@@ -23,6 +23,7 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
@@ -100,25 +101,25 @@ public class MultiplayerSystemTest {
         asrtFl1("■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
+                "e      \n" +
                 " e     \n" +
-                " e     \n" +
-                " o     \n" +
+                "o      \n" +
                 "■■■■■■■\n");
 
         asrtFl2("■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " e     \n" +
+                "e      \n" +
                 " o     \n" +
-                " e     \n" +
+                "e      \n" +
                 "■■■■■■■\n");
 
         asrtFl3("■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " o     \n" +
+                "o      \n" +
                 " e     \n" +
-                " e     \n" +
+                "e      \n" +
                 "■■■■■■■\n");
     }
 
@@ -137,10 +138,10 @@ public class MultiplayerSystemTest {
         //then
         String expected = "■■■■■■■\n" +
                 "       \n" +
-                " e     \n" +
+                "e      \n" +
                 "       \n" +
                 " z     \n" +
-                " o     \n" +
+                "o      \n" +
                 "■■■■■■■\n";
         assertEquals(expected, game1.getBoardAsString());
     }
@@ -160,7 +161,7 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "       \n" +
                 " e     \n" +
-                " o     \n" +
+                "o      \n" +
                 "■■■■■■■\n";
         assertEquals(expected, game1.getBoardAsString());
     }
@@ -169,6 +170,10 @@ public class MultiplayerSystemTest {
     public void shouldCrushEnemyBikeAfterClash() {
         //given
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
 
         //when
         game1.getJoystick().up();
@@ -190,6 +195,10 @@ public class MultiplayerSystemTest {
     public void shouldCrushEnemyBikeAfterClash2() {
         //given
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
 
         //when
         game1.getJoystick().up();
@@ -212,6 +221,10 @@ public class MultiplayerSystemTest {
     public void shouldCrushEnemyBikeAfterClash3() {
         //given
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
 
         //when
         game1.getJoystick().down();
@@ -234,6 +247,10 @@ public class MultiplayerSystemTest {
     public void shouldDoNothingAfterBikesClashEachOther() {
         //given
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
 
         //when
         game1.getJoystick().up();
@@ -255,6 +272,10 @@ public class MultiplayerSystemTest {
     public void shouldMoveBikesInAnyOrderOfCall() {
         //given
         when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
 
         //when
         game1.getJoystick().up();
@@ -272,5 +293,4 @@ public class MultiplayerSystemTest {
                 "■■■■■■■\n";
         assertEquals(expected, game1.getBoardAsString());
     }
-
 }

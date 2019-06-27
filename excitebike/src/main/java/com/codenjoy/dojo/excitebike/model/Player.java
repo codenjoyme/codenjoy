@@ -48,7 +48,7 @@ public class Player extends GamePlayer<Bike, GameField> {
     @Override
     public void newHero(GameField gameField) {
         if (bike == null) {
-            bike = new Bike(new PointImpl(BIKE_START_X, gameField.getPlayersNumber()));
+            bike = gameField.getNewFreeBike();
             bike.init(gameField);
         }
     }

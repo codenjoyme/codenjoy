@@ -28,13 +28,17 @@ import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static java.util.stream.Collectors.toList;
+import static java.util.Map.Entry.comparingByValue;
+import static java.util.stream.Collectors.*;
 
 
 public class GameFieldImpl implements GameField {
@@ -77,7 +81,7 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public boolean isBorder(int x, int y) {
-        return y < 1 || y > mapParser.getYSize()-2;
+        return y < 1 || y > mapParser.getYSize() - 2;
     }
 
     @Override
@@ -97,12 +101,12 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public boolean isUpLineChanger(int x, int y) {
-        return allShiftableElements.get(GameElementType.LINE_CHANGER_UP).contains(pt(x,y));
+        return allShiftableElements.get(GameElementType.LINE_CHANGER_UP).contains(pt(x, y));
     }
 
     @Override
     public boolean isDownLineChanger(int x, int y) {
-        return allShiftableElements.get(GameElementType.LINE_CHANGER_DOWN).contains(pt(x,y));
+        return allShiftableElements.get(GameElementType.LINE_CHANGER_DOWN).contains(pt(x, y));
     }
 
     @Override
@@ -111,13 +115,73 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public int getPlayersNumber() {
-        return players.size();
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    @Override
+    public Bike getNewFreeBike() {
+        return createNewFreeBike(getBikesCountOnEachY());
+    }
+
+    private Map<Integer, Long> getBikesCountOnEachY() {
+        Map<Integer, Long> bikesCountOnEachY = getBikes().stream().collect(
+                groupingBy(
+                        PointImpl::getY,
+                        Collectors.counting()
+                )
+        );
+        IntStream.range(1, mapParser.getYSize() - 1).forEach(value -> bikesCountOnEachY.putIfAbsent(value, 0L));
+        return bikesCountOnEachY;
+    }
+
+    private int getYWithMinNumberOfBikes(Map<Integer, Long> bikesCountOnEachY) {
+        return bikesCountOnEachY.entrySet()
+                .stream()
+                .min(
+                        Comparator.comparingLong(Map.Entry::getValue)
+                )
+                .map(Map.Entry::getKey)
+                .orElseGet(() -> 1);
+    }
+
+    private Bike createNewFreeBike(Map<Integer, Long> bikesCountOnEachY) {
+        final int minPossibleX = 0;
+        final int step = 3;
+        int y = getYWithMinNumberOfBikes(bikesCountOnEachY);
+
+        Bike newBike = new Bike(minPossibleX, y);
+
+        for (int i = minPossibleX; i < mapParser.getXSize(); i += step) {
+            newBike.setX(newBike.getY() % 2 == 0 ? i + 1 : i);
+            if (isFree(newBike) || tryToSetFreeCoordinates(newBike, bikesCountOnEachY, i)) {
+                break;
+            }
+            newBike.setY(1);
+        }
+        return newBike;
+    }
+
+    private boolean tryToSetFreeCoordinates(Bike bike, Map<Integer, Long> bikesOnYCount, int x) {
+        return bikesOnYCount.entrySet()
+                .stream()
+                .sorted(comparingByValue())
+                .map(Map.Entry::getKey)
+                .anyMatch(y -> {
+                    bike.setY(y);
+                    bike.setX(y % 2 == 0 ? x + 1 : x);
+                    return isFree(bike);
+                });
+    }
+
+    private boolean isFree(Point point) {
+        return !getBikes().contains(point) && !borders.contains(point) && !allShiftableElements.get(GameElementType.OBSTACLE).contains(point);
     }
 
     public List<Bike> getBikes() {
         return players.stream()
                 .map(Player::getHero)
+                .filter(Objects::nonNull)
                 .collect(toList());
     }
 

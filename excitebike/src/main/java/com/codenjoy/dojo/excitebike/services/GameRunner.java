@@ -48,6 +48,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
+    //TODO add to settings TASK - 34-admin-functional-and-settings
     public static final int FIELD_HEIGHT = 12;
 
     private final MapParser mapParser;
