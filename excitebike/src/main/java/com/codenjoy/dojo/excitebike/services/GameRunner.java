@@ -75,22 +75,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new PlayerScores() {
-            @Override
-            public Object getScore() {
-                return 0;
-            }
-
-            @Override
-            public int clear() {
-                return 0;
-            }
-
-            @Override
-            public void event(Object o) {
-                //nothing to do
-            }
-        };
+        return new Scores((Integer)score, settings);
     }
 
     @Override

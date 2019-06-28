@@ -10,12 +10,12 @@ package com.codenjoy.dojo.excitebike.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -33,9 +33,7 @@ import com.codenjoy.dojo.services.EventListener;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
@@ -232,8 +230,73 @@ public class GameFieldImplTest {
         gameField.tick();
 
         //then
-        assertThat(gameField.isAccelerator(xSize-1, 1), is(true));
+        assertThat(gameField.isAccelerator(xSize - 1, 1), is(true));
     }
 
+    @Test
+    public void tick__shouldSetAllPlayersBikesToNull() {
+        //given
+        Player player2 = new Player(mock(EventListener.class));
+
+        gameField = new GameFieldImpl(mapParser, dice);
+        gameField.newGame(new Player(mock(EventListener.class)));
+        gameField.newGame(player2);
+
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        player2.getHero().crush();
+        gameField.tick();
+
+        //then
+        assertThat(gameField.getPlayers().stream().allMatch(player -> player.getHero() == null), is(true));
+    }
+
+    @Test
+    public void tick__shouldClearAllShiftableElements() {
+        //given
+        when(dice.next(anyInt())).thenReturn(5);
+        when(mapParser.getInhibitors()).thenReturn(new LinkedList<Inhibitor>(){
+            {
+                add(new Inhibitor(1,1));
+            }
+        });
+        when(mapParser.getAccelerators()).thenReturn(new LinkedList<Accelerator>(){
+            {
+                add(new Accelerator(1,2));
+            }
+        });
+        when(mapParser.getObstacles()).thenReturn(new LinkedList<Obstacle>(){
+            {
+                add(new Obstacle(1,3));
+            }
+        });
+        when(mapParser.getLineUpChangers()).thenReturn(new LinkedList<LineChanger>(){
+            {
+                add(new LineChanger(1,4, true));
+            }
+        });
+        when(mapParser.getLineDownChangers()).thenReturn(new LinkedList<LineChanger>(){
+            {
+                add(new LineChanger(1,5, false));
+            }
+        });
+        Player player2 = new Player(mock(EventListener.class));
+
+        gameField = new GameFieldImpl(mapParser, dice);
+        gameField.newGame(new Player(mock(EventListener.class)));
+        gameField.newGame(player2);
+
+        //when
+        player2.getHero().crush();
+        gameField.tick();
+
+        //then
+        assertThat(gameField.isInhibitor(0,1), is(false));
+        assertThat(gameField.isAccelerator(0,2), is(false));
+        assertThat(gameField.isObstacle(0,3), is(false));
+        assertThat(gameField.isUpLineChanger(0,4), is(false));
+        assertThat(gameField.isDownLineChanger(0,5), is(false));
+    }
 
 }

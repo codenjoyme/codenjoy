@@ -10,12 +10,12 @@ package com.codenjoy.dojo.excitebike.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,19 +23,32 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
+import com.codenjoy.dojo.client.ClientBoard;
+import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.services.GameRunner;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -54,12 +67,12 @@ public class MultiplayerSystemTest {
     @Before
     public void setup() {
         MapParser mapParser = new MapParserImpl("■■■■■■■" +
-                        "       " +
-                        "       " +
-                        "       " +
-                        "       " +
-                        "       " +
-                        "■■■■■■■");
+                "       " +
+                "       " +
+                "       " +
+                "       " +
+                "       " +
+                "■■■■■■■");
 
         dice = mock(Dice.class);
         field = new GameFieldImpl(mapParser, dice);
@@ -171,9 +184,9 @@ public class MultiplayerSystemTest {
         //given
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX()+1);
+        bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX()+1);
+        bike3.setX(bike3.getX() + 1);
 
         //when
         game1.getJoystick().up();
@@ -196,9 +209,9 @@ public class MultiplayerSystemTest {
         //given
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX()+1);
+        bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX()+1);
+        bike3.setX(bike3.getX() + 1);
 
         //when
         game1.getJoystick().up();
@@ -222,9 +235,9 @@ public class MultiplayerSystemTest {
         //given
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX()+1);
+        bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX()+1);
+        bike3.setX(bike3.getX() + 1);
 
         //when
         game1.getJoystick().down();
@@ -248,9 +261,9 @@ public class MultiplayerSystemTest {
         //given
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX()+1);
+        bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX()+1);
+        bike3.setX(bike3.getX() + 1);
 
         //when
         game1.getJoystick().up();
@@ -273,9 +286,9 @@ public class MultiplayerSystemTest {
         //given
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX()+1);
+        bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX()+1);
+        bike3.setX(bike3.getX() + 1);
 
         //when
         game1.getJoystick().up();
@@ -292,5 +305,61 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "■■■■■■■\n";
         assertEquals(expected, game1.getBoardAsString());
+    }
+
+    @Ignore
+    @Test
+    public void shouldResetAllPlayersBikesAndFireWInEvent() {
+        //given
+        Solver pl1 = clientBoard -> Direction.STOP.toString();
+        Solver pl2 = clientBoard -> Direction.DOWN.toString();
+        Solver pl3 = clientBoard -> Direction.DOWN.toString();
+
+        LinkedList<String> messages = new LinkedList<>();
+        LocalGameRunner.out = (e) -> messages.add(e);
+        LocalGameRunner.timeout = 0;
+        LocalGameRunner.countIterations = 5;
+
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        LocalGameRunner.run(new GameRunner() {
+            @Override
+            protected String getMap() {
+                return "■■■■■■■" +
+                        "       " +
+                        "       " +
+                        "       " +
+                        "       " +
+                        "   ▒   " +
+                        "■■■■■■■";
+            }
+
+            @Override
+            public Dice getDice() {
+                return dice;
+            }
+        }, Arrays.asList(pl1, pl2, pl3), Arrays.asList(new Board(), new Board(), new Board()));
+
+        //then
+        assertThat(
+                String.join("\n", messages.get(messages.size() - 3)),
+                is("3:Board:\n" +
+                        "3:■■■■■■■\n" +
+                        "3:       \n" +
+                        "3:       \n" +
+                        "3:o      \n" +
+                        "3: e     \n" +
+                        "3:e      \n" +
+                        "3:■■■■■■■\n" +
+                        "3:")
+        );
+        assertThat(
+                String.join("\n", messages.subList(messages.size()-12, messages.size()-8)),
+                is("Fire Event: WIN\n" +
+                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "3:PLAYER_GAME_OVER -> START_NEW_GAME")
+        );
     }
 }
