@@ -2295,6 +2295,9 @@ public class SingleTest {
         assertEquals(offset,
                 JsonUtils.clean(JsonUtils.toStringSorted(json.get("scannerOffset").toString())));
 
+        assertEquals(false,
+                json.get("levelFinished"));
+
         assertEquals(heroes,
                 JsonUtils.clean(JsonUtils.toStringSorted(json.get("heroPosition").toString())));
 

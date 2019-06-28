@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import org.json.JSONObject;
 
 public class Player extends GamePlayer<Hero, IField> {
@@ -70,6 +71,18 @@ public class Player extends GamePlayer<Hero, IField> {
 
     public IField getField() {
         return field;
+    }
+
+    // TODO test me
+    public boolean isLevelFinished() {
+        Hero hero = getHero();
+        Point exit = getField().getEndPosition();
+        return hero.getPosition().equals(exit) && !hero.isFlying();
+    }
+
+    // TODO test me
+    public Point getHeroOffset(PrinterData data) {
+        return getHero().getPosition().relative(data.getOffset());
     }
 
     public class ICanCodeHeroData implements HeroData {

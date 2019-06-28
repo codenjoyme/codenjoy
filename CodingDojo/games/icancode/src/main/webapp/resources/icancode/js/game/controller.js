@@ -57,9 +57,10 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
             var b = new Board(board);
             var hero = b.getHero();
             var exit = b.getExit();
+            var levelFinished = b.isLevelFinished();
         }
 
-        var finished = !!b && !!hero && !!exit && hero.toString() == exit.toString() && !levelProgress.isCurrentLevelMultiple();
+        var finished = !!b && levelFinished && !levelProgress.isCurrentLevelMultiple();
         var stopped = currentCommand() == 'STOP';
         if (!controlling || stopped || finished) {
             finish();

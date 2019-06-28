@@ -54,6 +54,7 @@ var Board = function (boardString) {
     var layersString = board.layers;
     var scannerOffset = board.scannerOffset;
     var heroPosition = board.heroPosition;
+    var levelFinished = board.levelFinished;
     var size = Math.sqrt(layersString[LAYER1].length);
     var xyl = new LengthToXY(size);
 
@@ -399,7 +400,10 @@ var Board = function (boardString) {
         getHero: function () {
             return pt(heroPosition.x, heroPosition.y);
         },
-        getOtherHeroes: getOtherHeroes,
+        isLevelFinished: function() {
+            return levelFinished;
+        },
+        geLOtherHeroes: getOtherHeroes,
         getLaserMachines: getLaserMachines,
         getLasers: getLasers,
         getWalls: getWalls,

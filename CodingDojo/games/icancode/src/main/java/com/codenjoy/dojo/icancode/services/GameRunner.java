@@ -140,7 +140,8 @@ public class GameRunner extends AbstractGameType implements GameType  {
             JSONObject result = new JSONObject();
             result.put("layers", data.getLayers());
             result.put("scannerOffset", toJson(data.getOffset()));
-            result.put("heroPosition", toJson(player.getHero().getPosition().relative(data.getOffset())));
+            result.put("heroPosition", toJson(player.getHeroOffset(data)));
+            result.put("levelFinished", player.isLevelFinished());
             result.put("showName", true);
             return result;
         });
