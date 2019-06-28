@@ -295,15 +295,15 @@ var Board = function (boardString) {
         return barriers;
     };
 
-    var getFromArray = function(x, y, array) {
+    var getFromArray = function(x, y, array, def) {
         if (x < 0 || y < 0 || x >= size || y >= size) {
-            return true;
+            return def;
         }
         return array[x][y];
     }
 
     var isBarrier = function(x, y) {
-        return getFromArray(x, y, barriersMap);
+        return getFromArray(x, y, barriersMap, true);
     }
     
     var getShortestWay = function (from, to) {
@@ -323,7 +323,7 @@ var Board = function (boardString) {
         }
 
         var getMask = function(x, y) {
-            return getFromArray(x, y, mask);
+            return getFromArray(x, y, mask, -1);
         }
 
         var current = 1;
