@@ -295,11 +295,15 @@ var Board = function (boardString) {
         return barriers;
     };
 
-    var isBarrier = function(x, y) {
+    var getFromArray = function(x, y, array) {
         if (x < 0 || y < 0 || x >= size || y >= size) {
             return true;
         }
-        return barriersMap[x][y];
+        return array[x][y];
+    }
+
+    var isBarrier = function(x, y) {
+        return getFromArray(x, y, barriersMap);
     }
     
     var getShortestWay = function (from, to) {
@@ -316,6 +320,10 @@ var Board = function (boardString) {
             for (var y = 0; y < size; y++) {
                 mask[x][y] = (isWallAt(x, y)) ? -1 : 0;
             }
+        }
+
+        var getMask = function(x, y) {
+            return getFromArray(x, y, mask);
         }
 
         var current = 1;
@@ -378,7 +386,7 @@ var Board = function (boardString) {
                     if (mask[x][y] != current) continue;
 
                     comeRound(x, y, function (xx, yy) {
-                        if (mask[xx][yy] == 0) {
+                        if (getMask(xx, yy) == 0) {
                             var dx = xx - x;
                             var dy = yy - y;
 
@@ -395,7 +403,7 @@ var Board = function (boardString) {
                                 can = false;
                             }
                             if (isBarrier(x, y)) {
-                                if (mask[px][py] == -1) {
+                                if (getMask(px, py) == -1) {
                                     can = false;
                                 }
                                 if (isBarrier(xx, yy)) {
