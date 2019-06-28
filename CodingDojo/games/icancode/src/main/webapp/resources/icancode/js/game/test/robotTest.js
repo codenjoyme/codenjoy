@@ -743,34 +743,7 @@ var robotTest = function() {
         // getBarriers
         resetMocks();
 
-        assertEquals([{'x': 0, 'y': 0}, {'x': 0, 'y': 1}, {'x': 0, 'y': 2}, {'x': 0, 'y': 3}, {'x': 0, 'y': 4}, {
-                'x': 0,
-                'y': 5
-            }, {'x': 0, 'y': 6}, {'x': 0, 'y': 7}, {'x': 0, 'y': 8}, {'x': 1, 'y': 0}, {'x': 1, 'y': 8}, {
-                'x': 2,
-                'y': 0
-            }, {'x': 2, 'y': 8}, {'x': 3, 'y': 0}, {'x': 3, 'y': 8}, {'x': 4, 'y': 0}, {'x': 4, 'y': 8}, {
-                'x': 5,
-                'y': 0
-            }, {'x': 5, 'y': 8}, {'x': 6, 'y': 0}, {'x': 6, 'y': 8}, {'x': 7, 'y': 0}, {'x': 7, 'y': 8}, {
-                'x': 8,
-                'y': 0
-            }, {'x': 8, 'y': 1}, {'x': 8, 'y': 2}, {'x': 8, 'y': 3}, {'x': 8, 'y': 4}, {'x': 8, 'y': 5}, {
-                'x': 8,
-                'y': 6
-            }, {'x': 8, 'y': 7}, {'x': 8, 'y': 8}, {'x': 1, 'y': 4, 'direction': 'RIGHT'}, {
-                'x': 3,
-                'y': 6,
-                'direction': 'UP'
-            }, {'x': 3, 'y': 7, 'direction': 'DOWN'}, {'x': 4, 'y': 1, 'direction': 'LEFT'}, {
-                'x': 4,
-                'y': 7,
-                'direction': 'LEFT'
-            }, {'x': 5, 'y': 7, 'direction': 'DOWN'}, {'x': 6, 'y': 7, 'direction': 'RIGHT'}, {
-                'x': 7,
-                'y': 7,
-                'direction': 'UP'
-            }, {'x': 3, 'y': 4}, {'x': 5, 'y': 3}, {'x': 5, 'y': 5}, {'x': 6, 'y': 4}],
+        assertEquals([{'x':0,'y':0},{'x':0,'y':1},{'x':0,'y':2},{'x':0,'y':3},{'x':0,'y':4},{'x':0,'y':5},{'x':0,'y':6},{'x':0,'y':7},{'x':0,'y':8},{'x':1,'y':0},{'x':1,'y':8},{'x':2,'y':0},{'x':2,'y':8},{'x':3,'y':0},{'x':3,'y':8},{'x':4,'y':0},{'x':4,'y':8},{'x':5,'y':0},{'x':5,'y':8},{'x':6,'y':0},{'x':6,'y':8},{'x':7,'y':0},{'x':7,'y':8},{'x':8,'y':0},{'x':8,'y':1},{'x':8,'y':2},{'x':8,'y':3},{'x':8,'y':4},{'x':8,'y':5},{'x':8,'y':6},{'x':8,'y':7},{'x':8,'y':8},{'x':1,'y':4,'direction':'RIGHT'},{'x':3,'y':6,'direction':'UP'},{'x':3,'y':7,'direction':'DOWN'},{'x':4,'y':1,'direction':'LEFT'},{'x':4,'y':7,'direction':'LEFT'},{'x':5,'y':7,'direction':'DOWN'},{'x':6,'y':7,'direction':'RIGHT'},{'x':7,'y':7,'direction':'UP'},{'x':3,'y':4},{'x':5,'y':3},{'x':5,'y':5},{'x':6,'y':4},{'x':2,'y':5},{'x':4,'y':4},{'x':6,'y':2},{'x':7,'y':1}],
             scanner.getBarriers());
 
         // getElements
@@ -797,7 +770,7 @@ var robotTest = function() {
         assertEquals([{'x': 2, 'y': 1}, {'x': 1, 'y': 1}],
             scanner.getShortestWay(scanner.getStart()[0]));
 
-        assertEquals([{'x':2,'y':1},{'x':2,'y':2},{'x':2,'y':3},{'x':2,'y':4},{'x':2,'y':5},{'x':3,'y':5},{'x':4,'y':5},{'x':4,'y':6},{'x':5,'y':6},{'x':6,'y':6}],
+        assertEquals([{'x':2,'y':1},{'x':2,'y':2},{'x':2,'y':3},{'x':2,'y':4},{'x':2,'y':5},{'x':2,'y':6},{'x':3,'y':6},{'x':4,'y':6},{'x':5,'y':6},{'x':6,'y':6}],
             scanner.getShortestWay(new Point(6, 6)));
 
         assertEquals(null,
@@ -838,7 +811,7 @@ var robotTest = function() {
         assertEquals([{'x': 2, 'y': 1}, {'x': 1, 'y': 1}],
             scanner.getShortestWay(new Point(2, 1), scanner.getStart()[0]));
 
-        assertEquals([{'x':2,'y':1},{'x':2,'y':2},{'x':2,'y':3},{'x':2,'y':4},{'x':2,'y':5},{'x':3,'y':5},{'x':4,'y':5},{'x':4,'y':6},{'x':5,'y':6},{'x':6,'y':6}],
+        assertEquals([{'x':2,'y':1},{'x':2,'y':2},{'x':2,'y':3},{'x':2,'y':4},{'x':2,'y':5},{'x':2,'y':6},{'x':3,'y':6},{'x':4,'y':6},{'x':5,'y':6},{'x':6,'y':6}],
             scanner.getShortestWay(new Point(2, 1), new Point(6, 6)));
 
         assertEquals(null,

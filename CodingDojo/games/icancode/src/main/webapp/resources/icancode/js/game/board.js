@@ -291,10 +291,11 @@ var Board = function (boardString) {
         var all = getWalls();
         all = all.concat(getLaserMachines());
         all = all.concat(getBoxes());
+        all = all.concat(getHoles());
         barriers = removeDuplicates(all);
         return barriers;
     };
-
+    
     var getShortestWay = function (from, to) {
         if (from.getX() == to.getX() && from.getY() == to.getY()) {
             return [from];
@@ -303,7 +304,7 @@ var Board = function (boardString) {
         for (var x = 0; x < size; x++) {
             mask[x] = new Array(size);
             for (var y = 0; y < size; y++) {
-                mask[x][y] = (isBarrierAt(x, y)) ? -1 : 0;
+                mask[x][y] = (isWallAt(x, y)) ? -1 : 0;
             }
         }
 
@@ -332,23 +333,88 @@ var Board = function (boardString) {
 
         var done = false;
         while (!done) {
+            var maskToString = function() {
+                var string = '01234567890123456789\n';
+                for (var y = 0; y < size; y++) {
+                    for (var x = 0; x < size; x++) {
+                        if (mask[x][y] == -1) {
+                            var s = '*';
+                        } else if (mask[x][y] == 0) {
+                            if (getAt(x, y, LAYER1) == Element.HOLE) {
+                                var s = 'O';
+                            } else if (getAt(x, y, LAYER2) == Element.BOX) {
+                                var s = 'B';
+                            } else if (getAt(x, y, LAYER1) == Element.EXIT) {
+                                var s = 'E';
+                            } else {
+                                var s = ' ';
+                            }
+                        } else {
+                            var s = '' + mask[x][y];
+                        }
+                        if (s.length == 2) s = s[1];
+                        string += s;
+                    }
+                    string += ' ' + y + '\n';
+                }
+                string += '01234567890123456789\n';
+                console.log(string);
+            }
+            // s = 29;
+            // s = -1;
+            // if (s == -1 || current >= s - 1 && current <= s) maskToString();
+
             for (var x = 0; x < size; x++) {
                 for (var y = 0; y < size; y++) {
                     if (mask[x][y] != current) continue;
 
                     comeRound(x, y, function (xx, yy) {
                         if (mask[xx][yy] == 0) {
-                            mask[xx][yy] = current + 1;
-                            if (xx == to.getX() && yy == to.getY()) {
-                                done = true;
+                            var dx = xx - x;
+                            var dy = yy - y;
+
+                            var px = x - dx;
+                            var py = y - dy;
+
+                            var fx = xx + dx;
+                            var fy = yy + dy;
+
+                            // путь px/py -> x/y -> xx/yy -> fx/fy
+
+                            var can = true;
+                            if (isBarrierAt(xx, yy) && isBarrierAt(fx, fy)) {
+                                can = false;
+                            }
+                            if (isBarrierAt(x, y)) {
+                                if (mask[px][py] == -1) {
+                                    can = false;
+                                }
+                            }
+                            // if (s == -1 || current >= s - 1 && current < s) {
+                            //     console.log('px/py: ' + px + ' ' + py);
+                            //     console.log('x/y: ' + x + ' ' + y);
+                            //     console.log('xx/yy: ' + xx + ' ' + yy);
+                            //     console.log('mask[px][py]: ' + mask[px][py]);
+                            //     console.log('isBarrierAt(px, py): ' + isBarrierAt(px, py));
+                            //     console.log('isBarrierAt(x, y): ' + isBarrierAt(x, y));
+                            //     console.log('isBarrierAt(xx, yy): ' + isBarrierAt(xx, yy));
+                            //     console.log(((can) ? '+' : '-') + (current + 1) + ": [" + x + ":" + y + "] -> [" + xx + ":" + yy + "]");
+                            // }
+
+                            if (can) {
+                                mask[xx][yy] = current + 1;
+                                if (xx == to.getX() && yy == to.getY()) {
+                                    done = true;
+                                }
                             }
                         }
                         return true;
                     });
                 }
             }
+
             current++;
-            if (current > 1000) {
+            if (current > 200) {
                 return [];
             }
         }
@@ -380,7 +446,7 @@ var Board = function (boardString) {
     var boardAsString = function (layer) {
         var result = "";
         for (var i = 0; i <= size - 1; i++) {
-            result += layers[layer].substring(i * size, (i + 1) * size);
+            result += layersString[layer].substring(i * size, (i + 1) * size);
             result += "\n";
         }
         return result;

@@ -290,7 +290,7 @@ assert points[0].getY() == 12;</pre>
 assert scanner.isNear(12, 7, "HERO") == true;
 // near means: atLeft || atRight || atUp || atDown</pre>
           
-          <p><span class="func">function isBarrierAt(x, y)</span> - Is it possible to go through the cell with {x,y} coordinates.</p>
+          <p><span class="func">function isBarrierAt(x, y)</span> - Is it impossible to go (not jump) through the cell with {x,y} coordinates.</p>
           <pre>assert scanner.isBarrierAt(12, 7) == false;</pre>
           
           <p><span class="func">function countNear(x, y, elementType)</span> - Returns count of elements with type specified around {x,y} point.</p>
