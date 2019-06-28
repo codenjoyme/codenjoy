@@ -184,6 +184,10 @@ var Board = function (boardString) {
         return contains(getBarriers(), pt(x, y));
     };
 
+    var isWallAt = function (x, y) {
+        return contains(getWalls(), pt(x, y));
+    };
+
     var countNear = function (x, y, layer, element) {
         if (pt(x, y).isBad(size)) {
             return 0;
@@ -276,7 +280,7 @@ var Board = function (boardString) {
         for (var x = 0; x < size; x++) {
             mask[x] = new Array(size);
             for (var y = 0; y < size; y++) {
-                mask[x][y] = (isBarrierAt(x, y)) ? -1 : 0;
+                mask[x][y] = (isWallAt(x, y)) ? -1 : 0;
             }
         }
 
@@ -403,7 +407,7 @@ var Board = function (boardString) {
         isLevelFinished: function() {
             return levelFinished;
         },
-        geLOtherHeroes: getOtherHeroes,
+        getOtherHeroes: getOtherHeroes,
         getLaserMachines: getLaserMachines,
         getLasers: getLasers,
         getWalls: getWalls,
