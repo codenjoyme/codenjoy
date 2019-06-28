@@ -474,42 +474,7 @@ var initLevelInfo = function() {
 
         'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[11].defaultCode,
-        'winCode':'function program(robot) {\n' +
-        '    var scanner = robot.getScanner();\n' +
-        '    var dest = scanner.getGold();\n' +
-        '    if (dest.length === 0) {\n' +
-        '        dest = scanner.getExit();\n' +
-        '    }\n' +
-        '    var to = scanner.getShortestWay(dest[0])[1];\n' +
-        '    var from = scanner.getMe();\n' +
-        '\n' +
-        '    robot.goOverHole = function(direction) {\n' +
-        '        if (scanner.at(direction) != "HOLE") {\n' +
-        '            robot.go(direction);\n' +
-        '        } else {\n' +
-        '            if (direction == "DOWN") { // TODO crutch :)\n' +
-        '                var afterHole = new Point(from.getX(), from.getY() + 2);\n' +
-        '                if (scanner.at(afterHole) == "WALL") {\n' +
-        '                    robot.go("RIGHT");\n' +
-        '                    return;\n' +
-        '                }\n' +
-        '            }\n' +
-        '            robot.jump(direction);\n' +
-        '        }\n' +
-        '    };\n' +
-        '    \n' +
-        '    var dx = to.getX() - from.getX(); \n' +
-        '    var dy = to.getY() - from.getY(); \n' +
-        '    if (dx > 0) {\n' +
-        '        robot.goOverHole("RIGHT");\n' +
-        '    } else if (dx < 0) {\n' +
-        '        robot.goOverHole("LEFT");\n' +
-        '    } else if (dy > 0) {\n' +
-        '        robot.goOverHole("DOWN");\n' +
-        '    } else if (dy < 0) {\n' +
-        '        robot.goOverHole("UP");\n' +
-        '    }\n' +
-        '}',
+        'winCode':levelInfo[11].winCode,
         'autocomplete':{
             'scanner.':{
                 'synonyms':['robot.getScanner().'],
@@ -534,7 +499,37 @@ var initLevelInfo = function() {
 
         'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[12].defaultCode,
-        'winCode':levelInfo[12].winCode,
+        'winCode':'function program(robot) {\n' +
+            '    var scanner = robot.getScanner();\n' +
+            '    var dest = scanner.getGold();\n' +
+            '    if (dest.length === 0) {\n' +
+            '        dest = scanner.getExit();\n' +
+            '    }\n' +
+            '    var to = scanner.getShortestWay(dest[0])[1];\n' +
+            '    var from = scanner.getMe();\n' +
+            '\n' +
+            '    robot.goOverHole = function(direction) {\n' +
+            '        if (scanner.at(direction) != "HOLE" && \n' +
+            '            scanner.at(direction) != "BOX") \n' +
+            '        {\n' +
+            '            robot.go(direction);\n' +
+            '        } else {\n' +
+            '            robot.jump(direction);\n' +
+            '        }\n' +
+            '    };\n' +
+            '    \n' +
+            '    var dx = to.getX() - from.getX(); \n' +
+            '    var dy = to.getY() - from.getY(); \n' +
+            '    if (dx > 0) {\n' +
+            '        robot.goOverHole("RIGHT");\n' +
+            '    } else if (dx < 0) {\n' +
+            '        robot.goOverHole("LEFT");\n' +
+            '    } else if (dy > 0) {\n' +
+            '        robot.goOverHole("DOWN");\n' +
+            '    } else if (dy < 0) {\n' +
+            '        robot.goOverHole("UP");\n' +
+            '    }\n' +
+            '}',
         'autocomplete':{
             'robot.':{
                 'synonyms':[],

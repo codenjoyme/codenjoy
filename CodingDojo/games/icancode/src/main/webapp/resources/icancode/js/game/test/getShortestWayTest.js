@@ -259,6 +259,9 @@ var getShortestWayTest = function() {
         assertEquals([{'x':11,'y':12},{'x':12,'y':12},{'x':13,'y':12}],
             scanner.getShortestWay(pt(11, 12), scanner.getExit()[0]));
 
+        assertEquals([{'x':11,'y':12},{'x':11,'y':13},{'x':10,'y':13},{'x':9,'y':13},{'x':8,'y':13},{'x':7,'y':13},{'x':7,'y':12},{'x':7,'y':11},{'x':7,'y':10},{'x':7,'y':9}],
+            scanner.getShortestWay(pt(11, 12), pt(7, 9)));
+
     }
 
     runTest1();
