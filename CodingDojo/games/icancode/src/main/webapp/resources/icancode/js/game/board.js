@@ -97,27 +97,6 @@ var Board = function (boardString) {
         layers.push(parseLayer(layersString[index]));
     }
 
-    var contains = function (a, obj) {
-        var i = a.length;
-        while (i--) {
-            if (a[i].equals(obj)) {
-                return true;
-            }
-        }
-        return false;
-    };
-
-    var removeDuplicates = function (all) {
-        var result = [];
-        for (var index in all) {
-            var point = all[index];
-            if (!contains(result, point)) {
-                result.push(point);
-            }
-        }
-        return result;
-    };
-
     var isAt = function (x, y, layer, element) {
         if (pt(x, y).isBad(size) || getAt(x, y, layer) == null) {
             return false;
@@ -204,11 +183,14 @@ var Board = function (boardString) {
     };
 
     var isBarrierAt = function (x, y) {
-        return contains(getBarriers(), pt(x, y));
+        if (!barriersMap) {
+            getBarriers();
+        }
+        return barriersMap[x][y];
     };
 
     var isWallAt = function (x, y) {
-        return contains(getWalls(), pt(x, y));
+        return getAt(x, y, LAYER1).type == 'WALL';
     };
 
     var countNear = function (x, y, layer, element) {
@@ -283,16 +265,33 @@ var Board = function (boardString) {
             layersString[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
     };
 
-    var barriers = null; // TODO optimize this method
+    var barriers = null; // TODO еще разочек подумать над этим методом
+    var barriersMap = null;
     var getBarriers = function () {
         if (!!barriers) {
             return barriers;
         }
-        var all = getWalls();
-        all = all.concat(getLaserMachines());
-        all = all.concat(getBoxes());
-        all = all.concat(getHoles());
-        barriers = removeDuplicates(all);
+
+        barriers = [];
+        barriersMap = Array(size);
+        for (var x = 0; x < size; x++) {
+            barriersMap[x] = new Array(size);
+            for (var y = 0; y < size; y++) {
+                var element1 = getAt(x, y, LAYER1);
+                var element2 = getAt(x, y, LAYER2);
+
+                barriersMap[x][y] = (
+                    element1.type == 'WALL' ||
+                    element1 == Element.HOLE ||
+                    element2 == Element.BOX ||
+                    !!element1.direction
+                );
+
+                if (barriersMap[x][y]) {
+                    barriers.push(pt(x, y));
+                }
+            }
+        }
         return barriers;
     };
     
@@ -300,6 +299,10 @@ var Board = function (boardString) {
         if (from.getX() == to.getX() && from.getY() == to.getY()) {
             return [from];
         }
+        if (!barriersMap) {
+            getBarriers();
+        }
+
         var mask = Array(size);
         for (var x = 0; x < size; x++) {
             mask[x] = new Array(size);
@@ -360,8 +363,7 @@ var Board = function (boardString) {
                 string += '01234567890123456789\n';
                 console.log(string);
             }
-            // s = 29;
-            // s = -1;
+            // s = 8;
             // if (s == -1 || current >= s - 1 && current <= s) maskToString();
 
             for (var x = 0; x < size; x++) {
@@ -382,14 +384,14 @@ var Board = function (boardString) {
                             // путь px/py -> x/y -> xx/yy -> fx/fy
 
                             var can = true;
-                            if (isBarrierAt(xx, yy) && isBarrierAt(fx, fy)) {
+                            if (barriersMap[xx][yy] && barriersMap[fx][fy]) {
                                 can = false;
                             }
-                            if (isBarrierAt(x, y)) {
+                            if (barriersMap[x][y]) {
                                 if (mask[px][py] == -1) {
                                     can = false;
                                 }
-                                if (isBarrierAt(xx, yy)) {
+                                if (barriersMap[xx][yy]) {
                                     can = false;
                                 }
                             }
@@ -397,10 +399,12 @@ var Board = function (boardString) {
                             //     console.log('px/py: ' + px + ' ' + py);
                             //     console.log('x/y: ' + x + ' ' + y);
                             //     console.log('xx/yy: ' + xx + ' ' + yy);
+                            //     console.log('fx/fy: ' + fx + ' ' + fy);
                             //     console.log('mask[px][py]: ' + mask[px][py]);
-                            //     console.log('isBarrierAt(px, py): ' + isBarrierAt(px, py));
-                            //     console.log('isBarrierAt(x, y): ' + isBarrierAt(x, y));
-                            //     console.log('isBarrierAt(xx, yy): ' + isBarrierAt(xx, yy));
+                            //     console.log('barriersMap[px][py]: ' + barriersMap[px][py]);
+                            //     console.log('barriersMap[x][y]: ' + barriersMap[x][y]);
+                            //     console.log('barriersMap[xx][yy]: ' + barriersMap[xx][yy]);
+                            //     console.log('barriersMap[fx][fy]: ' + barriersMap[fx][fy]);
                             //     console.log(((can) ? '+' : '-') + (current + 1) + ": [" + x + ":" + y + "] -> [" + xx + ":" + yy + "]");
                             // }
 
