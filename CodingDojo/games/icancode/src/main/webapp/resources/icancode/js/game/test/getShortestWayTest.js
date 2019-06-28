@@ -51,41 +51,40 @@ var getShortestWayTest = function() {
     var loggerActions = [];
     var controllerActions = [];
 
-    runTest = function () {
+    var logger = {
+        print: function (message) {
+            loggerActions.push(message);
+        }
+    };
 
-        var logger = {
-            print: function (message) {
-                loggerActions.push(message);
-            }
-        };
+    var controller = {
+        commit: function () {
+            controllerActions.push('commit');
+        },
+        reset: function () {
+            controllerActions.push('reset');
+        },
+        onMessage: function () {
+            controllerActions.push('commit');
+        },
+        reconnect: function () {
+            controllerActions.push('reconnect');
+        },
+        cleanCommand: function () {
+            controllerActions.push('clean');
+        },
+        addCommand: function (command) {
+            controllerActions.push('command[' + command + ']');
+        },
+        waitCommand: function () {
+            controllerActions.push('wait');
+        },
+        winCommand: function () {
+            controllerActions.push('win');
+        }
+    };
 
-        var controller = {
-            commit: function () {
-                controllerActions.push('commit');
-            },
-            reset: function () {
-                controllerActions.push('reset');
-            },
-            onMessage: function () {
-                controllerActions.push('commit');
-            },
-            reconnect: function () {
-                controllerActions.push('reconnect');
-            },
-            cleanCommand: function () {
-                controllerActions.push('clean');
-            },
-            addCommand: function (command) {
-                controllerActions.push('command[' + command + ']');
-            },
-            waitCommand: function () {
-                controllerActions.push('wait');
-            },
-            winCommand: function () {
-                controllerActions.push('win');
-            }
-        };
-
+    runTest1 = function () {
         board = 'board={"heroPosition":{"x":16,"y":18},' +
             '"showName":true,' +
             '"levelFinished":false,' +
@@ -174,5 +173,94 @@ var getShortestWayTest = function() {
 
     }
 
-    runTest();
+    runTest2 = function () {
+        board = 'board={"heroPosition":{"x":7,"y":5},' +
+            '"showName":true,' +
+            '"levelFinished":false,' +
+            '"scannerOffset":{"x":0,"y":0},' +
+            '"layers":["' +
+            '                    ' +
+            '                    ' +
+            '                    ' +
+            '                    ' +
+            '      ╔═════┐       ' +
+            '      ║S.O..│       ' +
+            '      └──╗..│       ' +
+            '         ║..│       ' +
+            '      ╔══╝..╚═┐     ' +
+            '      ║$..OO..│     ' +
+            '      ║.┌─╗...│     ' +
+            '      ║.│ ║...│     ' +
+            '      ║.╚═╝..E│     ' +
+            '      ║.......│     ' +
+            '      └───────┘     ' +
+            '                    ' +
+            '                    ' +
+            '                    ' +
+            '                    ' +
+            '                    ","' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '-------☺------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------B-----------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------","' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------' +
+            '--------------------"],' +
+            '"levelProgress":{"total":18,"current":11,"lastPassed":16}}';
+
+        robot = initRobot(logger, controller);
+        var scanner = robot.getScanner();
+
+        resetMocks();
+
+        var me = scanner.getMe();
+        assertEquals(['START','MY_ROBOT'],
+            scanner.getAt(me.getX(), me.getY()));
+
+        assertEquals([{'x':7,'y':5},{'x':8,'y':5},{'x':9,'y':5},{'x':10,'y':5},{'x':10,'y':6},{'x':10,'y':7},{'x':10,'y':8},{'x':11,'y':8},{'x':11,'y':9},{'x':11,'y':10},{'x':11,'y':11},{'x':11,'y':12},{'x':12,'y':12},{'x':13,'y':12}],
+            scanner.getShortestWay(scanner.getStart()[0], scanner.getExit()[0]));
+
+        assertEquals([{'x':7,'y':5},{'x':8,'y':5},{'x':9,'y':5},{'x':10,'y':5},{'x':10,'y':6},{'x':10,'y':7},{'x':10,'y':8},{'x':11,'y':8},{'x':11,'y':9},{'x':11,'y':10},{'x':11,'y':11},{'x':11,'y':12},{'x':11,'y':13},{'x':10,'y':13},{'x':9,'y':13},{'x':8,'y':13},{'x':7,'y':13},{'x':7,'y':12},{'x':7,'y':11},{'x':7,'y':10},{'x':7,'y':9}],
+            scanner.getShortestWay(pt(7, 5), pt(7, 9)));
+
+        assertEquals([{'x':11,'y':12},{'x':12,'y':12},{'x':13,'y':12}],
+            scanner.getShortestWay(pt(11, 12), scanner.getExit()[0]));
+
+    }
+
+    runTest1();
+    runTest2();
 }

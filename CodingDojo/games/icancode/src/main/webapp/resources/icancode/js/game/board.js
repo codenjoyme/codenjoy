@@ -389,6 +389,9 @@ var Board = function (boardString) {
                                 if (mask[px][py] == -1) {
                                     can = false;
                                 }
+                                if (isBarrierAt(xx, yy)) {
+                                    can = false;
+                                }
                             }
                             // if (s == -1 || current >= s - 1 && current < s) {
                             //     console.log('px/py: ' + px + ' ' + py);
