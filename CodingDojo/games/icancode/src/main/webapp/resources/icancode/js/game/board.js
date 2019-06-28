@@ -303,7 +303,7 @@ var Board = function (boardString) {
         for (var x = 0; x < size; x++) {
             mask[x] = new Array(size);
             for (var y = 0; y < size; y++) {
-                mask[x][y] = (isWallAt(x, y)) ? -1 : 0;
+                mask[x][y] = (isBarrierAt(x, y)) ? -1 : 0;
             }
         }
 

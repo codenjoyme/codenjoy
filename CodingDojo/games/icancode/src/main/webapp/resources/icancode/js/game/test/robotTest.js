@@ -797,10 +797,7 @@ var robotTest = function() {
         assertEquals([{'x': 2, 'y': 1}, {'x': 1, 'y': 1}],
             scanner.getShortestWay(scanner.getStart()[0]));
 
-        assertEquals([{'x': 2, 'y': 1}, {'x': 2, 'y': 2}, {'x': 2, 'y': 3}, {'x': 2, 'y': 4}, {'x': 2, 'y': 5}, {
-                'x': 2,
-                'y': 6
-            }, {'x': 3, 'y': 6}, {'x': 4, 'y': 6}, {'x': 5, 'y': 6}, {'x': 6, 'y': 6}],
+        assertEquals([{'x':2,'y':1},{'x':2,'y':2},{'x':2,'y':3},{'x':2,'y':4},{'x':2,'y':5},{'x':3,'y':5},{'x':4,'y':5},{'x':4,'y':6},{'x':5,'y':6},{'x':6,'y':6}],
             scanner.getShortestWay(new Point(6, 6)));
 
         assertEquals(null,
@@ -841,10 +838,7 @@ var robotTest = function() {
         assertEquals([{'x': 2, 'y': 1}, {'x': 1, 'y': 1}],
             scanner.getShortestWay(new Point(2, 1), scanner.getStart()[0]));
 
-        assertEquals([{'x': 2, 'y': 1}, {'x': 2, 'y': 2}, {'x': 2, 'y': 3}, {'x': 2, 'y': 4}, {'x': 2, 'y': 5}, {
-                'x': 2,
-                'y': 6
-            }, {'x': 3, 'y': 6}, {'x': 4, 'y': 6}, {'x': 5, 'y': 6}, {'x': 6, 'y': 6}],
+        assertEquals([{'x':2,'y':1},{'x':2,'y':2},{'x':2,'y':3},{'x':2,'y':4},{'x':2,'y':5},{'x':3,'y':5},{'x':4,'y':5},{'x':4,'y':6},{'x':5,'y':6},{'x':6,'y':6}],
             scanner.getShortestWay(new Point(2, 1), new Point(6, 6)));
 
         assertEquals(null,
