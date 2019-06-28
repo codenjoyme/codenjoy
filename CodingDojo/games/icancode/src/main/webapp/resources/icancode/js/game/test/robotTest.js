@@ -184,6 +184,20 @@ runTest = function() {
     robot = initRobot(logger, controller);
     var scanner = robot.getScanner();
 
+    // --------- board.getWholeBoard -----------
+    resetMocks();
+
+    assertEquals([[['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL']],
+        [['WALL'],['START'],['OTHER_ROBOT'],['OTHER_ROBOT'],['LASER_MACHINE'],['ZOMBIE'],['NONE'],['NONE'],['WALL']],
+        [['WALL'],['MY_ROBOT'],['NONE'],['GOLD'],['LASER_RIGHT'],['HOLE','ZOMBIE'],['OTHER_ROBOT'],['NONE'],['WALL']],
+        [['WALL'],['GOLD'],['NONE'],['EXIT'],['BOX'],['ZOMBIE'],['LASER_MACHINE'],['LASER_MACHINE'],['WALL']],
+        [['WALL'],['LASER_MACHINE_READY'],['NONE'],['NONE'],['HOLE'],['ZOMBIE_DIE'],['NONE'],['LASER_MACHINE'],['WALL']],
+        [['WALL'],['NONE'],['GOLD'],['BOX'],['LASER_DOWN'],['BOX'],['LASER_UP'],['LASER_MACHINE_READY'],['WALL']],
+        [['WALL'],['MY_ROBOT'],['HOLE','OTHER_ROBOT'],['NONE'],['BOX','OTHER_ROBOT'],['ZOMBIE_START'],['LASER_LEFT'],['LASER_MACHINE_READY'],['WALL']],
+        [['WALL'],['HOLE','MY_ROBOT'],['MY_ROBOT'],['NONE'],['NONE'],['NONE'],['NONE'],['LASER_MACHINE_READY'],['WALL']],
+        [['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL']]],
+        scanner.getWholeBoard());
+
     // --------- getScanner --------------
     // at point
     resetMocks();

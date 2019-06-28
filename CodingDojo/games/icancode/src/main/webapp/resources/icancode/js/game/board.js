@@ -114,6 +114,35 @@ var Board = function (boardString) {
         return result;
     };
 
+    var removeAllElements = function(array, element) {
+        var index;
+        while ((index = array.indexOf(element)) !== -1) {
+            array.splice(index, 1);
+        }
+        return array;
+    }
+
+    var getWholeBoard = function() {
+        var result = [];
+        for (var x = 0; x < size; x++) {
+            var arr = [];
+            result.push(arr);
+            for (var y = 0; y < size; y++) {
+                var cell = [];
+                cell.push(getAt(x, y, LAYER1).type);
+                cell.push(getAt(x, y, LAYER2).type);
+                cell.push(getAt(x, y, LAYER3).type);
+                removeAllElements(cell, 'NONE');
+                if (cell.length == 0) {
+                    cell.push('NONE');
+                }
+
+                arr.push(cell);
+            }
+        }
+        return result;
+    }
+
     var findAllElements = function (elements, layer) {
         var result = [];
         for (var x = 0; x < size; x++) {
@@ -395,6 +424,7 @@ var Board = function (boardString) {
         layer3: function () {
             return boardAsString(LAYER3)
         },
+        getWholeBoard: getWholeBoard,
         getBarriers: getBarriers,
         findAll: findAll,
         isAnyOfAt: isAnyOfAt,

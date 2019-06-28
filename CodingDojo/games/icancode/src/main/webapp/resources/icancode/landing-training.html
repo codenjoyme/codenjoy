@@ -297,6 +297,13 @@ assert scanner.countNear(12, 7, "BOX") == 3;</pre>
 'LASER_MACHINE', 'LASER_MACHINE_READY',
 'LASER_LEFT', 'LASER_RIGHT', 'LASER_UP', 'LASER_DOWN',
 'START', 'EXIT', 'GOLD', 'HOLE', 'BOX']; </pre>
+
+          <p><span class="func">function getWholeBoard()</span> - Returns all elements on board. This is three-dimensional array [x][y][elements].</p>
+            <pre>assert scanner.getWholeBoard() ==
+[[['WALL'],['WALL'],['WALL'],['WALL']],
+[['WALL'],['START'],['HOLE','OTHER_ROBOT'],['WALL']],
+[['WALL'],['MY_ROBOT'],['GOLD'],['WALL']],
+[['WALL'],['WALL'],['WALL'],['WALL']]];</pre>
           
           <p><span class="func">function getOtherRobots()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStart,  getExit, getHoles</p>
           

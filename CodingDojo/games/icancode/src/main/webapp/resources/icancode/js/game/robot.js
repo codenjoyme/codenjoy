@@ -560,6 +560,10 @@ function initRobot(logger, controller) {
                 }
             }
 
+            var getWholeBoard = function() {
+                return b.getWholeBoard();
+            }
+
             return {
                 at : at,
                 atLeft : atLeft,
@@ -588,7 +592,8 @@ function initRobot(logger, controller) {
                 isMyRobotAlive : isMyRobotAlive,
                 getBarriers : getBarriers,
                 getElements : getElements,
-                getShortestWay : getShortestWay
+                getShortestWay : getShortestWay,
+                getWholeBoard : getWholeBoard
             }
         }
     };
