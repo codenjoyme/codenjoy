@@ -148,7 +148,9 @@ runTest = function() {
         }
     };
 
-    board = 'board={"layers":["' +
+    board = 'board={"scannerOffset":{"x":0,"y":0},' +
+        '"heroPosition":{"x":2,"y":1},' +
+        '"layers":["' +
                         '╔═══════┐' + // 0
                         '║S.$◄..O│' + // 1
                         '║....$O.│' + // 2

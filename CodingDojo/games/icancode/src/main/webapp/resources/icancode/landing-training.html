@@ -261,6 +261,11 @@ assert scanner.atNearRobot(xOffset, yOffset) == element;</pre>
           <pre>var point = scanner.getMe();
 assert point.getX() == 7;
 assert point.getY() == 5;</pre>
+
+<p><span class="func">function getScannerOffset()</span> - Returns position of your scanner inside map.</p>
+<pre>var point = scanner.getScannerOffset();
+assert point.getX() == 7;
+assert point.getY() == 5;</pre>
           
           <p><span class="func">function getAt(x, y)</span> - Returns element at position specified.</p>
           <pre>scanner.getAt(12, 7) == ["START", "HERO"];</pre>

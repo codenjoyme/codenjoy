@@ -52,11 +52,8 @@ public class PrinterData {
         return layers;
     }
 
-    public JSONObject getOffset() {
-        JSONObject result = new JSONObject();
-        result.put("x", offset.getX());
-        result.put("y", offset.getY());
-        return result;
+    public Point getOffset() {
+        return offset;
     }
 
     @Override

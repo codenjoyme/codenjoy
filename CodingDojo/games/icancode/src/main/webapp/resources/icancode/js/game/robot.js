@@ -551,7 +551,7 @@ function initRobot(logger, controller) {
                     if (!validatePoint(arguments)) {
                         return null;
                     }
-                    return b.getShortestWay(getMe(), pt1);
+                    return b.getShortestWay(hero, pt1);
                 } else {
                     if (!validate2Points(arguments)) {
                         return null;
@@ -562,6 +562,10 @@ function initRobot(logger, controller) {
 
             var getWholeBoard = function() {
                 return b.getWholeBoard();
+            }
+
+            var getScannerOffset = function() {
+                return b.getScannerOffset();
             }
 
             return {
@@ -593,7 +597,8 @@ function initRobot(logger, controller) {
                 getBarriers : getBarriers,
                 getElements : getElements,
                 getShortestWay : getShortestWay,
-                getWholeBoard : getWholeBoard
+                getWholeBoard : getWholeBoard,
+                getScannerOffset : getScannerOffset
             }
         }
     };

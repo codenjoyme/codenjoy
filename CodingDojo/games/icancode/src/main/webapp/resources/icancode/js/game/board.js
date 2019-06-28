@@ -52,6 +52,8 @@ var LAYER3 = 2;
 var Board = function (boardString) {
     var board = eval(boardString);
     var layers = board.layers;
+    var scannerOffset = board.scannerOffset;
+    var heroPosition = board.heroPosition;
     var size = Math.sqrt(layers[LAYER1].length);
     var xyl = new LengthToXY(size);
 
@@ -190,13 +192,6 @@ var Board = function (boardString) {
         if (isAt(x, y - 1, layer, element)) count++;
         if (isAt(x, y + 1, layer, element)) count++;
         return count;
-    };
-
-    var getHero = function () {
-        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_LASER];
-        var result = findAllElements(elements, LAYER2)
-            .concat(findAll(Element.ROBOT_FLYING, LAYER3));
-        return result[0];
     };
 
     var getOtherHeroes = function () {
@@ -400,7 +395,9 @@ var Board = function (boardString) {
         size: function () {
             return size;
         },
-        getHero: getHero,
+        getHero: function () {
+            return pt(heroPosition.x, heroPosition.y);
+        },
         getOtherHeroes: getOtherHeroes,
         getLaserMachines: getLaserMachines,
         getLasers: getLasers,
@@ -431,7 +428,10 @@ var Board = function (boardString) {
         isNear: isNear,
         isBarrierAt: isBarrierAt,
         countNear: countNear,
-        getShortestWay: getShortestWay
+        getShortestWay: getShortestWay,
+        getScannerOffset: function () {
+            return pt(scannerOffset.x, scannerOffset.y);
+        }
     };
 };
 

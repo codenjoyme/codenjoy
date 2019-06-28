@@ -25,10 +25,7 @@ package com.codenjoy.dojo.icancode.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.AbstractGameType;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -142,10 +139,18 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
             JSONObject result = new JSONObject();
             result.put("layers", data.getLayers());
-            result.put("offset", data.getOffset());
+            result.put("scannerOffset", toJson(data.getOffset()));
+            result.put("heroPosition", toJson(player.getHero().getPosition().relative(data.getOffset())));
             result.put("showName", true);
             return result;
         });
+    }
+
+    private JSONObject toJson(Point point) {
+        JSONObject result = new JSONObject();
+        result.put("x", point.getX());
+        result.put("y", point.getY());
+        return result;
     }
 
 }

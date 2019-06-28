@@ -167,4 +167,9 @@ public class PointImpl implements Point, Comparable<Point> {
         }
         return Integer.compare(this.hashCode(), o.hashCode());
     }
+
+    @Override
+    public Point relative(Point offset) {
+        return pt(x - offset.getX(), y - offset.getY());
+    }
 }
