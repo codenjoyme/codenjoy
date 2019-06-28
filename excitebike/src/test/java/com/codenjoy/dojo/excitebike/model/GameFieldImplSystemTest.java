@@ -495,7 +495,7 @@ public class GameFieldImplSystemTest {
         assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
     }
 
-        @Test
+    @Test
     public void shouldRemoveObstructedBikeFromBoard__IfBikeXCoordinateIsOutOfBound() {
         //given
         String board = "■■■■■" +
@@ -520,7 +520,7 @@ public class GameFieldImplSystemTest {
     }
 
     @Test
-    public void shouldSpawnAcceleratorOnTheHighestLine(){
+    public void shouldSpawnAcceleratorOnTheHighestLine() {
         //given
         String board = "■■■■■" +
                 "     " +
