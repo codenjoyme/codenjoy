@@ -88,7 +88,7 @@ function initSocket(game, buttons, logger, onSocketMessage, onSocketClose) {
         }
 
         socket.onerror = function(error) {
-            logger.error(error);
+            logger.error(error, 'runProgram');
             socket = null;
         }
 
