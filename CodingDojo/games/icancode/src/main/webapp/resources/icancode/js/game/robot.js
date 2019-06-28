@@ -215,7 +215,7 @@ function initRobot(logger, controller) {
             if (typeof message == 'object') {
                 message = JSON.stringify(message);
             }
-            logger.print("Robot says: " + message);
+            logger.print(message);
         },
         invert : function(direction) {
             if (!validateDirection(direction)) {

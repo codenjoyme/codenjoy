@@ -858,7 +858,7 @@ var robotTest = function() {
 
         robot.log('message');
         robot.log('message2');
-        assertActions(['Robot says: message', 'Robot says: message2'], loggerActions);
+        assertActions(['message', 'message2'], loggerActions);
 
         // invert
         assertEquals('DOWN', robot.invert('UP'));

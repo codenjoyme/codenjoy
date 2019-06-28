@@ -294,6 +294,13 @@ var Board = function (boardString) {
         }
         return barriers;
     };
+
+    var isBarrier = function(x, y) {
+        if (x < 0 || y < 0 || x >= size || y >= size) {
+            return true;
+        }
+        return barriersMap[x][y];
+    }
     
     var getShortestWay = function (from, to) {
         if (from.getX() == to.getX() && from.getY() == to.getY()) {
@@ -384,14 +391,14 @@ var Board = function (boardString) {
                             // путь px/py -> x/y -> xx/yy -> fx/fy
 
                             var can = true;
-                            if (barriersMap[xx][yy] && barriersMap[fx][fy]) {
+                            if (isBarrier(xx, yy) && isBarrier(fx, fy)) {
                                 can = false;
                             }
-                            if (barriersMap[x][y]) {
+                            if (isBarrier(x, y)) {
                                 if (mask[px][py] == -1) {
                                     can = false;
                                 }
-                                if (barriersMap[xx][yy]) {
+                                if (isBarrier(xx, yy)) {
                                     can = false;
                                 }
                             }
@@ -401,10 +408,10 @@ var Board = function (boardString) {
                             //     console.log('xx/yy: ' + xx + ' ' + yy);
                             //     console.log('fx/fy: ' + fx + ' ' + fy);
                             //     console.log('mask[px][py]: ' + mask[px][py]);
-                            //     console.log('barriersMap[px][py]: ' + barriersMap[px][py]);
-                            //     console.log('barriersMap[x][y]: ' + barriersMap[x][y]);
-                            //     console.log('barriersMap[xx][yy]: ' + barriersMap[xx][yy]);
-                            //     console.log('barriersMap[fx][fy]: ' + barriersMap[fx][fy]);
+                            //     console.log('isBarrier(px, py): ' + isBarrier(px, py));
+                            //     console.log('isBarrier(x, y): ' + isBarrier(x, y));
+                            //     console.log('isBarrier(xx, yy): ' + isBarrier(xx, yy));
+                            //     console.log('isBarrier(fx, fy): ' + isBarrier(fx, fy));
                             //     console.log(((can) ? '+' : '-') + (current + 1) + ": [" + x + ":" + y + "] -> [" + xx + ":" + yy + "]");
                             // }
 
