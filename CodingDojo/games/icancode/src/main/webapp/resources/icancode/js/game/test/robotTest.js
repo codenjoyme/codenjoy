@@ -593,7 +593,7 @@ runTest = function() {
     // getShortestWay deadloop
     resetMocks();
 
-    assertEquals("[0,0]",
+    assertEquals("",
         scanner.getShortestWay(new Point(0, 0), scanner.getMe()));
 
     // getShortestWay with 1 point

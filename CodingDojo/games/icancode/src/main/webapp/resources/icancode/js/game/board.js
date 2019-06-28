@@ -296,7 +296,7 @@ var Board = function (boardString) {
             }
             current++;
             if (current > 1000) {
-                return [from];
+                return [];
             }
         }
         var point = to;
