@@ -23,10 +23,10 @@ package com.codenjoy.dojo.web.controller;
  */
 
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.services.dao.Registration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
@@ -43,6 +43,7 @@ import java.io.IOException;
 public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler implements LogoutSuccessHandler {
 
     private final PlayerService playerService;
+    private final SaveService saveService;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request,
@@ -50,6 +51,7 @@ public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler im
                                 Authentication authentication) throws IOException, ServletException {
         if (authentication != null) {
             Registration.User principal = (Registration.User) authentication.getPrincipal();
+            saveService.save(principal.getId());
             playerService.remove(principal.getId());
         }
         super.onLogoutSuccess(request, response, authentication);

@@ -225,12 +225,16 @@ public class Registration {
                 new Object[]{1, code});
     }
 
-    public void updateName(String id, String name) {
+    public void updateReadableName(String id, String name) {
         pool.update("UPDATE users SET readable_name = ? WHERE id = ?;",
                 new Object[]{name, id});
     }
 
-    // TODO test me
+    public void updateId(String name, String id) {
+        pool.update("UPDATE users SET id = ? WHERE readable_name = ?;",
+                new Object[]{id, name});
+    }
+
     public void updateNameAndEmail(String id, String name, String email) {
         pool.update("UPDATE users SET readable_name = ?, email = ? WHERE id = ?;",
                 new Object[]{name, email, id});

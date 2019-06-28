@@ -1127,7 +1127,7 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        List<PlayerInfo> infos = new LinkedList<PlayerInfo>();
+        List<PlayerInfo> infos = new LinkedList<>();
         infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
         infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2", "new-game"));
         playerService.updateAll(infos);
@@ -1163,7 +1163,7 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        List<PlayerInfo> infos = new LinkedList<PlayerInfo>();
+        List<PlayerInfo> infos = new LinkedList<>();
         infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
         infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2", "new-game"));
         infos.add(new PlayerInfo(null, "new-pass2", "new-url2", "new-game"));
@@ -1178,7 +1178,7 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        List<PlayerInfo> infos = new LinkedList<PlayerInfo>();
+        List<PlayerInfo> infos = new LinkedList<>();
         infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
 
         try {

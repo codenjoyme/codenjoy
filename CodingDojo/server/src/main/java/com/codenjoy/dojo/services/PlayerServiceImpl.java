@@ -42,7 +42,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -74,6 +73,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Autowired protected GameService gameService;
     @Autowired protected AutoSaver autoSaver;
+    @Autowired protected GameSaver saver;
     @Autowired protected ActionLogger actionLogger;
     @Autowired protected Registration registration;
 
@@ -108,7 +108,14 @@ public class PlayerServiceImpl implements PlayerService {
 
             registerAIIfNeeded(name, gameName);
 
-            Player player = register(new PlayerSave(name, ip, gameName, 0, null));
+            // TODO test me
+            PlayerSave save = saver.loadGame(name);
+            if (save != PlayerSave.NULL && gameName.equals(save.getGameName())) {
+                save.setCallbackUrl(ip);
+            } else {
+                save = new PlayerSave(name, ip, gameName, 0, null);
+            }
+            Player player = register(new PlayerSave(name, ip, gameName, save.getScore(), save.getSave()));
 
             return player;
         } finally {
@@ -442,7 +449,13 @@ public class PlayerServiceImpl implements PlayerService {
         boolean updateReadableName = StringUtils.isNotEmpty(input.getReadableName());
         if (updateReadableName) {
             updated.setReadableName(input.getReadableName());
-            registration.updateName(input.getName(), input.getReadableName());
+            registration.updateReadableName(input.getName(), input.getReadableName());
+        }
+
+        boolean updateId = !playerGame.getPlayer().getName().equals(input.getName());
+        if (updateId) {
+            updated.setName(input.getName());
+            registration.updateId(input.getReadableName(), input.getName());
         }
 
         try {
