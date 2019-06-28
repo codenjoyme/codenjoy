@@ -85,6 +85,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             MVCConf.RESOURCES_URI,
             ErrorController.URI,
             GameDataController.URI + "/**",
+
+            // all players board
+            BoardController.URI + "/game/**",
+            "/rest/player/null/null/wantsToPlay/**",
+            "/screen-ws/**",
     };
 
     @Override
