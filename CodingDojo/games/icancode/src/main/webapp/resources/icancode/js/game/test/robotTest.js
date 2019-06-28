@@ -237,6 +237,16 @@ runTest = function() {
         scanner.at('QWE'));
     assertActions(["Expected direction or point but was 'QWE' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'."], loggerActions);
 
+    // out of board
+
+    assertEquals(null,
+        scanner.at(0, -1));
+    assertActions(['Your point is out of board: [0,-1].'], loggerActions);
+
+    assertEquals(null,
+        scanner.at(new Point(9, 0)));
+    assertActions(['Your point is out of board: [9,0].'], loggerActions);
+
     // at direction
     resetMocks();
 
@@ -291,6 +301,16 @@ runTest = function() {
         scanner.atNearRobot('ASD', 'QWE', false));
     assertActions(["You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [ASD,QWE,false]."], loggerActions);
 
+    // out of board
+
+    assertEquals(null,
+        scanner.atNearRobot(0, -10));
+    assertActions(['Your point is out of board: [2,-9].'], loggerActions); // TODO немного вводит в заблуждение, передал: 0, -10, а в сообщении: 2,-9
+
+    assertEquals(null,
+        scanner.atNearRobot(90, 0));
+    assertActions(['Your point is out of board: [92,1].'], loggerActions);
+
     // getMe
     resetMocks();
 
@@ -339,6 +359,16 @@ runTest = function() {
         scanner.isAt(1, 2, [3, 4]));
     assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4]."], loggerActions);
 
+    // out of board
+
+    assertEquals(false,
+        scanner.isAt(-1, 0, 'MY_ROBOT'));
+    assertActions(['Your point is out of board: [-1,0].'], loggerActions);
+
+    assertEquals(false,
+        scanner.isAt(0, 9, 'MY_ROBOT'));
+    assertActions(['Your point is out of board: [0,9].'], loggerActions);
+
     // getAt
     resetMocks();
 
@@ -367,6 +397,16 @@ runTest = function() {
     assertEquals(null,
         scanner.getAt('1', 'HERO'));
     assertActions(["You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,HERO]."], loggerActions);
+
+    // out of board
+
+    assertEquals(null,
+        scanner.getAt(-1, -1));
+    assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
+
+    assertEquals(null,
+        scanner.getAt(9, 9));
+    assertActions(['Your point is out of board: [9,9].'], loggerActions);
 
     // findAll
     resetMocks();
@@ -439,6 +479,38 @@ runTest = function() {
         scanner.isAnyOfAt(1, 2, [3, 4]));
     assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4]."], loggerActions);
 
+    // at corners
+
+    assertEquals(true,
+        scanner.isAnyOfAt(0, 0, 'WALL'));
+
+    assertEquals(true,
+        scanner.isAnyOfAt(0, 8, ['OTHER_ROBOT', 'WALL']));
+
+    assertEquals(false,
+        scanner.isAnyOfAt(8, 0, 'GOLD'));
+
+    assertEquals(false,
+        scanner.isAnyOfAt(8, 8, ['GOLD', 'HOLE']));
+
+    // outside of map
+
+    assertEquals(false,
+        scanner.isAnyOfAt(-1, -1, 'WALL'));
+    assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
+
+    assertEquals(false,
+        scanner.isAnyOfAt(-1, 9, ['OTHER_ROBOT', 'WALL']));
+    assertActions(['Your point is out of board: [-1,9].'], loggerActions);
+
+    assertEquals(false,
+        scanner.isAnyOfAt(9, -1, 'GOLD'));
+    assertActions(['Your point is out of board: [9,-1].'], loggerActions);
+
+    assertEquals(false,
+        scanner.isAnyOfAt(9, 9, ['GOLD', 'HOLE']));
+    assertActions(['Your point is out of board: [9,9].'], loggerActions);
+
     // isNear
     resetMocks();
 
@@ -478,6 +550,16 @@ runTest = function() {
         scanner.isNear(1, 2, [3, 4]));
     assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4]."], loggerActions);
 
+    // out of board
+
+    assertEquals(false,
+        scanner.isNear(-1, -1, 'GOLD'));
+    assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
+
+    assertEquals(false,
+        scanner.isNear(9, 9, 'GOLD'));
+    assertActions(['Your point is out of board: [9,9].'], loggerActions);
+
     // isBarrierAt
     resetMocks();
 
@@ -508,6 +590,16 @@ runTest = function() {
         scanner.isBarrierAt('ASD', 'QWE', false));
     assertActions(["You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [ASD,QWE,false]."], loggerActions);
 
+    // out of board
+
+    assertEquals(false,
+        scanner.isBarrierAt(-1, -1));
+    assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
+
+    assertEquals(false,
+        scanner.isBarrierAt(9, 9));
+    assertActions(['Your point is out of board: [9,9].'], loggerActions);
+
     // countNear
     resetMocks();
 
@@ -535,17 +627,27 @@ runTest = function() {
     assertEquals(2, // TODO should be 3
             scanner.countNear(1, 1, 'WALL'));
 
-    assertEquals(false,
+    assertEquals(0,
         scanner.countNear(2, 2));
     assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,2]."], loggerActions);
 
-    assertEquals(false,
+    assertEquals(0,
         scanner.countNear());
     assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters []."], loggerActions);
 
-    assertEquals(false,
+    assertEquals(0,
         scanner.countNear(1, 2, [3, 4]));
     assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4]."], loggerActions);
+
+    // out of board
+
+    assertEquals(0,
+        scanner.countNear(-1, -1, 'GOLD'));
+    assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
+
+    assertEquals(0,
+        scanner.countNear(9, 9, 'GOLD'));
+    assertActions(['Your point is out of board: [9,9].'], loggerActions);
 
     // getOtherRobots
     resetMocks();
@@ -656,6 +758,16 @@ runTest = function() {
         scanner.getShortestWay('string'));
     assertActions(["You tried to call function(point) with parameters [string]."], loggerActions);
 
+    // out of board
+
+    assertEquals(null,
+        scanner.getShortestWay(pt(-1, -1)));
+    assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
+
+    assertEquals(null,
+        scanner.getShortestWay(pt(9, 9)));
+    assertActions(['Your point is out of board: [9,9].'], loggerActions);
+
     // getShortestWay with 2 points
     resetMocks();
 
@@ -685,8 +797,17 @@ runTest = function() {
 
     assertEquals(null,
         scanner.getShortestWay(new Point(1, 2), 3));
-
     assertActions(["You tried to call function(point, point) with parameters [[1,2],3]."], loggerActions);
+
+    // out of board
+
+    assertEquals(null,
+        scanner.getShortestWay(pt(-1, -1), pt(0, 0)));
+    assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
+
+    assertEquals(null,
+        scanner.getShortestWay(pt(0, 0), pt(9, 9)));
+    assertActions(['Your point is out of board: [9,9].'], loggerActions);
 
     // isMyRobotAlive
     resetMocks();

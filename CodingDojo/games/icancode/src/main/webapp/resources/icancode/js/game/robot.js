@@ -76,21 +76,33 @@ function initRobot(logger, controller) {
         return (arg.length == 2 && typeof arg[0] == 'number' && typeof arg[1] == 'number');
     }
 
-    var validateTwoInteger = function(arg) {
-        var valid = isTwoInteger(arg);
+    var validateTwoInteger = function(arg, size) {
+        var valid = isTwoInteger(arg) && isPoint(pt(arg[0], arg[1]));
         if (!valid) {
             logger.print("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [" + Array.from(arg).join(',') + "].");
+        } else {
+            valid = validateIsOutOf(pt(arg[0], arg[1]), size);
         }
         return valid;
     }
 
-    var validateTwoIntegerAndElements = function(arg) {
+    var validateIsOutOf = function(point, size) {
+        if (isOutOf(point, size)) {
+            logger.print("Your point is out of board: " + point + ".");
+            return false;
+        }
+        return true;
+    }
+
+    var validateTwoIntegerAndElements = function(arg, size) {
         var valid = (arg.length == 3 &&
                 typeof arg[0] == 'number' &&
                 typeof arg[1] == 'number' &&
                 isValidElements(arg[2]));
         if (!valid) {
             logger.print("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [" + Array.from(arg).join(',') + "].");
+        } else {
+            valid = validateIsOutOf(pt(arg[0], arg[1]), size);
         }
         return valid;
     }
@@ -118,6 +130,13 @@ function initRobot(logger, controller) {
         return valid;
     }
 
+    var isOutOf = function(point, size) {
+        if (size == undefined) return false;
+        var x = point.getX();
+        var y = point.getY();
+        return x < 0 || x >= size || y < 0 || y >= size;
+    }
+
     var isPoint = function(object) {
         if (!object) {
             return null;
@@ -126,18 +145,22 @@ function initRobot(logger, controller) {
             typeof object.getY == 'function');
     }
 
-    var validatePoint = function(arg) {
+    var validatePoint = function(arg, size) {
         var valid = (arg.length == 1 && isPoint(arg[0]));
         if (!valid) {
             logger.print("You tried to call function(point) with parameters [" + Array.from(arg).join(',') + "].");
+        } else {
+            valid = validateIsOutOf(arg[0], size);
         }
         return valid;
     }
 
-    var validate2Points = function(arg) {
+    var validate2Points = function(arg, size) {
         var valid = (arg.length == 2 && isPoint(arg[0]) && isPoint(arg[1]));
         if (!valid) {
             logger.print("You tried to call function(point, point) with parameters [" + Array.from(arg).join(',') + "].");
+        } else {
+            valid = validateIsOutOf(arg[0], size) && validateIsOutOf(arg[1], size);
         }
         return valid;
     }
@@ -302,6 +325,7 @@ function initRobot(logger, controller) {
         },
         getScanner : function() {
             var b = new Board(board);
+            var size = b.size();
             var hero = b.getHero();
 
             var forAll = function(elementTypes, doThat) {
@@ -321,13 +345,20 @@ function initRobot(logger, controller) {
             }
 
             var atNearRobot = function(dx, dy) {
-                if (!validateTwoInteger(arguments)) {
+                if (!validateTwoInteger(arguments, undefined)) {
                     return null;
                 }
 
-                var element1 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER1);
-                var element2 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER2);
-                var element3 = b.getAt(hero.getX() + dx, hero.getY() + dy, LAYER3);
+                var x = hero.getX() + dx;
+                var y = hero.getY() + dy;
+
+                if (!validateIsOutOf(pt(x, y), size)) {
+                    return null;
+                }
+
+                var element1 = b.getAt(x, y, LAYER1);
+                var element2 = b.getAt(x, y, LAYER2);
+                var element3 = b.getAt(x, y, LAYER3);
 
                 return collect(element1.type, element2.type, element3.type);
             }
@@ -337,7 +368,7 @@ function initRobot(logger, controller) {
             }
 
             var isAt = function(x, y, elementTypes) {
-                if (!validateTwoIntegerAndElements(arguments)) {
+                if (!validateTwoIntegerAndElements(arguments, size)) {
                     return false;
                 }
 
@@ -367,7 +398,7 @@ function initRobot(logger, controller) {
             }
 
             var getAt = function(x, y) {
-                if (!validateTwoInteger(arguments)) {
+                if (!validateTwoInteger(arguments, size)) {
                     return null;
                 }
 
@@ -402,7 +433,7 @@ function initRobot(logger, controller) {
             }
 
             var isAnyOfAt = function(x, y, elementTypes) {
-                if (!validateTwoIntegerAndElements(arguments)) {
+                if (!validateTwoIntegerAndElements(arguments, size)) {
                     return false;
                 }
 
@@ -421,7 +452,7 @@ function initRobot(logger, controller) {
             }
 
             var isNear = function(x, y, elementTypes) {
-                if (!validateTwoIntegerAndElements(arguments)) {
+                if (!validateTwoIntegerAndElements(arguments, size)) {
                     return false;
                 }
 
@@ -438,7 +469,7 @@ function initRobot(logger, controller) {
             }
 
             var isBarrierAt = function(x, y) {
-                if (!validateTwoInteger(arguments)) {
+                if (!validateTwoInteger(arguments, size)) {
                     return false;
                 }
 
@@ -446,8 +477,8 @@ function initRobot(logger, controller) {
             }
 
             var countNear = function(x, y, elementTypes) {
-                if (!validateTwoIntegerAndElements(arguments)) {
-                    return false;
+                if (!validateTwoIntegerAndElements(arguments, size)) {
+                    return 0;
                 }
 
                 var count = 0;
@@ -518,6 +549,9 @@ function initRobot(logger, controller) {
 
                 if (isPoint(directionOrPoint)) {
                     var point = directionOrPoint;
+                    if (!validateIsOutOf(point, size)) {
+                        return null;
+                    }
                     return getAt(point.getX(), point.getY());
                 }
 
@@ -548,12 +582,12 @@ function initRobot(logger, controller) {
 
             var getShortestWay = function(pt1, pt2) {
                 if (!pt2) {
-                    if (!validatePoint(arguments)) {
+                    if (!validatePoint(arguments, size)) {
                         return null;
                     }
                     return b.getShortestWay(hero, pt1);
                 } else {
-                    if (!validate2Points(arguments)) {
+                    if (!validate2Points(arguments, size)) {
                         return null;
                     }
                     return b.getShortestWay(pt1, pt2);
