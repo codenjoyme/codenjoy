@@ -40,6 +40,7 @@ import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import org.json.JSONObject;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType  {
@@ -139,12 +140,19 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
             JSONObject result = new JSONObject();
             result.put("layers", data.getLayers());
-            result.put("scannerOffset", toJson(data.getOffset()));
+            result.put("scannerOffset", toJson(getViewOffset(data)));
             result.put("heroPosition", toJson(player.getHeroOffset(data)));
             result.put("levelFinished", player.isLevelFinished());
             result.put("showName", true);
             return result;
         });
+    }
+
+    private Point getViewOffset(PrinterData data) {
+        Point offset = data.getOffset();
+        return pt(offset.getX(),
+                // TODO думаю стоит проинвертировать y тут #323
+                data.getMapSize() - data.getViewSize() - offset.getY());
     }
 
     private JSONObject toJson(Point point) {

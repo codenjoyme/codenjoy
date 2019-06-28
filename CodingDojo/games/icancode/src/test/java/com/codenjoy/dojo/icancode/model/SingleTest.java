@@ -1770,7 +1770,7 @@ public class SingleTest {
         // when then
         assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
                 "{'x':0,'y':0}",
-                "{'x':1,'y':3}",
+                "{'x':1,'y':1}",
 
                 "╔═══┐\n" +
                 "║SE.│\n" +
@@ -1793,7 +1793,7 @@ public class SingleTest {
         // when then
         assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
                 "{'x':0,'y':0}",
-                "{'x':1,'y':3}",
+                "{'x':1,'y':1}",
 
                 "╔═══┐\n" +
                 "║SE.│\n" +
@@ -1860,7 +1860,7 @@ public class SingleTest {
         // when then
         assertBoardData("{'current':1,'lastPassed':0,'total':1}",
                 "{'x':0,'y':0}",
-                "{'x':2,'y':3}",
+                "{'x':2,'y':1}",
 
                 "╔═══┐\n" +
                 "║S..│\n" +
@@ -1932,8 +1932,8 @@ public class SingleTest {
 
         // when then
         assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':0,'y':4}",
-                "{'x':1,'y':14}",
+                "{'x':0,'y':0}",
+                "{'x':1,'y':1}",
 
                 "╔═══════════════\n" +
                 "║S..............\n" +
@@ -1987,8 +1987,8 @@ public class SingleTest {
                 "----------------\n", single1);
 
         assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':0,'y':4}",
-                "{'x':1,'y':14}",
+                "{'x':0,'y':0}",
+                "{'x':1,'y':1}",
 
                 "╔═══════════════\n" +
                 "║S..............\n" +
@@ -2051,8 +2051,8 @@ public class SingleTest {
 
         // then
         assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':4,'y':4}",
-                "{'x':14,'y':14}",
+                "{'x':4,'y':0}",
+                "{'x':14,'y':1}",
 
                 "═══════════════┐\n" +
                 "...............│\n" +
@@ -2106,8 +2106,8 @@ public class SingleTest {
                 "----------------\n", single1);
 
         assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':0,'y':0}",
-                "{'x':1,'y':1}",
+                "{'x':0,'y':4}",
+                "{'x':1,'y':14}",
 
                 "║....│  ║.......\n" +
                 "║..┌─┘  └─╗.....\n" +
@@ -2176,8 +2176,8 @@ public class SingleTest {
 
         // then
         assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':3,'y':4}",
-                "{'x':8,'y':9}",
+                "{'x':3,'y':0}",
+                "{'x':8,'y':6}",
 
                 "════════════════\n" +
                 "................\n" +
@@ -2231,8 +2231,8 @@ public class SingleTest {
                 "----------------\n", single1);
 
         assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':0,'y':0}",
-                "{'x':6,'y':8}",
+                "{'x':0,'y':4}",
+                "{'x':6,'y':7}",
 
                 "║....│  ║.......\n" +
                 "║..┌─┘  └─╗.....\n" +

@@ -96,6 +96,8 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
     private PrinterData getPrinterData(StringBuilder[] builders) {
         PrinterData result = new PrinterData();
         result.setOffset(pt(vx, vy));
+        result.setViewSize(viewSize);
+        result.setMapSize(size);
         for (int i = 0; i < countLayers; ++i) {
             result.addLayer(builders[i].toString());
         }

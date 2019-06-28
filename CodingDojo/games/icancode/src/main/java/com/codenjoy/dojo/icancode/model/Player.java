@@ -82,7 +82,10 @@ public class Player extends GamePlayer<Hero, IField> {
 
     // TODO test me
     public Point getHeroOffset(PrinterData data) {
-        return getHero().getPosition().relative(data.getOffset());
+        Point point = getHero().getPosition().relative(data.getOffset());
+        // TODO думаю стоит проинвертировать y тут #323
+        point.setY(data.getViewSize() - 1 - point.getY());
+        return point;
     }
 
     public class ICanCodeHeroData implements HeroData {

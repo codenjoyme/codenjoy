@@ -171,6 +171,7 @@ if (scanner.at(point) == "HOLE") {
     // some statement here
 }
 </pre>
+          <!-- // TODO думаю стоит проинвертировать y тут #323 -->
           <p>Coordinate {x:0, y:0} in the left-top corner of board.</p>
           <p>To show data in console use the following code:</p>
           <pre>
@@ -256,13 +257,15 @@ var xOffset = 1;
 var yOffset = -2;
 var element = "HOLE";
 assert scanner.atNearRobot(xOffset, yOffset) == element;</pre>
-          
-          <p><span class="func">function getMe()</span> - Returns position of your robot.</p>
+
+          <!-- // TODO думаю стоит проинвертировать y тут #323 -->
+          <p><span class="func">function getMe()</span> - Returns position of your robot ({x:0, y:0} is on left-top corner).</p>
           <pre>var point = scanner.getMe();
 assert point.getX() == 7;
 assert point.getY() == 5;</pre>
 
-<p><span class="func">function getScannerOffset()</span> - Returns position of your scanner inside map.</p>
+          <!-- // TODO думаю стоит проинвертировать y тут #323 -->
+          <p><span class="func">function getScannerOffset()</span> - Returns position of your scanner inside map - distance between left-top corner of scanner and lest-top corner of map  with coordinate {x:0, y:0}.</p>
 <pre>var point = scanner.getScannerOffset();
 assert point.getX() == 7;
 assert point.getY() == 5;</pre>

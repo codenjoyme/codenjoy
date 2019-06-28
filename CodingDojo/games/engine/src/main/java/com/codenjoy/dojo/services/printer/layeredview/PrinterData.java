@@ -26,7 +26,6 @@ package com.codenjoy.dojo.services.printer.layeredview;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
-import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +34,8 @@ public class PrinterData {
 
     private List<String> layers;
     private Point offset;
+    private int mapSize;
+    private int viewSize;
 
     public PrinterData() {
         this.layers = new LinkedList<>();
@@ -59,5 +60,21 @@ public class PrinterData {
     @Override
     public String toString() {
         return JsonUtils.toStringSorted(this);
+    }
+
+    public void setViewSize(int viewSize) {
+        this.viewSize = viewSize;
+    }
+
+    public int getViewSize() {
+        return viewSize;
+    }
+
+    public void setMapSize(int mapSize) {
+        this.mapSize = mapSize;
+    }
+
+    public int getMapSize() {
+        return mapSize;
     }
 }
