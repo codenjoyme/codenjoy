@@ -51,10 +51,10 @@ var LAYER3 = 2;
 
 var Board = function (boardString) {
     var board = eval(boardString);
-    var layers = board.layers;
+    var layersString = board.layers;
     var scannerOffset = board.scannerOffset;
     var heroPosition = board.heroPosition;
-    var size = Math.sqrt(layers[LAYER1].length);
+    var size = Math.sqrt(layersString[LAYER1].length);
     var xyl = new LengthToXY(size);
 
     var parseLayer = function (layer) {
@@ -68,8 +68,9 @@ var Board = function (boardString) {
         return map;
     }
 
-    for (var index in layers) {
-        layers[index] = parseLayer(layers[index]);
+    var layers = [];
+    for (var index in layersString) {
+        layers.push(parseLayer(layersString[index]));
     }
 
     var contains = function (a, obj) {
@@ -250,8 +251,8 @@ var Board = function (boardString) {
     };
 
     var isMyRobotAlive = function () {
-        return layers[LAYER2].indexOf(Element.ROBOT_LASER.char) == -1 &&
-            layers[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
+        return layersString[LAYER2].indexOf(Element.ROBOT_LASER.char) == -1 &&
+            layersString[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
     };
 
     var barriers = null; // TODO optimize this method

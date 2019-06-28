@@ -691,7 +691,7 @@ runTest = function() {
     // isMyRobotAlive
     resetMocks();
 
-    assertEquals(true,
+    assertEquals(false,
         scanner.isMyRobotAlive());
 
     // ------------- other Robot methods ---------------
