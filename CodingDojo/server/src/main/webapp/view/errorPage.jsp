@@ -39,8 +39,9 @@
     <div class="page-header">
         <h1>WTF! Something wrong...</h1>
     </div>
-        <div>Your ticket number is: ${ticketNumber} <a href="${ctx}">Go to main page</a></div></br>
+        <div>Your ticket number is: ${ticketNumber}</div></br>
         <div>${message}</div></br>
+        <div><a href="${ctx}">Go to main page</a><div></br>
         <div>${stacktrace}</div></br>
     </div>
 </body>

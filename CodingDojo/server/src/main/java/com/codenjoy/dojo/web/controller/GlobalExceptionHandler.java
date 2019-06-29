@@ -23,21 +23,14 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.DebugService;
-import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.ErrorTicketService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Calendar;
 
 /**
  * Created by Oleksandr_Baglai on 2018-06-26.
@@ -46,70 +39,12 @@ import java.util.Calendar;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @Autowired
-    private DebugService debug;
+    @Autowired private ErrorTicketService ticket;
 
     @ExceptionHandler(value = Exception.class)
     public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) {
         String url = req.getRequestURL().toString();
-        String ticket = ticket();
 
-        log.error("[TICKET:URL] {}:{} {}", ticket, url, e);
-        System.err.printf("[TICKET:URL] %s:%s%n", ticket, url);
-        e.printStackTrace();
-
-        ModelAndView result = new ModelAndView();
-        result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        result.addObject("ticketNumber", ticket);
-        result.addObject("message", "Something wrong with your request. " +
-                "Please save you ticker number and ask site administrator.");
-
-        if (!debug.isWorking()) {
-            if (url.contains("/rest/")) {
-                shouldJsonResult(result);
-            } else {
-                shouldErrorPage(result);
-            }
-            return result;
-        }
-
-        result.addObject("message", e.getClass().getName() + ": " + e.getMessage());
-        result.addObject("url", url);
-        result.addObject("exception", e);
-
-        if (url.contains("/rest/")) {
-            result.addObject("stackTrace", ExceptionUtils.getStackTrace(e));
-            result.setView(new MappingJackson2JsonView(){{
-                setPrettyPrint(true);
-            }});
-            return result;
-        }
-
-        StringWriter writer = new StringWriter();
-        e.printStackTrace(new PrintWriter(writer));
-        String text = writer.toString()
-                .replaceAll("\\n\\r", "\n")
-                .replaceAll("\\n\\n", "\n")
-                .replaceAll("\\n", "<br>");
-        result.addObject("stacktrace", text);
-
-        shouldErrorPage(result);
-        return result;
+        return ticket.get(url, e);
     }
-
-    private void shouldJsonResult(ModelAndView result) {
-        result.setView(new MappingJackson2JsonView(){{
-            setPrettyPrint(true);
-        }});
-    }
-
-    private void shouldErrorPage(ModelAndView result) {
-        result.setViewName("errorPage");
-    }
-
-    private String ticket() {
-        return Hash.md5("anotherSoul" + Hash.md5("someSoul" +
-                Calendar.getInstance().getTimeInMillis()));
-    }
-
 }
