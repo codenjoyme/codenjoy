@@ -26,9 +26,9 @@ function defaultRegistrationSettings() {
     return {
         showGames: true,
         showNames: true,
-        showCities: false,
-        showTechSkills: false,
-        showUniversity: false,
+        showData2: false,
+        showData2: false,
+        showData3: false,
         defaultGame: null,
         gameTypes: {
             icancode: ['Training', 'Contest', 'eKids', 'Befunge']
@@ -62,8 +62,9 @@ pages.admin = function() {
 
         result.showGames = $('#show-games').prop('checked');
         result.showNames = $('#show-names').prop('checked');
-        result.showTechSkills = $('#show-tech').prop('checked');
-        result.showUniversity = $('#show-university').prop('checked');
+        result.showData1 = $('#show-data1').prop('checked');
+        result.showData2 = $('#show-data2').prop('checked');
+        result.showData3 = $('#show-data3').prop('checked');
         result.defaultGame = $('#default-game').find('option:selected').text();
 
         return result;
@@ -79,8 +80,9 @@ pages.admin = function() {
 
         $('#show-games').prop('checked', data.showGames);
         $('#show-names').prop('checked', data.showNames);
-        $('#show-tech').prop('checked', data.showTechSkills);
-        $('#show-university').prop('checked', data.showUniversity);
+        $('#show-data1').prop('checked', data.showData1);
+        $('#show-data2').prop('checked', data.showData2);
+        $('#show-data3').prop('checked', data.showData3);
 
         var select = $('#default-game');
         select.children().remove();

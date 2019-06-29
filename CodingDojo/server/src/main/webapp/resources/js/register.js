@@ -80,9 +80,9 @@ function initRegistration(waitApprove, contextPath) {
 
             display('#gameType', data.showGames);
             display('#readableName', data.showNames);
-            display('#data1', data.showCities);
-            display('#data2', data.showTechSkills);
-            display('#data3', data.showUniversity);
+            display('#data1', data.showData1);
+            display('#data2', data.showData2);
+            display('#data3', data.showData3);
 
             fillFormFromLocalStorage(data);
 
