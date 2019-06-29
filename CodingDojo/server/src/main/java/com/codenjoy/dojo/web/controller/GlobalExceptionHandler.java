@@ -53,16 +53,18 @@ public class GlobalExceptionHandler {
     public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) {
         String url = req.getRequestURL().toString();
         String ticket = ticket();
+
         log.error("[TICKET:URL] {}:{} {}", ticket, url, e);
         System.err.printf("[TICKET:URL] %s:%s%n", ticket, url);
         e.printStackTrace();
 
         ModelAndView result = new ModelAndView();
         result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+        result.addObject("ticketNumber", ticket);
+        result.addObject("message", "Something wrong with your request. " +
+                "Please save you ticker number and ask site administrator.");
 
         if (!debug.isWorking()) {
-            result.addObject("message", "Something wrong with your request. " +
-                    "Please ask site administrator. Your ticket number is: " + ticket);
             if (url.contains("/rest/")) {
                 shouldJsonResult(result);
             } else {
@@ -71,17 +73,17 @@ public class GlobalExceptionHandler {
             return result;
         }
 
+        result.addObject("message", e.getClass().getName() + ": " + e.getMessage());
+        result.addObject("url", url);
+        result.addObject("exception", e);
+
         if (url.contains("/rest/")) {
-            result.addObject("message", e.getMessage());
             result.addObject("stackTrace", ExceptionUtils.getStackTrace(e));
-            result.addObject("url", url);
             result.setView(new MappingJackson2JsonView(){{
                 setPrettyPrint(true);
             }});
             return result;
         }
-
-        result.addObject("exception", e);
 
         StringWriter writer = new StringWriter();
         e.printStackTrace(new PrintWriter(writer));
@@ -91,12 +93,7 @@ public class GlobalExceptionHandler {
                 .replaceAll("\\n", "<br>");
         result.addObject("stacktrace", text);
 
-        result.addObject("message", e.getClass().getName() + ": " + e.getMessage());
-
-        result.addObject("url", url);
-
         shouldErrorPage(result);
-
         return result;
     }
 
