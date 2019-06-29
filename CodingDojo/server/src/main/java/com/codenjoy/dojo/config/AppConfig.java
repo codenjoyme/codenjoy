@@ -44,13 +44,13 @@ public class AppConfig {
     }
 
     @Bean
-    public PlayerTransport controlPlayerTransport(DebugService debugService) {
-        return new PlayerTransportImpl(debugService);
+    public PlayerTransport controlPlayerTransport() {
+        return new PlayerTransportImpl();
     }
 
     @Bean
-    public PlayerTransport screenPlayerTransport(DebugService debugService) {
-        return new PlayerTransportImpl(debugService);
+    public PlayerTransport screenPlayerTransport() {
+        return new PlayerTransportImpl();
     }
 
 }

@@ -38,11 +38,6 @@ public class PlayerTransportImpl implements PlayerTransport {
     private Map<String, SocketsHandlerPair> endpoints = new LinkedHashMap<>();
     private Map<PlayerSocket, Function<Object, Object>> filters = new HashMap<>();
     private Function<Object, Object> defaultFilter;
-    private DebugService debugService;
-
-    public PlayerTransportImpl(DebugService debugService) {
-        this.debugService = debugService;
-    }
 
     @Override
     public void sendStateToAll(Object state) throws IOException {
@@ -67,9 +62,7 @@ public class PlayerTransportImpl implements PlayerTransport {
                         messages.toString());
                 // TODO Может не надо тут прокидывать это исключение а просто логгировать факт каждой проблемы отдельно
             }
-            if (debugService.isWorking()) {
-                log.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", requested);
-            }
+            log.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", requested);
         } finally {
             lock.readLock().unlock();
         }

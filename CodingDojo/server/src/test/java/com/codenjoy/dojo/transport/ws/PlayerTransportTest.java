@@ -78,9 +78,7 @@ public class PlayerTransportTest {
     }
 
     private void createServices(boolean waitForClient) {
-        AppProperties appProperties = new AppProperties();
-        appProperties.setLogging(Arrays.asList("com.epam", "com.codenjoy"));
-        transport = new PlayerTransportImpl(new DebugService(appProperties));
+        transport = new PlayerTransportImpl();
         authentication = mock(AuthenticationService.class);
         creator = new PlayerSocketCreator(transport, authentication, waitForClient);
     }
