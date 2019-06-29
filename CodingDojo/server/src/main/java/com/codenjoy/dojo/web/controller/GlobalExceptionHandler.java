@@ -23,9 +23,11 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
+import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.hash.Hash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -44,6 +46,9 @@ import java.util.Calendar;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    @Autowired
+    private DebugService debug;
+
     @ExceptionHandler(value = Exception.class)
     public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) {
         String url = req.getRequestURL().toString();
@@ -55,8 +60,7 @@ public class GlobalExceptionHandler {
         ModelAndView result = new ModelAndView();
         result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        // TODO сдеалть тут какуй-то пропертю
-        if (true) {
+        if (!debug.isWorking()) {
             result.addObject("message", "Something wrong with your request. " +
                     "Please ask site administrator. Your ticket number is: " + ticket);
             if (url.contains("/rest/")) {
