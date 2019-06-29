@@ -351,7 +351,7 @@ public class AdminController {
     }
 
     private String getDefaultGame() {
-        return gameService.getGameNames().iterator().next();
+        return gameService.getDefaultGame();
     }
 
     @RequestMapping(method = RequestMethod.GET)

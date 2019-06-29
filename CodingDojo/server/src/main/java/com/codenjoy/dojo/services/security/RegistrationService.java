@@ -23,10 +23,7 @@ package com.codenjoy.dojo.services.security;
  */
 
 import com.codenjoy.dojo.client.CodenjoyContext;
-import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.LinkService;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.web.controller.AdminController;
@@ -69,6 +66,7 @@ public class RegistrationService {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final ViewDelegationService viewDelegationService;
+    private final GameService gameService;
 
     public String register(Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
@@ -205,6 +203,10 @@ public class RegistrationService {
     }
 
     public String register(String id, String code, String gameName, String ip) {
+        // TODO #984 вот тут дополнительная защита на всякий
+        if (gameName == null) {
+            gameName = gameService.getDefaultGame();
+        }
         Player player = playerService.register(id, ip, gameName);
         return getBoardUrl(code, player.getName(), gameName);
     }

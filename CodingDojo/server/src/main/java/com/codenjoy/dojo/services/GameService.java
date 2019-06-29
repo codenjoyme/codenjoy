@@ -36,4 +36,6 @@ public interface GameService {
     Map<String, List<String>> getSprites();
 
     GameType getGame(String name);
+
+    String getDefaultGame();
 }

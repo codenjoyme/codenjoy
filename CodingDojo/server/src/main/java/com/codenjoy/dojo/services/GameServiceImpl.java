@@ -130,4 +130,9 @@ public class GameServiceImpl implements GameService {
 
         return NullGameType.INSTANCE;
     }
+
+    @Override
+    public String getDefaultGame() {
+        return getGameNames().iterator().next();
+    }
 }
