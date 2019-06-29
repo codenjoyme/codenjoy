@@ -45,8 +45,6 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType  {
 
-    public static final int COUNT_LAYERS = 3;
-
     private Parameter<Integer> isTrainingMode;
 
     public GameRunner() {
@@ -127,20 +125,11 @@ public class GameRunner extends AbstractGameType implements GameType  {
     @Override
     public PrinterFactory getPrinterFactory() {
         return PrinterFactory.get((BoardReader reader, Player player) -> {
-            // TODO тут ой как некрасиво, при каждой прорисовке создается принтер
-            // TODO да и само по себе это layered как-то сложно вышло
-            LayeredViewPrinter printer = new LayeredViewPrinter(
-                    reader.size(),
-                    () -> player.getField().layeredReader(),
-                    () -> player,
-                    Levels.size(),
-                    COUNT_LAYERS);
-
-            PrinterData data = printer.print();
+            PrinterData data = player.getPrinter().print();
 
             JSONObject result = new JSONObject();
             result.put("layers", data.getLayers());
-            result.put("scannerOffset", toJson(getViewOffset(data)));
+            result.put("offset", toJson(getViewOffset(data)));
             result.put("heroPosition", toJson(player.getHeroOffset(data)));
             result.put("levelFinished", player.isLevelFinished());
             result.put("showName", true);

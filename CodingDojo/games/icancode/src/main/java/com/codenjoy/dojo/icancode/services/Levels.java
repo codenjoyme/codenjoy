@@ -37,6 +37,7 @@ public final class Levels {
 
     public static int VIEW_SIZE = 20;
     public static final int VIEW_SIZE_TESTING = 16;
+    public static final int COUNT_LAYERS = 3;
 
     private Levels() {
         throw new IllegalAccessError("Utility class");
@@ -425,6 +426,7 @@ public final class Levels {
         return new LevelImpl(resize(decorate(levelMap), size()));
     }
 
+    // TODO я думаю этот метод не нужен тут, так как он дублирует Layered view
     static String resize(String level, int toSize) {
         double sqrt = Math.sqrt(level.length());
         int currentSize = (int) sqrt;

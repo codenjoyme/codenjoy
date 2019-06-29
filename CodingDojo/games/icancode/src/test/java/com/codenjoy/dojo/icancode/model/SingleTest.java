@@ -1768,22 +1768,23 @@ public class SingleTest {
                 "└───┘");
 
         // when then
-        assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':0,'y':0}",
-                "{'x':1,'y':1}",
-
+        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+                "offset: {'x':0,'y':0}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':1,'y':1}\n" +
+                "\n" +
                 "╔═══┐\n" +
                 "║SE.│\n" +
                 "║...│\n" +
                 "║...│\n" +
-                "└───┘\n",
-
+                "└───┘\n" +
+                "\n" +
                 "-----\n" +
                 "-☺---\n" +
                 "-----\n" +
                 "-----\n" +
-                "-----\n",
-
+                "-----\n" +
+                "\n" +
                 "-----\n" +
                 "-----\n" +
                 "-----\n" +
@@ -1791,22 +1792,23 @@ public class SingleTest {
                 "-----\n", single1);
 
         // when then
-        assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':0,'y':0}",
-                "{'x':1,'y':1}",
-
+        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+                "offset: {'x':0,'y':0}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':1,'y':1}\n" +
+                "\n" +
                 "╔═══┐\n" +
                 "║SE.│\n" +
                 "║...│\n" +
                 "║...│\n" +
-                "└───┘\n",
-
+                "└───┘\n" +
+                "\n" +
                 "-----\n" +
                 "-☺---\n" +
                 "-----\n" +
                 "-----\n" +
-                "-----\n",
-
+                "-----\n" +
+                "\n" +
                 "-----\n" +
                 "-----\n" +
                 "-----\n" +
@@ -1858,22 +1860,23 @@ public class SingleTest {
                 "-----");
 
         // when then
-        assertBoardData("{'current':1,'lastPassed':0,'total':1}",
-                "{'x':0,'y':0}",
-                "{'x':2,'y':1}",
-
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':1}\n" +
+                "offset: {'x':0,'y':0}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':2,'y':1}\n" +
+                "\n" +
                 "╔═══┐\n" +
                 "║S..│\n" +
                 "║...│\n" +
                 "║..E│\n" +
-                "└───┘\n",
-
+                "└───┘\n" +
+                "\n" +
                 "-----\n" +
                 "--☺--\n" +
                 "-X---\n" +
                 "-----\n" +
-                "-----\n",
-
+                "-----\n" +
+                "\n" +
                 "-----\n" +
                 "-----\n" +
                 "-----\n" +
@@ -1881,22 +1884,23 @@ public class SingleTest {
                 "-----\n", single1);
 
         // when then
-        assertBoardData("{'current':1,'lastPassed':0,'total':1}",
-                "{'x':0,'y':0}",
-                "{'x':1,'y':2}",
-
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':1}\n" +
+                "offset: {'x':0,'y':0}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':1,'y':2}\n" +
+                "\n" +
                 "╔═══┐\n" +
                 "║S..│\n" +
                 "║...│\n" +
                 "║..E│\n" +
-                "└───┘\n",
-
+                "└───┘\n" +
+                "\n" +
                 "-----\n" +
                 "--X--\n" +
                 "-☺---\n" +
                 "-----\n" +
-                "-----\n",
-
+                "-----\n" +
+                "\n" +
                 "-----\n" +
                 "-----\n" +
                 "-----\n" +
@@ -1931,10 +1935,11 @@ public class SingleTest {
         givenFl(field, field);
 
         // when then
-        assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':0,'y':0}",
-                "{'x':1,'y':1}",
-
+        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+                "offset: {'x':0,'y':0}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':1,'y':1}\n" +
+                "\n" +
                 "╔═══════════════\n" +
                 "║S..............\n" +
                 "║...............\n" +
@@ -1950,8 +1955,8 @@ public class SingleTest {
                 "║...............\n" +
                 "║...............\n" +
                 "║...............\n" +
-                "║...............\n",
-
+                "║...............\n" +
+                "\n" +
                 "----------------\n" +
                 "-☺--------------\n" +
                 "---------------B\n" +
@@ -1967,8 +1972,8 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
-                "--B-------------\n",
-
+                "--B-------------\n" +
+                "\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
@@ -1986,10 +1991,11 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n", single1);
 
-        assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':0,'y':0}",
-                "{'x':1,'y':1}",
-
+        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+                "offset: {'x':0,'y':0}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':1,'y':1}\n" +
+                "\n" +
                 "╔═══════════════\n" +
                 "║S..............\n" +
                 "║...............\n" +
@@ -2005,8 +2011,8 @@ public class SingleTest {
                 "║...............\n" +
                 "║...............\n" +
                 "║...............\n" +
-                "║...............\n",
-
+                "║...............\n" +
+                "\n" +
                 "----------------\n" +
                 "-☺--------------\n" +
                 "---------------B\n" +
@@ -2022,8 +2028,8 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
-                "--B-------------\n",
-
+                "--B-------------\n" +
+                "\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
@@ -2050,10 +2056,11 @@ public class SingleTest {
         }
 
         // then
-        assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':4,'y':0}",
-                "{'x':14,'y':1}",
-
+        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+                "offset: {'x':4,'y':0}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':14,'y':1}\n" +
+                "\n" +
                 "═══════════════┐\n" +
                 "...............│\n" +
                 "...............│\n" +
@@ -2069,8 +2076,8 @@ public class SingleTest {
                 "...............│\n" +
                 "...............│\n" +
                 "...............│\n" +
-                "...............│\n",
-
+                "...............│\n" +
+                "\n" +
                 "----------------\n" +
                 "--------------☺-\n" +
                 "-----------B----\n" +
@@ -2086,8 +2093,8 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
-                "----------------\n",
-
+                "----------------\n" +
+                "\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
@@ -2105,10 +2112,11 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n", single1);
 
-        assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':0,'y':4}",
-                "{'x':1,'y':14}",
-
+        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+                "offset: {'x':0,'y':4}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':1,'y':14}\n" +
+                "\n" +
                 "║....│  ║.......\n" +
                 "║..┌─┘  └─╗.....\n" +
                 "║..│      ║.....\n" +
@@ -2124,8 +2132,8 @@ public class SingleTest {
                 "║...............\n" +
                 "║...............\n" +
                 "║...............\n" +
-                "└───────────────\n",
-
+                "└───────────────\n" +
+                "\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
@@ -2141,8 +2149,8 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n" +
                 "-☺--------------\n" +
-                "----------------\n",
-
+                "----------------\n" +
+                "\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
@@ -2161,13 +2169,13 @@ public class SingleTest {
                 "----------------\n", single2);
 
         // when
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             hero1().down();
             hero2().right();
             tick(single1);
             tick(single2);
         }
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 10; i++) {
             hero1().left();
             hero2().up();
             tick(single1);
@@ -2175,34 +2183,31 @@ public class SingleTest {
         }
 
         // then
-        assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':3,'y':0}",
-                "{'x':8,'y':6}",
-
-                "════════════════\n" +
-                "................\n" +
-                "................\n" +
-                "..┌──╗..........\n" +
-                "..│  ║..........\n" +
-                "┌─┘  └─╗........\n" +
-                "│      ║........\n" +
-                "│      ║........\n" +
-                "╚═┐  ╔═╝........\n" +
-                "..│  ║..........\n" +
-                "..╚══╝..........\n" +
-                "................\n" +
-                "................\n" +
-                "................\n" +
-                "................\n" +
-                "................\n",
-
+        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+                "offset: {'x':4,'y':0}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':4,'y':11}\n" +
+                "\n" +
+                "═══════════════┐\n" +
+                "...............│\n" +
+                "...............│\n" +
+                ".┌──╗..........│\n" +
+                ".│  ║..........│\n" +
+                "─┘  └─╗........│\n" +
+                "      ║........│\n" +
+                "      ║........│\n" +
+                "═┐  ╔═╝........│\n" +
+                ".│  ║..........│\n" +
+                ".╚══╝..........│\n" +
+                "...............│\n" +
+                "...............│\n" +
+                "...............│\n" +
+                "...............│\n" +
+                "...............│\n" +
+                "\n" +
                 "----------------\n" +
                 "----------------\n" +
-                "------------B---\n" +
-                "----------------\n" +
-                "----------------\n" +
-                "----------------\n" +
-                "--------☺-------\n" +
+                "-----------B----\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
@@ -2211,8 +2216,12 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
-                "----------------\n",
-
+                "----☺-----------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
@@ -2230,10 +2239,11 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n", single1);
 
-        assertBoardData("{'current':0,'lastPassed':-1,'total':1}",
-                "{'x':0,'y':4}",
-                "{'x':6,'y':7}",
-
+        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+                "offset: {'x':0,'y':4}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':11,'y':4}\n" +
+                "\n" +
                 "║....│  ║.......\n" +
                 "║..┌─┘  └─╗.....\n" +
                 "║..│      ║.....\n" +
@@ -2249,16 +2259,16 @@ public class SingleTest {
                 "║...............\n" +
                 "║...............\n" +
                 "║...............\n" +
-                "└───────────────\n",
-
+                "└───────────────\n" +
+                "\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
+                "-----------☺----\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
-                "------☺---------\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
@@ -2266,8 +2276,128 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
-                "----------------\n",
+                "----------------\n" +
+                "\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n", single2);
 
+        // when
+        // one more time should move view
+        hero1().left();
+        hero2().up();
+        tick(single1);
+        tick(single2);
+
+        // then
+        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+                "offset: {'x':3,'y':0}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':4,'y':11}\n" +
+                "\n" +
+                "════════════════\n" +
+                "................\n" +
+                "................\n" +
+                "..┌──╗..........\n" +
+                "..│  ║..........\n" +
+                "┌─┘  └─╗........\n" +
+                "│      ║........\n" +
+                "│      ║........\n" +
+                "╚═┐  ╔═╝........\n" +
+                "..│  ║..........\n" +
+                "..╚══╝..........\n" +
+                "................\n" +
+                "................\n" +
+                "................\n" +
+                "................\n" +
+                "................\n" +
+                "\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "------------B---\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----☺-----------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n", single1);
+
+        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+                "offset: {'x':0,'y':3}\n" +
+                "levelFinished: false\n" +
+                "heroPosition: {'x':11,'y':4}\n" +
+                "\n" +
+                "║....┌──╗.......\n" +
+                "║....│  ║.......\n" +
+                "║..┌─┘  └─╗.....\n" +
+                "║..│      ║.....\n" +
+                "║..│      ║.....\n" +
+                "║..╚═┐  ╔═╝.....\n" +
+                "║....│  ║.......\n" +
+                "║....╚══╝.......\n" +
+                "║...............\n" +
+                "║...............\n" +
+                "║...............\n" +
+                "║...............\n" +
+                "║...............\n" +
+                "║...............\n" +
+                "║...............\n" +
+                "║...............\n" +
+                "\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "-----------☺----\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "--B-------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "----------------\n" +
+                "\n" +
                 "----------------\n" +
                 "----------------\n" +
                 "----------------\n" +
@@ -2286,31 +2416,28 @@ public class SingleTest {
                 "----------------\n", single2);
     }
 
-    private void assertBoardData(String levelProgress, String offset, String heroes, String levels1, String levels2, String levels3, Single single) {
+    private void assertBoardData(String expected, Single single) {
         JSONObject json = (JSONObject) single.getBoardAsString();
 
-        assertEquals(levelProgress,
-                JsonUtils.clean(JsonUtils.toStringSorted(json.get("levelProgress").toString())));
-
-        assertEquals(offset,
-                JsonUtils.clean(JsonUtils.toStringSorted(json.get("scannerOffset").toString())));
-
-        assertEquals(false,
-                json.get("levelFinished"));
-
-        assertEquals(heroes,
-                JsonUtils.clean(JsonUtils.toStringSorted(json.get("heroPosition").toString())));
-
         JSONArray layers = json.getJSONArray("layers");
-        
-        assertEquals(levels1,
-                injectN(layers.getString(0)));
+        String actual = String.format(
+                "levelProgress: %s\n" +
+                "offset: %s\n" +
+                "levelFinished: %s\n" +
+                "heroPosition: %s\n\n" +
+                "%s\n" +
+                "%s\n" +
+                "%s",
+                JsonUtils.clean(JsonUtils.toStringSorted(json.get("levelProgress").toString())),
+                JsonUtils.clean(JsonUtils.toStringSorted(json.get("offset").toString())),
+                json.get("levelFinished"),
+                JsonUtils.clean(JsonUtils.toStringSorted(json.get("heroPosition").toString())),
+                injectN(layers.getString(0)),
+                injectN(layers.getString(1)),
+                injectN(layers.getString(2))
+        );
 
-        assertEquals(levels2,
-                injectN(layers.getString(1)));
-
-        assertEquals(levels3,
-                injectN(layers.getString(2)));
+        assertEquals(expected, actual);
     }
 
     @Test

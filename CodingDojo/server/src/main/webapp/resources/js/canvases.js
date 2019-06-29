@@ -274,7 +274,12 @@ function initCanvases(contextPath, players, allPlayersScreen,
                         var heroData = heroesData[name];
                         var point = heroData.coordinate;
                         if (!point) return; // TODO why this can happen?
-                        if (point.x == -1 || point.y == -1) return;
+                        if (point.x == -1 || point.y == -1) {
+                            if (playerName == name) {
+                                currentIsDrawName = false;
+                            }
+                            continue;
+                        }
                         if (!!board.offset) {
                             point.x -= board.offset.x;
                             point.y -= board.offset.y;
@@ -286,7 +291,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                             if (!progress) {
                                 return false;
                             }
-                            return   progress.current < progress.total;
+                            return progress.current < progress.total;
                         }
                         var isDrawName = !!heroData.multiplayer && !isPlayerOnSingleBoard(board);
                         if (playerName == name) {

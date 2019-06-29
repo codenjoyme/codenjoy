@@ -88,7 +88,7 @@ var getShortestWayTest = function() {
         board = 'board={"heroPosition":{"x":16,"y":18},' +
             '"showName":true,' +
             '"levelFinished":false,' +
-            '"scannerOffset":{"x":0,"y":0},' +
+            '"offset":{"x":0,"y":0},' +
             '"layers":["' +
           //           1111111111
           // 01234567890123456789
@@ -177,7 +177,7 @@ var getShortestWayTest = function() {
         board = 'board={"heroPosition":{"x":7,"y":5},' +
             '"showName":true,' +
             '"levelFinished":false,' +
-            '"scannerOffset":{"x":0,"y":0},' +
+            '"offset":{"x":0,"y":0},' +
             '"layers":["' +
             '                    ' +
             '                    ' +

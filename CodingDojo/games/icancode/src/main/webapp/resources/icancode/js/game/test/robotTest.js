@@ -149,7 +149,7 @@ var robotTest = function() {
             }
         };
 
-        board = 'board={"scannerOffset":{"x":0,"y":0},' +
+        board = 'board={"offset":{"x":0,"y":0},' +
             '"heroPosition":{"x":2,"y":1},' +
             '"layers":["' +
             '╔═══════┐' + // 0
