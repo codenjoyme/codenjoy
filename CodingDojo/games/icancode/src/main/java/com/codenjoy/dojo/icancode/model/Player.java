@@ -93,11 +93,8 @@ public class Player extends GamePlayer<Hero, IField> {
     }
 
     // TODO test me
-    public Point getHeroOffset(PrinterData data) {
-        Point point = getHero().getPosition().relative(data.getOffset());
-        // TODO думаю стоит проинвертировать y тут #323
-        point.setY(data.getViewSize() - 1 - point.getY());
-        return point;
+    public Point getHeroOffset(Point offset) {
+        return getHero().getPosition().relative(offset);
     }
 
     public Printer<PrinterData> getPrinter() {

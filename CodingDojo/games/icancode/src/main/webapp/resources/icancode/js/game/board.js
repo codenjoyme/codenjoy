@@ -27,31 +27,7 @@
 
 var LengthToXY = function (boardSize) {
     var inversion = function (y) {
-        return y;
-//        return boardSize - 1 - y; TODO думаю стоит проинвертировать y тут #323
-/*
-
-  #323 код для тестирования этого кейза в js редакторе на 18м уровне
-
-count = 0;
-var commands = ['STOP','RIGHT','RIGHT','RIGHT','UP','UP','RIGHT','JUMP','RIGHT','UP','UP','UP','RIGHT','RIGHT','RIGHT','UP','RIGHT','RIGHT','RIGHT','JUMP','UP','UP','RIGHT','UP','UP','UP','UP','UP','RIGHT','RIGHT','RIGHT','RIGHT','RIGHT','RIGHT','RIGHT','UP','UP','UP','JUMP','UP','UP','UP','UP','UP','JUMP','UP','UP','UP','RIGHT','JUMP','RIGHT','JUMP','RIGHT','RIGHT','STOP'];
-function program(robot) {
-   var current = commands[count++];
-   if (current == 'JUMP') {
-       robot.jump(commands[count++]);
-   } else {
-       robot.go(current);
-   }
-
-   var scanner = robot.getScanner();
-   var me = scanner.getMe();
-   robot.log('---------------');
-   robot.log('me: ' + me);
-   robot.log('at me: ' + scanner.getAt(me.getX(), me.getY()));
-   robot.log('offset' + scanner.getScannerOffset());
-}
-
- */
+        return boardSize - 1 - y;
     }
 
     return {

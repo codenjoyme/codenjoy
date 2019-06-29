@@ -31,7 +31,6 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.icancode.model.Elements;
@@ -40,7 +39,6 @@ import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import org.json.JSONObject;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType  {
@@ -129,19 +127,13 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
             JSONObject result = new JSONObject();
             result.put("layers", data.getLayers());
-            result.put("offset", toJson(getViewOffset(data)));
-            result.put("heroPosition", toJson(player.getHeroOffset(data)));
+            // do not change 'offset' key - canvases working
+            result.put("offset", toJson(data.getOffset()));
+            result.put("heroPosition", toJson(player.getHeroOffset(data.getOffset())));
             result.put("levelFinished", player.isLevelFinished());
             result.put("showName", true);
             return result;
         });
-    }
-
-    private Point getViewOffset(PrinterData data) {
-        Point offset = data.getOffset();
-        return pt(offset.getX(),
-                // TODO думаю стоит проинвертировать y тут #323
-                data.getMapSize() - data.getViewSize() - offset.getY());
     }
 
     private JSONObject toJson(Point point) {
