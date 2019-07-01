@@ -399,7 +399,7 @@ public class MultiplayerSystemTest {
                         "       " +
                         "       " +
                         "       " +
-                        "   ▒   " +
+                        "   <   " +
                         "■■■■■■■";
             }
 
@@ -416,9 +416,9 @@ public class MultiplayerSystemTest {
                         "3:■■■■■■■\n" +
                         "3:       \n" +
                         "3:       \n" +
-                        "3:o      \n" +
-                        "3: e     \n" +
-                        "3:e      \n" +
+                        "3:B      \n" +
+                        "3: E     \n" +
+                        "3:E      \n" +
                         "3:■■■■■■■\n" +
                         "3:")
         );
