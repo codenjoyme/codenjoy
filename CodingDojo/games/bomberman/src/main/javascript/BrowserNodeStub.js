@@ -19,47 +19,49 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var printBoardOnTextArea = function(data) {
-    var textarea = document.getElementById("board");
-    if (!textarea) return;
-    var size = data.split('\n')[0].length;
-    textarea.cols = size;
-    textarea.rows = size + 1;
-    textarea.value = data;
-}
-
-var printLogOnTextArea = function(data) {
-    var textarea = document.getElementById("log-area");
-    var addToEnd = document.getElementById("add-to-end");
-    if (!textarea) return;
-    if (addToEnd.checked) {
-        cache.push(data);
-        if (cache.length > 30) {
-            cache.shift()
-        }
-    } else {
-        cache.unshift(data);
-        if (cache.length > 30) {
-            cache.pop()
-        }
+var browserNodeStub = (function (){
+    var printBoardOnTextArea = function(data) {
+        var textarea = document.getElementById("board");
+        if (!textarea) return;
+        var size = data.split('\n')[0].length;
+        textarea.cols = size;
+        textarea.rows = size + 1;
+        textarea.value = data;
     }
 
-    var all = '';
-    for (var i in cache) {
-        var data = cache[i];
-        all = all + "\n" + data;
-    }
-    textarea.value = all;
-}
+    var printLogOnTextArea = function(data) {
+        var textarea = document.getElementById("log-area");
+        var addToEnd = document.getElementById("add-to-end");
+        if (!textarea) return;
+        var cache = [];
 
-var require = function(string) {
-    if (string == 'util') {
+        if (addToEnd.checked) {
+            cache.push(data);
+            if (cache.length > 30) {
+                cache.shift()
+            }
+        } else {
+            cache.unshift(data);
+            if (cache.length > 30) {
+                cache.pop()
+            }
+        }
+
+        var all = '';
+        for (var i in cache) {
+            var data = cache[i];
+            all = all + "\n" + data;
+        }
+        textarea.value = all;
+    }
+    
+    var util = function () {
         return {
             // thanks to http://stackoverflow.com/a/4673436
-            "format":function(format) {
+            "format": function(string) {
                 var args = Array.prototype.slice.call(arguments, 1);
                 var number = -1;
-                return format.replace(/%s/g, function(match) {
+                return string.replace(/%s/g, function(match) {
                     number++;
                     return typeof args[number] != 'undefined'
                         ? args[number]
@@ -68,9 +70,11 @@ var require = function(string) {
                 });
             }
         }
-    } else if (string == 'ws') {
-        return function(uri) {
-            var socket = new WebSocket(uri);
+    };
+
+    var webSoket = function () {
+        return function(url) {
+            var socket = new WebSocket(url);
             return {
                 "on" : function(name, callback) {
                     if (name == "open") {
@@ -91,4 +95,14 @@ var require = function(string) {
             }
         }
     }
-}
+
+    return {
+        printBoardOnTextArea: printBoardOnTextArea,
+        printLogOnTextArea: printLogOnTextArea,
+        util: util,
+        webSoket: webSoket
+    }
+})();
+
+
+module.exports = browserNodeStub;

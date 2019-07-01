@@ -46,3 +46,4 @@
 /CodingDojo/games/loderunner/src/main/dotNet/Loderunner/packages/**
 /CodingDojo/games/bomberman/src/main/dotNet/Bomberman/packages/**
 /CodingDojo/portable/linux-docker-all
+node_modules/

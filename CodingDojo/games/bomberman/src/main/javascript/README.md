@@ -1,20 +1,15 @@
 Registration:
-- on page http://server/codenjoy-contest/help
-    + you can read game instructions
-        * server = server_host_ip:8080 server ip inside your LAN
-        * server = codenjoy.com if you play on http://codenjoy.com/codenjoy-contest
-- register your hero on server http://server/codenjoy-contest/register
-- copy board page browser url from address bar and paste into url variable of Runner.js
-- write your own bot at 'get' function
+- On page http://server/codenjoy-contest/help
+    + You can read game instructions
+        * Server = server_host_ip:8080 server ip inside your LAN
+        * Server = codenjoy.com if you play on http://codenjoy.com/codenjoy-contest
+- Register your hero on server http://server/codenjoy-contest/register
+- As soon as you get registered copy he url address of your browser and replace the url value in the `Runner.js` file.
+- Write your own bot at `get` function on the `Runner.js`.
+- Each time you save your changes will be automatically reflected.
 
-For JavaScript with browser:
-- write bot
-- run run-client.html
+For JavaScript:
 
-For JavaScript with node.js:
-- install Node.js from http://nodejs.org/
-- update Path System variable - add node.js root folder
-- setup new node.js library - run
-    + npm install ws
-- write bot
-- run run-client.bat
+- You should have installed node (http://nodejs.org/) and npm or yarn.
+- Run `npm install` to install all the dependencies.
+- Run either `npm start` to open board information on browser or `npm start-on-terminal` to view game information on terminal.
