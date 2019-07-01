@@ -23,13 +23,7 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.excitebike.model.items.Accelerator;
-import com.codenjoy.dojo.excitebike.model.items.Border;
-import com.codenjoy.dojo.excitebike.model.items.GameElementType;
-import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
-import com.codenjoy.dojo.excitebike.model.items.LineChanger;
-import com.codenjoy.dojo.excitebike.model.items.Obstacle;
-import com.codenjoy.dojo.excitebike.model.items.Shiftable;
+import com.codenjoy.dojo.excitebike.model.items.*;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.springboard.Springboard;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
@@ -42,21 +36,17 @@ import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.excitebike.model.items.GameElementType.*;
+import static com.codenjoy.dojo.excitebike.model.items.ComplexGameElementType.*;
 import static com.codenjoy.dojo.excitebike.model.items.bike.Bike.OTHER_BIKE_PREFIX;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static java.util.Map.Entry.comparingByValue;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 
@@ -69,6 +59,7 @@ public class GameFieldImpl implements GameField {
 
     private List<Border> borders;
 
+    private List<CharElements> generatableElements = new ArrayList<>();
     private int generationLock;
 
     public GameFieldImpl(MapParser mapParser, Dice dice) {
@@ -84,6 +75,9 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(LINE_CHANGER_DOWN, new ArrayList<>(mapParser.getLineDownChangers()));
         allShiftableElements.put(BIKE_FALLEN, new ArrayList<>(mapParser.getFallenBikes()));
         allShiftableElements.put(SPRINGBOARD, new LinkedList<>());
+
+        generatableElements.addAll(Arrays.asList(GameElementType.values()));
+        generatableElements.addAll(Arrays.asList(ComplexGameElementType.values()));
     }
 
     /**
@@ -156,8 +150,9 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public Optional<Springboard> getSpringboardThatContainsPoint(Point point) {
-        List<Springboard> springboards = allShiftableElements.get(SPRINGBOARD);
-        for (Springboard springboard : springboards) {
+        List<Shiftable> springboards = allShiftableElements.get(SPRINGBOARD);
+        for (Shiftable shiftableSpringboard : springboards) {
+            Springboard springboard = (Springboard) shiftableSpringboard;
             if (springboard.getElements().contains(point)) {
                 return Optional.of(springboard);
             }
@@ -266,7 +261,7 @@ public class GameFieldImpl implements GameField {
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>() {{
                     addAll(GameFieldImpl.this.getBikes());
-                    GameFieldImpl.this.allShiftableElements.get(GameElementType.SPRINGBOARD).forEach(springboard -> addAll(((Springboard) springboard).getElements()));
+                    GameFieldImpl.this.allShiftableElements.get(SPRINGBOARD).forEach(springboard -> addAll(((Springboard) springboard).getElements()));
                     GameFieldImpl.this.allShiftableElements.values().forEach(this::addAll);
                     addAll(getBorders());
                 }};
@@ -296,37 +291,35 @@ public class GameFieldImpl implements GameField {
 
         boolean needGenerate = dice.next(10) < 5;
         if (needGenerate) {
-            int rndNonBorderElementOrdinal = dice.next(GameElementType.values().length - 2) + 2;
+            int rndNonBorderElementOrdinal = dice.next(generatableElements.size() - 2) + 2;
             int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
 
-            GameElementType randomType = GameElementType.values()[rndNonBorderElementOrdinal];
+            CharElements randomType = generatableElements.get(rndNonBorderElementOrdinal);
             List<Shiftable> elements = allShiftableElements.get(randomType);
             Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
             elements.add(newElement);
         }
     }
 
-    private Shiftable getNewElement(GameElementType randomType, int x, int y) {
-        switch (randomType) {
-            case ACCELERATOR:
-                return new Accelerator(x, y);
-            case INHIBITOR:
-                return new Inhibitor(x, y);
-            case OBSTACLE:
-                return new Obstacle(x, y);
-            case LINE_CHANGER_UP:
-                return new LineChanger(x, y, true);
-            case LINE_CHANGER_DOWN:
-                return new LineChanger(x, y, false);
-            case SPRINGBOARD:
-                final int clearLinesAroundSpringboard = 1;
-                final int springboardTopMaXWidth = 5;
-                int springboardWidth = dice.next(springboardTopMaXWidth) + 2;
-                generationLock = springboardWidth + clearLinesAroundSpringboard * 2;
-                return new Springboard(x + clearLinesAroundSpringboard, mapParser.getYSize(), springboardWidth);
-            default:
-                throw new IllegalArgumentException("No such element for " + randomType);
+    private Shiftable getNewElement(CharElements randomType, int x, int y) {
+        if (ACCELERATOR.equals(randomType)) {
+            return new Accelerator(x, y);
+        } else if (INHIBITOR.equals(randomType)) {
+            return new Inhibitor(x, y);
+        } else if (OBSTACLE.equals(randomType)) {
+            return new Obstacle(x, y);
+        } else if (LINE_CHANGER_UP.equals(randomType)) {
+            return new LineChanger(x, y, true);
+        } else if (LINE_CHANGER_DOWN.equals(randomType)) {
+            return new LineChanger(x, y, false);
+        } else if (SPRINGBOARD.equals(randomType)) {
+            final int clearLinesAroundSpringboard = 1;
+            final int springboardTopMaXWidth = 5;
+            int springboardWidth = dice.next(springboardTopMaXWidth) + 2;
+            generationLock = springboardWidth + clearLinesAroundSpringboard * 2;
+            return new Springboard(x + clearLinesAroundSpringboard, mapParser.getYSize(), springboardWidth);
         }
+        throw new IllegalArgumentException("No such element for " + randomType);
     }
 
     @Override

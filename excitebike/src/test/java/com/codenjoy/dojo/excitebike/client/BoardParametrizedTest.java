@@ -26,6 +26,7 @@ import com.codenjoy.dojo.excitebike.model.items.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.services.printer.CharElements;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -42,6 +43,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 /**
  * Created by Pavel Bobylev 6/18/2019
  */
+@Ignore
 @RunWith(Parameterized.class)
 public class BoardParametrizedTest {
 
