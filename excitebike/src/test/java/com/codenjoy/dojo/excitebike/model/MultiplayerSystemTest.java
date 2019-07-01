@@ -23,7 +23,6 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
@@ -38,18 +37,14 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -251,9 +246,9 @@ public class MultiplayerSystemTest {
         init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX()+1);
+        bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX()+1);
+        bike3.setX(bike3.getX() + 1);
 
         //when
         game1.getJoystick().up();
@@ -277,9 +272,9 @@ public class MultiplayerSystemTest {
         init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX()+1);
+        bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX()+1);
+        bike3.setX(bike3.getX() + 1);
         game1.getJoystick().up();
         game2.getJoystick().down();
         field.tick();
@@ -306,9 +301,9 @@ public class MultiplayerSystemTest {
         init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX()+1);
+        bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX()+1);
+        bike3.setX(bike3.getX() + 1);
 
         //when
         game1.getJoystick().up();
@@ -383,6 +378,7 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldResetAllPlayersBikesAndFireWInEvent() {
         //given
+        init();
         Solver pl1 = clientBoard -> Direction.STOP.toString();
         Solver pl2 = clientBoard -> Direction.DOWN.toString();
         Solver pl3 = clientBoard -> Direction.DOWN.toString();
@@ -427,7 +423,7 @@ public class MultiplayerSystemTest {
                         "3:")
         );
         assertThat(
-                String.join("\n", messages.subList(messages.size()-12, messages.size()-8)),
+                String.join("\n", messages.subList(messages.size() - 12, messages.size() - 8)),
                 is("Fire Event: WIN\n" +
                         "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +

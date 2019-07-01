@@ -195,10 +195,10 @@ public class AISolverParametrizedTest {
     public void get__shouldReturnAppropriateDirection__accordingToGameElementTypeAround() {
         //given
         Board board = toBoard("■■■■■" +
-                        "  " + elementBelow + "  " +
-                        "  B" + elementAtRight + " " +
-                        "  " + elementAbove + "  " +
-                        "■■■■■"
+                "  " + elementBelow + "  " +
+                "  B" + elementAtRight + " " +
+                "  " + elementAbove + "  " +
+                "■■■■■"
         );
         if (expectedDirection == null) {
             boolean randomBool = new Random().nextBoolean();
