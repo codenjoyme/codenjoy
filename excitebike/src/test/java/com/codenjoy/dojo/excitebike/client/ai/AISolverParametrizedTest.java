@@ -196,7 +196,7 @@ public class AISolverParametrizedTest {
         //given
         Board board = toBoard("■■■■■" +
                         "  " + elementBelow + "  " +
-                        "  o" + elementAtRight + " " +
+                        "  B" + elementAtRight + " " +
                         "  " + elementAbove + "  " +
                         "■■■■■"
         );

@@ -22,7 +22,12 @@ package com.codenjoy.dojo.excitebike.services.parse;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.items.*;
+import com.codenjoy.dojo.excitebike.model.items.Accelerator;
+import com.codenjoy.dojo.excitebike.model.items.Border;
+import com.codenjoy.dojo.excitebike.model.items.GameElementType;
+import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
+import com.codenjoy.dojo.excitebike.model.items.LineChanger;
+import com.codenjoy.dojo.excitebike.model.items.Obstacle;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
@@ -31,6 +36,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.CharElements;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
@@ -63,8 +69,11 @@ public class MapParserImpl implements MapParser {
     }
 
     @Override
-    public List<Bike> getBikes() {
-        return parseAndConvertElements(Bike::new, BikeType.BIKE);
+    public List<Bike> getFallenBikes() {
+        return parseAndConvertElements(Bike::new,
+                Arrays.stream(BikeType.values())
+                        .filter(e -> e.name().contains(Bike.FALLEN_BIKE_SUFFIX))
+                        .toArray(BikeType[]::new));
     }
 
     @Override
@@ -127,9 +136,9 @@ public class MapParserImpl implements MapParser {
         return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_RIGHT_UP), SpringboardElementType.SPRINGBOARD_RIGHT_UP);
     }
 
-    private <T> List<T> parseAndConvertElements(Function<Point, T> elementConstructor, CharElements elementType) {
+    private <T> List<T> parseAndConvertElements(Function<Point, T> elementConstructor, CharElements... elements) {
         return IntStream.range(0, map.length())
-                .filter(index -> map.charAt(index) == elementType.ch())
+                .filter(index -> Arrays.stream(elements).anyMatch(e -> map.charAt(index) == e.ch()))
                 .mapToObj(this::convertToPoint)
                 .map(elementConstructor)
                 .collect(Collectors.toCollection(LinkedList::new));

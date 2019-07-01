@@ -31,15 +31,53 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-import java.util.Optional;
+import java.util.Objects;
+
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_ACCELERATOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_DOWNED_BIKE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_ACCELERATOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_BORDER;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_ACCELERATOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_ACCELERATOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_UP;
+import static com.codenjoy.dojo.services.Direction.DOWN;
+import static com.codenjoy.dojo.services.Direction.LEFT;
+import static com.codenjoy.dojo.services.Direction.RIGHT;
+import static com.codenjoy.dojo.services.Direction.UP;
 
 public class Bike extends PlayerHero<GameField> implements State<BikeType, Player>, Shiftable {
 
-    private Direction direction;
+    public static final String OTHER_BIKE_PREFIX = "OTHER";
+    public static final String FALLEN_BIKE_SUFFIX = "FALLEN";
+    public static final String BIKE_AT_PREFIX = "AT_";
+    public static final String INCLINE_SUFFIX = "_INCLINE_";
+    public static final String BIKE_PREFIX = "BIKE";
+    public static final String AT_ACCELERATOR_SUFFIX = "_AT_ACCELERATOR";
+    public static final String AT_INHIBITOR_SUFFIX = "_AT_INHIBITOR";
+    public static final String AT_LINE_CHANGER_UP_SUFFIX = "_AT_LINE_CHANGER_UP";
+    public static final String AT_LINE_CHANGER_DOWN_SUFFIX = "_AT_LINE_CHANGER_DOWN";
 
-    private BikeType type = BikeType.BIKE;
-
+    private Direction command;
+    private Movement movement = new Movement();
+    private BikeType type = BIKE;
     private boolean ticked;
+    private boolean accelerated;
+    private boolean inhibited;
+    private boolean interacted;
 
     public Bike(Point xy) {
         super(xy);
@@ -57,41 +95,42 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     @Override
     public void down() {
         if (!isAlive()) return;
-
-        direction = Direction.DOWN;
+        command = DOWN;
     }
 
     @Override
     public void up() {
         if (!isAlive()) return;
-
-        direction = Direction.UP;
+        command = UP;
     }
 
     @Override
     public void left() {
         if (!isAlive()) return;
-
-        changeIncline(BikeType.BIKE_INCLINE_LEFT, BikeType.BIKE_INCLINE_RIGHT);
+        changeIncline(LEFT);
     }
 
     @Override
     public void right() {
         if (!isAlive()) return;
-
-        changeIncline(BikeType.BIKE_INCLINE_RIGHT, BikeType.BIKE_INCLINE_LEFT);
+        changeIncline(RIGHT);
     }
 
-    private void changeIncline(BikeType toIncline, BikeType inclinedTo) {
-        if (type == BikeType.BIKE) {
-            type = toIncline;
-        } else if (type == inclinedTo) {
-            type = BikeType.BIKE;
+    private void changeIncline(Direction direction) {
+        String oppositeIncline = INCLINE_SUFFIX + (direction == LEFT ? RIGHT.name() : LEFT.name());
+        if (type.name().contains(oppositeIncline)) {
+            type = BikeType.valueOf(type.name().replace(oppositeIncline, ""));
+        } else if (!type.name().contains(INCLINE_SUFFIX + direction.name())) {
+            type = BikeType.valueOf(type.name().replace(BIKE_PREFIX, BIKE_PREFIX + INCLINE_SUFFIX + direction.name()));
         }
     }
 
     public void crush() {
-        type = BikeType.BIKE_FALLEN;
+        type = type == BIKE_AT_ACCELERATOR ? BIKE_FALLEN_AT_ACCELERATOR :
+                type == BIKE_AT_INHIBITOR ? BIKE_FALLEN_AT_INHIBITOR :
+                        type == BIKE_AT_LINE_CHANGER_DOWN ? BIKE_FALLEN_AT_LINE_CHANGER_DOWN :
+                                type == BIKE_AT_LINE_CHANGER_UP ? BIKE_FALLEN_AT_LINE_CHANGER_UP :
+                                        BIKE_FALLEN;
     }
 
     public void jump() {
@@ -106,127 +145,274 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
     @Override
     public void tick() {
-        if (!ticked) {
-            if (isAlive()) {
-                if (direction != null) {
-                    int newX = direction.changeX(x);
-                    int newY = direction.changeY(y);
-                    tryToMove(newX, newY);
+        if (!ticked && isAlive()) {
+            actAccordingToState();
+            executeCommand();
+            adjustStateToElement();
+            tryToMove();
+        }
+    }
+
+    private void executeCommand() {
+        interacted = false;
+        if (command != null) {
+            x = command.changeX(x);
+            y = command.changeY(y);
+            interactWithOtherBike();
+            command = null;
+        }
+    }
+
+    private void actAccordingToState() {
+        if (type == BIKE_AT_ACCELERATOR
+                || type == BIKE_INCLINE_LEFT_AT_ACCELERATOR
+                || type == BIKE_INCLINE_RIGHT_AT_ACCELERATOR
+                || accelerated) {
+            movement.setRight();
+            type = atNothingType();
+            accelerated = false;
+            return;
+        }
+
+        if (type == BIKE_AT_INHIBITOR
+                || type == BIKE_INCLINE_LEFT_AT_INHIBITOR
+                || type == BIKE_INCLINE_RIGHT_AT_INHIBITOR) {
+            if (!inhibited) {
+                movement.setLeft();
+                inhibited = true;
+            }
+            type = atNothingType();
+            return;
+        } else {
+            inhibited = false;
+        }
+
+        if (type == BIKE_AT_LINE_CHANGER_UP
+                || type == BIKE_INCLINE_LEFT_AT_LINE_CHANGER_UP
+                || type == BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_UP) {
+            movement.setUp();
+            type = atNothingType();
+            return;
+        }
+
+        if (type == BIKE_AT_LINE_CHANGER_DOWN
+                || type == BIKE_INCLINE_LEFT_AT_LINE_CHANGER_DOWN
+                || type == BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_DOWN) {
+            movement.setDown();
+            type = atNothingType();
+        }
+
+    }
+
+    private BikeType atNothingType() {
+        return type.name().contains(BIKE_AT_PREFIX)
+                ? BikeType.valueOf(type.name().substring(0, type.name().indexOf(BIKE_AT_PREFIX) - 1))
+                : type;
+    }
+
+    private void tryToMove() {
+        int xBefore = x;
+        int yBefore = y;
+        if (!isAlive()) {
+            return;
+        }
+        if (movement.isUp()) {
+            y = UP.changeY(y);
+        }
+        if (movement.isDown()) {
+            y = DOWN.changeY(y);
+        }
+        if (movement.isLeft()) {
+            x = Direction.LEFT.changeX(x);
+            if (isAlive() && x < 0) {
+                x = 0;
+            }
+        }
+        if (movement.isRight()) {
+            x = RIGHT.changeX(x);
+            if (x >= field.size()) {
+                x = field.size() - 1;
+            }
+        }
+        interactWithOtherBike();
+        movement.clear();
+        if (xBefore != x || yBefore != y) {
+            adjustStateToElement();
+        }
+    }
+
+    private void interactWithOtherBike() {
+        if (interacted) {
+            return;
+        }
+        field.getEnemyBike(x, y, field.getPlayerOfBike(this)).ifPresent(enemy -> {
+            if (enemy != this) {
+                if (!enemy.isAlive() ||
+                        (movement.isRight()
+                                && !enemy.movement.isRight()
+                                && !enemy.movement.isUp()
+                                && !enemy.movement.isDown()
+                                && enemy.command == null)) {
+                    crush();
+                    enemy.type = BIKE_AT_DOWNED_BIKE;
+                    return;
                 }
-                interactWithOtherElements(x, y);
-            } else if (x >= 0) {
-                shift();
+                if (!enemy.movement.isUp() && !enemy.movement.isDown() && enemy.command == null) {
+                    enemy.crush();
+                    type = BIKE_AT_DOWNED_BIKE;
+                    move(enemy);
+                    enemy.ticked = true;
+                    movement.clear();
+                    command = null;
+                } else if (((movement.isDown() || command == DOWN) && (enemy.movement.isUp() || enemy.command == UP))
+                        || ((movement.isUp() || command == UP) && (enemy.movement.isDown() || enemy.command == DOWN))) {
+                    enemy.clearY();
+                    if (movement.isUp() || command == UP) {
+                        move(x, DOWN.changeY(y));
+                    } else if (movement.isDown() || command == DOWN) {
+                        move(x, UP.changeY(y));
+                    }
+                    clearY();
+                } else {
+                    enemy.tick();
+                    enemy.ticked = true;
+                }
             }
+        });
+        interacted = true;
+    }
+
+    private void clearY() {
+        if (movement.isUp()) {
+            movement.setDown();
+        } else if (movement.isDown()) {
+            movement.setUp();
         }
+        command = null;
     }
 
-    private void tryToMove(final int x, final int y) {
-        Optional<Bike> enemyBike = field.getEnemyBike(x, y);
-        enemyBike.ifPresent(this::interactWithOtherBike);
-
-        if (canMoveTo(x, y) && direction != null) {
-            move(x, y);
-            direction = null;
+    private void adjustStateToElement() {
+        if (!isAlive()) {
+            return;
         }
-    }
-
-    private boolean canMoveTo(final int x, final int y) {
-        return !field.isBorder(x, y);
-    }
-
-    private void interactWithOtherBike(Bike enemyBike) {
-        if (enemyBike != this) {
-            if (!enemyBike.isAlive()) {
-                crush();
-                return;
-            }
-
-            if (enemyBike.direction == null) {
-                enemyBike.crush();
-                move(enemyBike);
-                enemyBike.shift();
-                enemyBike.ticked = true;
-                direction = null;
-            } else if (direction != enemyBike.direction) {
-                enemyBike.direction = null;
-                direction = null;
-            } else {
-                enemyBike.tick();
-                enemyBike.ticked = true;
-            }
-        }
-    }
-
-    private void interactWithOtherElements(final int x, final int y) {
-        int acceleratorStep = 2;
-        int inhibitorStep = -2;
 
         if (field.isAccelerator(x, y)) {
-            if (x + acceleratorStep < field.size()) {
-                move(x + acceleratorStep, y);
+            if (type.name().contains(BIKE_AT_PREFIX)) {
+                String substringBikeAtSomething = type.name().substring(type.name().indexOf(BIKE_AT_PREFIX) - 1);
+                type = BikeType.valueOf(type.name().replace(substringBikeAtSomething, AT_ACCELERATOR_SUFFIX));
             } else {
-                move(field.size() - 1, y);
+                type = BikeType.valueOf(type.name() + AT_ACCELERATOR_SUFFIX);
             }
+            accelerated = true;
             return;
         }
 
         if (field.isInhibitor(x, y)) {
-            if (x + inhibitorStep >= 0) {
-                move(x + inhibitorStep, y);
+            if (type.name().contains(AT_ACCELERATOR_SUFFIX)) {
+                type = BikeType.valueOf(type.name().replace(AT_ACCELERATOR_SUFFIX, ""));
+            } else if (type.name().contains(BIKE_AT_PREFIX)) {
+                String substringBikeAtSomething = type.name().substring(type.name().indexOf(BIKE_AT_PREFIX) - 1);
+                type = BikeType.valueOf(type.name().replace(substringBikeAtSomething, AT_INHIBITOR_SUFFIX));
             } else {
-                move(0, y);
+                type = BikeType.valueOf(type.name() + AT_INHIBITOR_SUFFIX);
+            }
+            if (movement.isRight()) {
+                movement.setLeft();
+                inhibited = true;
             }
             return;
         }
 
         if (field.isObstacle(x, y)) {
-            crush();
-            shift();
+            if (movement.isRight()) {
+                movement.setLeft();
+            }
+            type = BIKE_FALLEN_AT_OBSTACLE;
             return;
         }
 
         if (field.isUpLineChanger(x, y)) {
-            direction = Direction.UP;
-            tryToMove(x, direction.changeY(y));
+            if (movement.isRight()) {
+                movement.setUp();
+            } else {
+                if (type == BIKE_AT_DOWNED_BIKE) {
+                    type = BIKE_AT_LINE_CHANGER_UP;
+                } else if (!type.name().contains(AT_LINE_CHANGER_UP_SUFFIX)) {
+                    type = BikeType.valueOf(type.name() + AT_LINE_CHANGER_UP_SUFFIX);
+                }
+            }
             return;
         }
 
         if (field.isDownLineChanger(x, y)) {
-            direction = Direction.DOWN;
-            tryToMove(x, direction.changeY(y));
+            if (movement.isRight()) {
+                movement.setDown();
+            } else {
+                if (type == BIKE_AT_DOWNED_BIKE) {
+                    type = BIKE_AT_LINE_CHANGER_DOWN;
+                } else if (!type.name().contains(AT_LINE_CHANGER_DOWN_SUFFIX)) {
+                    type = BikeType.valueOf(type.name() + AT_LINE_CHANGER_DOWN_SUFFIX);
+                }
+            }
             return;
         }
 
-        tryToMove(x, y);
+        if (field.isBorder(x, y)) {
+            type = BIKE_FALLEN_AT_BORDER;
+            return;
+        }
+
+        if (!field.getEnemyBike(x, y, field.getPlayerOfBike(this)).isPresent()) {
+            type = atNothingType();
+        }
     }
 
     @Override
     public BikeType state(Player player, Object... alsoAtPoint) {
         Bike bike = player.getHero();
-
         return this == bike ? bike.type : this.getEnemyBikeType();
     }
 
     private BikeType getEnemyBikeType() {
-        switch (type) {
-            case BIKE:
-                return BikeType.OTHER_BIKE;
-            case BIKE_FALLEN:
-                return BikeType.OTHER_BIKE_FALLEN;
-            case BIKE_INCLINE_LEFT:
-                return BikeType.OTHER_BIKE_INCLINE_LEFT;
-            case BIKE_INCLINE_RIGHT:
-                return BikeType.OTHER_BIKE_INCLINE_RIGHT;
-            default:
-                throw new IllegalArgumentException("No such element for " + type);
-        }
+        return BikeType.valueOf(OTHER_BIKE_PREFIX + "_" + type.name());
     }
 
     public boolean isAlive() {
-        return type != BikeType.BIKE_FALLEN;
+        return type != null && !type.name().contains(FALLEN_BIKE_SUFFIX);
     }
 
     public void setTicked(boolean ticked) {
         this.ticked = ticked;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Bike bike = (Bike) o;
+        return ticked == bike.ticked &&
+                accelerated == bike.accelerated &&
+                inhibited == bike.inhibited &&
+                Objects.equals(movement, bike.movement) &&
+                type == bike.type;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), movement, type, ticked, inhibited, accelerated);
+    }
+
+    @Override
+    public String toString() {
+        return "Bike{" +
+                "movement=" + movement +
+                ", type=" + type +
+                ", ticked=" + ticked +
+                ", accelerated=" + accelerated +
+                ", inhibited=" + inhibited +
+                ", x=" + x +
+                ", y=" + y +
+                '}';
     }
 }

@@ -27,14 +27,15 @@ import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.anyInt;
+import static com.codenjoy.dojo.excitebike.TestUtils.parseBikes;
+import static com.codenjoy.dojo.excitebike.TestUtils.printField;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -43,9 +44,7 @@ public class GameFieldImplSystemTest {
     private GameFieldImpl game;
     private Bike bike;
     private Dice dice;
-    private EventListener listener;
     private Player player;
-    private PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
     public void setup() {
@@ -53,12 +52,9 @@ public class GameFieldImplSystemTest {
     }
 
     private void init(String board) {
-        MapParserImpl parser = new MapParserImpl(board);
-        Bike bike = parser.getBikes().get(0);
-
-        game = new GameFieldImpl(parser, dice);
-        listener = mock(EventListener.class);
-        player = new Player(listener);
+        Bike bike = parseBikes(board).get(0);
+        game = new GameFieldImpl(new MapParserImpl(board), dice);
+        player = new Player(mock(EventListener.class));
         game.newGame(player);
         player.setHero(bike);
         bike.init(game);
@@ -66,12 +62,12 @@ public class GameFieldImplSystemTest {
     }
 
     @Test
-    public void shouldFieldAtStart() {
+    public void init__shouldFillFieldCorrectly() {
         //given
         String board = "■■■■■" +
-                " o ▼ " +
-                "  »  " +
-                " ▲ ▒ " +
+                " B ▼ " +
+                "  >  " +
+                " ▲ < " +
                 "■■■■■";
 
         //when
@@ -79,20 +75,20 @@ public class GameFieldImplSystemTest {
 
         //then
         String expected = "■■■■■" +
-                " o ▼ " +
-                "  »  " +
-                " ▲ ▒ " +
+                " B ▼ " +
+                "  >  " +
+                " ▲ < " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldShiftTrack() {
+    public void tick__shouldShiftTrack() {
         //given
         String board = "■■■■■" +
-                " o ▼ " +
-                "  »  " +
-                " ▲ ▒ " +
+                " B ▼ " +
+                "  >  " +
+                " ▲ < " +
                 "■■■■■";
         init(board);
         when(dice.next(anyInt())).thenReturn(1);
@@ -102,18 +98,18 @@ public class GameFieldImplSystemTest {
 
         //then
         String expected = "■■■■■" +
-                " o▼  " +
-                " »  ▒" +
-                "▲ ▒  " +
+                " B▼  " +
+                " >  <" +
+                "▲ <  " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldMoveBikeToDown() {
+    public void down__shouldMoveBikeToDown() {
         //given
         String board = "■■■■■" +
-                " o   " +
+                " B   " +
                 "     " +
                 "     " +
                 "■■■■■";
@@ -127,18 +123,18 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■" +
                 "     " +
-                " o   " +
+                " B   " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldMoveBikeToUp() {
+    public void up__shouldMoveBikeToUp() {
         //given
         String board = "■■■■■" +
                 "     " +
-                " o   " +
+                " B   " +
                 "     " +
                 "■■■■■";
         init(board);
@@ -150,19 +146,19 @@ public class GameFieldImplSystemTest {
 
         //then
         String expected = "■■■■■" +
-                " o   " +
+                " B   " +
                 "     " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldInclineBikeToRight__IfBikeIsNotInclined() {
+    public void right__shouldInclineBikeToRight__IfBikeIsNotInclined() {
         //given
         String board = "■■■■■" +
                 "     " +
-                "  o  " +
+                "  B  " +
                 "     " +
                 "■■■■■";
         init(board);
@@ -175,24 +171,22 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■" +
                 "     " +
-                "  )  " +
+                "  R  " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldInclineBikeToRight__IfBikeIsInclinedToLeft() {
+    public void right__shouldInclineBikeToRight__IfBikeIsNotInclinedAndAtAccelerator() {
         //given
         String board = "■■■■■" +
                 "     " +
-                "  o  " +
+                "  B> " +
                 "     " +
                 "■■■■■";
         init(board);
         when(dice.next(anyInt())).thenReturn(5);
-        bike.left();
-        game.tick();
 
         //when
         bike.right();
@@ -201,50 +195,119 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■" +
                 "     " +
-                "  o  " +
+                "  C  " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldInclineBikeToLeft__IfBikeIsNotInclined() {
+    public void right__shouldInclineBikeToRight__IfBikeIsNotInclinedAndAtInhibitor() {
         //given
         String board = "■■■■■" +
                 "     " +
-                "  o  " +
+                "  B< " +
                 "     " +
                 "■■■■■";
         init(board);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
-        bike.left();
-        game.tick();
-
-        //then
-        String expected = "■■■■■" +
-                "     " +
-                "  (  " +
-                "     " +
-                "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
-    }
-
-
-    @Test
-    public void shouldInclineBikeToLeft__IfBikeIsInclinedToRight() {
-        //given
-        String board = "■■■■■" +
-                "     " +
-                "  o  " +
-                "     " +
-                "■■■■■";
-        init(board);
-        when(dice.next(anyInt())).thenReturn(5);
         bike.right();
         game.tick();
 
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  M  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void right__shouldInclineBikeToRight__IfBikeIsNotInclinedAndAtLineChangerDown() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▼ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        bike.right();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  O  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void right__shouldInclineBikeToRight__IfBikeIsNotInclinedAndAtLineChangerUp() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▲ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        bike.right();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  N  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void right__shouldInclineBikeToRight__IfBikeIsInclinedToLeft() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  L  " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        bike.right();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  R  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void left__shouldInclineBikeToLeft__IfBikeIsNotInclined() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B  " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
         //when
         bike.left();
         game.tick();
@@ -252,18 +315,43 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■" +
                 "     " +
-                "  o  " +
+                "  L  " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
+
     @Test
-    public void shouldFallBike() {
+    public void left__shouldInclineBikeToLeft__IfBikeIsInclinedToRight() {
         //given
         String board = "■■■■■" +
                 "     " +
-                "  o  " +
+                "  R  " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        bike.left();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  L  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void crush__shouldFallBike() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B  " +
                 "     " +
                 "■■■■■";
         init(board);
@@ -276,18 +364,18 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■" +
                 "     " +
-                " ~   " +
+                "  b  " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldIgnoreMovingAfterBikeIsFallen() {
+    public void tick__shouldIgnoreMovingAfterBikeIsFallen() {
         //given
         String board = "■■■■■" +
                 "     " +
-                "  o  " +
+                "  B  " +
                 "     " +
                 "■■■■■";
         init(board);
@@ -302,18 +390,669 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■" +
                 "     " +
-                "~    " +
+                " b   " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldInhibitBike() {
+    public void inhibitorTick1__shouldChangeBikeStateToAtInhibitor__atTheBeginning() {
         //given
         String board = "■■■■■" +
                 "     " +
-                "o▒   " +
+                "B<   " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "I    " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitorTick2__shouldChangeBikeStateToNormal__atTheBeginning() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B<   " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "B    " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitor__shouldChangeBikeStateToAtInhibitor__atTheEnding() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "   B<" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "   I " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitor__shouldChangeBikeStateToAtInhibitor__afterBikeMoveUp() {
+        //given
+        String board = "■■■■■" +
+                "   < " +
+                "  B  " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        bike.up();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "  I  " +
+                "     " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitorTick1__shouldChangeStateToInhibited() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B< " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  I  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitorTick2__shouldMoveInhibitedBikeOneStepBack() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B< " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " I   " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitorTick3__shouldChangeBikeStateToNormalAndMoveBackInhibitor() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B< " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "<B   " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoInhibitorsTick1__shouldChangeStateToInhibited() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B<<" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  I< " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoInhibitorsTick2__shouldChangeKeepBikeStateInhibitedAndMoveItBack() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B<<" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " I<  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoInhibitorsTick3__shouldChangeKeepBikeStateInhibited() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B<<" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "<I   " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoInhibitorsTick4__shouldChangeBikeStateToNormal() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B<<" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "<B   " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void accelerator__shouldChangeBikeStateToAtAccelerator__atTheBeginning() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B>   " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "A    " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void accelerator__shouldChangeBikeStateToAtAccelerator__atTheEnding() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "   B>" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "   A " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void accelerator__shouldChangeBikeStateToAtAccelerator__afterBikeMoveUp() {
+        //given
+        String board = "■■■■■" +
+                "   > " +
+                "  B  " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        bike.up();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "  A  " +
+                "     " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void acceleratorTick1__shouldChangeStateToAccelerated() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B> " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  A  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void acceleratorTick2__shouldMoveAcceleratedBikeOneStepForwardAndChangeStateToNormalAndMoveAcceleratorBack() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B> " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " > B " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void acceleratorTick3__shouldMoveBackAccelerator() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B> " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                ">  B " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoAcceleratorsTick1__shouldChangeBikeStateToAccelerated() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B>>  " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "A>   " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoAcceleratorsTick2__shouldMoveBikeForwardAndChangeStateToNormal() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B>>  " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                ">B   " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoAcceleratorsTick3__shouldChangeKeepBikeStateNormalButMoveItForward() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B>>  " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  B  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void obstacleTick1__shouldObstructBike() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "   B|" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "   o " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void obstacleTick2__shouldMoveObstructedBikeLeft() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "   B|" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  o  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void obstacleTick3__shouldMoveObstructedBikeLeft() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "   B|" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " o   " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void obstacleTick4__shouldMoveObstructedBikeLeft() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "   B|" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "o    " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void obstacleTick5__shouldRemoveObstructedBike__ifItIsLastCell() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "   B|" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "     " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void obstacleAndUpCommand__shouldMoveBikeUp() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "   B|" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        bike.up();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "   B " +
+                "   | " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick2__shouldMoveObstructedBikeAndObstacleTogether() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "   B|" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  o  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick1__shouldMakeBikeObstructed__IfBikeInteractedWithObstacle() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B|   " +
                 "     " +
                 "■■■■■";
         init(board);
@@ -328,15 +1067,39 @@ public class GameFieldImplSystemTest {
                 "o    " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldInhibitBike2() {
+    public void tick2__shouldMoveOutObstructedBikeWithObstacle__ifItIsFirstColumn() {
         //given
         String board = "■■■■■" +
                 "     " +
-                "   o▒" +
+                "B|   " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "     " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void acceleratorAndInhibitorTick1__shouldChangeBikeStateToAccelerated() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B><" +
                 "     " +
                 "■■■■■";
         init(board);
@@ -348,18 +1111,302 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■" +
                 "     " +
-                " o ▒ " +
+                "  A< " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldInhibitBikeAfterMovingUp() {
+    public void acceleratorAndInhibitorTick2__shouldChangeBikeStateToInhibited() {
         //given
         String board = "■■■■■" +
-                "   ▒ " +
-                "  o  " +
+                "     " +
+                "  B><" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " >I  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void acceleratorAndInhibitorTick3__shouldChangeBikeStateToNormal() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B><" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "><B  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void acceleratorAndObstacleTick1__shouldChangeBikeStateToAccelerated() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B>|" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  A| " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void acceleratorAndObstacleTick2__shouldChangeBikeStateToFallen() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B>|" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " >o  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void acceleratorAndLineChangerUpTick1__shouldChangeBikeStateToAccelerated() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B>▲" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  A▲ " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void acceleratorAndLineChangerUpTick2__shouldMoveBikeForwardAndUp() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B>▲" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "   B " +
+                " >▲  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void acceleratorAndLineChangerDownTick1__shouldChangeBikeStateToAccelerated() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B>▼" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  A▼ " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void acceleratorAndLineChangerDownTick2__shouldMoveBikeForwardAndDown() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B>▼" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " >▼  " +
+                "   B " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void lineChangerUpTick1__shouldChangeBikeStateToAtLineChangerUp() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▲ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  U  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void lineChangerUpTick2__shouldMoveBikeUpAndChangeStateBackToNormal() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▲ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "  B  " +
+                " ▲   " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void lineChangerDownTick1__shouldChangeBikeStateToAtLineChangerDown() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▼ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  D  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void lineChangerDownTick2__shouldMoveBikeDownAndChangeStateBackToNormal() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▼ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " ▼   " +
+                "  B  " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void lineChangerUpAndCommandUpTick1__shouldMoveBikeUpAndKeepStateNormal() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▲ " +
                 "     " +
                 "■■■■■";
         init(board);
@@ -371,19 +1418,367 @@ public class GameFieldImplSystemTest {
 
         //then
         String expected = "■■■■■" +
-                "o ▒  " +
-                "     " +
+                "  B  " +
+                "  ▲  " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldAccelerateBike() {
+    public void lineChangerUpAndCommandUpTick2__shouldNotMoveBikeAndKeepState() {
         //given
         String board = "■■■■■" +
                 "     " +
-                "o»   " +
+                "  B▲ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        bike.up();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "  B  " +
+                " ▲   " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void lineChangerUpTick2AndCommandDown__shouldNotMoveBikeAndChangeStateBackToNormal() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▲ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        bike.down();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " ▲B  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void lineChangerDownAndCommandDownTick1__shouldMoveBikeDownAndKeepStateNormal() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▼ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        bike.down();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "  ▼  " +
+                "  B  " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void lineChangerDownAndCommandDownTick2__shouldNotMoveBikeAndChangeState() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▼ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        bike.down();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " ▼   " +
+                "  B  " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void lineChangerDownTick2AndCommandUp__shouldNotMoveBikeAndChangeStateBackToNormal() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▼ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        bike.up();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " ▼B  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitorAfterInhibitorTick1__shouldChangeStateToInhibited() {
+        //given
+        String board = "■■■■■■■■" +
+                "        " +
+                "   B<  <" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■" +
+                "        " +
+                "   I  < " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitorAfterInhibitorTick2__shouldMoveBikeBackAndKeepStateInhibited() {
+        //given
+        String board = "■■■■■■■■" +
+                "        " +
+                "   B<  <" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■" +
+                "        " +
+                "  I  <  " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitorAfterInhibitorTick3__shouldChangeStateToNormal() {
+        //given
+        String board = "■■■■■■■■" +
+                "        " +
+                "   B<  <" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■" +
+                "        " +
+                " <B <   " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitorAfterInhibitorTick4__shouldKeepStateNormal() {
+        //given
+        String board = "■■■■■■■■" +
+                "        " +
+                "   B<  <" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■" +
+                "        " +
+                "< B<    " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitorAfterInhibitorTick5__shouldChangeStateToInhibited() {
+        //given
+        String board = "■■■■■■■■" +
+                "        " +
+                "   B<  <" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■" +
+                "        " +
+                "  I     " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitorAfterInhibitorTick6__shouldMoveInhibitedBikeBack() {
+        //given
+        String board = "■■■■■■■■" +
+                "        " +
+                "   B<  <" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■" +
+                "        " +
+                " I      " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void inhibitorAfterInhibitorTick7__shouldChangeStateToNormal() {
+        //given
+        String board = "■■■■■■■■" +
+                "        " +
+                "   B<  <" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■" +
+                "        " +
+                "<B      " +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoLineChangersUpTick1__shouldChangeBikeStateToAtLineChangerUp() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▲▲" +
                 "     " +
                 "■■■■■";
         init(board);
@@ -395,18 +1790,42 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■" +
                 "     " +
-                "» o  " +
+                "  U▲ " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldAccelerateBike2() {
+    public void twoLineChangersUpTick2__shouldMoveBikeUpAndChangeStateToNormal() {
         //given
         String board = "■■■■■" +
                 "     " +
-                "   o»" +
+                "  B▲▲" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "  B  " +
+                " ▲▲  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void lineChangerUpAndDownTick1__shouldChangeBikeStateToAtLineChangerUp() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▲▼" +
                 "     " +
                 "■■■■■";
         init(board);
@@ -418,18 +1837,42 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■" +
                 "     " +
-                "   »o" +
+                "  U▼ " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldAccelerateBikeAfterMovingUp() {
+    public void lineChangerUpAndDownTick2__shouldMoveBikeUpAndChangeStateToNormal() {
         //given
         String board = "■■■■■" +
-                "   » " +
-                "  o  " +
+                "     " +
+                "  B▲▼" +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "  B  " +
+                " ▲▼  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void commandUpToAcceleratorTick1__shouldMoveBikeUpAndChangeStateToAccelerated() {
+        //given
+        String board = "■■■■■" +
+                "   > " +
+                "  B| " +
                 "     " +
                 "■■■■■";
         init(board);
@@ -441,19 +1884,19 @@ public class GameFieldImplSystemTest {
 
         //then
         String expected = "■■■■■" +
-                "  » o" +
-                "     " +
+                "  A  " +
+                "  |  " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldObstructBike() {
+    public void acceleratorWithSpaceAndObstacleTick1__shouldChangeBikeStateToAccelerated() {
         //given
         String board = "■■■■■" +
                 "     " +
-                "   o█" +
+                " B> |" +
                 "     " +
                 "■■■■■";
         init(board);
@@ -465,42 +1908,18 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■" +
                 "     " +
-                "  ~█ " +
+                " A | " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void shouldMoveObstructedBikeAndObstacleTogether() {
+    public void acceleratorWithSpaceAndObstacleTick2__shouldMoveBikeForwardAndChangeStateToObstructed() {
         //given
         String board = "■■■■■" +
                 "     " +
-                "   o█" +
-                "     " +
-                "■■■■■";
-        init(board);
-        when(dice.next(anyInt())).thenReturn(5);
-        game.tick();
-
-        //when
-        game.tick();
-
-        //then
-        String expected = "■■■■■" +
-                "     " +
-                " ~█  " +
-                "     " +
-                "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
-    }
-
-    @Test
-    public void shouldRemoveObstructedBikeFromBoard__IfBikeXCoordinateIsOutOfBound() {
-        //given
-        String board = "■■■■■" +
-                "     " +
-                " o█  " +
+                " B> |" +
                 "     " +
                 "■■■■■";
         init(board);
@@ -513,10 +1932,10 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■" +
                 "     " +
-                "█    " +
+                "> o  " +
                 "     " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
@@ -525,7 +1944,7 @@ public class GameFieldImplSystemTest {
         String board = "■■■■■" +
                 "     " +
                 "     " +
-                "o    " +
+                "B    " +
                 "■■■■■";
         init(board);
         when(dice.next(anyInt())).thenReturn(0, 0, 2);
@@ -535,11 +1954,11 @@ public class GameFieldImplSystemTest {
 
         //then
         String expected = "■■■■■" +
-                "    »" +
+                "    >" +
                 "     " +
-                "o    " +
+                "B    " +
                 "■■■■■";
-        assertEquals(TestUtils.injectN(expected), printer.getPrinter(game.reader(), player).print());
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
 }

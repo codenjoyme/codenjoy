@@ -54,9 +54,9 @@ public class BoardTest {
     public void getMe__shouldReturnPointWithBikeElement() {
         //given
         Board board = toBoard("■■■■■" +
-                        " o » " +
-                        "  e █" +
-                        " _ ▼ " +
+                        " B > " +
+                        "  E |" +
+                        " e ▼ " +
                         "■■■■■"
         );
 
@@ -71,10 +71,10 @@ public class BoardTest {
     @Test
     public void getMe__shouldReturnPointWithBikeFallenElement() {
         //given
-        Board board = toBoard("~■■■■" +
-                        "   » " +
-                        "  e █" +
-                        " z ▼ " +
+        Board board = toBoard("b■■■■" +
+                        "   > " +
+                        "  E |" +
+                        " Z ▼ " +
                         "■■■■■"
         );
 
@@ -90,9 +90,9 @@ public class BoardTest {
     public void getMe__shouldReturnPointWithBikeInclineLeftElement() {
         //given
         Board board = toBoard("■■■■■" +
-                        " e » " +
-                        "  ( █" +
-                        " x ▼ " +
+                        " E > " +
+                        "  L |" +
+                        " F ▼ " +
                         "■■■■■"
         );
 
@@ -108,9 +108,9 @@ public class BoardTest {
     public void getMe__shouldReturnPointWithBikeInclineRightElement() {
         //given
         Board board = toBoard("■■■■■" +
-                        " x » " +
-                        "  z █" +
-                        " _ ) " +
+                        " F > " +
+                        "  Z |" +
+                        " e R " +
                         "■■■■■"
         );
 
@@ -126,10 +126,10 @@ public class BoardTest {
     public void isGameOver__shouldReturnTrueIfThereIsBikeFallenElement() {
         //given
         Board board = toBoard("■■■■■" +
-                        "   » " +
-                        "  e █" +
-                        " z ▼ " +
-                        "■■~■■"
+                        "   > " +
+                        "  E |" +
+                        " Z ▼ " +
+                        "■■■■■"
         );
 
         //when
@@ -143,10 +143,10 @@ public class BoardTest {
     public void isGameOver__shouldReturnFalseIfThereIsNoBikeFallenElement() {
         //given
         Board board = toBoard("■■■■■" +
-                        " o »)" +
-                        "( e █" +
-                        " z ▼ " +
-                        "■■_■■"
+                        " B >R" +
+                        "L E |" +
+                        " Z ▼ " +
+                        "■■■■■"
         );
 
         //when
@@ -160,10 +160,10 @@ public class BoardTest {
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtRightDirection() {
         //given
         Board board = toBoard("■■■■■" +
-                        " o»  " +
-                        "  e █" +
-                        " z ▼ " +
-                        "■■_■■"
+                        " B>  " +
+                        "  E |" +
+                        " Z ▼ " +
+                        "■■■■■"
         );
 
         //when
@@ -177,10 +177,10 @@ public class BoardTest {
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtDownDirection() {
         //given
         Board board = toBoard("■■■■■" +
-                        " z   " +
-                        " e █ " +
-                        " o ▼ " +
-                        "■■_■■"
+                        " Z   " +
+                        " E | " +
+                        " B ▼ " +
+                        "■■■■■"
         );
 
         //when
@@ -194,10 +194,10 @@ public class BoardTest {
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtLeftDirection() {
         //given
         Board board = toBoard("■■■■■" +
-                        "╝o»  " +
-                        " e █ " +
-                        " z ▼ " +
-                        "■■_■■"
+                        "╝B>  " +
+                        " E | " +
+                        " Z ▼ " +
+                        "■■■■■"
         );
 
         //when
@@ -211,10 +211,10 @@ public class BoardTest {
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtUpDirection() {
         //given
         Board board = toBoard("■■■■■" +
-                        "╝x»  " +
-                        " e █ " +
-                        " o ▼ " +
-                        "■■_■■"
+                        "╝F>  " +
+                        " E | " +
+                        " B ▼ " +
+                        "■■■■■"
         );
 
         //when
@@ -228,10 +228,10 @@ public class BoardTest {
     public void checkAtMe__shouldReturnTrue__ifAtMeIsGivenElement() {
         //given
         Board board = toBoard("■■■■■" +
-                        "╝x»  " +
-                        " e █ " +
-                        " ( ▼ " +
-                        "■■_■■"
+                        "╝F>  " +
+                        " E | " +
+                        " L ▼ " +
+                        "■■■■■"
         );
 
         //when
@@ -245,10 +245,10 @@ public class BoardTest {
     public void checkAtMe__shouldReturnFalse__ifAtMeIsNotGivenElement() {
         //given
         Board board = toBoard("■■■■■" +
-                        "╝x»  " +
-                        " e █ " +
-                        " o ▼ " +
-                        "■■_■■"
+                        "╝F>  " +
+                        " E | " +
+                        " B ▼ " +
+                        "■■■■■"
         );
 
         //when

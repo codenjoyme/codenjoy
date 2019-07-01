@@ -22,7 +22,11 @@ package com.codenjoy.dojo.excitebike.services.parse;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.items.*;
+import com.codenjoy.dojo.excitebike.model.items.Accelerator;
+import com.codenjoy.dojo.excitebike.model.items.Border;
+import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
+import com.codenjoy.dojo.excitebike.model.items.LineChanger;
+import com.codenjoy.dojo.excitebike.model.items.Obstacle;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
 
@@ -34,7 +38,7 @@ public interface MapParser {
 
     int getYSize();
 
-    List<Bike> getBikes();
+    List<Bike> getFallenBikes();
 
     List<Accelerator> getAccelerators();
 

@@ -42,6 +42,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,17 +56,13 @@ import static org.mockito.Mockito.when;
 
 public class MultiplayerSystemTest {
 
-    private EventListener listener1;
-    private EventListener listener2;
-    private EventListener listener3;
     private Game game1;
     private Game game2;
     private Game game3;
     private Dice dice;
     private GameFieldImpl field;
 
-    @Before
-    public void setup() {
+    private void init() {
         MapParser mapParser = new MapParserImpl("■■■■■■■" +
                 "       " +
                 "       " +
@@ -78,67 +75,55 @@ public class MultiplayerSystemTest {
         field = new GameFieldImpl(mapParser, dice);
         PrinterFactory factory = new PrinterFactoryImpl();
 
-        listener1 = mock(EventListener.class);
-        game1 = new Single(new Player(listener1), factory);
+        game1 = new Single(new Player(mock(EventListener.class)), factory);
         game1.on(field);
 
-        listener2 = mock(EventListener.class);
-        game2 = new Single(new Player(listener2), factory);
+        game2 = new Single(new Player(mock(EventListener.class)), factory);
         game2.on(field);
 
-        listener3 = mock(EventListener.class);
-        game3 = new Single(new Player(listener3), factory);
+        game3 = new Single(new Player(mock(EventListener.class)), factory);
         game3.on(field);
 
         game1.newGame();
-
         game2.newGame();
-
         game3.newGame();
     }
 
-    private void asrtFl1(String expected) {
-        assertEquals(expected, game1.getBoardAsString());
-    }
-
-    private void asrtFl2(String expected) {
-        assertEquals(expected, game2.getBoardAsString());
-    }
-
-    private void asrtFl3(String expected) {
-        assertEquals(expected, game3.getBoardAsString());
-    }
-
     @Test
-    public void shouldPrint() {
-        asrtFl1("■■■■■■■\n" +
-                "       \n" +
-                "       \n" +
-                "e      \n" +
-                " e     \n" +
-                "o      \n" +
-                "■■■■■■■\n");
+    public void games__shouldInitializeCorrectly() {
+        //given
 
-        asrtFl2("■■■■■■■\n" +
-                "       \n" +
-                "       \n" +
-                "e      \n" +
-                " o     \n" +
-                "e      \n" +
-                "■■■■■■■\n");
+        //when
+        init();
 
-        asrtFl3("■■■■■■■\n" +
+        //then
+        assertThat(game1.getBoardAsString(), is("■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                "o      \n" +
-                " e     \n" +
-                "e      \n" +
-                "■■■■■■■\n");
+                "E      \n" +
+                " E     \n" +
+                "B      \n" +
+                "■■■■■■■\n"));
+        assertThat(game2.getBoardAsString(), is("■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                "E      \n" +
+                " B     \n" +
+                "E      \n" +
+                "■■■■■■■\n"));
+        assertThat(game3.getBoardAsString(), is("■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                "B      \n" +
+                " E     \n" +
+                "E      \n" +
+                "■■■■■■■\n"));
     }
 
     @Test
     public void shouldJoystick() {
         //given
+        init();
         when(dice.next(anyInt())).thenReturn(5);
 
         game3.getJoystick().up();
@@ -151,17 +136,18 @@ public class MultiplayerSystemTest {
         //then
         String expected = "■■■■■■■\n" +
                 "       \n" +
-                "e      \n" +
+                "E      \n" +
                 "       \n" +
-                " z     \n" +
-                "o      \n" +
-                "■■■■■■■\n";
-        assertEquals(expected, game1.getBoardAsString());
+                " Z     \n" +
+                "       \n" +
+                "c■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
     }
 
     @Test
     public void shouldRemove() {
         //given
+        init();
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -173,15 +159,16 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "       \n" +
                 "       \n" +
-                " e     \n" +
-                "o      \n" +
+                " E     \n" +
+                "B      \n" +
                 "■■■■■■■\n";
-        assertEquals(expected, game1.getBoardAsString());
+        assertThat(game1.getBoardAsString(), is(expected));
     }
 
     @Test
     public void shouldCrushEnemyBikeAfterClash() {
         //given
+        init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
@@ -196,17 +183,18 @@ public class MultiplayerSystemTest {
         String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " e     \n" +
-                "_o     \n" +
+                " E     \n" +
+                " k     \n" +
                 "       \n" +
                 "■■■■■■■\n";
-        assertEquals(expected, game1.getBoardAsString());
-        assertTrue(game2.isGameOver());
+        assertThat(game1.getBoardAsString(), is(expected));
+        assertThat(game2.isGameOver(), is(true));
     }
 
     @Test
     public void shouldCrushEnemyBikeAfterClash2() {
         //given
+        init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
@@ -222,17 +210,18 @@ public class MultiplayerSystemTest {
         String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                "_e     \n" +
-                " o     \n" +
+                " l     \n" +
+                " B     \n" +
                 "       \n" +
                 "■■■■■■■\n";
-        assertEquals(expected, game1.getBoardAsString());
-        assertTrue(game3.isGameOver());
+        assertThat(game1.getBoardAsString(), is(expected));
+        assertThat(game3.isGameOver(), is(true));
     }
 
     @Test
     public void shouldCrushEnemyBikeAfterClash3() {
         //given
+        init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
@@ -248,17 +237,99 @@ public class MultiplayerSystemTest {
         String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " e     \n" +
+                " E     \n" +
                 "       \n" +
-                "_o     \n" +
-                "■■■■■■■\n";
-        assertEquals(expected, game2.getBoardAsString());
-        assertTrue(game1.isGameOver());
+                " B     \n" +
+                "■r■■■■■\n";
+        assertThat(game2.getBoardAsString(), is(expected));
+        assertThat(game1.isGameOver(), is(true));
     }
 
     @Test
-    public void shouldDoNothingAfterBikesClashEachOther() {
+    public void shouldDoNothingAfterBikesClashEachOther__bike1() {
         //given
+        init();
+        when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
+
+        //when
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                " E     \n" +
+                " E     \n" +
+                " B     \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldDoNothingAfterBikesClashEachOther__bike1__tick2() {
+        //given
+        init();
+        when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        field.tick();
+
+        //when
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                " E     \n" +
+                " E     \n" +
+                " B     \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldDoNothingAfterBikesClashEachOther__bike2() {
+        //given
+        init();
+        when(dice.next(anyInt())).thenReturn(5);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX()+1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX()+1);
+
+        //when
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                " E     \n" +
+                " B     \n" +
+                " E     \n" +
+                "■■■■■■■\n";
+        assertThat(game2.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldDoNothingAfterBikesClashEachOther__bike3() {
+        //given
+        init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
@@ -274,16 +345,17 @@ public class MultiplayerSystemTest {
         String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " e     \n" +
-                " e     \n" +
-                " o     \n" +
+                " B     \n" +
+                " E     \n" +
+                " E     \n" +
                 "■■■■■■■\n";
-        assertEquals(expected, game1.getBoardAsString());
+        assertThat(game3.getBoardAsString(), is(expected));
     }
 
     @Test
     public void shouldMoveBikesInAnyOrderOfCall() {
         //given
+        init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
@@ -299,12 +371,12 @@ public class MultiplayerSystemTest {
         //then
         String expected = "■■■■■■■\n" +
                 "       \n" +
-                " e     \n" +
-                " e     \n" +
-                " o     \n" +
+                " E     \n" +
+                " E     \n" +
+                " B     \n" +
                 "       \n" +
                 "■■■■■■■\n";
-        assertEquals(expected, game1.getBoardAsString());
+        assertThat(game1.getBoardAsString(), is(expected));
     }
 
     @Ignore

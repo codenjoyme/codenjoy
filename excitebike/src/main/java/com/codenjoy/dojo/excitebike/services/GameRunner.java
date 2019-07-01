@@ -27,13 +27,13 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.client.ai.AISolver;
-import com.codenjoy.dojo.excitebike.model.items.GameElementType;
 import com.codenjoy.dojo.excitebike.model.GameFieldImpl;
-import com.codenjoy.dojo.excitebike.services.parse.MapParser;
-import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.excitebike.model.Player;
+import com.codenjoy.dojo.excitebike.model.items.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
+import com.codenjoy.dojo.excitebike.services.parse.MapParser;
+import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.GameType;
@@ -60,7 +60,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     protected String getMap() {
         StringBuilder sb = new StringBuilder();
         appendElementManyTimes(sb, GameElementType.BORDER, FIELD_HEIGHT);
-        for (int i = 0; i < FIELD_HEIGHT-2; i++) {
+        for (int i = 0; i < FIELD_HEIGHT - 2; i++) {
             appendElementManyTimes(sb, GameElementType.NONE, FIELD_HEIGHT);
         }
         appendElementManyTimes(sb, GameElementType.BORDER, FIELD_HEIGHT);
@@ -75,7 +75,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer)score, settings);
+        return new Scores((Integer) score, settings);
     }
 
     @Override

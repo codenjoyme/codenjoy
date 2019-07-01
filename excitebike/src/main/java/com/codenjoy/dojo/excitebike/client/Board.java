@@ -25,6 +25,7 @@ package com.codenjoy.dojo.excitebike.client;
 
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.excitebike.model.items.GameElementType;
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.services.Direction;
@@ -33,12 +34,8 @@ import com.codenjoy.dojo.services.printer.CharElements;
 
 import java.util.Arrays;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT;
 
 /**
  * Класс, обрабатывающий строковое представление доски.
@@ -60,7 +57,10 @@ public class Board extends AbstractBoard<CharElements> {
     }
 
     public Point getMe() {
-        return get(BIKE, BIKE_FALLEN, BIKE_INCLINE_LEFT, BIKE_INCLINE_RIGHT)
+        return get(Arrays.stream(BikeType.values())
+                .filter(v -> !v.name().contains(Bike.OTHER_BIKE_PREFIX))
+                .collect(Collectors.toList())
+                .toArray(new BikeType[]{}))
                 .stream()
                 .findFirst()
                 .orElse(null);
@@ -68,7 +68,9 @@ public class Board extends AbstractBoard<CharElements> {
 
     public boolean isGameOver() {
         Point me = getMe();
-        return me == null || isAt(me, BIKE_FALLEN);
+        return me == null || Arrays.stream(BikeType.values())
+                .filter(v -> !v.name().contains(Bike.OTHER_BIKE_PREFIX) && v.name().contains(Bike.FALLEN_BIKE_SUFFIX))
+                .anyMatch(v -> isAt(me, v));
     }
 
     public boolean checkNearMe(Direction direction, CharElements... elements) {

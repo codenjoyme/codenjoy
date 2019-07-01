@@ -22,7 +22,6 @@ package com.codenjoy.dojo.excitebike.model;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
@@ -43,24 +42,21 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static com.codenjoy.dojo.excitebike.TestUtils.parseBikes;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(Parameterized.class)
 public class PlayersSpawnSystemParametrizedTest {
 
-    private String name;
     private String init;
     private String expected;
     private int newPlayerNumberAfterInit;
 
     public PlayersSpawnSystemParametrizedTest(String name, int newPlayerNumberAfterInit, String init, String expected) {
-        this.name = name;
         this.newPlayerNumberAfterInit = newPlayerNumberAfterInit;
         this.init = init;
         this.expected = expected;
@@ -81,9 +77,9 @@ public class PlayersSpawnSystemParametrizedTest {
                         "■■■■■■■\n" +
                                 "       \n" +
                                 "       \n" +
-                                "e      \n" +
-                                " e     \n" +
-                                "o      \n" +
+                                "E      \n" +
+                                " E     \n" +
+                                "B      \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddFiveBikesInFirstFullChessColumn",
@@ -96,11 +92,11 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
-                                "e      \n" +
-                                " e     \n" +
-                                "e      \n" +
-                                " e     \n" +
-                                "o      \n" +
+                                "E      \n" +
+                                " E     \n" +
+                                "E      \n" +
+                                " E     \n" +
+                                "B      \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddSevenBikesInFirstAnSecondChessColumns",
@@ -113,11 +109,11 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
-                                "e      \n" +
-                                " e     \n" +
-                                "e      \n" +
-                                " e  e  \n" +
-                                "o  e   \n" +
+                                "E      \n" +
+                                " E     \n" +
+                                "E      \n" +
+                                " E  E  \n" +
+                                "B  E   \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddTenBikesInFirstAnSecondFullChessColumns",
@@ -130,11 +126,11 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
-                                "e  e   \n" +
-                                " e  e  \n" +
-                                "e  e   \n" +
-                                " e  e  \n" +
-                                "o  e   \n" +
+                                "E  E   \n" +
+                                " E  E  \n" +
+                                "E  E   \n" +
+                                " E  E  \n" +
+                                "B  E   \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddOneNewBike",
@@ -142,33 +138,33 @@ public class PlayersSpawnSystemParametrizedTest {
                         "■■■■■■■" +
                                 "       " +
                                 "       " +
-                                "  o    " +
+                                "  B    " +
                                 "       " +
-                                "   o   " +
+                                "   B   " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
                                 "       \n" +
                                 "       \n" +
-                                "  o    \n" +
-                                " e     \n" +
-                                "   e   \n" +
+                                "  B    \n" +
+                                " E     \n" +
+                                "   E   \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddManyNewBikes",
                         3,
                         "■■■■■■■" +
                                 "       " +
-                                "    o  " +
-                                "o      " +
-                                "     o " +
-                                "   o o " +
+                                "    B  " +
+                                "B      " +
+                                "     B " +
+                                "   B B " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
-                                "e      \n" +
-                                " e  o  \n" +
-                                "e      \n" +
-                                " e   e \n" +
-                                "   e e \n" +
+                                "E      \n" +
+                                " E  B  \n" +
+                                "E      \n" +
+                                " E   E \n" +
+                                "   E E \n" +
                                 "■■■■■■■\n"
                 }
         );
@@ -186,11 +182,11 @@ public class PlayersSpawnSystemParametrizedTest {
 
         List<Game> games = new ArrayList<>();
 
-        if (mapParser.getBikes().isEmpty()) {
+        if (parseBikes(init).isEmpty()) {
             int playersNumber = StringUtils.countMatches(expected, BikeType.OTHER_BIKE.ch()) + 1;
             IntStream.range(0, playersNumber).forEach(value -> games.add(createNewGame(field, factory)));
         } else {
-            mapParser.getBikes().forEach(bike -> {
+            parseBikes(init).forEach(bike -> {
                 Game game = createNewGame(field, factory);
                 games.add(game);
                 ((Player) game.getPlayer()).setHero(bike);

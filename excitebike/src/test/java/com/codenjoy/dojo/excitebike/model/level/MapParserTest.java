@@ -23,20 +23,18 @@ package com.codenjoy.dojo.excitebike.model.level;
  */
 
 import com.codenjoy.dojo.excitebike.model.items.GameElementType;
+import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.CharElements;
+import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -56,13 +54,21 @@ public class MapParserTest {
 
     @Parameterized.Parameters(name = "{0}")
     public static Collection data() {
-        return Stream.of(
-                Arrays.stream(GameElementType.values()),
-                Arrays.stream(SpringboardElementType.values())
-        )
-                .flatMap(Function.identity())
-                .filter(e -> e != GameElementType.NONE)
-                .collect(Collectors.toList());
+        return Lists.newArrayList(
+                GameElementType.BORDER,
+                GameElementType.ACCELERATOR,
+                GameElementType.INHIBITOR,
+                GameElementType.OBSTACLE,
+                GameElementType.LINE_CHANGER_UP,
+                GameElementType.LINE_CHANGER_DOWN,
+                SpringboardElementType.SPRINGBOARD_DARK,
+                SpringboardElementType.SPRINGBOARD_LIGHT,
+                SpringboardElementType.SPRINGBOARD_LEFT_DOWN,
+                SpringboardElementType.SPRINGBOARD_LEFT_UP,
+                SpringboardElementType.SPRINGBOARD_RIGHT_DOWN,
+                SpringboardElementType.SPRINGBOARD_RIGHT_UP,
+                BikeType.BIKE_FALLEN
+        );
     }
 
     @Test
@@ -221,6 +227,8 @@ public class MapParserTest {
             return (List<T>) mapParser.getSpringboardRightDownElements();
         } else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_UP) {
             return (List<T>) mapParser.getSpringboardRightUpElements();
+        } else if (element == BikeType.BIKE_FALLEN) {
+            return (List<T>) mapParser.getFallenBikes();
         }
         return null;
     }
