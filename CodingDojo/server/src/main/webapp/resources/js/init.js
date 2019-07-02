@@ -34,6 +34,7 @@ game.enableAdvertisement = false;
 game.showBody = true;
 game.sprites = null;
 game.heroInfo = null;
+game.isDrawByOrder = false;
 
 game.debug = false;
 game['debugger'] = function() {

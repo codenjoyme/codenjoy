@@ -187,7 +187,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
 
         var drawAllLayers = function(layers, onDrawItem){
-            var isDrawByOrder = false; // TODO вероятно тут надо очень сильно упростить, я не могу всспомнить где мне надо послойно печатать
+            var isDrawByOrder = game.isDrawByOrder;
 
             var drawChar = function(plotIndex) {
                 var x = 0;

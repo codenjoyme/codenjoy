@@ -67,6 +67,7 @@ if (gameName == 'Training') {
     game.sprites = 'robot';
     game.onlyLeaderBoard = true;
 }
+game.isDrawByOrder = (game.sprites == 'ekids');
 game.enableDonate = false;
 game.enableJoystick = false;
 game.enablePlayerInfo = false;
