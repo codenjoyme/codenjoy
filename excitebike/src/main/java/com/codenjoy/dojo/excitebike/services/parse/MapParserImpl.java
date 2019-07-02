@@ -30,6 +30,7 @@ import com.codenjoy.dojo.excitebike.model.items.LineChanger;
 import com.codenjoy.dojo.excitebike.model.items.Obstacle;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
+import com.codenjoy.dojo.excitebike.model.items.springboard.Springboard;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.services.Point;
@@ -104,36 +105,6 @@ public class MapParserImpl implements MapParser {
     @Override
     public List<Obstacle> getObstacles() {
         return parseAndConvertElements(Obstacle::new, GameElementType.OBSTACLE);
-    }
-
-    @Override
-    public List<SpringboardElement> getSpringboardDarkElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_DARK), SpringboardElementType.SPRINGBOARD_DARK);
-    }
-
-    @Override
-    public List<SpringboardElement> getSpringboardLightElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_LIGHT), SpringboardElementType.SPRINGBOARD_LIGHT);
-    }
-
-    @Override
-    public List<SpringboardElement> getSpringboardLeftDownElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_LEFT_DOWN), SpringboardElementType.SPRINGBOARD_LEFT_DOWN);
-    }
-
-    @Override
-    public List<SpringboardElement> getSpringboardLeftUpElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_LEFT_UP), SpringboardElementType.SPRINGBOARD_LEFT_UP);
-    }
-
-    @Override
-    public List<SpringboardElement> getSpringboardRightDownElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_RIGHT_DOWN), SpringboardElementType.SPRINGBOARD_RIGHT_DOWN);
-    }
-
-    @Override
-    public List<SpringboardElement> getSpringboardRightUpElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_RIGHT_UP), SpringboardElementType.SPRINGBOARD_RIGHT_UP);
     }
 
     private <T> List<T> parseAndConvertElements(Function<Point, T> elementConstructor, CharElements... elements) {

@@ -26,7 +26,6 @@ package com.codenjoy.dojo.excitebike.model;
 import com.codenjoy.dojo.excitebike.model.items.*;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.springboard.Springboard;
-import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
@@ -149,15 +148,15 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public Optional<Springboard> getSpringboardThatContainsPoint(Point point) {
+    public Springboard getSpringboardThatContainsPoint(Point point) {
         List<Shiftable> springboards = allShiftableElements.get(SPRINGBOARD);
         for (Shiftable shiftableSpringboard : springboards) {
             Springboard springboard = (Springboard) shiftableSpringboard;
             if (springboard.getElements().contains(point)) {
-                return Optional.of(springboard);
+                return springboard;
             }
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override

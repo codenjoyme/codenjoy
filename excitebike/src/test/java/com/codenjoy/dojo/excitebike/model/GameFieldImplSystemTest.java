@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.excitebike.TestUtils.parseBikes;
@@ -1839,4 +1840,119 @@ public class GameFieldImplSystemTest {
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
+
+    @Ignore
+    @Test
+    public void tick__shouldMoveBikeUp_ifBikeCrossRiseOfSpringboard() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "     " +
+                "  B  " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(0,5,1,5);
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        //when
+        bike.down();
+        game.tick();
+
+        //then
+        String expected = "■╔^^^"+
+                " /^^^"+
+                " /^^^"+
+                " ╚///"+
+                "■■b■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Ignore
+    @Test
+    public void tick__shouldMoveBikeUp_ifBikeCrossRiseOfSpringboard2() {
+        //given
+        String board = "■■■■■" +
+                "  B  " +
+                "     " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(0,5,1,5);
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        //when
+        bike.up();
+        game.tick();
+
+        //then
+        String expected = "■╔B^^"+
+                " /^^^"+
+                " /^^^"+
+                " ╚///"+
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Ignore
+    @Test
+    public void tick__shouldMoveBikeUp_ifBikeCrossRiseOfSpringboard3() {
+        //given
+        String board = "■■■■■" +
+                "  B  " +
+                "     " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(0,5,1,5);
+        game.tick();
+        game.tick();
+        game.tick();
+
+        //when
+        bike.up();
+        game.tick();
+        game.tick();
+
+        //then
+        String expected = "■╔B^^"+
+                " /^^^"+
+                " /^^^"+
+                " ╚///"+
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick__shouldCrushBike_ifBikeMoveDownAndCrossRiseOfSpringboard() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "     " +
+                "  B  " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(0,5,1,5);
+        game.tick();
+        game.tick();
+        game.tick();
+
+        //when
+        bike.down();
+        game.tick();
+
+        //then
+        String expected = "■■╔^^"+
+                "  /^^"+
+                "  /^^"+
+                "  ╚//"+
+                "■■c■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
 }

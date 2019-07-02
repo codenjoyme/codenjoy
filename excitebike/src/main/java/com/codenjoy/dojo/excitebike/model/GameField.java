@@ -52,7 +52,7 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
 
     Bike getNewFreeBike();
 
-    Optional<Springboard> getSpringboardThatContainsPoint(Point point);
+    Springboard getSpringboardThatContainsPoint(Point point);
 
     Player getPlayerOfBike(Bike bike);
 }

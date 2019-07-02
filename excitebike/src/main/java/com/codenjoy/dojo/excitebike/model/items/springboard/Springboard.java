@@ -23,6 +23,7 @@ package com.codenjoy.dojo.excitebike.model.items.springboard;
  */
 
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
+import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 
@@ -90,16 +91,14 @@ public class Springboard extends PointImpl implements Shiftable {
         };
     }
 
-    public boolean isOnRise(Point point) {
-        return riseElements.contains(point);
+    public SpringboardElementType getOnDescentElement(Point point) {
+        int index = descentElements.indexOf(point);
+        return index >= 0 ? descentElements.get(index).state(null) : null;
+
     }
 
-    public boolean isOnSpringBoardTop(Point point) {
-        return betweenElements.contains(point);
+    public SpringboardElementType getOnRiseElement(Point point) {
+        int index = riseElements.indexOf(point);
+        return index >= 0 ? riseElements.get(index).state(null)  : null;
     }
-
-    public boolean isOnDescent(Point point) {
-        return descentElements.contains(point);
-    }
-
 }

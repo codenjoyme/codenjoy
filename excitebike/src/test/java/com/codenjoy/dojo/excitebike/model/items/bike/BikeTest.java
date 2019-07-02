@@ -24,7 +24,12 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
 
 import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
+import com.codenjoy.dojo.excitebike.model.items.springboard.Springboard;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
+import com.codenjoy.dojo.services.Point;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -46,6 +51,7 @@ public class BikeTest {
     public void init() {
         bike = new Bike(5, 5);
         gameField = mock(GameField.class);
+        when(gameField.size()).thenReturn(10);
         bike.init(gameField);
     }
 
@@ -131,6 +137,7 @@ public class BikeTest {
     @Test
     public void tickWithDownCommand__shouldMoveBikeAndCrushIt__ifLowerPositionIsBorder() {
         //given
+        bike.setY(1);
         when(gameField.isBorder(anyInt(), anyInt())).thenReturn(true);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
         bike.down();
@@ -140,7 +147,7 @@ public class BikeTest {
 
         //then
         assertThat(bike.getX(), is(5));
-        assertThat(bike.getY(), is(4));
+        assertThat(bike.getY(), is(0));
         assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_FALLEN_AT_BORDER));
     }
 
@@ -524,6 +531,151 @@ public class BikeTest {
         assertThat(bike.isAlive(), is(false));
         assertThat(enemy.state(getPlayer(bike)), is(BikeType.OTHER_BIKE_AT_DOWNED_BIKE));
         assertThat(enemy.state(getPlayer(enemy)), is(BikeType.BIKE_AT_DOWNED_BIKE));
+    }
+
+    @Test
+    public void tick__shouldMoveBikeUpAndSetAtSpringboardType__ifBikeGoToSpringboardLeftUpElementType() {
+        //given
+        Springboard springboard = mock(Springboard.class);
+        when(gameField.getSpringboardThatContainsPoint(any(Point.class))).thenReturn(springboard);
+        when(springboard.getOnRiseElement(any(Point.class))).thenReturn(SpringboardElementType.SPRINGBOARD_LEFT_UP);
+        bike.tick();
+
+        //when
+        bike.tick();
+
+        //then
+        assertThat(bike.getX(), is(5));
+        assertThat(bike.getY(), is(6));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_SPRINGBOARD_LEFT_UP));
+    }
+
+    @Test
+    public void tick__shouldMoveBikeUpAndSetAtSpringboardType__ifBikeGoToSpringboardLeftDownElementType() {
+        //given
+        Springboard springboard = mock(Springboard.class);
+        when(gameField.getSpringboardThatContainsPoint(any(Point.class))).thenReturn(springboard);
+        when(springboard.getOnRiseElement(any(Point.class))).thenReturn(SpringboardElementType.SPRINGBOARD_LEFT_DOWN);
+        bike.tick();
+
+        //when
+        bike.tick();
+
+        //then
+        assertThat(bike.getX(), is(5));
+        assertThat(bike.getY(), is(6));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_SPRINGBOARD_LEFT_DOWN));
+    }
+
+    @Test
+    public void tick__shouldMoveBikeUpAndSetAtSpringboardType__ifBikeGoToSpringboardDarkElementType() {
+        //given
+        Springboard springboard = mock(Springboard.class);
+        when(gameField.getSpringboardThatContainsPoint(any(Point.class))).thenReturn(springboard);
+        when(springboard.getOnRiseElement(any(Point.class))).thenReturn(SpringboardElementType.SPRINGBOARD_DARK);
+        bike.tick();
+
+        //when
+        bike.tick();
+
+        //then
+        assertThat(bike.getX(), is(5));
+        assertThat(bike.getY(), is(6));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_SPRINGBOARD_DARK));
+    }
+
+    @Ignore
+    @Test
+    public void tick__shouldMoveBikeDownAndSetAtSpringboardType__ifBikeGoToSpringboardRightUpElementType() {
+        //given
+        Springboard springboard = mock(Springboard.class);
+        when(gameField.getSpringboardThatContainsPoint(any(Point.class))).thenReturn(springboard);
+        when(springboard.getOnDescentElement(any(Point.class))).thenReturn(SpringboardElementType.SPRINGBOARD_RIGHT_UP);
+        bike.tick();
+
+        //when
+        bike.tick();
+
+        //then
+        assertThat(bike.getX(), is(5));
+        assertThat(bike.getY(), is(4));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_SPRINGBOARD_RIGHT_UP));
+    }
+
+    @Ignore
+    @Test
+    public void tick__shouldMoveBikeDown__ifBikeGoToSpringboardLightElementType() {
+        //given
+        Springboard springboard = mock(Springboard.class);
+        when(gameField.getSpringboardThatContainsPoint(any(Point.class))).thenReturn(springboard);
+        when(springboard.getOnDescentElement(any(Point.class))).thenReturn(SpringboardElementType.SPRINGBOARD_LIGHT);
+        bike.tick();
+
+        //when
+        bike.tick();
+
+        //then
+        assertThat(bike.getX(), is(5));
+        assertThat(bike.getY(), is(4));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_SPRINGBOARD_LIGHT));
+    }
+
+    @Ignore
+    @Test
+    public void tick__shouldMoveBikeDownAndSetAtSpringboardType__ifBikeGoToSpringboardRightDownElementType() {
+        //given
+        Springboard springboard = mock(Springboard.class);
+        when(gameField.getSpringboardThatContainsPoint(any(Point.class))).thenReturn(springboard);
+        when(springboard.getOnDescentElement(any(Point.class))).thenReturn(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN, SpringboardElementType.SPRINGBOARD_RIGHT_DOWN, null);
+        bike.tick();
+
+        //when
+        bike.tick();
+
+        //then
+        assertThat(bike.getX(), is(5));
+        assertThat(bike.getY(), is(4));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_SPRINGBOARD_RIGHT_DOWN));
+    }
+
+    @Ignore
+    @Test
+    public void tick__shouldCrushBike__ifBikeGiveDownCommandWhileOnTopOfSpringboard() {
+        //given
+        bike.setY(1);
+        Springboard springboard = mock(Springboard.class);
+        when(gameField.getSpringboardThatContainsPoint(any(Point.class))).thenReturn(springboard);
+        when(springboard.getOnRiseElement(any(Point.class))).thenReturn(SpringboardElementType.SPRINGBOARD_LEFT_DOWN, null);
+        bike.tick();
+        bike.down();
+
+        //when
+        bike.tick();
+
+        //then
+        assertThat(bike.getX(), is(5));
+        assertThat(bike.getY(), is(0));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_FALLEN_AT_BORDER));
+    }
+
+    @Ignore
+    @Test
+    public void tick__shouldNotMoveBikeUp__ifBikeGiveUpCommandWhileOnTopOfSpringboard() {
+        //given
+        Springboard springboard = mock(Springboard.class);
+        when(gameField.getSpringboardThatContainsPoint(any(Point.class))).thenReturn(springboard);
+        when(springboard.getOnRiseElement(any(Point.class))).thenReturn(SpringboardElementType.SPRINGBOARD_LEFT_DOWN, null);
+        when(gameField.size()).thenReturn(6);
+        bike.tick();
+        bike.up();
+        when(gameField.size()).thenReturn(bike.getY() + 1);
+
+        //when
+        bike.tick();
+
+        //then
+        assertThat(bike.getX(), is(5));
+        assertThat(bike.getY(), is(5));
     }
 
 }
