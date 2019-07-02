@@ -84,6 +84,10 @@ game.debug = false;
 // ========================== leaderboard page ==========================
 
 var initHelpLink = function() {
+    if (gameName == 'eKids') {
+        $('#help-link').hide();
+        return; // TODO написать нормально мануал и убрать это
+    }
     var pageName = gameName.split(' ').join('-').toLowerCase();
     $('#help-link').attr('href', '/codenjoy-contest/resources/icancode/landing-' + pageName + '.html')
 }
