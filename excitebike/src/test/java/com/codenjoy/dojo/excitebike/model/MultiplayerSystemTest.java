@@ -133,7 +133,7 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "E      \n" +
                 "       \n" +
-                " Z     \n" +
+                " E     \n" +
                 "       \n" +
                 "c■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));

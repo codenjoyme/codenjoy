@@ -46,16 +46,7 @@ import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_DOWN;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_UP;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_OBSTACLE;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_ACCELERATOR;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_INHIBITOR;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_LINE_CHANGER_DOWN;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_LEFT_AT_LINE_CHANGER_UP;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_ACCELERATOR;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_INHIBITOR;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_DOWN;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_UP;
 import static com.codenjoy.dojo.services.Direction.DOWN;
-import static com.codenjoy.dojo.services.Direction.LEFT;
 import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static com.codenjoy.dojo.services.Direction.UP;
 
@@ -64,7 +55,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     public static final String OTHER_BIKE_PREFIX = "OTHER";
     public static final String FALLEN_BIKE_SUFFIX = "FALLEN";
     public static final String BIKE_AT_PREFIX = "AT_";
-    public static final String INCLINE_SUFFIX = "_INCLINE_";
     public static final String BIKE_PREFIX = "BIKE";
     public static final String AT_ACCELERATOR_SUFFIX = "_AT_ACCELERATOR";
     public static final String AT_INHIBITOR_SUFFIX = "_AT_INHIBITOR";
@@ -106,23 +96,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
     @Override
     public void left() {
-        if (!isAlive()) return;
-        changeIncline(LEFT);
     }
 
     @Override
     public void right() {
-        if (!isAlive()) return;
-        changeIncline(RIGHT);
-    }
-
-    private void changeIncline(Direction direction) {
-        String oppositeIncline = INCLINE_SUFFIX + (direction == LEFT ? RIGHT.name() : LEFT.name());
-        if (type.name().contains(oppositeIncline)) {
-            type = BikeType.valueOf(type.name().replace(oppositeIncline, ""));
-        } else if (!type.name().contains(INCLINE_SUFFIX + direction.name())) {
-            type = BikeType.valueOf(type.name().replace(BIKE_PREFIX, BIKE_PREFIX + INCLINE_SUFFIX + direction.name()));
-        }
     }
 
     public void crush() {
@@ -131,11 +108,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                         type == BIKE_AT_LINE_CHANGER_DOWN ? BIKE_FALLEN_AT_LINE_CHANGER_DOWN :
                                 type == BIKE_AT_LINE_CHANGER_UP ? BIKE_FALLEN_AT_LINE_CHANGER_UP :
                                         BIKE_FALLEN;
-    }
-
-    public void jump() {
-        //TODO add new BikeType.JUMP for springboard TASK - 26-springboard-item
-        //type = BikeType.BIKE_JUMP;
     }
 
     @Override
@@ -164,19 +136,14 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     }
 
     private void actAccordingToState() {
-        if (type == BIKE_AT_ACCELERATOR
-                || type == BIKE_INCLINE_LEFT_AT_ACCELERATOR
-                || type == BIKE_INCLINE_RIGHT_AT_ACCELERATOR
-                || accelerated) {
+        if (type == BIKE_AT_ACCELERATOR || accelerated) {
             movement.setRight();
             type = atNothingType();
             accelerated = false;
             return;
         }
 
-        if (type == BIKE_AT_INHIBITOR
-                || type == BIKE_INCLINE_LEFT_AT_INHIBITOR
-                || type == BIKE_INCLINE_RIGHT_AT_INHIBITOR) {
+        if (type == BIKE_AT_INHIBITOR) {
             if (!inhibited) {
                 movement.setLeft();
                 inhibited = true;
@@ -187,17 +154,13 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             inhibited = false;
         }
 
-        if (type == BIKE_AT_LINE_CHANGER_UP
-                || type == BIKE_INCLINE_LEFT_AT_LINE_CHANGER_UP
-                || type == BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_UP) {
+        if (type == BIKE_AT_LINE_CHANGER_UP) {
             movement.setUp();
             type = atNothingType();
             return;
         }
 
-        if (type == BIKE_AT_LINE_CHANGER_DOWN
-                || type == BIKE_INCLINE_LEFT_AT_LINE_CHANGER_DOWN
-                || type == BIKE_INCLINE_RIGHT_AT_LINE_CHANGER_DOWN) {
+        if (type == BIKE_AT_LINE_CHANGER_DOWN) {
             movement.setDown();
             type = atNothingType();
         }

@@ -39,8 +39,6 @@ import static com.codenjoy.dojo.excitebike.model.items.GameElementType.NONE;
 import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_FALLEN;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_INCLINE_LEFT;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_INCLINE_RIGHT;
 import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static com.codenjoy.dojo.services.Direction.UP;
@@ -77,8 +75,6 @@ public class AISolverParametrizedTest {
                 // avoid obstacle - choose not border
                 new Object[]{OBSTACLE, NONE, BORDER, DOWN},
                 new Object[]{OBSTACLE, OTHER_BIKE, BORDER, DOWN},
-                new Object[]{OBSTACLE, OTHER_BIKE_INCLINE_LEFT, BORDER, DOWN},
-                new Object[]{OBSTACLE, OTHER_BIKE_INCLINE_RIGHT, BORDER, DOWN},
 
                 // no way to survive
                 new Object[]{OBSTACLE, OTHER_BIKE_FALLEN, BORDER, STOP},
@@ -86,8 +82,6 @@ public class AISolverParametrizedTest {
                 // avoid obstacle - choose not border
                 new Object[]{OBSTACLE, BORDER, NONE, UP},
                 new Object[]{OBSTACLE, BORDER, OTHER_BIKE, UP},
-                new Object[]{OBSTACLE, BORDER, OTHER_BIKE_INCLINE_LEFT, UP},
-                new Object[]{OBSTACLE, BORDER, OTHER_BIKE_INCLINE_RIGHT, UP},
 
                 // no way to survive
                 new Object[]{OBSTACLE, BORDER, OTHER_BIKE_FALLEN, STOP},
@@ -98,8 +92,6 @@ public class AISolverParametrizedTest {
                 // avoid other bike - choose not border
                 new Object[]{OTHER_BIKE, NONE, BORDER, DOWN},
                 new Object[]{OTHER_BIKE, OTHER_BIKE, BORDER, DOWN},
-                new Object[]{OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, BORDER, DOWN},
-                new Object[]{OTHER_BIKE, OTHER_BIKE_INCLINE_RIGHT, BORDER, DOWN},
 
                 // no way to avoid other bike / change the line
                 new Object[]{OTHER_BIKE, OTHER_BIKE_FALLEN, BORDER, STOP},
@@ -107,53 +99,9 @@ public class AISolverParametrizedTest {
                 // avoid other bike - choose not border
                 new Object[]{OTHER_BIKE, BORDER, NONE, UP},
                 new Object[]{OTHER_BIKE, BORDER, OTHER_BIKE, UP},
-                new Object[]{OTHER_BIKE, BORDER, OTHER_BIKE_INCLINE_LEFT, UP},
-                new Object[]{OTHER_BIKE, BORDER, OTHER_BIKE_INCLINE_RIGHT, UP},
 
                 // no way to avoid other bike / change the line
                 new Object[]{OTHER_BIKE, BORDER, OTHER_BIKE_FALLEN, STOP},
-
-                // avoid other bike - random choice
-                new Object[]{OTHER_BIKE_INCLINE_LEFT, NONE, NONE, null},
-
-                // avoid other bike - choose not border
-                new Object[]{OTHER_BIKE_INCLINE_LEFT, NONE, BORDER, DOWN},
-                new Object[]{OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE, BORDER, DOWN},
-                new Object[]{OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_LEFT, BORDER, DOWN},
-                new Object[]{OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT, BORDER, DOWN},
-
-                // no way to avoid other bike / change the line
-                new Object[]{OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_FALLEN, BORDER, STOP},
-
-                // avoid other bike - choose not border
-                new Object[]{OTHER_BIKE_INCLINE_LEFT, BORDER, NONE, UP},
-                new Object[]{OTHER_BIKE_INCLINE_LEFT, BORDER, OTHER_BIKE, UP},
-                new Object[]{OTHER_BIKE_INCLINE_LEFT, BORDER, OTHER_BIKE_INCLINE_LEFT, UP},
-                new Object[]{OTHER_BIKE_INCLINE_LEFT, BORDER, OTHER_BIKE_INCLINE_RIGHT, UP},
-
-                // no way to avoid other bike / change the line
-                new Object[]{OTHER_BIKE_INCLINE_LEFT, BORDER, OTHER_BIKE_FALLEN, STOP},
-
-                // avoid other bike - random choice
-                new Object[]{OTHER_BIKE_INCLINE_RIGHT, NONE, NONE, null},
-
-                // avoid other bike - choose not border
-                new Object[]{OTHER_BIKE_INCLINE_RIGHT, NONE, BORDER, DOWN},
-                new Object[]{OTHER_BIKE_INCLINE_RIGHT, OTHER_BIKE, BORDER, DOWN},
-                new Object[]{OTHER_BIKE_INCLINE_RIGHT, OTHER_BIKE_INCLINE_LEFT, BORDER, DOWN},
-                new Object[]{OTHER_BIKE_INCLINE_RIGHT, OTHER_BIKE_INCLINE_RIGHT, BORDER, DOWN},
-
-                // no way to avoid other bike / change the line
-                new Object[]{OTHER_BIKE_INCLINE_RIGHT, OTHER_BIKE_FALLEN, BORDER, STOP},
-
-                // avoid other bike - choose not border
-                new Object[]{OTHER_BIKE_INCLINE_RIGHT, BORDER, NONE, UP},
-                new Object[]{OTHER_BIKE_INCLINE_RIGHT, BORDER, OTHER_BIKE, UP},
-                new Object[]{OTHER_BIKE_INCLINE_RIGHT, BORDER, OTHER_BIKE_INCLINE_LEFT, UP},
-                new Object[]{OTHER_BIKE_INCLINE_RIGHT, BORDER, OTHER_BIKE_INCLINE_RIGHT, UP},
-
-                // no way to avoid other bike / change the line
-                new Object[]{OTHER_BIKE_INCLINE_RIGHT, BORDER, OTHER_BIKE_FALLEN, STOP},
 
                 // avoid other bike - random choice
                 new Object[]{OTHER_BIKE_FALLEN, NONE, NONE, null},
@@ -161,8 +109,6 @@ public class AISolverParametrizedTest {
                 // avoid other bike - choose not border
                 new Object[]{OTHER_BIKE_FALLEN, NONE, BORDER, DOWN},
                 new Object[]{OTHER_BIKE_FALLEN, OTHER_BIKE, BORDER, DOWN},
-                new Object[]{OTHER_BIKE_FALLEN, OTHER_BIKE_INCLINE_LEFT, BORDER, DOWN},
-                new Object[]{OTHER_BIKE_FALLEN, OTHER_BIKE_INCLINE_RIGHT, BORDER, DOWN},
 
                 // no way to avoid other bike / change the line
                 new Object[]{OTHER_BIKE_FALLEN, OTHER_BIKE_FALLEN, BORDER, STOP},
@@ -170,19 +116,13 @@ public class AISolverParametrizedTest {
                 // avoid other bike - choose not border
                 new Object[]{OTHER_BIKE_FALLEN, BORDER, NONE, UP},
                 new Object[]{OTHER_BIKE_FALLEN, BORDER, OTHER_BIKE, UP},
-                new Object[]{OTHER_BIKE_FALLEN, BORDER, OTHER_BIKE_INCLINE_LEFT, UP},
-                new Object[]{OTHER_BIKE_FALLEN, BORDER, OTHER_BIKE_INCLINE_RIGHT, UP},
 
                 // no way to avoid other bike / change the line
                 new Object[]{OTHER_BIKE_FALLEN, BORDER, OTHER_BIKE_FALLEN, STOP},
 
                 // hit the bike
                 new Object[]{NONE, OTHER_BIKE, NONE, DOWN},
-                new Object[]{NONE, OTHER_BIKE_INCLINE_LEFT, NONE, DOWN},
-                new Object[]{NONE, OTHER_BIKE_INCLINE_RIGHT, NONE, DOWN},
-                new Object[]{NONE, NONE, OTHER_BIKE, UP},
-                new Object[]{NONE, NONE, OTHER_BIKE_INCLINE_LEFT, UP},
-                new Object[]{NONE, NONE, OTHER_BIKE_INCLINE_RIGHT, UP}
+                new Object[]{NONE, NONE, OTHER_BIKE, UP}
 
                 // incline the bike according to the springboard
                 //TODO implement after Springboard task (#26)

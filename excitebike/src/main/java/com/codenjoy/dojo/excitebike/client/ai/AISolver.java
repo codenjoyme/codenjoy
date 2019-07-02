@@ -34,8 +34,6 @@ import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHAN
 import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_FALLEN;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_INCLINE_LEFT;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_INCLINE_RIGHT;
 import static com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType.SPRINGBOARD_LEFT_DOWN;
 import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.Direction.LEFT;
@@ -73,13 +71,13 @@ public class AISolver implements Solver<Board> {
     private Direction getCommand(Board board) {
         Direction command = STOP;
 
-        if (board.checkNearMe(RIGHT, OBSTACLE, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT, OTHER_BIKE_FALLEN)) {
+        if (board.checkNearMe(RIGHT, OBSTACLE, OTHER_BIKE, OTHER_BIKE_FALLEN)) {
             command = evade(board);
-        } else if (board.checkNearMe(UP, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT) && board.checkNearMe(DOWN, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
+        } else if (board.checkNearMe(UP, OTHER_BIKE) && board.checkNearMe(DOWN, OTHER_BIKE)) {
             command = randomBoolean() ? UP : DOWN;
-        } else if (board.checkNearMe(UP, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
+        } else if (board.checkNearMe(UP, OTHER_BIKE)) {
             command = UP;
-        } else if (board.checkNearMe(DOWN, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT)) {
+        } else if (board.checkNearMe(DOWN, OTHER_BIKE)) {
             command = DOWN;
             //TODO implement after Springboard task (#26)
         } else if (board.checkNearMe(RIGHT, SPRINGBOARD_LEFT_DOWN)) {
@@ -98,11 +96,11 @@ public class AISolver implements Solver<Board> {
             if (noLineChangerCurrently(board)) {
                 command = UP;
             }
-        } else if (board.checkNearMe(UP, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT) && !board.checkNearMe(DOWN, BORDER, OTHER_BIKE_FALLEN)) {
+        } else if (board.checkNearMe(UP, OTHER_BIKE) && !board.checkNearMe(DOWN, BORDER, OTHER_BIKE_FALLEN)) {
             if (noLineChangerCurrently(board)) {
                 command = DOWN;
             }
-        } else if (board.checkNearMe(DOWN, OTHER_BIKE, OTHER_BIKE_INCLINE_LEFT, OTHER_BIKE_INCLINE_RIGHT) && !board.checkNearMe(UP, BORDER, OTHER_BIKE_FALLEN)) {
+        } else if (board.checkNearMe(DOWN, OTHER_BIKE) && !board.checkNearMe(UP, BORDER, OTHER_BIKE_FALLEN)) {
             if (noLineChangerCurrently(board)) {
                 command = UP;
             }

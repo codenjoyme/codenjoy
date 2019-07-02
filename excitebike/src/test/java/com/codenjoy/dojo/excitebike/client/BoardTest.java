@@ -74,7 +74,7 @@ public class BoardTest {
         Board board = toBoard("b■■■■" +
                 "   > " +
                 "  E |" +
-                " Z ▼ " +
+                " P ▼ " +
                 "■■■■■"
         );
 
@@ -87,48 +87,12 @@ public class BoardTest {
     }
 
     @Test
-    public void getMe__shouldReturnPointWithBikeInclineLeftElement() {
-        //given
-        Board board = toBoard("■■■■■" +
-                " E > " +
-                "  L |" +
-                " F ▼ " +
-                "■■■■■"
-        );
-
-        //when
-        Point result = board.getMe();
-
-        //then
-        assertThat(result.getX(), is(2));
-        assertThat(result.getY(), is(2));
-    }
-
-    @Test
-    public void getMe__shouldReturnPointWithBikeInclineRightElement() {
-        //given
-        Board board = toBoard("■■■■■" +
-                " F > " +
-                "  Z |" +
-                " e R " +
-                "■■■■■"
-        );
-
-        //when
-        Point result = board.getMe();
-
-        //then
-        assertThat(result.getX(), is(3));
-        assertThat(result.getY(), is(3));
-    }
-
-    @Test
     public void isGameOver__shouldReturnTrueIfThereIsBikeFallenElement() {
         //given
         Board board = toBoard("■■■■■" +
                 "   > " +
                 "  E |" +
-                " Z ▼ " +
+                " P ▼ " +
                 "■■■■■"
         );
 
@@ -143,9 +107,9 @@ public class BoardTest {
     public void isGameOver__shouldReturnFalseIfThereIsNoBikeFallenElement() {
         //given
         Board board = toBoard("■■■■■" +
-                " B >R" +
-                "L E |" +
-                " Z ▼ " +
+                " B >I" +
+                "A E |" +
+                " P ▼ " +
                 "■■■■■"
         );
 
@@ -162,7 +126,7 @@ public class BoardTest {
         Board board = toBoard("■■■■■" +
                 " B>  " +
                 "  E |" +
-                " Z ▼ " +
+                " P ▼ " +
                 "■■■■■"
         );
 
@@ -177,7 +141,7 @@ public class BoardTest {
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtDownDirection() {
         //given
         Board board = toBoard("■■■■■" +
-                " Z   " +
+                " P   " +
                 " E | " +
                 " B ▼ " +
                 "■■■■■"
@@ -196,7 +160,7 @@ public class BoardTest {
         Board board = toBoard("■■■■■" +
                 "╝B>  " +
                 " E | " +
-                " Z ▼ " +
+                " P ▼ " +
                 "■■■■■"
         );
 
@@ -211,7 +175,7 @@ public class BoardTest {
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtUpDirection() {
         //given
         Board board = toBoard("■■■■■" +
-                "╝F>  " +
+                "╝Q>  " +
                 " E | " +
                 " B ▼ " +
                 "■■■■■"
@@ -228,14 +192,14 @@ public class BoardTest {
     public void checkAtMe__shouldReturnTrue__ifAtMeIsGivenElement() {
         //given
         Board board = toBoard("■■■■■" +
-                "╝F>  " +
+                "╝Q>  " +
                 " E | " +
-                " L ▼ " +
+                " A ▼ " +
                 "■■■■■"
         );
 
         //when
-        boolean result = board.checkAtMe(BikeType.BIKE_INCLINE_LEFT);
+        boolean result = board.checkAtMe(BikeType.BIKE_AT_ACCELERATOR);
 
         //then
         assertThat(result, is(true));
@@ -245,14 +209,14 @@ public class BoardTest {
     public void checkAtMe__shouldReturnFalse__ifAtMeIsNotGivenElement() {
         //given
         Board board = toBoard("■■■■■" +
-                "╝F>  " +
+                "╝Q>  " +
                 " E | " +
                 " B ▼ " +
                 "■■■■■"
         );
 
         //when
-        boolean result = board.checkAtMe(BikeType.BIKE_INCLINE_LEFT);
+        boolean result = board.checkAtMe(BikeType.BIKE_AT_ACCELERATOR);
 
         //then
         assertThat(result, is(false));
