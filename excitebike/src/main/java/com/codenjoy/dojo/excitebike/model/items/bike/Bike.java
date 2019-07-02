@@ -68,6 +68,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     private boolean accelerated;
     private boolean inhibited;
     private boolean interacted;
+    private boolean adjusted;
 
     public Bike(Point xy) {
         super(xy);
@@ -118,10 +119,11 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     @Override
     public void tick() {
         if (!ticked && isAlive()) {
+            adjusted = false;
             actAccordingToState();
             executeCommand();
-            adjustStateToElement();
             tryToMove();
+            adjustStateToElement();
         }
     }
 
@@ -132,6 +134,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             y = command.changeY(y);
             interactWithOtherBike();
             command = null;
+            adjustStateToElement();
         }
     }
 
@@ -140,6 +143,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             movement.setRight();
             type = atNothingType();
             accelerated = false;
+            adjustStateToElement();
             return;
         }
 
@@ -200,7 +204,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         interactWithOtherBike();
         movement.clear();
         if (xBefore != x || yBefore != y) {
-            adjustStateToElement();
+            adjusted = false;
         }
     }
 
@@ -255,9 +259,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     }
 
     private void adjustStateToElement() {
-        if (!isAlive()) {
+        if (!isAlive() || adjusted) {
             return;
         }
+        adjusted = true;
 
         if (field.isAccelerator(x, y)) {
             if (type.name().contains(BIKE_AT_PREFIX)) {
