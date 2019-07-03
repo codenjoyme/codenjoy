@@ -743,8 +743,7 @@ function initRunnerBefunge(logger, storage) {
             process: valueZombieCommand,
             description: 'Значние - "Зомби". Испольузется совместно с другими командами.',
             minLevel: 14,
-            img1: '../sprite/icancode/ekids/male_zombie.png',
-            img2: '../sprite/icancode/ekids/female_zombie.png'
+            img1: '../sprite/icancode/ekids/zombies.png'
         }
     ];
 
