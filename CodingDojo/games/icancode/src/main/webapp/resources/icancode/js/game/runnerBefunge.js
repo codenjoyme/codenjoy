@@ -166,6 +166,15 @@ function initRunnerBefunge(logger, storage) {
         var oldValue = popFromStack();
         try {
             var value = robot.getScanner().at(oldValue);
+            if (value == 'LASER_LEFT' || value == 'LASER_RIGHT' || value == 'LASER_UP' || value == 'LASER_DOWN') {
+                value = 'LASER'; // TODO это костыль, надо сделать потом все направления лазеров
+            }
+            if (value == 'LASER_MACHINE_READY' || value == 'LASER_MACHINE') {
+                value = 'LASER_MACHINE'; // TODO это тоже костыль
+            }
+            if (value == 'ZOMBIE_DIE') {
+                value = 'NONE'; // TODO это тоже костыль
+            }
         } catch (error) {
             logger.print('Неправильно значение для сканнера: "' + oldValue + '"');
             forceFinish();
@@ -286,6 +295,18 @@ function initRunnerBefunge(logger, storage) {
         stack.push('GOLD');
     }
 
+    var valueZombieCommand = function(x, y) {
+        stack.push('ZOMBIE');
+    }
+
+    var valueLaserMachineCommand = function(x, y) {
+        stack.push('LASER_MACHINE');
+    }
+
+    var valueLaserCommand = function(x, y) {
+        stack.push('LASER');
+    }
+
     // ------------------------------------- commands -----------------------------------
     var commands = [
         {
@@ -293,7 +314,7 @@ function initRunnerBefunge(logger, storage) {
             type: 1,
             title: 'start',
             process: startCommand,
-            description: 'Выполнение команд начинается тута.',
+            description: 'Выполнение команд начинается тут.',
             minLevel: 0,
             img1: 'img/sprite/start.png'
         },
@@ -651,7 +672,7 @@ function initRunnerBefunge(logger, storage) {
             title: 'value-start',
             process: valueStartCommand,
             description: 'Значние "Точка старта". Испольузется совместно с другими командами.',
-            minLevel: 11,
+            minLevel: 9,
             img1: '../sprite/icancode/ekids/start.png'
         },
 
@@ -661,7 +682,7 @@ function initRunnerBefunge(logger, storage) {
             title: 'value-end',
             process: valueEndCommand,
             description: 'Значние "Точка финиша". Испольузется совместно с другими командами.',
-            minLevel: 11,
+            minLevel: 9,
             img1: '../sprite/icancode/ekids/exit.png'
         },
 
@@ -671,7 +692,7 @@ function initRunnerBefunge(logger, storage) {
             title: 'value-gold',
             process: valueGoldCommand,
             description: 'Значние - "Золото". Испольузется совместно с другими командами.',
-            minLevel: 11,
+            minLevel: 9,
             img1: '../sprite/icancode/ekids/gold.png'
         },
 
@@ -691,8 +712,39 @@ function initRunnerBefunge(logger, storage) {
             title: 'value-hole',
             process: valueHoleCommand,
             description: 'Значние - "Яма". Испольузется совместно с другими командами.',
-            minLevel: 11,
+            minLevel: 10,
             img1: '../sprite/icancode/ekids/hole.png'
+        },
+
+        {
+            id: 'value-laser-machine',
+            type: 3,
+            title: 'value-laser-machine',
+            process: valueLaserMachineCommand,
+            description: 'Значние - "Лазерная машина". Испольузется совместно с другими командами.',
+            minLevel: 13,
+            img1: '../sprite/icancode/ekids/laser_machine_charging_down.png'
+        },
+
+        {
+            id: 'value-laser',
+            type: 3,
+            title: 'value-laser',
+            process: valueLaserCommand,
+            description: 'Значние - "Лазер". Испольузется совместно с другими командами.',
+            minLevel: 13,
+            img1: '../sprite/icancode/ekids/laser_down.png'
+        },
+
+        {
+            id: 'value-zombie',
+            type: 3,
+            title: 'value-zombie',
+            process: valueZombieCommand,
+            description: 'Значние - "Зомби". Испольузется совместно с другими командами.',
+            minLevel: 14,
+            img1: '../sprite/icancode/ekids/male_zombie.png',
+            img2: '../sprite/icancode/ekids/female_zombie.png'
         }
     ];
 
