@@ -2,8 +2,6 @@ package main.groovy.com.codenjoy.dojo.logs
 
 import org.json.JSONObject
 
-import java.util.regex.Matcher
-
 def base = 'D:\\Work\\2019-07-09\\EPAM\\Парсил логи LearningWeek чтобы достать юзеров\\nginx';
 
 // get all files
@@ -12,10 +10,16 @@ new File(base).eachFile { file ->
     files << new File(file.path)
 }
 
+// load users
+def users = [:]
+new File(base + '\\..\\database\\users.txt').text.split('\r\n').each {
+    def data = it.split('\t')
+    users[data[1]] = data[0]
+}
+
 // filter and parse lines
 def logs = []
 def actions = [:]
-Matcher mather = "subject" =~ /regex/
 files.each {
     println it
     def text = it.text
@@ -31,12 +35,27 @@ files.each {
             def time = json.getString('time')
 
             def prefix = '/ws?user='
-            def suffix = '\u0026code='
+            def suffix = '&code='
             def playerId = log.substring(
                     log.indexOf(prefix) + prefix.length(),
                     log.indexOf(suffix))
 
-            println time + ' > ' + playerId
+            def user = users[playerId]
+            if (user == null) {
+                user = "user('$playerId')"
+            }
+            if (Arrays.asList('63gk89b3j87z87a83eri',
+                    'zemm5yx98w7rde0697p6',
+                    'hwrreckowfd255qe59b3').contains(playerId))
+            {
+                return
+            }
+            if (actions[user] == null) {
+                actions[user] = new TreeSet()
+            }
+            actions[user] << time
+
+            println time + ' > ' + user
         }
     }
 }
