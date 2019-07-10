@@ -142,11 +142,6 @@ public class MapParserImpl implements MapParser {
         return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_NONE), SpringboardElementType.SPRINGBOARD_NONE);
     }
 
-    /*@Override
-    public List<SpringboardElement> getSpringboardDarkFrontElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_DARK_FRONT), SpringboardElementType.SPRINGBOARD_DARK_FRONT);
-    }*/
-
     private <T> List<T> parseAndConvertElements(Function<Point, T> elementConstructor, CharElements... elements) {
         return IntStream.range(0, map.length())
                 .filter(index -> Arrays.stream(elements).anyMatch(e -> map.charAt(index) == e.ch()))

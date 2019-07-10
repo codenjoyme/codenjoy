@@ -54,8 +54,6 @@ public interface MapParser {
 
     List<SpringboardElement> getSpringboardDarkElements();
 
-//    List<SpringboardElement> getSpringboardDarkFrontElements();
-
     List<SpringboardElement> getSpringboardLightElements();
 
     List<SpringboardElement> getSpringboardLeftDownElements();

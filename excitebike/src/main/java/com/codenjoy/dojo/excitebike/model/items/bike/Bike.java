@@ -54,6 +54,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     private boolean inhibited;
     private boolean interacted;
     private boolean atSpringboard;
+    private boolean adjusted;
 
     public Bike(Point xy) {
         super(xy);
@@ -104,10 +105,11 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     @Override
     public void tick() {
         if (!ticked && isAlive()) {
+            adjusted = false;
             actAccordingToState();
             executeCommand();
-            adjustStateToElement();
             tryToMove();
+            adjustStateToElement();
         }
     }
 
@@ -118,6 +120,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             y = command.changeY(y);
             interactWithOtherBike();
             command = null;
+            adjustStateToElement();
         }
     }
 
@@ -126,6 +129,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             movement.setRight();
             type = atNothingType();
             accelerated = false;
+            adjustStateToElement();
             return;
         }
 
@@ -205,7 +209,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         interactWithOtherBike();
         movement.clear();
         if (xBefore != x || yBefore != y) {
-            adjustStateToElement();
+            adjusted = false;
         }
     }
 
@@ -260,9 +264,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     }
 
     private void adjustStateToElement() {
-        if (!isAlive()) {
+        if (!isAlive() || adjusted) {
             return;
         }
+        adjusted = true;
 
         if (field.isSpringboardDarkElements(x, y)) {
             if (y == 1 && !movement.isUp()) {
@@ -378,7 +383,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (!field.getEnemyBike(x, y, field.getPlayerOfBike(this)).isPresent()) {
             type = atNothingType();
         }
-
     }
 
     @Override

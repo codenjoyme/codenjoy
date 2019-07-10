@@ -25,20 +25,15 @@ package com.codenjoy.dojo.excitebike.client.ai;
 import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.printer.CharElements;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.stubbing.Answer;
 
 import java.util.List;
 import java.util.Random;
 
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.BORDER;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.NONE;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_FALLEN;
 import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static com.codenjoy.dojo.services.Direction.UP;
@@ -52,105 +47,958 @@ public class AISolverParametrizedTest {
 
     private Dice dice;
     private AISolver solver;
-    private char elementAtRight;
-    private char elementAbove;
-    private char elementBelow;
+    private String boardString;
     private Direction expectedDirection;
 
-    public AISolverParametrizedTest(CharElements elementAtRight, CharElements elementAbove, CharElements elementBelow, Direction expectedDirection) {
-        this.elementAtRight = elementAtRight.ch();
-        this.elementAbove = elementAbove.ch();
-        this.elementBelow = elementBelow.ch();
+    public AISolverParametrizedTest(String caseName, String board, Direction expectedDirection) {
+        this.boardString = board;
         this.expectedDirection = expectedDirection;
         dice = mock(Dice.class);
         solver = new AISolver(dice);
     }
 
-    @Parameterized.Parameters(name = "Element to be evaded: {0}, element above: {1}, element below: {2}, expected direction: {3}")
+    @Parameterized.Parameters(name = "Case: {0}, Board: {1}, expected direction: {1}")
     public static List<Object[]> data() {
         return Lists.newArrayList(
-                // avoid obstacle - random choice
-                new Object[]{OBSTACLE, NONE, NONE, null},
+                new Object[]{"1. avoid obstacle - random choice",
+                        "■■■■■" +
+                        "     " +
+                        "  B| " +
+                        "     " +
+                        "■■■■■",
+                        STOP},
 
-                // avoid obstacle - choose not border
-                new Object[]{OBSTACLE, NONE, BORDER, DOWN},
-                new Object[]{OBSTACLE, OTHER_BIKE, BORDER, DOWN},
+                new Object[]{"2. avoid obstacle - choose not border above",
+                        "■■■■■" +
+                        "   ■ " +
+                        "  B| " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
 
-                // no way to survive
-                new Object[]{OBSTACLE, OTHER_BIKE_FALLEN, BORDER, STOP},
+                new Object[]{"3. avoid obstacle - choose enemy bike below, not border above",
+                        "■■■■■" +
+                        "   ■ " +
+                        "  B| " +
+                        "   E " +
+                        "■■■■■",
+                        DOWN},
 
-                // avoid obstacle - choose not border
-                new Object[]{OBSTACLE, BORDER, NONE, UP},
-                new Object[]{OBSTACLE, BORDER, OTHER_BIKE, UP},
+                new Object[]{"4. no way to survive - no action",
+                        "■■■■■" +
+                        "   ■ " +
+                        "  B| " +
+                        "   e " +
+                        "■■■■■",
+                        null},
 
-                // no way to survive
-                new Object[]{OBSTACLE, BORDER, OTHER_BIKE_FALLEN, STOP},
+                new Object[]{"5. avoid obstacle - choose not border below",
+                        "■■■■■" +
+                        "     " +
+                        "  B| " +
+                        "   ■ " +
+                        "■■■■■",
+                        UP},
 
-                // avoid other bike - random choice
-                new Object[]{OTHER_BIKE, NONE, NONE, null},
+                new Object[]{"6. avoid obstacle - choose enemy bike above, not border below",
+                        "■■■■■" +
+                        "   E " +
+                        "  B| " +
+                        "   ■ " +
+                        "■■■■■",
+                        UP},
 
-                // avoid other bike - choose not border
-                new Object[]{OTHER_BIKE, NONE, BORDER, DOWN},
-                new Object[]{OTHER_BIKE, OTHER_BIKE, BORDER, DOWN},
+                new Object[]{"7. no way to survive - no action",
+                        "■■■■■" +
+                        "   e " +
+                        "  B| " +
+                        "   ■ " +
+                        "■■■■■",
+                        null},
 
-                // no way to avoid other bike / change the line
-                new Object[]{OTHER_BIKE, OTHER_BIKE_FALLEN, BORDER, STOP},
+                new Object[]{"8. avoid other bike - random choice",
+                        "■■■■■" +
+                        "     " +
+                        "  BE " +
+                        "     " +
+                        "■■■■■",
+                        STOP},
 
-                // avoid other bike - choose not border
-                new Object[]{OTHER_BIKE, BORDER, NONE, UP},
-                new Object[]{OTHER_BIKE, BORDER, OTHER_BIKE, UP},
+                new Object[]{"9. avoid other bike - choose not border above",
+                        "■■■■■" +
+                        "   ■ " +
+                        "  BE " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
 
-                // no way to avoid other bike / change the line
-                new Object[]{OTHER_BIKE, BORDER, OTHER_BIKE_FALLEN, STOP},
+                new Object[]{"10. avoid other bike - choose enemy bike below, not border above",
+                        "■■■■■" +
+                        "   ■ " +
+                        "  BE " +
+                        "   E " +
+                        "■■■■■",
+                        DOWN},
 
-                // avoid other bike - random choice
-                new Object[]{OTHER_BIKE_FALLEN, NONE, NONE, null},
+                new Object[]{"11. no way to avoid other bike - no action",
+                        "■■■■■" +
+                        "   ■ " +
+                        "  BE " +
+                        "   e " +
+                        "■■■■■",
+                        null},
 
-                // avoid other bike - choose not border
-                new Object[]{OTHER_BIKE_FALLEN, NONE, BORDER, DOWN},
-                new Object[]{OTHER_BIKE_FALLEN, OTHER_BIKE, BORDER, DOWN},
+                new Object[]{"12. avoid other bike - choose not border below",
+                        "■■■■■" +
+                        "     " +
+                        "  BE " +
+                        "   ■ " +
+                        "■■■■■",
+                        UP},
 
-                // no way to avoid other bike / change the line
-                new Object[]{OTHER_BIKE_FALLEN, OTHER_BIKE_FALLEN, BORDER, STOP},
+                new Object[]{"13. avoid other bike - choose enemy bike above, not border below",
+                        "■■■■■" +
+                        "   E " +
+                        "  BE " +
+                        "   ■ " +
+                        "■■■■■",
+                        UP},
 
-                // avoid other bike - choose not border
-                new Object[]{OTHER_BIKE_FALLEN, BORDER, NONE, UP},
-                new Object[]{OTHER_BIKE_FALLEN, BORDER, OTHER_BIKE, UP},
+                new Object[]{"14. no way to avoid other bike  - no action",
+                        "■■■■■" +
+                        "   e " +
+                        "  BE " +
+                        "   ■ " +
+                        "■■■■■",
+                        null},
 
-                // no way to avoid other bike / change the line
-                new Object[]{OTHER_BIKE_FALLEN, BORDER, OTHER_BIKE_FALLEN, STOP},
+                new Object[]{"15. avoid fallen bike - random choice",
+                        "■■■■■" +
+                        "     " +
+                        "  Be " +
+                        "     " +
+                        "■■■■■",
+                        STOP},
 
-                // hit the bike
-                new Object[]{NONE, OTHER_BIKE, NONE, DOWN},
-                new Object[]{NONE, NONE, OTHER_BIKE, UP}
+                new Object[]{"16. avoid fallen bike - choose not border above",
+                        "■■■■■" +
+                        "   ■ " +
+                        "  Be " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
 
-                // incline the bike according to the springboard
-                //TODO implement after Springboard task (#26)
-                //new Object[]{SpringboardType.LEFT_DOWN, GameElementType.NONE, GameElementType.NONE, Direction.LEFT},
-                //new Object[]{SpringboardType.RIGHT_DOWN, GameElementType.NONE, GameElementType.NONE, Direction.RIGHT}
+                new Object[]{"17. avoid fallen bike - choose enemy bike below, not border above",
+                        "■■■■■" +
+                        "   ■ " +
+                        "  Be " +
+                        "   E " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"18. no way to avoid fallen bike - no action",
+                        "■■■■■" +
+                        "   ■ " +
+                        "  Be " +
+                        "   e " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"19. avoid fallen bike - choose not border below",
+                        "■■■■■" +
+                        "     " +
+                        "  Be " +
+                        "   ■ " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"20. avoid fallen bike - choose enemy bike above, not border below",
+                        "■■■■■" +
+                        "   E " +
+                        "  Be " +
+                        "   ■ " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"21. no way to avoid other bike - no action",
+                        "■■■■■" +
+                        "   e " +
+                        "  Be " +
+                        "   ■ " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"22. hit the bike below",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  E  " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"23. hit the bike above",
+                        "■■■■■" +
+                        "  E  " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"24. don't hit the bike below if there is obstacle after it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  E| " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"25. don't hit the bike below if there is another fallen bike at accelerator after it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  Ep " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"26. don't hit the bike below if there is another fallen bike at inhibitor after it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  Eq " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"27. don't hit the bike below if there is another fallen bike at line changer up after it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  Es " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"28. don't hit the bike below if there is another fallen bike at line changer up after it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  Es " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"29. don't hit the bike below if there is another fallen bike at line changer down after it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  Et " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"30. don't hit the bike below if there is another fallen bike at obstacle after it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  Ev " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"31. don't hit the bike below if there is an accelerator and obstacle after it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  E>|" +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"32. don't hit the bike below if there is an accelerator and another bike after it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  E>E" +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"33. don't hit the bike below if there is an accelerator and fallen bike after it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  E>e" +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"34. don't hit the bike below if there is bike at inhibitor after it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  EQ " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"35. don't hit the bike above if there is obstacle after it",
+                        "■■■■■" +
+                        "  E| " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"36. don't hit the bike above if there is another fallen bike at accelerator after it",
+                        "■■■■■" +
+                        "  Ep " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"37. don't hit the bike above if there is another fallen bike at inhibitor after it",
+                        "■■■■■" +
+                        "  Eq " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"38. don't hit the bike above if there is another fallen bike at line changer up after it",
+                        "■■■■■" +
+                        "  Es " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"39. don't hit the bike above if there is another fallen bike at line changer up after it",
+                        "■■■■■" +
+                        "  Es " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"40. don't hit the bike above if there is another fallen bike at line changer down after it",
+                        "■■■■■" +
+                        "  Et " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"41. don't hit the bike above if there is another fallen bike at obstacle after it",
+                        "■■■■■" +
+                        "  Ev " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"42. don't hit the bike above if there is an accelerator and obstacle after it",
+                        "■■■■■" +
+                        "  E>|" +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"43. don't hit the bike above if there is an accelerator and another bike after it",
+                        "■■■■■" +
+                        "  E>E" +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"44. don't hit the bike above if there is an accelerator and fallen bike after it",
+                        "■■■■■" +
+                        "  E>e" +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"45. don't hit the bike above if there is bike at inhibitor after it",
+                        "■■■■■" +
+                        "  EQ " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"46. neutralize line changer up if there is border above and nothing in front",
+                        "■■■■■" +
+                        "  U  " +
+                        "     " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"47. neutralize line changer up if there is obstacle above in front and nothing in front",
+                        "■■■■■" +
+                        "   | " +
+                        "  U  " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"48. neutralize line changer up if there is fallen bike above in front and nothing in front",
+                        "■■■■■" +
+                        "   e " +
+                        "  U  " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"49. neutralize line changer up if there is another bike at inhibitor above in front and nothing in front",
+                        "■■■■■" +
+                        "   Q " +
+                        "  U  " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"50. neutralize line changer up if there is accelerator and obstacle after it above in front and nothing in front",
+                        "■■■■■" +
+                        "   >|" +
+                        "  U  " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"51. neutralize line changer up if there is accelerator and fallen bike after it above in front and nothing in front",
+                        "■■■■■" +
+                        "   >e" +
+                        "  U  " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"52. neutralize line changer up if there is other bike in front and fallen bike above in front and nothing above it",
+                        "■■■■■" +
+                        "     " +
+                        "   | " +
+                        "  UE " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"53. neutralize line changer down if there is border below and nothing in front",
+                        "■■■■■" +
+                        "     " +
+                        "     " +
+                        "  D  " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"54. neutralize line changer down if there is obstacle below in front and nothing in front",
+                        "■■■■■" +
+                        "     " +
+                        "  D  " +
+                        "   | " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"55. neutralize line changer down if there is fallen bike below in front and nothing in front",
+                        "■■■■■" +
+                        "     " +
+                        "  D  " +
+                        "   e " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"56. neutralize line changer down if there is another bike at inhibitor below in front and nothing in front",
+                        "■■■■■" +
+                        "     " +
+                        "  D  " +
+                        "   Q " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"57. neutralize line changer down if there is accelerator and obstacle after it below in front and nothing in front",
+                        "■■■■■" +
+                        "     " +
+                        "  D  " +
+                        "   >|" +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"58. neutralize line changer down if there is accelerator and fallen bike after it below in front and nothing in front",
+                        "■■■■■" +
+                        "     " +
+                        "  D  " +
+                        "   >e" +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"59. neutralize line changer down if there is other bike in front and fallen bike above in front and nothing above it",
+                        "■■■■■" +
+                        "  DE " +
+                        "   | " +
+                        "     " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"60. do nothing when at line changer up and there is nothing above in front",
+                        "■■■■■" +
+                        "     " +
+                        "  U  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"61. do nothing when at line changer down and there is nothing below in front",
+                        "■■■■■" +
+                        "     " +
+                        "  D  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"62. force line changer up if there is obstacle in front and another obstacle above in front and nothing above it",
+                        "■■■■■" +
+                        "     " +
+                        "   | " +
+                        "  U| " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"63. force line changer up if there is fallen bike in front and another fallen bike above in front and nothing above it",
+                        "■■■■■" +
+                        "     " +
+                        "   e " +
+                        "  Ue " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"64. force line changer up if there is obstacle in front and fallen bike above in front and nothing above it",
+                        "■■■■■" +
+                        "     " +
+                        "   e " +
+                        "  U| " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"65. force line changer up if there is obstacle in front and fallen bike above in front and nothing above it",
+                        "■■■■■" +
+                        "     " +
+                        "   | " +
+                        "  Ue " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"66. force line changer up if there is obstacle in front and another bike at inhibitor above in front and nothing above it",
+                        "■■■■■" +
+                        "     " +
+                        "   Q " +
+                        "  U| " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"67. force line changer up if there is obstacle in front, accelerator and obstacle after it above it in front and nothing above it",
+                        "■■■■■" +
+                        "     " +
+                        "   >|" +
+                        "  U| " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"68. force line changer up if there is obstacle in front, accelerator and fallen bike after it above it in front and nothing above it",
+                        "■■■■■" +
+                        "     " +
+                        "   >e" +
+                        "  U| " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"69. force line changer down if there is obstacle in front and below in front ant nothing below it",
+                        "■■■■■" +
+                        "  D| " +
+                        "   | " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"70. force line changer down if there is fallen bike in front and below in front and nothing below it",
+                        "■■■■■" +
+                        "  De " +
+                        "   e " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"71. force line changer down if there is fallen bike in front and bike at inhibitor below in front and nothing below it",
+                        "■■■■■" +
+                        "  De " +
+                        "   Q " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"72. force line changer down if there is obstacle in front and accelerator and obstacle below in front and nothing below it",
+                        "■■■■■" +
+                        "  D| " +
+                        "   >|" +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"73. force line changer down if there is fallen bike in front and accelerator and fallen bike after it below in front and nothing below it",
+                        "■■■■■" +
+                        "  De " +
+                        "   >e" +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"74. do nothing when at line changer up and there is obstacle in front and fallen bike above in front and border above it",
+                        "■■■■■" +
+                        "   e " +
+                        "  U| " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"75. do nothing when at line changer down and there is fallen bike in front and obstacle below in front and fallen bike at ;ine changer down below it",
+                        "■■■■■" +
+                        "  De " +
+                        "   | " +
+                        "   t " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"76. go down if there is another bike at accelerator in front and obstacle above",
+                        "■■■■■" +
+                        "   | " +
+                        "  BP " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"77. go down if there is another bike at inhibitor in front and obstacle above",
+                        "■■■■■" +
+                        "   | " +
+                        "  BQ " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"78. go down if there is another bike at line changer up in front and obstacle above",
+                        "■■■■■" +
+                        "   | " +
+                        "  BS " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"79. go down if there is another bike at line changer down in front and obstacle above",
+                        "■■■■■" +
+                        "   | " +
+                        "  BT " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"80. go down if there is another bike at downed bike in front and obstacle above",
+                        "■■■■■" +
+                        "   | " +
+                        "  Bl " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"81. go down if there is another bike in front and fallen bike at border obstacle above",
+                        "■rr■■" +
+                        "  Be " +
+                        "     " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"82. go up if there is fallen bike at accelerator in front and obstacle below",
+                        "■■■■■" +
+                        "     " +
+                        "  Bp " +
+                        "   | " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"83. go up if there is fallen bike at inhibitor in front and obstacle below",
+                        "■■■■■" +
+                        "     " +
+                        "  Bq " +
+                        "   | " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"84. go up if there is fallen bike at line changer up in front and obstacle below",
+                        "■■■■■" +
+                        "     " +
+                        "  Bs " +
+                        "   | " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"85. go up if there is fallen bike at line changer down in front and obstacle below",
+                        "■■■■■" +
+                        "     " +
+                        "  Bt " +
+                        "   | " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"86. go up if there is fallen bike at obstacle in front and fallen bike at border below",
+                        "■■■■■" +
+                        "     " +
+                        "     " +
+                        "  Bv " +
+                        "■■r■■",
+                        UP},
+
+                new Object[]{"87. go down if there is line changer up in front and border above it",
+                        "■■■■■" +
+                        "  B▲ " +
+                        "     " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"88. go down if there is line changer up in front and fallen bike above it",
+                        "■■■■■" +
+                        "   e " +
+                        "  B▲ " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"89. go down if there is line changer up in front and fallen bike at accelerator above it",
+                        "■■■■■" +
+                        "   p " +
+                        "  B▲ " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"90. go down if there is line changer up in front and fallen bike at inhibitor above it",
+                        "■■■■■" +
+                        "   q " +
+                        "  B▲ " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"91. go down if there is line changer up in front and fallen bike at line changer up above it",
+                        "■■■■■" +
+                        "   s " +
+                        "  B▲ " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"92. go down if there is line changer up in front and fallen bike at line changer down above it",
+                        "■■■■■" +
+                        "   t " +
+                        "  B▲ " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"93. go down if there is line changer up in front and fallen bike at downed bike above it",
+                        "■■■■■" +
+                        "   l " +
+                        "  B▲ " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"94. go down if there is line changer up in front and fallen bike at border above it",
+                        "■■■■■" +
+                        "   r " +
+                        "  B▲ " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"95. go down if there is line changer up in front and fallen bike at obstacle above it",
+                        "■■■■■" +
+                        "   v " +
+                        "  B▲ " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"96. go up if there is line changer down in front and border below it",
+                        "■■■■■" +
+                        "     " +
+                        "     " +
+                        "  B▼ " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"97. go up if there is line changer down in front and fallen bike above it",
+                        "■■■■■" +
+                        "     " +
+                        "  B▼ " +
+                        "   e " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"98. go up if there is line changer down in front and fallen bike at accelerator above it",
+                        "■■■■■" +
+                        "     " +
+                        "  B▼ " +
+                        "   p " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"99. go up if there is line changer down in front and fallen bike at inhibitor above it",
+                        "■■■■■" +
+                        "     " +
+                        "  B▼ " +
+                        "   q " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"100. go up if there is line changer down in front and fallen bike at line changer up above it",
+                        "■■■■■" +
+                        "     " +
+                        "  B▼ " +
+                        "   s " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"101. go up if there is line changer down in front and fallen bike at line changer down above it",
+                        "■■■■■" +
+                        "     " +
+                        "  B▼ " +
+                        "   t " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"102. go up if there is line changer down in front and fallen bike at downed bike above it",
+                        "■■■■■" +
+                        "     " +
+                        "  B▼ " +
+                        "   l " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"103. go up if there is line changer down in front and fallen bike at border above it",
+                        "■■■■■" +
+                        "     " +
+                        "  B▼ " +
+                        "   r " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"104. go up if there is line changer down in front and fallen bike at obstacle above it",
+                        "■■■■■" +
+                        "     " +
+                        "  B▼ " +
+                        "   v " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"105. go up if there is obstacle above and accelerator in front and fallen bike in front of it",
+                        "■■■■■" +
+                        "     " +
+                        "  B>e" +
+                        "   | " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"106. go down if there is fallen bike at another bike below and accelerator in front and fallen bike in front of it",
+                        "■■■■■" +
+                        "   l " +
+                        "  B>e" +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"107. go down if there is bike above and obstacle in front",
+                        "■■■■■" +
+                        "  E  " +
+                        "  B| " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"108. go up if there is bike below and fallen bike at inhibitor in front",
+                        "■■■■■" +
+                        "     " +
+                        "  Bq " +
+                        "  E  " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"109. go up if there is fallen bike at line changer up below and accelerator leading to line changer down leading to obstacle in front",
+                        "■■■■■" +
+                        "     " +
+                        " B>▼ " +
+                        "  s |" +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"110. go down if there is fallen bike at obstacle above and accelerator leading to line changer up leading to other bike at downed bike in front",
+                        "■■■■■" +
+                        "  v l" +
+                        " B>▲ " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"111. go to random up/down if there is obstacle in 2 cells in front and obstacles below and above in 1 cell",
+                        "■■■■■" +
+                        "    |" +
+                        "  B |" +
+                        "    |" +
+                        "■■■■■",
+                        STOP},
+
+                new Object[]{"112. go to up if there is other bike below and line changer up in front of it",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  E▲ " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"113. go to up if there is other bike at line changer up below",
+                        "■■■■■" +
+                        "     " +
+                        "  B  " +
+                        "  S  " +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"114. go down if there is other bike at downed bike above and line changer down in front of it",
+                        "■■■■■" +
+                        "  l▼ " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        DOWN},
+
+                new Object[]{"115. go down if there is other bike at line changer down above",
+                        "■■■■■" +
+                        "  T  " +
+                        "  B  " +
+                        "     " +
+                        "■■■■■",
+                        DOWN}
         );
     }
 
     @Test
     public void get__shouldReturnAppropriateDirection__accordingToGameElementTypeAround() {
         //given
-        Board board = toBoard("■■■■■" +
-                "  " + elementBelow + "  " +
-                "  B" + elementAtRight + " " +
-                "  " + elementAbove + "  " +
-                "■■■■■"
-        );
-        if (expectedDirection == null) {
-            boolean randomBool = new Random().nextBoolean();
-            when(dice.next(2)).thenReturn(randomBool ? 1 : 0);
-            expectedDirection = randomBool ? DOWN : UP;
+        Board board = toBoard(boardString);
+        if (expectedDirection == STOP) {
+            when(dice.next(2)).then((Answer<Integer>) invocationOnMock -> {
+                int randomInt = new Random().nextInt(2);
+                expectedDirection = randomInt == 1 ? DOWN : UP;
+                return randomInt;
+            });
         }
 
         //when
         String result = solver.get(board);
 
         //then
-        assertThat(result, is(expectedDirection.toString()));
+        assertThat(result, is(expectedDirection != null ? expectedDirection.toString() : ""));
     }
 
     private Board toBoard(String board) {

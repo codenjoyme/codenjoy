@@ -5,6 +5,7 @@ import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.google.common.collect.Lists;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -186,6 +187,23 @@ public class BoardTest {
 
         //then
         assertThat(result, is(false));
+    }
+
+    @Test
+    public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtRightRightUpDirection() {
+        //given
+        Board board = toBoard("■■■■■" +
+                " B   " +
+                "  E>|" +
+                " P ▼ " +
+                "■■■■■"
+        );
+
+        //when
+        boolean result = board.checkNearMe(Lists.newArrayList(Direction.RIGHT, Direction.RIGHT, Direction.UP), GameElementType.ACCELERATOR);
+
+        //then
+        assertThat(result, is(true));
     }
 
     @Test

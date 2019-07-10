@@ -57,32 +57,21 @@ public class SpringboardGenerator {
 
     private void generateSpringBoardStep(SpringboardElementType up, SpringboardElementType middle, SpringboardElementType down, int x, int lines) {
         mergeNewElementToElementsMap(down, x , 1);
-
-//        elements.get(down).add(new SpringboardElement(x, 1, down));
-
         int y = 2;
         for (; y < lines - 1; y++) {
             mergeNewElementToElementsMap(middle, x , y);
-//            elements.get(middle).add(new SpringboardElement(x, y, middle));
         }
         mergeNewElementToElementsMap(up, x, y);
-
-//        elements.get(up).add(new SpringboardElement(x, y, up));
     }
 
     private void mergeNewElementToElementsMap(SpringboardElementType type, int x, int y) {
         elements.merge(type,
                 new LinkedList<>(Lists.newArrayList(new SpringboardElement(x, y, type))),
-                (shiftables, shiftables2) -> {
-                    shiftables.addAll(shiftables2);
-                    return shiftables;
+                (elementsFromMap, newElements) -> {
+                    elementsFromMap.addAll(newElements);
+                    return elementsFromMap;
                 });
     }
-
-//
-//    public List<SpringboardElement> getNextStep() {
-//        return elements.isEmpty() ? Collections.emptyList() : elements.remove(0);
-//    }
 
     public Map<? extends CharElements, List<Shiftable>> getElements() {
         return elements;

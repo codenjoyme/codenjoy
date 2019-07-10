@@ -23,7 +23,6 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.model.items.*;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
@@ -173,11 +172,6 @@ public class GameFieldImpl implements GameField {
     public boolean isSpringboardRightUpElements(int x, int y) {
         return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_UP).contains(pt(x, y));
     }
-
-//    @Override
-//    public boolean isSpringboardDarkFrontElements(int x, int y) {
-//        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_DARK_FRONT).contains(pt(x, y));
-//    }
 
     @Override
     public Optional<Bike> getEnemyBike(int x, int y, Player player) {
