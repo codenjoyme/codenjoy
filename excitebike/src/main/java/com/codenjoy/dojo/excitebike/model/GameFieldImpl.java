@@ -23,9 +23,11 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
+import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.model.items.*;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
-import com.codenjoy.dojo.excitebike.model.items.springboard.Springboard;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardGenerator;
 import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
@@ -40,7 +42,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.excitebike.model.items.GameElementType.*;
-import static com.codenjoy.dojo.excitebike.model.items.ComplexGameElementType.*;
 import static com.codenjoy.dojo.excitebike.model.items.bike.Bike.OTHER_BIKE_PREFIX;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -58,8 +59,9 @@ public class GameFieldImpl implements GameField {
 
     private List<Border> borders;
 
-    private List<CharElements> generatableElements = new ArrayList<>();
     private int generationLock;
+
+    private final int SPRINGBOARD_GENERATION_CHANCE = 2;
 
     public GameFieldImpl(MapParser mapParser, Dice dice) {
         this.dice = dice;
@@ -73,10 +75,15 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(LINE_CHANGER_UP, new ArrayList<>(mapParser.getLineUpChangers()));
         allShiftableElements.put(LINE_CHANGER_DOWN, new ArrayList<>(mapParser.getLineDownChangers()));
         allShiftableElements.put(BIKE_FALLEN, new ArrayList<>(mapParser.getFallenBikes()));
-        allShiftableElements.put(SPRINGBOARD, new LinkedList<>());
 
-        generatableElements.addAll(Arrays.asList(GameElementType.values()));
-        generatableElements.addAll(Arrays.asList(ComplexGameElementType.values()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LEFT_UP, new ArrayList<>(mapParser.getSpringboardLeftUpElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LIGHT, new ArrayList<>(mapParser.getSpringboardLightElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LEFT_DOWN, new ArrayList<>(mapParser.getSpringboardLeftDownElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_UP, new ArrayList<>(mapParser.getSpringboardRightUpElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_DARK, new ArrayList<>(mapParser.getSpringboardDarkElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN, new ArrayList<>(mapParser.getSpringboardRightDownElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_NONE, new ArrayList<>(mapParser.getSpringboardNoneElements()));
+
     }
 
     /**
@@ -138,6 +145,41 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
+    public boolean isSpringboardDarkElements(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_DARK).contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isSpringboardLightElements(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LIGHT).contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isSpringboardLeftDownElements(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT_DOWN).contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isSpringboardLeftUpElements(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT_UP).contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isSpringboardRightDownElements(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isSpringboardRightUpElements(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_UP).contains(pt(x, y));
+    }
+
+//    @Override
+//    public boolean isSpringboardDarkFrontElements(int x, int y) {
+//        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_DARK_FRONT).contains(pt(x, y));
+//    }
+
+    @Override
     public Optional<Bike> getEnemyBike(int x, int y, Player player) {
         return player != null ?
                 players.parallelStream()
@@ -145,18 +187,6 @@ public class GameFieldImpl implements GameField {
                         .filter(bike -> bike.state(player).name().contains(OTHER_BIKE_PREFIX) && bike.itsMe(x, y))
                         .findFirst()
                 : Optional.empty();
-    }
-
-    @Override
-    public Springboard getSpringboardThatContainsPoint(Point point) {
-        List<Shiftable> springboards = allShiftableElements.get(SPRINGBOARD);
-        for (Shiftable shiftableSpringboard : springboards) {
-            Springboard springboard = (Springboard) shiftableSpringboard;
-            if (springboard.getElements().contains(point)) {
-                return springboard;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -249,7 +279,7 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public BoardReader reader() {
-        return new BoardReader() {
+        BoardReader reader = new BoardReader() {
 
             @Override
             public int size() {
@@ -260,12 +290,13 @@ public class GameFieldImpl implements GameField {
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>() {{
                     addAll(GameFieldImpl.this.getBikes());
-                    GameFieldImpl.this.allShiftableElements.get(SPRINGBOARD).forEach(springboard -> addAll(((Springboard) springboard).getElements()));
                     GameFieldImpl.this.allShiftableElements.values().forEach(this::addAll);
                     addAll(getBorders());
                 }};
             }
+
         };
+        return reader;
     }
 
     private void shiftTrack() {
@@ -290,13 +321,30 @@ public class GameFieldImpl implements GameField {
 
         boolean needGenerate = dice.next(10) < 5;
         if (needGenerate) {
-            int rndNonBorderElementOrdinal = dice.next(generatableElements.size() - 2) + 2;
-            int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
+            boolean isSpringboard = dice.next(10) < SPRINGBOARD_GENERATION_CHANCE;
+            if (isSpringboard) {
+                final int clearLinesAroundSpringboard = 1;
+                final int springboardTopMaXWidth = 5;
+                int springboardWidth = dice.next(springboardTopMaXWidth) + 2;
+                generationLock = springboardWidth + clearLinesAroundSpringboard * 2;
+                SpringboardGenerator generator = new SpringboardGenerator(firstPossibleX + clearLinesAroundSpringboard, mapParser.getYSize(), springboardWidth);
 
-            CharElements randomType = generatableElements.get(rndNonBorderElementOrdinal);
-            List<Shiftable> elements = allShiftableElements.get(randomType);
-            Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
-            elements.add(newElement);
+                generator.getElements()
+                        .forEach((key, elements) -> allShiftableElements.merge(key, elements, (currentElements, newElements) -> {
+                                    currentElements.addAll(newElements);
+                                    return currentElements;
+                                }
+                        ));
+
+            } else {
+                int rndNonBorderElementOrdinal = dice.next(values().length - 2) + 2;
+                int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
+
+                CharElements randomType = GameElementType.values()[rndNonBorderElementOrdinal];
+                List<Shiftable> elements = allShiftableElements.get(randomType);
+                Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
+                elements.add(newElement);
+            }
         }
     }
 
@@ -311,12 +359,6 @@ public class GameFieldImpl implements GameField {
             return new LineChanger(x, y, true);
         } else if (LINE_CHANGER_DOWN.equals(randomType)) {
             return new LineChanger(x, y, false);
-        } else if (SPRINGBOARD.equals(randomType)) {
-            final int clearLinesAroundSpringboard = 1;
-            final int springboardTopMaXWidth = 5;
-            int springboardWidth = dice.next(springboardTopMaXWidth) + 2;
-            generationLock = springboardWidth + clearLinesAroundSpringboard * 2;
-            return new Springboard(x + clearLinesAroundSpringboard, mapParser.getYSize(), springboardWidth);
         }
         throw new IllegalArgumentException("No such element for " + randomType);
     }

@@ -24,8 +24,6 @@ package com.codenjoy.dojo.excitebike.model;
 
 
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
-import com.codenjoy.dojo.excitebike.model.items.springboard.Springboard;
-import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,13 +44,25 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
 
     boolean isDownLineChanger(int x, int y);
 
+    boolean isSpringboardDarkElements(int x, int y);
+
+//    boolean isSpringboardDarkFrontElements(int x, int y);
+
+    boolean isSpringboardLightElements(int x, int y);
+
+    boolean isSpringboardLeftDownElements(int x, int y);
+
+    boolean isSpringboardLeftUpElements(int x, int y);
+
+    boolean isSpringboardRightDownElements(int x, int y);
+
+    boolean isSpringboardRightUpElements(int x, int y);
+
     Optional<Bike> getEnemyBike(int x, int y, Player player);
 
     List<Player> getPlayers();
 
     Bike getNewFreeBike();
-
-    Springboard getSpringboardThatContainsPoint(Point point);
 
     Player getPlayerOfBike(Bike bike);
 }

@@ -73,7 +73,7 @@ public class SpawnElementsSystemParameterizedTest {
     @Test
     public void shouldGenerateElement() {
         //given
-        when(dice.next(anyInt())).thenReturn(0, gameElementType.ordinal() - 2, 0);
+        when(dice.next(anyInt())).thenReturn(0,5, gameElementType.ordinal() - 2, 0);
 
         //when
         game.tick();

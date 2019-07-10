@@ -44,7 +44,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
  * Created by Pavel Bobylev 6/18/2019
  */
 
-@Ignore
 @RunWith(Parameterized.class)
 public class BoardParametrizedTest {
 

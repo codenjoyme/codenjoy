@@ -28,6 +28,7 @@ import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
 import com.codenjoy.dojo.excitebike.model.items.LineChanger;
 import com.codenjoy.dojo.excitebike.model.items.Obstacle;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElement;
 
 import java.util.List;
 
@@ -50,4 +51,21 @@ public interface MapParser {
     List<LineChanger> getLineDownChangers();
 
     List<Obstacle> getObstacles();
+
+    List<SpringboardElement> getSpringboardDarkElements();
+
+//    List<SpringboardElement> getSpringboardDarkFrontElements();
+
+    List<SpringboardElement> getSpringboardLightElements();
+
+    List<SpringboardElement> getSpringboardLeftDownElements();
+
+    List<SpringboardElement> getSpringboardLeftUpElements();
+
+    List<SpringboardElement> getSpringboardRightDownElements();
+
+    List<SpringboardElement> getSpringboardRightUpElements();
+
+    List<SpringboardElement> getSpringboardNoneElements();
+
 }
