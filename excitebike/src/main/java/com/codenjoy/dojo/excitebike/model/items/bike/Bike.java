@@ -55,7 +55,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     public static final String OTHER_BIKE_PREFIX = "OTHER";
     public static final String FALLEN_BIKE_SUFFIX = "FALLEN";
     public static final String BIKE_AT_PREFIX = "AT_";
-    public static final String BIKE_PREFIX = "BIKE";
     public static final String AT_ACCELERATOR_SUFFIX = "_AT_ACCELERATOR";
     public static final String AT_INHIBITOR_SUFFIX = "_AT_INHIBITOR";
     public static final String AT_LINE_CHANGER_UP_SUFFIX = "_AT_LINE_CHANGER_UP";

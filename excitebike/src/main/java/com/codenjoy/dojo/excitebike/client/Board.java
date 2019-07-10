@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.CharElements;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -73,6 +74,17 @@ public class Board extends AbstractBoard<CharElements> {
                 .anyMatch(v -> isAt(me, v));
     }
 
+    public boolean checkNearMe(List<Direction> directions, CharElements... elements) {
+        Point point = getMe();
+        if (point == null) {
+            return false;
+        }
+        for (Direction direction : directions) {
+            point = direction.change(point);
+        }
+        return isAt(point.getX(), point.getY(), elements);
+    }
+
     public boolean checkNearMe(Direction direction, CharElements... elements) {
         Point me = getMe();
         if (me == null) {
@@ -82,8 +94,8 @@ public class Board extends AbstractBoard<CharElements> {
         return isAt(atDirection.getX(), atDirection.getY(), elements);
     }
 
-    public boolean checkAtMe(CharElements element) {
+    public boolean checkAtMe(CharElements... elements) {
         Point me = getMe();
-        return me != null && isAt(me, element);
+        return me != null && isAt(me, elements);
     }
 }
