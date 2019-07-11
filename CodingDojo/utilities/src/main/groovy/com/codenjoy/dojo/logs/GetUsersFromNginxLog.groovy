@@ -44,9 +44,9 @@ files.each {
             if (user == null) {
                 user = "user('$playerId')"
             }
-            if (Arrays.asList('63gk89b3j87z87a83eri',
+            if (['63gk89b3j87z87a83eri',
                     'zemm5yx98w7rde0697p6',
-                    'hwrreckowfd255qe59b3').contains(playerId))
+                    'hwrreckowfd255qe59b3'].contains(playerId))
             {
                 return
             }
@@ -55,8 +55,16 @@ files.each {
             }
             actions[user] << time
 
-            println time + ' > ' + user
+//            println time + ' > ' + user
         }
     }
 }
+
+println 'activity'
+def sorted = [:]
+actions.each{ user, times ->
+    println "${user} : ${times.size()}"
+}
+
+
 
