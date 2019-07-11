@@ -46,15 +46,9 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
 
     boolean isSpringboardDarkElements(int x, int y);
 
-//    boolean isSpringboardDarkFrontElements(int x, int y);
-
     boolean isSpringboardLightElements(int x, int y);
 
     boolean isSpringboardLeftDownElements(int x, int y);
-
-    boolean isSpringboardLeftUpElements(int x, int y);
-
-    boolean isSpringboardRightDownElements(int x, int y);
 
     boolean isSpringboardRightUpElements(int x, int y);
 

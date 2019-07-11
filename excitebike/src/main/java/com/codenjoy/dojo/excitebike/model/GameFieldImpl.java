@@ -159,16 +159,6 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public boolean isSpringboardLeftUpElements(int x, int y) {
-        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT_UP).contains(pt(x, y));
-    }
-
-    @Override
-    public boolean isSpringboardRightDownElements(int x, int y) {
-        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(pt(x, y));
-    }
-
-    @Override
     public boolean isSpringboardRightUpElements(int x, int y) {
         return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_UP).contains(pt(x, y));
     }
@@ -273,7 +263,7 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public BoardReader reader() {
-        BoardReader reader = new BoardReader() {
+        return new BoardReader() {
 
             @Override
             public int size() {
@@ -288,9 +278,7 @@ public class GameFieldImpl implements GameField {
                     addAll(getBorders());
                 }};
             }
-
         };
-        return reader;
     }
 
     private void shiftTrack() {

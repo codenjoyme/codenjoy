@@ -156,7 +156,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
 
         if (type == BIKE_AT_SPRINGBOARD_DARK
-                || type == BIKE_AT_SPRINGBOARD_LEFT_UP
                 || type == BIKE_AT_SPRINGBOARD_LEFT_DOWN) {
             command = null;
             movement.setUp();
@@ -166,7 +165,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
         if (type == BIKE_AT_SPRINGBOARD_LIGHT
                 || type == BIKE_AT_SPRINGBOARD_RIGHT_UP
-                || type == BIKE_AT_SPRINGBOARD_RIGHT_DOWN
                 || type == BIKE_IN_FLIGHT_FROM_SPRINGBOARD) {
             command = null;
             movement.setDown();
@@ -285,12 +283,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             return;
         }
 
-        if (field.isSpringboardLeftUpElements(x, y)) {
-            type = BIKE_AT_SPRINGBOARD_LEFT_UP;
-            atSpringboard = true;
-            return;
-        }
-
         if (field.isSpringboardLeftDownElements(x, y)) {
             type = BIKE_AT_SPRINGBOARD_LEFT_DOWN;
             atSpringboard = true;
@@ -299,12 +291,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
         if (field.isSpringboardRightUpElements(x, y)) {
             type = BIKE_AT_SPRINGBOARD_RIGHT_UP;
-            atSpringboard = false;
-            return;
-        }
-
-        if (field.isSpringboardRightDownElements(x, y)) {
-            type = BIKE_AT_SPRINGBOARD_RIGHT_DOWN;
             atSpringboard = false;
             return;
         }
