@@ -1,10 +1,23 @@
 #!/usr/bin/env bash
 
 if [ "x$CODENJOY_VERSION" = "x" ]; then
-    CODENJOY_VERSION=1.0.28
+    CODENJOY_VERSION=1.1.0
 fi
 
-mvn install:install-file -Dfile=engine-$CODENJOY_VERSION.jar -Dsources=engine-$CODENJOY_VERSION-sources.jar -DpomFile=engine-$CODENJOY_VERSION-pom.xml -DgroupId=com.codenjoy -DartifactId=engine -Dversion=$CODENJOY_VERSION -Dpackaging=jar
+mkdir .\.mvn
+mkdir .\.mvn\wrapper
+
+MVNW=$(pwd)\mvnw
+
+if [ ! -d ".\target" ]; then
+	$MVNW clean install -DskipTests=true
+	cp .\pom.xml .\target\engine-$CODENJOY_VERSION-pom.xml
+	cp ..\pom.xml .\target\games-$CODENJOY_VERSION-pom.xml
+fi
+
+cd .\target
+
+$MVNW install:install-file -Dfile=engine-$CODENJOY_VERSION.jar -Dsources=engine-$CODENJOY_VERSION-sources.jar -DpomFile=engine-$CODENJOY_VERSION-pom.xml -DgroupId=com.codenjoy -DartifactId=engine -Dversion=$CODENJOY_VERSION -Dpackaging=jar
 
 echo "[93m"
 echo "       +--------------------------------------------------+"
@@ -17,7 +30,7 @@ if [ "x$DEBUG" = "xtrue" ]; then
     read
 fi
 
-mvn install:install-file -Dfile=games-$CODENJOY_VERSION-pom.xml -DpomFile=games-$CODENJOY_VERSION-pom.xml -DgroupId=com.codenjoy -DartifactId=games -Dversion=$CODENJOY_VERSION -Dpackaging=pom
+$MVNW install:install-file -Dfile=games-$CODENJOY_VERSION-pom.xml -DpomFile=games-$CODENJOY_VERSION-pom.xml -DgroupId=com.codenjoy -DartifactId=games -Dversion=$CODENJOY_VERSION -Dpackaging=pom
 echo "[93m"
 echo "       +--------------------------------------------------+"
 echo "       !         Check that BUILD was SUCCESS             !"
