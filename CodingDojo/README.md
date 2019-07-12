@@ -51,15 +51,26 @@ To run a project with your game, do the following:
      project to install only games parent project
   * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\yourgame`
      project to install your game
-  * run `clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,yourgame,debug -Dcontext=/codenjoy-contest -Pyourgame`
+  * run `clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,yourgame,debug -Dcontext=/codenjoy-contest --server.port=8080 -Pyourgame`
      in the `\CodingDojo\server` project to launch the game (where 'yourgame')
      is a name of profile that you have set recently in `\CodingDojo\server\pom.xml`.
      There may be several games listed separated by commas.
 - build all games
   * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games` project to install all games
-  * If you want to run all games just run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-contest -DallGames`
+  * If you want to run all games just run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-contest --server.port=8080 -DallGames`
 - if maven is not installed on you machine, try `mvnw` instead of `mvn`
 - a simpler way of launching Codenjoy with all games is by running a script in the root `\CodingDojo\build-server.bat` then `\CodingDojo\start-server.bat`
+  * please change `set GAMES_TO_RUN=tetris,snake,bomberman` before run `\CodingDojo\build-server.bat`
+  * also you can change properties `--spring.profiles.active=sqlite,debug --context=/codenjoy-contest --server.port=8080` inside `\CodingDojo\start-server.bat`
+    * `context` changes link to the application
+    [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest)
+    * `server.port` the port on which the application starts
+    * `spring.profiles.active`
+      * `sqlite` for the lightweight database (<50 participants)
+      * `postgres` for the postgres database (>50 participants)
+      * `trace` for enable log.debug
+      * `debug` if you want to debug js files (otherwise it will compress and obfuscate)
+      * `yourgame` if you added your custom configuration to the game inside `CodingDojo\games\yourgame\src\main\resources\application-yourgame.yml`
 - after that in the browser access [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) and register the player
 - you can read a description of any game on the help page [http://127.0.0.1:8080/codenjoy-contest/help](http://127.0.0.1:8080/codenjoy-contest/help)
 - in case of any problems, please email [apofig@gmail.com](mailto:apofig@gmail.com) or chat to [Skype Oleksandr Baglai](skype:alexander.baglay)

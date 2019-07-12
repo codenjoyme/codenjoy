@@ -26,12 +26,21 @@ package com.codenjoy.dojo.client;
 public class CodenjoyContext {
 
     private static String CONTEXT = "codenjoy-contest";
+    private static int PORT = 8080;
 
-    public static String get() {
+    public static String getContext() {
         return CONTEXT;
     }
 
-    public static void set(String context) {
+    public static void setContext(String context) {
         CONTEXT = context;
+    }
+
+    public static int getPort() {
+        return PORT;
+    }
+
+    public static void setPort(int port) {
+        PORT = port;
     }
 }

@@ -115,7 +115,7 @@ public class RegistrationService {
                     String hostIp = properties.getServerIp(); // TODO to use server domain here
                     map.put("host", hostIp);
 
-                    String context = CodenjoyContext.get();
+                    String context = CodenjoyContext.getContext();
                     String link = "http://" + hostIp + "/" + context + "/register?approve=" + storage.getLink();
                     try {
                         mailService.sendEmail(id, "Codenjoy регистрация",
