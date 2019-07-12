@@ -181,6 +181,38 @@ Merge your game into codenjoy master
 - renname `CodingDojo/games2` to `CodingDojo/games` with accept merging of two folders
 - `git add CodingDojo/games2`
 - `git add CodingDojo/games/your-game`
+- in the `CodingDojo/server/pom.xml` file, add new profile according to
+the template specified in the comment. Profile name should represent game
+name for simplicity:
+```xml
+    <!-- this is your new game
+        <profile>
+            <id>yourgame</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>yourgame-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    -->
+```
+- you must add a new game to the `CodingDojo/games/pom.xml` parent project in the modules section
+```xml
+    <modules>
+        <module>games/engine</module>
+        <module>games/sample</module>
+        ...
+        <module>games/yourgame</module> <!-- this is your new game -->
+    </modules>
+```
+- `git add .`
 - `git commit -m "[your-game] Added new game YourGame"
 - `git push --all origin`
 - then you can [run codenjoy with this game](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo#run-codenjoy-server-from-sources)

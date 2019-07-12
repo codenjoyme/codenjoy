@@ -41,49 +41,20 @@ Run Codenjoy server from sources
 --------------------------------
 
 To run a project with your game, do the following:
-
 - clone the project from the [codenjoy main repository](https://github.com/codenjoyme/codenjoy)
-- In the `\CodingDojo\server\pom.xml` file, add new profile according to
-the template specified in the comment. Profile name should represent game
-name for simplicity:
-```xml
-    <!-- this is your new game
-        <profile>
-            <id>yourgame</id>
-            <activation>
-                <property>
-                    <name>allGames</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>yourgame-engine</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-    -->
-```
-- you must add a new game to the `\CodingDojo\games\pom.xml` parent project in the modules section
-```xml
-    <modules>
-        <module>games/engine</module>
-        <module>games/sample</module>
-        ...
-        <module>games/yourgame</module> <!-- this is your new game -->
-    </modules>
-```
 - configure Codenjoy server by modifying the settings in files:
   * [\CodingDojo\server\src\main\resources\application.yml](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/server/src/main/resources/application.yml)
   * [\CodingDojo\server\src\main\webapp\resources\js\init.js](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/server/src/main/webapp/resources/js/init.js)
 - run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\engine` project to install the common classes/interfaces
 - build one game
-  * run `mvn clean install -N -DskipTests=true` in the `\CodingDojo\games` project to install only games parent project
-  * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\yourgame` project to install your game
+  * run `mvn clean install -N -DskipTests=true` in the `\CodingDojo\games`
+     project to install only games parent project
+  * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\yourgame`
+     project to install your game
   * run `clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,yourgame,debug -Dcontext=/codenjoy-contest -Pyourgame`
-in the `\CodingDojo\server` project to launch the game (where 'yourgame') is a name of profile that you have set
-recently in `\CodingDojo\server\pom.xml`.
+     in the `\CodingDojo\server` project to launch the game (where 'yourgame')
+     is a name of profile that you have set recently in `\CodingDojo\server\pom.xml`.
+     There may be several games listed separated by commas.
 - build all games
   * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games` project to install all games
   * If you want to run all games just run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-contest -DallGames`
