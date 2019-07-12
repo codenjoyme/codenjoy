@@ -35,58 +35,69 @@ OS name: "xxxxxxxxxx", version: "xxx", arch: "xxxxx", family: "xxxxxxx"
 C:\Users\user>
 ```
 - download and install [IntelliJ IDEA Community version](https://www.jetbrains.com/idea/download/)
+- install [Lombok plugin](https://plugins.jetbrains.com/plugin/6317-lombok) for idea
 
-Run your game using Codenjoy-contest module
---------------
+Run Codenjoy server from sources
+--------------------------------
 
-To build a project with your game, do the following:
+To run a project with your game, do the following:
 
-- download the project from the [codenjoy main repository](https://github.com/codenjoyme/codenjoy)
-- In the `\CodingDojo\server\pom.xml` file, specify the games you need. To achieve this:
-- add a dependency to a selected game in the `dependency` block under a new profile. Profile name should 
-represent game name for simplicity. 
+- clone the project from the [codenjoy main repository](https://github.com/codenjoyme/codenjoy)
+- In the `\CodingDojo\server\pom.xml` file, add new profile according to
+the template specified in the comment. Profile name should represent game
+name for simplicity:
 ```xml
-<profile>
-    <id>sampleengine</id>
-    <activation>
-        <property>
-            <name>allGames</name>
-        </property>
-    </activation>
-    <properties>
-        <exclude.sampletext>false</exclude.sampletext>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>sample-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-</profile>
+    <!-- this is your new game
+        <profile>
+            <id>yourgame</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>yourgame-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    -->
 ```
-- you can add a new game to the `\CodingDojo\pom.xml` parent project in the modules section, or maintain it separately
+- you must add a new game to the `\CodingDojo\games\pom.xml` parent project in the modules section
 ```xml
-<modules>
-    <module>games/engine</module>
-    <module>games/sample</module>
-    ...
-    <module>games/your-game</module> <!-- this is your new game -->
-    <module>server</module>
-</modules>
+    <modules>
+        <module>games/engine</module>
+        <module>games/sample</module>
+        ...
+        <module>games/yourgame</module> <!-- this is your new game -->
+    </modules>
 ```
-- configure codenjoy by modifying the settings in the file `\CodingDojo\server\src\main\resources\application.yml`
-- configure codenjoy by modifying the settings in the file `\CodingDojo\server\src\main\webapp\resources\js\init.js`
-- that is, set `email.verification=false` to disable email verification during registration
-- run `mvn clean install` in the `\CodingDojo\games\engine` project to install the UI
-- run `mvn clean install` in the project root to install all other components
-- run `mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite spring-boot:run -Pyour-game-profile` 
-in the `\CodingDojo\server` project to launch the game (where 'your-game-profile') is a name of profile that you have set 
-recently in `\CodingDojo\server\pom.xml`
-- a simpler way of launching the game is by running a script in the root of the `\CodingDojo\server\start-server.bat` project
-- in the browser, access [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) and register the player
+- configure Codenjoy server by modifying the settings in files:
+  * [\CodingDojo\server\src\main\resources\application.yml](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/server/src/main/resources/application.yml)
+  * [\CodingDojo\server\src\main\webapp\resources\js\init.js](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/server/src/main/webapp/resources/js/init.js)
+- run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\engine` project to install the common classes/interfaces
+- build one game
+  * run `mvn clean install -N -DskipTests=true` in the `\CodingDojo\games` project to install only games parent project
+  * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\yourgame` project to install your game
+  * run `clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,yourgame,debug -Dcontext=/codenjoy-contest -Pyourgame`
+in the `\CodingDojo\server` project to launch the game (where 'yourgame') is a name of profile that you have set
+recently in `\CodingDojo\server\pom.xml`.
+- build all games
+  * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games` project to install all games
+  * If you want to run all games just run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-contest -DallGames`
+- if maven is not installed on you machine, try `mvnw` instead of `mvn`
+- a simpler way of launching Codenjoy with all games is by running a script in the root `\CodingDojo\build-server.bat` then `\CodingDojo\start-server.bat`
+- after that in the browser access [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) and register the player
 - you can read a description of any game on the help page [http://127.0.0.1:8080/codenjoy-contest/help](http://127.0.0.1:8080/codenjoy-contest/help)
-- in case of any problems, skype Oleksandr Baglai at `alexander.baglay`
+- in case of any problems, please email [apofig@gmail.com](mailto:apofig@gmail.com) or chat to [Skype Oleksandr Baglai](skype:alexander.baglay)
+
+Run Codenjoy in portable mode
+--------------
+There are two scripts to run Codenjoy on Ubuntu and Windows:
+- [how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker-compose)
+- [how to run the server on Windows](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/windows-cmd)
 
 Develop a game
 --------------

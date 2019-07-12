@@ -42,7 +42,7 @@ import static java.util.stream.Collectors.toList;
 
 public class LocalGameRunner {
 
-    public static int timeout = 1000;
+    public static int timeout = 10;
     public static Consumer<String> out = System.out::println;
     public static Integer countIterations = null;
 

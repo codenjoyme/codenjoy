@@ -1,2 +1,5 @@
-call mvn clean install
-builder\start-server.bat
+set ROOT=%CD%
+
+call mvnw clean install -DskipTests=true
+
+pause >nul
