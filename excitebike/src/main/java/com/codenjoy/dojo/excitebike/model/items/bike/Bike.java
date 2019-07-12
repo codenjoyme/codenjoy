@@ -153,6 +153,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (type == BIKE_AT_LINE_CHANGER_DOWN) {
             movement.setDown();
             type = atNothingType();
+            return;
         }
 
         if (type == BIKE_AT_SPRINGBOARD_DARK
@@ -164,12 +165,14 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
 
         if (type == BIKE_AT_SPRINGBOARD_LIGHT
-                || type == BIKE_AT_SPRINGBOARD_RIGHT_UP
-                || type == BIKE_IN_FLIGHT_FROM_SPRINGBOARD) {
+                || type == BIKE_AT_SPRINGBOARD_RIGHT_DOWN) {
+            command = null;
+            type = atNothingType();
+        }
+
+        if (type == BIKE_IN_FLIGHT_FROM_SPRINGBOARD){
             command = null;
             movement.setDown();
-            type = atNothingType();
-            return;
         }
     }
 
@@ -190,7 +193,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
         if (movement.isDown()) {
             y = DOWN.changeY(y);
-
         }
         if (movement.isLeft()) {
             x = Direction.LEFT.changeX(x);
@@ -267,9 +269,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
         adjusted = true;
 
-        if (field.isSpringboardDarkElements(x, y)) {
+        if (field.isSpringboardDarkElement(x, y)) {
             if (y == 1 && !movement.isUp()) {
                 type = BIKE_IN_FLIGHT_FROM_SPRINGBOARD;
+                atSpringboard = false;
             } else {
                 type = BIKE_AT_SPRINGBOARD_DARK;
                 atSpringboard = true;
@@ -277,21 +280,23 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             return;
         }
 
-        if (field.isSpringboardLightElements(x, y)) {
+        if (field.isSpringboardLightElement(x, y - 1)) {
             type = BIKE_AT_SPRINGBOARD_LIGHT;
             atSpringboard = false;
+            y--;
             return;
         }
 
-        if (field.isSpringboardLeftDownElements(x, y)) {
+        if (field.isSpringboardLeftDownElement(x, y)) {
             type = BIKE_AT_SPRINGBOARD_LEFT_DOWN;
             atSpringboard = true;
             return;
         }
 
-        if (field.isSpringboardRightUpElements(x, y)) {
-            type = BIKE_AT_SPRINGBOARD_RIGHT_UP;
+        if (field.isSpringboardRightDownElement(x, y - 1)) {
+            type = BIKE_AT_SPRINGBOARD_RIGHT_DOWN;
             atSpringboard = false;
+            y--;
             return;
         }
 

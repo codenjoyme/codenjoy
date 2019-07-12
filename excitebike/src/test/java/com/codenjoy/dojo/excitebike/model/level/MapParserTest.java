@@ -24,6 +24,7 @@ package com.codenjoy.dojo.excitebike.model.level;
 
 import com.codenjoy.dojo.excitebike.model.items.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.CharElements;
@@ -60,7 +61,14 @@ public class MapParserTest {
                 GameElementType.OBSTACLE,
                 GameElementType.LINE_CHANGER_UP,
                 GameElementType.LINE_CHANGER_DOWN,
-                BikeType.BIKE_FALLEN
+                BikeType.BIKE_FALLEN,
+                SpringboardElementType.SPRINGBOARD_DARK,
+                SpringboardElementType.SPRINGBOARD_LIGHT,
+                SpringboardElementType.SPRINGBOARD_LEFT_DOWN,
+                SpringboardElementType.SPRINGBOARD_RIGHT_DOWN,
+                SpringboardElementType.SPRINGBOARD_LEFT_UP,
+                SpringboardElementType.SPRINGBOARD_LEFT_DOWN,
+                SpringboardElementType.SPRINGBOARD_NONE
         );
     }
 
@@ -210,6 +218,20 @@ public class MapParserTest {
             return (List<T>) mapParser.getLineDownChangers();
         } else if (element == BikeType.BIKE_FALLEN) {
             return (List<T>) mapParser.getFallenBikes();
+        }else if (element == SpringboardElementType.SPRINGBOARD_DARK) {
+            return (List<T>) mapParser.getSpringboardDarkElements();
+        }else if (element == SpringboardElementType.SPRINGBOARD_LIGHT) {
+            return (List<T>) mapParser.getSpringboardLightElements();
+        }else if (element == SpringboardElementType.SPRINGBOARD_LEFT_DOWN) {
+            return (List<T>) mapParser.getSpringboardLeftDownElements();
+        }else if (element == SpringboardElementType.SPRINGBOARD_LEFT_UP) {
+            return (List<T>) mapParser.getSpringboardLeftUpElements();
+        }else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_DOWN) {
+            return (List<T>) mapParser.getSpringboardRightDownElements();
+        }else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_UP) {
+            return (List<T>) mapParser.getSpringboardRightUpElements();
+        }else if (element == SpringboardElementType.SPRINGBOARD_NONE) {
+            return (List<T>) mapParser.getSpringboardNoneElements();
         }
         return null;
     }

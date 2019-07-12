@@ -23,6 +23,7 @@ package com.codenjoy.dojo.excitebike.model.items.springboard;
  */
 
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.google.common.collect.Lists;
 
@@ -31,20 +32,40 @@ import java.util.*;
 import static com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType.*;
 
 public class SpringboardGenerator {
+    private static final int CLEAR_LINES_AROUND_SPRINGBOARD = 1;
+    private static final int SPRINGBOARD_TOP_MAX_WIDTH = 5;
+    private static final  int SPRINGBOARD_GENERATION_CHANCE = 2;
+
+    private int width;
     private int x0;
     private int x;
+    private int linesNumber;
+    private Dice dice;
     private Map<SpringboardElementType, List<Shiftable>> elements = new EnumMap<>(SpringboardElementType.class);
 
-    public SpringboardGenerator(int x0, int linesNumber, int width) {
-        this.x0 = x0;
-        this.x = x0 + (width < 2 ? 2 : width);
+    public SpringboardGenerator(int x0, int linesNumber, Dice dice) {
+        this.x0 = x0 + CLEAR_LINES_AROUND_SPRINGBOARD;
+        this.linesNumber = linesNumber;
+        this.dice = dice;
+    }
 
-        generateRiseLine(linesNumber);
+    public boolean generate() {
+        boolean needGenerate = dice.next(10) < SPRINGBOARD_GENERATION_CHANCE;
+        if (needGenerate) {
+            width = dice.next(SPRINGBOARD_TOP_MAX_WIDTH) + 2;
+            x = x0 + width;
 
-        for (int i = x0 + 1; i < x - 1; i++) {
-            generateSpringBoardStep(SPRINGBOARD_NONE, SPRINGBOARD_NONE, SPRINGBOARD_DARK, i, linesNumber);
+            generateRiseLine(linesNumber);
+            for (int i = x0 + 1; i < x - 1; i++) {
+                generateSpringBoardStep(SPRINGBOARD_NONE, SPRINGBOARD_NONE, SPRINGBOARD_DARK, i, linesNumber);
+            }
+            generateDescentLine(linesNumber);
         }
-        generateDescentLine(linesNumber);
+        return needGenerate;
+    }
+
+    public int size() {
+        return width + CLEAR_LINES_AROUND_SPRINGBOARD * 2;
     }
 
     private void generateRiseLine(int linesNumber) {
@@ -56,10 +77,10 @@ public class SpringboardGenerator {
     }
 
     private void generateSpringBoardStep(SpringboardElementType up, SpringboardElementType middle, SpringboardElementType down, int x, int lines) {
-        mergeNewElementToElementsMap(down, x , 1);
+        mergeNewElementToElementsMap(down, x, 1);
         int y = 2;
         for (; y < lines - 1; y++) {
-            mergeNewElementToElementsMap(middle, x , y);
+            mergeNewElementToElementsMap(middle, x, y);
         }
         mergeNewElementToElementsMap(up, x, y);
     }

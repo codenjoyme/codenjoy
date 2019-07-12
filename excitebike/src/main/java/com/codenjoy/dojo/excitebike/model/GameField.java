@@ -44,13 +44,13 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
 
     boolean isDownLineChanger(int x, int y);
 
-    boolean isSpringboardDarkElements(int x, int y);
+    boolean isSpringboardDarkElement(int x, int y);
 
-    boolean isSpringboardLightElements(int x, int y);
+    boolean isSpringboardLightElement(int x, int y);
 
-    boolean isSpringboardLeftDownElements(int x, int y);
+    boolean isSpringboardLeftDownElement(int x, int y);
 
-    boolean isSpringboardRightUpElements(int x, int y);
+    boolean isSpringboardRightDownElement(int x, int y);
 
     Optional<Bike> getEnemyBike(int x, int y, Player player);
 

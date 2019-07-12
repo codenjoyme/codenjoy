@@ -2272,6 +2272,34 @@ public class GameFieldImplSystemTest {
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
+
+    @Test
+    public void tick__shouldCrushBikeAtBorder_ifBikeWasInFlight2() {
+        //given
+        String board = "■■■╔^" +
+                "  /^ " +
+                "  /  " +
+                " B╚//" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+        bike.down();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected ="^■■  "+
+                "     "+
+                "     "+
+                "/    "+
+                "■c■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
     @Test
     public void tick__shouldCrushBike_ifBikeMoveUpOnSpringboardBorder() {
         //given
@@ -2343,6 +2371,52 @@ public class GameFieldImplSystemTest {
                 "  \\  " +
                 " ^\\B " +
                 " \\╝  " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick__shouldMoveBikeDown_ifBikeCrossDescentOfSpringboard3() {
+        //given
+        String board = "■■■^╗" +
+                "   ^\\" +
+                "   B\\" +
+                "   \\╝" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■^╗ " +
+                "  ^\\ " +
+                "   \\ " +
+                "  \\┘ " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick__shouldMoveBikeDown_ifBikeCrossDescentOfSpringboard4() {
+        //given
+        String board = "■■■^╗" +
+                "   B\\" +
+                "   ^\\" +
+                "   \\╝" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■^╗ " +
+                "   \\ " +
+                "  ^┤ " +
+                "  \\╝ " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }

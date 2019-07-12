@@ -60,8 +60,6 @@ public class GameFieldImpl implements GameField {
 
     private int generationLock;
 
-    private final int SPRINGBOARD_GENERATION_CHANCE = 2;
-
     public GameFieldImpl(MapParser mapParser, Dice dice) {
         this.dice = dice;
         this.mapParser = mapParser;
@@ -144,23 +142,23 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public boolean isSpringboardDarkElements(int x, int y) {
+    public boolean isSpringboardDarkElement(int x, int y) {
         return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_DARK).contains(pt(x, y));
     }
 
     @Override
-    public boolean isSpringboardLightElements(int x, int y) {
+    public boolean isSpringboardLightElement(int x, int y) {
         return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LIGHT).contains(pt(x, y));
     }
 
     @Override
-    public boolean isSpringboardLeftDownElements(int x, int y) {
+    public boolean isSpringboardLeftDownElement(int x, int y) {
         return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT_DOWN).contains(pt(x, y));
     }
 
     @Override
-    public boolean isSpringboardRightUpElements(int x, int y) {
-        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_UP).contains(pt(x, y));
+    public boolean isSpringboardRightDownElement(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(pt(x, y));
     }
 
     @Override
@@ -303,13 +301,10 @@ public class GameFieldImpl implements GameField {
 
         boolean needGenerate = dice.next(10) < 5;
         if (needGenerate) {
-            boolean isSpringboard = dice.next(10) < SPRINGBOARD_GENERATION_CHANCE;
-            if (isSpringboard) {
-                final int clearLinesAroundSpringboard = 1;
-                final int springboardTopMaXWidth = 5;
-                int springboardWidth = dice.next(springboardTopMaXWidth) + 2;
-                generationLock = springboardWidth + clearLinesAroundSpringboard * 2;
-                SpringboardGenerator generator = new SpringboardGenerator(firstPossibleX + clearLinesAroundSpringboard, mapParser.getYSize(), springboardWidth);
+            SpringboardGenerator generator = new SpringboardGenerator(firstPossibleX, mapParser.getYSize(), dice);
+            boolean isSpringboardGenerated = generator.generate();
+            if (isSpringboardGenerated) {
+                generationLock = generator.size();
 
                 generator.getElements()
                         .forEach((key, elements) -> allShiftableElements.merge(key, elements, (currentElements, newElements) -> {
@@ -317,17 +312,20 @@ public class GameFieldImpl implements GameField {
                                     return currentElements;
                                 }
                         ));
-
             } else {
-                int rndNonBorderElementOrdinal = dice.next(values().length - 2) + 2;
-                int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
-
-                CharElements randomType = GameElementType.values()[rndNonBorderElementOrdinal];
-                List<Shiftable> elements = allShiftableElements.get(randomType);
-                Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
-                elements.add(newElement);
+                generateElement(firstPossibleX, laneNumber);
             }
         }
+    }
+
+    private void generateElement(final int firstPossibleX, final int laneNumber) {
+        int rndNonBorderElementOrdinal = dice.next(values().length - 2) + 2;
+        int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
+
+        CharElements randomType = GameElementType.values()[rndNonBorderElementOrdinal];
+        List<Shiftable> elements = allShiftableElements.get(randomType);
+        Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
+        elements.add(newElement);
     }
 
     private Shiftable getNewElement(CharElements randomType, int x, int y) {

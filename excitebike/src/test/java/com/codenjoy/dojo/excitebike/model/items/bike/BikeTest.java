@@ -531,7 +531,7 @@ public class BikeTest {
     @Test
     public void tick__shouldMoveBikeUp__ifBikeGoToSpringboardLeftDownElementType() {
         //given
-        when(gameField.isSpringboardLeftDownElements(bike.getX(), bike.getY())).thenReturn(true);
+        when(gameField.isSpringboardLeftDownElement(bike.getX(), bike.getY())).thenReturn(true);
         bike.tick();
 
         //when
@@ -545,8 +545,8 @@ public class BikeTest {
     @Test
     public void tick__shouldMoveBikeUp__ifBikeGoToSpringboardDarkElementType() {
         //given
-        when(gameField.isSpringboardDarkElements(bike.getX(), bike.getY())).thenReturn(true);
-        when(gameField.isSpringboardLeftDownElements(bike.getX(), 1)).thenReturn(true);
+        when(gameField.isSpringboardDarkElement(bike.getX(), bike.getY())).thenReturn(true);
+        when(gameField.isSpringboardLeftDownElement(bike.getX(), 1)).thenReturn(true);
         bike.tick();
 
         //when
@@ -560,7 +560,7 @@ public class BikeTest {
     @Test
     public void tick__shouldMoveBikeDown__ifBikeGoToSpringboardRightUpElementType() {
         //given
-        when(gameField.isSpringboardRightUpElements(bike.getX(), bike.getY())).thenReturn(true);
+        when(gameField.isSpringboardRightDownElement(bike.getX(), bike.getY()-1)).thenReturn(true);
         bike.tick();
 
         //when
@@ -574,7 +574,7 @@ public class BikeTest {
     @Test
     public void tick__shouldMoveBikeDown__ifBikeGoToSpringboardLightElementType() {
         //given
-        when(gameField.isSpringboardLightElements(bike.getX(), bike.getY())).thenReturn(true);
+        when(gameField.isSpringboardLightElement(bike.getX(), bike.getY()-1)).thenReturn(true);
         bike.tick();
 
         //when
@@ -590,7 +590,7 @@ public class BikeTest {
         //given
         bike.setY(2);
         bike.down();
-        when(gameField.isSpringboardDarkElements(anyInt(), anyInt())).thenReturn(true);
+        when(gameField.isSpringboardDarkElement(anyInt(), anyInt())).thenReturn(true);
         bike.tick();
 
         //when
