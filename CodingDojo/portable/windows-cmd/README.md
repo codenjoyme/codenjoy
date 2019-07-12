@@ -17,8 +17,14 @@ Best use `c:\codenjoy` folder. There is problem with spaces on windows and java
 like git repo, branch name where the server will be built from
   * `set CODENJOY_VERSION=1.1.0` Current version of codenjoy
   * `set SKIP_TESTS=true` should skip test
+  * `set GAMES_TO_RUN=ask`
+     * if `ask` - we will ask you about this parameter during build
+     * if `yourgame` - we will build server with this game only
+     * if `game1,game2,game3` - we will build server with all these games
+     * if `` - we will build server with all games which we have
   * `set CONTEXT=/codenjoy-contest` changes link to the
     application [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest)
+  * `set PORT=8080` the port on which the application starts
   * `set SPRING_PROFILES=sqlite`
     * `sqlite` for the lightweight database (<50 participants)
     * `postgres` for the postgres database (>50 participants)
@@ -27,7 +33,16 @@ like git repo, branch name where the server will be built from
     * `yourgame` if you added your custom configuration to the game inside `CodingDojo\games\yourgame\src\main\resources\application-yourgame.yml`
   * `set DEBUG=false` if you want to stop running script after each maven build (successful or no)
   * `set GIT_REPO=https://github.com/codenjoyme/codenjoy.git` repo with codenjoy forked from `https://github.com/codenjoyme/codenjoy.git`
-  * `set GIT_REVISION=master` branch name where the server will be built from: master, branch name, commit hash or tag name
+  * `set GIT_REVISION=master` commit where the server will be built from
+    * it can be `master`
+    * it can be `local` - then we dont touch your local changes
+    * it can be a branch name like `snake_with_something`
+    * it can be commit hash like `43bd382`
+    * or tag name like `v1.1.24`
+  * `set REBUILD_SOURCES=ask`
+    * if `ask` - we will ask you about this parameter during build,
+    * if `yes` - we will rebuild sources
+    * if `no` - we'll just run the server with the games that you chose
 - *[Optional]* Run `1-rebuild-server.bat` if you just made a changes on
 sources `\dojo-server\codenjoy`, want to update from git or change game(s) list
 - There are several steps where you should check something and press the

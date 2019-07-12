@@ -10,14 +10,14 @@ mkdir .\.mvn\wrapper
 MVNW=$(pwd)\mvnw
 
 if [ -f ".\engine-$CODENJOY_VERSION-pom.xml" ]; then
-	mkdir .\target
-	cp .\pom.xml .\target\engine-$CODENJOY_VERSION-pom.xml
-	cp .\games-pom.xml .\target\games-$CODENJOY_VERSION-pom.xml
+    mkdir .\target
+    cp .\pom.xml .\target\engine-$CODENJOY_VERSION-pom.xml
+    cp .\games-pom.xml .\target\games-$CODENJOY_VERSION-pom.xml
 elif [ ! -d ".\target" ]; then
-		$MVNW clean install -DskipTests=true
-		cp .\pom.xml .\target\engine-$CODENJOY_VERSION-pom.xml
-		cp ..\pom.xml .\target\games-$CODENJOY_VERSION-pom.xml
-	fi
+        $MVNW clean install -DskipTests=true
+        cp .\pom.xml .\target\engine-$CODENJOY_VERSION-pom.xml
+        cp ..\pom.xml .\target\games-$CODENJOY_VERSION-pom.xml
+    fi
 fi
 
 cd .\target

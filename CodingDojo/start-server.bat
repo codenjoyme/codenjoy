@@ -1,7 +1,5 @@
 set ROOT=%CD%
 
-cd %ROOT%\server
-call %ROOT%\mvnw clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-contest -Djetty.http.port=8081 -DallGames
-rem call %ROOT%\mvnw clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-contest -Djetty.http.port=8080 -Psnake,bomberman,sample
-
+java -jar %ROOT%\server\target\codenjoy-contest.war --MAVEN_OPTS=-Xmx1024m --spring.profiles.active=sqlite,debug --context=/codenjoy-contest --server.port=8080
+ 
 pause >nul

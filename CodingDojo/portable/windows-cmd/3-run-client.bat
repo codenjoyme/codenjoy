@@ -22,19 +22,19 @@ echo [0m
 Set SELECTED_GAME=%ROOT%\client\%GAME_TO_RUN%-servers
 
 if exist %SELECTED_GAME% (
-	cd %SELECTED_GAME%
-	call mvnw clean install -DskipTests=%SKIP_TESTS%
-	call mvnw exec:java -D"exec.mainClass"="com.codenjoy.dojo.%GAME_TO_RUN%.client.YourSolver"
+    cd %SELECTED_GAME%
+    call mvnw clean install -DskipTests=%SKIP_TESTS%
+    call mvnw exec:java -D"exec.mainClass"="com.codenjoy.dojo.%GAME_TO_RUN%.client.YourSolver"
 )
 
 if not exist %SELECTED_GAME% (
-	echo off
-	echo [44;93m
-	echo        +-------------------------------------------------------------------------+        
-	echo        !                 There is no client for this game                        !        
-	echo        +-------------------------------------------------------------------------+        
-	echo [0m
-	echo on	
+    echo off
+    echo [44;93m
+    echo        +-------------------------------------------------------------------------+        
+    echo        !                 There is no client for this game                        !        
+    echo        +-------------------------------------------------------------------------+        
+    echo [0m
+    echo on    
 )
 
 echo Press any key to exit

@@ -8,16 +8,16 @@ mkdir .\.mvn\wrapper
 SET MVNW=%cd%\mvnw
 
 IF NOT EXIST ".\engine-$CODENJOY_VERSION-pom.xml" (
-	mkdir .\target
-	copy .\engine-%CODENJOY_VERSION%-pom.xml .\target\engine-%CODENJOY_VERSION%-pom.xml
-	copy .\games-%CODENJOY_VERSION%-pom.xml .\target\games-%CODENJOY_VERSION%-pom.xml
-	copy .\*.jar .\target\*.jar
+    mkdir .\target
+    copy .\engine-%CODENJOY_VERSION%-pom.xml .\target\engine-%CODENJOY_VERSION%-pom.xml
+    copy .\games-%CODENJOY_VERSION%-pom.xml .\target\games-%CODENJOY_VERSION%-pom.xml
+    copy .\*.jar .\target\*.jar
 ) else (
-	IF NOT EXIST ".\target" (
-		call %MVNW% clean install -DskipTests=true
-		copy .\pom.xml .\target\engine-%CODENJOY_VERSION%-pom.xml
-		copy ..\pom.xml .\target\games-%CODENJOY_VERSION%-pom.xml
-	)
+    IF NOT EXIST ".\target" (
+        call %MVNW% clean install -DskipTests=true
+        copy .\pom.xml .\target\engine-%CODENJOY_VERSION%-pom.xml
+        copy ..\pom.xml .\target\games-%CODENJOY_VERSION%-pom.xml
+    )
 )
 
 cd .\target
