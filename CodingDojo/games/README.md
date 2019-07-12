@@ -46,8 +46,8 @@ You have to install the `engine` dependency located in the `engine` folder.
 Watch out: its version may be updated, so you will have
 to update it and your game's source code. To do this:
 
-- open the 'engine' folder
-- run 'setup.bat'
+- open the `CodingDojo/games/engine` folder
+- run `setup.bat`
 - make sure installation is successful - the dependency should be
 installed under `C:\Users\<UserName>\.m2\repository\com\codenjoy\engine`
 
@@ -55,22 +55,29 @@ Develop a game
 --------------
 
 Invent/recall a game that might interest others, does not involve following complicated rules,
-and people played it in childhood. The game might have the same rules as the original,
+and people played it in childhood.
+
+The game might have the same rules as the original,
 or might provide some variation. For example, you can turn a two-player game, such as the battleship,
 into a multiplayer game. Make sure the gamer will enjoy writing the AI algorithm
 (the challenges should be reasonably tough).
+
 Do not hesitate to [contact us](http://codenjoy.com/portal/?page_id=51)
 If stumped, get in touch and we'll help you.
 
-Then proceed to writing a model of the game you selected.
-The following section contains the required how-to.
+Then proceed to writing a model of the game you selected. The following section contains the required how-to.
+
 Here is an example (in russian) of how a 'reversi'
-model was written: [part1](https://www.youtube.com/watch?v=W17BKHU9H-Y)
-[part2](https://www.youtube.com/watch?v=zrINVp1RFj4)
+model was written: [part1](https://www.youtube.com/watch?v=W17BKHU9H-Y),
+[part2](https://www.youtube.com/watch?v=zrINVp1RFj4),
 [par3](https://www.youtube.com/watch?v=zarRXhfqlfM).
+You can investigate commits with this command
+`git log --oneline 71090be..8a12c53`
+
 Unit testing coverage is expected. It'd be still better to write the code
 following TDD, and if you don't know how
-[watch this video (in Russian)](https://vimeo.com/54862036).
+[watch this video (in russian)](https://vimeo.com/54862036).
+
 And then [email us](mailto:apofig@gmail.com). We'll arrange for code review if necessary.
 And once the model is ready, we'll integrate it to our framework, and
 help your arrange your first Codenjoy event.

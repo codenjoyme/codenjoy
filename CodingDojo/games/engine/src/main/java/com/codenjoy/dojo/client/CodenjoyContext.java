@@ -25,7 +25,7 @@ package com.codenjoy.dojo.client;
 
 public class CodenjoyContext {
 
-    private static String CONTEXT = "codenjoy-context";
+    private static String CONTEXT = "codenjoy-contest";
 
     public static String get() {
         return CONTEXT;

@@ -1,1 +1,0 @@
-mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite,trace clean spring-boot:run -DallGames  # -Dcontext=/another-context # -Psnake,bomberman,sample

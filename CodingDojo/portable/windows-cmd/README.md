@@ -30,7 +30,6 @@ like git repo, branch name where the server will be built from
   * `set GIT_REVISION=master` branch name where the server will be built from: master, branch name, commit hash or tag name
 - *[Optional]* Run `1-rebuild-server.bat` if you just made a changes on
 sources `\dojo-server\codenjoy`, want to update from git or change game(s) list
-- Run `2-start-server.bat` for run server
 - There are several steps where you should check something and press the
 button (it stops only if `00-setup.bat` has `set DEBUG=true`, by default false).
 There should always be
@@ -51,9 +50,16 @@ not:
     [INFO] Finished at: 2019-07-12T17:06:10+03:00
     [INFO] ------------------------------------------------------------------------
 ```
-- Now you can press Ctrl-F5 (for clean browser cache) and register
+- Run `2-start-server.bat` for run server. It will immediately open the
+page in the browser and 404 will be displayed there. Do not worry, give
+the server a start.
+```
+2019-07-12T18:24:37.779 [main] INFO  o.e.jetty.server.AbstractConnector - Started ServerConnector@435a718a{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+2019-07-12T18:24:37.782 [main] INFO  o.s.b.w.e.jetty.JettyWebServer - Jetty started on port(s) 8080 (http/1.1) with context path '/codenjoy-contest'
+2019-07-12T18:24:37.785 [main] INFO  c.c.dojo.CodenjoyContestApplication - Started CodenjoyContestApplication in 39.97 seconds (JVM running for 86.503)
+```
+- After that you can press Ctrl-F5 (for clean browser cache) and register
 [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest)
-
 
 Other materials
 --------------
