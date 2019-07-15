@@ -63,4 +63,7 @@ public interface MapParser {
     List<SpringboardElement> getSpringboardRightDownElements();
 
     List<SpringboardElement> getSpringboardRightUpElements();
+
+    List<SpringboardElement> getSpringboardNoneElements();
+
 }

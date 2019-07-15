@@ -106,6 +106,7 @@ public class MapParserImpl implements MapParser {
         return parseAndConvertElements(Obstacle::new, GameElementType.OBSTACLE);
     }
 
+
     @Override
     public List<SpringboardElement> getSpringboardDarkElements() {
         return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_DARK), SpringboardElementType.SPRINGBOARD_DARK);
@@ -134,6 +135,11 @@ public class MapParserImpl implements MapParser {
     @Override
     public List<SpringboardElement> getSpringboardRightUpElements() {
         return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_RIGHT_UP), SpringboardElementType.SPRINGBOARD_RIGHT_UP);
+    }
+
+    @Override
+    public List<SpringboardElement> getSpringboardNoneElements() {
+        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_NONE), SpringboardElementType.SPRINGBOARD_NONE);
     }
 
     private <T> List<T> parseAndConvertElements(Function<Point, T> elementConstructor, CharElements... elements) {

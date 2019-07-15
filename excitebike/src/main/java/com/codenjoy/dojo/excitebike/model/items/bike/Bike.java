@@ -33,22 +33,8 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Objects;
 
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_ACCELERATOR;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_DOWNED_BIKE;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_INHIBITOR;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LINE_CHANGER_DOWN;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LINE_CHANGER_UP;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_ACCELERATOR;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_BORDER;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_INHIBITOR;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_DOWN;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_UP;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_OBSTACLE;
-import static com.codenjoy.dojo.services.Direction.DOWN;
-import static com.codenjoy.dojo.services.Direction.RIGHT;
-import static com.codenjoy.dojo.services.Direction.UP;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.*;
+import static com.codenjoy.dojo.services.Direction.*;
 
 public class Bike extends PlayerHero<GameField> implements State<BikeType, Player>, Shiftable {
 
@@ -67,7 +53,9 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     private boolean accelerated;
     private boolean inhibited;
     private boolean interacted;
+    private boolean atSpringboard;
     private boolean adjusted;
+    private boolean commandLock;
 
     public Bike(Point xy) {
         super(xy);
@@ -129,6 +117,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     private void executeCommand() {
         interacted = false;
         if (command != null) {
+            if (commandLock) {
+                command = null;
+                return;
+            }
             x = command.changeX(x);
             y = command.changeY(y);
             interactWithOtherBike();
@@ -164,6 +156,26 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             accelerated = false;
             adjustStateToElement();
         }
+
+        if (type == BIKE_AT_SPRINGBOARD_DARK
+                || type == BIKE_AT_SPRINGBOARD_LEFT_DOWN) {
+            commandLock = true;
+            y++;
+            type = atNothingType();
+            return;
+        }
+
+        if (type == BIKE_AT_SPRINGBOARD_LIGHT
+                || type == BIKE_AT_SPRINGBOARD_RIGHT_DOWN) {
+            commandLock = true;
+            type = atNothingType();
+        }
+
+        if (type == BIKE_IN_FLIGHT_FROM_SPRINGBOARD) {
+            commandLock = true;
+            movement.setDown();
+        }
+
     }
 
     private BikeType atNothingType() {
@@ -259,6 +271,52 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
         adjusted = true;
 
+        if (field.isSpringboardDarkElement(x+1, y)||field.isSpringboardLeftDownElement(x+1, y)) {
+            command = null;
+        }
+
+        if (field.isSpringboardDarkElement(x, y)) {
+            if (y == 1 && !movement.isUp()) {
+                type = BIKE_IN_FLIGHT_FROM_SPRINGBOARD;
+                atSpringboard = false;
+            } else {
+                type = BIKE_AT_SPRINGBOARD_DARK;
+                atSpringboard = true;
+            }
+            return;
+        }
+
+
+        if (field.isSpringboardLightElement(x + 1, y - 1)) {
+            commandLock = true;
+            return;
+        }
+
+        if (field.isSpringboardLightElement(x, y - 1)) {
+            type = BIKE_AT_SPRINGBOARD_LIGHT;
+            atSpringboard = false;
+            y--;
+            return;
+        }
+
+        if (field.isSpringboardLeftDownElement(x, y)) {
+            type = BIKE_AT_SPRINGBOARD_LEFT_DOWN;
+            atSpringboard = true;
+            return;
+        }
+
+        if (field.isSpringboardRightDownElement(x + 1, y - 1)) {
+            commandLock = true;
+            return;
+        }
+
+        if (field.isSpringboardRightDownElement(x, y - 1)) {
+            type = BIKE_AT_SPRINGBOARD_RIGHT_DOWN;
+            atSpringboard = false;
+            y--;
+            return;
+        }
+
         if (field.isAccelerator(x, y)) {
             changeStateToAt(AT_ACCELERATOR_SUFFIX);
             accelerated = true;
@@ -304,14 +362,21 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             return;
         }
 
-        if (field.isBorder(x, y)) {
+        if (field.isBorder(x, y) && !atSpringboard) {
             type = BIKE_FALLEN_AT_BORDER;
+            return;
+        }
+
+        if (atSpringboard && y >= field.size()) {
+            crush();
             return;
         }
 
         if (!field.getEnemyBike(x, y, field.getPlayerOfBike(this)).isPresent()) {
             type = atNothingType();
         }
+
+        commandLock = false;
     }
 
     private void changeStateToAt(String atSuffix) {

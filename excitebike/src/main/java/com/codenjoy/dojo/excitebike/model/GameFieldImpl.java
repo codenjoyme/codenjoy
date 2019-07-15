@@ -23,14 +23,10 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.excitebike.model.items.Accelerator;
-import com.codenjoy.dojo.excitebike.model.items.Border;
-import com.codenjoy.dojo.excitebike.model.items.GameElementType;
-import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
-import com.codenjoy.dojo.excitebike.model.items.LineChanger;
-import com.codenjoy.dojo.excitebike.model.items.Obstacle;
-import com.codenjoy.dojo.excitebike.model.items.Shiftable;
+import com.codenjoy.dojo.excitebike.model.items.*;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
+import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardGenerator;
 import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
@@ -40,22 +36,11 @@ import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.ACCELERATOR;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.INHIBITOR;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_DOWN;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_UP;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.*;
 import static com.codenjoy.dojo.excitebike.model.items.bike.Bike.OTHER_BIKE_PREFIX;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -70,7 +55,10 @@ public class GameFieldImpl implements GameField {
     private MapParser mapParser;
     private Map<CharElements, List<Shiftable>> allShiftableElements = new HashMap<>();
     private List<Player> players = new LinkedList<>();
+
     private List<Border> borders;
+
+    private int generationLock;
 
     public GameFieldImpl(MapParser mapParser, Dice dice) {
         this.dice = dice;
@@ -84,6 +72,15 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(LINE_CHANGER_UP, new ArrayList<>(mapParser.getLineUpChangers()));
         allShiftableElements.put(LINE_CHANGER_DOWN, new ArrayList<>(mapParser.getLineDownChangers()));
         allShiftableElements.put(BIKE_FALLEN, new ArrayList<>(mapParser.getFallenBikes()));
+
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LEFT_UP, new ArrayList<>(mapParser.getSpringboardLeftUpElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LIGHT, new ArrayList<>(mapParser.getSpringboardLightElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LEFT_DOWN, new ArrayList<>(mapParser.getSpringboardLeftDownElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_UP, new ArrayList<>(mapParser.getSpringboardRightUpElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_DARK, new ArrayList<>(mapParser.getSpringboardDarkElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN, new ArrayList<>(mapParser.getSpringboardRightDownElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_NONE, new ArrayList<>(mapParser.getSpringboardNoneElements()));
+
     }
 
     /**
@@ -142,6 +139,26 @@ public class GameFieldImpl implements GameField {
     @Override
     public boolean isDownLineChanger(int x, int y) {
         return allShiftableElements.get(LINE_CHANGER_DOWN).contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isSpringboardDarkElement(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_DARK).contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isSpringboardLightElement(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LIGHT).contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isSpringboardLeftDownElement(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT_DOWN).contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isSpringboardRightDownElement(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(pt(x, y));
     }
 
     @Override
@@ -277,33 +294,53 @@ public class GameFieldImpl implements GameField {
     }
 
     private void generateNewTrackStep(final int laneNumber, final int firstPossibleX) {
+        if (generationLock > 0) {
+            generationLock--;
+            return;
+        }
+
         boolean needGenerate = dice.next(10) < 5;
         if (needGenerate) {
-            int rndNonBorderElementOrdinal = dice.next(GameElementType.values().length - 2) + 2;
-            int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
+            SpringboardGenerator generator = new SpringboardGenerator(firstPossibleX, mapParser.getYSize(), dice);
+            boolean isSpringboardGenerated = generator.generate();
+            if (isSpringboardGenerated) {
+                generationLock = generator.size();
 
-            GameElementType randomType = GameElementType.values()[rndNonBorderElementOrdinal];
-            List<Shiftable> elements = allShiftableElements.get(randomType);
-            Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
-            elements.add(newElement);
+                generator.getElements()
+                        .forEach((key, elements) -> allShiftableElements.merge(key, elements, (currentElements, newElements) -> {
+                                    currentElements.addAll(newElements);
+                                    return currentElements;
+                                }
+                        ));
+            } else {
+                generateElement(firstPossibleX, laneNumber);
+            }
         }
     }
 
-    private Shiftable getNewElement(GameElementType randomType, int x, int y) {
-        switch (randomType) {
-            case ACCELERATOR:
-                return new Accelerator(x, y);
-            case INHIBITOR:
-                return new Inhibitor(x, y);
-            case OBSTACLE:
-                return new Obstacle(x, y);
-            case LINE_CHANGER_UP:
-                return new LineChanger(x, y, true);
-            case LINE_CHANGER_DOWN:
-                return new LineChanger(x, y, false);
-            default:
-                throw new IllegalArgumentException("No such element for " + randomType);
+    private void generateElement(final int firstPossibleX, final int laneNumber) {
+        int rndNonBorderElementOrdinal = dice.next(values().length - 2) + 2;
+        int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
+
+        CharElements randomType = GameElementType.values()[rndNonBorderElementOrdinal];
+        List<Shiftable> elements = allShiftableElements.get(randomType);
+        Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
+        elements.add(newElement);
+    }
+
+    private Shiftable getNewElement(CharElements randomType, int x, int y) {
+        if (ACCELERATOR.equals(randomType)) {
+            return new Accelerator(x, y);
+        } else if (INHIBITOR.equals(randomType)) {
+            return new Inhibitor(x, y);
+        } else if (OBSTACLE.equals(randomType)) {
+            return new Obstacle(x, y);
+        } else if (LINE_CHANGER_UP.equals(randomType)) {
+            return new LineChanger(x, y, true);
+        } else if (LINE_CHANGER_DOWN.equals(randomType)) {
+            return new LineChanger(x, y, false);
         }
+        throw new IllegalArgumentException("No such element for " + randomType);
     }
 
     @Override

@@ -26,6 +26,7 @@ import com.codenjoy.dojo.services.printer.CharElements;
 
 public enum SpringboardElementType implements CharElements {
 
+    SPRINGBOARD_NONE('^'),
     SPRINGBOARD_DARK('/'),
     SPRINGBOARD_LIGHT('\\'),
     SPRINGBOARD_LEFT_DOWN('╚'),     //200
@@ -57,4 +58,5 @@ public enum SpringboardElementType implements CharElements {
     public String toString() {
         return String.valueOf(ch);
     }
+
 }

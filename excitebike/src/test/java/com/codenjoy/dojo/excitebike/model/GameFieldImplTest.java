@@ -265,7 +265,7 @@ public class GameFieldImplTest {
 
         gameField = new GameFieldImpl(mapParser, dice);
         when(mapParser.getXSize()).thenReturn(xSize);
-        when(dice.next(anyInt())).thenReturn(generateChance, nonBorderElementOrdinal, nonBorderLaneNumber);
+        when(dice.next(anyInt())).thenReturn(generateChance,5, nonBorderElementOrdinal, nonBorderLaneNumber);
 
         //when
         gameField.tick();
