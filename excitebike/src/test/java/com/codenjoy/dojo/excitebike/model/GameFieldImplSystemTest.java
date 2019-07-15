@@ -2150,4 +2150,148 @@ public class GameFieldImplSystemTest {
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
+
+    @Test
+    public void twoAcceleratorsAndLineChangerUpTick1__shouldChangeBikeStateToAccelerated() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B>>▲ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "A>▲  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoAcceleratorsAndLineChangerUpTick2__shouldChangeBikeStateToAtLineChangerUp() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B>>▲ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                ">U   " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoAcceleratorsAndLineChangerUpTick3__shouldMoveBikeUpAndRightAndChangeStateToNormal() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B>>▲ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "  B  " +
+                "▲    " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoAcceleratorsAndLineChangerDownTick1__shouldChangeBikeStateToAccelerated() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B>>▼ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "A>▼  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoAcceleratorsAndLineChangerDownTick2__shouldChangeBikeStateToAtLineChangerDown() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B>>▼ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                ">D   " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void twoAcceleratorsAndLineChangerDownTick3__shouldMoveBikeDownAndRightAndChangeStateToNormal() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "B>>▼ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                "▼    " +
+                "  B  " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
 }
