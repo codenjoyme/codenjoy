@@ -130,21 +130,12 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     }
 
     private void actAccordingToState() {
-        if (type == BIKE_AT_ACCELERATOR || accelerated) {
-            movement.setRight();
-            type = atNothingType();
-            accelerated = false;
-            adjustStateToElement();
-            return;
-        }
-
         if (type == BIKE_AT_INHIBITOR) {
             if (!inhibited) {
                 movement.setLeft();
                 inhibited = true;
             }
             type = atNothingType();
-            return;
         } else {
             inhibited = false;
         }
@@ -152,13 +143,19 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (type == BIKE_AT_LINE_CHANGER_UP) {
             movement.setUp();
             type = atNothingType();
-            return;
         }
 
         if (type == BIKE_AT_LINE_CHANGER_DOWN) {
             movement.setDown();
             type = atNothingType();
             return;
+        }
+
+        if (type == BIKE_AT_ACCELERATOR || accelerated) {
+            movement.setRight();
+            type = atNothingType();
+            accelerated = false;
+            adjustStateToElement();
         }
 
         if (type == BIKE_AT_SPRINGBOARD_DARK
@@ -179,6 +176,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             commandLock = true;
             movement.setDown();
         }
+
     }
 
     private BikeType atNothingType() {
@@ -317,12 +315,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
 
         if (field.isAccelerator(x, y)) {
-            if (type.name().contains(BIKE_AT_PREFIX)) {
-                String substringBikeAtSomething = type.name().substring(type.name().indexOf(BIKE_AT_PREFIX) - 1);
-                type = BikeType.valueOf(type.name().replace(substringBikeAtSomething, AT_ACCELERATOR_SUFFIX));
-            } else {
-                type = BikeType.valueOf(type.name() + AT_ACCELERATOR_SUFFIX);
-            }
+            changeStateToAt(AT_ACCELERATOR_SUFFIX);
             accelerated = true;
             return;
         }
@@ -330,11 +323,8 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (field.isInhibitor(x, y)) {
             if (type.name().contains(AT_ACCELERATOR_SUFFIX)) {
                 type = BikeType.valueOf(type.name().replace(AT_ACCELERATOR_SUFFIX, ""));
-            } else if (type.name().contains(BIKE_AT_PREFIX)) {
-                String substringBikeAtSomething = type.name().substring(type.name().indexOf(BIKE_AT_PREFIX) - 1);
-                type = BikeType.valueOf(type.name().replace(substringBikeAtSomething, AT_INHIBITOR_SUFFIX));
             } else {
-                type = BikeType.valueOf(type.name() + AT_INHIBITOR_SUFFIX);
+                changeStateToAt(AT_INHIBITOR_SUFFIX);
             }
             if (movement.isRight()) {
                 movement.setLeft();
@@ -355,11 +345,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             if (movement.isRight()) {
                 movement.setUp();
             } else {
-                if (type == BIKE_AT_DOWNED_BIKE) {
-                    type = BIKE_AT_LINE_CHANGER_UP;
-                } else if (!type.name().contains(AT_LINE_CHANGER_UP_SUFFIX)) {
-                    type = BikeType.valueOf(type.name() + AT_LINE_CHANGER_UP_SUFFIX);
-                }
+                changeStateToAt(AT_LINE_CHANGER_UP_SUFFIX);
             }
             return;
         }
@@ -368,11 +354,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             if (movement.isRight()) {
                 movement.setDown();
             } else {
-                if (type == BIKE_AT_DOWNED_BIKE) {
-                    type = BIKE_AT_LINE_CHANGER_DOWN;
-                } else if (!type.name().contains(AT_LINE_CHANGER_DOWN_SUFFIX)) {
-                    type = BikeType.valueOf(type.name() + AT_LINE_CHANGER_DOWN_SUFFIX);
-                }
+                changeStateToAt(AT_LINE_CHANGER_DOWN_SUFFIX);
             }
             return;
         }
@@ -392,6 +374,15 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
 
         commandLock = false;
+    }
+
+    private void changeStateToAt(String atSuffix) {
+        if (type.name().contains(BIKE_AT_PREFIX)) {
+            String substringBikeAtSomething = type.name().substring(type.name().indexOf(BIKE_AT_PREFIX) - 1);
+            type = BikeType.valueOf(type.name().replace(substringBikeAtSomething, atSuffix));
+        } else {
+            type = BikeType.valueOf(type.name() + atSuffix);
+        }
     }
 
     @Override
