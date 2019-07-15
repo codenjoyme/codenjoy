@@ -159,6 +159,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
         if (type == BIKE_AT_SPRINGBOARD_DARK
                 || type == BIKE_AT_SPRINGBOARD_LEFT_DOWN) {
+            commandLock = true;
             y++;
             type = atNothingType();
             return;
