@@ -148,7 +148,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (type == BIKE_AT_LINE_CHANGER_DOWN) {
             movement.setDown();
             type = atNothingType();
-            return;
         }
 
         if (type == BIKE_AT_ACCELERATOR || accelerated) {
@@ -160,8 +159,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
 
         if (type == BIKE_AT_SPRINGBOARD_DARK
                 || type == BIKE_AT_SPRINGBOARD_LEFT_DOWN) {
-            commandLock = true;
-            movement.setUp();
+            y++;
             type = atNothingType();
             return;
         }
@@ -271,6 +269,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             return;
         }
         adjusted = true;
+
+        if (field.isSpringboardDarkElement(x+1, y)||field.isSpringboardLeftDownElement(x+1, y)) {
+            command = null;
+        }
 
         if (field.isSpringboardDarkElement(x, y)) {
             if (y == 1 && !movement.isUp()) {
