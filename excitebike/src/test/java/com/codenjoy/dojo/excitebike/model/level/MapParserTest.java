@@ -55,20 +55,20 @@ public class MapParserTest {
     @Parameterized.Parameters(name = "{0}")
     public static Collection data() {
         return Lists.newArrayList(
-                GameElementType.BORDER,
+                GameElementType.FENCE,
                 GameElementType.ACCELERATOR,
                 GameElementType.INHIBITOR,
                 GameElementType.OBSTACLE,
                 GameElementType.LINE_CHANGER_UP,
                 GameElementType.LINE_CHANGER_DOWN,
                 BikeType.BIKE_FALLEN,
-                SpringboardElementType.SPRINGBOARD_DARK,
-                SpringboardElementType.SPRINGBOARD_LIGHT,
+                SpringboardElementType.SPRINGBOARD_LEFT,
+                SpringboardElementType.SPRINGBOARD_RIGHT,
                 SpringboardElementType.SPRINGBOARD_LEFT_DOWN,
                 SpringboardElementType.SPRINGBOARD_RIGHT_DOWN,
                 SpringboardElementType.SPRINGBOARD_LEFT_UP,
                 SpringboardElementType.SPRINGBOARD_LEFT_DOWN,
-                SpringboardElementType.SPRINGBOARD_NONE
+                SpringboardElementType.SPRINGBOARD_TOP
         );
     }
 
@@ -204,8 +204,8 @@ public class MapParserTest {
     }
 
     private <T extends PointImpl> List<T> callTestMethod(MapParserImpl mapParser) {
-        if (element == GameElementType.BORDER) {
-            return (List<T>) mapParser.getBorders();
+        if (element == GameElementType.FENCE) {
+            return (List<T>) mapParser.getFences();
         } else if (element == GameElementType.ACCELERATOR) {
             return (List<T>) mapParser.getAccelerators();
         } else if (element == GameElementType.INHIBITOR) {
@@ -218,9 +218,9 @@ public class MapParserTest {
             return (List<T>) mapParser.getLineDownChangers();
         } else if (element == BikeType.BIKE_FALLEN) {
             return (List<T>) mapParser.getFallenBikes();
-        }else if (element == SpringboardElementType.SPRINGBOARD_DARK) {
+        }else if (element == SpringboardElementType.SPRINGBOARD_LEFT) {
             return (List<T>) mapParser.getSpringboardDarkElements();
-        }else if (element == SpringboardElementType.SPRINGBOARD_LIGHT) {
+        }else if (element == SpringboardElementType.SPRINGBOARD_RIGHT) {
             return (List<T>) mapParser.getSpringboardLightElements();
         }else if (element == SpringboardElementType.SPRINGBOARD_LEFT_DOWN) {
             return (List<T>) mapParser.getSpringboardLeftDownElements();
@@ -230,7 +230,7 @@ public class MapParserTest {
             return (List<T>) mapParser.getSpringboardRightDownElements();
         }else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_UP) {
             return (List<T>) mapParser.getSpringboardRightUpElements();
-        }else if (element == SpringboardElementType.SPRINGBOARD_NONE) {
+        }else if (element == SpringboardElementType.SPRINGBOARD_TOP) {
             return (List<T>) mapParser.getSpringboardNoneElements();
         }
         return null;

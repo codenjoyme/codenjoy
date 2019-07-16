@@ -39,13 +39,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.excitebike.model.items.GameElementType.ACCELERATOR;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.BORDER;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.FENCE;
 import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_DOWN;
 import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_UP;
 import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LINE_CHANGER_DOWN;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LINE_CHANGER_UP;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_DOWNED_BIKE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_KILLED_BIKE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_INHIBITOR;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_LINE_CHANGER_DOWN;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_LINE_CHANGER_UP;
@@ -106,12 +106,12 @@ public class AISolver implements Solver<Board> {
         if (toCheck == null) {
             return null;
         }
-        if (board.checkNearMe(Lists.newArrayList(toCheck, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+        if (board.checkNearMe(Lists.newArrayList(toCheck, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))
                 || board.checkNearMe(Lists.newArrayList(toCheck, RIGHT), OTHER_BIKE_AT_INHIBITOR)
                 || board.checkNearMe(Lists.newArrayList(toCheck, RIGHT), ACCELERATOR)
                 && board.checkNearMe(Lists.newArrayList(toCheck, RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OBSTACLE))) {
-            if (board.checkNearMe(RIGHT, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))) {
-                if (!board.checkNearMe(Lists.newArrayList(toCheck, toCheck, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))) {
+            if (board.checkNearMe(RIGHT, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))) {
+                if (!board.checkNearMe(Lists.newArrayList(toCheck, toCheck, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))) {
                     return toCheck;
                 }
             } else {
@@ -180,21 +180,21 @@ public class AISolver implements Solver<Board> {
         Direction command = null;
         if (!board.checkAtMe(BIKE_AT_LINE_CHANGER_DOWN, BIKE_AT_LINE_CHANGER_UP) &&
                 (board.checkNearMe(RIGHT, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX, OBSTACLE))
-                        || board.checkNearMe(RIGHT, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE))
+                        || board.checkNearMe(RIGHT, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE))
                         || board.checkNearMe(RIGHT, LINE_CHANGER_DOWN)
-                        && board.checkNearMe(Lists.newArrayList(UP, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+                        && board.checkNearMe(Lists.newArrayList(UP, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))
                         || board.checkNearMe(RIGHT, LINE_CHANGER_UP)
-                        && board.checkNearMe(Lists.newArrayList(DOWN, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+                        && board.checkNearMe(Lists.newArrayList(DOWN, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))
                         || board.checkNearMe(RIGHT, ACCELERATOR)
-                        && (board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE))
+                        && (board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE))
                         || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
                         || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), LINE_CHANGER_DOWN)
-                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))
                         || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), LINE_CHANGER_UP)
-                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER)))
-                        || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE))
-                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
-                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, OBSTACLE, BORDER))
+                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE)))
+                        || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE))
+                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))
+                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))
                 )) {
             if (isVerticalDirectionClear(board, UP) && !isVerticalDirectionClear(board, DOWN)) {
                 command = UP;
@@ -209,7 +209,7 @@ public class AISolver implements Solver<Board> {
     }
 
     private boolean isVerticalDirectionClear(Board board, Direction toCheck) {
-        CharElements[] elementsToCheck = getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_DOWNED_BIKE, BORDER, OBSTACLE);
+        CharElements[] elementsToCheck = getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, FENCE, OBSTACLE);
         return !board.checkNearMe(toCheck, elementsToCheck) && !board.checkNearMe(toCheck, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
                 && !board.checkNearMe(Lists.newArrayList(toCheck, RIGHT), elementsToCheck);
     }

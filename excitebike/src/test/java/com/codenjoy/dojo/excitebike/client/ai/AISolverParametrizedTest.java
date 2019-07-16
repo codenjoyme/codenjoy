@@ -68,7 +68,7 @@ public class AISolverParametrizedTest {
                         "■■■■■",
                         STOP},
 
-                new Object[]{"2. avoid obstacle - choose not border above",
+                new Object[]{"2. avoid obstacle - choose not fence above",
                         "■■■■■" +
                         "   ■ " +
                         "  B| " +
@@ -76,11 +76,11 @@ public class AISolverParametrizedTest {
                         "■■■■■",
                         DOWN},
 
-                new Object[]{"3. avoid obstacle - choose enemy bike below, not border above",
+                new Object[]{"3. avoid obstacle - choose enemy bike below, not fence above",
                         "■■■■■" +
                         "   ■ " +
                         "  B| " +
-                        "   E " +
+                        "   Ḃ " +
                         "■■■■■",
                         DOWN},
 
@@ -88,11 +88,11 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "   ■ " +
                         "  B| " +
-                        "   e " +
+                        "   ḃ " +
                         "■■■■■",
                         null},
 
-                new Object[]{"5. avoid obstacle - choose not border below",
+                new Object[]{"5. avoid obstacle - choose not fence below",
                         "■■■■■" +
                         "     " +
                         "  B| " +
@@ -100,9 +100,9 @@ public class AISolverParametrizedTest {
                         "■■■■■",
                         UP},
 
-                new Object[]{"6. avoid obstacle - choose enemy bike above, not border below",
+                new Object[]{"6. avoid obstacle - choose enemy bike above, not fence below",
                         "■■■■■" +
-                        "   E " +
+                        "   Ḃ " +
                         "  B| " +
                         "   ■ " +
                         "■■■■■",
@@ -110,7 +110,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"7. no way to survive - no action",
                         "■■■■■" +
-                        "   e " +
+                        "   ḃ " +
                         "  B| " +
                         "   ■ " +
                         "■■■■■",
@@ -119,55 +119,55 @@ public class AISolverParametrizedTest {
                 new Object[]{"8. avoid other bike - random choice",
                         "■■■■■" +
                         "     " +
-                        "  BE " +
+                        "  BḂ " +
                         "     " +
                         "■■■■■",
                         STOP},
 
-                new Object[]{"9. avoid other bike - choose not border above",
+                new Object[]{"9. avoid other bike - choose not fence above",
                         "■■■■■" +
                         "   ■ " +
-                        "  BE " +
+                        "  BḂ " +
                         "     " +
                         "■■■■■",
                         DOWN},
 
-                new Object[]{"10. avoid other bike - choose enemy bike below, not border above",
+                new Object[]{"10. avoid other bike - choose enemy bike below, not fence above",
                         "■■■■■" +
                         "   ■ " +
-                        "  BE " +
-                        "   E " +
+                        "  BḂ " +
+                        "   Ḃ " +
                         "■■■■■",
                         DOWN},
 
                 new Object[]{"11. no way to avoid other bike - no action",
                         "■■■■■" +
                         "   ■ " +
-                        "  BE " +
-                        "   e " +
+                        "  BḂ " +
+                        "   ḃ " +
                         "■■■■■",
                         null},
 
-                new Object[]{"12. avoid other bike - choose not border below",
+                new Object[]{"12. avoid other bike - choose not fence below",
                         "■■■■■" +
                         "     " +
-                        "  BE " +
+                        "  BḂ " +
                         "   ■ " +
                         "■■■■■",
                         UP},
 
-                new Object[]{"13. avoid other bike - choose enemy bike above, not border below",
+                new Object[]{"13. avoid other bike - choose enemy bike above, not fence below",
                         "■■■■■" +
-                        "   E " +
-                        "  BE " +
+                        "   Ḃ " +
+                        "  BḂ " +
                         "   ■ " +
                         "■■■■■",
                         UP},
 
                 new Object[]{"14. no way to avoid other bike  - no action",
                         "■■■■■" +
-                        "   e " +
-                        "  BE " +
+                        "   ḃ " +
+                        "  BḂ " +
                         "   ■ " +
                         "■■■■■",
                         null},
@@ -175,55 +175,55 @@ public class AISolverParametrizedTest {
                 new Object[]{"15. avoid fallen bike - random choice",
                         "■■■■■" +
                         "     " +
-                        "  Be " +
+                        "  Bḃ " +
                         "     " +
                         "■■■■■",
                         STOP},
 
-                new Object[]{"16. avoid fallen bike - choose not border above",
+                new Object[]{"16. avoid fallen bike - choose not fence above",
                         "■■■■■" +
                         "   ■ " +
-                        "  Be " +
+                        "  Bḃ " +
                         "     " +
                         "■■■■■",
                         DOWN},
 
-                new Object[]{"17. avoid fallen bike - choose enemy bike below, not border above",
+                new Object[]{"17. avoid fallen bike - choose enemy bike below, not fence above",
                         "■■■■■" +
                         "   ■ " +
-                        "  Be " +
-                        "   E " +
+                        "  Bḃ " +
+                        "   Ḃ " +
                         "■■■■■",
                         DOWN},
 
                 new Object[]{"18. no way to avoid fallen bike - no action",
                         "■■■■■" +
                         "   ■ " +
-                        "  Be " +
-                        "   e " +
+                        "  Bḃ " +
+                        "   ḃ " +
                         "■■■■■",
                         null},
 
-                new Object[]{"19. avoid fallen bike - choose not border below",
+                new Object[]{"19. avoid fallen bike - choose not fence below",
                         "■■■■■" +
                         "     " +
-                        "  Be " +
+                        "  Bḃ " +
                         "   ■ " +
                         "■■■■■",
                         UP},
 
-                new Object[]{"20. avoid fallen bike - choose enemy bike above, not border below",
+                new Object[]{"20. avoid fallen bike - choose enemy bike above, not fence below",
                         "■■■■■" +
-                        "   E " +
-                        "  Be " +
+                        "   Ḃ " +
+                        "  Bḃ " +
                         "   ■ " +
                         "■■■■■",
                         UP},
 
                 new Object[]{"21. no way to avoid other bike - no action",
                         "■■■■■" +
-                        "   e " +
-                        "  Be " +
+                        "   ḃ " +
+                        "  Bḃ " +
                         "   ■ " +
                         "■■■■■",
                         null},
@@ -232,13 +232,13 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  E  " +
+                        "  Ḃ  " +
                         "■■■■■",
                         DOWN},
 
                 new Object[]{"23. hit the bike above",
                         "■■■■■" +
-                        "  E  " +
+                        "  Ḃ  " +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -248,7 +248,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  E| " +
+                        "  Ḃ| " +
                         "■■■■■",
                         null},
 
@@ -256,7 +256,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  Ep " +
+                        "  Ḃā " +
                         "■■■■■",
                         null},
 
@@ -264,7 +264,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  Eq " +
+                        "  Ḃī " +
                         "■■■■■",
                         null},
 
@@ -272,7 +272,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  Es " +
+                        "  Ḃū " +
                         "■■■■■",
                         null},
 
@@ -280,7 +280,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  Es " +
+                        "  Ḃū " +
                         "■■■■■",
                         null},
 
@@ -288,7 +288,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  Et " +
+                        "  Ḃď " +
                         "■■■■■",
                         null},
 
@@ -296,7 +296,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  Ev " +
+                        "  Ḃō " +
                         "■■■■■",
                         null},
 
@@ -304,7 +304,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  E>|" +
+                        "  Ḃ>|" +
                         "■■■■■",
                         null},
 
@@ -312,7 +312,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  E>E" +
+                        "  Ḃ>Ḃ" +
                         "■■■■■",
                         null},
 
@@ -320,7 +320,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  E>e" +
+                        "  Ḃ>ḃ" +
                         "■■■■■",
                         null},
 
@@ -328,13 +328,13 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  EQ " +
+                        "  ḂĪ " +
                         "■■■■■",
                         null},
 
                 new Object[]{"35. don't hit the bike above if there is obstacle after it",
                         "■■■■■" +
-                        "  E| " +
+                        "  Ḃ| " +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -342,7 +342,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"36. don't hit the bike above if there is another fallen bike at accelerator after it",
                         "■■■■■" +
-                        "  Ep " +
+                        "  Ḃā " +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -350,7 +350,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"37. don't hit the bike above if there is another fallen bike at inhibitor after it",
                         "■■■■■" +
-                        "  Eq " +
+                        "  Ḃī " +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -358,7 +358,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"38. don't hit the bike above if there is another fallen bike at line changer up after it",
                         "■■■■■" +
-                        "  Es " +
+                        "  Ḃū " +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -366,7 +366,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"39. don't hit the bike above if there is another fallen bike at line changer up after it",
                         "■■■■■" +
-                        "  Es " +
+                        "  Ḃū " +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -374,7 +374,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"40. don't hit the bike above if there is another fallen bike at line changer down after it",
                         "■■■■■" +
-                        "  Et " +
+                        "  Ḃď " +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -382,7 +382,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"41. don't hit the bike above if there is another fallen bike at obstacle after it",
                         "■■■■■" +
-                        "  Ev " +
+                        "  Ḃō " +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -390,7 +390,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"42. don't hit the bike above if there is an accelerator and obstacle after it",
                         "■■■■■" +
-                        "  E>|" +
+                        "  Ḃ>|" +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -398,7 +398,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"43. don't hit the bike above if there is an accelerator and another bike after it",
                         "■■■■■" +
-                        "  E>E" +
+                        "  Ḃ>Ḃ" +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -406,7 +406,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"44. don't hit the bike above if there is an accelerator and fallen bike after it",
                         "■■■■■" +
-                        "  E>e" +
+                        "  Ḃ>ḃ" +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -414,13 +414,13 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"45. don't hit the bike above if there is bike at inhibitor after it",
                         "■■■■■" +
-                        "  EQ " +
+                        "  ḂĪ " +
                         "  B  " +
                         "     " +
                         "■■■■■",
                         null},
 
-                new Object[]{"46. neutralize line changer up if there is border above and nothing in front",
+                new Object[]{"46. neutralize line changer up if there is fence above and nothing in front",
                         "■■■■■" +
                         "  U  " +
                         "     " +
@@ -438,7 +438,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"48. neutralize line changer up if there is fallen bike above in front and nothing in front",
                         "■■■■■" +
-                        "   e " +
+                        "   ḃ " +
                         "  U  " +
                         "     " +
                         "■■■■■",
@@ -446,7 +446,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"49. neutralize line changer up if there is another bike at inhibitor above in front and nothing in front",
                         "■■■■■" +
-                        "   Q " +
+                        "   Ī " +
                         "  U  " +
                         "     " +
                         "■■■■■",
@@ -462,7 +462,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"51. neutralize line changer up if there is accelerator and fallen bike after it above in front and nothing in front",
                         "■■■■■" +
-                        "   >e" +
+                        "   >ḃ" +
                         "  U  " +
                         "     " +
                         "■■■■■",
@@ -472,11 +472,11 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "   | " +
-                        "  UE " +
+                        "  UḂ " +
                         "■■■■■",
                         DOWN},
 
-                new Object[]{"53. neutralize line changer down if there is border below and nothing in front",
+                new Object[]{"53. neutralize line changer down if there is fence below and nothing in front",
                         "■■■■■" +
                         "     " +
                         "     " +
@@ -496,7 +496,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  D  " +
-                        "   e " +
+                        "   ḃ " +
                         "■■■■■",
                         UP},
 
@@ -504,7 +504,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  D  " +
-                        "   Q " +
+                        "   Ī " +
                         "■■■■■",
                         UP},
 
@@ -520,13 +520,13 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  D  " +
-                        "   >e" +
+                        "   >ḃ" +
                         "■■■■■",
                         UP},
 
                 new Object[]{"59. neutralize line changer down if there is other bike in front and fallen bike above in front and nothing above it",
                         "■■■■■" +
-                        "  DE " +
+                        "  DḂ " +
                         "   | " +
                         "     " +
                         "■■■■■",
@@ -559,15 +559,15 @@ public class AISolverParametrizedTest {
                 new Object[]{"63. force line changer up if there is fallen bike in front and another fallen bike above in front and nothing above it",
                         "■■■■■" +
                         "     " +
-                        "   e " +
-                        "  Ue " +
+                        "   ḃ " +
+                        "  Uḃ " +
                         "■■■■■",
                         UP},
 
                 new Object[]{"64. force line changer up if there is obstacle in front and fallen bike above in front and nothing above it",
                         "■■■■■" +
                         "     " +
-                        "   e " +
+                        "   ḃ " +
                         "  U| " +
                         "■■■■■",
                         UP},
@@ -576,14 +576,14 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "   | " +
-                        "  Ue " +
+                        "  Uḃ " +
                         "■■■■■",
                         UP},
 
                 new Object[]{"66. force line changer up if there is obstacle in front and another bike at inhibitor above in front and nothing above it",
                         "■■■■■" +
                         "     " +
-                        "   Q " +
+                        "   Ī " +
                         "  U| " +
                         "■■■■■",
                         UP},
@@ -599,7 +599,7 @@ public class AISolverParametrizedTest {
                 new Object[]{"68. force line changer up if there is obstacle in front, accelerator and fallen bike after it above it in front and nothing above it",
                         "■■■■■" +
                         "     " +
-                        "   >e" +
+                        "   >ḃ" +
                         "  U| " +
                         "■■■■■",
                         UP},
@@ -614,16 +614,16 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"70. force line changer down if there is fallen bike in front and below in front and nothing below it",
                         "■■■■■" +
-                        "  De " +
-                        "   e " +
+                        "  Dḃ " +
+                        "   ḃ " +
                         "     " +
                         "■■■■■",
                         DOWN},
 
                 new Object[]{"71. force line changer down if there is fallen bike in front and bike at inhibitor below in front and nothing below it",
                         "■■■■■" +
-                        "  De " +
-                        "   Q " +
+                        "  Dḃ " +
+                        "   Ī " +
                         "     " +
                         "■■■■■",
                         DOWN},
@@ -638,15 +638,15 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"73. force line changer down if there is fallen bike in front and accelerator and fallen bike after it below in front and nothing below it",
                         "■■■■■" +
-                        "  De " +
-                        "   >e" +
+                        "  Dḃ " +
+                        "   >ḃ" +
                         "     " +
                         "■■■■■",
                         DOWN},
 
-                new Object[]{"74. do nothing when at line changer up and there is obstacle in front and fallen bike above in front and border above it",
+                new Object[]{"74. do nothing when at line changer up and there is obstacle in front and fallen bike above in front and fence above it",
                         "■■■■■" +
-                        "   e " +
+                        "   ḃ " +
                         "  U| " +
                         "     " +
                         "■■■■■",
@@ -654,16 +654,16 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"75. do nothing when at line changer down and there is fallen bike in front and obstacle below in front and fallen bike at ;ine changer down below it",
                         "■■■■■" +
-                        "  De " +
+                        "  Dḃ " +
                         "   | " +
-                        "   t " +
+                        "   ď " +
                         "■■■■■",
                         null},
 
                 new Object[]{"76. go down if there is another bike at accelerator in front and obstacle above",
                         "■■■■■" +
                         "   | " +
-                        "  BP " +
+                        "  BĀ " +
                         "     " +
                         "■■■■■",
                         DOWN},
@@ -671,7 +671,7 @@ public class AISolverParametrizedTest {
                 new Object[]{"77. go down if there is another bike at inhibitor in front and obstacle above",
                         "■■■■■" +
                         "   | " +
-                        "  BQ " +
+                        "  BĪ " +
                         "     " +
                         "■■■■■",
                         DOWN},
@@ -679,7 +679,7 @@ public class AISolverParametrizedTest {
                 new Object[]{"78. go down if there is another bike at line changer up in front and obstacle above",
                         "■■■■■" +
                         "   | " +
-                        "  BS " +
+                        "  BŪ " +
                         "     " +
                         "■■■■■",
                         DOWN},
@@ -687,22 +687,22 @@ public class AISolverParametrizedTest {
                 new Object[]{"79. go down if there is another bike at line changer down in front and obstacle above",
                         "■■■■■" +
                         "   | " +
-                        "  BT " +
+                        "  BĎ " +
                         "     " +
                         "■■■■■",
                         DOWN},
 
-                new Object[]{"80. go down if there is another bike at downed bike in front and obstacle above",
+                new Object[]{"80. go down if there is another bike at killed bike in front and obstacle above",
                         "■■■■■" +
                         "   | " +
-                        "  Bl " +
+                        "  BḰ " +
                         "     " +
                         "■■■■■",
                         DOWN},
 
-                new Object[]{"81. go down if there is another bike in front and fallen bike at border obstacle above",
-                        "■rr■■" +
-                        "  Be " +
+                new Object[]{"81. go down if there is another bike in front and fallen bike at fence obstacle above",
+                        "■ḟḟ■■" +
+                        "  Bḃ " +
                         "     " +
                         "     " +
                         "■■■■■",
@@ -711,7 +711,7 @@ public class AISolverParametrizedTest {
                 new Object[]{"82. go up if there is fallen bike at accelerator in front and obstacle below",
                         "■■■■■" +
                         "     " +
-                        "  Bp " +
+                        "  Bā " +
                         "   | " +
                         "■■■■■",
                         UP},
@@ -719,7 +719,7 @@ public class AISolverParametrizedTest {
                 new Object[]{"83. go up if there is fallen bike at inhibitor in front and obstacle below",
                         "■■■■■" +
                         "     " +
-                        "  Bq " +
+                        "  Bī " +
                         "   | " +
                         "■■■■■",
                         UP},
@@ -727,7 +727,7 @@ public class AISolverParametrizedTest {
                 new Object[]{"84. go up if there is fallen bike at line changer up in front and obstacle below",
                         "■■■■■" +
                         "     " +
-                        "  Bs " +
+                        "  Bū " +
                         "   | " +
                         "■■■■■",
                         UP},
@@ -735,20 +735,20 @@ public class AISolverParametrizedTest {
                 new Object[]{"85. go up if there is fallen bike at line changer down in front and obstacle below",
                         "■■■■■" +
                         "     " +
-                        "  Bt " +
+                        "  Bď " +
                         "   | " +
                         "■■■■■",
                         UP},
 
-                new Object[]{"86. go up if there is fallen bike at obstacle in front and fallen bike at border below",
+                new Object[]{"86. go up if there is fallen bike at obstacle in front and fallen bike at fence below",
                         "■■■■■" +
                         "     " +
                         "     " +
-                        "  Bv " +
-                        "■■r■■",
+                        "  Bō " +
+                        "■■ḟ■■",
                         UP},
 
-                new Object[]{"87. go down if there is line changer up in front and border above it",
+                new Object[]{"87. go down if there is line changer up in front and fence above it",
                         "■■■■■" +
                         "  B▲ " +
                         "     " +
@@ -758,7 +758,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"88. go down if there is line changer up in front and fallen bike above it",
                         "■■■■■" +
-                        "   e " +
+                        "   ḃ " +
                         "  B▲ " +
                         "     " +
                         "■■■■■",
@@ -766,7 +766,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"89. go down if there is line changer up in front and fallen bike at accelerator above it",
                         "■■■■■" +
-                        "   p " +
+                        "   ā " +
                         "  B▲ " +
                         "     " +
                         "■■■■■",
@@ -774,7 +774,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"90. go down if there is line changer up in front and fallen bike at inhibitor above it",
                         "■■■■■" +
-                        "   q " +
+                        "   ī " +
                         "  B▲ " +
                         "     " +
                         "■■■■■",
@@ -782,7 +782,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"91. go down if there is line changer up in front and fallen bike at line changer up above it",
                         "■■■■■" +
-                        "   s " +
+                        "   ū " +
                         "  B▲ " +
                         "     " +
                         "■■■■■",
@@ -790,23 +790,23 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"92. go down if there is line changer up in front and fallen bike at line changer down above it",
                         "■■■■■" +
-                        "   t " +
+                        "   ď " +
                         "  B▲ " +
                         "     " +
                         "■■■■■",
                         DOWN},
 
-                new Object[]{"93. go down if there is line changer up in front and fallen bike at downed bike above it",
+                new Object[]{"93. go down if there is line changer up in front and fallen bike at killed bike above it",
                         "■■■■■" +
-                        "   l " +
+                        "   Ḱ " +
                         "  B▲ " +
                         "     " +
                         "■■■■■",
                         DOWN},
 
-                new Object[]{"94. go down if there is line changer up in front and fallen bike at border above it",
+                new Object[]{"94. go down if there is line changer up in front and fallen bike at fence above it",
                         "■■■■■" +
-                        "   r " +
+                        "   ḟ " +
                         "  B▲ " +
                         "     " +
                         "■■■■■",
@@ -814,13 +814,13 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"95. go down if there is line changer up in front and fallen bike at obstacle above it",
                         "■■■■■" +
-                        "   v " +
+                        "   ō " +
                         "  B▲ " +
                         "     " +
                         "■■■■■",
                         DOWN},
 
-                new Object[]{"96. go up if there is line changer down in front and border below it",
+                new Object[]{"96. go up if there is line changer down in front and fence below it",
                         "■■■■■" +
                         "     " +
                         "     " +
@@ -832,7 +832,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B▼ " +
-                        "   e " +
+                        "   ḃ " +
                         "■■■■■",
                         UP},
 
@@ -840,7 +840,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B▼ " +
-                        "   p " +
+                        "   ā " +
                         "■■■■■",
                         UP},
 
@@ -848,7 +848,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B▼ " +
-                        "   q " +
+                        "   ī " +
                         "■■■■■",
                         UP},
 
@@ -856,7 +856,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B▼ " +
-                        "   s " +
+                        "   ū " +
                         "■■■■■",
                         UP},
 
@@ -864,23 +864,23 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B▼ " +
-                        "   t " +
+                        "   ď " +
                         "■■■■■",
                         UP},
 
-                new Object[]{"102. go up if there is line changer down in front and fallen bike at downed bike above it",
+                new Object[]{"102. go up if there is line changer down in front and fallen bike at killed bike above it",
                         "■■■■■" +
                         "     " +
                         "  B▼ " +
-                        "   l " +
+                        "   Ḱ " +
                         "■■■■■",
                         UP},
 
-                new Object[]{"103. go up if there is line changer down in front and fallen bike at border above it",
+                new Object[]{"103. go up if there is line changer down in front and fallen bike at fence above it",
                         "■■■■■" +
                         "     " +
                         "  B▼ " +
-                        "   r " +
+                        "   ḟ " +
                         "■■■■■",
                         UP},
 
@@ -888,29 +888,29 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B▼ " +
-                        "   v " +
+                        "   ō " +
                         "■■■■■",
                         UP},
 
                 new Object[]{"105. go up if there is obstacle above and accelerator in front and fallen bike in front of it",
                         "■■■■■" +
                         "     " +
-                        "  B>e" +
+                        "  B>ḃ" +
                         "   | " +
                         "■■■■■",
                         UP},
 
                 new Object[]{"106. go down if there is fallen bike at another bike below and accelerator in front and fallen bike in front of it",
                         "■■■■■" +
-                        "   l " +
-                        "  B>e" +
+                        "   Ḱ " +
+                        "  B>ḃ" +
                         "     " +
                         "■■■■■",
                         DOWN},
 
                 new Object[]{"107. go down if there is bike above and obstacle in front",
                         "■■■■■" +
-                        "  E  " +
+                        "  Ḃ  " +
                         "  B| " +
                         "     " +
                         "■■■■■",
@@ -919,8 +919,8 @@ public class AISolverParametrizedTest {
                 new Object[]{"108. go up if there is bike below and fallen bike at inhibitor in front",
                         "■■■■■" +
                         "     " +
-                        "  Bq " +
-                        "  E  " +
+                        "  Bī " +
+                        "  Ḃ  " +
                         "■■■■■",
                         UP},
 
@@ -928,13 +928,13 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         " B>▼ " +
-                        "  s |" +
+                        "  ū |" +
                         "■■■■■",
                         UP},
 
-                new Object[]{"110. go down if there is fallen bike at obstacle above and accelerator leading to line changer up leading to other bike at downed bike in front",
+                new Object[]{"110. go down if there is fallen bike at obstacle above and accelerator leading to line changer up leading to other bike at killed bike in front",
                         "■■■■■" +
-                        "  v l" +
+                        "  ō Ḱ" +
                         " B>▲ " +
                         "     " +
                         "■■■■■",
@@ -952,7 +952,7 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  E▲ " +
+                        "  Ḃ▲ " +
                         "■■■■■",
                         UP},
 
@@ -960,13 +960,13 @@ public class AISolverParametrizedTest {
                         "■■■■■" +
                         "     " +
                         "  B  " +
-                        "  S  " +
+                        "  Ū  " +
                         "■■■■■",
                         UP},
 
-                new Object[]{"114. go down if there is other bike at downed bike above and line changer down in front of it",
+                new Object[]{"114. go down if there is other bike at killed bike above and line changer down in front of it",
                         "■■■■■" +
-                        "  l▼ " +
+                        "  Ḱ▼ " +
                         "  B  " +
                         "     " +
                         "■■■■■",
@@ -974,7 +974,7 @@ public class AISolverParametrizedTest {
 
                 new Object[]{"115. go down if there is other bike at line changer down above",
                         "■■■■■" +
-                        "  T  " +
+                        "  Ď  " +
                         "  B  " +
                         "     " +
                         "■■■■■",

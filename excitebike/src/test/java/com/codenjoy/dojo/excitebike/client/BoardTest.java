@@ -56,8 +56,8 @@ public class BoardTest {
         //given
         Board board = toBoard("■■■■■" +
                 " B > " +
-                "  E |" +
-                " e ▼ " +
+                "  Ḃ |" +
+                " ḃ ▼ " +
                 "■■■■■"
         );
 
@@ -74,8 +74,8 @@ public class BoardTest {
         //given
         Board board = toBoard("b■■■■" +
                 "   > " +
-                "  E |" +
-                " P ▼ " +
+                "  Ḃ |" +
+                " Ā ▼ " +
                 "■■■■■"
         );
 
@@ -92,8 +92,8 @@ public class BoardTest {
         //given
         Board board = toBoard("■■■■■" +
                 "   > " +
-                "  E |" +
-                " P ▼ " +
+                "  Ḃ |" +
+                " Ā ▼ " +
                 "■■■■■"
         );
 
@@ -109,8 +109,8 @@ public class BoardTest {
         //given
         Board board = toBoard("■■■■■" +
                 " B >I" +
-                "A E |" +
-                " P ▼ " +
+                "A Ḃ |" +
+                " Ā ▼ " +
                 "■■■■■"
         );
 
@@ -126,8 +126,8 @@ public class BoardTest {
         //given
         Board board = toBoard("■■■■■" +
                 " B>  " +
-                "  E |" +
-                " P ▼ " +
+                "  Ḃ |" +
+                " Ā ▼ " +
                 "■■■■■"
         );
 
@@ -142,8 +142,8 @@ public class BoardTest {
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtDownDirection() {
         //given
         Board board = toBoard("■■■■■" +
-                " P   " +
-                " E | " +
+                " Ā   " +
+                " Ḃ | " +
                 " B ▼ " +
                 "■■■■■"
         );
@@ -160,8 +160,8 @@ public class BoardTest {
         //given
         Board board = toBoard("■■■■■" +
                 "╝B>  " +
-                " E | " +
-                " P ▼ " +
+                " Ḃ | " +
+                " Ā ▼ " +
                 "■■■■■"
         );
 
@@ -176,14 +176,14 @@ public class BoardTest {
     public void checkNearMe__shouldReturnTrueIfThereIsOneOfExpectedElementsNearMeAtUpDirection() {
         //given
         Board board = toBoard("■■■■■" +
-                "╝Q>  " +
-                " E | " +
+                "╝Ī>  " +
+                " Ḃ | " +
                 " B ▼ " +
                 "■■■■■"
         );
 
         //when
-        boolean result = board.checkNearMe(Direction.DOWN, GameElementType.BORDER);
+        boolean result = board.checkNearMe(Direction.DOWN, GameElementType.FENCE);
 
         //then
         assertThat(result, is(false));
@@ -194,8 +194,8 @@ public class BoardTest {
         //given
         Board board = toBoard("■■■■■" +
                 " B   " +
-                "  E>|" +
-                " P ▼ " +
+                "  Ḃ>|" +
+                " Ā ▼ " +
                 "■■■■■"
         );
 
@@ -210,8 +210,8 @@ public class BoardTest {
     public void checkAtMe__shouldReturnTrue__ifAtMeIsGivenElement() {
         //given
         Board board = toBoard("■■■■■" +
-                "╝Q>  " +
-                " E | " +
+                "╝Ī>  " +
+                " Ḃ | " +
                 " A ▼ " +
                 "■■■■■"
         );
@@ -227,8 +227,8 @@ public class BoardTest {
     public void checkAtMe__shouldReturnFalse__ifAtMeIsNotGivenElement() {
         //given
         Board board = toBoard("■■■■■" +
-                "╝Q>  " +
-                " E | " +
+                "╝Ī>  " +
+                " Ḃ | " +
                 " B ▼ " +
                 "■■■■■"
         );

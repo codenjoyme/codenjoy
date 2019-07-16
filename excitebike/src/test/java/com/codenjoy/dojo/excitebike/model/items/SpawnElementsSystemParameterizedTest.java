@@ -79,7 +79,7 @@ public class SpawnElementsSystemParameterizedTest {
         game.tick();
 
         //then
-        PointImpl generatedElement = (PointImpl) ((List) game.reader().elements()).stream().filter(el -> !(el instanceof Bike || el instanceof Border)).findFirst().get();
+        PointImpl generatedElement = (PointImpl) ((List) game.reader().elements()).stream().filter(el -> !(el instanceof Bike || el instanceof Fence)).findFirst().get();
         assertThat(((State) generatedElement).state(player), is(gameElementType));
 
     }

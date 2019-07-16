@@ -26,13 +26,13 @@ import com.codenjoy.dojo.services.printer.CharElements;
 
 public enum SpringboardElementType implements CharElements {
 
-    SPRINGBOARD_NONE('^'),
-    SPRINGBOARD_DARK('/'),
-    SPRINGBOARD_LIGHT('\\'),
-    SPRINGBOARD_LEFT_DOWN('╚'),     //200
-    SPRINGBOARD_LEFT_UP('╔'),       //201
-    SPRINGBOARD_RIGHT_DOWN('╝'),    //188
-    SPRINGBOARD_RIGHT_UP('╗');      //187
+    SPRINGBOARD_LEFT_UP('╔'),
+    SPRINGBOARD_LEFT('/'),
+    SPRINGBOARD_LEFT_DOWN('╚'),
+    SPRINGBOARD_TOP('═'),
+    SPRINGBOARD_RIGHT_UP('╗'),
+    SPRINGBOARD_RIGHT('\\'),
+    SPRINGBOARD_RIGHT_DOWN('╝');
 
     final char ch;
 

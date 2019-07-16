@@ -32,7 +32,7 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
 
     int size();
 
-    boolean isBorder(int x, int y);
+    boolean isFence(int x, int y);
 
     boolean isInhibitor(int x, int y);
 

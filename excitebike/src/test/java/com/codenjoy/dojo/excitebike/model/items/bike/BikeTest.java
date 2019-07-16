@@ -66,7 +66,7 @@ public class BikeTest {
     @Test
     public void tickWithUpCommand__shouldMoveBikeToUp__ifUpperPositionIsFree() {
         //given
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
         bike.up();
 
@@ -79,9 +79,9 @@ public class BikeTest {
     }
 
     @Test
-    public void tickWithUpCommand__shouldMoveAndCrushBike__ifUpperPositionIsBorder() {
+    public void tickWithUpCommand__shouldMoveAndCrushBike__ifUpperPositionIsFence() {
         //given
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(true);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(true);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
         bike.up();
 
@@ -91,13 +91,13 @@ public class BikeTest {
         //then
         assertThat(bike.getX(), is(5));
         assertThat(bike.getY(), is(6));
-        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_FALLEN_AT_BORDER));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_FALLEN_AT_FENCE));
     }
 
     @Test
-    public void tickWithUpCommand__shouldMoveBikeAndChangeItsStateToDownedEnemy__ifUpperPositionIsOtherBike() {
+    public void tickWithUpCommand__shouldMoveBikeAndChangeItsStateToKilledEnemy__ifUpperPositionIsOtherBike() {
         //given
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
         Bike enemy = new Bike(5, 6);
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
@@ -111,13 +111,13 @@ public class BikeTest {
         //then
         assertThat(bike.getX(), is(5));
         assertThat(bike.getY(), is(6));
-        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_DOWNED_BIKE));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_KILLED_BIKE));
     }
 
     @Test
     public void tickWithDownCommand__shouldMoveBikeToDown__ifLowerPositionIsFree() {
         //given
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
         bike.down();
 
@@ -130,10 +130,10 @@ public class BikeTest {
     }
 
     @Test
-    public void tickWithDownCommand__shouldMoveBikeAndCrushIt__ifLowerPositionIsBorder() {
+    public void tickWithDownCommand__shouldMoveBikeAndCrushIt__ifLowerPositionIsFence() {
         //given
         bike.setY(1);
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(true);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(true);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
         bike.down();
 
@@ -143,13 +143,13 @@ public class BikeTest {
         //then
         assertThat(bike.getX(), is(5));
         assertThat(bike.getY(), is(0));
-        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_FALLEN_AT_BORDER));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_FALLEN_AT_FENCE));
     }
 
     @Test
-    public void tickWithDownCommand__shouldMoveBikeAndChangeItsStateToDownedEnemy__ifLowerPositionIsOtherBike() {
+    public void tickWithDownCommand__shouldMoveBikeAndChangeItsStateToKilledEnemy__ifLowerPositionIsOtherBike() {
         //given
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
         Bike enemy = new Bike(5, 4);
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
@@ -163,7 +163,7 @@ public class BikeTest {
         //then
         assertThat(bike.getX(), is(5));
         assertThat(bike.getY(), is(4));
-        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_DOWNED_BIKE));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_KILLED_BIKE));
     }
 
     @Test
@@ -273,7 +273,7 @@ public class BikeTest {
     public void tick1__shouldNotChangeBikePosition__ifBikeTakeUpLineChangerAndUpperPositionIsFree() {
         //given
         when(gameField.isUpLineChanger(anyInt(), anyInt())).thenReturn(true);
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
 
         //when
@@ -288,7 +288,7 @@ public class BikeTest {
     public void tick2__shouldMoveBikeUpper__ifBikeTakeUpLineChangerAndUpperPositionIsFree() {
         //given
         when(gameField.isUpLineChanger(anyInt(), anyInt())).thenReturn(true);
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
         bike.tick();
 
@@ -301,10 +301,10 @@ public class BikeTest {
     }
 
     @Test
-    public void tick1__shouldNotMoveAndCrushBike__ifBikeTakeUpLineChangerAndUpperPositionIsBorder() {
+    public void tick1__shouldNotMoveAndCrushBike__ifBikeTakeUpLineChangerAndUpperPositionIsFence() {
         //given
         when(gameField.isUpLineChanger(anyInt(), anyInt())).thenReturn(true);
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(true);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(true);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
 
         //when
@@ -317,10 +317,10 @@ public class BikeTest {
     }
 
     @Test
-    public void tick2__shouldMoveAndCrushBike__ifBikeTakeUpLineChangerAndUpperPositionIsBorder() {
+    public void tick2__shouldMoveAndCrushBike__ifBikeTakeUpLineChangerAndUpperPositionIsFence() {
         //given
         when(gameField.isUpLineChanger(5, 5)).thenReturn(true);
-        when(gameField.isBorder(5, 6)).thenReturn(true);
+        when(gameField.isFence(5, 6)).thenReturn(true);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
         bike.tick();
 
@@ -330,14 +330,14 @@ public class BikeTest {
         //then
         assertThat(bike.getX(), is(5));
         assertThat(bike.getY(), is(6));
-        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_FALLEN_AT_BORDER));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_FALLEN_AT_FENCE));
     }
 
     @Test
     public void tick1__shouldNotMoveBike__ifBikeTakeUpLineChangerAndUpperPositionIsOtherBike() {
         //given
         when(gameField.isUpLineChanger(anyInt(), anyInt())).thenReturn(true);
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
         Bike enemy = new Bike(5, 6);
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
@@ -356,7 +356,7 @@ public class BikeTest {
     public void tick2__shouldMoveBike_ifBikeTakeUpLineChangerAndUpperPositionIsOtherBike() {
         //given
         when(gameField.isUpLineChanger(anyInt(), anyInt())).thenReturn(true);
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
         Bike enemy = new Bike(5, 6);
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
@@ -376,7 +376,7 @@ public class BikeTest {
     public void tick1__shouldNotMoveBike__ifBikeTakeDownLineChangerAndLowerPositionIsFree() {
         //given
         when(gameField.isDownLineChanger(anyInt(), anyInt())).thenReturn(true);
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
 
         //when
@@ -391,7 +391,7 @@ public class BikeTest {
     public void tick2__shouldMoveBikeDown__ifBikeTakeDownLineChangerAndLowerPositionIsFree() {
         //given
         when(gameField.isDownLineChanger(anyInt(), anyInt())).thenReturn(true);
-        when(gameField.isBorder(anyInt(), anyInt())).thenReturn(false);
+        when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
         bike.tick();
 
@@ -404,10 +404,10 @@ public class BikeTest {
     }
 
     @Test
-    public void tick2__shouldMoveAndCrushBike__ifBikeTakeDownLineChangerAndLowerPositionIsBorder() {
+    public void tick2__shouldMoveAndCrushBike__ifBikeTakeDownLineChangerAndLowerPositionIsFence() {
         //given
         when(gameField.isDownLineChanger(5, 5)).thenReturn(true);
-        when(gameField.isBorder(5, 4)).thenReturn(true);
+        when(gameField.isFence(5, 4)).thenReturn(true);
         bike.tick();
 
         //when
@@ -417,7 +417,7 @@ public class BikeTest {
         assertThat(bike.getX(), is(5));
         assertThat(bike.getY(), is(4));
         assertThat(bike.isAlive(), is(false));
-        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_FALLEN_AT_BORDER));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_FALLEN_AT_FENCE));
     }
 
     @Test
@@ -457,7 +457,7 @@ public class BikeTest {
         //then
         assertThat(bike.getX(), is(5));
         assertThat(bike.getY(), is(4));
-        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_DOWNED_BIKE));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_KILLED_BIKE));
     }
 
     @Test
@@ -501,11 +501,11 @@ public class BikeTest {
         assertThat(bike.getY(), is(4));
         assertThat(enemy.getX(), is(5));
         assertThat(enemy.getY(), is(4));
-        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_DOWNED_BIKE));
+        assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_KILLED_BIKE));
     }
 
     @Test
-    public void tick2__shouldCrushBikeAndChangeEnemyBikeStateToAtDownedBike__ifBikeAfterAcceleratorCollidesEnemyBike() {
+    public void tick2__shouldCrushBikeAndChangeEnemyBikeStateToAtKilledBike__ifBikeAfterAcceleratorCollidesEnemyBike() {
         //given
         when(gameField.isAccelerator(5, 5)).thenReturn(true);
         when(gameField.size()).thenReturn(10);
@@ -524,8 +524,8 @@ public class BikeTest {
         assertThat(bike.getX(), is(6));
         assertThat(bike.getY(), is(5));
         assertThat(bike.isAlive(), is(false));
-        assertThat(enemy.state(getPlayer(bike)), is(BikeType.OTHER_BIKE_AT_DOWNED_BIKE));
-        assertThat(enemy.state(getPlayer(enemy)), is(BikeType.BIKE_AT_DOWNED_BIKE));
+        assertThat(enemy.state(getPlayer(bike)), is(BikeType.OTHER_BIKE_AT_KILLED_BIKE));
+        assertThat(enemy.state(getPlayer(enemy)), is(BikeType.BIKE_AT_KILLED_BIKE));
     }
 
     @Test

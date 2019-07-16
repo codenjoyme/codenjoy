@@ -77,8 +77,8 @@ public class PlayersSpawnSystemParametrizedTest {
                         "■■■■■■■\n" +
                                 "       \n" +
                                 "       \n" +
-                                "E      \n" +
-                                " E     \n" +
+                                "Ḃ      \n" +
+                                " Ḃ     \n" +
                                 "B      \n" +
                                 "■■■■■■■\n"
                 },
@@ -92,10 +92,10 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
-                                "E      \n" +
-                                " E     \n" +
-                                "E      \n" +
-                                " E     \n" +
+                                "Ḃ      \n" +
+                                " Ḃ     \n" +
+                                "Ḃ      \n" +
+                                " Ḃ     \n" +
                                 "B      \n" +
                                 "■■■■■■■\n"
                 },
@@ -109,11 +109,11 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
-                                "E      \n" +
-                                " E     \n" +
-                                "E      \n" +
-                                " E  E  \n" +
-                                "B  E   \n" +
+                                "Ḃ      \n" +
+                                " Ḃ     \n" +
+                                "Ḃ      \n" +
+                                " Ḃ  Ḃ  \n" +
+                                "B  Ḃ   \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddTenBikesInFirstAnSecondFullChessColumns",
@@ -126,11 +126,11 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
-                                "E  E   \n" +
-                                " E  E  \n" +
-                                "E  E   \n" +
-                                " E  E  \n" +
-                                "B  E   \n" +
+                                "Ḃ  Ḃ   \n" +
+                                " Ḃ  Ḃ  \n" +
+                                "Ḃ  Ḃ   \n" +
+                                " Ḃ  Ḃ  \n" +
+                                "B  Ḃ   \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddOneNewBike",
@@ -146,8 +146,8 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       \n" +
                                 "       \n" +
                                 "  B    \n" +
-                                " E     \n" +
-                                "   E   \n" +
+                                " Ḃ     \n" +
+                                "   Ḃ   \n" +
                                 "■■■■■■■\n"
                 },
                 new Object[]{"shouldAddManyNewBikes",
@@ -160,11 +160,11 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "   B B " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
-                                "E      \n" +
-                                " E  B  \n" +
-                                "E      \n" +
-                                " E   E \n" +
-                                "   E E \n" +
+                                "Ḃ      \n" +
+                                " Ḃ  B  \n" +
+                                "Ḃ      \n" +
+                                " Ḃ   Ḃ \n" +
+                                "   Ḃ Ḃ \n" +
                                 "■■■■■■■\n"
                 }
         );

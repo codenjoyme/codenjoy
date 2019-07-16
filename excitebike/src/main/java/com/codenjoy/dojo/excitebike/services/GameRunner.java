@@ -59,11 +59,11 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     protected String getMap() {
         StringBuilder sb = new StringBuilder();
-        appendElementManyTimes(sb, GameElementType.BORDER, FIELD_HEIGHT);
+        appendElementManyTimes(sb, GameElementType.FENCE, FIELD_HEIGHT);
         for (int i = 0; i < FIELD_HEIGHT - 2; i++) {
             appendElementManyTimes(sb, GameElementType.NONE, FIELD_HEIGHT);
         }
-        appendElementManyTimes(sb, GameElementType.BORDER, FIELD_HEIGHT);
+        appendElementManyTimes(sb, GameElementType.FENCE, FIELD_HEIGHT);
         return sb.toString();
     }
 

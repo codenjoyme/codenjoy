@@ -27,18 +27,18 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Border extends PointImpl implements State<GameElementType, Player> {
+public class Fence extends PointImpl implements State<GameElementType, Player> {
 
-    public Border(int x, int y) {
+    public Fence(int x, int y) {
         super(x, y);
     }
 
-    public Border(Point point) {
+    public Fence(Point point) {
         super(point);
     }
 
     @Override
     public GameElementType state(Player player, Object... objects) {
-        return GameElementType.BORDER;
+        return GameElementType.FENCE;
     }
 }

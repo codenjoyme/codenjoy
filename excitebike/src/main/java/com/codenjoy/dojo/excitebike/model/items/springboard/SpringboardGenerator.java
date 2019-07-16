@@ -57,7 +57,7 @@ public class SpringboardGenerator {
 
             generateRiseLine(linesNumber);
             for (int i = x0 + 1; i < x - 1; i++) {
-                generateSpringBoardStep(SPRINGBOARD_NONE, SPRINGBOARD_NONE, SPRINGBOARD_DARK, i, linesNumber);
+                generateSpringBoardStep(SPRINGBOARD_TOP, SPRINGBOARD_TOP, SPRINGBOARD_LEFT, i, linesNumber);
             }
             generateDescentLine(linesNumber);
         }
@@ -69,11 +69,11 @@ public class SpringboardGenerator {
     }
 
     private void generateRiseLine(int linesNumber) {
-        generateSpringBoardStep(SPRINGBOARD_LEFT_UP, SPRINGBOARD_DARK, SPRINGBOARD_LEFT_DOWN, x0, linesNumber);
+        generateSpringBoardStep(SPRINGBOARD_LEFT_UP, SPRINGBOARD_LEFT, SPRINGBOARD_LEFT_DOWN, x0, linesNumber);
     }
 
     private void generateDescentLine(int linesNumber) {
-        generateSpringBoardStep(SPRINGBOARD_RIGHT_UP, SPRINGBOARD_LIGHT, SPRINGBOARD_RIGHT_DOWN, x - 1, linesNumber);
+        generateSpringBoardStep(SPRINGBOARD_RIGHT_UP, SPRINGBOARD_RIGHT, SPRINGBOARD_RIGHT_DOWN, x - 1, linesNumber);
     }
 
     private void generateSpringBoardStep(SpringboardElementType up, SpringboardElementType middle, SpringboardElementType down, int x, int lines) {

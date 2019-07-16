@@ -23,7 +23,7 @@ package com.codenjoy.dojo.excitebike.services.parse;
  */
 
 import com.codenjoy.dojo.excitebike.model.items.Accelerator;
-import com.codenjoy.dojo.excitebike.model.items.Border;
+import com.codenjoy.dojo.excitebike.model.items.Fence;
 import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
 import com.codenjoy.dojo.excitebike.model.items.LineChanger;
 import com.codenjoy.dojo.excitebike.model.items.Obstacle;
@@ -42,7 +42,7 @@ public interface MapParser {
 
     List<Accelerator> getAccelerators();
 
-    List<Border> getBorders();
+    List<Fence> getFences();
 
     List<Inhibitor> getInhibitors();
 

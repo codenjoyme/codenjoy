@@ -2298,9 +2298,9 @@ public class GameFieldImplSystemTest {
     @Test
     public void tick__shouldMoveBikeUp_ifBikeCrossRiseOfSpringboard() {
         //given
-        String board = "■■■╔^" +
-                "   /^" +
-                "   /^" +
+        String board = "■■■╔═" +
+                "   /═" +
+                "   /═" +
                 "  B╚/" +
                 "■■■■■";
         init(board);
@@ -2311,8 +2311,8 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■╔^  "+
-                " /^  "+
+        String expected = "■╔═  "+
+                " /═  "+
                 " /B  "+
                 " ╚/  "+
                 "■■■■■";
@@ -2322,9 +2322,9 @@ public class GameFieldImplSystemTest {
     @Test
     public void tick__shouldMoveBikeUp_ifBikeCrossRiseOfSpringboard2() {
         //given
-        String board = "■■■╔^" +
-                "  B/^" +
-                "   /^" +
+        String board = "■■■╔═" +
+                "  B/═" +
+                "   /═" +
                 "   ╚/" +
                 "■■■■■";
         init(board);
@@ -2336,8 +2336,8 @@ public class GameFieldImplSystemTest {
 
         //then
         String expected = "■╔B  "+
-                " /^  "+
-                " /^  "+
+                " /═  "+
+                " /═  "+
                 " ╚/  "+
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
@@ -2346,9 +2346,9 @@ public class GameFieldImplSystemTest {
     @Test
     public void tick__shouldMoveBikeUp_ifBikeCrossRiseOfSpringboard3() {
         //given
-        String board = "■■■╔^" +
-                "   /^" +
-                "  B/^" +
+        String board = "■■■╔═" +
+                "   /═" +
+                "  B/═" +
                 "   ╚/" +
                 "■■■■■";
         init(board);
@@ -2359,9 +2359,9 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■╔^  "+
+        String expected = "■╔═  "+
                 " /B  "+
-                " /^  "+
+                " /═  "+
                 " ╚/  "+
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
@@ -2370,8 +2370,8 @@ public class GameFieldImplSystemTest {
     @Test
     public void tick__shouldSetStateBikeInFlight() {
         //given
-        String board = "■■■╔^" +
-                "  /^ " +
+        String board = "■■■╔═" +
+                "  /═ " +
                 "  /B " +
                 "  ╚//" +
                 "■■■■■";
@@ -2383,19 +2383,19 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■■╔^ "+
-                " /^  "+
+        String expected = "■■╔═ "+
+                " /═  "+
                 " /   "+
-                " ╚/& "+
+                " ╚/F "+
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void tick__shouldCrushBikeAtBorder_ifBikeWasInFlight() {
+    public void tick__shouldCrushBikeAtFence_ifBikeWasInFlight() {
         //given
-        String board = "■■■╔^" +
-                "  /^ " +
+        String board = "■■■╔═" +
+                "  /═ " +
                 "  /B " +
                 "  ╚//" +
                 "■■■■■";
@@ -2408,20 +2408,20 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■╔^  "+
-                "/^   "+
+        String expected = "■╔═  "+
+                "/═   "+
                 "/    "+
                 "╚//  "+
-                "■■■c■";
+                "■■■f■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
 
     @Test
-    public void tick__shouldCrushBikeAtBorder_ifBikeWasInFlight2() {
+    public void tick__shouldCrushBikeAtFence_ifBikeWasInFlight2() {
         //given
-        String board = "■■■╔^" +
-                "  /^ " +
+        String board = "■■■╔═" +
+                "  /═ " +
                 "  /  " +
                 " B╚//" +
                 "■■■■■";
@@ -2436,20 +2436,20 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected ="^■■  "+
+        String expected ="═■■  "+
                 "     "+
                 "     "+
                 "/    "+
-                "■c■■■";
+                "■f■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
     @Test
-    public void tick__shouldCrushBike_ifBikeMoveUpOnSpringboardBorder() {
+    public void tick__shouldCrushBike_ifBikeMoveUpOnSpringboardFence() {
         //given
-        String board = "■■■╔^" +
-                "  B/^" +
-                "   /^" +
+        String board = "■■■╔═" +
+                "  B/═" +
+                "   /═" +
                 "   ╚/" +
                 "■■■■■";
         init(board);
@@ -2462,9 +2462,9 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "╔^■  "+
-                "/^   "+
-                "/^   "+
+        String expected = "╔═■  "+
+                "/═   "+
+                "/═   "+
                 "╚/   "+
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
@@ -2474,8 +2474,8 @@ public class GameFieldImplSystemTest {
     @Test
     public void tick__shouldMoveBikeDown_ifBikeCrossDescentOfSpringboard() {
         //given
-        String board = "■■■^╗" +
-                "   ^\\" +
+        String board = "■■■═╗" +
+                "   ═\\" +
                 "   B\\" +
                 "   \\╝" +
                 "■■■■■";
@@ -2487,8 +2487,8 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■^╗  " +
-                " ^\\  " +
+        String expected = "■═╗  " +
+                " ═\\  " +
                 "  \\  " +
                 " \\╝B " +
                 "■■■■■";
@@ -2498,9 +2498,9 @@ public class GameFieldImplSystemTest {
     @Test
     public void tick__shouldMoveBikeDown_ifBikeCrossDescentOfSpringboard2() {
         //given
-        String board = "■■■^╗" +
+        String board = "■■■═╗" +
                 "   B\\" +
-                "   ^\\" +
+                "   ═\\" +
                 "   \\╝" +
                 "■■■■■";
         init(board);
@@ -2511,9 +2511,9 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■^╗  " +
+        String expected = "■═╗  " +
                 "  \\  " +
-                " ^\\B " +
+                " ═\\B " +
                 " \\╝  " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
@@ -2522,8 +2522,8 @@ public class GameFieldImplSystemTest {
     @Test
     public void tick__shouldMoveBikeDown_ifBikeCrossDescentOfSpringboard3() {
         //given
-        String board = "■■■^╗" +
-                "   ^\\" +
+        String board = "■■■═╗" +
+                "   ═\\" +
                 "   B\\" +
                 "   \\╝" +
                 "■■■■■";
@@ -2534,10 +2534,10 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■■^╗ " +
-                "  ^\\ " +
+        String expected = "■■═╗ " +
+                "  ═\\ " +
                 "   \\ " +
-                "  \\┘ " +
+                "  \\S " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2545,9 +2545,9 @@ public class GameFieldImplSystemTest {
     @Test
     public void tick__shouldMoveBikeDown_ifBikeCrossDescentOfSpringboard4() {
         //given
-        String board = "■■■^╗" +
+        String board = "■■■═╗" +
                 "   B\\" +
-                "   ^\\" +
+                "   ═\\" +
                 "   \\╝" +
                 "■■■■■";
         init(board);
@@ -2557,9 +2557,9 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "■■^╗ " +
+        String expected = "■■═╗ " +
                 "   \\ " +
-                "  ^┤ " +
+                "  ═R " +
                 "  \\╝ " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));

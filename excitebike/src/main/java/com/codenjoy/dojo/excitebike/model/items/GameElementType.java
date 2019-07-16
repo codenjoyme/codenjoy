@@ -29,7 +29,7 @@ public enum GameElementType implements CharElements {
 
     //ASCII code of char in comment
     NONE(' '),  //space
-    BORDER('■'),    //254
+    FENCE('■'),    //254
 
     ACCELERATOR('>'),   //175
     INHIBITOR('<'),    //177

@@ -58,41 +58,41 @@ public class GameFieldImplTest {
     }
 
     @Test
-    public void isBorder__shouldReturnTrue__IfYEqualsZero() {
+    public void isFence__shouldReturnTrue__IfYEqualsZero() {
         //given
         int x = 1, y = 0;
         gameField = new GameFieldImpl(mapParser, dice);
 
         //when
-        boolean result = gameField.isBorder(x, y);
+        boolean result = gameField.isFence(x, y);
 
         //then
         assertThat(result, is(true));
     }
 
     @Test
-    public void isBorder__shouldReturnTrue__IfYEqualsMaxPossibleValue() {
+    public void isFence__shouldReturnTrue__IfYEqualsMaxPossibleValue() {
         //given
         int x = 1, y = 2;
         when(mapParser.getYSize()).thenReturn(3);
         gameField = new GameFieldImpl(mapParser, dice);
 
         //when
-        boolean result = gameField.isBorder(x, y);
+        boolean result = gameField.isFence(x, y);
 
         //then
         assertThat(result, is(true));
     }
 
     @Test
-    public void isBorder__shouldReturnFalse__IfYIsNotZeroAndMaxPossibleValue() {
+    public void isFence__shouldReturnFalse__IfYIsNotZeroAndMaxPossibleValue() {
         //given
         int x = 1, y = 1;
         when(mapParser.getYSize()).thenReturn(3);
         gameField = new GameFieldImpl(mapParser, dice);
 
         //when
-        boolean result = gameField.isBorder(x, y);
+        boolean result = gameField.isFence(x, y);
 
         //then
         assertThat(result, is(false));
@@ -260,12 +260,12 @@ public class GameFieldImplTest {
         //given
         int xSize = 5;
         int generateChance = 1; //if less than 5 then element will be generated
-        int nonBorderElementOrdinal = 0;
-        int nonBorderLaneNumber = 0;
+        int nonFenceElementOrdinal = 0;
+        int nonFenceLaneNumber = 0;
 
         gameField = new GameFieldImpl(mapParser, dice);
         when(mapParser.getXSize()).thenReturn(xSize);
-        when(dice.next(anyInt())).thenReturn(generateChance,5, nonBorderElementOrdinal, nonBorderLaneNumber);
+        when(dice.next(anyInt())).thenReturn(generateChance,5, nonFenceElementOrdinal, nonFenceLaneNumber);
 
         //when
         gameField.tick();

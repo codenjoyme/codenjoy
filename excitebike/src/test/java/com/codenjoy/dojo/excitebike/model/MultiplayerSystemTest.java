@@ -37,7 +37,6 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -95,23 +94,23 @@ public class MultiplayerSystemTest {
         assertThat(game1.getBoardAsString(), is("■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                "E      \n" +
-                " E     \n" +
+                "Ḃ      \n" +
+                " Ḃ     \n" +
                 "B      \n" +
                 "■■■■■■■\n"));
         assertThat(game2.getBoardAsString(), is("■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                "E      \n" +
+                "Ḃ      \n" +
                 " B     \n" +
-                "E      \n" +
+                "Ḃ      \n" +
                 "■■■■■■■\n"));
         assertThat(game3.getBoardAsString(), is("■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
                 "B      \n" +
-                " E     \n" +
-                "E      \n" +
+                " Ḃ     \n" +
+                "Ḃ      \n" +
                 "■■■■■■■\n"));
     }
 
@@ -131,11 +130,11 @@ public class MultiplayerSystemTest {
         //then
         String expected = "■■■■■■■\n" +
                 "       \n" +
-                "E      \n" +
+                "Ḃ      \n" +
                 "       \n" +
-                " E     \n" +
+                " Ḃ     \n" +
                 "       \n" +
-                "c■■■■■■\n";
+                "f■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
 
@@ -154,7 +153,7 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "       \n" +
                 "       \n" +
-                " E     \n" +
+                " Ḃ     \n" +
                 "B      \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
@@ -178,8 +177,8 @@ public class MultiplayerSystemTest {
         String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " E     \n" +
-                " k     \n" +
+                " Ḃ     \n" +
+                " K     \n" +
                 "       \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
@@ -205,7 +204,7 @@ public class MultiplayerSystemTest {
         String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " l     \n" +
+                " Ḱ     \n" +
                 " B     \n" +
                 "       \n" +
                 "■■■■■■■\n";
@@ -232,10 +231,10 @@ public class MultiplayerSystemTest {
         String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " E     \n" +
+                " Ḃ     \n" +
                 "       \n" +
                 " B     \n" +
-                "■r■■■■■\n";
+                "■ḟ■■■■■\n";
         assertThat(game2.getBoardAsString(), is(expected));
         assertThat(game1.isGameOver(), is(true));
     }
@@ -259,8 +258,8 @@ public class MultiplayerSystemTest {
         String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " E     \n" +
-                " E     \n" +
+                " Ḃ     \n" +
+                " Ḃ     \n" +
                 " B     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
@@ -288,8 +287,8 @@ public class MultiplayerSystemTest {
         String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " E     \n" +
-                " E     \n" +
+                " Ḃ     \n" +
+                " Ḃ     \n" +
                 " B     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
@@ -314,9 +313,9 @@ public class MultiplayerSystemTest {
         String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
-                " E     \n" +
+                " Ḃ     \n" +
                 " B     \n" +
-                " E     \n" +
+                " Ḃ     \n" +
                 "■■■■■■■\n";
         assertThat(game2.getBoardAsString(), is(expected));
     }
@@ -341,8 +340,8 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "       \n" +
                 " B     \n" +
-                " E     \n" +
-                " E     \n" +
+                " Ḃ     \n" +
+                " Ḃ     \n" +
                 "■■■■■■■\n";
         assertThat(game3.getBoardAsString(), is(expected));
     }
@@ -366,15 +365,14 @@ public class MultiplayerSystemTest {
         //then
         String expected = "■■■■■■■\n" +
                 "       \n" +
-                " E     \n" +
-                " E     \n" +
+                " Ḃ     \n" +
+                " Ḃ     \n" +
                 " B     \n" +
                 "       \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
 
-    @Ignore
     @Test
     public void shouldResetAllPlayersBikesAndFireWInEvent() {
         //given
@@ -417,8 +415,8 @@ public class MultiplayerSystemTest {
                         "3:       \n" +
                         "3:       \n" +
                         "3:B      \n" +
-                        "3: E     \n" +
-                        "3:E      \n" +
+                        "3: Ḃ     \n" +
+                        "3:Ḃ      \n" +
                         "3:■■■■■■■\n" +
                         "3:")
         );

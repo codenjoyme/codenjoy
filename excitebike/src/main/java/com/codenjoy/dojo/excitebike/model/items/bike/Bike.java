@@ -157,7 +157,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             adjustStateToElement();
         }
 
-        if (type == BIKE_AT_SPRINGBOARD_DARK
+        if (type == BIKE_AT_SPRINGBOARD_LEFT
                 || type == BIKE_AT_SPRINGBOARD_LEFT_DOWN) {
             commandLock = true;
             y++;
@@ -165,7 +165,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             return;
         }
 
-        if (type == BIKE_AT_SPRINGBOARD_LIGHT
+        if (type == BIKE_AT_SPRINGBOARD_RIGHT
                 || type == BIKE_AT_SPRINGBOARD_RIGHT_DOWN) {
             commandLock = true;
             type = atNothingType();
@@ -228,12 +228,12 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                                 && !enemy.movement.isDown()
                                 && enemy.command == null)) {
                     crush();
-                    enemy.type = BIKE_AT_DOWNED_BIKE;
+                    enemy.type = BIKE_AT_KILLED_BIKE;
                     return;
                 }
                 if (!enemy.movement.isUp() && !enemy.movement.isDown() && enemy.command == null) {
                     enemy.crush();
-                    type = BIKE_AT_DOWNED_BIKE;
+                    type = BIKE_AT_KILLED_BIKE;
                     move(enemy);
                     enemy.ticked = true;
                     movement.clear();
@@ -280,7 +280,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                 type = BIKE_IN_FLIGHT_FROM_SPRINGBOARD;
                 atSpringboard = false;
             } else {
-                type = BIKE_AT_SPRINGBOARD_DARK;
+                type = BIKE_AT_SPRINGBOARD_LEFT;
                 atSpringboard = true;
             }
             return;
@@ -293,7 +293,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
 
         if (field.isSpringboardLightElement(x, y - 1)) {
-            type = BIKE_AT_SPRINGBOARD_LIGHT;
+            type = BIKE_AT_SPRINGBOARD_RIGHT;
             atSpringboard = false;
             y--;
             return;
@@ -362,8 +362,8 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             return;
         }
 
-        if (field.isBorder(x, y) && !atSpringboard) {
-            type = BIKE_FALLEN_AT_BORDER;
+        if (field.isFence(x, y) && !atSpringboard) {
+            type = BIKE_FALLEN_AT_FENCE;
             return;
         }
 

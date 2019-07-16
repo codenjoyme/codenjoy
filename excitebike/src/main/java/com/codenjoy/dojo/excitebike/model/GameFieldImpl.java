@@ -56,7 +56,7 @@ public class GameFieldImpl implements GameField {
     private Map<CharElements, List<Shiftable>> allShiftableElements = new HashMap<>();
     private List<Player> players = new LinkedList<>();
 
-    private List<Border> borders;
+    private List<Fence> fences;
 
     private int generationLock;
 
@@ -64,7 +64,7 @@ public class GameFieldImpl implements GameField {
         this.dice = dice;
         this.mapParser = mapParser;
 
-        borders = mapParser.getBorders();
+        fences = mapParser.getFences();
 
         allShiftableElements.put(ACCELERATOR, new ArrayList<>(mapParser.getAccelerators()));
         allShiftableElements.put(INHIBITOR, new ArrayList<>(mapParser.getInhibitors()));
@@ -74,12 +74,12 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(BIKE_FALLEN, new ArrayList<>(mapParser.getFallenBikes()));
 
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LEFT_UP, new ArrayList<>(mapParser.getSpringboardLeftUpElements()));
-        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LIGHT, new ArrayList<>(mapParser.getSpringboardLightElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT, new ArrayList<>(mapParser.getSpringboardLightElements()));
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LEFT_DOWN, new ArrayList<>(mapParser.getSpringboardLeftDownElements()));
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_UP, new ArrayList<>(mapParser.getSpringboardRightUpElements()));
-        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_DARK, new ArrayList<>(mapParser.getSpringboardDarkElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LEFT, new ArrayList<>(mapParser.getSpringboardDarkElements()));
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN, new ArrayList<>(mapParser.getSpringboardRightDownElements()));
-        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_NONE, new ArrayList<>(mapParser.getSpringboardNoneElements()));
+        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_TOP, new ArrayList<>(mapParser.getSpringboardNoneElements()));
 
     }
 
@@ -112,7 +112,7 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public boolean isBorder(int x, int y) {
+    public boolean isFence(int x, int y) {
         return y < 1 || y > mapParser.getYSize() - 2;
     }
 
@@ -143,12 +143,12 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public boolean isSpringboardDarkElement(int x, int y) {
-        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_DARK).contains(pt(x, y));
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT).contains(pt(x, y));
     }
 
     @Override
     public boolean isSpringboardLightElement(int x, int y) {
-        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LIGHT).contains(pt(x, y));
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT).contains(pt(x, y));
     }
 
     @Override
@@ -232,7 +232,7 @@ public class GameFieldImpl implements GameField {
     }
 
     private boolean isFree(Point point) {
-        return !getBikes().contains(point) && !borders.contains(point) && !allShiftableElements.get(OBSTACLE).contains(point);
+        return !getBikes().contains(point) && !fences.contains(point) && !allShiftableElements.get(OBSTACLE).contains(point);
     }
 
     public List<Bike> getBikes() {
@@ -242,8 +242,8 @@ public class GameFieldImpl implements GameField {
                 .collect(toList());
     }
 
-    public List<Border> getBorders() {
-        return borders;
+    public List<Fence> getFences() {
+        return fences;
     }
 
     @Override
@@ -273,7 +273,7 @@ public class GameFieldImpl implements GameField {
                 return new LinkedList<Point>() {{
                     addAll(GameFieldImpl.this.getBikes());
                     GameFieldImpl.this.allShiftableElements.values().forEach(this::addAll);
-                    addAll(getBorders());
+                    addAll(getFences());
                 }};
             }
         };
@@ -319,12 +319,12 @@ public class GameFieldImpl implements GameField {
     }
 
     private void generateElement(final int firstPossibleX, final int laneNumber) {
-        int rndNonBorderElementOrdinal = dice.next(values().length - 2) + 2;
-        int rndNonBorderLaneNumber = dice.next(laneNumber - 2) + 1;
+        int rndNonFenceElementOrdinal = dice.next(values().length - 2) + 2;
+        int rndNonFenceLaneNumber = dice.next(laneNumber - 2) + 1;
 
-        CharElements randomType = GameElementType.values()[rndNonBorderElementOrdinal];
+        CharElements randomType = GameElementType.values()[rndNonFenceElementOrdinal];
         List<Shiftable> elements = allShiftableElements.get(randomType);
-        Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonBorderLaneNumber);
+        Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonFenceLaneNumber);
         elements.add(newElement);
     }
 

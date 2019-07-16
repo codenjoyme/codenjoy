@@ -23,7 +23,7 @@ package com.codenjoy.dojo.excitebike.services.parse;
  */
 
 import com.codenjoy.dojo.excitebike.model.items.Accelerator;
-import com.codenjoy.dojo.excitebike.model.items.Border;
+import com.codenjoy.dojo.excitebike.model.items.Fence;
 import com.codenjoy.dojo.excitebike.model.items.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
 import com.codenjoy.dojo.excitebike.model.items.LineChanger;
@@ -82,8 +82,8 @@ public class MapParserImpl implements MapParser {
     }
 
     @Override
-    public List<Border> getBorders() {
-        return parseAndConvertElements(Border::new, GameElementType.BORDER);
+    public List<Fence> getFences() {
+        return parseAndConvertElements(Fence::new, GameElementType.FENCE);
     }
 
     @Override
@@ -109,12 +109,12 @@ public class MapParserImpl implements MapParser {
 
     @Override
     public List<SpringboardElement> getSpringboardDarkElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_DARK), SpringboardElementType.SPRINGBOARD_DARK);
+        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_LEFT), SpringboardElementType.SPRINGBOARD_LEFT);
     }
 
     @Override
     public List<SpringboardElement> getSpringboardLightElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_LIGHT), SpringboardElementType.SPRINGBOARD_LIGHT);
+        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_RIGHT), SpringboardElementType.SPRINGBOARD_RIGHT);
     }
 
     @Override
@@ -139,7 +139,7 @@ public class MapParserImpl implements MapParser {
 
     @Override
     public List<SpringboardElement> getSpringboardNoneElements() {
-        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_NONE), SpringboardElementType.SPRINGBOARD_NONE);
+        return parseAndConvertElements(point -> new SpringboardElement(point, SpringboardElementType.SPRINGBOARD_TOP), SpringboardElementType.SPRINGBOARD_TOP);
     }
 
     private <T> List<T> parseAndConvertElements(Function<Point, T> elementConstructor, CharElements... elements) {
