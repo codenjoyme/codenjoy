@@ -8,7 +8,7 @@ jdk/maven installation. This version uses their own JDK8, Git and Maven,
 so it reset M2_HOME and JAVA_HOME for this session. Nothing will change no
 your home version - this works just during run windows command script.
 If you want to run it on linux, you should read
-[how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker-compose)
+[how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker-compose#ubuntu-portable-script)
 - *[Optional]* Use [this zip](https://epa.ms/EBW39) (~900Mb) - there is everything you need to run on a clean
 windows machine without the Internet.
 - Copy this folder to root of your HDD. Make sure that there no spaces on the path.
@@ -78,7 +78,7 @@ the server a start.
 
 Other materials
 --------------
-For [more details, click here](https://github.com/codenjoyme/codenjoy)
+For [more details, click here](https://github.com/codenjoyme/codenjoy#codenjoy)
 
 [Codenjoy team](http://codenjoy.com/portal/?page_id=51)
 ===========

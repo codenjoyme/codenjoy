@@ -227,7 +227,7 @@ name for simplicity:
 
 Other materials
 --------------
-For [more details, click here](https://github.com/codenjoyme/codenjoy)
+For [more details, click here](https://github.com/codenjoyme/codenjoy#codenjoy)
 
 [Codenjoy team](http://codenjoy.com/portal/?page_id=51)
 ===========

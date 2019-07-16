@@ -78,12 +78,12 @@ To run a project with your game, do the following:
 Run Codenjoy in portable mode
 --------------
 There are two scripts to run Codenjoy on Ubuntu and Windows:
-- [how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker-compose)
-- [how to run the server on Windows](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/windows-cmd)
+- [how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker-compose#ubuntu-portable-script)
+- [how to run the server on Windows](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/windows-cmd#windows-portable-script)
 
 Develop a game
 --------------
-To find out more on how to create a game, [read here](https://github.com/codenjoyme/codenjoy-game)
+To find out more on how to create a game, [read here](https://github.com/codenjoyme/codenjoy-game#create-your-own-codenjoy-game)
 
 Server Configuration
 --------------
@@ -129,7 +129,7 @@ Those mandatory settings are:
 
 Other materials
 --------------
-For [more details, click here](https://github.com/codenjoyme/codenjoy)
+For [more details, click here](https://github.com/codenjoyme/codenjoy#codenjoy)
 
 [Codenjoy team](http://codenjoy.com/portal/?page_id=51)
 ===========
