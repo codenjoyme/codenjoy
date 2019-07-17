@@ -75,6 +75,21 @@
             </dependencies>
         </profile>
         <profile>
+            <id>crossyroad</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>crossyroad-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
             <id>sampletext</id>
             <activation>
                 <property>

@@ -76,6 +76,7 @@
         <module>tetris</module>
         <module>sokoban</module>
         <module>lemonade</module>
+        <module>crossyroad</module>
     </modules>
 
     <dependencyManagement>
