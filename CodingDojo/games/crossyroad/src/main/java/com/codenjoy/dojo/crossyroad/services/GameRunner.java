@@ -46,7 +46,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     protected String getMap() {
-        return "                    " +
+        return "#                  #" +
                 "#                  #" +
                 "#                  #" +
                 "#                  #" +
@@ -65,7 +65,7 @@ public class GameRunner extends AbstractGameType implements GameType {
                 "#                ==#" +
                 "#                  #" +
                 "#         ☺        #" +
-                "                    ";
+                "#                  #";
     }
 
     @Override

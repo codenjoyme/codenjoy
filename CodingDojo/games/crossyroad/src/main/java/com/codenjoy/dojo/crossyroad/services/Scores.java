@@ -37,7 +37,7 @@ public class Scores implements PlayerScores {
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(5);
         losePenalty = settings.addEditBox("Lose penalty").type(Integer.class).def(100);
     }
 
