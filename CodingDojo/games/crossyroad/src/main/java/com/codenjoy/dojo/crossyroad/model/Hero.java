@@ -56,12 +56,16 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void left() {
-        // do nothing, this should never happen
+        if (!alive) return;
+
+        direction = Direction.LEFT;
     }
 
     @Override
     public void right() {
-        // do nothing, this should never happen
+        if (!alive) return;
+
+        direction = Direction.RIGHT;
     }
 
     @Override
@@ -72,16 +76,19 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public void tick() {
         if (!alive) return;
+       // move(x-1, y);
+        if (direction != null) {
+            Point to = direction.change(this.copy());
+            move(to);}
+      //  if (status == HeroStatus.IDLE) alreadyJumped = 0;
 
-        if (status == HeroStatus.IDLE) alreadyJumped = 0;
-
-        if (direction == Direction.UP) {
+      /*  if (direction == Direction.UP) {
             if (alreadyJumped <= 1) {
                 setStatus(HeroStatus.JUMPING);
             }
-        }
+        }*/
 
-        direction = null;
+        direction = Direction.random();
     }
 
     public boolean isAlive() {
@@ -96,23 +103,23 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return Elements.BLACK_HERO;
         }
     }
-
+        // Для переход в режим бога alive = true
     public void dies() {
-        alive = false;
+        alive = true;
     }
 
     public void setStatus(HeroStatus status) {
         this.status = status;
     }
 
-    public void falls() {
+    /*public void falls() {
         move(x, y - 1);
-    }
+    }*/
 
-    public void jumps() {
+    /*public void jumps() {
         alreadyJumped++;
         move(x, y + 1);
-    }
+    }*/
 
     public HeroStatus getStatus() {
         return status;

@@ -81,14 +81,14 @@ public class Crossyroad implements Field {
             Hero hero = player.getHero();
 
             // moving hero
-            if (hero.getStatus() == HeroStatus.FALLING) {
+           /* if (hero.getStatus() == HeroStatus.FALLING) {
                 //Very podozritelno
                 if (!platforms.contains(pt(hero.getX() + 1, hero.getY() - 1))) {
                     hero.falls();
                 }
             } else if (hero.getStatus() == HeroStatus.JUMPING) {
                 hero.jumps();
-            }
+            }*/
 
             // status changing
             boolean isPlatformUnderHero = platforms.contains(pt(hero.getX(), hero.getY() - 1));
