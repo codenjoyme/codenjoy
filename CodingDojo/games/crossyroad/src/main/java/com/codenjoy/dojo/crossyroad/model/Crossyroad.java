@@ -27,12 +27,9 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.crossyroad.services.Events;
-import com.codenjoy.dojo.crossyroad.services.HeroStatus;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Crossyroad implements Field {
 

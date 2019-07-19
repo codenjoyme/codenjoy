@@ -24,20 +24,15 @@ package com.codenjoy.dojo.crossyroad.model;
 
 
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.crossyroad.services.HeroStatus;
 import com.codenjoy.dojo.services.*;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private boolean alive;
     private Direction direction;
-    private HeroStatus status;
-    private int alreadyJumped;
 
     public Hero(Point xy) {
         super(xy);
-        status = HeroStatus.IDLE;
-        alreadyJumped = 0;
         direction = null;
         alive = true;
     }
@@ -79,13 +74,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         if (direction != null) {
             Point to = direction.change(this.copy());
             move(to);}
-      //  if (status == HeroStatus.IDLE) alreadyJumped = 0;
-
-      /*  if (direction == Direction.UP) {
-            if (alreadyJumped <= 1) {
-                setStatus(HeroStatus.JUMPING);
-            }
-        }*/
 
         direction = Direction.random();
     }
@@ -107,9 +95,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         alive = true;
     }
 
-    public void setStatus(HeroStatus status) {
-        this.status = status;
-    }
+
 
     /*public void falls() {
         move(x, y - 1);
@@ -120,11 +106,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         move(x, y + 1);
     }*/
 
-    public HeroStatus getStatus() {
-        return status;
-    }
 
-    public void setAlreadyJumped(int alreadyJumped) {
+
+   /* public void setAlreadyJumped(int alreadyJumped) {
         this.alreadyJumped = alreadyJumped;
-    }
+    }*/
 }
