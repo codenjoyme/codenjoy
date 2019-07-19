@@ -64,31 +64,31 @@ public class Crossyroad implements Field {
             hero.tick();
 
         }
-        // move world
+        // перемещение машин
         for (Platform platform : platforms) {
             platform.tick();
         }
 
-        // remove platforms that out of the world
+        // убираем машины, вышедшие за экран
         for (Platform platform : platforms.toArray(new Platform[0])) {
             if (platform.isOutOf(size)) {
                 platforms.remove(platform);
             }
         }
 
-        // moving hero and status changing
-        for (Player player : players) {
+        // реализация механики прыжка(из другой игры)
+       /* for (Player player : players) {
             Hero hero = player.getHero();
 
             // moving hero
-           /* if (hero.getStatus() == HeroStatus.FALLING) {
+            if (hero.getStatus() == HeroStatus.FALLING) {
                 //Very podozritelno
                 if (!platforms.contains(pt(hero.getX() + 1, hero.getY() - 1))) {
                     hero.falls();
                 }
             } else if (hero.getStatus() == HeroStatus.JUMPING) {
                 hero.jumps();
-            }*/
+            }
 
             // status changing
             boolean isPlatformUnderHero = platforms.contains(pt(hero.getX(), hero.getY() - 1));
@@ -106,9 +106,9 @@ public class Crossyroad implements Field {
             if (walls.contains(hero)) {
                 loseGame(player, hero);
             }
-        }
+        }*/
 
-        // kill hero inside platforms
+        // если игрок попадает под машину, то умирает
         for (Player player : players) {
             Hero hero = player.getHero();
             if (platforms.contains(hero)) {
