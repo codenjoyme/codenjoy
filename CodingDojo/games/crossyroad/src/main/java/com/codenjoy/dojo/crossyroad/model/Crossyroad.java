@@ -58,12 +58,12 @@ public class Crossyroad implements Field {
         tickCounter++;
         platforms.addAll(platformGenerator.generateRandomPlatforms());
 
-        // set player JUMPING status and/or jumpCounter since last IDLE
+        // перемещение героя
         for (Player player : players) {
             Hero hero = player.getHero();
             hero.tick();
-        }
 
+        }
         // move world
         for (Platform platform : platforms) {
             platform.tick();

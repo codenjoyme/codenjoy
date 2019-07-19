@@ -76,7 +76,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public void tick() {
         if (!alive) return;
-       // move(x-1, y);
         if (direction != null) {
             Point to = direction.change(this.copy());
             move(to);}

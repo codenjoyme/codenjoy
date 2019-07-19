@@ -39,7 +39,7 @@ public class YourSolver implements Solver<Board> {
 
     private Dice dice;
     private Board board;
-
+    private Direction dir=Direction.STOP;
     public YourSolver(Dice dice) {
         this.dice = dice;
     }
@@ -47,7 +47,21 @@ public class YourSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         this.board = board;
-        return Direction.random().toString();
+        if (dir== Direction.STOP){
+            dir =Direction.UP;
+        }else
+        if (dir== Direction.UP){
+            dir =Direction.LEFT;
+        }else
+        if (dir== Direction.LEFT){
+            dir =Direction.RIGHT;
+        }else
+        if (dir== Direction.RIGHT){
+            dir =Direction.UP;
+        }
+
+        return dir.toString();
+
     }
 
     public static void main(String[] args) {
