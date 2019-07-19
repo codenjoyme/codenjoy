@@ -44,6 +44,17 @@ public class Platform extends PointImpl implements Tickable, State<Elements, Pla
 
     @Override
     public void tick() {
-        move(x-1, y);
+        if(direction == Direction.LEFT) {
+            move(x - 1, y);
+        }else
+        if(direction == Direction.RIGHT) {
+            move(x + 1, y);
+        }else
+            move(x - 1, y);
+
+    }
+
+    public void down (){
+        move(x , y-1);
     }
 }

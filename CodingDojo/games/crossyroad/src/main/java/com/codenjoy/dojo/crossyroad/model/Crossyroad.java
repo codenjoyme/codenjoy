@@ -24,6 +24,7 @@ package com.codenjoy.dojo.crossyroad.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.crossyroad.services.Events;
@@ -54,25 +55,30 @@ public class Crossyroad implements Field {
     public void tick() {
         tickCounter++;
         platforms.addAll(platformGenerator.generateRandomPlatforms());
-
         // перемещение героя
         for (Player player : players) {
             Hero hero = player.getHero();
             hero.tick();
-
+            Direction directionHero = hero.getDirection();
+            //for (Platform platform : platforms) {
+              //  platform.down();
+            //}
+            if (directionHero==Direction.DOWN){
+                for (Platform platform : platforms) {
+                    platform.down();
+                }
+            }
         }
         // перемещение машин
         for (Platform platform : platforms) {
             platform.tick();
         }
-
         // убираем машины, вышедшие за экран
         for (Platform platform : platforms.toArray(new Platform[0])) {
             if (platform.isOutOf(size)) {
                 platforms.remove(platform);
             }
         }
-
         // реализация механики прыжка(из другой игры)
        /* for (Player player : players) {
             Hero hero = player.getHero();
@@ -104,7 +110,6 @@ public class Crossyroad implements Field {
                 loseGame(player, hero);
             }
         }*/
-
         // если игрок попадает под машину, то умирает
         for (Player player : players) {
             Hero hero = player.getHero();

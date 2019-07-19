@@ -45,36 +45,34 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public void up() {
         if (!alive) return;
-
         direction = Direction.UP;
     }
 
     @Override
     public void left() {
         if (!alive) return;
-
         direction = Direction.LEFT;
     }
 
     @Override
     public void right() {
         if (!alive) return;
-
         direction = Direction.RIGHT;
     }
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
+        // do nothing, this should never happen
     }
 
     @Override
     public void tick() {
         if (!alive) return;
         if (direction != null) {
+            //приращение по x y по значению передаваемой точки
             Point to = direction.change(this.copy());
-            move(to);}
-
+            move(to);
+        }
         direction = Direction.random();
     }
 
@@ -95,19 +93,14 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         alive = true;
     }
 
-
-
+    public Direction getDirection(){return this.direction;}
     /*public void falls() {
         move(x, y - 1);
     }*/
-
     /*public void jumps() {
         alreadyJumped++;
         move(x, y + 1);
     }*/
-
-
-
    /* public void setAlreadyJumped(int alreadyJumped) {
         this.alreadyJumped = alreadyJumped;
     }*/

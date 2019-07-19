@@ -39,7 +39,7 @@ public class YourSolver implements Solver<Board> {
 
     private Dice dice;
     private Board board;
-    private Direction dir=Direction.STOP;
+    private Direction dir=Direction.UP;
     public YourSolver(Dice dice) {
         this.dice = dice;
     }
