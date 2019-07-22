@@ -50,7 +50,7 @@ public class YourSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         this.board = board;
-        Direction dir = Direction.UP;// дефолтное напраление
+        Direction dir = Direction.STOP;// дефолтное напраление
 
         List<Point> barriers = board.getBarriers();// получение всех координат препятствий
 
@@ -59,19 +59,35 @@ public class YourSolver implements Solver<Board> {
         double myX = myPos.getX();//10
         double myY = myPos.getY();//18
 
-        System.out.println(myX+" "+myY);
+        System.out.println(myX+" "+myY);//для проверок, потом удалить
 
         List<Point> possibleDirection = new LinkedList<>();//← ↑ →
+        boolean check[] = {true, true, true};
+        int i=0;
         for (Direction direction : Direction.onlyDirections()){
             if(  !(direction.equals(Direction.DOWN))  ) {
-                Point point = board.getMe();
-                point.change(direction);
-                possibleDirection.add(point);
+                Point heroAfterToMove = board.getMe();//мое положение
+                heroAfterToMove.change(direction);//мое положение после хода(типа)
+                possibleDirection.add(heroAfterToMove);//добавление этой позиции в лист
+                //флаги(наличие слева/свеху/справа чего-нибудь)(сравнение этой позиции с координатами барьеров)
+                for(Point point : barriers){
+                    if(point.equals(heroAfterToMove)){
+                        check[i] = false;// что логично, если возможная точка совпала с точкой барьера, туда ходить нельзя, печалька
+                    }
+                }
+                i++;
             }
         }
+        //на выходе: список с координатами для хода и массив флагов, говорящих, можно ли туда ходить
 
-        
 
+        // алгоритм выбора направления (лево, вверх, вправо, стоп)
+        // реализация пока самая простая
+        if(check[1])                    // если впереди свободно, то вперед
+            return Direction.UP.toString();
+        if( !(check[1]) && check[2])    // если впереди занято, а с права свободно, то ждем
+            return Direction.STOP.toString();
+        // в любом другом случае(при направлении платформ в одну сторону), суицыд
 
         //реализовать: проверку на встречу игрока со стеной(не здесь, а в Crossyroad.tick() , там есть заготовки)
         return dir.toString();
