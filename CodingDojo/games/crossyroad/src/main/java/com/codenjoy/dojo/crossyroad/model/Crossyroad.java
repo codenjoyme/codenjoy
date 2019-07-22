@@ -123,7 +123,8 @@ public class Crossyroad implements Field {
             if (walls.contains(hero)) {
                 loseGame(player, hero);
             }
-        }*/
+        }
+        */
         // если игрок попадает под машину, то умирает
         for (Player player : players) {
             Hero hero = player.getHero();
@@ -132,7 +133,11 @@ public class Crossyroad implements Field {
             }
         }
         for (Player player : players) {
-            player.event(Events.STILL_ALIVE);
+            Hero hero = player.getHero();
+            //player.event(Events.STILL_ALIVE);
+            if(Direction.UP.equals(hero.getDirection())){
+                player.event(Events.GO_UP);
+            }
         }
     }
 

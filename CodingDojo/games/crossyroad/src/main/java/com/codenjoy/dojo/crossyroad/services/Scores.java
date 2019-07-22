@@ -53,7 +53,7 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.STILL_ALIVE)) {
+        if (event.equals(Events.GO_UP)) {
             score += winScore.getValue();
         }
         score = Math.max(0, score);

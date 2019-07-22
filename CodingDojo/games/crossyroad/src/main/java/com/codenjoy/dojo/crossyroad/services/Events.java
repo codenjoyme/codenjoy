@@ -24,5 +24,5 @@ package com.codenjoy.dojo.crossyroad.services;
 
 
 public enum Events {
-    STILL_ALIVE, LOSE
+    GO_UP, LOSE
 }
