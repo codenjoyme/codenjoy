@@ -62,16 +62,20 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void act(int... p) {
-        // do nothing, this should never happen
+        if (!alive) return;
     }
 
     @Override
     public void tick() {
         if (!alive) return;
         if (direction != null) {
-            //приращение по x y по значению передаваемой точки
-            Point to = direction.change(this.copy());
-            move(to);
+            //приращение по x y по значению передаваемой точки, если напрваление не вверх
+            // то есть, direction героя смениться на UP, но вперед он идти не будет
+            // только влево-вправо
+            if(direction!=Direction.UP) {
+                Point to = direction.change(this.copy());
+                move(to);
+            }
         }
         direction = Direction.random();
     }

@@ -25,6 +25,8 @@ package com.codenjoy.dojo.crossyroad.client;
 
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.crossyroad.model.Elements;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 
 /**
  * Класс, обрабатывающий строковое представление доски.
@@ -42,11 +44,11 @@ public class Board extends AbstractBoard<Elements> {
 //    public boolean isBarrierAt(int x, int y) {
 //        return isAt(x, y, Elements.WALL);
 //    }
-//
-//    public Point getMe() {
-//        return get(Elements.DEAD_HERO,
-//                Elements.HERO).get(0);
-//    }
+    //возвращает точку живого или мертвого героя
+    public Point getMe() {
+        return get(Elements.BLACK_HERO,
+                Elements.HERO).get(0);
+    }
 //
 //    public boolean isGameOver() {
 //        return !get(Elements.DEAD_HERO).isEmpty();
@@ -55,4 +57,13 @@ public class Board extends AbstractBoard<Elements> {
 //    public boolean isBombAt(int x, int y) {
 //        return isAt(x, y, Elements.BOMB);
 //    }
+
+    /*//так как перс может иметь только три направления(лево,право,вверх), но вверх он не ходит, а падают машины
+    public Direction trueRandom(){
+        Direction dir = Direction.random();
+        while(!(dir==Direction.UP)||!(dir==Direction.LEFT)||!(dir==Direction.RIGHT)){
+            dir = Direction.random();
+        }
+        return dir;
+    }*/
 }

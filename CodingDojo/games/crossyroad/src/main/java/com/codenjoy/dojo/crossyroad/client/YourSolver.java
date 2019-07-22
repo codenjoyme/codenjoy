@@ -47,6 +47,8 @@ public class YourSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         this.board = board;
+       // System.out.println(board.getMe().toString());
+       // return this.trueRandom().toString();
         if (dir== Direction.STOP){
             dir =Direction.UP;
         }else
@@ -59,11 +61,17 @@ public class YourSolver implements Solver<Board> {
         if (dir== Direction.RIGHT){
             dir =Direction.UP;
         }
-
         return dir.toString();
-
     }
 
+    //так как перс может иметь только три направления(лево,право,вверх), но вверх он не ходит, а падают машины
+   /* public Direction trueRandom(){
+        Direction dir = Direction.random();
+        while(!(dir==Direction.UP)||!(dir==Direction.LEFT)||!(dir==Direction.RIGHT)){
+            dir = Direction.random();
+        }
+        return dir;
+    }*/
     public static void main(String[] args) {
         WebSocketRunner.runClient(
                 // paste here board page url from browser after registration

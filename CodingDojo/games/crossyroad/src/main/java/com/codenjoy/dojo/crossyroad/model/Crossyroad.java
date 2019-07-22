@@ -60,9 +60,8 @@ public class Crossyroad implements Field {
             Hero hero = player.getHero();
             hero.tick();
             Direction directionHero = hero.getDirection();
-            //for (Platform platform : platforms) {
-              //  platform.down();
-            //}
+
+            //System.out.println(hero.toString()); //не работает
             if (directionHero==Direction.DOWN){
                 for (Platform platform : platforms) {
                     platform.down();

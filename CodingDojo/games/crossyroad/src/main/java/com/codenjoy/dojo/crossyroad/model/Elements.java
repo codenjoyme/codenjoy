@@ -35,7 +35,7 @@ public enum Elements implements CharElements {
     WALL('#'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
     PLATFORM('='),   // а это МОЯ ПЛАТФОРМА
     HERO('☺'),       // а это мой герой
-    BLACK_HERO('☻');       // а это очень мертвый труп
+    BLACK_HERO('☻'); // а это очень мертвый труп
 
 
     final char ch;
