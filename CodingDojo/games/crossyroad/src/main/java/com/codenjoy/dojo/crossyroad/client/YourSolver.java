@@ -27,7 +27,11 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.RandomDice;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * User: your name
@@ -39,7 +43,6 @@ public class YourSolver implements Solver<Board> {
 
     private Dice dice;
     private Board board;
-    private Direction dir=Direction.UP;// подумать, какое начальное состояние лучше задать(было UP)(заглушка)
     public YourSolver(Dice dice) {
         this.dice = dice;
     }
@@ -47,37 +50,33 @@ public class YourSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         this.board = board;
-       // System.out.println(board.getMe().toString());
-       // return this.trueRandom().toString();
-        // заглушка(пока не будет рнеализована логика выбора направления бота)
-        if (dir== Direction.STOP){
-            dir =Direction.UP;
-        }else
-        if (dir== Direction.UP){
-            dir =Direction.LEFT;
-        }else
-        if (dir== Direction.LEFT){
-            dir =Direction.RIGHT;
-        }else
-        if (dir== Direction.RIGHT){
-            dir =Direction.UP;
-        }
-        //реализовать: выбор направления(left, up, right)
-        // получение всех координат препятствий
+        Direction dir = Direction.UP;// дефолтное напраление
 
-        //реализовать: проверку на встречу игрока со стеной
-        System.out.println(dir.toString());
+        List<Point> barriers = board.getBarriers();// получение всех координат препятствий
+
+        //реализовать: выбор направления(left, up, right)
+        Point myPos = board.getMe();
+        double myX = myPos.getX();//10
+        double myY = myPos.getY();//18
+
+        System.out.println(myX+" "+myY);
+
+        List<Point> possibleDirection = new LinkedList<>();//← ↑ →
+        for (Direction direction : Direction.onlyDirections()){
+            if(  !(direction.equals(Direction.DOWN))  ) {
+                Point point = board.getMe();
+                point.change(direction);
+                possibleDirection.add(point);
+            }
+        }
+
+        
+
+
+        //реализовать: проверку на встречу игрока со стеной(не здесь, а в Crossyroad.tick() , там есть заготовки)
         return dir.toString();
     }
 
-    //так как перс может иметь только три направления(лево,право,вверх), но вверх он не ходит, а падают машины
-   /* public Direction trueRandom(){
-        Direction dir = Direction.random();
-        while(!(dir==Direction.UP)||!(dir==Direction.LEFT)||!(dir==Direction.RIGHT)){
-            dir = Direction.random();
-        }
-        return dir;
-    }*/
     public static void main(String[] args) {
         WebSocketRunner.runClient(
                 // paste here board page url from browser after registration
@@ -85,5 +84,33 @@ public class YourSolver implements Solver<Board> {
                 new YourSolver(new RandomDice()),
                 new Board());
     }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
