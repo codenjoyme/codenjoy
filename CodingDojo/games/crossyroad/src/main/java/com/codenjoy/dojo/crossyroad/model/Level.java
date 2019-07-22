@@ -33,5 +33,7 @@ public interface Level {
 
     List<Wall> getWalls();
 
+    List<Stone> getStones();
+
     List<Platform> getPlatforms();
 }

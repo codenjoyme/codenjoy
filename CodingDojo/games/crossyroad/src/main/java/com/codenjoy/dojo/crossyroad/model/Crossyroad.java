@@ -29,15 +29,21 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.crossyroad.services.Events;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Crossyroad implements Field {
 
     public static final int MAX_PLATFORM_LENGTH = 3;
+    public static final int NEW_APPEAR_PERIOD = 3;
     private final PlatformGenerator platformGenerator;
     private Level level;
     private List<Player> players;
+    private List<Stone> stones;
+    private boolean isNewStone = true;
+    private Dice dice;
+    private int countStone = 0;
     private List<Platform> platforms;
     private int tickCounter;
 
@@ -48,29 +54,38 @@ public class Crossyroad implements Field {
         this.level = level;
         size = level.getSize();
         players = new LinkedList<>();
+        stones = new LinkedList<Stone>();
         platformGenerator = new PlatformGenerator(dice, size, MAX_PLATFORM_LENGTH);
     }
 
     @Override
     public void tick() {
         tickCounter++;
+        createStone();
+        removeStoneOutOfBoard();
         platforms.addAll(platformGenerator.generateRandomPlatforms());
         // перемещение героя
         for (Player player : players) {
             Hero hero = player.getHero();
             hero.tick();
             Direction directionHero = hero.getDirection();
-
             //System.out.println(hero.toString()); //не работает
             if (directionHero==Direction.UP){
                 for (Platform platform : platforms) {
                     platform.down();
                 }
+            for (Stone stone : stones) {
+                stone.down();
+            }
             }
         }
-        // перемещение машин(влево вправо)
+        // перемещение машин
         for (Platform platform : platforms) {
             platform.tick();
+        }
+        // добавление камней
+        for (Stone stone : stones) {
+            stone.tick();
         }
         // убираем машины, вышедшие за экран
         for (Platform platform : platforms.toArray(new Platform[0])) {
@@ -121,6 +136,19 @@ public class Crossyroad implements Field {
         }
     }
 
+    // создание камней
+    private void createStone() {
+       countStone++;
+        if (countStone == NEW_APPEAR_PERIOD) {
+            int x = dice.next(size - 2);
+            if (x != -1) {
+              addStone(x + 1);
+            }
+            countStone = 0;
+        }
+    }
+
+
     private void loseGame(Player player, Hero hero) {
         player.event(Events.LOSE);
         platformGenerator.setPreviousY(2);
@@ -140,6 +168,7 @@ public class Crossyroad implements Field {
 
         walls = level.getWalls();
         platforms = level.getPlatforms();
+        stones = level.getStones();
     }
 
     @Override
@@ -163,6 +192,7 @@ public class Crossyroad implements Field {
                     addAll(getHeroes());
                     if (walls != null) addAll(walls);
                     if (platforms != null) addAll(platforms);
+                    addAll(stones);
                 }};
             }
         };
@@ -174,6 +204,22 @@ public class Crossyroad implements Field {
             heroes.add(player.getHero());
         }
         return heroes;
+    }
+
+    private void removeStoneOutOfBoard() {
+        for (Iterator<Stone> stone = stones.iterator(); stone.hasNext();){
+            if (stone.next().isOutOf(size)){
+                stone.remove();
+            }
+        }
+    }
+    public void addStone(int x) {
+        stones.add(new Stone(x, size));
+        isNewStone = false;
+    }
+
+    List<Stone> getStones() {
+        return stones;
     }
 
     List<Platform> getPlatforms() {

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.crossyroad.client.ai;
+package com.codenjoy.dojo.crossyroad.model;
 
 /*-
  * #%L
@@ -22,35 +22,38 @@ package com.codenjoy.dojo.crossyroad.client.ai;
  * #L%
  */
 
+import com.codenjoy.dojo.services.*;
 
-import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.crossyroad.client.Board;
-import com.codenjoy.dojo.services.Direction;
+/**
+ * Артефакт Камень на поле
+ */
+public class Stone extends PointImpl implements State<Elements, Player>, Tickable {
+    private Direction direction;
 
-public class AISolver implements Solver<Board> {
-
-    private Dice dice;
-
-    public AISolver(Dice dice) {
-        this.dice = dice;
+    public Stone(int x, int y) {
+        super(x, y);
+        direction = Direction.DOWN;
     }
-    private Direction dir=Direction.UP;
+
+    public Stone(Point pt) {
+        super(pt);
+    }
 
     @Override
-    public String get(final Board board) {
-        if (dir== Direction.STOP){
-            dir =Direction.UP;
-        }else
-        if (dir== Direction.UP){
-            dir =Direction.LEFT;
-        }else
-        if (dir== Direction.LEFT){
-            dir =Direction.RIGHT;
-        }else
-        if (dir== Direction.RIGHT){
-            dir =Direction.UP;
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.STONE;
+    }
+
+    @Override
+    public void tick() {
+        if (direction != null) {
+            int newX = direction.changeX(x);
+            int newY = direction.changeY(y);
+            move(newX, newY);
         }
-        return dir.toString();
+
+    }
+    public void down (){
+        move(x , y-1);
     }
 }

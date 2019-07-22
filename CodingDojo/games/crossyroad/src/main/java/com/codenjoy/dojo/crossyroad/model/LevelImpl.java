@@ -78,6 +78,16 @@ public class LevelImpl implements Level, Tickable {
         return result;
     }
 
+    @Override
+    public List<Stone> getStones() {
+        List<Stone> result = new LinkedList<Stone>();
+
+        for (Point pt : getPointsOf(Elements.STONE)) {
+            result.add(new Stone(pt));
+        }
+
+        return result;
+    }
 
     private List<Point> getPointsOf(Elements element) {
         List<Point> result = new LinkedList<Point>();
