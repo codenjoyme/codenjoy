@@ -39,7 +39,7 @@ public class YourSolver implements Solver<Board> {
 
     private Dice dice;
     private Board board;
-    private Direction dir=Direction.UP;
+    private Direction dir=Direction.UP;// подумать, какое начальное состояние лучше задать(было UP)(заглушка)
     public YourSolver(Dice dice) {
         this.dice = dice;
     }
@@ -49,6 +49,7 @@ public class YourSolver implements Solver<Board> {
         this.board = board;
        // System.out.println(board.getMe().toString());
        // return this.trueRandom().toString();
+        // заглушка(пока не будет рнеализована логика выбора направления бота)
         if (dir== Direction.STOP){
             dir =Direction.UP;
         }else
@@ -61,6 +62,11 @@ public class YourSolver implements Solver<Board> {
         if (dir== Direction.RIGHT){
             dir =Direction.UP;
         }
+        //реализовать: выбор направления(left, up, right)
+        // получение всех координат препятствий
+
+        //реализовать: проверку на встречу игрока со стеной
+        System.out.println(dir.toString());
         return dir.toString();
     }
 

@@ -28,6 +28,9 @@ import com.codenjoy.dojo.crossyroad.model.Elements;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Класс, обрабатывающий строковое представление доски.
  * Содержит ряд унаследованных методов {@see AbstractBoard},
@@ -40,30 +43,63 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
+    /**
     // TODO закончить
 //    public boolean isBarrierAt(int x, int y) {
 //        return isAt(x, y, Elements.WALL);
 //    }
+     */
+
+
+    // возвращает элементы стены(wall) + камни(stone) + платформы(platform) (они должны находиться внизу этого класса)
+    public List<Point> getBarriers() {
+        List<Point> result = getPlatforms();
+        //result.addAll(getStones());
+        result.addAll(getWalls());
+        return result;
+    }
+
+// геты для получения списков каждого типа элементов на доске
     //возвращает точку живого или мертвого героя
     public Point getMe() {
         return get(Elements.BLACK_HERO,
                 Elements.HERO).get(0);
     }
-//
-//    public boolean isGameOver() {
-//        return !get(Elements.DEAD_HERO).isEmpty();
-//    }
-//
-//    public boolean isBombAt(int x, int y) {
-//        return isAt(x, y, Elements.BOMB);
-//    }
+    public List<Point> getWalls(){
+        return get(Elements.WALL);
+    }
+    public List<Point> getPlatforms(){
+        return get(Elements.PLATFORM);
+    }
+    // пока не реализованы камни
 
-    /*//так как перс может иметь только три направления(лево,право,вверх), но вверх он не ходит, а падают машины
+
+
+
+
+
+
+
+
+
+    /*
+    public boolean isGameOver() {
+        return !get(Elements.DEAD_HERO).isEmpty();
+    }
+
+    public boolean isBombAt(int x, int y) {
+       return isAt(x, y, Elements.BOMB);
+    }
+    */
+
+    /*
+    //так как перс может иметь только три направления(лево,право,вверх), но вверх он не ходит, а падают машины
     public Direction trueRandom(){
         Direction dir = Direction.random();
         while(!(dir==Direction.UP)||!(dir==Direction.LEFT)||!(dir==Direction.RIGHT)){
             dir = Direction.random();
         }
         return dir;
-    }*/
+    }
+     */
 }

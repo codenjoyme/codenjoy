@@ -36,48 +36,31 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         direction = null;
         alive = true;
     }
-
+//смена направления героя
     @Override
-    public void down() {
-        // do nothing, this should never happen
-    }
-
+    public void down() {/* do nothing, this should never happen*/}
     @Override
-    public void up() {
-        if (!alive) return;
-        direction = Direction.UP;
-    }
-
+    public void up() { if (!alive) return;direction = Direction.UP; }
     @Override
-    public void left() {
-        if (!alive) return;
-        direction = Direction.LEFT;
-    }
-
+    public void left() { if (!alive) return;direction = Direction.LEFT; }
     @Override
-    public void right() {
-        if (!alive) return;
-        direction = Direction.RIGHT;
-    }
-
+    public void right() { if (!alive) return;direction = Direction.RIGHT; }
     @Override
-    public void act(int... p) {
-        if (!alive) return;
-    }
+    public void act(int... p) {if (!alive) return;/* пока это нигде не используется*/}
 
     @Override
     public void tick() {
         if (!alive) return;
         if (direction != null) {
             //приращение по x y по значению передаваемой точки, если напрваление не вверх
-            // то есть, direction героя смениться на UP, но вперед он идти не будет
+            // то есть, direction героя смениться на UP, но вперед он идти не будет,
             // только влево-вправо
             if(direction!=Direction.UP) {
                 Point to = direction.change(this.copy());
                 move(to);
             }
         }
-        direction = Direction.random();
+        //direction = Direction.random();// заглушка, сейчас не используется
     }
 
     public boolean isAlive() {
@@ -98,6 +81,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public Direction getDirection(){return this.direction;}
+
+    //логика из предыдущей игры, оставлена как ознакомительный фрагмент
     /*public void falls() {
         move(x, y - 1);
     }*/

@@ -62,13 +62,13 @@ public class Crossyroad implements Field {
             Direction directionHero = hero.getDirection();
 
             //System.out.println(hero.toString()); //не работает
-            if (directionHero==Direction.DOWN){
+            if (directionHero==Direction.UP){
                 for (Platform platform : platforms) {
                     platform.down();
                 }
             }
         }
-        // перемещение машин
+        // перемещение машин(влево вправо)
         for (Platform platform : platforms) {
             platform.tick();
         }
