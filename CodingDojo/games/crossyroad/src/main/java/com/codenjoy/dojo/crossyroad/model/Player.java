@@ -44,7 +44,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public void newHero(Field field) {
-        hero = new Hero(pt(10, 3));
+        hero = new Hero(pt(10, 1));
     }
 
     @Override

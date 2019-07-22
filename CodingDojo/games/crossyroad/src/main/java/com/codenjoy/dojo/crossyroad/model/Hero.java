@@ -77,7 +77,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                 move(to);
             }
         }
-        direction = Direction.random();
+      //  direction = Direction.random();
     }
 
     public boolean isAlive() {
