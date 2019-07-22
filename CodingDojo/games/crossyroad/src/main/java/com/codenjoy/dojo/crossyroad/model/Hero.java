@@ -60,7 +60,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                 move(to);
             }
         }
-        direction = Direction.random();
+        //direction = Direction.random();
     }
 
     public boolean isAlive() {
@@ -77,7 +77,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
         // Для переход в режим бога alive = true
     public void dies() {
-        alive = true;
+        alive = false;
     }
 
     public Direction getDirection(){return this.direction;}

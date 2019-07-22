@@ -54,7 +54,7 @@ public class Crossyroad implements Field {
         this.level = level;
         size = level.getSize();
         players = new LinkedList<>();
-        stones = new LinkedList<Stone>();
+        stones = new LinkedList<>();
         platformGenerator = new PlatformGenerator(dice, size, MAX_PLATFORM_LENGTH);
     }
 
@@ -215,16 +215,16 @@ public class Crossyroad implements Field {
     }
     public void addStone(int x) {
         stones.add(new Stone(x, size));
-        isNewStone = false;
+        isNewStone = false;// где это используется...
     }
 
     List<Stone> getStones() {
         return stones;
-    }
+    }// шобы было
 
     List<Platform> getPlatforms() {
         return platforms;
-    }
+    }// шобы было
 
     public int getTickCounter() {
         return tickCounter;
