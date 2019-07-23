@@ -30,6 +30,8 @@ import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -370,4 +372,55 @@ public class GameFieldImplTest {
         //then
         assertThat(result, is(givenPlayer));
     }
+/*
+    @Test
+    public void tick__shouldMoveBikeUp__ifBikeGoToSpringboardLeftDownElementType() {
+        //given
+        gameField = new GameFieldImpl(mapParser, dice);
+        int x = 5;
+        int y = 5;
+        Bike givenBike = new Bike(x, y);
+        Player givenPlayer = new Player(mock(EventListener.class));
+        givenPlayer.setHero(givenBike);
+        gameField.newGame(givenPlayer);
+        when(gameField.isSpringboardLeftDownElement(anyInt(), anyInt())).thenReturn(true);
+//        bike.tick();
+
+        //when
+        gameField.tick();
+
+        //then
+        MatcherAssert.assertThat(givenBike.getX(), CoreMatchers.is(5));
+        MatcherAssert.assertThat(givenBike.getY(), CoreMatchers.is(6));
+    }
+
+    @Test
+    public void tick__shouldMoveBikeUp__ifBikeGoToSpringboardDarkElementType() {
+        //given
+        when(gameField.isSpringboardDarkElement(bike.getX(), bike.getY())).thenReturn(true);
+        when(gameField.isSpringboardLeftDownElement(bike.getX(), 1)).thenReturn(true);
+        bike.tick();
+
+        //when
+        bike.tick();
+
+        //then
+        MatcherAssert.assertThat(bike.getX(), CoreMatchers.is(5));
+        MatcherAssert.assertThat(bike.getY(), CoreMatchers.is(6));
+    }
+
+    @Test
+    public void tick__shouldMoveBikeDown__ifBikeGoToSpringboardRightUpElementType() {
+        //given
+        when(gameField.isSpringboardRightDownElement(bike.getX() + 1, bike.getY() - 1)).thenReturn(true);
+        bike.tick();
+
+        //when
+        bike.tick();
+
+        //then
+        MatcherAssert.assertThat(bike.getX(), CoreMatchers.is(5));
+        MatcherAssert.assertThat(bike.getY(), CoreMatchers.is(4));
+    }
+*/
 }

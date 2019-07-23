@@ -89,6 +89,7 @@ public class GameFieldImpl implements GameField {
     @Override
     public void tick() {
         shiftTrack();
+        players.forEach(player -> player.getHero().changeYDependsOnSpringboard());
         players.forEach(player -> player.getHero().tick());
         players.forEach(player -> player.getHero().setTicked(false));
         if (players.stream().filter(Player::isAlive).count() <= 1 && players.size() > 1) {
