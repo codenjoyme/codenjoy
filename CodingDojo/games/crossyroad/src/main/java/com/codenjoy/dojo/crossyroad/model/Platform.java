@@ -29,12 +29,14 @@ public class Platform extends PointImpl implements Tickable, State<Elements, Pla
 
     private Direction direction;
 
-    public Platform(int x, int y) {
+    public Platform(int x, int y, Direction direction) {
         super(x, y);
+        this.direction = direction;
     }
 
-    public Platform(Point point) {
+    public Platform(Point point, Direction direction) {
         super(point);
+        this.direction = direction;
     }
 
     @Override

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.crossyroad.model;
  */
 
 
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
@@ -72,7 +73,7 @@ public class LevelImpl implements Level, Tickable {
         List<Platform> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.PLATFORM)) {
-            result.add(new Platform(pt));
+            result.add(new Platform(pt, Direction.LEFT));
         }
 
         return result;

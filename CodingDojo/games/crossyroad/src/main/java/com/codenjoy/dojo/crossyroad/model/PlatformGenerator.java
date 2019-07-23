@@ -24,6 +24,7 @@ package com.codenjoy.dojo.crossyroad.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class PlatformGenerator {
     private int maxPlatformLength;
     private int previousY;
     boolean finishedGenerationPlatform;
+    Direction newPlatformDirection;
 
     public PlatformGenerator(Dice dice, int size, int maxPlatformLength) {
         this.dice = dice;
@@ -53,6 +55,12 @@ public class PlatformGenerator {
             dice.next(123);
             finishedGenerationPlatform = false;
         } else {
+            int dir = dice.next(10);
+            if (dir >= 5)
+                newPlatformDirection = Direction.RIGHT;
+            else
+                newPlatformDirection = Direction.LEFT;
+
             if (newPlatformLengthLeft == 0) {
                 int newY = dice.next(size-3)+1;
                 int maxPlatformY = previousY + 2;
@@ -66,9 +74,12 @@ public class PlatformGenerator {
             }
 
             if (newPlatformLengthLeft != 0) {
-                result.add(new Platform(size, newPlatformY));
+                if (newPlatformDirection == Direction.LEFT)
+                    result.add(new Platform(size, newPlatformY, newPlatformDirection));
+                else
+                    result.add(new Platform(0, newPlatformY, newPlatformDirection));
                 previousY = newPlatformY;
-                newPlatformLengthLeft--;
+                newPlatformLengthLeft--;    //?
                 if (newPlatformLengthLeft == 0) {
                     finishedGenerationPlatform = true;
                 } else {
