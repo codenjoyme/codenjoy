@@ -63,6 +63,7 @@ public class Crossyroad implements Field {
         tickCounter++;
         createStone();
         removeStoneOutOfBoard();
+      //  stones.add(new Stone(5, size));
         platforms.addAll(platformGenerator.generateRandomPlatforms());
         // перемещение героя
         for (Player player : players) {
