@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.excitebike.model.level;
+package com.codenjoy.dojo.excitebike.services.parse;
 
 /*-
  * #%L
@@ -25,7 +25,6 @@ package com.codenjoy.dojo.excitebike.model.level;
 import com.codenjoy.dojo.excitebike.model.items.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
-import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.google.common.collect.Lists;
@@ -218,19 +217,19 @@ public class MapParserTest {
             return (List<T>) mapParser.getLineDownChangers();
         } else if (element == BikeType.BIKE_FALLEN) {
             return (List<T>) mapParser.getFallenBikes();
-        }else if (element == SpringboardElementType.SPRINGBOARD_LEFT) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_LEFT) {
             return (List<T>) mapParser.getSpringboardDarkElements();
-        }else if (element == SpringboardElementType.SPRINGBOARD_RIGHT) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_RIGHT) {
             return (List<T>) mapParser.getSpringboardLightElements();
-        }else if (element == SpringboardElementType.SPRINGBOARD_LEFT_DOWN) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_LEFT_DOWN) {
             return (List<T>) mapParser.getSpringboardLeftDownElements();
-        }else if (element == SpringboardElementType.SPRINGBOARD_LEFT_UP) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_LEFT_UP) {
             return (List<T>) mapParser.getSpringboardLeftUpElements();
-        }else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_DOWN) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_DOWN) {
             return (List<T>) mapParser.getSpringboardRightDownElements();
-        }else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_UP) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_RIGHT_UP) {
             return (List<T>) mapParser.getSpringboardRightUpElements();
-        }else if (element == SpringboardElementType.SPRINGBOARD_TOP) {
+        } else if (element == SpringboardElementType.SPRINGBOARD_TOP) {
             return (List<T>) mapParser.getSpringboardNoneElements();
         }
         return null;

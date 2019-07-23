@@ -33,8 +33,27 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Objects;
 
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.*;
-import static com.codenjoy.dojo.services.Direction.*;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_ACCELERATOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_KILLED_BIKE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_SPRINGBOARD_LEFT;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_SPRINGBOARD_LEFT_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_SPRINGBOARD_RIGHT;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_SPRINGBOARD_RIGHT_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_ACCELERATOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_FENCE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN_AT_OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_IN_FLIGHT_FROM_SPRINGBOARD;
+import static com.codenjoy.dojo.services.Direction.DOWN;
+import static com.codenjoy.dojo.services.Direction.RIGHT;
+import static com.codenjoy.dojo.services.Direction.UP;
 
 public class Bike extends PlayerHero<GameField> implements State<BikeType, Player>, Shiftable {
 
@@ -271,7 +290,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
         adjusted = true;
 
-        if (field.isSpringboardDarkElement(x+1, y)||field.isSpringboardLeftDownElement(x+1, y)) {
+        if (field.isSpringboardDarkElement(x + 1, y) || field.isSpringboardLeftDownElement(x + 1, y)) {
             command = null;
         }
 

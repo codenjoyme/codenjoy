@@ -560,7 +560,7 @@ public class BikeTest {
     @Test
     public void tick__shouldMoveBikeDown__ifBikeGoToSpringboardRightUpElementType() {
         //given
-        when(gameField.isSpringboardRightDownElement(bike.getX(), bike.getY()-1)).thenReturn(true);
+        when(gameField.isSpringboardRightDownElement(bike.getX(), bike.getY() - 1)).thenReturn(true);
         bike.tick();
 
         //when
@@ -574,7 +574,7 @@ public class BikeTest {
     @Test
     public void tick__shouldMoveBikeDown__ifBikeGoToSpringboardLightElementType() {
         //given
-        when(gameField.isSpringboardLightElement(bike.getX(), bike.getY()-1)).thenReturn(true);
+        when(gameField.isSpringboardLightElement(bike.getX(), bike.getY() - 1)).thenReturn(true);
         bike.tick();
 
         //when

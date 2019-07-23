@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.excitebike.services;
+package com.codenjoy.dojo.excitebike.services.generation;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,35 +22,12 @@ package com.codenjoy.dojo.excitebike.services;
  * #L%
  */
 
-
-import com.codenjoy.dojo.services.PlayerScores;
-
-public class Scores implements PlayerScores {
-
-    private final SettingsHandler settingsHandler;
-
-    private volatile int score;
-
-    public Scores(int startScore, SettingsHandler settingsHandler) {
-        this.score = startScore;
-        this.settingsHandler = settingsHandler;
-    }
-
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event.equals(Events.WIN)) {
-            score += settingsHandler.getWinScore();
-        }
-        score = Math.max(0, score);
-    }
+/**
+ * Created by Pavel Bobylev 7/18/2019
+ */
+public enum GenerationOption {
+    NOTHING,
+    SINGLE_ELEMENT,
+    SPRINGBOARD,
+    OBSTACLE_CHAIN
 }

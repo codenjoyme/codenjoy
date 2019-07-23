@@ -45,8 +45,8 @@ import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHAN
 import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LINE_CHANGER_DOWN;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_AT_LINE_CHANGER_UP;
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_KILLED_BIKE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_KILLED_BIKE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_LINE_CHANGER_DOWN;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.OTHER_BIKE_AT_LINE_CHANGER_UP;
 import static com.codenjoy.dojo.services.Direction.DOWN;
