@@ -26,8 +26,11 @@ package com.codenjoy.dojo.crossyroad.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.Arrays;
 
 public class PlatformGenerator {
     private final Dice dice;
@@ -46,7 +49,7 @@ public class PlatformGenerator {
         this.previousY = 2;
     }
 
-    public List<Platform> generateRandomPlatforms() {
+    public List<Platform> generateRandomPlatforms(List<Stone> stones, List<Platform> platforms) {
         List<Platform> result = new LinkedList<>();
         if (finishedGenerationPlatform) {
             //LOL just for mocking
@@ -55,13 +58,34 @@ public class PlatformGenerator {
             dice.next(123);
             finishedGenerationPlatform = false;
         } else {
-            int dir = dice.next(10);
-            if (dir >= 5)
-                newPlatformDirection = Direction.RIGHT;
-            else
-                newPlatformDirection = Direction.LEFT;
-
             if (newPlatformLengthLeft == 0) {
+                int dir = dice.next(10);
+                if (dir >= 5)
+                    newPlatformDirection = Direction.RIGHT;
+                else
+                    newPlatformDirection = Direction.LEFT;
+                Set<Integer> freeLines = new HashSet<>();
+                for (int i = previousY; i < size; i++) {
+                    freeLines.add(i);
+                }
+                for (Stone s : stones) {
+                    if (freeLines.contains(s.getY())) {
+                        freeLines.remove(s.getY());
+                    }
+                }
+                for (Platform p : platforms){
+                    if (freeLines.contains(p.getY())){
+                        freeLines.remove(p.getY());
+                    }
+                }
+                if (freeLines.size() == 0) return result;
+
+
+
+                newPlatformY = dice.next(freeLines.size() + 1);
+                newPlatformLengthLeft = dice.next(maxPlatformLength + 1);
+            }
+            /*if (newPlatformLengthLeft == 0) {
                 int newY = dice.next(size-3)+1;
                 int maxPlatformY = previousY + 2;
 //            int minPlatformY = previousY - 2;
@@ -70,8 +94,9 @@ public class PlatformGenerator {
                 else {
                     newPlatformY = newY;
                 }
+
                 newPlatformLengthLeft = dice.next(maxPlatformLength+1);
-            }
+            }*/
 
             if (newPlatformLengthLeft != 0) {
                 if (newPlatformDirection == Direction.LEFT)
@@ -79,7 +104,7 @@ public class PlatformGenerator {
                 else
                     result.add(new Platform(0, newPlatformY, newPlatformDirection));
                 previousY = newPlatformY;
-                newPlatformLengthLeft--;    //?
+                newPlatformLengthLeft--;
                 if (newPlatformLengthLeft == 0) {
                     finishedGenerationPlatform = true;
                 } else {

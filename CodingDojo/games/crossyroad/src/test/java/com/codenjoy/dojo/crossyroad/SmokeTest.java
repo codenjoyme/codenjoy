@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.crossyroad.client.Board;
 import com.codenjoy.dojo.crossyroad.client.ai.AISolver;
 import com.codenjoy.dojo.crossyroad.services.GameRunner;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -35,6 +36,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class SmokeTest {
 
     @Test

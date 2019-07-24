@@ -34,7 +34,7 @@ public class SolverRunner {
             YourSolver.main(args);
         } else {
             System.out.println("Running Kotlin client");
-            YourSolverKt.main(args);
+//            YourSolverKt.main(args);
         }
     }
 }

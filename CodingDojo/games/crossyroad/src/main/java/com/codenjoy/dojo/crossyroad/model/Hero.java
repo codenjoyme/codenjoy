@@ -33,7 +33,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public Hero(Point xy) {
         super(xy);
-        direction = null;
+        direction = Direction.STOP;
         alive = true;
     }
 //смена направления героя
@@ -80,8 +80,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void dies() { alive = true; teleport();}
 
     public void teleport(){
-        direction = Direction.UP;
-        move(10,1);
+        direction = Direction.STOP;
+        move(10,2);
     }
 
     public Direction getDirection(){return this.direction;}

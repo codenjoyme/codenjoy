@@ -64,7 +64,7 @@ public class Crossyroad implements Field {
         createStone();
         removeStoneOutOfBoard();
       //  stones.add(new Stone(5, size));
-        platforms.addAll(platformGenerator.generateRandomPlatforms());
+        platforms.addAll(platformGenerator.generateRandomPlatforms(getStones(),getPlatforms()));
         // перемещение героя
         for (Player player : players) {
             Hero hero = player.getHero();
@@ -75,9 +75,9 @@ public class Crossyroad implements Field {
                 for (Platform platform : platforms) {
                     platform.down();
                 }
-            for (Stone stone : stones) {
-                stone.down();
-            }
+                for (Stone stone : stones) {
+                    stone.down();
+                }
             }
         }
         // перемещение машин
