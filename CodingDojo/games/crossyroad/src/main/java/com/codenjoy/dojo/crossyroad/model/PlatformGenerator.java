@@ -26,11 +26,7 @@ package com.codenjoy.dojo.crossyroad.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.Arrays;
+import java.util.*;
 
 public class PlatformGenerator {
     private final Dice dice;
@@ -64,25 +60,21 @@ public class PlatformGenerator {
                     newPlatformDirection = Direction.RIGHT;
                 else
                     newPlatformDirection = Direction.LEFT;
-                Set<Integer> freeLines = new HashSet<>();
+                List<Integer> freeLines = new LinkedList<>();
                 for (int i = previousY; i < size; i++) {
                     freeLines.add(i);
                 }
+                List<Integer> st = new LinkedList<>();
                 for (Stone s : stones) {
-                    if (freeLines.contains(s.getY())) {
-                        freeLines.remove(s.getY());
-                    }
+                    st.add(s.getY());
                 }
                 for (Platform p : platforms){
-                    if (freeLines.contains(p.getY())){
-                        freeLines.remove(p.getY());
-                    }
+                    st.add(p.getY());
                 }
+                if (st.size() != 0) freeLines.removeAll(st);
                 if (freeLines.size() == 0) return result;
-
-
-
-                newPlatformY = dice.next(freeLines.size() + 1);
+                int index = dice.next(freeLines.size() + 1);
+                newPlatformY = freeLines.get(index);
                 newPlatformLengthLeft = dice.next(maxPlatformLength + 1);
             }
             /*if (newPlatformLengthLeft == 0) {
