@@ -36,7 +36,7 @@ import java.util.List;
 public class Crossyroad implements Field {
 
     public static final int MAX_PLATFORM_LENGTH = 3;
-    public static final int NEW_APPEAR_PERIOD = 3;
+    public static final int NEW_APPEAR_PERIOD = 2;
     private final PlatformGenerator platformGenerator;
     private Level level;
     private List<Player> players;
@@ -46,6 +46,7 @@ public class Crossyroad implements Field {
     private int countStone = 0;
     private List<Platform> platforms;
     private int tickCounter;
+    private int i=0;
 
     private final int size;
     private List<Wall> walls;
@@ -142,13 +143,17 @@ public class Crossyroad implements Field {
         }
     }
 
-    // создание камней
+    // создание камней;
     private void createStone() {
        countStone++;
+        int x = i++;
+       //генерация через dice.next не работает
+        if (i>=20){
+           i -=19;
+       }
         if (countStone == NEW_APPEAR_PERIOD) {
-            int x = dice.next(size - 2);
             if (x != -1) {
-              addStone(x + 1);
+              addStone(x+1);
             }
             countStone = 0;
         }
@@ -220,8 +225,8 @@ public class Crossyroad implements Field {
         }
     }
     public void addStone(int x) {
-        stones.add(new Stone(x, size));
-        isNewStone = false;// где это используется...
+        stones.add(new Stone(x,size-1));
+               isNewStone = false;// где это используется...
     }
 
     List<Stone> getStones() {
