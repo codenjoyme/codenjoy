@@ -2702,32 +2702,6 @@ public class GameFieldImplSystemTest {
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
-    @Ignore
-    @Test
-    public void tick__shouldNotMoveBikeDown_ifBikeCommandDownBeforeSpringboardDescent2() {
-        //given
-        String board = "■■=═╗" +
-                "  ==\\" +
-                " B=═\\" +
-                "  \\\\╝" +
-                "■■■■■";
-        init(board);
-        when(dice.next(anyInt())).thenReturn(5);
-
-        //when
-        game.tick();
-        bike.down();
-        game.tick();
-
-        //then
-        String expected = "■═╗  " +
-                "  \\  " +
-                " B\\  " +
-                " \\╝  " +
-                "■■■■■";
-        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
-    }
-
     @Test
     public void tick__shouldMoveBikeDownAndCrushIt_ifBikeCommandDownAtSpringboardDescent() {
         //given

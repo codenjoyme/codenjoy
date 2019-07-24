@@ -433,12 +433,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldIncrementYCoordinateForAllBikes() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
@@ -455,12 +454,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "╔═╗■■■╔\n" +
-                "/═\\   /\n" +
-                "/Ḃ\\   /\n" +
-                "/Ḃ\\   /\n" +
-                "/B\\   /\n" +
-                "╚/╝   ╚\n" +
+        String expected = "╔═╗■■■■\n" +
+                "/═\\    \n" +
+                "/Ḃ\\    \n" +
+                "/Ḃ\\    \n" +
+                "/B\\    \n" +
+                "╚/╝    \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -468,12 +467,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardRise() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
@@ -503,12 +501,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldCrushBike_whenBikeTakeDownCommandOnSpringboardRise() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
@@ -526,12 +523,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "╔═╗■■■╔\n" +
-                "/═\\   /\n" +
-                "/Ḃ\\   /\n" +
-                "/Ḃ\\   /\n" +
-                "/═\\   /\n" +
-                "╚F╝   ╚\n" +
+        String expected = "╔═╗■■■■\n" +
+                "/═\\    \n" +
+                "/Ḃ\\    \n" +
+                "/Ḃ\\    \n" +
+                "/═\\    \n" +
+                "╚F╝    \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -539,12 +536,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldCrushBike_whenBikeHitOtherBikeAtTopOfSpringboard() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
@@ -562,12 +558,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "╔═╗■■■╔\n" +
-                "/═\\   /\n" +
-                "/Ḃ\\   /\n" +
-                "/K\\   /\n" +
-                "/═\\   /\n" +
-                "╚/╝   ╚\n" +
+        String expected = "╔═╗■■■■\n" +
+                "/═\\    \n" +
+                "/Ḃ\\    \n" +
+                "/K\\    \n" +
+                "/═\\    \n" +
+                "╚/╝    \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
         assertThat(game2.isGameOver(), is(true));
@@ -576,12 +572,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldShiftCrushedBikeAtSpringboardTop() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
@@ -600,12 +595,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "═╗■■■╔═\n" +
-                "═\\   /═\n" +
-                "═\\   /═\n" +
-                "ḃŘ   /═\n" +
-                "═R   /═\n" +
-                "/╝   ╚/\n" +
+        String expected = "═╗■■■■■\n" +
+                "═\\     \n" +
+                "═\\     \n" +
+                "ḃŘ     \n" +
+                "═R     \n" +
+                "/╝     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
         assertThat(game2.isGameOver(), is(true));
@@ -614,12 +609,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldCrushOnFenceBikeAfterFlightFromSpringboard() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
@@ -638,12 +632,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "═╗■■■╔═\n" +
-                "═\\   /═\n" +
-                "═\\   /═\n" +
-                "═Ř   /═\n" +
-                "═Ř   /═\n" +
-                "/╝   ╚/\n" +
+        String expected = "═╗■■■■■\n" +
+                "═\\     \n" +
+                "═\\     \n" +
+                "═Ř     \n" +
+                "═Ř     \n" +
+                "/╝     \n" +
                 "■f■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -651,12 +645,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldDecrementYCoordinateForAllBikes() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
@@ -676,12 +669,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "═╗■■■╔═\n" +
-                "═\\   /═\n" +
-                "═\\   /═\n" +
-                "═R   /═\n" +
-                "═Ř   /═\n" +
-                "/Ŝ   ╚/\n" +
+        String expected = "═╗■■■■■\n" +
+                "═\\     \n" +
+                "═\\     \n" +
+                "═R     \n" +
+                "═Ř     \n" +
+                "/Ŝ     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -689,12 +682,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
@@ -716,12 +708,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "═╗■■■╔═\n" +
-                "═\\   /═\n" +
-                "═\\   /═\n" +
-                "═R   /═\n" +
-                "═Ř   /═\n" +
-                "/Ŝ   ╚/\n" +
+        String expected = "═╗■■■■■\n" +
+                "═\\     \n" +
+                "═\\     \n" +
+                "═R     \n" +
+                "═Ř     \n" +
+                "/Ŝ     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -729,12 +721,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent2() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
@@ -757,12 +748,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "═╗■■■╔═\n" +
-                "═\\   /═\n" +
-                "═\\   /═\n" +
-                "═R   /═\n" +
-                "═Ř   /═\n" +
-                "/Ŝ   ╚/\n" +
+        String expected = "═╗■■■■■\n" +
+                "═\\     \n" +
+                "═\\     \n" +
+                "═R     \n" +
+                "═Ř     \n" +
+                "/Ŝ     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -770,12 +761,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent3() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
@@ -800,12 +790,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "═╗■■■╔═\n" +
-                "═Ř   /═\n" +
-                "═Ř   /═\n" +
-                "═R   /═\n" +
-                "═\\   /═\n" +
-                "/╝   ╚/\n" +
+        String expected = "═╗■■■■■\n" +
+                "═Ř     \n" +
+                "═Ř     \n" +
+                "═R     \n" +
+                "═\\     \n" +
+                "/╝     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -813,12 +803,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldCrushBike_whenBikeAtHighestLineAndTakeUpCommandAfterSpringboardRise() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
@@ -842,12 +831,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "╔Ḃ╗■■■╔\n" +
-                "/═\\   /\n" +
-                "/═\\   /\n" +
-                "/B\\   /\n" +
-                "/═\\   /\n" +
-                "╚/╝   ╚\n" +
+        String expected = "╔Ḃ╗■■■■\n" +
+                "/═\\    \n" +
+                "/═\\    \n" +
+                "/B\\    \n" +
+                "/═\\    \n" +
+                "╚/╝    \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
         assertThat(game3.isGameOver(), is(true));
@@ -856,12 +845,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldCrushBike_whenBikeAtHighestLineAndTakeUpCommandAfterSpringboardDecent() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 1;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
@@ -887,12 +875,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "╗ḟ■■╔═╗\n" +
-                "\\   /═\\\n" +
-                "\\Ḃ  /═\\\n" +
-                "\\B  /═\\\n" +
-                "\\   /═\\\n" +
-                "╝   ╚/╝\n" +
+        String expected = "╗ḟ■■■■■\n" +
+                "\\      \n" +
+                "\\Ḃ     \n" +
+                "\\B     \n" +
+                "\\      \n" +
+                "╝      \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -900,12 +888,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent4() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 0;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
@@ -923,12 +910,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "╔╗■■■╔╗\n" +
-                "/\\   /\\\n" +
-                "/\\   /\\\n" +
-                "/Ř   /\\\n" +
-                "/Ř   /\\\n" +
-                "╚S   ╚╝\n" +
+        String expected = "╔╗■■■■■\n" +
+                "/\\     \n" +
+                "/\\     \n" +
+                "/Ř     \n" +
+                "/Ř     \n" +
+                "╚S     \n" +
                 "■■■■■■■\n";
 
         assertThat(game1.getBoardAsString(), is(expected));
@@ -937,12 +924,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent5() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 0;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
@@ -961,12 +947,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "╔╗■■■╔╗\n" +
-                "/\\   /\\\n" +
-                "/\\   /\\\n" +
-                "/Ř   /\\\n" +
-                "/Ř   /\\\n" +
-                "╚S   ╚╝\n" +
+        String expected = "╔╗■■■■■\n" +
+                "/\\     \n" +
+                "/\\     \n" +
+                "/Ř     \n" +
+                "/Ř     \n" +
+                "╚S     \n" +
                 "■■■■■■■\n";
 
         assertThat(game1.getBoardAsString(), is(expected));
@@ -975,12 +961,11 @@ public class MultiplayerSystemTest {
     @Test
     public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent6() {
         //given
-        int needGenerate = 0;
-        int isSpringboard = 0;
+        int springboardWeight = 17;
         int springboardTopSize = 0;
 
         init();
-        when(dice.next(anyInt())).thenReturn(needGenerate, isSpringboard, springboardTopSize);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
@@ -1003,12 +988,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "╔╗■■■╔╗\n" +
-                "/Ř   /\\\n" +
-                "/Ř   /\\\n" +
-                "/R   /\\\n" +
-                "/\\   /\\\n" +
-                "╚╝   ╚╝\n" +
+        String expected = "╔╗■■■■■\n" +
+                "/Ř     \n" +
+                "/Ř     \n" +
+                "/R     \n" +
+                "/\\     \n" +
+                "╚╝     \n" +
                 "■■■■■■■\n";
 
         assertThat(game1.getBoardAsString(), is(expected));
