@@ -51,7 +51,6 @@ public class YourSolver implements Solver<Board> {
     public String get(Board board) {
         this.board = board;
         Direction dir = Direction.STOP;// дефолтное напраление
-
         List<Point> barriers = board.getBarriers();// получение всех координат препятствий
 
         //реализовать: выбор направления(left, up, right)
