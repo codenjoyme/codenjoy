@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.services.GameRunner;
+import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
@@ -66,7 +67,7 @@ public class MultiplayerSystemTest {
                 "■■■■■■■");
 
         dice = mock(Dice.class);
-        field = new GameFieldImpl(mapParser, dice);
+        field = new GameFieldImpl(mapParser, dice, new SettingsHandler());
         PrinterFactory factory = new PrinterFactoryImpl();
 
         game1 = new Single(new Player(mock(EventListener.class)), factory);

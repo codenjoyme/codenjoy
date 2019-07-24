@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.excitebike.services;
+package com.codenjoy.dojo.excitebike.services.generation.generator;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,35 +22,18 @@ package com.codenjoy.dojo.excitebike.services;
  * #L%
  */
 
+import com.codenjoy.dojo.excitebike.model.items.Shiftable;
+import com.codenjoy.dojo.services.printer.CharElements;
 
-import com.codenjoy.dojo.services.PlayerScores;
+import java.util.List;
+import java.util.Map;
 
-public class Scores implements PlayerScores {
+/**
+ * Created by Pavel Bobylev 7/18/2019
+ */
+public interface Generator {
 
-    private final SettingsHandler settingsHandler;
+    Map<? extends CharElements, List<Shiftable>> generate();
 
-    private volatile int score;
-
-    public Scores(int startScore, SettingsHandler settingsHandler) {
-        this.score = startScore;
-        this.settingsHandler = settingsHandler;
-    }
-
-    @Override
-    public int clear() {
-        return score = 0;
-    }
-
-    @Override
-    public Integer getScore() {
-        return score;
-    }
-
-    @Override
-    public void event(Object event) {
-        if (event.equals(Events.WIN)) {
-            score += settingsHandler.getWinScore();
-        }
-        score = Math.max(0, score);
-    }
+    int generationLockSize();
 }

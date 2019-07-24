@@ -25,7 +25,6 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
 import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Optional;

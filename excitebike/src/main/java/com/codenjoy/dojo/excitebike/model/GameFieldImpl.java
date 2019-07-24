@@ -23,11 +23,15 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.excitebike.model.items.*;
+import com.codenjoy.dojo.excitebike.model.items.Fence;
+import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
-import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardGenerator;
 import com.codenjoy.dojo.excitebike.services.Events;
+import com.codenjoy.dojo.excitebike.services.SettingsHandler;
+import com.codenjoy.dojo.excitebike.services.generation.GenerationOption;
+import com.codenjoy.dojo.excitebike.services.generation.TrackStepGenerator;
+import com.codenjoy.dojo.excitebike.services.generation.WeightedRandomBag;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -36,11 +40,22 @@ import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.*;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.ACCELERATOR;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
 import static com.codenjoy.dojo.excitebike.model.items.bike.Bike.OTHER_BIKE_PREFIX;
 import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.BIKE_FALLEN;
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -51,18 +66,16 @@ import static java.util.stream.Collectors.toList;
 
 public class GameFieldImpl implements GameField {
 
-    private Dice dice;
-    private MapParser mapParser;
-    private Map<CharElements, List<Shiftable>> allShiftableElements = new HashMap<>();
-    private List<Player> players = new LinkedList<>();
+    private final MapParser mapParser;
+    private final Map<CharElements, List<Shiftable>> allShiftableElements = new HashMap<>();
+    private final List<Player> players = new LinkedList<>();
+    private final List<Fence> fences;
+    private final TrackStepGenerator trackStepGenerator;
+    private final SettingsHandler settingsHandler;
 
-    private List<Fence> fences;
-
-    private int generationLock;
-
-    public GameFieldImpl(MapParser mapParser, Dice dice) {
-        this.dice = dice;
+    public GameFieldImpl(MapParser mapParser, Dice dice, SettingsHandler settingsHandler) {
         this.mapParser = mapParser;
+        this.settingsHandler = settingsHandler;
 
         fences = mapParser.getFences();
 
@@ -81,6 +94,7 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN, new ArrayList<>(mapParser.getSpringboardRightDownElements()));
         allShiftableElements.put(SpringboardElementType.SPRINGBOARD_TOP, new ArrayList<>(mapParser.getSpringboardNoneElements()));
 
+        this.trackStepGenerator = new TrackStepGenerator(dice, mapParser.getXSize(), mapParser.getYSize());
     }
 
     /**
@@ -89,6 +103,8 @@ public class GameFieldImpl implements GameField {
     @Override
     public void tick() {
         shiftTrack();
+        generateNewTrackStep();
+
         players.forEach(player -> player.getHero().changeYDependsOnSpringboard());
         players.forEach(player -> player.getHero().tick());
         players.forEach(player -> player.getHero().setTicked(false));
@@ -282,66 +298,24 @@ public class GameFieldImpl implements GameField {
 
     private void shiftTrack() {
         final int lastPossibleX = 0;
-        final int firstPossibleX = mapParser.getXSize() - 1;
-
         allShiftableElements.values().parallelStream().forEach(
                 pointsOfElementType -> {
                     pointsOfElementType.forEach(Shiftable::shift);
                     pointsOfElementType.removeIf(point -> point.getX() < lastPossibleX);
                 }
         );
-
-        generateNewTrackStep(mapParser.getXSize(), firstPossibleX);
     }
 
-    private void generateNewTrackStep(final int laneNumber, final int firstPossibleX) {
-        if (generationLock > 0) {
-            generationLock--;
-            return;
+    private void generateNewTrackStep() {
+        WeightedRandomBag<GenerationOption> weightedRandomBag = settingsHandler.getWeightedRandomBag();
+        Map<? extends CharElements, List<Shiftable>> generated = trackStepGenerator.generate(weightedRandomBag);
+        if (generated != null) {
+            generated.forEach((key, elements) -> allShiftableElements.merge(key, elements, (currentElements, newElements) -> {
+                        currentElements.addAll(newElements);
+                        return currentElements;
+                    }
+            ));
         }
-
-        boolean needGenerate = dice.next(10) < 5;
-        if (needGenerate) {
-            SpringboardGenerator generator = new SpringboardGenerator(firstPossibleX, mapParser.getYSize(), dice);
-            boolean isSpringboardGenerated = generator.generate();
-            if (isSpringboardGenerated) {
-                generationLock = generator.size();
-
-                generator.getElements()
-                        .forEach((key, elements) -> allShiftableElements.merge(key, elements, (currentElements, newElements) -> {
-                                    currentElements.addAll(newElements);
-                                    return currentElements;
-                                }
-                        ));
-            } else {
-                generateElement(firstPossibleX, laneNumber);
-            }
-        }
-    }
-
-    private void generateElement(final int firstPossibleX, final int laneNumber) {
-        int rndNonFenceElementOrdinal = dice.next(values().length - 2) + 2;
-        int rndNonFenceLaneNumber = dice.next(laneNumber - 2) + 1;
-
-        CharElements randomType = GameElementType.values()[rndNonFenceElementOrdinal];
-        List<Shiftable> elements = allShiftableElements.get(randomType);
-        Shiftable newElement = getNewElement(randomType, firstPossibleX, rndNonFenceLaneNumber);
-        elements.add(newElement);
-    }
-
-    private Shiftable getNewElement(CharElements randomType, int x, int y) {
-        if (ACCELERATOR.equals(randomType)) {
-            return new Accelerator(x, y);
-        } else if (INHIBITOR.equals(randomType)) {
-            return new Inhibitor(x, y);
-        } else if (OBSTACLE.equals(randomType)) {
-            return new Obstacle(x, y);
-        } else if (LINE_CHANGER_UP.equals(randomType)) {
-            return new LineChanger(x, y, true);
-        } else if (LINE_CHANGER_DOWN.equals(randomType)) {
-            return new LineChanger(x, y, false);
-        }
-        throw new IllegalArgumentException("No such element for " + randomType);
     }
 
     @Override

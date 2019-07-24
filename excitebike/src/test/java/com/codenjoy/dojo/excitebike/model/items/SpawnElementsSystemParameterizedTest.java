@@ -25,6 +25,7 @@ package com.codenjoy.dojo.excitebike.model.items;
 import com.codenjoy.dojo.excitebike.model.GameFieldImpl;
 import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -42,7 +43,6 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -65,7 +65,9 @@ public class SpawnElementsSystemParameterizedTest {
     @Before
     public void init() {
         dice = mock(Dice.class);
-        game = new GameFieldImpl(mock(MapParser.class), dice);
+        MapParser mapParser = mock(MapParser.class);
+        when(mapParser.getYSize()).thenReturn(5);
+        game = new GameFieldImpl(mapParser, dice, new SettingsHandler());
         player = new Player(mock(EventListener.class));
         game.newGame(player);
     }
@@ -73,7 +75,9 @@ public class SpawnElementsSystemParameterizedTest {
     @Test
     public void shouldGenerateElement() {
         //given
-        when(dice.next(anyInt())).thenReturn(0,5, gameElementType.ordinal() - 2, 0);
+        when(dice.next(20)).thenReturn(12);
+        when(dice.next(5)).thenReturn(gameElementType.ordinal() - 2);
+        when(dice.next(3)).thenReturn(0);
 
         //when
         game.tick();
