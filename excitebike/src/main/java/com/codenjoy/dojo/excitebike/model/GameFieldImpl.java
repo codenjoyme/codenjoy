@@ -108,20 +108,14 @@ public class GameFieldImpl implements GameField {
         players.forEach(player -> player.getHero().changeYDependsOnSpringboard());
         players.forEach(player -> player.getHero().tick());
         players.forEach(player -> player.getHero().setTicked(false));
-        if (players.stream().filter(Player::isAlive).count() <= 1 && players.size() > 1) {
-            players.stream().filter(Player::isAlive).findFirst().ifPresent(player -> player.event(Events.WIN));
-            restart();
-        }
+        players.stream()
+                .filter(player -> player.getHero().getX() < 0)
+                .forEach(player -> player.setHero(null));
         allShiftableElements.put(BIKE_FALLEN, players.stream()
                 .map(Player::getHero)
                 .filter(h -> h != null && !h.isAlive())
                 .collect(toList())
         );
-    }
-
-    private void restart() {
-        players.forEach(player -> player.setHero(null));
-        allShiftableElements.values().forEach(List::clear);
     }
 
     public int size() {
@@ -249,7 +243,13 @@ public class GameFieldImpl implements GameField {
     }
 
     private boolean isFree(Point point) {
-        return !getBikes().contains(point) && !fences.contains(point) && !allShiftableElements.get(OBSTACLE).contains(point);
+        return !getBikes().contains(point)
+                && !fences.contains(point)
+                && !allShiftableElements.get(OBSTACLE).contains(point)
+                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT).contains(point)
+                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT_DOWN).contains(point)
+                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT).contains(point)
+                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(point);
     }
 
     public List<Bike> getBikes() {

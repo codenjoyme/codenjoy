@@ -26,6 +26,7 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
 import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
+import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
@@ -228,6 +229,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                     return;
                 }
                 if (!enemy.movement.isUp() && !enemy.movement.isDown() && enemy.command == null) {
+                    field.getPlayerOfBike(this).event(Events.WIN);
                     enemy.crush();
                     type = BIKE_AT_KILLED_BIKE;
                     move(enemy);

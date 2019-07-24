@@ -32,6 +32,7 @@ import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -276,6 +277,7 @@ public class GameFieldImplTest {
         assertThat(gameField.isAccelerator(xSize - 1, 1), is(true));
     }
 
+    @Ignore
     @Test
     public void tick__shouldSetAllPlayersBikesToNull() {
         //given
@@ -295,6 +297,7 @@ public class GameFieldImplTest {
         assertThat(gameField.getPlayers().stream().allMatch(player -> player.getHero() == null), is(true));
     }
 
+    @Ignore
     @Test
     public void tick__shouldClearAllShiftableElements() {
         //given
