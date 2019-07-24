@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.excitebike.TestUtils.parseBikes;
@@ -2476,21 +2477,23 @@ public class GameFieldImplSystemTest {
         //given
         String board = "■■■═╗" +
                 "   ═\\" +
-                "   B\\" +
+                " B  \\" +
                 "   \\╝" +
                 "■■■■■";
         init(board);
         when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
         game.tick();
 
         //when
         game.tick();
 
         //then
-        String expected = "■═╗  " +
-                " ═\\  " +
-                "  \\  " +
-                " \\╝B " +
+        String expected = "╗■■  " +
+                "\\    " +
+                "\\    " +
+                "╝B   " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2499,22 +2502,24 @@ public class GameFieldImplSystemTest {
     public void tick__shouldMoveBikeDown_ifBikeCrossDescentOfSpringboard2() {
         //given
         String board = "■■■═╗" +
-                "   B\\" +
+                " B  \\" +
                 "   ═\\" +
                 "   \\╝" +
                 "■■■■■";
         init(board);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
+        game.tick();
+        game.tick();
 
         //when
         game.tick();
 
         //then
-        String expected = "■═╗  " +
-                "  \\  " +
-                " ═\\B " +
-                " \\╝  " +
+        String expected = "╗■■  " +
+                "\\    " +
+                "\\B   " +
+                "╝    " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2524,20 +2529,22 @@ public class GameFieldImplSystemTest {
         //given
         String board = "■■■═╗" +
                 "   ═\\" +
-                "   B\\" +
+                " B  \\" +
                 "   \\╝" +
                 "■■■■■";
         init(board);
         when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
 
         //when
         game.tick();
 
         //then
-        String expected = "■■═╗ " +
-                "  ═\\ " +
-                "   \\ " +
-                "  \\S " +
+        String expected = "═╗■  " +
+                "═\\   " +
+                " \\   " +
+                "\\S   " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2546,8 +2553,167 @@ public class GameFieldImplSystemTest {
     public void tick__shouldMoveBikeDown_ifBikeCrossDescentOfSpringboard4() {
         //given
         String board = "■■■═╗" +
-                "   B\\" +
+                " B  \\" +
                 "   ═\\" +
+                "   \\╝" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "═╗■  " +
+                " \\   " +
+                "═R   " +
+                "\\╝   " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick__shouldNotMoveBikeDown_ifBikeCommandDownBeforeSpringboardRise() {
+        //given
+        String board = "■■■╔═" +
+                "B  /═" +
+                "   /═" +
+                "   ╚/" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+        bike.down();
+        game.tick();
+        game.tick();
+
+        //then
+        String expected = "╔═■  " +
+                "L═   " +
+                "/═   " +
+                "╚/   " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick__shouldNotMoveBikeDown_ifBikeCommandDownBeforeSpringboardRise2() {
+        //given
+        String board = "■■■╔═" +
+                "   /═" +
+                "   /═" +
+                "B  ╚/" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+        game.tick();
+        bike.down();
+        game.tick();
+
+        //then
+        String expected = "╔═■  " +
+                "/═   " +
+                "/═   " +
+                "M/   " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick__shouldNotMoveBikeUp_ifBikeCommandUpAtSpringboardRise() {
+        //given
+        String board = "■■■╔═" +
+                "   /═" +
+                "   /═" +
+                "B  ╚/" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+        game.tick();
+        game.tick();
+        bike.up();
+        game.tick();
+
+        //then
+        String expected = "═■■  " +
+                "B    " +
+                "═    " +
+                "/    " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick__shouldNotMoveBikeDownAndSetInFlightState_ifBikeCommandDownAtSpringboardRise() {
+        //given
+        String board = "■■■╔═" +
+                "   /═" +
+                "   /═" +
+                "B  ╚/" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+        game.tick();
+        game.tick();
+        bike.down();
+        game.tick();
+
+        //then
+        String expected = "═■■  " +
+                "═    " +
+                "═    " +
+                "F    " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick__shouldNotMoveBikeUpAndCrushIt_ifBikeCommandUpAtSpringboardRise() {
+        //given
+        String board = "■■■╔═" +
+                "B  /═" +
+                "   /═" +
+                "   ╚/" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+        game.tick();
+        game.tick();
+        bike.up();
+        game.tick();
+
+        //then
+        String expected = "═■■  " +
+                "═    " +
+                "═    " +
+                "/    " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+        assertThat(player.isAlive(), is(false));
+    }
+
+    @Test
+    public void tick__shouldNotMoveBikeDown_ifBikeCommandDownBeforeSpringboardDescent() {
+        //given
+        String board = "■■=═╗" +
+                " B==\\" +
+                "  =═\\" +
                 "   \\╝" +
                 "■■■■■";
         init(board);
@@ -2555,14 +2721,98 @@ public class GameFieldImplSystemTest {
 
         //when
         game.tick();
+        bike.down();
+        game.tick();
 
         //then
-        String expected = "■■═╗ " +
-                "   \\ " +
-                "  ═R " +
-                "  \\╝ " +
+        String expected = "■═╗  " +
+                " B\\  " +
+                " ═\\  " +
+                " \\╝  " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Ignore
+    @Test
+    public void tick__shouldNotMoveBikeDown_ifBikeCommandDownBeforeSpringboardDescent2() {
+        //given
+        String board = "■■=═╗" +
+                "  ==\\" +
+                " B=═\\" +
+                "  \\\\╝" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+        bike.down();
+        game.tick();
+
+        //then
+        String expected = "■═╗  " +
+                "  \\  " +
+                " B\\  " +
+                " \\╝  " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick__shouldMoveBikeDownAndCrushIt_ifBikeCommandDownAtSpringboardDescent() {
+        //given
+        String board = "■■=═╗" +
+                "  ==\\" +
+                " B=═\\" +
+                "   \\╝" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+        game.tick();
+        game.tick();
+        bike.down();
+        game.tick();
+
+        //then
+        String expected = "╗■   " +
+                "\\    " +
+                "\\    " +
+                "╝    " +
+                "■f■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick__shouldMoveBikeUpAndCrushIt_ifBikeCommandUpAtSpringboardDescent() {
+        //given
+        String board = "■■■╔╗" +
+                "B  /\\" +
+                "   /\\" +
+                "   ╚╝" +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        bike.up();
+        game.tick();
+
+        //then
+        String expected = "f■■  " +
+                "     " +
+                "     " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+        assertThat(player.isAlive(), is(false));
     }
 
 }

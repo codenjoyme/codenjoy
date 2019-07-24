@@ -162,7 +162,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                 || type == BIKE_AT_SPRINGBOARD_LEFT_DOWN
                 || type == BIKE_AT_SPRINGBOARD_RIGHT
                 || type == BIKE_AT_SPRINGBOARD_RIGHT_DOWN) {
-            movementLock = false;
+            movementLock = field.isSpringboardLightElement(x, y) || field.isSpringboardRightDownElement(x, y);
             type = atNothingType();
             return;
         }

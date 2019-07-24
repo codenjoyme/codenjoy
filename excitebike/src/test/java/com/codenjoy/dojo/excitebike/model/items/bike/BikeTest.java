@@ -25,6 +25,7 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
 import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -526,63 +527,6 @@ public class BikeTest {
         assertThat(bike.isAlive(), is(false));
         assertThat(enemy.state(getPlayer(bike)), is(BikeType.OTHER_BIKE_AT_KILLED_BIKE));
         assertThat(enemy.state(getPlayer(enemy)), is(BikeType.BIKE_AT_KILLED_BIKE));
-    }
-
-    @Test
-    public void tick__shouldMoveBikeUp__ifBikeGoToSpringboardLeftDownElementType() {
-        //given
-        when(gameField.isSpringboardLeftDownElement(bike.getX(), bike.getY())).thenReturn(true);
-        bike.tick();
-
-        //when
-        bike.tick();
-
-        //then
-        assertThat(bike.getX(), is(5));
-        assertThat(bike.getY(), is(6));
-    }
-
-    @Test
-    public void tick__shouldMoveBikeUp__ifBikeGoToSpringboardDarkElementType() {
-        //given
-        when(gameField.isSpringboardDarkElement(bike.getX(), bike.getY())).thenReturn(true);
-        when(gameField.isSpringboardLeftDownElement(bike.getX(), 1)).thenReturn(true);
-        bike.tick();
-
-        //when
-        bike.tick();
-
-        //then
-        assertThat(bike.getX(), is(5));
-        assertThat(bike.getY(), is(6));
-    }
-
-    @Test
-    public void tick__shouldMoveBikeDown__ifBikeGoToSpringboardRightUpElementType() {
-        //given
-        when(gameField.isSpringboardRightDownElement(bike.getX(), bike.getY()-1)).thenReturn(true);
-        bike.tick();
-
-        //when
-        bike.tick();
-
-        //then
-        assertThat(bike.getX(), is(5));
-        assertThat(bike.getY(), is(4));
-    }
-
-    @Test
-    public void tick__shouldMoveBikeDown__ifBikeGoToSpringboardLightElementType() {
-        //given
-        when(gameField.isSpringboardLightElement(bike.getX(), bike.getY()-1)).thenReturn(true);
-        bike.tick();
-
-        //when
-        bike.tick();
-
-        //then
-        assertThat(bike.getX(), is(5));
-        assertThat(bike.getY(), is(4));
     }
 
     @Test
