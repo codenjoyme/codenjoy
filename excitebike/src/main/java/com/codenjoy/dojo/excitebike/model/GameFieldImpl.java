@@ -27,7 +27,6 @@ import com.codenjoy.dojo.excitebike.model.items.Fence;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.excitebike.model.items.Bike;
 import com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType;
-import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.generation.GenerationOption;
 import com.codenjoy.dojo.excitebike.services.generation.TrackStepGenerator;
@@ -108,20 +107,14 @@ public class GameFieldImpl implements GameField {
         players.forEach(player -> player.getHero().changeYDependsOnSpringboard());
         players.forEach(player -> player.getHero().tick());
         players.forEach(player -> player.getHero().setTicked(false));
-        if (players.stream().filter(Player::isAlive).count() <= 1 && players.size() > 1) {
-            players.stream().filter(Player::isAlive).findFirst().ifPresent(player -> player.event(Events.WIN));
-            restart();
-        }
+        players.stream()
+                .filter(player -> player.getHero().getX() < 0)
+                .forEach(player -> player.setHero(null));
         allShiftableElements.put(BIKE_FALLEN, players.stream()
                 .map(Player::getHero)
                 .filter(h -> h != null && !h.isAlive())
                 .collect(toList())
         );
-    }
-
-    private void restart() {
-        players.forEach(player -> player.setHero(null));
-        allShiftableElements.values().forEach(List::clear);
     }
 
     public int size() {
@@ -176,6 +169,11 @@ public class GameFieldImpl implements GameField {
     @Override
     public boolean isSpringboardRightDownElement(int x, int y) {
         return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(pt(x, y));
+    }
+
+    @Override
+    public boolean isSpringboardTopElement(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_TOP).contains(pt(x, y));
     }
 
     @Override
@@ -249,7 +247,10 @@ public class GameFieldImpl implements GameField {
     }
 
     private boolean isFree(Point point) {
-        return !getBikes().contains(point) && !fences.contains(point) && !allShiftableElements.get(OBSTACLE).contains(point);
+        return !getBikes().contains(point)
+                && !fences.contains(point)
+                && !allShiftableElements.get(OBSTACLE).contains(point)
+                || (point.getY() != 1 && allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT).contains(point));
     }
 
     public List<Bike> getBikes() {

@@ -25,6 +25,8 @@ package com.codenjoy.dojo.excitebike.model.items;
 
 import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
+import com.codenjoy.dojo.excitebike.model.items.Shiftable;
+import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.model.elements.BikeType;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -87,6 +89,9 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     @Override
     public void init(GameField gameField) {
         this.field = gameField;
+        if (field.isSpringboardTopElement(x, y)){
+            atSpringboard = true;
+        }
     }
 
     @Override
@@ -135,6 +140,9 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             executeCommand();
             tryToMove();
             adjustStateToElement();
+            if(!isAlive()){
+                field.getPlayerOfBike(this).event(Events.LOSE);
+            }
         }
     }
 
@@ -449,6 +457,8 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                 ", ticked=" + ticked +
                 ", accelerated=" + accelerated +
                 ", inhibited=" + inhibited +
+                ", atSpringboard=" + atSpringboard +
+                ", movementLock=" + movementLock +
                 ", x=" + x +
                 ", y=" + y +
                 '}';

@@ -52,6 +52,8 @@ public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameFi
 
     boolean isSpringboardRightDownElement(int x, int y);
 
+    boolean isSpringboardTopElement(int x, int y);
+
     Optional<Bike> getEnemyBike(int x, int y, Player player);
 
     List<Player> getPlayers();
