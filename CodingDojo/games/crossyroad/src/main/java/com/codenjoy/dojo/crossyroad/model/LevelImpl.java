@@ -75,6 +75,9 @@ public class LevelImpl implements Level, Tickable {
         for (Point pt : getPointsOf(Elements.CARRIGHTTOLEFT)) {
             result.add(new Platform(pt, Direction.LEFT));
         }
+        for (Point pt : getPointsOf(Elements.CARLEFTTORIGHT)) {
+            result.add(new Platform(pt, Direction.RIGHT));
+        }
 
         return result;
     }
