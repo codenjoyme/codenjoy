@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.excitebike.model.items.bike;
+package com.codenjoy.dojo.excitebike.model.elements;
 
 /*-
  * #%L

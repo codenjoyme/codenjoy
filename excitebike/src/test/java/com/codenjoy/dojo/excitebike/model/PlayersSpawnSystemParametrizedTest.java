@@ -22,7 +22,7 @@ package com.codenjoy.dojo.excitebike.model;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
+import com.codenjoy.dojo.excitebike.model.elements.BikeType;
 import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;

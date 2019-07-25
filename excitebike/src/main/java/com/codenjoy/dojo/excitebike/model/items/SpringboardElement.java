@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.excitebike.model.items.springboard;
+package com.codenjoy.dojo.excitebike.model.items;
 
 /*-
  * #%L
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.excitebike.model.items.springboard;
  */
 
 import com.codenjoy.dojo.excitebike.model.Player;
+import com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
