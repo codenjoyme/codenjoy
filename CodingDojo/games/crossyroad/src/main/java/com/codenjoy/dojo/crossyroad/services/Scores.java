@@ -38,7 +38,7 @@ public class Scores implements PlayerScores {
         this.score = startScore;
 
         winScore = settings.addEditBox("Win score").type(Integer.class).def(5);
-        losePenalty = settings.addEditBox("Lose penalty").type(Integer.class).def(100);
+        losePenalty = settings.addEditBox("Lose penalty").type(Integer.class).def(50);
     }
 
     @Override
@@ -55,6 +55,9 @@ public class Scores implements PlayerScores {
     public void event(Object event) {
         if (event.equals(Events.GO_UP)) {
             score += winScore.getValue();
+        }
+        else if (event.equals(Events.LOSE)){
+            score -= losePenalty.getValue();
         }
         score = Math.max(0, score);
     }
