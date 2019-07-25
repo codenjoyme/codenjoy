@@ -277,6 +277,7 @@
                         <canUpdateLicense>false</canUpdateLicense>
                         <excludes>
                             <exclude>**/*.json</exclude>
+                            <exclude>**/*.html</exclude>
                         </excludes>
                     </configuration>
                     <executions>
