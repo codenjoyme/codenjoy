@@ -22,9 +22,9 @@ package com.codenjoy.dojo.excitebike.services.generation;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.items.GameElementType;
+import com.codenjoy.dojo.excitebike.model.elements.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
-import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
+import com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType;
 import com.codenjoy.dojo.excitebike.services.generation.generator.SpringboardGenerator;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.printer.CharElements;

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.excitebike.model.items.bike;
+package com.codenjoy.dojo.excitebike.model.items;
 
 /*-
  * #%L
@@ -27,6 +27,7 @@ import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.excitebike.services.Events;
+import com.codenjoy.dojo.excitebike.model.elements.BikeType;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
@@ -34,8 +35,27 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Objects;
 
-import static com.codenjoy.dojo.excitebike.model.items.bike.BikeType.*;
-import static com.codenjoy.dojo.services.Direction.*;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_ACCELERATOR;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_KILLED_BIKE;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_SPRINGBOARD_LEFT;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_SPRINGBOARD_LEFT_DOWN;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_SPRINGBOARD_RIGHT;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_SPRINGBOARD_RIGHT_DOWN;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN_AT_ACCELERATOR;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN_AT_FENCE;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN_AT_INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN_AT_LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN_AT_OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_IN_FLIGHT_FROM_SPRINGBOARD;
+import static com.codenjoy.dojo.services.Direction.DOWN;
+import static com.codenjoy.dojo.services.Direction.RIGHT;
+import static com.codenjoy.dojo.services.Direction.UP;
 
 public class Bike extends PlayerHero<GameField> implements State<BikeType, Player>, Shiftable {
 
@@ -235,7 +255,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                     return;
                 }
                 if (!enemy.movement.isUp() && !enemy.movement.isDown() && enemy.command == null) {
-                    field.getPlayerOfBike(this).event(Events.WIN);
                     enemy.crush();
                     type = BIKE_AT_KILLED_BIKE;
                     move(enemy);
@@ -443,5 +462,97 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                 ", x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    class Movement {
+
+        private boolean up;
+        private boolean down;
+        private boolean left;
+        private boolean right;
+
+        public Movement() {
+        }
+
+        public boolean isUp() {
+            return up;
+        }
+
+        public void setUp() {
+            if (down) {
+                down = false;
+            } else {
+                up = true;
+            }
+        }
+
+        public boolean isDown() {
+            return down;
+        }
+
+        public void setDown() {
+            if (up) {
+                up = false;
+            } else {
+                down = true;
+            }
+        }
+
+        public boolean isLeft() {
+            return left;
+        }
+
+        public void setLeft() {
+            if (right) {
+                right = false;
+            } else {
+                left = true;
+            }
+        }
+
+        public boolean isRight() {
+            return right;
+        }
+
+        public void setRight() {
+            if (left) {
+                left = false;
+            } else {
+                right = true;
+            }
+        }
+
+        public void clear() {
+            up = false;
+            down = false;
+            left = false;
+            right = false;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Movement movement = (Movement) o;
+            return up == movement.up &&
+                    down == movement.down &&
+                    left == movement.left &&
+                    right == movement.right;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(up, down, left, right);
+        }
+
+        @Override
+        public String toString() {
+            return "Movement{" +
+                    "up=" + up +
+                    ", down=" + down +
+                    ", left=" + left +
+                    ", right=" + right +
+                    '}';
+        }
     }
 }

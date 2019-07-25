@@ -30,7 +30,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.OBSTACLE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;

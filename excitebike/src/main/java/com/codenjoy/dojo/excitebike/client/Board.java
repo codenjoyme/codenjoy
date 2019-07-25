@@ -24,10 +24,10 @@ package com.codenjoy.dojo.excitebike.client;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.excitebike.model.items.GameElementType;
-import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
-import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
-import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
+import com.codenjoy.dojo.excitebike.model.elements.GameElementType;
+import com.codenjoy.dojo.excitebike.model.items.Bike;
+import com.codenjoy.dojo.excitebike.model.elements.BikeType;
+import com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.CharElements;

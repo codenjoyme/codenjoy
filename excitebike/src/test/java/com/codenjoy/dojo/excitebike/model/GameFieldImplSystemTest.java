@@ -23,7 +23,7 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
-import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
+import com.codenjoy.dojo.excitebike.model.items.Bike;
 import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
 import com.codenjoy.dojo.services.Dice;
@@ -3759,6 +3759,106 @@ public class GameFieldImplSystemTest {
                 "         |  " +
                 "            " +
                 "■■■■■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void commandUpAtLineChangerDown__shouldNotMoveBike() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▼ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        bike.up();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " ▼B  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void commandDownAtLineChangerUp__shouldNotMoveBike() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "  B▲ " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        bike.down();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "     " +
+                " ▲B  " +
+                "     " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void commandDownAtLineChangerDown__shouldMoveBikeForTwoCells() {
+        //given
+        String board = "■■■■■" +
+                "  B▼ " +
+                "     " +
+                "     " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        bike.down();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                " ▼   " +
+                "     " +
+                "  B  " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void commandUpAtLineChangerUp__shouldMoveBikeForTwoCells() {
+        //given
+        String board = "■■■■■" +
+                "     " +
+                "     " +
+                "  B▲ " +
+                "■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        bike.up();
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "  B  " +
+                "     " +
+                " ▲   " +
+                "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 

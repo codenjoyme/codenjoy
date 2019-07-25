@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.excitebike.model.items.springboard;
+package com.codenjoy.dojo.excitebike.model.elements;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2019 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,26 +22,29 @@ package com.codenjoy.dojo.excitebike.model.items.springboard;
  * #L%
  */
 
+
 import com.codenjoy.dojo.services.printer.CharElements;
 
-public enum SpringboardElementType implements CharElements {
+public enum GameElementType implements CharElements {
 
-    SPRINGBOARD_LEFT_UP('╔'),
-    SPRINGBOARD_LEFT('/'),
-    SPRINGBOARD_LEFT_DOWN('╚'),
-    SPRINGBOARD_TOP('═'),
-    SPRINGBOARD_RIGHT_UP('╗'),
-    SPRINGBOARD_RIGHT('\\'),
-    SPRINGBOARD_RIGHT_DOWN('╝');
+    //ASCII code of char in comment
+    NONE(' '),  //space
+    FENCE('■'),    //254
+
+    ACCELERATOR('>'),   //175
+    INHIBITOR('<'),    //177
+    OBSTACLE('|'),     //178
+    LINE_CHANGER_UP('▲'),  //30
+    LINE_CHANGER_DOWN('▼');  //31
 
     final char ch;
 
-    SpringboardElementType(char ch) {
+    GameElementType(char ch) {
         this.ch = ch;
     }
 
-    public static SpringboardElementType valueOf(char ch) {
-        for (SpringboardElementType el : SpringboardElementType.values()) {
+    public static GameElementType valueOf(char ch) {
+        for (GameElementType el : GameElementType.values()) {
             if (el.ch == ch) {
                 return el;
             }

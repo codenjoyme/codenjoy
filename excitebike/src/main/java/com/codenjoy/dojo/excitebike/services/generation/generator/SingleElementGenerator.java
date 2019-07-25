@@ -23,7 +23,7 @@ package com.codenjoy.dojo.excitebike.services.generation.generator;
  */
 
 import com.codenjoy.dojo.excitebike.model.items.Accelerator;
-import com.codenjoy.dojo.excitebike.model.items.GameElementType;
+import com.codenjoy.dojo.excitebike.model.elements.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
 import com.codenjoy.dojo.excitebike.model.items.LineChanger;
 import com.codenjoy.dojo.excitebike.model.items.Obstacle;
@@ -36,11 +36,11 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.ACCELERATOR;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.INHIBITOR;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_DOWN;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.LINE_CHANGER_UP;
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.ACCELERATOR;
+import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.OBSTACLE;
 
 /**
  * Created by Pavel Bobylev 7/18/2019

@@ -1,8 +1,8 @@
 package com.codenjoy.dojo.excitebike.client;
 
-import com.codenjoy.dojo.excitebike.model.items.GameElementType;
-import com.codenjoy.dojo.excitebike.model.items.bike.BikeType;
-import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
+import com.codenjoy.dojo.excitebike.model.elements.GameElementType;
+import com.codenjoy.dojo.excitebike.model.elements.BikeType;
+import com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.google.common.collect.Lists;

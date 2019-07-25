@@ -25,6 +25,8 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
 import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.excitebike.services.Events;
+import com.codenjoy.dojo.excitebike.model.elements.BikeType;
+import com.codenjoy.dojo.excitebike.model.items.Bike;
 import org.junit.Before;
 import org.junit.Test;
 

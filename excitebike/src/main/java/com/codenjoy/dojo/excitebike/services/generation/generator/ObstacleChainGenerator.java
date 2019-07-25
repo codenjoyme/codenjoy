@@ -22,7 +22,7 @@ package com.codenjoy.dojo.excitebike.services.generation.generator;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.items.GameElementType;
+import com.codenjoy.dojo.excitebike.model.elements.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.Obstacle;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.services.Dice;
@@ -33,7 +33,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.codenjoy.dojo.excitebike.model.items.GameElementType.OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.OBSTACLE;
 import static com.codenjoy.dojo.excitebike.services.generation.generator.ObstacleChainGenerator.Shape.LADDER_DOWN;
 import static com.codenjoy.dojo.excitebike.services.generation.generator.ObstacleChainGenerator.Shape.LADDER_UP;
 import static com.codenjoy.dojo.excitebike.services.generation.generator.ObstacleChainGenerator.Shape.STRAIGHT;
