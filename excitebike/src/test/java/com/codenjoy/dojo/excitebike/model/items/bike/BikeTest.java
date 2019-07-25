@@ -529,63 +529,6 @@ public class BikeTest {
     }
 
     @Test
-    public void tick__shouldMoveBikeUp__ifBikeGoToSpringboardLeftDownElementType() {
-        //given
-        when(gameField.isSpringboardLeftDownElement(bike.getX(), bike.getY())).thenReturn(true);
-        bike.tick();
-
-        //when
-        bike.tick();
-
-        //then
-        assertThat(bike.getX(), is(5));
-        assertThat(bike.getY(), is(6));
-    }
-
-    @Test
-    public void tick__shouldMoveBikeUp__ifBikeGoToSpringboardDarkElementType() {
-        //given
-        when(gameField.isSpringboardDarkElement(bike.getX(), bike.getY())).thenReturn(true);
-        when(gameField.isSpringboardLeftDownElement(bike.getX(), 1)).thenReturn(true);
-        bike.tick();
-
-        //when
-        bike.tick();
-
-        //then
-        assertThat(bike.getX(), is(5));
-        assertThat(bike.getY(), is(6));
-    }
-
-    @Test
-    public void tick__shouldMoveBikeDown__ifBikeGoToSpringboardRightUpElementType() {
-        //given
-        when(gameField.isSpringboardRightDownElement(bike.getX(), bike.getY() - 1)).thenReturn(true);
-        bike.tick();
-
-        //when
-        bike.tick();
-
-        //then
-        assertThat(bike.getX(), is(5));
-        assertThat(bike.getY(), is(4));
-    }
-
-    @Test
-    public void tick__shouldMoveBikeDown__ifBikeGoToSpringboardLightElementType() {
-        //given
-        when(gameField.isSpringboardLightElement(bike.getX(), bike.getY() - 1)).thenReturn(true);
-        bike.tick();
-
-        //when
-        bike.tick();
-
-        //then
-        assertThat(bike.getX(), is(5));
-        assertThat(bike.getY(), is(4));
-    }
-
-    @Test
     public void tick__shouldMoveBikeDownToFlight__ifBikeGoToSpringboardDarkElementTypeUnderRoad() {
         //given
         bike.setY(2);

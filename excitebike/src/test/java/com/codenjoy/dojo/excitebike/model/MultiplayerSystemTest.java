@@ -429,4 +429,574 @@ public class MultiplayerSystemTest {
                         "3:PLAYER_GAME_OVER -> START_NEW_GAME")
         );
     }
+
+    @Test
+    public void shouldIncrementYCoordinateForAllBikes() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        field.tick();
+
+        //then
+        String expected = "╔═╗■■■■\n" +
+                "/═\\    \n" +
+                "/Ḃ\\    \n" +
+                "/Ḃ\\    \n" +
+                "/B\\    \n" +
+                "╚/╝    \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardRise() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game1.getJoystick().down();
+        game3.getJoystick().up();
+        field.tick();
+
+        //then
+        String expected = "■■╔═╗■■\n" +
+                "  /═\\  \n" +
+                "  /═\\  \n" +
+                " Ḃ/═\\  \n" +
+                " Ḃ/═\\  \n" +
+                " B╚/╝  \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldCrushBike_whenBikeTakeDownCommandOnSpringboardRise() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game1.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "╔═╗■■■■\n" +
+                "/═\\    \n" +
+                "/Ḃ\\    \n" +
+                "/Ḃ\\    \n" +
+                "/═\\    \n" +
+                "╚F╝    \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldCrushBike_whenBikeHitOtherBikeAtTopOfSpringboard() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game1.getJoystick().up();
+        field.tick();
+
+        //then
+        String expected = "╔═╗■■■■\n" +
+                "/═\\    \n" +
+                "/Ḃ\\    \n" +
+                "/K\\    \n" +
+                "/═\\    \n" +
+                "╚/╝    \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+        assertThat(game2.isGameOver(), is(true));
+    }
+
+    @Test
+    public void shouldShiftCrushedBikeAtSpringboardTop() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game1.getJoystick().up();
+        field.tick();
+        field.tick();
+
+        //then
+        String expected = "═╗■■■■■\n" +
+                "═\\     \n" +
+                "═\\     \n" +
+                "ḃŘ     \n" +
+                "═R     \n" +
+                "/╝     \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+        assertThat(game2.isGameOver(), is(true));
+    }
+
+    @Test
+    public void shouldCrushOnFenceBikeAfterFlightFromSpringboard() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game1.getJoystick().down();
+        field.tick();
+        field.tick();
+
+        //then
+        String expected = "═╗■■■■■\n" +
+                "═\\     \n" +
+                "═\\     \n" +
+                "═Ř     \n" +
+                "═Ř     \n" +
+                "/╝     \n" +
+                "■f■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldDecrementYCoordinateForAllBikes() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 2);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        field.tick();
+
+        //then
+        String expected = "═╗■■■■■\n" +
+                "═\\     \n" +
+                "═\\     \n" +
+                "═R     \n" +
+                "═Ř     \n" +
+                "/Ŝ     \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 2);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game2.getJoystick().up();
+        game1.getJoystick().up();
+        field.tick();
+
+        //then
+        String expected = "═╗■■■■■\n" +
+                "═\\     \n" +
+                "═\\     \n" +
+                "═R     \n" +
+                "═Ř     \n" +
+                "/Ŝ     \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent2() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 2);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game3.getJoystick().up();
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "═╗■■■■■\n" +
+                "═\\     \n" +
+                "═\\     \n" +
+                "═R     \n" +
+                "═Ř     \n" +
+                "/Ŝ     \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent3() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 2);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setY(bike2.getY() + 2);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game3.getJoystick().up();
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "═╗■■■■■\n" +
+                "═Ř     \n" +
+                "═Ř     \n" +
+                "═R     \n" +
+                "═\\     \n" +
+                "/╝     \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldCrushBike_whenBikeAtHighestLineAndTakeUpCommandAfterSpringboardRise() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 2);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setY(bike2.getY() + 2);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game3.getJoystick().up();
+        game2.getJoystick().up();
+        game1.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "╔Ḃ╗■■■■\n" +
+                "/═\\    \n" +
+                "/═\\    \n" +
+                "/B\\    \n" +
+                "/═\\    \n" +
+                "╚/╝    \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+        assertThat(game3.isGameOver(), is(true));
+    }
+
+    @Test
+    public void shouldCrushBike_whenBikeAtHighestLineAndTakeUpCommandAfterSpringboardDecent() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 2);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setY(bike2.getY() + 2);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game3.getJoystick().up();
+        game1.getJoystick().up();
+        game2.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "╗ḟ■■■■■\n" +
+                "\\      \n" +
+                "\\Ḃ     \n" +
+                "\\B     \n" +
+                "\\      \n" +
+                "╝      \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent4() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 0;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game1.getJoystick().up();
+        field.tick();
+
+        //then
+        String expected = "╔╗■■■■■\n" +
+                "/\\     \n" +
+                "/\\     \n" +
+                "/Ř     \n" +
+                "/Ř     \n" +
+                "╚S     \n" +
+                "■■■■■■■\n";
+
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent5() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 0;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game1.getJoystick().up();
+        game3.getJoystick().up();
+        field.tick();
+
+        //then
+        String expected = "╔╗■■■■■\n" +
+                "/\\     \n" +
+                "/\\     \n" +
+                "/Ř     \n" +
+                "/Ř     \n" +
+                "╚S     \n" +
+                "■■■■■■■\n";
+
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldIgnoreAllCommands_whenBikeBeforeSpringboardDecent6() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 0;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 2);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setY(bike2.getY() + 2);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        //when
+        game1.getJoystick().up();
+        game3.getJoystick().up();
+        field.tick();
+
+        //then
+        String expected = "╔╗■■■■■\n" +
+                "/Ř     \n" +
+                "/Ř     \n" +
+                "/R     \n" +
+                "/\\     \n" +
+                "╚╝     \n" +
+                "■■■■■■■\n";
+
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
 }

@@ -372,4 +372,5 @@ public class GameFieldImplTest {
         //then
         assertThat(result, is(givenPlayer));
     }
+
 }
