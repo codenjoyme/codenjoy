@@ -127,13 +127,22 @@ public class Crossyroad implements Field {
             }
         }
         */
-        // если игрок попадает под машину, то умирает
+        // если игрок попадает под машину или камень, выходит за границы поля, то умирает
         for (Player player : players) {
             Hero hero = player.getHero();
-            if (platforms.contains(hero)) {
-                loseGame(player, hero);
+            for (Platform p : platforms){
+                if (hero.getX() == p.getX() && hero.getY() == p.getY())
+                    loseGame(player, hero);
+            }
+            for (Stone s : stones){
+                if (hero.getX() == s.getX() && hero.getY() == s.getY())
+                    loseGame(player, hero);
+            }
+            if (player.getHero().getX() < 1 || player.getHero().getX() >= size){
+                loseGame(player, player.getHero());
             }
         }
+
         for (Player player : players) {
             Hero hero = player.getHero();
             //player.event(Events.STILL_ALIVE);
