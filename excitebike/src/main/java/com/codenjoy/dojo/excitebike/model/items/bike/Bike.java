@@ -69,6 +69,9 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     @Override
     public void init(GameField gameField) {
         this.field = gameField;
+        if (field.isSpringboardTopElement(x, y)){
+            atSpringboard = true;
+        }
     }
 
     @Override
@@ -117,6 +120,9 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             executeCommand();
             tryToMove();
             adjustStateToElement();
+            if(!isAlive()){
+                field.getPlayerOfBike(this).event(Events.LOSE);
+            }
         }
     }
 
@@ -432,6 +438,8 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                 ", ticked=" + ticked +
                 ", accelerated=" + accelerated +
                 ", inhibited=" + inhibited +
+                ", atSpringboard=" + atSpringboard +
+                ", movementLock=" + movementLock +
                 ", x=" + x +
                 ", y=" + y +
                 '}';

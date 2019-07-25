@@ -51,6 +51,9 @@ public class Scores implements PlayerScores {
         if (event.equals(Events.WIN)) {
             score += settingsHandler.getWinScore();
         }
+        if (event.equals(Events.LOSE)) {
+            score -= settingsHandler.getLoseScore();
+        }
         score = Math.max(0, score);
     }
 }

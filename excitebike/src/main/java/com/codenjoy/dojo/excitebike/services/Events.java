@@ -24,5 +24,5 @@ package com.codenjoy.dojo.excitebike.services;
 
 
 public enum Events {
-    WIN
+    WIN, LOSE
 }

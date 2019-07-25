@@ -41,11 +41,13 @@ public class SettingsHandler {
     private static final String GENERATION_WEIGHT_SPRINGBOARD = "Spawn weight: springboard";
     private static final String GENERATION_WEIGHT_OBSTACLE_CHAIN = "Spawn weight: obstacle chain";
     private static final String WIN_SCORE = "Win score";
+    private static final String LOSE_SCORE = "Lose score";
     private static final int DEFAULT_GENERATION_WEIGHT_NOTHING = 10;
     private static final int DEFAULT_GENERATION_WEIGHT_SINGLE_ELEMENT = 5;
     private static final int DEFAULT_GENERATION_WEIGHT_SPRINGBOARD = 2;
     private static final int DEFAULT_GENERATION_WEIGHT_OBSTACLE_CHAIN = 2;
     private static final int DEFAULT_WIN_SCORE = 1;
+    private static final int DEFAULT_LOSE_SCORE = 1;
     private final SettingsImpl settings = new SettingsImpl();
 
     public SettingsHandler() {
@@ -54,6 +56,7 @@ public class SettingsHandler {
         settings.addEditBox(GENERATION_WEIGHT_SPRINGBOARD).type(Integer.class).def(DEFAULT_GENERATION_WEIGHT_SPRINGBOARD);
         settings.addEditBox(GENERATION_WEIGHT_OBSTACLE_CHAIN).type(Integer.class).def(DEFAULT_GENERATION_WEIGHT_OBSTACLE_CHAIN);
         settings.addEditBox(WIN_SCORE).type(Integer.class).def(DEFAULT_WIN_SCORE);
+        settings.addEditBox(LOSE_SCORE).type(Integer.class).def(DEFAULT_LOSE_SCORE);
     }
 
     public SettingsImpl getSettings() {
@@ -71,5 +74,9 @@ public class SettingsHandler {
 
     public Integer getWinScore() {
         return (Integer) settings.getParameter(WIN_SCORE).getValue();
+    }
+
+    public Integer getLoseScore() {
+        return (Integer) settings.getParameter(LOSE_SCORE).getValue();
     }
 }

@@ -38,7 +38,6 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -373,63 +372,6 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
-    }
-
-    @Ignore
-    @Test
-    public void shouldResetAllPlayersBikesAndFireWInEvent() {
-        //given
-        init();
-        Solver pl1 = clientBoard -> Direction.STOP.toString();
-        Solver pl2 = clientBoard -> Direction.DOWN.toString();
-        Solver pl3 = clientBoard -> Direction.DOWN.toString();
-
-        LinkedList<String> messages = new LinkedList<>();
-        LocalGameRunner.out = (e) -> messages.add(e);
-        LocalGameRunner.timeout = 0;
-        LocalGameRunner.countIterations = 5;
-
-        when(dice.next(anyInt())).thenReturn(5);
-
-        //when
-        LocalGameRunner.run(new GameRunner() {
-            @Override
-            protected String getMap() {
-                return "■■■■■■■" +
-                        "       " +
-                        "       " +
-                        "       " +
-                        "       " +
-                        "   <   " +
-                        "■■■■■■■";
-            }
-
-            @Override
-            public Dice getDice() {
-                return dice;
-            }
-        }, Arrays.asList(pl1, pl2, pl3), Arrays.asList(new Board(), new Board(), new Board()));
-
-        //then
-        assertThat(
-                String.join("\n", messages.get(messages.size() - 3)),
-                is("3:Board:\n" +
-                        "3:■■■■■■■\n" +
-                        "3:       \n" +
-                        "3:       \n" +
-                        "3:B      \n" +
-                        "3: Ḃ     \n" +
-                        "3:Ḃ      \n" +
-                        "3:■■■■■■■\n" +
-                        "3:")
-        );
-        assertThat(
-                String.join("\n", messages.subList(messages.size() - 12, messages.size() - 8)),
-                is("Fire Event: WIN\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "3:PLAYER_GAME_OVER -> START_NEW_GAME")
-        );
     }
 
     @Test

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.excitebike.model.items.bike;
 
 import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
+import com.codenjoy.dojo.excitebike.services.Events;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,8 +35,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class BikeTest {
 
@@ -53,6 +53,8 @@ public class BikeTest {
     @Test
     public void tick__shouldNotShiftBike__ifBikeIsNotAlive() {
         //given
+        Player player = mock(Player.class);
+        when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         bike.crush();
 
         //when
@@ -81,6 +83,8 @@ public class BikeTest {
     @Test
     public void tickWithUpCommand__shouldMoveAndCrushBike__ifUpperPositionIsFence() {
         //given
+        Player player = mock(Player.class);
+        when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.isFence(anyInt(), anyInt())).thenReturn(true);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
         bike.up();
@@ -132,6 +136,8 @@ public class BikeTest {
     @Test
     public void tickWithDownCommand__shouldMoveBikeAndCrushIt__ifLowerPositionIsFence() {
         //given
+        Player player = mock(Player.class);
+        when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         bike.setY(1);
         when(gameField.isFence(anyInt(), anyInt())).thenReturn(true);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
@@ -260,6 +266,8 @@ public class BikeTest {
     @Test
     public void tick__shouldFallBike_ifBikeEncounterWithObstacle() {
         //given
+        Player player = mock(Player.class);
+        when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.isObstacle(anyInt(), anyInt())).thenReturn(true);
 
         //when
@@ -319,6 +327,8 @@ public class BikeTest {
     @Test
     public void tick2__shouldMoveAndCrushBike__ifBikeTakeUpLineChangerAndUpperPositionIsFence() {
         //given
+        Player player = mock(Player.class);
+        when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.isUpLineChanger(5, 5)).thenReturn(true);
         when(gameField.isFence(5, 6)).thenReturn(true);
         when(gameField.getEnemyBike(anyInt(), anyInt(), any(Player.class))).thenReturn(Optional.empty());
@@ -406,6 +416,8 @@ public class BikeTest {
     @Test
     public void tick2__shouldMoveAndCrushBike__ifBikeTakeDownLineChangerAndLowerPositionIsFence() {
         //given
+        Player player = mock(Player.class);
+        when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.isDownLineChanger(5, 5)).thenReturn(true);
         when(gameField.isFence(5, 4)).thenReturn(true);
         bike.tick();
@@ -437,7 +449,6 @@ public class BikeTest {
         assertThat(bike.getX(), is(5));
         assertThat(bike.getY(), is(5));
         assertThat(bike.state(getPlayer(bike)), is(BikeType.BIKE_AT_LINE_CHANGER_DOWN));
-
     }
 
     @Test
@@ -542,6 +553,20 @@ public class BikeTest {
         //then
         assertThat(bike.getX(), is(5));
         assertThat(bike.getY(), is(0));
+    }
+
+    @Test
+    public void tick__shouldFireLoseEventAfterCrush() {
+        //given
+        Player player = mock(Player.class);
+        when(gameField.getPlayerOfBike(bike)).thenReturn(player);
+        when(gameField.isObstacle(bike.getX(), bike.getY())).thenReturn(true);
+
+        //when
+        bike.tick();
+
+        //then
+        verify(player).event(Events.LOSE);
     }
 
 }

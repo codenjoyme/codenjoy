@@ -27,7 +27,6 @@ import com.codenjoy.dojo.excitebike.model.items.Fence;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.excitebike.model.items.bike.Bike;
 import com.codenjoy.dojo.excitebike.model.items.springboard.SpringboardElementType;
-import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.generation.GenerationOption;
 import com.codenjoy.dojo.excitebike.services.generation.TrackStepGenerator;
@@ -173,6 +172,11 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
+    public boolean isSpringboardTopElement(int x, int y) {
+        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_TOP).contains(pt(x, y));
+    }
+
+    @Override
     public Optional<Bike> getEnemyBike(int x, int y, Player player) {
         return player != null ?
                 players.parallelStream()
@@ -246,10 +250,10 @@ public class GameFieldImpl implements GameField {
         return !getBikes().contains(point)
                 && !fences.contains(point)
                 && !allShiftableElements.get(OBSTACLE).contains(point)
-                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT).contains(point)
-                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT_DOWN).contains(point)
-                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT).contains(point)
-                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(point);
+                || (point.getY() != 1 && allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT).contains(point));
+//                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT_DOWN).contains(point)
+//                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT).contains(point)
+//                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(point);
     }
 
     public List<Bike> getBikes() {
