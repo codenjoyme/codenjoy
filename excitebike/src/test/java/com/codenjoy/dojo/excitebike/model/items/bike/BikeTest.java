@@ -35,8 +35,6 @@ import java.util.Optional;
 import static com.codenjoy.dojo.excitebike.TestUtils.getPlayer;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class BikeTest {
