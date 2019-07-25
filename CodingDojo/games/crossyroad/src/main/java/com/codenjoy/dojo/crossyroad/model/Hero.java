@@ -71,13 +71,19 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         if (alive) {
-            return Elements.HERO;
+            if(direction == Direction.UP) {
+            return Elements.HEROUP;} else
+            if(direction == Direction.LEFT) {
+                return Elements.HEROLEFT;} else
+            if(direction == Direction.RIGHT) {
+                return Elements.HERORIGHT;} else
+                return Elements.HEROSTOP;
         } else {
             return Elements.BLACK_HERO;
         }
     }
         // Для переход в режим бога alive = true
-    public void dies() { alive = false;
+    public void dies() { alive = true;
     teleport();}
 
     public void teleport(){

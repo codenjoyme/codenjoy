@@ -61,7 +61,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
 // геты для получения списков каждого типа элементов на доске
-    public Point getMe() { return get(Elements.BLACK_HERO, Elements.HERO).get(0); } //герой
+    public Point getMe() { return get(Elements.BLACK_HERO, Elements.HEROUP, Elements.HEROLEFT, Elements.HERORIGHT, Elements.HEROSTOP).get(0); } //герой
     public List<Point> getWalls(){ return get(Elements.WALL); }                     //стены
     public List<Point> getCarLeftToRight(){ return get(Elements.CARLEFTTORIGHT); }       //машина едет слева направо
     public List<Point> getCarRightToLeft(){ return get(Elements.CARRIGHTTOLEFT); }       //машина едет слева направо
