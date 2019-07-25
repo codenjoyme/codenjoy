@@ -92,9 +92,9 @@ public class PlatformGenerator {
 
             if (newPlatformLengthLeft != 0) {
                 if (newPlatformDirection == Direction.LEFT)
-                    result.add(new Platform(size, newPlatformY, newPlatformDirection));
+                    result.add(new Platform(size, size, newPlatformDirection));
                 else
-                    result.add(new Platform(0, newPlatformY, newPlatformDirection));
+                    result.add(new Platform(0, size, newPlatformDirection));
                 previousY = newPlatformY;
                 newPlatformLengthLeft--;
                 if (newPlatformLengthLeft == 0) {
