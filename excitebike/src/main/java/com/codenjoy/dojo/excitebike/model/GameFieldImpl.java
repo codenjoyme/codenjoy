@@ -251,9 +251,6 @@ public class GameFieldImpl implements GameField {
                 && !fences.contains(point)
                 && !allShiftableElements.get(OBSTACLE).contains(point)
                 || (point.getY() != 1 && allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT).contains(point));
-//                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT_DOWN).contains(point)
-//                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT).contains(point)
-//                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(point);
     }
 
     public List<Bike> getBikes() {
