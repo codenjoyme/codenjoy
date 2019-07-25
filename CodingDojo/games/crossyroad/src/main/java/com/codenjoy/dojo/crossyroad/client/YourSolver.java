@@ -46,6 +46,7 @@ public class YourSolver implements Solver<Board> {
     public YourSolver(Dice dice) {
         this.dice = dice;
     }
+    private Direction dir=Direction.UP;
 
     @Override
     public String get(Board board) {
@@ -90,7 +91,19 @@ public class YourSolver implements Solver<Board> {
 
         //реализовать: проверку на встречу игрока со стеной(не здесь, а в Crossyroad.tick() , там есть заготовки)
         return dir.toString();*/
-        return Direction.UP.toString();
+        if (dir== Direction.STOP){
+            dir =Direction.UP;
+        }else
+        if (dir== Direction.UP){
+            dir =Direction.LEFT;
+        }else
+        if (dir== Direction.LEFT){
+            dir =Direction.RIGHT;
+        }else
+        if (dir== Direction.RIGHT){
+            dir =Direction.UP;
+        }
+        return dir.toString();
     }
 
     public static void main(String[] args) {

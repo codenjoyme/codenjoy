@@ -36,7 +36,7 @@ import java.util.List;
 public class Crossyroad implements Field {
 
     public static final int MAX_PLATFORM_LENGTH = 3;
-    public static final int NEW_APPEAR_PERIOD = 2;
+    public static final int NEW_APPEAR_PERIOD = 5;
     private final PlatformGenerator platformGenerator;
     private Level level;
     private List<Player> players;
@@ -142,7 +142,6 @@ public class Crossyroad implements Field {
                 loseGame(player, player.getHero());
             }
         }
-
         for (Player player : players) {
             Hero hero = player.getHero();
             //player.event(Events.STILL_ALIVE);

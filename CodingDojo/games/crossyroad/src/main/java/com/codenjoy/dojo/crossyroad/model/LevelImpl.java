@@ -72,7 +72,7 @@ public class LevelImpl implements Level, Tickable {
     public List<Platform> getPlatforms() {
         List<Platform> result = new LinkedList<>();
 
-        for (Point pt : getPointsOf(Elements.PLATFORM)) {
+        for (Point pt : getPointsOf(Elements.CARRIGHTTOLEFT)) {
             result.add(new Platform(pt, Direction.LEFT));
         }
 

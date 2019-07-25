@@ -53,7 +53,8 @@ public class Board extends AbstractBoard<Elements> {
 
     // возвращает элементы стены(wall) + камни(stone) + платформы(platform) (они должны находиться внизу этого класса)
     public List<Point> getBarriers() {
-        List<Point> result = getPlatforms();
+        List<Point> result = getCarLeftToRight();
+        result.addAll(getCarRightToLeft());
         result.addAll(getStones());
         result.addAll(getWalls());
         return result;
@@ -62,7 +63,8 @@ public class Board extends AbstractBoard<Elements> {
 // геты для получения списков каждого типа элементов на доске
     public Point getMe() { return get(Elements.BLACK_HERO, Elements.HERO).get(0); } //герой
     public List<Point> getWalls(){ return get(Elements.WALL); }                     //стены
-    public List<Point> getPlatforms(){ return get(Elements.PLATFORM); }             //платформы
+    public List<Point> getCarLeftToRight(){ return get(Elements.CARLEFTTORIGHT); }       //машина едет слева направо
+    public List<Point> getCarRightToLeft(){ return get(Elements.CARRIGHTTOLEFT); }       //машина едет слева направо
     public List<Point> getStones(){ return get(Elements.STONE);}                    //камни
 
 

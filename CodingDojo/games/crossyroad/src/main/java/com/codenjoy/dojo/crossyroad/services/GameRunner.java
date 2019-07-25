@@ -51,9 +51,6 @@ public class GameRunner extends AbstractGameType implements GameType {
                 "#                  #" +
                 "#                  #" +
                 "#                  #" +
-                "#        ==        #" +
-                "#                  #" +
-                "#          ==      #" +
                 "#                  #" +
                 "#                  #" +
                 "#                  #" +
@@ -62,7 +59,10 @@ public class GameRunner extends AbstractGameType implements GameType {
                 "#                  #" +
                 "#                  #" +
                 "#                  #" +
-                "#                ==#" +
+                "#                  #" +
+                "#                  #" +
+                "#                  #" +
+                "#                  #" +
                 "#                  #" +
                 "#         ☺        #" +
                 "#                  #";

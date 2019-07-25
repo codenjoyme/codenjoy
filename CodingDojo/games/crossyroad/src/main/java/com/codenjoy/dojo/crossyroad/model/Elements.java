@@ -31,12 +31,13 @@ import com.codenjoy.dojo.services.printer.CharElements;
  */
 public enum Elements implements CharElements {
 
-    NONE(' '),       // пустое поле
-    WALL('#'),       // а это стенка, через которую я хочу чтобы проходить нельзя было
-    PLATFORM('='),   // а это МОЯ ПЛАТФОРМА
-    HERO('☺'),       // а это мой герой
-    STONE('0'),      // а это камень
-    BLACK_HERO('☻'); // а это очень мертвый труп
+    NONE(' '),             // пустое поле
+    WALL('#'),             // а это стенка, через которую я хочу чтобы проходить нельзя было
+    CARRIGHTTOLEFT('<'),   // а это машина движется влево
+    CARLEFTTORIGHT('>'),   // а это машина движется вправо
+    HERO('☺'),            // а это мой герой
+    STONE('0'),            // а это камень
+    BLACK_HERO('☻');      // а это очень мертвый труп
 
 
     final char ch;

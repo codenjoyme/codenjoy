@@ -41,7 +41,9 @@ public class Platform extends PointImpl implements Tickable, State<Elements, Pla
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.PLATFORM;
+        if (direction == Direction.RIGHT){
+        return Elements.CARLEFTTORIGHT;}
+        else return Elements.CARRIGHTTOLEFT;
     }
 
     @Override
