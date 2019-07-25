@@ -77,32 +77,15 @@ public class PlatformGenerator {
                 newPlatformY = freeLines.get(index);
                 newPlatformLengthLeft = dice.next(maxPlatformLength + 1);
             }
-            /*if (newPlatformLengthLeft == 0) {
-                int newY = dice.next(size-3)+1;
-                int maxPlatformY = previousY + 2;
-//            int minPlatformY = previousY - 2;
-                if (newY > maxPlatformY) newPlatformY = maxPlatformY;
-//            else if (newY < minPlatformY) newPlatformY = minPlatformY;
-                else {
-                    newPlatformY = newY;
-                }
 
-                newPlatformLengthLeft = dice.next(maxPlatformLength+1);
-            }*/
-
-            if (newPlatformLengthLeft != 0) {
+            for (int i = 0; i < newPlatformLengthLeft; i++){
                 if (newPlatformDirection == Direction.LEFT)
-                    result.add(new Platform(size, size, newPlatformDirection));
+                    result.add(new Platform(size-i, newPlatformY, newPlatformDirection));
                 else
-                    result.add(new Platform(0, size, newPlatformDirection));
-                previousY = newPlatformY;
-                newPlatformLengthLeft--;
-                if (newPlatformLengthLeft == 0) {
-                    finishedGenerationPlatform = true;
-                } else {
-                    finishedGenerationPlatform = false;
-                }
+                    result.add(new Platform(i, newPlatformY, newPlatformDirection));
+                finishedGenerationPlatform = true;
             }
+            newPlatformLengthLeft = 0;
         }
 
         return result;

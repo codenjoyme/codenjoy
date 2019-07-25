@@ -48,8 +48,8 @@ public class Stone extends PointImpl implements State<Elements, Player>, Tickabl
     public void tick() {
         if (direction != null) {
             int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
-            move(newX, newY);
+            //int newY = direction.changeY(y);
+            move(newX, y);
         }
 
     }

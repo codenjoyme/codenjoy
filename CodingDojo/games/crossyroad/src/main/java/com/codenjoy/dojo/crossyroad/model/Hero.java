@@ -77,11 +77,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
         // Для переход в режим бога alive = true
-    public void dies() { alive = true; teleport();}
+    public void dies() { alive = false;
+    teleport();}
 
     public void teleport(){
         direction = Direction.STOP;
         move(10,2);
+
     }
 
     public Direction getDirection(){return this.direction;}

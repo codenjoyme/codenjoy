@@ -50,7 +50,7 @@ public class YourSolver implements Solver<Board> {
     @Override
     public String get(Board board) {
         this.board = board;
-        Direction dir = Direction.STOP;// дефолтное напраление
+        /*Direction dir = Direction.STOP;// дефолтное напраление
         List<Point> barriers = board.getBarriers();// получение всех координат препятствий
 
         //реализовать: выбор направления(left, up, right)
@@ -89,13 +89,14 @@ public class YourSolver implements Solver<Board> {
         // в любом другом случае(при направлении платформ в одну сторону), суицыд
 
         //реализовать: проверку на встречу игрока со стеной(не здесь, а в Crossyroad.tick() , там есть заготовки)
-        return dir.toString();
+        return dir.toString();*/
+        return Direction.UP.toString();
     }
 
     public static void main(String[] args) {
         WebSocketRunner.runClient(
                 // paste here board page url from browser after registration
-                "http://localhost:8080/codenjoy-contest/board/player/0?code=000000000000",
+                "http://localhost:8080/codenjoy-contest/board/player/6ggjzkf57sv5w220gwnz?code=4718332084348471577",
                 new YourSolver(new RandomDice()),
                 new Board());
     }
