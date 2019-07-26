@@ -25,16 +25,16 @@ package com.codenjoy.dojo.crossyroad.model;
 
 import com.codenjoy.dojo.services.*;
 
-public class Platform extends PointImpl implements Tickable, State<Elements, Player> {
+public class Car extends PointImpl implements Tickable, State<Elements, Player> {
 
     private Direction direction;
 
-    public Platform(int x, int y, Direction direction) {
+    public Car(int x, int y, Direction direction) {
         super(x, y);
         this.direction = direction;
     }
 
-    public Platform(Point point, Direction direction) {
+    public Car(Point point, Direction direction) {
         super(point);
         this.direction = direction;
     }

@@ -69,14 +69,14 @@ public class LevelImpl implements Level, Tickable {
     }
 
     @Override
-    public List<Platform> getPlatforms() {
-        List<Platform> result = new LinkedList<>();
+    public List<Car> getPlatforms() {
+        List<Car> result = new LinkedList<>();
 
         for (Point pt : getPointsOf(Elements.CARRIGHTTOLEFT)) {
-            result.add(new Platform(pt, Direction.LEFT));
+            result.add(new Car(pt, Direction.LEFT));
         }
         for (Point pt : getPointsOf(Elements.CARLEFTTORIGHT)) {
-            result.add(new Platform(pt, Direction.RIGHT));
+            result.add(new Car(pt, Direction.RIGHT));
         }
 
         return result;

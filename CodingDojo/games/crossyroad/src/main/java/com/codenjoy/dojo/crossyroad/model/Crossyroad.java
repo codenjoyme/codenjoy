@@ -37,14 +37,14 @@ public class Crossyroad implements Field {
 
     public static final int MAX_CAR_NUMBER = 10;
     public static final int NEW_APPEAR_PERIOD = 3;
-    private final PlatformGenerator platformGenerator;
+    private final CarGenerator carGenerator;
     private Level level;
     private List<Player> players;
     private List<Stone> stones;
     private boolean isNewStone = true;
     private Dice dice;
     private int countStone = 0;
-    private List<Platform> platforms;
+    private List<Car> cars;
     private int tickCounter;
 
     private final int size;
@@ -56,7 +56,7 @@ public class Crossyroad implements Field {
         size = level.getSize();
         players = new LinkedList<>();
         stones = new LinkedList<>();
-        platformGenerator = new PlatformGenerator(dice, size, MAX_CAR_NUMBER);
+        carGenerator = new CarGenerator(dice, size, MAX_CAR_NUMBER);
     }
 
     @Override
@@ -64,15 +64,15 @@ public class Crossyroad implements Field {
         tickCounter++;
         createStone();
         removeStoneOutOfBoard();
-        platforms.addAll(platformGenerator.generateRandomPlatforms(getStones(), getPlatforms()));
+        cars.addAll(carGenerator.generateRandomPlatforms(getStones(), getCars()));
         // перемещение героя
         for (Player player : players) {
             Hero hero = player.getHero();
             hero.tick();
             Direction directionHero = hero.getDirection();
             if (directionHero==Direction.UP){
-                for (Platform platform : platforms) {
-                    platform.down();
+                for (Car car : cars) {
+                    car.down();
                 }
                 for (Stone stone : stones) {
                     stone.down();
@@ -80,23 +80,23 @@ public class Crossyroad implements Field {
             }
         }
         // перемещение машин
-        for (Platform platform : platforms) {
-            platform.tick();
+        for (Car car : cars) {
+            car.tick();
         }
         // добавление камней
         for (Stone stone : stones) {
             stone.tick();
         }
         // убираем машины, вышедшие за экран
-        for (Platform platform : platforms.toArray(new Platform[0])) {
-            if (platform.isOutOf(size)) {
-                if (platform.getDirection().equals(Direction.LEFT)){
-                    platform.move(size-1,platform.getY());
+        for (Car car : cars.toArray(new Car[0])) {
+            if (car.isOutOf(size)) {
+                if (car.getDirection().equals(Direction.LEFT)){
+                    car.move(size-1, car.getY());
                 }
                 else{
-                    platform.move(1, platform.getY());
+                    car.move(1, car.getY());
                 }
-                if (platform.getY() < 0) platforms.remove(platform);
+                if (car.getY() < 0) cars.remove(car);
             }
         }
         // реализация механики прыжка(из другой игры)
@@ -134,7 +134,7 @@ public class Crossyroad implements Field {
         // если игрок попадает под машину или камень, выходит за границы поля, то умирает
         for (Player player : players) {
             Hero hero = player.getHero();
-            for (Platform p : platforms){
+            for (Car p : cars){
                 if (hero.getX() == p.getX() && hero.getY() == p.getY())
                     loseGame(player, hero);
             }
@@ -178,7 +178,7 @@ public class Crossyroad implements Field {
 
     private void loseGame(Player player, Hero hero) {
         player.event(Events.LOSE);
-        platformGenerator.setPreviousY(2);
+        carGenerator.setPreviousY(2);
         hero.dies();
     }
 
@@ -194,7 +194,7 @@ public class Crossyroad implements Field {
         player.newHero(this);
 
         walls = level.getWalls();
-        platforms = level.getPlatforms();
+        cars = level.getPlatforms();
         stones = level.getStones();
     }
 
@@ -218,7 +218,7 @@ public class Crossyroad implements Field {
                 return new LinkedList<Point>() {{
                     addAll(getHeroes());
                     if (walls != null) addAll(walls);
-                    if (platforms != null) addAll(platforms);
+                    if (cars != null) addAll(cars);
                     addAll(stones);
                 }};
             }
@@ -249,8 +249,8 @@ public class Crossyroad implements Field {
         return stones;
     }// шобы было
 
-    List<Platform> getPlatforms() {
-        return platforms;
+    List<Car> getCars() {
+        return cars;
     }// шобы было
 
     public int getTickCounter() {

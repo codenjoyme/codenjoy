@@ -35,5 +35,5 @@ public interface Level {
 
     List<Stone> getStones();
 
-    List<Platform> getPlatforms();
+    List<Car> getPlatforms();
 }

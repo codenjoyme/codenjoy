@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.Direction;
 
 import java.util.*;
 
-public class PlatformGenerator {
+public class CarGenerator {
     private final Dice dice;
     private final int size;
     private int newPlatformY;
@@ -38,15 +38,15 @@ public class PlatformGenerator {
     boolean finishedGenerationPlatform;
     Direction newPlatformDirection;
 
-    public PlatformGenerator(Dice dice, int size, int maxCarNumber) {
+    public CarGenerator(Dice dice, int size, int maxCarNumber) {
         this.dice = dice;
         this.size = size;
         this.maxCarNumber = maxCarNumber;
         this.previousY = 14;
     }
 
-    public List<Platform> generateRandomPlatforms(List<Stone> stones, List<Platform> platforms) {
-        List<Platform> result = new LinkedList<>();
+    public List<Car> generateRandomPlatforms(List<Stone> stones, List<Car> cars) {
+        List<Car> result = new LinkedList<>();
         if (finishedGenerationPlatform) {
             //LOL just for mocking
             dice.next(123);
@@ -68,7 +68,7 @@ public class PlatformGenerator {
                 for (Stone s : stones) {
                     st.add(s.getY());
                 }
-                for (Platform p : platforms){
+                for (Car p : cars){
                     st.add(p.getY());
                 }
                 if (st.size() != 0) freeLines.removeAll(st);
@@ -80,9 +80,9 @@ public class PlatformGenerator {
 
             for (int i = 0; i < newPlatformLengthLeft; i++){
                 if (newPlatformDirection == Direction.LEFT)
-                    result.add(new Platform(size-dice.next(size-1), newPlatformY, newPlatformDirection));
+                    result.add(new Car(size-dice.next(size-1), newPlatformY, newPlatformDirection));
                 else
-                    result.add(new Platform(dice.next(size-1), newPlatformY, newPlatformDirection));
+                    result.add(new Car(dice.next(size-1), newPlatformY, newPlatformDirection));
                 finishedGenerationPlatform = true;
             }
             newPlatformLengthLeft = 0;

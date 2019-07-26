@@ -161,7 +161,7 @@ public class CrossyroadTest {
                 "       " +
                 "#######");
 
-        Assert.assertEquals(1, game.getPlatforms().size());
+        Assert.assertEquals(1, game.getCars().size());
     }
 
     @Test
@@ -185,7 +185,7 @@ public class CrossyroadTest {
                 "       " +
                 "#######");
 
-        Assert.assertEquals(1, game.getPlatforms().size());
+        Assert.assertEquals(1, game.getCars().size());
     }
 
     @Test
