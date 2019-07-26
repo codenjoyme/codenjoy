@@ -65,14 +65,12 @@ public class Crossyroad implements Field {
         tickCounter++;
         createStone();
         removeStoneOutOfBoard();
-      //  stones.add(new Stone(5, size));
         platforms.addAll(platformGenerator.generateRandomPlatforms(getStones(), getPlatforms()));
         // перемещение героя
         for (Player player : players) {
             Hero hero = player.getHero();
             hero.tick();
             Direction directionHero = hero.getDirection();
-            //System.out.println(hero.toString()); //не работает
             if (directionHero==Direction.UP){
                 for (Platform platform : platforms) {
                     platform.down();
@@ -93,7 +91,13 @@ public class Crossyroad implements Field {
         // убираем машины, вышедшие за экран
         for (Platform platform : platforms.toArray(new Platform[0])) {
             if (platform.isOutOf(size)) {
-                platforms.remove(platform);
+                if (platform.getDirection().equals(Direction.LEFT)){
+                    platform.move(size-1,platform.getY());
+                }
+                else{
+                    platform.move(1, platform.getY());
+                }
+                //platforms.remove(platform);
             }
         }
         // реализация механики прыжка(из другой игры)

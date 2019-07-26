@@ -61,4 +61,8 @@ public class Platform extends PointImpl implements Tickable, State<Elements, Pla
     public void down (){
         move(x , y-1);
     }
+
+    public Direction getDirection() {
+        return direction;
+    }
 }
