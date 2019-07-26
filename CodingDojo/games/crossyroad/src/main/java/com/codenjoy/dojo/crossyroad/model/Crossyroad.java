@@ -46,7 +46,6 @@ public class Crossyroad implements Field {
     private int countStone = 0;
     private List<Platform> platforms;
     private int tickCounter;
-    private int i=0;
 
     private final int size;
     private List<Wall> walls;
@@ -97,7 +96,7 @@ public class Crossyroad implements Field {
                 else{
                     platform.move(1, platform.getY());
                 }
-                //platforms.remove(platform);
+                if (platform.getY() < 0) platforms.remove(platform);
             }
         }
         // реализация механики прыжка(из другой игры)
