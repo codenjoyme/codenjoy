@@ -2758,7 +2758,7 @@ public class GameFieldImplSystemTest {
     }
 
     @Test
-    public void tick__shouldSpawnStraightObstaclesLineWithOneExit__ifDiceReturnsAccordingNumbers() {
+    public void tick2__shouldSpawnStraightObstaclesLineWithOneExit__ifDiceReturnsAccordingNumbers() {
         //given
         String board = "■■■■■■■■■■■■" +
                 "            " +
@@ -2777,6 +2777,7 @@ public class GameFieldImplSystemTest {
         when(dice.next(4)).thenReturn(0);
         when(dice.next(3)).thenReturn(0);
         when(dice.next(10)).thenReturn(9, 7, 8, 6, 4);
+        game.tick();
 
         //when
         game.tick();
@@ -2798,7 +2799,7 @@ public class GameFieldImplSystemTest {
     }
 
     @Test
-    public void tick1__shouldSpawnLadderUpObstaclesLineWithOneExitAndWidthTen__ifDiceReturnsAccordingNumbers() {
+    public void tick1__shouldSpawnEmptyLine__ifDiceReturnsAccordingForObstacleLadderUpNumbers() {
         //given
         String board = "■■■■■■■■■■■■" +
                 "            " +
@@ -2833,7 +2834,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "            " +
-                "           |" +
+                "            " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2874,8 +2875,8 @@ public class GameFieldImplSystemTest {
                 "B           " +
                 "            " +
                 "            " +
+                "            " +
                 "           |" +
-                "          | " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2915,9 +2916,9 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "B           " +
                 "            " +
+                "            " +
                 "           |" +
                 "          | " +
-                "         |  " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2956,10 +2957,10 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "B           " +
+                "            " +
                 "           |" +
                 "          | " +
                 "         |  " +
-                "        |   " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -2997,11 +2998,11 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "            " +
-                "B          |" +
+                "B           " +
+                "           |" +
                 "          | " +
                 "         |  " +
                 "        |   " +
-                "       |    " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -3038,12 +3039,12 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "            " +
-                "           |" +
-                "B         | " +
+                "            " +
+                "B          |" +
+                "          | " +
                 "         |  " +
                 "        |   " +
                 "       |    " +
-                "      |     " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -3079,13 +3080,13 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "            " +
+                "            " +
                 "           |" +
-                "          | " +
-                "B        |  " +
+                "B         | " +
+                "         |  " +
                 "        |   " +
                 "       |    " +
                 "      |     " +
-                "     |      " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -3120,14 +3121,14 @@ public class GameFieldImplSystemTest {
         String expected = "■■■■■■■■■■■■" +
                 "            " +
                 "            " +
+                "            " +
                 "           |" +
                 "          | " +
-                "         |  " +
-                "B       |   " +
+                "B        |  " +
+                "        |   " +
                 "       |    " +
                 "      |     " +
                 "     |      " +
-                "    |       " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -3161,15 +3162,15 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
+                "            " +
                 "           |" +
                 "          | " +
                 "         |  " +
-                "        |   " +
-                "B      |    " +
+                "B       |   " +
+                "       |    " +
                 "      |     " +
                 "     |      " +
                 "    |       " +
-                "   |        " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -3203,15 +3204,15 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
+                "           |" +
                 "          | " +
                 "         |  " +
                 "        |   " +
-                "       |    " +
-                "B     |     " +
+                "B      |    " +
+                "      |     " +
                 "     |      " +
                 "    |       " +
                 "   |        " +
-                "  |         " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -3245,6 +3246,48 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
+                "          | " +
+                "         |  " +
+                "        |   " +
+                "       |    " +
+                "B     |     " +
+                "     |      " +
+                "    |       " +
+                "   |        " +
+                "  |         " +
+                "■■■■■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick12__shouldSpawnLadderUpObstaclesLineWithOneExitAndWidthTen__ifDiceReturnsAccordingNumbers() {
+        //given
+        String board = "■■■■■■■■■■■■" +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "B           " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "■■■■■■■■■■■■";
+        init(board);
+        when(dice.next(3)).thenReturn(1);
+        when(dice.next(20)).thenReturn(18);
+        when(dice.next(4)).thenReturn(1);
+        when(dice.next(10)).thenReturn(9);
+        when(dice.next(5)).thenReturn(0);
+        ticks(11);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■■■■■" +
+                "            " +
                 "         |  " +
                 "        |   " +
                 "       |    " +
@@ -3259,7 +3302,90 @@ public class GameFieldImplSystemTest {
     }
 
     @Test
-    public void tick2__shouldSpawnLadderDownObstaclesLineWithOneExitAndWidthTen__ifDiceReturnsAccordingNumbers() {
+    public void tick13__shouldSpawnLadderUpObstaclesLineWithOneExitAndWidthTen__ifDiceReturnsAccordingNumbers() {
+        //given
+        String board = "■■■■■■■■■■■■" +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "B           " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "■■■■■■■■■■■■";
+        init(board);
+        when(dice.next(3)).thenReturn(1);
+        when(dice.next(20)).thenReturn(18);
+        when(dice.next(4)).thenReturn(1);
+        when(dice.next(10)).thenReturn(9);
+        when(dice.next(5)).thenReturn(0);
+        ticks(12);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■■■■■" +
+                "            " +
+                "        |   " +
+                "       |    " +
+                "      |     " +
+                "     |      " +
+                "B   |       " +
+                "   |        " +
+                "  |         " +
+                " |          " +
+                "|           " +
+                "■■■■■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick1__shouldSpawnEmptyLine__ifDiceReturnsAccordingToObstacleLadderDownNumbers() {
+        //given
+        String board = "■■■■■■■■■■■■" +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "B           " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "■■■■■■■■■■■■";
+        init(board);
+        when(dice.next(3)).thenReturn(2);
+        when(dice.next(20)).thenReturn(18);
+        when(dice.next(4)).thenReturn(2);
+        when(dice.next(10)).thenReturn(9);
+        when(dice.next(5)).thenReturn(0);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■■■■■" +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "B           " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "■■■■■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick2__shouldSpawnEmptyLineWhichIsExit__ifDiceReturnsAccordingToObstacleLadderDownNumbers() {
         //given
         String board = "■■■■■■■■■■■■" +
                 "            " +
@@ -3287,7 +3413,7 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
-                "           |" +
+                "            " +
                 "            " +
                 "            " +
                 "            " +
@@ -3329,8 +3455,8 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
-                "          | " +
                 "           |" +
+                "            " +
                 "            " +
                 "            " +
                 "B           " +
@@ -3371,9 +3497,9 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
-                "         |  " +
                 "          | " +
                 "           |" +
+                "            " +
                 "            " +
                 "B           " +
                 "            " +
@@ -3413,10 +3539,10 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
-                "        |   " +
                 "         |  " +
                 "          | " +
                 "           |" +
+                "            " +
                 "B           " +
                 "            " +
                 "            " +
@@ -3455,11 +3581,11 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
-                "       |    " +
                 "        |   " +
                 "         |  " +
                 "          | " +
-                "B          |" +
+                "           |" +
+                "B           " +
                 "            " +
                 "            " +
                 "            " +
@@ -3497,12 +3623,12 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
-                "      |     " +
                 "       |    " +
                 "        |   " +
                 "         |  " +
-                "B         | " +
-                "           |" +
+                "          | " +
+                "B          |" +
+                "            " +
                 "            " +
                 "            " +
                 "            " +
@@ -3539,13 +3665,13 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
-                "     |      " +
                 "      |     " +
                 "       |    " +
                 "        |   " +
-                "B        |  " +
-                "          | " +
+                "         |  " +
+                "B         | " +
                 "           |" +
+                "            " +
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
@@ -3581,14 +3707,14 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
-                "    |       " +
                 "     |      " +
                 "      |     " +
                 "       |    " +
-                "B       |   " +
-                "         |  " +
+                "        |   " +
+                "B        |  " +
                 "          | " +
                 "           |" +
+                "            " +
                 "            " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
@@ -3623,15 +3749,15 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
-                "   |        " +
                 "    |       " +
                 "     |      " +
                 "      |     " +
-                "B      |    " +
-                "        |   " +
+                "       |    " +
+                "B       |   " +
                 "         |  " +
                 "          | " +
                 "           |" +
+                "            " +
                 "■■■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -3665,6 +3791,48 @@ public class GameFieldImplSystemTest {
         //then
         String expected = "■■■■■■■■■■■■" +
                 "            " +
+                "   |        " +
+                "    |       " +
+                "     |      " +
+                "      |     " +
+                "B      |    " +
+                "        |   " +
+                "         |  " +
+                "          | " +
+                "           |" +
+                "■■■■■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick12__shouldSpawnLadderDownObstaclesLineWithOneExitAndWidthTen__ifDiceReturnsAccordingNumbers() {
+        //given
+        String board = "■■■■■■■■■■■■" +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "B           " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "■■■■■■■■■■■■";
+        init(board);
+        when(dice.next(3)).thenReturn(2);
+        when(dice.next(20)).thenReturn(18);
+        when(dice.next(4)).thenReturn(2);
+        when(dice.next(10)).thenReturn(9);
+        when(dice.next(5)).thenReturn(0);
+        ticks(11);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■■■■■" +
+                "            " +
                 "  |         " +
                 "   |        " +
                 "    |       " +
@@ -3679,7 +3847,49 @@ public class GameFieldImplSystemTest {
     }
 
     @Test
-    public void tick5__shouldSpawnLadderUpAndDownObstaclesLineWithOneExitAndWidthFour__ifDiceReturnsAccordingNumbers() {
+    public void tick13__shouldSpawnLadderDownObstaclesLineWithOneExitAndWidthTen__ifDiceReturnsAccordingNumbers() {
+        //given
+        String board = "■■■■■■■■■■■■" +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "B           " +
+                "            " +
+                "            " +
+                "            " +
+                "            " +
+                "■■■■■■■■■■■■";
+        init(board);
+        when(dice.next(3)).thenReturn(2);
+        when(dice.next(20)).thenReturn(18);
+        when(dice.next(4)).thenReturn(2);
+        when(dice.next(10)).thenReturn(9);
+        when(dice.next(5)).thenReturn(0);
+        ticks(12);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■■■■■■■■" +
+                "            " +
+                " |          " +
+                "  |         " +
+                "   |        " +
+                "    |       " +
+                "B    |      " +
+                "      |     " +
+                "       |    " +
+                "        |   " +
+                "         |  " +
+                "■■■■■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void tick6__shouldSpawnLadderUpAndDownObstaclesLineWithOneExitAndWidthFour__ifDiceReturnsAccordingNumbers() {
         //given
         String board = "■■■■■■■■■■■■" +
                 "            " +
@@ -3699,7 +3909,7 @@ public class GameFieldImplSystemTest {
         when(dice.next(4)).thenReturn(1);
         when(dice.next(10)).thenReturn(3);
         when(dice.next(5)).thenReturn(0);
-        ticks(4);
+        ticks(5);
 
         //when
         game.tick();
@@ -3721,7 +3931,7 @@ public class GameFieldImplSystemTest {
     }
 
     @Test
-    public void tick5__shouldSpawnLadderDownAndUpObstaclesLineWithOneExitAndWidthFour__ifDiceReturnsAccordingNumbers() {
+    public void tick6__shouldSpawnLadderDownAndUpObstaclesLineWithOneExitAndWidthFour__ifDiceReturnsAccordingNumbers() {
         //given
         String board = "■■■■■■■■■■■■" +
                 "            " +
@@ -3741,7 +3951,7 @@ public class GameFieldImplSystemTest {
         when(dice.next(4)).thenReturn(2);
         when(dice.next(10)).thenReturn(3);
         when(dice.next(5)).thenReturn(0);
-        ticks(4);
+        ticks(5);
 
         //when
         game.tick();
