@@ -426,6 +426,39 @@ public class MultiplayerSystemTest {
     }
 
     @Test
+    public void shouldNotSpawnBikeInFlight() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 1;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        ((Bike) game1.getPlayer().getHero()).crush();
+        field.tick();
+        field.tick();
+
+        //when
+        game1.newGame();
+        field.tick();
+
+        //then
+        String expected = "═╗■■■■■\n" +
+                "═\\     \n" +
+                "Ḃ\\     \n" +
+                "═\\     \n" +
+                "═Ř     \n" +
+                "/S     \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
     public void shouldCrushBike_whenBikeTakeDownCommandOnSpringboardRise() {
         //given
         int springboardWeight = 17;

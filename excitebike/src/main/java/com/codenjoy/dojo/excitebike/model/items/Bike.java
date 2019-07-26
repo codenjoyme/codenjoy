@@ -138,7 +138,6 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             if (movementLock) {
                 command = null;
                 accelerated = false;
-                inhibited = false;
             }
             executeCommand();
             tryToMove();
