@@ -35,6 +35,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.excitebike.TestUtils.ticks;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.anyInt;
@@ -378,13 +379,7 @@ public class MultiplayerSystemTest {
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 7);
 
         //when
         field.tick();
@@ -412,11 +407,7 @@ public class MultiplayerSystemTest {
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 5);
 
         //when
         game1.getJoystick().down();
@@ -479,13 +470,7 @@ public class MultiplayerSystemTest {
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 7);
 
         //when
         game1.getJoystick().down();
@@ -514,13 +499,7 @@ public class MultiplayerSystemTest {
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 7);
 
         //when
         game1.getJoystick().up();
@@ -550,13 +529,7 @@ public class MultiplayerSystemTest {
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 7);
 
         //when
         game1.getJoystick().up();
@@ -587,13 +560,7 @@ public class MultiplayerSystemTest {
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 7);
 
         //when
         game1.getJoystick().down();
@@ -625,13 +592,7 @@ public class MultiplayerSystemTest {
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
         bike3.setY(bike3.getY() - 2);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 7);
         field.tick();
 
         //when
@@ -662,14 +623,7 @@ public class MultiplayerSystemTest {
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
         bike3.setY(bike3.getY() - 2);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 8);
 
         //when
         game2.getJoystick().up();
@@ -701,14 +655,7 @@ public class MultiplayerSystemTest {
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
         bike3.setY(bike3.getY() - 2);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 8);
 
         //when
         game3.getJoystick().up();
@@ -743,14 +690,7 @@ public class MultiplayerSystemTest {
         bike3.setY(bike3.getY() + 2);
         Bike bike2 = (Bike) game2.getPlayer().getHero();
         bike2.setY(bike2.getY() + 2);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 8);
 
         //when
         game3.getJoystick().up();
@@ -785,13 +725,7 @@ public class MultiplayerSystemTest {
         bike3.setY(bike3.getY() + 2);
         Bike bike2 = (Bike) game2.getPlayer().getHero();
         bike2.setY(bike2.getY() + 2);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 7);
 
         //when
         game3.getJoystick().up();
@@ -827,15 +761,7 @@ public class MultiplayerSystemTest {
         bike3.setY(bike3.getY() + 2);
         Bike bike2 = (Bike) game2.getPlayer().getHero();
         bike2.setY(bike2.getY() + 2);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 9);
 
         //when
         game3.getJoystick().up();
@@ -866,13 +792,7 @@ public class MultiplayerSystemTest {
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 7);
 
         //when
         game1.getJoystick().up();
@@ -902,13 +822,7 @@ public class MultiplayerSystemTest {
         bike1.setX(bike1.getX() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 7);
 
         //when
         game1.getJoystick().up();
@@ -943,13 +857,7 @@ public class MultiplayerSystemTest {
         bike3.setY(bike3.getY() + 2);
         Bike bike2 = (Bike) game2.getPlayer().getHero();
         bike2.setY(bike2.getY() + 2);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 7);
 
         //when
         game1.getJoystick().up();
@@ -968,4 +876,89 @@ public class MultiplayerSystemTest {
         assertThat(game1.getBoardAsString(), is(expected));
     }
 
+    @Test
+    public void twoBikesBehindObstacleTick1__shouldBeSpawnedCorrectly() {
+        //given
+        init();
+        game3.close();
+        when(dice.next(20)).thenReturn(12);
+        when(dice.next(5)).thenReturn(2, 2);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 4);
+        bike1.setY(bike1.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setY(bike2.getY() + 1);
+        bike2.setX(bike2.getX() + 4);
+
+        //when
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                "    BḂ|\n" +
+                "       \n" +
+                "       \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void twoBikesBehindObstacleTick2__shouldCrushEnemyBikeAtObstacle() {
+        //given
+        init();
+        game3.close();
+        when(dice.next(20)).thenReturn(12, 1);
+        when(dice.next(5)).thenReturn(2, 2);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 4);
+        bike1.setY(bike1.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setY(bike2.getY() + 1);
+        bike2.setX(bike2.getX() + 4);
+        field.tick();
+
+        //when
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                "    Bō \n" +
+                "       \n" +
+                "       \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void twoBikesBehindObstacleTick3__shouldCrushPlayerBikeAtEnemyAtObstacle() {
+        //given
+        init();
+        game3.close();
+        when(dice.next(20)).thenReturn(12, 1);
+        when(dice.next(5)).thenReturn(2, 2);
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setX(bike1.getX() + 4);
+        bike1.setY(bike1.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setY(bike2.getY() + 1);
+        bike2.setX(bike2.getX() + 4);
+        ticks(field, 2);
+
+        //when
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                "    o  \n" +
+                "       \n" +
+                "       \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
 }

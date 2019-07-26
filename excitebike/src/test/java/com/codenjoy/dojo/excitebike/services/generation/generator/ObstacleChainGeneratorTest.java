@@ -60,7 +60,7 @@ public class ObstacleChainGeneratorTest {
         List<Shiftable> obstacles = result.get(OBSTACLE);
         assertThat(obstacles, hasSize(7));
         for (int i = 0; i < obstacles.size(); i++) {
-            assertThat(obstacles.get(i).getX(), is(9));
+            assertThat(obstacles.get(i).getX(), is(10));
             assertThat(obstacles.get(i).getY(), is(i + (i < 5 ? 1 : 2)));
         }
     }
@@ -84,7 +84,7 @@ public class ObstacleChainGeneratorTest {
         List<Shiftable> obstacles = result.get(OBSTACLE);
         assertThat(obstacles, hasSize(5));
         for (int i = 0; i < obstacles.size(); i++) {
-            assertThat(obstacles.get(i).getX(), is(9));
+            assertThat(obstacles.get(i).getX(), is(10));
             assertThat(obstacles.get(i).getY(), is(i + (i < 3 ? 2 : 3)));
         }
     }
@@ -109,7 +109,7 @@ public class ObstacleChainGeneratorTest {
         List<Shiftable> obstacles = result.get(OBSTACLE);
         assertThat(obstacles, hasSize(7));
         for (int i = 0; i < obstacles.size(); i++) {
-            assertThat(obstacles.get(i).getX(), is(ySize + i));
+            assertThat(obstacles.get(i).getX(), is(ySize + i + 1));
             assertThat(obstacles.get(i).getY(), is(i + 2));
         }
     }
@@ -134,7 +134,7 @@ public class ObstacleChainGeneratorTest {
         List<Shiftable> obstacles = result.get(OBSTACLE);
         assertThat(obstacles, hasSize(5));
         for (int i = 0; i < obstacles.size(); i++) {
-            assertThat(obstacles.get(i).getX(), is(ySize + (i < 3 ? i : i + 1)));
+            assertThat(obstacles.get(i).getX(), is(ySize + (i < 3 ? i + 1 : i + 2)));
             assertThat(obstacles.get(i).getY(), is(i + (i < 3 ? 2 : 3)));
         }
     }
@@ -161,11 +161,11 @@ public class ObstacleChainGeneratorTest {
         for (int i = 0; i < obstacles.size(); i++) {
             int expectedX;
             if (i == 0 || i == 2 || i == 4 || i == 6) {
-                expectedX = 10;
-            } else if (i == 3) {
-                expectedX = 9;
-            } else {
                 expectedX = 11;
+            } else if (i == 3) {
+                expectedX = 10;
+            } else {
+                expectedX = 12;
             }
             assertThat(obstacles.get(i).getX(), is(expectedX));
             assertThat(obstacles.get(i).getY(), is(i + 2));
@@ -183,7 +183,7 @@ public class ObstacleChainGeneratorTest {
         when(dice.next(4)).thenReturn(0);
         when(dice.next(ySize - 2)).thenReturn(7);
         when(dice.next(10)).thenReturn(1, 7, 6, 8, 2, 7, 9, 6);
-        int expectedX = 15;
+        int expectedX = 16;
         int expectedY = 2;
 
         //when
@@ -212,7 +212,7 @@ public class ObstacleChainGeneratorTest {
         when(dice.next(4)).thenReturn(2);
         when(dice.next(ySize - 2)).thenReturn(7);
         when(dice.next(10)).thenReturn(1, 7, 6, 8, 2, 7, 9, 6);
-        int expectedX = 15;
+        int expectedX = 16;
         int expectedY = 2;
 
         //when
@@ -256,11 +256,11 @@ public class ObstacleChainGeneratorTest {
         for (int i = 0; i < obstacles.size(); i++) {
             int expectedX;
             if (i == 0 || i == 2 || i == 4 || i == 6) {
-                expectedX = 10;
-            } else if (i == 3) {
                 expectedX = 11;
+            } else if (i == 3) {
+                expectedX = 12;
             } else {
-                expectedX = 9;
+                expectedX = 10;
             }
             assertThat(obstacles.get(i).getX(), is(expectedX));
             assertThat(obstacles.get(i).getY(), is(i + 2));

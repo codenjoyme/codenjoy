@@ -25,7 +25,6 @@ package com.codenjoy.dojo.excitebike.model.items;
 
 import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
-import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.model.elements.BikeType;
 import com.codenjoy.dojo.services.Direction;
@@ -120,6 +119,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                         type == BIKE_AT_LINE_CHANGER_DOWN ? BIKE_FALLEN_AT_LINE_CHANGER_DOWN :
                                 type == BIKE_AT_LINE_CHANGER_UP ? BIKE_FALLEN_AT_LINE_CHANGER_UP :
                                         BIKE_FALLEN;
+    }
+
+    public void crushLikeEnemy(BikeType crushedEnemyBikeType) {
+        type = BikeType.valueOf(crushedEnemyBikeType.name().replace(OTHER_BIKE_PREFIX + "_", ""));
     }
 
     @Override
@@ -249,8 +252,12 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                                 && !enemy.movement.isUp()
                                 && !enemy.movement.isDown()
                                 && enemy.command == null)) {
-                    crush();
-                    enemy.type = BIKE_AT_KILLED_BIKE;
+                    if (enemy.isAlive()) {
+                        enemy.type = BIKE_AT_KILLED_BIKE;
+                        crush();
+                    } else {
+                        crushLikeEnemy(enemy.getEnemyBikeType());
+                    }
                     return;
                 }
                 if (!enemy.movement.isUp() && !enemy.movement.isDown() && enemy.command == null) {
