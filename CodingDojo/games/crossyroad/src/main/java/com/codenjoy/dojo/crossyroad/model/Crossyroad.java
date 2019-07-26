@@ -89,7 +89,14 @@ public class Crossyroad implements Field {
         }
         // убираем машины, вышедшие за экран
         for (Car car : cars.toArray(new Car[0])) {
-            if (car.isOutOf(size)) {
+            if (car.getX() < 1 && car.getDirection().equals(Direction.LEFT)){
+                car.move(size-2, car.getY());
+            }
+            if (car.getX() > size-2 && car.getDirection().equals(Direction.RIGHT)){
+                car.move(1, car.getY());
+            }
+            if (car.getY() < 0) cars.remove(car);
+            /*if (car.isOutOf(size)) {
                 if (car.getDirection().equals(Direction.LEFT)){
                     car.move(size-1, car.getY());
                 }
@@ -97,7 +104,7 @@ public class Crossyroad implements Field {
                     car.move(1, car.getY());
                 }
                 if (car.getY() < 0) cars.remove(car);
-            }
+            }*/
         }
         // реализация механики прыжка(из другой игры)
        /* for (Player player : players) {
