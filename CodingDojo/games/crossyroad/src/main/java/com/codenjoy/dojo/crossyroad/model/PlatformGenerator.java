@@ -33,16 +33,16 @@ public class PlatformGenerator {
     private final int size;
     private int newPlatformY;
     private int newPlatformLengthLeft;
-    private int maxPlatformLength;
+    private int maxCarNumber;
     private int previousY;
     boolean finishedGenerationPlatform;
     Direction newPlatformDirection;
 
-    public PlatformGenerator(Dice dice, int size, int maxPlatformLength) {
+    public PlatformGenerator(Dice dice, int size, int maxCarNumber) {
         this.dice = dice;
         this.size = size;
-        this.maxPlatformLength = maxPlatformLength;
-        this.previousY = 2;
+        this.maxCarNumber = maxCarNumber;
+        this.previousY = 14;
     }
 
     public List<Platform> generateRandomPlatforms(List<Stone> stones, List<Platform> platforms) {
@@ -75,14 +75,14 @@ public class PlatformGenerator {
                 if (freeLines.size() == 0) return result;
                 int index = dice.next(freeLines.size() + 1);
                 newPlatformY = freeLines.get(index);
-                newPlatformLengthLeft = dice.next(maxPlatformLength + 1);
+                newPlatformLengthLeft = dice.next(maxCarNumber + 1);
             }
 
             for (int i = 0; i < newPlatformLengthLeft; i++){
                 if (newPlatformDirection == Direction.LEFT)
-                    result.add(new Platform(size-i, newPlatformY, newPlatformDirection));
+                    result.add(new Platform(size-dice.next(size-1), newPlatformY, newPlatformDirection));
                 else
-                    result.add(new Platform(i, newPlatformY, newPlatformDirection));
+                    result.add(new Platform(dice.next(size-1), newPlatformY, newPlatformDirection));
                 finishedGenerationPlatform = true;
             }
             newPlatformLengthLeft = 0;

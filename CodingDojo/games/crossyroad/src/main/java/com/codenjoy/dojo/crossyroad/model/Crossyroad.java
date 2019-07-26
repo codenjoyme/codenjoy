@@ -35,7 +35,7 @@ import java.util.List;
 
 public class Crossyroad implements Field {
 
-    public static final int MAX_PLATFORM_LENGTH = 3;
+    public static final int MAX_CAR_NUMBER = 10;
     public static final int NEW_APPEAR_PERIOD = 3;
     private final PlatformGenerator platformGenerator;
     private Level level;
@@ -57,7 +57,7 @@ public class Crossyroad implements Field {
         size = level.getSize();
         players = new LinkedList<>();
         stones = new LinkedList<>();
-        platformGenerator = new PlatformGenerator(dice, size, MAX_PLATFORM_LENGTH);
+        platformGenerator = new PlatformGenerator(dice, size, MAX_CAR_NUMBER);
     }
 
     @Override
