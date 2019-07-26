@@ -247,10 +247,12 @@ public class GameFieldImpl implements GameField {
     }
 
     private boolean isFree(Point point) {
+        Point pointForChecking = new PointImpl(point.getX()+1, point.getY());
         return !getBikes().contains(point)
                 && !fences.contains(point)
-                && !allShiftableElements.get(OBSTACLE).contains(point)
-                || (point.getY() != 1 && allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT).contains(point));
+                && !allShiftableElements.get(OBSTACLE).contains(pointForChecking)
+                && (!allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT).contains(pointForChecking) || pointForChecking.getY() > 1)
+                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(pointForChecking);
     }
 
     public List<Bike> getBikes() {
