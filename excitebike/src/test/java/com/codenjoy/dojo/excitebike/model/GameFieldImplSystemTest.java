@@ -4072,4 +4072,83 @@ public class GameFieldImplSystemTest {
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
+
+    @Test
+    public void shouldInhibitBikeOnlyOnceAfterCrossingSpringboard() {
+        //given
+        String board = "■■■■■■■■╔╗■■■" +
+                "     B< /\\  <" +
+                "        /\\   " +
+                "        /\\   " +
+                "        /\\   " +
+                "        /\\   " +
+                "        /\\   " +
+                "        /\\   " +
+                "        /\\   " +
+                "        /\\   " +
+                "        /\\   " +
+                "        ╚╝   " +
+                "■■■■■■■■■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        ticks(game, 10);
+
+        //then
+        String expected ="■■■■■■■■  ■■■" +
+                "  <B         " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "■■■■■■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void shouldInhibitBikeOnlyOnceAfterCrossingSpringboard2() {
+        //given
+        String board = "■■■■■■■╔═╗■■■" +
+                "    B< /═\\  <" +
+                "       /═\\   " +
+                "       /═\\   " +
+                "       /═\\   " +
+                "       /═\\   " +
+                "       /═\\   " +
+                "       /═\\   " +
+                "       /═\\   " +
+                "       /═\\   " +
+                "       /═\\   " +
+                "       ╚═╝   " +
+                "■■■■■■■■■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        ticks(game, 11);
+
+        //then
+        String expected ="■■■■■■■   ■■■" +
+                " <B          " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "             " +
+                "■■■■■■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
 }
