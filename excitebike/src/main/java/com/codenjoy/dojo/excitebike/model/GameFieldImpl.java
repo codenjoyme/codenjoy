@@ -187,11 +187,6 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    @Override
     public Bike getNewFreeBike() {
         return createNewFreeBike(getBikesCountOnEachY());
     }

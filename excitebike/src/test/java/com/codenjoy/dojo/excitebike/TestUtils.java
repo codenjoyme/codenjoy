@@ -23,6 +23,7 @@ package com.codenjoy.dojo.excitebike;
  */
 
 import com.codenjoy.dojo.excitebike.model.GameField;
+import com.codenjoy.dojo.excitebike.model.GameFieldImpl;
 import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.excitebike.model.items.Bike;
 import com.codenjoy.dojo.excitebike.model.elements.BikeType;
@@ -45,6 +46,9 @@ import static org.mockito.Mockito.mock;
  * Created by Pavel Bobylev 6/26/2019
  */
 public class TestUtils {
+
+    private TestUtils() {
+    }
 
     public static List<Bike> parseBikes(String map) {
         return parseAndConvertElements(map, Bike::new, Arrays.stream(BikeType.values())
@@ -75,5 +79,11 @@ public class TestUtils {
         Player player = new Player(mock(EventListener.class));
         player.setHero(bike);
         return player;
+    }
+
+    public static void ticks(GameFieldImpl game, int number) {
+        for (int i = 0; i < number; i++) {
+            game.tick();
+        }
     }
 }
