@@ -36,7 +36,7 @@ import java.util.List;
 public class Crossyroad implements Field {
 
     public static final int MAX_PLATFORM_LENGTH = 3;
-    public static final int NEW_APPEAR_PERIOD = 5;
+    public static final int NEW_APPEAR_PERIOD = 3;
     private final PlatformGenerator platformGenerator;
     private Level level;
     private List<Player> players;
@@ -52,6 +52,7 @@ public class Crossyroad implements Field {
     private List<Wall> walls;
 
     public Crossyroad(Dice dice, Level level) {
+        this.dice = dice;
         this.level = level;
         size = level.getSize();
         players = new LinkedList<>();
@@ -142,6 +143,7 @@ public class Crossyroad implements Field {
                 loseGame(player, player.getHero());
             }
         }
+        //начисление очков за движение вперед
         for (Player player : players) {
             Hero hero = player.getHero();
             //player.event(Events.STILL_ALIVE);
@@ -153,17 +155,20 @@ public class Crossyroad implements Field {
 
     // создание камней;
     private void createStone() {
-       countStone++;
-        int x = i++;
-       //генерация через dice.next не работает
-        if (i>=20){
-           i -=19;
+       boolean isHeroMoving = false;
+       for (Player p : players){
+           if (p.getHero().getDirection().equals(Direction.UP)){
+               isHeroMoving = true;
+               break;
+           }
        }
-        if (countStone == NEW_APPEAR_PERIOD) {
-            if (x != -1) {
-              addStone(x+1);
-            }
-            countStone = 0;
+       if(isHeroMoving){countStone++;}
+       if (countStone == NEW_APPEAR_PERIOD) {
+           int x = dice.next(size-1)+1;
+           if (x > 0) {
+               addStone(x);
+           }
+           countStone = 0;
         }
     }
 
