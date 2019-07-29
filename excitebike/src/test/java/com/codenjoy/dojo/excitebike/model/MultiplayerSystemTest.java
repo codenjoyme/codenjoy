@@ -1067,6 +1067,40 @@ public class MultiplayerSystemTest {
     }
 
     @Test
+    public void shouldIgnoreAllCommands_whenBikeJustSpawnedBeforeSpringboardDecent3() {
+        //given
+        int springboardWeight = 17;
+        int springboardTopSize = 0;
+
+        init();
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() - 1);
+        ticks(field, 6);
+        ((Bike) game1.getPlayer().getHero()).crush();
+        ((Bike) game2.getPlayer().getHero()).crush();
+        ((Bike) game3.getPlayer().getHero()).crush();
+        ticks(field, 2);
+
+        //when
+        game1.newGame();
+        game2.newGame();
+        game3.newGame();
+        game2.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "╗■■■■■■\n" +
+                "\\      \n" +
+                "\\Ḃ     \n" +
+                "\\      \n" +
+                "ŘB     \n" +
+                "╝      \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+    }
+
+    @Test
     public void shouldNotCrushBike_whenBikeMovesToTopLineOfSpringboardAfterRespawn() {
         //given
         int springboardWeight = 17;
