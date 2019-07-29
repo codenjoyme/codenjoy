@@ -2556,8 +2556,8 @@ public class GameFieldImplSystemTest {
 
         //when
         game.tick();
-        bike.down();
         game.tick();
+        bike.down();
         game.tick();
 
         //then
@@ -2690,14 +2690,15 @@ public class GameFieldImplSystemTest {
 
         //when
         game.tick();
+        game.tick();
         bike.down();
         game.tick();
 
         //then
-        String expected = "■═╗  " +
-                " B\\  " +
-                " ═\\  " +
-                " \\╝  " +
+        String expected = "═╗   " +
+                " \\   " +
+                "═R   " +
+                "\\╝   " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -4151,4 +4152,45 @@ public class GameFieldImplSystemTest {
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
 
+    @Test
+    public void tick__shouldNotMoveBikeDown_ifBikeJustSpawnedAtSpringboard() {
+        //given
+        String board = "■■■╔════╗■" +
+                "   /════\\ " +
+                "   /════\\ " +
+                "   /════\\ " +
+                "   /════\\ " +
+                "   /════\\ " +
+                "   /════\\ " +
+                "   /════\\ " +
+                "B  ╚////╝  " +
+                "■■■■■■■■■■";
+        init(board);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+        bike.crush();
+        game.tick();
+        game.tick();
+
+        //when
+        game.newGame(player);
+        player.getHero().down();
+        game.tick();
+
+        //then
+        String expected = "═╗■      ■" +
+                "═\\        " +
+                "═\\        " +
+                "═\\        " +
+                "═\\        " +
+                "═\\        " +
+                "═\\        " +
+                "═\\        " +
+                "/S        " +
+                "■■■■■■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
 }

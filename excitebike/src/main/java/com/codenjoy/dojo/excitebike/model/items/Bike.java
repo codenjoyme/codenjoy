@@ -91,6 +91,9 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (field.isSpringboardTopElement(x, y)){
             atSpringboard = true;
         }
+        if (isNextStepSpringboardRiseOrDecent()) {
+            movementLock = true;
+        }
     }
 
     @Override
@@ -300,14 +303,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
         adjusted = true;
 
-        if (field.isSpringboardLightElement(x + 1, y - 1)
-                || field.isSpringboardRightDownElement(x + 1, y - 1)
-                || field.isSpringboardDarkElement(x + 1, y)
-                || field.isSpringboardLeftDownElement(x + 1, y)
-                || field.isSpringboardLightElement(x + 2, y - 1)
-                || field.isSpringboardRightDownElement(x + 2, y - 1)
-                || field.isSpringboardDarkElement(x + 2, y)
-                || field.isSpringboardLeftDownElement(x + 2, y)) {
+        if (isNextStepSpringboardRiseOrDecent()) {
             movementLock = true;
         }
 
@@ -435,6 +431,13 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         if (field.isSpringboardLightElement(x, y - 1) || field.isSpringboardRightDownElement(x, y - 1)) {
             y--;
         }
+    }
+
+    private boolean isNextStepSpringboardRiseOrDecent(){
+        return field.isSpringboardLightElement(x + 1, y - 1)
+                || field.isSpringboardRightDownElement(x + 1, y - 1)
+                || field.isSpringboardDarkElement(x + 1, y)
+                || field.isSpringboardLeftDownElement(x + 1, y);
     }
 
     @Override
