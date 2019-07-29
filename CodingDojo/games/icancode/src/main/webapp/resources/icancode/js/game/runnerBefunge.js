@@ -308,6 +308,7 @@ function initRunnerBefunge(logger, storage) {
     }
 
     // ------------------------------------- commands -----------------------------------
+    var gameName = game.sprites;
     var commands = [
         {
             id: 'start',
@@ -316,7 +317,7 @@ function initRunnerBefunge(logger, storage) {
             process: startCommand,
             description: 'Выполнение команд начинается тут.',
             minLevel: 0,
-            img1: 'img/sprite/start.png'
+            img1: '../sprite/icancode/befunge/start.png'
         },
 
         {
@@ -326,7 +327,7 @@ function initRunnerBefunge(logger, storage) {
             process: finishCommand,
             description: 'Выполнение команд останавливается тут.',
             minLevel: 0,
-            img1: 'img/sprite/finish.png'
+            img1: '../sprite/icancode/befunge/finish.png'
         },
 
         {
@@ -376,7 +377,7 @@ function initRunnerBefunge(logger, storage) {
             process: cursorMirrorTopBottomCommand,
             description: 'Зеркало изменяет направление движения командного курсора.',
             minLevel: 3,
-            img1: 'img/sprite/mirror-top-bottom.png'
+            img1: '../sprite/icancode/befunge/mirror-top-bottom.png'
         },
 
         {
@@ -386,7 +387,7 @@ function initRunnerBefunge(logger, storage) {
             process: cursorMirrorBottomTopCommand,
             description: 'Зеркало изменяет направление движения командного курсора.',
             minLevel: 3,
-            img1: 'img/sprite/mirror-bottom-top.png'
+            img1: '../sprite/icancode/befunge/mirror-bottom-top.png'
         },
 
         {
@@ -405,8 +406,8 @@ function initRunnerBefunge(logger, storage) {
             process: activateProcedure1Command,
             description: 'Вызов воспомогательной процедуры №1. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
-            img1: 'img/sprite/procedure-1-1.png',
-            img2: 'img/sprite/procedure-1.png',
+            img1: '../sprite/icancode/befunge/procedure-1-1.png',
+            img2: '../sprite/icancode/befunge/procedure-1.png',
         },
 
         {
@@ -416,8 +417,8 @@ function initRunnerBefunge(logger, storage) {
             process: activateProcedure2Command,
             description: 'Вызов воспомогательной процедуры №2. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
-            img1: 'img/sprite/procedure-2-1.png',
-            img2: 'img/sprite/procedure-2.png',
+            img1: '../sprite/icancode/befunge/procedure-2-1.png',
+            img2: '../sprite/icancode/befunge/procedure-2.png',
         },
 
         {
@@ -427,8 +428,8 @@ function initRunnerBefunge(logger, storage) {
             process: activateProcedure3Command,
             description: 'Вызов воспомогательной процедуры №3. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
-            img1: 'img/sprite/procedure-3-1.png',
-            img2: 'img/sprite/procedure-3.png',
+            img1: '../sprite/icancode/befunge/procedure-3-1.png',
+            img2: '../sprite/icancode/befunge/procedure-3.png',
         },
 
         {
@@ -438,8 +439,8 @@ function initRunnerBefunge(logger, storage) {
             process: ifCommand,
             description: 'Оператор ветвления. Если значения по обе стороны команды равны - поворот командного курсора направо, если не равны - поворот курсора налево.',
             minLevel: 1,
-            img1: 'img/sprite/if-1.png',
-            img2: 'img/sprite/if.png'
+            img1: '../sprite/icancode/befunge/if-1.png',
+            img2: '../sprite/icancode/befunge/if.png'
         },
 
         {
@@ -449,10 +450,10 @@ function initRunnerBefunge(logger, storage) {
             process: scannerAtCommand,
             description: 'Сканер позволяет определить, что находится на поле вокруг героя. Сторону необходимо указать предварительно.',
             minLevel: 1,
-            img1: 'img/sprite/scanner-at-left.png',
-            img2: 'img/sprite/scanner-at-right.png',
-            img3: 'img/sprite/value-left.png',
-            img4: 'img/sprite/value-right.png'
+            img1: '../sprite/icancode/befunge/scanner-at-left.png',
+            img2: '../sprite/icancode/befunge/scanner-at-right.png',
+            img3: '../sprite/icancode/befunge/' + gameName + '/value-left.png',
+            img4: '../sprite/icancode/befunge/' + gameName + '/value-right.png'
         },
 
         {
@@ -462,7 +463,7 @@ function initRunnerBefunge(logger, storage) {
             process: robotCameFromCommand,
             description: 'Указывает откуда пришел герой только что. Если герой не двигался - команда вернет Null.',
             minLevel: 2,
-            img1: 'img/sprite/robot-came-from.png'
+            img1: '../sprite/icancode/befunge/robot-came-from.png'
         },
 
         {
@@ -472,7 +473,7 @@ function initRunnerBefunge(logger, storage) {
             process: robotPreviousDirectionCommand,
             description: 'Указывает куда ходил герой в прошлый раз. Если герой не двигался - команда вернет Null.',
             minLevel: 2,
-            img1: 'img/sprite/robot-previous-direction.png'
+            img1: '../sprite/icancode/befunge/robot-previous-direction.png'
         },
 
         {
@@ -482,8 +483,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotGoLeftCommand,
             description: 'Команда герою двигаться влево.',
             minLevel: 0,
-            img1: 'img/sprite/robot-left-1.png',
-            img2: 'img/sprite/robot-left.png'
+            img1: '../sprite/icancode/befunge/robot-left-1.png',
+            img2: '../sprite/icancode/befunge/' + gameName + '/robot-left.png'
         },
 
         {
@@ -493,8 +494,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotGoRightCommand,
             description: 'Команда герою двигаться вправо.',
             minLevel: 0,
-            img1: 'img/sprite/robot-right-1.png',
-            img2: 'img/sprite/robot-right.png'
+            img1: '../sprite/icancode/befunge/robot-right-1.png',
+            img2: '../sprite/icancode/befunge/' + gameName + '/robot-right.png'
         },
 
         {
@@ -504,8 +505,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotGoUpCommand,
             description: 'Команда герою двигаться вверх.',
             minLevel: 0,
-            img1: 'img/sprite/robot-up-1.png',
-            img2: 'img/sprite/robot-up.png'
+            img1: '../sprite/icancode/befunge/robot-up-1.png',
+            img2: '../sprite/icancode/befunge/' + gameName + '/robot-up.png'
         },
 
         {
@@ -515,8 +516,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotGoDownCommand,
             description: 'Команда герою двигаться вниз.',
             minLevel: 0,
-            img1: 'img/sprite/robot-down-1.png',
-            img2: 'img/sprite/robot-down.png'
+            img1: '../sprite/icancode/befunge/robot-down-1.png',
+            img2: '../sprite/icancode/befunge/' + gameName + '/robot-down.png'
         },
 
         {
@@ -526,10 +527,10 @@ function initRunnerBefunge(logger, storage) {
             process: robotGoCommand,
             description: 'Команда герою двигаться в заданном направлении. Сторону необходимо указать предварительно.',
             minLevel: 2,
-            img1: 'img/sprite/robot-go-left.png',
-            img2: 'img/sprite/robot-go-right.png',
-            img3: 'img/sprite/robot-left.png',
-            img4: 'img/sprite/robot-right.png'
+            img1: '../sprite/icancode/befunge/robot-go-left.png',
+            img2: '../sprite/icancode/befunge/robot-go-right.png',
+            img3: '../sprite/icancode/befunge/' + gameName + '/robot-left.png',
+            img4: '../sprite/icancode/befunge/' + gameName + '/robot-right.png'
         },
 
         {
@@ -539,8 +540,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotJumpLeftCommand,
             description: 'Команда герою прыгнуть влево.',
             minLevel: 10,
-            img1: 'img/sprite/robot-jump-left-1.png',
-            img2: 'img/sprite/robot-jump-left.png'
+            img1: '../sprite/icancode/befunge/robot-jump-left-1.png',
+            img2: '../sprite/icancode/befunge/' + gameName + '/robot-jump-left.png'
         },
 
         {
@@ -550,8 +551,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotJumpRightCommand,
             description: 'Команда герою прыгнуть направо.',
             minLevel: 10,
-            img1: 'img/sprite/robot-jump-right-1.png',
-            img2: 'img/sprite/robot-jump-right.png'
+            img1: '../sprite/icancode/befunge/robot-jump-right-1.png',
+            img2: '../sprite/icancode/befunge/' + gameName + '/robot-jump-right.png'
         },
 
         {
@@ -561,8 +562,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotJumpUpCommand,
             description: 'Команда герою прыгнуть вверх.',
             minLevel: 10,
-            img1: 'img/sprite/robot-jump-up-1.png',
-            img2: 'img/sprite/robot-jump-up.png'
+            img1: '../sprite/icancode/befunge/robot-jump-up-1.png',
+            img2: '../sprite/icancode/befunge/' + gameName + '/robot-jump-up.png'
         },
 
         {
@@ -572,8 +573,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotJumpDownCommand,
             description: 'Команда герою прыгнуть вниз.',
             minLevel: 10,
-            img1: 'img/sprite/robot-jump-down-1.png',
-            img2: 'img/sprite/robot-jump-down.png'
+            img1: '../sprite/icancode/befunge/robot-jump-down-1.png',
+            img2: '../sprite/icancode/befunge/' + gameName + '/robot-jump-down.png'
         },
 
         {
@@ -583,10 +584,10 @@ function initRunnerBefunge(logger, storage) {
             process: robotJumpCommand,
             description: 'Команда герою прыгнуть в заданном направлении. Cторону необходимо указать предварительно.',
             minLevel: 10,
-            img1: 'img/sprite/jump-left.png',
-            img2: 'img/sprite/jump-right.png',
-            img3: 'img/sprite/robot-jump-left.png',
-            img4: 'img/sprite/robot-jump-right.png'
+            img1: '../sprite/icancode/befunge/jump-left.png',
+            img2: '../sprite/icancode/befunge/jump-right.png',
+            img3: '../sprite/icancode/befunge/' + gameName + '/robot-jump-left.png',
+            img4: '../sprite/icancode/befunge/' + gameName + '/robot-jump-right.png'
         },
 
         {
@@ -596,9 +597,9 @@ function initRunnerBefunge(logger, storage) {
             process: valueLeftCommand,
             description: 'Указание направления "влево". Используется совместно с другими командами.',
             minLevel: 2,
-            img1: 'img/sprite/value-left-2.png',
-            img2: 'img/sprite/value-left-1.png',
-            img3: 'img/sprite/value-left.png'
+            img1: '../sprite/icancode/befunge/value-left-2.png',
+            img2: '../sprite/icancode/befunge/value-left-1.png',
+            img3: '../sprite/icancode/befunge/' + gameName + '/value-left.png'
         },
 
         {
@@ -608,9 +609,9 @@ function initRunnerBefunge(logger, storage) {
             process: valueRightCommand,
             description: 'Указание направления "направо". Используется совместно с другими командами.',
             minLevel: 2,
-            img1: 'img/sprite/value-right-2.png',
-            img2: 'img/sprite/value-right-1.png',
-            img3: 'img/sprite/value-right.png'
+            img1: '../sprite/icancode/befunge/value-right-2.png',
+            img2: '../sprite/icancode/befunge/value-right-1.png',
+            img3: '../sprite/icancode/befunge/' + gameName + '/value-right.png'
         },
 
         {
@@ -620,9 +621,9 @@ function initRunnerBefunge(logger, storage) {
             process: valueUpCommand,
             description: 'Указание направления "вверх". Используется совместно с другими командами.',
             minLevel: 2,
-            img1: 'img/sprite/value-up-2.png',
-            img2: 'img/sprite/value-up-1.png',
-            img3: 'img/sprite/value-up.png'
+            img1: '../sprite/icancode/befunge/value-up-2.png',
+            img2: '../sprite/icancode/befunge/value-up-1.png',
+            img3: '../sprite/icancode/befunge/' + gameName + '/value-up.png'
         },
 
         {
@@ -632,9 +633,9 @@ function initRunnerBefunge(logger, storage) {
             process: valueDownCommand,
             description: 'Указание направления "вниз". Используется совместно с другими командами.',
             minLevel: 2,
-            img1: 'img/sprite/value-down-2.png',
-            img2: 'img/sprite/value-down-1.png',
-            img3: 'img/sprite/value-down.png'
+            img1: '../sprite/icancode/befunge/value-down-2.png',
+            img2: '../sprite/icancode/befunge/value-down-1.png',
+            img3: '../sprite/icancode/befunge/' + gameName + '/value-down.png'
         },
 
         {
@@ -651,9 +652,9 @@ function initRunnerBefunge(logger, storage) {
             type: 3,
             title: 'value-wall',
             process: valueWallCommand,
-            description: 'Значние "Обрыв". Испольузется совместно с другими командами.',
+            description: 'Значние "Недосягаемо". Испольузется совместно с другими командами.',
             minLevel: 1,
-            img1: 'img/sprite/cloud.png'
+            img1: '../sprite/icancode/befunge/' + gameName + '/cloud.png'
         },
 
         {
@@ -663,7 +664,7 @@ function initRunnerBefunge(logger, storage) {
             process: valueGroundCommand,
             description: 'Значние "Земля". Испольузется совместно с другими командами.',
             minLevel: 1,
-            img1: '../sprite/icancode/ekids/floor.png'
+            img1: '../sprite/icancode/' + gameName + '/floor.png'
         },
 
         {
@@ -673,7 +674,7 @@ function initRunnerBefunge(logger, storage) {
             process: valueStartCommand,
             description: 'Значние "Точка старта". Испольузется совместно с другими командами.',
             minLevel: 9,
-            img1: '../sprite/icancode/ekids/start.png'
+            img1: '../sprite/icancode/' + gameName + '/start.png'
         },
 
         {
@@ -683,7 +684,7 @@ function initRunnerBefunge(logger, storage) {
             process: valueEndCommand,
             description: 'Значние "Точка финиша". Испольузется совместно с другими командами.',
             minLevel: 9,
-            img1: '../sprite/icancode/ekids/exit.png'
+            img1: '../sprite/icancode/' + gameName + '/exit.png'
         },
 
         {
@@ -693,7 +694,7 @@ function initRunnerBefunge(logger, storage) {
             process: valueGoldCommand,
             description: 'Значние - "Золото". Испольузется совместно с другими командами.',
             minLevel: 9,
-            img1: '../sprite/icancode/ekids/gold.png'
+            img1: '../sprite/icancode/' + gameName + '/gold.png'
         },
 
         {
@@ -701,9 +702,9 @@ function initRunnerBefunge(logger, storage) {
             type: 3,
             title: 'value-box',
             process: valueBoxCommand,
-            description: 'Значние - "Камень". Испольузется совместно с другими командами.',
+            description: 'Значние - "Препятствие". Испольузется совместно с другими командами.',
             minLevel: 11,
-            img1: '../sprite/icancode/ekids/box.png'
+            img1: '../sprite/icancode/' + gameName + '/box.png'
         },
 
         {
@@ -713,7 +714,7 @@ function initRunnerBefunge(logger, storage) {
             process: valueHoleCommand,
             description: 'Значние - "Яма". Испольузется совместно с другими командами.',
             minLevel: 10,
-            img1: '../sprite/icancode/ekids/hole.png'
+            img1: '../sprite/icancode/' + gameName + '/hole.png'
         },
 
         {
@@ -723,7 +724,7 @@ function initRunnerBefunge(logger, storage) {
             process: valueLaserMachineCommand,
             description: 'Значние - "Лазерная машина". Испольузется совместно с другими командами.',
             minLevel: 13,
-            img1: '../sprite/icancode/ekids/laser_machine_charging_down.png'
+            img1: '../sprite/icancode/' + gameName + '/laser_machine_charging_down.png'
         },
 
         {
@@ -733,7 +734,7 @@ function initRunnerBefunge(logger, storage) {
             process: valueLaserCommand,
             description: 'Значние - "Лазер". Испольузется совместно с другими командами.',
             minLevel: 13,
-            img1: '../sprite/icancode/ekids/laser_down.png'
+            img1: '../sprite/icancode/' + gameName + '/laser_down.png'
         },
 
         {
@@ -743,7 +744,7 @@ function initRunnerBefunge(logger, storage) {
             process: valueZombieCommand,
             description: 'Значние - "Зомби". Испольузется совместно с другими командами.',
             minLevel: 14,
-            img1: '../sprite/icancode/ekids/zombies.png'
+            img1: '../sprite/icancode/befunge/zombies.png'
         }
     ];
 
@@ -1107,7 +1108,7 @@ function initRunnerBefunge(logger, storage) {
     };
 
     var buildBoll = function() {
-        var ball = '<div id="ball" class="ball hidden"><img src = "../../resources/icancode/img/sprite/ball.png"></div>';
+        var ball = '<div id="ball" class="ball hidden"><img src = "../../resources/icancode/../sprite/icancode/befunge/ball.png"></div>';
         $("#cardSlots").append(ball);
     };
 
