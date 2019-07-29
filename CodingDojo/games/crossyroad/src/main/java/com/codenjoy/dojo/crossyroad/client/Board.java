@@ -43,15 +43,11 @@ public class Board extends AbstractBoard<Elements> {
         return Elements.valueOf(ch);
     }
 
-    /**
-    // TODO закончить
-//    public boolean isBarrierAt(int x, int y) {
-//        return isAt(x, y, Elements.WALL);
-//    }
-     */
+    public boolean isWallAt(int x, int y) {
+        return isAt(x, y, Elements.WALL);
+    }
 
-
-    // возвращает элементы стены(wall) + камни(stone) + платформы(platform) (они должны находиться внизу этого класса)
+    // возвращает элементы стены(wall) + камни(stone) + машины(машины) (они должны находиться внизу этого класса)
     public List<Point> getBarriers() {
         List<Point> result = getCarLeftToRight();
         result.addAll(getCarRightToLeft());
@@ -60,40 +56,18 @@ public class Board extends AbstractBoard<Elements> {
         return result;
     }
 
-// геты для получения списков каждого типа элементов на доске
+// получение списков каждого типа элементов на доске
     public Point getMe() { return get(Elements.BLACK_HERO, Elements.HEROUP, Elements.HEROLEFT, Elements.HERORIGHT, Elements.HEROSTOP).get(0); } //герой
     public List<Point> getWalls(){ return get(Elements.WALL); }                     //стены
-    public List<Point> getCarLeftToRight(){ return get(Elements.CARLEFTTORIGHT); }       //машина едет слева направо
-    public List<Point> getCarRightToLeft(){ return get(Elements.CARRIGHTTOLEFT); }       //машина едет слева направо
+    public List<Point> getCarLeftToRight(){ return get(Elements.CARLEFTTORIGHT); }  //машина едет слева направо
+    public List<Point> getCarRightToLeft(){ return get(Elements.CARRIGHTTOLEFT); }  //машина едет слева направо
     public List<Point> getStones(){ return get(Elements.STONE);}                    //камни
 
-
-
-
-
-
-
-
-
-
-    /*
     public boolean isGameOver() {
-        return !get(Elements.DEAD_HERO).isEmpty();
+        return !get(Elements.BLACK_HERO).isEmpty();
     }
 
-    public boolean isBombAt(int x, int y) {
-       return isAt(x, y, Elements.BOMB);
+    public boolean isStoneAt(int x, int y) {
+        return isAt(x, y, Elements.STONE);
     }
-    */
-
-    /*
-    //так как перс может иметь только три направления(лево,право,вверх), но вверх он не ходит, а падают машины
-    public Direction trueRandom(){
-        Direction dir = Direction.random();
-        while(!(dir==Direction.UP)||!(dir==Direction.LEFT)||!(dir==Direction.RIGHT)){
-            dir = Direction.random();
-        }
-        return dir;
-    }
-     */
 }

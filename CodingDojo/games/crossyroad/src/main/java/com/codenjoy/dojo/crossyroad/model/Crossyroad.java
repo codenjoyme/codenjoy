@@ -96,16 +96,7 @@ public class Crossyroad implements Field {
                 car.move(1, car.getY());
             }
             if (car.getY() < 0) cars.remove(car);
-            /*if (car.isOutOf(size)) {
-                if (car.getDirection().equals(Direction.LEFT)){
-                    car.move(size-1, car.getY());
-                }
-                else{
-                    car.move(1, car.getY());
-                }
-                if (car.getY() < 0) cars.remove(car);
-            }*/
-        }
+                   }
         // реализация механики прыжка(из другой игры)
        /* for (Player player : players) {
             Hero hero = player.getHero();

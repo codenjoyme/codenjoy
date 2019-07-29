@@ -41,25 +41,24 @@ public class Car extends PointImpl implements Tickable, State<Elements, Player> 
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (direction == Direction.RIGHT){
-        return Elements.CARLEFTTORIGHT;}
-        else return Elements.CARRIGHTTOLEFT;
+        if (direction == Direction.RIGHT) {
+            return Elements.CARLEFTTORIGHT;
+        } else return Elements.CARRIGHTTOLEFT;
     }
 
     @Override
     public void tick() {
-        if(direction == Direction.LEFT) {
+        if (direction == Direction.LEFT) {
             move(x - 1, y);
-        }else
-        if(direction == Direction.RIGHT) {
+        } else if (direction == Direction.RIGHT) {
             move(x + 1, y);
-        }else
+        } else
             move(x - 1, y);
 
     }
 
-    public void down (){
-        move(x , y-1);
+    public void down() {
+        move(x, y - 1);
     }
 
     public Direction getDirection() {

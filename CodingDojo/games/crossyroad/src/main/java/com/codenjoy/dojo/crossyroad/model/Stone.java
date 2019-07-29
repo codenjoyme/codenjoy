@@ -53,7 +53,8 @@ public class Stone extends PointImpl implements State<Elements, Player>, Tickabl
         }
 
     }
-    public void down (){
-        move(x , y-1);
+
+    public void down() {
+        move(x, y - 1);
     }
 }

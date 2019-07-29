@@ -36,17 +36,33 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         direction = Direction.STOP;
         alive = true;
     }
-//смена направления героя
+
+    //смена направления героя
     @Override
     public void down() {/* do nothing, this should never happen*/}
+
     @Override
-    public void up() { if (!alive) return;direction = Direction.UP; }
+    public void up() {
+        if (!alive) return;
+        direction = Direction.UP;
+    }
+
     @Override
-    public void left() { if (!alive) return;direction = Direction.LEFT; }
+    public void left() {
+        if (!alive) return;
+        direction = Direction.LEFT;
+    }
+
     @Override
-    public void right() { if (!alive) return;direction = Direction.RIGHT; }
+    public void right() {
+        if (!alive) return;
+        direction = Direction.RIGHT;
+    }
+
     @Override
-    public void act(int... p) {if (!alive) return;/* пока это нигде не используется*/}
+    public void act(int... p) {
+        if (!alive) return;
+    }
 
     @Override
     public void tick() {
@@ -55,13 +71,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             //приращение по x y по значению передаваемой точки, если напрваление не вверх
             // то есть, direction героя смениться на UP, но вперед он идти не будет,
             // только влево-вправо
-            if(direction!=Direction.UP) {
+            if (direction != Direction.UP) {
                 Point to = direction.change(this.copy());
                 move(to);
             }
         }
-
-        //direction = Direction.random();
     }
 
     public boolean isAlive() {
@@ -71,38 +85,33 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         if (alive) {
-            if(direction == Direction.UP) {
-            return Elements.HEROUP;} else
-            if(direction == Direction.LEFT) {
-                return Elements.HEROLEFT;} else
-            if(direction == Direction.RIGHT) {
-                return Elements.HERORIGHT;} else
+            if (direction == Direction.UP) {
+                return Elements.HEROUP;
+            } else if (direction == Direction.LEFT) {
+                return Elements.HEROLEFT;
+            } else if (direction == Direction.RIGHT) {
+                return Elements.HERORIGHT;
+            } else
                 return Elements.HEROSTOP;
         } else {
             return Elements.BLACK_HERO;
         }
     }
-        // Для переход в режим бога alive = true
-    public void dies() { alive = true;
-    teleport();}
 
-    public void teleport(){
+    // Для переход в режим бога alive = true
+    public void dies() {
+        alive = true;
+        teleport();
+    }
+
+    public void teleport() {
         direction = Direction.STOP;
-        move(10,2);
+        move(10, 2);
 
     }
 
-    public Direction getDirection(){return this.direction;}
+    public Direction getDirection() {
+        return this.direction;
+    }
 
-    //логика из предыдущей игры, оставлена как ознакомительный фрагмент
-    /*public void falls() {
-        move(x, y - 1);
-    }*/
-    /*public void jumps() {
-        alreadyJumped++;
-        move(x, y + 1);
-    }*/
-   /* public void setAlreadyJumped(int alreadyJumped) {
-        this.alreadyJumped = alreadyJumped;
-    }*/
 }

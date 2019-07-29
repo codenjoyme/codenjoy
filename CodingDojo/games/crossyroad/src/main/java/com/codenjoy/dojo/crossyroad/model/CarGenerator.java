@@ -68,7 +68,7 @@ public class CarGenerator {
                 for (Stone s : stones) {
                     st.add(s.getY());
                 }
-                for (Car p : cars){
+                for (Car p : cars) {
                     st.add(p.getY());
                 }
                 if (st.size() != 0) freeLines.removeAll(st);
@@ -78,11 +78,11 @@ public class CarGenerator {
                 newPlatformLengthLeft = dice.next(maxCarNumber + 1);
             }
 
-            for (int i = 0; i < newPlatformLengthLeft; i++){
+            for (int i = 0; i < newPlatformLengthLeft; i++) {
                 if (newPlatformDirection == Direction.LEFT)
-                    result.add(new Car(size-dice.next(size-1), newPlatformY, newPlatformDirection));
+                    result.add(new Car(size - dice.next(size - 1), newPlatformY, newPlatformDirection));
                 else
-                    result.add(new Car(dice.next(size-1), newPlatformY, newPlatformDirection));
+                    result.add(new Car(dice.next(size - 1), newPlatformY, newPlatformDirection));
                 finishedGenerationPlatform = true;
             }
             newPlatformLengthLeft = 0;
