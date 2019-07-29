@@ -61,7 +61,7 @@ public class CarGenerator {
                 else
                     newPlatformDirection = Direction.LEFT;
                 List<Integer> freeLines = new LinkedList<>();
-                for (int i = previousY; i < size; i++) {
+                for (int i = previousY; i < size-1; i++) {
                     freeLines.add(i);
                 }
                 List<Integer> st = new LinkedList<>();
