@@ -1,6 +1,7 @@
 server:
   servlet.context-path: ${context:/codenjoy-contest}
   ip: 127.0.0.1
+  port: 8080
 
 rest-sender:
   pool-size: 100
