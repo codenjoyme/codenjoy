@@ -59,7 +59,7 @@
 }
 
 .add-left, .add-right {
-	cursor: pointer;
+  cursor: pointer;
   background-color: #666;
 }
 
@@ -398,12 +398,17 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   border:1px solid gray;
   z-index: 99;
   -webkit-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
+  box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
+  text-align: center;
 }
 
 .ui-draggable-dragging {
-    z-index: 101;
+  z-index: 101 !important;
+}
+
+.card-item {
+  z-index: 2;
 }
 
 .ball {

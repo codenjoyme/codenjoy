@@ -926,12 +926,13 @@ function initRunnerBefunge(logger, storage) {
             var showTooltip = function(event) {
                 if (touchMode) return false;
          
-                var slot = $(this);
-                currentTooltip = slot.data('data-type').id;
+                var card = $(this);
+                var slot = card.parent();
+                currentTooltip = card.data('data-type').id;
                 touchMode = event.type === 'touchstart';
 
                 setTimeout(function() {
-                    var tooltip = slot.data('data-type').id;
+                    var tooltip = card.data('data-type').id;
                     if (tooltip == currentTooltip) {
                         slot.append(elem);
                         var el = slot.find('.img-tooltip');
@@ -960,8 +961,6 @@ function initRunnerBefunge(logger, storage) {
                                 changeLeft(el, - left);
                                 changeLeft(before, left);
                                 changeLeft(after, left);
-
-                                slot.find('.img-tooltip').css("z-index", "99");
                             }
 
                             // display:hidden мы не можем использовать потому
@@ -984,7 +983,7 @@ function initRunnerBefunge(logger, storage) {
                             });
                         }
                     } else {
-                        slot.empty();
+                        slot.find('.img-tooltip').remove();
                     }
                 }, 500);
             }
@@ -992,12 +991,13 @@ function initRunnerBefunge(logger, storage) {
             var hideTooltip = function() {
                 if (touchMode) return false;
 
-                var slot = $(this);
-                var tooltip = slot.data('data-type').id;
+                var card = $(this);
+                var slot = card.parent();
+                var tooltip = card.data('data-type').id;
                 if (tooltip == currentTooltip) {
                     currentTooltip = null;
                 }
-                slot.empty();
+                slot.find('.img-tooltip').remove();
             }
 
             var handleTouchEnd = function(evt) {
@@ -1005,12 +1005,13 @@ function initRunnerBefunge(logger, storage) {
                 hideTooltip.call(this, evt);
             }
 
-            $("#cardPile ." + commands[index].title)[0].addEventListener('touchstart', showTooltip);
-            $("#cardPile ." + commands[index].title)[0].addEventListener('touchend', handleTouchEnd);
-            $("#cardPile ." + commands[index].title)[0].addEventListener('touchmove', handleTouchEnd);
-            $("#cardPile ." + commands[index].title).mouseenter(showTooltip);
-            $("#cardPile ." + commands[index].title).mousedown(hideTooltip);
-            $("#cardPile ." + commands[index].title).mouseleave(hideTooltip);
+            var card = $("#cardPile ." + commands[index].title);
+            card[0].addEventListener('touchstart', showTooltip);
+            card[0].addEventListener('touchend', handleTouchEnd);
+            card[0].addEventListener('touchmove', handleTouchEnd);
+            card.mouseenter(showTooltip);
+            card.mousedown(hideTooltip);
+            card.mouseleave(hideTooltip);
         })
     };
     buildTooltips();
