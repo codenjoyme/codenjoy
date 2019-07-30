@@ -948,17 +948,32 @@ function initRunnerBefunge(logger, storage) {
                             return element.offset().left + element.width();
                         }
 
+                        var leftBound = function(element) {
+                            return element.offset().left;
+                        }
+
                         var onLoad = function() {
                             var before = el.find('.before-tooltip');
                             var after = el.find('.after-tooltip');
 
 
+                            var C = parseInt(before.css('left').split('px')[0]);
+                            var left = el.width() - C*2;
                             if (rightBound(el) > rightBound($('#cardPile'))) {
-                                // зеркалируем тултип только если
+                                // влево ориентированный тултип только если
                                 // он не помещается в отведенной ему области
-                                var C = parseInt(before.css('left').split('px')[0]);
-                                var left = el.width() - C*2;
-                                changeLeft(el, - left);
+                                changeLeft(el, -left);
+                                changeLeft(before, left);
+                                changeLeft(after, left);
+                            }
+
+                            if (leftBound(el) < leftBound($('#cardPile'))) {
+                                // по цнетру ориентированный тултип только если
+                                // он не помещается в отведенной ему области ни
+                                // с ориентацией вправо, ни после ориентации влево
+
+                                left = -left/2;
+                                changeLeft(el, -left);
                                 changeLeft(before, left);
                                 changeLeft(after, left);
                             }
