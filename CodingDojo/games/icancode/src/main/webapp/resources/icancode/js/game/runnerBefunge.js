@@ -904,61 +904,27 @@ function initRunnerBefunge(logger, storage) {
     buildPileCards();
 
     // -------------------------------------- tooltips -----------------------------------
-    // TODO to remove duplicate
     // TODO to extract whole html to board.js as template
 
     var buildTooltips = function() {
         jQuery.each(commands, function(index) {
-            var elem;
-            if (commands[index].img1 && commands[index].img2 && commands[index].img3 && commands[index].img4) {
-                elem =
-                    '<div class="img-tooltip">' +
-                        '<div class="img-container">' +
-                            '<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img1 + '">' +
-                            '<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img2 + '">' +
-                        '</div>' +
-                        '<div class="img-container">' +
-                            '<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img3 + '">' +
-                            '<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img4 + '">' +
-                        '</div>' +
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
-                    '</div>';
-            } else if (commands[index].img1 && commands[index].img2 && commands[index].img3) {
-                elem =
-                    '<div class="img-tooltip">' +
-                        '<div class="img-container">' +
-                            '<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img1 + '">' +
-                        '</div>' +
-                        '<div class="img-container">' +
-                            '<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img2 + '">' +
-                            '<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img3 + '">' +
-                        '</div>' +
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
-                    '</div>';
-            } else if (commands[index].img1 && commands[index].img2) {
-                elem =
-                    '<div class="img-tooltip">' +
-                        '<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img1 + '">' +
-                        '<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img2 + '">' +
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
-                    '</div>';
-            } else if (commands[index].img1) {
-                elem =
-                    '<div class="img-tooltip">' +
-                        '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
-                    '</div>';
-            } else {
-                elem =
-                    '<div class="img-tooltip">' +
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
-                    '</div>';
-            }
+            var elem =
+                '<div class="img-tooltip">' +
+                    '<div class="img-container">' +
+                        ((!!commands[index].img1)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img1 + '">':'') +
+                        ((!!commands[index].img2)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img2 + '">':'') +
+                    '</div>' +
+                    '<div class="img-container">' +
+                        ((!!commands[index].img3)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img3 + '">':'') +
+                        ((!!commands[index].img4)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img4 + '">':'') +
+                    '</div>' +
+                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
+                '</div>';
 
             var currentTooltip = null;
             var touchMode = false;
             var showTooltip = function(event) {
-                if(touchMode) return false;
+                if (touchMode) return false;
          
                 var slot = $(this);
                 currentTooltip = slot.data('data-type').id;
