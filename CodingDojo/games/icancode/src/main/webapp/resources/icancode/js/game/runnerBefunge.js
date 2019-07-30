@@ -909,7 +909,7 @@ function initRunnerBefunge(logger, storage) {
     var buildTooltips = function() {
         jQuery.each(commands, function(index) {
             var elem =
-                '<div class="img-tooltip">' +
+                '<div class="img-tooltip" style="display: none">' +
                     '<div class="img-container">' +
                         ((!!commands[index].img1)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img1 + '">':'') +
                         ((!!commands[index].img2)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img2 + '">':'') +
@@ -934,7 +934,44 @@ function initRunnerBefunge(logger, storage) {
                     var tooltip = slot.data('data-type').id;
                     if (tooltip == currentTooltip) {
                         slot.append(elem);
-                        $('.img-tooltip').css("z-index", "99");
+                        var el = slot.find('.img-tooltip');
+
+                        el.prepend('<div class="before-tooltip"></div>');
+                        el.append('<div class="after-tooltip"></div>');
+
+                        var changeLeft = function(element, moveLeft) {
+                            element.offset({left: element.offset().left + moveLeft});
+                        }
+
+                        var onLoad = function() {
+                            var before = el.find('.before-tooltip');
+                            var after = el.find('.after-tooltip');
+
+                            var C = parseInt(before.css('left').split('px')[0]);
+                            var left = el.width() - C*2;
+                            changeLeft(el, - left);
+                            changeLeft(before, left);
+                            changeLeft(after, left);
+
+                            el.css("z-index", "99");
+
+                            el.show();
+                        }
+
+                        // если есть изображения ждем пока они все загузятся,
+                        // иначе ширина тултипа будеь рссчитана неверно
+                        var images = $(el).find('img');
+                        var loaded = images.length;
+                        if (loaded == 0) {
+                            onLoad();
+                        } else {
+                            images.load(function () {
+                                loaded--;
+                                if (loaded == 0) {
+                                    onLoad();
+                                }
+                            });
+                        }
                     } else {
                         slot.empty();
                     }
@@ -942,7 +979,7 @@ function initRunnerBefunge(logger, storage) {
             }
 
             var hideTooltip = function() {
-                if(touchMode) return false;
+                if (touchMode) return false;
 
                 var slot = $(this);
                 var tooltip = slot.data('data-type').id;

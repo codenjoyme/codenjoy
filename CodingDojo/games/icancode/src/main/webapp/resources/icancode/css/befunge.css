@@ -429,7 +429,7 @@ box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
   margin-bottom: 5px;
 }
 
-.img-tooltip::before {
+.img-tooltip .before-tooltip {
   content: "";
   display: block;
   position: absolute;
@@ -442,7 +442,7 @@ box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
   left: 9px;
 }
 
-.img-tooltip::after {
+.img-tooltip .after-tooltip {
   content: "";
   display: block;
   position: absolute;
