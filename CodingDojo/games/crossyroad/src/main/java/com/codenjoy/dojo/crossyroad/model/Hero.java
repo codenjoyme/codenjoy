@@ -29,10 +29,12 @@ import com.codenjoy.dojo.services.*;
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private boolean alive;
+    private final int boardSize;
     private Direction direction;
 
-    public Hero(Point xy) {
+    public Hero(Point xy,int boardSize) {
         super(xy);
+        this.boardSize = boardSize;
         direction = Direction.STOP;
         alive = true;
     }
@@ -105,11 +107,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void teleport() {
         direction = Direction.STOP;
-        move(10, 2); // TODO сделать расчет точки респавна зависимым от размера уровня
+        move(boardSize /2, 0);
             }
 
     public Direction getDirection() {
         return this.direction;
     }
-
+    public int getBoardSize() {
+        return this.boardSize;
+    }
 }

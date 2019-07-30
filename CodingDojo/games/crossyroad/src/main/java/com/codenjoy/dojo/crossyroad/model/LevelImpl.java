@@ -51,7 +51,7 @@ public class LevelImpl implements Level, Tickable {
         List<Hero> result = new LinkedList<Hero>();
 
         for (Point pt : getPointsOf(Elements.HEROSTOP)) {
-            result.add(new Hero(pt));
+            result.add(new Hero(pt,getSize()));
         }
 
         return result;

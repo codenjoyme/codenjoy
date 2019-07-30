@@ -100,7 +100,7 @@ public class Crossyroad implements Field {
             Hero hero = player.getHero();
             for (Car p : cars) {
                 if (hero.getX() == p.getX() && hero.getY() == p.getY())
-                    loseGame(player, hero);
+                loseGame(player, hero);
             }
             for (Stone s : stones) {
                 if (hero.getX() == s.getX() && hero.getY() == s.getY())

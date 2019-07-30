@@ -86,17 +86,17 @@ public class CrossyroadTest {
                 "#     #" +
                 "#     #" +
                 "#     #" +
-                "#  ▼  #" +
                 "#     #" +
-                "#     #");
+                "#     #" +
+                "#  ▼  #");
 
         assertE("#     #" +
                 "#     #" +
                 "#     #" +
                 "#     #" +
-                "#  ▼  #" +
                 "#     #" +
-                "#     #");
+                "#     #" +
+                "#  ▼  #");
     }
 
     @Test
@@ -105,17 +105,17 @@ public class CrossyroadTest {
                 "#  0  #" +
                 "#     #" +
                 "#    0#" +
-                "#  ▼  #" +
                 "#     #" +
-                "#     #");
+                "#     #" +
+                "#  ▼  #");
 
         assertE("#     #" +
                 "#  0  #" +
                 "#     #" +
                 "#    0#" +
-                "#  ▼  #" +
                 "#     #" +
-                "#     #");
+                "#     #" +
+                "#  ▼  #");
     }
     @Test
 
@@ -124,17 +124,17 @@ public class CrossyroadTest {
                 "#> >  #" +
                 "#     #" +
                 "#    <#" +
-                "#  ▼  #" +
                 "#     #" +
-                "#     #");
+                "#     #" +
+                "#  ▼  #");
 
         assertE("#     #" +
                 "#> >  #" +
                 "#     #" +
                 "#    <#" +
-                "#  ▼  #" +
                 "#     #" +
-                "#     #");
+                "#     #" +
+                "#  ▼  #");
     }
 
     @Test
@@ -235,27 +235,26 @@ public class CrossyroadTest {
                 Assert.assertEquals(1, game.getCars().size());
     }
 
-//    @Test
-//    public void shouldHeroTeleportWhenCollision() {
-//        givenFl( "#     #" +
-//                "#  ▼< #" +
-//                "#     #" +
-//                "#     #" +
-//                "#     #" +
-//                "#     #" +
-//                "#     #");
-//        game.tick();
-//
-//        assertE( "#     #" +
-//                "#  <  #" +
-//                "#     #" +
-//                "#     #" +
-//                "#     #" +
-//                "#  ▼  #" +
-//                "#     #");
-//
-//
-//    }
+    @Test
+    public void shouldHeroTeleportWhenCollision() {
+        givenFl( "#     #" +
+                "#  ▼< #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #");
+        game.tick();
+        assertE( "#     #" +
+                "#  <  #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#  ▼  #");
+
+
+    }
 
 //    @Test
 //    public void shouldDestroyAllPlatforms() {

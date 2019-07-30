@@ -33,7 +33,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
-
     public Player(EventListener listener) {
         super(listener);
     }
@@ -44,7 +43,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public void newHero(Field field) {
-        hero = new Hero(pt(10, 1));
+        hero = new Hero(pt(10, 0),20);
     }
 
     @Override
