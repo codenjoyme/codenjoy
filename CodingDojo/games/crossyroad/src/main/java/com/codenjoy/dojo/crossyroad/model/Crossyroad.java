@@ -35,13 +35,12 @@ import java.util.List;
 
 public class Crossyroad implements Field {
 
-    public static final int MAX_CAR_NUMBER = 10;
+    public static final int MAX_CAR_NUMBER = 6;
     public static final int NEW_APPEAR_PERIOD = 3;
     private final CarGenerator carGenerator;
     private Level level;
     private List<Player> players;
     private List<Stone> stones;
-    private boolean isNewStone = true;
     private Dice dice;
     private int countStone = 0;
     private List<Car> cars;
@@ -70,7 +69,7 @@ public class Crossyroad implements Field {
             Hero hero = player.getHero();
             hero.tick();
             Direction directionHero = hero.getDirection();
-            if (directionHero==Direction.UP){
+            if (directionHero == Direction.UP) {
                 for (Car car : cars) {
                     car.down();
                 }
@@ -89,94 +88,61 @@ public class Crossyroad implements Field {
         }
         // убираем машины, вышедшие за экран
         for (Car car : cars.toArray(new Car[0])) {
-            if (car.getX() < 1 && car.getDirection().equals(Direction.LEFT)){
-                car.move(size-2, car.getY());
+            if (car.getX() < 1 && car.getDirection().equals(Direction.LEFT)) {
+                car.move(size - 2, car.getY());
             }
-            if (car.getX() > size-2 && car.getDirection().equals(Direction.RIGHT)){
+            if (car.getX() > size - 2 && car.getDirection().equals(Direction.RIGHT)) {
                 car.move(1, car.getY());
             }
             if (car.getY() < 0) cars.remove(car);
-                   }
-        // реализация механики прыжка(из другой игры)
-       /* for (Player player : players) {
-            Hero hero = player.getHero();
-
-            // moving hero
-            if (hero.getStatus() == HeroStatus.FALLING) {
-                //Very podozritelno
-                if (!platforms.contains(pt(hero.getX() + 1, hero.getY() - 1))) {
-                    hero.falls();
-                }
-            } else if (hero.getStatus() == HeroStatus.JUMPING) {
-                hero.jumps();
-            }
-
-            // status changing
-            boolean isPlatformUnderHero = platforms.contains(pt(hero.getX(), hero.getY() - 1));
-            boolean isPlatformUnderHeroOnNextStep = platforms.contains(pt(hero.getX() + 1, hero.getY() - 1));
-            if (isPlatformUnderHero || isPlatformUnderHeroOnNextStep) {
-                hero.setStatus(HeroStatus.IDLE);
-            } else {
-                if (hero.getStatus() == HeroStatus.IDLE) {
-                    hero.setAlreadyJumped(1);
-                }
-                hero.setStatus(HeroStatus.FALLING);
-            }
-
-            // kill hero in wall(spikes)
-            if (walls.contains(hero)) {
-                loseGame(player, hero);
-            }
         }
-        */
-        // если игрок попадает под машину или камень, выходит за границы поля, то умирает
+        // если игрок попадает под машину или камень, либо выходит за границы поля, то умирает
         for (Player player : players) {
             Hero hero = player.getHero();
-            for (Car p : cars){
+            for (Car p : cars) {
                 if (hero.getX() == p.getX() && hero.getY() == p.getY())
                     loseGame(player, hero);
             }
-            for (Stone s : stones){
+            for (Stone s : stones) {
                 if (hero.getX() == s.getX() && hero.getY() == s.getY())
                     loseGame(player, hero);
             }
-            if (player.getHero().getX() < 1 || player.getHero().getX() >= size){
+            if (player.getHero().getX() < 1 || player.getHero().getX() >= size) {
                 loseGame(player, player.getHero());
             }
         }
         //начисление очков за движение вперед
         for (Player player : players) {
             Hero hero = player.getHero();
-            //player.event(Events.STILL_ALIVE);
-            if(Direction.UP.equals(hero.getDirection())){
+            if (Direction.UP.equals(hero.getDirection())) {
                 player.event(Events.GO_UP);
             }
         }
     }
-
     // создание камней;
     private void createStone() {
-       boolean isHeroMoving = false;
-       for (Player p : players){
-           if (p.getHero().getDirection().equals(Direction.UP)){
-               isHeroMoving = true;
-               break;
-           }
-       }
-       if(isHeroMoving){countStone++;}
-       if (countStone == NEW_APPEAR_PERIOD) {
-           int x = dice.next(size-1)+1;
-           if (x > 0) {
-               addStone(x);
-           }
-           countStone = 0;
+        boolean isHeroMoving = false;
+        for (Player p : players) {
+            if (p.getHero().getDirection().equals(Direction.UP)) {
+                isHeroMoving = true;
+                break;
+            }
+        }
+        if (isHeroMoving) {
+            countStone++;
+        }
+        if (countStone == NEW_APPEAR_PERIOD) {
+            int x = dice.next(size - 1) + 1;
+            if (x > 0) {
+                addStone(x);
+            }
+            countStone = 0;
         }
     }
 
-
     private void loseGame(Player player, Hero hero) {
         player.event(Events.LOSE);
-        carGenerator.setPreviousY(2);
+        carGenerator.setPreviousY(16);
         hero.dies();
     }
 
@@ -232,24 +198,24 @@ public class Crossyroad implements Field {
     }
 
     private void removeStoneOutOfBoard() {
-        for (Iterator<Stone> stone = stones.iterator(); stone.hasNext();){
-            if (stone.next().isOutOf(size)){
+        for (Iterator<Stone> stone = stones.iterator(); stone.hasNext(); ) {
+            if (stone.next().isOutOf(size)) {
                 stone.remove();
             }
         }
     }
+
     public void addStone(int x) {
-        stones.add(new Stone(x,size-1));
-               isNewStone = false;// где это используется...
+        stones.add(new Stone(x, size - 1));
     }
 
     List<Stone> getStones() {
         return stones;
-    }// шобы было
+    }
 
     List<Car> getCars() {
         return cars;
-    }// шобы было
+    }
 
     public int getTickCounter() {
         return tickCounter;

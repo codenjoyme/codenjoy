@@ -94,15 +94,6 @@ public class YourSolver implements Solver<Board> {
 
         //реализовать: проверку на встречу игрока со стеной(не здесь, а в Crossyroad.tick() , там есть заготовки)
         return dir.toString();*/
-      /*  if ((board.getNear(board.getMe()).get(0)== Elements.CARLEFTTORIGHT)
-                ||(board.getNear(board.getMe()).get(3)== Elements.STONE)
-                ||(board.getNear(board.getMe()).get(5)== Elements.CARRIGHTTOLEFT)){
-            if ((board.getNear(board.getMe()).get(1)== Elements.STONE)
-                    &(board.getNear(board.getMe()).get(0)== Elements.CARLEFTTORIGHT)){
-            dir=Direction.STOP;
-            } else if (board.getNear(board.getMe()).get(1)== Elements.STONE)
-            {dir=Direction.LEFT;}
-        }else dir=Direction.UP;*/
         if (dir == Direction.STOP) {
             dir = Direction.UP;
         } else if (dir == Direction.UP) {

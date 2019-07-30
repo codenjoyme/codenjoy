@@ -42,7 +42,7 @@ public class CarGenerator {
         this.dice = dice;
         this.size = size;
         this.maxCarNumber = maxCarNumber;
-        this.previousY = 14;
+        this.previousY = 16;
     }
 
     public List<Car> generateRandomPlatforms(List<Stone> stones, List<Car> cars) {

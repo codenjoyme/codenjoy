@@ -24,6 +24,7 @@ package com.codenjoy.dojo.crossyroad.client.ai;
 
 
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.crossyroad.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.crossyroad.client.Board;
 import com.codenjoy.dojo.services.Direction;
@@ -35,22 +36,26 @@ public class AISolver implements Solver<Board> {
     public AISolver(Dice dice) {
         this.dice = dice;
     }
-    private Direction dir=Direction.UP;
+
+    private Direction dir = Direction.UP;
 
     @Override
     public String get(final Board board) {
-        if (dir== Direction.STOP){
-            dir =Direction.UP;
-        }else
-        if (dir== Direction.UP){
-            dir =Direction.LEFT;
-        }else
-        if (dir== Direction.LEFT){
-            dir =Direction.RIGHT;
-        }else
-        if (dir== Direction.RIGHT){
-            dir =Direction.UP;
-        }
+        if ((board.getNear(board.getMe()).get(0) == Elements.CARLEFTTORIGHT)
+                || (board.getNear(board.getMe()).get(3) == Elements.STONE)
+                || (board.getNear(board.getMe()).get(5) == Elements.CARRIGHTTOLEFT)) {
+            if ((board.getNear(board.getMe()).get(1) == Elements.STONE)
+                    & (board.getNear(board.getMe()).get(0) == Elements.CARLEFTTORIGHT)) {
+                dir = Direction.STOP;
+            } else if ((board.getNear(board.getMe()).get(6) == Elements.STONE)
+                    & (board.getNear(board.getMe()).get(5) == Elements.CARRIGHTTOLEFT)) {
+                dir = Direction.STOP;
+            } else if (board.getNear(board.getMe()).get(1) == Elements.STONE) {
+                dir = Direction.RIGHT;
+            } else if (board.getNear(board.getMe()).get(5) == Elements.STONE) {
+                dir = Direction.LEFT;
+            } else dir = Direction.STOP;
+        } else dir = Direction.UP;
         return dir.toString();
     }
 }

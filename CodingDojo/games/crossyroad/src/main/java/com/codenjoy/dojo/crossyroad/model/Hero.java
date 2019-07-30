@@ -98,9 +98,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    // Для переход в режим бога alive = true
     public void dies() {
-        alive = true;
+        alive = true; // Чтобы герой возрождался после смерти alive = true
         teleport();
     }
 
