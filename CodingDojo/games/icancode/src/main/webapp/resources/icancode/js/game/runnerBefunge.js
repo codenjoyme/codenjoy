@@ -909,7 +909,7 @@ function initRunnerBefunge(logger, storage) {
     var buildTooltips = function() {
         jQuery.each(commands, function(index) {
             var elem =
-                '<div class="img-tooltip" style="display: none">' +
+                '<div class="img-tooltip" style="visibility: hidden">' +
                     '<div class="img-container">' +
                         ((!!commands[index].img1)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img1 + '">':'') +
                         ((!!commands[index].img2)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img2 + '">':'') +
@@ -943,22 +943,33 @@ function initRunnerBefunge(logger, storage) {
                             element.offset({left: element.offset().left + moveLeft});
                         }
 
+                        var rightBound = function(element) {
+                            return element.offset().left + element.width();
+                        }
+
                         var onLoad = function() {
                             var before = el.find('.before-tooltip');
                             var after = el.find('.after-tooltip');
 
-                            var C = parseInt(before.css('left').split('px')[0]);
-                            var left = el.width() - C*2;
-                            changeLeft(el, - left);
-                            changeLeft(before, left);
-                            changeLeft(after, left);
 
-                            el.css("z-index", "99");
+                            if (rightBound(el) > rightBound($('#cardPile'))) {
+                                // зеркалируем тултип только если
+                                // он не помещается в отведенной ему области
+                                var C = parseInt(before.css('left').split('px')[0]);
+                                var left = el.width() - C*2;
+                                changeLeft(el, - left);
+                                changeLeft(before, left);
+                                changeLeft(after, left);
 
-                            el.show();
+                                slot.find('.img-tooltip').css("z-index", "99");
+                            }
+
+                            // display:hidden мы не можем использовать потому
+                            // что оперируем позицией элемента до его отображения
+                            el.css("visibility", "visible");
                         }
 
-                        // если есть изображения ждем пока они все загузятся,
+                        // если есть изображения в тултипе ждем пока они все загузятся,
                         // иначе ширина тултипа будеь рссчитана неверно
                         var images = $(el).find('img');
                         var loaded = images.length;
