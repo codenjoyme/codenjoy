@@ -25,8 +25,8 @@ package com.codenjoy.dojo.excitebike.client.ai;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
-import com.codenjoy.dojo.excitebike.model.items.Bike;
 import com.codenjoy.dojo.excitebike.model.elements.BikeType;
+import com.codenjoy.dojo.excitebike.model.items.Bike;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.printer.CharElements;
@@ -38,17 +38,21 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_LINE_CHANGER_UP;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_SPRINGBOARD_LEFT;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_SPRINGBOARD_LEFT_DOWN;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_SPRINGBOARD_RIGHT;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_SPRINGBOARD_RIGHT_DOWN;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.OTHER_BIKE_AT_INHIBITOR;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.OTHER_BIKE_AT_KILLED_BIKE;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.OTHER_BIKE_AT_LINE_CHANGER_DOWN;
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.OTHER_BIKE_AT_LINE_CHANGER_UP;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.ACCELERATOR;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.FENCE;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.LINE_CHANGER_DOWN;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.LINE_CHANGER_UP;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.OBSTACLE;
-import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_LINE_CHANGER_DOWN;
-import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_LINE_CHANGER_UP;
-import static com.codenjoy.dojo.excitebike.model.elements.BikeType.OTHER_BIKE_AT_INHIBITOR;
-import static com.codenjoy.dojo.excitebike.model.elements.BikeType.OTHER_BIKE_AT_KILLED_BIKE;
-import static com.codenjoy.dojo.excitebike.model.elements.BikeType.OTHER_BIKE_AT_LINE_CHANGER_DOWN;
-import static com.codenjoy.dojo.excitebike.model.elements.BikeType.OTHER_BIKE_AT_LINE_CHANGER_UP;
 import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static com.codenjoy.dojo.services.Direction.UP;
@@ -72,11 +76,11 @@ public class AISolver implements Solver<Board> {
     public String get(final Board board) {
         if (board.isGameOver()) return "";
         Direction result = getCommand(board);
-        result = invertIfNeeded(result);
+        result = invertVertically(result);
         return result != null ? result.toString() : "";
     }
 
-    private Direction invertIfNeeded(Direction original) {
+    private Direction invertVertically(Direction original) {
         return (original == DOWN || original == UP) ? original.inverted() : original;
     }
 
@@ -115,7 +119,7 @@ public class AISolver implements Solver<Board> {
                     return toCheck;
                 }
             } else {
-                return invertIfNeeded(toCheck);
+                return invertVertically(toCheck);
             }
         }
         return null;
@@ -147,23 +151,36 @@ public class AISolver implements Solver<Board> {
     }
 
     private boolean isOtherBikeAliveAndShouldBePushed(Board board, Direction direction) {
-        return board.checkNearMe(direction, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
-                && !isOtherBikeAliveAndShouldBeAvoided(board, direction)
-                && !board.checkNearMe(direction, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX))
-                && !board.checkNearMe(Lists.newArrayList(direction, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OBSTACLE))
-                && !board.checkNearMe(Lists.newArrayList(direction, RIGHT), OTHER_BIKE_AT_INHIBITOR)
-                && !(board.checkNearMe(Lists.newArrayList(direction, RIGHT), ACCELERATOR)
-                && (board.checkNearMe(Lists.newArrayList(direction, RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OBSTACLE))
-                || board.checkNearMe(Lists.newArrayList(direction, RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX)))
-        );
+        boolean otherBikeAtDirection = board.checkNearMe(direction, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX));
+        boolean otherBikeIsAtOppositeLineChanger = board.checkNearMe(direction, direction == UP ? OTHER_BIKE_AT_LINE_CHANGER_UP : OTHER_BIKE_AT_LINE_CHANGER_DOWN);
+        boolean otherBikeAliveAtDirectionAndShouldBeAvoided = isOtherBikeAliveAndShouldBeAvoided(board, direction);
+        boolean fallenBikeAtDirection = board.checkNearMe(direction, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX));
+        boolean fallenBikeOrObstacleOrFenceNextAtDirection = board.checkNearMe(Lists.newArrayList(direction, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OBSTACLE, FENCE));
+        boolean otherBikeAtInhibitorNextAtDirection = board.checkNearMe(Lists.newArrayList(direction, RIGHT), OTHER_BIKE_AT_INHIBITOR);
+        boolean acceleratorNextAtDirection = board.checkNearMe(Lists.newArrayList(direction, RIGHT), ACCELERATOR);
+        boolean otherOrFallenBikeOrObstacleNextAfterNextAtDirection = board.checkNearMe(Lists.newArrayList(direction, RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OBSTACLE))
+                || board.checkNearMe(Lists.newArrayList(direction, RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX));
+        boolean acceleratorNextAtDirectionAndOtherOrFallenBikeAfterIt = acceleratorNextAtDirection && otherOrFallenBikeOrObstacleNextAfterNextAtDirection;
+        return otherBikeAtDirection
+                && !otherBikeIsAtOppositeLineChanger
+                && !otherBikeAliveAtDirectionAndShouldBeAvoided
+                && !fallenBikeAtDirection
+                && !fallenBikeOrObstacleOrFenceNextAtDirection
+                && !otherBikeAtInhibitorNextAtDirection
+                && !acceleratorNextAtDirectionAndOtherOrFallenBikeAfterIt;
     }
 
     private boolean isOtherBikeAliveAndShouldBeAvoided(Board board, Direction direction) {
-        return board.checkNearMe(direction, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
-                && (direction == UP && board.checkNearMe(direction, OTHER_BIKE_AT_LINE_CHANGER_UP)
-                || direction == DOWN && board.checkNearMe(direction, OTHER_BIKE_AT_LINE_CHANGER_DOWN)
-                || direction == UP && board.checkNearMe(Lists.newArrayList(direction, RIGHT), LINE_CHANGER_UP)
-                || direction == DOWN && board.checkNearMe(Lists.newArrayList(direction, RIGHT), LINE_CHANGER_DOWN));
+        boolean directionIsDownAndOtherBikeAtLineChangerUpBelow = direction == UP && board.checkNearMe(direction, OTHER_BIKE_AT_LINE_CHANGER_UP);
+        boolean directionIsUpAndOtherBikeAtLineChangerDownAbove = direction == DOWN && board.checkNearMe(direction, OTHER_BIKE_AT_LINE_CHANGER_DOWN);
+        boolean directionIsDownAndOtherBikeInFrontOfLineChangerUpBelow = direction == UP && board.checkNearMe(Lists.newArrayList(direction, RIGHT), LINE_CHANGER_UP);
+        boolean directionIsUpAndOtherBikeInFrontOfLineChangerDownAbove = direction == DOWN && board.checkNearMe(Lists.newArrayList(direction, RIGHT), LINE_CHANGER_DOWN);
+        boolean oppositeDirectionIsClear = !isElementShouldBeAvoided(board, Lists.newArrayList(invertVertically(direction), RIGHT));
+        return oppositeDirectionIsClear
+                && (directionIsDownAndOtherBikeAtLineChangerUpBelow
+                || directionIsUpAndOtherBikeAtLineChangerDownAbove
+                || directionIsUpAndOtherBikeInFrontOfLineChangerDownAbove
+                || directionIsDownAndOtherBikeInFrontOfLineChangerUpBelow);
     }
 
     private CharElements[] getBikeElementsBySuffixAndElements(String suffix, CharElements... elements) {
@@ -178,29 +195,16 @@ public class AISolver implements Solver<Board> {
 
     private Direction evadeElementAtRight(Board board) {
         Direction command = null;
-        if (!board.checkAtMe(BIKE_AT_LINE_CHANGER_DOWN, BIKE_AT_LINE_CHANGER_UP) &&
-                (board.checkNearMe(RIGHT, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX, OBSTACLE))
-                        || board.checkNearMe(RIGHT, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE))
-                        || board.checkNearMe(RIGHT, LINE_CHANGER_DOWN)
-                        && board.checkNearMe(Lists.newArrayList(UP, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))
-                        || board.checkNearMe(RIGHT, LINE_CHANGER_UP)
-                        && board.checkNearMe(Lists.newArrayList(DOWN, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))
-                        || board.checkNearMe(RIGHT, ACCELERATOR)
-                        && (board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE))
-                        || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
-                        || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), LINE_CHANGER_DOWN)
-                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))
-                        || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), LINE_CHANGER_UP)
-                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE)))
-                        || board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE))
-                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))
-                        && board.checkNearMe(Lists.newArrayList(RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE))
-                )) {
-            if (isVerticalDirectionClear(board, UP) && !isVerticalDirectionClear(board, DOWN)) {
+        List<Direction> toCheck = getNextDirection(board);
+        boolean nextElementShouldBeAvoided = isElementShouldBeAvoided(board, toCheck);
+        if (nextElementShouldBeAvoided) {
+            boolean upDirectionClear = isVerticalDirectionClear(board, UP);
+            boolean downDirectionClear = isVerticalDirectionClear(board, DOWN);
+            if (upDirectionClear && !downDirectionClear) {
                 command = UP;
-            } else if (isVerticalDirectionClear(board, DOWN) && !isVerticalDirectionClear(board, UP)) {
+            } else if (downDirectionClear && !upDirectionClear) {
                 command = DOWN;
-            } else if (isVerticalDirectionClear(board, UP) && isVerticalDirectionClear(board, DOWN)) {
+            } else if (upDirectionClear) {
                 command = randomUpDown();
             }
             return command;
@@ -208,10 +212,57 @@ public class AISolver implements Solver<Board> {
         return command;
     }
 
+    private boolean isElementShouldBeAvoided(Board board, List<Direction> toCheck) {
+        boolean atLineChanger = board.checkAtMe(BIKE_AT_LINE_CHANGER_DOWN, BIKE_AT_LINE_CHANGER_UP);
+        boolean otherBikeOrObstacleOrFenceIsNext = board.checkNearMe(toCheck, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX, OBSTACLE, FENCE));
+        boolean fallenBikeIsNext = board.checkNearMe(toCheck, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX));
+        boolean lineChangerDownAtRightAndSmthToAvoidAtRightAndDown = board.checkNearMe(toCheck, LINE_CHANGER_DOWN)
+                && board.checkNearMe(plusDirection(toCheck, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE));
+        boolean lineChangerUpAtRightAndSmthToAvoidAtRightAndUp = board.checkNearMe(toCheck, LINE_CHANGER_UP)
+                && board.checkNearMe(plusDirection(toCheck, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE));
+        List<Direction> nextAfter = plusDirection(toCheck, RIGHT);
+        boolean smthToAvoidInTwoSteps = board.checkNearMe(nextAfter, getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE));
+        boolean otherBikeInTwoSteps = board.checkNearMe(nextAfter, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX));
+        boolean lineChangerDownInTwoStepsAndSmthToAvoidInTwoStepsAndDown = board.checkNearMe(nextAfter, LINE_CHANGER_DOWN)
+                && board.checkNearMe(plusDirection(toCheck, RIGHT, RIGHT, UP), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE));
+        boolean lineChangerUpInTwoStepsAndSmthToAvoidInTwoStepsAndUp = board.checkNearMe(nextAfter, LINE_CHANGER_UP)
+                && board.checkNearMe(plusDirection(toCheck, RIGHT, RIGHT, DOWN), getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, OBSTACLE, FENCE));
+        boolean acceleratorAndSmthToAvoidInTwoSteps = board.checkNearMe(toCheck, ACCELERATOR)
+                && (smthToAvoidInTwoSteps
+                || otherBikeInTwoSteps
+                || lineChangerDownInTwoStepsAndSmthToAvoidInTwoStepsAndDown
+                || lineChangerUpInTwoStepsAndSmthToAvoidInTwoStepsAndUp);
+        return !atLineChanger
+                && (otherBikeOrObstacleOrFenceIsNext
+                || fallenBikeIsNext
+                || lineChangerDownAtRightAndSmthToAvoidAtRightAndDown
+                || lineChangerUpAtRightAndSmthToAvoidAtRightAndUp
+                || acceleratorAndSmthToAvoidInTwoSteps
+                || smthToAvoidInTwoSteps);
+    }
+
+    private List<Direction> plusDirection(List<Direction> original, Direction... toAdd) {
+        List<Direction> result = new ArrayList<>(original);
+        result.addAll(Arrays.asList(toAdd));
+        return result;
+    }
+
+    private ArrayList<Direction> getNextDirection(Board board) {
+        boolean atSpringboardLeft = board.checkAtMe(BIKE_AT_SPRINGBOARD_LEFT) || board.checkAtMe(BIKE_AT_SPRINGBOARD_LEFT_DOWN);
+        boolean atSpringboardRight = board.checkAtMe(BIKE_AT_SPRINGBOARD_RIGHT) || board.checkAtMe(BIKE_AT_SPRINGBOARD_RIGHT_DOWN);
+        return atSpringboardLeft ? Lists.newArrayList(RIGHT, UP) : atSpringboardRight ? Lists.newArrayList(RIGHT, DOWN) : Lists.newArrayList(RIGHT);
+    }
+
     private boolean isVerticalDirectionClear(Board board, Direction toCheck) {
         CharElements[] elementsToCheck = getBikeElementsBySuffixAndElements(Bike.FALLEN_BIKE_SUFFIX, OTHER_BIKE_AT_KILLED_BIKE, FENCE, OBSTACLE);
-        return !board.checkNearMe(toCheck, elementsToCheck) && !board.checkNearMe(toCheck, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX))
-                && !board.checkNearMe(Lists.newArrayList(toCheck, RIGHT), elementsToCheck);
+        boolean fallenOrOtherBikeAtKilledOrFenceOrObstacleAtDirection = board.checkNearMe(toCheck, elementsToCheck);
+        boolean otherBikeAtDirection = board.checkNearMe(toCheck, getBikeElementsBySuffixAndElements(Bike.OTHER_BIKE_PREFIX));
+        boolean fallenOrOtherBikeAtKilledOrFenceOrObstacleNextAtDirection = board.checkNearMe(Lists.newArrayList(toCheck, RIGHT), elementsToCheck);
+        boolean pointExistsAtDirection = !board.isOutOfFieldRelativeToMe(toCheck);
+        return pointExistsAtDirection
+                && !fallenOrOtherBikeAtKilledOrFenceOrObstacleAtDirection
+                && !otherBikeAtDirection
+                && !fallenOrOtherBikeAtKilledOrFenceOrObstacleNextAtDirection;
     }
 
 }

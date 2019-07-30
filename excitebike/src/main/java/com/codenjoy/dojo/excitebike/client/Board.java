@@ -98,4 +98,13 @@ public class Board extends AbstractBoard<CharElements> {
         Point me = getMe();
         return me != null && isAt(me, elements);
     }
+
+    public boolean isOutOfFieldRelativeToMe(Direction direction) {
+        Point me = getMe();
+        if (me == null) {
+            return false;
+        }
+        Point atDirection = direction.change(me);
+        return isOutOfField(atDirection.getX(), atDirection.getY());
+    }
 }

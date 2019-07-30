@@ -978,6 +978,54 @@ public class AISolverParametrizedTest {
                         "  B  " +
                         "     " +
                         "■■■■■",
+                        DOWN},
+
+                new Object[]{"117. not go down or up at springboard left if there is another bike in front",
+                        "■╔═╗■" +
+                        "  /═\\" +
+                        "  LḂ\\" +
+                        "  ╚═╝" +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"118. not go down or up at springboard right if there is another bike in front",
+                        "■╔═╗■" +
+                        "  /═\\" +
+                        " /═RḂ" +
+                        "  ╚═╝" +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"119. not go down at lowest line when enemy bike above at line changer down",
+                        "■■■■■" +
+                        "     " +
+                        "  Ď  " +
+                        "  B  " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"120. not go up at highest line when enemy bike below at line changer up",
+                        "■■■■■" +
+                        "  B  " +
+                        "  Ū  " +
+                        "     " +
+                        "■■■■■",
+                        null},
+
+                new Object[]{"121. go up at lowest springboard top line when enemy bike in front and upper",
+                        "■╔══╗" +
+                        " /══\\" +
+                        " /═Ḃ\\" +
+                        " ╚BḂ╝" +
+                        "■■■■■",
+                        UP},
+
+                new Object[]{"122. go down at highest springboard top line when enemy bike in front and downer",
+                        "■╔BḂ╗" +
+                        " /═Ḃ\\" +
+                        " /══\\" +
+                        "  ╚═╝" +
+                        "■■■■■",
                         DOWN}
         );
     }
