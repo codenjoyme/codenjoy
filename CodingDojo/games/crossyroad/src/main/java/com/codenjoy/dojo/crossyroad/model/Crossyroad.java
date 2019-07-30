@@ -45,7 +45,6 @@ public class Crossyroad implements Field {
     private int countStone = 0;
     private List<Car> cars;
     private int tickCounter;
-
     private final int size;
     private List<Wall> walls;
 

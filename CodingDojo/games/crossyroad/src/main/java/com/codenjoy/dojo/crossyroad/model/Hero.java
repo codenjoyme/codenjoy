@@ -105,9 +105,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void teleport() {
         direction = Direction.STOP;
-        move(10, 2);
-
-    }
+        move(10, 2); // TODO сделать расчет точки респавна зависимым от размера уровня
+            }
 
     public Direction getDirection() {
         return this.direction;
