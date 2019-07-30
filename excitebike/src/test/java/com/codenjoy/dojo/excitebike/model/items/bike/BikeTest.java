@@ -106,6 +106,7 @@ public class BikeTest {
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getEnemyBike(5, 6, player)).thenReturn(Optional.of(enemy));
+        when(gameField.getPlayerOfBike(enemy)).thenReturn(player);
         enemy.init(gameField);
         bike.up();
 
@@ -160,6 +161,7 @@ public class BikeTest {
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getEnemyBike(5, 4, player)).thenReturn(Optional.of(enemy));
+        when(gameField.getPlayerOfBike(enemy)).thenReturn(player);
         enemy.init(gameField);
         bike.down();
 
@@ -371,6 +373,7 @@ public class BikeTest {
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getEnemyBike(5, 6, player)).thenReturn(Optional.of(enemy));
+        when(gameField.getPlayerOfBike(enemy)).thenReturn(player);
         enemy.init(gameField);
         bike.tick();
 
@@ -459,6 +462,7 @@ public class BikeTest {
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getEnemyBike(5, 4, player)).thenReturn(Optional.of(enemy));
+        when(gameField.getPlayerOfBike(enemy)).thenReturn(player);
         enemy.init(gameField);
         bike.tick();
 
@@ -497,6 +501,7 @@ public class BikeTest {
         Bike enemy = new Bike(5, 4);
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
+        when(gameField.getPlayerOfBike(enemy)).thenReturn(player);
         when(gameField.getEnemyBike(5, 4, player)).thenReturn(Optional.of(enemy));
         enemy.init(gameField);
 

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.excitebike.model;
 
 
 import com.codenjoy.dojo.excitebike.model.items.Bike;
+import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
@@ -40,13 +41,19 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class MultiplayerSystemTest {
 
     private Game game1;
+    private EventListener eventListenerSpy1 = spy(EventListener.class);
     private Game game2;
+    private EventListener eventListenerSpy2 = spy(EventListener.class);
     private Game game3;
+    private EventListener eventListenerSpy3 = spy(EventListener.class);
     private Dice dice;
     private GameFieldImpl field;
 
@@ -63,13 +70,13 @@ public class MultiplayerSystemTest {
         field = new GameFieldImpl(mapParser, dice, new SettingsHandler());
         PrinterFactory factory = new PrinterFactoryImpl();
 
-        game1 = new Single(new Player(mock(EventListener.class)), factory);
+        game1 = new Single(new Player(eventListenerSpy1), factory);
         game1.on(field);
 
-        game2 = new Single(new Player(mock(EventListener.class)), factory);
+        game2 = new Single(new Player(eventListenerSpy2), factory);
         game2.on(field);
 
-        game3 = new Single(new Player(mock(EventListener.class)), factory);
+        game3 = new Single(new Player(eventListenerSpy3), factory);
         game3.on(field);
 
         game1.newGame();
@@ -154,7 +161,7 @@ public class MultiplayerSystemTest {
     }
 
     @Test
-    public void shouldCrushEnemyBikeAfterClash() {
+    public void shouldCrushEnemyBikeAfterClashAndGetEvents() {
         //given
         init();
         when(dice.next(anyInt())).thenReturn(5);
@@ -177,10 +184,16 @@ public class MultiplayerSystemTest {
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
         assertThat(game2.isGameOver(), is(true));
+        verify(eventListenerSpy1).event(Events.WIN);
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy2).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
-    public void shouldCrushEnemyBikeAfterClash2() {
+    public void shouldCrushEnemyBikeAfterClash2AndGetScores() {
         //given
         init();
         when(dice.next(anyInt())).thenReturn(5);
@@ -204,10 +217,16 @@ public class MultiplayerSystemTest {
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
         assertThat(game3.isGameOver(), is(true));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2).event(Events.WIN);
+        verify(eventListenerSpy2, never()).event(Events.LOSE);
+        verify(eventListenerSpy3).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
-    public void shouldCrushEnemyBikeAfterClash3() {
+    public void shouldCrushBikeAfterClashWithFenceAndGetScores() {
         //given
         init();
         when(dice.next(anyInt())).thenReturn(5);
@@ -231,6 +250,12 @@ public class MultiplayerSystemTest {
                 "■ḟ■■■■■\n";
         assertThat(game2.getBoardAsString(), is(expected));
         assertThat(game1.isGameOver(), is(true));
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy1).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy2, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
     }
 
     @Test
@@ -257,6 +282,12 @@ public class MultiplayerSystemTest {
                 " B     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2, never()).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
@@ -286,6 +317,12 @@ public class MultiplayerSystemTest {
                 " B     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2, never()).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
@@ -312,6 +349,12 @@ public class MultiplayerSystemTest {
                 " Ḃ     \n" +
                 "■■■■■■■\n";
         assertThat(game2.getBoardAsString(), is(expected));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2, never()).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
@@ -338,6 +381,12 @@ public class MultiplayerSystemTest {
                 " Ḃ     \n" +
                 "■■■■■■■\n";
         assertThat(game3.getBoardAsString(), is(expected));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2, never()).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
@@ -459,7 +508,7 @@ public class MultiplayerSystemTest {
     }
 
     @Test
-    public void shouldCrushBike_whenBikeTakeDownCommandOnSpringboardRise() {
+    public void shouldStartBikeFlightFromSpringboard_whenBikeTakeDownCommandOnSpringboardRise() {
         //given
         int springboardWeight = 17;
         int springboardTopSize = 1;
@@ -485,10 +534,16 @@ public class MultiplayerSystemTest {
                 "╚F╝    \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2, never()).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
-    public void shouldCrushBike_whenBikeHitOtherBikeAtTopOfSpringboard() {
+    public void shouldCrushBike_whenBikeHitOtherBikeAtTopOfSpringboardAndGetScores() {
         //given
         int springboardWeight = 17;
         int springboardTopSize = 1;
@@ -515,10 +570,16 @@ public class MultiplayerSystemTest {
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
         assertThat(game2.isGameOver(), is(true));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1).event(Events.WIN);
+        verify(eventListenerSpy2).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
-    public void shouldShiftCrushedBikeAtSpringboardTop() {
+    public void shouldShiftCrushedBikeAtSpringboardTopAndGetScores() {
         //given
         int springboardWeight = 17;
         int springboardTopSize = 1;
@@ -546,10 +607,14 @@ public class MultiplayerSystemTest {
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
         assertThat(game2.isGameOver(), is(true));
+        verify(eventListenerSpy1).event(Events.WIN);
+        verify(eventListenerSpy2).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
-    public void shouldCrushOnFenceBikeAfterFlightFromSpringboard() {
+    public void shouldCrushOnFenceBikeAfterFlightFromSpringboardAndGetScores() {
         //given
         int springboardWeight = 17;
         int springboardTopSize = 1;
@@ -576,6 +641,12 @@ public class MultiplayerSystemTest {
                 "/╝     \n" +
                 "■f■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
+        verify(eventListenerSpy1).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2, never()).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
@@ -710,7 +781,7 @@ public class MultiplayerSystemTest {
     }
 
     @Test
-    public void shouldCrushBike_whenBikeAtHighestLineAndTakeUpCommandAfterSpringboardRise() {
+    public void shouldCrushBike_whenBikeAtHighestLineAndTakeUpCommandAfterSpringboardRiseAndGetScores() {
         //given
         int springboardWeight = 17;
         int springboardTopSize = 1;
@@ -743,10 +814,16 @@ public class MultiplayerSystemTest {
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
         assertThat(game3.isGameOver(), is(true));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2, never()).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
-    public void shouldCrushBike_whenBikeAtHighestLineAndTakeUpCommandAfterSpringboardDecent() {
+    public void shouldCrushBike_whenBikeAtHighestLineAndTakeUpCommandAfterSpringboardDecentAndGetScores() {
         //given
         int springboardWeight = 17;
         int springboardTopSize = 1;
@@ -778,6 +855,12 @@ public class MultiplayerSystemTest {
                 "╝      \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2, never()).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
@@ -877,7 +960,7 @@ public class MultiplayerSystemTest {
     }
 
     @Test
-    public void shouldNotIgnoreAllCommands_whenBikeBeforeTwoStepsFromSpringboardRise() {
+    public void shouldNotIgnoreAllCommands_whenBikeBeforeTwoStepsFromSpringboardRiseAndGetScores() {
         //given
         int springboardWeight = 17;
         int springboardTopSize = 0;
@@ -909,6 +992,12 @@ public class MultiplayerSystemTest {
                 "■■■■■■■\n";
 
         assertThat(game1.getBoardAsString(), is(expected));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1).event(Events.WIN);
+        verify(eventListenerSpy2).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
@@ -966,10 +1055,16 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
-    public void twoBikesBehindObstacleTick3__shouldCrushPlayerBikeAtEnemyAtObstacle() {
+    public void twoBikesBehindObstacleTick3__shouldCrushPlayerBikeAtEnemyAtObstacleAndGetScores() {
         //given
         init();
         game3.close();
@@ -995,6 +1090,12 @@ public class MultiplayerSystemTest {
                 "       \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
+        verify(eventListenerSpy1).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
     @Test
@@ -1134,6 +1235,12 @@ public class MultiplayerSystemTest {
                 "////╝  \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
+        verify(eventListenerSpy1, never()).event(Events.LOSE);
+        verify(eventListenerSpy1, never()).event(Events.WIN);
+        verify(eventListenerSpy2, never()).event(Events.LOSE);
+        verify(eventListenerSpy2, never()).event(Events.WIN);
+        verify(eventListenerSpy3, never()).event(Events.LOSE);
+        verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
 }

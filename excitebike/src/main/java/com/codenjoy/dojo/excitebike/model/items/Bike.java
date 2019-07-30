@@ -25,8 +25,8 @@ package com.codenjoy.dojo.excitebike.model.items;
 
 import com.codenjoy.dojo.excitebike.model.GameField;
 import com.codenjoy.dojo.excitebike.model.Player;
-import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.excitebike.model.elements.BikeType;
+import com.codenjoy.dojo.excitebike.services.Events;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
@@ -88,7 +88,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     @Override
     public void init(GameField gameField) {
         this.field = gameField;
-        if (field.isSpringboardTopElement(x, y)){
+        if (field.isSpringboardTopElement(x, y)) {
             atSpringboard = true;
         }
         if (isNextStepSpringboardRiseOrDecent()) {
@@ -266,8 +266,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                 if (!enemy.movement.isUp() && !enemy.movement.isDown() && enemy.command == null) {
                     enemy.crush();
                     type = BIKE_AT_KILLED_BIKE;
+                    field.getPlayerOfBike(this).event(Events.WIN);
                     move(enemy);
                     enemy.ticked = true;
+                    field.getPlayerOfBike(enemy).event(Events.LOSE);
                     movement.clear();
                     command = null;
                 } else if (((movement.isDown() || command == DOWN) && (enemy.movement.isUp() || enemy.command == UP))
@@ -433,7 +435,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
     }
 
-    private boolean isNextStepSpringboardRiseOrDecent(){
+    private boolean isNextStepSpringboardRiseOrDecent() {
         return field.isSpringboardLightElement(x + 1, y - 1)
                 || field.isSpringboardRightDownElement(x + 1, y - 1)
                 || field.isSpringboardDarkElement(x + 1, y)
