@@ -1246,6 +1246,7 @@ function initRunnerBefunge(logger, storage) {
                 return false;
             }
 
+            // если мы переместили в то же место откуда начали
             if (parked[0] == card[0]) {
                 return false;
             }
@@ -1318,8 +1319,12 @@ function initRunnerBefunge(logger, storage) {
                 }
                 var card = ui.draggable;
 
-                var busy = !!slot.data('parked')
-                if (busy) {
+                // переместили в заняый слот
+                var busy = !!slot.data('parked');
+                // переместили в ту же клеточку с которой начали
+                var sameSlot = slot[0] == card.data('parkedTo')[0];
+
+                if (busy && !sameSlot) {
                     if (isOnCardPile(slot) && !isOnCardPile(card.parent())) {
                         //doNotRevert = true;
                         //moveToInitial(card);
@@ -1332,6 +1337,7 @@ function initRunnerBefunge(logger, storage) {
                     moveToInitial(card);
                 } else {
                     if (!isOnCardPile(card.parent())) {
+                        // TODO вообщето тут физически див остается в старом месте меняется только его координаты и привязка в данных, это работает но это не совсем ок
                         park(card, slot);
                     } else {
                         doNotRevert = true;
