@@ -28,6 +28,7 @@ License along with this program.  If not, see
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Codenjoy | Sign In</title>
     <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
@@ -39,8 +40,14 @@ License along with this program.  If not, see
 <div id="settings" page="register" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
 <div class="header-container">
     <div class="container-fluid">
-        <header class="header row">
-            <div class="col-xs-6">
+        <header class="header">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
                 <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/logo.png"></a>
                 <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <c:if test="${activeProfiles.contains('icancode')}">
@@ -49,15 +56,17 @@ License along with this program.  If not, see
                     <span class="title icancode-title">ICanCode</span>
                 </c:if>
             </div>
-            <nav class="nav col-xs-6 pull-right text-right">
-                <ul class="nav-list">
-                    <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
-                    <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#"></a></li>
-                    <sec:authorize access="isAuthenticated()">
-                        <li class="logo title inline"><img src="${ctx}/resources/img/profile.png"></li>
-                    </sec:authorize>
-                </ul>
-            </nav>
+            <div id="navbar" class="navbar-collapse collapse">
+                <nav class="nav pull-right text-right">
+                    <ul class="nav-list">
+                        <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
+                        <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#"></a></li>
+                        <sec:authorize access="isAuthenticated()">
+                            <li class="logo title inline"><img src="${ctx}/resources/img/profile.png"></li>
+                        </sec:authorize>
+                    </ul>
+                </nav>
+            </div>
         </header>
     </div>
 </div>
