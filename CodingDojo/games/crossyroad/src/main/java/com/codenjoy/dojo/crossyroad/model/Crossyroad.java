@@ -37,6 +37,7 @@ public class Crossyroad implements Field {
 
     public static final int MAX_CAR_NUMBER = 6;
     public static final int NEW_APPEAR_PERIOD = 3;
+    private final int TICKS_TO_DIE = 5;
     private final CarGenerator carGenerator;
     private Level level;
     private List<Player> players;
@@ -45,6 +46,8 @@ public class Crossyroad implements Field {
     private int countStone = 0;
     private List<Car> cars;
     private int tickCounter;
+    private int ticksToDie;
+
     private final int size;
     private List<Wall> walls;
 
@@ -55,6 +58,7 @@ public class Crossyroad implements Field {
         players = new LinkedList<>();
         stones = new LinkedList<>();
         carGenerator = new CarGenerator(dice, size, MAX_CAR_NUMBER);
+        ticksToDie = TICKS_TO_DIE;
     }
 
     @Override
@@ -75,6 +79,7 @@ public class Crossyroad implements Field {
                 for (Stone stone : stones) {
                     stone.down();
                 }
+                ticksToDie = TICKS_TO_DIE;
             }
         }
         // перемещение машин
@@ -115,6 +120,12 @@ public class Crossyroad implements Field {
             Hero hero = player.getHero();
             if (Direction.UP.equals(hero.getDirection())) {
                 player.event(Events.GO_UP);
+            }
+            else {
+                ticksToDie--;
+                if (ticksToDie == 0){
+                    loseGame(player, hero);
+                }
             }
         }
     }
