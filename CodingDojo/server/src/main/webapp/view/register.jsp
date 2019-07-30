@@ -99,16 +99,16 @@ License along with this program.  If not, see
             <!-- add attribute 'not-empty' to the div if you want to enable validation -->
             <!-- add attribute 'hidden' to the div if you want to hide this edit box -->
             <div id="data1" class="field not-valid" not-empty hidden>
-                <input type="text" placeholder="Tech skills"/>
+                <input type="text" placeholder="Tech skill/level"/>
                 <span class="icon fa"></span>
             </div>
             <div id="data2" class="field not-valid" not-empty hidden>
                 <!-- also you can change input placeholder="..." -->
-                <input type="text" placeholder="Experience (years)"/>
+                <input type="text" placeholder="City"/>
                 <span class="icon fa"></span>
             </div>
             <div id="data3" class="field not-valid" not-empty hidden>
-                <input type="text" placeholder="Company"/>
+                <input type="text" placeholder="Company/position"/>
                 <span class="icon fa"></span>
             </div>
             <c:if test="${not adminLogin}">
