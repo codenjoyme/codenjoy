@@ -825,7 +825,7 @@ function initRunnerBefunge(logger, storage) {
         readyForSaving = true;
     };
 
-    // --------------------------------------- cards bulding ---------------------------------
+    // --------------------------------------- cards building ---------------------------------
     var mapSlots = [];
     for (var y = 0; y < height; y++) {
         mapSlots[y] = [];
@@ -1260,6 +1260,7 @@ function initRunnerBefunge(logger, storage) {
     }
 
     var doNotRevert = false;
+    // переносим из палитры команду
     $('#cardPile .card-item').draggable({
         helper: "clone",
         cursor: 'move',
@@ -1315,6 +1316,7 @@ function initRunnerBefunge(logger, storage) {
                     slot = slot.data('parkedTo');
                 }
                 var card = ui.draggable;
+                card.css("z-index", "2");
 
                 var busy = !!slot.data('parked')
                 if (busy) {
@@ -1343,6 +1345,7 @@ function initRunnerBefunge(logger, storage) {
     var cloneCardOnSlot = function(card, slot) {
         var newCard = cloneCard(card);
         slot.append(newCard);
+        // переносим карту из поля
         $(newCard).draggable({
             cursor: 'move',
             revert: onDragRevert
