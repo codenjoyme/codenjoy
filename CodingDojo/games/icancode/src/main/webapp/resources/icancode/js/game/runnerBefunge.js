@@ -1316,7 +1316,6 @@ function initRunnerBefunge(logger, storage) {
                     slot = slot.data('parkedTo');
                 }
                 var card = ui.draggable;
-                card.css("z-index", "2");
 
                 var busy = !!slot.data('parked')
                 if (busy) {
