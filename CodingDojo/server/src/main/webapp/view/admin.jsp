@@ -202,21 +202,28 @@
             <td>
                 <input id="show-data1" type="checkbox">
                 <label class="check-label" for="show-data1"></label>
-                <span>Show tech skills on registration</span>
+                <span>Show city on registration</span>
             </td>
         </tr>
         <tr>
             <td>
                 <input id="show-data2" type="checkbox">
                 <label class="check-label" for="show-data2"></label>
-                <span>Show experience on registration</span>
+                <span>Show tech skills on registration</span>
             </td>
         </tr>
         <tr>
             <td>
                 <input id="show-data3" type="checkbox">
                 <label class="check-label" for="show-data3"></label>
-                <span>Show company on registration</span>
+                <span>Show company / position on registration</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="show-data4" type="checkbox">
+                <label class="check-label" for="show-data4"></label>
+                <span>Show experience on registration</span>
             </td>
         </tr>
         <tr>

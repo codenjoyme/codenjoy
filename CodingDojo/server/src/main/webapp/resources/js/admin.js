@@ -26,9 +26,10 @@ function defaultRegistrationSettings() {
     return {
         showGames: true,
         showNames: true,
-        showData2: false,
+        showData1: false,
         showData2: false,
         showData3: false,
+        showData4: false,
         defaultGame: null,
         gameTypes: {
             icancode: ['Training', 'Contest', 'eKids', 'Befunge']
@@ -65,6 +66,7 @@ pages.admin = function() {
         result.showData1 = $('#show-data1').prop('checked');
         result.showData2 = $('#show-data2').prop('checked');
         result.showData3 = $('#show-data3').prop('checked');
+        result.showData4 = $('#show-data4').prop('checked');
         result.defaultGame = $('#default-game').find('option:selected').text();
 
         return result;
@@ -83,6 +85,7 @@ pages.admin = function() {
         $('#show-data1').prop('checked', data.showData1);
         $('#show-data2').prop('checked', data.showData2);
         $('#show-data3').prop('checked', data.showData3);
+        $('#show-data4').prop('checked', data.showData4);
 
         var select = $('#default-game');
         select.children().remove();

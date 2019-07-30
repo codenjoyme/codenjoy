@@ -52,7 +52,8 @@ function initRegistration(waitApprove, contextPath) {
             data: "registration-data",
             data1: "registration-data1",
             data2: "registration-data2",
-            data3: "registration-data3"
+            data3: "registration-data3",
+            data4: "registration-data4"
         }
     };
 
@@ -83,6 +84,7 @@ function initRegistration(waitApprove, contextPath) {
             display('#data1', data.showData1);
             display('#data2', data.showData2);
             display('#data3', data.showData3);
+            display('#data4', data.showData4);
 
             fillFormFromLocalStorage(data);
 
@@ -133,6 +135,7 @@ function initRegistration(waitApprove, contextPath) {
         configurable('data1');
         configurable('data2');
         configurable('data3');
+        configurable('data4');
 
         var validateElements = function () {
             for (var index in checkEls) {
@@ -181,7 +184,8 @@ function initRegistration(waitApprove, contextPath) {
                 $('#data input').val(
                     $('#data1 input').val() + "|" +
                     $('#data2 input').val() + "|" +
-                    $('#data3 input').val()
+                    $('#data3 input').val() + "|" +
+                    $('#data4 input').val()
                 );
 
                 saveDataToLocalStorage();
@@ -190,7 +194,7 @@ function initRegistration(waitApprove, contextPath) {
         };
 
         $('#submit-button').click(submitForm);
-        $('#email, #password, #gameName, #gameType, #skills, #readableName, #data1, #data2, #data3').keypress(function (e) {
+        $('#email, #password, #gameName, #gameType, #skills, #readableName, #data1, #data2, #data3, #data4').keypress(function (e) {
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
                 submitForm();
@@ -267,6 +271,7 @@ function initRegistration(waitApprove, contextPath) {
         loadInput(KEYS.userData.data1, '#data1');
         loadInput(KEYS.userData.data2, '#data2');
         loadInput(KEYS.userData.data3, '#data3');
+        loadInput(KEYS.userData.data4, '#data4');
     }
 
     function saveDataToLocalStorage() {
@@ -277,6 +282,7 @@ function initRegistration(waitApprove, contextPath) {
         localStorage.setItem(KEYS.userData.data1, $('#data1 input').val());
         localStorage.setItem(KEYS.userData.data2, $('#data2 input').val());
         localStorage.setItem(KEYS.userData.data3, $('#data3 input').val());
+        localStorage.setItem(KEYS.userData.data4, $('#data4 input').val());
     }
 
     $(document).ready(function() {
