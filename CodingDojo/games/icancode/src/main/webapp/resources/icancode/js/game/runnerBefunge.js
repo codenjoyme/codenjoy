@@ -407,7 +407,8 @@ function initRunnerBefunge(logger, storage) {
             description: 'Вызов воспомогательной процедуры №1. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
             img1: 'procedure-1-1.png',
-            img2: 'procedure-1.png',
+            img2: null,
+            img3: 'procedure-1.png',
         },
 
         {
@@ -418,7 +419,8 @@ function initRunnerBefunge(logger, storage) {
             description: 'Вызов воспомогательной процедуры №2. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
             img1: 'procedure-2-1.png',
-            img2: 'procedure-2.png',
+            img2: null,
+            img3: 'procedure-2.png',
         },
 
         {
@@ -429,7 +431,8 @@ function initRunnerBefunge(logger, storage) {
             description: 'Вызов воспомогательной процедуры №3. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
             img1: 'procedure-3-1.png',
-            img2: 'procedure-3.png',
+            img2: null,
+            img3: 'procedure-3.png',
         },
 
         {
@@ -956,26 +959,19 @@ function initRunnerBefunge(logger, storage) {
                             var before = el.find('.before-tooltip');
                             var after = el.find('.after-tooltip');
 
-
-                            var C = parseInt(before.css('left').split('px')[0]);
-                            var left = el.width() - C*2;
-                            if (rightBound(el) > rightBound($('#cardPile'))) {
-                                // влево ориентированный тултип только если
-                                // он не помещается в отведенной ему области
-                                changeLeft(el, -left);
-                                changeLeft(before, left);
-                                changeLeft(after, left);
+                            var right = rightBound(el) - rightBound($('#cardPile'));
+                            var left = leftBound($('#cardPile')) - leftBound(el);
+                            if (right <= 0) {
+                                right = 0;
                             }
-
-                            if (leftBound(el) < leftBound($('#cardPile'))) {
-                                // по цнетру ориентированный тултип только если
-                                // он не помещается в отведенной ему области ни
-                                // с ориентацией вправо, ни после ориентации влево
-
-                                left = -left/2;
-                                changeLeft(el, -left);
-                                changeLeft(before, left);
-                                changeLeft(after, left);
+                            if (left <= 0) {
+                                left = 0;
+                            }
+                            if (right > 0 || left > 0) {
+                                var delta = right - left;
+                                changeLeft(el, -delta);
+                                changeLeft(before, delta);
+                                changeLeft(after, delta);
                             }
 
                             // display:hidden мы не можем использовать потому
