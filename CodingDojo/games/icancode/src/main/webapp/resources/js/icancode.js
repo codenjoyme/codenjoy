@@ -52,7 +52,7 @@ if (typeof game == 'undefined') {
 }
 
 var gameName = localStorage.getItem('gameType'); // check KEYS constants in register.js
-if (gameName == 'Training') {
+if (gameName == 'JavaScript') {
     game.enableBefunge = false;
     game.sprites = 'robot';
 } else if (gameName == 'eKids') {
@@ -62,7 +62,7 @@ if (gameName == 'Training') {
     game.enableBefunge = true;
     game.sprites = 'robot';
 } else { // if (gameName == 'iCanCode Contest') { by default
-    gameName = 'Contest';
+    gameName = 'Java';
     game.enableBefunge = false;
     game.sprites = 'robot';
     game.onlyLeaderBoard = true;

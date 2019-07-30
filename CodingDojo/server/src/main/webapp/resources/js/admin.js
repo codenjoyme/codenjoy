@@ -26,13 +26,13 @@ function defaultRegistrationSettings() {
     return {
         showGames: true,
         showNames: true,
-        showData1: false,
-        showData2: false,
-        showData3: false,
-        showData4: false,
+        showData1: true,
+        showData2: true,
+        showData3: true,
+        showData4: true,
         defaultGame: null,
         gameTypes: {
-            icancode: ['Training', 'Contest', 'eKids', 'Befunge']
+            icancode: ['JavaScript', 'Java', 'eKids', 'Befunge']
         }
     };
 }
