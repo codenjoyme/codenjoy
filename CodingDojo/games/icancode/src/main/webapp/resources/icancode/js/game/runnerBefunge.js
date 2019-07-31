@@ -46,10 +46,41 @@ function initRunnerBefunge(logger, storage) {
 
     $('.autocomplete').hide();
     $('#ide-help').hide();
-    $('.bottom-panel').append('<button class="button help" id="ide-clean">Clean</button>')
-    $('#ide-clean').click(function() {
+
+    var createButton = function(id, name, onClick) {
+        $('.bottom-panel').append('<button class="button help" id="' + id + '">' + name + '</button>')
+        var button = $('#' + id);
+        button.click(function () {
+            onClick(button);
+        });
+        return button;
+    }
+
+    // TODO дублирование с buttons.js
+    var enableButton = function(button, enable) {
+        button.prop('disabled', !enable);
+    }
+
+    var cleanField = function() {
         moveAllCardsToCardPile();
         resetRows();
+    }
+
+    var cleanButton = createButton('ide-clean', 'Clean', function(button) {
+        cleanField();
+        saveState();
+    });
+
+    var undoButton = createButton('ide-undo', 'Undo', function(button) {
+        if (undo.length == 0) {
+            return;
+        }
+
+        undo.pop(); // удаляем текущее состояние
+        var data = undo[undo.length - 1]; // грузим прошлое
+        updateUndoButton();
+        cleanField();
+        loadStateFromData(data);
     });
 
     // ------------------------------------- state -----------------------------------
@@ -752,6 +783,19 @@ function initRunnerBefunge(logger, storage) {
     ];
 
     // ------------------------------------- save state -----------------------------------
+    var undo = [];
+    var updateUndoButton = function() {
+        enableButton(undoButton, undo.length > 0);
+        undoButton.text('Undo (' + undo.length + ')');
+    }
+    updateUndoButton();
+    var pushSave = function(data) {
+        undo.push(data);
+        if (undo.length > 100) {
+            undo.shift();
+        }
+        updateUndoButton();
+    }
     var saveState = function() {
         if (!readyForSaving) {
             return;
@@ -767,18 +811,26 @@ function initRunnerBefunge(logger, storage) {
             }
         }
 
+        pushSave(data);
         storage.save('editor', data);
     };
 
     // -------------------------------------- load state -----------------------------------
     var loadState = function() {
+        var data = null;
         readyForSaving = false;
         try {
-            var data = storage.load('editor');
+            data = storage.load('editor');
+            pushSave(data);
         } catch (err) {
             readyForSaving = true;
             return;
         }
+        loadStateFromData(data);
+    }
+
+    var loadStateFromData = function(data) {
+        readyForSaving = false;
 
         if (!data || data.length != height) {
             readyForSaving = true;
@@ -882,8 +934,6 @@ function initRunnerBefunge(logger, storage) {
             }
         });
         width = defaultSize;
-
-        saveState();
     }
 
     $('<div id="add-left" class="add-left">+</div>').appendTo('#cardSlots').click(addRowBefore);
