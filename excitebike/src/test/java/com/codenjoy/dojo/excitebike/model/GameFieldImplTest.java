@@ -54,6 +54,8 @@ public class GameFieldImplTest {
     @Before
     public void init() {
         mapParser = mock(MapParser.class);
+        when(mapParser.getXSize()).thenReturn(5);
+        when(mapParser.getYSize()).thenReturn(5);
         dice = mock(Dice.class);
     }
 

@@ -26,7 +26,6 @@ package com.codenjoy.dojo.excitebike.model;
 import com.codenjoy.dojo.excitebike.model.items.Fence;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
 import com.codenjoy.dojo.excitebike.model.items.Bike;
-import com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType;
 import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.generation.GenerationOption;
 import com.codenjoy.dojo.excitebike.services.generation.TrackStepGenerator;
@@ -40,26 +39,28 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.ACCELERATOR;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.INHIBITOR;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.LINE_CHANGER_DOWN;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.LINE_CHANGER_UP;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.OBSTACLE;
+import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_LEFT;
+import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_LEFT_DOWN;
+import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_LEFT_UP;
+import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_RIGHT;
+import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_RIGHT_DOWN;
+import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_RIGHT_UP;
+import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_TOP;
 import static com.codenjoy.dojo.excitebike.model.items.Bike.OTHER_BIKE_PREFIX;
 import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN;
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static java.util.Map.Entry.comparingByValue;
-import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 
@@ -85,13 +86,13 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(LINE_CHANGER_DOWN, new ArrayList<>(mapParser.getLineDownChangers()));
         allShiftableElements.put(BIKE_FALLEN, new ArrayList<>(mapParser.getFallenBikes()));
 
-        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LEFT_UP, new ArrayList<>(mapParser.getSpringboardLeftUpElements()));
-        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT, new ArrayList<>(mapParser.getSpringboardLightElements()));
-        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LEFT_DOWN, new ArrayList<>(mapParser.getSpringboardLeftDownElements()));
-        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_UP, new ArrayList<>(mapParser.getSpringboardRightUpElements()));
-        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_LEFT, new ArrayList<>(mapParser.getSpringboardDarkElements()));
-        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN, new ArrayList<>(mapParser.getSpringboardRightDownElements()));
-        allShiftableElements.put(SpringboardElementType.SPRINGBOARD_TOP, new ArrayList<>(mapParser.getSpringboardNoneElements()));
+        allShiftableElements.put(SPRINGBOARD_LEFT_UP, new ArrayList<>(mapParser.getSpringboardLeftUpElements()));
+        allShiftableElements.put(SPRINGBOARD_RIGHT, new ArrayList<>(mapParser.getSpringboardLightElements()));
+        allShiftableElements.put(SPRINGBOARD_LEFT_DOWN, new ArrayList<>(mapParser.getSpringboardLeftDownElements()));
+        allShiftableElements.put(SPRINGBOARD_RIGHT_UP, new ArrayList<>(mapParser.getSpringboardRightUpElements()));
+        allShiftableElements.put(SPRINGBOARD_LEFT, new ArrayList<>(mapParser.getSpringboardDarkElements()));
+        allShiftableElements.put(SPRINGBOARD_RIGHT_DOWN, new ArrayList<>(mapParser.getSpringboardRightDownElements()));
+        allShiftableElements.put(SPRINGBOARD_TOP, new ArrayList<>(mapParser.getSpringboardNoneElements()));
 
         this.trackStepGenerator = new TrackStepGenerator(dice, mapParser.getXSize(), mapParser.getYSize());
     }
@@ -152,28 +153,28 @@ public class GameFieldImpl implements GameField {
     }
 
     @Override
-    public boolean isSpringboardDarkElement(int x, int y) {
-        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT).contains(pt(x, y));
+    public boolean isSpringboardLeftOrDownElement(int x, int y) {
+        return allShiftableElements.get(SPRINGBOARD_LEFT).contains(pt(x, y));
     }
 
     @Override
-    public boolean isSpringboardLightElement(int x, int y) {
-        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT).contains(pt(x, y));
+    public boolean isSpringboardRightElement(int x, int y) {
+        return allShiftableElements.get(SPRINGBOARD_RIGHT).contains(pt(x, y));
     }
 
     @Override
     public boolean isSpringboardLeftDownElement(int x, int y) {
-        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT_DOWN).contains(pt(x, y));
+        return allShiftableElements.get(SPRINGBOARD_LEFT_DOWN).contains(pt(x, y));
     }
 
     @Override
     public boolean isSpringboardRightDownElement(int x, int y) {
-        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(pt(x, y));
+        return allShiftableElements.get(SPRINGBOARD_RIGHT_DOWN).contains(pt(x, y));
     }
 
     @Override
     public boolean isSpringboardTopElement(int x, int y) {
-        return allShiftableElements.get(SpringboardElementType.SPRINGBOARD_TOP).contains(pt(x, y));
+        return allShiftableElements.get(SPRINGBOARD_TOP).contains(pt(x, y));
     }
 
     @Override
@@ -181,73 +182,54 @@ public class GameFieldImpl implements GameField {
         return player != null ?
                 players.parallelStream()
                         .map(Player::getHero)
-                        .filter(bike -> bike.state(player).name().contains(OTHER_BIKE_PREFIX) && bike.itsMe(x, y))
+                        .filter(bike -> bike != null && bike.state(player).name().contains(OTHER_BIKE_PREFIX) && bike.itsMe(x, y))
                         .findFirst()
                 : Optional.empty();
     }
 
     @Override
     public Bike getNewFreeBike() {
-        return createNewFreeBike(getBikesCountOnEachY());
-    }
-
-    private Map<Integer, Long> getBikesCountOnEachY() {
-        Map<Integer, Long> bikesCountOnEachY = getBikes().stream().collect(
-                groupingBy(
-                        PointImpl::getY,
-                        Collectors.counting()
-                )
-        );
-        IntStream.range(1, mapParser.getYSize() - 1).forEach(value -> bikesCountOnEachY.putIfAbsent(value, 0L));
-        return bikesCountOnEachY;
-    }
-
-    private int getYWithMinNumberOfBikes(Map<Integer, Long> bikesCountOnEachY) {
-        return bikesCountOnEachY.entrySet()
-                .stream()
-                .min(
-                        Comparator.comparingLong(Map.Entry::getValue)
-                )
-                .map(Map.Entry::getKey)
-                .orElseGet(() -> 1);
-    }
-
-    private Bike createNewFreeBike(Map<Integer, Long> bikesCountOnEachY) {
-        final int minPossibleX = 0;
-        final int step = 3;
-        int y = getYWithMinNumberOfBikes(bikesCountOnEachY);
-
-        Bike newBike = new Bike(minPossibleX, y);
-
-        for (int i = minPossibleX; i < mapParser.getXSize(); i += step) {
-            newBike.setX(newBike.getY() % 2 == 0 ? i + 1 : i);
-            if (isFree(newBike) || tryToSetFreeCoordinates(newBike, bikesCountOnEachY, i)) {
-                break;
-            }
-            newBike.setY(1);
+        Bike result = createNewFreeBike(true);
+        if (result == null) {
+            result = createNewFreeBike(false);
         }
-        return newBike;
+        if (result == null) {
+            throw new RuntimeException("Game field is full, can't add more bikes!");
+        }
+        return result;
     }
 
-    private boolean tryToSetFreeCoordinates(Bike bike, Map<Integer, Long> bikesOnYCount, int x) {
-        return bikesOnYCount.entrySet()
-                .stream()
-                .sorted(comparingByValue())
-                .map(Map.Entry::getKey)
-                .anyMatch(y -> {
-                    bike.setY(y);
-                    bike.setX(y % 2 == 0 ? x + 1 : x);
-                    return isFree(bike);
-                });
+    private Bike createNewFreeBike(boolean chessOrder) {
+        for (int xi = 0; xi < mapParser.getXSize(); xi++) {
+            for (int yi = 1; yi < mapParser.getYSize() - 1; yi++) {
+                if (chessOrder && (even(xi) && even(yi) || !even(xi) && !even(yi))) {
+                    continue;
+                }
+                Point lowestPointAtColumn = new PointImpl(xi, 1);
+                boolean atSpringboard = pointAtSpringboard(lowestPointAtColumn);
+                Point spawnPlaceCandidate = new PointImpl(xi, atSpringboard ? yi + 1 : yi);
+                if (isFree(spawnPlaceCandidate)) {
+                    return new Bike(spawnPlaceCandidate);
+                }
+            }
+        }
+        return null;
+    }
+
+    private boolean even(int number) {
+        return number % 2 == 0;
+    }
+
+    private boolean pointAtSpringboard(Point point) {
+        return allShiftableElements.get(SPRINGBOARD_LEFT).contains(point);
     }
 
     private boolean isFree(Point point) {
-        Point pointForChecking = new PointImpl(point.getX()+1, point.getY());
+        Point nextPoint = new PointImpl(point.getX()+1, point.getY());
         return !getBikes().contains(point)
                 && !fences.contains(point)
-                && !allShiftableElements.get(OBSTACLE).contains(pointForChecking)
-                && (!allShiftableElements.get(SpringboardElementType.SPRINGBOARD_LEFT).contains(pointForChecking) || pointForChecking.getY() > 1)
-                && !allShiftableElements.get(SpringboardElementType.SPRINGBOARD_RIGHT_DOWN).contains(pointForChecking);
+                && !allShiftableElements.get(OBSTACLE).contains(point)
+                && !allShiftableElements.get(OBSTACLE).contains(nextPoint);
     }
 
     public List<Bike> getBikes() {

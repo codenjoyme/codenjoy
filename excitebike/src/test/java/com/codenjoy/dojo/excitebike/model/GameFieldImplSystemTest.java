@@ -4167,13 +4167,9 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■";
         init(board);
         when(dice.next(anyInt())).thenReturn(5);
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
+        ticks(game, 5);
         bike.crush();
-        game.tick();
-        game.tick();
+        ticks(game, 2);
 
         //when
         game.newGame(player);
@@ -4181,15 +4177,15 @@ public class GameFieldImplSystemTest {
         game.tick();
 
         //then
-        String expected = "═╗■      ■" +
-                "═\\        " +
-                "═\\        " +
-                "═\\        " +
-                "═\\        " +
-                "═\\        " +
-                "═\\        " +
-                "═\\        " +
-                "/S        " +
+        String expected = "╗■■      ■" +
+                "\\         " +
+                "\\         " +
+                "\\         " +
+                "\\         " +
+                "\\         " +
+                "\\         " +
+                "\\         " +
+                "S         " +
                 "■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }

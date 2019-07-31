@@ -22,7 +22,6 @@ package com.codenjoy.dojo.excitebike.model;
  * #L%
  */
 
-import com.codenjoy.dojo.excitebike.model.elements.BikeType;
 import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.parse.MapParser;
 import com.codenjoy.dojo.excitebike.services.parse.MapParserImpl;
@@ -33,7 +32,6 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -66,8 +64,8 @@ public class PlayersSpawnSystemParametrizedTest {
     @Parameterized.Parameters(name = "{0}")
     public static Collection<Object> data() {
         return Lists.newArrayList(
-                new Object[]{"shouldAddThreeBikesInFirstChessColumn",
-                        0,
+                new Object[]{"1. shouldAddThreeBikesToFirstColumn",
+                        3,
                         "■■■■■■■" +
                                 "       " +
                                 "       " +
@@ -76,15 +74,32 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
+                                "Ḃ      \n" +
                                 "       \n" +
+                                "Ḃ      \n" +
                                 "       \n" +
+                                "B      \n" +
+                                "■■■■■■■\n"
+                },
+                new Object[]{"2. shouldAddFiveBikesInChessOrder",
+                        5,
+                        "■■■■■■■" +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "■■■■■■■",
+                        "■■■■■■■\n" +
+                                "Ḃ      \n" +
+                                " Ḃ     \n" +
                                 "Ḃ      \n" +
                                 " Ḃ     \n" +
                                 "B      \n" +
                                 "■■■■■■■\n"
                 },
-                new Object[]{"shouldAddFiveBikesInFirstFullChessColumn",
-                        0,
+                new Object[]{"3. shouldAddSevenBikesInChessOrder",
+                        7,
                         "■■■■■■■" +
                                 "       " +
                                 "       " +
@@ -95,13 +110,13 @@ public class PlayersSpawnSystemParametrizedTest {
                         "■■■■■■■\n" +
                                 "Ḃ      \n" +
                                 " Ḃ     \n" +
-                                "Ḃ      \n" +
+                                "Ḃ Ḃ    \n" +
                                 " Ḃ     \n" +
-                                "B      \n" +
+                                "B Ḃ    \n" +
                                 "■■■■■■■\n"
                 },
-                new Object[]{"shouldAddSevenBikesInFirstAnSecondChessColumns",
-                        0,
+                new Object[]{"4. shouldAddTenBikesInChessOrder",
+                        10,
                         "■■■■■■■" +
                                 "       " +
                                 "       " +
@@ -110,31 +125,14 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       " +
                                 "■■■■■■■",
                         "■■■■■■■\n" +
-                                "Ḃ      \n" +
-                                " Ḃ     \n" +
-                                "Ḃ      \n" +
-                                " Ḃ  Ḃ  \n" +
-                                "B  Ḃ   \n" +
+                                "Ḃ Ḃ    \n" +
+                                " Ḃ Ḃ   \n" +
+                                "Ḃ Ḃ    \n" +
+                                " Ḃ Ḃ   \n" +
+                                "B Ḃ    \n" +
                                 "■■■■■■■\n"
                 },
-                new Object[]{"shouldAddTenBikesInFirstAnSecondFullChessColumns",
-                        0,
-                        "■■■■■■■" +
-                                "       " +
-                                "       " +
-                                "       " +
-                                "       " +
-                                "       " +
-                                "■■■■■■■",
-                        "■■■■■■■\n" +
-                                "Ḃ  Ḃ   \n" +
-                                " Ḃ  Ḃ  \n" +
-                                "Ḃ  Ḃ   \n" +
-                                " Ḃ  Ḃ  \n" +
-                                "B  Ḃ   \n" +
-                                "■■■■■■■\n"
-                },
-                new Object[]{"shouldAddOneNewBike",
+                new Object[]{"5. shouldAddOneNewBikeBikesToFirstColumn",
                         1,
                         "■■■■■■■" +
                                 "       " +
@@ -147,11 +145,11 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "       \n" +
                                 "       \n" +
                                 "  B    \n" +
-                                " Ḃ     \n" +
-                                "   Ḃ   \n" +
+                                "       \n" +
+                                "Ḃ  Ḃ   \n" +
                                 "■■■■■■■\n"
                 },
-                new Object[]{"shouldAddManyNewBikes",
+                new Object[]{"6. shouldAddThreeNewBikes",
                         3,
                         "■■■■■■■" +
                                 "       " +
@@ -162,10 +160,134 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "■■■■■■■",
                         "■■■■■■■\n" +
                                 "Ḃ      \n" +
-                                " Ḃ  B  \n" +
+                                "    B  \n" +
                                 "Ḃ      \n" +
                                 " Ḃ   Ḃ \n" +
-                                "   Ḃ Ḃ \n" +
+                                "Ḃ  Ḃ Ḃ \n" +
+                                "■■■■■■■\n"
+                },
+                new Object[]{"7. shouldAddThreeBikesInFirstColumn__atSpringboardBeginning",
+                        3,
+                        "╔════╗■" +
+                                "/════\\ " +
+                                "/════\\ " +
+                                "/════\\ " +
+                                "/════\\ " +
+                                "╚////╝ " +
+                                "■■■■■■■",
+                        "╔════╗■\n" +
+                                "Ĺ════\\ \n" +
+                                "/════\\ \n" +
+                                "Ĺ════\\ \n" +
+                                "/════\\ \n" +
+                                "M////╝ \n" +
+                                "■■■■■■■\n"
+                },
+                new Object[]{"8. shouldAddThreeBikesInFirstColumn__atSpringboardTop",
+                        3,
+                        "════╗■■" +
+                                "════\\  " +
+                                "════\\  " +
+                                "════\\  " +
+                                "════\\  " +
+                                "////╝  " +
+                                "■■■■■■■",
+                        "Ḃ═══╗■■\n" +
+                                "════\\  \n" +
+                                "Ḃ═══\\  \n" +
+                                "════\\  \n" +
+                                "B═══\\  \n" +
+                                "////╝  \n" +
+                                "■■■■■■■\n"
+                },
+                new Object[]{"9. shouldAddThreeBikesInFirstColumn__atSpringboardEnding",
+                        3,
+                        "╗■■■■■■" +
+                                "\\      " +
+                                "\\      " +
+                                "\\      " +
+                                "\\      " +
+                                "╝      " +
+                                "■■■■■■■",
+                        "╗■■■■■■\n" +
+                                "Ř      \n" +
+                                "\\      \n" +
+                                "Ř      \n" +
+                                "\\      \n" +
+                                "S      \n" +
+                                "■■■■■■■\n"
+                },
+                new Object[]{"10. shouldAddManyBikes__coveringWholeFieldInChessOrder",
+                        8,
+                        "■■■■■" +
+                                "     " +
+                                "     " +
+                                "     " +
+                                "■■■■■",
+                        "■■■■■\n" +
+                                "Ḃ Ḃ Ḃ\n" +
+                                " Ḃ Ḃ \n" +
+                                "B Ḃ Ḃ\n" +
+                                "■■■■■\n"
+                },
+                new Object[]{"11. shouldAddManyBikes__coveringWholeFieldInChessOrderAndTwoMore",
+                        10,
+                        "■■■■■" +
+                                "     " +
+                                "     " +
+                                "     " +
+                                "■■■■■",
+                        "■■■■■\n" +
+                                "Ḃ Ḃ Ḃ\n" +
+                                "ḂḂ Ḃ \n" +
+                                "BḂḂ Ḃ\n" +
+                                "■■■■■\n"
+                },
+                new Object[]{"12. shouldAddManyBikes__fullyCoveringWholeField",
+                        15,
+                        "■■■■■" +
+                                "     " +
+                                "     " +
+                                "     " +
+                                "■■■■■",
+                        "■■■■■\n" +
+                                "ḂḂḂḂḂ\n" +
+                                "ḂḂḂḂḂ\n" +
+                                "BḂḂḂḂ\n" +
+                                "■■■■■\n"
+                },
+                new Object[]{"13. shouldAddManyBikes__coveringWholeSpringboardAndLinesBeforeAndAfterInChessOrder",
+                        18,
+                        "■╔═══╗■" +
+                                " /═══\\ " +
+                                " /═══\\ " +
+                                " /═══\\ " +
+                                " /═══\\ " +
+                                " ╚///╝ " +
+                                "■■■■■■■",
+                        "■╔Ḃ═Ḃ╗■\n" +
+                                "Ḃ/═Ḃ═\\Ḃ\n" +
+                                " ĹḂ═ḂŘ \n" +
+                                "Ḃ/═Ḃ═\\Ḃ\n" +
+                                " ĹḂ═ḂŘ \n" +
+                                "B╚///╝Ḃ\n" +
+                                "■■■■■■■\n"
+                },
+                new Object[]{"14. shouldAddManyBikes__fullyCoveringWholeSpringboardAndLinesBeforeAndAfter",
+                        35,
+                        "■╔═══╗■" +
+                                " /═══\\ " +
+                                " /═══\\ " +
+                                " /═══\\ " +
+                                " /═══\\ " +
+                                " ╚///╝ " +
+                                "■■■■■■■",
+                        "■╔ḂḂḂ╗■\n" +
+                                "ḂĹḂḂḂŘḂ\n" +
+                                "ḂĹḂḂḂŘḂ\n" +
+                                "ḂĹḂḂḂŘḂ\n" +
+                                "ḂĹḂḂḂŘḂ\n" +
+                                "BṀ///ŜḂ\n" +
                                 "■■■■■■■\n"
                 }
         );
@@ -183,23 +305,19 @@ public class PlayersSpawnSystemParametrizedTest {
 
         List<Game> games = new ArrayList<>();
 
-        if (parseBikes(init).isEmpty()) {
-            int playersNumber = StringUtils.countMatches(expected, BikeType.OTHER_BIKE.ch()) + 1;
-            IntStream.range(0, playersNumber).forEach(value -> games.add(createNewGame(field, factory)));
-        } else {
-            parseBikes(init).forEach(bike -> {
-                Game game = createNewGame(field, factory);
-                games.add(game);
-                ((Player) game.getPlayer()).setHero(bike);
-            });
-        }
+        parseBikes(init).forEach(bike -> {
+            Game game = createNewGame(field, factory);
+            games.add(game);
+            ((Player) game.getPlayer()).setHero(bike);
+        });
+
 
         //when
         IntStream.range(0, newPlayerNumberAfterInit).mapToObj(i -> createNewGame(field, factory)).forEach(games::add);
         String res = (String) games.get(0).getBoardAsString();
 
         //then
-        assertThat(expected, is(res));
+        assertThat(res, is(expected));
     }
 
     private Game createNewGame(GameField field, PrinterFactory factory) {

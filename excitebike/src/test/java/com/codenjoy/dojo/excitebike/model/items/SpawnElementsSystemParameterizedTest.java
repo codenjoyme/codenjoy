@@ -66,6 +66,7 @@ public class SpawnElementsSystemParameterizedTest {
     public void init() {
         dice = mock(Dice.class);
         MapParser mapParser = mock(MapParser.class);
+        when(mapParser.getXSize()).thenReturn(5);
         when(mapParser.getYSize()).thenReturn(5);
         game = new GameFieldImpl(mapParser, dice, new SettingsHandler());
         player = new Player(mock(EventListener.class));

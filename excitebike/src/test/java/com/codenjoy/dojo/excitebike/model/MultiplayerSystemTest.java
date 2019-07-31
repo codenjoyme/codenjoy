@@ -93,24 +93,24 @@ public class MultiplayerSystemTest {
 
         //then
         assertThat(game1.getBoardAsString(), is("■■■■■■■\n" +
-                "       \n" +
+                "Ḃ      \n" +
                 "       \n" +
                 "Ḃ      \n" +
-                " Ḃ     \n" +
+                "       \n" +
                 "B      \n" +
                 "■■■■■■■\n"));
         assertThat(game2.getBoardAsString(), is("■■■■■■■\n" +
-                "       \n" +
-                "       \n" +
                 "Ḃ      \n" +
-                " B     \n" +
+                "       \n" +
+                "B      \n" +
+                "       \n" +
                 "Ḃ      \n" +
                 "■■■■■■■\n"));
         assertThat(game3.getBoardAsString(), is("■■■■■■■\n" +
-                "       \n" +
-                "       \n" +
                 "B      \n" +
-                " Ḃ     \n" +
+                "       \n" +
+                "Ḃ      \n" +
+                "       \n" +
                 "Ḃ      \n" +
                 "■■■■■■■\n"));
     }
@@ -129,11 +129,11 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "■■■■■■■\n" +
+        String expected = "ḟ■■■■■■\n" +
+                "       \n" +
                 "       \n" +
                 "Ḃ      \n" +
                 "       \n" +
-                " Ḃ     \n" +
                 "       \n" +
                 "f■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
@@ -153,8 +153,8 @@ public class MultiplayerSystemTest {
         String expected = "■■■■■■■\n" +
                 "       \n" +
                 "       \n" +
+                "Ḃ      \n" +
                 "       \n" +
-                " Ḃ     \n" +
                 "B      \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
@@ -165,10 +165,8 @@ public class MultiplayerSystemTest {
         //given
         init();
         when(dice.next(anyInt())).thenReturn(5);
-        Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX() + 1);
-        Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX() + 1);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setY(bike2.getY() - 1);
 
         //when
         game1.getJoystick().up();
@@ -176,10 +174,10 @@ public class MultiplayerSystemTest {
 
         //then
         String expected = "■■■■■■■\n" +
+                "Ḃ      \n" +
                 "       \n" +
                 "       \n" +
-                " Ḃ     \n" +
-                " K     \n" +
+                "K      \n" +
                 "       \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
@@ -198,9 +196,9 @@ public class MultiplayerSystemTest {
         init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 1);
 
         //when
         game1.getJoystick().up();
@@ -210,9 +208,9 @@ public class MultiplayerSystemTest {
         //then
         String expected = "■■■■■■■\n" +
                 "       \n" +
+                "Ḱ      \n" +
+                "B      \n" +
                 "       \n" +
-                " Ḱ     \n" +
-                " B     \n" +
                 "       \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
@@ -230,10 +228,6 @@ public class MultiplayerSystemTest {
         //given
         init();
         when(dice.next(anyInt())).thenReturn(5);
-        Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX() + 1);
-        Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX() + 1);
 
         //when
         game1.getJoystick().down();
@@ -242,12 +236,12 @@ public class MultiplayerSystemTest {
 
         //then
         String expected = "■■■■■■■\n" +
+                "Ḃ      \n" +
                 "       \n" +
                 "       \n" +
-                " Ḃ     \n" +
+                "B      \n" +
                 "       \n" +
-                " B     \n" +
-                "■ḟ■■■■■\n";
+                "ḟ■■■■■■\n";
         assertThat(game2.getBoardAsString(), is(expected));
         assertThat(game1.isGameOver(), is(true));
         verify(eventListenerSpy1, never()).event(Events.WIN);
@@ -264,9 +258,9 @@ public class MultiplayerSystemTest {
         init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 1);
 
         //when
         game1.getJoystick().up();
@@ -276,10 +270,10 @@ public class MultiplayerSystemTest {
         //then
         String expected = "■■■■■■■\n" +
                 "       \n" +
+                "Ḃ      \n" +
+                "Ḃ      \n" +
+                "B      \n" +
                 "       \n" +
-                " Ḃ     \n" +
-                " Ḃ     \n" +
-                " B     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
         verify(eventListenerSpy1, never()).event(Events.LOSE);
@@ -296,9 +290,9 @@ public class MultiplayerSystemTest {
         init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 1);
         game1.getJoystick().up();
         game2.getJoystick().down();
         field.tick();
@@ -311,10 +305,10 @@ public class MultiplayerSystemTest {
         //then
         String expected = "■■■■■■■\n" +
                 "       \n" +
+                "Ḃ      \n" +
+                "Ḃ      \n" +
+                "B      \n" +
                 "       \n" +
-                " Ḃ     \n" +
-                " Ḃ     \n" +
-                " B     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
         verify(eventListenerSpy1, never()).event(Events.LOSE);
@@ -331,9 +325,9 @@ public class MultiplayerSystemTest {
         init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 1);
 
         //when
         game1.getJoystick().up();
@@ -343,10 +337,10 @@ public class MultiplayerSystemTest {
         //then
         String expected = "■■■■■■■\n" +
                 "       \n" +
+                "Ḃ      \n" +
+                "B      \n" +
+                "Ḃ      \n" +
                 "       \n" +
-                " Ḃ     \n" +
-                " B     \n" +
-                " Ḃ     \n" +
                 "■■■■■■■\n";
         assertThat(game2.getBoardAsString(), is(expected));
         verify(eventListenerSpy1, never()).event(Events.LOSE);
@@ -363,9 +357,9 @@ public class MultiplayerSystemTest {
         init();
         when(dice.next(anyInt())).thenReturn(5);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX() + 1);
+        bike1.setY(bike1.getY() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 1);
 
         //when
         game1.getJoystick().up();
@@ -375,10 +369,10 @@ public class MultiplayerSystemTest {
         //then
         String expected = "■■■■■■■\n" +
                 "       \n" +
+                "B      \n" +
+                "Ḃ      \n" +
+                "Ḃ      \n" +
                 "       \n" +
-                " B     \n" +
-                " Ḃ     \n" +
-                " Ḃ     \n" +
                 "■■■■■■■\n";
         assertThat(game3.getBoardAsString(), is(expected));
         verify(eventListenerSpy1, never()).event(Events.LOSE);
@@ -394,10 +388,10 @@ public class MultiplayerSystemTest {
         //given
         init();
         when(dice.next(anyInt())).thenReturn(5);
-        Bike bike1 = (Bike) game1.getPlayer().getHero();
-        bike1.setX(bike1.getX() + 1);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
-        bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
 
         //when
         game1.getJoystick().up();
@@ -408,9 +402,9 @@ public class MultiplayerSystemTest {
         //then
         String expected = "■■■■■■■\n" +
                 "       \n" +
-                " Ḃ     \n" +
-                " Ḃ     \n" +
-                " B     \n" +
+                "Ḃ      \n" +
+                "Ḃ      \n" +
+                "B      \n" +
                 "       \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
@@ -426,8 +420,12 @@ public class MultiplayerSystemTest {
         when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
         ticks(field, 7);
 
         //when
@@ -454,8 +452,12 @@ public class MultiplayerSystemTest {
         when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
         ticks(field, 5);
 
         //when
@@ -479,18 +481,16 @@ public class MultiplayerSystemTest {
         //given
         int springboardWeight = 17;
         int springboardTopSize = 1;
-
         init();
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setY(bike3.getY() - 2);
         when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
+        ticks(field, 6);
         ((Bike) game1.getPlayer().getHero()).crush();
-        field.tick();
-        field.tick();
+        ticks(field, 2);
 
         //when
         game1.newGame();
@@ -501,8 +501,8 @@ public class MultiplayerSystemTest {
                 "═\\     \n" +
                 "Ḃ\\     \n" +
                 "═\\     \n" +
-                "═Ř     \n" +
-                "/S     \n" +
+                "BŘ     \n" +
+                "/╝     \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -517,8 +517,12 @@ public class MultiplayerSystemTest {
         when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
         ticks(field, 7);
 
         //when
@@ -552,8 +556,12 @@ public class MultiplayerSystemTest {
         when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
         ticks(field, 7);
 
         //when
@@ -588,8 +596,12 @@ public class MultiplayerSystemTest {
         when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
         ticks(field, 7);
 
         //when
@@ -623,8 +635,12 @@ public class MultiplayerSystemTest {
         when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
         ticks(field, 7);
 
         //when
@@ -660,9 +676,12 @@ public class MultiplayerSystemTest {
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        bike3.setY(bike3.getY() - 2);
+        bike3.setY(bike3.getY() - 4);
         ticks(field, 7);
         field.tick();
 
@@ -691,9 +710,12 @@ public class MultiplayerSystemTest {
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        bike3.setY(bike3.getY() - 2);
+        bike3.setY(bike3.getY() - 4);
         ticks(field, 8);
 
         //when
@@ -723,9 +745,12 @@ public class MultiplayerSystemTest {
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        bike3.setY(bike3.getY() - 2);
+        bike3.setY(bike3.getY() - 4);
         ticks(field, 8);
 
         //when
@@ -756,11 +781,11 @@ public class MultiplayerSystemTest {
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        bike3.setY(bike3.getY() + 2);
-        Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setY(bike2.getY() + 2);
         ticks(field, 8);
 
         //when
@@ -791,11 +816,11 @@ public class MultiplayerSystemTest {
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        bike3.setY(bike3.getY() + 2);
-        Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setY(bike2.getY() + 2);
         ticks(field, 7);
 
         //when
@@ -833,11 +858,11 @@ public class MultiplayerSystemTest {
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        bike3.setY(bike3.getY() + 2);
-        Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setY(bike2.getY() + 2);
         ticks(field, 9);
 
         //when
@@ -873,8 +898,12 @@ public class MultiplayerSystemTest {
         when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
         ticks(field, 7);
 
         //when
@@ -903,8 +932,12 @@ public class MultiplayerSystemTest {
         when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() - 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
+        bike3.setY(bike3.getY() - 2);
         ticks(field, 7);
 
         //when
@@ -935,11 +968,11 @@ public class MultiplayerSystemTest {
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        bike3.setY(bike3.getY() + 2);
-        Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setY(bike2.getY() + 2);
         ticks(field, 7);
 
         //when
@@ -970,11 +1003,11 @@ public class MultiplayerSystemTest {
         Bike bike1 = (Bike) game1.getPlayer().getHero();
         bike1.setX(bike1.getX() + 1);
         bike1.setY(bike1.getY() + 2);
+        Bike bike2 = (Bike) game2.getPlayer().getHero();
+        bike2.setX(bike2.getX() + 1);
+        bike2.setY(bike2.getY() + 1);
         Bike bike3 = (Bike) game3.getPlayer().getHero();
         bike3.setX(bike3.getX() + 1);
-        bike3.setY(bike3.getY() + 2);
-        Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setY(bike2.getY() + 2);
         ticks(field, 5);
 
         //when
@@ -1011,8 +1044,7 @@ public class MultiplayerSystemTest {
         bike1.setX(bike1.getX() + 4);
         bike1.setY(bike1.getY() + 2);
         Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setY(bike2.getY() + 1);
-        bike2.setX(bike2.getX() + 4);
+        bike2.setX(bike2.getX() + 5);
 
         //when
         field.tick();
@@ -1039,8 +1071,7 @@ public class MultiplayerSystemTest {
         bike1.setX(bike1.getX() + 4);
         bike1.setY(bike1.getY() + 2);
         Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setY(bike2.getY() + 1);
-        bike2.setX(bike2.getX() + 4);
+        bike2.setX(bike2.getX() + 5);
         field.tick();
 
         //when
@@ -1074,8 +1105,7 @@ public class MultiplayerSystemTest {
         bike1.setX(bike1.getX() + 4);
         bike1.setY(bike1.getY() + 2);
         Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setY(bike2.getY() + 1);
-        bike2.setX(bike2.getX() + 4);
+        bike2.setX(bike2.getX() + 5);
         ticks(field, 2);
 
         //when
@@ -1103,12 +1133,13 @@ public class MultiplayerSystemTest {
         //given
         int springboardWeight = 17;
         int springboardTopSize = 2;
-
         init();
-        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setX(bike2.getX() - 1);
-        ticks(field, 7);
+        bike2.setY(bike2.getY() - 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setY(bike3.getY() - 2);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
+        ticks(field, 8);
         ((Bike) game1.getPlayer().getHero()).crush();
         ((Bike) game2.getPlayer().getHero()).crush();
         ((Bike) game3.getPlayer().getHero()).crush();
@@ -1123,12 +1154,12 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "═╗■■■■■\n" +
-                "═\\     \n" +
-                "═\\     \n" +
-                "ḂŘ     \n" +
-                "═\\     \n" +
-                "/S     \n" +
+        String expected = "╗■■■■■■\n" +
+                "\\      \n" +
+                "\\      \n" +
+                "ŘḂ     \n" +
+                "\\      \n" +
+                "S      \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -1142,7 +1173,9 @@ public class MultiplayerSystemTest {
         init();
         when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setX(bike2.getX() - 1);
+        bike2.setY(bike2.getY() - 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setY(bike3.getY() - 2);
         ticks(field, 8);
         ((Bike) game1.getPlayer().getHero()).crush();
         ((Bike) game2.getPlayer().getHero()).crush();
@@ -1159,10 +1192,10 @@ public class MultiplayerSystemTest {
         //then
         String expected = "╗■■■■■■\n" +
                 "\\      \n" +
-                "\\Ḃ     \n" +
                 "\\      \n" +
-                "ŘB     \n" +
-                "╝      \n" +
+                "Ř      \n" +
+                "\\Ḃ     \n" +
+                "S      \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -1176,7 +1209,9 @@ public class MultiplayerSystemTest {
         init();
         when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setX(bike2.getX() - 1);
+        bike2.setY(bike2.getY() - 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setY(bike3.getY() - 2);
         ticks(field, 6);
         ((Bike) game1.getPlayer().getHero()).crush();
         ((Bike) game2.getPlayer().getHero()).crush();
@@ -1192,11 +1227,11 @@ public class MultiplayerSystemTest {
 
         //then
         String expected = "╗■■■■■■\n" +
+                "Ř      \n" +
                 "\\      \n" +
-                "\\Ḃ     \n" +
+                "Ř      \n" +
                 "\\      \n" +
-                "ŘB     \n" +
-                "╝      \n" +
+                "S      \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));
     }
@@ -1206,11 +1241,12 @@ public class MultiplayerSystemTest {
         //given
         int springboardWeight = 17;
         int springboardTopSize = 7;
-
         init();
-        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         Bike bike2 = (Bike) game2.getPlayer().getHero();
-        bike2.setX(bike2.getX() - 1);
+        bike2.setY(bike2.getY() - 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setY(bike3.getY() - 2);
+        when(dice.next(anyInt())).thenReturn(springboardWeight, springboardTopSize);
         ticks(field, 8);
         ((Bike) game1.getPlayer().getHero()).crush();
         ((Bike) game2.getPlayer().getHero()).crush();
@@ -1227,11 +1263,11 @@ public class MultiplayerSystemTest {
         field.tick();
 
         //then
-        String expected = "═Ḃ══╗■■\n" +
-                "════\\  \n" +
-                "════\\  \n" +
+        String expected = "════╗■■\n" +
+                "═Ḃ══\\  \n" +
                 "Ḃ═══\\  \n" +
-                "═B══\\  \n" +
+                "════\\  \n" +
+                "B═══\\  \n" +
                 "////╝  \n" +
                 "■■■■■■■\n";
         assertThat(game1.getBoardAsString(), is(expected));

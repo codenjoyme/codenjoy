@@ -549,7 +549,7 @@ public class BikeTest {
         //given
         bike.setY(2);
         bike.down();
-        when(gameField.isSpringboardDarkElement(anyInt(), anyInt())).thenReturn(true);
+        when(gameField.isSpringboardLeftOrDownElement(anyInt(), anyInt())).thenReturn(true);
         bike.tick();
 
         //when
