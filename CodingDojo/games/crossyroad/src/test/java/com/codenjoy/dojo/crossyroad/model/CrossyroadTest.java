@@ -82,7 +82,7 @@ public class CrossyroadTest {
     // есть карта со мной
     @Test
     public void shouldFieldAtStart() {
-        givenFl( "#     #" +
+        givenFl("#     #" +
                 "#     #" +
                 "#     #" +
                 "#     #" +
@@ -99,9 +99,10 @@ public class CrossyroadTest {
                 "#  ▼  #");
     }
 
+    // есть карта с камнями
     @Test
     public void shouldFieldWithStoneAtStart() {
-        givenFl( "#     #" +
+        givenFl("#     #" +
                 "#  0  #" +
                 "#     #" +
                 "#    0#" +
@@ -117,10 +118,11 @@ public class CrossyroadTest {
                 "#     #" +
                 "#  ▼  #");
     }
+
+    // есть карта с машинами
     @Test
-
     public void shouldFieldWithCarsAtStart() {
-        givenFl( "#     #" +
+        givenFl("#     #" +
                 "#> >  #" +
                 "#     #" +
                 "#    <#" +
@@ -137,28 +139,29 @@ public class CrossyroadTest {
                 "#  ▼  #");
     }
 
+    // машины должны двигаться
     @Test
     public void shouldMoveLeftCarRightToLeft() {
-            givenFl( "#     #" +
-                    "#  <  #" +
-                    "#     #" +
-                    "#    <#" +
-                    "#  ▼  #" +
-                    "#     #" +
-                    "#     #");
-    game.tick();
-            assertE("#     #" +
-                    "# <   #" +
-                    "#     #" +
-                    "#   < #" +
-                    "#  ▼  #" +
-                    "#     #" +
-                    "#     #");
-            }
+        givenFl("#     #" +
+                "#  <  #" +
+                "#     #" +
+                "#    <#" +
+                "#  ▼  #" +
+                "#     #" +
+                "#     #");
+        game.tick();
+        assertE("#     #" +
+                "# <   #" +
+                "#     #" +
+                "#   < #" +
+                "#  ▼  #" +
+                "#     #" +
+                "#     #");
+    }
 
     @Test
     public void shouldMoveRightCarLeftToRight() {
-        givenFl( "#     #" +
+        givenFl("#     #" +
                 "#  >  #" +
                 "#     #" +
                 "#    >#" +
@@ -175,9 +178,10 @@ public class CrossyroadTest {
                 "#     #");
     }
 
+    // машины должны появляться на другом краю карты, если вышли за границу
     @Test
     public void shouldMoveThroughBoundCarRightToLeft() {
-        givenFl( "#     #" +
+        givenFl("#     #" +
                 "#     #" +
                 "#<    #" +
                 "#     #" +
@@ -192,11 +196,11 @@ public class CrossyroadTest {
                 "#  ▼  #" +
                 "#     #" +
                 "#     #");
-           }
-    @Test
+    }
 
+    @Test
     public void shouldMoveThroughBoundCarLeftToRight() {
-        givenFl( "#     #" +
+        givenFl("#     #" +
                 "#     #" +
                 "#     #" +
                 "#    >#" +
@@ -211,33 +215,35 @@ public class CrossyroadTest {
                 "#  ▼  #" +
                 "#     #" +
                 "#     #");
-           }
-
-    @Test
-    public void shouldDestroyAllCarsOutOfBorders() {
-            givenFl( "#     #" +
-                    "#>    #" +
-                    "#     #" +
-                    "#     #" +
-                    "#  ▼  #" +
-                    "#     #" +
-                    "#<<<<<#");
-            hero.up();
-            game.tick();
-            assertE("#     #" +
-                    "#     #" +
-                    "# >   #" +
-                    "#     #" +
-                    "#  ▲  #" +
-                    "#     #" +
-                    "#     #");
-
-                Assert.assertEquals(1, game.getCars().size());
     }
 
+    // машины должны убираться с доски
+    @Test
+    public void shouldDestroyAllCarsOutOfBorders() {
+        givenFl("#     #" +
+                "#>    #" +
+                "#     #" +
+                "#     #" +
+                "#  ▼  #" +
+                "#     #" +
+                "#<<<<<#");
+        hero.up();
+        game.tick();
+        assertE("#     #" +
+                "#     #" +
+                "# >   #" +
+                "#     #" +
+                "#  ▲  #" +
+                "#     #" +
+                "#     #");
+
+        Assert.assertEquals(1, game.getCars().size());
+    }
+
+    // герой должен телепортироваться, если врезается в препятствие
     @Test
     public void shouldHeroTeleportWhenCollision() {
-        givenFl( "#     #" +
+        givenFl("#     #" +
                 "#  ▼< #" +
                 "#     #" +
                 "#     #" +
@@ -245,8 +251,132 @@ public class CrossyroadTest {
                 "#     #" +
                 "#     #");
         game.tick();
-        assertE( "#     #" +
+        assertE("#     #" +
                 "#  <  #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#  ▼  #");
+
+    }
+
+    // герой должен телепортироваться, если врезается в стену
+    @Test
+    public void shouldHeroTeleportWhenWallCollision() {
+        givenFl("#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#▼    #");
+        hero.left();
+        game.tick();
+        assertE("#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#  ▼  #");
+
+    }
+
+    // герой должен ходить
+    @Test
+    public void shouldWalk() {
+        givenFl("#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#  ▼  #");
+
+        hero.left();
+        game.tick();
+
+        assertE("#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "# ◄   #");
+        ;
+
+        hero.right();
+        game.tick();
+
+        assertE("#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#  ►  #");
+        ;
+
+        hero.up();
+        game.tick();
+
+        assertE("#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#  ▲  #");
+        ;
+    }
+
+    // объекты должны смещаться вниз, когда герой идет вверх
+    @Test
+    public void shouldObjectsMoveWhenUp() {
+        givenFl("#     #" +
+                "#0    #" +
+                "# >   #" +
+                "#     #" +
+                "#  <  #" +
+                "#     #" +
+                "#  ▼  #");
+        ;
+
+        hero.up();
+        game.tick();
+        assertE("#     #" +
+                "#     #" +
+                "#0    #" +
+                "#  >  #" +
+                "#     #" +
+                "# <   #" +
+                "#  ▲  #");
+        ;
+    }
+
+    // герой должен телепортироваться, если не идет вперед пять ходов
+    @Test
+    public void shouldHeroTeleportWhenDontGoUpFiveTurns() {
+        givenFl("#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#    ▼#");
+        hero.left();
+        game.tick();
+        hero.left();
+        game.tick();
+        hero.left();
+        game.tick();
+        hero.left();
+        game.tick();
+        hero.right();
+        game.tick();
+        assertE("#     #" +
+                "#     #" +
                 "#     #" +
                 "#     #" +
                 "#     #" +
@@ -256,673 +386,54 @@ public class CrossyroadTest {
 
     }
 
-//    @Test
-//    public void shouldDestroyAllPlatforms() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=======" +
-//                "       " +
-//                "#######");
-//
-//        game.tick();
-//        game.tick();
-//        game.tick();
-//        game.tick();
-//        game.tick();
-//        game.tick();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldCreateOnePlatform() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=====  " +
-//                "       " +
-//                "#######");
-//
-//        dice(2 - 1, 2);
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "====  =" +
-//                "       " +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldHeroFall() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=      " +
-//                "       " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldHeroStopsOnPlatformWhenFalling() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=      " +
-//                "  =    " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                " =     " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=      " +
-//                "#######");
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldHeroDiesOnBottomWall() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "#######");
-//
-//        game.tick();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☻######");
-//
-//        assertFalse(hero.isAlive());
-//
-//        game.newGame(player);
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldHeroDiesFullLifeCycle() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=      " +
-//                "  =    " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                " =     " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=      " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☻######");
-//
-//        assertFalse(hero.isAlive());
-//
-//        game.newGame(player);
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=      " +
-//                "  =    " +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldJump() {
-//        givenFl("      =" +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=      " +
-//                "       " +
-//                "#######");
-//
-//        hero.up();
-//        game.tick();
-//
-//        assertE("     = " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("    =  " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldJumpOnPlatform() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "= ==   " +
-//                "       " +
-//                "#######");
-//
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                " ==    " +
-//                "       " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "==     " +
-//                "       " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=      " +
-//                "       " +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldJumpAboveOnPlatform() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺ ==   " +
-//                "=      " +
-//                "       " +
-//                "#######");
-//
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                " ==    " +
-//                "       " +
-//                "       " +
-//                "#######");
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                "==     " +
-//                "       " +
-//                "       " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                "=      " +
-//                "       " +
-//                "       " +
-//                "#######");
-//    }
-//
-//
-//    @Test
-//    public void shouldHeroNotDieWhenFallsOnPlatform() {
-//        givenFl("☺      " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "     ==" +
-//                "#######");
-//
-//        dice(1 - 1, 10);
-//
-//        game.tick();
-//
-//        assertE("☺      " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "    ===" +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "   ====" +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "  =====" +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                " ======" +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=======" +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldOnlyDoubleJump() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=      " +
-//                "       " +
-//                "#######");
-////first jump
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "#######");
-////second jump
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "#######");
-////cannot jump
-//        hero.up();
-//        game.tick();
-//
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "#######");
-//
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "#######");
-//
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldDoubleJumpAfterIdle() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=======" +
-//                "       " +
-//                "#######");
-////first jump
-//        dice(2 - 1, 20);
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "=======" +
-//                "       " +
-//                "#######");
-////second jump
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "=======" +
-//                "       " +
-//                "#######");
-////cannot jump
-//        hero.up();
-//        game.tick();
-//
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "=======" +
-//                "       " +
-//                "#######");
-//
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=======" +
-//                "       " +
-//                "#######");
-//
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "=======" +
-//                "       " +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldJumpOnlyOnceWhenFalling() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=      " +
-//                "       " +
-//                "#######");
-//
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "#######");
-////first jump - should be like double
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "       " +
-//                "#######");
-//
-////cannot jump twice when falling
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "       " +
-//                "#######");
-//    }
-//
-//    @Test
-//    public void shouldFallingJustAfterJump() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "====== " +
-//                "       " +
-//                "#######");
-//
-//        hero.up();
-//        game.tick();
-//
-//        assertE("       " +
-//                "       " +
-//                "☺      " +
-//                "       " +
-//                "=====  " +
-//                "       " +
-//                "#######");
-//
-//      //  Assert.assertTrue(hero.getStatus() == HeroStatus.FALLING);
-//    }
-//
-//    @Test
-//    public void shouldMakeTenTicks() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=======" +
-//                "       " +
-//                "#######");
-//        dice(2 - 1, 10);
-//        for (int i = 0; i < 10; i++) {
-//            game.tick();
-//        }
-//
-//        assertE("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=======" +
-//                "       " +
-//                "#######");
-//
-//        Assert.assertEquals(10, game.getTickCounter());
-//    }
-//
+    // проверка счетчика тиков
+    @Test
+    public void shouldMakeTenTicks() {
+        givenFl("#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#  ▼  #");
+        dice(2 - 1, 10);
+        for (int i = 0; i < 10; i++) {
+            game.tick();
+        }
+
+        assertE("#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#     #" +
+                "#  ▼  #");
+
+        Assert.assertEquals(10, game.getTickCounter());
+    }
+
 //    @Test
 //    public void shouldMakePlatformNoHigherThanY4WhenDice5() {
-//        givenFl("       " +
-//                "       " +
-//                "       " +
-//                "☺      " +
-//                "=======" +
-//                "       " +
-//                "#######");
+//        givenFl("#     #" +
+//                "#     #" +
+//                "#     #" +
+//                "#     #" +
+//                "#<<   #" +
+//                "#     #" +
+//                "#  ▼  #");
 //
 //        dice(5 - 1, 1);
 //        game.tick();
 //
-//        assertE("       " +
-//                "       " +
-//                "      =" +
-//                "☺      " +
-//                "====== " +
-//                "       " +
-//                "#######");
+//        assertE("#     #" +
+//                "#     #" +
+//                "#    <#" +
+//                "#     #" +
+//                "#<   <#" +
+//                "#     #" +
+//                "#  ▼  #");
 //    }
-//
+
 //    @Test
 //    public void shouldNotMakeSecondPlatformHigherThanY4WhenDice5() {
 //        givenFl("#######" +
