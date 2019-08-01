@@ -60,7 +60,7 @@ public class GameFieldImplSystemTest {
         game.newGame(player);
         player.setHero(bike);
         bike.init(game);
-        this.bike = game.getBikes().get(0);
+        this.bike = game.getAliveBikes().get(0);
     }
 
     @Test

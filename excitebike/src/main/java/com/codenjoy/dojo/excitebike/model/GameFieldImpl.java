@@ -226,16 +226,18 @@ public class GameFieldImpl implements GameField {
 
     private boolean isFree(Point point) {
         Point nextPoint = new PointImpl(point.getX()+1, point.getY());
-        return !getBikes().contains(point)
+        return !getAliveBikes().contains(point)
                 && !fences.contains(point)
                 && !allShiftableElements.get(OBSTACLE).contains(point)
-                && !allShiftableElements.get(OBSTACLE).contains(nextPoint);
+                && !allShiftableElements.get(OBSTACLE).contains(nextPoint)
+                && !allShiftableElements.get(BIKE_FALLEN).contains(point)
+                && !allShiftableElements.get(BIKE_FALLEN).contains(nextPoint);
     }
 
-    public List<Bike> getBikes() {
+    public List<Bike> getAliveBikes() {
         return players.stream()
                 .map(Player::getHero)
-                .filter(Objects::nonNull)
+                .filter(b -> Objects.nonNull(b) && b.isAlive())
                 .collect(toList());
     }
 
@@ -268,8 +270,12 @@ public class GameFieldImpl implements GameField {
             @Override
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>() {{
-                    addAll(GameFieldImpl.this.getBikes());
-                    GameFieldImpl.this.allShiftableElements.values().forEach(this::addAll);
+                    addAll(GameFieldImpl.this.getAliveBikes());
+                    addAll(GameFieldImpl.this.allShiftableElements.get(BIKE_FALLEN));
+                    GameFieldImpl.this.allShiftableElements.entrySet()
+                            .stream()
+                            .filter(e -> e.getKey() != BIKE_FALLEN)
+                            .forEach(e -> this.addAll(e.getValue()));
                     addAll(getFences());
                 }};
             }
