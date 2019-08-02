@@ -18,6 +18,7 @@ How to run server on Linux?
     * [optional] change `GAME_AI=false` to disable default AI with first player
     * [optional] change docker container name `CONTAINER_NAME=codenjoy`
     * [optional] change application context `CONTEXT=codenjoy-contest`
+    * change default `ADMIN_PASSWORD=admin` to be secure
     * run it to start server `sudo bash 3-start.sh`
 - go to ```http://your-server:8080/codenjoy-contest/```
 - codenjoy!    
