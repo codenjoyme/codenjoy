@@ -7,6 +7,7 @@ MAINTAINER Igor_Petrov@epam.com
 ENV MVN_HOME=/home/maven
 
 # comma-separated list of games or 'allGames'
+# TODO for all games sould be -P parameter in 'mvn clean package' command
 ENV GAMES=allGames
 
 WORKDIR $MVN_HOME

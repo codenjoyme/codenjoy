@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
+
 if [ "$EUID" -ne 0 ]; then
     echo "[91mPlease run as root on the /srv/codenjoy folder[0m" ;
     exit ;
 fi
-
-DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0
-SERVER_PORT=8080
-
-JETTY_PID=999
 
 HOME_DIR=$(
   cd $(dirname "$0")
@@ -24,41 +20,21 @@ eval_echo() {
     eval $to_run
 }
 
+DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0
+SERVER_PORT=8080
+PROFILES=sqlite,icancode
+GAME_AI=false
+CONTAINER_NAME=codenjoy-server
+
 eval_echo "mkdir $HOME_DIR/logs"
 eval_echo "chown $JETTY_PID:$JETTY_PID $HOME_DIR/logs"
 
 eval_echo "touch $HOME_DIR/logs/codenjoy-contest.log"
 eval_echo "chown $JETTY_PID:$JETTY_PID $HOME_DIR/logs/codenjoy-contest.log"
 
-eval_echo "mkdir $HOME_DIR/config"
-eval_echo "chown $JETTY_PID:$JETTY_PID $HOME_DIR/config"
-
-eval_echo "rm $HOME_DIR/config/codenjoy-contest.properties"
-cat <<EOT >> $HOME_DIR/config/codenjoy-contest.properties
-game.save.auto=true
-board.save.ticks=1
-game.ai=false
-log.debug=false
-page.main.url=
-page.registration.url=
-page.registration.nickname=false
-page.help.language=
-email.verification=false
-email.password=
-email.name=info@codenjoy.com
-donate.code=
-database.url=
-database.name=
-database.user=
-database.password=
-admin.password=admin
-email.hash=secureHash
-server.ip=127.0.0.1
-EOT
-
 eval_echo "mkdir $HOME_DIR/database"
 eval_echo "chown $JETTY_PID:$JETTY_PID $HOME_DIR/database"
 
 eval_echo "docker rm --force codenjoy-contest"
 
-eval_echo "docker run --name codenjoy-contest -p $SERVER_PORT:8080 -v $HOME_DIR/database:/var/lib/jetty/database -v $HOME_DIR/config:/var/lib/jetty/config -v $HOME_DIR/logs/codenjoy-contest.log:/var/lib/jetty/logs/codenjoy-contest.log -d $DOCKER_IMAGE"
+eval_echo "docker run -d --name $CONTAINER_NAME -e GAME_AI=$GAME_AI -e SPRING_PROFILES_ACTIVE=$PROFILES -v $HOME_DIR/database:/usr/app/database -p $SERVER_PORT:8080 $DOCKER_IMAGE"
