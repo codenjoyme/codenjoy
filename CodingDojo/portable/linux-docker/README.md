@@ -1,3 +1,8 @@
+Linux portable script (simple version)
+======================
+
+How to run server on Linux?
+----------------------------
 - copy this sctipt [https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/portable/linux-docker/start.sh](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/portable/linux-docker/start.sh) to your server (in the `/srv/codenjoy` folder for exapmple)
 - with `1-git-clone.sh` 
     * [optional] change `GIT_REPO=https://github.com/codenjoyme/codenjoy.git`
