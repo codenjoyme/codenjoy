@@ -21,10 +21,11 @@ eval_echo() {
 }
 
 DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0
-SERVER_PORT=8080
+CONTEXT=/codenjoy-contest
+SERVER_PORT=80
 PROFILES=sqlite,icancode
-GAME_AI=false
-CONTAINER_NAME=codenjoy-server
+GAME_AI=true
+CONTAINER_NAME=codenjoy
 
 eval_echo "mkdir $HOME_DIR/logs"
 eval_echo "chown $JETTY_PID:$JETTY_PID $HOME_DIR/logs"
@@ -35,6 +36,8 @@ eval_echo "chown $JETTY_PID:$JETTY_PID $HOME_DIR/logs/codenjoy-contest.log"
 eval_echo "mkdir $HOME_DIR/database"
 eval_echo "chown $JETTY_PID:$JETTY_PID $HOME_DIR/database"
 
-eval_echo "docker rm --force codenjoy-contest"
+eval_echo "docker rm --force $CONTAINER_NAME"
 
-eval_echo "docker run -d --name $CONTAINER_NAME -e GAME_AI=$GAME_AI -e SPRING_PROFILES_ACTIVE=$PROFILES -v $HOME_DIR/database:/usr/app/database -p $SERVER_PORT:8080 $DOCKER_IMAGE"
+eval_echo "docker run -d --name $CONTAINER_NAME -e GAME_AI=$GAME_AI -e CONTEXT=$CONTEXT -e SPRING_PROFILES_ACTIVE=$PROFILES -v $HOME_DIR/database:/usr/app/database -p $SERVER_PORT:8080 $DOCKER_IMAGE"
+
+eval_echo "docker attach $CONTAINER_NAME"

@@ -20,6 +20,8 @@ eval_echo() {
     eval $to_run
 }
 
-DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0
+GIT_REPO=https://github.com/codenjoyme/codenjoy.git
+GIT_REVISION=master
 
-eval_echo "docker build -f portable/linux-docker/Dockerfile -t $DOCKER_IMAGE ."
+eval_echo "git clone $GIT_REPO"
+eval_echo "git checkout $GIT_REVISION"
