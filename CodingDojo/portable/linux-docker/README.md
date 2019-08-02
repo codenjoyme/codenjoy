@@ -11,6 +11,7 @@ Other options:
 
 So lets do it together!
 - copy this sctipt [https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/portable/linux-docker/start.sh](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/portable/linux-docker/start.sh) to your server (in the `/srv/codenjoy` folder for exapmple)
+- **be careful, you need to run everything under sudo**
 - with `1-git-clone.sh` 
     * [optional] change `GIT_REPO=https://github.com/codenjoyme/codenjoy.git`
     * [optional] change `GIT_REVISION=master`
@@ -18,6 +19,7 @@ So lets do it together!
 - with `2-build.sh` 
     * [optional] change `DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0`
     * run it to build project and create image `sudo bash 2-build.sh` 
+- remove folders `logs` and `database` from last running
 - with `3-start.sh`
     * [optional] change `DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0`
     * [optional] select `SERVER_PORT=8080`
@@ -27,5 +29,8 @@ So lets do it together!
     * [optional] change application context `CONTEXT=codenjoy-contest`
     * change default `ADMIN_PASSWORD=admin` to be secure
     * run it to start server `sudo bash 3-start.sh`
+- clear browser cache (old scripts can break system) or disable caching 
+ (Chrome - `Ctrl+Shift+J`, Tab `Network`, set `Disable Cache` checkbox, then press `Ctrl+F5`)
 - go to ```http://your-server:8080/codenjoy-contest/```
-- codenjoy!    
+- codenjoy!   
+
