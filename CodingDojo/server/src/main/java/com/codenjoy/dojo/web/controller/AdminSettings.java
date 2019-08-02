@@ -31,6 +31,8 @@ public class AdminSettings {
 
     private List<PlayerInfo> players;
 
+    private List<Object> games;
+
     private List<Object> parameters;
 
     private String gameName;
@@ -96,5 +98,13 @@ public class AdminSettings {
 
     public void setProgress(String progress) {
         this.progress = progress;
+    }
+
+    public List<Object> getGames() {
+        return games;
+    }
+
+    public void setGames(List<Object> games) {
+        this.games = games;
     }
 }

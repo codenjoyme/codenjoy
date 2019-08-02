@@ -69,6 +69,31 @@
         </tr>
     </table>
 
+    <form:form modelAttribute="adminSettings" action="admin" method="POST">
+        <table class="admin-table" id="selectGame">
+            <tr>
+                <td style="width:300px;">
+                    <b>Active games for participants</b>
+                </td>
+            </tr>
+            <c:forEach items="${games}" var="game" varStatus="status">
+                <tr>
+                    <td>
+                        <form:checkbox id="enable-games-${game}" path="games[${status.index}]"/>
+                        <label class="check-label" for="enable-games-${game}"></label>
+                        <span>${game}</span>
+                    </td>
+                </tr>
+            </c:forEach>
+        </table>
+        <tr>
+            <td>
+                <input type="hidden" name="gameName" value="${gameName}"/>
+                <input type="submit" value="Save"/>
+            </td>
+        </tr>
+    </form:form>
+
     <table class="admin-table" id="pauseGame">
         <tr>
             <td>

@@ -83,16 +83,16 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Set<String> getGameNames() {
-        return cache.keySet();
+    public List<String> getGameNames() {
+        return new LinkedList<>(cache.keySet());
     }
 
     // TODO test me
     @Override
-    public Set<String> getOnlyGameNames() {
+    public List<String> getOnlyGameNames() {
         return getGameNames().stream()
                 .map(GameServiceImpl::removeNumbers)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     public static String removeNumbers(String gameName) {

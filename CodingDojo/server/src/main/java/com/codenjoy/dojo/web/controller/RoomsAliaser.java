@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,10 +42,7 @@ public class RoomsAliaser {
 
     @PostConstruct
     public void init() {
-        rooms = new DualLinkedHashBidiMap();
-
-        gameService.getGameNames()
-                .forEach(gameName -> rooms.put(gameName, gameName));
+        addAllGames();
 
         // TODO move to admin settings
 //        rooms.put("battlecity-1", "Haifa");
@@ -52,6 +50,12 @@ public class RoomsAliaser {
 //        rooms.put("battlecity-3", "Co-studying");
 //        rooms.put("battlecity-4", "Semi Final");
 //        rooms.put("battlecity-5", "Final");
+    }
+
+    private void addAllGames() {
+        rooms = new DualLinkedHashBidiMap();
+        gameService.getGameNames()
+                .forEach(gameName -> rooms.put(gameName, gameName));
     }
 
     public RoomsAliaser() {
@@ -82,5 +86,11 @@ public class RoomsAliaser {
 
     public Set<Map.Entry<String, String>> all() {
         return rooms.entrySet();
+    }
+
+    // TODO test me
+    public void enableGames(List<String> toRemove) {
+        addAllGames();
+        toRemove.forEach(game -> rooms.remove(game));
     }
 }

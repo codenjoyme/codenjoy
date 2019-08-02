@@ -74,6 +74,7 @@ public class AdminController {
     private final AutoSaver autoSaver;
     private final DebugService debugService;
     private final Registration registration;
+    private final RoomsAliaser rooms;
     private final ViewDelegationService viewDelegationService;
 
     @RequestMapping(params = "save", method = RequestMethod.GET)
@@ -280,6 +281,22 @@ public class AdminController {
                     settings.getProgress());
         }
 
+        if (settings.getGames() != null) {
+            List<Parameter> games = (List)settings.getGames();
+            List<String> toRemove = new LinkedList<>();
+            List<String> allGames = gameService.getGameNames();
+            if (games.size() != allGames.size()) {
+                throw new IllegalStateException("Список игр к активации не полный");
+            }
+            for (int i = 0; i < allGames.size(); i++) {
+                if (games.get(i) == null) {
+                    toRemove.add(allGames.get(i));
+                }
+            }
+
+            rooms.enableGames(toRemove);
+        }
+
         List<Exception> errors = new LinkedList<>();
         if (settings.getParameters() != null) {
             Settings gameSettings = gameService.getGame(settings.getGameName()).getSettings();
@@ -385,6 +402,11 @@ public class AdminController {
         for (Parameter p : parameters) {
             settings.getParameters().add(p.getValue());
         }
+
+        settings.setGames(new LinkedList<>());
+        Set<String> enabled = rooms.gameNames();
+        gameService.getGameNames()
+                .forEach(name -> settings.getGames().add(enabled.contains(name)));
 
         model.addAttribute("adminSettings", settings);
         model.addAttribute("settings", parameters);
