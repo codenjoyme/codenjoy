@@ -9,6 +9,7 @@ Other options:
 - If you want to run it on windows, you should read
 [how to run the server on Windows](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/windows-cmd#windows-portable-script)
 
+So lets do it together!
 - copy this sctipt [https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/portable/linux-docker/start.sh](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/portable/linux-docker/start.sh) to your server (in the `/srv/codenjoy` folder for exapmple)
 - with `1-git-clone.sh` 
     * [optional] change `GIT_REPO=https://github.com/codenjoyme/codenjoy.git`
