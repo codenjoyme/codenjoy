@@ -3,10 +3,14 @@ Ubuntu portable script
 
 How to run server on Ubuntu?
 ----------------------------
+Other options:
+- If you want to run it on windows, you should read
+[how to run the server on Windows](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/windows-cmd#windows-portable-script)
+- If you want to run simple version of linex server, you should read 
+[how to run the server on Linux (simple version)](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker#linux-portable-script-simple-version)
+
 I prepared to you this script so you can run it on ubuntu server.
 This version uses docker-composer and docker.
-If you want to run it on windows, you should read
-[how to run the server on Windows](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/windows-cmd#windows-portable-script)
 - make sure that nginx on host machine is disabled.
 - *[Optional]* Please use [dedicated server](https://contabo.com/?show=configurator&server_id=270)
     for every 300-500 participants or [VPS](https://contabo.com/?show=configurator&vserver_id=229)

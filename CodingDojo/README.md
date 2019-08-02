@@ -77,9 +77,10 @@ To run a project with your game, do the following:
 
 Run Codenjoy in portable mode
 --------------
-There are two scripts to run Codenjoy on Ubuntu and Windows:
+There are three scripts to run Codenjoy on Ubuntu and Windows:
 - [how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker-compose#ubuntu-portable-script)
 - [how to run the server on Windows](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/windows-cmd#windows-portable-script)
+- [how to run the server on Linux (simple version)](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker#linux-portable-script-simple-version)
 
 Develop a game
 --------------
