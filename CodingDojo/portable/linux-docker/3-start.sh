@@ -22,7 +22,7 @@ eval_echo() {
 
 DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0
 CONTEXT=/codenjoy-contest
-SERVER_PORT=80
+SERVER_PORT=8080
 PROFILES=sqlite,icancode
 GAME_AI=true
 CONTAINER_NAME=codenjoy
