@@ -50,6 +50,9 @@ app:
   logging:
     - com.epam.dojo
     - com.codenjoy
+  sso-admins:
+    - admin@codenjoyme.com
+    - Igor_Petrov@epam.com
 
 logging:
   level:
