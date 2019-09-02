@@ -140,7 +140,7 @@ Full authentication is required to access this resource
 ```
 Don't worry about it. Just download [postman](https://www.getpostman.com/downloads/) and create `GET` request:
 - `http://127.0.0.1/codenjoy-contest/board/game/bomberman/rejoining`
-- `Authorization` -> `Braer Token` = `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER`
+- `Authorization` -> `Bearer Token` = `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER`
 After submit you can see html page with board, try find inside:
 ```
 <body style="display:none;">
