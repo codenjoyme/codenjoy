@@ -128,6 +128,22 @@ Those mandatory settings are:
 | `spring.security.oauth2.client.provider.dojo.user-info-uri`                                          | `OAUTH2_USERINFO_URI`             | AS Userinfo URI (part after `auth-server.location`)<br> Provides information about user depending on requested scopes and in response to properly authorized request<br>  For more details see OAuth2 RFC                                                                                                                                                                                                         |
 | `spring.security.oauth2.client.provider.dojo.user-name-attribute`                                    | `OAUTH2_USERNAME_ATTR`            | Key for the user name attribute in AS response to Userinfo endpoint request  For more details see OAuth2 RFC                                                                                                                                                                                                                                                                                                      | 
 
+Try run `clean install spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug,sso -Dcontext=/codenjoy-contest -DallGames -DOAUTH2_AUTH_SERVER_URL=https://authorization-server.com/core -DOAUTH2_CALLBACK_URI=/api/v1/users/callback -DOAUTH2_AUTH_URI=/connect/authorize -DOAUTH2_CLIENT_ID=dojo -DOAUTH2_CLIENT_SECRET=secret -DOAUTH2_TOKEN_URI=/connect/token -DOAUTH2_USERINFO_URI=/connect/userinfo -DOAUTH2_JWKS_URI=/.well-known/jwks -DCLIENT_NAME=dojo`
+Then try go to [/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) from browser. Then you can see
+```
+<oauth>
+<error_description>
+Full authentication is required to access this resource
+</error_description>
+<error>unauthorized</error>
+</oauth>
+```
+Don't worry about it. Just download [postman](https://www.getpostman.com/downloads/) and create `POST` request:
+- `http://127.0.0.1/codenjoy-contest/board/game/bomberman/rejoining`
+- `Authorization` -> `Braer Token` = `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER`
+After submit you can see html page with board, try find `` there.
+Also you can use [https://jwt.io/](https://jwt.io/) to parse `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER`.
+
 Other materials
 --------------
 For [more details, click here](https://github.com/codenjoyme/codenjoy#codenjoy)
