@@ -36,6 +36,7 @@ eval_echo "sudo apt-get update -y"
 eval_echo "apt-cache policy docker-engine"
 eval_echo "sudo apt-get install -y docker-engine"
 eval_echo "sudo systemctl status docker --no-pager"
+eval_echo "sudo usermod -aG docker $USER"
 	
 # setup compose
 eval_echo "curl -L 'https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)' -o /usr/local/bin/docker-compose"
