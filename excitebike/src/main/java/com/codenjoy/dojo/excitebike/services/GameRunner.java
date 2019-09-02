@@ -49,27 +49,30 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
-    //TODO add to settings TASK - 34-admin-functional-and-settings
-    public static final int FIELD_HEIGHT = 12;
+    //-----------------------------------
+    // Don't forget to adjust excitebike.js if you change those x/y parameters:
+    private static final int X_SIZE = 30;
+    private static final int Y_SIZE = 12;
+    //-----------------------------------
     private final MapParser mapParser;
     private SettingsHandler settingsHandler;
 
     public GameRunner() {
-        mapParser = new MapParserImpl(getMap());
+        mapParser = new MapParserImpl(getMap(), X_SIZE);
     }
 
     protected String getMap() {
         StringBuilder sb = new StringBuilder();
-        appendElementManyTimes(sb, GameElementType.FENCE, FIELD_HEIGHT);
-        for (int i = 0; i < FIELD_HEIGHT - 2; i++) {
-            appendElementManyTimes(sb, GameElementType.NONE, FIELD_HEIGHT);
+        appendElementForWholeLine(sb, GameElementType.FENCE);
+        for (int i = 0; i < Y_SIZE - 2; i++) {
+            appendElementForWholeLine(sb, GameElementType.NONE);
         }
-        appendElementManyTimes(sb, GameElementType.FENCE, FIELD_HEIGHT);
+        appendElementForWholeLine(sb, GameElementType.FENCE);
         return sb.toString();
     }
 
-    private void appendElementManyTimes(StringBuilder sb, GameElementType element, int times) {
-        for (int i = 0; i < times; i++) {
+    private void appendElementForWholeLine(StringBuilder sb, GameElementType element) {
+        for (int i = 0; i < GameRunner.X_SIZE; i++) {
             sb.append(element);
         }
     }
@@ -92,7 +95,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(mapParser.getXSize());
+        return v(X_SIZE);
     }
 
     @Override

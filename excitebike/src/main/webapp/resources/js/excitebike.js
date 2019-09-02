@@ -20,8 +20,30 @@
  * #L%
  */
 
+// should by synced with the GameRunner#Y_SIZE constant
+var ySize = 12;
+
 window.onload = function(){
-    let initTribune = function() {
+    let initTribune = function(canvasElement) {
+        let tribuneDiv = document.createElement('div');
+        tribuneDiv.id = 'tribune';
+        canvasElement.parentNode.insertBefore(tribuneDiv, canvasElement);
+    }
+
+    let hideEmptyCanvasPart = function(canvasElement) {
+        var xSize = game.boardSize;
+        canvasElement.style.bottom = xSize * 50 - ySize * 50 + 'px';
+        canvasElement.style.height = xSize * 50 + 'px';
+
+        var canvasWrapper = document.createElement('div');
+        canvasWrapper.id = 'canvasWrapper';
+        canvasWrapper.style.height = ySize * 50 + 'px';
+
+        canvasElement.parentNode.insertBefore(canvasWrapper, canvasElement);
+        canvasWrapper.appendChild(canvasElement);
+    }
+
+    let injectCssWithUiMods = function() {
         let divCanvas = document.getElementsByClassName('player-canvas');
         if(divCanvas!=null && document.getElementsByTagName('canvas').length>1){
             let canvasElement = document.getElementById(game.playerName);
@@ -31,13 +53,11 @@ window.onload = function(){
             document.getElementsByTagName("head")[0].insertAdjacentHTML(
                      "beforeend",
                      "<link rel=\"stylesheet\" href=\""+document.location.origin+game.contextPath+"/resources/css/"+game.gameName+".css"+"\" />");
-            let tribuneDiv = document.createElement('div');
-            tribuneDiv.id = 'tribune';
-            tribuneDiv.style.height = canvasElement.height/3+'px';
-            canvasElement.parentNode.insertBefore(tribuneDiv, canvasElement);
+            initTribune(canvasElement);
+            hideEmptyCanvasPart(canvasElement);
         } else {
-        setTimeout(initTribune, 100);
+            setTimeout(injectCssWithUiMods, 100);
         }
     }
-    initTribune();
+    injectCssWithUiMods();
 }

@@ -48,11 +48,6 @@ public class MapParserImpl implements MapParser {
     private String map;
     private int xSize;
 
-    public MapParserImpl(String map) {
-        this.xSize = (int) Math.sqrt(map.length());
-        this.map = map;
-    }
-
     public MapParserImpl(String map, int xSize) {
         this.map = map;
         this.xSize = xSize;

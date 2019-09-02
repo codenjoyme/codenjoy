@@ -64,7 +64,7 @@ public class MultiplayerSystemTest {
                 "       " +
                 "       " +
                 "       " +
-                "■■■■■■■");
+                "■■■■■■■", 7);
 
         dice = mock(Dice.class);
         field = new GameFieldImpl(mapParser, dice, new SettingsHandler());

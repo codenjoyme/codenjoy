@@ -29,7 +29,9 @@ import java.util.Optional;
 
 public interface GameField extends com.codenjoy.dojo.services.multiplayer.GameField<Player> {
 
-    int size();
+    int xSize();
+
+    int ySize();
 
     boolean isFence(int x, int y);
 

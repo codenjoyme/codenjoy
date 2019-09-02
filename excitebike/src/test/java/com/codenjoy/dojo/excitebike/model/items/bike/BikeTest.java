@@ -46,7 +46,7 @@ public class BikeTest {
     public void init() {
         bike = new Bike(5, 5);
         gameField = mock(GameField.class);
-        when(gameField.size()).thenReturn(10);
+        when(gameField.xSize()).thenReturn(10);
         bike.init(gameField);
     }
 
@@ -178,7 +178,7 @@ public class BikeTest {
     public void tick1__shouldNotChangeBikePositionAndChangeStateToAccelerated__ifBikeTakeAccelerator() {
         //given
         when(gameField.isAccelerator(anyInt(), anyInt())).thenReturn(true);
-        when(gameField.size()).thenReturn(8);
+        when(gameField.xSize()).thenReturn(8);
 
         //when
         bike.tick();
@@ -193,7 +193,7 @@ public class BikeTest {
     public void tick2__shouldSetBikeXCoordinateToMaxPossible__ifBikePositionAfterAccelerationIsOutOfFieldBound() {
         //given
         when(gameField.isAccelerator(5, 5)).thenReturn(true);
-        when(gameField.size()).thenReturn(6);
+        when(gameField.xSize()).thenReturn(6);
         bike.tick();
 
         //when
@@ -524,7 +524,7 @@ public class BikeTest {
     public void tick2__shouldCrushBikeAndChangeEnemyBikeStateToAtKilledBike__ifBikeAfterAcceleratorCollidesEnemyBike() {
         //given
         when(gameField.isAccelerator(5, 5)).thenReturn(true);
-        when(gameField.size()).thenReturn(10);
+        when(gameField.xSize()).thenReturn(10);
         Bike enemy = new Bike(6, 5);
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);

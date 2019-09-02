@@ -53,9 +53,9 @@ public class GameFieldImplSystemTest {
         dice = mock(Dice.class);
     }
 
-    private void init(String board) {
-        Bike bike = parseBikes(board).get(0);
-        game = new GameFieldImpl(new MapParserImpl(board), dice, new SettingsHandler());
+    private void init(String board, int xSize) {
+        Bike bike = parseBikes(board, xSize).get(0);
+        game = new GameFieldImpl(new MapParserImpl(board, xSize), dice, new SettingsHandler());
         player = new Player(mock(EventListener.class));
         game.newGame(player);
         player.setHero(bike);
@@ -73,7 +73,7 @@ public class GameFieldImplSystemTest {
                 "■■■■■";
 
         //when
-        init(board);
+        init(board, 5);
 
         //then
         String expected = "■■■■■" +
@@ -92,7 +92,7 @@ public class GameFieldImplSystemTest {
                 "  >  " +
                 " ▲ < " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(20)).thenReturn(12);
         when(dice.next(5)).thenReturn(1);
         when(dice.next(3)).thenReturn(1);
@@ -117,7 +117,7 @@ public class GameFieldImplSystemTest {
                 "     " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -141,7 +141,7 @@ public class GameFieldImplSystemTest {
                 " B   " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -165,7 +165,7 @@ public class GameFieldImplSystemTest {
                 "  B  " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -189,7 +189,7 @@ public class GameFieldImplSystemTest {
                 "  B  " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         bike.crush();
         game.tick();
@@ -215,7 +215,7 @@ public class GameFieldImplSystemTest {
                 "B<   " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -238,7 +238,7 @@ public class GameFieldImplSystemTest {
                 "B<   " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -262,7 +262,7 @@ public class GameFieldImplSystemTest {
                 "   B<" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -285,7 +285,7 @@ public class GameFieldImplSystemTest {
                 "  B  " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -309,7 +309,7 @@ public class GameFieldImplSystemTest {
                 "  B< " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -332,7 +332,7 @@ public class GameFieldImplSystemTest {
                 "  B< " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -356,7 +356,7 @@ public class GameFieldImplSystemTest {
                 "  B< " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
 
@@ -380,7 +380,7 @@ public class GameFieldImplSystemTest {
                 "  B<<" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -403,7 +403,7 @@ public class GameFieldImplSystemTest {
                 "  B<<" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -427,7 +427,7 @@ public class GameFieldImplSystemTest {
                 "  B<<" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
 
@@ -451,7 +451,7 @@ public class GameFieldImplSystemTest {
                 "  B<<" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 3);
 
@@ -475,7 +475,7 @@ public class GameFieldImplSystemTest {
                 "B>   " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -498,7 +498,7 @@ public class GameFieldImplSystemTest {
                 "   B>" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -521,7 +521,7 @@ public class GameFieldImplSystemTest {
                 "  B  " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -545,7 +545,7 @@ public class GameFieldImplSystemTest {
                 "  B> " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -568,7 +568,7 @@ public class GameFieldImplSystemTest {
                 "  B> " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -592,7 +592,7 @@ public class GameFieldImplSystemTest {
                 "  B> " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
 
@@ -616,7 +616,7 @@ public class GameFieldImplSystemTest {
                 "B>>  " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -639,7 +639,7 @@ public class GameFieldImplSystemTest {
                 "B>>  " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -663,7 +663,7 @@ public class GameFieldImplSystemTest {
                 "B>>  " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
 
@@ -687,7 +687,7 @@ public class GameFieldImplSystemTest {
                 "   B|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -710,7 +710,7 @@ public class GameFieldImplSystemTest {
                 "   B|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -734,7 +734,7 @@ public class GameFieldImplSystemTest {
                 "   B|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
 
@@ -758,7 +758,7 @@ public class GameFieldImplSystemTest {
                 "   B|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 3);
 
@@ -782,7 +782,7 @@ public class GameFieldImplSystemTest {
                 "   B|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 4);
 
@@ -806,7 +806,7 @@ public class GameFieldImplSystemTest {
                 "   B|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         bike.up();
 
@@ -830,7 +830,7 @@ public class GameFieldImplSystemTest {
                 "   B|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -854,7 +854,7 @@ public class GameFieldImplSystemTest {
                 "B|   " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -877,7 +877,7 @@ public class GameFieldImplSystemTest {
                 "B|   " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -901,7 +901,7 @@ public class GameFieldImplSystemTest {
                 "  B><" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -924,7 +924,7 @@ public class GameFieldImplSystemTest {
                 "  B><" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -948,7 +948,7 @@ public class GameFieldImplSystemTest {
                 "  B><" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
 
@@ -972,7 +972,7 @@ public class GameFieldImplSystemTest {
                 "  B>|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -995,7 +995,7 @@ public class GameFieldImplSystemTest {
                 "  B>|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1019,7 +1019,7 @@ public class GameFieldImplSystemTest {
                 "  B>▲" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1042,7 +1042,7 @@ public class GameFieldImplSystemTest {
                 "  B>▲" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1066,7 +1066,7 @@ public class GameFieldImplSystemTest {
                 "  B>▼" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1089,7 +1089,7 @@ public class GameFieldImplSystemTest {
                 "  B>▼" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1113,7 +1113,7 @@ public class GameFieldImplSystemTest {
                 "  B▲ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1136,7 +1136,7 @@ public class GameFieldImplSystemTest {
                 "  B▲ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1160,7 +1160,7 @@ public class GameFieldImplSystemTest {
                 "  B▼ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1183,7 +1183,7 @@ public class GameFieldImplSystemTest {
                 "  B▼ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1207,7 +1207,7 @@ public class GameFieldImplSystemTest {
                 "  B▲ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1231,7 +1231,7 @@ public class GameFieldImplSystemTest {
                 "  B▲ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         bike.up();
         game.tick();
@@ -1256,7 +1256,7 @@ public class GameFieldImplSystemTest {
                 "  B▲ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1281,7 +1281,7 @@ public class GameFieldImplSystemTest {
                 "  B▼ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1305,7 +1305,7 @@ public class GameFieldImplSystemTest {
                 "  B▼ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         bike.down();
         game.tick();
@@ -1330,7 +1330,7 @@ public class GameFieldImplSystemTest {
                 "  B▼ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1358,7 +1358,7 @@ public class GameFieldImplSystemTest {
                 "        " +
                 "        " +
                 "■■■■■■■■";
-        init(board);
+        init(board, 8);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1387,7 +1387,7 @@ public class GameFieldImplSystemTest {
                 "        " +
                 "        " +
                 "■■■■■■■■";
-        init(board);
+        init(board, 8);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1417,7 +1417,7 @@ public class GameFieldImplSystemTest {
                 "        " +
                 "        " +
                 "■■■■■■■■";
-        init(board);
+        init(board, 8);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
 
@@ -1447,7 +1447,7 @@ public class GameFieldImplSystemTest {
                 "        " +
                 "        " +
                 "■■■■■■■■";
-        init(board);
+        init(board, 8);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 3);
 
@@ -1477,7 +1477,7 @@ public class GameFieldImplSystemTest {
                 "        " +
                 "        " +
                 "■■■■■■■■";
-        init(board);
+        init(board, 8);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 4);
 
@@ -1507,7 +1507,7 @@ public class GameFieldImplSystemTest {
                 "        " +
                 "        " +
                 "■■■■■■■■";
-        init(board);
+        init(board, 8);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 5);
 
@@ -1537,7 +1537,7 @@ public class GameFieldImplSystemTest {
                 "        " +
                 "        " +
                 "■■■■■■■■";
-        init(board);
+        init(board, 8);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 6);
 
@@ -1564,7 +1564,7 @@ public class GameFieldImplSystemTest {
                 "  B▲▲" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1587,7 +1587,7 @@ public class GameFieldImplSystemTest {
                 "  B▲▲" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1611,7 +1611,7 @@ public class GameFieldImplSystemTest {
                 "  B▲▼" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1634,7 +1634,7 @@ public class GameFieldImplSystemTest {
                 "  B▲▼" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1658,7 +1658,7 @@ public class GameFieldImplSystemTest {
                 "  B| " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1682,7 +1682,7 @@ public class GameFieldImplSystemTest {
                 " B> |" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1705,7 +1705,7 @@ public class GameFieldImplSystemTest {
                 " B> |" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1729,7 +1729,7 @@ public class GameFieldImplSystemTest {
                 "     " +
                 "B    " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(20)).thenReturn(12);
         when(dice.next(5)).thenReturn(0);
         when(dice.next(3)).thenReturn(2);
@@ -1754,7 +1754,7 @@ public class GameFieldImplSystemTest {
                 "  B  " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1778,7 +1778,7 @@ public class GameFieldImplSystemTest {
                 "  B  " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1802,7 +1802,7 @@ public class GameFieldImplSystemTest {
                 "  B  " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1826,7 +1826,7 @@ public class GameFieldImplSystemTest {
                 "  B▼|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1849,7 +1849,7 @@ public class GameFieldImplSystemTest {
                 "  B▼|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1873,7 +1873,7 @@ public class GameFieldImplSystemTest {
                 "  B▲|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1896,7 +1896,7 @@ public class GameFieldImplSystemTest {
                 "  B▲|" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1920,7 +1920,7 @@ public class GameFieldImplSystemTest {
                 "  B▼>" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -1943,7 +1943,7 @@ public class GameFieldImplSystemTest {
                 "  B▼>" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -1967,7 +1967,7 @@ public class GameFieldImplSystemTest {
                 "  B▼>" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
 
@@ -1991,7 +1991,7 @@ public class GameFieldImplSystemTest {
                 "  B<>" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2014,7 +2014,7 @@ public class GameFieldImplSystemTest {
                 "  B<>" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -2038,7 +2038,7 @@ public class GameFieldImplSystemTest {
                 "  B<>" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
 
@@ -2062,7 +2062,7 @@ public class GameFieldImplSystemTest {
                 "  B<>" +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 3);
 
@@ -2086,7 +2086,7 @@ public class GameFieldImplSystemTest {
                 "  B▲ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2109,7 +2109,7 @@ public class GameFieldImplSystemTest {
                 "  B▲ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -2133,7 +2133,7 @@ public class GameFieldImplSystemTest {
                 "B>>▲ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2156,7 +2156,7 @@ public class GameFieldImplSystemTest {
                 "B>>▲ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -2180,7 +2180,7 @@ public class GameFieldImplSystemTest {
                 "B>>▲ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
 
@@ -2204,7 +2204,7 @@ public class GameFieldImplSystemTest {
                 "B>>▼ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2227,7 +2227,7 @@ public class GameFieldImplSystemTest {
                 "B>>▼ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -2251,7 +2251,7 @@ public class GameFieldImplSystemTest {
                 "B>>▼ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
 
@@ -2275,7 +2275,7 @@ public class GameFieldImplSystemTest {
                 "   /═" +
                 "  B╚/" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -2299,7 +2299,7 @@ public class GameFieldImplSystemTest {
                 "   /═" +
                 "   ╚/" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -2323,7 +2323,7 @@ public class GameFieldImplSystemTest {
                 "  B/═" +
                 "   ╚/" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -2347,7 +2347,7 @@ public class GameFieldImplSystemTest {
                 "  /B " +
                 "  ╚//" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2371,7 +2371,7 @@ public class GameFieldImplSystemTest {
                 "  /B " +
                 "  ╚//" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         bike.down();
         game.tick();
@@ -2397,7 +2397,7 @@ public class GameFieldImplSystemTest {
                 "  /  " +
                 " B╚//" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
         bike.down();
@@ -2423,7 +2423,7 @@ public class GameFieldImplSystemTest {
                 "   /═" +
                 "   ╚/" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 2);
         bike.up();
@@ -2449,7 +2449,7 @@ public class GameFieldImplSystemTest {
                 " B  \\" +
                 "   \\╝" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
         game.tick();
@@ -2475,7 +2475,7 @@ public class GameFieldImplSystemTest {
                 "   ═\\" +
                 "   \\╝" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
         game.tick();
@@ -2501,7 +2501,7 @@ public class GameFieldImplSystemTest {
                 " B  \\" +
                 "   \\╝" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
         game.tick();
@@ -2526,7 +2526,7 @@ public class GameFieldImplSystemTest {
                 "   ═\\" +
                 "   \\╝" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
         game.tick();
@@ -2551,7 +2551,7 @@ public class GameFieldImplSystemTest {
                 "   /═" +
                 "   ╚/" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2577,7 +2577,7 @@ public class GameFieldImplSystemTest {
                 "   /═" +
                 "B  ╚/" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2603,7 +2603,7 @@ public class GameFieldImplSystemTest {
                 "   /═" +
                 "B  ╚/" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2630,7 +2630,7 @@ public class GameFieldImplSystemTest {
                 "   /═" +
                 "B  ╚/" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2657,7 +2657,7 @@ public class GameFieldImplSystemTest {
                 "   /═" +
                 "   ╚/" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2685,7 +2685,7 @@ public class GameFieldImplSystemTest {
                 "  =═\\" +
                 "   \\╝" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2711,7 +2711,7 @@ public class GameFieldImplSystemTest {
                 " B=═\\" +
                 "   \\╝" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2738,7 +2738,7 @@ public class GameFieldImplSystemTest {
                 "   /\\" +
                 "   ╚╝" +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -2774,7 +2774,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(0);
         when(dice.next(3)).thenReturn(0);
@@ -2815,7 +2815,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -2856,7 +2856,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -2898,7 +2898,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -2940,7 +2940,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -2982,7 +2982,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -3024,7 +3024,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -3066,7 +3066,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -3108,7 +3108,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -3150,7 +3150,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -3192,7 +3192,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -3234,7 +3234,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -3276,7 +3276,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -3318,7 +3318,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -3360,7 +3360,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3401,7 +3401,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3443,7 +3443,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3485,7 +3485,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3527,7 +3527,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3569,7 +3569,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3611,7 +3611,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3653,7 +3653,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3695,7 +3695,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3737,7 +3737,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3779,7 +3779,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3821,7 +3821,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3863,7 +3863,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3905,7 +3905,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(1);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(1);
@@ -3947,7 +3947,7 @@ public class GameFieldImplSystemTest {
                 "            " +
                 "            " +
                 "■■■■■■■■■■■■";
-        init(board);
+        init(board, 12);
         when(dice.next(3)).thenReturn(2);
         when(dice.next(20)).thenReturn(18);
         when(dice.next(4)).thenReturn(2);
@@ -3982,7 +3982,7 @@ public class GameFieldImplSystemTest {
                 "  B▼ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -4007,7 +4007,7 @@ public class GameFieldImplSystemTest {
                 "  B▲ " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -4032,7 +4032,7 @@ public class GameFieldImplSystemTest {
                 "     " +
                 "     " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -4057,7 +4057,7 @@ public class GameFieldImplSystemTest {
                 "     " +
                 "  B▲ " +
                 "■■■■■";
-        init(board);
+        init(board, 5);
         when(dice.next(anyInt())).thenReturn(5);
         game.tick();
 
@@ -4090,7 +4090,7 @@ public class GameFieldImplSystemTest {
                 "        /\\   " +
                 "        ╚╝   " +
                 "■■■■■■■■■■■■■";
-        init(board);
+        init(board, 13);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -4129,7 +4129,7 @@ public class GameFieldImplSystemTest {
                 "       /═\\   " +
                 "       ╚═╝   " +
                 "■■■■■■■■■■■■■";
-        init(board);
+        init(board, 13);
         when(dice.next(anyInt())).thenReturn(5);
 
         //when
@@ -4165,7 +4165,7 @@ public class GameFieldImplSystemTest {
                 "   /════\\ " +
                 "B  ╚////╝  " +
                 "■■■■■■■■■■";
-        init(board);
+        init(board, 10);
         when(dice.next(anyInt())).thenReturn(5);
         ticks(game, 5);
         bike.crush();

@@ -218,43 +218,55 @@ public class PlayersSpawnSystemParametrizedTest {
                                 "■■■■■■■\n"
                 },
                 new Object[]{"10. shouldAddManyBikes__coveringWholeFieldInChessOrder",
-                        8,
-                        "■■■■■" +
-                                "     " +
-                                "     " +
-                                "     " +
-                                "■■■■■",
-                        "■■■■■\n" +
-                                "Ḃ Ḃ Ḃ\n" +
-                                " Ḃ Ḃ \n" +
-                                "B Ḃ Ḃ\n" +
-                                "■■■■■\n"
+                        18,
+                        "■■■■■■■" +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "■■■■■■■",
+                        "■■■■■■■\n" +
+                                "Ḃ Ḃ Ḃ Ḃ\n" +
+                                " Ḃ Ḃ Ḃ \n" +
+                                "Ḃ Ḃ Ḃ Ḃ\n" +
+                                " Ḃ Ḃ Ḃ \n" +
+                                "B Ḃ Ḃ Ḃ\n" +
+                                "■■■■■■■\n"
                 },
                 new Object[]{"11. shouldAddManyBikes__coveringWholeFieldInChessOrderAndTwoMore",
-                        10,
-                        "■■■■■" +
-                                "     " +
-                                "     " +
-                                "     " +
-                                "■■■■■",
-                        "■■■■■\n" +
-                                "Ḃ Ḃ Ḃ\n" +
-                                "ḂḂ Ḃ \n" +
-                                "BḂḂ Ḃ\n" +
-                                "■■■■■\n"
+                        20,
+                        "■■■■■■■" +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "■■■■■■■",
+                        "■■■■■■■\n" +
+                                "Ḃ Ḃ Ḃ Ḃ\n" +
+                                "ḂḂ Ḃ Ḃ \n" +
+                                "Ḃ Ḃ Ḃ Ḃ\n" +
+                                "ḂḂ Ḃ Ḃ \n" +
+                                "B Ḃ Ḃ Ḃ\n" +
+                                "■■■■■■■\n"
                 },
                 new Object[]{"12. shouldAddManyBikes__fullyCoveringWholeField",
-                        15,
-                        "■■■■■" +
-                                "     " +
-                                "     " +
-                                "     " +
-                                "■■■■■",
-                        "■■■■■\n" +
-                                "ḂḂḂḂḂ\n" +
-                                "ḂḂḂḂḂ\n" +
-                                "BḂḂḂḂ\n" +
-                                "■■■■■\n"
+                        35,
+                        "■■■■■■■" +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "       " +
+                                "■■■■■■■",
+                        "■■■■■■■\n" +
+                                "ḂḂḂḂḂḂḂ\n" +
+                                "ḂḂḂḂḂḂḂ\n" +
+                                "ḂḂḂḂḂḂḂ\n" +
+                                "ḂḂḂḂḂḂḂ\n" +
+                                "BḂḂḂḂḂḂ\n" +
+                                "■■■■■■■\n"
                 },
                 new Object[]{"13. shouldAddManyBikes__coveringWholeSpringboardAndLinesBeforeAndAfterInChessOrder",
                         18,
@@ -296,7 +308,8 @@ public class PlayersSpawnSystemParametrizedTest {
     @Test
     public void shouldSpawnPlayers() {
         //given
-        MapParser mapParser = new MapParserImpl(init);
+        int xSize = 7;
+        MapParser mapParser = new MapParserImpl(init, xSize);
 
         Dice dice = mock(Dice.class);
         when(dice.next(anyInt())).thenReturn(5);
@@ -305,7 +318,7 @@ public class PlayersSpawnSystemParametrizedTest {
 
         List<Game> games = new ArrayList<>();
 
-        parseBikes(init).forEach(bike -> {
+        parseBikes(init, xSize).forEach(bike -> {
             Game game = createNewGame(field, factory);
             games.add(game);
             ((Player) game.getPlayer()).setHero(bike);

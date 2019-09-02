@@ -50,22 +50,21 @@ public class TestUtils {
     private TestUtils() {
     }
 
-    public static List<Bike> parseBikes(String map) {
-        return parseAndConvertElements(map, Bike::new, Arrays.stream(BikeType.values())
+    public static List<Bike> parseBikes(String map, int xSize) {
+        return parseAndConvertElements(map, xSize, Bike::new, Arrays.stream(BikeType.values())
                 .filter(e -> !e.name().contains(Bike.OTHER_BIKE_PREFIX))
                 .toArray(BikeType[]::new));
     }
 
-    private static <T> List<T> parseAndConvertElements(String map, Function<Point, T> elementConstructor, CharElements... elements) {
+    private static <T> List<T> parseAndConvertElements(String map, int xSize, Function<Point, T> elementConstructor, CharElements... elements) {
         return IntStream.range(0, map.length())
                 .filter(index -> Arrays.stream(elements).anyMatch(e -> map.charAt(index) == e.ch()))
-                .mapToObj(i -> convertToPoint(map, i))
+                .mapToObj(i -> convertToPoint(map, xSize, i))
                 .map(elementConstructor)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    private static Point convertToPoint(String map, int position) {
-        int xSize = (int) Math.sqrt(map.length());
+    private static Point convertToPoint(String map, int xSize, int position) {
         return position == -1
                 ? null
                 : PointImpl.pt(position % xSize, (map.length() - position - 1) / xSize);

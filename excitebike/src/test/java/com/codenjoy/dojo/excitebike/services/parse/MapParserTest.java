@@ -79,8 +79,8 @@ public class MapParserTest {
                 "  " + element.ch() + element.ch() + " " +
                 "     " +
                 element.ch() + "    ";
-        int fieldHeight = 5;
-        MapParserImpl mapParser = new MapParserImpl(map, fieldHeight);
+        int xSize = 5;
+        MapParserImpl mapParser = new MapParserImpl(map, xSize);
 
         //when
         List<PointImpl> result = callTestMethod(mapParser);
@@ -107,8 +107,8 @@ public class MapParserTest {
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch();
-        int fieldHeight = 3;
-        MapParserImpl mapParser = new MapParserImpl(map, fieldHeight);
+        int xSize = 3;
+        MapParserImpl mapParser = new MapParserImpl(map, xSize);
 
         //when
         List<PointImpl> result = callTestMethod(mapParser);
@@ -150,8 +150,8 @@ public class MapParserTest {
         String map = "     " +
                 "   " + element.ch() + " " +
                 "  " + element.ch() + element.ch() + " ";
-        int fieldHeight = 5;
-        MapParserImpl mapParser = new MapParserImpl(map, fieldHeight);
+        int xSize = 5;
+        MapParserImpl mapParser = new MapParserImpl(map, xSize);
 
         //when
         List<PointImpl> result = callTestMethod(mapParser);
@@ -174,8 +174,8 @@ public class MapParserTest {
         //given
         String map = "" + element.ch() + element.ch() + element.ch() +
                 element.ch() + element.ch() + element.ch();
-        int fieldHeight = 3;
-        MapParserImpl mapParser = new MapParserImpl(map, fieldHeight);
+        int xSize = 3;
+        MapParserImpl mapParser = new MapParserImpl(map, xSize);
 
         //when
         List<PointImpl> result = callTestMethod(mapParser);

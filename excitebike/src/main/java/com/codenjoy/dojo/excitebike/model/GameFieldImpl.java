@@ -118,8 +118,13 @@ public class GameFieldImpl implements GameField {
         );
     }
 
-    public int size() {
+    public int xSize() {
         return mapParser.getXSize();
+    }
+
+    @Override
+    public int ySize() {
+        return mapParser.getYSize();
     }
 
     @Override

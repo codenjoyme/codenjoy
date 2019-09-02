@@ -229,8 +229,8 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
         if (movement.isRight()) {
             x = RIGHT.changeX(x);
-            if (x >= field.size()) {
-                x = field.size() - 1;
+            if (x >= field.xSize()) {
+                x = field.xSize() - 1;
             }
         }
         interactWithOtherBike();
@@ -389,7 +389,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             return;
         }
 
-        if (atSpringboard && y >= field.size()) {
+        if (atSpringboard && y >= field.ySize()) {
             crush();
             return;
         }
