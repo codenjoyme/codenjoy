@@ -138,11 +138,18 @@ Full authentication is required to access this resource
 <error>unauthorized</error>
 </oauth>
 ```
-Don't worry about it. Just download [postman](https://www.getpostman.com/downloads/) and create `POST` request:
+Don't worry about it. Just download [postman](https://www.getpostman.com/downloads/) and create `GET` request:
 - `http://127.0.0.1/codenjoy-contest/board/game/bomberman/rejoining`
 - `Authorization` -> `Braer Token` = `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER`
-After submit you can see html page with board, try find `` there.
-Also you can use [https://jwt.io/](https://jwt.io/) to parse `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER`.
+After submit you can see html page with board, try find inside:
+```
+<body style="display:none;">
+    <div id="settings" page="board" contextPath="/codenjoy-contest" gameName="bomberman"
+        playerName="t8o7ty34t9h43fpgf9b8" readableName="Stiven Pupkin" code="3465239452394852393"
+        allPlayersScreen="false"></div>
+```
+Another way to add `Authroization: Bearer USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER` header parameter.
+Also you can use [https://jwt.io/](https://jwt.io/) to parse `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER` and get additional data.
 
 Other materials
 --------------

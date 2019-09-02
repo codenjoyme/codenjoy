@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
@@ -45,6 +46,7 @@ import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_ADMIN;
 import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_USER;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 public class Registration {
 
@@ -52,9 +54,11 @@ public class Registration {
 
     private CrudConnectionThreadPool pool;
     private PasswordEncoder passwordEncoder;
+    private ConfigProperties properties;
 
-    public Registration(ConnectionThreadPoolFactory factory, String adminEmail, String adminPassword, PasswordEncoder passwordEncoder, boolean initAdminUser) {
+    public Registration(ConnectionThreadPoolFactory factory, String adminEmail, String adminPassword, PasswordEncoder passwordEncoder, ConfigProperties properties, boolean initAdminUser) {
         this.passwordEncoder = passwordEncoder;
+        this.properties = properties;
         adminPassword = passwordEncoder.encode(adminPassword);
         List<String> initialScripts = new ArrayList<>();
         initialScripts.add("CREATE TABLE IF NOT EXISTS users (" +
@@ -103,6 +107,20 @@ public class Registration {
             throw new IllegalStateException("Found more than one user with " + details);
         }
         return count > 0;
+    }
+
+    public User register(String email, String readableName) {
+        String id = Hash.getRandomId();
+        String password = passwordEncoder.encode(randomAlphanumeric(properties.getAutoGenPasswordLen()));
+
+        User user = register(id, email, readableName,
+                password, "{}", GameAuthorities.USER.roles());
+
+        if (!properties.isEmailVerificationNeeded()) {
+            approve(user.getCode());
+        }
+
+        return user;
     }
 
     public User register(String id, String email, String readableName, String password, String data, String... roles) {
