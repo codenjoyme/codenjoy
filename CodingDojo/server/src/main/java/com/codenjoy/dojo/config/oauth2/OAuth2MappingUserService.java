@@ -54,7 +54,7 @@ public class OAuth2MappingUserService extends DefaultOAuth2UserService {
     private final Registration registration;
     private final ConfigProperties properties;
 
-    @Value("${registration.pasword.autogen-length}")
+    @Value("${registration.password.autogen-length}")
     private int autoGenPasswordLen;
 
     @Override

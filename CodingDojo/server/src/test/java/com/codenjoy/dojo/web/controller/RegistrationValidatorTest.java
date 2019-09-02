@@ -55,7 +55,7 @@ import static org.mockito.Mockito.when;
 @ActiveProfiles(SQLiteProfile.NAME)
 @TestPropertySource(properties = {
         "registration.nickname.allowed=false",
-        "registration.pasword.min-length=5"
+        "registration.password.min-length=5"
 })
 public class RegistrationValidatorTest {
 

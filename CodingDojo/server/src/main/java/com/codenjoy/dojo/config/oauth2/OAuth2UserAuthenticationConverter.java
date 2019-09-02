@@ -52,7 +52,7 @@ public class OAuth2UserAuthenticationConverter extends DefaultUserAuthentication
     private final PasswordEncoder passwordEncoder;
     private final ConfigProperties properties;
 
-    @Value("${registration.pasword.autogen-length}")
+    @Value("${registration.password.autogen-length}")
     private int autoGenPasswordLen;
 
     @Override
@@ -64,7 +64,7 @@ public class OAuth2UserAuthenticationConverter extends DefaultUserAuthentication
         String email = (String) map.get("email");
 
         Registration.User applicationUser = registration.getUserByEmail(email)
-                .orElse(registerNewUser(map));
+                .orElseGet(() -> registerNewUser(map));
 
         return new UsernamePasswordAuthenticationToken(applicationUser, null, applicationUser.getAuthorities());
     }

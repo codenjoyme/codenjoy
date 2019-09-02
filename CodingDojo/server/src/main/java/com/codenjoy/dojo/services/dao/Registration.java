@@ -290,8 +290,8 @@ public class Registration {
         });
     }
 
-    public Optional<User> getUserByEmail(String code) {
-        return pool.select("SELECT * FROM users where email = ?", new Object[] {code}, rs -> {
+    public Optional<User> getUserByEmail(String email) {
+        return pool.select("SELECT * FROM users where email = ?", new Object[] {email}, rs -> {
             if (!rs.next()) {
                 return Optional.empty();
             }
