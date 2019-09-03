@@ -4,36 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.codenjoy</groupId>
-    <artifactId>games</artifactId>
-    <version>1.1.0</version>
+    <parent>
+        <groupId>com.codenjoy</groupId>
+        <artifactId>games</artifactId>
+        <version>1.1.0</version>
+    </parent>
 
-    <packaging>pom</packaging>
+    <artifactId>excitebike-engine</artifactId>
 
     <properties>
-        <build.time>${maven.build.timestamp}</build.time>
-
-        <java.version>1.8</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <commons-collections.version>4.3</commons-collections.version>
-        <commons-lang.version>3.8.1</commons-lang.version>
-        <org.json.version>20180813</org.json.version>
-        <jsonio.version>4.10.1</jsonio.version>
-
-        <fest-reflect.version>1.4.1</fest-reflect.version>
-        <fest-assert.version>1.4</fest-assert.version>
-        <junit.version>4.12</junit.version>
-        <mockito.version>2.24.0</mockito.version>
-
-        <maven-compiler.version>3.5.1</maven-compiler.version>
-        <maven-resources.version>2.7</maven-resources.version>
-        <maven-antrun.version>1.8</maven-antrun.version>
-        <maven-license.version>1.16</maven-license.version>
-        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
-
-        <user.resources>src/main/webapp/resources/user</user.resources>
-        <client.sources>${user.resources}/${module.name}-servers.zip</client.sources>
+        <module.name>excitebike</module.name>
     </properties>
 
     <repositories>
@@ -43,254 +23,109 @@
         </repository>
     </repositories>
 
-    <modules>
-        <module>engine</module>
-        <module>sample</module>
-        <module>sample-text</module>
-        <module>a2048</module>
-        <module>bomberman</module>
-        <module>battlecity</module>
-        <module>chess</module>
-        <module>collapse</module>
-        <module>hex</module>
-        <module>loderunner</module>
-        <module>minesweeper</module>
-        <module>rubicscube</module>
-        <module>sudoku</module>
-        <module>snake</module>
-        <module>snakebattle</module>
-        <module>moebius</module>
-        <module>football</module>
-        <module>startandjump</module>
-        <module>quake2d</module>
-        <module>pong</module>
-        <module>fifteen</module>
-        <module>puzzlebox</module>
-        <module>spacerace</module>
-        <module>kata</module>
-        <module>icancode</module>
-        <module>expansion</module>
-        <module>reversi</module>
-        <module>quadro</module>
-        <module>lunolet</module>
-        <module>tetris</module>
-        <module>sokoban</module>
-        <module>lemonade</module>
-        <module>excitebike</module>
-    </modules>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>${project.groupId}</groupId>
-                <artifactId>engine</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-collections4</artifactId>
-                <version>${commons-collections.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.json</groupId>
-                <artifactId>json</artifactId>
-                <version>${org.json.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.cedarsoftware</groupId>
-                <artifactId>json-io</artifactId>
-                <version>${jsonio.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.easytesting</groupId>
-                <artifactId>fest-assert</artifactId>
-                <version>${fest-assert.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.easytesting</groupId>
-                <artifactId>fest-reflect</artifactId>
-                <version>${fest-reflect.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/main/webapp</directory>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src</directory>
-                <includes>
-                    <include>license/**</include>
-                </includes>
-            </resource>
-        </resources>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler.version}</version>
-                    <configuration>
-                        <encoding>utf8</encoding>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>${maven-source-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>${maven-resources.version}</version>
-                    <configuration>
-                        <encoding>utf8</encoding>
-                        <nonFilteredFileExtensions>
-                            <nonFilteredFileExtension>zip</nonFilteredFileExtension>
-                        </nonFilteredFileExtensions>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>3.0.0</version>
-                    <configuration>
-                        <filesets>
-                            <fileset>
-                                <directory>${user.resources}</directory>
-                                <includes>
-                                    <include>**/${module.name}-servers.zip</include>
-                                </includes>
-                                <followSymlinks>false</followSymlinks>
-                            </fileset>
-                        </filesets>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <version>${maven-antrun.version}</version>
-                    <executions>
-                        <execution>
-                            <phase>verify</phase>
-                            <configuration>
-                                <target>
-                                    <zip destfile="${client.sources}"
-                                         basedir="."
-                                         includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
-                                               src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
-                                               src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven-antrun.version}</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <configuration>
+                            <target>
+                                <zip destfile="${client.sources}"
+                                     basedir="."
+                                     includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                               src/main/java/com/codenjoy/dojo/${module.name}/model/elements/*.java,
                                                README.*,
                                                src/license/**,
                                                **/pom.xml"
-                                         excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
+                                     excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*,
                                                **/target/**"
-                                         update="true"/>
+                                     update="true"/>
 
-                                    <zip destfile="${client.sources}"
-                                         basedir="."
-                                         includes="src/main/**"
-                                         excludes="src/main/java/**,
+                                <zip destfile="${client.sources}"
+                                     basedir="."
+                                     includes="src/main/**"
+                                     excludes="src/main/java/**,
                                                 src/main/webapp/**,
                                                 src/main/resources/**,
                                                 **/target/**"
-                                         update="true"/>
+                                     update="true"/>
 
-                                    <zip destfile="${project.build.directory}/${project.artifactId}.jar"
-                                         basedir="src/main/webapp"
-                                         includes="resources/user/${module.name}-servers.zip"
-                                         excludes=""
-                                         update="true"/>
+                                <zip destfile="${project.build.directory}/${project.artifactId}.jar"
+                                     basedir="src/main/webapp"
+                                     includes="resources/user/${module.name}-servers.zip"
+                                     excludes=""
+                                     update="true"/>
 
-                                    <zip destfile="${project.build.directory}/${project.artifactId}-sources.jar"
-                                         basedir="src/main/webapp"
-                                         includes="resources/user/${module.name}-servers.zip"
-                                         excludes=""
-                                         update="true"/>
-                                </target>
-                            </configuration>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>license-maven-plugin</artifactId>
-                    <version>${maven-license.version}</version>
-                    <configuration>
-                        <licenseName>gpl_v3</licenseName>
-                        <licenseResolver>${project.baseUri}/src/license</licenseResolver>
-                        <organizationName>Codenjoy</organizationName>
-                        <projectName>Codenjoy - it's a dojo-like platform from developers to developers.</projectName>
-                        <inceptionYear>2018</inceptionYear>
-                        <canUpdateCopyright>false</canUpdateCopyright>
-                        <canUpdateDescription>false</canUpdateDescription>
-                        <canUpdateLicense>false</canUpdateLicense>
-                        <excludes>
-                            <exclude>**/*.json</exclude>
-                            <exclude>**/*.html</exclude>
-                        </excludes>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>first</id>
-                            <goals>
-                                <goal>update-file-header</goal>
-                            </goals>
-                            <phase>process-sources</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+                                <zip destfile="${project.build.directory}/${project.artifactId}-sources.jar"
+                                     basedir="src/main/webapp"
+                                     includes="resources/user/${module.name}-servers.zip"
+                                     excludes=""
+                                     update="true"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${maven-license.version}</version>
+            </plugin>
+        </plugins>
     </build>
 </project>
