@@ -211,10 +211,10 @@ public class GameFieldImplTest {
         int y = 1;
         Bike thisBike = new Bike(x, y);
         Bike enemyBike = new Bike(x, y);
-        Player thisPlayer = new Player(mock(EventListener.class));
-        thisPlayer.setHero(thisBike);
-        Player enemyPlayer = new Player(mock(EventListener.class));
-        enemyPlayer.setHero(enemyBike);
+        Player thisPlayer = mock(Player.class);
+        when(thisPlayer.getHero()).thenReturn(thisBike);
+        Player enemyPlayer = mock(Player.class);
+        when(enemyPlayer.getHero()).thenReturn(enemyBike);
         gameField.newGame(thisPlayer);
         gameField.newGame(enemyPlayer);
 
@@ -298,8 +298,8 @@ public class GameFieldImplTest {
         int x = 1;
         int y = 1;
         Bike givenBike = new Bike(x, y);
-        Player givenPlayer = new Player(mock(EventListener.class));
-        givenPlayer.setHero(givenBike);
+        Player givenPlayer = mock(Player.class);
+        when(givenPlayer.getHero()).thenReturn(givenBike);
         gameField.newGame(givenPlayer);
         //when
         Player result = gameField.getPlayerOfBike(givenBike);

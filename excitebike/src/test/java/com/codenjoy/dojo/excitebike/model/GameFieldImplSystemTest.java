@@ -775,7 +775,7 @@ public class GameFieldImplSystemTest {
     }
 
     @Test
-    public void obstacleTick5__shouldRemoveObstructedBike__ifItIsLastCell() {
+    public void obstacleTick5__shouldRespawnObstructedBike__ifItIsLastCell() {
         //given
         String board = "■■■■■" +
                 "     " +
@@ -793,7 +793,7 @@ public class GameFieldImplSystemTest {
         String expected = "■■■■■" +
                 "     " +
                 "     " +
-                "     " +
+                "B    " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -870,7 +870,7 @@ public class GameFieldImplSystemTest {
     }
 
     @Test
-    public void tick2__shouldMoveOutObstructedBikeWithObstacle__ifItIsFirstColumn() {
+    public void tick2__shouldRespawnObstructedBike__ifItIsFirstColumn() {
         //given
         String board = "■■■■■" +
                 "     " +
@@ -888,7 +888,7 @@ public class GameFieldImplSystemTest {
         String expected = "■■■■■" +
                 "     " +
                 "     " +
-                "     " +
+                "B    " +
                 "■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
@@ -4172,7 +4172,6 @@ public class GameFieldImplSystemTest {
         ticks(game, 2);
 
         //when
-        game.newGame(player);
         player.getHero().down();
         game.tick();
 

@@ -493,7 +493,6 @@ public class MultiplayerSystemTest {
         ticks(field, 2);
 
         //when
-        game1.newGame();
         field.tick();
 
         //then
@@ -1146,9 +1145,6 @@ public class MultiplayerSystemTest {
         ticks(field, 2);
 
         //when
-        game1.newGame();
-        game2.newGame();
-        game3.newGame();
         game1.getJoystick().down();
         game3.getJoystick().up();
         field.tick();
@@ -1183,9 +1179,6 @@ public class MultiplayerSystemTest {
         ticks(field, 2);
 
         //when
-        game1.newGame();
-        game2.newGame();
-        game3.newGame();
         game2.getJoystick().down();
         field.tick();
 
@@ -1219,9 +1212,6 @@ public class MultiplayerSystemTest {
         ticks(field, 2);
 
         //when
-        game1.newGame();
-        game2.newGame();
-        game3.newGame();
         game2.getJoystick().down();
         field.tick();
 
@@ -1254,9 +1244,6 @@ public class MultiplayerSystemTest {
         ticks(field, 2);
 
         //when
-        game1.newGame();
-        game2.newGame();
-        game3.newGame();
         game3.getJoystick().up();
         field.tick();
         game3.getJoystick().up();

@@ -45,10 +45,8 @@ public class Player extends GamePlayer<Bike, GameField> {
 
     @Override
     public void newHero(GameField gameField) {
-        if (bike == null) {
-            bike = gameField.getNewFreeBike();
-            bike.init(gameField);
-        }
+        bike = gameField.getNewFreeBike();
+        bike.init(gameField);
     }
 
     @Override
