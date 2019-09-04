@@ -32,7 +32,7 @@ function defaultRegistrationSettings() {
         showData4: true,
         defaultGame: null,
         gameTypes: {
-            icancode: ['JavaScript', 'Befunge']
+            icancode: [['JavaScript', 'Java', 'eKids', 'Befunge']]
         }
     };
 }
