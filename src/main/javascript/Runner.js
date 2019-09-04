@@ -20,7 +20,7 @@
  * #L%
  */
 
-// TODO test me
+var MAX_Y_SIZE = 12;
 
 var util = require('util');
 var WSocket = require('ws');
@@ -51,6 +51,8 @@ var processBoard = function (boardString) {
     var answer = new DirectionSolver(board).get().toString();
     logMessage += "Answer: " + answer + "\n";
     logMessage += "-----------------------------------\n";
+    
+    console.log(board.toString())
 
     log(logMessage);
 
@@ -166,6 +168,10 @@ var D = function (index, dx, dy, name) {
         return y + dy;
     };
 
+    var change = function(point) {
+        return point.moveTo(this);
+    };
+
     var inverted = function () {
         switch (this) {
             case Direction.UP: return Direction.DOWN;
@@ -181,6 +187,7 @@ var D = function (index, dx, dy, name) {
     return {
         changeX : changeX,
         changeY : changeY,
+        change : change,
         inverted : inverted,
         toString : toString,
 
@@ -191,11 +198,11 @@ var D = function (index, dx, dy, name) {
 };
 
 var Direction = {
-    UP          : D(2,  0, -1, 'UP'),         // move up
-    DOWN        : D(3,  0,  1, 'DOWN'),       // move down
-    LEFT        : D(0, -1,  0, 'LEFT'),
-    RIGHT       : D(1,  1,  0, 'RIGHT'),
-    STOP        : D(4,  0,  0, ''),           // stay
+    UP          : D(1,  0, 1, 'UP'),         // move up
+    DOWN        : D(2,  0, -1, 'DOWN'),       // move down
+    STOP        : D(3,  0,  0, ''),           // stay
+    LEFT        : D(4,  -1,  0, 'LEFT'),
+    RIGHT       : D(5,  1,  0, 'RIGHT'),
 };
 
 Direction.values = function () {
@@ -224,7 +231,7 @@ var Point = function (x, y) {
         },
 
         isOutOf: function (boardSize) {
-            return x >= boardSize || y >= boardSize || x < 0 || y < 0;
+            return x >= boardSize || y > MAX_Y_SIZE || x < 0 || y < 0;
         },
 
         getX: function () {
@@ -233,6 +240,10 @@ var Point = function (x, y) {
 
         getY: function () {
             return y;
+        },
+        
+        moveTo : function(direction) {
+            return pt(direction.changeX(x), direction.changeY(y));
         }
     }
 };
@@ -348,12 +359,6 @@ var Board = function (board) {
         result = result.concat(findAll(Elements.OTHER_BIKE_IN_FLIGHT_FROM_SPRINGBOARD));
         return result;
     };
-    /*
-        var getFallenBikes = function() {
-            var result = [];
-            result = result.concat(findAll(Elements.));
-            return result;
-        };*/
 
     var getAccelerators = function () {
         var result = [];
@@ -435,7 +440,6 @@ var Board = function (board) {
 
     var isGameOver = function () {
         return board.indexOf(Elements.BIKE_FALLEN) != -1
-            || board.indexOf(Elements.BIKE_FALLEN) != -1
             || board.indexOf(Elements.BIKE_FALLEN_AT_ACCELERATOR) != -1
             || board.indexOf(Elements.BIKE_FALLEN_AT_FENCE) != -1
             || board.indexOf(Elements.BIKE_FALLEN_AT_INHIBITOR) != -1
@@ -443,19 +447,36 @@ var Board = function (board) {
             || board.indexOf(Elements.BIKE_FALLEN_AT_LINE_CHANGER_UP) != -1
             || board.indexOf(Elements.BIKE_FALLEN_AT_OBSTACLE) != -1;
     };
+    
+    var isAt = function (x, y, element) {
+        if (pt(x, y).isOutOf(size)) {
+            return false;
+        }
+        return getAt(x, y) == element;
+    };
 
-// ========================================================
+    var isAtMany = function (x, y, elements) {
+        if (pt(x, y).isOutOf(size)) {
+            return false;
+        }
+        var elpt = getAt(x, y);
+        for(var el of elements){
+            if(elpt==el){
+                return true;
+            }
+        }
+        return false;
+    };
 
-
-    var checkNearMe = function (directions, elements) {
+    var checkNearMeManyMoves = function (directions, elements) {
         var point = getMe();
         if (point == null) {
             return false;
         }
-        for(direction in directions){
-            point.change(point)
+        for(var direction of directions){
+            point = direction.change(point)
         }
-        return isAt(point.getX(), point.getY(), elements);
+        return isAtMany(point.getX(), point.getY(), elements);
     }
 
     var checkNearMe = function (direction, elements) {
@@ -464,12 +485,11 @@ var Board = function (board) {
             return false;
         }
         var atDirection = direction.change(me);
-        return isAt(atDirection.getX(), atDirection.getY(), elements);
+        return isAtMany(atDirection.getX(), atDirection.getY(), elements);
     }
 
-    var checkAtMe = function (elements) {
-        var me = getMe();
-        return me != null && isAt(me, elements);
+    var isOutOfField = function(x, y){
+        return x<0 || x>size || y<0 || y>MAX_Y_SIZE;
     }
 
     var isOutOfFieldRelativeToMe = function (direction) {
@@ -480,16 +500,6 @@ var Board = function (board) {
         var atDirection = direction.change(me);
         return isOutOfField(atDirection.getX(), atDirection.getY());
     }   
-
-
-
-
-    var isAt = function (x, y, element) {
-        if (pt(x, y).isOutOf(size)) {
-            return false;
-        }
-        return getAt(x, y) == element;
-    };
 
     var getAt = function (x, y) {
         if (pt(x, y).isOutOf(size)) {
@@ -545,7 +555,6 @@ var Board = function (board) {
         return contains(getBarriers(), pt(x, y));
     };
 
-    //TODO add other fallen bike
     var hasOtherBikeAt = function (x, y) {
         return isAnyOfAt(x, y,
             [Elements.OTHER_BIKE, 
@@ -557,9 +566,17 @@ var Board = function (board) {
                 Elements.OTHER_BIKE_AT_SPRINGBOARD_LEFT, 
                 Elements.OTHER_BIKE_AT_SPRINGBOARD_LEFT_DOWN, 
                 Elements.OTHER_BIKE_AT_SPRINGBOARD_RIGHT, 
-                Elements.OTHER_BIKE_AT_SPRINGBOARD_RIGHT_DOWN]);
+                Elements.OTHER_BIKE_AT_SPRINGBOARD_RIGHT_DOWN,
+                Elements.OTHER_BIKE_FALLEN,
+                Elements.OTHER_BIKE_FALLEN_AT_ACCELERATOR,
+                Elements.OTHER_BIKE_FALLEN_AT_FENCE,
+                Elements.OTHER_BIKE_FALLEN_AT_INHIBITOR,
+                Elements.OTHER_BIKE_FALLEN_AT_LINE_CHANGER_DOWN,
+                Elements.OTHER_BIKE_FALLEN_AT_LINE_CHANGER_UP,
+                Elements.OTHER_BIKE_FALLEN_AT_OBSTACLE,
+                Elements.OTHER_BIKE_IN_FLIGHT_FROM_SPRINGBOARD]);
     };
-    
+
     var hasFenceAt = function (x, y) {
         if (pt(x, y).isOutOf(size)) {
             return true;
@@ -607,19 +624,39 @@ var Board = function (board) {
         return isAt(x, y, Elements.SPRINGBOARD_TOP);
     };
 
-    //////////////////////////////////
-
     var toString = function () {
         return util.format("Board:\n%s\n" +
             "Me at: %s\n" +
-            "Other heroes at: %s\n" +
-            "Enemies at: %s\n" +
-            "Gold at: %s\n",
+            "Enemy bikes at: %s\n" +
+            "Accelerators at: %s\n" +
+            "Fences at: %s\n" +
+            "Inhibitors at: %s\n" +
+            "Line Up Changers at: %s\n" +
+            "Line Down Changers at: %s\n" +
+            "Obstacles at: %s\n" +
+            "Springboard Dark Elements at: %s\n" +
+            "Springboard Light Elements at: %s\n" +
+            "Springboard Left Down Elements at: %s\n" +
+            "Springboard Right Down Elements at: %s\n" +
+            "Springboard Left Up Elements at: %s\n" +
+            "Springboard Right Up Elements at: %s\n" +
+            "Springboard Top Elements at: %s\n",
             boardAsString(),
             getMe(),
             printArray(getOtherHeroes()),
-            printArray(getEnemies()),
-            printArray(getGold())
+            printArray(getAccelerators()),
+            printArray(getFences()),
+            printArray(getInhibitors()),
+            printArray(getLineUpChangers()),
+            printArray(getLineDownChangers()),
+            printArray(getObstacles()),
+            printArray(getSpringboardDarkElements()),
+            printArray(getSpringboardLightElements()),
+            printArray(getSpringboardLeftDownElements()),
+            printArray(getSpringboardRightDownElements()),
+            printArray(getSpringboardLeftUpElements()),
+            printArray(getSpringboardRightUpElements()),
+            printArray(getSpringboardTopElements())
         );
     };
 
@@ -651,6 +688,7 @@ var Board = function (board) {
         getOtherHeroes: getOtherHeroes,
         isGameOver: isGameOver,
         isAt: isAt,
+        isAtMany: isAtMany,
         getAt: getAt,
         boardAsString: boardAsString,
         getBarriers: getBarriers,
@@ -670,7 +708,7 @@ var Board = function (board) {
         getSpringboardRightUpElements: getSpringboardRightUpElements,
         getSpringboardTopElements: getSpringboardTopElements,
         checkNearMe: checkNearMe,
-        checkAtMe: checkAtMe,
+        checkNearMeManyMoves: checkNearMeManyMoves,
         isOutOfFieldRelativeToMe: isOutOfFieldRelativeToMe,
         hasFenceAt: hasFenceAt,
         hasInhibitorAt: hasInhibitorAt,
@@ -683,6 +721,7 @@ var Board = function (board) {
         hasSpringboardLeftDownElementAt: hasSpringboardLeftDownElementAt,
         hasSpringboardRightDownElementAt: hasSpringboardRightDownElementAt,
         hasSpringboardTopElementAt: hasSpringboardTopElementAt,
+        hasOtherBikeAt: hasOtherBikeAt,
         isAnyOfAt: isAnyOfAt,
         isNear: isNear,
         isBarrierAt: isBarrierAt,
@@ -706,9 +745,9 @@ var DirectionSolver = function (board) {
             //console.log(me.getX(), me.getY());
 
             // TODO your code here
-            var dir = Direction.values()[random(1)];  // STUB get any random direction except Direction.DIE
+            var dir = Direction.STOP;  // STUB get any random direction except Direction.STOP
 
-            //return Direction.DIE;  // for suicide
+            //return Direction.STOP;  // for nothing to do
             return dir;
         }
     };
