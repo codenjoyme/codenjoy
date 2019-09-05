@@ -26,7 +26,6 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 import com.codenjoy.dojo.config.AppProperties;
 import com.codenjoy.dojo.config.meta.OAuth2Profile;
-import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.dao.Registration.User;
 import com.codenjoy.dojo.services.hash.Hash;
@@ -35,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -49,7 +46,6 @@ import org.springframework.util.CollectionUtils;
  * @author Igor_Petrov@epam.com
  * Created at 5/15/2019
  */
-@RequiredArgsConstructor
 @Component
 @OAuth2Profile
 public class OAuth2MappingUserService extends DefaultOAuth2UserService {
