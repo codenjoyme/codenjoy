@@ -4188,4 +4188,51 @@ public class GameFieldImplSystemTest {
                 "■■■■■■■■■■";
         assertThat(printField(game, player), is(TestUtils.injectN(expected)));
     }
+
+    @Test
+    public void bikeInFrontOfObstacleAtLine1__tick1__shouldBeCrushedAtObstacle() {
+        //given
+        String board = "■■■■■" +
+                " ||  " +
+                " ||  " +
+                "B||  " +
+                "■■■■■";
+        init(board, 5);
+        when(dice.next(anyInt())).thenReturn(5);
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "||   " +
+                "||   " +
+                "o|   " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
+
+    @Test
+    public void bikeInFrontOfObstacleAtLine1__tick2__shouldBeRespawnedAtFreeSpace() {
+        //given
+        String board = "■■■■■" +
+                " ||  " +
+                " ||  " +
+                "B||  " +
+                "■■■■■";
+        init(board, 5);
+        when(dice.next(anyInt())).thenReturn(5);
+        game.tick();
+
+        //when
+        game.tick();
+
+        //then
+        String expected = "■■■■■" +
+                "|    " +
+                "|B   " +
+                "|    " +
+                "■■■■■";
+        assertThat(printField(game, player), is(TestUtils.injectN(expected)));
+    }
 }

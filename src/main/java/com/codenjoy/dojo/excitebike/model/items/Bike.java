@@ -452,24 +452,33 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         return ticked == bike.ticked &&
                 accelerated == bike.accelerated &&
                 inhibited == bike.inhibited &&
+                interacted == bike.interacted &&
+                atSpringboard == bike.atSpringboard &&
+                adjusted == bike.adjusted &&
+                movementLock == bike.movementLock &&
+                command == bike.command &&
                 Objects.equals(movement, bike.movement) &&
                 type == bike.type;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), movement, type, ticked, inhibited, accelerated);
+        return Objects.hash(super.hashCode(), command, movement, type, ticked, accelerated, inhibited, interacted,
+                atSpringboard, adjusted, movementLock);
     }
 
     @Override
     public String toString() {
         return "Bike{" +
-                "movement=" + movement +
+                "command=" + command +
+                ", movement=" + movement +
                 ", type=" + type +
                 ", ticked=" + ticked +
                 ", accelerated=" + accelerated +
                 ", inhibited=" + inhibited +
+                ", interacted=" + interacted +
                 ", atSpringboard=" + atSpringboard +
+                ", adjusted=" + adjusted +
                 ", movementLock=" + movementLock +
                 ", x=" + x +
                 ", y=" + y +
