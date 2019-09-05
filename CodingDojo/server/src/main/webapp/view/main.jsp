@@ -45,7 +45,7 @@
             <ul>
             <c:forEach items="${gameNames}" var="gameName">
                 <li>
-                    <div>${gameName.value}: <a class="gameView" gameName="${gameName.key}" href="${ctx}/board/game/${gameName.key}?viewOnly=true">View</a> | <a id="rejoin-${gameName.key}" href="${ctx}/board/game/${gameName.key}/rejoining">Join</a></div>
+                    <div>${gameName.value}: <a class="gameView" gameName="${gameName.key}" href="${ctx}/board/game/${gameName.key}?viewOnly=true">View</a> | <a id="rejoin-${gameName.key}" href="${ctx}/board/rejoining/${gameName.key}">Join</a></div>
                 </li>
             </c:forEach>
             </ul>

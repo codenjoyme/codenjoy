@@ -116,7 +116,7 @@ public class BoardController {
         return (justBoard == null || !justBoard) ? "board" : "board-only";
     }
 
-    @GetMapping(URI + "/game/{gameName}/rejoining")
+    @GetMapping(URI + "/rejoining/{gameName}")
     public String rejoinGame(ModelMap model, @PathVariable("gameName") String gameName,
                              HttpServletRequest request,
                              @AuthenticationPrincipal Registration.User user) {
