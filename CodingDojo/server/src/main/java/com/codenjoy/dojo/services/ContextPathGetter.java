@@ -24,6 +24,9 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.client.CodenjoyContext;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -40,13 +43,26 @@ public class ContextPathGetter {
     @Value("${server.port}")
     private int port;
 
+    @Getter
+    @Setter(AccessLevel.PRIVATE)
+    @Value("${server.protocol}://${server.host}:${server.port}")
+    private String serverLocation;
+    @Getter
+    @Setter(AccessLevel.PRIVATE)
+    private String contextPath;
+
     @PostConstruct
     public void gotIt() {
-        CodenjoyContext.setContext(servletContext.getContextPath().replaceAll("/", ""));
+        contextPath = servletContext.getContextPath().replaceAll("/", "");
+        CodenjoyContext.setContext(contextPath);
         CodenjoyContext.setPort(port);
     }
 
     public String getContext() {
         return CodenjoyContext.getContext();
+    }
+
+    public String getContextPath() {
+        return contextPath;
     }
 }

@@ -22,16 +22,23 @@ package com.codenjoy.dojo.config.oauth2;
  * #L%
  */
 
+import com.codenjoy.dojo.config.AppProperties;
 import com.codenjoy.dojo.config.meta.OAuth2Profile;
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.dao.Registration.User;
+import com.codenjoy.dojo.services.security.GameAuthorities;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author Igor_Petrov@epam.com
@@ -43,18 +50,60 @@ import java.util.Map;
 public class OAuth2MappingUserService extends DefaultOAuth2UserService {
 
     private final Registration registration;
+    private final ConfigProperties confProperties;
+    private final AppProperties appProperties;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        OAuth2User auth = super.loadUser(userRequest);
-        Map<String, Object> map = auth.getAttributes();
+        OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        String email = (String) map.get("email");
-        String readableName = (String) map.get("name");
+        Optional<User> applicationUser = registration
+                .getUserByEmail((String) oAuth2User.getAttributes().get("email"));
 
-        Registration.User user = registration.getUserByEmail(email)
-                .orElseGet(() -> registration.register(email, readableName));
+        User user = applicationUser.orElseGet(() -> registerNewUser(oAuth2User));
 
-        return user;
+        return populateIdentityToken(userRequest, user);
+    }
+
+    private OAuth2User populateIdentityToken(OAuth2UserRequest userRequest, User user) {
+        String idToken = (String) userRequest.getAdditionalParameters()
+            .get(OidcParameterNames.ID_TOKEN);
+        return user.setIdToken(idToken);
+    }
+
+    private User registerNewUser(OAuth2User oAuth2User) {
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        String email = (String) attributes.get("email");
+
+        String readableName = extractUserName(attributes, email);
+
+        GameAuthorities authorities = appProperties.isSsoAdmin(email)
+            ? GameAuthorities.ADMIN
+            : GameAuthorities.USER;
+
+        User newlyRegisteredUser = registration.register(email, readableName, authorities.roles());
+
+        if (!confProperties.isEmailVerificationNeeded()) {
+            registration.approve(newlyRegisteredUser.getCode());
+        }
+
+        return newlyRegisteredUser;
+    }
+
+    @SuppressWarnings("unchecked")
+    private String extractUserName(Map<String, Object> attributes, String email) {
+        Object name = attributes.get("name");
+        String playerName = null;
+        if (name instanceof String) {
+            playerName = (String) name;
+        } else if (name instanceof List) {
+            List<Object> namesClaim = (List<Object>) name;
+            if (!CollectionUtils.isEmpty(namesClaim)) {
+                playerName = namesClaim.get(0).toString();
+            }
+        } else {
+            playerName = email;
+        }
+        return playerName;
     }
 }

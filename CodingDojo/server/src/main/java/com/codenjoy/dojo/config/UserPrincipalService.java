@@ -22,28 +22,18 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import com.codenjoy.dojo.services.dao.Registration.User;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+@Service
+public class UserPrincipalService {
 
-@Data
-@ConfigurationProperties("app")
-public class AppProperties {
+  public User currentUserPrincipal() {
+    return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
 
-    private List<String> logging;
-    private List<String> ssoAdmins;
-    private Map<String, Provider> security;
-
-    public boolean isSsoAdmin(String email) {
-        return ssoAdmins
-            .stream()
-            .anyMatch(email::equalsIgnoreCase);
-    }
-
-    @Data
-    public static class Provider {
-        private String logoutUri;
-    }
+  public String userIdToken() {
+    return currentUserPrincipal().getIdToken();
+  }
 }

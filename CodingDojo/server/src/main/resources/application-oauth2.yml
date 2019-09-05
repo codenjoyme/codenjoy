@@ -20,3 +20,8 @@ spring:
             token-uri: ${auth-server.location}${OAUTH2_TOKEN_URI}
             user-info-uri: ${auth-server.location}${OAUTH2_USERINFO_URI}
             user-name-attribute: ${OAUTH2_USERNAME_ATTR:name}
+
+app:
+  security:
+    dojo:
+      logout-uri: ${auth-server.location}${OAUTH2_LOGOUT_URI}

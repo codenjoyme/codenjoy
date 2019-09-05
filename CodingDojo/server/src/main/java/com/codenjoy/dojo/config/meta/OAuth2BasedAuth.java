@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.config;
+package com.codenjoy.dojo.config.meta;
 
 /*-
  * #%L
@@ -22,28 +22,15 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import org.springframework.context.annotation.Conditional;
 
-import java.util.List;
-import java.util.Map;
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Conditional(OAuth2BasedAuthConditional.class)
+public @interface OAuth2BasedAuth {
 
-@Data
-@ConfigurationProperties("app")
-public class AppProperties {
-
-    private List<String> logging;
-    private List<String> ssoAdmins;
-    private Map<String, Provider> security;
-
-    public boolean isSsoAdmin(String email) {
-        return ssoAdmins
-            .stream()
-            .anyMatch(email::equalsIgnoreCase);
-    }
-
-    @Data
-    public static class Provider {
-        private String logoutUri;
-    }
 }

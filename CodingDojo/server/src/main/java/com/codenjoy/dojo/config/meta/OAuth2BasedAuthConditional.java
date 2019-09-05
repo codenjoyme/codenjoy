@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.config;
+package com.codenjoy.dojo.config.meta;
 
 /*-
  * #%L
@@ -22,28 +22,16 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import java.util.stream.Stream;
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.core.type.AnnotatedTypeMetadata;
 
-import java.util.List;
-import java.util.Map;
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+public class OAuth2BasedAuthConditional implements Condition {
 
-@Data
-@ConfigurationProperties("app")
-public class AppProperties {
-
-    private List<String> logging;
-    private List<String> ssoAdmins;
-    private Map<String, Provider> security;
-
-    public boolean isSsoAdmin(String email) {
-        return ssoAdmins
-            .stream()
-            .anyMatch(email::equalsIgnoreCase);
-    }
-
-    @Data
-    public static class Provider {
-        private String logoutUri;
-    }
+  @Override
+  public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+    return Stream.of(context.getEnvironment().getActiveProfiles())
+        .anyMatch(profile -> OAuth2Profile.NAME.equals(profile) || SSOProfile.NAME.equals(profile));
+  }
 }

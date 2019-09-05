@@ -1,6 +1,8 @@
 server:
   servlet.context-path: ${context:/codenjoy-contest}
   ip: 127.0.0.1
+  protocol: http
+  host: localhost
   port: 8080
 
 rest-sender:
@@ -50,6 +52,8 @@ app:
   logging:
     - com.epam.dojo
     - com.codenjoy
+  sso-admins:
+    - admin@codenjoyme.com
 
 logging:
   level:

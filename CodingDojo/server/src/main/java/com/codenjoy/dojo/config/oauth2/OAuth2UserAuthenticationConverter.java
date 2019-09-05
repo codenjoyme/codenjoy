@@ -22,15 +22,20 @@ package com.codenjoy.dojo.config.oauth2;
  * #L%
  */
 
+import com.codenjoy.dojo.config.AppProperties;
 import com.codenjoy.dojo.config.meta.SSOProfile;
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.dao.Registration.User;
+import com.codenjoy.dojo.services.security.GameAuthorities;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.oidc.endpoint.OidcParameterNames;
 import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
+import org.springframework.util.StringUtils;
 
 /**
  * @author Igor_Petrov@epam.com
@@ -42,19 +47,49 @@ import java.util.Map;
 public class OAuth2UserAuthenticationConverter extends DefaultUserAuthenticationConverter {
 
     private final Registration registration;
+    private final ConfigProperties confProperties;
+    private final AppProperties appProperties;
 
     @Override
     public Authentication extractAuthentication(Map<String, ?> map) {
-        Authentication auth = super.extractAuthentication(map);
-        if (auth != null) {
-            return auth;
+        Authentication authentication = super.extractAuthentication(map);
+        if (authentication != null) {
+            return authentication;
         }
         String email = (String) map.get("email");
+
+        Registration.User applicationUser = registration.getUserByEmail(email)
+            .orElse(registerNewUser(map));
+
+        populateIdentityToken(map, applicationUser);
+
+        return new UsernamePasswordAuthenticationToken(applicationUser, null,
+            applicationUser.getAuthorities());
+    }
+
+    private void populateIdentityToken(Map<String, ?> map, User applicationUser) {
+        Object idToken = map.get(OidcParameterNames.ID_TOKEN);
+        if (idToken instanceof String) {
+            applicationUser.setIdToken((String) idToken);
+        }
+    }
+
+    private Registration.User registerNewUser(Map<String, ?> map) {
+        String email = (String) map.get("email");
         String readableName = (String) map.get("name");
+        readableName = StringUtils.hasText(readableName) ? readableName : email;
 
-        Registration.User user = registration.getUserByEmail(email)
-                .orElseGet(() -> registration.register(email, readableName));
+        GameAuthorities authorities = appProperties.isSsoAdmin(email)
+            ? GameAuthorities.ADMIN
+            : GameAuthorities.USER;
 
-        return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        Registration.User newlyRegisteredUser = registration.register(email, readableName,
+            authorities.roles());
+
+        if (!confProperties.isEmailVerificationNeeded()) {
+            registration.approve(newlyRegisteredUser.getCode());
+        }
+
+        return newlyRegisteredUser;
     }
 }
