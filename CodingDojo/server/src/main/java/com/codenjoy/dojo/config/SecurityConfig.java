@@ -25,6 +25,7 @@ package com.codenjoy.dojo.config;
 import com.codenjoy.dojo.config.meta.DefaultAuth;
 import com.codenjoy.dojo.config.meta.OAuth2Profile;
 import com.codenjoy.dojo.config.meta.SSOProfile;
+import com.codenjoy.dojo.config.oauth2.OAuth2LogoutHandler;
 import com.codenjoy.dojo.config.oauth2.OAuth2MappingUserService;
 import com.codenjoy.dojo.web.controller.*;
 import lombok.extern.slf4j.Slf4j;
@@ -187,7 +188,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         private OAuth2MappingUserService oAuth2MappingUserService;
 
         @Autowired
-        private LogoutSuccessHandler logoutSuccessHandler;
+        private OAuth2LogoutHandler logoutHandler;
 
         @PostConstruct
         void info() {
@@ -210,10 +211,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .and()
                     .and()
                         .logout()
-                            .logoutUrl(LOGOUT_PROCESSING_URI)
-                            .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
-                            .logoutSuccessHandler(logoutSuccessHandler)
-                            .invalidateHttpSession(true);
+                            .addLogoutHandler(logoutHandler)
+                            .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI));
             // @formatter:on
         }
     }
@@ -232,7 +231,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         private OAuth2ClientProperties clientProperties;
 
         @Autowired
-        private LogoutSuccessHandler logoutSuccessHandler;
+        private OAuth2LogoutHandler logoutHandler;
 
         @Value("${mvc.control-servlet-path}")
         private String controlWsURI;
@@ -268,10 +267,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .hasRole("USER")
                     .and()
                         .logout()
-                            .logoutUrl(LOGOUT_PROCESSING_URI)
-                            .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
-                            .logoutSuccessHandler(logoutSuccessHandler)
-                            .invalidateHttpSession(true);
+                            .addLogoutHandler(logoutHandler)
+                            .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI));
             // @formatter:on
         }
 

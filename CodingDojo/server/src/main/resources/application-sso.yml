@@ -19,3 +19,8 @@ spring:
             authorization-uri: ${auth-server.location}${OAUTH2_AUTH_URI}
             token-uri: ${auth-server.location}${OAUTH2_TOKEN_URI}
             jwk-set-uri: ${auth-server.location}${OAUTH2_JWKS_URI}
+
+app:
+  security:
+    dojo:
+      logout-uri: ${auth-server.location}${OAUTH2_LOGOUT_URI}
