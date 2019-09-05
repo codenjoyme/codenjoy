@@ -23,11 +23,25 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_ADMIN;
+import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_USER;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
+
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.security.GameAuthorities;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -37,16 +51,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_ADMIN;
-import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_USER;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 public class Registration {
 
@@ -109,12 +113,12 @@ public class Registration {
         return count > 0;
     }
 
-    public User register(String email, String readableName) {
+    public User register(String email, String readableName, String[] authorities) {
         String id = Hash.getRandomId();
         String password = passwordEncoder.encode(randomAlphanumeric(properties.getAutoGenPasswordLen()));
 
         User user = register(id, email, readableName,
-                password, "{}", GameAuthorities.USER.roles());
+                password, "{}", authorities);
 
         if (!properties.isEmailVerificationNeeded()) {
             approve(user.getCode());
