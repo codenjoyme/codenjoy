@@ -35,6 +35,11 @@ public class Pill extends PointImpl implements State<Elements, Player> {
     this.pillType = pillType;
   }
 
+  public Pill(int x, int y, PillType pillType) {
+    super(x, y);
+    this.pillType = pillType;
+  }
+
   @Override
   public Elements state(Player player, Object... alsoAtPoint) {
     return Elements.THE_KILLER_PILL;

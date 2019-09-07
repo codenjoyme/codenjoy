@@ -58,6 +58,16 @@ public enum Elements implements CharElements {
     HERO_PIPE_LEFT('{'),
     HERO_PIPE_RIGHT('}'),
 
+    HERO_KILLER_DRILL_LEFT('⊰'),
+    HERO_KILLER_DRILL_RIGHT('⊱'),
+    HERO_KILLER_LADDER('⍬'),
+    HERO_KILLER_LEFT('⊲'),
+    HERO_KILLER_RIGHT('⊳'),
+    HERO_KILLER_FALL_LEFT('⊅'),
+    HERO_KILLER_FALL_RIGHT('⊄'),
+    HERO_KILLER_PIPE_LEFT('⋜'),
+    HERO_KILLER_PIPE_RIGHT('⋝'),
+
     OTHER_HERO_DIE('Z'),
     OTHER_HERO_LEFT(')'),
     OTHER_HERO_RIGHT('('),
@@ -97,6 +107,15 @@ public enum Elements implements CharElements {
             case HERO_FALL_RIGHT : return OTHER_HERO_RIGHT;
             case HERO_PIPE_LEFT : return OTHER_HERO_PIPE_LEFT;
             case HERO_PIPE_RIGHT : return OTHER_HERO_PIPE_RIGHT;
+            case HERO_KILLER_DRILL_LEFT : return OTHER_HERO_LEFT;
+            case HERO_KILLER_DRILL_RIGHT : return OTHER_HERO_RIGHT;
+            case HERO_KILLER_LADDER : return OTHER_HERO_LADDER;
+            case HERO_KILLER_LEFT : return OTHER_HERO_LEFT;
+            case HERO_KILLER_RIGHT : return OTHER_HERO_RIGHT;
+            case HERO_KILLER_FALL_LEFT : return OTHER_HERO_LEFT;
+            case HERO_KILLER_FALL_RIGHT : return OTHER_HERO_RIGHT;
+            case HERO_KILLER_PIPE_LEFT : return OTHER_HERO_PIPE_LEFT;
+            case HERO_KILLER_PIPE_RIGHT : return OTHER_HERO_PIPE_RIGHT;
         }
         throw new IllegalArgumentException("Bad hero state: " + hero);
     }

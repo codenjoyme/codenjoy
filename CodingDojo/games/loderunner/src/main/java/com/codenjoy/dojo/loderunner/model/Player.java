@@ -23,18 +23,25 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import java.util.function.Supplier;
 
 public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
+    private Supplier<Integer> activeKillerPillsTicks;
 
     public Player(EventListener listener) {
         super(listener);
+        this.activeKillerPillsTicks = () -> 0;
+    }
+
+    public Player(EventListener listener, Supplier<Integer> activeKillerPillsTicks) {
+        this(listener);
+        this.activeKillerPillsTicks = activeKillerPillsTicks;
     }
 
     @Override
@@ -45,7 +52,7 @@ public class Player extends GamePlayer<Hero, Field> {
     @Override
     public void newHero(Field field) {
         Point pt = field.getFreeRandom();
-        hero = new Hero(pt, Direction.RIGHT);
+        hero = new Hero(pt, Direction.RIGHT, activeKillerPillsTicks);
         hero.init(field);
     }
 
@@ -53,5 +60,4 @@ public class Player extends GamePlayer<Hero, Field> {
     public boolean isAlive() {
         return hero != null && hero.isAlive();
     }
-
 }

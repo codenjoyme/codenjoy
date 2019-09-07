@@ -87,7 +87,9 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerName) {
-        return new Player(listener);
+        return new Player(listener, () -> settings
+            .<Integer>getParameter("Number of ticks that the killer pill will be active")
+            .getValue());
     }
 
     protected String getMap() {
