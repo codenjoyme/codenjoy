@@ -66,7 +66,9 @@ public enum Elements implements CharElements {
     OTHER_HERO_PIPE_RIGHT('Є'),
 
     LADDER('H'),
-    PIPE('~');
+    PIPE('~'),
+
+    THE_KILLER_PILL('K');
 
     final char ch;
 

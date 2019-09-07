@@ -4,7 +4,7 @@ package com.codenjoy.dojo.loderunner.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,25 +22,26 @@ package com.codenjoy.dojo.loderunner.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-import java.util.List;
+public class Pill extends PointImpl implements State<Elements, Player> {
 
-public interface Level {
-    int getSize();
+  private PillType pillType;
 
-    List<Brick> getBricks();
+  public Pill(Point point, PillType pillType) {
+    super(point);
+    this.pillType = pillType;
+  }
 
-    List<Border> getBorders();
+  @Override
+  public Elements state(Player player, Object... alsoAtPoint) {
+    return Elements.THE_KILLER_PILL;
+  }
 
-    List<Hero> getHeroes();
-
-    List<Gold> getGold();
-
-    List<Ladder> getLadder();
-
-    List<Pipe> getPipe();
-
-    List<Enemy> getEnemies();
-
-    List<Pill> getPills();
+  enum PillType {
+    THE_KILLER_PILL,
+    SPEED_PILL
+  }
 }

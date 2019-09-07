@@ -43,6 +43,7 @@ public class Loderunner implements Field {
     private List<Player> players;
     private List<Enemy> enemies;
     private List<Gold> gold;
+    private List<Pill> pills;
 
     private final int size;
     private Dice dice;
@@ -58,6 +59,7 @@ public class Loderunner implements Field {
         toField(level.getPipe());
 
         gold = level.getGold();
+        pills = level.getPills();
 
         enemies = level.getEnemies();
         for (Enemy enemy : enemies) {
@@ -132,6 +134,7 @@ public class Loderunner implements Field {
                     addAll(Loderunner.this.getEnemies());
                     addAll(Loderunner.this.getGold());
                     addAll(Loderunner.this.getFieldElements());
+                    addAll(Loderunner.this.getPills());
                 }};
             }
         };
@@ -357,6 +360,10 @@ public class Loderunner implements Field {
 
     public List<Gold> getGold() {
         return gold;
+    }
+
+    public List<Pill> getPills() {
+        return pills;
     }
 
     @Override
