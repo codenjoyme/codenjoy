@@ -94,9 +94,19 @@ public class Loderunner implements Field {
 
         for (Player player : die) {
             player.event(Events.KILL_HERO);
+            Hero deadHero = player.getHero();
+            rewardMurderers(deadHero.getX(), deadHero.getY());
         }
 
         generatePills();
+    }
+
+    private void rewardMurderers(int x, int y) {
+        players.stream()
+            .filter(player -> player.getHero().isUnderThePill(PillType.SHADOW_PILL))
+            .filter(shadow -> shadow.getHero().itsMe(x, y))
+            .forEach(murderer -> murderer.event(Events.KILL_ENEMY));
+
     }
 
     private void generatePills() {
