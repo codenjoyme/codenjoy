@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -43,6 +44,7 @@ public class Loderunner implements Field {
     private List<Player> players;
     private List<Enemy> enemies;
     private List<Gold> gold;
+    private List<Pill> pills;
 
     private final int size;
     private Dice dice;
@@ -58,6 +60,7 @@ public class Loderunner implements Field {
         toField(level.getPipe());
 
         gold = level.getGold();
+        pills = level.getPills();
 
         enemies = level.getEnemies();
         for (Enemy enemy : enemies) {
@@ -132,6 +135,7 @@ public class Loderunner implements Field {
                     addAll(Loderunner.this.getEnemies());
                     addAll(Loderunner.this.getGold());
                     addAll(Loderunner.this.getFieldElements());
+                    addAll(Loderunner.this.getPills());
                 }};
             }
         };
@@ -215,6 +219,14 @@ public class Loderunner implements Field {
                 Point pos = getFreeRandom();
                 leaveGold(pos.getX(), pos.getY());
             }
+
+            if (pills.contains(hero)) {
+                pills.remove(hero);
+                hero.swallowThePill(PillType.THE_KILLER_PILL);
+
+                Point pos = getFreeRandom();
+                leavePill(pos.getX(), pos.getY(), PillType.THE_KILLER_PILL);
+            }
         }
     }
 
@@ -245,7 +257,7 @@ public class Loderunner implements Field {
                 || y < 0 || y > size - 1
                 || isFullBrick(x, y)
                 || is(pt, Border.class)
-                || isHeroAt(x, y);
+                || (isHeroAt(x, y) && !isUnderThePillAt(x, y, PillType.THE_KILLER_PILL));
     }
 
     @Override
@@ -318,6 +330,7 @@ public class Loderunner implements Field {
     @Override
     public boolean isFree(Point pt) {
         return !(gold.contains(pt)
+                || pills.contains(pt)
                 || is(pt, Border.class)
                 || is(pt, Brick.class)
                 || getHeroes().contains(pt)
@@ -337,12 +350,31 @@ public class Loderunner implements Field {
 
     @Override
     public boolean isEnemyAt(int x, int y) {
-        return enemies.contains(pt(x, y));
+        List<Hero> underKillerPillPlayers = players.stream()
+            .filter(player -> player.getHero().isUnderThePill(PillType.THE_KILLER_PILL))
+            .map(Player::getHero)
+            .collect(toList());
+        Point point = pt(x, y);
+        return enemies.contains(point) || underKillerPillPlayers.contains(point);
     }
 
     @Override
     public void leaveGold(int x, int y) {
         gold.add(new Gold(x, y));
+    }
+
+    @Override
+    public void leavePill(int x, int y, PillType pillType) {
+        pills.add(new Pill(x, y, pillType));
+    }
+
+    @Override
+    public boolean isUnderThePillAt(int x, int y, PillType pillType) {
+        Point pt = pt(x, y);
+        return players.stream()
+            .map(Player::getHero)
+            .filter(hero -> hero.equals(pt))
+            .anyMatch(hero -> hero.isUnderThePill(pillType));
     }
 
     @Override
@@ -357,6 +389,10 @@ public class Loderunner implements Field {
 
     public List<Gold> getGold() {
         return gold;
+    }
+
+    public List<Pill> getPills() {
+        return pills;
     }
 
     @Override
