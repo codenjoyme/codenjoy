@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
 import java.util.List;
@@ -173,7 +174,7 @@ public class AITest {
 
     private void setupAI(String map) {
         level = new LevelImpl(map);
-        loderunner = new Loderunner(level, mock(Dice.class));
+        loderunner = new Loderunner(level, mock(Dice.class), new SettingsImpl());
 
         for (Hero hero : level.getHeroes()) {
             Player player = new Player(mock(EventListener.class));

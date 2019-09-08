@@ -42,11 +42,11 @@ public class Pill extends PointImpl implements State<Elements, Player> {
 
   @Override
   public Elements state(Player player, Object... alsoAtPoint) {
-    return Elements.THE_KILLER_PILL;
+    return Elements.THE_SHADOW_PILL;
   }
 
   enum PillType {
-    THE_KILLER_PILL,
+    SHADOW_PILL,
     SPEED_PILL
   }
 }
