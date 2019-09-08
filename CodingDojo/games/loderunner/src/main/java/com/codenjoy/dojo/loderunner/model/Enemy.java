@@ -57,7 +57,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
         if (huntHim == null || !huntHim.isAlive()) {
             List<Hero> heroes = new LinkedList<>(field.getHeroes())
                 .stream()
-                .filter(hero -> !hero.isUnderThePill(PillType.THE_KILLER_PILL))
+                .filter(hero -> !hero.isUnderThePill(PillType.SHADOW_PILL))
                 .collect(Collectors.toList());
             if (oldHurt != null) { // если я бегал за героем, который спрятался
                 heroes.remove(oldHurt); // исключаю его из поиска // TODO подумать, тут может быть кейс, когда герой один и он появился уже а я за ним бегать не могу

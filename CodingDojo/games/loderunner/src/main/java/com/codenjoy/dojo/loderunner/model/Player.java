@@ -32,16 +32,16 @@ import java.util.function.Supplier;
 public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
-    private Supplier<Integer> activeKillerPillsTicks;
+    private Supplier<Integer> shadowPillTicks;
 
     public Player(EventListener listener) {
         super(listener);
-        this.activeKillerPillsTicks = () -> 0;
+        this.shadowPillTicks = () -> 0;
     }
 
-    public Player(EventListener listener, Supplier<Integer> activeKillerPillsTicks) {
+    public Player(EventListener listener, Supplier<Integer> shadowPillTicks) {
         this(listener);
-        this.activeKillerPillsTicks = activeKillerPillsTicks;
+        this.shadowPillTicks = shadowPillTicks;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Player extends GamePlayer<Hero, Field> {
     @Override
     public void newHero(Field field) {
         Point pt = field.getFreeRandom();
-        hero = new Hero(pt, Direction.RIGHT, activeKillerPillsTicks);
+        hero = new Hero(pt, Direction.RIGHT, shadowPillTicks);
         hero.init(field);
     }
 

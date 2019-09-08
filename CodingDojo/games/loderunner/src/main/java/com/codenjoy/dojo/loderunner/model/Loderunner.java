@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
+import com.codenjoy.dojo.services.settings.Settings;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,10 +48,12 @@ public class Loderunner implements Field {
     private List<Pill> pills;
 
     private final int size;
+    private final Settings settings;
     private Dice dice;
 
-    public Loderunner(Level level, Dice dice) {
+    public Loderunner(Level level, Dice dice, Settings settings) {
         this.dice = dice;
+        this.settings = settings;
         size = level.getSize();
         field = new Point[size][size];
 
@@ -68,6 +71,7 @@ public class Loderunner implements Field {
         }
 
         players = new LinkedList<>();
+        generatePills();
     }
 
     private void toField(List<? extends Point> elements) {
@@ -90,6 +94,26 @@ public class Loderunner implements Field {
 
         for (Player player : die) {
             player.event(Events.KILL_HERO);
+        }
+
+        generatePills();
+    }
+
+    private void generatePills() {
+        Integer shadowPillsCount = settings
+            .<Integer>getParameter("The shadow pills count")
+            .getValue();
+
+        shadowPillsCount = shadowPillsCount < 0 ? 0 : shadowPillsCount;
+
+        if (shadowPillsCount <= pills.size()) {
+            pills = pills.subList(0, shadowPillsCount);
+            return;
+        }
+        shadowPillsCount = shadowPillsCount - pills.size();
+        for (int i = 0; i < Math.abs(shadowPillsCount); i++) {
+            Point pos = getFreeRandom();
+            leavePill(pos.getX(), pos.getY(), PillType.SHADOW_PILL);
         }
     }
 
@@ -222,10 +246,7 @@ public class Loderunner implements Field {
 
             if (pills.contains(hero)) {
                 pills.remove(hero);
-                hero.swallowThePill(PillType.THE_KILLER_PILL);
-
-                Point pos = getFreeRandom();
-                leavePill(pos.getX(), pos.getY(), PillType.THE_KILLER_PILL);
+                hero.swallowThePill(PillType.SHADOW_PILL);
             }
         }
     }
@@ -257,7 +278,7 @@ public class Loderunner implements Field {
                 || y < 0 || y > size - 1
                 || isFullBrick(x, y)
                 || is(pt, Border.class)
-                || (isHeroAt(x, y) && !isUnderThePillAt(x, y, PillType.THE_KILLER_PILL));
+                || (isHeroAt(x, y) && !isUnderThePillAt(x, y, PillType.SHADOW_PILL));
     }
 
     @Override
@@ -350,12 +371,12 @@ public class Loderunner implements Field {
 
     @Override
     public boolean isEnemyAt(int x, int y) {
-        List<Hero> underKillerPillPlayers = players.stream()
-            .filter(player -> player.getHero().isUnderThePill(PillType.THE_KILLER_PILL))
+        List<Hero> shadows = players.stream()
+            .filter(player -> player.getHero().isUnderThePill(PillType.SHADOW_PILL))
             .map(Player::getHero)
             .collect(toList());
         Point point = pt(x, y);
-        return enemies.contains(point) || underKillerPillPlayers.contains(point);
+        return enemies.contains(point) || shadows.contains(point);
     }
 
     @Override

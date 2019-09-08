@@ -125,8 +125,8 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Pill> getPills() {
-        return pointsOf(THE_KILLER_PILL).stream() // TODO: add speed pills
-            .map(kp -> new Pill(kp, PillType.THE_KILLER_PILL))
+        return pointsOf(THE_SHADOW_PILL).stream() // TODO: add speed pills
+            .map(kp -> new Pill(kp, PillType.SHADOW_PILL))
             .collect(toList());
     }
 

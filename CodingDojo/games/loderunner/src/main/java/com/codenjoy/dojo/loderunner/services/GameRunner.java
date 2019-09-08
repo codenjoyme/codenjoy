@@ -52,7 +52,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
-        return new Loderunner(level, getDice());
+        return new Loderunner(level, getDice(), settings);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerName) {
         return new Player(listener, () -> settings
-            .<Integer>getParameter("Number of ticks that the killer pill will be active")
+            .<Integer>getParameter("Number of ticks that the shadow pill will be active")
             .getValue());
     }
 

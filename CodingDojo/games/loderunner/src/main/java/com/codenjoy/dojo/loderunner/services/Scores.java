@@ -33,7 +33,8 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> killEnemyScore;
     private final Parameter<Integer> getGoldScore;
     private final Parameter<Integer> forNextGoldIncScore;
-    private final Parameter<Integer> theKillerPillActiveTicks;
+    private final Parameter<Integer> shadowPillActiveTicks;
+    private final Parameter<Integer> shadowPillsCount;
 
     private volatile int score;
     private volatile int count;
@@ -45,7 +46,8 @@ public class Scores implements PlayerScores {
         killEnemyScore = settings.addEditBox("Kill enemy score").type(Integer.class).def(10);
         getGoldScore = settings.addEditBox("Get gold score").type(Integer.class).def(1);
         forNextGoldIncScore = settings.addEditBox("Get next gold increment score").type(Integer.class).def(1);
-        theKillerPillActiveTicks = settings.addEditBox("Number of ticks that the killer pill will be active").type(Integer.class).def(5000);
+        shadowPillActiveTicks = settings.addEditBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
+        shadowPillsCount = settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
     }
 
     @Override
