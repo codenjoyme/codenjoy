@@ -89,8 +89,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void act(int... p) {
         if (!alive) return;
 
-        if (p.length == 1 && p[0] == 0) { // TODO test me
-            alive = false;
+        if (p.length == 1 && p[0] == 0) {
             return;
         }
 
