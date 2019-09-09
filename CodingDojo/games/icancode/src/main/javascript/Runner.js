@@ -172,11 +172,11 @@ Direction.values = function() {
    return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.JUMP, Direction.PULL, Direction.FIRE, Direction.DIE, Direction.STOP];
 };
 
-Direction.valueOf = function(index) {
+Direction.valueOf = function(indexOrName) {
     var directions = Direction.values();
     for (var i in directions) {
         var direction = directions[i];
-        if (direction.getIndex() == index) {
+        if (direction.getIndex() == indexOrName || direction.toString() == indexOrName) {
              return direction;
         }
     }
@@ -886,49 +886,49 @@ var Command = {
      */
     doNothing : function() {
         return Direction.STOP.toString();
-    }
+    },
 
     /**
      * Reset current level
      */
     die : function() {
         return Direction.DIE.toString();
-    }
+    },
 
     /**
      * Says to Hero jump to direction
      */
     jump : function(direction) {
-        return Direction.JUMP.toString() + "," + direction.toString());
-    }
+        return Direction.JUMP.toString() + "," + direction.toString();
+    },
 
     /**
      * Says to Hero pull box on this direction
      */
     pull : function(direction) {
-        return Direction.PULL.toString() + "," + direction.toString());
-    }
+        return Direction.PULL.toString() + "," + direction.toString();
+    },
 
     /**
      * Says to Hero fire on this direction
      */
     fire : function(direction) {
-        return Direction.FIRE.toString() + "," + direction.toString());
-    }
+        return Direction.FIRE.toString() + "," + direction.toString();
+    },
 
     /**
      * Says to Hero jump in place
      */
     jump : function() {
         return Direction.JUMP.toString();
-    }
+    },
 
     /**
      * Says to Hero go to direction
      */
     go : function(direction) {
-        return Direction.valueOf(direction).toString();
-    }
+        return Direction.valueOf(direction.toString()).toString();
+    },
 
     /**
      * Says to Hero goes to start point
