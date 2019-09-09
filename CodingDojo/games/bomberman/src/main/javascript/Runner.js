@@ -49,10 +49,10 @@ var processBoard = function(boardString) {
 
     var logMessage = board + "\n\n";
     var answer = new DirectionSolver(board).get().toString();
-	logMessage += "Answer: " + answer + "\n";
+    logMessage += "Answer: " + answer + "\n";
     logMessage += "-----------------------------------\n";
-	
-	log(logMessage);
+    
+    log(logMessage);
 
     return answer;
 };
@@ -305,7 +305,7 @@ var Board = function(board){
     };
 
     var getAt = function(x, y) {
-		if (pt(x, y).isOutOf(size)) {
+        if (pt(x, y).isOutOf(size)) {
            return Element.WALL;
         }
         return board.charAt(xyl.getLength(x, y));
@@ -380,7 +380,7 @@ var Board = function(board){
        result = result.concat(findAll(Element.BOMB_TIMER_4));
        result = result.concat(findAll(Element.BOMB_TIMER_5));
        result = result.concat(findAll(Element.BOMB_BOMBERMAN));
-	   result = result.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));	   
+       result = result.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));       
        return result;
    };
 
@@ -405,7 +405,7 @@ var Board = function(board){
            if (blast.isOutOf(size) || contains(getWalls(), blast)) {
                continue;
            }
-		   result2.push(blast);
+           result2.push(blast);
        }
        return removeDuplicates(result2);
    };
@@ -425,9 +425,9 @@ var Board = function(board){
            return false;
        }
        return isAt(x + 1, y, element) || // TODO to remove duplicate
-			  isAt(x - 1, y, element) || 
-			  isAt(x, y + 1, element) || 
-			  isAt(x, y - 1, element);
+              isAt(x - 1, y, element) || 
+              isAt(x, y + 1, element) || 
+              isAt(x, y - 1, element);
    };
 
    var isBarrierAt = function(x, y) {

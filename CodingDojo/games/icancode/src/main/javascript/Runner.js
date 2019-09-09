@@ -59,7 +59,7 @@ var processBoard = function(boardString) {
 };
 
 // you can get this code after registration on the server with your email
-var url = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890";
+var url = "http://codenjoy.com/codenjoy-contest/board/player/5q0uczbju6no468bg6w0?code=1725193577353578184&gameName=icancode";
 
 url = url.replace("http", "ws");
 url = url.replace("board/player/", "ws?user=");
