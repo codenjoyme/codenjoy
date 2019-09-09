@@ -23,26 +23,38 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Supplier;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private Direction direction;
+    private Supplier<Integer> shadowPillTicks;
+    private Map<PillType, Integer> activePills = new HashMap<>();
     private boolean moving;
     private boolean drill;
     private boolean drilled;
     private boolean alive;
     private boolean jump;
 
-    public Hero(Point xy, Direction direction) {
+    public Hero(Point xy, Direction direction, Supplier<Integer> shadowPillTicks) {
         super(xy);
         this.direction = direction;
+        this.shadowPillTicks = shadowPillTicks;
         moving = false;
         drilled = false;
         drill = false;
         alive = true;
         jump = false;
+    }
+
+    public Hero(Point point, Direction direction) {
+        this(point, direction, () -> 0);
     }
 
     @Override
@@ -119,13 +131,38 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                 newY = y - 1;
             }
 
-            if (!field.isBarrier(newX, newY)) {
+            boolean noPhysicalBarrier = !field.isBarrier(newX, newY);
+            boolean victim = isRegularPlayerAt(newX, newY) && iAmTheShadow();
+            if (noPhysicalBarrier || victim) {
                 move(newX, newY);
             }
         }
         drill = false;
         moving = false;
         jump = false;
+        dissolvePills();
+    }
+
+  private boolean iAmTheShadow() {
+    return this.isUnderThePill(PillType.SHADOW_PILL);
+  }
+
+  private boolean isRegularPlayerAt(int x, int y) {
+    return field.isHeroAt(x, y)
+        && !field.isUnderThePillAt(x, y, PillType.SHADOW_PILL);
+  }
+
+  private void dissolvePills() {
+        Set<PillType> activePillTypes = activePills.keySet();
+        for (PillType activePill : activePillTypes) {
+            int ticksLeft = activePills.get(activePill);
+            ticksLeft--;
+            if (ticksLeft < 0) {
+                activePills.remove(activePill);
+            } else {
+                activePills.put(activePill, ticksLeft);
+            }
+        }
     }
 
     public boolean isAlive() {
@@ -135,8 +172,18 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return alive;
     }
 
+    public boolean isUnderThePill(PillType pillType) {
+        return activePills.containsKey(pillType);
+    }
+
+    public void swallowThePill(PillType pillType) {
+        activePills.put(pillType, shadowPillTicks.get());
+    }
+
     private void checkAlive() {
-        if (field.isFullBrick(x, y) || field.isEnemyAt(x, y)) {
+        // TODO: перепроверить. Кажется, где-то проскакивает ArrayIndexOutOfBoundsException
+        boolean killedByEnemy = field.isEnemyAt(x, y) && !iAmTheShadow();
+        if (field.isFullBrick(x, y) || killedByEnemy) {
             alive = false;
         }
     }
@@ -159,6 +206,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         Ladder ladder = null;
         Pipe pipe = null;
         Object el = alsoAtPoint[1];
+        boolean underKillerPill = iAmTheShadow();
         if (el != null) {
             if (el instanceof Ladder) {
                 ladder = (Ladder) el;
@@ -172,37 +220,37 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (ladder != null) {
-            return Elements.HERO_LADDER;
+            return underKillerPill ? Elements.HERO_SHADOW_LADDER : Elements.HERO_LADDER;
         }
 
         if (pipe != null) {
             if (direction.equals(Direction.LEFT)) {
-                return Elements.HERO_PIPE_LEFT;
+                return underKillerPill ? Elements.HERO_SHADOW_PIPE_LEFT : Elements.HERO_PIPE_LEFT;
             } else {
-                return Elements.HERO_PIPE_RIGHT;
+                return underKillerPill ? Elements.HERO_SHADOW_PIPE_RIGHT : Elements.HERO_PIPE_RIGHT;
             }
         }
 
         if (drilled) {
             if (direction.equals(Direction.LEFT)) {
-                return Elements.HERO_DRILL_LEFT;
+                return underKillerPill ? Elements.HERO_SHADOW_DRILL_LEFT : Elements.HERO_DRILL_LEFT;
             } else {
-                return Elements.HERO_DRILL_RIGHT;
+                return underKillerPill ? Elements.HERO_SHADOW_DRILL_RIGHT : Elements.HERO_DRILL_RIGHT;
             }
         }
 
         if (isFall()) {
             if (direction.equals(Direction.LEFT)) {
-                return Elements.HERO_FALL_LEFT;
+                return underKillerPill ? Elements.HERO_SHADOW_FALL_LEFT : Elements.HERO_FALL_LEFT;
             } else {
-                return Elements.HERO_FALL_RIGHT;
+                return underKillerPill ? Elements.HERO_SHADOW_FALL_RIGHT : Elements.HERO_FALL_RIGHT;
             }
         }
 
         if (direction.equals(Direction.LEFT)) {
-            return Elements.HERO_LEFT;
+            return underKillerPill ? Elements.HERO_SHADOW_LEFT : Elements.HERO_LEFT;
         } else {
-            return Elements.HERO_RIGHT;
+            return underKillerPill ? Elements.HERO_SHADOW_RIGHT : Elements.HERO_RIGHT;
         }
     }
 }

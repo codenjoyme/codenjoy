@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,7 +75,7 @@ public class LoderunnerTest {
             hero = level.getHeroes().get(0);
         }
 
-        game = new Loderunner(level, dice);   // Ужас! :)
+        game = new Loderunner(level, dice, new SettingsImpl());   // Ужас! :)
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);

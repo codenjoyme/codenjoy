@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
@@ -52,6 +53,10 @@ public interface Field extends GameField<Player> {
     boolean isEnemyAt(int x, int y);
 
     void leaveGold(int x, int y);
+
+    void leavePill(int x, int y, PillType pillType);
+
+    boolean isUnderThePillAt(int x, int y, PillType pillType);
 
     int size();
 
