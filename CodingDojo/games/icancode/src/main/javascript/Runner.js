@@ -626,11 +626,11 @@ var Board = function (board) {
 
         var result = '';
 
-        var layer1 = boardAsString(LAYER1).split('\n');
-        var layer2 = boardAsString(LAYER2).split('\n');
-        var layer3 = boardAsString(LAYER3).split('\n');
+        var layer1 = boardAsString(LAYER1).split('\n').slice(0, -1);
+        var layer2 = boardAsString(LAYER2).split('\n').slice(0, -1);
+        var layer3 = boardAsString(LAYER3).split('\n').slice(0, -1);
 
-        var numbers = temp.substring(0, layer1.length - 1);
+        var numbers = temp.substring(0, layer1.length);
         var space = ''.padStart(layer1.length - 5);
         var numbersLine = numbers + '   ' + numbers + '   ' + numbers;
         var firstPart = ' Layer1 ' + space + ' Layer2' + space + ' Layer3' + '\n  ' + numbersLine;
