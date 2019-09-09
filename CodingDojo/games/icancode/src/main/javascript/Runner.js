@@ -87,7 +87,9 @@ function connect() {
     });
 }
 
-connect();
+if (typeof(doNotConnect) == 'undefined') {
+    connect();
+}
 
 var elements = [];
 var elementsTypes = [];
@@ -335,7 +337,7 @@ var LAYER3 = 2;
 
 var LengthToXY = function (boardSize) {
     var inversion = function (y) {
-        return boardSize - 1 - y;
+        return y;
     }
 
     return {
@@ -389,12 +391,13 @@ var Board = function (board) {
             return false;
         }
 
-        var found = false;
         for (var e in elements) {
             var element = elements[e];
-            found |= (getAt(layer, x, y).char == element.char);
+            if (getAt(layer, x, y).char == element.char) {
+                return true;
+            }
         }
-        return found;
+        return false;
     };
 
     var getAt = function (layer, x, y) {
@@ -448,16 +451,6 @@ var Board = function (board) {
             }
         }
         return result;
-    };
-
-    var isAnyOfAt = function (x, y, layer, elements) {
-        for (var index in elements) {
-            var element = elements[index];
-            if (isAt(layer, x, y, element)) {
-                return true;
-            }
-        }
-        return false;
     };
 
     var isNear = function (layer, x, y, element) {
@@ -722,7 +715,7 @@ var Board = function (board) {
         getHoles: getHoles,
         isMeAlive: isMeAlive, 
         isAt: isAt, 
-        getAt: getAt, 
+        getAt: getAt,
         get: get, 
         toString: toString,
         layer1: function () {
@@ -736,8 +729,7 @@ var Board = function (board) {
         },
         getWholeBoard: getWholeBoard,
         getBarriers: getBarriers,        
-        isAnyOfAt: isAnyOfAt,
-        isNear: isNear, 
+        isNear: isNear,
         isBarrierAt: isBarrierAt, 
         countNear: countNear, 
         getScannerOffset: function () {
