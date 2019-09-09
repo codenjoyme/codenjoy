@@ -157,18 +157,19 @@ var D = function(index, dx, dy, name){
 };
 
 var Direction = {
-    UP : D(2, 0, 1, 'up'),                  // you can move
+    UP   : D(2, 0, 1, 'up'),                // you can move
     DOWN : D(3, 0, -1, 'down'),
     LEFT : D(0, -1, 0, 'left'),
     RIGHT : D(1, 1, 0, 'right'),
     JUMP : D(4, 0, 0, 'act(1)'),            // jump
     PULL : D(5, 0, 0, 'act(2)'),            // pull box
     FIRE : D(6, 0, 0, 'act(3)'),            // fire
-    STOP : D(5, 0, 0, '')                   // stay
+    DIE  : D(7, 0, 0, 'act(0)'),            // die
+    STOP : D(8, 0, 0, '')                   // stay
 };
 
 Direction.values = function() {
-   return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.JUMP, Direction.PULL, Direction.FIRE, Direction.STOP];
+   return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.JUMP, Direction.PULL, Direction.FIRE, Direction.DIE, Direction.STOP];
 };
 
 Direction.valueOf = function(index) {
@@ -270,8 +271,11 @@ var Element = {
 
     getElementsOfType: function (type) {
         return elementsByType[type];
-    }
+    },
 
+    isWall: function(element) {
+        return element.type == 'WALL';
+    }
 };
 
 var Point = function (x, y, direction) {
@@ -501,7 +505,7 @@ var Board = function (board) {
         return findAll(Element.BOX, LAYER2);
     };
 
-    var getStart = function () {
+    var getStarts = function () {
         return findAll(Element.START, LAYER1);
     };
 
@@ -509,7 +513,7 @@ var Board = function (board) {
         return findAll(Element.ZOMBIE_START, LAYER1);
     };
 
-    var getExit = function () {
+    var getExits = function () {
         return findAll(Element.EXIT, LAYER1);
     };
 
@@ -735,7 +739,7 @@ var Board = function (board) {
         return result;
     };
 
-    var getHero = function() {
+    var getMe = function() {
         return pt(heroPosition.x, heroPosition.y);
     }
 
@@ -754,24 +758,83 @@ var Board = function (board) {
         }
     }
 
+    var setCharAt = function(str, index, replacement) {
+        return str.substr(0, index) + replacement + str.substr(index + replacement.length);
+    }
+
+    var maskOverlay = function(source, mask) {
+        var result = source;
+        for (var i = 0; i < result.length; ++i) {
+            var el = Element.getElement(mask[i]);
+            if (Element.isWall(el)) {
+                setCharAt(result, i, el.char);
+            }
+        }
+
+        return result.toString();
+    }
+
     var toString = function () {
-        return "Board layer 1:\n" +
-            boardAsString(LAYER1) + "\n" +
-            "Board layer 2:\n" +
-            boardAsString(LAYER2) + "\n" +
-            "Board layer 3:\n" +
-            boardAsString(LAYER3) + "\n" +
-            "Robot at: " + getHero() + "\n" +
-            "Other robots at: " + printArray(getOtherHeroes()) + "\n" +
-            "LaserMachine at: " + printArray(getLaserMachines()) + "\n" +
-            "Laser at: " + printArray(getLasers()) + "";
+        var temp = '0123456789012345678901234567890';
+
+        var result = '';
+
+        var layer1 = boardAsString(LAYER1).split('\n');
+        var layer2 = boardAsString(LAYER2).split('\n');
+        var layer3 = boardAsString(LAYER3).split('\n');
+
+        var numbers = temp.substring(0, layer1.length);
+        var space = ''.padStart(layer1.length - 5);
+        var numbersLine = numbers + '   ' + numbers + '   ' + numbers;
+        var firstPart = ' Layer1 ' + space + ' Layer2' + space + ' Layer3' + '\n  ' + numbersLine;
+
+        for (var i = 0; i < layer1.length; ++i) {
+            var ii = size - 1 - i;
+            var index = (ii < 10 ? ' ' : '') + ii;
+            result += index + layer1[i] +
+                    ' ' + index + maskOverlay(layer2[i], layer1[i]) +
+                    ' ' + index + maskOverlay(layer3[i], layer1[i]);
+
+            switch (i) {
+                case 0:
+                    result += ' Robots: ' + getMe() + ',' + printArray(getOtherHeroes());
+                    break;
+                case 1:
+                    result += ' Gold: ' + printArray(getGold());
+                    break;
+                case 2:
+                    result += ' Starts: ' + printArray(getStarts());
+                    break;
+                case 3:
+                    result += ' Exits: ' + printArray(getExits());
+                    break;
+                case 4:
+                    result += ' Boxes: ' + printArray(getBoxes());
+                    break;
+                case 5:
+                    result += ' Holes: ' + printArray(getHoles());
+                    break;
+                case 6:
+                    result += ' LaserMachine: ' + printArray(getLaserMachines());
+                    break;
+                case 7:
+                    result += ' Lasers: ' + printArray(getLasers());
+                    break;
+            }
+
+            if (i != layer1.length - 1) {
+                result += '\n';
+            }
+        }
+
+        return firstPart + '\n' + result + '\n  ' + numbersLine;
     };
 
     return {
         size: function () {
             return size;
         },
-        getHero: getHero,
+        getMe: getMe,
         isLevelFinished: function() {
             return levelFinished;
         },
@@ -781,9 +844,9 @@ var Board = function (board) {
         getWalls: getWalls,
         getBoxes: getBoxes,
         getGold: getGold,
-        getStart: getStart,
+        getStarts: getStarts,
         getZombieStart: getZombieStart,
-        getExit: getExit,
+        getExits: getExits,
         getHoles: getHoles,
         isMyRobotAlive: isMyRobotAlive,
         isAt: isAt,
@@ -816,6 +879,67 @@ var random = function (n) {
     return Math.floor(Math.random() * n);
 };
 
+var Command = {
+
+    /**
+     * Says to Hero do nothing
+     */
+    doNothing : function() {
+        return Direction.STOP.toString();
+    }
+
+    /**
+     * Reset current level
+     */
+    die : function() {
+        return Direction.DIE.toString();
+    }
+
+    /**
+     * Says to Hero jump to direction
+     */
+    jump : function(direction) {
+        return Direction.JUMP.toString() + "," + direction.toString());
+    }
+
+    /**
+     * Says to Hero pull box on this direction
+     */
+    pull : function(direction) {
+        return Direction.PULL.toString() + "," + direction.toString());
+    }
+
+    /**
+     * Says to Hero fire on this direction
+     */
+    fire : function(direction) {
+        return Direction.FIRE.toString() + "," + direction.toString());
+    }
+
+    /**
+     * Says to Hero jump in place
+     */
+    jump : function() {
+        return Direction.JUMP.toString();
+    }
+
+    /**
+     * Says to Hero go to direction
+     */
+    go : function(direction) {
+        return Direction.valueOf(direction).toString();
+    }
+
+    /**
+     * Says to Hero goes to start point
+     */
+    reset : function() {
+        return Direction.DIE.toString();
+    }
+
+}
+
+
 var direction;
 
 var DirectionSolver = function(board){
@@ -825,11 +949,11 @@ var DirectionSolver = function(board){
          * @return next hero action
          */
         get : function() {
-            var hero = board.getHero();
+            var hero = board.getMe();
 
             // TODO your code here
 
-            return Direction.JUMP;
+            return Command.go(Direction.RIGHT);
         }
     };
 };
