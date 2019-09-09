@@ -376,27 +376,29 @@ var Board = function (board) {
         layers.push(parseLayer(layersString[index]));
     }
 
-    var isAt = function (layer, x, y, element) {
-        if (pt(x, y).isBad(size) || getAt(x, y, layer) == null) {
+    // TODO to add List<Elements> getNear(int numLayer, int x, int y) method
+
+    var isAt = function (layer, x, y, elements) {
+        if (!Array.isArray(elements)) {
+            var arr = [];
+            arr.push(elements);
+            elements = arr;
+        }
+
+        if (pt(x, y).isBad(size) || getAt(layer, x, y) == null) {
             return false;
         }
-        return getAt(x, y, layer).char == element.char;
-    };
 
-    var getAt = function (x, y, layer) {
-        return layers[layer][x][y];
-    };
-
-    var findAll = function (element, layer) {
-        var result = [];
-        for (var x = 0; x < size; x++) {
-            for (var y = 0; y < size; y++) {
-                if (isAt(layer, x, y, element)) {
-                    result.push(new Point(x, y));
-                }
-            }
+        var found = false;
+        for (var e in elements) {
+            var element = elements[e];
+            found |= (getAt(layer, x, y).char == element.char);
         }
-        return result;
+        return found;
+    };
+
+    var getAt = function (layer, x, y) {
+        return layers[layer][x][y];
     };
 
     var removeAllElements = function(array, element) {
@@ -414,9 +416,9 @@ var Board = function (board) {
             result.push(arr);
             for (var y = 0; y < size; y++) {
                 var cell = [];
-                cell.push(getAt(x, y, LAYER1).type);
-                cell.push(getAt(x, y, LAYER2).type);
-                cell.push(getAt(x, y, LAYER3).type);
+                cell.push(getAt(LAYER1, x, y).type);
+                cell.push(getAt(LAYER2, x, y).type);
+                cell.push(getAt(LAYER3, x, y).type);
                 removeAllElements(cell, 'NONE');
                 if (cell.length == 0) {
                     cell.push('NONE');
@@ -428,7 +430,12 @@ var Board = function (board) {
         return result;
     }
 
-    var findAllElements = function (elements, layer) {
+    var get = function (layer, elements) {
+        if (!Array.isArray(elements)) {
+            var arr = [];
+            arr.push(elements);
+            elements = arr;
+        }
         var result = [];
         for (var x = 0; x < size; x++) {
             for (var y = 0; y < size; y++) {
@@ -453,7 +460,7 @@ var Board = function (board) {
         return false;
     };
 
-    var isNear = function (x, y, layer, element) {
+    var isNear = function (layer, x, y, element) {
         if (pt(x, y).isBad(size)) {
             return false;
         }
@@ -469,10 +476,10 @@ var Board = function (board) {
     };
 
     var isWallAt = function (x, y) {
-        return getAt(x, y, LAYER1).type == 'WALL';
+        return getAt(LAYER1, x, y).type == 'WALL';
     };
 
-    var countNear = function (x, y, layer, element) {
+    var countNear = function (layer, x, y, element) {
         if (pt(x, y).isBad(size)) {
             return 0;
         }
@@ -486,8 +493,8 @@ var Board = function (board) {
 
     var getOtherHeroes = function () {
         var elements = [Element.ROBOT_OTHER, Element.ROBOT_OTHER_FALLING, Element.ROBOT_OTHER_LASER];
-        return findAllElements(elements, LAYER2)
-            .concat(findAll(Element.ROBOT_OTHER_FLYING, LAYER3));
+        return get(LAYER2, elements)
+            .concat(get(LAYER3, Element.ROBOT_OTHER_FLYING));
     };
 
     var getLaserMachines = function () {
@@ -495,13 +502,13 @@ var Board = function (board) {
             Element.LASER_MACHINE_CHARGING_UP, Element.LASER_MACHINE_CHARGING_DOWN,
             Element.LASER_MACHINE_READY_LEFT, Element.LASER_MACHINE_READY_RIGHT,
             Element.LASER_MACHINE_READY_UP, Element.LASER_MACHINE_READY_DOWN];
-        return findAllElements(elements, LAYER1);
+        return get(LAYER1, elements);
     };
 
     var getLasers = function () {
         var elements = [Element.LASER_LEFT, Element.LASER_RIGHT,
             Element.LASER_UP, Element.LASER_DOWN];
-        return findAllElements(elements, LAYER2);
+        return get(LAYER2, elements);
     };
 
     var getWalls = function () {
@@ -512,40 +519,40 @@ var Board = function (board) {
             Element.WALL_BACK_ANGLE_LEFT, Element.WALL_BACK_ANGLE_RIGHT,
             Element.ANGLE_OUT_RIGHT, Element.ANGLE_OUT_LEFT,
             Element.SPACE];
-        return findAllElements(elements, LAYER1);
+        return get(LAYER1, elements);
     };
 
     var getBoxes = function () {
-        return findAll(Element.BOX, LAYER2);
+        return get(LAYER2, Element.BOX);
     };
 
     var getStarts = function () {
-        return findAll(Element.START, LAYER1);
+        return get(LAYER1, Element.START);
     };
 
     var getZombieStart = function () {
-        return findAll(Element.ZOMBIE_START, LAYER1);
+        return get(LAYER1, Element.ZOMBIE_START);
     };
 
     var getExits = function () {
-        return findAll(Element.EXIT, LAYER1);
+        return get(LAYER1, Element.EXIT);
     };
 
     var getGold = function () {
-        return findAll(Element.GOLD, LAYER1);
+        return get(LAYER1, Element.GOLD);
     };
 
     var getZombies = function () {
         var elements = [Element.FEMALE_ZOMBIE, Element.MALE_ZOMBIE,
                     Element.ZOMBIE_DIE];
-        return findAllElements(elements, LAYER2);
+        return get(LAYER2, elements);
     };
 
     var getHoles = function () {
-        return findAll(Element.HOLE, LAYER1);
+        return get(LAYER1, Element.HOLE);
     };
 
-    var isMyRobotAlive = function () {
+    var isMeAlive = function () {
         return layersString[LAYER2].indexOf(Element.ROBOT_LASER.char) == -1 &&
             layersString[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
     };
@@ -562,8 +569,8 @@ var Board = function (board) {
         for (var x = 0; x < size; x++) {
             barriersMap[x] = new Array(size);
             for (var y = 0; y < size; y++) {
-                var element1 = getAt(x, y, LAYER1);
-                var element2 = getAt(x, y, LAYER2);
+                var element1 = getAt(LAYER1, x, y);
+                var element2 = getAt(LAYER2, x, y);
 
                 barriersMap[x][y] = (
                     element1.type == 'WALL' ||
@@ -698,11 +705,11 @@ var Board = function (board) {
         size: function () {
             return size;
         },
-        getMe: getMe,
+        getMe: getMe, 
         isLevelFinished: function() {
             return levelFinished;
         },
-        getOtherHeroes: getOtherHeroes,
+        getOtherHeroes: getOtherHeroes, 
         getLaserMachines: getLaserMachines,
         getLasers: getLasers,
         getWalls: getWalls,
@@ -713,9 +720,10 @@ var Board = function (board) {
         getZombieStart: getZombieStart,
         getExits: getExits,
         getHoles: getHoles,
-        isMyRobotAlive: isMyRobotAlive,
-        isAt: isAt, // +
-        getAt: getAt,
+        isMeAlive: isMeAlive, 
+        isAt: isAt, 
+        getAt: getAt, 
+        get: get, 
         toString: toString,
         layer1: function () {
             return boardAsString(LAYER1)
@@ -727,12 +735,11 @@ var Board = function (board) {
             return boardAsString(LAYER3)
         },
         getWholeBoard: getWholeBoard,
-        getBarriers: getBarriers,
-        findAll: findAll,
+        getBarriers: getBarriers,        
         isAnyOfAt: isAnyOfAt,
-        isNear: isNear,
-        isBarrierAt: isBarrierAt,
-        countNear: countNear,
+        isNear: isNear, 
+        isBarrierAt: isBarrierAt, 
+        countNear: countNear, 
         getScannerOffset: function () {
             return pt(scannerOffset.x, scannerOffset.y);
         }

@@ -110,7 +110,7 @@
     <div class="wrapper wrapper-rules">
       <div class="header-wrap">
         <div class="container">
-		<header class="header row">
+        <header class="header row">
           <div class="logo-container col-md-6 col-xs-12">
             <div class="logo-dojo inline" href="#" title="DOJO"><img id="logo" src="img/dojo_logo.png"><span class="logo-title"><span class="text-uppercase after-line">Coding DOJO</span>iCanCode</span></div>
           </div>
@@ -126,7 +126,7 @@
               </ul>
             </div>
           </h1>
-		</header>
+        </header>
       </div>
       </div>
       
@@ -442,7 +442,7 @@ import static com.codenjoy.dojo.services.PointImpl.*;
 import static com.codenjoy.dojo.icancode.model.Elements.*;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;</pre>
 
-		<p><b>Important!</b> You can change any class that you want: Board, AbstractSolver and YourSolver. Also you can wryte your own Unit test.</p>
+        <p><b>Important!</b> You can change any class that you want: Board, AbstractSolver and YourSolver. Also you can wryte your own Unit test.</p>
 
 <!-- -----------------------------------------CORE COMMAND METHODS--------------------------------------------------- -->
           <a id="command"></a>
@@ -457,7 +457,7 @@ import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;</pre>
 <pre>public Command whatToDo(Board board) {
     return Command.jump(Direction.LEFT);
 }</pre>
-    	  <p><span class="func">Command jump()</span> - Jumps on a place. You should return result of this function from whatToDo method.</p>
+          <p><span class="func">Command jump()</span> - Jumps on a place. You should return result of this function from whatToDo method.</p>
 <pre>public Command whatToDo(Board board) {
     return Command.jump();
 }</pre>
@@ -545,6 +545,12 @@ assert heroes.get(0).equals(pt(1, 2));</pre>
           <p><span class="func">List&lt;Point&gt; getOtherHeroes()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStarts,  getExits, getHoles</p>
           <pre>List&lt;Point&gt; points = board.getOtherRobots();
 assert points.get(0).equals(pt(1, 2));</pre>
+
+          <p><span class="func">Point getScannerOffset()</span> - Returns the offset of the visible frame relative to the entire map.</p>
+          <pre>Point offset = board.getScannerOffset();
+assert offset.equals(pt(12, 24));</pre>
+
+          <p><span class="func">There are other useful methods on the Board object</span></p>
         </div>    
       </section>
       
