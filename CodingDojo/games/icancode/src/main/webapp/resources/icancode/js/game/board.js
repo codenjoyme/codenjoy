@@ -450,6 +450,10 @@ var Board = function (boardString) {
         return result;
     };
 
+    var getHero = function() {
+        return pt(heroPosition.x, heroPosition.y);
+    }
+
     // thanks http://jsfiddle.net/queryj/g109jvxd/
     String.format = function () {
         // The string containing the format items (e.g. "{0}")
@@ -466,31 +470,23 @@ var Board = function (boardString) {
     }
 
     var toString = function () {
-        return String.format(
-            "Board layer 1:\n{0}\n" +
-            "Board layer 2:\n{1}\n" +
-            "Board layer 3:\n{2}\n" +
-            "Robot at: {3}\n" +
-            "Other robots at: {4}\n" +
-            "LaserMachine at: {5}" +
-            "Laser at: {6}" +
-            boardAsString(LAYER1),
-            boardAsString(LAYER2),
-            boardAsString(LAYER3),
-            getHero(),
-            printArray(getOtherHeroes()),
-            printArray(getLaserMachines()),
-            printArray(getLasers())
-        );
+        return "Board layer 1:\n" +
+            boardAsString(LAYER1) + "\n" +
+            "Board layer 2:\n" +
+            boardAsString(LAYER2) + "\n" +
+            "Board layer 3:\n" +
+            boardAsString(LAYER3) + "\n" +
+            "Robot at: " + getHero() + "\n" +
+            "Other robots at: " + printArray(getOtherHeroes()) + "\n" +
+            "LaserMachine at: " + printArray(getLaserMachines()) + "\n" +
+            "Laser at: " + printArray(getLasers()) + "";
     };
 
     return {
         size: function () {
             return size;
         },
-        getHero: function () {
-            return pt(heroPosition.x, heroPosition.y);
-        },
+        getHero: getHero,
         isLevelFinished: function() {
             return levelFinished;
         },

@@ -20,8 +20,6 @@
  * #L%
  */
 
-// TODO test me
-
 var util = require('util');
 var WSocket = require('ws');
 
@@ -44,8 +42,8 @@ var printArray = function (array) {
 var processBoard = function(boardString) {
     var boardJson = eval(boardString);
     var board = new Board(boardJson);
-        if (!!printBoardOnTextArea) {
-        printBoardOnTextArea(board.boardAsString());
+    if (!!printBoardOnTextArea) {
+        printBoardOnTextArea(board.toString());
     }
 
     var logMessage = board + "\n\n";
@@ -91,66 +89,32 @@ function connect() {
 
 connect();
 
-var Element = {
-    EMPTY: '-',
-    FLOOR: '.',
+var elements = [];
+var elementsTypes = [];
+var elementsByChar = {};
+var elementsByType = {};
 
-    // this is wall
-    ANGLE_IN_LEFT: '╔',
-    WALL_FRONT: '═',
-    ANGLE_IN_RIGHT: '┐',
-    WALL_RIGHT: '│',
-    ANGLE_BACK_RIGHT: '┘',
-    WALL_BACK: '─',
-    ANGLE_BACK_LEFT: '└',
-    WALL_LEFT: '║',
-    WALL_BACK_ANGLE_LEFT: '┌',
-    WALL_BACK_ANGLE_RIGHT: '╗',
-    ANGLE_OUT_RIGHT: '╝',
-    ANGLE_OUT_LEFT: '╚',
-    SPACE: ' ',
+var el = function(char, type, direction) {
+    var result = {
+        char: char,
+        type: type,
+        direction: direction
+    };
 
-    // this is laser mathine
-    LASER_MACHINE_CHARGING_LEFT: '˂',
-    LASER_MACHINE_CHARGING_RIGHT: '˃',
-    LASER_MACHINE_CHARGING_UP: '˄',
-    LASER_MACHINE_CHARGING_DOWN: '˅',
+    elementsByChar[char] = result;
 
-    LASER_MACHINE_READY_LEFT: '◄',
-    LASER_MACHINE_READY_RIGHT: '►',
-    LASER_MACHINE_READY_UP: '▲',
-    LASER_MACHINE_READY_DOWN: '▼',
+    if (!elementsByType[type]) {
+        elementsByType[type] = [];
+    }
 
-    // this is stuff
-    START: 'S',
-    EXIT: 'E',
-    HOLE: 'O',
-    BOX: 'B',
-    ZOMBIE_START: 'Z',
-    GOLD: '$',
+    elementsByType[type].push(result);
+    elements.push(result);
 
-    // this is your robot
-    ROBOT: '☺',
-    ROBOT_FALLING: 'o',
-    ROBOT_FLYING: '*',
-    ROBOT_LASER: '☻',
+    if (elementsTypes.indexOf(type) == -1) {
+        elementsTypes.push(type);
+    }
 
-    // this is other robot
-    ROBOT_OTHER: 'X',
-    ROBOT_OTHER_FALLING: 'x',
-    ROBOT_OTHER_FLYING: '^',
-    ROBOT_OTHER_LASER: '&',
-
-    // this is laser
-    LASER_LEFT: '←',
-    LASER_RIGHT: '→',
-    LASER_UP: '↑',
-    LASER_DOWN: '↓',
-
-    // this is zombie
-    FEMALE_ZOMBIE: '♀',
-    MALE_ZOMBIE: '♂',
-    ZOMBIE_DIE: '✝',
+    return result;
 }
 
 var D = function(index, dx, dy, name){
@@ -216,6 +180,98 @@ Direction.valueOf = function(index) {
         }
     }
     return Direction.STOP;
+};
+
+var Element = {
+    EMPTY: el('-', 'NONE'),
+    FLOOR: el('.', 'NONE'),
+
+    ANGLE_IN_LEFT: el('╔', 'WALL'),
+    WALL_FRONT: el('═', 'WALL'),
+    ANGLE_IN_RIGHT: el('┐', 'WALL'),
+    WALL_RIGHT: el('│', 'WALL'),
+    ANGLE_BACK_RIGHT: el('┘', 'WALL'),
+    WALL_BACK: el('─', 'WALL'),
+    ANGLE_BACK_LEFT: el('└', 'WALL'),
+    WALL_LEFT: el('║', 'WALL'),
+    WALL_BACK_ANGLE_LEFT: el('┌', 'WALL'),
+    WALL_BACK_ANGLE_RIGHT: el('╗', 'WALL'),
+    ANGLE_OUT_RIGHT: el('╝', 'WALL'),
+    ANGLE_OUT_LEFT: el('╚', 'WALL'),
+    SPACE: el(' ', 'WALL'),
+
+    LASER_MACHINE_CHARGING_LEFT: el('˂', 'LASER_MACHINE', Direction.LEFT),
+    LASER_MACHINE_CHARGING_RIGHT: el('˃', 'LASER_MACHINE', Direction.RIGHT),
+    LASER_MACHINE_CHARGING_UP: el('˄', 'LASER_MACHINE', Direction.UP),
+    LASER_MACHINE_CHARGING_DOWN: el('˅', 'LASER_MACHINE', Direction.DOWN),
+
+    LASER_MACHINE_READY_LEFT: el('◄', 'LASER_MACHINE_READY', Direction.LEFT),
+    LASER_MACHINE_READY_RIGHT: el('►', 'LASER_MACHINE_READY', Direction.RIGHT),
+    LASER_MACHINE_READY_UP: el('▲', 'LASER_MACHINE_READY', Direction.UP),
+    LASER_MACHINE_READY_DOWN: el('▼', 'LASER_MACHINE_READY', Direction.DOWN),
+
+    START: el('S', 'START'),
+    EXIT: el('E', 'EXIT'),
+    HOLE: el('O', 'HOLE'),
+    BOX: el('B', 'BOX'),
+    ZOMBIE_START: el('Z', 'ZOMBIE_START'),
+    GOLD: el('$', 'GOLD'),
+
+    ROBOT: el('☺', 'MY_ROBOT'),
+    ROBOT_FALLING: el('o', 'MY_ROBOT'),
+    ROBOT_FLYING: el('*', 'MY_ROBOT'),
+    ROBOT_LASER: el('☻', 'MY_ROBOT'),
+
+    ROBOT_OTHER: el('X', 'OTHER_ROBOT'),
+    ROBOT_OTHER_FALLING: el('x', 'OTHER_ROBOT'),
+    ROBOT_OTHER_FLYING: el('^', 'OTHER_ROBOT'),
+    ROBOT_OTHER_LASER: el('&', 'OTHER_ROBOT'),
+
+    LASER_LEFT: el('←', 'LASER_LEFT', Direction.LEFT),
+    LASER_RIGHT: el('→', 'LASER_RIGHT', Direction.RIGHT),
+    LASER_UP: el('↑', 'LASER_UP', Direction.UP),
+    LASER_DOWN: el('↓', 'LASER_DOWN', Direction.DOWN),
+
+    FEMALE_ZOMBIE: el('♀', 'ZOMBIE'),
+    MALE_ZOMBIE: el('♂', 'ZOMBIE'),
+    ZOMBIE_DIE: el('✝', 'ZOMBIE_DIE'),
+
+    getElements: function () {
+        return elements.slice(0);
+    },
+
+    getElement: function (char) {
+        var el = elementsByChar[char];
+        if (!el) {
+            throw "Element not found for: " + char;
+        }
+        return el;
+    },
+
+    getElementsTypes: function () {
+        var elements = [];
+        elementsTypes.forEach(function(e) {
+            if (Array.isArray(e)) {
+                elements = elements.concat(e);
+            } else {
+                elements.push(e);
+            }
+        });
+
+        var result = [];
+        elements.forEach(function(e) {
+            if (result.indexOf(e) < 0) {
+                result.push(e);
+            }
+        });
+
+        return result;
+    },
+
+    getElementsOfType: function (type) {
+        return elementsByType[type];
+    }
+
 };
 
 var Point = function (x, y, direction) {
@@ -470,7 +526,7 @@ var Board = function (board) {
             layersString[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
     };
 
-    var barriers = null; // TODO еще разочек подумать над этим методом
+    var barriers = null;
     var barriersMap = null;
     var getBarriers = function () {
         if (!!barriers) {
@@ -679,6 +735,10 @@ var Board = function (board) {
         return result;
     };
 
+    var getHero = function() {
+        return pt(heroPosition.x, heroPosition.y);
+    }
+
     // thanks http://jsfiddle.net/queryj/g109jvxd/
     String.format = function () {
         // The string containing the format items (e.g. "{0}")
@@ -695,31 +755,23 @@ var Board = function (board) {
     }
 
     var toString = function () {
-        return String.format(
-            "Board layer 1:\n{0}\n" +
-            "Board layer 2:\n{1}\n" +
-            "Board layer 3:\n{2}\n" +
-            "Robot at: {3}\n" +
-            "Other robots at: {4}\n" +
-            "LaserMachine at: {5}" +
-            "Laser at: {6}" +
-            boardAsString(LAYER1),
-            boardAsString(LAYER2),
-            boardAsString(LAYER3),
-            getHero(),
-            printArray(getOtherHeroes()),
-            printArray(getLaserMachines()),
-            printArray(getLasers())
-        );
+        return "Board layer 1:\n" +
+            boardAsString(LAYER1) + "\n" +
+            "Board layer 2:\n" +
+            boardAsString(LAYER2) + "\n" +
+            "Board layer 3:\n" +
+            boardAsString(LAYER3) + "\n" +
+            "Robot at: " + getHero() + "\n" +
+            "Other robots at: " + printArray(getOtherHeroes()) + "\n" +
+            "LaserMachine at: " + printArray(getLaserMachines()) + "\n" +
+            "Laser at: " + printArray(getLasers()) + "";
     };
 
     return {
         size: function () {
             return size;
         },
-        getHero: function () {
-            return pt(heroPosition.x, heroPosition.y);
-        },
+        getHero: getHero,
         isLevelFinished: function() {
             return levelFinished;
         },
@@ -770,10 +822,10 @@ var DirectionSolver = function(board){
 
     return {
         /**
-         * @return next robot action
+         * @return next hero action
          */
         get : function() {
-            var robot = board.getRobot();
+            var hero = board.getHero();
 
             // TODO your code here
 
