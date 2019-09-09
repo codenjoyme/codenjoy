@@ -36,7 +36,7 @@ var printArray = function (array) {
        var element = array[index];
        result.push(element.toString());
    }
-   return "[" + result + "]";
+   return result;
 };
 
 var processBoard = function(boardString) {
@@ -49,7 +49,7 @@ var processBoard = function(boardString) {
     var logMessage = board + "\n\n";
     var answer = new DirectionSolver(board).get().toString();
     logMessage += "Answer: " + answer + "\n";
-    logMessage += "-----------------------------------\n";
+    logMessage += "---------------------------------------------------------------------------------------------------------\n";
     
     log(logMessage);
 
@@ -614,7 +614,7 @@ var Board = function (board) {
         for (var i = 0; i < result.length; ++i) {
             var el = Element.getElement(mask[i]);
             if (Element.isWall(el)) {
-                setCharAt(result, i, el.char);
+                result = setCharAt(result, i, el.char);
             }
         }
 
