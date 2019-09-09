@@ -20,6 +20,9 @@
  * #L%
  */
 
+// you can get this code after registration on the server with your email
+var url = "http://codenjoy.com/codenjoy-contest/board/player/5q0uczbju6no468bg6w0?code=1725193577353578184&gameName=icancode";
+
 var util = require('util');
 var WSocket = require('ws');
 
@@ -47,7 +50,7 @@ var processBoard = function(boardString) {
     }
 
     var logMessage = board + "\n\n";
-    var answer = new DirectionSolver(board).get().toString();
+    var answer = new YourSolver(board).whatToDo().toString();
     logMessage += "Answer: " + answer + "\n";
     logMessage += "---------------------------------------------------------------------------------------------------------\n";
     
@@ -55,9 +58,6 @@ var processBoard = function(boardString) {
 
     return answer;
 };
-
-// you can get this code after registration on the server with your email
-var url = "http://codenjoy.com/codenjoy-contest/board/player/5q0uczbju6no468bg6w0?code=1725193577353578184&gameName=icancode";
 
 url = url.replace("http", "ws");
 url = url.replace("board/player/", "ws?user=");
@@ -789,16 +789,15 @@ var Command = {
 
 }
 
-
 var direction;
 
-var DirectionSolver = function(board){
+var YourSolver = function(board){
 
     return {
         /**
-         * @return next hero action
+         * @return next robot action
          */
-        get : function() {
+        whatToDo : function() {
             var hero = board.getMe();
 
             // TODO your code here
