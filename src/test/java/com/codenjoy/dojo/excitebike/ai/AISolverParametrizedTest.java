@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.excitebike.client.ai;
+package com.codenjoy.dojo.excitebike.ai;
 
 /*-
  * #%L
@@ -22,6 +22,7 @@ package com.codenjoy.dojo.excitebike.client.ai;
  * #L%
  */
 
+import com.codenjoy.dojo.excitebike.ai.AISolver;
 import com.codenjoy.dojo.excitebike.client.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;

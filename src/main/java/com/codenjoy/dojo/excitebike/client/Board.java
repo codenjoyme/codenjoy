@@ -27,7 +27,6 @@ import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.excitebike.model.elements.BikeType;
 import com.codenjoy.dojo.excitebike.model.elements.GameElementType;
 import com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType;
-import com.codenjoy.dojo.excitebike.model.items.Bike;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.CharElements;
@@ -45,6 +44,9 @@ import java.util.stream.Stream;
  */
 public class Board extends AbstractBoard<CharElements> {
 
+    private static final String OTHER_BIKE_PREFIX = "OTHER";
+    private static final String FALLEN_BIKE_SUFFIX = "FALLEN";
+
     @Override
     public CharElements valueOf(char ch) {
         return Stream.of(
@@ -59,7 +61,7 @@ public class Board extends AbstractBoard<CharElements> {
 
     public Point getMe() {
         return get(Arrays.stream(BikeType.values())
-                .filter(v -> !v.name().contains(Bike.OTHER_BIKE_PREFIX))
+                .filter(v -> !v.name().contains(OTHER_BIKE_PREFIX))
                 .collect(Collectors.toList())
                 .toArray(new BikeType[]{}))
                 .stream()
@@ -70,7 +72,7 @@ public class Board extends AbstractBoard<CharElements> {
     public boolean isGameOver() {
         Point me = getMe();
         return me == null || Arrays.stream(BikeType.values())
-                .filter(v -> !v.name().contains(Bike.OTHER_BIKE_PREFIX) && v.name().contains(Bike.FALLEN_BIKE_SUFFIX))
+                .filter(v -> !v.name().contains(OTHER_BIKE_PREFIX) && v.name().contains(FALLEN_BIKE_SUFFIX))
                 .anyMatch(v -> isAt(me, v));
     }
 

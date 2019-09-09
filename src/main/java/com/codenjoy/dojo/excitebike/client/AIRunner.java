@@ -25,21 +25,19 @@ package com.codenjoy.dojo.excitebike.client;
 
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.excitebike.client.ai.AISolver;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
 /**
- * User: your name
- * Это твой алгоритм AI для игры. Реализуй его на свое усмотрение.
- * Обрати внимание на {@see YourSolverTest} - там приготовлен тестовый
- * фреймворк для тебя.
+ * Это класс, подключающий твоего бота к игровому серверу.
+ * Просто запусти main метод, предварительно убедившись, что url для подключения корректен.
+ * Логика твоего бота должна быть расположена в классе AISolver, в нем необходимо реализовать один метод - String get(Board board)
  */
-public class YourSolver implements Solver<Board> {
+public class AIRunner implements Solver<Board> {
 
     private AISolver aiSolver;
 
-    public YourSolver(Dice dice) {
+    public AIRunner(Dice dice) {
         aiSolver = new AISolver(dice);
     }
 
@@ -47,13 +45,14 @@ public class YourSolver implements Solver<Board> {
         WebSocketRunner.runClient(
                 // paste here board page url from browser after registration
                 "http://localhost:8080/codenjoy-contest/board/player/pmy8dshjv0o9o1rrjv04?code=7685646871932912113",
-                new YourSolver(new RandomDice()),
+                new AIRunner(new RandomDice()),
                 new Board());
     }
 
     @Override
     public String get(Board board) {
-        return aiSolver.get(board);
+        String aiCommand = aiSolver.get(board);
+        return aiCommand != null ? aiCommand : "";
     }
 
 }

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.excitebike.client.ai;
+package com.codenjoy.dojo.excitebike.ai;
 
 /*-
  * #%L
@@ -58,11 +58,10 @@ import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static com.codenjoy.dojo.services.Direction.UP;
 
 /**
- * Это алгоритм твоего бота. Он будет запускаться в игру с первым
+ * Это алгоритм встроенного бота. Он будет запускаться в игру с первым
  * зарегистрировавшимся игроком, чтобы ему не было скучно играть самому.
  * Реализуй его как хочешь, хоть на Random (только используй для этого
  * {@see Dice} что приходит через конструктор).
- * Для его запуска воспользуйся методом {@see ApofigSolver#main}
  */
 public class AISolver implements Solver<Board> {
 

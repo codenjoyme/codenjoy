@@ -26,7 +26,7 @@ package com.codenjoy.dojo.excitebike.services;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.excitebike.client.Board;
-import com.codenjoy.dojo.excitebike.client.ai.AISolver;
+import com.codenjoy.dojo.excitebike.ai.AISolver;
 import com.codenjoy.dojo.excitebike.model.GameFieldImpl;
 import com.codenjoy.dojo.excitebike.model.Player;
 import com.codenjoy.dojo.excitebike.model.elements.GameElementType;
