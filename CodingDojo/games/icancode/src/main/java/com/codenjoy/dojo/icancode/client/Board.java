@@ -199,6 +199,16 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     /**
+     * @return Returns list of coordinates for all visible Zombies (even die).
+     */
+    public List<Point> getZombies() {
+        return get(LAYER2,
+                FEMALE_ZOMBIE,
+                MALE_ZOMBIE,
+                ZOMBIE_DIE);
+    }
+
+    /**
      * @return Checks if your robot is alive.
      */
     public boolean isMeAlive() {
@@ -262,6 +272,9 @@ public class Board extends AbstractBoard<Elements> {
                     break;
                 case 7:
                     builder.append(" Lasers: " + listToString(getLasers()));
+                    break;
+                case 8:
+                    builder.append(" Zombies: " + listToString(getZombies()));
                     break;
             }
 

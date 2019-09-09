@@ -521,6 +521,12 @@ var Board = function (board) {
         return findAll(Element.GOLD, LAYER1);
     };
 
+    var getZombies = function () {
+        var elements = [Element.FEMALE_ZOMBIE, Element.MALE_ZOMBIE,
+                    Element.ZOMBIE_DIE];
+        return findAllElements(elements, LAYER2);
+    };
+
     var getHoles = function () {
         return findAll(Element.HOLE, LAYER1);
     };
@@ -624,7 +630,7 @@ var Board = function (board) {
         var layer2 = boardAsString(LAYER2).split('\n');
         var layer3 = boardAsString(LAYER3).split('\n');
 
-        var numbers = temp.substring(0, layer1.length);
+        var numbers = temp.substring(0, layer1.length - 1);
         var space = ''.padStart(layer1.length - 5);
         var numbersLine = numbers + '   ' + numbers + '   ' + numbers;
         var firstPart = ' Layer1 ' + space + ' Layer2' + space + ' Layer3' + '\n  ' + numbersLine;
@@ -661,6 +667,9 @@ var Board = function (board) {
                 case 7:
                     result += ' Lasers: ' + printArray(getLasers());
                     break;
+                case 8:
+                    result += ' Zombies: ' + printArray(getZombies());
+                    break;
             }
 
             if (i != layer1.length - 1) {
@@ -686,6 +695,7 @@ var Board = function (board) {
         getBoxes: getBoxes,
         getGold: getGold,
         getStarts: getStarts,
+        getZombies: getZombies,
         getZombieStart: getZombieStart,
         getExits: getExits,
         getHoles: getHoles,
