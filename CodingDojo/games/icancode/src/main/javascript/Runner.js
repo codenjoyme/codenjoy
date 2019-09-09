@@ -119,6 +119,10 @@ var el = function(char, type, direction) {
 
 var D = function(index, dx, dy, name){
 
+    var change = function(pt) {
+        return pt(changeX(pt.getX()), changeY(pt.getY()));
+    };
+
     var changeX = function(x) {
         return x + dx;
     };
@@ -133,6 +137,16 @@ var D = function(index, dx, dy, name){
             case Direction.DOWN : return Direction.UP;
             case Direction.LEFT : return Direction.RIGHT;
             case Direction.RIGHT : return Direction.LEFT;
+            default : return Direction.STOP;
+        }
+    };
+
+    var clockwise = function() {
+        switch (this) {
+            case Direction.LEFT : return Direction.UP;
+            case Direction.UP : return Direction.RIGHT;
+            case Direction.RIGHT : return Direction.DOWN;
+            case Direction.DOWN : return Direction.LEFT;
             default : return Direction.STOP;
         }
     };
@@ -362,7 +376,7 @@ var Board = function (board) {
         layers.push(parseLayer(layersString[index]));
     }
 
-    var isAt = function (x, y, layer, element) {
+    var isAt = function (layer, x, y, element) {
         if (pt(x, y).isBad(size) || getAt(x, y, layer) == null) {
             return false;
         }
@@ -377,7 +391,7 @@ var Board = function (board) {
         var result = [];
         for (var x = 0; x < size; x++) {
             for (var y = 0; y < size; y++) {
-                if (isAt(x, y, layer, element)) {
+                if (isAt(layer, x, y, element)) {
                     result.push(new Point(x, y));
                 }
             }
@@ -420,7 +434,7 @@ var Board = function (board) {
             for (var y = 0; y < size; y++) {
                 for (var e in elements) {
                     var element = elements[e];
-                    if (isAt(x, y, layer, element)) {
+                    if (isAt(layer, x, y, element)) {
                         result.push(element.direction ? new Point(x, y, element.direction.toString()) : new Point(x, y));
                     }
                 }
@@ -432,7 +446,7 @@ var Board = function (board) {
     var isAnyOfAt = function (x, y, layer, elements) {
         for (var index in elements) {
             var element = elements[index];
-            if (isAt(x, y, layer, element)) {
+            if (isAt(layer, x, y, element)) {
                 return true;
             }
         }
@@ -443,8 +457,8 @@ var Board = function (board) {
         if (pt(x, y).isBad(size)) {
             return false;
         }
-        return isAt(x + 1, y, layer, element) || isAt(x - 1, y, layer, element)
-            || isAt(x, y + 1, layer, element) || isAt(x, y - 1, layer, element);
+        return isAt(layer, x + 1, y, element) || isAt(layer, x - 1, y, element)
+            || isAt(layer, x, y + 1, element) || isAt(layer, x, y - 1, element);
     };
 
     var isBarrierAt = function (x, y) {
@@ -463,10 +477,10 @@ var Board = function (board) {
             return 0;
         }
         var count = 0;
-        if (isAt(x - 1, y, layer, element)) count++;
-        if (isAt(x + 1, y, layer, element)) count++;
-        if (isAt(x, y - 1, layer, element)) count++;
-        if (isAt(x, y + 1, layer, element)) count++;
+        if (isAt(layer, x + 1, y, element)) count++;
+        if (isAt(layer, x - 1, y, element)) count++;
+        if (isAt(layer, x, y - 1, element)) count++;
+        if (isAt(layer, x, y + 1, element)) count++;
         return count;
     };
 
@@ -700,7 +714,7 @@ var Board = function (board) {
         getExits: getExits,
         getHoles: getHoles,
         isMyRobotAlive: isMyRobotAlive,
-        isAt: isAt,
+        isAt: isAt, // +
         getAt: getAt,
         toString: toString,
         layer1: function () {

@@ -471,7 +471,7 @@ import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;</pre>
           <a id="direction"></a>
           <h2 class="subtitle text-uppercase">Direction methods</h2>
           
-          <p><span class="func">Direction direction.invert()</span> - Returns inverted direction. Inverts UP to DOWN, RIGHT to LEFT, etc.</p>
+          <p><span class="func">Direction direction.inverted()</span> - Returns inverted direction. Inverts UP to DOWN, RIGHT to LEFT, etc.</p>
 <pre>Direction direction = Direction.LEFT.inverted();
 assert direction.inverted() == Direction.RIGHT;</pre>
           
@@ -497,7 +497,7 @@ assert Direction.UP.changeY(1) == 0;</pre>
         <p><span class="func">new PointImpl(int x, int y)</span> - Creates new point objects with given x and y.</p>
         <pre>Point pt1 = new PointImpl(1, 2);
 Point pt2 = pt(1, 2); // To use import static com.codenjoy.dojo.services.PointImpl.pt;
-assert pt1.eqals(pt2);</pre>
+assert pt1.equals(pt2);</pre>
 
             <p>Please check com.codenjoy.dojo.services.Point for more details.</p>
 
