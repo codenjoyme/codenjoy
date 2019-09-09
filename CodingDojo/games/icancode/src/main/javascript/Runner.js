@@ -421,7 +421,7 @@ var Board = function (board) {
                 for (var e in elements) {
                     var element = elements[e];
                     if (isAt(x, y, layer, element)) {
-                        result.push(element.direction ? new Point(x, y, element.direction.name()) : new Point(x, y));
+                        result.push(element.direction ? new Point(x, y, element.direction.toString()) : new Point(x, y));
                     }
                 }
             }
