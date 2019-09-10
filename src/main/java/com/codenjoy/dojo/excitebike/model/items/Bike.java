@@ -66,6 +66,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     public static final String AT_LINE_CHANGER_UP_SUFFIX = "_AT_LINE_CHANGER_UP";
     public static final String AT_LINE_CHANGER_DOWN_SUFFIX = "_AT_LINE_CHANGER_DOWN";
 
+    private final String playerName;
     private Direction command;
     private Movement movement = new Movement();
     private BikeType type = BIKE;
@@ -77,12 +78,18 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     private boolean adjusted;
     private boolean movementLock;
 
-    public Bike(Point xy) {
+    public Bike(Point xy, String playerName) {
         super(xy);
+        this.playerName = playerName;
     }
 
-    public Bike(int x, int y) {
+    public Bike(int x, int y, String playerName) {
         super(x, y);
+        this.playerName = playerName;
+    }
+
+    public String getPlayerName() {
+        return playerName;
     }
 
     @Override
@@ -142,7 +149,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             executeCommand();
             tryToMove();
             adjustStateToElement();
-            if(!isAlive()){
+            if (!isAlive()) {
                 field.getPlayerOfBike(this).event(Events.LOSE);
             }
         }
@@ -447,30 +454,20 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
         Bike bike = (Bike) o;
-        return ticked == bike.ticked &&
-                accelerated == bike.accelerated &&
-                inhibited == bike.inhibited &&
-                interacted == bike.interacted &&
-                atSpringboard == bike.atSpringboard &&
-                adjusted == bike.adjusted &&
-                movementLock == bike.movementLock &&
-                command == bike.command &&
-                Objects.equals(movement, bike.movement) &&
-                type == bike.type;
+        return playerName.equals(bike.playerName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), command, movement, type, ticked, accelerated, inhibited, interacted,
-                atSpringboard, adjusted, movementLock);
+        return Objects.hash(playerName);
     }
 
     @Override
     public String toString() {
         return "Bike{" +
-                "command=" + command +
+                "playerName=" + playerName +
+                ", command=" + command +
                 ", movement=" + movement +
                 ", type=" + type +
                 ", ticked=" + ticked +

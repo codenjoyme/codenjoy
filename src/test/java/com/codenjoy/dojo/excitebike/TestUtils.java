@@ -36,6 +36,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -51,9 +52,17 @@ public class TestUtils {
     }
 
     public static List<Bike> parseBikes(String map, int xSize) {
-        return parseAndConvertElements(map, xSize, Bike::new, Arrays.stream(BikeType.values())
+        return parseAndConvertElements(map, xSize, TestUtils::newDefaultBike, Arrays.stream(BikeType.values())
                 .filter(e -> !e.name().contains(Bike.OTHER_BIKE_PREFIX))
                 .toArray(BikeType[]::new));
+    }
+
+    private static Bike newDefaultBike(Point point) {
+        return new Bike(point, getPlayerName());
+    }
+
+    private static String getPlayerName() {
+        return "player" + new Random().nextLong();
     }
 
     private static <T> List<T> parseAndConvertElements(String map, int xSize, Function<Point, T> elementConstructor, CharElements... elements) {
@@ -75,7 +84,7 @@ public class TestUtils {
     }
 
     public static Player getPlayer(Bike bike) {
-        Player player = new Player(mock(EventListener.class));
+        Player player = new Player(mock(EventListener.class), getPlayerName());
         player.setHero(bike);
         return player;
     }

@@ -44,7 +44,7 @@ public class BikeTest {
 
     @Before
     public void init() {
-        bike = new Bike(5, 5);
+        bike = new Bike(5, 5, "player");
         gameField = mock(GameField.class);
         when(gameField.xSize()).thenReturn(10);
         bike.init(gameField);
@@ -102,7 +102,7 @@ public class BikeTest {
     public void tickWithUpCommand__shouldMoveBikeAndChangeItsStateToKilledEnemy__ifUpperPositionIsOtherBike() {
         //given
         when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
-        Bike enemy = new Bike(5, 6);
+        Bike enemy = new Bike(5, 6, "player");
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getEnemyBike(5, 6, player)).thenReturn(Optional.of(enemy));
@@ -157,7 +157,7 @@ public class BikeTest {
     public void tickWithDownCommand__shouldMoveBikeAndChangeItsStateToKilledEnemy__ifLowerPositionIsOtherBike() {
         //given
         when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
-        Bike enemy = new Bike(5, 4);
+        Bike enemy = new Bike(5, 4, "player");
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getEnemyBike(5, 4, player)).thenReturn(Optional.of(enemy));
@@ -350,7 +350,7 @@ public class BikeTest {
         //given
         when(gameField.isUpLineChanger(anyInt(), anyInt())).thenReturn(true);
         when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
-        Bike enemy = new Bike(5, 6);
+        Bike enemy = new Bike(5, 6, "player");
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getEnemyBike(5, 6, player)).thenReturn(Optional.of(enemy));
@@ -369,7 +369,7 @@ public class BikeTest {
         //given
         when(gameField.isUpLineChanger(anyInt(), anyInt())).thenReturn(true);
         when(gameField.isFence(anyInt(), anyInt())).thenReturn(false);
-        Bike enemy = new Bike(5, 6);
+        Bike enemy = new Bike(5, 6, "player");
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getEnemyBike(5, 6, player)).thenReturn(Optional.of(enemy));
@@ -439,7 +439,7 @@ public class BikeTest {
     public void tick1__shouldNotMoveBike__ifBikeTakeDownLineChangerAndLowerPositionIsOtherBike() {
         //given
         when(gameField.isDownLineChanger(5, 5)).thenReturn(true);
-        Bike enemy = new Bike(5, 6);
+        Bike enemy = new Bike(5, 6, "player");
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getEnemyBike(5, 6, player)).thenReturn(Optional.of(enemy));
@@ -458,7 +458,7 @@ public class BikeTest {
     public void tick2__shouldMoveBikeDown__ifBikeTakeDownLineChangerAndLowerPositionIsOtherBike() {
         //given
         when(gameField.isDownLineChanger(5, 5)).thenReturn(true);
-        Bike enemy = new Bike(5, 4);
+        Bike enemy = new Bike(5, 4, "player");
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getEnemyBike(5, 4, player)).thenReturn(Optional.of(enemy));
@@ -478,7 +478,7 @@ public class BikeTest {
     @Test
     public void tick__shouldCrushBike__ifBikeCollideOtherCrushedBike() {
         //given
-        Bike enemyBike = new Bike(5, 5);
+        Bike enemyBike = new Bike(5, 5, "player");
         enemyBike.crush();
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
@@ -498,7 +498,7 @@ public class BikeTest {
     @Test
     public void downCommandToEnemyBikeTick__shouldCrushOtherBike__ifOtherBikeDidNotChangeLine() {
         //given
-        Bike enemy = new Bike(5, 4);
+        Bike enemy = new Bike(5, 4, "player");
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getPlayerOfBike(enemy)).thenReturn(player);
@@ -525,7 +525,7 @@ public class BikeTest {
         //given
         when(gameField.isAccelerator(5, 5)).thenReturn(true);
         when(gameField.xSize()).thenReturn(10);
-        Bike enemy = new Bike(6, 5);
+        Bike enemy = new Bike(6, 5, "player");
         Player player = mock(Player.class);
         when(gameField.getPlayerOfBike(bike)).thenReturn(player);
         when(gameField.getEnemyBike(6, 5, player)).thenReturn(Optional.of(enemy));

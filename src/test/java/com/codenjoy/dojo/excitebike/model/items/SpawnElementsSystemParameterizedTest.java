@@ -69,7 +69,7 @@ public class SpawnElementsSystemParameterizedTest {
         when(mapParser.getXSize()).thenReturn(5);
         when(mapParser.getYSize()).thenReturn(5);
         game = new GameFieldImpl(mapParser, dice, new SettingsHandler());
-        player = new Player(mock(EventListener.class));
+        player = new Player(mock(EventListener.class), "playerName");
         game.newGame(player);
     }
 

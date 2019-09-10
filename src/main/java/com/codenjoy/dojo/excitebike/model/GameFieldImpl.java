@@ -23,9 +23,9 @@ package com.codenjoy.dojo.excitebike.model;
  */
 
 
+import com.codenjoy.dojo.excitebike.model.items.Bike;
 import com.codenjoy.dojo.excitebike.model.items.Fence;
 import com.codenjoy.dojo.excitebike.model.items.Shiftable;
-import com.codenjoy.dojo.excitebike.model.items.Bike;
 import com.codenjoy.dojo.excitebike.services.SettingsHandler;
 import com.codenjoy.dojo.excitebike.services.generation.GenerationOption;
 import com.codenjoy.dojo.excitebike.services.generation.TrackStepGenerator;
@@ -46,6 +46,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.ACCELERATOR;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.INHIBITOR;
 import static com.codenjoy.dojo.excitebike.model.elements.GameElementType.LINE_CHANGER_DOWN;
@@ -58,8 +59,6 @@ import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType
 import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_RIGHT_DOWN;
 import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_RIGHT_UP;
 import static com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType.SPRINGBOARD_TOP;
-import static com.codenjoy.dojo.excitebike.model.items.Bike.OTHER_BIKE_PREFIX;
-import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
@@ -84,7 +83,7 @@ public class GameFieldImpl implements GameField {
         allShiftableElements.put(OBSTACLE, new ArrayList<>(mapParser.getObstacles()));
         allShiftableElements.put(LINE_CHANGER_UP, new ArrayList<>(mapParser.getLineUpChangers()));
         allShiftableElements.put(LINE_CHANGER_DOWN, new ArrayList<>(mapParser.getLineDownChangers()));
-        allShiftableElements.put(BIKE_FALLEN, new ArrayList<>(mapParser.getFallenBikes()));
+        allShiftableElements.put(BIKE_FALLEN, new ArrayList<>());
 
         allShiftableElements.put(SPRINGBOARD_LEFT_UP, new ArrayList<>(mapParser.getSpringboardLeftUpElements()));
         allShiftableElements.put(SPRINGBOARD_RIGHT, new ArrayList<>(mapParser.getSpringboardLightElements()));
@@ -187,16 +186,16 @@ public class GameFieldImpl implements GameField {
         return player != null ?
                 players.parallelStream()
                         .map(Player::getHero)
-                        .filter(bike -> bike != null && bike.state(player).name().contains(OTHER_BIKE_PREFIX) && bike.itsMe(x, y))
+                        .filter(bike -> bike != null && !bike.getPlayerName().equals(player.getHero().getPlayerName()) && bike.itsMe(x, y))
                         .findFirst()
                 : Optional.empty();
     }
 
     @Override
-    public Bike getNewFreeBike() {
-        Bike result = createNewFreeBike(true);
+    public Point findFreePosition() {
+        Point result = findFreePosition(true);
         if (result == null) {
-            result = createNewFreeBike(false);
+            result = findFreePosition(false);
         }
         if (result == null) {
             throw new RuntimeException("Game field is full, can't add more bikes!");
@@ -204,7 +203,7 @@ public class GameFieldImpl implements GameField {
         return result;
     }
 
-    private Bike createNewFreeBike(boolean chessOrder) {
+    private Point findFreePosition(boolean chessOrder) {
         for (int xi = 0; xi < mapParser.getXSize(); xi++) {
             for (int yi = 1; yi < mapParser.getYSize() - 1; yi++) {
                 if (chessOrder && (even(xi) && even(yi) || !even(xi) && !even(yi))) {
@@ -214,7 +213,7 @@ public class GameFieldImpl implements GameField {
                 boolean atSpringboard = pointAtSpringboard(lowestPointAtColumn);
                 Point spawnPlaceCandidate = new PointImpl(xi, atSpringboard ? yi + 1 : yi);
                 if (isFree(spawnPlaceCandidate)) {
-                    return new Bike(spawnPlaceCandidate);
+                    return spawnPlaceCandidate;
                 }
             }
         }
@@ -255,8 +254,8 @@ public class GameFieldImpl implements GameField {
     public void newGame(Player player) {
         if (!players.contains(player)) {
             players.add(player);
+            player.newHero(this);
         }
-        player.newHero(this);
     }
 
     @Override
@@ -312,6 +311,14 @@ public class GameFieldImpl implements GameField {
 
     @Override
     public Player getPlayerOfBike(Bike bike) {
-        return players.parallelStream().filter(p -> Objects.equals(p.getHero(), bike)).findFirst().orElse(null);
+        return players.parallelStream()
+                .filter(p -> p.getHero() != null && p.getHero().getPlayerName().equals(bike.getPlayerName()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public void removeFallenBike(Bike bike) {
+        allShiftableElements.get(BIKE_FALLEN).remove(bike);
     }
 }

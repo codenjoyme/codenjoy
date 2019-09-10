@@ -28,8 +28,6 @@ import com.codenjoy.dojo.excitebike.model.elements.GameElementType;
 import com.codenjoy.dojo.excitebike.model.items.Inhibitor;
 import com.codenjoy.dojo.excitebike.model.items.LineChanger;
 import com.codenjoy.dojo.excitebike.model.items.Obstacle;
-import com.codenjoy.dojo.excitebike.model.items.Bike;
-import com.codenjoy.dojo.excitebike.model.elements.BikeType;
 import com.codenjoy.dojo.excitebike.model.items.SpringboardElement;
 import com.codenjoy.dojo.excitebike.model.elements.SpringboardElementType;
 import com.codenjoy.dojo.services.Point;
@@ -61,14 +59,6 @@ public class MapParserImpl implements MapParser {
     @Override
     public int getYSize() {
         return map.length() / xSize;
-    }
-
-    @Override
-    public List<Bike> getFallenBikes() {
-        return parseAndConvertElements(Bike::new,
-                Arrays.stream(BikeType.values())
-                        .filter(e -> e.name().contains(Bike.FALLEN_BIKE_SUFFIX))
-                        .toArray(BikeType[]::new));
     }
 
     @Override

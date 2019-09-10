@@ -179,7 +179,7 @@ public class GameFieldImplTest {
     public void getEnemyBike__shouldReturnEmptyOptional__ifThereIsOnlyThisBikeAtGivenCoordinates() {
         //given
         gameField = new GameFieldImpl(mapParser, dice, new SettingsHandler());
-        Player player = new Player(mock(EventListener.class));
+        Player player = new Player(mock(EventListener.class), "player1");
         gameField.newGame(player);
 
         //when
@@ -193,7 +193,7 @@ public class GameFieldImplTest {
     public void getEnemyBike__shouldReturnEmptyOptional__ifGivenPlayerIsNull() {
         //given
         gameField = new GameFieldImpl(mapParser, dice, new SettingsHandler());
-        Player player = new Player(mock(EventListener.class));
+        Player player = new Player(mock(EventListener.class), "player1");
         gameField.newGame(player);
 
         //when
@@ -209,8 +209,8 @@ public class GameFieldImplTest {
         gameField = new GameFieldImpl(mapParser, dice, new SettingsHandler());
         int x = 1;
         int y = 1;
-        Bike thisBike = new Bike(x, y);
-        Bike enemyBike = new Bike(x, y);
+        Bike thisBike = new Bike(x, y, "thisPlayer");
+        Bike enemyBike = new Bike(x, y, "enemyPlayer");
         Player thisPlayer = mock(Player.class);
         when(thisPlayer.getHero()).thenReturn(thisBike);
         Player enemyPlayer = mock(Player.class);
@@ -281,11 +281,11 @@ public class GameFieldImplTest {
     public void getPlayerOfBike__shouldReturnNull__ifThereIsNoPlayerWithGivenBike() {
         //given
         gameField = new GameFieldImpl(mapParser, dice, new SettingsHandler());
-        Player player = new Player(mock(EventListener.class));
+        Player player = new Player(mock(EventListener.class), "player1");
         gameField.newGame(player);
 
         //when
-        Player result = gameField.getPlayerOfBike(new Bike(2, 22));
+        Player result = gameField.getPlayerOfBike(new Bike(2, 22,"player2"));
 
         //then
         assertThat(result, nullValue());
@@ -297,7 +297,7 @@ public class GameFieldImplTest {
         gameField = new GameFieldImpl(mapParser, dice, new SettingsHandler());
         int x = 1;
         int y = 1;
-        Bike givenBike = new Bike(x, y);
+        Bike givenBike = new Bike(x, y, "givenPlayer");
         Player givenPlayer = mock(Player.class);
         when(givenPlayer.getHero()).thenReturn(givenBike);
         gameField.newGame(givenPlayer);

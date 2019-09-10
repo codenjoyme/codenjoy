@@ -25,14 +25,21 @@ package com.codenjoy.dojo.excitebike.model;
 
 import com.codenjoy.dojo.excitebike.model.items.Bike;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Objects;
+import java.util.Random;
 
 public class Player extends GamePlayer<Bike, GameField> {
 
+    private final String name;
     private Bike bike;
 
-    public Player(EventListener listener) {
+    public Player(EventListener listener, String playerName) {
         super(listener);
+        this.name = StringUtils.isNotEmpty(playerName) ? playerName : "player" + new Random().nextLong();
     }
 
     public Bike getHero() {
@@ -45,7 +52,11 @@ public class Player extends GamePlayer<Bike, GameField> {
 
     @Override
     public void newHero(GameField gameField) {
-        bike = gameField.getNewFreeBike();
+        if (bike != null) {
+            gameField.removeFallenBike(bike);
+        }
+        Point freePosition = gameField.findFreePosition();
+        bike = new Bike(freePosition, name);
         bike.init(gameField);
     }
 
@@ -54,4 +65,25 @@ public class Player extends GamePlayer<Bike, GameField> {
         return bike != null && bike.isAlive();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return name.equals(player.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name=" + name +
+                ", bike=" + bike +
+                ", listener=" + listener +
+                '}';
+    }
 }

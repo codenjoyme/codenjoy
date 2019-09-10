@@ -70,13 +70,13 @@ public class MultiplayerSystemTest {
         field = new GameFieldImpl(mapParser, dice, new SettingsHandler());
         PrinterFactory factory = new PrinterFactoryImpl();
 
-        game1 = new Single(new Player(eventListenerSpy1), factory);
+        game1 = new Single(new Player(eventListenerSpy1, "player1"), factory);
         game1.on(field);
 
-        game2 = new Single(new Player(eventListenerSpy2), factory);
+        game2 = new Single(new Player(eventListenerSpy2, "player2"), factory);
         game2.on(field);
 
-        game3 = new Single(new Player(eventListenerSpy3), factory);
+        game3 = new Single(new Player(eventListenerSpy3, "player3"), factory);
         game3.on(field);
 
         game1.newGame();

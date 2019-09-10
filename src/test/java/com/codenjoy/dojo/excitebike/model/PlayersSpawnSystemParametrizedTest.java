@@ -39,6 +39,7 @@ import org.junit.runners.Parameterized;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.excitebike.TestUtils.parseBikes;
@@ -334,7 +335,7 @@ public class PlayersSpawnSystemParametrizedTest {
     }
 
     private Game createNewGame(GameField field, PrinterFactory factory) {
-        Game game = new Single(new Player(mock(EventListener.class)), factory);
+        Game game = new Single(new Player(mock(EventListener.class), "player" + new Random().nextInt()), factory);
         game.on(field);
         game.newGame();
         return game;

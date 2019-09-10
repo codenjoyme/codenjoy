@@ -60,7 +60,6 @@ public class MapParserTest {
                 GameElementType.OBSTACLE,
                 GameElementType.LINE_CHANGER_UP,
                 GameElementType.LINE_CHANGER_DOWN,
-                BikeType.BIKE_FALLEN,
                 SpringboardElementType.SPRINGBOARD_LEFT,
                 SpringboardElementType.SPRINGBOARD_RIGHT,
                 SpringboardElementType.SPRINGBOARD_LEFT_DOWN,
@@ -215,8 +214,6 @@ public class MapParserTest {
             return (List<T>) mapParser.getLineUpChangers();
         } else if (element == GameElementType.LINE_CHANGER_DOWN) {
             return (List<T>) mapParser.getLineDownChangers();
-        } else if (element == BikeType.BIKE_FALLEN) {
-            return (List<T>) mapParser.getFallenBikes();
         } else if (element == SpringboardElementType.SPRINGBOARD_LEFT) {
             return (List<T>) mapParser.getSpringboardDarkElements();
         } else if (element == SpringboardElementType.SPRINGBOARD_RIGHT) {
