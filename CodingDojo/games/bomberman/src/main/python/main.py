@@ -22,18 +22,31 @@
 # #L%
 ###
 
+
 from sys import version_info
 from webclient import WebClient
 from dds import DirectionSolver
+import re
+
 
 def main():
-
     assert version_info[0] == 3, "You should run me with Python 3.x"
+
+    # substitute following link with the one you've copied in your browser after registration
+    url = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890"
+
+    repattern = re.compile(
+        "^https?://([-a-zA-Z0-9@:%._\+~#=\.]+)/codenjoy-contest/board/player/([a-z0-9]+)\?code=([0-9]+)")
+    rematch = repattern.match(url)
+    serverandport = rematch.group(1)
+    username = rematch.group(2)
+    usercode = rematch.group(3)
 
     dds = DirectionSolver()
     wcl = WebClient(dds)
 
-    wcl.run("ws://codenjoy.com:80/codenjoy-contest/ws", 'au')
+    wcl.run(serverandport, username, usercode)
+
 
 if __name__ == '__main__':
     main()

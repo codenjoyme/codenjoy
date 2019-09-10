@@ -27,10 +27,12 @@ from random import choice
 from board import Board
 from element import Element
 from direction import Direction
+import src.main.python.direction as direct
+
 
 class DirectionSolver:
     """ This class should contain the movement generation algorythm."""
-    
+
     def __init__(self):
         self._direction = None
         self._board = None
@@ -42,6 +44,7 @@ class DirectionSolver:
         self._board = Board(board_string)
         _command = self.find_direction()
         print("Sending Command {}".format(_command))
+
         return _command
 
     def find_direction(self):
@@ -57,7 +60,7 @@ class DirectionSolver:
         if 4 == self._board.count_near(_bm_x, _bm_y, Element('DESTROY_WALL')):
             print("It seems like walls surround you. Self-destroying.")
             return Direction('ACT').to_string()  # Let's drop a bomb then
-        #print(self._board.to_string())
+        # print(self._board.to_string())
         print("Found your Bomberman at {}".format(_bm))
         # here's how we get the list of barriers Points
         _barriers = self._board.get_barriers()
@@ -78,10 +81,11 @@ class DirectionSolver:
                     self._last = _bm.get_x(), _bm.get_y()
                     self._count = 0
                     break
-        else: # it seem that we are surrounded
+        else:  # it seem that we are surrounded
             print("It's long time passed. Let's drop a bomb")
-            _direction = Direction('ACT').to_string() # let's drop a bomb  :)
+            _direction = Direction('ACT').to_string()  # let's drop a bomb  :)
         return _direction
-        
+
+
 if __name__ == '__main__':
     raise RuntimeError("This module is not intended to be ran from CLI")

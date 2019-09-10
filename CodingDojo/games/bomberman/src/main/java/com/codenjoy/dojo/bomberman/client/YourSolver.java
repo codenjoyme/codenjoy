@@ -40,14 +40,22 @@ public class YourSolver implements Solver<Board> {
         this.dice = dice;
     }
 
+    // the method which should be implemented
     @Override
     public String get(Board board) {
         this.board = board;
         if (board.isMyBombermanDead()) return "";
 
-        return Direction.ACT.toString();
+        // put your logic here
+        return Direction.DOWN.toString();
     }
 
+    /**
+     * To connect to the game server:
+     * 1. Sign up on the game server. If you did everything right, you'll get to the main game board.
+     * 2. Click on your name on the right hand side panel
+     * 3. Copy the whole link from the browser, paste it inside below method, now you're good to go!
+     */
     public static void main(String[] args) {
         WebSocketRunner.runClient(
                 // paste here board page url from browser after registration
