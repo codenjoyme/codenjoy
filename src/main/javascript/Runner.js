@@ -735,6 +735,7 @@ var random = function (n) {
 
 var direction;
 
+//Game supports only two directions UP and DOWN or you can return nothing
 var DirectionSolver = function (board) {
     return {
         /**
