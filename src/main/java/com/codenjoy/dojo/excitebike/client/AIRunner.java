@@ -42,9 +42,10 @@ public class AIRunner implements Solver<Board> {
     }
 
     public static void main(String[] args) {
+        // paste here board page url from browser after registration
+        String url = "http://localhost:8080/codenjoy-contest/board/player/pmy8dshjv0o9o1rrjv04?code=7685646871932912113";
         WebSocketRunner.runClient(
-                // paste here board page url from browser after registration
-                "http://localhost:8080/codenjoy-contest/board/player/pmy8dshjv0o9o1rrjv04?code=7685646871932912113",
+                url,
                 new AIRunner(new RandomDice()),
                 new Board());
     }

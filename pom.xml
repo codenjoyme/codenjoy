@@ -85,20 +85,13 @@
                                      basedir="."
                                      includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
                                                src/main/java/com/codenjoy/dojo/${module.name}/model/elements/*.java,
+                                               src/main/javascript/**,
+                                               src/main/csharp/**
                                                README.*,
                                                src/license/**,
-                                               **/pom.xml"
+                                               pom.xml"
                                      excludes="src/test/java/com/codenjoy/dojo/${module.name}/client/*,
                                                **/target/**"
-                                     update="true"/>
-
-                                <zip destfile="${client.sources}"
-                                     basedir="."
-                                     includes="src/main/**"
-                                     excludes="src/main/java/**,
-                                                src/main/webapp/**,
-                                                src/main/resources/**,
-                                                **/target/**"
                                      update="true"/>
 
                                 <zip destfile="${project.build.directory}/${project.artifactId}.jar"
