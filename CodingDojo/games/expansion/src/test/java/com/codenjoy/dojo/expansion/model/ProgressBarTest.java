@@ -23,30 +23,27 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.expansion.model.lobby.NotWaitPlayerLobby;
-import com.codenjoy.dojo.expansion.model.lobby.PlayerLobby;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.expansion.model.levels.Cell;
+import com.codenjoy.dojo.expansion.model.levels.CellImpl;
 import com.codenjoy.dojo.expansion.model.levels.Level;
+import com.codenjoy.dojo.expansion.model.levels.StubGamesGameFactory;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
 import com.codenjoy.dojo.expansion.model.levels.items.Start;
-import com.codenjoy.dojo.expansion.model.levels.CellImpl;
-import com.codenjoy.dojo.expansion.model.levels.StubGamesGameFactory;
 import com.codenjoy.dojo.expansion.model.replay.GameLogger;
 import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Predicate;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -57,8 +54,8 @@ import static org.mockito.Mockito.when;
  */
 public class ProgressBarTest {
 
-    private PlayerBoard single;
-    private PlayerBoard multiple;
+    private IField single;
+    private IField multiple;
     private ProgressBar progressBar;
     private Player player;
     private Dice dice;
@@ -104,8 +101,7 @@ public class ProgressBarTest {
         single = new DummyExpansion(Arrays.asList(level1, level2, level3, level4), dice, false);
         multiple = new DummyExpansion(Arrays.asList(level5), dice, true);
         StubGamesGameFactory factory = new StubGamesGameFactory(single, multiple);
-        PlayerLobby lobby = new NotWaitPlayerLobby(factory);
-        progressBar = new ProgressBar(factory, () -> lobby);
+        progressBar = new ProgressBar(factory);
 
         player = new Player(mock(EventListener.class), progressBar, null);
         progressBar.start(null);

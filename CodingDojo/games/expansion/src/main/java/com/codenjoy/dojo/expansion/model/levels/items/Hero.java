@@ -24,7 +24,6 @@ package com.codenjoy.dojo.expansion.model.levels.items;
 
 
 import com.codenjoy.dojo.services.DLoggerFactory;
-import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
@@ -35,7 +34,7 @@ import com.codenjoy.dojo.expansion.model.BusyMapException;
 import com.codenjoy.dojo.expansion.model.Expansion;
 import com.codenjoy.dojo.expansion.model.Forces;
 import com.codenjoy.dojo.expansion.model.ForcesMoves;
-import com.codenjoy.dojo.expansion.model.Field;
+import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.expansion.services.CodeSaver;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -48,7 +47,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 
-public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable {
+public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickable {
 
     private static Logger logger = DLoggerFactory.getLogger(Hero.class);
 
@@ -61,7 +60,7 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
     private List<Gold> gold;
     private List<ForcesMoves> increase;
     private List<ForcesMoves> movements;
-    private Field field;
+    private IField field;
     private Point position;
     private JSONObject currentAction;
     private JSONObject lastAction;
@@ -82,12 +81,12 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
         currentAction = null;
     }
 
-    public void setField(Field field) {
+    public void setField(IField field) {
         this.field = field;
         resetOn(field);
     }
 
-    private void resetOn(Field field) {
+    private void resetOn(IField field) {
         resetFlags();
         position = occupyFreeBase().getCell().copy();
         field.reset();

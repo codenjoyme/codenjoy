@@ -23,14 +23,16 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.GameRunner;
 import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
@@ -110,7 +112,11 @@ public class AbstractGameRunnerTest {
     }
 
     protected void createNewGame() {
-        Game game = gameRunner.newGame(listener, factory, null, null);
+        GameField field = gameRunner.createGame(0);
+        GamePlayer player = gameRunner.createPlayer(listener, "");
+        Single game = new Single(player, new PrinterFactoryImpl());
+        game.on(field);
+        game.newGame();
         games.add(game);
     }
 
@@ -124,23 +130,23 @@ public class AbstractGameRunnerTest {
     protected void assertE(String expected, int index) {
         Single single = (Single)game(index);
         assertEquals(expected,
-                TestUtils.injectN(getBoardAsString(single).getLayers().get(1)));
+                TestUtils.injectN(getLayer(single, 1)));
     }
 
     protected void assertL(String expected, int index) {
         Single single = (Single)game(index);
         assertEquals(expected,
-                TestUtils.injectN(getBoardAsString(single).getLayers().get(0)));
+                TestUtils.injectN(getLayer(single, 0)));
     }
 
     protected void assertF(String expected, int index) {
         Single single = (Single)game(index);
         assertEquals(expected,
-                TestUtils.injectNN(getBoardAsString(single).getLayers().get(2)));
+                TestUtils.injectNN(getLayer(single, 2)));
     }
 
-    protected PrinterData getBoardAsString(Single single) {
-        return single.getPrinter().print();
+    private String getLayer(Single single, int layer) {
+        return ((JSONObject) single.getBoardAsString()).getJSONArray("layers").getString(layer);
     }
 
     protected void tickAll() {

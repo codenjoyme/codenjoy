@@ -24,25 +24,24 @@ package com.codenjoy.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.expansion.model.levels.*;
-import com.codenjoy.dojo.expansion.model.lobby.NotWaitPlayerLobby;
-import com.codenjoy.dojo.expansion.model.lobby.PlayerLobby;
-import com.codenjoy.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
+import com.codenjoy.dojo.expansion.model.levels.items.Hero;
+import com.codenjoy.dojo.expansion.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.QDirection;
-import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.expansion.model.levels.items.Hero;
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
@@ -108,7 +107,6 @@ public abstract class AbstractSinglePlayersTest {
     private GameFactory gameFactory;
     protected Ticker ticker;
     private int size = LevelsTest.LEVEL_SIZE;
-    private PlayerLobby lobby;
 
     @Before
     public void setup() {
@@ -141,19 +139,17 @@ public abstract class AbstractSinglePlayersTest {
     protected void givenFl(String... boards) {
         setupMaps(boards);
         gameFactory = getGameFactory();
-        lobby = new NotWaitPlayerLobby(gameFactory);
     }
 
     protected void givenFlWithWaitForAllLobby(String... boards) {
         setupMaps(boards);
         gameFactory = getGameFactory();
-        lobby = new WaitForAllPlayerLobby(gameFactory);
     }
 
 
     protected void givenForces(String forces, String layer2) {
-        PlayerBoard current = singles.get(PLAYER1).getProgressBar().getCurrent();
-        LevelImpl level = (LevelImpl)current.getCurrentLevel();
+        IField current = (IField)singles.get(PLAYER1).getField();
+        LevelImpl level = (LevelImpl) current.getCurrentLevel();
         level.fillForces(layer2, heroes.toArray(new Hero[0]));
         level.fillForcesCount(forces);
     }
@@ -194,7 +190,7 @@ public abstract class AbstractSinglePlayersTest {
     protected void tickAll() {
         for (Single single : singles) {
             if (single != null) {
-                single.tick();
+                single.getField().tick();
             }
         }
     }
@@ -267,30 +263,30 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected void destroy(int index) {
-        single(index).destroy();
+        // single(index).destroy(); TODO to use progressBar.destroy
         singles.set(index, null);
     }
 
     protected void assertL(String expected, int index) {
         Single single = single(index);
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(getBoardAsString(single).getLayers().get(0)));
+                TestUtils.injectN(getLayer(single, 0)));
     }
 
-    private PrinterData getBoardAsString(Single single) {
-        return single.getPrinter().print();
+    private String getLayer(Single single, int layer) {
+        return ((JSONObject) single.getBoardAsString()).getJSONArray("layers").getString(layer);
     }
 
     protected void assertE(String expected, int index) {
         Single single = single(index);
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(getBoardAsString(single).getLayers().get(1)));
+                TestUtils.injectN(getLayer(single, 1)));
     }
 
     protected void assertF(String expected, int index) {
         Single single = single(index);
         assertEquals(expected,
-                TestUtils.injectNN(getBoardAsString(single).getLayers().get(2)));
+                TestUtils.injectNN(getLayer(single, 2)));
     }
 
     protected EventListener verify(int index) {
@@ -313,7 +309,7 @@ public abstract class AbstractSinglePlayersTest {
                                    boolean onlyMyName, String layer1, String layer2,
                                    String forces, Point myBase, int index)
     {
-        JSONObject json = getBoardAsString(index);
+        JSONObject json = getLayer(index);
 
         assertEquals(levelProgress,
                 JsonUtils.clean(JsonUtils.toStringSorted(json.get("levelProgress"))));
@@ -341,12 +337,12 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected void assertBoardData(int index, String expected) {
-        JSONObject json = getBoardAsString(index);
+        JSONObject json = getLayer(index);
         assertEquals(JsonUtils.clean(JsonUtils.toStringSorted(expected)),
                 JsonUtils.clean(JsonUtils.toStringSorted(json)));
     }
 
-    protected JSONObject getBoardAsString(int index) {
-        return single(index).getBoardAsString();
+    protected JSONObject getLayer(int index) {
+        return (JSONObject) single(index).getBoardAsString();
     }
 }

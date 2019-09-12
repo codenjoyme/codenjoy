@@ -25,9 +25,9 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 import com.codenjoy.dojo.expansion.model.Expansion;
 import com.codenjoy.dojo.expansion.model.GameFactory;
-import com.codenjoy.dojo.expansion.model.PlayerBoard;
-import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.expansion.model.replay.GameLoggerImpl;
+import com.codenjoy.dojo.services.Dice;
 
 /**
  * Created by Oleksandr_Baglai on 2017-09-01.
@@ -38,7 +38,7 @@ public class OneMultipleGameFactory implements GameFactory {
     private LevelsFactory singleFactory;
     private LevelsFactory multipleFactory;
 
-    private PlayerBoard multiple;
+    private IField multiple;
 
     public OneMultipleGameFactory(Dice dice,
                                   LevelsFactory singleFactory,
@@ -49,17 +49,17 @@ public class OneMultipleGameFactory implements GameFactory {
     }
 
     @Override
-    public PlayerBoard existMultiple() {
+    public IField existMultiple() {
         return multiple;
     }
 
     @Override
-    public PlayerBoard newMultiple() {
+    public IField newMultiple() {
         return multiple = new Expansion(multipleFactory.get(), dice, new GameLoggerImpl(), Expansion.MULTIPLE);
     }
 
     @Override
-    public PlayerBoard single() {
+    public IField single() {
         return new Expansion(singleFactory.get(), dice, new GameLoggerImpl(), Expansion.SINGLE);
     }
 }

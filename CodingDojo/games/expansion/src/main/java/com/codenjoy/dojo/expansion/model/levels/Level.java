@@ -23,7 +23,7 @@ package com.codenjoy.dojo.expansion.model.levels;
  */
 
 
-import com.codenjoy.dojo.expansion.model.Field;
+import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public interface Level {
 
     List<Cell> getCellsWith(Predicate<Cell> is);
 
-    void setField(Field field);
+    void setField(IField field);
 
     String getName();
 }

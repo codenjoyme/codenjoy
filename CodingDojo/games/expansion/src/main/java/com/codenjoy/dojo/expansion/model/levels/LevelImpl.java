@@ -24,7 +24,7 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 
 import com.codenjoy.dojo.expansion.model.Elements;
-import com.codenjoy.dojo.expansion.model.Field;
+import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
@@ -202,7 +202,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public void setField(Field field) {
+    public void setField(IField field) {
         List<FieldItem> items = getItems(FieldItem.class);
 
         for (int i = 0; i < items.size(); ++i) {

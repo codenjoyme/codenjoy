@@ -27,7 +27,7 @@ package com.codenjoy.dojo.expansion.model;
  * Created by Oleksandr_Baglai on 2017-09-01.
  */
 public interface GameFactory {
-    PlayerBoard single();
-    PlayerBoard newMultiple();
-    PlayerBoard existMultiple();
+    IField single();
+    IField newMultiple();
+    IField existMultiple();
 }

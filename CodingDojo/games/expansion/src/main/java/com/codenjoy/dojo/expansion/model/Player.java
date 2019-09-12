@@ -23,11 +23,11 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.Events;
@@ -38,7 +38,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class Player extends GamePlayer<Hero, Field> {
+public class Player extends GamePlayer<Hero, IField> {
 
     private static Logger logger = DLoggerFactory.getLogger(Player.class);
 
@@ -67,7 +67,7 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero;
     }
 
-    public void newHero(Field field) {
+    public void newHero(IField field) {
         if (hero == null) {
             hero = new Hero();
         }
@@ -93,9 +93,44 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero.getBase().element().getIndex();
     }
 
-    public Game getGame() {
-        return progressBar.getGameOwner();
+    public IField getGame() {
+        return progressBar.getCurrent();
     }
+
+    @Override
+    public HeroData getHeroData() {
+        return new GameHeroData();
+    }
+
+    public class GameHeroData implements HeroData {
+        @Override
+        public Point getCoordinate() {
+            return new PointImpl(getHero().getBasePosition());
+        }
+
+        @Override
+        public boolean isMultiplayer() {
+            return progressBar.isMultiple();
+        }
+
+        @Override
+        public int getLevel() {
+            return 0;
+        }
+
+        @Override
+        public Object getAdditionalData() {
+            JSONObject result = new JSONObject();
+            result.put("lastAction", getCurrentAction());
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("getAdditionalData for game {} prepare {}", lg.id(), JsonUtils.toStringSorted(result));
+            }
+
+            return result;
+        }
+
+    };
 
     public Point getBasePosition() {
         return hero.getBasePosition();
@@ -119,16 +154,20 @@ public class Player extends GamePlayer<Hero, Field> {
         this.hero = hero;
     }
 
-    public void setPlayerBoard(PlayerBoard current) {
+    public void setPlayerBoard(IField current) {
         progressBar.setCurrent(current);
     }
 
-    public PlayerBoard getCurrent() {
+    public IField getCurrent() {
         return progressBar.getCurrent();
     }
 
     public String getName() {
         return name;
+    }
+
+    public ProgressBar getProgress() {
+        return progressBar;
     }
 
     public class LogState {
@@ -151,6 +190,10 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public LogState lg = new LogState();
+
+    public Printer<PrinterData> getPrinter() {
+        return progressBar.getPrinter();
+    }
 
     @Override
     public String toString() {

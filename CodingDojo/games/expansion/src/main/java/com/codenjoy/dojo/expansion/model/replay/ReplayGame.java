@@ -38,6 +38,7 @@ import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 /**
  * Created by Oleksandr_Baglai on 2017-09-21.
  */
+// TODO починить риплеи и встроить их в сам коденжой для всех игр
 public abstract class ReplayGame implements Game {
 
     private static final String START_FROM_TICK = "startFromTick";
@@ -131,9 +132,10 @@ public abstract class ReplayGame implements Game {
             return result;
         }
 
-        // TODO this method not used
         public List<Game> playersGroup() {
-            return Arrays.asList(ReplayGame.this);
+            // TODO this method not used
+            // return Arrays.asList(ReplayGame.this);
+            return null;
         }
     };
 

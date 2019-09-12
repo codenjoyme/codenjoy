@@ -26,6 +26,7 @@ package com.codenjoy.dojo.expansion.model.replay;
 import com.codenjoy.dojo.expansion.model.AbstractSinglePlayersTest;
 import com.codenjoy.dojo.expansion.model.GameFactory;
 import com.codenjoy.dojo.expansion.model.MultipleGameFactory;
+import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.expansion.model.levels.LevelsFactory;
 import org.jetbrains.annotations.NotNull;
@@ -135,13 +136,14 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        String game1 = single(PLAYER1).getPlayer().getCurrent().id();
+        int index = PLAYER1;
+        String game1 = getGameId(index);
         File file = getFile("game-" + game1 + "-1.txt");
 
         String result = loadFromFile(file);
 
-        String player1 = singles.get(PLAYER1).getPlayer().lg.id();
-        String player2 = singles.get(PLAYER2).getPlayer().lg.id();
+        String player1 = getPlayerId(PLAYER1);
+        String player2 = getPlayerId(PLAYER2);
         String hero1 = hero(PLAYER1).lg.id();
         String hero2 = hero(PLAYER2).lg.id();
 
@@ -168,6 +170,14 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
                             .replace("H@10b48321", hero2)
                             .replace("E@6a396c1e", game1),
                 result);
+    }
+
+    private String getGameId(int index) {
+        return ((Player)single(index).getPlayer()).getCurrent().id();
+    }
+
+    private String getPlayerId(int index) {
+        return ((Player)single(index).getPlayer()).lg.id();
     }
 
     @Test
@@ -247,13 +257,13 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        String game1 = single(PLAYER1).getPlayer().getCurrent().id();
+        String game1 = getGameId(PLAYER1);
         File file = getFile("game-" + game1 + "-1.txt");
 
         String result = loadFromFile(file);
 
-        String player1 = singles.get(PLAYER1).getPlayer().lg.id();
-        String player2 = singles.get(PLAYER2).getPlayer().lg.id();
+        String player1 = getPlayerId(PLAYER1);
+        String player2 = getPlayerId(PLAYER2);
         String hero1 = hero(PLAYER1).lg.id();
         String hero2 = hero(PLAYER2).lg.id();
 
@@ -376,13 +386,13 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        String game1 = single(PLAYER1).getPlayer().getCurrent().id();
+        String game1 = getGameId(PLAYER1);
 
         File file1 = getFile("game-" + game1 + "-1.txt");
         String result1 = loadFromFile(file1);
 
-        String player1 = singles.get(PLAYER1).getPlayer().lg.id();
-        String player2 = singles.get(PLAYER2).getPlayer().lg.id();
+        String player1 = getPlayerId(PLAYER1);
+        String player2 = getPlayerId(PLAYER2);
         String hero1 = hero(PLAYER1).lg.id();
         String hero2 = hero(PLAYER2).lg.id();
 
@@ -525,14 +535,14 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        String game1 = single(PLAYER1).getPlayer().getCurrent().id();
+        String game1 = getGameId(PLAYER1);
 
         File file = getFile("game-" + game1 + "-1.txt");
         String result = loadFromFile(file);
 
-        String player1 = singles.get(PLAYER1).getPlayer().lg.id();
-        String player2 = singles.get(PLAYER2).getPlayer().lg.id();
-        String player3 = singles.get(PLAYER3).getPlayer().lg.id();
+        String player1 = getPlayerId(PLAYER1);
+        String player2 = getPlayerId(PLAYER2);
+        String player3 = getPlayerId(PLAYER3);
         String hero1 = hero(PLAYER1).lg.id();
         String hero2 = hero(PLAYER2).lg.id();
         String hero3 = hero(PLAYER3).lg.id();
@@ -736,13 +746,13 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         tickAll();
 
         // then
-        String game1 = single(PLAYER1).getPlayer().getCurrent().id();
+        String game1 = getGameId(PLAYER1);
 
         File file1 = getFile("game-" + game1 + "-1.txt");
         String result1 = loadFromFile(file1);
 
-        String player1 = singles.get(PLAYER1).getPlayer().lg.id();
-        String player2 = singles.get(PLAYER2).getPlayer().lg.id();
+        String player1 = getPlayerId(PLAYER1);
+        String player2 = getPlayerId(PLAYER2);
         String hero1 = hero(PLAYER1).lg.id();
         String hero2 = hero(PLAYER2).lg.id();
 

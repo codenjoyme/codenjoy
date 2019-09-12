@@ -65,14 +65,14 @@ public class MultipleGameFactory implements GameFactory {
 
     @Override
     @NotNull
-    public PlayerBoard single() {
+    public IField single() {
         return new Expansion(singleFactory.get(),
                 new RandomDice(), new GameLoggerImpl(), Expansion.SINGLE);
     }
 
     @Override
     @Nullable
-    public PlayerBoard existMultiple() {
+    public IField existMultiple() {
         List<Expansion> free = rooms.stream()
                 .filter(Expansion::isFree)
                 .collect(toList());
@@ -93,7 +93,7 @@ public class MultipleGameFactory implements GameFactory {
 
     @Override
     @NotNull
-    public PlayerBoard newMultiple() {
+    public IField newMultiple() {
         Level level = randomLevel();
         Expansion result = new Expansion(Arrays.asList(level),
                 new RandomDice(), new GameLoggerImpl(), Expansion.MULTIPLE);

@@ -45,7 +45,7 @@ import java.util.function.BiFunction;
 
 import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 
-public class Expansion implements Tickable, Field, PlayerBoard {
+public class Expansion implements Tickable, IField {
 
     public static final Events WIN_MULTIPLE = Events.WIN(data.winScore());
     public static final Events DRAW_MULTIPLE = Events.WIN(data.drawScore());

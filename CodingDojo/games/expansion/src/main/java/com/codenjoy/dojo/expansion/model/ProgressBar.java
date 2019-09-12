@@ -28,9 +28,6 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.codenjoy.dojo.expansion.model.lobby.LobbyPlayerBoard;
-import com.codenjoy.dojo.expansion.model.lobby.PlayerLobby;
-
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -38,7 +35,6 @@ import org.slf4j.Logger;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * Created by oleksandr.baglai on 27.06.2016.
@@ -48,7 +44,6 @@ public class ProgressBar {
     public static final int COUNT_LAYERS = 3;
     private static Logger logger = DLoggerFactory.getLogger(ProgressBar.class);
 
-    private Supplier<PlayerLobby> lobby;
     private GameFactory factory;
     private Player player;
 
@@ -59,14 +54,12 @@ public class ProgressBar {
 
     private Integer backToSingleLevel;
 
-    private PlayerBoard single;
-    private PlayerBoard current;
+    private IField single;
+    private IField current;
     private Printer printer;
-    private Single gameOwner;
 
-    public ProgressBar(GameFactory factory, Supplier<PlayerLobby> lobby) {
+    public ProgressBar(GameFactory factory) {
         this.factory = factory;
-        this.lobby = lobby;
         single = factory.single();
     }
 
@@ -82,6 +75,11 @@ public class ProgressBar {
         Integer result = backToSingleLevel;
         backToSingleLevel = null;
         return result;
+    }
+
+    public void destroy() {
+        remove(player);
+        setCurrent(null);
     }
 
     protected void checkLevel() {
@@ -180,7 +178,10 @@ public class ProgressBar {
 
     private void loadMultiple() {
         remove(player);
-        current = lobby.get().start(player);
+        current = factory.existMultiple();
+        if (current == null) {
+            current = factory.newMultiple();
+        }
         processCurrent(0);
     }
 
@@ -208,7 +209,7 @@ public class ProgressBar {
     }
 
     // TODO test me
-    public List<Game> getPlayerRoom() {
+    public List<IField> getPlayerRoom() {
         List<Player> players = current.getPlayers();
         if (!isMultiple()) {
             if (players.size() != 1) {
@@ -216,7 +217,7 @@ public class ProgressBar {
             }
             return Arrays.asList(players.get(0).getGame());
         }
-        List<Game> result = new LinkedList<>();
+        List<IField> result = new LinkedList<>();
         for (Player player : players) {
             result.add(player.getGame());
         }
@@ -225,7 +226,6 @@ public class ProgressBar {
 
     protected void setPlayer(Player player) {
         this.player = player;
-        lobby.get().addPlayer(player);
     }
 
     public void start(String save) {
@@ -281,32 +281,20 @@ public class ProgressBar {
         return isMultiple() || (currentLevel > lastPassedLevel);
     }
 
-    public PlayerBoard getCurrent() {
+    public IField getCurrent() {
         return current;
-    }
-
-    public void setGameOwner(Single gameOwner) {
-        this.gameOwner = gameOwner;
-    }
-
-    public Single getGameOwner() {
-        return gameOwner;
     }
 
     public int getRoundTicks() {
         return current.getRoundTicks();
     }
 
-    public void setCurrent(PlayerBoard current) {
+    public void setCurrent(IField current) {
         this.current.remove(player);
         this.current = current;
         if (current != null) {
             processCurrent(0);
         }
-    }
-
-    public boolean inLobby() {
-        return current instanceof LobbyPlayerBoard;
     }
 
     public class LogState {
@@ -322,7 +310,6 @@ public class ProgressBar {
                 put("backToSingleLevel", backToSingleLevel);
                 put("single", (single != null) ? single.id() : "null");
                 put("current", (current != null) ? current.id() : "null");
-                put("gameOwner", (gameOwner != null) ? gameOwner.lg.id() : "null");
             }};
         }
 

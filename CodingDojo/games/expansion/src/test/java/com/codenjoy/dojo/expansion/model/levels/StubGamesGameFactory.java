@@ -24,33 +24,33 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 
 import com.codenjoy.dojo.expansion.model.GameFactory;
-import com.codenjoy.dojo.expansion.model.PlayerBoard;
+import com.codenjoy.dojo.expansion.model.IField;
 
 /**
  * Created by Oleksandr_Baglai on 2017-09-01.
  */
 public class StubGamesGameFactory implements GameFactory {
 
-    private PlayerBoard multiple;
-    private PlayerBoard single;
+    private IField multiple;
+    private IField single;
 
-    public StubGamesGameFactory(PlayerBoard single, PlayerBoard multiple) {
+    public StubGamesGameFactory(IField single, IField multiple) {
         this.single = single;
         this.multiple = multiple;
     }
 
     @Override
-    public PlayerBoard newMultiple() {
+    public IField newMultiple() {
         return multiple;
     }
 
     @Override
-    public PlayerBoard existMultiple() {
+    public IField existMultiple() {
         return multiple;
     }
 
     @Override
-    public PlayerBoard single() {
+    public IField single() {
         return single;
     }
 }

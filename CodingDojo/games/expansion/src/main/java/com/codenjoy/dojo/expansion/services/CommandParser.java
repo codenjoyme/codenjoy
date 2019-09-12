@@ -23,7 +23,6 @@ package com.codenjoy.dojo.expansion.services;
  */
 
 
-import com.codenjoy.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.apache.commons.lang.StringUtils;
 
@@ -42,9 +41,9 @@ public class CommandParser { // TODO test this monster
 
             String command = SettingsWrapper.data.command();
             if (command.equals("lobby.letThemGo()")) {
-                if (runner.lobby instanceof WaitForAllPlayerLobby) {
-                    ((WaitForAllPlayerLobby) runner.lobby).letThemGo(false);
-                }
+//                if (runner.lobby instanceof WaitForAllPlayerLobby) {
+//                    ((WaitForAllPlayerLobby) runner.lobby).letThemGo(false);
+//                }
             }
 //            else if (command.equals("any command that you want to run from admin")) {
 

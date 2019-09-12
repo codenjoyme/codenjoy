@@ -1310,7 +1310,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'rounds':10000," +
                 "'showName':true," +
                 "'tick':6" +
-                "}", JsonUtils.toStringSorted(getBoardAsString(PLAYER1)).replace('"', '\''));
+                "}", JsonUtils.toStringSorted(getLayer(PLAYER1)).replace('"', '\''));
 
         assertEquals("{" +
                 "'available':10," +
@@ -1327,7 +1327,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'rounds':10000," +
                 "'showName':true," +
                 "'tick':6" +
-                "}", JsonUtils.toStringSorted(getBoardAsString(PLAYER2)).replace('"', '\''));
+                "}", JsonUtils.toStringSorted(getLayer(PLAYER2)).replace('"', '\''));
     }
 
     @Test
@@ -1340,10 +1340,10 @@ public class SingleTest extends AbstractSinglePlayersTest {
             testGetBoardAsString();
 
             // when then
-            String json = JsonUtils.toStringSorted(getBoardAsString(PLAYER1)).replace('"', '\'');
+            String json = JsonUtils.toStringSorted(getLayer(PLAYER1)).replace('"', '\'');
             assertEquals(json, true, json.contains("'round':-1,'rounds':-1,"));
 
-            json = JsonUtils.toStringSorted(getBoardAsString(PLAYER2)).replace('"', '\'');
+            json = JsonUtils.toStringSorted(getLayer(PLAYER2)).replace('"', '\'');
             assertEquals(json, true, json.contains("'round':-1,'rounds':-1,"));
         } finally {
             data.roundTicks(old);

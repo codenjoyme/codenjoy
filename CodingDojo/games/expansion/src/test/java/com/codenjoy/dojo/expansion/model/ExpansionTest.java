@@ -23,7 +23,6 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -56,7 +55,7 @@ import static org.mockito.Mockito.*;
 public class ExpansionTest {
 
     public static final int FIRE_TICKS = 6;
-    private PlayerBoard game;
+    private IField game;
     private Printer<PrinterData> printer;
 
     private Hero hero;
@@ -93,8 +92,7 @@ public class ExpansionTest {
                 Levels.collectYours(size, boards),
                 Levels.none());
         listener = mock(EventListener.class);
-        WaitForAllPlayerLobby lobby = mock(WaitForAllPlayerLobby.class);
-        ProgressBar progressBar = new ProgressBar(factory, () -> lobby);
+        ProgressBar progressBar = new ProgressBar(factory);
         player = new Player(listener, progressBar, null);
         progressBar.start(null);
         game = progressBar.getCurrent();

@@ -2775,7 +2775,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
     }
 
     private void assertRound(String expected, int player) {
-        JSONObject json = getBoardAsString(player);
+        JSONObject json = getLayer(player);
         assertEquals(expected, pt(json.getInt("round"), json.getInt("rounds")).toString());
     }
 
