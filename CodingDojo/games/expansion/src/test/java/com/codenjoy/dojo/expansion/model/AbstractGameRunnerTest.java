@@ -23,16 +23,17 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.expansion.model.levels.items.Hero;
-import com.codenjoy.dojo.expansion.services.GameRunner;
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.expansion.model.levels.items.Hero;
+import com.codenjoy.dojo.expansion.services.GameRunner;
+import com.codenjoy.dojo.expansion.services.SettingsWrapper;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
@@ -112,10 +113,11 @@ public class AbstractGameRunnerTest {
     }
 
     protected void createNewGame() {
-        GameField field = gameRunner.createGame(0);
-        GamePlayer player = gameRunner.createPlayer(listener, "");
-        Single game = new Single(player, new PrinterFactoryImpl());
-        game.on(field);
+        // TODO выпилить ProgressBar
+        // GameField field = gameRunner.createGame(0);
+        Player player = (Player) gameRunner.createPlayer(listener, "");
+        Single game = new Single(player, gameRunner.getPrinterFactory());
+        game.on(player.getCurrent());
         game.newGame();
         games.add(game);
     }

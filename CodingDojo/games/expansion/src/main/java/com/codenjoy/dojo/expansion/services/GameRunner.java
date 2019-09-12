@@ -58,8 +58,6 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
         ticker = new Ticker();
         dice = getDice();
-
-        initGameFactory();
     }
 
     private void initGameFactory() {
@@ -99,6 +97,8 @@ public class GameRunner extends AbstractGameType implements GameType  {
         if (logger.isDebugEnabled()) {
             logger.debug("Creating GamePlayer for {}", playerName);
         }
+
+        initGameFactory();
 
         String save = null;
         boolean isTrainingMode = false; // TODO load from game_settings via GameDataController

@@ -32,7 +32,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 /**
  * Created by Sanja on 15.02.14.
  */
-@Ignore("TODO: пофиксить создание игры")
 public class GameRunnerTest extends AbstractGameRunnerTest {
 
     @Test

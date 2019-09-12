@@ -675,7 +675,6 @@ public class Expansion implements Tickable, IField {
         };
     }
 
-
     @Override
     public String toString() {
         return JsonUtils.toStringSorted(lg.json());
