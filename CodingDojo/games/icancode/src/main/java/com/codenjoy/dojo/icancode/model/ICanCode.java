@@ -29,6 +29,7 @@ import com.codenjoy.dojo.icancode.model.interfaces.IItem;
 import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.services.Events;
+import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
@@ -285,6 +286,11 @@ public class ICanCode implements Tickable, IField {
             @Override
             public int size() {
                 return ICanCode.this.size();
+            }
+
+            @Override
+            public int viewSize() {
+                return Levels.size();
             }
 
             @Override

@@ -49,17 +49,17 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
     private int bound;
     private Boolean needToCenter;
 
-    public LayeredViewPrinter(Supplier<LayeredBoardReader> reader, Supplier<Object> player, int viewSize, int countLayers) {
+    public LayeredViewPrinter(Supplier<LayeredBoardReader> reader, Supplier<Object> player, int countLayers) {
         this.getReader = reader;
         this.getPlayer = player;
         this.countLayers = countLayers;
-        this.viewSize = viewSize;
     }
 
     @Override
     public PrinterData print(Object... parameters) {
         reader = this.getReader.get();
         size = reader.size();
+        viewSize = reader.viewSize();
 
         if (needToCenter == null) {
             int min = Math.min(size, viewSize);

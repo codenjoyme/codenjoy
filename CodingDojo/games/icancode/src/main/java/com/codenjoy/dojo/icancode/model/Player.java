@@ -49,7 +49,6 @@ public class Player extends GamePlayer<Hero, IField> {
         printer = new LayeredViewPrinter(
                 () -> field.layeredReader(),
                 () -> this,
-                Levels.size(),
                 Levels.COUNT_LAYERS);
     }
 

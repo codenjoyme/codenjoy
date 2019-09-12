@@ -93,7 +93,6 @@ public class AbstractGameTest {
         printer = new LayeredViewPrinter(
                 () -> game.layeredReader(),
                 () -> player,
-                Levels.size(),
                 COUNT_LAYERS);
     }
 
