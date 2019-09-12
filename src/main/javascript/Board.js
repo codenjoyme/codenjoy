@@ -2,200 +2,31 @@
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General var License as
+ * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General var License for more details.
+ * GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU General var
+ * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
+ // Отступ от нижней границы в поинтах(10 полос на дороге по вертикали + 2 полосы ограждений)
 var MAX_Y_SIZE = 12;
 
+
+
 var util = require('util');
-var WSocket = require('ws');
 
-var log = function (string) {
-    console.log(string);
-    if (!!printBoardOnTextArea) {
-        printLogOnTextArea(string);
-    }
-};
-
-var printArray = function (array) {
-    var result = [];
-    for (var index in array) {
-        var element = array[index];
-        result.push(element.toString());
-    }
-    return "[" + result + "]";
-};
-
-var processBoard = function (boardString) {
-    var board = new Board(boardString);
-    if (!!printBoardOnTextArea) {
-        printBoardOnTextArea(board.boardAsString());
-    }
-
-    var logMessage = /*board +*/ "\n";
-    var answer = new DirectionSolver(board).get().toString();
-    logMessage += "Answer: " + answer + "\n";
-    logMessage += "-----------------------------------\n";
-    
-    console.log(board.toString())
-
-    log(logMessage);
-
-    return answer;
-};
-
-// you can get this code after registration on the server with your email
-var url = "http://localhost:8080/codenjoy-contest/board/player/fqmczd2equqykjd0qp83?code=6168728264219630428";
-
-url = url.replace("http", "ws");
-url = url.replace("board/player/", "ws?user=");
-url = url.replace("?code=", "&code=");
-
-var ws;
-
-function connect() {
-    ws = new WSocket(url);
-    log('Opening...');
-
-    ws.on('open', function () {
-        log('Web socket client opened ' + url);
-    });
-
-    ws.on('close', function () {
-        log('Web socket client closed');
-
-        setTimeout(function () {
-            connect();
-        }, 5000);
-    });
-
-    ws.on('message', function (message) {
-        var pattern = new RegExp(/^board=(.*)$/);
-        var parameters = message.match(pattern);
-        var boardString = parameters[1];
-        var answer = processBoard(boardString);
-        ws.send(answer);
-    });
-}
-
-connect();
-
-var Elements = {
-    //game element types
-    NONE: ' ',
-    FENCE: '■',
-
-    ACCELERATOR: '>',
-    INHIBITOR: '<',
-    OBSTACLE: '|',
-    LINE_CHANGER_UP: '▲',
-    LINE_CHANGER_DOWN: '▼',
-
-    //springboard elements types
-    SPRINGBOARD_LEFT_UP: '╔',
-    SPRINGBOARD_LEFT: '/',
-    SPRINGBOARD_LEFT_DOWN: '╚',
-    SPRINGBOARD_TOP: '═',
-    SPRINGBOARD_RIGHT_UP: '╗',
-    SPRINGBOARD_RIGHT: '\\',
-    SPRINGBOARD_RIGHT_DOWN: '╝',
-
-    //player bike    
-    BIKE: 'B',
-    BIKE_AT_ACCELERATOR: 'A',
-    BIKE_AT_INHIBITOR: 'I',
-    BIKE_AT_LINE_CHANGER_UP: 'U',
-    BIKE_AT_LINE_CHANGER_DOWN: 'D',
-    BIKE_AT_KILLED_BIKE: 'K',
-    BIKE_AT_SPRINGBOARD_LEFT: 'L',
-    BIKE_AT_SPRINGBOARD_LEFT_DOWN: 'M',
-    BIKE_AT_SPRINGBOARD_RIGHT: 'R',
-    BIKE_AT_SPRINGBOARD_RIGHT_DOWN: 'S',
-    BIKE_IN_FLIGHT_FROM_SPRINGBOARD: 'F',
-
-    BIKE_FALLEN: 'b',
-    BIKE_FALLEN_AT_ACCELERATOR: 'a',
-    BIKE_FALLEN_AT_INHIBITOR: 'i',
-    BIKE_FALLEN_AT_LINE_CHANGER_UP: 'u',
-    BIKE_FALLEN_AT_LINE_CHANGER_DOWN: 'd',
-    BIKE_FALLEN_AT_FENCE: 'f',
-    BIKE_FALLEN_AT_OBSTACLE: 'o',
-
-    //enemy player bike    
-    OTHER_BIKE: 'Ḃ',
-    OTHER_BIKE_AT_ACCELERATOR: 'Ā',
-    OTHER_BIKE_AT_INHIBITOR: 'Ī',
-    OTHER_BIKE_AT_LINE_CHANGER_UP: 'Ū',
-    OTHER_BIKE_AT_LINE_CHANGER_DOWN: 'Ď',
-    OTHER_BIKE_AT_KILLED_BIKE: 'Ḱ',
-    OTHER_BIKE_AT_SPRINGBOARD_LEFT: 'Ĺ',
-    OTHER_BIKE_AT_SPRINGBOARD_LEFT_DOWN: 'Ṁ',
-    OTHER_BIKE_AT_SPRINGBOARD_RIGHT: 'Ř',
-    OTHER_BIKE_AT_SPRINGBOARD_RIGHT_DOWN: 'Ŝ',
-    OTHER_BIKE_IN_FLIGHT_FROM_SPRINGBOARD: 'Ḟ',
-
-    OTHER_BIKE_FALLEN: 'ḃ',
-    OTHER_BIKE_FALLEN_AT_ACCELERATOR: 'ā',
-    OTHER_BIKE_FALLEN_AT_INHIBITOR: 'ī',
-    OTHER_BIKE_FALLEN_AT_LINE_CHANGER_UP: 'ū',
-    OTHER_BIKE_FALLEN_AT_LINE_CHANGER_DOWN: 'ď',
-    OTHER_BIKE_FALLEN_AT_FENCE: 'ḟ',
-    OTHER_BIKE_FALLEN_AT_OBSTACLE: 'ō'
-};
-
-var D = function (index, dx, dy, name) {
-
-    var changeX = function (x) {
-        return x + dx;
-    };
-
-    var changeY = function (y) {
-        return y + dy;
-    };
-
-    var change = function(point) {
-        return point.moveTo(this);
-    };
-
-    var inverted = function () {
-        switch (this) {
-            case Direction.UP: return Direction.DOWN;
-            case Direction.DOWN: return Direction.UP;
-            default: return Direction.STOP;
-        }
-    };
-
-    var toString = function () {
-        return name;
-    };
-
-    return {
-        changeX : changeX,
-        changeY : changeY,
-        change : change,
-        inverted : inverted,
-        toString : toString,
-
-        getIndex : function() {
-            return index;
-        }
-    };
-};
 
 var Direction = {
     UP          : D(1,  0, 1, 'UP'),         // move up
@@ -246,37 +77,6 @@ var Point = function (x, y) {
             return pt(direction.changeX(x), direction.changeY(y));
         }
     }
-};
-
-var pt = function (x, y) {
-    return new Point(x, y);
-};
-
-var LengthToXY = function (boardSize) {
-    function inversionY(y) {
-        return boardSize - 1 - y;
-    }
-
-    function inversionX(x) {
-        return x;
-    }
-
-    return {
-        getXY: function (length) {
-            if (length == -1) {
-                return null;
-            }
-            var x = inversionX(length % boardSize);
-            var y = inversionY(Math.trunc(length / boardSize));
-            return new Point(x, y);
-        },
-
-        getLength: function (x, y) {
-            var xx = inversionX(x);
-            var yy = inversionY(y);
-            return yy * boardSize + xx;
-        }
-    };
 };
 
 var Board = function (board) {
@@ -664,7 +464,7 @@ var Board = function (board) {
         if (pt(x, y).isOutOf(size)) {
             return false;
         }
-        return isAt(x + 1, y, element) || // TODO to remove duplicate
+        return isAt(x + 1, y, element) ||
             isAt(x - 1, y, element) ||
             isAt(x, y + 1, element) ||
             isAt(x, y - 1, element);
@@ -675,7 +475,7 @@ var Board = function (board) {
             return 0;
         }
         var count = 0;
-        if (isAt(x - 1, y, element)) count++; // TODO to remove duplicate
+        if (isAt(x - 1, y, element)) count++;
         if (isAt(x + 1, y, element)) count++;
         if (isAt(x, y - 1, element)) count++;
         if (isAt(x, y + 1, element)) count++;
@@ -726,30 +526,5 @@ var Board = function (board) {
         isNear: isNear,
         isBarrierAt: isBarrierAt,
         countNear: countNear
-    };
-};
-
-var random = function (n) {
-    return Math.floor(Math.random() * n);
-};
-
-var direction;
-
-//Game supports only two directions UP and DOWN or you can return nothing
-var DirectionSolver = function (board) {
-    return {
-        /**
-         * @return next hero action
-         */
-        get: function () {
-            var me = board.getMe();
-            //console.log(me.getX(), me.getY());
-
-            // TODO your code here
-            var dir = Direction.STOP;  // STUB get any random direction except Direction.STOP
-
-            //return Direction.STOP;  // for nothing to do
-            return dir;
-        }
     };
 };
