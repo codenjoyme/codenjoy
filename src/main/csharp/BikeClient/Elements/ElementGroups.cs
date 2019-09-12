@@ -1,0 +1,69 @@
+namespace BikeClient.Elements
+{
+    public class ElementGroups
+    {
+        public static readonly Element[] AllBikeStates = new[]
+        {
+            Element.BIKE,
+            Element.BIKE_AT_ACCELERATOR,
+            Element.BIKE_AT_INHIBITOR,
+            Element.BIKE_AT_LINE_CHANGER_UP,
+            Element.BIKE_AT_LINE_CHANGER_DOWN,
+            Element.BIKE_AT_KILLED_BIKE,
+            Element.BIKE_AT_SPRINGBOARD_LEFT,
+            Element.BIKE_AT_SPRINGBOARD_LEFT_DOWN,
+            Element.BIKE_AT_SPRINGBOARD_RIGHT,
+            Element.BIKE_AT_SPRINGBOARD_RIGHT_DOWN,
+            Element.BIKE_IN_FLIGHT_FROM_SPRINGBOARD,
+            Element.BIKE_FALLEN,
+            Element.BIKE_FALLEN_AT_ACCELERATOR,
+            Element.BIKE_FALLEN_AT_INHIBITOR,
+            Element.BIKE_FALLEN_AT_LINE_CHANGER_UP,
+            Element.BIKE_FALLEN_AT_LINE_CHANGER_DOWN,
+            Element.BIKE_FALLEN_AT_FENCE,
+            Element.BIKE_FALLEN_AT_OBSTACLE,
+            Element.OTHER_BIKE,
+            Element.OTHER_BIKE_AT_ACCELERATOR,
+            Element.OTHER_BIKE_AT_INHIBITOR,
+            Element.OTHER_BIKE_AT_LINE_CHANGER_UP,
+            Element.OTHER_BIKE_AT_LINE_CHANGER_DOWN,
+            Element.OTHER_BIKE_AT_KILLED_BIKE,
+            Element.OTHER_BIKE_AT_SPRINGBOARD_LEFT,
+            Element.OTHER_BIKE_AT_SPRINGBOARD_LEFT_DOWN,
+            Element.OTHER_BIKE_AT_SPRINGBOARD_RIGHT,
+            Element.OTHER_BIKE_AT_SPRINGBOARD_RIGHT_DOWN,
+            Element.OTHER_BIKE_IN_FLIGHT_FROM_SPRINGBOARD,
+            Element.OTHER_BIKE_FALLEN,
+            Element.OTHER_BIKE_FALLEN_AT_ACCELERATOR,
+            Element.OTHER_BIKE_FALLEN_AT_INHIBITOR,
+            Element.OTHER_BIKE_FALLEN_AT_LINE_CHANGER_UP,
+            Element.OTHER_BIKE_FALLEN_AT_LINE_CHANGER_DOWN,
+            Element.OTHER_BIKE_FALLEN_AT_FENCE,
+            Element.OTHER_BIKE_FALLEN_AT_OBSTACLE
+        };
+        public static readonly Element[] MyBike = new[]
+        {
+            Element.BIKE,
+            Element.BIKE_AT_ACCELERATOR,
+            Element.BIKE_AT_INHIBITOR,
+            Element.BIKE_AT_LINE_CHANGER_UP,
+            Element.BIKE_AT_LINE_CHANGER_DOWN,
+            Element.BIKE_AT_KILLED_BIKE,
+            Element.BIKE_AT_SPRINGBOARD_LEFT,
+            Element.BIKE_AT_SPRINGBOARD_LEFT_DOWN,
+            Element.BIKE_AT_SPRINGBOARD_RIGHT,
+            Element.BIKE_AT_SPRINGBOARD_RIGHT_DOWN,
+            Element.BIKE_IN_FLIGHT_FROM_SPRINGBOARD,
+        };
+        public static readonly Element[] MyFallenBike = new[]
+        {
+            Element.BIKE_FALLEN,
+            Element.BIKE_FALLEN_AT_ACCELERATOR,
+            Element.BIKE_FALLEN_AT_INHIBITOR,
+            Element.BIKE_FALLEN_AT_LINE_CHANGER_UP,
+            Element.BIKE_FALLEN_AT_LINE_CHANGER_DOWN,
+            Element.BIKE_FALLEN_AT_FENCE,
+            Element.BIKE_FALLEN_AT_OBSTACLE
+        };
+    }
+}
