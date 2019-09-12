@@ -43,7 +43,7 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         super.setup();
 
         SettingsWrapper.data
-                .lobbyEnable(true)
+//                .lobbyEnable(true)
                 .lobbyCapacity(4)
                 .defenderHasAdvantage(false)
                 .shufflePlayers(false);
@@ -1571,9 +1571,9 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         boolean old1 = data.waitingOthers();
         int old2 = data.lobbyCapacity();
         int old3 = data.roundTicks();
-        boolean old4 = data.lobbyEnable();
+//        boolean old4 = data.lobbyEnable();
         try {
-            data.lobbyEnable(true);
+//            data.lobbyEnable(true);
             data.waitingOthers(true);
             data.lobbyCapacity(LOBBY_CAPACITY);
             data.roundTicks(ROUNDS);
@@ -1633,7 +1633,7 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
             // when
             // disable lobby with players inside
-            data.lobbyEnable(false);
+//            data.lobbyEnable(false);
 
             tickAll();
 
@@ -1720,7 +1720,7 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             data.waitingOthers(old1);
             data.lobbyCapacity(old2);
             data.roundTicks(old3);
-            data.lobbyEnable(old4);
+//            data.lobbyEnable(old4);
         }
     }
 

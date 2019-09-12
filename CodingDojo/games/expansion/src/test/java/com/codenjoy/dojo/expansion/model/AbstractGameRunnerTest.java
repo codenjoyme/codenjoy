@@ -64,6 +64,7 @@ public class AbstractGameRunnerTest {
     private Dice dice;
     private EventListener listener;
     private Settings settings;
+    private Expansion current;
 
     @Before
     public void setup() {
@@ -73,12 +74,12 @@ public class AbstractGameRunnerTest {
         gameRunner = new GameRunner();
         gameRunner.setDice(dice);
 
-        games = new LinkedList<Game>();
+        games = new LinkedList<>();
         factory = new PrinterFactoryImpl();
 
         settings = gameRunner.getSettings();
         SettingsWrapper.data
-                .lobbyEnable(false)
+//                .lobbyEnable(false)
                 .waitingOthers(false)
                 .shufflePlayers(false);
     }
@@ -103,8 +104,8 @@ public class AbstractGameRunnerTest {
         return game;
     }
 
-    protected void createNewGame(int levelOfRoom) {
-        gotoFreeRoom(levelOfRoom);
+    protected void createNewGame(int room) {
+        gotoFreeRoom(room);
         createNewGame();
     }
 
@@ -113,11 +114,12 @@ public class AbstractGameRunnerTest {
     }
 
     protected void createNewGame() {
-        // TODO выпилить ProgressBar
-        // GameField field = gameRunner.createGame(0);
+        if (current == null || current.freeBases() == 0) {
+            current = (Expansion) gameRunner.createGame(0);
+        }
         Player player = (Player) gameRunner.createPlayer(listener, "");
         Single game = new Single(player, gameRunner.getPrinterFactory());
-        game.on(player.getCurrent());
+        game.on(current);
         game.newGame();
         games.add(game);
     }
@@ -154,7 +156,7 @@ public class AbstractGameRunnerTest {
     protected void tickAll() {
         for (Game game : games) {
             if (game != null) {
-//                game.tick(); // TODO тут пришлось закомментить
+                game.getField().tick();
             }
         }
         gameRunner.tick(); // this codenjoy server will do after all game ticks
@@ -168,7 +170,8 @@ public class AbstractGameRunnerTest {
     }
 
     protected void destroy(int player) {
-//        game(player).destroy(); TODO тут пришлось закомментить
+        Game game = games.get(player);
+        game.getField().remove(game.getPlayer());
         games.set(player, null);
     }
 

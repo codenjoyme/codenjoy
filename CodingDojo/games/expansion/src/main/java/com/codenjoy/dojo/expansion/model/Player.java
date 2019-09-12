@@ -23,10 +23,12 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.expansion.model.levels.Levels;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
@@ -43,24 +45,34 @@ public class Player extends GamePlayer<Hero, IField> {
     private static Logger logger = DLoggerFactory.getLogger(Player.class);
 
     Hero hero;
-    private ProgressBar progressBar;
     private String name;
+    private IField field;
+    private Printer<PrinterData> printer;
+    private boolean isWin;
 
-    public Player(EventListener listener, ProgressBar progressBar, String name) {
+    public Player(EventListener listener, String name) {
         super(listener);
-        this.progressBar = progressBar;
         this.name = name;
-        progressBar.setPlayer(this);
+        isWin = false;
+        setupPrinter();
+    }
+
+    private void setupPrinter() {
+        printer = new LayeredViewPrinter(
+                () -> field.layeredReader(),
+                () -> this,
+                Levels.COUNT_LAYERS);
     }
 
     public void event(Events event) {
         if (logger.isDebugEnabled()) {
             logger.debug("Player {} fired event {}", lg.id(), event);
         }
+        super.event(event);
 
-        if (listener != null && progressBar.enableWinScore()) {
-            listener.event(event);
-        }
+        //if (listener != null /* TODO что это было тут? && progressBar.enableWinScore()*/) {
+        //    listener.event(event);
+        //}
     }
 
     public Hero getHero() {
@@ -68,11 +80,12 @@ public class Player extends GamePlayer<Hero, IField> {
     }
 
     public void newHero(IField field) {
+        this.field = field;
         if (hero == null) {
             hero = new Hero();
         }
 
-        hero.setField(field);
+        hero.init(field);
     }
 
     @Override
@@ -80,26 +93,30 @@ public class Player extends GamePlayer<Hero, IField> {
         return hero.isAlive();
     }
 
-    public void tick() {
-        progressBar.checkLevel();
-        hero.tick();
+    @Override
+    public boolean isWin() {
+        return isWin;
     }
 
     public void setNextLevel() {
-        progressBar.setNextLevel();
+        isWin = true;
     }
 
     public int getForcesColor() {
         return hero.getBase().element().getIndex();
     }
 
-    public IField getGame() {
-        return progressBar.getCurrent();
+    public IField getField() {
+        return field;
     }
 
     @Override
     public HeroData getHeroData() {
         return new GameHeroData();
+    }
+
+    public int getRoundTicks() {
+        return field.getRoundTicks();
     }
 
     public class GameHeroData implements HeroData {
@@ -110,7 +127,7 @@ public class Player extends GamePlayer<Hero, IField> {
 
         @Override
         public boolean isMultiplayer() {
-            return progressBar.isMultiple();
+            return Player.this.field.isMultiplayer();
         }
 
         @Override
@@ -154,20 +171,8 @@ public class Player extends GamePlayer<Hero, IField> {
         this.hero = hero;
     }
 
-    public void setPlayerBoard(IField current) {
-        progressBar.setCurrent(current);
-    }
-
-    public IField getCurrent() {
-        return progressBar.getCurrent();
-    }
-
     public String getName() {
         return name;
-    }
-
-    public ProgressBar getProgress() {
-        return progressBar;
     }
 
     public class LogState {
@@ -176,7 +181,7 @@ public class Player extends GamePlayer<Hero, IField> {
                 put("id", id());
                 put("name", name);
                 put("hero", (hero != null) ? hero.lg.json() : "null");
-                put("progressBar", (progressBar != null) ? progressBar.lg.json() : "null");
+                put("field", (field != null) ? field.id() : "null");
             }};
         }
 
@@ -192,7 +197,7 @@ public class Player extends GamePlayer<Hero, IField> {
     public LogState lg = new LogState();
 
     public Printer<PrinterData> getPrinter() {
-        return progressBar.getPrinter();
+        return printer;
     }
 
     @Override

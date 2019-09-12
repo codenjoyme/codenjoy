@@ -28,10 +28,14 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.expansion.client.Board;
 import com.codenjoy.dojo.expansion.client.ai.ApofigBotSolver;
 import com.codenjoy.dojo.expansion.model.*;
+import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
+import com.codenjoy.dojo.expansion.model.levels.LevelsFactory;
+import com.codenjoy.dojo.expansion.model.replay.GameLoggerImpl;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
@@ -40,6 +44,7 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -48,10 +53,13 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     private static Logger logger = DLoggerFactory.getLogger(GameRunner.class);
 
+    public static boolean SINGLE_TRAINING_MODE = false;
+
     private Dice dice;
-    private MultipleGameFactory gameFactory;
     private Ticker ticker;
     private int size;
+    private LevelsFactory singleLevels;
+    private LevelsFactory multipleLevels;
 
     public GameRunner() {
         SettingsWrapper.setup(settings);
@@ -61,15 +69,22 @@ public class GameRunner extends AbstractGameType implements GameType  {
     }
 
     private void initGameFactory() {
-        if (gameFactory == null || settings.changed()) {
+        if (singleLevels == null || settings.changed()) {
             settings.changesReacted();
 
             size = SettingsWrapper.data.boardSize();
-            gameFactory = new MultipleGameFactory(dice,
-                    Levels.collectSingle(SettingsWrapper.data.boardSize()),
-                    Levels.collectMultiple(SettingsWrapper.data.boardSize(),
-                            SettingsWrapper.data.levels().toArray(new String[0]))
-            );
+            singleLevels = Levels.collectSingle(SettingsWrapper.data.boardSize());
+            multipleLevels = Levels.collectMultiple(SettingsWrapper.data.boardSize(),
+                    SettingsWrapper.data.levels());
+        }
+    }
+
+    @Override
+    public MultiplayerType getMultiplayerType() {
+        if (SINGLE_TRAINING_MODE) {
+            return MultiplayerType.TRAINING.apply(Levels.getSingleMaps().size());
+        } else {
+            return MultiplayerType.QUADRO;
         }
     }
 
@@ -84,12 +99,21 @@ public class GameRunner extends AbstractGameType implements GameType  {
             logger.debug("Creating GameField for {}", levelNumber);
         }
 
-// TODO понять как достать тут сейв
-//        if (ReplayGame.isReplay(save)) {
-//            return new ReplayGame(new JSONObject(save));
-//        }
+        initGameFactory();
 
-        return gameFactory.single();
+        if (SINGLE_TRAINING_MODE) {
+            boolean isSingle = levelNumber < getMultiplayerType().getLevelsCount();
+            if (isSingle) {
+                Level level = singleLevels.get().get(levelNumber);
+                return new Expansion(level,
+                        new RandomDice(), new GameLoggerImpl(), Expansion.SINGLE);
+            }
+        }
+
+        List<Level> levels = multipleLevels.get();
+        Level level = levels.get(dice.next(levels.size()));
+        return new Expansion(level,
+                dice, new GameLoggerImpl(), Expansion.MULTIPLE);
     }
 
     @Override
@@ -98,7 +122,10 @@ public class GameRunner extends AbstractGameType implements GameType  {
             logger.debug("Creating GamePlayer for {}", playerName);
         }
 
-        initGameFactory();
+        // TODO понять как достать тут сейв
+//        if (ReplayGame.isReplay(save)) {
+//            return new ReplayGame(new JSONObject(save));
+//        }
 
         String save = null;
         boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
@@ -107,14 +134,12 @@ public class GameRunner extends AbstractGameType implements GameType  {
             save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
 
-        ProgressBar progressBar = new ProgressBar(gameFactory);
-        Player player = new Player(listener, progressBar, playerName);
+        Player player = new Player(listener, playerName);
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Starts new game for {}", player.lg.id());
-        }
+//        if (logger.isDebugEnabled()) {
+//            logger.debug("Starts new game for {}", player.lg.id());
+//        }
 
-        progressBar.start(save);
         return player;
     }
 
@@ -151,6 +176,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public void tick() {
         processAdminCommands();
         initGameFactory();
+        ticker.tick();
     }
 
     private void processAdminCommands() {
@@ -161,7 +187,6 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public PrinterFactory getPrinterFactory() {
         return PrinterFactory.get((BoardReader reader, Player player) -> {
             PrinterData data = player.getPrinter().print();
-            ProgressBar progressBar = player.getProgress();
 
             JSONObject result = new JSONObject();
             List<String> layers = data.getLayers();
@@ -171,29 +196,19 @@ public class GameRunner extends AbstractGameType implements GameType  {
             result.put("myBase", new JSONObject(player.getBasePosition()));
             result.put("myColor", player.getForcesColor());
             result.put("tick", ticker.get());
-            result.put("round", progressBar.getRoundTicks());
+            result.put("round", player.getRoundTicks());
             result.put("rounds", SettingsWrapper.data.roundTicks());
             result.put("available", player.getForcesPerTick());
             result.put("offset", data.getOffset());
-            JSONObject progress = progressBar.printProgress();
-            result.put("showName", true);
-            result.put("onlyMyName", !progress.getBoolean("multiple"));
-            result.put("levelProgress", progress);
 
             if (logger.isDebugEnabled()) {
-                logger.debug("getBoardAsString for game {} prepare {}",
-                        progressBar.lg.id(),
+                logger.debug("getBoardAsString for player {} and field {} prepare {}",
+                        player.lg.id(),
+                        player.getField().id(),
                         JsonUtils.toStringSorted(result));
             }
 
             return result;
         });
-    }
-
-    private JSONObject toJson(Point point) {
-        JSONObject result = new JSONObject();
-        result.put("x", point.getX());
-        result.put("y", point.getY());
-        return result;
     }
 }

@@ -22,25 +22,27 @@ package com.codenjoy.dojo.expansion.model;
  * #L%
  */
 
-import com.codenjoy.dojo.expansion.model.levels.items.*;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
-import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
-import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
-import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.expansion.model.levels.Cell;
 import com.codenjoy.dojo.expansion.model.levels.Item;
 import com.codenjoy.dojo.expansion.model.levels.Level;
+import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.expansion.model.replay.GameLogger;
 import com.codenjoy.dojo.expansion.services.Events;
 import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.BiFunction;
 
 import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
@@ -58,10 +60,9 @@ public class Expansion implements Tickable, IField {
     public static final boolean MULTIPLE = true;
     private GameLogger gameLogger;
 
-    private List<Level> levels;
     private Level level;
 
-    private boolean isMultiple;
+    private boolean isMultiplayer;
     private boolean nothingChanged;
 
     private int ticks;
@@ -69,9 +70,10 @@ public class Expansion implements Tickable, IField {
     private List<Player> losers;
     private int roundTicks;
 
-    public Expansion(List<Level> levels, Dice dice, GameLogger gameLogger, boolean multiple) {
-        this.levels = new LinkedList(levels);
-        isMultiple = multiple;
+    public Expansion(Level level, Dice dice, GameLogger gameLogger, boolean multiple) {
+        this.level = level;
+        level.setField(this);
+        isMultiplayer = multiple;
         players = new LinkedList();
         this.gameLogger = gameLogger;
         cleanAfterGame();
@@ -82,7 +84,7 @@ public class Expansion implements Tickable, IField {
         roundTicks = 0;
         nothingChanged = true;
         losers = new LinkedList();
-        if (isMultiple) {
+        if (isMultiplayer) {
             gameLogger.start(this);
         }
     }
@@ -93,7 +95,7 @@ public class Expansion implements Tickable, IField {
             logger.debug("Expansion {} started tick", lg.id());
         }
 
-        if (isMultiple) {
+        if (isMultiplayer) {
             ticks++;
             if (ticks % players.size() != 0) {
                 return;
@@ -111,11 +113,11 @@ public class Expansion implements Tickable, IField {
                     toString());
         }
 
-        if (isMultiple) {
+        if (isMultiplayer) {
             gameLogger.logState();
         }
 
-        if (isMultiple) {
+        if (isMultiplayer) {
             Player winner = null;
             for (Player player : players) {
                 Hero hero = player.getHero();
@@ -152,7 +154,7 @@ public class Expansion implements Tickable, IField {
 
         // there player level be changed
         for (Player player : players.toArray(new Player[0])) {
-            player.tick();
+            player.getHero().tick();
         }
 
         if (!players.isEmpty()) {
@@ -183,21 +185,11 @@ public class Expansion implements Tickable, IField {
     }
 
     private void resetAllPlayers() {
-        if (data.lobbyEnable()) {
-            // all players goes on lobby
-            for (Player player : players) {
-                player.getHero().wantsReset();
-            }
-            // cleanAfterGame(); // TODO подозреваю, что из за этого создается по два файла дщгов игры, но тест написать не могу
-            // этот метод все равно вызовется после того как все плееры тикнутся после вызова resetAllPlayers
-            // но мне надо тест на этот кейз
-        } else {
-            // fist time remove all players
-            List<Player> reset = removeAllPlayers();
-            // then add they to this board
-            for (Player player : reset) {
-                newGame(player);
-            }
+        // fist time remove all players
+        List<Player> reset = removeAllPlayers();
+        // then add they to this board
+        for (Player player : reset) {
+            newGame(player);
         }
     }
 
@@ -233,15 +225,7 @@ public class Expansion implements Tickable, IField {
     private LawOfEnergyConservationChecker countChecker = new LawOfEnergyConservationChecker();
 
     public boolean isNew() {
-        return !isMultiple || (isMultiple && players.isEmpty());
-    }
-
-    @Override
-    public void loadLevel(int index) {
-        level = levels.get(index);
-        if (isNew()) {
-            level.setField(this);
-        }
+        return !isMultiplayer || (isMultiplayer && players.isEmpty());
     }
 
     class LawOfEnergyConservationChecker {
@@ -363,7 +347,7 @@ public class Expansion implements Tickable, IField {
     }
 
     private boolean isWaitingOthers() {
-        return isMultiple && data.waitingOthers() && gameNotStarted() && players.size() != 4;
+        return isMultiplayer && data.waitingOthers() && gameNotStarted() && players.size() != 4;
     }
 
     private boolean gameNotStarted() {
@@ -396,12 +380,7 @@ public class Expansion implements Tickable, IField {
     public Start getFreeBase() {
         List<Start> bases = level.getItems(Start.class);
 
-        Collections.sort(bases, new Comparator<Start>() {
-            @Override
-            public int compare(Start o1, Start o2) {
-                return Integer.compare(o1.index(), o2.index());
-            }
-        });
+        Collections.sort(bases, (o1, o2) -> Integer.compare(o1.index(), o2.index()));
 
         Start free = null;
         for (Start place : bases) {
@@ -474,7 +453,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public void reset() {
-        if (isMultiple && players.size() > 1) {
+        if (isMultiplayer && players.size() > 1) {
             return;
         }
 
@@ -504,7 +483,7 @@ public class Expansion implements Tickable, IField {
             players.add(player);
         }
         player.newHero(this);
-        if (isMultiple) {
+        if (isMultiplayer) {
             gameLogger.register(player);
         }
     }
@@ -544,13 +523,8 @@ public class Expansion implements Tickable, IField {
     }
 
     @Override
-    public int levelsCount() {
-        return levels.size();
-    }
-
-    @Override
-    public boolean isMultiple() {
-        return isMultiple;
+    public boolean isMultiplayer() {
+        return isMultiplayer;
     }
 
     @Override
@@ -564,7 +538,7 @@ public class Expansion implements Tickable, IField {
 
     @Override
     public int freeBases() {
-        if (isMultiple) {
+        if (isMultiplayer) {
             return (getFreeBase() == null) ? 0 : 4 - players.size();
         } else {
             return (players.isEmpty()) ? 1 : 0;
@@ -589,7 +563,7 @@ public class Expansion implements Tickable, IField {
             return new JSONObject(){{
                 put("players", players());
                 put("id", id());
-                put("isMultiple", isMultiple);
+                put("isMultiple", isMultiplayer);
                 put("losers", Player.lg(losers));
                 put("waitingOthers", isWaitingOthers());
                 put("ticks", ticks);
@@ -604,10 +578,7 @@ public class Expansion implements Tickable, IField {
 
         public PrinterData printer() {
             try {
-                return new LayeredViewPrinter(Expansion.this.size(),
-                        () -> Expansion.this.layeredReader(),
-                        () -> Expansion.this.players.get(0),
-                        size(), ProgressBar.COUNT_LAYERS).print();
+                return Expansion.this.players.get(0).getPrinter().print();
             } catch (Exception e) {
                 return null;
             }
@@ -645,6 +616,12 @@ public class Expansion implements Tickable, IField {
             @Override
             public int size() {
                 return Expansion.this.size();
+            }
+
+            @Override
+            public int viewSize() {
+                int viewSize = Expansion.this.level.getViewSize();
+                return (viewSize == -1) ? size() : viewSize;
             }
 
             @Override

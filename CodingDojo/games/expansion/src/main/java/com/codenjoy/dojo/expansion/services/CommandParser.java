@@ -24,7 +24,7 @@ package com.codenjoy.dojo.expansion.services;
 
 
 import com.codenjoy.dojo.services.settings.Settings;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by Oleksandr_Baglai on 2017-09-14.

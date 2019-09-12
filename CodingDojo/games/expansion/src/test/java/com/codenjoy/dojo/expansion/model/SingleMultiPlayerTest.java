@@ -68,8 +68,6 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
             "║3.E.2│" +
             "└─────┘";
 
-    private MultipleGameFactory gameFactory;
-
     @NotNull
     private Events WIN() {
         return Events.WIN(data.winScore());
@@ -78,12 +76,6 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
     @NotNull
     private Events DRAW() {
         return Events.WIN(data.drawScore());
-    }
-
-    @Override
-    protected GameFactory getGameFactory(LevelsFactory single, LevelsFactory multiple) {
-        gameFactory = new MultipleGameFactory(dice, single, multiple);
-        return gameFactory;
     }
 
     @Test

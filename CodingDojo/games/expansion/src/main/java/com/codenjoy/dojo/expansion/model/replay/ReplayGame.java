@@ -26,7 +26,7 @@ package com.codenjoy.dojo.expansion.model.replay;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.nullobj.NullJoystick;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 

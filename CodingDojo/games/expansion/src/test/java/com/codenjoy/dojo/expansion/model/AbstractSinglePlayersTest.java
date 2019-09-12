@@ -42,6 +42,7 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
@@ -104,7 +105,6 @@ public abstract class AbstractSinglePlayersTest {
     private LinkedList<String> levelsMaps;
 
     private String multipleLevelsMaps;
-    private GameFactory gameFactory;
     protected Ticker ticker;
     private int size = LevelsTest.LEVEL_SIZE;
 
@@ -120,7 +120,6 @@ public abstract class AbstractSinglePlayersTest {
                 .regionsScores(0)
                 .roundTicks(10000)
                 .waitingOthers(false)
-                .lobbyEnable(false)
                 .defenderHasAdvantage(false)
                 .shufflePlayers(false);
     }
@@ -138,14 +137,7 @@ public abstract class AbstractSinglePlayersTest {
 
     protected void givenFl(String... boards) {
         setupMaps(boards);
-        gameFactory = getGameFactory();
     }
-
-    protected void givenFlWithWaitForAllLobby(String... boards) {
-        setupMaps(boards);
-        gameFactory = getGameFactory();
-    }
-
 
     protected void givenForces(String forces, String layer2) {
         IField current = (IField)singles.get(PLAYER1).getField();
@@ -163,6 +155,9 @@ public abstract class AbstractSinglePlayersTest {
     private void setupMaps(String[] boards) {
         levelsMaps = new LinkedList<>(Arrays.asList(boards));
         multipleLevelsMaps = levelsMaps.removeLast();
+
+        List<Supplier<Level>> single = Levels.collectYours(size, levelsMaps.toArray(new String[0]));
+        List<Supplier<Level>> multiple = Levels.collectYours(size, multipleLevelsMaps);
     }
 
     protected void createOneMorePlayer() {
@@ -175,16 +170,6 @@ public abstract class AbstractSinglePlayersTest {
         singles.add(game);
         game.newGame();
         // heroes.add(game.getPlayer().getHero()); // TODO тут пришлось закомментить
-    }
-
-    private GameFactory getGameFactory() {
-        LevelsFactory single = Levels.collectYours(size, levelsMaps.toArray(new String[0]));
-        LevelsFactory multiple = Levels.collectYours(size, multipleLevelsMaps);
-        return getGameFactory(single, multiple);
-    }
-
-    protected GameFactory getGameFactory(LevelsFactory single, LevelsFactory multiple) {
-        return new OneMultipleGameFactory(dice, single, multiple);
     }
 
     protected void tickAll() {
@@ -241,11 +226,6 @@ public abstract class AbstractSinglePlayersTest {
             @Override
             public void message(String command) {
                 hero.message(command);
-            }
-
-            @Override
-            public void loadLevel(int level) {
-                hero.loadLevel(level);
             }
         };
     }

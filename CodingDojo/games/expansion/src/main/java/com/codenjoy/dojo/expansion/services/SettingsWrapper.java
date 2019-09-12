@@ -59,7 +59,6 @@ public final class SettingsWrapper {
     private final Parameter<Double> defenderAdvantage;
     private final Parameter<Boolean> waitingOthers;
     private final Parameter<Boolean> shufflePlayers;
-    private final Parameter<Boolean> lobbyEnable;
     private final Parameter<Boolean> gameLoggingEnable;
     private final List<Parameter<String>> levels;
     private final int totalSingleLevels;
@@ -84,7 +83,6 @@ public final class SettingsWrapper {
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(20);
 
         waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(true);
-        lobbyEnable = settings.addEditBox("Lobby enable (special waiting room)").type(Boolean.class).def(true);
         shufflePlayers = settings.addEditBox("Shuffle players after lobby").type(Boolean.class).def(true);
         lobbyCapacity = settings.addEditBox("Lobby capacity (-1 if wait for all)").type(Integer.class).def(8);
 
@@ -161,10 +159,6 @@ public final class SettingsWrapper {
         return gameLoggingEnable.getValue();
     }
 
-    public boolean lobbyEnable() {
-        return lobbyEnable.getValue();
-    }
-
     public boolean roundLimitedInTime() {
         return roundTicks() != UNLIMITED;
     }
@@ -227,11 +221,6 @@ public final class SettingsWrapper {
 
     public SettingsWrapper roundTicks(int value) {
         roundTicks.update(value);
-        return this;
-    }
-
-    public SettingsWrapper lobbyEnable(boolean value) {
-        lobbyEnable.update(value);
         return this;
     }
 

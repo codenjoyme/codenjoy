@@ -27,7 +27,7 @@ import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.Item;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.utils.TestUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by Oleksandr_Baglai on 2017-12-12.

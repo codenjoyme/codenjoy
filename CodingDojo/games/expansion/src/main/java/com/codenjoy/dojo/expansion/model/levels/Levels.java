@@ -27,7 +27,7 @@ import com.codenjoy.dojo.expansion.model.Elements;
 import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.TestUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -36,7 +36,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by oleksandr.baglai on 18.06.2016.
@@ -44,6 +47,8 @@ import java.util.function.Supplier;
 public class Levels {
 
     private static Logger logger = DLoggerFactory.getLogger(Levels.class);
+
+    public static final int COUNT_LAYERS = 3;
 
     private static Map<String, String> levels = new LinkedHashMap<>();
 
@@ -136,11 +141,16 @@ public class Levels {
 
     public static LevelsFactory collectSingle(int boardSize) {
         return () -> collect(boardSize,
-                SINGLE1, SINGLE2, SINGLE3, SINGLE4,
+                getSingleMaps());
+    }
+
+    @NotNull
+    public static List<String> getSingleMaps() {
+        return Arrays.asList(SINGLE1, SINGLE2, SINGLE3, SINGLE4,
                 SINGLE5, SINGLE6, SINGLE7);
     }
 
-    public static LevelsFactory collectMultiple(int boardSize, String... levels) {
+    public static LevelsFactory collectMultiple(int boardSize, List<String> levels) {
         return () -> collect(boardSize, levels);
     }
 
@@ -148,20 +158,17 @@ public class Levels {
         return () -> Arrays.asList();
     }
 
-    public static LevelsFactory collectYours(final int viewSize, final String... boards) {
-        return () -> {
-            List<Level> result = new LinkedList<>();
-            List<String> list = Arrays.asList(boards);
-            for (String board : list) {
-                String name = "level_" + Integer.toHexString(board.hashCode());
-                Level level = new LevelImpl(name, board, viewSize);
-                result.add(level);
-            }
-            return result;
-        };
+    public static List<Supplier<Level>> collectYours(final int viewSize, final String... boards) {
+        return Arrays.stream(boards)
+                .map(board -> {
+                    Supplier<Level> result = () -> new LevelImpl("level_" + Integer.toHexString(board.hashCode()),
+                                    board, viewSize);
+                    return result;
+                })
+                .collect(toList());
     }
 
-    private static List<Level> collect(int viewSize, String... names) {
+    private static List<Level> collect(int viewSize, List<String> names) {
         List<Level> result = new LinkedList<>();
         for (String name : names) {
             result.add(getLevel(viewSize, name));

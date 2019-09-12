@@ -24,11 +24,8 @@ package com.codenjoy.dojo.expansion.model.replay;
 
 
 import com.codenjoy.dojo.expansion.model.AbstractSinglePlayersTest;
-import com.codenjoy.dojo.expansion.model.GameFactory;
-import com.codenjoy.dojo.expansion.model.MultipleGameFactory;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
-import com.codenjoy.dojo.expansion.model.levels.LevelsFactory;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -47,14 +44,6 @@ import static org.junit.Assert.fail;
 public class GameLoggerTest extends AbstractSinglePlayersTest {
 
     private File gameDataFolder;
-
-    private MultipleGameFactory gameFactory;
-
-    @Override
-    protected GameFactory getGameFactory(LevelsFactory single, LevelsFactory multiple) {
-        gameFactory = new MultipleGameFactory(dice, single, multiple);
-        return gameFactory;
-    }
 
     @Before
     public void setup() {
@@ -173,7 +162,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
     }
 
     private String getGameId(int index) {
-        return ((Player)single(index).getPlayer()).getCurrent().id();
+        return ((Player)single(index).getPlayer()).getField().id();
     }
 
     private String getPlayerId(int index) {
@@ -615,8 +604,8 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
     public void shouldCreateNewFileWhenGoToAnotherGameAfterLobby() {
         // given
         data.gameLoggingEnable(true)
-                .lobbyCapacity(4)
-                .lobbyEnable(true);
+                .lobbyCapacity(4);
+//                .lobbyEnable(true);
 
         String single =
                 "╔══┐" +
@@ -628,7 +617,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
                 "║12│" +
                 "║34│" +
                 "└──┘";
-        givenFlWithWaitForAllLobby(single, multiple);
+//        givenFlWithWaitForAllLobby(single, multiple);
         createPlayers(4);
 
         // when
