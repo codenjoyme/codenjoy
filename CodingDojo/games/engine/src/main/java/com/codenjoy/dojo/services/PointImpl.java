@@ -99,6 +99,14 @@ public class PointImpl implements Point, Comparable<Point> {
         return x*1000 + y;
     }
 
+    public int parentHashCode() {
+        return super.hashCode();
+    }
+
+    public boolean parentEquals(Object o) {
+        return super.equals(o);
+    }
+
     @Override
     public String toString() {
         return String.format("[%s,%s]", x, y);
