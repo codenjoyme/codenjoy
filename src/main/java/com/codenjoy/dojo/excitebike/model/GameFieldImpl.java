@@ -71,10 +71,12 @@ public class GameFieldImpl implements GameField {
     private final List<Fence> fences;
     private final TrackStepGenerator trackStepGenerator;
     private final SettingsHandler settingsHandler;
+    private final Dice dice;
 
     public GameFieldImpl(MapParser mapParser, Dice dice, SettingsHandler settingsHandler) {
         this.mapParser = mapParser;
         this.settingsHandler = settingsHandler;
+        this.dice = dice;
 
         fences = mapParser.getFences();
 
@@ -105,7 +107,9 @@ public class GameFieldImpl implements GameField {
         generateNewTrackStep();
 
         players.forEach(player -> player.getHero().changeYDependsOnSpringboard());
-        players.forEach(player -> player.getHero().tick());
+        players.stream()
+                .sorted((o1, o2) -> dice.next(3) - 1)
+                .forEach(player -> player.getHero().tick());
         players.forEach(player -> player.getHero().setTicked(false));
         players.stream()
                 .filter(player -> player.getHero().getX() < 0)

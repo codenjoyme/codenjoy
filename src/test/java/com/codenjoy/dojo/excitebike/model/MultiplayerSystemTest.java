@@ -1266,4 +1266,49 @@ public class MultiplayerSystemTest {
         verify(eventListenerSpy3, never()).event(Events.WIN);
     }
 
+    @Test
+    public void shouldMoveBike3DownFirstAndThenBike2Up__ifDiceReturnedRandomNumberLikeThatForTicking() {
+        //given
+        init();
+        when(dice.next(3)).thenReturn(0);
+
+        game3.getJoystick().down();
+        game2.getJoystick().up();
+
+        //when
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "K      \n" +
+                "       \n" +
+                "       \n" +
+                "Ḃ      \n" +
+                "■■■■■■■\n";
+        assertThat(game2.getBoardAsString(), is(expected));
+    }
+
+    @Test
+    public void shouldMoveBike2UpFirstAndThenBike3Down__ifDiceReturnedRandomNumberLikeThatForTicking() {
+        //given
+        init();
+        when(dice.next(3)).thenReturn(2);
+
+        game3.getJoystick().down();
+        game2.getJoystick().up();
+
+        //when
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "Ḱ      \n" +
+                "       \n" +
+                "       \n" +
+                "Ḃ      \n" +
+                "■■■■■■■\n";
+        assertThat(game2.getBoardAsString(), is(expected));
+    }
 }
