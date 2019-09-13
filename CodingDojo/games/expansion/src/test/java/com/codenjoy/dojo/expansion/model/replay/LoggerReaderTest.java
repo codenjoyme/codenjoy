@@ -63,7 +63,6 @@ public class LoggerReaderTest {
             "                    ";
 
     @Test
-    @Ignore("TODO: пофиксить логику")
     public void testParseFile() throws IOException {
         // given
         SettingsWrapper.setup().roundTicks(50);
@@ -199,7 +198,6 @@ public class LoggerReaderTest {
             "--------------------------------------------------------------";
 
     @Test
-    @Ignore("TODO: пофиксить логику")
     public void testParseFileWhenHeroIsNotAlive_forDiedUser() throws IOException {
         // given
         SettingsWrapper.setup().roundTicks(50);
@@ -253,7 +251,6 @@ public class LoggerReaderTest {
     }
 
     @Test
-    @Ignore("TODO: пофиксить логику")
     public void testParseFileWhenHeroIsNotAlive_forAttackerUser() throws IOException {
         // given
         SettingsWrapper.setup().roundTicks(50);
@@ -307,7 +304,6 @@ public class LoggerReaderTest {
     }
 
     @Test
-    @Ignore("TODO: пофиксить логику")
     public void testParseFileWhenHeroIsNotAlive_forNeutralUser() throws IOException {
         // given
         SettingsWrapper.setup().roundTicks(50);
