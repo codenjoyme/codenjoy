@@ -101,7 +101,6 @@ public abstract class AbstractSinglePlayersTest {
     protected List<PlayerHero> heroes;
 
     protected Ticker ticker;
-    private int size = LevelsTest.LEVEL_SIZE;
 
     private List<Expansion> currents;
     private GameRunner gameRunner;
@@ -137,7 +136,7 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected void givenSize(int size) {
-        this.size = size;
+        SettingsWrapper.data.boardSize(size);
     }
 
     protected void givenFl(String... boards) {
@@ -169,6 +168,12 @@ public abstract class AbstractSinglePlayersTest {
 
         createNewLevelIfNeeded(player);
 
+        frameworkShouldReloadLevel(player);
+    }
+
+    protected void frameworkShouldReloadLevel(int player) {
+        Single game = games.get(player);
+
         game.getField().remove(game.getPlayer());
 
         game.on(currents.get(player));
@@ -196,22 +201,37 @@ public abstract class AbstractSinglePlayersTest {
 
     private void createNewLevelIfNeeded(int player) {
         boolean newPlayer = (player == currents.size());
-        if (newPlayer ||
-                (currents.get(player).freeBases() == 0
-                        && levelNumbers.get(player) < gameRunner.getMultiplayerType().getLevelsCount()))
-        {
-            if (newPlayer) {
-                levelNumbers.add(0);
-            } else {
-                levelNumbers.set(player, levelNumbers.get(player) + 1);
-            }
+        if (newPlayer || currents.get(player).freeBases() == 0) {
+            int multipleIndex = gameRunner.getMultiplayerType().getLevelsCount();
+            boolean isSingle = newPlayer || levelNumbers.get(player) + 1 < multipleIndex;
+            boolean hasAnotherMultiple = multipleIndex == levelNumbers.stream().max(Integer::compareTo).orElseGet(() -> 0);
 
-            Expansion current = (Expansion) gameRunner.createGame(levelNumbers.get(player));
+            if (isSingle || !hasAnotherMultiple) {
+                if (newPlayer) {
+                    levelNumbers.add(0);
+                } else {
+                    levelNumbers.set(player, levelNumbers.get(player) + 1);
+                }
 
-            if (newPlayer) {
-                currents.add(current);
+                Expansion current = (Expansion) gameRunner.createGame(levelNumbers.get(player));
+
+                if (newPlayer) {
+                    currents.add(current);
+                } else {
+                    currents.set(player, current);
+                }
             } else {
-                currents.set(player, current);
+                boolean found = false;
+                for (int i = 0; i < levelNumbers.size(); i++) {
+                    if (levelNumbers.get(i) == multipleIndex) {
+                        currents.set(player, currents.get(i));
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    throw new IllegalStateException();
+                }
             }
         }
     }
@@ -334,16 +354,17 @@ public abstract class AbstractSinglePlayersTest {
         Mockito.verifyNoMoreInteractions(listener(index));
     }
 
-    protected void assertBoardData(String levelProgress, String heroes,
-                                   boolean onlyMyName, String layer1, String layer2,
+    protected void assertBoardData(String levelProgress, String offset,
+                                   String layer1, String layer2,
                                    String forces, Point myBase, int index)
     {
         JSONObject json = getLayer(index);
 
+        // TODO вообще тут эмуляция многих частей codenjoy фреймворка а значит дублирование, и это я уже не стал эмулировать
         assertEquals(levelProgress,
-                JsonUtils.clean(JsonUtils.toStringSorted(json.get("levelProgress"))));
+                levelProgress);
 
-        assertEquals(heroes,
+        assertEquals(offset,
                 JsonUtils.clean(JsonUtils.toStringSorted(json.get("offset"))));
 
         assertEquals(TestUtils.injectN(layer1),
@@ -355,14 +376,8 @@ public abstract class AbstractSinglePlayersTest {
         assertEquals(forces,
                 TestUtils.injectNN(json.getString("forces")));
 
-        assertEquals(true,
-                json.getBoolean("showName"));
-
         assertEquals(JsonUtils.clean(JsonUtils.toStringSorted(myBase)),
                 JsonUtils.clean(JsonUtils.toStringSorted(json.get("myBase"))));
-
-        assertEquals(onlyMyName,
-                json.getBoolean("onlyMyName"));
     }
 
     protected void assertBoardData(int index, String expected) {

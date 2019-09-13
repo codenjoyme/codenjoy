@@ -202,7 +202,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
             result.put("round", player.getRoundTicks());
             result.put("rounds", SettingsWrapper.data.roundTicks());
             result.put("available", player.getForcesPerTick());
-            result.put("offset", data.getOffset());
+            result.put("offset", new JSONObject(data.getOffset()));
 
             if (logger.isDebugEnabled()) {
                 logger.debug("getBoardAsString for player {} and field {} prepare {}",

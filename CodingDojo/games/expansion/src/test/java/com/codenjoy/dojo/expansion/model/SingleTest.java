@@ -410,6 +410,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER2, 1, 2).right();
+
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll(); // player1 goes multiple
 
         // then
@@ -445,6 +447,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 2).down();
+        frameworkShouldGoNextLevelForWinner(PLAYER2);
         tickAll(); // player2 goes multiple
 
         // then
@@ -525,6 +528,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         hero(PLAYER2, 2, 2).down();
         // player1 started
         // player2 finished
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll();
 
 
@@ -564,6 +568,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#\n", PLAYER2);
 
         // when
+        frameworkShouldGoNextLevelForWinner(PLAYER2);
         tickAll(); // player2 started
 
         // then
@@ -647,12 +652,14 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         hero(PLAYER2, 2, 2).down();
 
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll(); // player1 started // player2 finished
 
 
         verify(PLAYER2).event(Events.WIN(0));
         reset(PLAYER2);
 
+        frameworkShouldGoNextLevelForWinner(PLAYER2);
         tickAll(); // player2 started
 
         verifyNoMoreInteractions(PLAYER1);
@@ -729,6 +736,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // when done 1 level - go to 2 (single)
         hero(PLAYER1, 1, 2).right();
         tickAll();
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll();
 
         // then
@@ -750,6 +758,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // when done 2 level - go to 3 (single)
         hero(PLAYER1, 2, 2).down();
         tickAll();
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll();
 
         // then
@@ -771,6 +780,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // when done 3 level - go to 4 (multiple)
         hero(PLAYER1, 2, 1).left();
         tickAll();
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll();
 
         // then
@@ -792,6 +802,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // when done 4 level - start 4 again (multiple)
         hero(PLAYER1, 1, 1).up();
         tickAll();
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll();
 
         // then
@@ -813,6 +824,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // when done 4 level - start 4 again multiple)
         hero(PLAYER1, 1, 1).up();
         tickAll();
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll();
 
         // then
@@ -839,6 +851,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 1).reset();
+        frameworkShouldReloadLevel(PLAYER1);
         tickAll();
         tickAll();
 
@@ -869,6 +882,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 1).reset();
+        frameworkShouldReloadLevel(PLAYER1);
         tickAll();
 
         // then
@@ -908,7 +922,6 @@ public class SingleTest extends AbstractSinglePlayersTest {
         assertBoardData(
                 "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
                 "{'x':0,'y':0}",
-                true,
                 "╔═══┐" +
                 "║1E.│" +
                 "║...│" +
@@ -930,7 +943,6 @@ public class SingleTest extends AbstractSinglePlayersTest {
         assertBoardData(
                 "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
                 "{'x':0,'y':0}",
-                true,
                 "╔═══┐" +
                 "║1E.│" +
                 "║...│" +
@@ -990,6 +1002,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#\n", PLAYER2);
 
         // players started on multiple
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
+        frameworkShouldGoNextLevelForWinner(PLAYER2);
         tickAll();
 
         assertL("╔═══┐" +
@@ -1074,7 +1088,6 @@ public class SingleTest extends AbstractSinglePlayersTest {
         assertBoardData(
                 "{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}",
                 "{'x':0,'y':0}",
-                false,
                 "╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
@@ -1096,7 +1109,6 @@ public class SingleTest extends AbstractSinglePlayersTest {
         assertBoardData(
                 "{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}",
                 "{'x':0,'y':0}",
-                false,
                 "╔═══┐" +
                 "║.2.│" +
                 "║1..│" +
@@ -1125,35 +1137,27 @@ public class SingleTest extends AbstractSinglePlayersTest {
         assertEquals("{" +
                 "'available':10," +
                 "'forces':'-=#-=#-=#-=#-=#-=#-=#00B001-=#-=#00B-=#-=#-=#-=#001-=#-=#-=#-=#-=#-=#-=#-=#'," +
-                "'inLobby':false," +
                 "'layers':['╔═══┐║.2.│║1..│║..E│└───┘'," +
                 "'-------♦♦--♥----♥--------']," +
-                "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +
                 "'myBase':{'x':1,'y':2}," +
                 "'myColor':0," +
                 "'offset':{'x':0,'y':0}," +
-                "'onlyMyName':false," +
-                "'round':1," +
+                "'round':2," +
                 "'rounds':10000," +
-                "'showName':true," +
-                "'tick':6" +
+                "'tick':0" +
                 "}", JsonUtils.toStringSorted(getLayer(PLAYER1)).replace('"', '\''));
 
         assertEquals("{" +
                 "'available':10," +
                 "'forces':'-=#-=#-=#-=#-=#-=#-=#00B001-=#-=#00B-=#-=#-=#-=#001-=#-=#-=#-=#-=#-=#-=#-=#'," +
-                "'inLobby':false," +
                 "'layers':['╔═══┐║.2.│║1..│║..E│└───┘'," +
                 "'-------♦♦--♥----♥--------']," +
-                "'levelProgress':{'current':0,'lastPassed':0,'multiple':true,'scores':true,'total':1}," +
                 "'myBase':{'x':2,'y':3}," +
                 "'myColor':1," +
                 "'offset':{'x':0,'y':0}," +
-                "'onlyMyName':false," +
-                "'round':1," +
+                "'round':2," +
                 "'rounds':10000," +
-                "'showName':true," +
-                "'tick':6" +
+                "'tick':0" +
                 "}", JsonUtils.toStringSorted(getLayer(PLAYER2)).replace('"', '\''));
     }
 
@@ -1196,11 +1200,11 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when then
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':2}}],'movements':[{'count':1,'direction':'DOWN','region':{'x':1,'y':2}}]}}," +
-                        "'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+                        "'coordinate':{'x':1,'y':2},'level':0,'multiplayer':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
 
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':2,'y':3}}],'movements':[{'count':1,'direction':'RIGHT','region':{'x':2,'y':3}}]}}," +
-                        "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+                        "'coordinate':{'x':2,'y':3},'level':0,'multiplayer':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
 
         // when
@@ -1223,11 +1227,11 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#\n", PLAYER1);
 
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':2}}],'movements':[{'count':1,'direction':'RIGHT','region':{'x':1,'y':2}}]}}," +
-                        "'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+                        "'coordinate':{'x':1,'y':2},'level':0,'multiplayer':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
 
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':3,'y':3}}],'movements':[{'count':1,'direction':'DOWN','region':{'x':3,'y':3}}]}}," +
-                        "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+                        "'coordinate':{'x':2,'y':3},'level':0,'multiplayer':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
     }
 
@@ -1257,12 +1261,12 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // then
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':1}}]," +
                         "'movements':[{'count':1,'direction':'RIGHT','region':{'x':1,'y':1}}]}}," +
-                        "'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+                        "'coordinate':{'x':1,'y':2},'level':0,'multiplayer':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
 
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':3,'y':3}}]," +
                         "'movements':[{'count':1,'direction':'DOWN','region':{'x':3,'y':3}}]}}," +
-                        "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+                        "'coordinate':{'x':2,'y':3},'level':0,'multiplayer':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
 
         // when
@@ -1271,11 +1275,11 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // then
         // still here
         assertEquals("{'additionalData':{'lastAction':{}}," +
-                        "'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+                        "'coordinate':{'x':1,'y':2},'level':0,'multiplayer':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
 
         assertEquals("{'additionalData':{'lastAction':{}}," +
-                        "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+                        "'coordinate':{'x':2,'y':3},'level':0,'multiplayer':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
 
         // when
@@ -1283,11 +1287,11 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // then
         // removed
-        assertEquals("{'additionalData':{'lastAction':{}},'coordinate':{'x':1,'y':2},'level':0,'singleBoardGame':true}",
+        assertEquals("{'additionalData':{'lastAction':{}},'coordinate':{'x':1,'y':2},'level':0,'multiplayer':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
 
         assertEquals("{'additionalData':{'lastAction':{}}," +
-                        "'coordinate':{'x':2,'y':3},'level':0,'singleBoardGame':true}",
+                        "'coordinate':{'x':2,'y':3},'level':0,'multiplayer':true}",
                 JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
     }
 
@@ -1321,7 +1325,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when then
         assertBoardData(
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':0,'y':4}", true, "╔═══════════════" +
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':0,'y':4}",
+                "╔═══════════════" +
                 "║1.............." +
                 "║..............B" +
                 "║....┌──╗......." +
@@ -1372,7 +1378,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 pt(1, 18), PLAYER1);
 
         assertBoardData(
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':0,'y':4}", true, "╔═══════════════" +
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':0,'y':4}",
+                "╔═══════════════" +
                 "║1.............." +
                 "║..............B" +
                 "║....┌──╗......." +
@@ -1431,7 +1439,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // then
         assertBoardData(
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':4,'y':4}", true, "═══════════════┐" +
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':4,'y':4}",
+                "═══════════════┐" +
                 "...............│" +
                 "...........B...│" +
                 ".┌──╗..........│" +
@@ -1482,7 +1492,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 pt(1, 18), PLAYER1);
 
         assertBoardData(
-                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}", "{'x':0,'y':0}", true, "║....│  ║......." +
+                "{'current':0,'lastPassed':-1,'multiple':false,'scores':true,'total':1}",
+                "{'x':0,'y':0}",
+                "║....│  ║......." +
                 "║..┌─┘  └─╗....." +
                 "║..│      ║....." +
                 "║..│      ║....." +

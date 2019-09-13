@@ -315,6 +315,8 @@ public final class SettingsWrapper {
         data.settings.getParameter(description + (index + 1)).update(name);
         Levels.put(name, value);
         int size = (int) Math.sqrt(value.length());
-        data.boardSize(size);
+        if (size < data.boardSize()) {
+            data.boardSize(size);
+        }
     }
 }
