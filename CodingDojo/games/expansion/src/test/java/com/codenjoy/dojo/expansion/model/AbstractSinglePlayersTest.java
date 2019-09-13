@@ -103,9 +103,9 @@ public abstract class AbstractSinglePlayersTest {
     protected Ticker ticker;
     private int size = LevelsTest.LEVEL_SIZE;
 
-    private Expansion current;
+    private List<Expansion> currents;
     private GameRunner gameRunner;
-    private int levelNumber;
+    private List<Integer> levelNumbers;
 
     @Before
     public void setup() {
@@ -113,7 +113,8 @@ public abstract class AbstractSinglePlayersTest {
 
         gameRunner = new GameRunner();
         gameRunner.setDice(dice);
-        levelNumber = 0;
+        levelNumbers = new LinkedList<>();
+        currents = new LinkedList<>();
 
         listeners = new LinkedList<>();
         games = new LinkedList<>();
@@ -140,7 +141,13 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected void givenFl(String... boards) {
-        SettingsWrapper.single(boards);
+        SettingsWrapper.single(Arrays.asList(boards)
+                .subList(0, boards.length - 1)
+                .toArray(new String[0]));
+
+        SettingsWrapper.multi(Arrays.asList(boards)
+                .subList(boards.length - 1, boards.length)
+                .toArray(new String[0]));
     }
 
     protected void givenForces(String forces, String layer2) {
@@ -160,38 +167,52 @@ public abstract class AbstractSinglePlayersTest {
         Single game = games.get(player);
         assertEquals(true, game.isWin());
 
-        createNewLevelIfNeeded();
+        createNewLevelIfNeeded(player);
 
         game.getField().remove(game.getPlayer());
 
-        game.on(current);
+        game.on(currents.get(player));
         game.newGame();
 
         heroes.set(player, game.getPlayer().getHero());
     }
 
     protected void createOneMorePlayer() {
-        createNewLevelIfNeeded();
+        int playerIndex = games.size();
+        createNewLevelIfNeeded(playerIndex);
 
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
-        String playerName = String.format("demo%s@codenjoy.com", games.size() + 1);
+        String playerName = String.format("demo%s@codenjoy.com", playerIndex + 1);
         Player player = (Player) gameRunner.createPlayer(listener, playerName);
         Single game = new Single(player, gameRunner.getPrinterFactory());
-        game.on(current);
+        game.on(currents.get(playerIndex));
         game.newGame();
         games.add(game);
 
         heroes.add(game.getPlayer().getHero());
     }
 
-    private void createNewLevelIfNeeded() {
-        if ((current == null || current.freeBases() == 0)
-                && levelNumber < gameRunner.getMultiplayerType().getLevelsCount())
+    private void createNewLevelIfNeeded(int player) {
+        boolean newPlayer = (player == currents.size());
+        if (newPlayer ||
+                (currents.get(player).freeBases() == 0
+                        && levelNumbers.get(player) < gameRunner.getMultiplayerType().getLevelsCount()))
         {
-            current = (Expansion) gameRunner.createGame(levelNumber);
-            levelNumber++;
+            if (newPlayer) {
+                levelNumbers.add(0);
+            } else {
+                levelNumbers.set(player, levelNumbers.get(player) + 1);
+            }
+
+            Expansion current = (Expansion) gameRunner.createGame(levelNumbers.get(player));
+
+            if (newPlayer) {
+                currents.add(current);
+            } else {
+                currents.set(player, current);
+            }
         }
     }
 

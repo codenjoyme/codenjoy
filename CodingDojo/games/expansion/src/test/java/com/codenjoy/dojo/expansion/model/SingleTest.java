@@ -308,6 +308,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         reset(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
 
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll();
 
         // then
@@ -344,7 +345,6 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER2);
-
     }
 
     @Test
