@@ -47,7 +47,6 @@ public class SingleTest extends AbstractSinglePlayersTest {
     @Test
     public void shouldNextLevelWhenFinishCurrent() {
         // given
-        createPlayers(1);
         givenFl("╔══┐" +
                 "║1E│" +
                 "║..│" +
@@ -60,6 +59,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "║1.│" +
                 "║.E│" +
                 "└──┘");
+
+        createPlayers(1);
 
         assertL("╔══┐" +
                 "║1E│" +
