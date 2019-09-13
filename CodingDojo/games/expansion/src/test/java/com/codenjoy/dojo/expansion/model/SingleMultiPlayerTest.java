@@ -538,6 +538,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         reset(player);
         verifyNoMoreInteractions(player);
 
+        frameworkShouldGoNextLevelForWinner(player);
         tickAll();
     }
 

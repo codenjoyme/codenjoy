@@ -176,10 +176,9 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected void frameworkShouldReloadLevel(int player) {
+        removeFromBoard(player);
+
         Single game = games.get(player);
-
-        game.getField().remove(game.getPlayer());
-
         game.on(currents.get(player));
         game.newGame();
 
@@ -203,38 +202,76 @@ public abstract class AbstractSinglePlayersTest {
         heroes.add(game.getPlayer().getHero());
     }
 
+    // TODO этот ужас надо забыть как страшный сон
+    // но пока что он эмулирует работу фреймфорка по принципу:
+    // все начинают со своих независимых single уровней пока не доберутся до multiple (последний)
+    // тогда они объединяются на одном поле, но если случится переполнение и баз свободных нет
+    // тогда новому игроку ничего не останется, кроме как занять новое свободное multiple поле
+    // и быть там первым
     private void createNewLevelIfNeeded(int player) {
+        // это нового плеера мы пытаемся сейчас создать или игрок уже играл?
         boolean newPlayer = (player == currents.size());
+
+        // если это новый пользователь или базы на текущем multiple уровне не свободны
+        // то надо потрудиться и разместить его как-то
         if (newPlayer || currents.get(player).freeBases() == 0) {
+            // это у нас индекс уровня на котором уже multiple
             int multipleIndex = gameRunner.getMultiplayerType().getLevelsCount();
-            boolean isSingle = newPlayer || levelNumbers.get(player) + 1 < multipleIndex;
+            // текущий юзер будет переходить на single или уже на multiple
+            boolean willGoOnSingle = newPlayer || levelNumbers.get(player) + 1 < multipleIndex;
+            // есть ли хоть один другой юзер который уже перешел на multiple?
             boolean hasAnotherMultiple = multipleIndex == levelNumbers.stream().max(Integer::compareTo).orElseGet(() -> 0);
 
-            if (isSingle || !hasAnotherMultiple) {
-                if (newPlayer) {
-                    levelNumbers.add(0);
-                } else {
-                    levelNumbers.set(player, levelNumbers.get(player) + 1);
-                }
+            // надо ли создавать новую комнату?
+            boolean createNew = false;
+            if (willGoOnSingle || !hasAnotherMultiple) {
+                // надо если мы будем переходить на single
+                // или переход будет на multiple но ни одного игрока добравшегося сюда нет
+                createNew = true;
+            } else { // а тут у нас переход на multiple и по идее надо найти комнату и попасть в нее
+                // мы самовыпилимся из комнаты где мы сейчас, чтобы если мы на multiple то не мешать другим туда попасть
+                removeFromBoard(player);
 
-                Expansion current = (Expansion) gameRunner.createGame(levelNumbers.get(player));
-
-                if (newPlayer) {
-                    currents.add(current);
-                } else {
-                    currents.set(player, current);
-                }
-            } else {
+                // мы пытаемся найти комнату multiple со свободными базами
                 boolean found = false;
                 for (int i = 0; i < levelNumbers.size(); i++) {
-                    if (levelNumbers.get(i) == multipleIndex) {
+                    if (levelNumbers.get(i) == multipleIndex && currents.get(i).freeBases() != 0) {
                         currents.set(player, currents.get(i));
                         found = true;
                         break;
                     }
                 }
+                // если не нашли
                 if (!found) {
-                    throw new IllegalStateException();
+                    // то создаем
+                    createNew = true;
+                    // и если мы переходим из multiple на multiple
+                    if (levelNumbers.get(player) == multipleIndex) {
+                        // нам надо сделать вид, будьто бы мы с single на multiple перешли
+                        // потому что скрипт ниже так заточен что переходит на n+1 уровнень
+                        levelNumbers.set(player, levelNumbers.get(player) - 1);
+                    }
+                }
+            }
+            // если надо создать новую комнату - создаем
+            if (createNew) {
+                if (newPlayer) {
+                    // для нового игрока просто доабвляем level = 0
+                    levelNumbers.add(0);
+                } else {
+                    // для существущего level++
+                    levelNumbers.set(player, levelNumbers.get(player) + 1);
+                }
+
+                // создаем комнату с этим уровнем
+                Expansion current = (Expansion) gameRunner.createGame(levelNumbers.get(player));
+
+                if (newPlayer) {
+                    // для нового игрока добавляем его комнату
+                    currents.add(current);
+                } else {
+                    // для существующего заменяем старую
+                    currents.set(player, current);
                 }
             }
         }
@@ -311,9 +348,13 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected void destroy(int player) {
+        removeFromBoard(player);
+        games.set(player, null);
+    }
+
+    private void removeFromBoard(int player) {
         Game game = games.get(player);
         game.getField().remove(game.getPlayer());
-        games.set(player, null);
     }
 
     protected void assertL(String expected, int index) {

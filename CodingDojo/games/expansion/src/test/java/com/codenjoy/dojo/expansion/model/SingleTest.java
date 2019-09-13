@@ -532,7 +532,6 @@ public class SingleTest extends AbstractSinglePlayersTest {
         frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll();
 
-
         // then
         verifyNoMoreInteractions(PLAYER1);
         verify(PLAYER2).event(Events.WIN(0));
