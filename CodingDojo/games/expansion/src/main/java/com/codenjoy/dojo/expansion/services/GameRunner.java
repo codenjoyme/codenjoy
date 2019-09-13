@@ -44,7 +44,6 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -73,16 +72,20 @@ public class GameRunner extends AbstractGameType implements GameType  {
             settings.changesReacted();
 
             size = SettingsWrapper.data.boardSize();
-            singleLevels = Levels.collectSingle(SettingsWrapper.data.boardSize());
-            multipleLevels = Levels.collectMultiple(SettingsWrapper.data.boardSize(),
-                    SettingsWrapper.data.levels());
+
+            singleLevels = Levels.collectLevels(SettingsWrapper.data.boardSize(),
+                    SettingsWrapper.data.singleLevels());
+
+            multipleLevels = Levels.collectLevels(SettingsWrapper.data.boardSize(),
+                    SettingsWrapper.data.multipleLevels());
         }
     }
 
     @Override
     public MultiplayerType getMultiplayerType() {
+        initGameFactory();
         if (SINGLE_TRAINING_MODE) {
-            return MultiplayerType.TRAINING.apply(Levels.getSingleMaps().size());
+            return MultiplayerType.TRAINING.apply(singleLevels.get().size());
         } else {
             return MultiplayerType.QUADRO;
         }
@@ -130,7 +133,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
         String save = null;
         boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
         if (!isTrainingMode) {
-            int total = SettingsWrapper.data.totalSingleLevels();
+            int total = SettingsWrapper.data.singleLevels().size();
             save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
 

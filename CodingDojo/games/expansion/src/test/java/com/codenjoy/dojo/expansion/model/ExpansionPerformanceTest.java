@@ -31,7 +31,6 @@ import org.junit.Test;
 /**
  * Created by Sanja on 15.02.14.
  */
-@Ignore("TODO: пофиксить создание игры")
 public class ExpansionPerformanceTest extends AbstractGameRunnerTest {
 
     public static final int COUNT_USERS = 100;

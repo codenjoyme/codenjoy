@@ -26,7 +26,6 @@ package com.codenjoy.dojo.expansion.model;
 import com.codenjoy.dojo.services.QDirection;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
-import com.codenjoy.dojo.expansion.model.levels.LevelsFactory;
 import com.codenjoy.dojo.expansion.services.Events;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -48,7 +47,6 @@ import static org.mockito.Mockito.when;
  * Date: 17.12.13
  * Time: 4:47
  */
-@Ignore("TODO: пофиксить создание игры")
 public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
 
     public static final String FIRST_SINGLE_LEVEL =
@@ -2447,7 +2445,6 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         verify(PLAYER1).event(DRAW());
     }
 
-    @Ignore
     @Test
     public void testBug() {
         givenSize(20);
@@ -2490,7 +2487,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         for (String string : strings) {
             if (string.contains("starting new game")) {
                 String playerId = getPlayerFromLine(string);
-                playerHeroes.put(playerId, singles.size());
+                playerHeroes.put(playerId, games.size());
                 createPlayers(1);
                 continue;
             }
@@ -2743,7 +2740,7 @@ public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
         // when
         destroy(PLAYER1);
         destroy(PLAYER2);
-        singles.clear();
+        games.clear();
         heroes.clear();
         listeners.clear();
         createPlayers(1);

@@ -23,17 +23,14 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.GameRunner;
 import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
@@ -79,14 +76,12 @@ public class AbstractGameRunnerTest {
 
         settings = gameRunner.getSettings();
         SettingsWrapper.data
-//                .lobbyEnable(false)
                 .waitingOthers(false)
                 .shufflePlayers(false);
     }
 
-
-    protected void givenLv(String level, int index) {
-        SettingsWrapper.multi(index, level);
+    protected void givenFl(String... boards) {
+        SettingsWrapper.multi(boards);
     }
 
     protected JSONObject board(int player) {
@@ -223,34 +218,29 @@ public class AbstractGameRunnerTest {
     }
 
     protected void givenLevels() {
-        givenLv("╔════┐" +
+        givenFl("╔════┐" +
                 "║1..2│" +
                 "║....│" +
                 "║....│" +
                 "║4..3│" +
-                "└────┘", LEVEL1);
-
-        givenLv("╔════┐" +
+                "└────┘",
+                "╔════┐" +
                 "║..1.│" +
                 "║4...│" +
                 "║...2│" +
                 "║.3..│" +
-                "└────┘", LEVEL2);
-
-        givenLv("╔════┐" +
+                "└────┘",
+                "╔════┐" +
                 "║.1..│" +
                 "║...2│" +
                 "║4...│" +
                 "║..3.│" +
-                "└────┘", LEVEL3);
-
-        givenLv("╔════┐" +
+                "└────┘",
+                "╔════┐" +
                 "║....│" +
                 "║.12.│" +
                 "║.43.│" +
                 "║....│" +
-                "└────┘", LEVEL4);
-
-        data.cleanMulti(LEVEL4);
+                "└────┘");
     }
 }

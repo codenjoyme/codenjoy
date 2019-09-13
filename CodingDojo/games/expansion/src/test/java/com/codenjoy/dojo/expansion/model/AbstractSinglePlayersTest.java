@@ -25,11 +25,10 @@ package com.codenjoy.dojo.expansion.model;
 
 import com.codenjoy.dojo.expansion.model.levels.*;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
+import com.codenjoy.dojo.expansion.services.GameRunner;
 import com.codenjoy.dojo.expansion.services.SettingsWrapper;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.QDirection;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -42,7 +41,6 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
@@ -99,20 +97,26 @@ public abstract class AbstractSinglePlayersTest {
 
     protected Dice dice;
     protected List<EventListener> listeners;
-    protected List<Single> singles;
-    protected List<Hero> heroes;
+    protected List<Single> games;
+    protected List<PlayerHero> heroes;
 
-    private LinkedList<String> levelsMaps;
-
-    private String multipleLevelsMaps;
     protected Ticker ticker;
     private int size = LevelsTest.LEVEL_SIZE;
+
+    private Expansion current;
+    private GameRunner gameRunner;
+    private int levelNumber;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+
+        gameRunner = new GameRunner();
+        gameRunner.setDice(dice);
+        levelNumber = 0;
+
         listeners = new LinkedList<>();
-        singles = new LinkedList<>();
+        games = new LinkedList<>();
         heroes = new LinkedList<>();
         ticker = new Ticker();
         SettingsWrapper.setup()
@@ -136,11 +140,11 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected void givenFl(String... boards) {
-        setupMaps(boards);
+        SettingsWrapper.single(boards);
     }
 
     protected void givenForces(String forces, String layer2) {
-        IField current = (IField)singles.get(PLAYER1).getField();
+        IField current = (IField) games.get(PLAYER1).getField();
         LevelImpl level = (LevelImpl) current.getCurrentLevel();
         level.fillForces(layer2, heroes.toArray(new Hero[0]));
         level.fillForcesCount(forces);
@@ -152,28 +156,47 @@ public abstract class AbstractSinglePlayersTest {
         }
     }
 
-    private void setupMaps(String[] boards) {
-        levelsMaps = new LinkedList<>(Arrays.asList(boards));
-        multipleLevelsMaps = levelsMaps.removeLast();
+    protected void frameworkShouldGoNextLevelForWinner(int player) {
+        Single game = games.get(player);
+        assertEquals(true, game.isWin());
 
-        List<Supplier<Level>> single = Levels.collectYours(size, levelsMaps.toArray(new String[0]));
-        List<Supplier<Level>> multiple = Levels.collectYours(size, multipleLevelsMaps);
+        createNewLevelIfNeeded();
+
+        game.getField().remove(game.getPlayer());
+
+        game.on(current);
+        game.newGame();
+
+        heroes.set(player, game.getPlayer().getHero());
     }
 
     protected void createOneMorePlayer() {
+        createNewLevelIfNeeded();
+
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
-        String playerName = String.format("demo%s@codenjoy.com", singles.size() + 1);
-        Single game = null; // TODO тут пришлось закомментить
-                // new Single(gameFactory, () -> lobby, listener, null, ticker, dice, null, playerName);
-        singles.add(game);
+        String playerName = String.format("demo%s@codenjoy.com", games.size() + 1);
+        Player player = (Player) gameRunner.createPlayer(listener, playerName);
+        Single game = new Single(player, gameRunner.getPrinterFactory());
+        game.on(current);
         game.newGame();
-        // heroes.add(game.getPlayer().getHero()); // TODO тут пришлось закомментить
+        games.add(game);
+
+        heroes.add(game.getPlayer().getHero());
+    }
+
+    private void createNewLevelIfNeeded() {
+        if ((current == null || current.freeBases() == 0)
+                && levelNumber < gameRunner.getMultiplayerType().getLevelsCount())
+        {
+            current = (Expansion) gameRunner.createGame(levelNumber);
+            levelNumber++;
+        }
     }
 
     protected void tickAll() {
-        for (Single single : singles) {
+        for (Single single : games) {
             if (single != null) {
                 single.getField().tick();
             }
@@ -239,12 +262,13 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected Single single(int index) {
-        return singles.get(index);
+        return games.get(index);
     }
 
-    protected void destroy(int index) {
-        // single(index).destroy(); TODO to use progressBar.destroy
-        singles.set(index, null);
+    protected void destroy(int player) {
+        Game game = games.get(player);
+        game.getField().remove(game.getPlayer());
+        games.set(player, null);
     }
 
     protected void assertL(String expected, int index) {
@@ -257,6 +281,10 @@ public abstract class AbstractSinglePlayersTest {
         return ((JSONObject) single.getBoardAsString()).getJSONArray("layers").getString(layer);
     }
 
+    private String getForces(Single single) {
+        return ((JSONObject) single.getBoardAsString()).getString("forces");
+    }
+
     protected void assertE(String expected, int index) {
         Single single = single(index);
         assertEquals(TestUtils.injectN(expected),
@@ -266,7 +294,7 @@ public abstract class AbstractSinglePlayersTest {
     protected void assertF(String expected, int index) {
         Single single = single(index);
         assertEquals(expected,
-                TestUtils.injectNN(getLayer(single, 2)));
+                TestUtils.injectNN(getForces(single)));
     }
 
     protected EventListener verify(int index) {

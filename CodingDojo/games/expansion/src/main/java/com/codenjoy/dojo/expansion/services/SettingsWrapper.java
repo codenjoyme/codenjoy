@@ -60,8 +60,8 @@ public final class SettingsWrapper {
     private final Parameter<Boolean> waitingOthers;
     private final Parameter<Boolean> shufflePlayers;
     private final Parameter<Boolean> gameLoggingEnable;
-    private final List<Parameter<String>> levels;
-    private final int totalSingleLevels;
+    private final List<Parameter<String>> multipleLevels;
+    private final List<Parameter<String>> singleLevels;
     private final Parameter<Integer> leaveForceCount;
     private final Settings settings;
     private final Parameter<String> command;
@@ -79,7 +79,6 @@ public final class SettingsWrapper {
         data = this;
         this.settings = settings;
 
-        levels = new LinkedList<>();
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(20);
 
         waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(true);
@@ -103,28 +102,33 @@ public final class SettingsWrapper {
         gameLoggingEnable = settings.addEditBox("Game logging enable").type(Boolean.class).def(false);
         delayReplay = settings.addEditBox("Clean scores to run all replays").type(Boolean.class).def(false);
 
+        multipleLevels = new LinkedList<>();
         for (int index = 0; index < Levels.MULTI.size(); index++) {
             String name = Levels.MULTI.get(index);
-            levels.add(settings.addEditBox("Multiple level " + (index + 1)).type(String.class).def(name));
+            multipleLevels.add(settings.addEditBox("Multiple level " + (index + 1)).type(String.class).def(name));
         }
 
-        totalSingleLevels = Levels.collectSingle(boardSize()).get().size();
+        singleLevels = new LinkedList<>();
+        for (int index = 0; index < Levels.SINGLE.size(); index++) {
+            String name = Levels.SINGLE.get(index);
+            singleLevels.add(settings.addEditBox("Single level " + (index + 1)).type(String.class).def(name));
+        }
     }
 
     public int boardSize() {
         return boardSize.getValue();
     }
 
-    public List<String> levels() {
-        return levels.stream().map(p -> p.getValue()).collect(toList());
+    public List<String> multipleLevels() {
+        return multipleLevels.stream().map(p -> p.getValue()).collect(toList());
+    }
+
+    public List<String> singleLevels() {
+        return singleLevels.stream().map(p -> p.getValue()).collect(toList());
     }
 
     public boolean waitingOthers() {
         return waitingOthers.getValue();
-    }
-
-    public int totalSingleLevels() {
-        return totalSingleLevels;
     }
 
     public int leaveForceCount() {
@@ -271,21 +275,46 @@ public final class SettingsWrapper {
 
     public static void cleanMulti(int afterIndex) {
         int index = 0;
-        for (Parameter parameter : data.levels.toArray(new Parameter[0])) {
+        for (Parameter parameter : data.multipleLevels.toArray(new Parameter[0])) {
             if (index > afterIndex) {
                 data.settings.removeParameter(parameter.getName());
-                data.levels.remove(data.levels.size() - 1);
+                data.multipleLevels.remove(data.multipleLevels.size() - 1);
             }
             index++;
         }
     }
 
-    public static void multi(int index, String value) {
-        String name = "MULTI" + index + "_TEST";
-        data.settings.getParameter("Multiple level " + (index + 1)).update(name);
+    public static void multi(String... maps) {
+        for (int i = 0; i < maps.length; i++) {
+            updateLevels("MULTI", "Multiple level ", i, maps[i]);
+        }
+        clean(maps.length - 1, data.multipleLevels);
+    }
+
+    private static void clean(int afterIndex, List<Parameter<String>> fromWhere) {
+        int index = 0;
+        for (Parameter parameter : fromWhere.toArray(new Parameter[0])) {
+            if (index > afterIndex) {
+                data.settings.removeParameter(parameter.getName());
+                fromWhere.remove(fromWhere.size() - 1);
+            }
+            index++;
+        }
+    }
+
+    public static void single(String... maps) {
+        for (int i = 0; i < maps.length; i++) {
+            updateLevels("SINGLE", "Single level ", i, maps[i]);
+        }
+        clean(maps.length - 1, data.singleLevels);
+    }
+
+    public static void updateLevels(String type, String description,
+                                    int index, String value) {
+        String name = type + index + "_TEST";
+        data.settings.getParameter(description + (index + 1)).update(name);
         Levels.put(name, value);
         int size = (int) Math.sqrt(value.length());
         data.boardSize(size);
     }
-
 }

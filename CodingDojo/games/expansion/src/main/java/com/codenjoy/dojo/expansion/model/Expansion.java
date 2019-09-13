@@ -173,7 +173,7 @@ public class Expansion implements Tickable, IField {
 
                 if (hero.isWin()) {
                     player.event(WIN_SINGLE);
-                    player.setNextLevel();
+                    player.goToNextLevel();
                 }
             }
         }

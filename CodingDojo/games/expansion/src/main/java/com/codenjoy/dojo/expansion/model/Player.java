@@ -98,7 +98,7 @@ public class Player extends GamePlayer<Hero, IField> {
         return isWin;
     }
 
-    public void setNextLevel() {
+    public void goToNextLevel() {
         isWin = true;
     }
 

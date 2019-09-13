@@ -53,17 +53,9 @@ public class Levels {
     private static Map<String, String> levels = new LinkedHashMap<>();
 
     public static final String DEMO = make("DEMO");
-    public static final String MULTILOBBY = make("MULTILOBBY");
     public static final String BIG_MULTI1 = make("BIG_MULTI1");
-    public static final String BIG_MULTI2 = make("BIG_MULTI2");
     public static final List<String> MULTI = makeAll("MULTI%s");
-    public static final String SINGLE1 = make("SINGLE1");
-    public static final String SINGLE2 = make("SINGLE2");
-    public static final String SINGLE3 = make("SINGLE3");
-    public static final String SINGLE4 = make("SINGLE4");
-    public static final String SINGLE5 = make("SINGLE5");
-    public static final String SINGLE6 = make("SINGLE6");
-    public static final String SINGLE7 = make("SINGLE7");
+    public static final List<String> SINGLE = makeAll("SINGLE%s");
 
     private static String make(String name) {
         String level = loadFromFile(name);
@@ -139,18 +131,7 @@ public class Levels {
         return Files.newInputStream(new File(filePath).toPath());
     }
 
-    public static LevelsFactory collectSingle(int boardSize) {
-        return () -> collect(boardSize,
-                getSingleMaps());
-    }
-
-    @NotNull
-    public static List<String> getSingleMaps() {
-        return Arrays.asList(SINGLE1, SINGLE2, SINGLE3, SINGLE4,
-                SINGLE5, SINGLE6, SINGLE7);
-    }
-
-    public static LevelsFactory collectMultiple(int boardSize, List<String> levels) {
+    public static LevelsFactory collectLevels(int boardSize, List<String> levels) {
         return () -> collect(boardSize, levels);
     }
 

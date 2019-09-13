@@ -23,10 +23,10 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
+import com.codenjoy.dojo.expansion.services.GameRunner;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.expansion.model.levels.LevelsTest;
 import com.codenjoy.dojo.expansion.services.Events;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -38,8 +38,11 @@ import static junit.framework.Assert.assertEquals;
  * Date: 17.12.13
  * Time: 4:47
  */
-@Ignore("TODO: пофиксить создание игры")
 public class SingleTest extends AbstractSinglePlayersTest {
+
+    public SingleTest() {
+        GameRunner.SINGLE_TRAINING_MODE = true;
+    }
 
     @Test
     public void shouldNextLevelWhenFinishCurrent() {
@@ -57,6 +60,11 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "║.E│" +
                 "└──┘");
         createPlayers(1);
+
+        assertL("╔══┐" +
+                "║1E│" +
+                "║..│" +
+                "└──┘", PLAYER1);
 
         assertE("----" +
                 "-♥--" +
@@ -91,6 +99,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#\n", PLAYER1);
 
         // when
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll();
 
         // then
@@ -133,6 +142,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#\n", PLAYER1);
 
         // when
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll();
 
         // then
@@ -195,6 +205,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#\n", PLAYER1);
 
         // when
+        frameworkShouldGoNextLevelForWinner(PLAYER1);
         tickAll();
 
         // then
