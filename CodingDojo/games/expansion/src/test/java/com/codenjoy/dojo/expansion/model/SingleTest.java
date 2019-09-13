@@ -40,13 +40,14 @@ import static junit.framework.Assert.assertEquals;
  */
 public class SingleTest extends AbstractSinglePlayersTest {
 
-    public SingleTest() {
-        GameRunner.SINGLE_TRAINING_MODE = true;
+    protected boolean isSingleTrainingOrMultiple() {
+        return true;
     }
 
     @Test
     public void shouldNextLevelWhenFinishCurrent() {
         // given
+        createPlayers(1);
         givenFl("╔══┐" +
                 "║1E│" +
                 "║..│" +
@@ -59,7 +60,6 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "║1.│" +
                 "║.E│" +
                 "└──┘");
-        createPlayers(1);
 
         assertL("╔══┐" +
                 "║1E│" +

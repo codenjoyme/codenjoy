@@ -49,6 +49,10 @@ import static org.mockito.Mockito.when;
  */
 public class SingleMultiPlayerTest extends AbstractSinglePlayersTest {
 
+    protected boolean isSingleTrainingOrMultiple() {
+        return true;
+    }
+
     public static final String FIRST_SINGLE_LEVEL =
             "╔═════┐" +
             "║1.E..│" +

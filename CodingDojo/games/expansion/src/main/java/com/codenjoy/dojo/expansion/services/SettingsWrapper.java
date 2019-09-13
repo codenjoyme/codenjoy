@@ -53,7 +53,6 @@ public final class SettingsWrapper {
     private final Parameter<Integer> goldScore;
     private final Parameter<Integer> regionsScores;
     private final Parameter<Integer> boardSize;
-    private final Parameter<Integer> lobbyCapacity;
     private final Parameter<Boolean> defenderHasAdvantage;
     private final Parameter<Boolean> delayReplay;
     private final Parameter<Double> defenderAdvantage;
@@ -83,7 +82,6 @@ public final class SettingsWrapper {
 
         waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(true);
         shufflePlayers = settings.addEditBox("Shuffle players after lobby").type(Boolean.class).def(true);
-        lobbyCapacity = settings.addEditBox("Lobby capacity (-1 if wait for all)").type(Integer.class).def(8);
 
         winScore = settings.addEditBox("Win on multiple score").type(Integer.class).def(4);
         drawScore = settings.addEditBox("Draw on multiple score").type(Integer.class).def(1);
@@ -175,10 +173,6 @@ public final class SettingsWrapper {
         return drawScore.getValue();
     }
 
-    public int lobbyCapacity() {
-        return lobbyCapacity.getValue();
-    }
-
     public double defenderAdvantage() {
         return defenderAdvantage.getValue();
     }
@@ -230,11 +224,6 @@ public final class SettingsWrapper {
 
     public SettingsWrapper shufflePlayers(boolean value) {
         shufflePlayers.update(value);
-        return this;
-    }
-
-    public SettingsWrapper lobbyCapacity(int value) {
-        lobbyCapacity.update(value);
         return this;
     }
 

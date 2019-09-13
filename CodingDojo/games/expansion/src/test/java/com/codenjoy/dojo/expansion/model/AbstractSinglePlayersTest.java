@@ -106,8 +106,12 @@ public abstract class AbstractSinglePlayersTest {
     private GameRunner gameRunner;
     private List<Integer> levelNumbers;
 
+    protected abstract boolean isSingleTrainingOrMultiple();
+
     @Before
     public void setup() {
+        GameRunner.SINGLE_TRAINING_MODE = isSingleTrainingOrMultiple();
+
         dice = mock(Dice.class);
 
         gameRunner = new GameRunner();
