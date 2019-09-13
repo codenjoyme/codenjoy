@@ -25,6 +25,9 @@ package com.codenjoy.dojo.expansion.model.replay;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.nullobj.NullJoystick;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -38,8 +41,7 @@ import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 /**
  * Created by Oleksandr_Baglai on 2017-09-21.
  */
-// TODO починить риплеи и встроить их в сам коденжой для всех игр
-public abstract class ReplayGame implements Game {
+public class ReplayGame implements Game {
 
     private static final String START_FROM_TICK = "startFromTick";
     private static final String REPLAY_NAME = "replayName";
@@ -75,21 +77,6 @@ public abstract class ReplayGame implements Game {
     @NotNull
     protected LoggerReader getLoggerReader(String replayName, String playerName) {
         return new LoggerReaderImpl(replayName, playerName);
-    }
-
-    @Override
-    public Joystick getJoystick() {
-        return NullJoystick.INSTANCE;
-    }
-
-    @Override
-    public boolean isGameOver() {
-        return false;
-    }
-
-    @Override
-    public void newGame() {
-        // do nothing
     }
 
     @Override
@@ -139,11 +126,6 @@ public abstract class ReplayGame implements Game {
         }
     };
 
-    @Override
-    public JSONObject getSave() {
-        return new JSONObject();
-    }
-
     public boolean noMoreTicks() {
         return tick == -1 || tick >= loggerReader.size();
     }
@@ -157,4 +139,72 @@ public abstract class ReplayGame implements Game {
         }
         tick++;
     }
+
+    // unused methods
+
+    @Override
+    public Joystick getJoystick() {
+        return NullJoystick.INSTANCE;
+    }
+
+    @Override
+    public boolean isGameOver() {
+        return false;
+    }
+
+    @Override
+    public boolean isWin() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldLeave() {
+        return false;
+    }
+
+    @Override
+    public void newGame() {
+        // do nothing
+    }
+
+    @Override
+    public void loadSave(JSONObject save) {
+        // do nothing
+    }
+
+    @Override
+    public JSONObject getSave() {
+        return new JSONObject();
+    }
+
+    @Override
+    public GamePlayer getPlayer() {
+        return null;
+    }
+
+    @Override
+    public GameField getField() {
+        return null;
+    }
+
+    @Override
+    public void on(GameField field) {
+        // do nothing
+    }
+
+    @Override
+    public void setProgress(LevelProgress progress) {
+        // do nothing
+    }
+
+    @Override
+    public LevelProgress getProgress() {
+        return null;
+    }
+
+    @Override
+    public void close() {
+        // do nothing
+    }
+
 }
