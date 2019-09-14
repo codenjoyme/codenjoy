@@ -25,9 +25,11 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 import com.codenjoy.dojo.expansion.model.Elements;
 import com.codenjoy.dojo.expansion.model.IField;
+import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.items.*;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -82,13 +84,13 @@ public class LevelImpl implements Level {
         }
     }
 
-    public void fillForces(String forcesMap, Hero... heroes) {
+    public void fillForces(String forcesMap, List<Hero> heroes) {
         fill(forcesMap, ONE_CHAR, (cell, ch) -> {
             int index = Elements.valueOf(ch.charAt(0)).getIndex();
             if (index == -1) {
                 return;
             }
-            Hero hero = heroes[index];
+            Hero hero = heroes.get(index);
             HeroForces oldItem = cell.getItem(HeroForces.class);
             if (oldItem != null) {
                 oldItem.removeFromCell();

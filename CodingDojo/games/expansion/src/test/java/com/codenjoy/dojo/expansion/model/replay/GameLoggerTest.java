@@ -24,11 +24,9 @@ package com.codenjoy.dojo.expansion.model.replay;
 
 
 import com.codenjoy.dojo.expansion.model.AbstractSinglePlayersTest;
-import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -53,10 +51,8 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         super.setup();
 
         gameDataFolder = new File("gameData");
-        if (gameDataFolder.exists()) {
-            for (File file : gameDataFolder.listFiles()) {
-                file.delete();
-            }
+        for (File file : getFiles()) {
+            file.delete();
         }
     }
 
@@ -83,14 +79,14 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         // players go to next level
         hero(PLAYER1, 1, 3).right();
         hero(PLAYER2, 1, 3).right();
-        tickAll();
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        frameworkShouldGoNextLevelForWinner(PLAYER2);
+        spreader.tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.reloadLevelForWinner(PLAYER2);
 
         // then select different way
         hero(PLAYER1, 1, 2).down();
         hero(PLAYER2, 2, 3).right();
-        tickAll();
+        spreader.tickAll();
 
         // then
         assertL(multiple, PLAYER1);
@@ -117,7 +113,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         // when
         hero(PLAYER1, 1, 1).right();
         hero(PLAYER2, 3, 3).down();
-        tickAll();
+        spreader.tickAll();
 
         assertF("-=#-=#-=#-=#-=#\n" +
                 "-=#-=#00B002-=#\n" +
@@ -126,17 +122,16 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#\n", PLAYER1);
 
         // when
-        tickAll();
+        spreader.tickAll();
 
         // then
-        int index = PLAYER1;
-        String game1 = getGameId(index);
+        String game1 = spreader.gameId(PLAYER1);
         File file = getFile("game-" + game1 + "-1.txt");
 
         String result = loadFromFile(file);
 
-        String player1 = getPlayerId(PLAYER1);
-        String player2 = getPlayerId(PLAYER2);
+        String player1 = spreader.playerId(PLAYER1);
+        String player2 = spreader.playerId(PLAYER2);
         String hero1 = hero(PLAYER1).lg.id();
         String hero2 = hero(PLAYER2).lg.id();
 
@@ -164,15 +159,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
                             .replace("E@6a396c1e", game1),
                 result);
     }
-
-    private String getGameId(int index) {
-        return ((Player)single(index).getPlayer()).getField().id();
-    }
-
-    private String getPlayerId(int index) {
-        return ((Player)single(index).getPlayer()).lg.id();
-    }
-
+    
     @Test
     public void shouldCreateNewFileWhenGoToExitOnMultiple() {
         // given
@@ -196,14 +183,14 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         // players go to next level
         hero(PLAYER1, 1, 3).right();
         hero(PLAYER2, 1, 3).right();
-        tickAll();
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        frameworkShouldGoNextLevelForWinner(PLAYER2);
+        spreader.tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.reloadLevelForWinner(PLAYER2);
 
         // then select different way
         hero(PLAYER1, 1, 2).down();
         hero(PLAYER2, 3, 2).down();
-        tickAll();
+        spreader.tickAll();
 
         // then
         assertL(multiple, PLAYER1);
@@ -229,7 +216,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 1).right();
-        tickAll();
+        spreader.tickAll();
 
         assertF("-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#\n" +
@@ -238,28 +225,16 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#\n", PLAYER1);
 
         // when
-        tickAll();
-
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        frameworkShouldReloadLevel(PLAYER2);
-
-        assertF("-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#\n" +
-                "-=#00A-=#00A-=#\n" +
-                "-=#-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#-=#\n", PLAYER1);
-
-        // when
-        tickAll();
+        spreader.tickAll();
 
         // then
-        String game1 = getGameId(PLAYER1);
+        String game1 = spreader.gameId(PLAYER1);
         File file = getFile("game-" + game1 + "-1.txt");
 
         String result = loadFromFile(file);
 
-        String player1 = getPlayerId(PLAYER1);
-        String player2 = getPlayerId(PLAYER2);
+        String player1 = spreader.playerId(PLAYER1);
+        String player2 = spreader.playerId(PLAYER2);
         String hero1 = hero(PLAYER1).lg.id();
         String hero2 = hero(PLAYER2).lg.id();
 
@@ -279,14 +254,6 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
                         "Hero H@12405818 of player P@6c3f5566 received command:'{\"increase\":[{\"count\":2,\"region\":{\"x\":1,\"y\":1}}],\"movements\":[{\"count\":1,\"direction\":\"RIGHT\",\"region\":{\"x\":1,\"y\":1}}]}'\n" +
                         "Hero H@10b48321 of player P@314c508a received command:'{}'\n" +
                         "Board:'{\"layers\":[\"╔═══┐║...│║1.2│║.E.│└───┘\",\"-----------♥-♦--♥♥♦------\",\"-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00B-=#00B-=#-=#002001001-=#-=#-=#-=#-=#-=#\"],\"mapSize\":5,\"offset\":{\"x\":0,\"y\":0},\"viewSize\":5}'\n" +
-                        "--------------------------------------------------------------\n" +
-                        "New player P@6c3f5566 registered with hero H@12405818 with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6c3f5566'}\"\n" +
-                        "New player P@314c508a registered with hero H@10b48321 with base at '{\"x\":3,\"y\":2}' and color '1' for user 'demo2@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@314c508a'}\"\n" +
-                        "Hero H@12405818 of player P@6c3f5566 received command:'{}'\n" +
-                        "Hero H@10b48321 of player P@314c508a received command:'{}'\n" +
-                        "Board:'{\"layers\":[\"╔═══┐║...│║1.2│║.E.│└───┘\",\"-----------♥-♦-----------\",\"-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#\"],\"mapSize\":5,\"offset\":{\"x\":0,\"y\":0},\"viewSize\":5}'\n" +
                         "--------------------------------------------------------------\n")
                                 .replace("P@6c3f5566", player1)
                                 .replace("P@314c508a", player2)
@@ -319,18 +286,18 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         // players go to next level
         hero(PLAYER1, 1, 3).right();
         hero(PLAYER2, 1, 3).right();
-        tickAll();
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        frameworkShouldGoNextLevelForWinner(PLAYER2);
+        spreader.tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.reloadLevelForWinner(PLAYER2);
 
         // then select different way
         INCREASE = 10;
         MOVE = 10;
         hero(PLAYER1, 1, 2).right();
-        tickAll();
+        spreader.tickAll();
 
         hero(PLAYER1, 2, 2).right();
-        tickAll();
+        spreader.tickAll();
 
         // then
         assertL(multiple, PLAYER1);
@@ -355,7 +322,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         assertF(forces, PLAYER2);
 
         // when
-        tickAll();
+        spreader.tickAll();
 
         assertF("-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#\n" +
@@ -367,7 +334,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         INCREASE = 2;
         MOVE = 2;
         hero(PLAYER2, 3, 2).left();
-        tickAll();
+        spreader.tickAll();
 
         assertE("-----" +
                 "-----" +
@@ -382,16 +349,16 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#\n", PLAYER1);
 
         // when
-        tickAll();
+        spreader.tickAll();
 
         // then
-        String game1 = getGameId(PLAYER1);
+        String game1 = spreader.gameId(PLAYER1);
 
         File file1 = getFile("game-" + game1 + "-1.txt");
         String result1 = loadFromFile(file1);
 
-        String player1 = getPlayerId(PLAYER1);
-        String player2 = getPlayerId(PLAYER2);
+        String player1 = spreader.playerId(PLAYER1);
+        String player2 = spreader.playerId(PLAYER2);
         String hero1 = hero(PLAYER1).lg.id();
         String hero2 = hero(PLAYER2).lg.id();
 
@@ -469,19 +436,19 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         hero(PLAYER1, 1, 3).right();
         hero(PLAYER2, 1, 3).right();
         hero(PLAYER3, 1, 3).right();
-        tickAll();
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        frameworkShouldGoNextLevelForWinner(PLAYER2);
-        frameworkShouldGoNextLevelForWinner(PLAYER3);
+        spreader.tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.reloadLevelForWinner(PLAYER2);
+        spreader.reloadLevelForWinner(PLAYER3);
 
         // then select different way
         INCREASE = 10;
         MOVE = 10;
         hero(PLAYER1, 1, 2).right();
-        tickAll();
+        spreader.tickAll();
 
         hero(PLAYER1, 2, 2).right();
-        tickAll();
+        spreader.tickAll();
 
         // then
         assertL(multiple, PLAYER1);
@@ -509,7 +476,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         assertF(forces, PLAYER3);
 
         // when
-        tickAll();
+        spreader.tickAll();
 
         assertE(layer2, PLAYER1);
         assertF(forces, PLAYER1);
@@ -518,7 +485,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         INCREASE = 2;
         MOVE = 2;
         hero(PLAYER3, 2, 1).right();
-        tickAll();
+        spreader.tickAll();
 
         assertE("-----" +
                 "-----" +
@@ -533,17 +500,17 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#\n", PLAYER1);
 
         // when
-        tickAll();
+        spreader.tickAll();
 
         // then
-        String game1 = getGameId(PLAYER1);
+        String game1 = spreader.gameId(PLAYER1);
 
         File file = getFile("game-" + game1 + "-1.txt");
         String result = loadFromFile(file);
 
-        String player1 = getPlayerId(PLAYER1);
-        String player2 = getPlayerId(PLAYER2);
-        String player3 = getPlayerId(PLAYER3);
+        String player1 = spreader.playerId(PLAYER1);
+        String player2 = spreader.playerId(PLAYER2);
+        String player3 = spreader.playerId(PLAYER3);
         String hero1 = hero(PLAYER1).lg.id();
         String hero2 = hero(PLAYER2).lg.id();
         String hero3 = hero(PLAYER3).lg.id();
@@ -602,13 +569,20 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
     }
 
     private File getFile(String fileName) {
-        for (File file : gameDataFolder.listFiles()) {
+        for (File file : getFiles()) {
             if (file.getName().equals(fileName)) {
                 return file;
             }
         }
         fail("File not found " + fileName);
         return null;
+    }
+
+    private File[] getFiles() {
+        if (!gameDataFolder.exists()) {
+            return new File[0];
+        }
+        return gameDataFolder.listFiles();
     }
 
     @Test
@@ -635,11 +609,11 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         hero(PLAYER2, 1, 2).right();
         hero(PLAYER3, 1, 2).right();
         hero(PLAYER4, 1, 2).right();
-        tickAll();
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        frameworkShouldGoNextLevelForWinner(PLAYER2);
-        frameworkShouldGoNextLevelForWinner(PLAYER3);
-        frameworkShouldGoNextLevelForWinner(PLAYER4);
+        spreader.tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.reloadLevelForWinner(PLAYER2);
+        spreader.reloadLevelForWinner(PLAYER3);
+        spreader.reloadLevelForWinner(PLAYER4);
 
         // then
         String layer2 =
@@ -667,7 +641,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         MOVE = 10;
         hero(PLAYER1, 1, 2).right();
         hero(PLAYER3, 1, 1).right();
-        tickAll();
+        spreader.tickAll();
 
         // then
         layer2 =
@@ -694,7 +668,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         INCREASE = 10;
         MOVE = 10;
         hero(PLAYER1, 1, 2).down();
-        tickAll();
+        spreader.tickAll();
 
         // then
         layer2 =
@@ -719,7 +693,7 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
 
         // when
         // new game
-        tickAll();
+        spreader.tickAll();
 
         layer2 =
                 "----" +
@@ -742,18 +716,18 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         assertF(forces, PLAYER4);
 
         // when
-        tickAll();
+        spreader.tickAll();
 
         // then
-        String game1 = getGameId(PLAYER1);
+        String game1 = spreader.gameId(PLAYER1);
 
         File file1 = getFile("game-" + game1 + "-1.txt");
         String result1 = loadFromFile(file1);
 
-        String player1 = getPlayerId(PLAYER1);
-        String player2 = getPlayerId(PLAYER2);
-        String player3 = getPlayerId(PLAYER3);
-        String player4 = getPlayerId(PLAYER4);
+        String player1 = spreader.playerId(PLAYER1);
+        String player2 = spreader.playerId(PLAYER2);
+        String player3 = spreader.playerId(PLAYER3);
+        String player4 = spreader.playerId(PLAYER4);
         String hero1 = hero(PLAYER1).lg.id();
         String hero2 = hero(PLAYER2).lg.id();
         String hero3 = hero(PLAYER3).lg.id();

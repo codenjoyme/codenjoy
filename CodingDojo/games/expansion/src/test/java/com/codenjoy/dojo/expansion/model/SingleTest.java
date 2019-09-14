@@ -23,7 +23,6 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.expansion.services.GameRunner;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.expansion.model.levels.LevelsTest;
 import com.codenjoy.dojo.expansion.services.Events;
@@ -79,7 +78,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 2).right();
-        tickAll();
+        spreader.tickAll();
 
         verify(PLAYER1).event(Events.WIN(0));
         reset(PLAYER1);
@@ -100,8 +99,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#\n", PLAYER1);
 
         // when
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll();
 
         // then
         assertL("╔══┐" +
@@ -121,7 +120,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 2).down();
-        tickAll();
+        spreader.tickAll();
 
         // then
         verify(PLAYER1).event(Events.WIN(0));
@@ -143,8 +142,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#\n", PLAYER1);
 
         // when
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll();
 
         // then
         assertL("╔══┐" +
@@ -164,7 +163,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 2).down();
-        tickAll();
+        spreader.tickAll();
 
         // then
         assertL("╔══┐" +
@@ -184,7 +183,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 1).right();
-        tickAll();
+        spreader.tickAll();
 
         // then
         verify(PLAYER1).event(Events.WIN(0));
@@ -206,8 +205,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#\n", PLAYER1);
 
         // when
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll();
 
         // then
         verifyNoMoreInteractions(PLAYER1);
@@ -284,7 +283,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // when
         // hero1 goes to multiple level
         hero(PLAYER1, 1, 5).right();
-        tickAll();
+        spreader.tickAll();
 
         assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#00B001-=#-=#-=#-=#\n" +
@@ -295,7 +294,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
 
         hero(PLAYER1, 2, 5).right();
-        tickAll();
+        spreader.tickAll();
 
         assertF("-=#-=#-=#-=#-=#-=#-=#\n" +
                 "-=#00B002001-=#-=#-=#\n" +
@@ -309,8 +308,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
         reset(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
 
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll();
 
         // then
         // hero1 on their own start base
@@ -373,7 +372,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 2).right();
-        tickAll();
+        spreader.tickAll();
 
         verify(PLAYER1).event(Events.WIN(0));
         reset(PLAYER1);
@@ -412,8 +411,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // when
         hero(PLAYER2, 1, 2).right();
 
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll(); // player1 goes multiple
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll(); // player1 goes multiple
 
         // then
         assertL("╔══┐" +
@@ -447,14 +446,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#\n", PLAYER2);
 
         // when
-        hero(PLAYER1, 1, 2).down();
-        frameworkShouldGoNextLevelForWinner(PLAYER2);
-        tickAll(); // player2 goes multiple
+        spreader.reloadLevelForWinner(PLAYER2);
+        spreader.tickAll(); // player2 goes multiple
 
         // then
         verifyNoMoreInteractions(PLAYER1);
         verify(PLAYER2).event(Events.WIN(0));
         reset(PLAYER2);
+
+        // when
+        hero(PLAYER1, 1, 2).down();
+        spreader.tickAll();
 
         assertL("╔══┐" +
                 "║12│" +
@@ -488,7 +490,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 1).right(); // finished
-        tickAll();
+        spreader.tickAll();
 
         // then
         verify(PLAYER1).event(Events.WIN(0));
@@ -525,12 +527,34 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#002001-=#\n" +
                 "-=#-=#-=#-=#\n", PLAYER2);
 
+        // then
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll();
+
+        assertL("╔══┐" +
+                "║12│" +
+                "║.E│" +
+                "└──┘", PLAYER1);
+
+        assertE("----" +
+                "-♥--" +
+                "----" +
+                "----", PLAYER1);
+
+        assertL("╔══┐" +
+                "║12│" +
+                "║.E│" +
+                "└──┘", PLAYER2);
+
+        assertE("----" +
+                "--♦-" +
+                "----" +
+                "----", PLAYER2);
+
         // when
-        hero(PLAYER2, 2, 2).down();
-        // player1 started
         // player2 finished
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll();
+        hero(PLAYER2, 2, 2).down();
+        spreader.tickAll();
 
         // then
         verifyNoMoreInteractions(PLAYER1);
@@ -543,13 +567,13 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "└──┘", PLAYER1);
 
         assertE("----" +
-                "-♥♦-" +
-                "--♦-" +
+                "-♥--" +
+                "----" +
                 "----", PLAYER1);
 
         assertF("-=#-=#-=#-=#\n" +
-                "-=#00A00B-=#\n" +
-                "-=#-=#001-=#\n" +
+                "-=#00A-=#-=#\n" +
+                "-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#\n", PLAYER1);
 
         assertL("╔══┐" +
@@ -558,18 +582,18 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "└──┘", PLAYER2);
 
         assertE("----" +
-                "-♥♦-" +
+                "--♦-" +
                 "--♦-" +
                 "----", PLAYER2);
 
         assertF("-=#-=#-=#-=#\n" +
-                "-=#00A00B-=#\n" +
+                "-=#-=#00B-=#\n" +
                 "-=#-=#001-=#\n" +
                 "-=#-=#-=#-=#\n", PLAYER2);
 
         // when
-        frameworkShouldGoNextLevelForWinner(PLAYER2);
-        tickAll(); // player2 started
+        spreader.reloadLevelForWinner(PLAYER2);
+        spreader.tickAll(); // player2 started
 
         // then
         verifyNoMoreInteractions(PLAYER1);
@@ -607,7 +631,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 2).down();
-        tickAll();
+        spreader.tickAll();
 
         // then
         verifyNoMoreInteractions(PLAYER1);
@@ -645,22 +669,22 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 1).right();
-        tickAll(); // player1 finished
+        spreader.tickAll(); // player1 finished
 
         verify(PLAYER1).event(Events.WIN(0));
         reset(PLAYER1);
 
         hero(PLAYER2, 2, 2).down();
 
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll(); // player1 started // player2 finished
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll(); // player1 started // player2 finished
 
 
         verify(PLAYER2).event(Events.WIN(0));
         reset(PLAYER2);
 
-        frameworkShouldGoNextLevelForWinner(PLAYER2);
-        tickAll(); // player2 started
+        spreader.reloadLevelForWinner(PLAYER2);
+        spreader.tickAll(); // player2 started
 
         verifyNoMoreInteractions(PLAYER1);
         verifyNoMoreInteractions(PLAYER2);
@@ -735,9 +759,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when done 1 level - go to 2 (single)
         hero(PLAYER1, 1, 2).right();
-        tickAll();
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll();
+        spreader.tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll();
 
         // then
         assertL("╔══┐" +
@@ -757,9 +781,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when done 2 level - go to 3 (single)
         hero(PLAYER1, 2, 2).down();
-        tickAll();
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll();
+        spreader.tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll();
 
         // then
         assertL("╔══┐" +
@@ -779,9 +803,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when done 3 level - go to 4 (multiple)
         hero(PLAYER1, 2, 1).left();
-        tickAll();
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll();
+        spreader.tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll();
 
         // then
         assertL("╔══┐" +
@@ -801,9 +825,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when done 4 level - start 4 again (multiple)
         hero(PLAYER1, 1, 1).up();
-        tickAll();
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll();
+        spreader.tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll();
 
         // then
         assertL("╔══┐" +
@@ -823,9 +847,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when done 4 level - start 4 again multiple)
         hero(PLAYER1, 1, 1).up();
-        tickAll();
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        tickAll();
+        spreader.tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.tickAll();
 
         // then
         assertL("╔══┐" +
@@ -851,9 +875,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 1).reset();
-        frameworkShouldReloadLevel(PLAYER1);
-        tickAll();
-        tickAll();
+        spreader.reloadLevel(PLAYER1);
+        spreader.tickAll();
+        spreader.tickAll();
 
         assertF("-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#\n" +
@@ -861,7 +885,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#\n", PLAYER1);
 
         hero(PLAYER1, 1, 1).right();
-        tickAll();
+        spreader.tickAll();
 
         // then
         // still multiple
@@ -882,8 +906,8 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         // when
         hero(PLAYER1, 1, 1).reset();
-        frameworkShouldReloadLevel(PLAYER1);
-        tickAll();
+        spreader.reloadLevel(PLAYER1);
+        spreader.tickAll();
 
         // then
         // still multiple
@@ -963,7 +987,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // players go to next level
         hero(PLAYER1, 1, 3).right();
         hero(PLAYER2, 1, 3).right();
-        tickAll();
+        spreader.tickAll();
 
         assertL("╔═══┐" +
                 "║1E.│" +
@@ -1002,9 +1026,9 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#\n", PLAYER2);
 
         // players started on multiple
-        frameworkShouldGoNextLevelForWinner(PLAYER1);
-        frameworkShouldGoNextLevelForWinner(PLAYER2);
-        tickAll();
+        spreader.reloadLevelForWinner(PLAYER1);
+        spreader.reloadLevelForWinner(PLAYER2);
+        spreader.tickAll();
 
         assertL("╔═══┐" +
                 "║.2.│" +
@@ -1045,7 +1069,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // then select different way
         hero(PLAYER1, 1, 2).down();
         hero(PLAYER2, 2, 3).right();
-        tickAll();
+        spreader.tickAll();
 
         // then
         assertL("╔═══┐" +
@@ -1201,17 +1225,17 @@ public class SingleTest extends AbstractSinglePlayersTest {
         // when then
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':2}}],'movements':[{'count':1,'direction':'DOWN','region':{'x':1,'y':2}}]}}," +
                         "'coordinate':{'x':1,'y':2},'level':0,'multiplayer':true}",
-                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
+                JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER1).getHero())));
 
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':2,'y':3}}],'movements':[{'count':1,'direction':'RIGHT','region':{'x':2,'y':3}}]}}," +
                         "'coordinate':{'x':2,'y':3},'level':0,'multiplayer':true}",
-                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
+                JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER2).getHero())));
 
         // when
         hero(PLAYER1, 1, 2).right();
         hero(PLAYER2, 3, 3).down();
 
-        tickAll();
+        spreader.tickAll();
 
         // then
         assertE("-----" +
@@ -1228,11 +1252,11 @@ public class SingleTest extends AbstractSinglePlayersTest {
 
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':2}}],'movements':[{'count':1,'direction':'RIGHT','region':{'x':1,'y':2}}]}}," +
                         "'coordinate':{'x':1,'y':2},'level':0,'multiplayer':true}",
-                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
+                JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER1).getHero())));
 
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':3,'y':3}}],'movements':[{'count':1,'direction':'DOWN','region':{'x':3,'y':3}}]}}," +
                         "'coordinate':{'x':2,'y':3},'level':0,'multiplayer':true}",
-                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
+                JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER2).getHero())));
     }
 
     @Test
@@ -1256,43 +1280,43 @@ public class SingleTest extends AbstractSinglePlayersTest {
         hero(PLAYER1, 1, 1).right();
         hero(PLAYER2, 3, 3).down();
 
-        tickAll();
+        spreader.tickAll();
 
         // then
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':1,'y':1}}]," +
                         "'movements':[{'count':1,'direction':'RIGHT','region':{'x':1,'y':1}}]}}," +
                         "'coordinate':{'x':1,'y':2},'level':0,'multiplayer':true}",
-                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
+                JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER1).getHero())));
 
         assertEquals("{'additionalData':{'lastAction':{'increase':[{'count':2,'region':{'x':3,'y':3}}]," +
                         "'movements':[{'count':1,'direction':'DOWN','region':{'x':3,'y':3}}]}}," +
                         "'coordinate':{'x':2,'y':3},'level':0,'multiplayer':true}",
-                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
+                JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER2).getHero())));
 
         // when
-        tickAll();
+        spreader.tickAll();
 
         // then
         // still here
         assertEquals("{'additionalData':{'lastAction':{}}," +
                         "'coordinate':{'x':1,'y':2},'level':0,'multiplayer':true}",
-                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
+                JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER1).getHero())));
 
         assertEquals("{'additionalData':{'lastAction':{}}," +
                         "'coordinate':{'x':2,'y':3},'level':0,'multiplayer':true}",
-                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
+                JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER2).getHero())));
 
         // when
-        tickAll();
+        spreader.tickAll();
 
         // then
         // removed
         assertEquals("{'additionalData':{'lastAction':{}},'coordinate':{'x':1,'y':2},'level':0,'multiplayer':true}",
-                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER1).getHero())));
+                JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER1).getHero())));
 
         assertEquals("{'additionalData':{'lastAction':{}}," +
                         "'coordinate':{'x':2,'y':3},'level':0,'multiplayer':true}",
-                JsonUtils.clean(JsonUtils.toStringSorted(single(PLAYER2).getHero())));
+                JsonUtils.clean(JsonUtils.toStringSorted(spreader.single(PLAYER2).getHero())));
     }
 
     @Test
@@ -1434,7 +1458,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
         for (int i = 0; i < 17; i++) {
             hero(PLAYER1, i + 1, 18).right();
             hero(PLAYER2, 1, 18 - i).down();
-            tickAll();
+            spreader.tickAll();
         }
 
         // then
@@ -1587,7 +1611,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "-=#-=#-=#-=#-=#\n", PLAYER2);
 
         // when
-        destroy(PLAYER2);
+        spreader.destroy(PLAYER2);
 
         // then
         assertL("╔═══┐" +
