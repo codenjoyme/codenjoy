@@ -816,7 +816,7 @@ public class ExpansionTest {
     }
 
     private void frameworkShouldReloadLevel() {
-        field = new Expansion(levels.get(current).get(),
+        field = new Expansion(levels.get(current).get(), mock(Ticker.class),
                 dice, mock(GameLogger.class), false);
         field.newGame(player);
         hero = field.getPlayers().get(0).getHero();

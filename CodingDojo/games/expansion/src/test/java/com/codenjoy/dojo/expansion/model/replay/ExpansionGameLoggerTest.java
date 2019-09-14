@@ -26,6 +26,7 @@ package com.codenjoy.dojo.expansion.model.replay;
 import com.codenjoy.dojo.expansion.model.Expansion;
 import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.expansion.model.Player;
+import com.codenjoy.dojo.expansion.model.Ticker;
 import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.LevelImpl;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
@@ -51,7 +52,8 @@ public class ExpansionGameLoggerTest {
     public void shouldCallWhenRegisterPlayer() {
         // given
         GameLogger logger = mock(GameLogger.class);
-        Expansion expansion = new Expansion(getLevel(), null, logger, Expansion.MULTIPLE);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.MULTIPLE);
 
         // when
         Player player = createPlayer();
@@ -65,7 +67,8 @@ public class ExpansionGameLoggerTest {
     public void shouldNotCallWhenRegisterPlayerForSingleGame() {
         // given
         GameLogger logger = mock(GameLogger.class);
-        Expansion expansion = new Expansion(getLevel(), null, logger, Expansion.SINGLE);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.SINGLE);
 
         // when
         Player player = createPlayer();
@@ -86,7 +89,8 @@ public class ExpansionGameLoggerTest {
         GameLogger logger = mock(GameLogger.class);
 
         // when
-        Expansion expansion = new Expansion(getLevel(), null, logger, Expansion.MULTIPLE);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.MULTIPLE);
 
         // then
         verify(logger).start(expansion);
@@ -98,7 +102,8 @@ public class ExpansionGameLoggerTest {
         GameLogger logger = mock(GameLogger.class);
 
         // when
-        Expansion expansion = new Expansion(getLevel(), null, logger, Expansion.SINGLE);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.SINGLE);
 
         // then
         verifyNoMoreInteractions(logger);
@@ -108,7 +113,8 @@ public class ExpansionGameLoggerTest {
     public void shouldCallLogWhenTick() {
         // given
         GameLogger logger = mock(GameLogger.class);
-        Expansion expansion = new Expansion(getLevel(), null, logger, Expansion.MULTIPLE);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.MULTIPLE);
         Player player = createPlayer();
         expansion.newGame(player);
         reset(logger);
@@ -124,7 +130,8 @@ public class ExpansionGameLoggerTest {
     public void shouldNotCallLogWhenTickForSingleGame() {
         // given
         GameLogger logger = mock(GameLogger.class);
-        Expansion expansion = new Expansion(getLevel(), null, logger, Expansion.SINGLE);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.SINGLE);
         Player player = createPlayer();
         expansion.newGame(player);
         reset(logger);

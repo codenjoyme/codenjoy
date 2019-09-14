@@ -61,6 +61,8 @@ public class Expansion implements Tickable, IField {
     private GameLogger gameLogger;
 
     private Level level;
+    private final Ticker ticker;
+    private final Dice dice;
 
     private boolean isMultiplayer;
     private boolean nothingChanged;
@@ -70,8 +72,10 @@ public class Expansion implements Tickable, IField {
     private List<Player> losers;
     private int roundTicks;
 
-    public Expansion(Level level, Dice dice, GameLogger gameLogger, boolean multiple) {
+    public Expansion(Level level, Ticker ticker, Dice dice, GameLogger gameLogger, boolean multiple) {
         this.level = level;
+        this.ticker = ticker;
+        this.dice = dice;
         level.setField(this);
         isMultiplayer = multiple;
         players = new LinkedList();
@@ -102,6 +106,8 @@ public class Expansion implements Tickable, IField {
             }
             ticks = 0;
         }
+
+        ticker.tick();
 
         if (isWaitingOthers()) return;
 
@@ -655,6 +661,11 @@ public class Expansion implements Tickable, IField {
                 }
             }
         };
+    }
+
+    @Override
+    public long ticker() {
+        return ticker.get();
     }
 
     @Override

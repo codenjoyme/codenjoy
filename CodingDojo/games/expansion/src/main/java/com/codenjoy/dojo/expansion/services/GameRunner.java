@@ -52,10 +52,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     private static Logger logger = DLoggerFactory.getLogger(GameRunner.class);
 
-    public static boolean SINGLE_TRAINING_MODE = false;
-
     private Dice dice;
-    private Ticker ticker;
     private int size;
     private LevelsFactory singleLevels;
     private LevelsFactory multipleLevels;
@@ -63,7 +60,6 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public GameRunner() {
         SettingsWrapper.setup(settings);
 
-        ticker = new Ticker();
         dice = getDice();
     }
 
@@ -84,7 +80,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
     @Override
     public MultiplayerType getMultiplayerType() {
         initGameFactory();
-        if (SINGLE_TRAINING_MODE) {
+        if (SettingsWrapper.data.singleTrainingMode()) {
             return MultiplayerType.TRAINING.apply(singleLevels.get().size());
         } else {
             return MultiplayerType.QUADRO;
@@ -104,19 +100,19 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
         initGameFactory();
 
-        if (SINGLE_TRAINING_MODE) {
+        if (SettingsWrapper.data.singleTrainingMode()) {
             boolean isSingle = levelNumber < getMultiplayerType().getLevelsCount();
             if (isSingle) {
                 Level level = singleLevels.get().get(levelNumber);
-                return new Expansion(level,
-                        new RandomDice(), new GameLoggerImpl(), Expansion.SINGLE);
+                return new Expansion(level, new Ticker(), dice,
+                        new GameLoggerImpl(), Expansion.SINGLE);
             }
         }
 
         List<Level> levels = multipleLevels.get();
         Level level = levels.get(dice.next(levels.size()));
-        return new Expansion(level,
-                dice, new GameLoggerImpl(), Expansion.MULTIPLE);
+        return new Expansion(level, new Ticker(), dice,
+                new GameLoggerImpl(), Expansion.MULTIPLE);
     }
 
     @Override
@@ -179,7 +175,6 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public void tick() {
         processAdminCommands();
         initGameFactory();
-        ticker.tick();
     }
 
     private void processAdminCommands() {
@@ -198,7 +193,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
             result.put("forces", forces);
             result.put("myBase", new JSONObject(player.getBasePosition()));
             result.put("myColor", player.getForcesColor());
-            result.put("tick", ticker.get());
+            result.put("tick", player.getField().ticker());
             result.put("round", player.getRoundTicks());
             result.put("rounds", SettingsWrapper.data.roundTicks());
             result.put("available", player.getForcesPerTick());

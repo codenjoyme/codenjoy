@@ -76,6 +76,7 @@ public class AbstractGameRunnerTest {
         settings = gameRunner.getSettings();
         SettingsWrapper.data
                 .waitingOthers(false)
+                .singleTrainingMode(false)
                 .shufflePlayers(false);
     }
 

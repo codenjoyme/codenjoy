@@ -1168,7 +1168,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'offset':{'x':0,'y':0}," +
                 "'round':2," +
                 "'rounds':10000," +
-                "'tick':3" +
+                "'tick':2" +
                 "}", JsonUtils.toStringSorted(getLayer(PLAYER1)).replace('"', '\''));
 
         assertEquals("{" +
@@ -1181,7 +1181,7 @@ public class SingleTest extends AbstractSinglePlayersTest {
                 "'offset':{'x':0,'y':0}," +
                 "'round':2," +
                 "'rounds':10000," +
-                "'tick':3" +
+                "'tick':2" +
                 "}", JsonUtils.toStringSorted(getLayer(PLAYER2)).replace('"', '\''));
     }
 

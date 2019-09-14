@@ -108,17 +108,15 @@ public abstract class AbstractSinglePlayersTest {
 
     Dice dice;
 
-    protected TestSpreader spreader;
+    protected SoftSpreader spreader;
 
     protected abstract boolean isSingleTrainingOrMultiple();
 
     @Before
     public void setup() {
-        GameRunner.SINGLE_TRAINING_MODE = isSingleTrainingOrMultiple();
-
         dice = mock(Dice.class);
 
-        spreader = new TestSpreader(new GameRunner(){{
+        spreader = new SoftSpreader(new GameRunner(){{
             setDice(dice);
         }});
 
@@ -128,6 +126,7 @@ public abstract class AbstractSinglePlayersTest {
                 .roundTicks(10000)
                 .waitingOthers(false)
                 .defenderHasAdvantage(false)
+                .singleTrainingMode(isSingleTrainingOrMultiple())
                 .shufflePlayers(false);
     }
 

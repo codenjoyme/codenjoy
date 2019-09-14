@@ -54,6 +54,7 @@ public final class SettingsWrapper {
     private final Parameter<Integer> regionsScores;
     private final Parameter<Integer> boardSize;
     private final Parameter<Boolean> defenderHasAdvantage;
+    private final Parameter<Boolean> singleTrainingMode;
     private final Parameter<Boolean> delayReplay;
     private final Parameter<Double> defenderAdvantage;
     private final Parameter<Boolean> waitingOthers;
@@ -80,6 +81,8 @@ public final class SettingsWrapper {
 
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(20);
 
+        singleTrainingMode = settings.addEditBox("Single training mode").type(Boolean.class).def(false);
+
         waitingOthers = settings.addEditBox("Waiting others").type(Boolean.class).def(true);
         shufflePlayers = settings.addEditBox("Shuffle players after lobby").type(Boolean.class).def(true);
 
@@ -92,6 +95,7 @@ public final class SettingsWrapper {
         increasePerTick = settings.addEditBox("Increase forces per tick count").type(Integer.class).def(10);
         goldScore = settings.addEditBox("Increase forces gold score").type(Integer.class).def(1);
         regionsScores = settings.addEditBox("Total count territories is occupied by you increase force score").type(Integer.class).def(10);
+
 
         defenderHasAdvantage = settings.addEditBox("Defender has advantage").type(Boolean.class).def(true);
         defenderAdvantage = settings.addEditBox("Defender attack advantage").type(Double.class).def(1.3);
@@ -181,6 +185,10 @@ public final class SettingsWrapper {
         return defenderHasAdvantage.getValue();
     }
 
+    public boolean singleTrainingMode() {
+        return singleTrainingMode.getValue();
+    }
+
     public String command() {
         return command.getValue();
     }
@@ -259,6 +267,11 @@ public final class SettingsWrapper {
 
     public SettingsWrapper delayReplay(boolean value) {
         delayReplay.update(value);
+        return this;
+    }
+
+    public SettingsWrapper singleTrainingMode(boolean value) {
+        singleTrainingMode.update(value);
         return this;
     }
 
