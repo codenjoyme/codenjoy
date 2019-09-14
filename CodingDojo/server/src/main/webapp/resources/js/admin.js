@@ -33,6 +33,7 @@ function defaultRegistrationSettings() {
         defaultGame: null,
         gameTypes: {
             icancode: ['JavaScript', 'Contest', 'eKids', 'Befunge']
+            expansion: ['JavaScript', 'Contest']
         }
     };
 }

@@ -66,7 +66,7 @@ public class GameServiceImpl implements GameService {
         remove(result,
                 it -> ConstructorUtils.getMatchingAccessibleConstructor(it) == null);
 
-        remove(result, it -> Stream.of("chess", "sokoban", "expansion")
+        remove(result, it -> Stream.of("chess", "sokoban")
                 .anyMatch(name -> it.getPackage().toString().contains(name)));
 
         return result;

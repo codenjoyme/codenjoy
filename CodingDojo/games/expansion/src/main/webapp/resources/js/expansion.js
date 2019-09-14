@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -37,12 +37,13 @@ if (typeof game == 'undefined') {
 }
 
 var gameName = localStorage.getItem('gameName');
-if (gameName == 'Expansion Training') {
+if (gameName == 'JavaScript') {
     game.sprites = 'robot';
-} else if (gameName == 'Expansion Contest') {
+} else {
     game.sprites = 'robot';
     game.onlyLeaderBoard = true;
 }
+game.isDrawByOrder = true;
 game.enableDonate = false;
 game.enableJoystick = false;
 game.enablePlayerInfo = false;
@@ -51,6 +52,7 @@ game.enableLeadersTable = false;
 game.enableChat = false;
 game.enableInfo = false;
 game.enableHotkeys = true;
+game.enableForkMe = false;
 game.enableAdvertisement = false;
 game.showBody = false;
 game.debug = false;
