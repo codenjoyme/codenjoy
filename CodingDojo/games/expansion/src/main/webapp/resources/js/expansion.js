@@ -312,19 +312,6 @@ game.drawBoard = function(drawer) {
         console.log(err);
     }
 
-    var playerHeroesData = heroesData[playerName];
-    try {
-        var allHeroesData = playerHeroesData[playerName].additionalData.heroesData;
-        if (!!allHeroesData) {
-            for (var otherPlayerName in allHeroesData) {
-                if (!playerHeroesData.hasOwnProperty(otherPlayerName)) {
-                    playerHeroesData[otherPlayerName] = allHeroesData[otherPlayerName];
-                }
-            }
-        }
-    } catch (err) {
-        console.log(err);
-    }
 
     try {
         var h = canvas.getPlotSize()/2;
@@ -358,8 +345,8 @@ game.drawBoard = function(drawer) {
                 }
             }
         }
-        for (var name in playerHeroesData) {
-            var additionalData = playerHeroesData[name].additionalData;
+        for (var name in heroesData.coordinates) {
+            var additionalData = heroesData.coordinates[name].additionalData;
             if (!!additionalData) {
                 drawLastAction(additionalData.lastAction);
                 var allLastActions = additionalData.allLastActions;
