@@ -172,7 +172,7 @@ public abstract class AbstractSinglePlayersTest {
         return new Hero() {
             @Override
             public void down() {
-                spreader.moved(player);
+                spreader.roomIsBusy(player);
 
                 hero.increaseAndMove(
                         new Forces(pt, INCREASE),
@@ -182,7 +182,7 @@ public abstract class AbstractSinglePlayersTest {
 
             @Override
             public void up() {
-                spreader.moved(player);
+                spreader.roomIsBusy(player);
 
                 hero.increaseAndMove(
                         new Forces(pt, INCREASE),
@@ -192,7 +192,7 @@ public abstract class AbstractSinglePlayersTest {
 
             @Override
             public void left() {
-                spreader.moved(player);
+                spreader.roomIsBusy(player);
 
                 hero.increaseAndMove(
                         new Forces(pt, INCREASE),
@@ -202,7 +202,7 @@ public abstract class AbstractSinglePlayersTest {
 
             @Override
             public void right() {
-                spreader.moved(player);
+                spreader.roomIsBusy(player);
 
                 hero.increaseAndMove(
                         new Forces(pt, INCREASE),
@@ -212,14 +212,14 @@ public abstract class AbstractSinglePlayersTest {
 
             @Override
             public void act(int... p) {
-                spreader.moved(player);
+                spreader.roomIsBusy(player);
 
                 hero.act(p);
             }
 
             @Override
             public void message(String command) {
-                spreader.moved(player);
+                spreader.roomIsBusy(player);
 
                 hero.message(command);
             }

@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -132,6 +133,7 @@ public class TestSpreader {
                     if (levelNumbers.get(i) == multipleIndex && max < 4) {
                         if (newPlayer) {
                             currents.add(current);
+                            levelNumbers.add(levelNumbers.get(i));
                         } else {
                             currents.set(player, current);
                         }
@@ -195,6 +197,7 @@ public class TestSpreader {
                 single.getField().tick();
             }
         }
+        gameRunner.tick();
     }
 
     public IField field(int player) {
@@ -243,8 +246,10 @@ public class TestSpreader {
     }
 
     // если игрок походил то в его комнате считаем, что уже все заполнено
-    public void moved(int index) {
-        Expansion current = currents.get(index);
-        fullness.put(current.id(), current.allBases());
+    public void roomIsBusy(int index) {
+        if (!data.waitingOthers()) {
+            Expansion current = currents.get(index);
+            fullness.put(current.id(), current.allBases());
+        }
     }
 }
