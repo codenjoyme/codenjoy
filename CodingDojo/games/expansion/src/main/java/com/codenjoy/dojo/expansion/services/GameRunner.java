@@ -126,18 +126,14 @@ public class GameRunner extends AbstractGameType implements GameType  {
 //            return new ReplayGame(new JSONObject(save));
 //        }
 
-        String save = null;
-        boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
-        if (!isTrainingMode) {
-            int total = SettingsWrapper.data.singleLevels().size();
-            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
-        }
+//        String save = null;
+//        boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
+//        if (!isTrainingMode) {
+//            int total = SettingsWrapper.data.singleLevels().size();
+//            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
+//        }
 
         Player player = new Player(listener, playerName);
-
-//        if (logger.isDebugEnabled()) {
-//            logger.debug("Starts new game for {}", player.lg.id());
-//        }
 
         return player;
     }

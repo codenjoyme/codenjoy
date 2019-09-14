@@ -67,7 +67,6 @@ public class Expansion implements Tickable, IField {
     private boolean isMultiplayer;
     private boolean nothingChanged;
 
-    private int ticks;
     private List<Player> players;
     private List<Player> losers;
     private int roundTicks;
@@ -84,7 +83,6 @@ public class Expansion implements Tickable, IField {
     }
 
     private void cleanAfterGame() {
-        ticks = 0;
         roundTicks = 0;
         nothingChanged = true;
         losers = new LinkedList();
@@ -97,14 +95,6 @@ public class Expansion implements Tickable, IField {
     public void tick() {
         if (logger.isDebugEnabled()) {
             logger.debug("Expansion {} started tick", lg.id());
-        }
-
-        if (isMultiplayer) {
-            ticks++;
-            if (ticks % players.size() != 0) {
-                return;
-            }
-            ticks = 0;
         }
 
         ticker.tick();
@@ -577,7 +567,6 @@ public class Expansion implements Tickable, IField {
                 put("isMultiple", isMultiplayer);
                 put("losers", Player.lg(losers));
                 put("waitingOthers", isWaitingOthers());
-                put("ticks", ticks);
                 put("roundTicks", roundTicks);
                 put("level", printer());
             }};
