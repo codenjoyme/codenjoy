@@ -539,10 +539,15 @@ public class Expansion implements Tickable, IField {
     @Override
     public int freeBases() {
         if (isMultiplayer) {
-            return (getFreeBase() == null) ? 0 : 4 - players.size();
+            return (getFreeBase() == null) ? 0 : allBases() - players.size();
         } else {
-            return (players.isEmpty()) ? 1 : 0;
+            return (players.isEmpty()) ? allBases() : 0;
         }
+    }
+
+    @Override
+    public int allBases() {
+        return isMultiplayer ? 4 : 1;
     }
 
     @Override

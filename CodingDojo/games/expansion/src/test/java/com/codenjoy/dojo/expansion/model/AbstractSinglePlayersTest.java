@@ -28,6 +28,7 @@ import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.GameRunner;
 import com.codenjoy.dojo.expansion.services.SettingsWrapper;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -38,9 +39,7 @@ import org.junit.Before;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
@@ -105,6 +104,7 @@ public abstract class AbstractSinglePlayersTest {
     private List<Expansion> currents;
     private GameRunner gameRunner;
     private List<Integer> levelNumbers;
+    private Map<String, Integer> fullness;
 
     protected abstract boolean isSingleTrainingOrMultiple();
 
@@ -117,6 +117,7 @@ public abstract class AbstractSinglePlayersTest {
         gameRunner = new GameRunner();
         gameRunner.setDice(dice);
         levelNumbers = new LinkedList<>();
+        fullness = new HashMap<>();
         currents = new LinkedList<>();
 
         listeners = new LinkedList<>();
@@ -212,9 +213,9 @@ public abstract class AbstractSinglePlayersTest {
         // это нового плеера мы пытаемся сейчас создать или игрок уже играл?
         boolean newPlayer = (player == currents.size());
 
-        // если это новый пользователь или базы на текущем multiple уровне не свободны
+        // если это новый пользователь или базы на текущем multiple уровне не свободны (или были заняты в прошлом)
         // то надо потрудиться и разместить его как-то
-        if (newPlayer || currents.get(player).freeBases() == 0) {
+        if (newPlayer || fullness.get(currents.get(player).id()) == currents.get(player).allBases()) {
             // это у нас индекс уровня на котором уже multiple
             int multipleIndex = gameRunner.getMultiplayerType().getLevelsCount();
             // текущий юзер будет переходить на single или уже на multiple
@@ -235,8 +236,15 @@ public abstract class AbstractSinglePlayersTest {
                 // мы пытаемся найти комнату multiple со свободными базами
                 boolean found = false;
                 for (int i = 0; i < levelNumbers.size(); i++) {
-                    if (levelNumbers.get(i) == multipleIndex && currents.get(i).freeBases() != 0) {
-                        currents.set(player, currents.get(i));
+                    // одна из комнат, мы не знаем свободна ли, на multiple ли
+                    Expansion current = currents.get(i);
+                    // сколько там юзеров было максимально
+                    Integer max = fullness.get(current.id());
+                    // она и свободная и multiple - нам подходит
+                    if (levelNumbers.get(i) == multipleIndex && max < 4) {
+                        currents.set(player, current);
+                        // в комнату куда пришел игрок, стало на 1 больше
+                        fullness.put(current.id(), max + 1);
                         found = true;
                         break;
                     }
@@ -273,6 +281,8 @@ public abstract class AbstractSinglePlayersTest {
                     // для существующего заменяем старую
                     currents.set(player, current);
                 }
+                // он в своей комнате один
+                fullness.put(current.id(), 1);
             }
         }
     }
