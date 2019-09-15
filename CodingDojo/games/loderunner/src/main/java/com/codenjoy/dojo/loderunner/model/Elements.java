@@ -75,6 +75,13 @@ public enum Elements implements CharElements {
     OTHER_HERO_PIPE_LEFT('Э'),
     OTHER_HERO_PIPE_RIGHT('Є'),
 
+    OTHER_HERO_SHADOW_DIE('⋈'),
+    OTHER_HERO_SHADOW_LEFT('⋊'),
+    OTHER_HERO_SHADOW_RIGHT('⋉'),
+    OTHER_HERO_SHADOW_LADDER('⋕'),
+    OTHER_HERO_SHADOW_PIPE_LEFT('⊣'),
+    OTHER_HERO_SHADOW_PIPE_RIGHT('⊢'),
+
     LADDER('H'),
     PIPE('~'),
 
@@ -107,15 +114,15 @@ public enum Elements implements CharElements {
             case HERO_FALL_RIGHT : return OTHER_HERO_RIGHT;
             case HERO_PIPE_LEFT : return OTHER_HERO_PIPE_LEFT;
             case HERO_PIPE_RIGHT : return OTHER_HERO_PIPE_RIGHT;
-            case HERO_SHADOW_DRILL_LEFT : return OTHER_HERO_LEFT;
-            case HERO_SHADOW_DRILL_RIGHT : return OTHER_HERO_RIGHT;
-            case HERO_SHADOW_LADDER : return OTHER_HERO_LADDER;
-            case HERO_SHADOW_LEFT : return OTHER_HERO_LEFT;
-            case HERO_SHADOW_RIGHT : return OTHER_HERO_RIGHT;
-            case HERO_SHADOW_FALL_LEFT : return OTHER_HERO_LEFT;
-            case HERO_SHADOW_FALL_RIGHT : return OTHER_HERO_RIGHT;
-            case HERO_SHADOW_PIPE_LEFT : return OTHER_HERO_PIPE_LEFT;
-            case HERO_SHADOW_PIPE_RIGHT : return OTHER_HERO_PIPE_RIGHT;
+            case HERO_SHADOW_DRILL_LEFT : return OTHER_HERO_SHADOW_LEFT;
+            case HERO_SHADOW_DRILL_RIGHT : return OTHER_HERO_SHADOW_RIGHT;
+            case HERO_SHADOW_LADDER : return OTHER_HERO_SHADOW_LADDER;
+            case HERO_SHADOW_LEFT : return OTHER_HERO_SHADOW_LEFT;
+            case HERO_SHADOW_RIGHT : return OTHER_HERO_SHADOW_RIGHT;
+            case HERO_SHADOW_FALL_LEFT : return OTHER_HERO_SHADOW_LEFT;
+            case HERO_SHADOW_FALL_RIGHT : return OTHER_HERO_SHADOW_RIGHT;
+            case HERO_SHADOW_PIPE_LEFT : return OTHER_HERO_SHADOW_PIPE_LEFT;
+            case HERO_SHADOW_PIPE_RIGHT : return OTHER_HERO_SHADOW_PIPE_RIGHT;
         }
         throw new IllegalArgumentException("Bad hero state: " + hero);
     }

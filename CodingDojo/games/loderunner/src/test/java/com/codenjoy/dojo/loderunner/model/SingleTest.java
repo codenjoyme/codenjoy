@@ -23,6 +23,15 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import com.codenjoy.dojo.loderunner.TestSettings;
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -30,13 +39,7 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
 
 public class SingleTest {
 
@@ -254,6 +257,114 @@ public class SingleTest {
 
         verify(listener1).event(Events.GET_GOLD);
 
+    }
+
+    @Test
+    public void thatEnemiesDoNotHauntShadowPlayers() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼  »   ☼" +
+            "☼######☼" +
+            "☼☼☼☼☼☼☼☼");
+
+        setupPlayer1(5, 2, PillType.SHADOW_PILL, 1);
+        setupPlayer2(1, 2);
+
+        field.tick();
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼(«  ⊳ ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void thatTwoShadowsWalkThroughEachOther() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼######☼" +
+            "☼☼☼☼☼☼☼☼");
+
+        setupPlayer1(1, 2, PillType.SHADOW_PILL, 10);
+        setupPlayer2(2, 2, PillType.SHADOW_PILL, 10);
+
+        game1.getJoystick().right();
+
+        field.tick();
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ⊳    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ⋉    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void thatShadowKillsNonShadowPlayer() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼######☼" +
+            "☼☼☼☼☼☼☼☼");
+
+        setupPlayer1(1, 2, PillType.SHADOW_PILL, 10);
+        setupPlayer2(2, 2);
+
+        game1.getJoystick().right();
+
+        field.tick();
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ⊳    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼ ⋉    ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        verify(listener1).event(Events.KILL_ENEMY);
+        verify(listener2).event(Events.KILL_HERO);
     }
 
     // можно ли проходить героям друг через дурга? Нет
@@ -656,10 +767,40 @@ public class SingleTest {
         game1.newGame();
     }
 
+    private void setupPlayer1(int x, int y, PillType withPill, int pillSteps) {
+        listener1 = mock(EventListener.class);
+        Player player = new Player(listener1, () -> pillSteps);
+        game1 = new Single(player, printerFactory);
+        game1.on(field);
+        when(dice.next(anyInt())).thenReturn(x, y);
+        game1.newGame();
+        player.getHero().swallowThePill(withPill);
+    }
+
+    private void setupPlayer2(int x, int y, PillType withPill, int pillSteps) {
+        listener2 = mock(EventListener.class);
+        Player player = new Player(listener2, () -> pillSteps);
+        game2 = new Single(player, printerFactory);
+        game2.on(field);
+        when(dice.next(anyInt())).thenReturn(x, y);
+        game2.newGame();
+        player.getHero().swallowThePill(withPill);
+    }
+
+    private void setupPlayer3(int x, int y, PillType withPill, int pillSteps) {
+        listener3 = mock(EventListener.class);
+        Player player = new Player(listener3, () -> pillSteps);
+        game3 = new Single(player, printerFactory);
+        game3.on(field);
+        when(dice.next(anyInt())).thenReturn(x, y);
+        game3.newGame();
+        player.getHero().swallowThePill(withPill);
+    }
+
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
         dice = mock(Dice.class);
-        field = new Loderunner(level, dice, new SettingsImpl());
+        field = new Loderunner(level, dice, new TestSettings());
     }
 
     @Test
