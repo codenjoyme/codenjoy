@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
@@ -120,6 +121,13 @@ public class LevelImpl implements Level {
                     .map(pt -> new Enemy(pt, Direction.RIGHT, ai))
                     .collect(toList()));
         }};
+    }
+
+    @Override
+    public List<Pill> getPills() {
+        return pointsOf(THE_SHADOW_PILL).stream() // TODO: add speed pills
+            .map(kp -> new Pill(kp, PillType.SHADOW_PILL))
+            .collect(toList());
     }
 
     public void setAI(EnemyAI ai) {

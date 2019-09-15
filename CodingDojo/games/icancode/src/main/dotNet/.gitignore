@@ -1,0 +1,17 @@
+# Folders to ignore
+.vs
+.out
+
+packages/
+published_files
+PublishProfiles
+TestResults/
+
+
+*.suo
+*.user
+[Oo]bj/
+[Bb]in/
+[Dd]ebug*/
+[Rr]elease*/
+_ReSharper*/

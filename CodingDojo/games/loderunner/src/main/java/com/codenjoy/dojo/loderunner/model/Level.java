@@ -41,4 +41,6 @@ public interface Level {
     List<Pipe> getPipe();
 
     List<Enemy> getEnemies();
+
+    List<Pill> getPills();
 }
