@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -327,18 +328,10 @@ public class SingleWithEnemyTest {
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
         dice = mock(Dice.class);
-        field = new Loderunner(level, dice, requiredSettings());
+        field = new Loderunner(level, dice, new TestSettings());
 
         int px = level.getHeroes().get(0).getX();
         int py = level.getHeroes().get(0).getY();
         setupPlayer(px, py);
-    }
-
-    private static Settings requiredSettings() {
-        Settings settings = new SettingsImpl();
-        settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
-        settings.addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(100);
-        settings.addEditBox("The portals count").type(Integer.class).def(0);
-        return settings;
     }
 }

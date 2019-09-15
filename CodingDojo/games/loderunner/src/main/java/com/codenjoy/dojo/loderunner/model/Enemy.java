@@ -54,7 +54,7 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
 
     @Override
     public void tick() {
-        if (huntHim == null || !huntHim.isAlive()) {
+        if (huntHim == null || !huntHim.isAlive() || huntHim.isUnderThePill(PillType.SHADOW_PILL)) {
             List<Hero> heroes = new LinkedList<>(field.getHeroes())
                 .stream()
                 .filter(hero -> !hero.isUnderThePill(PillType.SHADOW_PILL))

@@ -23,20 +23,18 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+
+import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import org.junit.Test;
-
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import org.junit.Test;
 
 public class AITest {
 
@@ -175,7 +173,7 @@ public class AITest {
 
     private void setupAI(String map) {
         level = new LevelImpl(map);
-        loderunner = new Loderunner(level, mock(Dice.class), requiredSettings());
+        loderunner = new Loderunner(level, mock(Dice.class), new TestSettings());
 
         for (Hero hero : level.getHeroes()) {
             Player player = new Player(mock(EventListener.class));
@@ -186,14 +184,6 @@ public class AITest {
 
         ai = new AI();
         ai.setupPossibleWays(loderunner);
-    }
-
-    private static Settings requiredSettings() {
-        Settings settings = new SettingsImpl();
-        settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
-        settings.addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(100);
-        settings.addEditBox("The portals count").type(Integer.class).def(0);
-        return settings;
     }
 
     private void assertD(String expected) {
