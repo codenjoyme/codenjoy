@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
@@ -174,7 +175,7 @@ public class AITest {
 
     private void setupAI(String map) {
         level = new LevelImpl(map);
-        loderunner = new Loderunner(level, mock(Dice.class), new SettingsImpl());
+        loderunner = new Loderunner(level, mock(Dice.class), requiredSettings());
 
         for (Hero hero : level.getHeroes()) {
             Player player = new Player(mock(EventListener.class));
@@ -185,6 +186,14 @@ public class AITest {
 
         ai = new AI();
         ai.setupPossibleWays(loderunner);
+    }
+
+    private static Settings requiredSettings() {
+        Settings settings = new SettingsImpl();
+        settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
+        settings.addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(100);
+        settings.addEditBox("The portals count").type(Integer.class).def(0);
+        return settings;
     }
 
     private void assertD(String expected) {

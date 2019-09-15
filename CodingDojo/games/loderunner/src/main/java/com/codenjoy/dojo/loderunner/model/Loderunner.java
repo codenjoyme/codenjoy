@@ -28,13 +28,12 @@ import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import com.codenjoy.dojo.services.settings.Settings;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
@@ -46,6 +45,8 @@ public class Loderunner implements Field {
     private List<Enemy> enemies;
     private List<Gold> gold;
     private List<Pill> pills;
+    private List<Portal> portals;
+    private Integer portalsTicksLive;
 
     private final int size;
     private final Settings settings;
@@ -64,6 +65,7 @@ public class Loderunner implements Field {
 
         gold = level.getGold();
         pills = level.getPills();
+        portals = level.getPortals();
 
         enemies = level.getEnemies();
         for (Enemy enemy : enemies) {
@@ -72,6 +74,7 @@ public class Loderunner implements Field {
 
         players = new LinkedList<>();
         generatePills();
+        generatePortals();
     }
 
     private void toField(List<? extends Point> elements) {
@@ -91,6 +94,8 @@ public class Loderunner implements Field {
         die.addAll(getDied());
 
         die.addAll(bricksGo());
+
+        portalsGo();
 
         for (Player player : die) {
             player.event(Events.KILL_HERO);
@@ -124,6 +129,28 @@ public class Loderunner implements Field {
         for (int i = 0; i < Math.abs(shadowPillsCount); i++) {
             Point pos = getFreeRandom();
             leavePill(pos.getX(), pos.getY(), PillType.SHADOW_PILL);
+        }
+    }
+
+    private void generatePortals() {
+        Integer portalsTicksLive = settings
+                .<Integer>getParameter("Number of ticks that the portals will be active")
+                .getValue();
+
+        portalsTicksLive = portalsTicksLive < 1 ? 1 : portalsTicksLive;
+
+        this.portalsTicksLive = portalsTicksLive;
+
+        Integer portalsCount = settings
+                .<Integer>getParameter("The portals count")
+                .getValue();
+
+        portals.clear();
+        if (portalsCount > 0) {
+            for (int i = 0; i < portalsCount; i++) {
+                Point pos = getFreeRandom();
+                leavePortal(pos.getX(), pos.getY());
+            }
         }
     }
 
@@ -170,6 +197,7 @@ public class Loderunner implements Field {
                     addAll(Loderunner.this.getGold());
                     addAll(Loderunner.this.getFieldElements());
                     addAll(Loderunner.this.getPills());
+                    addAll(Loderunner.this.getPortals());
                 }};
             }
         };
@@ -258,6 +286,20 @@ public class Loderunner implements Field {
                 pills.remove(hero);
                 hero.swallowThePill(PillType.SHADOW_PILL);
             }
+
+            if (portals.contains(hero)) {
+                transport(hero);
+            }
+        }
+    }
+
+    private void transport(PointImpl point) {
+        for (int i = 0; i < portals.size(); i++) {
+            if (portals.get(i).equals(point)) {
+                Portal portalToMove = portals.get(i < portals.size() - 1 ? i + 1 : 0);
+                point.move(portalToMove.getX(), portalToMove.getY());
+                return;
+            }
         }
     }
 
@@ -269,8 +311,21 @@ public class Loderunner implements Field {
                 gold.remove(enemy);
                 enemy.getGold();
             }
+
+            if (portals.contains(enemy)) {
+                transport(enemy);
+            }
         }
     }
+
+    private void portalsGo() {
+        if (this.portalsTicksLive == 0) {
+            generatePortals();
+        } else {
+            this.portalsTicksLive--;
+        }
+    }
+
 
     private Player getPlayer(Hero hero) {
         for (Player player : players) {
@@ -362,6 +417,7 @@ public class Loderunner implements Field {
     public boolean isFree(Point pt) {
         return !(gold.contains(pt)
                 || pills.contains(pt)
+                || portals.contains(pt)
                 || is(pt, Border.class)
                 || is(pt, Brick.class)
                 || getHeroes().contains(pt)
@@ -400,6 +456,11 @@ public class Loderunner implements Field {
     }
 
     @Override
+    public void leavePortal(int x, int y) {
+        portals.add(new Portal(x, y));
+    }
+
+    @Override
     public boolean isUnderThePillAt(int x, int y, PillType pillType) {
         Point pt = pt(x, y);
         return players.stream()
@@ -424,6 +485,10 @@ public class Loderunner implements Field {
 
     public List<Pill> getPills() {
         return pills;
+    }
+
+    public List<Portal> getPortals() {
+        return portals;
     }
 
     @Override

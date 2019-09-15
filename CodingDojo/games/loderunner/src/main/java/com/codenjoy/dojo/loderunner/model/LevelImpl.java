@@ -130,6 +130,13 @@ public class LevelImpl implements Level {
             .collect(toList());
     }
 
+    @Override
+    public List<Portal> getPortals() {
+        return pointsOf(PORTAL).stream()
+                .map(Portal::new)
+                .collect(toList());
+    }
+
     public void setAI(EnemyAI ai) {
         this.ai = ai;
     }

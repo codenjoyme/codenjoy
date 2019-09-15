@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
@@ -42,6 +44,7 @@ import static org.mockito.Mockito.*;
 
 public class LoderunnerTest {
 
+    private Settings settings;
     private Loderunner game;
     private Hero hero;
     private Dice dice;
@@ -55,6 +58,7 @@ public class LoderunnerTest {
     public void setup() {
         dice = mock(Dice.class);
         ai = mock(EnemyAI.class);
+        settings = requiredSettings();
     }
 
     private void dice(int...ints) {
@@ -75,13 +79,21 @@ public class LoderunnerTest {
             hero = level.getHeroes().get(0);
         }
 
-        game = new Loderunner(level, dice, new SettingsImpl());   // Ужас! :)
+        game = new Loderunner(level, dice, settings);   // Ужас! :)
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
         player.hero = hero;
         hero.init(game);
         this.hero = game.getHeroes().get(0);
+    }
+
+    private static Settings requiredSettings() {
+        Settings settings = new SettingsImpl();
+        settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
+        settings.addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(100);
+        settings.addEditBox("The portals count").type(Integer.class).def(0);
+        return settings;
     }
 
     private void assertE(String expected) {
@@ -3832,6 +3844,28 @@ public class LoderunnerTest {
                 "☼ ◄ ☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
+    }
+
+    @Test
+    public void iCanJumpThroughPortals() {
+        Parameter<Integer> p1 = settings.getParameter("The portals count").type(Integer.class);
+        p1.update(2);
+        dice(1, 2, 3, 3);
+        givenFl("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛◄ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ]☼" +
+                "☼⊛  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+        p1.update(0);
     }
 
     // если монстр не успел вылезти из ямки и она заросла то монстр умирает?

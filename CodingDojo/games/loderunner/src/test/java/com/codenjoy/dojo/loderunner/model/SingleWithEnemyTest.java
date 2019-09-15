@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
@@ -326,10 +327,18 @@ public class SingleWithEnemyTest {
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
         dice = mock(Dice.class);
-        field = new Loderunner(level, dice, new SettingsImpl());
+        field = new Loderunner(level, dice, requiredSettings());
 
         int px = level.getHeroes().get(0).getX();
         int py = level.getHeroes().get(0).getY();
         setupPlayer(px, py);
+    }
+
+    private static Settings requiredSettings() {
+        Settings settings = new SettingsImpl();
+        settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
+        settings.addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(100);
+        settings.addEditBox("The portals count").type(Integer.class).def(0);
+        return settings;
     }
 }

@@ -78,6 +78,8 @@ public enum Elements implements CharElements {
     LADDER('H'),
     PIPE('~'),
 
+    PORTAL('⊛'),
+
     THE_SHADOW_PILL('S');
 
     final char ch;

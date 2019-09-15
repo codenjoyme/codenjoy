@@ -35,6 +35,8 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> forNextGoldIncScore;
     private final Parameter<Integer> shadowPillActiveTicks;
     private final Parameter<Integer> shadowPillsCount;
+    private final Parameter<Integer> portalsCount;
+    private final Parameter<Integer> portalsAcrtiveTicks;
 
     private volatile int score;
     private volatile int count;
@@ -48,6 +50,8 @@ public class Scores implements PlayerScores {
         forNextGoldIncScore = settings.addEditBox("Get next gold increment score").type(Integer.class).def(1);
         shadowPillActiveTicks = settings.addEditBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
         shadowPillsCount = settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
+        portalsCount = settings.addEditBox("The portals count").type(Integer.class).def(0);
+        portalsAcrtiveTicks = settings.addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(10);
     }
 
     @Override
