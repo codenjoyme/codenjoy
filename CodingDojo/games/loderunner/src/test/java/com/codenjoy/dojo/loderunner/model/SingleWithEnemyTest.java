@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -326,7 +327,7 @@ public class SingleWithEnemyTest {
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
         dice = mock(Dice.class);
-        field = new Loderunner(level, dice, new SettingsImpl());
+        field = new Loderunner(level, dice, new TestSettings());
 
         int px = level.getHeroes().get(0).getX();
         int py = level.getHeroes().get(0).getY();
