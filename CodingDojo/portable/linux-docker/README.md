@@ -17,11 +17,11 @@ So lets do it together!
     * [optional] change `GIT_REVISION=master`
     * run it to clone project `sudo bash 1-git-clone.sh`
 - with `2-build.sh` 
-    * [optional] change `DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0`
+    * [optional] change `DOCKER_IMAGE=apofig/codenjoy-contest:1.1.1`
     * run it to build project and create image `sudo bash 2-build.sh` 
 - remove folders `logs` and `database` from last running
 - with `3-start.sh`
-    * [optional] change `DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0`
+    * [optional] change `DOCKER_IMAGE=apofig/codenjoy-contest:1.1.1`
     * [optional] select `SERVER_PORT=8080`
     * [optional] change `PROFILES=sqlite,icancode`
     * [optional] change `GAME_AI=false` to disable default AI with first player

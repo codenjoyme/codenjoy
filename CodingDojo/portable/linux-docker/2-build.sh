@@ -20,6 +20,6 @@ eval_echo() {
     eval $to_run
 }
 
-DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0
+DOCKER_IMAGE=apofig/codenjoy-contest:1.1.1
 
 eval_echo "docker build -f ./Dockerfile -t $DOCKER_IMAGE ."
