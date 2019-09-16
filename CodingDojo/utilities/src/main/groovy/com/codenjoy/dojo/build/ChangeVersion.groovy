@@ -1,5 +1,5 @@
-def fromVersion = '1.1.0'
-def toVersion = '1.1.1'
+def fromVersion = '1.1.1'
+def toVersion = '1.1.2'
 
 // select root directories
 def base = '..\\..\\..\\..\\..\\..\\..\\..\\';
@@ -38,7 +38,7 @@ files << new File("${base}portable\\windows-cmd\\00-settings.bat")
 files << new File("${base}portable\\linux-docker-compose\\balancer.yml")
 files << new File("${base}portable\\linux-docker-compose\\codenjoy.yml")
 files << new File("${base}portable\\linux-docker-compose\\rebuild.sh")
-files << new File("${base}portable\\linux-docker\\start.sh")
+files << new File("${base}portable\\linux-docker\\3-start.sh")
 files << new File("${base}games\\pom.xml")
 files << new File("${base}pom.xml")
 

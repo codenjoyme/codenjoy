@@ -20,7 +20,7 @@ eval_echo() {
     eval $to_run
 }
 
-DOCKER_IMAGE=apofig/codenjoy-contest:1.1.0
+DOCKER_IMAGE=apofig/codenjoy-contest:1.1.1
 CONTEXT=/codenjoy-contest
 SERVER_PORT=8080
 PROFILES=sqlite,icancode

@@ -4,7 +4,7 @@ services:
    codenjoy_server:
      depends_on:                                            #!L#
        - codenjoy_db                                        #!L#
-     image: apofig/codenjoy-contest:1.1.0
+     image: apofig/codenjoy-contest:1.1.1
      container_name: codenjoy-contest
      build:
         context: ./applications
