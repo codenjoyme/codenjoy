@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,8 +24,11 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import com.codenjoy.dojo.loderunner.model.Pill.PillType;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -143,16 +146,16 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         dissolvePills();
     }
 
-  private boolean iAmTheShadow() {
-    return this.isUnderThePill(PillType.SHADOW_PILL);
-  }
+    private boolean iAmTheShadow() {
+        return this.isUnderThePill(PillType.SHADOW_PILL);
+    }
 
-  private boolean isRegularPlayerAt(int x, int y) {
-    return field.isHeroAt(x, y)
-        && !field.isUnderThePillAt(x, y, PillType.SHADOW_PILL);
-  }
+    private boolean isRegularPlayerAt(int x, int y) {
+        return field.isHeroAt(x, y)
+                && !field.isUnderThePillAt(x, y, PillType.SHADOW_PILL);
+    }
 
-  private void dissolvePills() {
+    private void dissolvePills() {
         Set<PillType> activePillTypes = activePills.keySet();
         for (PillType activePill : activePillTypes) {
             int ticksLeft = activePills.get(activePill);
@@ -215,7 +218,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             if (el instanceof Ladder) {
                 ladder = (Ladder) el;
             } else if (el instanceof Pipe) {
-                pipe = (Pipe)el;
+                pipe = (Pipe) el;
             }
         }
 
