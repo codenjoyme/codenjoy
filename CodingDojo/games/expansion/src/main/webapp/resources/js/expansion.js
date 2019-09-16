@@ -33,37 +33,14 @@ if (typeof game == 'undefined') {
     }
 }
 
-game.sprites = 'robot';
 game.isDrawByOrder = true;
-game.enableDonate = false;
-game.enableJoystick = false;
 game.enablePlayerInfo = false;
 game.enablePlayerInfoLevel = false;
-game.enableLeadersTable = false;
-game.enableChat = false;
-game.enableInfo = false;
-game.enableHotkeys = true;
-game.enableForkMe = false;
-game.enableAdvertisement = false;
 game.showBody = false;
-game.debug = false;
 
 // ========================== leaderboard page ==========================
 
-var initHelpLink = function() {
-    $('#help-link').attr('href', 'https://docs.google.com/document/d/1SPvBsZKtkk7F28sLtuUo2kOFtNWIz_8umWYYYLZ7kWY/edit')
-}
-var initAdditionalLink = function() {
-    $('#additional-link').attr('href', '/codenjoy-contest/resources/user/expansion-servers.zip')
-    $('#additional-link').text('Get client')
-}
-
 var boardAllPageLoad = function() {
-
-    if (game.debug) {
-        game.debugger();
-    }
-
     // https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
     if (!String.prototype.padStart) {
@@ -142,13 +119,12 @@ var boardAllPageLoad = function() {
 
 game.onBoardAllPageLoad = function() {
     loadArrowImages();
-    initLayout(game.gameName, 'leaderboard.html', game.contextPath,
-        null,
-        [],
-        function() {
-            boardAllPageLoad();
-            loadStuff();
-        });
+
+    boardAllPageLoad();
+
+    $('#help-link').attr('href', 'https://docs.google.com/document/d/1SPvBsZKtkk7F28sLtuUo2kOFtNWIz_8umWYYYLZ7kWY/edit')
+    $('#additional-link').attr('href', '/codenjoy-contest/resources/user/expansion-servers.zip')
+    $('#additional-link').text('Get client')
 }
 
 // ========================== user page ==========================
@@ -165,7 +141,7 @@ var loadStuff = function() {
 var sprites = {};
 var directions = ['up', 'right_up', 'right', 'right_down', 'down', 'left_down', 'left', 'left_up'];
 var loadImage = function(name) {
-    var url = game.contextPath + '/resources/sprite/' + game.gameName + '/' + game.sprites + '/' + name + '.png';
+    var url = game.contextPath + '/resources/sprite/' + game.gameName + '/' + name + '.png';
     var image = new Image();
     image.onload = function() {
         // do nothing
