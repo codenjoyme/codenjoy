@@ -36,6 +36,8 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> shadowPillActiveTicks;
     private final Parameter<Integer> shadowPillsCount;
     private final Parameter<Integer> suicidePenalty;
+    private final Parameter<Integer> portalsCount;
+    private final Parameter<Integer> portalsActiveTicks;
 
     private volatile int score;
     private volatile int count;
@@ -50,6 +52,8 @@ public class Scores implements PlayerScores {
         shadowPillActiveTicks = settings.addEditBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
         shadowPillsCount = settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
         suicidePenalty = settings.addEditBox("SuicidePenalty").type(Integer.class).def(0);
+        portalsCount = settings.addEditBox("The portals count").type(Integer.class).def(0);
+        portalsActiveTicks = settings.addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(10);
     }
 
     @Override

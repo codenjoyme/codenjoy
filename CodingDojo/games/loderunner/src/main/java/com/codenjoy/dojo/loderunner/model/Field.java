@@ -56,6 +56,8 @@ public interface Field extends GameField<Player> {
 
     void leavePill(int x, int y, PillType pillType);
 
+    void leavePortal(int x, int y);
+
     boolean isUnderThePillAt(int x, int y, PillType pillType);
 
     int size();

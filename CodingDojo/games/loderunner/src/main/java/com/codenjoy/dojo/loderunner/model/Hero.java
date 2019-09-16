@@ -55,10 +55,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         suicide = false;
     }
 
-    public Hero(Point point, Direction direction) {
-        this(point, direction, () -> 0);
-    }
-
     @Override
     public void down() {
         if (!alive) return;

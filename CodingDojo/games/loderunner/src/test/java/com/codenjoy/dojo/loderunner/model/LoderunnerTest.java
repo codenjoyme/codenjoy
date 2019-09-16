@@ -23,25 +23,39 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
+
+import com.codenjoy.dojo.loderunner.TestSettings;
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.loderunner.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
-
 public class LoderunnerTest {
 
+    private Settings settings;
     private Loderunner game;
     private Hero hero;
     private Dice dice;
@@ -55,6 +69,7 @@ public class LoderunnerTest {
     public void setup() {
         dice = mock(Dice.class);
         ai = mock(EnemyAI.class);
+        settings = new TestSettings();
     }
 
     private void dice(int...ints) {
@@ -75,13 +90,6 @@ public class LoderunnerTest {
             hero = level.getHeroes().get(0);
         }
 
-        SettingsImpl settings = new SettingsImpl();
-        settings.addEditBox("Kill hero penalty").type(Integer.class).def(0);
-        settings.addEditBox("Kill enemy score").type(Integer.class).def(10);
-        settings.addEditBox("Get gold score").type(Integer.class).def(1);
-        settings.addEditBox("Get next gold increment score").type(Integer.class).def(1);
-        settings.addEditBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
-        settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
 
         game = new Loderunner(level, dice, settings);   // Ужас! :)
         listener = mock(EventListener.class);
@@ -3825,7 +3833,7 @@ public class LoderunnerTest {
     }
 
     @Test
-    public void shouldSkipTurnOnSuicideCommand() {
+    public void iLooseScoresWhenDoHarakiri() {
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ◄ ☼" +
@@ -3842,6 +3850,28 @@ public class LoderunnerTest {
                 "☼☼☼☼☼");
 
         verify(listener).event(Events.SUICIDE);
+    }
+
+    @Test
+    public void iCanJumpThroughPortals() {
+        Parameter<Integer> p1 = settings.getParameter("The portals count").type(Integer.class);
+        p1.update(2);
+        dice(1, 2, 3, 3);
+        givenFl("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛◄ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ]☼" +
+                "☼⊛  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+        p1.update(0);
     }
 
     // если монстр не успел вылезти из ямки и она заросла то монстр умирает?

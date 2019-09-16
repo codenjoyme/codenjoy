@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,13 +56,24 @@ public class LevelImpl implements Level {
     @Override
     public List<Hero> getHeroes() {
         return new LinkedList<Hero>(){{
-            addAll(pointsOf(HERO_LEFT).stream()
-                    .map(pt -> new Hero(pt, Direction.LEFT))
-                    .collect(toList()));
-            
-            addAll(pointsOf(HERO_RIGHT).stream()
-                    .map(pt -> new Hero(pt, Direction.RIGHT))
-                    .collect(toList()));
+            EnumSet<Elements> heroesGoingLeft = EnumSet
+                .of(HERO_DRILL_LEFT, HERO_LEFT, HERO_FALL_LEFT, HERO_PIPE_LEFT,
+                    HERO_SHADOW_DRILL_LEFT,
+                    HERO_SHADOW_LEFT, HERO_SHADOW_FALL_LEFT, HERO_SHADOW_PIPE_LEFT);
+            heroesGoingLeft.forEach(heroBlocks ->
+                addAll(pointsOf(heroBlocks).stream()
+                    .map(pt -> new Hero(pt, Direction.LEFT, () -> 1))
+                    .collect(toList())));
+
+            EnumSet<Elements> heroesGoingRight = EnumSet
+                .of(HERO_DRILL_RIGHT, HERO_RIGHT, HERO_FALL_RIGHT, HERO_PIPE_RIGHT,
+                    HERO_SHADOW_DRILL_RIGHT,
+                    HERO_SHADOW_RIGHT, HERO_SHADOW_FALL_RIGHT, HERO_SHADOW_PIPE_RIGHT);
+
+            heroesGoingRight.forEach(heroBlocks ->
+                addAll(pointsOf(heroBlocks).stream()
+                    .map(pt -> new Hero(pt, Direction.RIGHT, () -> 1))
+                    .collect(toList())));
         }};
     }
 
@@ -128,6 +140,13 @@ public class LevelImpl implements Level {
         return pointsOf(THE_SHADOW_PILL).stream() // TODO: add speed pills
             .map(kp -> new Pill(kp, PillType.SHADOW_PILL))
             .collect(toList());
+    }
+
+    @Override
+    public List<Portal> getPortals() {
+        return pointsOf(PORTAL).stream()
+                .map(Portal::new)
+                .collect(toList());
     }
 
     public void setAI(EnemyAI ai) {

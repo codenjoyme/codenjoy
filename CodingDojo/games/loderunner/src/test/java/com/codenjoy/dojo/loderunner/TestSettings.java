@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.loderunner.model;
+package com.codenjoy.dojo.loderunner;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,27 +22,14 @@ package com.codenjoy.dojo.loderunner.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 
-import java.util.List;
+public class TestSettings extends SettingsImpl {
 
-public interface Level {
-    int getSize();
-
-    List<Brick> getBricks();
-
-    List<Border> getBorders();
-
-    List<Hero> getHeroes();
-
-    List<Gold> getGold();
-
-    List<Ladder> getLadder();
-
-    List<Pipe> getPipe();
-
-    List<Enemy> getEnemies();
-
-    List<Pill> getPills();
-
-    List<Portal> getPortals();
+  public TestSettings() {
+    addEditBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
+    addEditBox("The shadow pills count").type(Integer.class).def(0);
+    addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(10);
+    addEditBox("The portals count").type(Integer.class).def(0);
+  }
 }
