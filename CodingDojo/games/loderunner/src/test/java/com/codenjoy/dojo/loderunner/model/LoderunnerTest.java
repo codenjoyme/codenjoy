@@ -75,7 +75,15 @@ public class LoderunnerTest {
             hero = level.getHeroes().get(0);
         }
 
-        game = new Loderunner(level, dice, new SettingsImpl());   // Ужас! :)
+        SettingsImpl settings = new SettingsImpl();
+        settings.addEditBox("Kill hero penalty").type(Integer.class).def(0);
+        settings.addEditBox("Kill enemy score").type(Integer.class).def(10);
+        settings.addEditBox("Get gold score").type(Integer.class).def(1);
+        settings.addEditBox("Get next gold increment score").type(Integer.class).def(1);
+        settings.addEditBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
+        settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
+
+        game = new Loderunner(level, dice, settings);   // Ужас! :)
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
@@ -3829,9 +3837,11 @@ public class LoderunnerTest {
 
         assertE("☼☼☼☼☼" +
                 "☼   ☼" +
-                "☼ ◄ ☼" +
+                "☼ Ѡ ☼" +
                 "☼###☼" +
                 "☼☼☼☼☼");
+
+        verify(listener).event(Events.SUICIDE);
     }
 
     // если монстр не успел вылезти из ямки и она заросла то монстр умирает?

@@ -31,6 +31,8 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import com.codenjoy.dojo.services.settings.Settings;
+
+import java.awt.*;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,10 +97,16 @@ public class Loderunner implements Field {
         for (Player player : die) {
             player.event(Events.KILL_HERO);
             Hero deadHero = player.getHero();
+            penaltySuicide(player);
             rewardMurderers(deadHero.getX(), deadHero.getY());
         }
-
         generatePills();
+    }
+
+    private void penaltySuicide(Player deadHero) {
+        if (deadHero.getHero().isSuicide()){
+            deadHero.event(Events.SUICIDE);
+        }
     }
 
     private void rewardMurderers(int x, int y) {

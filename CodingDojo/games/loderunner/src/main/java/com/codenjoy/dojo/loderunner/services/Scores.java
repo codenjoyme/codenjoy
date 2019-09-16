@@ -35,6 +35,7 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> forNextGoldIncScore;
     private final Parameter<Integer> shadowPillActiveTicks;
     private final Parameter<Integer> shadowPillsCount;
+    private final Parameter<Integer> suicidePenalty;
 
     private volatile int score;
     private volatile int count;
@@ -48,6 +49,7 @@ public class Scores implements PlayerScores {
         forNextGoldIncScore = settings.addEditBox("Get next gold increment score").type(Integer.class).def(1);
         shadowPillActiveTicks = settings.addEditBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
         shadowPillsCount = settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
+        suicidePenalty = settings.addEditBox("SuicidePenalty").type(Integer.class).def(0);
     }
 
     @Override
@@ -71,6 +73,9 @@ public class Scores implements PlayerScores {
         } else if (event.equals(Events.KILL_HERO)) {
             count = 0;
             score -= killHeroPenalty.getValue();
+        }
+        else if (event.equals(Events.SUICIDE)){
+            score -= suicidePenalty.getValue();
         }
         score = Math.max(0, score);
     }
