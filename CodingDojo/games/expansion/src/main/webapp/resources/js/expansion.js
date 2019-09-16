@@ -123,8 +123,6 @@ game.onBoardAllPageLoad = function() {
     boardAllPageLoad();
 
     $('#help-link').attr('href', 'https://docs.google.com/document/d/1SPvBsZKtkk7F28sLtuUo2kOFtNWIz_8umWYYYLZ7kWY/edit')
-    $('#additional-link').attr('href', '/codenjoy-contest/resources/user/expansion-servers.zip')
-    $('#additional-link').text('Get client')
 }
 
 // ========================== user page ==========================
