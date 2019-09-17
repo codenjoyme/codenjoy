@@ -29,5 +29,7 @@ public class TestSettings extends SettingsImpl {
   public TestSettings() {
     addEditBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
     addEditBox("The shadow pills count").type(Integer.class).def(0);
+    addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(10);
+    addEditBox("The portals count").type(Integer.class).def(0);
   }
 }
