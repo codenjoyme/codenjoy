@@ -93,7 +93,7 @@ public class AISolver implements Solver<Board> {
     public List<Direction> getDirections(Board board) {
         int size = board.size();
         Point from = board.getMe();
-        List<Point> to = board.get(Elements.GOLD);
+        List<Point> to = board.get(Elements.YELLOW_GOLD,Elements.GREEN_GOLD,Elements.RED_GOLD);
         DeikstraFindWay.Possible map = possible(board);
         return way.getShortestWay(size, from, to, map);
     }

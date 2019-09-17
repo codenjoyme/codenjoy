@@ -27,18 +27,18 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Gold extends PointImpl implements State<Elements, Player> {
+public class YellowGold extends PointImpl implements State<Elements, Player> {
 
-    public Gold(Point point) {
+    public YellowGold(Point point) {
         super(point);
     }
 
-    public Gold(int x, int y) {
+    public YellowGold(int x, int y) {
         super(x, y);
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.GOLD;
+        return Elements.YELLOW_GOLD;
     }
 }

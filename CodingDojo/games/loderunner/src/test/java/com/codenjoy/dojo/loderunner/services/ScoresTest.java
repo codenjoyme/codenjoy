@@ -50,7 +50,7 @@ public class ScoresTest {
     }
 
     public void getGold() {
-        scores.event(Events.GET_GOLD);
+        scores.event(Events.GET_YELLOW_GOLD);
     }
 
     @Before

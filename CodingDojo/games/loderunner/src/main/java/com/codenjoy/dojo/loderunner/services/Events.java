@@ -23,5 +23,5 @@ package com.codenjoy.dojo.loderunner.services;
  */
 
 public enum Events {
-    KILL_ENEMY, KILL_HERO, GET_GOLD;
+    KILL_ENEMY, KILL_HERO, GET_YELLOW_GOLD, GET_GREEN_GOLD, GET_RED_GOLD;
 }

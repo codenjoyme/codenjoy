@@ -251,7 +251,7 @@ public class SingleTest {
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        verify(listener1).event(Events.GET_GOLD);
+        verify(listener1).event(Events.GET_YELLOW_GOLD);
 
     }
 
@@ -658,7 +658,7 @@ public class SingleTest {
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
         dice = mock(Dice.class);
-        field = new Loderunner(level, dice);
+        field = new Loderunner(level, dice, null);
     }
 
     @Test

@@ -28,27 +28,29 @@ import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.Settings;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
 public class Loderunner implements Field {
 
+    private final Settings settings;
     private Point[][] field;
     private List<Player> players;
     private List<Enemy> enemies;
-    private List<Gold> gold;
+    private List<YellowGold> yellowGold;
+    private List<GreenGold> greenGold;
+    private List<RedGold> redGold;
 
     private final int size;
     private Dice dice;
 
-    public Loderunner(Level level, Dice dice) {
+    public Loderunner(Level level, Dice dice, Settings settings) {
         this.dice = dice;
+        this.settings = settings;
         size = level.getSize();
         field = new Point[size][size];
 
@@ -57,7 +59,9 @@ public class Loderunner implements Field {
         toField(level.getLadder());
         toField(level.getPipe());
 
-        gold = level.getGold();
+        yellowGold = level.getYellowGold();
+        greenGold = level.getGreenGold();
+        redGold = level.getRedGold();
 
         enemies = level.getEnemies();
         for (Enemy enemy : enemies) {
@@ -88,6 +92,7 @@ public class Loderunner implements Field {
         for (Player player : die) {
             player.event(Events.KILL_HERO);
         }
+        generateGold();
     }
 
     private Set<Player> getDied() {
@@ -130,7 +135,9 @@ public class Loderunner implements Field {
                 return new LinkedList<Point>(){{
                     addAll(Loderunner.this.getHeroes());
                     addAll(Loderunner.this.getEnemies());
-                    addAll(Loderunner.this.getGold());
+                    addAll(Loderunner.this.getYellowGold());
+                    addAll(Loderunner.this.getGreenGold());
+                    addAll(Loderunner.this.getRedGold());
                     addAll(Loderunner.this.getFieldElements());
                 }};
             }
@@ -208,12 +215,15 @@ public class Loderunner implements Field {
 
             hero.tick();
 
-            if (gold.contains(hero)) {
-                gold.remove(hero);
-                player.event(Events.GET_GOLD);
-
-                Point pos = getFreeRandom();
-                leaveGold(pos.getX(), pos.getY());
+            if (yellowGold.contains(hero)) {
+                yellowGold.remove(hero);
+                getGoldEvent(player, Events.GET_YELLOW_GOLD);
+            } else if (greenGold.contains(hero)) {
+                greenGold.remove(hero);
+                getGoldEvent(player, Events.GET_GREEN_GOLD);
+            } else if (redGold.contains(hero)) {
+                redGold.remove(hero);
+                getGoldEvent(player, Events.GET_RED_GOLD);
             }
         }
     }
@@ -222,8 +232,14 @@ public class Loderunner implements Field {
         for (Enemy enemy : enemies) {
             enemy.tick();
 
-            if (gold.contains(enemy) && !enemy.withGold()) {
-                gold.remove(enemy);
+            if (yellowGold.contains(enemy) && !enemy.withGold()) {
+                yellowGold.remove(enemy);
+                enemy.getGold();
+            } else if (greenGold.contains(enemy) && !enemy.withGold()) {
+                greenGold.remove(enemy);
+                enemy.getGold();
+            } else if (redGold.contains(enemy) && !enemy.withGold()) {
+                redGold.remove(enemy);
                 enemy.getGold();
             }
         }
@@ -257,7 +273,9 @@ public class Loderunner implements Field {
 
         Point over = pt(x, y + 1);
         if (is(over, Ladder.class)
-                || gold.contains(over)
+                || yellowGold.contains(over)
+                || greenGold.contains(over)
+                || redGold.contains(over)
                 || isFullBrick(over.getX(), over.getY())
                 || getHeroes().contains(over)
                 || enemies.contains(over))
@@ -317,7 +335,9 @@ public class Loderunner implements Field {
 
     @Override
     public boolean isFree(Point pt) {
-        return !(gold.contains(pt)
+        return !(redGold.contains(pt)
+                || greenGold.contains(pt)
+                || yellowGold.contains(pt)
                 || is(pt, Border.class)
                 || is(pt, Brick.class)
                 || getHeroes().contains(pt)
@@ -342,7 +362,13 @@ public class Loderunner implements Field {
 
     @Override
     public void leaveGold(int x, int y) {
-        gold.add(new Gold(x, y));
+        if (is(x,y,YellowGold.class)) {
+            yellowGold.add(new YellowGold(x, y));
+        } else if (is(x,y,GreenGold.class)) {
+            greenGold.add(new GreenGold(x,y));
+        } else if (is(x,y,RedGold.class)) {
+            redGold.add(new RedGold(x,y));
+        }
     }
 
     @Override
@@ -355,8 +381,16 @@ public class Loderunner implements Field {
         return is(x, y, Border.class);
     }
 
-    public List<Gold> getGold() {
-        return gold;
+    public List<YellowGold> getYellowGold() {
+        return yellowGold;
+    }
+
+    public List<GreenGold> getGreenGold() {
+        return greenGold;
+    }
+
+    public List<RedGold> getRedGold() {
+        return redGold;
     }
 
     @Override
@@ -379,5 +413,51 @@ public class Loderunner implements Field {
 
     public List<Enemy> getEnemies() {
         return enemies;
+    }
+
+    private void getGoldEvent(Player player, Events event) {
+        player.event(event);
+        Point pos = getFreeRandom();
+        leaveGold(pos.getX(), pos.getY());
+    }
+
+    private void generateGold()  {
+        int yellowTypeGoldCount = (Integer) settings.getParameter("yellow type gold count").getValue();
+        int greenTypeGoldCount = (Integer) settings.getParameter("green type gold count").getValue();
+        int redTypeGoldCount = (Integer) settings.getParameter("red type gold count").getValue();
+        yellowTypeGoldCount = yellowTypeGoldCount < 0 ? 0 : yellowTypeGoldCount;
+        greenTypeGoldCount = greenTypeGoldCount < 0 ? 0 : greenTypeGoldCount;
+        redTypeGoldCount = redTypeGoldCount < 0 ? 0 : redTypeGoldCount;
+
+        if (yellowTypeGoldCount <= yellowGold.size()) {
+            yellowGold = yellowGold.subList(0, yellowTypeGoldCount);
+            return;
+        }
+        if (greenTypeGoldCount <= greenGold.size()) {
+            greenGold = greenGold.subList(0, greenTypeGoldCount);
+            return;
+        }
+        if (redTypeGoldCount <= redGold.size()) {
+            redGold = redGold.subList(0, redTypeGoldCount);
+            return;
+        }
+
+        yellowTypeGoldCount = yellowTypeGoldCount - yellowGold.size();
+        for (int i = 0; i < Math.abs(yellowTypeGoldCount); i++) {
+            Point pos = getFreeRandom();
+            yellowGold.add(new YellowGold(pos.getX(), pos.getY()));
+        }
+
+        greenTypeGoldCount = greenTypeGoldCount - greenGold.size();
+        for (int i = 0; i < Math.abs(greenTypeGoldCount); i++) {
+            Point pos = getFreeRandom();
+            greenGold.add(new GreenGold(pos.getX(), pos.getY()));
+        }
+
+        redTypeGoldCount = redTypeGoldCount - redGold.size();
+        for (int i = 0; i < Math.abs(redTypeGoldCount); i++) {
+            Point pos = getFreeRandom();
+            redGold.add(new RedGold(pos.getX(), pos.getY()));
+        }
     }
 }

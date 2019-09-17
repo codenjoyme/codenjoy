@@ -4,7 +4,7 @@ package com.codenjoy.dojo.loderunner.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,27 +22,22 @@ package com.codenjoy.dojo.loderunner.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-import java.util.List;
+public class RedGold extends PointImpl implements State<Elements, Player> {
 
-public interface Level {
-    int getSize();
+    public RedGold(Point point) {
+        super(point);
+    }
 
-    List<Brick> getBricks();
+    public RedGold(int x, int y) {
+        super(x, y);
+    }
 
-    List<Border> getBorders();
-
-    List<Hero> getHeroes();
-
-    List<YellowGold> getYellowGold();
-
-    List<GreenGold> getGreenGold();
-
-    List<RedGold> getRedGold();
-
-    List<Ladder> getLadder();
-
-    List<Pipe> getPipe();
-
-    List<Enemy> getEnemies();
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.RED_GOLD;
+    }
 }

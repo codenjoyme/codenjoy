@@ -325,7 +325,7 @@ public class SingleWithEnemyTest {
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
         dice = mock(Dice.class);
-        field = new Loderunner(level, dice);
+        field = new Loderunner(level, dice, null);
 
         int px = level.getHeroes().get(0).getX();
         int py = level.getHeroes().get(0).getY();

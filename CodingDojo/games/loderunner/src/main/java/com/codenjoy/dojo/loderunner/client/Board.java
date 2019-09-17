@@ -98,7 +98,7 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     public boolean aGold(int x, int y) {
-        return isAt(x, y, Elements.GOLD);
+        return isAt(x, y, Elements.YELLOW_GOLD) || isAt(x, y, Elements.GREEN_GOLD) || isAt(x, y, Elements.RED_GOLD);
     }
 
     public boolean aLadder(int x, int y) {

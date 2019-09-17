@@ -173,7 +173,7 @@ public class AITest {
 
     private void setupAI(String map) {
         level = new LevelImpl(map);
-        loderunner = new Loderunner(level, mock(Dice.class));
+        loderunner = new Loderunner(level, mock(Dice.class), null);
 
         for (Hero hero : level.getHeroes()) {
             Player player = new Player(mock(EventListener.class));
