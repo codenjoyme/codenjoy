@@ -18,7 +18,7 @@
 
         <commons-collections.version>4.4</commons-collections.version>
         <commons-lang.version>3.9</commons-lang.version>
-        <org.json.version>20190722</org.json.version>
+        <org.json.version>20180813</org.json.version> <!-- do not update -->
         <json-io.version>4.10.1</json-io.version>
 
         <fest-reflect.version>1.4.1</fest-reflect.version>

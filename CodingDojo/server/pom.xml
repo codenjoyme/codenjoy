@@ -20,11 +20,15 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <json.version>20190722</json.version>
+        <!-- please do not update these versions
+             they are not in spring boot  -->
+        <json.version>20180813</json.version>
         <commons-collections.version>4.4</commons-collections.version>
         <reflections.version>0.9.11</reflections.version>
         <fest-reflect.version>1.4.1</fest-reflect.version>
+        <selenium.version>2.53.1</selenium.version>
         <fest-assert.version>1.4</fest-assert.version>
+        <!-- end -->
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
@@ -759,6 +763,7 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
