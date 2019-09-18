@@ -110,7 +110,7 @@ public class GameFieldImpl implements GameField {
         players.stream()
                 .sorted((o1, o2) -> dice.next(3) - 1)
                 .forEach(player -> player.getHero().tick());
-        players.forEach(player -> player.getHero().setTicked(false));
+        players.forEach(player -> player.getHero().resetTicked());
         players.stream()
                 .filter(player -> player.getHero().getX() < 0)
                 .forEach(player -> player.newHero(this));

@@ -1311,4 +1311,64 @@ public class MultiplayerSystemTest {
                 "■■■■■■■\n";
         assertThat(game2.getBoardAsString(), is(expected));
     }
+
+    @Test
+    public void shouldKillLowerBikeByLowest__ifThereWerePairOfBikesWithLikewiseCommandsAndAnotherOneLowest__andDiceSaysPlayer3ShouldBeTicketFirstAndThenPlayer2AndThenPlayer1() {
+        //given
+        init();
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setY(bike1.getY() + 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setY(bike3.getY() - 1);
+        when(dice.next(3)).thenReturn(-1);
+
+        //when
+        game1.getJoystick().up();
+        game2.getJoystick().up();
+        game3.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "Ḃ      \n" +
+                "K      \n" +
+                "       \n" +
+                "       \n" +
+                "■■■■■■■\n";
+        assertThat(game1.getBoardAsString(), is(expected));
+        assertThat(game1.getPlayer().isAlive(), is(true));
+        assertThat(game2.getPlayer().isAlive(), is(false));
+        assertThat(game3.getPlayer().isAlive(), is(true));
+    }
+
+    @Test
+    public void lowestBikeShouldKillLowerBikeAndThenShouldBeKilledByUpperBike__ifThereWerePairOfBikesWithLikewiseCommandsAndAnotherOneLowest__andDiceSaysPlayer1ShouldBeTicketFirstAndThenPlayer2AndThenPlayer3() {
+        //given
+        init();
+        Bike bike1 = (Bike) game1.getPlayer().getHero();
+        bike1.setY(bike1.getY() + 1);
+        Bike bike3 = (Bike) game3.getPlayer().getHero();
+        bike3.setY(bike3.getY() - 1);
+        when(dice.next(3)).thenReturn(1);
+
+        //when
+        game1.getJoystick().up();
+        game2.getJoystick().up();
+        game3.getJoystick().down();
+        field.tick();
+
+        //then
+        String expected = "■■■■■■■\n" +
+                "       \n" +
+                "       \n" +
+                "K      \n" +
+                "       \n" +
+                "       \n" +
+                "■■■■■■■\n";
+        assertThat(game3.getBoardAsString(), is(expected));
+        assertThat(game1.getPlayer().isAlive(), is(false));
+        assertThat(game2.getPlayer().isAlive(), is(false));
+        assertThat(game3.getPlayer().isAlive(), is(true));
+    }
 }

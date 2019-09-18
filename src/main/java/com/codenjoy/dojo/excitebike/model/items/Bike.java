@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE;
 import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_AT_ACCELERATOR;
@@ -53,6 +54,7 @@ import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN_A
 import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_FALLEN_AT_OBSTACLE;
 import static com.codenjoy.dojo.excitebike.model.elements.BikeType.BIKE_IN_FLIGHT_FROM_SPRINGBOARD;
 import static com.codenjoy.dojo.services.Direction.DOWN;
+import static com.codenjoy.dojo.services.Direction.LEFT;
 import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static com.codenjoy.dojo.services.Direction.UP;
 
@@ -229,7 +231,7 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             y = DOWN.changeY(y);
         }
         if (movement.isLeft()) {
-            x = Direction.LEFT.changeX(x);
+            x = LEFT.changeX(x);
             if (isAlive() && x < 0) {
                 x = 0;
             }
@@ -253,21 +255,28 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         }
         field.getEnemyBike(x, y, field.getPlayerOfBike(this)).ifPresent(enemy -> {
             if (enemy != this) {
-                if (!enemy.isAlive() ||
-                        (movement.isRight()
-                                && !enemy.movement.isRight()
-                                && !enemy.movement.isUp()
-                                && !enemy.movement.isDown()
-                                && enemy.command == null)) {
-                    if (enemy.isAlive()) {
-                        enemy.type = BIKE_AT_KILLED_BIKE;
-                        crush();
-                    } else {
-                        crushLikeEnemy(enemy.getEnemyBikeType());
-                    }
+                if (!enemy.isAlive()) {
+                    crushLikeEnemy(enemy.getEnemyBikeType());
                     return;
                 }
-                if (!enemy.movement.isUp() && !enemy.movement.isDown() && enemy.command == null) {
+                if (movement.isRight()
+                        && !enemy.movement.isRight()
+                        && (enemyDoesNotMoveUpOrDown(enemy) || enemyCouldAvoidThisBikeButCantBecauseOfInteractionWithOtherBike(enemy))) {
+                    enemy.type = BIKE_AT_KILLED_BIKE;
+                    crush();
+                    return;
+                }
+                if (twoBikesAreMovingUpOrDownToEachOther(this, enemy)) {
+                    enemy.clearY();
+                    if (movement.isUp() || command == UP) {
+                        move(x, DOWN.changeY(y));
+                    } else if (movement.isDown() || command == DOWN) {
+                        move(x, UP.changeY(y));
+                    }
+                    clearY();
+                    return;
+                }
+                if (enemyDoesNotMoveUpOrDown(enemy) || enemyCouldAvoidThisBikeButCantBecauseOfInteractionWithOtherBike(enemy)) {
                     enemy.crush();
                     type = BIKE_AT_KILLED_BIKE;
                     field.getPlayerOfBike(this).event(Events.WIN);
@@ -276,22 +285,46 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
                     field.getPlayerOfBike(enemy).event(Events.LOSE);
                     movement.clear();
                     command = null;
-                } else if (((movement.isDown() || command == DOWN) && (enemy.movement.isUp() || enemy.command == UP))
-                        || ((movement.isUp() || command == UP) && (enemy.movement.isDown() || enemy.command == DOWN))) {
-                    enemy.clearY();
-                    if (movement.isUp() || command == UP) {
-                        move(x, DOWN.changeY(y));
-                    } else if (movement.isDown() || command == DOWN) {
-                        move(x, UP.changeY(y));
-                    }
-                    clearY();
-                } else {
-                    enemy.tick();
-                    enemy.ticked = true;
                 }
             }
         });
         interacted = true;
+    }
+
+    private boolean twoBikesAreMovingUpOrDownToEachOther(Bike one, Bike another) {
+        return (one.movement.isDown() || one.command == DOWN) && (another.movement.isUp() || another.command == UP)
+                || (one.movement.isUp() || one.command == UP) && (another.movement.isDown() || another.command == DOWN);
+    }
+
+    private boolean enemyDoesNotMoveUpOrDown(Bike enemy) {
+        return !enemy.movement.isUp() && !enemy.movement.isDown() && enemy.command != UP && enemy.command != DOWN;
+    }
+
+    private boolean enemyCouldAvoidThisBikeButCantBecauseOfInteractionWithOtherBike(Bike enemy) {
+        if (movement.isRight() && enemy.movement.isRight()
+                || (movement.isUp() || command == UP) && (enemy.movement.isUp() || enemy.command == UP)
+                || (movement.isDown() || command == DOWN) && (enemy.movement.isDown() || enemy.command == DOWN)) {
+            int enemyDestinationX = enemy.x;
+            int enemyDestinationY = enemy.y;
+            if (enemy.command != null) {
+                enemyDestinationY = command.changeY(enemyDestinationY);
+            }
+            if (enemy.movement.isLeft() && enemy.x > 0) {
+                enemyDestinationX = LEFT.changeX(enemyDestinationX);
+            }
+            if (enemy.movement.isRight() && enemy.x >= field.xSize()) {
+                enemyDestinationX = RIGHT.changeX(enemyDestinationX);
+            }
+            if (enemy.movement.isUp()) {
+                enemyDestinationY = UP.changeY(enemyDestinationY);
+            }
+            if (enemy.movement.isDown()) {
+                enemyDestinationY = DOWN.changeY(enemyDestinationY);
+            }
+            Optional<Bike> enemyOfTheEnemy = field.getEnemyBike(enemyDestinationX, enemyDestinationY, field.getPlayerOfBike(enemy));
+            return enemyOfTheEnemy.isPresent() && twoBikesAreMovingUpOrDownToEachOther(enemy, enemyOfTheEnemy.get());
+        }
+        return false;
     }
 
     private void clearY() {
@@ -429,8 +462,8 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
         return type != null && !type.name().contains(FALLEN_BIKE_SUFFIX);
     }
 
-    public void setTicked(boolean ticked) {
-        this.ticked = ticked;
+    public void resetTicked() {
+        ticked = false;
     }
 
     public void changeYDependsOnSpringboard() {
@@ -545,6 +578,10 @@ public class Bike extends PlayerHero<GameField> implements State<BikeType, Playe
             down = false;
             left = false;
             right = false;
+        }
+
+        public boolean isClean() {
+            return !up && !down && !left && !right;
         }
 
         @Override
