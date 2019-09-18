@@ -566,15 +566,12 @@ public class Loderunner implements Field {
 
         if (yellowTypeGoldCount <= yellowGold.size()) {
             yellowGold = yellowGold.subList(0, yellowTypeGoldCount);
-            return;
         }
         if (greenTypeGoldCount <= greenGold.size()) {
             greenGold = greenGold.subList(0, greenTypeGoldCount);
-            return;
         }
         if (redTypeGoldCount <= redGold.size()) {
             redGold = redGold.subList(0, redTypeGoldCount);
-            return;
         }
 
         yellowTypeGoldCount = yellowTypeGoldCount - yellowGold.size();

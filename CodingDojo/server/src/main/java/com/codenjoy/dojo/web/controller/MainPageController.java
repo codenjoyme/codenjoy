@@ -85,13 +85,10 @@ public class MainPageController {
 
         Registration.User principal = (Registration.User) authentication.getPrincipal();
         // TODO если юзер не авторизирован, то надо вызвать борду со всеми пользователями
-        if (!authentication.isAuthenticated()) {
+        if (true) {
             return "redirect:" + registrationService.getBoardUrl(principal.getCode(), principal.getId(), null);
-        } else if (gameService.getGameNames().size() > 1) {
-            return "redirect:board";
         } else {
-            return "redirect:" + registrationService.register(principal.getId(), principal.getCode(),
-                null, request.getRemoteAddr());
+            return "redirect:board";
         }
     }
 
