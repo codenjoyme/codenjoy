@@ -37,6 +37,7 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> shadowPillsCount;
     private final Parameter<Integer> portalsCount;
     private final Parameter<Integer> portalsAcrtiveTicks;
+    private final Parameter<String> customMapPath;
 
     private volatile int score;
     private volatile int count;
@@ -52,6 +53,8 @@ public class Scores implements PlayerScores {
         shadowPillsCount = settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
         portalsCount = settings.addEditBox("The portals count").type(Integer.class).def(0);
         portalsAcrtiveTicks = settings.addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(10);
+        customMapPath = settings.addEditBox("Custom map path").type(String.class).def("");
+
     }
 
     @Override
