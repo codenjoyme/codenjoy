@@ -10,25 +10,18 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.model.Pill.PillType;
@@ -40,6 +33,11 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
 public class SingleTest {
 
@@ -69,57 +67,57 @@ public class SingleTest {
 
         atGame1(
                 "☼☼☼☼☼☼\n" +
-                "☼► ( ☼\n" +
-                "☼####☼\n" +
-                "☼ ( $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼► ( ☼\n" +
+                        "☼####☼\n" +
+                        "☼ ( $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         atGame2(
                 "☼☼☼☼☼☼\n" +
-                "☼( ( ☼\n" +
-                "☼####☼\n" +
-                "☼ ► $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼( ( ☼\n" +
+                        "☼####☼\n" +
+                        "☼ ► $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         atGame3(
                 "☼☼☼☼☼☼\n" +
-                "☼( ► ☼\n" +
-                "☼####☼\n" +
-                "☼ ( $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼( ► ☼\n" +
+                        "☼####☼\n" +
+                        "☼ ( $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         game1.getJoystick().right();
         game2.getJoystick().left();
         game3.getJoystick().right();
 
-        field.tick(); 
+        field.tick();
 
         atGame1(
                 "☼☼☼☼☼☼\n" +
-                "☼ ► (☼\n" +
-                "☼####☼\n" +
-                "☼)  $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼ ► (☼\n" +
+                        "☼####☼\n" +
+                        "☼)  $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         atGame2(
                 "☼☼☼☼☼☼\n" +
-                "☼ ( (☼\n" +
-                "☼####☼\n" +
-                "☼◄  $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼ ( (☼\n" +
+                        "☼####☼\n" +
+                        "☼◄  $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         atGame3(
                 "☼☼☼☼☼☼\n" +
-                "☼ ( ►☼\n" +
-                "☼####☼\n" +
-                "☼)  $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼ ( ►☼\n" +
+                        "☼####☼\n" +
+                        "☼)  $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         game1.getJoystick().act();
         game3.close();
@@ -262,13 +260,13 @@ public class SingleTest {
     @Test
     public void thatEnemiesDoNotHauntShadowPlayers() {
         setupGm("☼☼☼☼☼☼☼☼" +
-            "☼      ☼" +
-            "☼      ☼" +
-            "☼      ☼" +
-            "☼      ☼" +
-            "☼  »   ☼" +
-            "☼######☼" +
-            "☼☼☼☼☼☼☼☼");
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  »   ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
 
         setupPlayer1(5, 2, PillType.SHADOW_PILL, 1);
         setupPlayer2(1, 2);
@@ -276,26 +274,26 @@ public class SingleTest {
         field.tick();
 
         atGame1(
-            "☼☼☼☼☼☼☼☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼(«  ⊳ ☼\n" +
-                "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼(«  ⊳ ☼\n" +
+                        "☼######☼\n" +
+                        "☼☼☼☼☼☼☼☼\n");
     }
 
     @Test
     public void thatTwoShadowsWalkThroughEachOther() {
         setupGm("☼☼☼☼☼☼☼☼" +
-            "☼      ☼" +
-            "☼      ☼" +
-            "☼      ☼" +
-            "☼      ☼" +
-            "☼      ☼" +
-            "☼######☼" +
-            "☼☼☼☼☼☼☼☼");
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
 
         setupPlayer1(1, 2, PillType.SHADOW_PILL, 10);
         setupPlayer2(2, 2, PillType.SHADOW_PILL, 10);
@@ -305,36 +303,36 @@ public class SingleTest {
         field.tick();
 
         atGame1(
-            "☼☼☼☼☼☼☼☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼ ⊳    ☼\n" +
-                "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼ ⊳    ☼\n" +
+                        "☼######☼\n" +
+                        "☼☼☼☼☼☼☼☼\n");
 
         atGame2(
-            "☼☼☼☼☼☼☼☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼ ⋉    ☼\n" +
-                "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼ ⋉    ☼\n" +
+                        "☼######☼\n" +
+                        "☼☼☼☼☼☼☼☼\n");
     }
 
     @Test
     public void thatShadowKillsNonShadowPlayer() {
         setupGm("☼☼☼☼☼☼☼☼" +
-            "☼      ☼" +
-            "☼      ☼" +
-            "☼      ☼" +
-            "☼      ☼" +
-            "☼      ☼" +
-            "☼######☼" +
-            "☼☼☼☼☼☼☼☼");
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
 
         setupPlayer1(1, 2, PillType.SHADOW_PILL, 10);
         setupPlayer2(2, 2);
@@ -344,24 +342,24 @@ public class SingleTest {
         field.tick();
 
         atGame1(
-            "☼☼☼☼☼☼☼☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼ ⊳    ☼\n" +
-                "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼ ⊳    ☼\n" +
+                        "☼######☼\n" +
+                        "☼☼☼☼☼☼☼☼\n");
 
         atGame2(
-            "☼☼☼☼☼☼☼☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼      ☼\n" +
-                "☼ ⋉    ☼\n" +
-                "☼######☼\n" +
-                "☼☼☼☼☼☼☼☼\n");
+                "☼☼☼☼☼☼☼☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼ ⋉    ☼\n" +
+                        "☼######☼\n" +
+                        "☼☼☼☼☼☼☼☼\n");
 
         verify(listener1).event(Events.KILL_ENEMY);
         verify(listener2).event(Events.KILL_HERO);
