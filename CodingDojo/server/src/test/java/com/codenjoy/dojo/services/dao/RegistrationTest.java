@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
@@ -40,6 +41,7 @@ import static com.codenjoy.dojo.services.security.GameAuthorities.ADMIN;
 import static com.codenjoy.dojo.services.security.GameAuthorities.USER;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class RegistrationTest {
 
@@ -57,7 +59,7 @@ public class RegistrationTest {
                             public String getContext() {
                                 return "context";
                             }
-                        }), "admin", "admin", new BCryptPasswordEncoder(), false);
+                        }), "admin", "admin", new BCryptPasswordEncoder(), mock(ConfigProperties.class), false);
     }
 
     @After

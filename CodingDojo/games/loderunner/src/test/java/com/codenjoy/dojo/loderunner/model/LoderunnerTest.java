@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,11 +23,14 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,6 +44,7 @@ import static org.mockito.Mockito.*;
 
 public class LoderunnerTest {
 
+    private Settings settings;
     private Loderunner game;
     private Hero hero;
     private Dice dice;
@@ -54,9 +58,10 @@ public class LoderunnerTest {
     public void setup() {
         dice = mock(Dice.class);
         ai = mock(EnemyAI.class);
+        settings = new TestSettings();
     }
 
-    private void dice(int...ints) {
+    private void dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -74,7 +79,8 @@ public class LoderunnerTest {
             hero = level.getHeroes().get(0);
         }
 
-        game = new Loderunner(level, dice, null);   // Ужас! :)
+
+        game = new Loderunner(level, dice, settings);   // Ужас! :)
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
@@ -86,33 +92,6 @@ public class LoderunnerTest {
     private void assertE(String expected) {
         assertEquals(TestUtils.injectN(expected),
                 printer.getPrinter(game.reader(), player).print());
-    }
-
-    private class EnemyJoystick implements Joystick, DirectionActJoystick {
-        @Override
-        public void down() {
-            ai(Direction.DOWN);
-        }
-
-        @Override
-        public void up() {
-            ai(Direction.UP);
-        }
-
-        @Override
-        public void left() {
-            ai(Direction.LEFT);
-        }
-
-        @Override
-        public void right() {
-            ai(Direction.RIGHT);
-        }
-
-        @Override
-        public void act(int... p) {
-            ai(null);
-        }
     }
 
     // есть карта со мной
@@ -1479,8 +1458,6 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼☼");
     }
 
-    // TODO я могу просверлить дырку под лестницей, а потом спуститься туда
-
     // я не могу просверлить дырку под другим камнем
     @Test
     public void shouldICantDrillUnderBrick() {
@@ -1499,6 +1476,8 @@ public class LoderunnerTest {
                 "☼###☼" +
                 "☼☼☼☼☼");
     }
+
+    // TODO я могу просверлить дырку под лестницей, а потом спуститься туда
 
     // я могу спрыгнуть с трубы
     @Test
@@ -1552,7 +1531,7 @@ public class LoderunnerTest {
                 "☼  ◄  ☼" +
                 "☼☼☼☼☼☼☼");
     }
-    
+
     // бага: мне нельзя спускаться с лестницы в бетон, так же как и подниматься
     // плюс я должен иметь возможность спустится по лестнице
     @Test
@@ -1731,8 +1710,8 @@ public class LoderunnerTest {
                 "☼☼☼☼☼☼" +
                 "☼☼☼☼☼☼");
 
-        for (int x = 0; x < game.size(); x ++) {
-            for (int y = 0; y < game.size(); y ++) {
+        for (int x = 0; x < game.size(); x++) {
+            for (int y = 0; y < game.size(); y++) {
                 assertFalse(game.isFree(pt(x, y)));
             }
 
@@ -3476,7 +3455,7 @@ public class LoderunnerTest {
 
     // я могу прыгнуть на голову монстру и мне ничего не будет
     @Test
-    public void shouldICanJumpAtEnemyHead () {
+    public void shouldICanJumpAtEnemyHead() {
         givenFl("☼☼☼☼☼" +
                 "☼ ◄ ☼" +
                 "☼   ☼" +
@@ -3813,6 +3792,75 @@ public class LoderunnerTest {
                 "☼######☼" +
                 "☼☼☼☼☼☼☼☼");
 
+    }
+
+    @Test
+    public void iLooseScoresWhenDoHarakiri() {
+        givenFl("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ ◄ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.act(0);
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼   ☼" +
+                "☼ Ѡ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        verify(listener).event(Events.SUICIDE);
+    }
+
+    @Test
+    public void iCanJumpThroughPortals() {
+        Parameter<Integer> p1 = settings.getParameter("The portals count").type(Integer.class);
+        p1.update(2);
+        dice(1, 2, 3, 3);
+        givenFl("☼☼☼☼☼" +
+                "☼  ⊛☼" +
+                "☼⊛◄ ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+
+        hero.left();
+        game.tick();
+
+        assertE("☼☼☼☼☼" +
+                "☼  ]☼" +
+                "☼⊛  ☼" +
+                "☼###☼" +
+                "☼☼☼☼☼");
+        p1.update(0);
+    }
+
+    private class EnemyJoystick implements Joystick, DirectionActJoystick {
+        @Override
+        public void down() {
+            ai(Direction.DOWN);
+        }
+
+        @Override
+        public void up() {
+            ai(Direction.UP);
+        }
+
+        @Override
+        public void left() {
+            ai(Direction.LEFT);
+        }
+
+        @Override
+        public void right() {
+            ai(Direction.RIGHT);
+        }
+
+        @Override
+        public void act(int... p) {
+            ai(null);
+        }
     }
 
     // если монстр не успел вылезти из ямки и она заросла то монстр умирает?

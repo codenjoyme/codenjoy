@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -39,6 +39,11 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> yellowTypeGoldWeight;
     private final Parameter<Integer> greenTypeGoldWeight;
     private final Parameter<Integer> redTypeGoldWeight;
+    private final Parameter<Integer> shadowPillActiveTicks;
+    private final Parameter<Integer> shadowPillsCount;
+    private final Parameter<Integer> suicidePenalty;
+    private final Parameter<Integer> portalsCount;
+    private final Parameter<Integer> portalsActiveTicks;
 
     private volatile int score;
     private volatile int count;
@@ -50,6 +55,11 @@ public class Scores implements PlayerScores {
         killEnemyScore = settings.addEditBox("Kill enemy score").type(Integer.class).def(10);
         getGoldScore = settings.addEditBox("Get gold score").type(Integer.class).def(1);
         forNextGoldIncScore = settings.addEditBox("Get next gold increment score").type(Integer.class).def(1);
+        shadowPillActiveTicks = settings.addEditBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
+        shadowPillsCount = settings.addEditBox("The shadow pills count").type(Integer.class).def(0);
+        suicidePenalty = settings.addEditBox("SuicidePenalty").type(Integer.class).def(0);
+        portalsCount = settings.addEditBox("The portals count").type(Integer.class).def(0);
+        portalsActiveTicks = settings.addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(10);
 
         yellowTypeGoldCount = settings.addEditBox("yellow type gold count").type(Integer.class).def(20);
         greenTypeGoldCount = settings.addEditBox("green type gold count").type(Integer.class).def(20);
@@ -88,6 +98,8 @@ public class Scores implements PlayerScores {
         } else if (event.equals(Events.KILL_HERO)) {
             count = 0;
             score -= killHeroPenalty.getValue();
+        } else if (event.equals(Events.SUICIDE)) {
+            score -= suicidePenalty.getValue();
         }
         score = Math.max(0, score);
     }

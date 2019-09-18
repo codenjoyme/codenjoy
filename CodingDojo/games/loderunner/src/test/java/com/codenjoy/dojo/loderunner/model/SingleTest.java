@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,6 +23,8 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.TestSettings;
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.loderunner.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -65,57 +67,57 @@ public class SingleTest {
 
         atGame1(
                 "☼☼☼☼☼☼\n" +
-                "☼► ( ☼\n" +
-                "☼####☼\n" +
-                "☼ ( $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼► ( ☼\n" +
+                        "☼####☼\n" +
+                        "☼ ( $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         atGame2(
                 "☼☼☼☼☼☼\n" +
-                "☼( ( ☼\n" +
-                "☼####☼\n" +
-                "☼ ► $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼( ( ☼\n" +
+                        "☼####☼\n" +
+                        "☼ ► $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         atGame3(
                 "☼☼☼☼☼☼\n" +
-                "☼( ► ☼\n" +
-                "☼####☼\n" +
-                "☼ ( $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼( ► ☼\n" +
+                        "☼####☼\n" +
+                        "☼ ( $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         game1.getJoystick().right();
         game2.getJoystick().left();
         game3.getJoystick().right();
 
-        field.tick(); 
+        field.tick();
 
         atGame1(
                 "☼☼☼☼☼☼\n" +
-                "☼ ► (☼\n" +
-                "☼####☼\n" +
-                "☼)  $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼ ► (☼\n" +
+                        "☼####☼\n" +
+                        "☼)  $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         atGame2(
                 "☼☼☼☼☼☼\n" +
-                "☼ ( (☼\n" +
-                "☼####☼\n" +
-                "☼◄  $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼ ( (☼\n" +
+                        "☼####☼\n" +
+                        "☼◄  $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         atGame3(
                 "☼☼☼☼☼☼\n" +
-                "☼ ( ►☼\n" +
-                "☼####☼\n" +
-                "☼)  $☼\n" +
-                "☼####☼\n" +
-                "☼☼☼☼☼☼\n");
+                        "☼ ( ►☼\n" +
+                        "☼####☼\n" +
+                        "☼)  $☼\n" +
+                        "☼####☼\n" +
+                        "☼☼☼☼☼☼\n");
 
         game1.getJoystick().act();
         game3.close();
@@ -253,6 +255,114 @@ public class SingleTest {
 
         verify(listener1).event(Events.GET_YELLOW_GOLD);
 
+    }
+
+    @Test
+    public void thatEnemiesDoNotHauntShadowPlayers() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼  »   ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        setupPlayer1(5, 2, PillType.SHADOW_PILL, 1);
+        setupPlayer2(1, 2);
+
+        field.tick();
+
+        atGame1(
+                "☼☼☼☼☼☼☼☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼(«  ⊳ ☼\n" +
+                        "☼######☼\n" +
+                        "☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void thatTwoShadowsWalkThroughEachOther() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        setupPlayer1(1, 2, PillType.SHADOW_PILL, 10);
+        setupPlayer2(2, 2, PillType.SHADOW_PILL, 10);
+
+        game1.getJoystick().right();
+
+        field.tick();
+
+        atGame1(
+                "☼☼☼☼☼☼☼☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼ ⊳    ☼\n" +
+                        "☼######☼\n" +
+                        "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+                "☼☼☼☼☼☼☼☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼ ⋉    ☼\n" +
+                        "☼######☼\n" +
+                        "☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void thatShadowKillsNonShadowPlayer() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼      ☼" +
+                "☼######☼" +
+                "☼☼☼☼☼☼☼☼");
+
+        setupPlayer1(1, 2, PillType.SHADOW_PILL, 10);
+        setupPlayer2(2, 2);
+
+        game1.getJoystick().right();
+
+        field.tick();
+
+        atGame1(
+                "☼☼☼☼☼☼☼☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼ ⊳    ☼\n" +
+                        "☼######☼\n" +
+                        "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+                "☼☼☼☼☼☼☼☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼      ☼\n" +
+                        "☼ ⋉    ☼\n" +
+                        "☼######☼\n" +
+                        "☼☼☼☼☼☼☼☼\n");
+
+        verify(listener1).event(Events.KILL_ENEMY);
+        verify(listener2).event(Events.KILL_HERO);
     }
 
     // можно ли проходить героям друг через дурга? Нет
@@ -655,10 +765,40 @@ public class SingleTest {
         game1.newGame();
     }
 
+    private void setupPlayer1(int x, int y, PillType withPill, int pillSteps) {
+        listener1 = mock(EventListener.class);
+        Player player = new Player(listener1, () -> pillSteps);
+        game1 = new Single(player, printerFactory);
+        game1.on(field);
+        when(dice.next(anyInt())).thenReturn(x, y);
+        game1.newGame();
+        player.getHero().swallowThePill(withPill);
+    }
+
+    private void setupPlayer2(int x, int y, PillType withPill, int pillSteps) {
+        listener2 = mock(EventListener.class);
+        Player player = new Player(listener2, () -> pillSteps);
+        game2 = new Single(player, printerFactory);
+        game2.on(field);
+        when(dice.next(anyInt())).thenReturn(x, y);
+        game2.newGame();
+        player.getHero().swallowThePill(withPill);
+    }
+
+    private void setupPlayer3(int x, int y, PillType withPill, int pillSteps) {
+        listener3 = mock(EventListener.class);
+        Player player = new Player(listener3, () -> pillSteps);
+        game3 = new Single(player, printerFactory);
+        game3.on(field);
+        when(dice.next(anyInt())).thenReturn(x, y);
+        game3.newGame();
+        player.getHero().swallowThePill(withPill);
+    }
+
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
         dice = mock(Dice.class);
-        field = new Loderunner(level, dice, null);
+        field = new Loderunner(level, dice, new TestSettings());
     }
 
     @Test

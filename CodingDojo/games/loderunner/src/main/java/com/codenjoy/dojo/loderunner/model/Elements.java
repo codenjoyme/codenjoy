@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -60,6 +60,16 @@ public enum Elements implements CharElements {
     HERO_PIPE_LEFT('{'),
     HERO_PIPE_RIGHT('}'),
 
+    HERO_SHADOW_DRILL_LEFT('⊰'),
+    HERO_SHADOW_DRILL_RIGHT('⊱'),
+    HERO_SHADOW_LADDER('⍬'),
+    HERO_SHADOW_LEFT('⊲'),
+    HERO_SHADOW_RIGHT('⊳'),
+    HERO_SHADOW_FALL_LEFT('⊅'),
+    HERO_SHADOW_FALL_RIGHT('⊄'),
+    HERO_SHADOW_PIPE_LEFT('⋜'),
+    HERO_SHADOW_PIPE_RIGHT('⋝'),
+
     OTHER_HERO_DIE('Z'),
     OTHER_HERO_LEFT(')'),
     OTHER_HERO_RIGHT('('),
@@ -67,10 +77,78 @@ public enum Elements implements CharElements {
     OTHER_HERO_PIPE_LEFT('Э'),
     OTHER_HERO_PIPE_RIGHT('Є'),
 
+    OTHER_HERO_SHADOW_DIE('⋈'),
+    OTHER_HERO_SHADOW_LEFT('⋊'),
+    OTHER_HERO_SHADOW_RIGHT('⋉'),
+    OTHER_HERO_SHADOW_LADDER('⋕'),
+    OTHER_HERO_SHADOW_PIPE_LEFT('⊣'),
+    OTHER_HERO_SHADOW_PIPE_RIGHT('⊢'),
+
     LADDER('H'),
-    PIPE('~');
+    PIPE('~'),
+
+    PORTAL('⊛'),
+
+    THE_SHADOW_PILL('S');
 
     final char ch;
+
+    Elements(char ch) {
+        this.ch = ch;
+    }
+
+    public static Elements forOtherHero(Elements hero) {
+        switch (hero) {
+            case HERO_DIE:
+                return OTHER_HERO_DIE;
+            case HERO_DRILL_LEFT:
+                return OTHER_HERO_LEFT;
+            case HERO_DRILL_RIGHT:
+                return OTHER_HERO_RIGHT;
+            case HERO_LADDER:
+                return OTHER_HERO_LADDER;
+            case HERO_LEFT:
+                return OTHER_HERO_LEFT;
+            case HERO_RIGHT:
+                return OTHER_HERO_RIGHT;
+            case HERO_FALL_LEFT:
+                return OTHER_HERO_LEFT;
+            case HERO_FALL_RIGHT:
+                return OTHER_HERO_RIGHT;
+            case HERO_PIPE_LEFT:
+                return OTHER_HERO_PIPE_LEFT;
+            case HERO_PIPE_RIGHT:
+                return OTHER_HERO_PIPE_RIGHT;
+            case HERO_SHADOW_DRILL_LEFT:
+                return OTHER_HERO_SHADOW_LEFT;
+            case HERO_SHADOW_DRILL_RIGHT:
+                return OTHER_HERO_SHADOW_RIGHT;
+            case HERO_SHADOW_LADDER:
+                return OTHER_HERO_SHADOW_LADDER;
+            case HERO_SHADOW_LEFT:
+                return OTHER_HERO_SHADOW_LEFT;
+            case HERO_SHADOW_RIGHT:
+                return OTHER_HERO_SHADOW_RIGHT;
+            case HERO_SHADOW_FALL_LEFT:
+                return OTHER_HERO_SHADOW_LEFT;
+            case HERO_SHADOW_FALL_RIGHT:
+                return OTHER_HERO_SHADOW_RIGHT;
+            case HERO_SHADOW_PIPE_LEFT:
+                return OTHER_HERO_SHADOW_PIPE_LEFT;
+            case HERO_SHADOW_PIPE_RIGHT:
+                return OTHER_HERO_SHADOW_PIPE_RIGHT;
+        }
+        throw new IllegalArgumentException("Bad hero state: " + hero);
+    }
+
+    public static Elements valueOf(char ch) {
+        for (Elements el : Elements.values()) {
+            if (el.ch == ch) {
+                return el;
+            }
+        }
+        throw new IllegalArgumentException("No such element for " + ch);
+    }
 
     @Override
     public char ch() {
@@ -81,37 +159,8 @@ public enum Elements implements CharElements {
         return ch;
     }
 
-    Elements(char ch) {
-        this.ch = ch;
-    }
-
-    public static Elements forOtherHero(Elements hero) {
-        switch (hero) {
-            case HERO_DIE : return OTHER_HERO_DIE;
-            case HERO_DRILL_LEFT : return OTHER_HERO_LEFT;
-            case HERO_DRILL_RIGHT : return OTHER_HERO_RIGHT;
-            case HERO_LADDER : return OTHER_HERO_LADDER;
-            case HERO_LEFT : return OTHER_HERO_LEFT;
-            case HERO_RIGHT : return OTHER_HERO_RIGHT;
-            case HERO_FALL_LEFT : return OTHER_HERO_LEFT;
-            case HERO_FALL_RIGHT : return OTHER_HERO_RIGHT;
-            case HERO_PIPE_LEFT : return OTHER_HERO_PIPE_LEFT;
-            case HERO_PIPE_RIGHT : return OTHER_HERO_PIPE_RIGHT;
-        }
-        throw new IllegalArgumentException("Bad hero state: " + hero);
-    }
-
     @Override
     public String toString() {
         return String.valueOf(ch);
-    }
-
-    public static Elements valueOf(char ch) {
-        for (Elements el : Elements.values()) {
-            if (el.ch == ch) {
-                return el;
-            }
-        }
-        throw new IllegalArgumentException("No such element for " + ch);
     }
 }

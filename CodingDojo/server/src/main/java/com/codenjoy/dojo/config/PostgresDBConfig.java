@@ -23,6 +23,7 @@ package com.codenjoy.dojo.config;
  */
 
 import com.codenjoy.dojo.config.meta.PostgreSQLProfile;
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.dao.*;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.PostgreSQLConnectionThreadPoolFactory;
@@ -46,6 +47,9 @@ public class PostgresDBConfig {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private ConfigProperties properties;
+
     @Bean
     public ConnectionThreadPoolFactory connectionThreadPollFactory() {
         return new PostgreSQLConnectionThreadPoolFactory(jdbcString);
@@ -65,7 +69,7 @@ public class PostgresDBConfig {
     public Registration registration(@Value("${admin.login}") String adminLogin,
                                      @Value("${admin.password}") String adminPassword) {
         return new Registration(connectionThreadPollFactory(), adminLogin, adminPassword,
-                passwordEncoder, true);
+                passwordEncoder, properties, true);
     }
 
     @Bean

@@ -10,7 +10,7 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
@@ -45,10 +46,10 @@ public class AITest {
     @Test
     public void shouldGeneratePossibleWays1() {
         assertP("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼ ◄ ☼" +
-                "☼###☼" +
-                "☼☼☼☼☼",
+                        "☼   ☼" +
+                        "☼ ◄ ☼" +
+                        "☼###☼" +
+                        "☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,3]=[DOWN], " +
                         "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], " +
@@ -58,10 +59,10 @@ public class AITest {
     @Test
     public void shouldGeneratePossibleWays_withLadder() {
         assertP("☼☼☼☼☼" +
-                "☼  H☼" +
-                "☼ ◄H☼" +
-                "☼###☼" +
-                "☼☼☼☼☼",
+                        "☼  H☼" +
+                        "☼ ◄H☼" +
+                        "☼###☼" +
+                        "☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,3]=[DOWN], " +
                         "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], " +
@@ -71,10 +72,10 @@ public class AITest {
     @Test
     public void shouldGeneratePossibleWays_withPipe() {
         assertP("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼◄~~☼" +
-                "☼#  ☼" +
-                "☼☼☼☼☼",
+                        "☼   ☼" +
+                        "☼◄~~☼" +
+                        "☼#  ☼" +
+                        "☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,3]=[DOWN], " +
                         "[2,1]=[RIGHT], [2,2]=[LEFT, RIGHT, DOWN], [2,3]=[DOWN], " +
@@ -84,10 +85,10 @@ public class AITest {
     @Test
     public void shouldGeneratePossibleWays_withLadder2() {
         assertP("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼◄HH☼" +
-                "☼#  ☼" +
-                "☼☼☼☼☼",
+                        "☼   ☼" +
+                        "☼◄HH☼" +
+                        "☼#  ☼" +
+                        "☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,3]=[DOWN], " +
                         "[2,1]=[RIGHT], [2,2]=[LEFT, RIGHT, UP, DOWN], [2,3]=[LEFT, RIGHT, DOWN], " +
@@ -97,23 +98,23 @@ public class AITest {
     @Test
     public void shouldGeneratePossibleWays_withoutBorders() {
         assertP("   H" +
-                "~~ H" +
-                "H  H" +
-                "H  H",
+                        "~~ H" +
+                        "H  H" +
+                        "H  H",
 
                 "{[0,0]=[RIGHT, UP], [0,1]=[RIGHT, UP, DOWN], [0,2]=[RIGHT, DOWN], [0,3]=[DOWN], " +
-                "[1,0]=[LEFT, RIGHT], [1,1]=[DOWN], [1,2]=[LEFT, RIGHT, DOWN], [1,3]=[DOWN], " +
-                "[2,0]=[LEFT, RIGHT], [2,1]=[DOWN], [2,2]=[DOWN], [2,3]=[DOWN], " +
-                "[3,0]=[LEFT, UP], [3,1]=[LEFT, UP, DOWN], [3,2]=[LEFT, UP, DOWN], [3,3]=[LEFT, DOWN]}");
+                        "[1,0]=[LEFT, RIGHT], [1,1]=[DOWN], [1,2]=[LEFT, RIGHT, DOWN], [1,3]=[DOWN], " +
+                        "[2,0]=[LEFT, RIGHT], [2,1]=[DOWN], [2,2]=[DOWN], [2,3]=[DOWN], " +
+                        "[3,0]=[LEFT, UP], [3,1]=[LEFT, UP, DOWN], [3,2]=[LEFT, UP, DOWN], [3,3]=[LEFT, DOWN]}");
     }
 
     @Test
     public void shouldGeneratePossibleWays_whenFromLadderOnPipe() {
         assertP("☼☼☼☼☼" +
-                "☼   ☼" +
-                "☼~~H☼" +
-                "☼  H☼" +
-                "☼☼☼☼☼",
+                        "☼   ☼" +
+                        "☼~~H☼" +
+                        "☼  H☼" +
+                        "☼☼☼☼☼",
 
                 "{[1,1]=[RIGHT], [1,2]=[RIGHT, DOWN], [1,3]=[DOWN], " +
                         "[2,1]=[LEFT, RIGHT], [2,2]=[LEFT, RIGHT, DOWN], [2,3]=[DOWN], " +
@@ -124,12 +125,12 @@ public class AITest {
     @Test
     public void shouldGeneratePossibleWays_whenFromLadderOnPipe2() {
         assertP("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼◄~~~ ☼" +
-                "☼#  #H☼" +
-                "☼    H☼" +
-                "☼#####☼" +
-                "☼☼☼☼☼☼☼",
+                        "☼     ☼" +
+                        "☼◄~~~ ☼" +
+                        "☼#  #H☼" +
+                        "☼    H☼" +
+                        "☼#####☼" +
+                        "☼☼☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,4]=[RIGHT], [1,5]=[DOWN], " +
                         "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], [2,4]=[LEFT, RIGHT, DOWN], [2,5]=[DOWN], " +
@@ -142,12 +143,12 @@ public class AITest {
     @Test
     public void shouldGeneratePossibleWays_whenFromLadderOnPipe3() {
         assertP("☼☼☼☼☼☼☼" +
-                "☼     ☼" +
-                "☼◄~~~H☼" +
-                "☼#   H☼" +
-                "☼    H☼" +
-                "☼#####☼" +
-                "☼☼☼☼☼☼☼",
+                        "☼     ☼" +
+                        "☼◄~~~H☼" +
+                        "☼#   H☼" +
+                        "☼    H☼" +
+                        "☼#####☼" +
+                        "☼☼☼☼☼☼☼",
 
                 "{[1,2]=[RIGHT], [1,4]=[RIGHT], [1,5]=[DOWN], " +
                         "[2,2]=[LEFT, RIGHT], [2,3]=[DOWN], [2,4]=[LEFT, RIGHT, DOWN], [2,5]=[DOWN], " +
@@ -173,7 +174,7 @@ public class AITest {
 
     private void setupAI(String map) {
         level = new LevelImpl(map);
-        loderunner = new Loderunner(level, mock(Dice.class), null);
+        loderunner = new Loderunner(level, mock(Dice.class), new TestSettings());
 
         for (Hero hero : level.getHeroes()) {
             Player player = new Player(mock(EventListener.class));
@@ -391,7 +392,6 @@ public class AITest {
         assertEquals("[5,6]", hero2.toString());
         assertEquals("[RIGHT, RIGHT, RIGHT, UP, UP, UP, UP, LEFT]", ai.getPath(loderunner.size(), enemy1, hero2).toString());
     }
-
 
 
 }

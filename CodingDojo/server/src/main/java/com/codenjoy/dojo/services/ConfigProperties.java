@@ -61,6 +61,9 @@ public class ConfigProperties {
     @Value("${server.ip}")
     private String serverIp;
 
+    @Value("${registration.password.autogen-length}")
+    private int autoGenPasswordLen;
+
     public boolean isEmailVerificationNeeded() {
         return isEmailVerificationNeeded;
     }

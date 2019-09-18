@@ -20,7 +20,7 @@ log.debug: false
 registration:
     nickname:
       allowed: false
-    pasword:
+    password:
       min-length: 8
       autogen-length: 8
 page:
