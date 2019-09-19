@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -28,25 +28,25 @@ import com.codenjoy.dojo.services.State;
 
 public class Pill extends PointImpl implements State<Elements, Player> {
 
-  private PillType pillType;
+    private PillType pillType;
 
-  public Pill(Point point, PillType pillType) {
-    super(point);
-    this.pillType = pillType;
-  }
+    public Pill(Point point, PillType pillType) {
+        super(point);
+        this.pillType = pillType;
+    }
 
-  public Pill(int x, int y, PillType pillType) {
-    super(x, y);
-    this.pillType = pillType;
-  }
+    public Pill(int x, int y, PillType pillType) {
+        super(x, y);
+        this.pillType = pillType;
+    }
 
-  @Override
-  public Elements state(Player player, Object... alsoAtPoint) {
-    return Elements.THE_SHADOW_PILL;
-  }
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.THE_SHADOW_PILL;
+    }
 
-  enum PillType {
-    SHADOW_PILL,
-    SPEED_PILL
-  }
+    enum PillType {
+        SHADOW_PILL,
+        SPEED_PILL
+    }
 }
