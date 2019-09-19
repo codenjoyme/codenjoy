@@ -23,30 +23,22 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
-import java.util.List;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-public interface Level {
-    int getSize();
+public class YellowGold extends PointImpl implements State<Elements, Player> {
 
-    List<Brick> getBricks();
+    public YellowGold(Point point) {
+        super(point);
+    }
 
-    List<Border> getBorders();
+    public YellowGold(int x, int y) {
+        super(x, y);
+    }
 
-    List<Hero> getHeroes();
-
-    List<YellowGold> getYellowGold();
-
-    List<GreenGold> getGreenGold();
-
-    List<RedGold> getRedGold();
-
-    List<Ladder> getLadder();
-
-    List<Pipe> getPipe();
-
-    List<Enemy> getEnemies();
-
-    List<Pill> getPills();
-
-    List<Portal> getPortals();
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.YELLOW_GOLD;
+    }
 }

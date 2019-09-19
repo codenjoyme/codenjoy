@@ -253,7 +253,7 @@ public class SingleTest {
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
 
-        verify(listener1).event(Events.GET_GOLD);
+        verify(listener1).event(Events.GET_YELLOW_GOLD);
 
     }
 

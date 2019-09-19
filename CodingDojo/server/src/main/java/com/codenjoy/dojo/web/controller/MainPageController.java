@@ -23,6 +23,9 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
+
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.Player;
@@ -30,6 +33,7 @@ import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.security.RegistrationService;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
@@ -39,11 +43,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-
-import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
-import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
 @RequiredArgsConstructor

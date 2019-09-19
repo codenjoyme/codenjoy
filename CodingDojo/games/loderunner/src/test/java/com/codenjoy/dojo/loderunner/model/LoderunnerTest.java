@@ -744,7 +744,7 @@ public class LoderunnerTest {
         dice(2, 3);
         hero.right();
         game.tick();
-        verify(listener).event(Events.GET_GOLD);
+        verify(listener).event(Events.GET_YELLOW_GOLD);
 
         assertE("☼☼☼☼☼" +
                 "☼ $ ☼" +
@@ -774,7 +774,7 @@ public class LoderunnerTest {
         dice(3, 3);
         hero.right();
         game.tick();
-        verify(listener).event(Events.GET_GOLD);
+        verify(listener).event(Events.GET_YELLOW_GOLD);
 
         assertE("☼☼☼☼☼" +
                 "☼  $☼" +
@@ -1318,7 +1318,7 @@ public class LoderunnerTest {
                 "☼ ◄   ☼" +
                 "☼☼☼☼☼☼☼");
 
-        verify(listener, times(4)).event(Events.GET_GOLD);
+        verify(listener, times(4)).event(Events.GET_YELLOW_GOLD);
     }
 
     // если я просверлил дырку и падаю в нее, а под ней ничего нет - то я падаю пока не найду препятствие
