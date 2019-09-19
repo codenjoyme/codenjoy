@@ -24,9 +24,6 @@ package com.codenjoy.dojo.loderunner.services;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
