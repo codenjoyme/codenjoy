@@ -53,7 +53,6 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
-        System.out.println("1");
         return new Loderunner(level, getDice(), settings);
     }
 
@@ -100,10 +99,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     protected String getMap() {
-        System.out.println("2");
         String customMapPath = settings.<String>getParameter("Custom map path").getValue();
         if (StringUtils.isNotEmpty(customMapPath)) {
-            System.out.println("3");
             return MapLoader.loadMapFromFile(customMapPath);
         } else {
             return Level1.get();

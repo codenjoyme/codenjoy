@@ -58,8 +58,8 @@ public class Loderunner implements Field {
         this.level = level;
         this.dice = dice;
         this.settings = settings;
-        init();
         players = new LinkedList<>();
+        init();
     }
 
     private void init() {
@@ -81,6 +81,10 @@ public class Loderunner implements Field {
             enemy.init(this);
         }
 
+        for (Player player : players) {
+            player.newHero(this);
+        }
+
         generatePills();
         generatePortals();
     }
@@ -94,7 +98,6 @@ public class Loderunner implements Field {
     @Override
     public void tick() {
         if (!level.getMapUUID().equals(mapUUID)) {
-            System.out.println("init");
             init();
         }
 

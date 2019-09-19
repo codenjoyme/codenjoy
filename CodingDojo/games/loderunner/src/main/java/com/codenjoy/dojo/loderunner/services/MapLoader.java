@@ -26,27 +26,28 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MapLoader {
+
+  protected static Logger log = Logger.getLogger(MapLoader.class.getName());
 
   public static String loadMapFromFile(String mapFilePath) {
     try {
       StringBuilder map = new StringBuilder();
-      System.out.println("File Path - " + mapFilePath);
-      Scanner scanner = new Scanner(new File(new URI("file:///C:/custom_map.txt")));
+      Scanner scanner = new Scanner(new File(mapFilePath), "UTF-8");
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
-        System.out.println("File Line - " + line);
         map.append(line);
       }
-      System.out.println("4 New map - " + map.toString());
-    } catch (FileNotFoundException | URISyntaxException e) {
-      //TODO: log
-      e.printStackTrace();
+      return map.toString();
+    } catch (FileNotFoundException e) {
+      log.log(Level.WARNING, "Map loading error", e);
     }
-    System.out.println("5");
-    return Level2.get();
+    return Level1.get();
   }
 
 }
