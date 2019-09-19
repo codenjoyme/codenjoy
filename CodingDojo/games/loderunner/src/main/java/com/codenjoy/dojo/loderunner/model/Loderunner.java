@@ -40,6 +40,8 @@ import static java.util.stream.Collectors.toList;
 
 public class Loderunner implements Field {
 
+    private Level level;
+    private UUID mapUUID;
     private Point[][] field;
     private List<Player> players;
     private List<Enemy> enemies;
@@ -48,13 +50,20 @@ public class Loderunner implements Field {
     private List<Portal> portals;
     private Integer portalsTicksLive;
 
-    private final int size;
+    private int size;
     private final Settings settings;
     private Dice dice;
 
     public Loderunner(Level level, Dice dice, Settings settings) {
+        this.level = level;
         this.dice = dice;
         this.settings = settings;
+        init();
+        players = new LinkedList<>();
+    }
+
+    private void init() {
+        mapUUID = level.getMapUUID();
         size = level.getSize();
         field = new Point[size][size];
 
@@ -72,7 +81,6 @@ public class Loderunner implements Field {
             enemy.init(this);
         }
 
-        players = new LinkedList<>();
         generatePills();
         generatePortals();
     }
@@ -85,6 +93,11 @@ public class Loderunner implements Field {
 
     @Override
     public void tick() {
+        if (!level.getMapUUID().equals(mapUUID)) {
+            System.out.println("init");
+            init();
+        }
+
         Set<Player> die = new HashSet<>();
 
         heroesGo();

@@ -43,6 +43,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     public GameRunner() {
         new Scores(0, settings);  // TODO сеттринги разделены по разным классам, продумать архитектуру
+        level = new LevelImpl(getMap());
     }
 
     @Override
@@ -53,7 +54,6 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public GameField createGame(int levelNumber) {
         System.out.println("1");
-        level = new LevelImpl(getMap());
         return new Loderunner(level, getDice(), settings);
     }
 
@@ -92,6 +92,11 @@ public class GameRunner extends AbstractGameType implements GameType {
         return new Player(listener, () -> settings
             .<Integer>getParameter("Number of ticks that the shadow pill will be active")
             .getValue());
+    }
+
+    @Override
+    public void refresh() {
+        level.refresh(getMap());
     }
 
     protected String getMap() {

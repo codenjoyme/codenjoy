@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.Point;
 import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.codenjoy.dojo.loderunner.model.Elements.*;
 import static java.util.stream.Collectors.toList;
@@ -39,11 +40,13 @@ public class LevelImpl implements Level {
 
     private EnemyAI ai;
 
-    private final LengthToXY xy;
+    private UUID mapUuid;
+    private LengthToXY xy;
     private String map;
 
     public LevelImpl(String map) {
         this.map = map;
+        mapUuid = UUID.randomUUID();
         ai = new AI();
         xy = new LengthToXY(getSize());
     }
@@ -147,6 +150,18 @@ public class LevelImpl implements Level {
         return pointsOf(PORTAL).stream()
                 .map(Portal::new)
                 .collect(toList());
+    }
+
+    @Override
+    public void refresh(String map) {
+        this.map = map;
+        mapUuid = UUID.randomUUID();
+        this.xy = new LengthToXY(getSize());
+    }
+
+    @Override
+    public UUID getMapUUID() {
+        return mapUuid;
     }
 
     public void setAI(EnemyAI ai) {

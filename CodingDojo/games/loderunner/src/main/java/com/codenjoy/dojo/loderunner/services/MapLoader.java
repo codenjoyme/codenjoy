@@ -34,7 +34,7 @@ public class MapLoader {
     try {
       StringBuilder map = new StringBuilder();
       System.out.println("File Path - " + mapFilePath);
-      Scanner scanner = new Scanner(new File(new URI("file:///C:/Work/epamMap.txt")));
+      Scanner scanner = new Scanner(new File(new URI("file:///C:/custom_map.txt")));
       while (scanner.hasNextLine()) {
         String line = scanner.nextLine();
         System.out.println("File Line - " + line);

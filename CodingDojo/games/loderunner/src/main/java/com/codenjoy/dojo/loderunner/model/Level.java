@@ -24,6 +24,7 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import java.util.List;
+import java.util.UUID;
 
 public interface Level {
     int getSize();
@@ -45,4 +46,8 @@ public interface Level {
     List<Pill> getPills();
 
     List<Portal> getPortals();
+
+    void refresh(String map);
+
+    UUID getMapUUID();
 }
