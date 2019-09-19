@@ -31,5 +31,12 @@ public class TestSettings extends SettingsImpl {
         addEditBox("The shadow pills count").type(Integer.class).def(0);
         addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(10);
         addEditBox("The portals count").type(Integer.class).def(0);
+
+        addEditBox("yellow type gold count").type(Integer.class).def(20);
+        addEditBox("green type gold count").type(Integer.class).def(20);
+        addEditBox("red type gold count").type(Integer.class).def(20);
+        addEditBox("yellow type gold weight").type(Integer.class).def(1);
+        addEditBox("green type gold weight").type(Integer.class).def(5);
+        addEditBox("red type gold weight").type(Integer.class).def(10);
     }
 }
