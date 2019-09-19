@@ -104,9 +104,23 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Gold> getGold() {
-        return pointsOf(GOLD).stream()
-                .map(Gold::new)
+    public List<YellowGold> getYellowGold() {
+        return pointsOf(YELLOW_GOLD).stream()
+                .map(YellowGold::new)
+                .collect(toList());
+    }
+
+    @Override
+    public List<GreenGold> getGreenGold() {
+        return pointsOf(GREEN_GOLD).stream()
+                .map(GreenGold::new)
+                .collect(toList());
+    }
+
+    @Override
+    public List<RedGold> getRedGold() {
+        return pointsOf(RED_GOLD).stream()
+                .map(RedGold::new)
                 .collect(toList());
     }
 

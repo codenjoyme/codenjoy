@@ -35,7 +35,11 @@ public interface Level {
 
     List<Hero> getHeroes();
 
-    List<Gold> getGold();
+    List<YellowGold> getYellowGold();
+
+    List<GreenGold> getGreenGold();
+
+    List<RedGold> getRedGold();
 
     List<Ladder> getLadder();
 

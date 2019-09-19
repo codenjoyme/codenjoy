@@ -1,21 +1,21 @@
-package com.codenjoy.dojo.config;
+package com.codenjoy.dojo.loderunner.model;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2019 Codenjoy
+ * Copyright (C) 2018 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,21 +23,22 @@ package com.codenjoy.dojo.config;
  */
 
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-import java.util.List;
+public class YellowGold extends PointImpl implements State<Elements, Player> {
 
-@Data
-@ConfigurationProperties("app")
-public class AppProperties {
+    public YellowGold(Point point) {
+        super(point);
+    }
 
-    private List<String> logging;
-    private List<String> ssoAdmins;
+    public YellowGold(int x, int y) {
+        super(x, y);
+    }
 
-    public boolean isSsoAdmin(String email) {
-        return ssoAdmins
-            .stream()
-            .anyMatch(email::equalsIgnoreCase);
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.YELLOW_GOLD;
     }
 }

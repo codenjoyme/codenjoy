@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.config;
+package com.codenjoy.dojo.loderunner.model;
 
 /*-
  * #%L
@@ -22,22 +22,22 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+public class RedGold extends PointImpl implements State<Elements, Player> {
 
-import java.util.List;
+    public RedGold(Point point) {
+        super(point);
+    }
 
-@Data
-@ConfigurationProperties("app")
-public class AppProperties {
+    public RedGold(int x, int y) {
+        super(x, y);
+    }
 
-    private List<String> logging;
-    private List<String> ssoAdmins;
-
-    public boolean isSsoAdmin(String email) {
-        return ssoAdmins
-            .stream()
-            .anyMatch(email::equalsIgnoreCase);
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.RED_GOLD;
     }
 }

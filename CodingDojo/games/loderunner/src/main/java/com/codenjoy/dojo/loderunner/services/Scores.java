@@ -33,6 +33,12 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> killEnemyScore;
     private final Parameter<Integer> getGoldScore;
     private final Parameter<Integer> forNextGoldIncScore;
+    private final Parameter<Integer> yellowTypeGoldCount;
+    private final Parameter<Integer> greenTypeGoldCount;
+    private final Parameter<Integer> redTypeGoldCount;
+    private final Parameter<Integer> yellowTypeGoldWeight;
+    private final Parameter<Integer> greenTypeGoldWeight;
+    private final Parameter<Integer> redTypeGoldWeight;
     private final Parameter<Integer> shadowPillActiveTicks;
     private final Parameter<Integer> shadowPillsCount;
     private final Parameter<Integer> suicidePenalty;
@@ -55,6 +61,15 @@ public class Scores implements PlayerScores {
         suicidePenalty = settings.addEditBox("SuicidePenalty").type(Integer.class).def(0);
         portalsCount = settings.addEditBox("The portals count").type(Integer.class).def(0);
         portalsActiveTicks = settings.addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(10);
+
+        yellowTypeGoldCount = settings.addEditBox("yellow type gold count").type(Integer.class).def(20);
+        greenTypeGoldCount = settings.addEditBox("green type gold count").type(Integer.class).def(20);
+        redTypeGoldCount = settings.addEditBox("red type gold count").type(Integer.class).def(20);
+
+        yellowTypeGoldWeight = settings.addEditBox("yellow type gold weight").type(Integer.class).def(1);
+        greenTypeGoldWeight = settings.addEditBox("green type gold weight").type(Integer.class).def(5);
+        redTypeGoldWeight = settings.addEditBox("red type gold weight").type(Integer.class).def(10);
+
         customMapPath = settings.addEditBox("Custom map path").type(String.class).def("");
     }
 
@@ -71,10 +86,17 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.GET_GOLD)) {
-            score += getGoldScore.getValue() + count;
+        if (event.equals(Events.GET_YELLOW_GOLD)) {
+            score += yellowTypeGoldWeight.getValue() + count;
             count += forNextGoldIncScore.getValue();
-        } else if (event.equals(Events.KILL_ENEMY)) {
+        } else if (event.equals(Events.GET_GREEN_GOLD)) {
+            score += greenTypeGoldWeight.getValue() + count;
+            count += forNextGoldIncScore.getValue();
+        } else if (event.equals(Events.GET_RED_GOLD)) {
+            score += redTypeGoldWeight.getValue() + count;
+            count += forNextGoldIncScore.getValue();
+        }
+        if (event.equals(Events.KILL_ENEMY)) {
             score += killEnemyScore.getValue();
         } else if (event.equals(Events.KILL_HERO)) {
             count = 0;
