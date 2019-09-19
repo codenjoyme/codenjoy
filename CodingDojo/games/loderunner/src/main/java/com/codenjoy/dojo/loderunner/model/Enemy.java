@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -56,9 +56,9 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
     public void tick() {
         if (huntHim == null || !huntHim.isAlive() || huntHim.isUnderThePill(PillType.SHADOW_PILL)) {
             List<Hero> heroes = new LinkedList<>(field.getHeroes())
-                .stream()
-                .filter(hero -> !hero.isUnderThePill(PillType.SHADOW_PILL))
-                .collect(Collectors.toList());
+                    .stream()
+                    .filter(hero -> !hero.isUnderThePill(PillType.SHADOW_PILL))
+                    .collect(Collectors.toList());
             if (oldHurt != null) { // если я бегал за героем, который спрятался
                 heroes.remove(oldHurt); // исключаю его из поиска // TODO подумать, тут может быть кейс, когда герой один и он появился уже а я за ним бегать не могу
             }
