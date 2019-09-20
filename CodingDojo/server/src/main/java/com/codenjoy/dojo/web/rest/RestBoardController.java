@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.GameTypeInfo;
+import com.codenjoy.dojo.web.rest.pojo.PParticipantsScores;
 import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import lombok.RequiredArgsConstructor;
@@ -138,6 +139,11 @@ public class RestBoardController {
 //    @RequestMapping(value = "/player/all/scores", method = RequestMethod.GET)
     public Map<String, Object> getPlayersScores() {
         return playerGamesView.getScores();
+    }
+
+    @RequestMapping(value = "/game/{gameName}/scores", method = RequestMethod.GET)
+    public PParticipantsScores getPlayersScoresForGame(@PathVariable("gameName") String gameName) {
+        return playerGamesView.getScoresFor(gameName);
     }
 
 //    @RequestMapping(value = "/scores/clear/{adminPassword}", method = RequestMethod.GET)

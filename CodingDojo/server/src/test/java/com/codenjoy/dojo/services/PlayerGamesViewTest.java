@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
-import lombok.SneakyThrows;
+import com.codenjoy.dojo.web.rest.pojo.PParticipantsScores;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -144,6 +144,29 @@ public class PlayerGamesViewTest {
 
         assertEquals(expectedGroup2, toString(dataMap.get("user3")));
         assertEquals(expectedGroup2, toString(dataMap.get("user4")));
+    }
+
+    @Test
+    public void testGetScoresJson() {
+        // given
+        testGetGamesDataMap_singleGames();
+
+        // юзера которые не должны войти в запрос
+        GameType gameType2 = addNewGameType("gameName2", 1234, inv -> mock(GameField.class));
+        addNewPlayer(gameType2, 678, getHeroData(23, pt(5, 6), "data8"));
+        addNewPlayer(gameType2, 789, getHeroData(24, pt(8, 7), "data9"));
+
+        // when
+        PParticipantsScores scores = playerGamesView.getScoresFor("gameName1");
+
+        // then
+        assertEquals("{'game':'gameName1'," +
+                "'participants':[" +
+                    "{'id':'user1','score':123}," +
+                    "{'id':'user2','score':234}," +
+                    "{'id':'user3','score':345}," +
+                    "{'id':'user4','score':456}]}",
+                JsonUtils.clean(JsonUtils.toStringSorted(new JSONObject(scores))));
     }
 
     @Test
