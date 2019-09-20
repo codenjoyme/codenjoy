@@ -51,6 +51,7 @@ public class OAuth2MappingUserService extends DefaultOAuth2UserService {
 
         String email = (String) map.get("email");
         String readableName = (String) map.get("name");
+         // TODO тут надо айдишку player брать от регистратора как имя и имейл, иначе регистратор не будет знать как управлять юзером тут через апи
 
         Registration.User user = registration.getUserByEmail(email)
                 .orElseGet(() -> registration.register(email, readableName));
