@@ -51,6 +51,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Supplier;
 
 @Component("playerService")
 @Slf4j
@@ -158,10 +159,15 @@ public class PlayerServiceImpl implements PlayerService {
                 gerCodeForAI(playerName) :
                 registration.getCodeById(playerName);
 
-        Closeable ai = createAI(playerName, code, gameType);
+        setupPlayerAI(() -> getPlayer(PlayerSave.get(playerName,
+                            "127.0.0.1", gameType.name(), 0, null), gameType),
+                playerName, code, gameType);
+    }
+
+    private void setupPlayerAI(Supplier<Player> getPlayer, String aiName, String code, GameType gameType) {
+        Closeable ai = createAI(aiName, code, gameType);
         if (ai != null) {
-            Player player = getPlayer(PlayerSave.get(playerName,
-                    "127.0.0.1", gameType.name(), 0, null), gameType);
+            Player player = getPlayer.get();
             player.setReadableName(StringUtils.capitalize(gameType.name()) + " SuperAI");
             player.setAI(ai);
         }
@@ -188,8 +194,8 @@ public class PlayerServiceImpl implements PlayerService {
         Player player = getPlayer(playerSave, gameType);
 
         if (isAI(name)) {
-            Closeable runner = createAI(name, gerCodeForAI(name), gameType);
-            player.setAI(runner);
+            setupPlayerAI(() -> player,
+                    name, gerCodeForAI(name), gameType);
         }
 
         return player;
