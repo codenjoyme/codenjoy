@@ -162,6 +162,7 @@ public class PlayerServiceImpl implements PlayerService {
         if (ai != null) {
             Player player = getPlayer(PlayerSave.get(playerName,
                     "127.0.0.1", gameType.name(), 0, null), gameType);
+            player.setReadableName(StringUtils.capitalize(gameType.name()) + " SuperAI");
             player.setAI(ai);
         }
     }
