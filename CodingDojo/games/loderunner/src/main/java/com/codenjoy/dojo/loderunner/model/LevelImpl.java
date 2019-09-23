@@ -169,6 +169,7 @@ public class LevelImpl implements Level {
     public void refresh(String map) {
         this.map = map;
         mapUuid = UUID.randomUUID();
+        ai = new AI();
         this.xy = new LengthToXY(getSize());
     }
 
