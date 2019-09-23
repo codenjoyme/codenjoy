@@ -33,14 +33,17 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Settings;
 
 import java.util.*;
+import java.util.UUID;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
 public class Loderunner implements Field {
 
-    private final int size;
     private final Settings settings;
+    private int size;
+    private Level level;
+    private UUID mapUUID;
     private Point[][] field;
     private List<Player> players;
     private List<Enemy> enemies;
@@ -53,8 +56,15 @@ public class Loderunner implements Field {
     private Dice dice;
 
     public Loderunner(Level level, Dice dice, Settings settings) {
+        this.level = level;
         this.dice = dice;
         this.settings = settings;
+        players = new LinkedList<>();
+        init();
+    }
+
+    private void init() {
+        mapUUID = level.getMapUUID();
         size = level.getSize();
         field = new Point[size][size];
 
@@ -74,7 +84,10 @@ public class Loderunner implements Field {
             enemy.init(this);
         }
 
-        players = new LinkedList<>();
+        for (Player player : players) {
+            player.newHero(this);
+        }
+
         generatePills();
         generatePortals();
     }
@@ -87,6 +100,10 @@ public class Loderunner implements Field {
 
     @Override
     public void tick() {
+        if (!level.getMapUUID().equals(mapUUID)) {
+            init();
+        }
+
         Set<Player> die = new HashSet<>();
 
         heroesGo();
