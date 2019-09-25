@@ -196,7 +196,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public boolean isFall() {
-        return field.isPit(x, y) && !field.isPipe(x, y) && !field.isLadder(x, y);
+        return (field.isPit(x, y) && !field.isPipe(x, y) && !field.isLadder(x, y))
+            || (iAmTheShadow() && isRegularPlayerAt(x, y - 1));
     }
 
     @Override

@@ -367,7 +367,149 @@ public class SingleTest {
         verify(listener2).event(Events.KILL_HERO);
     }
 
-//    void thatShadowFalls
+    @Test
+    public void thatShadowFallsAtTheRegularPlayerAndKillsHim() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼######☼" +
+            "☼☼☼☼☼☼☼☼");
+
+        setupPlayer1(1, 3, PillType.SHADOW_PILL, 10);
+        setupPlayer2(1, 2);
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⊄     ☼\n" +
+                "☼(     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⋉     ☼\n" +
+                "☼►     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        field.tick();
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⊳     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⋉     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        verify(listener1).event(Events.KILL_ENEMY);
+        verify(listener2).event(Events.KILL_HERO);
+    }
+
+    @Test
+    public void thatShadowStairsUpTheLadderAtTheRegularPlayerAndKillsHim() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼  H   ☼" +
+            "☼######☼" +
+            "☼☼☼☼☼☼☼☼");
+
+        setupPlayer1(2, 2, PillType.SHADOW_PILL, 10);
+        setupPlayer2(3, 3);
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  (   ☼\n" +
+                "☼ ⊳H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ►   ☼\n" +
+                "☼ ⋉H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        game1.getJoystick().right();
+        field.tick();
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  (   ☼\n" +
+                "☼  ⍬   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ►   ☼\n" +
+                "☼  ⋕   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        game1.getJoystick().up();
+        field.tick();
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ⊳   ☼\n" +
+                "☼  H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ⋉   ☼\n" +
+                "☼  H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        verify(listener1).event(Events.KILL_ENEMY);
+        verify(listener2).event(Events.KILL_HERO);
+    }
 
     // можно ли проходить героям друг через дурга? Нет
     @Test
