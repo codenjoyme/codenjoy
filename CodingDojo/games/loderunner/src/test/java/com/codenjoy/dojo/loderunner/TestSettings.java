@@ -38,5 +38,7 @@ public class TestSettings extends SettingsImpl {
         addEditBox("yellow type gold weight").type(Integer.class).def(1);
         addEditBox("green type gold weight").type(Integer.class).def(5);
         addEditBox("red type gold weight").type(Integer.class).def(10);
+
+        addEditBox("Number of enemies").type(Integer.class).def(0);
     }
 }
