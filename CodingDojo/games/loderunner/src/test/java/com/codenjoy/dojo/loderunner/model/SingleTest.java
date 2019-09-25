@@ -23,6 +23,13 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.loderunner.services.Events;
@@ -33,11 +40,6 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
 
 public class SingleTest {
 
@@ -364,6 +366,8 @@ public class SingleTest {
         verify(listener1).event(Events.KILL_ENEMY);
         verify(listener2).event(Events.KILL_HERO);
     }
+
+//    void thatShadowFalls
 
     // можно ли проходить героям друг через дурга? Нет
     @Test

@@ -23,17 +23,17 @@ package com.codenjoy.dojo.loderunner;
  */
 
 
+import static org.junit.Assert.assertEquals;
+
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.loderunner.client.ai.AISolver;
 import com.codenjoy.dojo.loderunner.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
-import org.junit.Test;
-
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 public class SmokeTest {
     private int index;
@@ -68,6 +68,11 @@ public class SmokeTest {
                         "☼$  H   $☼" +
                         "☼########☼" +
                         "☼☼☼☼☼☼☼☼☼☼";
+            }
+
+            @Override
+            protected SettingsImpl createSettings() {
+                return new TestSettings();
             }
         };
 
@@ -166,7 +171,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Answer: LEFT\n" +
-                        "Fire Event: GET_GOLD\n" +
+                        "Fire Event: GET_YELLOW_GOLD\n" +
                         "DICE:6\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
@@ -303,7 +308,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Answer: RIGHT\n" +
-                        "Fire Event: GET_GOLD\n" +
+                        "Fire Event: GET_YELLOW_GOLD\n" +
                         "DICE:6\n" +
                         "DICE:6\n" +
                         "------------------------------------------",

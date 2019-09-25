@@ -36,13 +36,13 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
     private Direction direction;
     private EnemyAI ai;
     private Field field;
-    private boolean withGold;
+    private Class<? extends Point> withGold;
     private Hero huntHim;
     private Hero oldHurt;
 
     public Enemy(Point pt, Direction direction, EnemyAI ai) {
         super(pt);
-        withGold = false;
+        withGold = null;
         this.direction = direction;
         this.ai = ai;
     }
@@ -69,10 +69,10 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
         }
 
         if (isFall()) {
-            if (field.isBrick(x, y - 1) && withGold) {
-                withGold = false;
+            if (field.isBrick(x, y - 1) && withGold != null) {
                 // TODO герой не может оставить золото, если он залез в ямку под лестницу, золото должно появиться сбоку
-                field.leaveGold(x, y);
+                field.leaveGold(x, y, withGold);
+                withGold = null;
             }
             move(x, y - 1);
         } else if (field.isBrick(x, y)) {
@@ -132,12 +132,12 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
         return Elements.ENEMY_RIGHT;
     }
 
-    public void getGold() {
-        withGold = true;
+    public void getGold(Class<? extends Point> clazz) {
+        withGold = clazz;
     }
 
     public boolean withGold() {
-        return withGold;
+        return withGold != null;
     }
 
 }
