@@ -44,6 +44,7 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> suicidePenalty;
     private final Parameter<Integer> portalsCount;
     private final Parameter<Integer> portalsActiveTicks;
+    private final Parameter<String> customMapPath;
 
     private volatile int score;
     private volatile int count;
@@ -68,6 +69,8 @@ public class Scores implements PlayerScores {
         yellowTypeGoldWeight = settings.addEditBox("yellow type gold weight").type(Integer.class).def(1);
         greenTypeGoldWeight = settings.addEditBox("green type gold weight").type(Integer.class).def(5);
         redTypeGoldWeight = settings.addEditBox("red type gold weight").type(Integer.class).def(10);
+
+        customMapPath = settings.addEditBox("Custom map path").type(String.class).def("");
     }
 
     @Override

@@ -36,12 +36,13 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
+import org.apache.commons.lang3.StringUtils;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
-    private final Level level;
+    private Level level;
 
     public GameRunner() {
         new Scores(0, settings);  // TODO сеттринги разделены по разным классам, продумать архитектуру
@@ -95,7 +96,17 @@ public class GameRunner extends AbstractGameType implements GameType {
                 .getValue());
     }
 
+    @Override
+    public void refresh() {
+        level.refresh(getMap());
+    }
+
     protected String getMap() {
-        return Level1.get();
+        String customMapPath = settings.<String>getParameter("Custom map path").getValue();
+        if (StringUtils.isNotEmpty(customMapPath)) {
+            return MapLoader.loadMapFromFile(customMapPath);
+        } else {
+            return Level1.get();
+        }
     }
 }
