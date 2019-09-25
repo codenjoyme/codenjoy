@@ -34,8 +34,7 @@ namespace BikeClient.GameArea
 
         public bool IsGameOver()
         {
-            Point me = GetMe();
-            return ElementGroups.MyFallenBike.Any(x => IsAt(me, x));
+            return ElementGroups.MyFallenBike.Any();
         }
 
         public bool CheckNearMe(List<QDirection> directions, Element[] elements)
@@ -65,6 +64,191 @@ namespace BikeClient.GameArea
             Point atDirection = direction.Change(me);
             return IsAt(atDirection.X, atDirection.Y, elements);
         }
+
+        public List<Point> GetOtherHeroes()
+        {
+            var elementsList = new Element[] {
+                Element.OTHER_BIKE,
+                Element.OTHER_BIKE_AT_ACCELERATOR,
+                Element.OTHER_BIKE_AT_INHIBITOR,
+                Element.OTHER_BIKE_AT_KILLED_BIKE,
+                Element.OTHER_BIKE_AT_LINE_CHANGER_DOWN,
+                Element.OTHER_BIKE_AT_LINE_CHANGER_UP,
+                Element.OTHER_BIKE_AT_SPRINGBOARD_LEFT,
+                Element.OTHER_BIKE_AT_SPRINGBOARD_LEFT_DOWN,
+                Element.OTHER_BIKE_AT_SPRINGBOARD_RIGHT,
+                Element.OTHER_BIKE_AT_SPRINGBOARD_RIGHT_DOWN,
+                Element.OTHER_BIKE_FALLEN,
+                Element.OTHER_BIKE_FALLEN_AT_ACCELERATOR,
+                Element.OTHER_BIKE_FALLEN_AT_FENCE,
+                Element.OTHER_BIKE_FALLEN_AT_INHIBITOR,
+                Element.OTHER_BIKE_FALLEN_AT_LINE_CHANGER_DOWN,
+                Element.OTHER_BIKE_FALLEN_AT_LINE_CHANGER_UP,
+                Element.OTHER_BIKE_FALLEN_AT_OBSTACLE,
+                Element.OTHER_BIKE_IN_FLIGHT_FROM_SPRINGBOARD
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetAccelerators()
+        {
+            var elementsList = new Element[] {
+                Element.ACCELERATOR
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetBikesToKill()
+        {
+            var elementsList = new Element[] {
+                Element.OTHER_BIKE,
+                Element.OTHER_BIKE_AT_ACCELERATOR,
+                Element.OTHER_BIKE_AT_INHIBITOR,
+                Element.OTHER_BIKE_AT_KILLED_BIKE,
+                Element.OTHER_BIKE_AT_LINE_CHANGER_DOWN,
+                Element.OTHER_BIKE_AT_LINE_CHANGER_UP,
+                Element.OTHER_BIKE_AT_SPRINGBOARD_LEFT,
+                Element.OTHER_BIKE_AT_SPRINGBOARD_LEFT_DOWN,
+                Element.OTHER_BIKE_AT_SPRINGBOARD_RIGHT,
+                Element.OTHER_BIKE_AT_SPRINGBOARD_RIGHT_DOWN
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetFences()
+        {
+            var elementsList = new Element[] {
+                Element.FENCE
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetInhibitors()
+        {
+            var elementsList = new Element[] {
+                Element.INHIBITOR
+            };
+            return Get(elementsList);
+        }
+
+
+        public List<Point> GetLineUpChangers()
+        {
+            var elementsList = new Element[] {
+                Element.LINE_CHANGER_UP
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetLineDownChangers()
+        {
+            var elementsList = new Element[] {
+                Element.LINE_CHANGER_DOWN
+            };
+            return Get(elementsList);
+        }
+        public List<Point> GetObstacles()
+        {
+            var elementsList = new Element[] {
+                Element.OBSTACLE
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetSpringboardDarkElements()
+        {
+            var elementsList = new Element[] {
+                Element.SPRINGBOARD_LEFT
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetSpringboardLightElements()
+        {
+            var elementsList = new Element[] {
+                Element.SPRINGBOARD_RIGHT
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetSpringboardLeftDownElements()
+        {
+            var elementsList = new Element[] {
+                Element.SPRINGBOARD_LEFT_DOWN
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetSpringboardRightDownElements()
+        {
+            var elementsList = new Element[] {
+                Element.SPRINGBOARD_RIGHT_DOWN
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetSpringboardLeftUpElements()
+        {
+            var elementsList = new Element[] {
+                Element.SPRINGBOARD_LEFT_UP
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetSpringboardRightUpElements()
+        {
+            var elementsList = new Element[] {
+                Element.SPRINGBOARD_RIGHT_UP
+            };
+            return Get(elementsList);
+        }
+
+        public List<Point> GetSpringboardTopElements()
+        {
+            var elementsList = new Element[] {
+                Element.SPRINGBOARD_TOP
+            };
+            return Get(elementsList);
+        }
+
+
+
+        public string GetAllElementsOnBoard()
+        {
+            Point me = GetMe();
+            var otherHeroes = string.Join(',', GetOtherHeroes());
+            var accelerators = string.Join(',', GetAccelerators());
+            var fences = string.Join(',', GetFences());
+            var inhibitors = string.Join(',', GetInhibitors());
+            var lineUpChangers = string.Join(',', GetLineUpChangers());
+            var lineDownChangers = string.Join(',', GetLineDownChangers());
+            var obstacles = string.Join(',', GetObstacles());
+            var springboardDarkElements = string.Join(',', GetSpringboardDarkElements());
+            var springboardLightElements = string.Join(',', GetSpringboardLightElements());
+            var springboardLeftDownElements = string.Join(',', GetSpringboardLeftDownElements());
+            var springboardRightDownElements = string.Join(',', GetSpringboardRightDownElements());
+            var springboardLeftUpElements = string.Join(',', GetSpringboardLeftUpElements());
+            var springboardRightUpElements = string.Join(',', GetSpringboardRightUpElements());
+            var springboardTopElements = string.Join(',', GetSpringboardTopElements());
+
+            var result = $"Me at: {me} \n Enemy bikes at: {otherHeroes}\n" +
+            $"Accelerators at: {accelerators}\n" +
+            $"Fences at: {fences}\n" +
+            $"Inhibitors at: {inhibitors}\n" +
+            $"Line Up Changers at: {lineUpChangers}\n" +
+            $"Line Down Changers at: {lineDownChangers}\n" +
+            $"Obstacles at: {obstacles}\n" +
+            $"Springboard Dark Elements at: {springboardDarkElements}\n" +
+            $"Springboard Light Elements at: {springboardLightElements}\n" +
+            $"Springboard Left Down Elements at: {springboardLeftDownElements}\n" +
+            $"Springboard Right Down Elements at: {springboardRightDownElements}\n" +
+            $"Springboard Left Up Elements at: {springboardLeftUpElements}\n" +
+            $"Springboard Right Up Elements at: {springboardRightUpElements}\n" +
+            $"Springboard Top Elements at: {springboardTopElements}\n";
+
+            return result;
+        }
+
 
         public bool CheckAtMe(Element[] elements)
         {

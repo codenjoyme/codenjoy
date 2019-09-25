@@ -34,6 +34,7 @@ namespace BikeClient
         protected int Size;
         protected JObject source;
         protected List<string> layersString = new List<string>();
+        protected const int MAX_Y_SIZE = 12;
         public AbstractPlayGround ForString(string boardString)
         {
             if (boardString.Contains("layer"))
@@ -53,7 +54,6 @@ namespace BikeClient
             {
                 return false;
             }
-
             return GetAt(numLayer, x, y).Equals(element);
         }
         public AbstractPlayGround ForString(string[] layers)
@@ -82,7 +82,7 @@ namespace BikeClient
 
         protected int inversionY(int y)
         {
-            return y;
+            return Size - y - 1;
         }
 
         protected bool IsAt(int numLayer, int x, int y, Element[] elements)
@@ -100,6 +100,7 @@ namespace BikeClient
 
         protected Element GetAt(int numLayer, int x, int y)
         {
+            
             return ValueOf(field[x, y]);
         }
 
@@ -170,7 +171,7 @@ namespace BikeClient
         }
         public bool IsAt(int x, int y, Element element)
         {
-            if (IsAt(x, y, element))
+            if (IsAt(0, x, y, element))
                 {
                     return true;
                 }
@@ -182,28 +183,24 @@ namespace BikeClient
             return IsAt(point.X, point.Y, element);
         }
 
-        public Nullable<Element> GetAt(int x, int y)
+        public Element GetAt(int x, int y)
         {
-            List<Element> at = GetAllAt(x, y);
-            if (at == null || at.Count == 0)
+            if (Point.pt(x, y).IsOutOf(Size))
             {
-                return null;
+                return Element.FENCE;
             }
-            else
-            {
-                return at[0];
-            }
+            return GetAt(0, x, y);
         }
 
         public Element GetAt(Point point)
         {
-            return GetAt(point.X, point.Y).Value;
+            return GetAt(point.X, point.Y);
         }
 
         public List<Element> GetAllAt(int x, int y)
         {
             List<Element> result = new List<Element>();
-            result.Add(GetAt(x, y).Value);
+            result.Add(GetAt(x, y));
             return result;
         }
 
@@ -220,9 +217,18 @@ namespace BikeClient
         public string boardAsString()
         {
             StringBuilder result = new StringBuilder();
-            result.Append('\n');
+            for (int y = MAX_Y_SIZE; y >=0 ; y--)
+            {
+                result.Append(y);
+                result.Append(" ");
+                for (int x = 0; x < Size; x++)
+                    result.Append(field[x, y]);
+                result.Append("\n");
+            }
             return result.ToString();
         }
+
+        
 
         /**
          * Says if at given position (X, Y) at given layer has given elements.
@@ -233,7 +239,7 @@ namespace BikeClient
          */
         public bool IsAt(int x, int y, Element[] elements)
         {
-            if (IsAt(x, y, elements))
+            if (IsAt(0, x, y, elements))
             {
                 return true;
             }
@@ -254,7 +260,7 @@ namespace BikeClient
          */
         public bool IsNear(int x, int y, Element element)
         {
-            if (IsNear(x, y, element))
+            if (IsNear(0, x, y, element))
                 {
                     return true;
                 }
@@ -277,7 +283,7 @@ namespace BikeClient
         public int CountNear(int x, int y, Element element)
         {
             int count = 0;
-            count += CountNear(x, y, element);
+            count += CountNear(0, x, y, element);
                 return count;
         }
 

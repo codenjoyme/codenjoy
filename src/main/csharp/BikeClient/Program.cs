@@ -109,18 +109,22 @@ namespace BikeClient
         {
             var buffer = Encoder.GetBytes(command);
             await webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, CancellationToken.None);
-            LogStatus(false);
+            LogStatus(false, command);
         }
 
         private static void LogStatus(
-            bool receiving)
+            bool receiving, string command="")
         {
             lock (ConsoleLock)
             {
                 if (Verbose && !receiving)
                 {
-                    Console.WriteLine(DateTime.Now.ToString());
-                    Console.Write("  ");
+                    Console.OutputEncoding = Encoding.UTF8;
+                    Console.WriteLine("----------------------------------\n");
+                    Console.WriteLine($"{DateTime.Now.ToString()} Answer: {command}");
+                    Console.Write(PlayGround.boardAsString());
+                    Console.WriteLine($"{DateTime.Now.ToString()} Answer: {command}");
+                    Console.Write(PlayGround.GetAllElementsOnBoard());
                 }
 
                 Console.ResetColor();
@@ -128,3 +132,4 @@ namespace BikeClient
         }
     }
 }
+

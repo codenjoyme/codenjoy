@@ -34,7 +34,12 @@ namespace BikeClient
             this.dy = dy;
             this.directionString = directionName;
         }
-        
+
+        public static QDirection Stop()
+        {
+            return new QDirection(1, 0, 0, "");
+        }
+
         public static QDirection  Up()
         {
             return new QDirection(2,0,-1, "UP");
@@ -56,7 +61,7 @@ namespace BikeClient
 
         public Point Change(Point point)
         {
-            return Point.pt(point.X,point.Y);
+            return Point.pt(point.X+dx,point.Y+dy);
         }
 
         public override string ToString()
