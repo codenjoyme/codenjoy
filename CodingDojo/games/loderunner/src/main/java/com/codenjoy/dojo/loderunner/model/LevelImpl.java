@@ -181,4 +181,9 @@ public class LevelImpl implements Level {
     public void setAI(EnemyAI ai) {
         this.ai = ai;
     }
+
+    @Override
+    public EnemyAI getAi() {
+        return this.ai;
+    }
 }

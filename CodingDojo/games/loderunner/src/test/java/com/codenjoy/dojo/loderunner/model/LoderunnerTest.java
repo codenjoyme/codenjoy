@@ -1965,6 +1965,7 @@ public class LoderunnerTest {
     // чертик двигается так же как и обычный игрок - мжет ходить влево и вправо
     @Test
     public void shouldEnemyMoveLeft() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ « ☼" +
@@ -1983,6 +1984,7 @@ public class LoderunnerTest {
 
     @Test
     public void shouldEnemyMoveRight() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼ « ☼" +
@@ -2002,6 +2004,7 @@ public class LoderunnerTest {
     // если небыло команды чертик никуда не идет
     @Test
     public void shouldEnemyStopWhenNoMoreRightCommand() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼  «☼" +
@@ -2029,6 +2032,7 @@ public class LoderunnerTest {
     // Чертик останавливается возле границы
     @Test
     public void shouldEnemyStopWhenWallRight() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼  »☼" +
@@ -2047,6 +2051,7 @@ public class LoderunnerTest {
 
     @Test
     public void shouldEnemyStopWhenWallLeft() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼«  ☼" +
@@ -2066,6 +2071,7 @@ public class LoderunnerTest {
     // В просверленную яму чертик легко может упасть
     @Test
     public void shouldEnemyFallInPitLeft() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼« ◄☼" +
@@ -2095,6 +2101,7 @@ public class LoderunnerTest {
 
     @Test
     public void shouldEnemyFallInPitRight() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄ «☼" +
@@ -2132,6 +2139,7 @@ public class LoderunnerTest {
     // при падении чертик не может передвигаться влево и вправо - ему мешают стены
     @Test
     public void shouldEnemyCantGoLeftIfWall() {
+        setEnemiesNumber(1);
         shouldEnemyFallInPitRight();
 
         enemy.left();
@@ -2146,6 +2154,7 @@ public class LoderunnerTest {
 
     @Test
     public void shouldEnemyCantGoRightIfWall() {
+        setEnemiesNumber(1);
         shouldEnemyFallInPitLeft();
 
         enemy.right();
@@ -2161,6 +2170,7 @@ public class LoderunnerTest {
     // монстр сидит в ямке некоторое количество тиков, потом он вылазит
     @Test
     public void shouldMonsterGetUpFromPit() {
+        setEnemiesNumber(1);
         shouldEnemyFallInPitLeft();
 
         game.tick();
@@ -2201,6 +2211,7 @@ public class LoderunnerTest {
     // если чертик попадает на героя - тот погибает
     @Test
     public void shouldHeroDieWhenMeetWithEnemy() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄ «☼" +
@@ -2234,6 +2245,7 @@ public class LoderunnerTest {
     // другой кейс, когда оба двигаются на встречу друг к другу
     @Test
     public void shouldHeroDieWhenMeetWithEnemy2() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄« ☼" +
@@ -2267,6 +2279,7 @@ public class LoderunnerTest {
     // другой кейс, когда игрок идет на чертика
     @Test
     public void shouldHeroDieWhenMeetWithEnemy_whenHeroWalk() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄« ☼" +
@@ -2299,6 +2312,7 @@ public class LoderunnerTest {
     // другой кейс, когда чертик идет на игрока
     @Test
     public void shouldHeroDieWhenMeetWithEnemy_whenEnemyWalk() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼◄« ☼" +
@@ -2331,6 +2345,7 @@ public class LoderunnerTest {
     // Чертик может зайти на лестницу и выйти обратно
     @Test
     public void shouldEnemyCanGoOnLadder() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2359,6 +2374,7 @@ public class LoderunnerTest {
     // Чертик может карабкаться по лестнице вверх
     @Test
     public void shouldEnemyCanGoOnLadderUp() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼  H☼" +
                 "☼  H☼" +
@@ -2396,6 +2412,7 @@ public class LoderunnerTest {
     // Чертик не может вылезти с лестницей за границы
     @Test
     public void shouldEnemyCantGoOnBarrierFromLadder() {
+        setEnemiesNumber(1);
         shouldEnemyCanGoOnLadderUp();
 
         assertE("☼☼☼☼►" +
@@ -2426,6 +2443,7 @@ public class LoderunnerTest {
     // Чертик может спустится вниз, но не дальше границы экрана
     @Test
     public void shouldEnemyCanGoOnLadderDown() {
+        setEnemiesNumber(1);
         shouldEnemyCanGoOnLadderUp();
 
         assertE("☼☼☼☼►" +
@@ -2465,6 +2483,7 @@ public class LoderunnerTest {
     // Чертик может в любой момент спрыгнуть с лестницы и будет падать до тех пор пока не наткнется на препятствие
     @Test
     public void shouldEnemyCanFly() {
+        setEnemiesNumber(1);
         shouldEnemyCanGoOnLadderUp();
 
         assertE("☼☼☼☼►" +
@@ -2502,6 +2521,7 @@ public class LoderunnerTest {
     // Чертик может поднятся по лестнице и зайти на площадку
     @Test
     public void shouldEnemyCanGoFromLadderToArea() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼H  ☼" +
                 "☼H# ☼" +
@@ -2574,6 +2594,7 @@ public class LoderunnerTest {
     // пока чертик падает он не может двигаться влево и справо, даже если там есть площадки
     @Test
     public void shouldEnemyCantMoveWhenFall() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼  »  ☼" +
                 "☼     ☼" +
@@ -2630,6 +2651,7 @@ public class LoderunnerTest {
     // если чертик с площадки заходит на трубу то он ползет по ней
     @Test
     public void shouldEnemyPipe() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼     ☼" +
                 "☼»~~~ ☼" +
@@ -2675,6 +2697,7 @@ public class LoderunnerTest {
     // с трубы чертик может спрыгунть и тогда он будет падать до препятствия
     @Test
     public void shouldEnemyFallFromPipe() {
+        setEnemiesNumber(1);
         shouldEnemyPipe();
 
         assertE("☼☼☼☼☼☼►" +
@@ -2730,6 +2753,7 @@ public class LoderunnerTest {
     // чертик может похитить 1 золото в падении
     @Test
     public void shouldEnemyGetGoldWhenFallenFromPipe() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼  $~~«☼" +
@@ -2811,6 +2835,7 @@ public class LoderunnerTest {
 
     @Test
     public void shouldEnemyLeaveGoldWhenFallInPit() {
+        setEnemiesNumber(1);
         shouldEnemyGetGoldWhenFallenFromPipe();
 
         enemy.right();
@@ -2853,6 +2878,7 @@ public class LoderunnerTest {
 
     @Test
     public void shouldIWalkOnEnemyInPitAndGetGold() {
+        setEnemiesNumber(1);
         shouldEnemyLeaveGoldWhenFallInPit();
 
         hero.left();     //я могу пройти по нему сверху и забрать золото
@@ -2896,6 +2922,7 @@ public class LoderunnerTest {
 
     @Test
     public void shouldNoMoreGoldAEnemy() {
+        setEnemiesNumber(1);
         shouldIWalkOnEnemyInPitAndGetGold();
 
         for (int c = 4; c < Brick.DRILL_TIMER; c++) { // враг вылазит
@@ -2943,6 +2970,7 @@ public class LoderunnerTest {
     // я могу ходить по монстру, который в ямке
     @Test
     public void shouldIWalkOnEnemy() {
+        setEnemiesNumber(1);
         shouldEnemyLeaveGoldWhenFallInPit();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3015,6 +3043,7 @@ public class LoderunnerTest {
     // TODO сделать так, чтобы мог
     @Test
     public void shouldICantDrillUnderEnemy() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ►»☼" +
@@ -3034,6 +3063,7 @@ public class LoderunnerTest {
     // если я просверлил дырку монстр падает в нее, а под ней ничего нет - монстр не проваливается сквозь
     @Test
     public void shouldEnemyStayOnPitWhenUnderPitIsFree() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼☼☼" +
                 "☼» ◄  ☼" +
                 "☼#####☼" +
@@ -3107,6 +3137,7 @@ public class LoderunnerTest {
     // если в процессе падения чертик вдург наткнулся на трубу то он повисаю на ней
     @Test
     public void shouldEnemyPipeWhenFall() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼  »  ☼" +
                 "☼# ###☼" +
@@ -3170,6 +3201,7 @@ public class LoderunnerTest {
     // чертик может спрыгнуть с трубы
     @Test
     public void shouldEnemyCanJumpFromPipe() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼☼►" +
                 "☼  «  ☼" +
                 "☼     ☼" +
@@ -3224,6 +3256,7 @@ public class LoderunnerTest {
     // плюс чертик должен иметь возможность спустится по лестнице
     @Test
     public void shouldEnemyCantWalkThroughWallDown() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼ « ☼" +
                 "☼ H ☼" +
@@ -3251,6 +3284,7 @@ public class LoderunnerTest {
 
     @Test
     public void shouldEnemyCantWalkThroughWallUp() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼ H ☼" +
@@ -3288,6 +3322,7 @@ public class LoderunnerTest {
     // Чертику нельзя проходить с лестницы через бетон направо или налево
     @Test
     public void shouldEnemyCantWalkThroughWallLeftRight() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼☼☼☼☼" +
                 "☼☼H☼☼" +
@@ -3334,6 +3369,7 @@ public class LoderunnerTest {
     // чертику нельзя проходить через бетон
     @Test
     public void shouldEnemyCantWalkThroughWallLeftRight2() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼►" +
                 "☼   ☼" +
                 "☼   ☼" +
@@ -3362,6 +3398,7 @@ public class LoderunnerTest {
     // Чертику нельзя спрыгивать с трубы что сразу над бетоном, протелая сквозь него
     @Test
     public void shouldEnemyCantJumpThroughWall() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼►" +
                 "☼  » ☼" +
                 "☼  ~ ☼" +
@@ -3392,6 +3429,7 @@ public class LoderunnerTest {
     // если чертик спрыгивает с последней секции лестницы
     @Test
     public void shouldEnemyJumpFromLadderDown() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼►" +
                 "☼ »  ☼" +
                 "☼ H##☼" +
@@ -3444,6 +3482,7 @@ public class LoderunnerTest {
     // Чертик не может прыгять вверх :)
     @Test
     public void shouldEnemyCantJump() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼►" +
                 "☼    ☼" +
                 "☼    ☼" +
@@ -3465,6 +3504,7 @@ public class LoderunnerTest {
     // я могу прыгнуть на голову монстру и мне ничего не будет
     @Test
     public void shouldICanJumpAtEnemyHead() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼" +
                 "☼ ◄ ☼" +
                 "☼   ☼" +
@@ -3509,6 +3549,7 @@ public class LoderunnerTest {
     // А когда снова упадет, то оставит
     @Test
     public void shouldGetGoldWheExitFromPit() {
+        setEnemiesNumber(1);
         shouldEnemyLeaveGoldWhenFallInPit();
 
         assertE("☼☼☼☼☼☼☼☼" +
@@ -3566,6 +3607,7 @@ public class LoderunnerTest {
     // Если чертик упал на другого чертика который был на трубе, то они складываются в один :)
     @Test
     public void shouldEnemyStayOnOtherAtThePipe() {
+        setEnemiesNumber(2);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼  «   ☼" +
                 "☼      ☼" +
@@ -3627,6 +3669,7 @@ public class LoderunnerTest {
 
     @Test
     public void shouldEnemyDontStopOnPipe() {
+        setEnemiesNumber(2);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -3678,6 +3721,7 @@ public class LoderunnerTest {
     // Чертик должен сам проваливаться на героя, а не впрыгивать в него
     @Test
     public void shouldEnemyStayOnHeroAtThePipe() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼  «   ☼" +
                 "☼      ☼" +
@@ -3728,6 +3772,7 @@ public class LoderunnerTest {
     // Чертик проваливается в яму за героем и там его находит
     @Test
     public void shouldEnemyFindHeroAtPit() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -3805,6 +3850,7 @@ public class LoderunnerTest {
 
     @Test
     public void iLooseScoresWhenDoHarakiri() {
+        setEnemiesNumber(1);
         givenFl("☼☼☼☼☼" +
                 "☼   ☼" +
                 "☼ ◄ ☼" +
@@ -3870,6 +3916,11 @@ public class LoderunnerTest {
         public void act(int... p) {
             ai(null);
         }
+    }
+
+    private void setEnemiesNumber(int enemiesNumber) {
+        Parameter<Integer> p = settings.getParameter("Number of enemies").type(Integer.class);
+        p.update(enemiesNumber);
     }
 
     // если монстр не успел вылезти из ямки и она заросла то монстр умирает?

@@ -54,4 +54,6 @@ public interface Level {
     void refresh(String map);
 
     UUID getMapUUID();
+
+    EnemyAI getAi();
 }
