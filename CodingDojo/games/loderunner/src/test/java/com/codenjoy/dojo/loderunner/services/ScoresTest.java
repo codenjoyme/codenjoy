@@ -23,14 +23,14 @@ package com.codenjoy.dojo.loderunner.services;
  */
 
 
+import static org.junit.Assert.assertEquals;
+
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
     private PlayerScores scores;
@@ -64,7 +64,7 @@ public class ScoresTest {
 
         killEnemyScore = settings.getParameter("Kill enemy score").type(Integer.class).getValue();
 
-        Parameter<Integer> p3 = settings.getParameter("Get gold score").type(Integer.class);
+        Parameter<Integer> p3 = settings.getParameter("yellow type gold weight").type(Integer.class);
         p3.update(10);
         getGoldScore = p3.getValue();
 

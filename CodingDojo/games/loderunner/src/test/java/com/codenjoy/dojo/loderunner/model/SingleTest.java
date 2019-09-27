@@ -23,6 +23,13 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.codenjoy.dojo.loderunner.TestSettings;
 import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.loderunner.services.Events;
@@ -33,11 +40,6 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
 
 public class SingleTest {
 
@@ -360,6 +362,150 @@ public class SingleTest {
                         "☼ ⋉    ☼\n" +
                         "☼######☼\n" +
                         "☼☼☼☼☼☼☼☼\n");
+
+        verify(listener1).event(Events.KILL_ENEMY);
+        verify(listener2).event(Events.KILL_HERO);
+    }
+
+    @Test
+    public void thatShadowFallsAtTheRegularPlayerAndKillsHim() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼######☼" +
+            "☼☼☼☼☼☼☼☼");
+
+        setupPlayer1(1, 3, PillType.SHADOW_PILL, 10);
+        setupPlayer2(1, 2);
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⊄     ☼\n" +
+                "☼(     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⋉     ☼\n" +
+                "☼►     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        field.tick();
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⊳     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼⋉     ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        verify(listener1).event(Events.KILL_ENEMY);
+        verify(listener2).event(Events.KILL_HERO);
+    }
+
+    @Test
+    public void thatShadowStairsUpTheLadderAtTheRegularPlayerAndKillsHim() {
+        setupGm("☼☼☼☼☼☼☼☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼      ☼" +
+            "☼  H   ☼" +
+            "☼######☼" +
+            "☼☼☼☼☼☼☼☼");
+
+        setupPlayer1(2, 2, PillType.SHADOW_PILL, 10);
+        setupPlayer2(3, 3);
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  (   ☼\n" +
+                "☼ ⊳H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ►   ☼\n" +
+                "☼ ⋉H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        game1.getJoystick().right();
+        field.tick();
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  (   ☼\n" +
+                "☼  ⍬   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ►   ☼\n" +
+                "☼  ⋕   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        game1.getJoystick().up();
+        field.tick();
+
+        atGame1(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ⊳   ☼\n" +
+                "☼  H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
+
+        atGame2(
+            "☼☼☼☼☼☼☼☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼      ☼\n" +
+                "☼  ⋉   ☼\n" +
+                "☼  H   ☼\n" +
+                "☼######☼\n" +
+                "☼☼☼☼☼☼☼☼\n");
 
         verify(listener1).event(Events.KILL_ENEMY);
         verify(listener2).event(Events.KILL_HERO);

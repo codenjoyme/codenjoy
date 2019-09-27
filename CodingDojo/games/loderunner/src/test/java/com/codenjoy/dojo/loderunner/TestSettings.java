@@ -22,21 +22,37 @@ package com.codenjoy.dojo.loderunner;
  * #L%
  */
 
+import com.codenjoy.dojo.services.settings.EditBox;
+import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 public class TestSettings extends SettingsImpl {
 
     public TestSettings() {
-        addEditBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
-        addEditBox("The shadow pills count").type(Integer.class).def(0);
-        addEditBox("Number of ticks that the portals will be active").type(Integer.class).def(10);
-        addEditBox("The portals count").type(Integer.class).def(0);
+        editBox("Kill hero penalty").type(Integer.class).def(0);
+        editBox("Kill enemy score").type(Integer.class).def(10);
+        editBox("Get next gold increment score").type(Integer.class).def(1);
+        editBox("SuicidePenalty").type(Integer.class).def(0);
+        editBox("Number of ticks that the shadow pill will be active").type(Integer.class).def(15);
+        editBox("The shadow pills count").type(Integer.class).def(0);
+        editBox("Number of ticks that the portals will be active").type(Integer.class).def(10);
+        editBox("The portals count").type(Integer.class).def(0);
+        editBox("Custom map path").type(String.class).def("");
 
-        addEditBox("yellow type gold count").type(Integer.class).def(20);
-        addEditBox("green type gold count").type(Integer.class).def(20);
-        addEditBox("red type gold count").type(Integer.class).def(20);
-        addEditBox("yellow type gold weight").type(Integer.class).def(1);
-        addEditBox("green type gold weight").type(Integer.class).def(5);
-        addEditBox("red type gold weight").type(Integer.class).def(10);
+        editBox("yellow type gold count").type(Integer.class).def(-1);
+        editBox("green type gold count").type(Integer.class).def(0);
+        editBox("red type gold count").type(Integer.class).def(0);
+        editBox("yellow type gold weight").type(Integer.class).def(1);
+        editBox("green type gold weight").type(Integer.class).def(5);
+        editBox("red type gold weight").type(Integer.class).def(10);
+    }
+
+    private Parameter<?> editBox(String name) {
+        return super.addEditBox(name);
+    }
+
+    @Override
+    public Parameter<?> addEditBox(String name) {
+        return new EditBox<>(name);
     }
 }
