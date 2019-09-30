@@ -39,11 +39,15 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+import org.junit.Before;
 import org.junit.Test;
 
 public class SingleTest {
 
     private Dice dice;
+    private Settings settings;
     private EventListener listener1;
     private Game game1;
     private EventListener listener2;
@@ -52,6 +56,12 @@ public class SingleTest {
     private EventListener listener3;
     private Game game3;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
+
+    @Before
+    public void setup() {
+        dice = mock(Dice.class);
+        settings = new TestSettings();
+    }
 
     // появляется другие игроки, игра становится мультипользовательской
     @Test
@@ -261,6 +271,7 @@ public class SingleTest {
 
     @Test
     public void thatEnemiesDoNotHauntShadowPlayers() {
+        setEnemiesNumber(1);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼      ☼" +
                 "☼      ☼" +
@@ -943,8 +954,7 @@ public class SingleTest {
 
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
-        dice = mock(Dice.class);
-        field = new Loderunner(level, dice, new TestSettings());
+        field = new Loderunner(level, dice, settings);
     }
 
     @Test
@@ -1007,5 +1017,10 @@ public class SingleTest {
                 "☼ ►( ☼\n" +
                 "☼####☼\n" +
                 "☼☼☼☼☼☼\n");
+    }
+
+    private void setEnemiesNumber(int enemiesNumber) {
+        Parameter<Integer> p = settings.getParameter("Number of enemies").type(Integer.class);
+        p.update(enemiesNumber);
     }
 }

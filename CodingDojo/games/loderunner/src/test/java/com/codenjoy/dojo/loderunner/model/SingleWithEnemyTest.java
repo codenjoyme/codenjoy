@@ -31,6 +31,9 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -41,14 +44,22 @@ import static org.mockito.Mockito.*;
 public class SingleWithEnemyTest {
 
     private Dice dice;
+    private Settings settings;
     private EventListener listener;
     private Game game;
     private Loderunner field;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
+    @Before
+    public void setup() {
+        dice = mock(Dice.class);
+        settings = new TestSettings();
+    }
+
     // чертик идет за тобой
     @Test
     public void shoulEnemyGoToHero() {
+        setEnemiesNumber(1);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼     »☼" +
                 "☼H#####☼" +
@@ -162,6 +173,7 @@ public class SingleWithEnemyTest {
     // чертик идет за тобой по более короткому маршруту
     @Test
     public void shouldEnemyGoToHeroShortestWay() {
+        setEnemiesNumber(1);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼     »☼" +
                 "☼H####H☼" +
@@ -187,6 +199,7 @@ public class SingleWithEnemyTest {
 
     @Test
     public void shouldEnemyGoToHeroShortestWay2() {
+        setEnemiesNumber(1);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼»     ☼" +
                 "☼H####H☼" +
@@ -213,6 +226,7 @@ public class SingleWithEnemyTest {
     // другой чертик чертику не помеха
     @Test
     public void shouldEnemyGoToHeroShortestWayGetRoundOther() {
+        setEnemiesNumber(2);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼»    »☼" +
                 "☼H####H☼" +
@@ -238,6 +252,7 @@ public class SingleWithEnemyTest {
 
     @Test
     public void shouldEnemyGoToHeroShortestWayGetRoundOther2() {
+        setEnemiesNumber(2);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼» »   ☼" +
                 "☼H####H☼" +
@@ -264,6 +279,7 @@ public class SingleWithEnemyTest {
     // если чертику не достать одного он бежит за другим а не зависает
     @Test
     public void shouldEnemyGoToNewHeroIfOneIsHidden() {
+        setEnemiesNumber(1);
         setupGm("☼☼☼☼☼☼☼☼" +
                 "☼   ►  ☼" +
                 "☼######☼" +
@@ -325,11 +341,15 @@ public class SingleWithEnemyTest {
 
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
-        dice = mock(Dice.class);
-        field = new Loderunner(level, dice, new TestSettings());
+        field = new Loderunner(level, dice, settings);
 
         int px = level.getHeroes().get(0).getX();
         int py = level.getHeroes().get(0).getY();
         setupPlayer(px, py);
+    }
+
+    private void setEnemiesNumber(int enemiesNumber) {
+        Parameter<Integer> p = settings.getParameter("Number of enemies").type(Integer.class);
+        p.update(enemiesNumber);
     }
 }

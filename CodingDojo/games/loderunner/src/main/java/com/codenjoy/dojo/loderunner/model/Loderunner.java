@@ -28,10 +28,7 @@ import static java.util.stream.Collectors.toList;
 
 import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.loderunner.services.Events;
-import com.codenjoy.dojo.services.BoardUtils;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Settings;
 import java.util.HashSet;
@@ -62,6 +59,7 @@ public class Loderunner implements Field {
         this.dice = dice;
         this.settings = settings;
         players = new LinkedList<>();
+        enemies = new LinkedList<>();
         init();
     }
 
@@ -93,6 +91,7 @@ public class Loderunner implements Field {
         generatePills();
         generateGold();
         generatePortals();
+        generateEnemies();
     }
 
     private void toField(List<? extends Point> elements) {
@@ -127,6 +126,7 @@ public class Loderunner implements Field {
             rewardMurderers(deadHero.getX(), deadHero.getY());
         }
         generatePills();
+        generateEnemies();
     }
 
     private void penaltySuicide(Player deadHero) {
@@ -158,6 +158,26 @@ public class Loderunner implements Field {
         for (int i = 0; i < Math.abs(shadowPillsCount); i++) {
             Point pos = getFreeRandom();
             leavePill(pos.getX(), pos.getY(), PillType.SHADOW_PILL);
+        }
+    }
+
+    private void generateEnemies() {
+        Integer numberOfEnemies = settings
+                .<Integer>getParameter("Number of enemies")
+                .getValue();
+
+        numberOfEnemies = numberOfEnemies < 0 ? 0 : numberOfEnemies;
+
+        if (numberOfEnemies < enemies.size()) {
+            enemies = enemies.subList(0, numberOfEnemies);
+            return;
+        }
+        numberOfEnemies = numberOfEnemies - enemies.size();
+        for (int i = 0; i < Math.abs(numberOfEnemies); i++) {
+            Point pos = getFreeRandom();
+            Enemy enemy = new Enemy(pos, Direction.LEFT, level.getAi());
+            enemies.add(enemy);
+            enemy.init(this);
         }
     }
 
