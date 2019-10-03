@@ -122,17 +122,10 @@ public class Loderunner implements Field {
         for (Player player : die) {
             player.event(Events.KILL_HERO);
             Hero deadHero = player.getHero();
-            penaltySuicide(player);
             rewardMurderers(deadHero.getX(), deadHero.getY());
         }
         generatePills();
         generateEnemies();
-    }
-
-    private void penaltySuicide(Player deadHero) {
-        if (deadHero.getHero().isSuicide()) {
-            deadHero.event(Events.SUICIDE);
-        }
     }
 
     private void rewardMurderers(int x, int y) {
@@ -402,6 +395,11 @@ public class Loderunner implements Field {
     }
 
     @Override
+    public void suicide(Hero hero) {
+        getPlayer(hero).event(Events.SUICIDE);
+    }
+
+    @Override
     public boolean tryToDrill(Hero byHero, int x, int y) {
         Point pt = pt(x, y);
         if (!isFullBrick(x, y)) {
@@ -599,8 +597,8 @@ public class Loderunner implements Field {
         int yellowTypeGoldCount = (Integer) settings.getParameter("yellow type gold count").getValue();
         int greenTypeGoldCount = (Integer) settings.getParameter("green type gold count").getValue();
         int redTypeGoldCount = (Integer) settings.getParameter("red type gold count").getValue();
-        greenTypeGoldCount = greenTypeGoldCount < 0 ? 0 : greenTypeGoldCount;
-        redTypeGoldCount = redTypeGoldCount < 0 ? 0 : redTypeGoldCount;
+        greenTypeGoldCount = Math.max(greenTypeGoldCount, 0);
+        redTypeGoldCount = Math.max(redTypeGoldCount, 0);
 
         if (yellowTypeGoldCount >= 0 && yellowTypeGoldCount <= yellowGold.size()) {
             yellowGold = yellowGold.subList(0, yellowTypeGoldCount);

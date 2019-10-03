@@ -64,4 +64,6 @@ public interface Field extends GameField<Player> {
     boolean isBorder(int x, int y);
 
     List<Hero> getHeroes();
+
+    void suicide(Hero hero);
 }
