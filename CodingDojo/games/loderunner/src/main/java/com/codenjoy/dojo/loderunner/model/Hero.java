@@ -44,7 +44,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private boolean drilled;
     private boolean alive;
     private boolean jump;
-    private boolean suicide;
 
     public Hero(Point xy, Direction direction, Supplier<Integer> shadowPillTicks) {
         super(xy);
@@ -55,7 +54,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         drill = false;
         alive = true;
         jump = false;
-        suicide = false;
     }
 
     @Override
@@ -104,7 +102,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
         if (p.length == 1 && p[0] == 0) {
             alive = false;
-            suicide = true;
+            field.suicide(this);
             return;
         }
 
@@ -173,10 +171,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             checkAlive();
         }
         return alive;
-    }
-
-    public boolean isSuicide() {
-        return suicide;
     }
 
     public boolean isUnderThePill(PillType pillType) {
