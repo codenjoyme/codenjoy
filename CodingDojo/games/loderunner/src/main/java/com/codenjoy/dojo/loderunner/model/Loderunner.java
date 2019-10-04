@@ -601,13 +601,13 @@ public class Loderunner implements Field {
         redTypeGoldCount = Math.max(redTypeGoldCount, 0);
 
         if (yellowTypeGoldCount >= 0 && yellowTypeGoldCount <= yellowGold.size()) {
-            yellowGold = yellowGold.subList(0, yellowTypeGoldCount);
+            yellowGold = yellowGold.stream().limit(yellowTypeGoldCount).collect(toList());
         }
         if (greenTypeGoldCount <= greenGold.size()) {
-            greenGold = greenGold.subList(0, greenTypeGoldCount);
+            greenGold = greenGold.stream().limit(greenTypeGoldCount).collect(toList());
         }
         if (redTypeGoldCount <= redGold.size()) {
-            redGold = redGold.subList(0, redTypeGoldCount);
+            redGold = redGold.stream().limit(redTypeGoldCount).collect(toList());
         }
 
         yellowTypeGoldCount = yellowTypeGoldCount - yellowGold.size();
