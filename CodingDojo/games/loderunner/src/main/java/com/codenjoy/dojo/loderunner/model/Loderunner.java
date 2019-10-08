@@ -223,12 +223,9 @@ public class Loderunner implements Field {
     public BoardReader reader() {
         return new BoardReader() {
 
-            private int size = Loderunner.this.size;
-            private Point[][] field = Loderunner.this.field;
-
             @Override
             public int size() {
-                return size;
+                return Loderunner.this.size;
             }
 
             @Override

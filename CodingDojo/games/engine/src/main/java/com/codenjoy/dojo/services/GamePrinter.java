@@ -43,4 +43,6 @@ public interface GamePrinter {
     interface Filler {
         void set(int x, int y, char ch);
     }
+
+    int getSize();
 }
