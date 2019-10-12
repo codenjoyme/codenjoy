@@ -124,14 +124,15 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         return new LinkedList<Bullet>(bullets);
     }
 
+
     public void init(Field field) {
         super.init(field);
 
         int xx = x;
         int yy = y;
         while (field.isBarrier(xx, yy)) {
-            xx = dice.next(field.size());
-            yy = dice.next(field.size());
+            xx = dice.next(field.getSize());
+            yy = dice.next(field.getSize());
         }
         move(xx, yy);
         alive = true;

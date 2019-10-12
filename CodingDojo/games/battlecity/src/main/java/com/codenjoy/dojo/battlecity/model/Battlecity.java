@@ -25,40 +25,74 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
+import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.battlecity.services.Events;
+import com.codenjoy.dojo.battlecity.services.GameRunner;
+import com.codenjoy.dojo.battlecity.services.Level1;
+import com.codenjoy.dojo.battlecity.services.MapLoader;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.Settings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
+import java.util.logging.Logger;
 
 public class Battlecity implements Field {
 
+    private final Settings settings;
     private Dice dice;
     private LinkedList<Tank> aiTanks;
     private int aiCount;
 
     private int size;
-    private List<Construction> constructions;
-    private List<Border> borders;
-
+    private List<Construction> constructions =  new LinkedList<Construction>();
+    private List<Border> borders =  new LinkedList<Border>();
     private List<Player> players = new LinkedList<Player>();
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions, Tank... aiTanks) {
-        this(size, dice, constructions, new DefaultBorders(size).get(), aiTanks);
+    private Level level;
+    private UUID mapUUID;
+    private Point[][] field;
+
+
+    public Battlecity(Level level, Dice dice, Settings settings) {
+        this.level = level;
+        this.dice = dice;
+        this.settings = settings;
+        this.aiTanks = new LinkedList<>();
+        this.players = new LinkedList<>();
+        this.init();
     }
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      List<Border> borders, Tank... aiTanks) {
-        aiCount = aiTanks.length;
-        this.dice = dice;
-        this.size = size;
-        this.aiTanks = new LinkedList<>();
-        this.constructions = new LinkedList<>(constructions);
-        this.borders = new LinkedList<>(borders);
+    private void init() {
+        aiTanks.clear();
+        aiCount = settings.<Boolean>getParameter(GameRunner.IS_NEED_AI).getValue()?level.getTanks().size():0;
+        mapUUID = level.getMapUUID();
+        size = level.getSize();
+        borders = level.getBorders();
+        constructions = level.getConstructions();
 
-        for (Tank tank : aiTanks) {
-            addAI(tank);
+        field = new Point[size][size];
+        toField(borders);
+        toField(constructions);
+
+        if (aiCount > 0) {
+            for (Tank tank : level.getTanks()) {
+                addAI(tank);
+            }
+        }
+
+        for (Player player : players) {
+            player.update(this);
+        }
+
+    }
+
+    private void toField(List<? extends Point> elements) {
+        for (Point element : elements) {
+            field[element.getX()][element.getY()] = element;
         }
     }
 
@@ -71,6 +105,9 @@ public class Battlecity implements Field {
 
     @Override
     public void tick() {
+        if (level.getMapUUID() != mapUUID){
+            init();
+        }
         removeDeadTanks();
 
         newAI();
@@ -266,8 +303,8 @@ public class Battlecity implements Field {
         return result;
     }
 
-    @Override
-    public List<Tank> getTanks() {
+//    @Override
+    private List<Tank> getTanks() {
         LinkedList<Tank> result = new LinkedList<>(aiTanks);
         for (Player player : players) {
 //            if (player.getTank().isAlive()) { // TODO разремарить с тестом
@@ -288,21 +325,21 @@ public class Battlecity implements Field {
             players.add(player);
         }
         player.newHero(this);
+        player.update(this);
     }
 
     @Override
-    public int size() {
+    public int getSize() {
         return size;
     }
 
     @Override
     public BoardReader reader() {
         return new BoardReader() {
-            private int size = Battlecity.this.size;
 
             @Override
             public int size() {
-                return size;
+                return Battlecity.this.getSize();
             }
 
             @Override
@@ -317,8 +354,8 @@ public class Battlecity implements Field {
         };
     }
 
-    @Override
-    public List<Construction> getConstructions() {
+//    @Override
+    private List<Construction> getConstructions() {
         List<Construction> result = new LinkedList<>();
         for (Construction construction : constructions) {
             if (!construction.destroyed()) {
@@ -328,13 +365,9 @@ public class Battlecity implements Field {
         return result;
     }
 
-    @Override
-    public List<Border> getBorders() {
+//    @Override
+    private List<Border> getBorders() {
         return borders;
-    }
-
-    public void setDice(Dice dice) {
-        this.dice = dice;
     }
 
 }

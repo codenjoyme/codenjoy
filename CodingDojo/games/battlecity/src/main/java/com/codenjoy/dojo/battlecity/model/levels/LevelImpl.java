@@ -29,22 +29,20 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 public class LevelImpl implements Level {
 
-    private final LengthToXY xy;
+    private LengthToXY xy;
     private final Dice dice;
-    private final String map;
+    private String map;
+    private UUID mapUuid;
 
     public LevelImpl(String map, Dice dice) {
         this.map = map;
+        mapUuid = UUID.randomUUID();
         this.dice = dice;
-        xy = new LengthToXY(size());
-    }
-
-    @Override
-    public int size() {
-        return (int) Math.sqrt(map.length());
+        xy = new LengthToXY(getSize());
     }
 
     @Override
@@ -63,7 +61,7 @@ public class LevelImpl implements Level {
         return new BoardReader() {
             @Override
             public int size() {
-                return LevelImpl.this.size();
+                return LevelImpl.this.getSize();
             }
 
             @Override
@@ -99,4 +97,22 @@ public class LevelImpl implements Level {
         }
         return result;
     }
+
+    @Override
+    public int getSize() {
+        return (int) Math.sqrt(map.length());
+    }
+
+    @Override
+    public void refresh(String map) {
+        this.map = map;
+        mapUuid = UUID.randomUUID();
+        this.xy = new LengthToXY(getSize());
+    }
+
+    @Override
+    public UUID getMapUUID() {
+        return mapUuid;
+    }
+
 }

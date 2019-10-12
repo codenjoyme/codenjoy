@@ -29,12 +29,13 @@ import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by indigo on 2018-07-01.
  */
 public interface Level {
-    int size();
+    int getSize();
 
     List<Border> getBorders();
 
@@ -43,4 +44,8 @@ public interface Level {
     List<Construction> getConstructions();
 
     BoardReader reader();
+    
+    void refresh(String map);
+
+    UUID getMapUUID();
 }

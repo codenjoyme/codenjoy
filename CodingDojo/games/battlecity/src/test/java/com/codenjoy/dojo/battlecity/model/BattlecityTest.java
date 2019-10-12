@@ -23,11 +23,14 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.TestSettings;
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
+import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -49,17 +52,24 @@ public class BattlecityTest {
     private Battlecity game;
     private Joystick hero;
     private List<Player> players = new LinkedList<>();
+    private LevelImpl level;
+    private Settings settings;
+    private String board = "☼☼☼☼☼" +
+            "☼   ☼" +
+            "☼   ☼" +
+            "☼   ☼" +
+            "☼☼☼☼☼";
 
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     @Before
     public void setup() {
-        size = 7;
+        level = new LevelImpl(board, mock(Dice.class));;
         ticksPerBullets = 1;
-    }
+        settings = new TestSettings();    }
 
     private void givenGame(Tank tank, Construction... constructions) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(constructions));
+        game = new Battlecity(level, mock(Dice.class), settings);
         initPlayer(game, tank);
         this.hero = tank;
     }
@@ -68,13 +78,13 @@ public class BattlecityTest {
         List<Border> borders = new DefaultBorders(size).get();
         borders.addAll(Arrays.asList(walls));
 
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), borders);
+        game = new Battlecity(level, mock(Dice.class), settings);
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private void givenGameWithAI(Tank tank, Tank... aiTanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), aiTanks);
+        game = new Battlecity(level, mock(Dice.class), settings);
         initPlayer(game, tank);
         this.hero = tank;
     }
@@ -89,7 +99,7 @@ public class BattlecityTest {
     }
 
     private void givenGameWithTanks(Tank... tanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[]{}));
+        game = new Battlecity(level, mock(Dice.class), settings);
         for (Tank tank : tanks) {
             initPlayer(game, tank);
         }
@@ -151,7 +161,7 @@ public class BattlecityTest {
     @Test
     public void shouldBeConstruction_whenGameCreated() {
         givenGame(tank(1, 1, Direction.UP), new Construction(3, 3));
-        assertEquals(1, game.getConstructions().size());
+        assertEquals(1, level.getConstructions().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -162,11 +172,6 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    @Test
-    public void shouldBeTankOnFieldWhenGameCreated() {
-        givenGameWithTankAt(1, 1);
-        assertNotNull(game.getTanks());
-    }
 
     @Test
     public void shouldTankMove() {
@@ -1958,17 +1963,6 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼ ▲   ☼\n" +
                 "☼    Ѡ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        game.setDice(getDice(3, 3));
-        game.tick();
-
-        assertW("☼☼☼☼☼☼☼\n" + // TODO разобраться почему тут скачет ассерт
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼ ▲   ☼\n" +
-                "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
 

@@ -28,8 +28,8 @@ import com.codenjoy.dojo.battlecity.client.ai.AISolver;
 import com.codenjoy.dojo.battlecity.model.Battlecity;
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
-import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
+import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
@@ -37,17 +37,36 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
+import org.apache.commons.lang3.StringUtils;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
-    private LevelImpl level;
+    public static final String NUMBER_OF_PLAYERS = "Number of players for team";
+    public static final String IS_NEED_AI = "Is need AI";
+    public static final String CUSTOM_MAP_PATH = "Custom map path";
+    public static final String MULTIPLAYER_TYPE = "Multiplayer Type";
+
+    private Level level;
+    private Parameter<String> multiplayerType;
+    private Parameter<Integer> numberOfPlayers;
+    private Parameter<Boolean> needAI;
+    private Parameter<String> customMapPath;
 
     public GameRunner() {
         new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
-
-        level = new LevelImpl(getMap(), getDice());
+        needAI = settings.addCheckBox(IS_NEED_AI).type(Boolean.class).def(true);
+        numberOfPlayers = settings.addEditBox(NUMBER_OF_PLAYERS).type(Integer.class).def(2);
+        customMapPath = settings.addEditBox(CUSTOM_MAP_PATH).type(String.class).def("");
+        multiplayerType = settings.addSelect(MULTIPLAYER_TYPE, Arrays.asList("MULTIPLAYER", "TEAM"))
+                .type(String.class)
+                .def("TEAM");
+        level = new LevelImpl(MapLoader.loadMapFromFile(customMapPath.getValue()), getDice());
     }
 
     @Override
@@ -57,16 +76,14 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
-        return new Battlecity(level.size(),
+        return new Battlecity(level,
                 getDice(),
-                level.getConstructions(),
-                level.getBorders(),
-                level.getTanks().toArray(new Tank[0]));
+                settings);
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(level.size());
+        return v(level.getSize());
     }
 
     @Override
@@ -91,7 +108,15 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.MULTIPLE;
+        switch (multiplayerType.getValue()){
+            case "MULTIPLAYER":
+                return MultiplayerType.MULTIPLE;
+            case "TEAM": {
+                return MultiplayerType.TEAM.apply(numberOfPlayers.getValue(), !MultiplayerType.DISPOSABLE);
+            }
+            default:
+                return MultiplayerType.MULTIPLE; //все на одной карте
+        }
     }
 
     @Override
@@ -99,44 +124,17 @@ public class GameRunner extends AbstractGameType implements GameType {
         return new Player(listener, getDice());
     }
 
-    /**
-     * @return Карта для игры, но ты так же можешь ее переопределить
-     */
-    public String getMap() {
-        return
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼ ¿    ¿    ¿        ¿    ¿    ¿ ☼" +
-                "☼                                ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬☼☼╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬☼☼╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬            ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬            ╬╬╬  ╬╬╬  ☼" +
-                "☼            ╬╬╬  ╬╬╬            ☼" +
-                "☼            ╬╬╬  ╬╬╬            ☼" +
-                "☼     ╬╬╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬╬╬     ☼" +
-                "☼☼☼   ╬╬╬╬╬            ╬╬╬╬╬   ☼☼☼" +
-                "☼                                ☼" +
-                "☼            ╬╬╬  ╬╬╬            ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬                      ╬╬╬  ☼" +
-                "☼  ╬╬╬                      ╬╬╬  ☼" +
-                "☼  ╬╬╬       ╬╬╬╬╬╬╬╬       ╬╬╬  ☼" +
-                "☼  ╬╬╬       ╬╬╬╬╬╬╬╬       ╬╬╬  ☼" +
-                "☼            ╬╬    ╬╬            ☼" +
-                "☼            ╬╬    ╬╬            ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
+    @Override
+    public void quietTick(){
+        if (this.settings.changed()){
+            for (String param: this.settings.whatChanged()){
+                if (param.equalsIgnoreCase(CUSTOM_MAP_PATH)){
+                    String customMapPath = settings.<String>getParameter(CUSTOM_MAP_PATH).getValue();
+                    level.refresh(MapLoader.loadMapFromFile(customMapPath));
+                }
+            }
+            this.settings.changesReacted();
+        }
     }
+
 }

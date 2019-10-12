@@ -23,16 +23,21 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.TestSettings;
+import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 
+import static com.codenjoy.dojo.battlecity.model.BattlecityTest.tank;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -50,9 +55,17 @@ public class SingleTest {
     private Player player1;
     private Player player2;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private Settings settings;
+    private String board = "☼☼☼☼☼" +
+            "☼   ☼" +
+            "☼   ☼" +
+            "☼   ☼" +
+            "☼☼☼☼☼";
 
     public void givenGame() {
-        field = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]));
+        settings = new TestSettings();
+        LevelImpl level = new LevelImpl(board, mock(Dice.class));
+        field = new Battlecity(level, mock(Dice.class), settings);
         player1 = new Player(null, dice1);
         player2 = new Player(null, dice2);
         tanks1 = new Single(player1, printerFactory);
