@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -28,17 +28,21 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.loderunner.client.ai.AISolver;
 import com.codenjoy.dojo.loderunner.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
+import org.apache.commons.lang3.StringUtils;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
-    private final Level level;
+    private Level level;
 
     public GameRunner() {
         new Scores(0, settings);  // TODO сеттринги разделены по разным классам, продумать архитектуру
@@ -52,7 +56,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
-        return new Loderunner(level, getDice());
+        return new Loderunner(level, getDice(), settings);
     }
 
     @Override
@@ -87,10 +91,22 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerName) {
-        return new Player(listener);
+        return new Player(listener, () -> settings
+                .<Integer>getParameter("Number of ticks that the shadow pill will be active")
+                .getValue());
+    }
+
+    @Override
+    public void refresh() {
+        level.refresh(getMap());
     }
 
     protected String getMap() {
-        return Level1.get();
+        String customMapPath = settings.<String>getParameter("Custom map path").getValue();
+        if (StringUtils.isNotEmpty(customMapPath)) {
+            return MapLoader.loadMapFromFile(customMapPath);
+        } else {
+            return Level1.get();
+        }
     }
 }

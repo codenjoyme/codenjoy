@@ -33,4 +33,11 @@ import java.util.List;
 public class AppProperties {
 
     private List<String> logging;
+    private List<String> ssoAdmins;
+
+    public boolean isSsoAdmin(String email) {
+        return ssoAdmins
+            .stream()
+            .anyMatch(email::equalsIgnoreCase);
+    }
 }

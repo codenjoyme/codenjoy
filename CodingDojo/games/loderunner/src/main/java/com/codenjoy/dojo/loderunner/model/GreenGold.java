@@ -4,7 +4,7 @@ package com.codenjoy.dojo.loderunner.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,23 +22,22 @@ package com.codenjoy.dojo.loderunner.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Gold extends PointImpl implements State<Elements, Player> {
+public class GreenGold extends PointImpl implements State<Elements, Player> {
 
-    public Gold(Point point) {
+    public GreenGold(Point point) {
         super(point);
     }
 
-    public Gold(int x, int y) {
+    public GreenGold(int x, int y) {
         super(x, y);
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.GOLD;
+        return Elements.GREEN_GOLD;
     }
 }

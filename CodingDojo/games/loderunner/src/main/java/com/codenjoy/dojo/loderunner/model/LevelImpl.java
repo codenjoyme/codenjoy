@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,25 +23,29 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.codenjoy.dojo.loderunner.model.Elements.*;
 import static java.util.stream.Collectors.toList;
 
 public class LevelImpl implements Level {
 
+    private UUID mapUuid;
+    private LengthToXY xy;
     private EnemyAI ai;
-
-    private final LengthToXY xy;
     private String map;
 
     public LevelImpl(String map) {
         this.map = map;
+        mapUuid = UUID.randomUUID();
         ai = new AI();
         xy = new LengthToXY(getSize());
     }
@@ -53,14 +57,25 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHeroes() {
-        return new LinkedList<Hero>(){{
-            addAll(pointsOf(HERO_LEFT).stream()
-                    .map(pt -> new Hero(pt, Direction.LEFT))
-                    .collect(toList()));
-            
-            addAll(pointsOf(HERO_RIGHT).stream()
-                    .map(pt -> new Hero(pt, Direction.RIGHT))
-                    .collect(toList()));
+        return new LinkedList<Hero>() {{
+            EnumSet<Elements> heroesGoingLeft = EnumSet
+                    .of(HERO_DRILL_LEFT, HERO_LEFT, HERO_FALL_LEFT, HERO_PIPE_LEFT,
+                            HERO_SHADOW_DRILL_LEFT,
+                            HERO_SHADOW_LEFT, HERO_SHADOW_FALL_LEFT, HERO_SHADOW_PIPE_LEFT);
+            heroesGoingLeft.forEach(heroBlocks ->
+                    addAll(pointsOf(heroBlocks).stream()
+                            .map(pt -> new Hero(pt, Direction.LEFT, () -> 1))
+                            .collect(toList())));
+
+            EnumSet<Elements> heroesGoingRight = EnumSet
+                    .of(HERO_DRILL_RIGHT, HERO_RIGHT, HERO_FALL_RIGHT, HERO_PIPE_RIGHT,
+                            HERO_SHADOW_DRILL_RIGHT,
+                            HERO_SHADOW_RIGHT, HERO_SHADOW_FALL_RIGHT, HERO_SHADOW_PIPE_RIGHT);
+
+            heroesGoingRight.forEach(heroBlocks ->
+                    addAll(pointsOf(heroBlocks).stream()
+                            .map(pt -> new Hero(pt, Direction.RIGHT, () -> 1))
+                            .collect(toList())));
         }};
     }
 
@@ -73,8 +88,8 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Border> getBorders() {
-                return pointsOf(UNDESTROYABLE_WALL).stream()
-            .map(Border::new)
+        return pointsOf(UNDESTROYABLE_WALL).stream()
+                .map(Border::new)
                 .collect(toList());
     }
 
@@ -89,9 +104,23 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Gold> getGold() {
-        return pointsOf(GOLD).stream()
-                .map(Gold::new)
+    public List<YellowGold> getYellowGold() {
+        return pointsOf(YELLOW_GOLD).stream()
+                .map(YellowGold::new)
+                .collect(toList());
+    }
+
+    @Override
+    public List<GreenGold> getGreenGold() {
+        return pointsOf(GREEN_GOLD).stream()
+                .map(GreenGold::new)
+                .collect(toList());
+    }
+
+    @Override
+    public List<RedGold> getRedGold() {
+        return pointsOf(RED_GOLD).stream()
+                .map(RedGold::new)
                 .collect(toList());
     }
 
@@ -111,7 +140,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Enemy> getEnemies() {
-        return new LinkedList<Enemy>(){{
+        return new LinkedList<Enemy>() {{
             addAll(pointsOf(ENEMY_LEFT).stream()
                     .map(pt -> new Enemy(pt, Direction.LEFT, ai))
                     .collect(toList()));
@@ -122,7 +151,39 @@ public class LevelImpl implements Level {
         }};
     }
 
+    @Override
+    public List<Pill> getPills() {
+        return pointsOf(THE_SHADOW_PILL).stream() // TODO: add speed pills
+                .map(kp -> new Pill(kp, PillType.SHADOW_PILL))
+                .collect(toList());
+    }
+
+    @Override
+    public List<Portal> getPortals() {
+        return pointsOf(PORTAL).stream()
+                .map(Portal::new)
+                .collect(toList());
+    }
+
+    @Override
+    public void refresh(String map) {
+        this.map = map;
+        mapUuid = UUID.randomUUID();
+        ai = new AI();
+        this.xy = new LengthToXY(getSize());
+    }
+
+    @Override
+    public UUID getMapUUID() {
+        return mapUuid;
+    }
+
     public void setAI(EnemyAI ai) {
         this.ai = ai;
+    }
+
+    @Override
+    public EnemyAI getAi() {
+        return this.ai;
     }
 }

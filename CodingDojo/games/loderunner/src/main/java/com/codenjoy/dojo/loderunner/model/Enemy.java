@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,24 +23,26 @@ package com.codenjoy.dojo.loderunner.model;
  */
 
 
+import com.codenjoy.dojo.loderunner.model.Pill.PillType;
 import com.codenjoy.dojo.services.*;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Enemy extends PointImpl implements Tickable, Fieldable, State<Elements, Player> {
 
     private Direction direction;
     private EnemyAI ai;
     private Field field;
-    private boolean withGold;
+    private Class<? extends Point> withGold;
     private Hero huntHim;
     private Hero oldHurt;
 
     public Enemy(Point pt, Direction direction, EnemyAI ai) {
         super(pt);
-        withGold = false;
+        withGold = null;
         this.direction = direction;
         this.ai = ai;
     }
@@ -52,8 +54,11 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
 
     @Override
     public void tick() {
-        if (huntHim == null || !huntHim.isAlive()) {
-            List<Hero> heroes = new LinkedList<>(field.getHeroes());
+        if (huntHim == null || !huntHim.isAlive() || huntHim.isUnderThePill(PillType.SHADOW_PILL)) {
+            List<Hero> heroes = new LinkedList<>(field.getHeroes())
+                    .stream()
+                    .filter(hero -> !hero.isUnderThePill(PillType.SHADOW_PILL))
+                    .collect(Collectors.toList());
             if (oldHurt != null) { // если я бегал за героем, который спрятался
                 heroes.remove(oldHurt); // исключаю его из поиска // TODO подумать, тут может быть кейс, когда герой один и он появился уже а я за ним бегать не могу
             }
@@ -64,10 +69,10 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
         }
 
         if (isFall()) {
-            if (field.isBrick(x, y - 1) && withGold) {
-                withGold = false;
+            if (field.isBrick(x, y - 1) && withGold != null) {
                 // TODO герой не может оставить золото, если он залез в ямку под лестницу, золото должно появиться сбоку
-                field.leaveGold(x, y);
+                field.leaveGold(x, y, withGold);
+                withGold = null;
             }
             move(x, y - 1);
         } else if (field.isBrick(x, y)) {
@@ -127,12 +132,12 @@ public class Enemy extends PointImpl implements Tickable, Fieldable, State<Eleme
         return Elements.ENEMY_RIGHT;
     }
 
-    public void getGold() {
-        withGold = true;
+    public void getGold(Class<? extends Point> clazz) {
+        withGold = clazz;
     }
 
     public boolean withGold() {
-        return withGold;
+        return withGold != null;
     }
 
 }

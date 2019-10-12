@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,14 +23,14 @@ package com.codenjoy.dojo.loderunner.services;
  */
 
 
+import static org.junit.Assert.assertEquals;
+
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
     private PlayerScores scores;
@@ -50,7 +50,7 @@ public class ScoresTest {
     }
 
     public void getGold() {
-        scores.event(Events.GET_GOLD);
+        scores.event(Events.GET_YELLOW_GOLD);
     }
 
     @Before
@@ -64,7 +64,7 @@ public class ScoresTest {
 
         killEnemyScore = settings.getParameter("Kill enemy score").type(Integer.class).getValue();
 
-        Parameter<Integer> p3 = settings.getParameter("Get gold score").type(Integer.class);
+        Parameter<Integer> p3 = settings.getParameter("yellow type gold weight").type(Integer.class);
         p3.update(10);
         getGoldScore = p3.getValue();
 
@@ -85,7 +85,7 @@ public class ScoresTest {
 
         killHero(); //-30
 
-        assertEquals(140 + 3*killEnemyScore + getGoldScore - killHeroPenalty, scores.getScore());
+        assertEquals(140 + 3 * killEnemyScore + getGoldScore - killHeroPenalty, scores.getScore());
     }
 
     @Test
@@ -113,7 +113,7 @@ public class ScoresTest {
         getGold();  //+16
         getGold();  //+19
 
-        assertEquals(10*4 + 3 + 6 + 9, scores.getScore());
+        assertEquals(10 * 4 + 3 + 6 + 9, scores.getScore());
     }
 
     @Test

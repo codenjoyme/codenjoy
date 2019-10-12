@@ -10,12 +10,12 @@ package com.codenjoy.dojo.loderunner;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,18 +23,18 @@ package com.codenjoy.dojo.loderunner;
  */
 
 
+import static org.junit.Assert.assertEquals;
+
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.loderunner.client.Board;
 import com.codenjoy.dojo.loderunner.client.ai.AISolver;
 import com.codenjoy.dojo.loderunner.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
-import org.junit.Test;
-
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import org.junit.Test;
 
 public class SmokeTest {
     private int index;
@@ -59,7 +59,7 @@ public class SmokeTest {
 
             @Override
             protected String getMap() {
-                return  "☼☼☼☼☼☼☼☼☼☼" +
+                return "☼☼☼☼☼☼☼☼☼☼" +
                         "☼ $ ~~~» ☼" +
                         "☼H##   # ☼" +
                         "☼H~~~   $☼" +
@@ -69,6 +69,14 @@ public class SmokeTest {
                         "☼$  H   $☼" +
                         "☼########☼" +
                         "☼☼☼☼☼☼☼☼☼☼";
+            }
+
+            @Override
+            protected SettingsImpl createSettings() {
+                SettingsImpl settings = new TestSettings();
+                Parameter<Integer> p = settings.getParameter("Number of enemies").type(Integer.class);
+                p.update(1);
+                return settings;
             }
         };
 
@@ -167,7 +175,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Answer: LEFT\n" +
-                        "Fire Event: GET_GOLD\n" +
+                        "Fire Event: GET_YELLOW_GOLD\n" +
                         "DICE:6\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
@@ -304,7 +312,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Answer: RIGHT\n" +
-                        "Fire Event: GET_GOLD\n" +
+                        "Fire Event: GET_YELLOW_GOLD\n" +
                         "DICE:6\n" +
                         "DICE:6\n" +
                         "------------------------------------------",
