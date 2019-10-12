@@ -43,7 +43,7 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     public void setup() {
         timeout = 3;
         semifinal = new Semifinal();
-        settings = semifinal.settings();
+        settings = semifinal.settings = new SemifinalSettings();
         settings.setEnabled(true);
         settings.setPercentage(true);
         settings.setLimit(50);
@@ -51,6 +51,81 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         settings.setTimeout(timeout);
         semifinal.playerGames = playerGames;
         semifinal.clean();
+    }
+
+    @Test
+    public void shouldResetTicks_whenRoundDone() {
+        // given
+        settings.setTimeout(3);
+
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(80);
+
+        assertEquals(0, semifinal.getTime());
+
+        // when then
+        semifinal.tick();
+        assertEquals(1, semifinal.getTime());
+
+        // when then
+        semifinal.tick();
+        assertEquals(2, semifinal.getTime());
+
+        // when then
+        semifinal.tick();
+        assertEquals(0, semifinal.getTime());
+
+        // when then
+        semifinal.tick();
+        assertEquals(1, semifinal.getTime());
+
+        // when then
+        semifinal.tick();
+        assertEquals(2, semifinal.getTime());
+
+        // when then
+        semifinal.tick();
+        assertEquals(0, semifinal.getTime());
+    }
+
+    @Test
+    public void shouldResetTicks_whenClear() {
+        // given
+        settings.setTimeout(10);
+
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(80);
+
+        semifinal.tick();
+        semifinal.tick();
+        semifinal.tick();
+        assertEquals(3, semifinal.getTime());
+
+        // when
+        semifinal.clean();
+
+        // then
+        assertEquals(0, semifinal.getTime());
+    }
+
+    @Test
+    public void shouldDoNotCalculateTicks_whenDisabled() {
+        // given
+        settings.setEnabled(false);
+        settings.setTimeout(3);
+
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(80);
+
+        assertEquals(0, semifinal.getTime());
+
+        // when then
+        semifinal.tick();
+        assertEquals(0, semifinal.getTime());
+
+        // when then
+        semifinal.tick();
+        assertEquals(0, semifinal.getTime());
     }
 
     @Test

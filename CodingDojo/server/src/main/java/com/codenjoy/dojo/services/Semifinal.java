@@ -22,14 +22,13 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.web.rest.pojo.GameTypeInfo;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -41,7 +40,7 @@ import static java.util.stream.Collectors.toMap;
 public class Semifinal implements Tickable {
 
     @Autowired
-    private SemifinalSettings settings;
+    protected SemifinalSettings settings;
 
     @Autowired
     protected PlayerGames playerGames;
@@ -59,6 +58,7 @@ public class Semifinal implements Tickable {
 
         // ждем заданное количество тиков
         if (++time % settings.getTimeout() != 0) return;
+        time = 0;
 
         // получаем мапу по играм, где значениями являются сортированные по очкам списки PlayerGame
         Map<String, List<PlayerGame>> map =
