@@ -77,6 +77,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected ActionLogger actionLogger;
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties config;
+    @Autowired protected Semifinal semifinal;
 
     @Value("${game.ai}")
     protected boolean isAINeeded;
@@ -298,6 +299,9 @@ public class PlayerServiceImpl implements PlayerService {
             if (playerGames.isEmpty()) {
                 return;
             }
+
+            semifinal.tick();
+
         } catch (Error e) {
             e.printStackTrace();
             log.error("PlayerService.tick() throws", e);
@@ -561,13 +565,9 @@ public class PlayerServiceImpl implements PlayerService {
     public void cleanAllScores() {
         lock.writeLock().lock();
         try {
-            for (PlayerGame playerGame : playerGames) {
-                Game game = playerGame.getGame();
-                Player player = playerGame.getPlayer();
+            semifinal.clean();
 
-                player.clearScore();
-                game.clearScore();
-            }
+            playerGames.forEach(PlayerGame::clearScore);
         } finally {
             lock.writeLock().unlock();
         }

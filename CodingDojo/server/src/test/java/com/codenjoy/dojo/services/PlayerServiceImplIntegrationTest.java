@@ -50,6 +50,7 @@ public class PlayerServiceImplIntegrationTest {
 
     private PlayerService service;
 
+    private Semifinal semifinal;
     private ConfigProperties config;
     private ActionLogger actionLogger;
     private AutoSaver autoSaver;
@@ -93,6 +94,10 @@ public class PlayerServiceImplIntegrationTest {
                 PlayerServiceImplIntegrationTest.this.config
                         = this.config = new ConfigProperties();
                 config.setRegistrationOpened(true);
+
+                PlayerServiceImplIntegrationTest.this.semifinal
+                        = this.semifinal = mock(Semifinal.class);
+                when(semifinal.isEnabled()).thenReturn(false);
 
                 this.isAINeeded = true;
             }

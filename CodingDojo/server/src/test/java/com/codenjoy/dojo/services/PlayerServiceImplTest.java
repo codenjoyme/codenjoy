@@ -111,6 +111,9 @@ public class PlayerServiceImplTest {
     private GameService gameService;
 
     @MockBean
+    private Semifinal semifinal;
+
+    @MockBean
     private ActionLogger actionLogger;
 
     @SpyBean
@@ -157,7 +160,7 @@ public class PlayerServiceImplTest {
 
         when(playerScores3.getScore()).thenReturn(0);
 
-        when(printer.print(anyObject(), anyObject())).thenReturn("1234");
+        when(printer.print(any(), any())).thenReturn("1234");
 
         when(gameService.getGame(anyString())).thenReturn(gameType);
 
@@ -299,7 +302,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendCoordinatesToPlayerBoard() throws IOException {
         Player vasia = createPlayer(VASYA);
-        when(printer.print(anyObject(), anyObject())).thenReturn("1234");
+        when(printer.print(any(), any())).thenReturn("1234");
 
         playerService.tick();
 
@@ -310,7 +313,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldSendPlayerBoardFromJsonBoard() throws IOException {
         Player vasia = createPlayer(VASYA);
-        when(printer.print(anyObject(), anyObject()))
+        when(printer.print(any(), any()))
                 .thenReturn(new JSONObject("{'layers':['1234','4321']}"));
 
         playerService.tick();
@@ -335,7 +338,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldRequestControlFromAllPlayersWithGlassState() throws IOException {
         createPlayer(VASYA);
-        when(printer.print(anyObject(), anyObject())).thenReturn("1234");
+        when(printer.print(any(), any())).thenReturn("1234");
 
         playerService.tick();
 
@@ -349,7 +352,7 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        when(printer.print(anyObject(), anyObject()))
+        when(printer.print(any(), any()))
                 .thenReturn("1234")
                 .thenReturn("4321");
         when(playerScores1.getScore()).thenReturn(123);
@@ -669,6 +672,7 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldTickForEachGamesWhenSeparateBordersGameType() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
 
@@ -682,8 +686,10 @@ public class PlayerServiceImplTest {
 
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
 
+        // when
         playerService.tick();
 
+        // then
         verify(game1.getField()).quietTick();
         verify(game2.getField()).quietTick();
     }
@@ -696,6 +702,7 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldContinueTicksWhenException() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
 
@@ -712,8 +719,10 @@ public class PlayerServiceImplTest {
 
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
 
+        // when
         playerService.tick();
 
+        // then
         verify(field1).quietTick();
         verify(field2).quietTick();
     }
@@ -733,6 +742,7 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldTickForOneGameWhenSingleBordersGameType() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
 
@@ -748,13 +758,16 @@ public class PlayerServiceImplTest {
 
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.MULTIPLE);   // тут отличия с прошлым тестом
 
+        // when
         playerService.tick();
 
+        // then
         verify(field1, times(1)).quietTick();
     }
 
     @Test
     public void shouldContinueTicksWhenExceptionInNewGame() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
 
@@ -768,14 +781,17 @@ public class PlayerServiceImplTest {
         when(game1.isGameOver()).thenReturn(true);
         doThrow(new RuntimeException()).when(game1).newGame();
 
+        // when
         playerService.tick();
 
+        // then
         verify(game1.getField()).quietTick();
         verify(game2.getField()).quietTick();
     }
 
     @Test
     public void shouldContinueTicksWhenExceptionInPlayerGameTick() {
+        // given
         createPlayer(VASYA);
 
         Game game1 = createGame(gameField(VASYA));
@@ -790,13 +806,16 @@ public class PlayerServiceImplTest {
 
         doThrow(new RuntimeException()).when(spy).tick();
 
+        // when
         playerService.tick();
 
+        // then
         verify(game1.getField()).quietTick();
     }
 
     @Test
     public void shouldContinueTicksWhenException_caseMultiplayer() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
 
@@ -811,8 +830,10 @@ public class PlayerServiceImplTest {
         GameField field1 = game1.getField();
         when(game2.getField()).thenReturn(field1);
 
+        // when
         playerService.tick();
 
+        // then
         verify(field1, times(1)).quietTick();
     }
 
@@ -1047,11 +1068,14 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldGetAll() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
 
+        // when
         List<Player> all = playerService.getAll();
 
+        // then
         assertEquals(2, all.size());
         Player player1 = all.get(0);
         Player player2 = all.get(1);
@@ -1067,19 +1091,23 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldContains() {
+        // given
         createPlayer(VASYA);
 
+        // when then
         assertTrue(playerService.contains(VASYA));
         assertFalse(playerService.contains(PETYA));
     }
 
     @Test
     public void shouldGetJoystick() {
+        // given
         createPlayer(VASYA);
         Joystick joystick1 = joystick(VASYA);
         createPlayer(PETYA);
         Joystick joystick2 = joystick(PETYA);
 
+        // when then
         assertSame(joystick1, ((LockedJoystick)playerService.getJoystick(VASYA)).getWrapped());
         assertSame(joystick2, ((LockedJoystick)playerService.getJoystick(PETYA)).getWrapped());
         assertSame(NullJoystick.INSTANCE, playerService.getJoystick(KATYA));
@@ -1087,20 +1115,25 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldCleanAllScores() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
 
         verify(gameField(VASYA)).newGame(any());
         verify(gameField(PETYA)).newGame(any());
 
+        // when
         playerService.cleanAllScores();
 
+        // then
         verify(playerScores1).clear();
         verify(playerScores2).clear();
         verifyNoMoreInteractions(playerScores3);
 
         verify(gameField(VASYA)).clearScore();
         verify(gameField(PETYA)).clearScore();
+
+        verify(semifinal).clean();
     }
 
     @Test
@@ -1113,33 +1146,43 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldUpdateAll_whenNullInfos() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
 
+        // when
         playerService.updateAll(null);
 
+        // then
         List<Player> all = playerService.getAll();
         assertVasyaAndPetya(all);
     }
 
     @Test
     public void shouldUpdateAll_mainCase() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
 
+        // when
         List<PlayerInfo> infos = new LinkedList<>();
         infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
         infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2", "new-game"));
         playerService.updateAll(infos);
 
+        // then
         List<Player> all = playerService.getAll();
         assertUpdatedVasyaAndPetya(all);
     }
 
     @Test
     public void shouldSendPlayerNameToGame() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
+
+        // when then
+        // TODO implement
     }
 
     private void assertUpdatedVasyaAndPetya(List<Player> all) {
@@ -1160,21 +1203,25 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldUpdateAll_removeNullUsers() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
 
+        // when
         List<PlayerInfo> infos = new LinkedList<>();
         infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
         infos.add(new PlayerInfo("new-petya", "new-pass2", "new-url2", "new-game"));
         infos.add(new PlayerInfo(null, "new-pass2", "new-url2", "new-game"));
         playerService.updateAll(infos);
 
+        // then
         List<Player> all = playerService.getAll();
         assertUpdatedVasyaAndPetya(all);
     }
 
     @Test
     public void shouldUpdateAll_exceptionIfCountUsersNotEqual() {
+        // given
         createPlayer(VASYA);
         createPlayer(PETYA);
 
@@ -1182,9 +1229,11 @@ public class PlayerServiceImplTest {
         infos.add(new PlayerInfo("new-vasya", "new-pass1", "new-url1", "new-game"));
 
         try {
+            // when
             playerService.updateAll(infos);
             fail();
         } catch (Exception e) {
+            // then
             assertEquals("java.lang.IllegalArgumentException: Diff players count", e.toString());
         }
 
@@ -1294,12 +1343,28 @@ public class PlayerServiceImplTest {
 
     @Test
     public void shouldLogActionsOnTick() {
+        // given
         createPlayer(VASYA);
 
+        // when
         playerService.tick();
 
+        // then
         verify(actionLogger).log(playerGames);
 //        verifyNoMoreInteractions(actionLogger);
+    }
+
+    @Test
+    public void shouldTickSemifinal_whenTick() {
+        // given
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        // when
+        playerService.tick();
+
+        // then
+        verify(semifinal, only()).tick();
     }
 
     private Joystick getJoystick(Controller controller) {
