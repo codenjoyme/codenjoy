@@ -398,4 +398,124 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
             semifinal.tick();
         }
     }
+
+    @Test
+    public void shouldDontCutPlayers_whenSameScore_casePercentage() {
+        // given
+        semifinal.setPercentage(true);
+        semifinal.setLimit(50);
+
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(90);
+        Player player3 = createPlayerWithScore(80);
+        Player player4 = createPlayerWithScore(50);
+        Player player5 = createPlayerWithScore(50);
+        Player player6 = createPlayerWithScore(50);
+        Player player7 = createPlayerWithScore(50);
+        Player player8 = createPlayerWithScore(30);
+        Player player9 = createPlayerWithScore(20);
+        Player player10 = createPlayerWithScore(10);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5, player6, player7);
+    }
+
+    @Test
+    public void shouldDontCutPlayers_whenSameScore_caseNotPercentage() {
+        // given
+        semifinal.setPercentage(false);
+        semifinal.setLimit(4);
+
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(90);
+        Player player3 = createPlayerWithScore(80);
+        Player player4 = createPlayerWithScore(50);
+        Player player5 = createPlayerWithScore(50);
+        Player player6 = createPlayerWithScore(50);
+        Player player7 = createPlayerWithScore(50);
+        Player player8 = createPlayerWithScore(30);
+        Player player9 = createPlayerWithScore(20);
+        Player player10 = createPlayerWithScore(10);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5, player6, player7);
+    }
+
+    @Test
+    public void shouldDontCutPlayers_whenAllScoresAreSame_cutOne() {
+        // given
+        semifinal.setPercentage(false);
+        semifinal.setLimit(1);
+
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(100);
+        Player player3 = createPlayerWithScore(100);
+        Player player4 = createPlayerWithScore(100);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4);
+    }
+
+    @Test
+    public void shouldDontCutPlayers_whenAllScoresAreSame_cutTwo() {
+        // given
+        semifinal.setPercentage(false);
+        semifinal.setLimit(2);
+
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(100);
+        Player player3 = createPlayerWithScore(100);
+        Player player4 = createPlayerWithScore(100);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4);
+    }
+
+    @Test
+    public void shouldDontCutPlayers_whenAllScoresAreSame_cutExactSame() {
+        // given
+        semifinal.setPercentage(false);
+        semifinal.setLimit(4);
+
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(100);
+        Player player3 = createPlayerWithScore(100);
+        Player player4 = createPlayerWithScore(100);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4);
+    }
+
+    @Test
+    public void shouldDontCutPlayers_whenAllScoresAreSame_cutMoreThanPlayers() {
+        // given
+        semifinal.setPercentage(false);
+        semifinal.setLimit(10);
+
+        Player player1 = createPlayerWithScore(100);
+        Player player2 = createPlayerWithScore(100);
+        Player player3 = createPlayerWithScore(100);
+        Player player4 = createPlayerWithScore(100);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4);
+    }
 }

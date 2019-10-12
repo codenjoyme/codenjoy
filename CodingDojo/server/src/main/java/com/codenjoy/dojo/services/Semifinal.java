@@ -76,10 +76,13 @@ public class Semifinal implements Tickable {
 
     @Override
     public void tick() {
+        // если режим включен не очищаем
         if (!enabled) return;
 
+        // ждем заданное количество тиков
         if (++time % timeout != 0) return;
 
+        // получаем мапу по играм, где значениями являются сортированные по очкам списки PlayerGame
         Map<String, List<PlayerGame>> map =
                 playerGames.getGameTypes().stream()
                     .map(GameType::name)
@@ -92,15 +95,31 @@ public class Semifinal implements Tickable {
 
         List<PlayerGame> toRemove = new LinkedList<>();
         map.values().forEach(games -> {
+            // единственного героя оставляем и не удаляем
             if (games.size() <= 1) return;
-            int from = percentage
+
+            // адская формула рассчета индекса разделения списка
+            int index = percentage
                     ? (int)((1D - 1D*limit/100)*games.size())
                     : (games.size() - Math.min(limit, games.size()));
-            toRemove.addAll(games.subList(0, from));
+
+            // если на границе "отрезания" есть участники с тем же числом очков,
+            // что и последний "проскочивший" участник, мы должны оставить их всех
+            while (index > 0 &&
+                    (games.get(index - 1).getPlayer().getScore() ==
+                     games.get(index).getPlayer().getScore()))
+            {
+                index--;
+            }
+
+            // готовим список для удаления
+            toRemove.addAll(games.subList(0, index));
         });
 
+        // собственно удаление
         toRemove.forEach(game -> playerGames.remove(game.getPlayer()));
 
+        // если после удаления надо почистить борды сделаем это
         if (resetBoard) {
             playerGames.forEach(PlayerGame::clearScore);
         }
