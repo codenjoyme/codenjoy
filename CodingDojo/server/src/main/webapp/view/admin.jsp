@@ -70,7 +70,7 @@
     </table>
 
     <form:form modelAttribute="adminSettings" action="admin" method="POST">
-        <table class="admin-table" id="selectGame">
+        <table class="admin-table" id="activeGames">
             <tr>
                 <td style="width:300px;">
                     <b>Active games for participants</b>
@@ -187,22 +187,27 @@
             </tr>
             <tr>
                 <td>Enable semifinal</td>
-                <td><input type="checkbox" name="semifinal.enabled" value="${semifinal.enabled}"/></td>
+                <td><form:checkbox path="semifinal.enabled"/></td>
             <tr>
+            </tr>
                 <td>Рercent/Count</td>
-                <td><input type="checkbox" name="semifinal.percentage" value="${semifinal.percentage}"/></td>
+                <td><form:checkbox path="semifinal.percentage"/></td>
             </tr>
             <tr>
                 <td>Finalists limit</td>
-                <td><input type="text" name="semifinal.limit" value="${semifinal.limit}"/></td>
+                <td><form:input path="semifinal.limit"/></td>
             </tr>
             <tr>
                 <td>Ticks timeout</td>
-                <td><input type="text" name="semifinal.timeout" value="${semifinal.timeout}"/></td>
+                <td><form:input path="semifinal.timeout"/></td>
             </tr>
             <tr>
+                <td>Current tick</td>
+                <td>${semifinalTick}</td>
+            <tr>
+            <tr>
                 <td>Reset board</td>
-                <td><input type="checkbox" name="semifinal.resetBoard" value="${semifinal.resetBoard}"/></td>
+                <td><form:checkbox path="semifinal.resetBoard"/></td>
             </tr>
             <tr>
                 <td>

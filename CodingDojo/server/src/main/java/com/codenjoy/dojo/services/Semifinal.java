@@ -106,4 +106,8 @@ public class Semifinal implements Tickable {
     public SemifinalSettings settings() {
         return settings;
     }
+
+    public int getTime() {
+        return time;
+    }
 }
