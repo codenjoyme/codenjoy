@@ -27,18 +27,18 @@ echo "================================================== Installing Docker =====
 echo "========================================================================================================================[0m"
 
 # setup docker
+eval_echo "sudo apt-get remove docker docker-engine docker.io containerd runc"
+eval_echo "sudo apt-get -y update"
+eval_echo "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+eval_echo "sudo apt-key fingerprint 0EBFCD88"
+eval_echo 'sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"'
 eval_echo "sudo apt-get update -y"
-eval_echo "sudo apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D"
-eval_echo "sudo apt-get install software-properties-common -y"
-eval_echo "sudo apt-get install apt-transport-https -y"
-eval_echo "sudo apt-add-repository 'deb https://apt.dockerproject.org/repo ubuntu-xenial main'"
-eval_echo "sudo apt-get update -y"
-eval_echo "apt-cache policy docker-engine"
-eval_echo "sudo apt-get install -y docker-engine"
+eval_echo "sudo apt-get install docker-ce docker-ce-cli containerd.io"
 eval_echo "sudo systemctl status docker --no-pager"
 eval_echo "sudo usermod -aG docker $USER"
+eval_echo "sudo docker -v"
 	
 # setup compose
-eval_echo "curl -L 'https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)' -o /usr/local/bin/docker-compose"
+eval_echo "curl -L 'https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)' -o /usr/local/bin/docker-compose"
 eval_echo "chmod +x /usr/local/bin/docker-compose"
 eval_echo "docker-compose --version"
