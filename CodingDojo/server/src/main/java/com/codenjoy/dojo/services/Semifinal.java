@@ -38,37 +38,15 @@ import static java.util.stream.Collectors.toMap;
  * Created by Oleksandr_Baglai on 2019-10-12.
  */
 @Component
-@Getter
-@Setter
 public class Semifinal implements Tickable {
 
-    @Value("${game.semifinal.enabled}")
-    private boolean enabled;
-
-    @Value("${game.semifinal.percentage}")
-    private boolean percentage;
-
-    @Value("${game.semifinal.limit}")
-    private int limit;
-
-    @Value("${game.semifinal.timeout}")
-    private int timeout;
-
-    @Value("${game.semifinal.reset-board}")
-    private boolean resetBoard;
+    @Autowired
+    private SemifinalSettings settings;
 
     @Autowired
     protected PlayerGames playerGames;
 
     private int time;
-
-    public void disable() {
-        enabled = false;
-    }
-
-    public void enable() {
-        enabled = true;
-    }
 
     public void clean() {
         time = 0;
@@ -77,10 +55,10 @@ public class Semifinal implements Tickable {
     @Override
     public void tick() {
         // если режим включен не очищаем
-        if (!enabled) return;
+        if (!settings.isEnabled()) return;
 
         // ждем заданное количество тиков
-        if (++time % timeout != 0) return;
+        if (++time % settings.getTimeout() != 0) return;
 
         // получаем мапу по играм, где значениями являются сортированные по очкам списки PlayerGame
         Map<String, List<PlayerGame>> map =
@@ -99,9 +77,9 @@ public class Semifinal implements Tickable {
             if (games.size() <= 1) return;
 
             // адская формула рассчета индекса разделения списка
-            int index = percentage
-                    ? (int)((1D - 1D*limit/100)*games.size())
-                    : (games.size() - Math.min(limit, games.size()));
+            int index = settings.isPercentage()
+                    ? (int)((1D - 1D*settings.getLimit()/100)*games.size())
+                    : (games.size() - Math.min(settings.getLimit(), games.size()));
 
             // если на границе "отрезания" есть участники с тем же числом очков,
             // что и последний "проскочивший" участник, мы должны оставить их всех
@@ -120,8 +98,12 @@ public class Semifinal implements Tickable {
         toRemove.forEach(game -> playerGames.remove(game.getPlayer()));
 
         // если после удаления надо почистить борды сделаем это
-        if (resetBoard) {
+        if (settings.isResetBoard()) {
             playerGames.forEach(PlayerGame::clearScore);
         }
+    }
+
+    public SemifinalSettings settings() {
+        return settings;
     }
 }

@@ -76,6 +76,7 @@ public class AdminController {
     private final Registration registration;
     private final RoomsAliaser rooms;
     private final ViewDelegationService viewDelegationService;
+    private final Semifinal semifinal;
 
     @RequestMapping(params = "save", method = RequestMethod.GET)
     public String savePlayerGame(@RequestParam("save") String name, Model model, HttpServletRequest request) {
@@ -268,6 +269,15 @@ public class AdminController {
             playerService.updateAll(settings.getPlayers());
         }
 
+        if (settings.getSemifinal() != null) {
+            try {
+                semifinal.settings().apply(settings.getSemifinal());
+                semifinal.clean();
+            } catch (Exception e) {
+                // do nothing
+            }
+        }
+
         if (settings.getTimerPeriod() != null) {
             try {
                 timerService.changePeriod(Integer.parseInt(settings.getTimerPeriod()));
@@ -410,6 +420,7 @@ public class AdminController {
 
         model.addAttribute("adminSettings", settings);
         model.addAttribute("settings", parameters);
+        model.addAttribute("semifinal", semifinal.settings().clone());
         model.addAttribute(GAME_NAME_FORM_KEY, gameName);
         model.addAttribute("gameVersion", game.getVersion());
         model.addAttribute("generateNameMask", "demo%@codenjoy.com");

@@ -97,7 +97,6 @@ public class PlayerServiceImplIntegrationTest {
 
                 PlayerServiceImplIntegrationTest.this.semifinal
                         = this.semifinal = mock(Semifinal.class);
-                when(semifinal.isEnabled()).thenReturn(false);
 
                 this.isAINeeded = true;
             }

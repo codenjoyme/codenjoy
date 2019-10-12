@@ -180,8 +180,44 @@
         </tr>
     </table>
 
+    <form:form modelAttribute="adminSettings" action="admin" method="POST">
+        <table class="admin-table" id="semifinal">
+            <tr colspan="2">
+                <td><b>Semifinal settings</b></td>
+            </tr>
+            <tr>
+                <td>Enable semifinal</td>
+                <td><input type="checkbox" name="semifinal.enabled" value="${semifinal.enabled}"/></td>
+            <tr>
+                <td>Рercent/Count</td>
+                <td><input type="checkbox" name="semifinal.percentage" value="${semifinal.percentage}"/></td>
+            </tr>
+            <tr>
+                <td>Finalists limit</td>
+                <td><input type="text" name="semifinal.limit" value="${semifinal.limit}"/></td>
+            </tr>
+            <tr>
+                <td>Ticks timeout</td>
+                <td><input type="text" name="semifinal.timeout" value="${semifinal.timeout}"/></td>
+            </tr>
+            <tr>
+                <td>Reset board</td>
+                <td><input type="checkbox" name="semifinal.resetBoard" value="${semifinal.resetBoard}"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="gameName" value="${gameName}"/>
+                    <input type="submit" value="Save"/>
+                </td>
+            </tr>
+        </table>
+    </form:form>
+
     <table class="admin-table" id="cleanGame">
         <tr>
+            <tr colspan="2">
+                <td><b>Clean</b></td>
+            </tr>
             <td>
                 <a href="${ctx}/admin?cleanAll&gameName=${gameName}">Clean all scores</a>.
             </td>
@@ -270,6 +306,9 @@
 
     <form:form modelAttribute="adminSettings" action="admin" method="POST">
         <table class="admin-table" id="createNewUsers">
+            <tr colspan="2">
+                <td><b>Create new users</b></td>
+            </tr>
             <tr>
                 <td>NameMask</td>
                 <td>Count</td>

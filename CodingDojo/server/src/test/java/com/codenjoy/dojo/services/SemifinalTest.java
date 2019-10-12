@@ -37,16 +37,18 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
 
     private Semifinal semifinal;
     private int timeout;
+    private SemifinalSettings settings;
 
     @Before
     public void setup() {
         timeout = 3;
         semifinal = new Semifinal();
-        semifinal.setEnabled(true);
-        semifinal.setPercentage(true);
-        semifinal.setLimit(50);
-        semifinal.setResetBoard(false);
-        semifinal.setTimeout(timeout);
+        settings = semifinal.settings();
+        settings.setEnabled(true);
+        settings.setPercentage(true);
+        settings.setLimit(50);
+        settings.setResetBoard(false);
+        settings.setTimeout(timeout);
         semifinal.playerGames = playerGames;
         semifinal.clean();
     }
@@ -54,7 +56,7 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDoNothing_whenDisabled() {
         // given
-        semifinal.setEnabled(false);
+        settings.setEnabled(false);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(80);
@@ -76,8 +78,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut50PercentUsers_whenAccurateCut() {
         // given
-        semifinal.setPercentage(true);
-        semifinal.setLimit(50);
+        settings.setPercentage(true);
+        settings.setLimit(50);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -124,8 +126,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut30PercentUsers_whenNotAccurateCut() {
         // given
-        semifinal.setPercentage(true);
-        semifinal.setLimit(30);
+        settings.setPercentage(true);
+        settings.setLimit(30);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -166,8 +168,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut1PercentUsers_whenNotAccurateCut() {
         // given
-        semifinal.setPercentage(true);
-        semifinal.setLimit(1);
+        settings.setPercentage(true);
+        settings.setLimit(1);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -196,8 +198,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut1PercentUsers_whenNotAccurateCut_caseTwoPlayers() {
         // given
-        semifinal.setPercentage(true);
-        semifinal.setLimit(1);
+        settings.setPercentage(true);
+        settings.setLimit(1);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(50);
@@ -212,8 +214,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut20PercentUsers_whenAccurateCut() {
         // given
-        semifinal.setPercentage(true);
-        semifinal.setLimit(20);
+        settings.setPercentage(true);
+        settings.setLimit(20);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -236,8 +238,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCut20PercentUsers_whenAccurateCut_mixedScoreOrder() {
         // given
-        semifinal.setPercentage(true);
-        semifinal.setLimit(20);
+        settings.setPercentage(true);
+        settings.setLimit(20);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(80);
@@ -260,8 +262,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCutOnly3Users_from10() {
         // given
-        semifinal.setPercentage(false);
-        semifinal.setLimit(3);
+        settings.setPercentage(false);
+        settings.setLimit(3);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -284,8 +286,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCutOnly3Users_from3() {
         // given
-        semifinal.setPercentage(false);
-        semifinal.setLimit(3);
+        settings.setPercentage(false);
+        settings.setLimit(3);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -301,8 +303,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCutOnly3Users_from1() {
         // given
-        semifinal.setPercentage(false);
-        semifinal.setLimit(3);
+        settings.setPercentage(false);
+        settings.setLimit(3);
 
         Player player1 = createPlayerWithScore(100);
 
@@ -316,8 +318,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldLeaveLastUser() {
         // given
-        semifinal.setPercentage(true);
-        semifinal.setLimit(50);
+        settings.setPercentage(true);
+        settings.setLimit(50);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(50);
@@ -341,7 +343,7 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldCleanScoresAfterCut_whenSetResetBoard() {
         // given
-        semifinal.setResetBoard(true);
+        settings.setResetBoard(true);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -364,7 +366,7 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCleanScoresAfterCut_whenIsNotSetResetBoard() {
         // given
-        semifinal.setResetBoard(false);
+        settings.setResetBoard(false);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -402,8 +404,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenSameScore_casePercentage() {
         // given
-        semifinal.setPercentage(true);
-        semifinal.setLimit(50);
+        settings.setPercentage(true);
+        settings.setLimit(50);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -426,8 +428,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenSameScore_caseNotPercentage() {
         // given
-        semifinal.setPercentage(false);
-        semifinal.setLimit(4);
+        settings.setPercentage(false);
+        settings.setLimit(4);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(90);
@@ -450,8 +452,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenAllScoresAreSame_cutOne() {
         // given
-        semifinal.setPercentage(false);
-        semifinal.setLimit(1);
+        settings.setPercentage(false);
+        settings.setLimit(1);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(100);
@@ -468,8 +470,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenAllScoresAreSame_cutTwo() {
         // given
-        semifinal.setPercentage(false);
-        semifinal.setLimit(2);
+        settings.setPercentage(false);
+        settings.setLimit(2);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(100);
@@ -486,8 +488,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenAllScoresAreSame_cutExactSame() {
         // given
-        semifinal.setPercentage(false);
-        semifinal.setLimit(4);
+        settings.setPercentage(false);
+        settings.setLimit(4);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(100);
@@ -504,8 +506,8 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldDontCutPlayers_whenAllScoresAreSame_cutMoreThanPlayers() {
         // given
-        semifinal.setPercentage(false);
-        semifinal.setLimit(10);
+        settings.setPercentage(false);
+        settings.setLimit(10);
 
         Player player1 = createPlayerWithScore(100);
         Player player2 = createPlayerWithScore(100);
