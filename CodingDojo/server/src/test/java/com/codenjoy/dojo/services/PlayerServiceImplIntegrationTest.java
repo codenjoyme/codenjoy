@@ -50,6 +50,7 @@ public class PlayerServiceImplIntegrationTest {
 
     private PlayerService service;
 
+    private ConfigProperties config;
     private ActionLogger actionLogger;
     private AutoSaver autoSaver;
     private GameSaver saver;
@@ -88,6 +89,10 @@ public class PlayerServiceImplIntegrationTest {
 
                 PlayerServiceImplIntegrationTest.this.registration
                         = this.registration = mock(Registration.class);
+
+                PlayerServiceImplIntegrationTest.this.config
+                        = this.config = new ConfigProperties();
+                config.setRegistrationOpened(true);
 
                 this.isAINeeded = true;
             }

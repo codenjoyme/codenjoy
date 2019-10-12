@@ -18,11 +18,12 @@ game:
 board.save.ticks: 1
 log.debug: false
 registration:
-    nickname:
-      allowed: false
-    password:
-      min-length: 8
-      autogen-length: 8
+  opened: true
+  nickname:
+    allowed: false
+  password:
+    min-length: 8
+    autogen-length: 8
 page:
   main:
     url: ''

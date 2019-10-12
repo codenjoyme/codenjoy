@@ -64,8 +64,19 @@ public class ConfigProperties {
     @Value("${registration.password.autogen-length}")
     private int autoGenPasswordLen;
 
+    @Value("${registration.opened}")
+    private boolean isRegistrationOpened;
+
     public boolean isEmailVerificationNeeded() {
         return isEmailVerificationNeeded;
+    }
+
+    public boolean isRegistrationOpened() {
+        return isRegistrationOpened;
+    }
+
+    public void setRegistrationOpened(boolean isOpened) {
+        isRegistrationOpened = isOpened;
     }
 
 }

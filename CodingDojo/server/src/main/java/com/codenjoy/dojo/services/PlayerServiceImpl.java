@@ -59,7 +59,6 @@ public class PlayerServiceImpl implements PlayerService {
     
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<>();
-    private boolean isRegOpened = true;
 
     @Autowired protected PlayerGames playerGames;
     @Autowired private PlayerGamesView playerGamesView;
@@ -77,6 +76,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected GameSaver saver;
     @Autowired protected ActionLogger actionLogger;
     @Autowired protected Registration registration;
+    @Autowired protected ConfigProperties config;
 
     @Value("${game.ai}")
     protected boolean isAINeeded;
@@ -103,7 +103,7 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             log.debug("Registered user {} in game {}", name, gameName);
 
-            if (!isRegOpened) {
+            if (!config.isRegistrationOpened()) {
                 return NullPlayer.INSTANCE;
             }
 
@@ -544,17 +544,17 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public void closeRegistration() {
-        isRegOpened = false;
+        config.setRegistrationOpened(false);
     }
 
     @Override
     public boolean isRegistrationOpened() {
-        return isRegOpened;
+        return config.isRegistrationOpened();
     }
 
     @Override
     public void openRegistration() {
-        isRegOpened = true;
+        config.setRegistrationOpened(true);
     }
 
     @Override
