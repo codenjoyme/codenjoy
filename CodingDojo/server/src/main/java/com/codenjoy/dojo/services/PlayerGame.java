@@ -124,4 +124,9 @@ public class PlayerGame implements Tickable {
     public String popLastCommand() {
         return joystick.popLastCommands();
     }
+
+    public void clearScore() {
+        player.clearScore();
+        game.clearScore();
+    }
 }

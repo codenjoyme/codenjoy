@@ -54,6 +54,8 @@ import java.util.function.Predicate;
 
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 
+import static java.util.stream.Collectors.toList;
+
 @Controller
 @RequestMapping(AdminController.URI)
 @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
@@ -76,6 +78,7 @@ public class AdminController {
     private final Registration registration;
     private final RoomsAliaser rooms;
     private final ViewDelegationService viewDelegationService;
+    private final Semifinal semifinal;
 
     @RequestMapping(params = "save", method = RequestMethod.GET)
     public String savePlayerGame(@RequestParam("save") String name, Model model, HttpServletRequest request) {
@@ -268,6 +271,15 @@ public class AdminController {
             playerService.updateAll(settings.getPlayers());
         }
 
+        if (settings.getSemifinal() != null) {
+            try {
+                semifinal.settings().apply(settings.getSemifinal());
+                semifinal.clean();
+            } catch (Exception e) {
+                // do nothing
+            }
+        }
+
         if (settings.getTimerPeriod() != null) {
             try {
                 timerService.changePeriod(Integer.parseInt(settings.getTimerPeriod()));
@@ -398,18 +410,23 @@ public class AdminController {
 
         AdminSettings settings = new AdminSettings();
 
+        settings.setSemifinal(semifinal.settings().clone());
+
         settings.setParameters(new LinkedList<>());
         for (Parameter p : parameters) {
             settings.getParameters().add(p.getValue());
         }
 
-        settings.setGames(new LinkedList<>());
         Set<String> enabled = rooms.gameNames();
-        gameService.getGameNames()
-                .forEach(name -> settings.getGames().add(enabled.contains(name)));
+        List<Object> games = gameService.getGameNames()
+                                .stream()
+                                .map(name -> enabled.contains(name))
+                                .collect(toList());
+        settings.setGames(games);
 
         model.addAttribute("adminSettings", settings);
         model.addAttribute("settings", parameters);
+        model.addAttribute("semifinalTick", semifinal.getTime());
         model.addAttribute(GAME_NAME_FORM_KEY, gameName);
         model.addAttribute("gameVersion", game.getVersion());
         model.addAttribute("generateNameMask", "demo%@codenjoy.com");

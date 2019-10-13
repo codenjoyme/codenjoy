@@ -11,18 +11,26 @@ mvc:
   screen-servlet-path: /screen-ws/*
   control-servlet-path: /ws/*
 
-
 game:
   save.auto: true
   ai: true
+  semifinal:
+    enabled: false
+    percentage: true
+    limit: 50
+    reset-board: true
+    timeout: 900
+
 board.save.ticks: 1
-log.debug: false
+
 registration:
-    nickname:
-      allowed: false
-    password:
-      min-length: 8
-      autogen-length: 8
+  opened: true
+  nickname:
+    allowed: false
+  password:
+    min-length: 8
+    autogen-length: 8
+
 page:
   main:
     url: ''
@@ -36,21 +44,24 @@ email:
   password: ''
   name: info@codenjoy.com
   hash: secureSoul
+
 donate.code:
+
 database:
   url: ''
   name: ''
   user: ''
   password: ''
+
 admin:
   login: admin@codenjoyme.com
   password: admin
 
+log.debug: false
 app:
   logging:
     - com.epam.dojo
     - com.codenjoy
-
 logging:
   level:
     root: info
@@ -60,4 +71,3 @@ logging:
     org:
       eclipse.jetty: info
       springframework.mvc: info
-
