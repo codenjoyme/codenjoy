@@ -99,7 +99,10 @@ public class Semifinal implements Tickable {
 
         // если после удаления надо почистить борды сделаем это
         if (settings.isResetBoard()) {
-            playerGames.forEach(PlayerGame::clearScore);
+            List<Player> players = playerGames.players();
+            players.forEach(player -> playerGames.remove(player));
+            players.forEach(player -> playerGames.add(player,
+                    new PlayerSave(player){{ setScore(0); }}));
         }
     }
 
