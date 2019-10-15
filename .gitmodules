@@ -1,0 +1,3 @@
+[submodule "CodingDojo/portable/linux-docker-compose"]
+	path = CodingDojo/portable/linux-docker-compose
+	url = https://github.com/codenjoyme/codenjoy-portable-linux.git
