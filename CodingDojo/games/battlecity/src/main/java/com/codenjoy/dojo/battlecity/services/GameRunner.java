@@ -61,7 +61,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     public GameRunner() {
         new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
         needAI = settings.addCheckBox(IS_NEED_AI).type(Boolean.class).def(true);
-        numberOfPlayers = settings.addEditBox(NUMBER_OF_PLAYERS).type(Integer.class).def(2);
+        numberOfPlayers = settings.addEditBox(NUMBER_OF_PLAYERS).type(Integer.class).def(10);
         customMapPath = settings.addEditBox(CUSTOM_MAP_PATH).type(String.class).def("");
         multiplayerType = settings.addSelect(MULTIPLAYER_TYPE, Arrays.asList("MULTIPLAYER", "TEAM"))
                 .type(String.class)
