@@ -4,3 +4,6 @@
 [submodule "CodingDojo/portable/linux-docker"]
 	path = CodingDojo/portable/linux-docker
 	url = https://github.com/codenjoyme/codenjoy-portable-linux-lite.git
+[submodule "CodingDojo/portable/windows-cmd"]
+	path = CodingDojo/portable/windows-cmd
+	url = https://github.com/codenjoyme/codenjoy-portable-windows.git
