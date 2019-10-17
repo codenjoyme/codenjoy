@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -50,6 +51,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     private Consumer<PlayerGame> onRemove;
     private ReadWriteLock lock;
     private Spreader spreader = new Spreader();
+
+    @Value("${engine.parallel}")
+    private boolean parallel;
 
     public void onAdd(Consumer<PlayerGame> consumer) {
         this.onAdd = consumer;
@@ -209,14 +213,21 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // но делаем это хитро и иногопоточно-параллельно для разных комнат,
         // т.к. пересечений по игрокам в разных комнатах нет
         if (!playerGames.isEmpty()) {
-            Map<GameField, List<PlayerGame>> rooms = getRooms();
-            ExecutorService executor = Executors.newFixedThreadPool(rooms.size());
-            rooms.keySet().forEach(field -> {
-                executor.execute(() -> rooms.get(field).forEach(PlayerGame::quietTick));
-            });
-            executor.shutdown();
-            while (!executor.isTerminated()) {
-                // do nothing
+            Consumer<PlayerGame> tick = PlayerGame::quietTick;
+            if (!parallel) {
+                playerGames.forEach(tick);
+            } else {
+                Map<GameField, List<PlayerGame>> rooms = getRooms();
+                ExecutorService executor = Executors.newFixedThreadPool(rooms.size());
+                rooms.keySet().forEach(field -> {
+                    executor.execute(() -> {
+                        rooms.get(field).forEach(tick);
+                    });
+                });
+                executor.shutdown();
+                while (!executor.isTerminated()) {
+                    // do nothing
+                }
             }
         }
         // если в TRAINING кто-то isWin то мы его относим на следующий уровень
@@ -345,5 +356,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public Stream<PlayerGame> stream() {
         return playerGames.stream();
+    }
+
+    public void setParallel(boolean parallel) {
+        this.parallel = parallel;
+    }
+
+    public boolean isParallel() {
+        return parallel;
     }
 }

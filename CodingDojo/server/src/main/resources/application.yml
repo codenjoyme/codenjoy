@@ -11,6 +11,9 @@ mvc:
   screen-servlet-path: /screen-ws/*
   control-servlet-path: /ws/*
 
+engine:
+  parallel: true
+
 game:
   save.auto: true
   ai: true

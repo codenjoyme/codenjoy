@@ -68,6 +68,7 @@ public class AdminController {
     public static final String GAME_NAME_FORM_KEY = "gameName";
     public static final String CUSTOM_ADMIN_PAGE_KEY = "custom";
 
+    private final PlayerGames playerGames;
     private final TimerService timerService;
     private final PlayerService playerService;
     private final SaveService saveService;
@@ -204,6 +205,25 @@ public class AdminController {
 
     private void checkGameStatus(Model model) {
         model.addAttribute("paused", timerService.isPaused());
+    }
+
+    // ----------------
+
+    @RequestMapping(params = "parallel", method = RequestMethod.GET)
+    public String parallel(Model model, HttpServletRequest request) {
+        playerGames.setParallel(true);
+        return getAdmin(request);
+    }
+
+
+    @RequestMapping(params = "inSeries", method = RequestMethod.GET)
+    public String inSeries(Model model, HttpServletRequest request) {
+        playerGames.setParallel(false);
+        return getAdmin(request);
+    }
+
+    private void getParallel(Model model) {
+        model.addAttribute("parallel", playerGames.isParallel());
     }
 
     // ----------------
@@ -438,6 +458,7 @@ public class AdminController {
         model.addAttribute("defaultProgress", save.toString().replace('"', '\''));
 
         checkGameStatus(model);
+        getParallel(model);
         checkRecordingStatus(model);
         checkAutoSaveStatus(model);
         checkDebugStatus(model);
