@@ -29,16 +29,16 @@ import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
+import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -197,11 +197,28 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return result;
     }
 
+    public Map<GameField, List<PlayerGame>> getRooms() {
+        return playerGames.stream()
+                .collect(groupingBy(PlayerGame::getField));
+    }
+
+
     @Override
     public void tick() {
         // по всем джойстикам отправили сообщения играм
-        playerGames.forEach(PlayerGame::quietTick);
-
+        // но делаем это хитро и иногопоточно-параллельно для разных комнат,
+        // т.к. пересечений по игрокам в разных комнатах нет
+        if (!playerGames.isEmpty()) {
+            Map<GameField, List<PlayerGame>> rooms = getRooms();
+            ExecutorService executor = Executors.newFixedThreadPool(rooms.size());
+            rooms.keySet().forEach(field -> {
+                executor.execute(() -> rooms.get(field).forEach(PlayerGame::quietTick));
+            });
+            executor.shutdown();
+            while (!executor.isTerminated()) {
+                // do nothing
+            }
+        }
         // если в TRAINING кто-то isWin то мы его относим на следующий уровень
         // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
         // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
