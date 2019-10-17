@@ -16,10 +16,13 @@ game:
   ai: true
   semifinal:
     enabled: false
-    percentage: true
-    limit: 50
-    reset-board: true
     timeout: 900
+    limit:
+      percentage: true
+      value: 50
+    board:
+      reset: true
+      shuffle: true
 
 board.save.ticks: 1
 

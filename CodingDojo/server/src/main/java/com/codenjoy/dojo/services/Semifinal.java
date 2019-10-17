@@ -25,10 +25,7 @@ package com.codenjoy.dojo.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -95,14 +92,17 @@ public class Semifinal implements Tickable {
         });
 
         // собственно удаление
-        toRemove.forEach(game -> playerGames.remove(game.getPlayer()));
+        toRemove.forEach(game -> playerGames.removeCurrent(game.getPlayer()));
 
-        // если после удаления надо почистить борды сделаем это
+        // если после удаления надо перегруппировать участников по бордам
         if (settings.isResetBoard()) {
-            List<Player> players = playerGames.players();
-            players.forEach(player -> playerGames.remove(player));
-            players.forEach(player -> playerGames.add(player,
-                    new PlayerSave(player){{ setScore(0); }}));
+            new LinkedList<PlayerGame>(){{
+                addAll(playerGames.all());
+                // так же хорошо бы их перемешать
+                if (settings.isShuffleBoard()) {
+                    Collections.shuffle(this);
+                }
+            }}.forEach(pg -> playerGames.reloadCurrent(pg));
         }
     }
 

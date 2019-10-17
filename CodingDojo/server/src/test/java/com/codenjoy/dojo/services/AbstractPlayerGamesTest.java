@@ -31,6 +31,7 @@ import org.junit.Before;
 
 import java.util.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -77,9 +78,19 @@ public class AbstractPlayerGamesTest {
         verify(ais.get(playerGame.getPlayer())).close();
     }
 
+    protected Player createPlayerWithScore(int score, String playerName, MultiplayerType type) {
+        Player player = createPlayer("game", playerName, type);
+        setScore(score, player);
+        return player;
+    }
+
+    private void setScore(int score, Player player) {
+        when(player.getScores().getScore()).thenReturn(score);
+    }
+
     protected Player createPlayerWithScore(int score) {
         Player player = createPlayer();
-        when(player.getScores().getScore()).thenReturn(score);
+        setScore(score, player);
         return player;
     }
 
@@ -125,5 +136,26 @@ public class AbstractPlayerGamesTest {
         gamePlayers.add(env.gamePlayer);
 
         return player;
+    }
+
+    public void assertR(String expected) {
+        Map<Integer, List<String>> result = getRooms();
+
+        assertEquals(expected, result.toString());
+    }
+
+    public Map<Integer, List<String>> getRooms() {
+        Map<String, Integer> map = playerGames.stream()
+                .collect(LinkedHashMap::new,
+                        (m, pg) -> m.put(pg.getPlayer().getName(), fields.indexOf(pg.getField())),
+                        Map::putAll);
+
+        return map.entrySet().stream()
+                .collect(TreeMap::new, (m, e) -> {
+                    if (!m.containsKey(e.getValue())) {
+                        m.put(e.getValue(), new LinkedList<>());
+                    }
+                    m.get(e.getValue()).add(e.getKey());
+                }, Map::putAll);
     }
 }

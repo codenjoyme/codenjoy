@@ -1,1 +1,0 @@
-docker exec -i codenjoy-database psql -U codenjoy -c "SELECT time, score, save FROM saves WHERE name = (SELECT id FROM users WHERE readable_name = '$1') ORDER BY time ASC;"
