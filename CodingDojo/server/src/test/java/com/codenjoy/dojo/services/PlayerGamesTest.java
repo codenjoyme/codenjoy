@@ -542,16 +542,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     }
 
     @Test
-    public void testResetAloneUsersField() {
+    public void testResetAloneUsersField_whenRemove() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;
         Player player1 = createPlayer("game", "player1", type);
         Player player2 = createPlayer("game", "player2", type);
         Player player3 = createPlayer("game", "player3", type);
 
-        GameField field3 = playerGames.get("player3").getGame().getField();
-
-        assertEquals(1, fields.size());
+        assertR("{0=[player1, player2, player3]}");
 
         // when
         playerGames.remove(player1);
@@ -565,10 +563,72 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // then
         // created new field for player3
         assertEquals(2, fields.size());
-        GameField newField3 = playerGames.get("player3").getGame().getField();
-        assertNotSame(field3, newField3);
+        assertR("{1=[player3]}");
 
         verify(fields.get(1), times(1)).newGame(gamePlayers.get(2));
+    }
+
+    @Test
+    public void testDontResetAloneUsersField_whenRemoveCurrent() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        Player player1 = createPlayer("game", "player1", type);
+        Player player2 = createPlayer("game", "player2", type);
+        Player player3 = createPlayer("game", "player3", type);
+
+        assertR("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.removeCurrent(player1);
+
+        // then
+        assertEquals(1, fields.size());
+
+        // when
+        playerGames.removeCurrent(player2);
+
+        // then
+        assertEquals(1, fields.size());
+        assertR("{0=[player3]}");
+    }
+
+    @Test
+    public void testResetAloneUsersField_whenReload() {
+        // given
+        MultiplayerType type = MultiplayerType.TOURNAMENT;
+        Player player1 = createPlayer("game", "player1", type);
+        Player player2 = createPlayer("game", "player2", type);
+
+        assertR("{0=[player1, player2]}");
+
+        // when
+        Game game = playerGames.get(0).getGame();
+        playerGames.reload(game, game.getSave());
+
+        // then
+        // created new field for player3
+        assertEquals(2, fields.size());
+        assertR("{1=[player1, player2]}");
+
+        verify(fields.get(1), times(1)).newGame(gamePlayers.get(1));
+    }
+
+    @Test
+    public void testDontResetAloneUsersField_whenReloadCurrent() {
+        // given
+        MultiplayerType type = MultiplayerType.TOURNAMENT;
+        Player player1 = createPlayer("game", "player1", type);
+        Player player2 = createPlayer("game", "player2", type);
+
+        assertR("{0=[player1, player2]}");
+
+        // when
+        PlayerGame playerGame = playerGames.get(0);
+        playerGames.reloadCurrent(playerGame);
+
+        // then
+        assertEquals(2, fields.size());
+        assertR("{0=[player2], 1=[player1]}");
     }
 
     @Test
