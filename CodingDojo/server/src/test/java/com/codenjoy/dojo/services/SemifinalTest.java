@@ -46,10 +46,11 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         semifinal = new Semifinal();
         settings = semifinal.settings = new SemifinalSettings();
         settings.setEnabled(true);
+        settings.setTimeout(timeout);
         settings.setPercentage(true);
         settings.setLimit(50);
         settings.setResetBoard(false);
-        settings.setTimeout(timeout);
+        settings.setShuffleBoard(false);
         semifinal.playerGames = playerGames;
         semifinal.clean();
     }
@@ -471,8 +472,50 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         ticksTillTimeout();
 
         // then
+        assertEquals(4, fields.size());
         assertR("{2=[player1], " +
                 "3=[player4, player5, player8]}");
+    }
+
+    @Test
+    public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple_shuffle() {
+        // given
+        settings.setResetBoard(true);
+        settings.setShuffleBoard(true);
+
+        int winner = 100;
+        int looser = 1;
+        Player player1 = createPlayerWithScore(winner, "player1", MultiplayerType.TRIPLE);
+        Player player2 = createPlayerWithScore(looser, "player2", MultiplayerType.TRIPLE);
+        Player player3 = createPlayerWithScore(looser, "player3", MultiplayerType.TRIPLE);
+        Player player4 = createPlayerWithScore(winner, "player4", MultiplayerType.TRIPLE);
+        Player player5 = createPlayerWithScore(winner, "player5", MultiplayerType.TRIPLE);
+        Player player6 = createPlayerWithScore(looser, "player6", MultiplayerType.TRIPLE);
+        Player player7 = createPlayerWithScore(looser, "player7", MultiplayerType.TRIPLE);
+        Player player8 = createPlayerWithScore(winner, "player8", MultiplayerType.TRIPLE);
+
+        assertR("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6], " +
+                "2=[player7, player8]}");
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        Map<Integer, List<String>> rooms = getRooms();
+        List<String> room2 = rooms.get(2);
+        List<String> room3 = rooms.get(3);
+
+//        assertR("{2=[playerX], " +
+//                "3=[playerY, playerZ, playerA]}");
+        assertEquals(4, fields.size());
+        assertEquals(1, room2.size());
+        assertEquals(3, room3.size());
+        assertEquals(false, room3.contains(room2.get(0)));
+        assertEquals(false, room3.contains("player2")); // loosers
+        assertEquals(false, room3.contains("player3"));
+        assertEquals(false, room3.contains("player6"));
+        assertEquals(false, room3.contains("player7"));
     }
 
     @Test

@@ -98,8 +98,10 @@ public class Semifinal implements Tickable {
         if (settings.isResetBoard()) {
             new LinkedList<PlayerGame>(){{
                 addAll(playerGames.all());
-                // TODO ввести новый параметр
-                // Collections.shuffle(this);
+                // так же хорошо бы их перемешать
+                if (settings.isShuffleBoard()) {
+                    Collections.shuffle(this);
+                }
             }}.forEach(pg -> playerGames.reloadCurrent(pg));
         }
     }

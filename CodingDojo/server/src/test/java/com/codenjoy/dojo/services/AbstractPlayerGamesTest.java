@@ -139,19 +139,23 @@ public class AbstractPlayerGamesTest {
     }
 
     public void assertR(String expected) {
+        Map<Integer, List<String>> result = getRooms();
+
+        assertEquals(expected, result.toString());
+    }
+
+    public Map<Integer, List<String>> getRooms() {
         Map<String, Integer> map = playerGames.stream()
                 .collect(LinkedHashMap::new,
                         (m, pg) -> m.put(pg.getPlayer().getName(), fields.indexOf(pg.getField())),
                         Map::putAll);
 
-        Map<Integer, List<String>> result = map.entrySet().stream()
+        return map.entrySet().stream()
                 .collect(TreeMap::new, (m, e) -> {
                     if (!m.containsKey(e.getValue())) {
                         m.put(e.getValue(), new LinkedList<>());
                     }
                     m.get(e.getValue()).add(e.getKey());
                 }, Map::putAll);
-
-        assertEquals(expected, result.toString());
     }
 }

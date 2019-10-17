@@ -189,6 +189,14 @@
                 <td>Enable semifinal</td>
                 <td><form:checkbox path="semifinal.enabled"/></td>
             <tr>
+            <tr>
+                <td>Ticks timeout</td>
+                <td><form:input path="semifinal.timeout"/></td>
+            </tr>
+            <tr>
+                <td>Current tick</td>
+                <td>${semifinalTick}</td>
+            <tr>
             </tr>
                 <td>Рercent/Count</td>
                 <td><form:checkbox path="semifinal.percentage"/></td>
@@ -198,16 +206,12 @@
                 <td><form:input path="semifinal.limit"/></td>
             </tr>
             <tr>
-                <td>Ticks timeout</td>
-                <td><form:input path="semifinal.timeout"/></td>
-            </tr>
-            <tr>
-                <td>Current tick</td>
-                <td>${semifinalTick}</td>
-            <tr>
-            <tr>
                 <td>Reset board</td>
                 <td><form:checkbox path="semifinal.resetBoard"/></td>
+            </tr>
+            <tr>
+                <td>Shuffle board</td>
+                <td><form:checkbox path="semifinal.shuffleBoard"/></td>
             </tr>
             <tr>
                 <td>

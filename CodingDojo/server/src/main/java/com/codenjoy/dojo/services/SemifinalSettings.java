@@ -39,20 +39,23 @@ public class SemifinalSettings {
     @Value("${game.semifinal.enabled}")
     private boolean enabled;
 
-    @Value("${game.semifinal.percentage}")
-    private boolean percentage;
-
-    @Value("${game.semifinal.limit}")
-    private int limit;
-
     @Value("${game.semifinal.timeout}")
     private int timeout;
 
-    @Value("${game.semifinal.reset-board}")
+    @Value("${game.semifinal.limit.percentage}")
+    private boolean percentage;
+
+    @Value("${game.semifinal.limit.value}")
+    private int limit;
+
+    @Value("${game.semifinal.board.reset}")
     private boolean resetBoard;
 
+    @Value("${game.semifinal.board.shuffle}")
+    private boolean shuffleBoard;
+
     public SemifinalSettings clone() {
-        return new SemifinalSettings(enabled, percentage, limit, timeout, resetBoard);
+        return new SemifinalSettings(enabled, timeout, percentage, limit, resetBoard, shuffleBoard);
     }
 
     public void apply(SemifinalSettings input) {
@@ -61,5 +64,6 @@ public class SemifinalSettings {
         limit = input.limit;
         timeout = input.timeout;
         resetBoard = input.resetBoard;
+        shuffleBoard = input.shuffleBoard;
     }
 }
