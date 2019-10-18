@@ -94,46 +94,29 @@
         </tr>
     </form:form>
 
-    <form:form modelAttribute="adminSettings" action="admin" method="POST">
-        <table class="admin-table" id="pauseGame">
-            <tr>
-                <td>
-                    <c:choose>
-                        <c:when test="${paused}">
-                            <b>The codenjoy was suspended</b></br>
-                            <a href="${ctx}/admin?resume&gameName=${gameName}">Resume game</a>.
-                        </c:when>
-                        <c:otherwise>
-                            <b>The codenjoy is active</b></br>
-                            <a href="${ctx}/admin?pause&gameName=${gameName}">Pause game</a>.
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-            </tr>
-            <tr>
-                <td><input type="text" name="timerPeriod" value="${timerPeriod}"/></td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="hidden" name="gameName" value="${gameName}"/>
-                    <input type="submit" value="Set"/>
-                </td>
-            </tr>
-        </table>
-    </form:form>
-
-    <table class="admin-table" id="parallelTicks">
+    <table class="admin-table" id="pauseGame">
         <tr>
             <td>
                 <c:choose>
-                    <c:when test="${parallel}">
-                        <b>Ticks will be calculated in parallel</b></br> <a href="${ctx}/admin?inSeries&gameName=${gameName}">In series</a>.
+                    <c:when test="${paused}">
+                        <b>The codenjoy was suspended</b></br> <a href="${ctx}/admin?resume&gameName=${gameName}">Resume game</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>Ticks will be calculated in series</b></br> <a href="${ctx}/admin?parallel&gameName=${gameName}">Parallel</a>.
+                        <b>The codenjoy is active</b></br> <a href="${ctx}/admin?pause&gameName=${gameName}">Pause game</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
+            <form:form modelAttribute="adminSettings" action="admin" method="POST">
+                <tr>
+                    <td><input type="text" name="timerPeriod" value="${timerPeriod}"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="hidden" name="gameName" value="${gameName}"/>
+                        <input type="submit" value="Set"/>
+                    </td>
+                </tr>
+            </form:form>
         </tr>
     </table>
 

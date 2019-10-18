@@ -27,19 +27,18 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
-import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -51,9 +50,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     private Consumer<PlayerGame> onRemove;
     private ReadWriteLock lock;
     private Spreader spreader = new Spreader();
-
-    @Value("${engine.parallel}")
-    private boolean parallel;
 
     public void onAdd(Consumer<PlayerGame> consumer) {
         this.onAdd = consumer;
@@ -201,35 +197,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return result;
     }
 
-    public Map<GameField, List<PlayerGame>> getRooms() {
-        return playerGames.stream()
-                .collect(groupingBy(PlayerGame::getField));
-    }
-
-
     @Override
     public void tick() {
         // по всем джойстикам отправили сообщения играм
-        // но делаем это хитро и иногопоточно-параллельно для разных комнат,
-        // т.к. пересечений по игрокам в разных комнатах нет
-        if (!playerGames.isEmpty()) {
-            Consumer<PlayerGame> tick = PlayerGame::quietTick;
-            if (!parallel) {
-                playerGames.forEach(tick);
-            } else {
-                Map<GameField, List<PlayerGame>> rooms = getRooms();
-                ExecutorService executor = Executors.newFixedThreadPool(rooms.size());
-                rooms.keySet().forEach(field -> {
-                    executor.execute(() -> {
-                        rooms.get(field).forEach(tick);
-                    });
-                });
-                executor.shutdown();
-                while (!executor.isTerminated()) {
-                    // do nothing
-                }
-            }
-        }
+        playerGames.forEach(PlayerGame::quietTick);
+
         // если в TRAINING кто-то isWin то мы его относим на следующий уровень
         // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
         // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
@@ -356,13 +328,5 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public Stream<PlayerGame> stream() {
         return playerGames.stream();
-    }
-
-    public void setParallel(boolean parallel) {
-        this.parallel = parallel;
-    }
-
-    public boolean isParallel() {
-        return parallel;
     }
 }
