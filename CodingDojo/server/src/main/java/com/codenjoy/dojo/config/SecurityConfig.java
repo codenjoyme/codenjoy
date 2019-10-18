@@ -51,6 +51,7 @@ import org.springframework.security.oauth2.provider.token.UserAuthenticationConv
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.jwk.JwkTokenStore;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -84,6 +85,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             MVCConf.RESOURCES_URI,
             ErrorController.URI,
             GameDataController.URI + "/**",
+
+            // all players board
+            BoardController.URI + "/game/**",
+            "/rest/player/null/null/wantsToPlay/**",
+            "/screen-ws/**",
     };
 
     @Override
@@ -139,6 +145,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
         private AuthenticationSuccessHandler authenticationSuccessHandler;
 
+        @Autowired
+        private LogoutSuccessHandler logoutSuccessHandler;
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             // @formatter:off
@@ -162,6 +171,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
                             .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
+                            .logoutSuccessHandler(logoutSuccessHandler)
                             .invalidateHttpSession(true);
             // @formatter:on
         }
@@ -175,6 +185,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired
         private OAuth2MappingUserService oAuth2MappingUserService;
+
+        @Autowired
+        private LogoutSuccessHandler logoutSuccessHandler;
 
         @PostConstruct
         void info() {
@@ -199,6 +212,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
                             .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
+                            .logoutSuccessHandler(logoutSuccessHandler)
                             .invalidateHttpSession(true);
             // @formatter:on
         }
@@ -216,6 +230,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Autowired
         private OAuth2ClientProperties clientProperties;
+
+        @Autowired
+        private LogoutSuccessHandler logoutSuccessHandler;
 
         @Value("${mvc.control-servlet-path}")
         private String controlWsURI;
@@ -240,17 +257,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                         .authorizeRequests()
-                            .antMatchers(LoginController.ADMIN_URI, RegistrationController.URI + "*",
-                                    LOGIN_PROCESSING_URI, ADMIN_LOGIN_PROCESSING_URI, MVCConf.RESOURCES_URI,
-                                    controlWsURI + "*")
+                            .antMatchers(LoginController.ADMIN_URI,
+                                         RegistrationController.URI + "*",
+                                         LOGIN_PROCESSING_URI,
+                                         ADMIN_LOGIN_PROCESSING_URI,
+                                         MVCConf.RESOURCES_URI,
+                                         controlWsURI + "*")
                                 .permitAll()
-
                             .anyRequest()
                                 .hasRole("USER")
                     .and()
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
                             .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
+                            .logoutSuccessHandler(logoutSuccessHandler)
                             .invalidateHttpSession(true);
             // @formatter:on
         }
@@ -270,6 +290,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Configuration
     @Order(PRE_BEFORE_DEFAULT_SEC_CONFIG_PRECEDENCE)
     public static class AdminSecurityConf extends WebSecurityConfigurerAdapter {
+
+        @Autowired
+        private LogoutSuccessHandler logoutSuccessHandler;
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
@@ -291,6 +314,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
                             .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))
+                            .logoutSuccessHandler(logoutSuccessHandler)
                             .invalidateHttpSession(true)
                     .and()
                         .exceptionHandling()

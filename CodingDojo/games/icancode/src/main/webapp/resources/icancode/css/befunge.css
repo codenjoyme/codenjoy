@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -58,14 +58,8 @@
   vertical-align: middle;
 }
 
-.slots-container .card-item {
-  z-index: 2 !important;
-}
-
-
-
 .add-left, .add-right {
-	cursor: pointer;
+  cursor: pointer;
   background-color: #666;
 }
 
@@ -310,6 +304,24 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   height: 22px;
 }
 
+.value-laser::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1292px -10px;
+  width: 16px;
+  height: 22px;
+}
+
+.value-laser-machine::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1322px -10px;
+  width: 22px;
+  height: 22px;
+}
+
+.value-zombie::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1364px -10px;
+  width: 22px;
+  height: 22px;
+}
+
 .mirror-top-bottom::after {
   background: url(../img/befunge_sprite.png) no-repeat -1135px -12px;
   width: 22px;
@@ -386,12 +398,17 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   border:1px solid gray;
   z-index: 99;
   -webkit-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
--moz-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
+  box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
+  text-align: center;
 }
 
 .ui-draggable-dragging {
-    z-index: 100;
+  z-index: 101 !important;
+}
+
+.card-item {
+  z-index: 2;
 }
 
 .ball {
@@ -411,7 +428,7 @@ box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
   margin-bottom: 5px;
 }
 
-.img-tooltip::before {
+.img-tooltip .before-tooltip {
   content: "";
   display: block;
   position: absolute;
@@ -424,7 +441,7 @@ box-shadow: 0px 2px 10px 1px rgba(0,0,0,0.75);
   left: 9px;
 }
 
-.img-tooltip::after {
+.img-tooltip .after-tooltip {
   content: "";
   display: block;
   position: absolute;

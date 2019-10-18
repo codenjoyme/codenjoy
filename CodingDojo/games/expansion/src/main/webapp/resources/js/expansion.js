@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -19,9 +19,6 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function runProgram(program, robot) {
-    program(robot);
-}
 
 // ========================== game setup ==========================
 
@@ -36,70 +33,101 @@ if (typeof game == 'undefined') {
     }
 }
 
-var gameName = localStorage.getItem('gameName');
-if (gameName == 'Expansion Training') {
-    game.sprites = 'robot';
-} else if (gameName == 'Expansion Contest') {
-    game.sprites = 'robot';
-    game.onlyLeaderBoard = true;
-}
-game.enableDonate = false;
-game.enableJoystick = false;
+game.isDrawByOrder = true;
 game.enablePlayerInfo = false;
 game.enablePlayerInfoLevel = false;
-game.enableLeadersTable = false;
-game.enableChat = false;
-game.enableInfo = false;
-game.enableHotkeys = true;
-game.enableAdvertisement = false;
 game.showBody = false;
-game.debug = false;
 
 // ========================== leaderboard page ==========================
 
-var initHelpLink = function() {
-    var pageName = gameName.split(' ').join('-').toLowerCase();
-//    $('#help-link').attr('href', '/codenjoy-contest/resources/expansion/landing-' + pageName + '.html')
-    $('#help-link').attr('href', 'https://docs.google.com/document/d/1SPvBsZKtkk7F28sLtuUo2kOFtNWIz_8umWYYYLZ7kWY/edit')
-}
-var initAdditionalLink = function() {
-    if (game.onlyLeaderBoard) {
-        $('#additional-link').attr('href', '/codenjoy-contest/resources/user/expansion-servers.zip')
-        $('#additional-link').text('Get client')
+var boardAllPageLoad = function() {
+    // https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+    if (!String.prototype.padStart) {
+        String.prototype.padStart = function padStart(targetLength,padString) {
+            targetLength = targetLength>>0; //floor if number or convert non-number to 0;
+            padString = String(padString || ' ');
+            if (this.length > targetLength) {
+                return String(this);
+            }
+            else {
+                targetLength = targetLength-this.length;
+                if (targetLength > padString.length) {
+                    padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
+                }
+                return padString.slice(0,targetLength) + String(this);
+            }
+        };
     }
+
+    // https://stackoverflow.com/a/17606289
+    String.prototype.replaceAll = function(search, replacement) {
+        var target = this;
+        return target.split(search).join(replacement);
+    };
+
+    initLeadersTable(game.contextPath, game.playerName, game.code,
+        function(count, you, link, name, score, maxLength, level) {
+            var star = '';
+            if (count == 1) {
+                star = 'first';
+            } else if (count <= 3) {
+                star = 'second';
+            }
+
+            var scoreAmount = score.score;
+            var roundCount = score.rounds.length;
+            var average = (roundCount == 0) ? 0 : (scoreAmount/roundCount);
+            average = 100*average/4.0;
+            var averageRound = parseFloat(Math.round(average * 100) / 100).toFixed(2);
+            var averageString = ("" + averageRound).padStart(4, ' ').replaceAll(' ', '&nbsp;');
+            var l1 = 10;
+            var l2 = l1 + 20;
+            var rounds = score.rounds.reverse().join('');
+            var rounds1 = rounds.substring(0, l1);
+            var dots = '...';
+            if (rounds.length > l1) {
+                var rounds2 = rounds.substring(l1, l2);
+                if (rounds.length > l2) {
+                    rounds2 = rounds2 + dots;
+                }
+            } else {
+                rounds2 = '';
+            }
+
+            return '<tr>' +
+                '<td><span class="' + star + ' star">' + count + '<span></td>' +
+                '<td>' + you + '<a href="' + link + '">' + name + '</a></td>' +
+                '<td class="left">' +
+                    '<span>' + averageString + '<span class="small-round">%</span>' +
+                    '(∑' + scoreAmount + ')</span>' +
+                    '<span class="small-round">' + '[i' + roundCount + ']' + rounds1 + '</span>' +
+                    '<span class="smaller-round">' + rounds2 + '</span>' +
+                    '</td>' +
+                '</tr>';
+        },
+        function(score) {
+            var scoreAmount = score.score;
+            var roundCount = score.rounds.length;
+            var average = (roundCount == 0) ? 0 : (scoreAmount/roundCount);
+            return average;
+        });
+    $('#table-logs').removeClass('table');
+    $('#table-logs').removeClass('table-striped');
+    $(document.body).show();
 }
 
 game.onBoardAllPageLoad = function() {
     loadArrowImages();
-    initLayout(game.gameName, 'leaderboard.html', game.contextPath,
-        null,
-        ['js/game/loader/boardAllPageLoad.js'],
-        function() {
-            boardAllPageLoad();
-            loadStuff();
-        });
+
+    boardAllPageLoad();
+
+    $('#help-link').attr('href', 'https://docs.google.com/document/d/1SPvBsZKtkk7F28sLtuUo2kOFtNWIz_8umWYYYLZ7kWY/edit')
 }
 
 // ========================== user page ==========================
 
-var controller;
-
-if (game.onlyLeaderBoard) {
-    game.onBoardPageLoad = game.onBoardAllPageLoad;
-} else {
-    game.onBoardPageLoad = function() {
-        loadArrowImages();
-        initLayout(game.gameName, 'board.html', game.contextPath,
-            null,
-            [],
-            function() {
-                if (this.hasOwnProperty('boardPageLoad')) {
-                    boardPageLoad();
-                    loadStuff();
-                }
-            });
-    }
-}
+game.onBoardPageLoad = game.onBoardAllPageLoad;
 
 // ========================== board draw logic ==========================
 
@@ -111,7 +139,7 @@ var loadStuff = function() {
 var sprites = {};
 var directions = ['up', 'right_up', 'right', 'right_down', 'down', 'left_down', 'left', 'left_up'];
 var loadImage = function(name) {
-    var url = game.contextPath + '/resources/sprite/' + game.gameName + '/' + game.sprites + '/' + name + '.png';
+    var url = game.contextPath + '/resources/sprite/' + game.gameName + '/' + name + '.png';
     var image = new Image();
     image.onload = function() {
         // do nothing
@@ -122,12 +150,12 @@ var loadImage = function(name) {
 
 var loadArrowImages = function() {
     for (var force = 0; force < 4; force++) {
-    	sprites[force] = {};
-    	for (var i in directions) {
-    		var direction = directions[i];
+        sprites[force] = {};
+        for (var i in directions) {
+            var direction = directions[i];
             var image = loadImage('force' + (force + 1) + '_' + direction);
-    		sprites[force][direction] = image;
-    	}
+            sprites[force][direction] = image;
+        }
     }
 
     for (var force = 0; force <= 4; force++) {
@@ -310,19 +338,6 @@ game.drawBoard = function(drawer) {
         console.log(err);
     }
 
-    var playerHeroesData = heroesData[playerName];
-    try {
-        var allHeroesData = playerHeroesData[playerName].additionalData.heroesData;
-        if (!!allHeroesData) {
-            for (var otherPlayerName in allHeroesData) {
-                if (!playerHeroesData.hasOwnProperty(otherPlayerName)) {
-                    playerHeroesData[otherPlayerName] = allHeroesData[otherPlayerName];
-                }
-            }
-        }
-    } catch (err) {
-        console.log(err);
-    }
 
     try {
         var h = canvas.getPlotSize()/2;
@@ -356,8 +371,8 @@ game.drawBoard = function(drawer) {
                 }
             }
         }
-        for (var name in playerHeroesData) {
-            var additionalData = playerHeroesData[name].additionalData;
+        for (var name in heroesData.coordinates) {
+            var additionalData = heroesData.coordinates[name].additionalData;
             if (!!additionalData) {
                 drawLastAction(additionalData.lastAction);
                 var allLastActions = additionalData.allLastActions;

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.config;
  */
 
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.dao.*;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
@@ -43,12 +44,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SqliteDBConfig {
 
     private final ContextPathGetter contextPathGetter;
-    private final SQLiteFilesProperties properties;
+    private final SQLiteFilesProperties sqlite;
     private final PasswordEncoder passwordEncoder;
+    private final ConfigProperties properties;
 
     @Bean
     public ConnectionThreadPoolFactory databasePoolFactory() {
-        return new SqliteConnectionThreadPoolFactory(properties.getFiles().getLog(), contextPathGetter);
+        return new SqliteConnectionThreadPoolFactory(sqlite.getFiles().getLog(), contextPathGetter);
     }
 
     @Bean
@@ -58,7 +60,7 @@ public class SqliteDBConfig {
 
     @Bean
     public ConnectionThreadPoolFactory playerPoolFactory() {
-        return new SqliteConnectionThreadPoolFactory(properties.getFiles().getSaves(), contextPathGetter);
+        return new SqliteConnectionThreadPoolFactory(sqlite.getFiles().getSaves(), contextPathGetter);
     }
 
     @Bean
@@ -68,19 +70,19 @@ public class SqliteDBConfig {
 
     @Bean
     public ConnectionThreadPoolFactory registrationPoolFactory() {
-        return new SqliteConnectionThreadPoolFactory(properties.getFiles().getUsers(), contextPathGetter);
+        return new SqliteConnectionThreadPoolFactory(sqlite.getFiles().getUsers(), contextPathGetter);
     }
 
     @Bean
     public Registration registration(@Value("${admin.login}") String adminLogin,
                                      @Value("${admin.password}") String adminPassword) {
         return new Registration(registrationPoolFactory(), adminLogin, adminPassword,
-                passwordEncoder, true);
+                passwordEncoder, properties, true);
     }
 
     @Bean
     public ConnectionThreadPoolFactory paymentPoolFactory() {
-        return new SqliteConnectionThreadPoolFactory(properties.getFiles().getPayment(), contextPathGetter);
+        return new SqliteConnectionThreadPoolFactory(sqlite.getFiles().getPayment(), contextPathGetter);
     }
 
     @Bean
@@ -90,7 +92,7 @@ public class SqliteDBConfig {
 
     @Bean
     public ConnectionThreadPoolFactory gameDataPoolFactory() {
-        return new SqliteConnectionThreadPoolFactory(properties.getFiles().getSettings(), contextPathGetter);
+        return new SqliteConnectionThreadPoolFactory(sqlite.getFiles().getSettings(), contextPathGetter);
     }
 
     @Bean

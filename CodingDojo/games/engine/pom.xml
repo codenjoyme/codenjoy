@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>engine</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -181,9 +181,14 @@
                                     <resources>
                                         <file file="setup.bat"/>
                                         <file file="setup.sh"/>
+                                        <file file="mvnw"/>
+                                        <file file="mvnw.cmd"/>
                                         <file file="${project.build.directory}/engine-${project.version}.jar"/>
                                         <file file="${project.build.directory}/engine-${project.version}-sources.jar"/>
                                     </resources>
+                                </copy>
+                                <copy todir="${engine.packs}/.mvn" >
+                                    <fileset dir=".mvn" includes="**"/>
                                 </copy>
                                 <copy file="pom.xml"
                                       tofile="${engine.packs}/engine-${project.version}-pom.xml"/>

@@ -87,4 +87,9 @@ public class Scores implements PlayerScores {
                 : ScoreMode.SUM_OF_PROFITS;
     }
 
+    @Override
+    public void update(Object score) {
+        this.score = Integer.valueOf(score.toString());
+    }
+
 }

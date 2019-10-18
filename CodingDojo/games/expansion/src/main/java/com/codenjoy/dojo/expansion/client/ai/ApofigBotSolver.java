@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.client.ai;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -27,11 +27,10 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.expansion.client.AbstractSolver;
 import com.codenjoy.dojo.expansion.client.Board;
 import com.codenjoy.dojo.expansion.client.Command;
+import com.codenjoy.dojo.expansion.client.YourSolver;
 import com.codenjoy.dojo.expansion.model.Forces;
 import com.codenjoy.dojo.expansion.model.ForcesMoves;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.QDirection;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.*;
 
 import java.util.*;
 
@@ -41,9 +40,11 @@ import java.util.*;
 public class ApofigBotSolver extends AbstractSolver {
 
     private int increase;
+    private Dice dice;
 
-    public ApofigBotSolver(int increase) {
-        this.increase = increase;
+    public ApofigBotSolver(Dice dice) {
+        this.dice = dice;
+        this.increase = 10;
     }
 
     public static int count = 0;
@@ -109,5 +110,4 @@ public class ApofigBotSolver extends AbstractSolver {
     protected String buildAnswer(Board board) {
         return String.format("message('%s')", super.buildAnswer(board));
     }
-
 }

@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.client;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -58,15 +58,22 @@ public class Command {
     /**
      * Says to Hero jump to direction
      */
-    public static Command jumpTo(Direction direction) {
+    public static Command jump(Direction direction) {
         return new Command("ACT(1)" + "," + direction.toString());
     }
 
     /**
      * Says to Hero pull box on this direction
      */
-    public static Command pullTo(Direction direction) {
+    public static Command pull(Direction direction) {
         return new Command("ACT(2)" + "," + direction.toString());
+    }
+
+    /**
+     * Says to Hero fire on this direction
+     */
+    public static Command fire(Direction direction) {
+        return new Command("ACT(3)" + "," + direction.toString());
     }
 
     /**
@@ -81,6 +88,13 @@ public class Command {
      */
     public static Command go(Direction direction) {
         return new Command(direction.toString());
+    }
+
+    /**
+     * Says to Hero goes to start point
+     */
+    public static Command reset() {
+        return new Command("ACT(0)");
     }
 
 }

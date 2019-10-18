@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -57,9 +57,10 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
             var b = new Board(board);
             var hero = b.getHero();
             var exit = b.getExit();
+            var levelFinished = b.isLevelFinished();
         }
 
-        var finished = !!b && !!hero && !!exit && hero.toString() == exit.toString() && !levelProgress.isCurrentLevelMultiple();
+        var finished = !!b && levelFinished && !levelProgress.isCurrentLevelMultiple();
         var stopped = currentCommand() == 'STOP';
         if (!controlling || stopped || finished) {
             finish();

@@ -26,9 +26,11 @@ from sys import exc_info
 from traceback import print_exception
 from websocket import WebSocketApp
 
+
 def _on_open(webclient):
     print("Opened Connection.\nSending <NULL> command...")
     webclient.send('NULL')
+
 
 def _on_message(webclient, message):
     """
@@ -44,22 +46,31 @@ def _on_message(webclient, message):
         print(e)
         print_exception(*exc_info())
 
+
 def _on_error(webclient, error):
     print(error)
+
+
+def _on_close(webclient):
+    print("WebSocket closed.")
+
 
 class WebClient(WebSocketApp):
 
     def __init__(self, solver):
-        #assert solver not None
+        # assert solver not None
         self._solver = solver
         self._server = None
         self._user = None
 
-    def run(self, server, user):
-        super().__init__("{}?user={}".format(server, user))
-        self.on_message = _on_message
+    def run(self, serverandport, user, code):
+        super().__init__(
+            "ws://{}/codenjoy-contest/ws?user={}&code={}".format(serverandport, user, code))
         self.on_open = _on_open
-        self._server = server
+        self.on_close = _on_close
+        self.on_error = _on_error
+        self.on_message = _on_message
+        self._server = serverandport
         self._user = user
         self.run_forever()
 

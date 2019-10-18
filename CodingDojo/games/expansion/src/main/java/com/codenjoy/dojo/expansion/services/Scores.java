@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.services;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -36,15 +36,15 @@ public class Scores implements PlayerScores {
     private final static String SCORE = "score";
     public static final String ROUNDS = "rounds";
 
-    private volatile int current;
+    private volatile int score;
     private JSONObject log;
 
     public Scores(Object startScore) {
         if (startScore instanceof Integer) {
-            this.current = (Integer)startScore;
+            this.score = (Integer)startScore;
         } else if (startScore instanceof String) {
             JSONObject object = new JSONObject((String) startScore);
-            this.current = object.getInt(SCORE);
+            this.score = object.getInt(SCORE);
         }
         log = new JSONObject();
         clearRounds();
@@ -57,12 +57,17 @@ public class Scores implements PlayerScores {
     @Override
     public int clear() {
         clearRounds();
-        return current = 0;
+        return score = 0;
+    }
+
+    @Override
+    public void update(Object score) {
+        this.score = Integer.valueOf(score.toString());
     }
 
     @Override
     public JSONObject getScore() {
-        log.put(SCORE, current);
+        log.put(SCORE, score);
         return log;
     }
     @Override
@@ -73,11 +78,11 @@ public class Scores implements PlayerScores {
         rounds().put(score);
 
         if (events.getType() == Events.Type.WIN) {
-            current += score;
+            this.score += score;
         } else if (events.getType() == Events.Type.LOOSE) {
-            current -= score;
+            this.score -= score;
         }
-        current = Math.max(0, current);
+        this.score = Math.max(0, this.score);
 
         if (logger.isDebugEnabled()) {
             logger.debug("Scores after event {} is {}", input, getScore());

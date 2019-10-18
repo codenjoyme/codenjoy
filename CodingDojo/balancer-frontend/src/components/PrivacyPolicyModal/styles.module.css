@@ -1,0 +1,88 @@
+.privacyModalContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 50px 20px;
+}
+
+.privacyFooter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.emptyBlock {
+    width: 18px;
+}
+
+.buttonsPanel {
+    width: 100%;
+    max-width: 1030px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.buttonsPanel button {
+    padding: 20px 0;
+    width: 100%;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    color: #ffffff;
+    font-size: 20px;
+}
+
+.disagree {
+    background-color: var(--block-bg-color);
+}
+
+.agree {
+    background-color: var(--primary-color);
+}
+
+.modalContent {
+    position: absolute;
+    top: 50px;
+    width: 90%;
+    max-width: 700px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    bottom: 50px;
+    background: var(--main-bg-color);
+    overflow: auto;
+    outline: none;
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgba(34, 34, 34, 0.8);
+}
+
+.modalContent::-webkit-scrollbar-track {
+    background-color: rgb(34, 34, 34);
+}
+
+.modalContent::-webkit-scrollbar {
+    width: 10px;
+}
+
+.modalContent::-webkit-scrollbar-thumb {
+    background-color: rgb(48, 113, 137);
+}
+
+@media all and (max-width: 820px) {
+    .modalContent {
+        width: calc(90% - 40px);
+        padding: 0 20px 20px;
+    }
+    .privacyModalContainer {
+        padding: 0px 0px 20px;
+    }
+}

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -110,8 +110,8 @@ var D = function(index, dx, dy, name){
 };
 
 var Direction = {
-    UP : D(2, 0, -1, 'UP'),
-    DOWN : D(3, 0, 1, 'DOWN'),
+    UP : D(2, 0, 1, 'UP'),
+    DOWN : D(3, 0, -1, 'DOWN'),
     LEFT : D(0, -1, 0, 'LEFT'),
     RIGHT : D(1, 1, 0, 'RIGHT'),
     ACT : D(4, 0, 0, 'ACT'),

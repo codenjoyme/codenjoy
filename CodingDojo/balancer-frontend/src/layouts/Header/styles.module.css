@@ -1,0 +1,133 @@
+.logoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    width: 300px;
+    color: white;
+}
+
+.logoContainer,
+.logoContainer:active,
+.logoContainer:focus,
+.logoContainer:hover {
+    text-decoration: none;
+}
+
+.logoContainer span {
+    font-family: 'Museo Sans Cyrl';
+    font-weight: 300;
+}
+
+.logo {
+    height: 54px;
+    margin-right: 28px;
+    display: inline-block;
+}
+
+.avatar {
+    margin-right: 8px;
+}
+
+.active {
+    border-bottom: 1px solid lightblue;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    background: var(--block-bg-color);
+    font-family: 'Museo Sans Cyrl';
+}
+
+.navMenu {
+    position: relative;
+    height: 20px;
+    color: white;
+    text-decoration: none;
+    padding: 38px 20px;
+    font-size: 20px;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+}
+
+.container a.activeMenu:after {
+    content: '';
+    position: absolute;
+    display: block;
+    box-sizing: border-box;
+    height: 5px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background: var(--primary-color);
+}
+
+.container ul {
+    display: flex;
+}
+
+.container ul li:last-child {
+    margin-left: 40px;
+}
+
+.container li {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logout {
+    cursor: pointer;
+}
+
+@media all and (max-width: 1090px) {
+    .navMenu {
+        font-size: 18px;
+    }
+    .logoContainer {
+        font-size: 15px;
+        width: 280px;
+    }
+}
+
+@media all and (max-width: 1020px) {
+    .container li {
+        width: 100%;
+    }
+    .container a {
+        padding: 10px 0;
+        width: 100%;
+        justify-content: center;
+    }
+    .container a.activeMenu {
+        background: var(--primary-color);
+    }
+    .container a.activeMenu:after {
+        display: none;
+    }
+    .active {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+    }
+    .logoContainer {
+        width: auto;
+        height: 60px;
+    }
+    .container ul {
+        flex-direction: column;
+    }
+    .container {
+        flex-direction: column;
+    }
+    .container ul li:last-child {
+        margin-left: 0;
+    }
+    .avatar {
+        width: 24px;
+    }
+}

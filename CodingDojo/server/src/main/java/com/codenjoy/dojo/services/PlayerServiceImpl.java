@@ -39,9 +39,9 @@ import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.fest.reflect.core.Reflection;
 import org.json.JSONObject;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,6 +51,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Supplier;
 
 @Component("playerService")
 @Slf4j
@@ -58,7 +59,6 @@ public class PlayerServiceImpl implements PlayerService {
     
     private ReadWriteLock lock = new ReentrantReadWriteLock(true);
     private Map<Player, String> cacheBoards = new HashMap<>();
-    private boolean isRegOpened = true;
 
     @Autowired protected PlayerGames playerGames;
     @Autowired private PlayerGamesView playerGamesView;
@@ -73,8 +73,11 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Autowired protected GameService gameService;
     @Autowired protected AutoSaver autoSaver;
+    @Autowired protected GameSaver saver;
     @Autowired protected ActionLogger actionLogger;
     @Autowired protected Registration registration;
+    @Autowired protected ConfigProperties config;
+    @Autowired protected Semifinal semifinal;
 
     @Value("${game.ai}")
     protected boolean isAINeeded;
@@ -101,13 +104,20 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             log.debug("Registered user {} in game {}", name, gameName);
 
-            if (!isRegOpened) {
+            if (!config.isRegistrationOpened()) {
                 return NullPlayer.INSTANCE;
             }
 
             registerAIIfNeeded(name, gameName);
 
-            Player player = register(new PlayerSave(name, ip, gameName, 0, null));
+            // TODO test me
+            PlayerSave save = saver.loadGame(name);
+            if (save != PlayerSave.NULL && gameName.equals(save.getGameName())) {
+                save.setCallbackUrl(ip);
+            } else {
+                save = new PlayerSave(name, ip, gameName, 0, null);
+            }
+            Player player = register(new PlayerSave(name, ip, gameName, save.getScore(), save.getSave()));
 
             return player;
         } finally {
@@ -150,10 +160,16 @@ public class PlayerServiceImpl implements PlayerService {
                 gerCodeForAI(playerName) :
                 registration.getCodeById(playerName);
 
-        Closeable ai = createAI(playerName, code, gameType);
+        setupPlayerAI(() -> getPlayer(PlayerSave.get(playerName,
+                            "127.0.0.1", gameType.name(), 0, null), gameType),
+                playerName, code, gameType);
+    }
+
+    private void setupPlayerAI(Supplier<Player> getPlayer, String aiName, String code, GameType gameType) {
+        Closeable ai = createAI(aiName, code, gameType);
         if (ai != null) {
-            Player player = getPlayer(PlayerSave.get(playerName,
-                    "127.0.0.1", gameType.name(), 0, null), gameType);
+            Player player = getPlayer.get();
+            player.setReadableName(StringUtils.capitalize(gameType.name()) + " SuperAI");
             player.setAI(ai);
         }
     }
@@ -179,8 +195,8 @@ public class PlayerServiceImpl implements PlayerService {
         Player player = getPlayer(playerSave, gameType);
 
         if (isAI(name)) {
-            Closeable runner = createAI(name, gerCodeForAI(name), gameType);
-            player.setAI(runner);
+            setupPlayerAI(() -> player,
+                    name, gerCodeForAI(name), gameType);
         }
 
         return player;
@@ -283,6 +299,9 @@ public class PlayerServiceImpl implements PlayerService {
             if (playerGames.isEmpty()) {
                 return;
             }
+
+            semifinal.tick();
+
         } catch (Error e) {
             e.printStackTrace();
             log.error("PlayerService.tick() throws", e);
@@ -414,26 +433,70 @@ public class PlayerServiceImpl implements PlayerService {
             }
 
             for (int index = 0; index < playerGames.size(); index ++) {
-                PlayerGame playerGame = playerGames.get(index);
-                Player playerToUpdate = playerGame.getPlayer();
-                Player newPlayer = players.get(index);
-
-                playerToUpdate.setCallbackUrl(newPlayer.getCallbackUrl());
-                playerToUpdate.setName(newPlayer.getName());
-                playerToUpdate.setReadableName(newPlayer.getReadableName());
-                registration.updateName(newPlayer.getName(), newPlayer.getReadableName());
-
-                Game game = playerGame.getGame();
-                if (game != null && game.getSave() != null) {
-                    String oldSave = game.getSave().toString();
-                    String newSave = newPlayer.getData();
-                    if (!PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave)) {
-                        playerGames.setLevel(
-                                newPlayer.getName(),
-                                new JSONObject(newSave));
-                    }
-                }
+                updatePlayer(playerGames.get(index), players.get(index));
             }
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void update(Player player) { // TODO test me
+        lock.writeLock().lock();
+        try {
+            updatePlayer(playerGames.get(player.getName()), player);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    private void updatePlayer(PlayerGame playerGame, Player input) {
+        Player updated = playerGame.getPlayer();
+
+        if (StringUtils.isNotEmpty(input.getCallbackUrl())) {
+            updated.setCallbackUrl(input.getCallbackUrl());
+        }
+
+        boolean updateReadableName = StringUtils.isNotEmpty(input.getReadableName());
+        if (updateReadableName) {
+            updated.setReadableName(input.getReadableName());
+            registration.updateReadableName(input.getName(), input.getReadableName());
+        }
+
+        boolean updateId = !playerGame.getPlayer().getName().equals(input.getName());
+        if (updateId) {
+            updated.setName(input.getName());
+            registration.updateId(input.getReadableName(), input.getName());
+        }
+
+        try {
+            if (input.getScore() != null) {
+                updated.getScores().update(input.getScore());
+            }
+        } catch (Exception e) {
+            // do nothing
+        }
+
+        Game game = playerGame.getGame();
+        if (game != null && game.getSave() != null) {
+            String oldSave = game.getSave().toString();
+            String newSave = input.getData();
+            if (!PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave)) {
+                playerGames.setLevel(
+                        input.getName(),
+                        new JSONObject(newSave));
+            }
+        }
+    }
+
+    @Override // TODO test me
+    public void loadSaveForAll(String gameName, String newSave) {
+        lock.writeLock().lock();
+        try {
+            List<Player> players = playerGames.getPlayers(gameName);
+            players.forEach(player -> playerGames.setLevel(
+                    player.getName(),
+                    new JSONObject(newSave)));
         } finally {
             lock.writeLock().unlock();
         }
@@ -485,30 +548,26 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public void closeRegistration() {
-        isRegOpened = false;
+        config.setRegistrationOpened(false);
     }
 
     @Override
     public boolean isRegistrationOpened() {
-        return isRegOpened;
+        return config.isRegistrationOpened();
     }
 
     @Override
     public void openRegistration() {
-        isRegOpened = true;
+        config.setRegistrationOpened(true);
     }
 
     @Override
     public void cleanAllScores() {
         lock.writeLock().lock();
         try {
-            for (PlayerGame playerGame : playerGames) {
-                Game game = playerGame.getGame();
-                Player player = playerGame.getPlayer();
+            semifinal.clean();
 
-                player.clearScore();
-                game.clearScore();
-            }
+            playerGames.forEach(PlayerGame::clearScore);
         } finally {
             lock.writeLock().unlock();
         }

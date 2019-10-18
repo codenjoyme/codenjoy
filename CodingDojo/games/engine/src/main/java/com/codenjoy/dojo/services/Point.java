@@ -104,4 +104,10 @@ public interface Point extends Comparable<Point> {
      * @param direction one of 4 directions
      */
     void change(Direction direction);
+
+    /**
+     * @param offset
+     * @return this.x - offset.x, this.y - offset.y
+     */
+    Point relative(Point offset);
 }

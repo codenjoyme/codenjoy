@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -37,7 +37,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel1() {
-        String map = getMap(Levels.SINGLE1);
+        String map = getMap(Levels.SINGLE.get(0));
         asrtMap("                " +
                 "                " +
                 "                " +
@@ -62,7 +62,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel5() {
-        String map = getMap(Levels.SINGLE5);
+        String map = getMap(Levels.SINGLE.get(4));
         asrtMap("                " +
                 "                " +
                 "                " +
@@ -83,7 +83,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel6() {
-        String map = getMap(Levels.SINGLE6);
+        String map = getMap(Levels.SINGLE.get(5));
         asrtMap("                " +
                 "                " +
                 "                " +
@@ -104,7 +104,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel7() {
-        String map = getMap(Levels.SINGLE7);
+        String map = getMap(Levels.SINGLE.get(6));
         asrtMap("                " +
                 "                " +
                 "  ╔══════┐      " +
@@ -146,7 +146,7 @@ public class LevelsTest {
 
     @Test
     public void testLevel4() {
-        String map = getMap(Levels.SINGLE4);
+        String map = getMap(Levels.SINGLE.get(3));
         asrtMap("                " +
                 "                " +
                 "                " +

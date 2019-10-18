@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -1085,6 +1085,13 @@ canvas {
     width: 24px;
     height: 3px;
     background: white;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .button {
+    font-size: 9px;
+    padding: 0 4px;
   }
 }
 

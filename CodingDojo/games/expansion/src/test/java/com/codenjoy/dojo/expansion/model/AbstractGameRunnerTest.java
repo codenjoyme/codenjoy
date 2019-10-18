@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -23,14 +23,14 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.GameRunner;
 import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
@@ -38,7 +38,6 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
 
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyInt;
@@ -61,6 +60,7 @@ public class AbstractGameRunnerTest {
     private Dice dice;
     private EventListener listener;
     private Settings settings;
+    private Expansion current;
 
     @Before
     public void setup() {
@@ -70,19 +70,18 @@ public class AbstractGameRunnerTest {
         gameRunner = new GameRunner();
         gameRunner.setDice(dice);
 
-        games = new LinkedList<Game>();
+        games = new LinkedList<>();
         factory = new PrinterFactoryImpl();
 
         settings = gameRunner.getSettings();
         SettingsWrapper.data
-                .lobbyEnable(false)
                 .waitingOthers(false)
+                .singleTrainingMode(false)
                 .shufflePlayers(false);
     }
 
-
-    protected void givenLv(String level, int index) {
-        SettingsWrapper.multi(index, level);
+    protected void givenFl(String... boards) {
+        SettingsWrapper.multi(boards);
     }
 
     protected JSONObject board(int player) {
@@ -100,8 +99,8 @@ public class AbstractGameRunnerTest {
         return game;
     }
 
-    protected void createNewGame(int levelOfRoom) {
-        gotoFreeRoom(levelOfRoom);
+    protected void createNewGame(int room) {
+        gotoFreeRoom(room);
         createNewGame();
     }
 
@@ -110,7 +109,13 @@ public class AbstractGameRunnerTest {
     }
 
     protected void createNewGame() {
-        Game game = gameRunner.newGame(listener, factory, null, null);
+        if (current == null || current.freeBases() == 0) {
+            current = (Expansion) gameRunner.createGame(0);
+        }
+        Player player = (Player) gameRunner.createPlayer(listener, "");
+        Single game = new Single(player, gameRunner.getPrinterFactory());
+        game.on(current);
+        game.newGame();
         games.add(game);
     }
 
@@ -124,29 +129,29 @@ public class AbstractGameRunnerTest {
     protected void assertE(String expected, int index) {
         Single single = (Single)game(index);
         assertEquals(expected,
-                TestUtils.injectN(getBoardAsString(single).getLayers().get(1)));
+                TestUtils.injectN(getLayer(single, 1)));
     }
 
     protected void assertL(String expected, int index) {
         Single single = (Single)game(index);
         assertEquals(expected,
-                TestUtils.injectN(getBoardAsString(single).getLayers().get(0)));
+                TestUtils.injectN(getLayer(single, 0)));
     }
 
     protected void assertF(String expected, int index) {
         Single single = (Single)game(index);
         assertEquals(expected,
-                TestUtils.injectNN(getBoardAsString(single).getLayers().get(2)));
+                TestUtils.injectNN(getLayer(single, 2)));
     }
 
-    protected PrinterData getBoardAsString(Single single) {
-        return single.getPrinter().print();
+    private String getLayer(Single single, int layer) {
+        return ((JSONObject) single.getBoardAsString()).getJSONArray("layers").getString(layer);
     }
 
     protected void tickAll() {
         for (Game game : games) {
             if (game != null) {
-//                game.tick(); // TODO тут пришлось закомментить
+                game.getField().tick();
             }
         }
         gameRunner.tick(); // this codenjoy server will do after all game ticks
@@ -160,7 +165,8 @@ public class AbstractGameRunnerTest {
     }
 
     protected void destroy(int player) {
-//        game(player).destroy(); TODO тут пришлось закомментить
+        Game game = games.get(player);
+        game.getField().remove(game.getPlayer());
         games.set(player, null);
     }
 
@@ -212,34 +218,29 @@ public class AbstractGameRunnerTest {
     }
 
     protected void givenLevels() {
-        givenLv("╔════┐" +
+        givenFl("╔════┐" +
                 "║1..2│" +
                 "║....│" +
                 "║....│" +
                 "║4..3│" +
-                "└────┘", LEVEL1);
-
-        givenLv("╔════┐" +
+                "└────┘",
+                "╔════┐" +
                 "║..1.│" +
                 "║4...│" +
                 "║...2│" +
                 "║.3..│" +
-                "└────┘", LEVEL2);
-
-        givenLv("╔════┐" +
+                "└────┘",
+                "╔════┐" +
                 "║.1..│" +
                 "║...2│" +
                 "║4...│" +
                 "║..3.│" +
-                "└────┘", LEVEL3);
-
-        givenLv("╔════┐" +
+                "└────┘",
+                "╔════┐" +
                 "║....│" +
                 "║.12.│" +
                 "║.43.│" +
                 "║....│" +
-                "└────┘", LEVEL4);
-
-        data.cleanMulti(LEVEL4);
+                "└────┘");
     }
 }

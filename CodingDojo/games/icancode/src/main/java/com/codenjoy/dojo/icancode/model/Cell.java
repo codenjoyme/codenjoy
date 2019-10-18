@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -33,6 +33,8 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
 
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
@@ -133,6 +135,43 @@ public class Cell extends PointImpl implements ICell {
             }
         }
         items.remove(item);
+    }
+
+    @Override
+    public void jump(IItem item) {
+        boolean heroOn2Layer = items.indexOf(item) == LAYER2;
+        if (!heroOn2Layer) {
+            // нас не интересуют случаи, когда герой не на втором слое
+            return;
+        }
+
+        // если герой на втором слое, то в прыжке его надо перенести на 3й
+        boolean twoLayers = (items.size() - 1 == LAYER2);
+        boolean threeLayers = (items.size() - 1 == LAYER3);
+
+        if (twoLayers) {
+            // если два слоя, то добавляем воздух
+            items.add(LAYER2, new Air());
+        } else if (threeLayers) {
+            // если три слоя, то ставим игрока выше
+            items.add(items.remove(LAYER2));
+        }
+    }
+
+    @Override
+    public void landOn(IItem item) {
+        boolean heroOn3Layer = (items.indexOf(item) == LAYER3);
+        if (!heroOn3Layer) {
+            // нас не интересуют случаи, когда герой не на третьем слое (в полете)
+            return;
+        }
+
+        boolean isAirOnSecondLayer = (items.get(LAYER2) instanceof Air);
+        if (isAirOnSecondLayer) {
+            // если в процессе полета на втором слое был воздух мы его удаляем
+            // TODO подумать о сценарии, когда воздух остался в клетке, а мы ее покинули
+            items.remove(LAYER2);
+        }
     }
 
     //================================ Overrides ================================

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -30,6 +30,9 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
 
     var progressBar = initProgressbar('progress-bar');
     progressBar.setProgress = function(current, lastPassed) {
+        for (var i = 0; i < progressBar.levelsCount; ++i) {
+            this.notActive(i);
+        }
         for (var i = 0; i <= lastPassed; ++i) {
             this.done(i);
         }
@@ -82,13 +85,19 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
 
         onUpdate(level, multiple, lastPassed);
 
-        if (currentLevel == level) {
+        var firstRun = !progressBar.levelProgress;
+        if (!firstRun &&
+            progressBar.levelProgress.current == level &&
+            progressBar.levelProgress.total == countLevels &&
+            progressBar.levelProgress.lastPassed == lastPassed)
+        {
             return;
         }
+        progressBar.levelProgress = board.levelProgress;
         currentLevel = level;
         currentLevelIsMultiple = multiple;
 
-        if (!progressBar.countLevelsChanged) {
+        if (firstRun || progressBar.levelProgress.total != countLevels) {
             progressBar.countLevels(countLevels);
         }
         progressBar.setProgress(currentLevel, lastPassed);

@@ -150,6 +150,11 @@ public class LayeredViewPrinterTest {
             }
 
             @Override
+            public int viewSize() {
+                return viewSize;
+            }
+
+            @Override
             public BiFunction<Integer, Integer, State> elements() {
                 return (index, layer) -> {
                     Point pt = lxy.getXY(index);
@@ -188,10 +193,9 @@ public class LayeredViewPrinterTest {
         };
         GamePlayer player = mock(GamePlayer.class);
 
-        printer = new LayeredViewPrinter(boardSize,
+        printer = new LayeredViewPrinter(
                 () -> reader,
                 () -> player,
-                viewSize,
                 countLayers);
     }
 
@@ -202,7 +206,7 @@ public class LayeredViewPrinterTest {
         board = (PrinterData) printer.print();
 
         // then
-        assertEquals("{\"x\":9,\"y\":10}", board.getOffset().toString());
+        assertEquals("[9,10]", board.getOffset().toString());
 
         assertL(".o☻o.o.\n" +
                 "o.o.o.o\n" +
@@ -228,7 +232,7 @@ public class LayeredViewPrinterTest {
         board = (PrinterData) printer.print();
 
         // then
-        assertEquals("{\"x\":7,\"y\":12}", board.getOffset().toString());
+        assertEquals("[7,12]", board.getOffset().toString());
 
         assertL(".o.o.o.\n" +
                 "o.o.o.o\n" +
@@ -254,7 +258,7 @@ public class LayeredViewPrinterTest {
         board = (PrinterData) printer.print();
 
         // then
-        assertEquals("{\"x\":13,\"y\":13}", board.getOffset().toString());
+        assertEquals("[13,13]", board.getOffset().toString());
 
         assertL("o.o.o.o\n" +
                 ".o.o.o.\n" +
@@ -283,7 +287,7 @@ public class LayeredViewPrinterTest {
         board = (PrinterData) printer.print();
 
         // then
-        assertEquals("{\"x\":7,\"y\":13}", board.getOffset().toString());
+        assertEquals("[7,13]", board.getOffset().toString());
 
         assertL("o.o.o.o\n" +
                 ".o.o.o.\n" +

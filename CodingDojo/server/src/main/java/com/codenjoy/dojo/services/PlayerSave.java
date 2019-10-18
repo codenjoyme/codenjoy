@@ -23,8 +23,12 @@ package com.codenjoy.dojo.services;
  */
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+@Getter
+@Setter
 public class PlayerSave {
 
     public static final PlayerSave NULL = new PlayerSave(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, 0, StringUtils.EMPTY);
@@ -63,23 +67,4 @@ public class PlayerSave {
         return StringUtils.isEmpty(str) || str.equalsIgnoreCase("null");
     }
 
-    public Object getScore() {
-        return score;
-    }
-
-    public String getCallbackUrl() {
-        return callbackUrl;
-    }
-
-    public String getGameName() {
-        return gameName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSave() {
-        return save;
-    }
 }

@@ -23,40 +23,22 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import lombok.SneakyThrows;
 import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class PlayerGamesTest {
-
-    private PlayerGames playerGames;
-    private List<GameType> gameTypes = new LinkedList<>();
-    private Map<Player, Closeable> ais = new HashMap<>();
-    private List<Joystick> joysticks = new LinkedList<>();
-    private List<Joystick> lazyJoysticks = new LinkedList<>();
-    private List<GamePlayer> gamePlayers = new LinkedList<>();
-    private List<GameField> fields = new LinkedList<>();
-
-    @Before
-    public void setUp() {
-        playerGames = new PlayerGames();
-    }
+public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
     private PlayerGame removed;
 
@@ -65,7 +47,7 @@ public class PlayerGamesTest {
         // given
         Player player = createPlayer();
 
-        assertEquals(false,playerGames.isEmpty());
+        assertEquals(false, playerGames.isEmpty());
         assertEquals(1, playerGames.size());
         PlayerGame playerGame = playerGames.get(player.getName());
         GameField field = playerGame.getGame().getField();
@@ -149,57 +131,6 @@ public class PlayerGamesTest {
         assertEquals(false,iterator.hasNext());
     }
 
-    private Player createPlayer(String game) {
-        return createPlayer(game, "player" + Calendar.getInstance().getTimeInMillis(),
-                MultiplayerType.SINGLE);
-    }
-
-    private Player createPlayer(String gameName, String name, MultiplayerType type) {
-        return createPlayer(gameName, name, type, null);
-    }
-
-    private Player createPlayer(String gameName, String name, MultiplayerType type, PlayerSave save) {
-        return createPlayer(gameName, name, type, save, "board");
-    }
-
-    private Player createPlayer(String gameName, String name, MultiplayerType type, PlayerSave save, Object board) {
-        GameService gameService = mock(GameService.class);
-        GameType gameType = mock(GameType.class);
-        gameTypes.add(gameType);
-        PlayerScores scores = mock(PlayerScores.class);
-        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
-        when(gameType.name()).thenReturn(gameName);
-        when(gameService.getGame(anyString())).thenReturn(gameType);
-
-        Player player = new Player(name, "url", gameType, scores, mock(Information.class));
-        player.setEventListener(mock(InformationCollector.class));
-        Closeable ai = mock(Closeable.class);
-        ais.put(player, ai);
-        player.setAI(ai);
-
-        playerGames.onAdd(pg -> lazyJoysticks.add(pg.getJoystick()));
-
-        TestUtils.Env env =
-                TestUtils.getPlayerGame(
-                        playerGames,
-                        player,
-                        inv -> {
-                            GameField field = mock(GameField.class);
-                            when(field.reader()).thenReturn(mock(BoardReader.class));
-                            fields.add(field);
-                            return field;
-                        },
-                        type,
-                        save,
-                        parameters -> board
-                );
-
-        joysticks.add(env.joystick);
-        gamePlayers.add(env.gamePlayer);
-
-        return player;
-    }
-
     @Test
     public void testPlayers() {
         // given
@@ -261,10 +192,6 @@ public class PlayerGamesTest {
         assertEquals(thirdPlayer, result2.get(0));
     }
 
-    private Player createPlayer() {
-        return createPlayer("game");
-    }
-
     @Test
     public void testClear() {
         // given
@@ -292,11 +219,6 @@ public class PlayerGamesTest {
         verifyRemove(playerGame1, field1);
         verifyRemove(playerGame2, field2);
         verifyRemove(playerGame3, field3);
-    }
-
-    private void verifyRemove(PlayerGame playerGame, GameField field) {
-        verify(field).remove(playerGame.getGame().getPlayer());
-        verify(ais.get(playerGame.getPlayer())).close();
     }
 
     @Test
@@ -620,16 +542,14 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void testResetAloneUsersField() {
+    public void testResetAloneUsersField_whenRemove() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;
         Player player1 = createPlayer("game", "player1", type);
         Player player2 = createPlayer("game", "player2", type);
         Player player3 = createPlayer("game", "player3", type);
 
-        GameField field3 = playerGames.get("player3").getGame().getField();
-
-        assertEquals(1, fields.size());
+        assertR("{0=[player1, player2, player3]}");
 
         // when
         playerGames.remove(player1);
@@ -643,10 +563,72 @@ public class PlayerGamesTest {
         // then
         // created new field for player3
         assertEquals(2, fields.size());
-        GameField newField3 = playerGames.get("player3").getGame().getField();
-        assertNotSame(field3, newField3);
+        assertR("{1=[player3]}");
 
         verify(fields.get(1), times(1)).newGame(gamePlayers.get(2));
+    }
+
+    @Test
+    public void testDontResetAloneUsersField_whenRemoveCurrent() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        Player player1 = createPlayer("game", "player1", type);
+        Player player2 = createPlayer("game", "player2", type);
+        Player player3 = createPlayer("game", "player3", type);
+
+        assertR("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.removeCurrent(player1);
+
+        // then
+        assertEquals(1, fields.size());
+
+        // when
+        playerGames.removeCurrent(player2);
+
+        // then
+        assertEquals(1, fields.size());
+        assertR("{0=[player3]}");
+    }
+
+    @Test
+    public void testResetAloneUsersField_whenReload() {
+        // given
+        MultiplayerType type = MultiplayerType.TOURNAMENT;
+        Player player1 = createPlayer("game", "player1", type);
+        Player player2 = createPlayer("game", "player2", type);
+
+        assertR("{0=[player1, player2]}");
+
+        // when
+        Game game = playerGames.get(0).getGame();
+        playerGames.reload(game, game.getSave());
+
+        // then
+        // created new field for player3
+        assertEquals(2, fields.size());
+        assertR("{1=[player1, player2]}");
+
+        verify(fields.get(1), times(1)).newGame(gamePlayers.get(1));
+    }
+
+    @Test
+    public void testDontResetAloneUsersField_whenReloadCurrent() {
+        // given
+        MultiplayerType type = MultiplayerType.TOURNAMENT;
+        Player player1 = createPlayer("game", "player1", type);
+        Player player2 = createPlayer("game", "player2", type);
+
+        assertR("{0=[player1, player2]}");
+
+        // when
+        PlayerGame playerGame = playerGames.get(0);
+        playerGames.reloadCurrent(playerGame);
+
+        // then
+        assertEquals(2, fields.size());
+        assertR("{0=[player2], 1=[player1]}");
     }
 
     @Test
@@ -1037,9 +1019,5 @@ public class PlayerGamesTest {
         assertEquals(fields.get(1), playerGames.get("player5").getField());
     }
 
-    private void setPlayerStatus(int index, boolean stillPlay) {
-        when(gamePlayers.get(index).isAlive()).thenReturn(stillPlay);
-        when(gamePlayers.get(index).isWin()).thenReturn(!stillPlay);
-        when(gamePlayers.get(index).shouldLeave()).thenReturn(!stillPlay);
-    }
+
 }

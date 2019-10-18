@@ -110,6 +110,7 @@ public class SaveServiceImpl implements SaveService {
             info.setCallbackUrl(player.getCallbackUrl());
             info.setReadableName(registration.getNameById(player.getName()));
             info.setAIPlayer(player.hasAI());
+            info.setScores(player.getScores()); // TODO test me
 
             copySave(player, info);
             map.put(player.getName(), info);
@@ -125,8 +126,10 @@ public class SaveServiceImpl implements SaveService {
                 info.setSaved(true);
             } else {
                 PlayerSave save = saver.loadGame(name);
+                // TODO оптимизнуть два запроса в один
                 String code = registration.getCodeById(name);
-                map.put(name, new PlayerInfo(name, code, save.getCallbackUrl(), save.getGameName(), true));
+                String readableName = registration.getNameById(name);
+                map.put(name, new PlayerInfo(name, readableName, code, save.getCallbackUrl(), save.getGameName(), true));
             }
         }
 

@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.client;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -41,8 +41,8 @@ public class YourSolverTest {
         ai = new YourSolver(mock(Dice.class));
     }
 
-    private Board board(String layer1, String layer2) {
-        return (Board) new Board().forString(layer1, layer2);
+    private Board board(String layer1, String layer2, String layer3) {
+        return (Board) new Board().forString(layer1, layer2, layer3);
     }
 
     @Test
@@ -193,7 +193,14 @@ public class YourSolverTest {
     }
 
     private void assertL(String layer1, String layer2, Command expected) {
-        String actual = ai.get(board(layer1, layer2));
+        String actual = ai.get(board(layer1, layer2,
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------"));
         assertEquals(expected.toString(), actual);
     }
 }

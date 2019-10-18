@@ -26,6 +26,8 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.security.ViewDelegationService;
@@ -34,16 +36,16 @@ import com.codenjoy.dojo.services.settings.Settings;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -51,6 +53,8 @@ import java.util.TreeSet;
 import java.util.function.Predicate;
 
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
+
+import static java.util.stream.Collectors.toList;
 
 @Controller
 @RequestMapping(AdminController.URI)
@@ -72,7 +76,9 @@ public class AdminController {
     private final AutoSaver autoSaver;
     private final DebugService debugService;
     private final Registration registration;
+    private final RoomsAliaser rooms;
     private final ViewDelegationService viewDelegationService;
+    private final Semifinal semifinal;
 
     @RequestMapping(params = "save", method = RequestMethod.GET)
     public String savePlayerGame(@RequestParam("save") String name, Model model, HttpServletRequest request) {
@@ -265,12 +271,42 @@ public class AdminController {
             playerService.updateAll(settings.getPlayers());
         }
 
+        if (settings.getSemifinal() != null) {
+            try {
+                semifinal.settings().apply(settings.getSemifinal());
+                semifinal.clean();
+            } catch (Exception e) {
+                // do nothing
+            }
+        }
+
         if (settings.getTimerPeriod() != null) {
             try {
                 timerService.changePeriod(Integer.parseInt(settings.getTimerPeriod()));
             } catch (NumberFormatException e) {
                 // do nothing
             }
+        }
+
+        if (settings.getProgress() != null) {
+            playerService.loadSaveForAll(settings.getGameName(),
+                    settings.getProgress());
+        }
+
+        if (settings.getGames() != null) {
+            List<Parameter> games = (List)settings.getGames();
+            List<String> toRemove = new LinkedList<>();
+            List<String> allGames = gameService.getGameNames();
+            if (games.size() != allGames.size()) {
+                throw new IllegalStateException("Список игр к активации не полный");
+            }
+            for (int i = 0; i < allGames.size(); i++) {
+                if (games.get(i) == null) {
+                    toRemove.add(allGames.get(i));
+                }
+            }
+
+            rooms.enableGames(toRemove);
         }
 
         List<Exception> errors = new LinkedList<>();
@@ -344,7 +380,7 @@ public class AdminController {
     }
 
     private String getDefaultGame() {
-        return gameService.getGameNames().iterator().next();
+        return gameService.getDefaultGame();
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -374,18 +410,32 @@ public class AdminController {
 
         AdminSettings settings = new AdminSettings();
 
+        settings.setSemifinal(semifinal.settings().clone());
+
         settings.setParameters(new LinkedList<>());
         for (Parameter p : parameters) {
             settings.getParameters().add(p.getValue());
         }
 
+        Set<String> enabled = rooms.gameNames();
+        List<Object> games = gameService.getGameNames()
+                                .stream()
+                                .map(name -> enabled.contains(name))
+                                .collect(toList());
+        settings.setGames(games);
+
         model.addAttribute("adminSettings", settings);
         model.addAttribute("settings", parameters);
+        model.addAttribute("semifinalTick", semifinal.getTime());
         model.addAttribute(GAME_NAME_FORM_KEY, gameName);
         model.addAttribute("gameVersion", game.getVersion());
         model.addAttribute("generateNameMask", "demo%@codenjoy.com");
         model.addAttribute("generateCount", "30");
         model.addAttribute("timerPeriod", timerService.getPeriod());
+
+        MultiplayerType type = gameService.getGame(gameName).getMultiplayerType();
+        JSONObject save = new LevelProgress(type).saveTo(new JSONObject());
+        model.addAttribute("defaultProgress", save.toString().replace('"', '\''));
 
         checkGameStatus(model);
         checkRecordingStatus(model);
@@ -463,6 +513,16 @@ public class AdminController {
     public String open(Model model, HttpServletRequest request) {
         playerService.openRegistration();
         return getAdmin(request);
+    }
+
+    @PostMapping("/user/info")
+    public @ResponseBody String update(@RequestBody Player player) {
+        try {
+            playerService.update(player);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "{}";
     }
 
 }

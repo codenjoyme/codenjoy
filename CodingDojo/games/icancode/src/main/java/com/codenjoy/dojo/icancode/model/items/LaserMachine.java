@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -81,4 +81,8 @@ public class LaserMachine extends FieldItem implements Tickable {
         }
     }
 
+    public void reset() {
+        timer = 0;
+        field.lasers().forEach(it -> it.die());
+    }
 }

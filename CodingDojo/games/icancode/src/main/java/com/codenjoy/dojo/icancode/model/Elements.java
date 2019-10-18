@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -29,8 +29,7 @@ import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER1;
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
 
 /**
  * All possible elements on board.
@@ -78,15 +77,13 @@ public enum Elements implements CharElements {
     // your robot
     ROBO(LAYER2, '☺'),
     ROBO_FALLING(LAYER2, 'o'),
-    ROBO_FLYING(LAYER2, '*'),
-    ROBO_FLYING_ON_BOX(LAYER2, '№'),
+    ROBO_FLYING(LAYER3, '*'),
     ROBO_LASER(LAYER2, '☻'),
 
     // other robot
     ROBO_OTHER(LAYER2, 'X'),
     ROBO_OTHER_FALLING(LAYER2, 'x'),
-    ROBO_OTHER_FLYING(LAYER2, '^'),
-    ROBO_OTHER_FLYING_ON_BOX(LAYER2, '%'),
+    ROBO_OTHER_FLYING(LAYER3, '^'),
     ROBO_OTHER_LASER(LAYER2, '&'),
 
     // laser
@@ -107,6 +104,7 @@ public enum Elements implements CharElements {
     public static class Layers {
         public final static int LAYER1 = 0;
         public final static int LAYER2 = 1;
+        public final static int LAYER3 = 2;
     }
 
     private static volatile Dictionary<String, Elements> elementsMap;

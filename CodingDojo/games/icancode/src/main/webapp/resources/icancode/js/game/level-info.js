@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -47,7 +47,8 @@ var initLevelInfo = function() {
 
     levelInfo[1] = {
         'help':'Robot asks for new orders every second. He should know where to go.<br>' +
-        'Help him - write program and save him from the Maze. <br>' +
+        'Help him - write program and save him from the Maze. <br><br>' +
+
         'The code looks like this:<br>' +
         '<pre>function program(robot) {\n' +
         '    // TODO Uncomment one line that will help\n' +
@@ -57,7 +58,8 @@ var initLevelInfo = function() {
         '    // robot.goRight();\n' +
         '}</pre>' +
         'Send program to Robot by clicking the Commit button.<br>' +
-        'If something is wrong - check Robot message in the Console (the rightmost field).<br>' +
+        'If something is wrong - check Robot message in the Console (the rightmost field).<br><br>' +
+
         'You can always stop the program by clicking the Reset button.',
         'defaultCode':'function program(robot) {\n' +
         '    // TODO Uncomment one line that will help\n' +
@@ -78,10 +80,12 @@ var initLevelInfo = function() {
     };
 
     levelInfo[2] = {
-        'help':'Looks like the Maze was changed. Our old program will not help.<br>' +
-        'We need to change it! The robot must learn how to use the scanner.<br>' +
+        'help':'Looks like the Maze was changed. Our old program will not help.<br><br>' +
+
+        'We need to change it ! The robot must learn how to use the scanner.<br>' +
         'Scanner will help robot to detect walls and other obstacles.<br>' +
-        'To use scanner is necessary to execute the following code:<br>' +
+
+        'To use scanner is necessary to execute the following code:<br><br>' +
         '<pre>function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
         '    if (scanner.atRight() != "WALL") {\n' +
@@ -99,7 +103,9 @@ var initLevelInfo = function() {
         '    // statement\n' +
         '} else {\n' +
         '    // statement\n' +
-        '}</pre>',
+        '}</pre>' +
+
+        'Be careful ! The program should work for all previous levels too.',
         'defaultCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
         '    if (scanner.atRight() != "WALL") {\n' +
@@ -138,13 +144,17 @@ var initLevelInfo = function() {
         'You can use new methods for refactoring:<br>' +
         '<pre>scanner.at("RIGHT");\n' +
         'robot.go("LEFT");</pre>' +
+
         'If you want to know where we came from - use this expression:<br>' +
         '<pre>robot.cameFrom() == "LEFT"</pre>' +
+
         'If you want to know where we came to on our previous step, use:<br>' +
         '<pre>robot.previousDirection() == "RIGHT"</pre>' +
+
         'You can use these commands with previous to tell robot to go on one direction, like:<br>' +
         '<pre>robot.go(robot.previousDirection());</pre>' +
-        'Be careful! The program should work for all previous levels too.',
+
+        'Be careful ! The program should work for all previous levels too.',
         'defaultCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
         '    // TODO write your code here\n' +
@@ -184,11 +194,13 @@ var initLevelInfo = function() {
     };
 
     levelInfo[4] = {
-        'help':'Try to solve it by adding new IF. Now it should be easy!<br>' +
+        'help':'Try to solve it by adding new IF. Now it should be easy !<br><br>' +
+
         'You can use this method to show data in console:<br>' +
         '<pre>var someVariable = "someData";\n' +
         'robot.log(someVariable);</pre>' +
-        'Be careful! The program should work for all previous levels too.',
+
+        'Be careful ! The program should work for all previous levels too.',
         'defaultCode':levelInfo[3].defaultCode,
         'winCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
@@ -215,9 +227,9 @@ var initLevelInfo = function() {
     };
 
     levelInfo[5] = {
-        'help':'Oops! Looks like we didn’t predict this situation.<br>' +
+        'help':'Oops ! Looks like we didn’t predict this situation.<br>' +
         'Think how to adapt the code to these new conditions.<br>' +
-        'Use refactoring to make your code more abstract.<br>' +
+        'Use refactoring to make your code more abstract.<br><br>' +
 
         'Уou can complicate IF conditions by using operators AND/OR/NOT:<br>' +
         '<pre>if (variable1 && !variable2 || variable3) {\n' +
@@ -225,7 +237,7 @@ var initLevelInfo = function() {
         '    //          variable1 IS true AND variable2 IS true\n' +
         '    //       OR variable3 IS true (ignoring variable1, variable2)\n' +
         '}</pre>' +
-        'These operators allow you to use any combination.<br>' +
+        'These operators allow you to use any combination.<br><br>' +
 
         'Уou can extract functions, create new local variables:<br>' +
         '<pre>function program(robot) {\n' +
@@ -236,9 +248,9 @@ var initLevelInfo = function() {
         '    return "some data";\n' +
         '}</pre>' +
         'New function used for encapsulate algorithm.<br>' +
-        'Local variable saves value only during current step.<br>' +
+        'Local variable saves value only during current step.<br><br>' +
 
-        'Remember! Your program should work for all previous levels too.',
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[4].defaultCode,
         'winCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
@@ -265,8 +277,9 @@ var initLevelInfo = function() {
     };
 
     levelInfo[6] = {
-        'help':'You should check all cases.<br>' +
-        'Remember! Your program should work for all previous levels too.',
+        'help':'You should check all cases.<br><br>' +
+
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[5].defaultCode,
         'winCode':levelInfo[5].winCode
     };
@@ -279,7 +292,8 @@ var initLevelInfo = function() {
         '    var direction = directions[index];\n' +
         '    // do something with current direction\n' +
         '}</pre>' +
-        'Remember! Your program should work for all previous levels too.',
+
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[6].defaultCode,
         'winCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
@@ -313,8 +327,9 @@ var initLevelInfo = function() {
     }
 
     levelInfo[9] = {
-        'help':'This is final LevelA Maze. Good luck!<br>' +
-        'Remember! Your program should work for all previous levels too.',
+        'help':'This is final LevelA Maze. Good luck !<br><br>' +
+
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[8].defaultCode,
         'winCode':levelInfo[8].winCode
     };
@@ -325,13 +340,13 @@ var initLevelInfo = function() {
         'var nextPoint = scanner.getShortestWay(destinationPoints[0]);\n' +
         'var exitPoint = scanner.getExit();\n' +
         'var robotPoint = scanner.getMe();</pre>' +
+        'Coordinate {x:0, y:0} in the left-top corner of board.<br><br>' +
 
-        'Coordinate {x:0, y:0} in the left-top corner of board.<br>' +
         'Try this code for check Robot position.<br>' +
         '<pre>robot.log(scanner.getMe());</pre>\n' +
+        'So you should collect all the golden bags in the Maze.<br><br>' +
 
-        'So you should collect all the golden bags in the Maze.<br>' +
-        'Remember! Your program should work for all previous levels too.',
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
         '    var dest = scanner.getGold();\n' +
@@ -376,17 +391,20 @@ var initLevelInfo = function() {
         'if (scanner.at("LEFT") == "HOLE") {\n' +
         '    // some statement here\n' +
         '}</pre>' +
+
         'And these new methods for jumping through it:<br>' +
         '<pre>robot.jumpLeft();\n' +
         'robot.jumpRight();\n' +
         'robot.jumpUp();\n' +
         'robot.jumpDown();\n' +
         'robot.jump("LEFT");</pre>' +
+
         'Also you can add new method to robot by:' +
         '<pre>robot.doSmthNew = function(parameter) {\n' +
         '    // some statement here\n' +
         '}</pre>' +
-        'Remember! Your program should work for all previous levels too.',
+
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[10].defaultCode,
         'winCode':'function program(robot) {\n' +
         '    var scanner = robot.getScanner();\n' +
@@ -434,9 +452,9 @@ var initLevelInfo = function() {
     };
 
     levelInfo[12] = {
-        'help':'Oops! Looks like we didn’t predict this situation.<br>' +
+        'help':'Oops ! Looks like we didn’t predict this situation.<br>' +
         'Think how to adapt the code to these new conditions.<br>' +
-        'Use IF construction to make your code more safely for Robot.<br>' +
+        'Use IF construction to make your code more safely for Robot.<br><br>' +
 
         'You can use this method to detect Elements throughout the world:<br>' +
         '<pre>var scanner = robot.getScanner();\n' +
@@ -452,46 +470,11 @@ var initLevelInfo = function() {
         'if (scanner.atNearRobot(xOffset, yOffset) == "HOLE") {\n' +
         '    // some statement here\n' +
         '}</pre>' +
-        'If Robot at {x:10, y:10}, this code will check {x:10 + 1, y:10 - 2} cell.<br>' +
+        'If Robot at {x:10, y:10}, this code will check {x:10 + 1, y:10 - 2} cell.<br><br>' +
 
-        'Remember! Your program should work for all previous levels too.',
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[11].defaultCode,
-        'winCode':'function program(robot) {\n' +
-        '    var scanner = robot.getScanner();\n' +
-        '    var dest = scanner.getGold();\n' +
-        '    if (dest.length === 0) {\n' +
-        '        dest = scanner.getExit();\n' +
-        '    }\n' +
-        '    var to = scanner.getShortestWay(dest[0])[1];\n' +
-        '    var from = scanner.getMe();\n' +
-        '\n' +
-        '    robot.goOverHole = function(direction) {\n' +
-        '        if (scanner.at(direction) != "HOLE") {\n' +
-        '            robot.go(direction);\n' +
-        '        } else {\n' +
-        '            if (direction == "DOWN") { // TODO crutch :)\n' +
-        '                var afterHole = new Point(from.getX(), from.getY() + 2);\n' +
-        '                if (scanner.at(afterHole) == "WALL") {\n' +
-        '                    robot.go("RIGHT");\n' +
-        '                    return;\n' +
-        '                }\n' +
-        '            }\n' +
-        '            robot.jump(direction);\n' +
-        '        }\n' +
-        '    };\n' +
-        '    \n' +
-        '    var dx = to.getX() - from.getX(); \n' +
-        '    var dy = to.getY() - from.getY(); \n' +
-        '    if (dx > 0) {\n' +
-        '        robot.goOverHole("RIGHT");\n' +
-        '    } else if (dx < 0) {\n' +
-        '        robot.goOverHole("LEFT");\n' +
-        '    } else if (dy > 0) {\n' +
-        '        robot.goOverHole("DOWN");\n' +
-        '    } else if (dy < 0) {\n' +
-        '        robot.goOverHole("UP");\n' +
-        '    }\n' +
-        '}',
+        'winCode':levelInfo[11].winCode,
         'autocomplete':{
             'scanner.':{
                 'synonyms':['robot.getScanner().'],
@@ -502,9 +485,9 @@ var initLevelInfo = function() {
 
     levelInfo[13] = {
         'help':'On this Maze you can see a lot of boxes. ' +
-        'You can jump over box and pull/push any box.<br>' +
+        'You can jump over box and pull/push any box.<br><br>' +
 
-        'It is possible to move the box only forward or backward, "side pulling" is not allowed.<br>' +
+        'It is possible to move the box only forward or backward, "side pulling" is not allowed.<br><br>' +
 
         'There are 4 corresponding functions for each direction: ' +
         'pullLeft, pullRight, pullUp and pullDown. Also you can use generic pull method:<br>' +
@@ -512,11 +495,41 @@ var initLevelInfo = function() {
         '// same as\n' +
         'robot.pullUp();</pre>' +
 
-        'If you want to find box on map - try use "BOX" element.<br>' +
+        'If you want to find box on map - try use "BOX" element.<br><br>' +
 
-        'Remember! Your program should work for all previous levels too.',
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[12].defaultCode,
-        'winCode':levelInfo[12].winCode,
+        'winCode':'function program(robot) {\n' +
+            '    var scanner = robot.getScanner();\n' +
+            '    var dest = scanner.getGold();\n' +
+            '    if (dest.length === 0) {\n' +
+            '        dest = scanner.getExit();\n' +
+            '    }\n' +
+            '    var to = scanner.getShortestWay(dest[0])[1];\n' +
+            '    var from = scanner.getMe();\n' +
+            '\n' +
+            '    robot.goOverHole = function(direction) {\n' +
+            '        if (scanner.at(direction) != "HOLE" && \n' +
+            '            scanner.at(direction) != "BOX") \n' +
+            '        {\n' +
+            '            robot.go(direction);\n' +
+            '        } else {\n' +
+            '            robot.jump(direction);\n' +
+            '        }\n' +
+            '    };\n' +
+            '    \n' +
+            '    var dx = to.getX() - from.getX(); \n' +
+            '    var dy = to.getY() - from.getY(); \n' +
+            '    if (dx > 0) {\n' +
+            '        robot.goOverHole("RIGHT");\n' +
+            '    } else if (dx < 0) {\n' +
+            '        robot.goOverHole("LEFT");\n' +
+            '    } else if (dy > 0) {\n' +
+            '        robot.goOverHole("DOWN");\n' +
+            '    } else if (dy < 0) {\n' +
+            '        robot.goOverHole("UP");\n' +
+            '    }\n' +
+            '}',
         'autocomplete':{
             'robot.':{
                 'synonyms':[],
@@ -531,10 +544,11 @@ var initLevelInfo = function() {
 
     levelInfo[14] = {
         'help':'On this Maze you can see a lot of laser machines ("LASER_MACHINE").<br>' +
-        'Each machine is periodically fired lasers.<br>' +
+        'Each machine is periodically fired lasers.<br><br>' +
+
         'When laser machine is ready to fire ("LASER_MACHINE_READY") it shoots after the second. ' +
         'You can check the direction of laser by "LASER_UP", "LASER_DOWN", ' +
-        '"LASER_LEFT" or "LASER_RIGHT" element.<br>' +
+        '"LASER_LEFT" or "LASER_RIGHT" element.<br><br>' +
 
         'There are 3 ways to cheat laser: move the box in front of laser, ' +
         'jump over laser and jump in place:<br>' +
@@ -542,7 +556,7 @@ var initLevelInfo = function() {
         'robot.jumpLeft();\n' +
         'robot.pullLeft();</pre>' +
 
-        'Remember! Your program should work for all previous levels too.',
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[13].defaultCode,
         'winCode':levelInfo[13].winCode,
         'autocomplete':{
@@ -554,8 +568,86 @@ var initLevelInfo = function() {
     }
 
     levelInfo[15] = {
-        'help':'',
+        'help':'There is a lot of gold on this maze. But it seems we are not alone here.<br>' +
+        'Hurry, the Zombie are not as fast as you.<br><br>' +
+
+        'Scanner will help Robot to detect Zombie also. If you want to find Zombie on map - try use "ZOMBIE" element.<br>' +
+        '<pre>var scanner = robot.getScanner();\n' +
+        'if (scanner.at("LEFT") == "ZOMBIE") {\n' +
+        '    // some statement here\n' +
+        '}</pre>' +
+
+        'Remember ! Your program should work for all previous levels too.',
         'defaultCode':levelInfo[14].defaultCode,
+        'winCode':levelInfo[14].winCode,
+        'autocomplete':{
+            ' == ':{
+                'synonyms':[' != '],
+                'values':['\'ZOMBIE\'']
+            }
+        }
+    }
+
+    levelInfo[16] = {
+        'help':'Zombie in your way. You will meet !<br><br>' +
+
+        'By the way, we did not tell you, but through Zombie you can also jump over:' +
+        '<pre>robot.jump();\n' +
+        'robot.jumpLeft();\n' +
+        'robot.jump("RIGHT");</pre>' +
+
+        'Remember ! Your program should work for all previous levels too.',
+        'defaultCode':levelInfo[15].defaultCode,
+        'winCode':levelInfo[15].winCode
+    }
+
+    levelInfo[17] = {
+        'help':'The more gold you collect, the more points you earn. But zombies are on the way. <br><br>' +
+
+        'Рay attention - the laser kills zombie. If it happens you will see "ZOMBIE_DIE" on board. <br><br>' +
+
+        'Another way to get lasershow on board - fire. Yes you can do it ! Sorry, we forgot to tell you about that...<br><br>' +
+
+        'There are several method for the Robot:' +
+        '<pre>robot.fireLeft();\n' +
+        'robot.fireRight();\n' +
+        'robot.fireUp();\n' +
+        'robot.fireDown();\n' +
+        'robot.fire("LEFT");</pre>' +
+        'Good luck !<br><br>' +
+
+        'Remember ! Your program should work for all previous levels too.',
+        'defaultCode':levelInfo[16].defaultCode,
+        'winCode':levelInfo[16].winCode,
+        'autocomplete': {
+            'robot.': {
+                'synonyms': [],
+                'values': ['fireLeft()', 'fireUp()', 'fireLeft()', 'fireRight()', 'fire()']
+            },
+            '.fire(': {
+                'synonyms': [],
+                'values': ['\'RIGHT\'', '\'DOWN\'', '\'LEFT\'', '\'UP\'']
+            },
+        }
+    }
+
+    levelInfo[18] = {
+        'help':'It looks like this labyrinth is much bigger than it seems.<br>' +
+        'But look how much gold there is ! See if you can collect all this gold.<br><br>' +
+
+        'Remember that boxes can be moved:' +
+        '<pre>robot.pull("UP");\n' +
+        '// same as\n' +
+        'robot.pullUp();</pre>' +
+
+        'Remember ! Your program should work for all previous levels too.',
+        'defaultCode':levelInfo[17].defaultCode,
+        'winCode':levelInfo[17].winCode
+    }
+
+    levelInfo[19] = {
+        'help':'',
+        'defaultCode':levelInfo[18].defaultCode,
         'winCode':'function program(robot) {' +
         '    var scanner = robot.getScanner();' +
         '    ' +

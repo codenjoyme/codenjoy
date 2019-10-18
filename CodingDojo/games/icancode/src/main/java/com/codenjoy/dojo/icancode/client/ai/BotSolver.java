@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.client.ai;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -59,7 +59,7 @@ public class BotSolver extends AbstractSolver {
 
         if (result.jump) {
             if (result.direction != null) {
-                return Command.jumpTo(result.direction);
+                return Command.jump(result.direction);
             } else {
                 return Command.jump();
             }

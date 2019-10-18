@@ -116,7 +116,41 @@ public class Player implements ScreenRecipient, Closeable {
     }
 
     public Object getScore() {
-        return scores.getScore();
+        return (scores != null) ? scores.getScore() : null;
+    }
+
+    // TODO this method is only for admin save player score
+    public void setScore(Object score) {
+        initScores();
+        this.scores.update(score);
+    }
+
+    void initScores() {
+        if (scores == null) {
+            scores = new PlayerScores() {
+                int score;
+
+                @Override
+                public Object getScore() {
+                    return score;
+                }
+
+                @Override
+                public int clear() {
+                    return score = 0;
+                }
+
+                @Override
+                public void update(Object score) {
+                    this.score = Integer.valueOf(score.toString());
+                }
+
+                @Override
+                public void event(Object event) {
+
+                }
+            };
+        }
     }
 
     public String getMessage() {

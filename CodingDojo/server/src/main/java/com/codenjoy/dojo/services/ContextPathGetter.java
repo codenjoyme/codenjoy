@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.client.CodenjoyContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -36,12 +37,16 @@ public class ContextPathGetter {
     @Autowired
     private ServletContext servletContext;
 
+    @Value("${server.port}")
+    private int port;
+
     @PostConstruct
     public void gotIt() {
-        CodenjoyContext.set(servletContext.getContextPath().replaceAll("/", ""));
+        CodenjoyContext.setContext(servletContext.getContextPath().replaceAll("/", ""));
+        CodenjoyContext.setPort(port);
     }
 
     public String getContext() {
-        return CodenjoyContext.get();
+        return CodenjoyContext.getContext();
     }
 }

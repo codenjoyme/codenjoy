@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2016 - 2018 EPAM
  * %%
@@ -40,7 +40,9 @@ public class ZombiePot extends FieldItem implements Tickable {
     public void tick() {
         if (++time % TICKS_PER_NEW_ZOMBIE == 0) {
             if (field.zombies().size() < COUNT_ZOMBIES_ON_MAP) {
-                field.move(newZombie(), this.getCell().getX(), this.getCell().getY());
+                field.move(newZombie(),
+                        this.getCell().getX(),
+                        this.getCell().getY());
             }
         }
     }
@@ -50,5 +52,10 @@ public class ZombiePot extends FieldItem implements Tickable {
         Zombie zombie = new Zombie(gender);
         zombie.setField(field);
         return zombie;
+    }
+
+    public void reset() {
+        time = 0;
+        field.zombies().forEach(it -> it.die());
     }
 }

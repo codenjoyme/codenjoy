@@ -44,7 +44,7 @@ public class RegistrationValidator implements Validator {
     @Value("${registration.nickname.allowed}")
     private boolean nicknameAllowed;
 
-    @Value("${registration.pasword.min-length}")
+    @Value("${registration.password.min-length}")
     private int minPasswordLen;
 
     private final com.codenjoy.dojo.web.controller.Validator validator;

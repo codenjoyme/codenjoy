@@ -37,79 +37,64 @@ function initRegistration(waitApprove, contextPath) {
         $("#name").prop("disabled", status);
         $("#readable-name").prop("disabled", status);
         $("#password").prop("disabled", status);
-        $("#gameName").prop("disabled", status)
+        $("#gameName select").prop("disabled", status)
+        $("#gameType select").prop("disabled", status)
     }
 
     var KEYS = {
-        gameName: "gameName",
+        game: {
+            name: "gameName",
+            type: "gameType"
+        },
         userData: {
             email: "registration-email",
             readableName: "registration-readableName",
             data: "registration-data",
             data1: "registration-data1",
             data2: "registration-data2",
-            data3: "registration-data3"
+            data3: "registration-data3",
+            data4: "registration-data4"
         }
     };
 
-    function configureFormFromAdminSettings() {
+    function display(element, isVisible) {
+        element = $(element);
+        if (isVisible) {
+            element.removeAttr('hidden');
+            element.show();
+        } else {
+            element.attr('hidden', 'hidden');
+            element.hide();
+        }
+    }
+
+    function configureFormFromAdminSettings(onFinish) {
         var general = new AdminSettings(contextPath, 'general', 'registration');
 
         general.load(function(data) {
             if ($.isEmptyObject(data)) {
-                data = {
-                    showGames: true,
-                    showNames: true,
-                    showCities: false,
-                    showTechSkills: false,
-                    showUniversity: false,
-                    defaultGame: null
-                };
+                data = defaultRegistrationSettings();
             }
 
-            var gamesCount = $('#gameName > option').length;
-            if (gamesCount > 1) {
-                $('#gameName').show();
-            } else {
-                $('#gameName').hide();
+            var gamesCount = $('#gameName select > option').length;
+            display('#gameName', gamesCount > 1);
+
+            display('#gameType', data.showGames);
+            display('#readableName', data.showNames);
+            display('#data1', data.showData1);
+            display('#data2', data.showData2);
+            display('#data3', data.showData3);
+            display('#data4', data.showData4);
+
+            fillFormFromLocalStorage(data);
+
+            if (!!onFinish) {
+                onFinish();
             }
-            if (data.showGames) {
-                $('#game').show();
-            } else {
-                $('#game').hide();
-            }
-            if (data.showNames) {
-                $('#readableName').show();
-            } else {
-                $('#readableName').hide();
-            }
-            if (data.showCities) {
-                $('#data1').show();
-            } else {
-                $('#data1').hide();
-            }
-            if (data.showTechSkills) {
-                $('#data2').show();
-            } else {
-                $('#data2').hide();
-            }
-            if (data.showUniversity) {
-                $('#data3').show();
-            } else {
-                $('#data3').hide();
-            }
-            if (!data.defaultGame) {
-                data.defaultGame = $("#game select option:first").val();
-            }
-            $('#game select').val(data.defaultGame);
         });
     }
 
     function loadRegistrationPage() {
-        configureFormFromAdminSettings();
-
-        fillFormFromLocalStorage();
-
         var checkEls = {};
 
         var validateEmail = function (email) {
@@ -150,6 +135,7 @@ function initRegistration(waitApprove, contextPath) {
         configurable('data1');
         configurable('data2');
         configurable('data3');
+        configurable('data4');
 
         var validateElements = function () {
             for (var index in checkEls) {
@@ -198,7 +184,8 @@ function initRegistration(waitApprove, contextPath) {
                 $('#data input').val(
                     $('#data1 input').val() + "|" +
                     $('#data2 input').val() + "|" +
-                    $('#data3 input').val()
+                    $('#data3 input').val() + "|" +
+                    $('#data4 input').val()
                 );
 
                 saveDataToLocalStorage();
@@ -207,7 +194,7 @@ function initRegistration(waitApprove, contextPath) {
         };
 
         $('#submit-button').click(submitForm);
-        $('#email, #password, #game, #skills, #readableName, #data1, #data2, #data3').keypress(function (e) {
+        $('#email, #password, #gameName, #gameType, #skills, #readableName, #data1, #data2, #data3, #data4').keypress(function (e) {
             var code = (e.keyCode ? e.keyCode : e.which);
             if (code == 13) {
                 submitForm();
@@ -223,31 +210,79 @@ function initRegistration(waitApprove, contextPath) {
         }
     }
 
-    function fillFormFromLocalStorage() {
-        var gameName = localStorage.getItem(KEYS.gameName);
-        if (!!gameName && !$('#game').attr('hidden')) {
-            $('#game select').val(gameName);
+    function loadGameNameSelect(key, selector, onSelect) {
+        var value = localStorage.getItem(key);
+        var select = $(selector).find('select');
+        if (!!value) {
+            select.val(value);
+        }
+
+        select.off();
+        select.change(function() {
+            onSelect(select.val());
+        });
+        onSelect(select.val());
+    }
+
+    function loadGameTypeSelect(key, selector, def) {
+        var value = localStorage.getItem(key);
+        var select = $(selector).find('select');
+        if (!!value && !$(selector).attr('hidden')) {
+            select.val(value);
         } else {
-            var def = $('#game select option[default]').attr('value');
             if (!!def) {
-                $('#game select').val(def);
+                select.val(def);
+            }
+        }
+    }
+
+    function fillGameTypes(selector, gameName, gameTypes) {
+        var select = $(selector).find('select');
+        select.children().remove();
+
+        var currentGameName = null;
+        for (var index in gameTypes) {
+            var types = gameTypes[index];
+            if (gameName == index && !!types) {
+                currentGameName = types;
+                break;
             }
         }
 
+        for (var index in currentGameName) {
+            var gameType = currentGameName[index];
+            select.append('<option value="' + gameType + '">' + gameType + '</option>');
+        }
+
+        return select;
+    }
+
+    function fillFormFromLocalStorage(data) {
+        loadGameNameSelect(KEYS.game.name, '#gameName', function(gameName) {
+            var select = fillGameTypes('#gameType', gameName, data.gameTypes);
+
+            var isVisible = (select.find('option').length > 0 && !!data.showGames);
+            display('#gameType', isVisible);
+
+            loadGameTypeSelect(KEYS.game.type, '#gameType', data.defaultGame);
+        });
         loadInput(KEYS.userData.email, '#email');
         loadInput(KEYS.userData.readableName, '#readableName');
         loadInput(KEYS.userData.data1, '#data1');
         loadInput(KEYS.userData.data2, '#data2');
         loadInput(KEYS.userData.data3, '#data3');
+        loadInput(KEYS.userData.data4, '#data4');
     }
 
     function saveDataToLocalStorage() {
-        localStorage.setItem(KEYS.gameName, $('#game').find('option:selected').text());
+        localStorage.setItem(KEYS.game.type, $('#gameType').find('option:selected').text());
+        localStorage.setItem(KEYS.game.name, $('#gameName').find('option:selected').text());
         localStorage.setItem(KEYS.userData.email, $('#email input').val());
         localStorage.setItem(KEYS.userData.readableName, $('#readableName input').val());
         localStorage.setItem(KEYS.userData.data1, $('#data1 input').val());
         localStorage.setItem(KEYS.userData.data2, $('#data2 input').val());
         localStorage.setItem(KEYS.userData.data3, $('#data3 input').val());
+        localStorage.setItem(KEYS.userData.data4, $('#data4 input').val());
     }
 
     $(document).ready(function() {
@@ -267,7 +302,7 @@ function initRegistration(waitApprove, contextPath) {
             } else {
                 $("#password").focus();
             }
-            loadRegistrationPage();
+            configureFormFromAdminSettings(loadRegistrationPage);
         }
     });
 }

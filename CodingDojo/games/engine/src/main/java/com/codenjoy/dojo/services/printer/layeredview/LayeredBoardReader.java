@@ -32,6 +32,8 @@ public interface LayeredBoardReader {
 
     int size();
 
+    int viewSize();
+
     BiFunction<Integer, Integer, State> elements();
 
     Point viewCenter(Object player);

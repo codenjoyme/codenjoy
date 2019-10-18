@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
 #%L
-iCanCode - it's a dojo-like platform from developers to developers.
+Codenjoy - it's a dojo-like platform from developers to developers.
 %%
 Copyright (C) 2018 Codenjoy
 %%
@@ -28,18 +28,26 @@ License along with this program.  If not, see
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Codenjoy | Sign In</title>
     <link href="${ctx}/resources/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="${ctx}/resources/css/registration-style.css" rel="stylesheet"/>
     <jsp:include page="common-inclusion.jsp" />
+    <script src="${ctx}/resources/css/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="settings" page="register" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
 <div class="header-container">
     <div class="container-fluid">
-        <header class="header row">
-            <div class="col-xs-6">
+        <header class="header">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
                 <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/logo.png"></a>
                 <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <c:if test="${activeProfiles.contains('icancode')}">
@@ -48,15 +56,17 @@ License along with this program.  If not, see
                     <span class="title icancode-title">ICanCode</span>
                 </c:if>
             </div>
-            <nav class="nav col-xs-6 pull-right text-right">
-                <ul class="nav-list">
-                    <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
-                    <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#"></a></li>
-                    <sec:authorize access="isAuthenticated()">
-                        <li class="logo title inline"><img src="${ctx}/resources/img/profile.png"></li>
-                    </sec:authorize>
-                </ul>
-            </nav>
+            <div id="navbar" class="navbar-collapse collapse">
+                <nav class="nav pull-right text-right">
+                    <ul class="nav-list">
+                        <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
+                        <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#"></a></li>
+                        <sec:authorize access="isAuthenticated()">
+                            <li class="logo title inline"><img src="${ctx}/resources/img/profile.png"></li>
+                        </sec:authorize>
+                    </ul>
+                </nav>
+            </div>
         </header>
     </div>
 </div>
@@ -77,27 +87,24 @@ License along with this program.  If not, see
                 <input type="password" placeholder="Password" name="password"/>
                 <span class="icon fa"></span>
             </div>
-            <div id="game" class="field valid" hidden>
-                <!-- TODO to remove from here -->
-                <select placeholder="Select your game" name="game">
-                    <option value="iCanCode Training" selected>iCanCode Training</option>
-                    <option value="iCanCode Contest" >iCanCode Contest</option>
-                    <option value="eKids">eKids</option>
-                </select>
-            </div>
             <div id="data" hidden>
                 <input type="text" name="data"/>
             </div>
             <c:if test="${not adminLogin}">
-                <tr>
-                    <td>
-                        <select name="gameName" id="gameName" hidden>
-                            <c:forEach items="${gameNames}" var="game" >
-                                <option value="${game}">${game}</option>
-                            </c:forEach>
-                        </select>
-                    </td>
-                </tr>
+                <div id="gameName" class="field valid" hidden>
+                    <select name="gameName">
+                        <c:forEach items="${gameNames}" var="game" >
+                            <option value="${game}">${game}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div id="gameType" class="field valid" hidden>
+                    <select placeholder="Select your game" name="game">
+                        <!--option value="Type1">Type1</option-->
+                        <!--option value="Type2">Type2</option-->
+                        <!--option value="Type3">Type3</option-->
+                    </select>
+                </div>
             </c:if>
             <button class="btn-submit" id="submit-button" type="button">Sign in</button>
             <a class="btn-submit reg-link" id="registration-button" href="${ctx}/register">Sign Up</a>

@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -876,6 +876,12 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        assertF("-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
         // when
         game.tick();
 
@@ -887,6 +893,12 @@ public class ICanCodeTest extends AbstractGameTest {
                 "     ");
 
         assertE("-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
                 "-----" +
                 "-*---" +
                 "-----" +
@@ -905,6 +917,12 @@ public class ICanCodeTest extends AbstractGameTest {
         assertE("-----" +
                 "-----" +
                 "-☺---" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
+                "-----" +
                 "-----" +
                 "-----");
     }
@@ -935,6 +953,12 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        assertF("-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
         // when
         game.tick();
 
@@ -946,6 +970,12 @@ public class ICanCodeTest extends AbstractGameTest {
                 "     ");
 
         assertE("-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
                 "-----" +
                 "--*--" +
                 "-----" +
@@ -964,6 +994,12 @@ public class ICanCodeTest extends AbstractGameTest {
         assertE("-----" +
                 "-----" +
                 "---☺-" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
+                "-----" +
                 "-----" +
                 "-----");
     }
@@ -994,6 +1030,12 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        assertF("-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
         // when
         game.tick();
 
@@ -1006,7 +1048,13 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("-----" +
                 "-----" +
-                "-*BB-" +
+                "--BB-" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
+                "-*---" +
                 "-----" +
                 "-----");
 
@@ -1023,6 +1071,12 @@ public class ICanCodeTest extends AbstractGameTest {
         assertE("-----" +
                 "-----" +
                 "-☺BB-" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
+                "-----" +
                 "-----" +
                 "-----");
     }
@@ -1053,6 +1107,12 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        assertF("-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
         // when
         game.tick();
 
@@ -1064,6 +1124,12 @@ public class ICanCodeTest extends AbstractGameTest {
                 "     ");
 
         assertE("-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
                 "-----" +
                 "--*--" +
                 "-----" +
@@ -1087,6 +1153,12 @@ public class ICanCodeTest extends AbstractGameTest {
         assertE("-----" +
                 "-----" +
                 "---☺-" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
+                "-----" +
                 "-----" +
                 "-----");
     }
@@ -1115,6 +1187,12 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("-----" +
                 "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
                 "--*--" +
                 "-----" +
                 "-----");
@@ -1132,6 +1210,12 @@ public class ICanCodeTest extends AbstractGameTest {
         assertE("-----" +
                 "-----" +
                 "---☺-" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
+                "-----" +
                 "-----" +
                 "-----");
     }
@@ -1160,6 +1244,12 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("-----" +
                 "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
                 "--*--" +
                 "-----" +
                 "-----");
@@ -1177,6 +1267,12 @@ public class ICanCodeTest extends AbstractGameTest {
         assertE("-----" +
                 "-----" +
                 "---☺-" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
+                "-----" +
                 "-----" +
                 "-----");
     }
@@ -1205,6 +1301,12 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("-----" +
                 "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
                 "---*-" +
                 "-----" +
                 "-----");
@@ -1222,6 +1324,12 @@ public class ICanCodeTest extends AbstractGameTest {
         assertE("-----" +
                 "-----" +
                 "---☺-" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
+                "-----" +
                 "-----" +
                 "-----");
     }
@@ -1553,6 +1661,14 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
+        assertF("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
         // when
         hero.jump();
         game.tick();
@@ -1569,6 +1685,14 @@ public class ICanCodeTest extends AbstractGameTest {
                 "       ");
 
         assertE("-------" +
+                "---→---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
                 "---*---" +
                 "-------" +
                 "-------" +
@@ -1596,6 +1720,14 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
+        assertF("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
         // when
         game.tick();
 
@@ -1613,6 +1745,145 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("-------" +
                 "---☺-→-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+    }
+
+    @Test
+    public void shouldAliveWhenJumpToLaser() {
+        // given
+        givenFl("╔═════┐" +
+                "║˃....│" +
+                "║..S..│" +
+                "└─────┘" +
+                "       " +
+                "       " +
+                "       ");
+
+        hero.up();
+        ticks(FIRE_TICKS);
+        game.tick();
+
+        assertL("╔═════┐" +
+                "║˃....│" +
+                "║..S..│" +
+                "└─────┘" +
+                "       " +
+                "       " +
+                "       ");
+
+        assertE("-------" +
+                "--→☺---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        // when
+        hero.jump();
+        hero.left();
+        game.tick();
+
+        // then
+        verifyNoMoreInteractions(listener);
+
+        assertL("╔═════┐" +
+                "║˃....│" +
+                "║..S..│" +
+                "└─────┘" +
+                "       " +
+                "       " +
+                "       ");
+
+        assertE("-------" +
+                "---→---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "--*----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║˃....│" +
+                "║..S..│" +
+                "└─────┘" +
+                "       " +
+                "       " +
+                "       ");
+
+        assertE("-------" +
+                "--☺-→--" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        // when
+        game.tick();
+
+        // then
+        verifyNoMoreInteractions(listener);
+
+        // then
+        assertL("╔═════┐" +
+                "║˃....│" +
+                "║..S..│" +
+                "└─────┘" +
+                "       " +
+                "       " +
+                "       ");
+
+        assertE("-------" +
+                "--☺--→-" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -1645,7 +1916,15 @@ public class ICanCodeTest extends AbstractGameTest {
                 "       ");
 
         assertE("-------" +
-                "--→*---" +
+                "--→----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "---*---" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -1668,6 +1947,14 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("-------" +
                 "---☻---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -1698,6 +1985,14 @@ public class ICanCodeTest extends AbstractGameTest {
         assertE("-------" +
                 "-------" +
                 "---☺---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "-------" +
+                "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -1820,6 +2115,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "└──┘");
 
         assertE("----" +
+                "----" +
+                "----" +
+                "----");
+
+        assertF("----" +
                 "--*-" +
                 "----" +
                 "----");
@@ -1835,6 +2135,11 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("----" +
                 "--o-" +
+                "----" +
+                "----");
+
+        assertF("----" +
+                "----" +
                 "----" +
                 "----");
 
@@ -1860,6 +2165,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "└──┘");
 
         assertE("----" +
+                "----" +
+                "----" +
+                "----");
+
+        assertF("----" +
                 "--*-" +
                 "----" +
                 "----");
@@ -1875,6 +2185,11 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("----" +
                 "--☺-" +
+                "----" +
+                "----");
+
+        assertF("----" +
+                "----" +
                 "----" +
                 "----");
     }
@@ -1901,6 +2216,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "└──┘");
 
         assertE("----" +
+                "----" +
+                "----" +
+                "----");
+
+        assertF("----" +
                 "--*-" +
                 "----" +
                 "----");
@@ -1918,6 +2238,11 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("----" +
                 "--☻-" +
+                "----" +
+                "----");
+
+        assertF("----" +
+                "----" +
                 "----" +
                 "----");
 
@@ -1959,6 +2284,14 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
+        assertF("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
         // when
         hero.jump();
         hero.left();
@@ -1976,7 +2309,15 @@ public class ICanCodeTest extends AbstractGameTest {
                 "       ");
 
         assertE("-------" +
-                "---→*--" +
+                "---→---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "----*--" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -1999,6 +2340,14 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("-------" +
                 "---☻---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -2036,6 +2385,14 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
+        assertF("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
         // when
         hero.jump();
         hero.left();
@@ -2053,6 +2410,14 @@ public class ICanCodeTest extends AbstractGameTest {
                 "       ");
 
         assertE("-------" +
+                "---→---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
                 "---*---" +
                 "-------" +
                 "-------" +
@@ -2076,6 +2441,14 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("-------" +
                 "--☺-→--" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -2113,6 +2486,14 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
+        assertF("-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
         // when
         hero.jump();
         hero.up();
@@ -2131,11 +2512,20 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("-------" +
                 "-------" +
+                "---→---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "-------" +
                 "---*---" +
                 "-------" +
                 "-------" +
                 "-------" +
                 "-------");
+
 
         // when
         game.tick();
@@ -2154,6 +2544,14 @@ public class ICanCodeTest extends AbstractGameTest {
         assertE("-------" +
                 "---☺---" +
                 "----→--" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertF("-------" +
+                "-------" +
+                "-------" +
                 "-------" +
                 "-------" +
                 "-------" +
@@ -2180,6 +2578,12 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("-----" +
                 "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
                 "-*---" +
                 "-----" +
                 "-----");
@@ -2201,6 +2605,12 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        assertF("-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
         // when
         game.tick();
 
@@ -2217,6 +2627,12 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        assertF("-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
         // when
         hero.jump();
         game.tick();
@@ -2228,6 +2644,12 @@ public class ICanCodeTest extends AbstractGameTest {
                 "     ");
 
         assertE("-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
                 "-----" +
                 "-*---" +
                 "-----" +
@@ -3412,7 +3834,14 @@ public class ICanCodeTest extends AbstractGameTest {
                 "└────┘");
 
         assertE("------" +
-                "--№---" +
+                "--B---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "--*---" +
                 "------" +
                 "------" +
                 "------" +
@@ -3431,6 +3860,13 @@ public class ICanCodeTest extends AbstractGameTest {
 
         assertE("------" +
                 "--B☺--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "------" +
                 "------" +
                 "------" +
                 "------" +
@@ -3708,6 +4144,12 @@ public class ICanCodeTest extends AbstractGameTest {
         // then
         assertE("-----" +
                 "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
                 "--*--" +
                 "-----" +
                 "-----");
@@ -3725,6 +4167,12 @@ public class ICanCodeTest extends AbstractGameTest {
         assertE("-----" +
                 "-----" +
                 "-←-☺-" +
+                "-----" +
+                "-----");
+
+        assertF("-----" +
+                "-----" +
+                "-----" +
                 "-----" +
                 "-----");
 

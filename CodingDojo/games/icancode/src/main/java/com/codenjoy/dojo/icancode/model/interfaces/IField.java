@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model.interfaces;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model.interfaces;
  */
 
 
+import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -30,8 +31,6 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 import com.codenjoy.dojo.icancode.model.Player;
-import com.codenjoy.dojo.icancode.model.items.BaseItem;
-import com.codenjoy.dojo.icancode.model.items.Zombie;
 
 import java.util.List;
 
@@ -66,4 +65,14 @@ public interface IField extends GameField<Player> {
     int size();
 
     List<Zombie> zombies();
+
+    List<Laser> lasers();
+
+    List<Gold> golds();
+
+    List<LaserMachine> laserMachines();
+
+    List<ZombiePot> zombiePots();
+
+    List<Floor> floors();
 }

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -46,10 +46,41 @@ function initRunnerBefunge(logger, storage) {
 
     $('.autocomplete').hide();
     $('#ide-help').hide();
-    $('.bottom-panel').append('<button class="button help" id="ide-clean">Clean</button>')
-    $('#ide-clean').click(function() {
+
+    var createButton = function(id, name, onClick) {
+        $('.bottom-panel').append('<button class="button help" id="' + id + '">' + name + '</button>')
+        var button = $('#' + id);
+        button.click(function () {
+            onClick(button);
+        });
+        return button;
+    }
+
+    // TODO дублирование с buttons.js
+    var enableButton = function(button, enable) {
+        button.prop('disabled', !enable);
+    }
+
+    var cleanField = function() {
         moveAllCardsToCardPile();
         resetRows();
+    }
+
+    var cleanButton = createButton('ide-clean', 'Clean', function(button) {
+        cleanField();
+        saveState();
+    });
+
+    var undoButton = createButton('ide-undo', 'Undo', function(button) {
+        if (undo.length == 0) {
+            return;
+        }
+
+        undo.pop(); // удаляем текущее состояние
+        var data = undo[undo.length - 1]; // грузим прошлое
+        updateUndoButton();
+        cleanField();
+        loadStateFromData(data);
     });
 
     // ------------------------------------- state -----------------------------------
@@ -166,6 +197,15 @@ function initRunnerBefunge(logger, storage) {
         var oldValue = popFromStack();
         try {
             var value = robot.getScanner().at(oldValue);
+            if (value == 'LASER_LEFT' || value == 'LASER_RIGHT' || value == 'LASER_UP' || value == 'LASER_DOWN') {
+                value = 'LASER'; // TODO это костыль, надо сделать потом все направления лазеров
+            }
+            if (value == 'LASER_MACHINE_READY' || value == 'LASER_MACHINE') {
+                value = 'LASER_MACHINE'; // TODO это тоже костыль
+            }
+            if (value == 'ZOMBIE_DIE') {
+                value = 'NONE'; // TODO это тоже костыль
+            }
         } catch (error) {
             logger.print('Неправильно значение для сканнера: "' + oldValue + '"');
             forceFinish();
@@ -286,16 +326,29 @@ function initRunnerBefunge(logger, storage) {
         stack.push('GOLD');
     }
 
+    var valueZombieCommand = function(x, y) {
+        stack.push('ZOMBIE');
+    }
+
+    var valueLaserMachineCommand = function(x, y) {
+        stack.push('LASER_MACHINE');
+    }
+
+    var valueLaserCommand = function(x, y) {
+        stack.push('LASER');
+    }
+
     // ------------------------------------- commands -----------------------------------
+    var gameName = game.sprites;
     var commands = [
         {
             id: 'start',
             type: 1,
             title: 'start',
             process: startCommand,
-            description: 'Выполнение команд начинается тута.',
+            description: 'Выполнение команд начинается тут.',
             minLevel: 0,
-            img1: 'img/sprite/start.png'
+            img1: 'start.png'
         },
 
         {
@@ -305,7 +358,7 @@ function initRunnerBefunge(logger, storage) {
             process: finishCommand,
             description: 'Выполнение команд останавливается тут.',
             minLevel: 0,
-            img1: 'img/sprite/finish.png'
+            img1: 'finish.png'
         },
 
         {
@@ -355,7 +408,7 @@ function initRunnerBefunge(logger, storage) {
             process: cursorMirrorTopBottomCommand,
             description: 'Зеркало изменяет направление движения командного курсора.',
             minLevel: 3,
-            img1: 'img/sprite/mirror-top-bottom.png'
+            img1: 'mirror-top-bottom.png'
         },
 
         {
@@ -365,7 +418,7 @@ function initRunnerBefunge(logger, storage) {
             process: cursorMirrorBottomTopCommand,
             description: 'Зеркало изменяет направление движения командного курсора.',
             minLevel: 3,
-            img1: 'img/sprite/mirror-bottom-top.png'
+            img1: 'mirror-bottom-top.png'
         },
 
         {
@@ -384,8 +437,9 @@ function initRunnerBefunge(logger, storage) {
             process: activateProcedure1Command,
             description: 'Вызов воспомогательной процедуры №1. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
-            img1: 'img/sprite/procedure-1-1.png',
-            img2: 'img/sprite/procedure-1.png',
+            img1: 'procedure-1-1.png',
+            img2: null,
+            img3: 'procedure-1.png',
         },
 
         {
@@ -395,8 +449,9 @@ function initRunnerBefunge(logger, storage) {
             process: activateProcedure2Command,
             description: 'Вызов воспомогательной процедуры №2. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
-            img1: 'img/sprite/procedure-2-1.png',
-            img2: 'img/sprite/procedure-2.png',
+            img1: 'procedure-2-1.png',
+            img2: null,
+            img3: 'procedure-2.png',
         },
 
         {
@@ -406,8 +461,9 @@ function initRunnerBefunge(logger, storage) {
             process: activateProcedure3Command,
             description: 'Вызов воспомогательной процедуры №3. Процедура должна быть так же объявлена на поле.',
             minLevel: 4,
-            img1: 'img/sprite/procedure-3-1.png',
-            img2: 'img/sprite/procedure-3.png',
+            img1: 'procedure-3-1.png',
+            img2: null,
+            img3: 'procedure-3.png',
         },
 
         {
@@ -417,8 +473,8 @@ function initRunnerBefunge(logger, storage) {
             process: ifCommand,
             description: 'Оператор ветвления. Если значения по обе стороны команды равны - поворот командного курсора направо, если не равны - поворот курсора налево.',
             minLevel: 1,
-            img1: 'img/sprite/if-1.png',
-            img2: 'img/sprite/if.png'
+            img1: 'if-1.png',
+            img2: 'if.png'
         },
 
         {
@@ -428,10 +484,10 @@ function initRunnerBefunge(logger, storage) {
             process: scannerAtCommand,
             description: 'Сканер позволяет определить, что находится на поле вокруг героя. Сторону необходимо указать предварительно.',
             minLevel: 1,
-            img1: 'img/sprite/scanner-at-left.png',
-            img2: 'img/sprite/scanner-at-right.png',
-            img3: 'img/sprite/value-left.png',
-            img4: 'img/sprite/value-right.png'
+            img1: 'scanner-at-left.png',
+            img2: 'scanner-at-right.png',
+            img3: gameName + '/value-left.png',
+            img4: gameName + '/value-right.png'
         },
 
         {
@@ -441,7 +497,7 @@ function initRunnerBefunge(logger, storage) {
             process: robotCameFromCommand,
             description: 'Указывает откуда пришел герой только что. Если герой не двигался - команда вернет Null.',
             minLevel: 2,
-            img1: 'img/sprite/robot-came-from.png'
+            img1: 'robot-came-from.png'
         },
 
         {
@@ -451,7 +507,7 @@ function initRunnerBefunge(logger, storage) {
             process: robotPreviousDirectionCommand,
             description: 'Указывает куда ходил герой в прошлый раз. Если герой не двигался - команда вернет Null.',
             minLevel: 2,
-            img1: 'img/sprite/robot-previous-direction.png'
+            img1: 'robot-previous-direction.png'
         },
 
         {
@@ -461,8 +517,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotGoLeftCommand,
             description: 'Команда герою двигаться влево.',
             minLevel: 0,
-            img1: 'img/sprite/robot-left-1.png',
-            img2: 'img/sprite/robot-left.png'
+            img1: 'robot-left-1.png',
+            img2: gameName + '/robot-left.png'
         },
 
         {
@@ -472,8 +528,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotGoRightCommand,
             description: 'Команда герою двигаться вправо.',
             minLevel: 0,
-            img1: 'img/sprite/robot-right-1.png',
-            img2: 'img/sprite/robot-right.png'
+            img1: 'robot-right-1.png',
+            img2: gameName + '/robot-right.png'
         },
 
         {
@@ -483,8 +539,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotGoUpCommand,
             description: 'Команда герою двигаться вверх.',
             minLevel: 0,
-            img1: 'img/sprite/robot-up-1.png',
-            img2: 'img/sprite/robot-up.png'
+            img1: 'robot-up-1.png',
+            img2: gameName + '/robot-up.png'
         },
 
         {
@@ -494,8 +550,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotGoDownCommand,
             description: 'Команда герою двигаться вниз.',
             minLevel: 0,
-            img1: 'img/sprite/robot-down-1.png',
-            img2: 'img/sprite/robot-down.png'
+            img1: 'robot-down-1.png',
+            img2: gameName + '/robot-down.png'
         },
 
         {
@@ -505,10 +561,10 @@ function initRunnerBefunge(logger, storage) {
             process: robotGoCommand,
             description: 'Команда герою двигаться в заданном направлении. Сторону необходимо указать предварительно.',
             minLevel: 2,
-            img1: 'img/sprite/robot-go-left.png',
-            img2: 'img/sprite/robot-go-right.png',
-            img3: 'img/sprite/robot-left.png',
-            img4: 'img/sprite/robot-right.png'
+            img1: 'robot-go-left.png',
+            img2: 'robot-go-right.png',
+            img3: gameName + '/robot-left.png',
+            img4: gameName + '/robot-right.png'
         },
 
         {
@@ -518,8 +574,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotJumpLeftCommand,
             description: 'Команда герою прыгнуть влево.',
             minLevel: 10,
-            img1: 'img/sprite/robot-jump-left-1.png',
-            img2: 'img/sprite/robot-jump-left.png'
+            img1: 'robot-jump-left-1.png',
+            img2: gameName + '/robot-jump-left.png'
         },
 
         {
@@ -529,8 +585,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotJumpRightCommand,
             description: 'Команда герою прыгнуть направо.',
             minLevel: 10,
-            img1: 'img/sprite/robot-jump-right-1.png',
-            img2: 'img/sprite/robot-jump-right.png'
+            img1: 'robot-jump-right-1.png',
+            img2: gameName + '/robot-jump-right.png'
         },
 
         {
@@ -540,8 +596,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotJumpUpCommand,
             description: 'Команда герою прыгнуть вверх.',
             minLevel: 10,
-            img1: 'img/sprite/robot-jump-up-1.png',
-            img2: 'img/sprite/robot-jump-up.png'
+            img1: 'robot-jump-up-1.png',
+            img2: gameName + '/robot-jump-up.png'
         },
 
         {
@@ -551,8 +607,8 @@ function initRunnerBefunge(logger, storage) {
             process: robotJumpDownCommand,
             description: 'Команда герою прыгнуть вниз.',
             minLevel: 10,
-            img1: 'img/sprite/robot-jump-down-1.png',
-            img2: 'img/sprite/robot-jump-down.png'
+            img1: 'robot-jump-down-1.png',
+            img2: gameName + '/robot-jump-down.png'
         },
 
         {
@@ -562,10 +618,10 @@ function initRunnerBefunge(logger, storage) {
             process: robotJumpCommand,
             description: 'Команда герою прыгнуть в заданном направлении. Cторону необходимо указать предварительно.',
             minLevel: 10,
-            img1: 'img/sprite/jump-left.png',
-            img2: 'img/sprite/jump-right.png',
-            img3: 'img/sprite/robot-jump-left.png',
-            img4: 'img/sprite/robot-jump-right.png'
+            img1: 'jump-left.png',
+            img2: 'jump-right.png',
+            img3: gameName + '/robot-jump-left.png',
+            img4: gameName + '/robot-jump-right.png'
         },
 
         {
@@ -575,9 +631,9 @@ function initRunnerBefunge(logger, storage) {
             process: valueLeftCommand,
             description: 'Указание направления "влево". Используется совместно с другими командами.',
             minLevel: 2,
-            img1: 'img/sprite/value-left-2.png',
-            img2: 'img/sprite/value-left-1.png',
-            img3: 'img/sprite/value-left.png'
+            img1: 'value-left-2.png',
+            img2: 'value-left-1.png',
+            img3: gameName +'/value-left.png'
         },
 
         {
@@ -587,9 +643,9 @@ function initRunnerBefunge(logger, storage) {
             process: valueRightCommand,
             description: 'Указание направления "направо". Используется совместно с другими командами.',
             minLevel: 2,
-            img1: 'img/sprite/value-right-2.png',
-            img2: 'img/sprite/value-right-1.png',
-            img3: 'img/sprite/value-right.png'
+            img1: 'value-right-2.png',
+            img2: 'value-right-1.png',
+            img3: gameName + '/value-right.png'
         },
 
         {
@@ -599,9 +655,9 @@ function initRunnerBefunge(logger, storage) {
             process: valueUpCommand,
             description: 'Указание направления "вверх". Используется совместно с другими командами.',
             minLevel: 2,
-            img1: 'img/sprite/value-up-2.png',
-            img2: 'img/sprite/value-up-1.png',
-            img3: 'img/sprite/value-up.png'
+            img1: 'value-up-2.png',
+            img2: 'value-up-1.png',
+            img3: gameName + '/value-up.png'
         },
 
         {
@@ -611,9 +667,9 @@ function initRunnerBefunge(logger, storage) {
             process: valueDownCommand,
             description: 'Указание направления "вниз". Используется совместно с другими командами.',
             minLevel: 2,
-            img1: 'img/sprite/value-down-2.png',
-            img2: 'img/sprite/value-down-1.png',
-            img3: 'img/sprite/value-down.png'
+            img1: 'value-down-2.png',
+            img2: 'value-down-1.png',
+            img3: gameName + '/value-down.png'
         },
 
         {
@@ -630,9 +686,9 @@ function initRunnerBefunge(logger, storage) {
             type: 3,
             title: 'value-wall',
             process: valueWallCommand,
-            description: 'Значние "Обрыв". Испольузется совместно с другими командами.',
+            description: 'Значние "Недосягаемо". Испольузется совместно с другими командами.',
             minLevel: 1,
-            img1: 'img/sprite/cloud.png'
+            img1: gameName + '/cloud.png'
         },
 
         {
@@ -642,7 +698,7 @@ function initRunnerBefunge(logger, storage) {
             process: valueGroundCommand,
             description: 'Значние "Земля". Испольузется совместно с другими командами.',
             minLevel: 1,
-            img1: '../sprite/icancode/ekids/floor.png'
+            img1: '../' + gameName + '/floor.png'
         },
 
         {
@@ -651,8 +707,8 @@ function initRunnerBefunge(logger, storage) {
             title: 'value-start',
             process: valueStartCommand,
             description: 'Значние "Точка старта". Испольузется совместно с другими командами.',
-            minLevel: 11,
-            img1: '../sprite/icancode/ekids/start.png'
+            minLevel: 9,
+            img1: '../' + gameName + '/start.png'
         },
 
         {
@@ -661,8 +717,8 @@ function initRunnerBefunge(logger, storage) {
             title: 'value-end',
             process: valueEndCommand,
             description: 'Значние "Точка финиша". Испольузется совместно с другими командами.',
-            minLevel: 11,
-            img1: '../sprite/icancode/ekids/exit.png'
+            minLevel: 9,
+            img1: '../' + gameName + '/exit.png'
         },
 
         {
@@ -671,8 +727,8 @@ function initRunnerBefunge(logger, storage) {
             title: 'value-gold',
             process: valueGoldCommand,
             description: 'Значние - "Золото". Испольузется совместно с другими командами.',
-            minLevel: 11,
-            img1: '../sprite/icancode/ekids/gold.png'
+            minLevel: 9,
+            img1: '../' + gameName + '/gold.png'
         },
 
         {
@@ -680,9 +736,9 @@ function initRunnerBefunge(logger, storage) {
             type: 3,
             title: 'value-box',
             process: valueBoxCommand,
-            description: 'Значние - "Камень". Испольузется совместно с другими командами.',
+            description: 'Значние - "Препятствие". Испольузется совместно с другими командами.',
             minLevel: 11,
-            img1: '../sprite/icancode/ekids/box.png'
+            img1: '../' + gameName + '/box.png'
         },
 
         {
@@ -691,12 +747,55 @@ function initRunnerBefunge(logger, storage) {
             title: 'value-hole',
             process: valueHoleCommand,
             description: 'Значние - "Яма". Испольузется совместно с другими командами.',
-            minLevel: 11,
-            img1: '../sprite/icancode/ekids/hole.png'
+            minLevel: 10,
+            img1: '../' + gameName + '/hole.png'
+        },
+
+        {
+            id: 'value-laser-machine',
+            type: 3,
+            title: 'value-laser-machine',
+            process: valueLaserMachineCommand,
+            description: 'Значние - "Лазерная машина". Испольузется совместно с другими командами.',
+            minLevel: 13,
+            img1: '../' + gameName + '/laser_machine_charging_down.png'
+        },
+
+        {
+            id: 'value-laser',
+            type: 3,
+            title: 'value-laser',
+            process: valueLaserCommand,
+            description: 'Значние - "Лазер". Испольузется совместно с другими командами.',
+            minLevel: 13,
+            img1: '../' + gameName + '/laser_down.png'
+        },
+
+        {
+            id: 'value-zombie',
+            type: 3,
+            title: 'value-zombie',
+            process: valueZombieCommand,
+            description: 'Значние - "Зомби". Испольузется совместно с другими командами.',
+            minLevel: 14,
+            img1: 'zombies.png'
         }
     ];
 
     // ------------------------------------- save state -----------------------------------
+    var undo = [];
+    var updateUndoButton = function() {
+        enableButton(undoButton, undo.length > 0);
+        undoButton.text('Undo (' + undo.length + ')');
+    }
+    updateUndoButton();
+    var pushSave = function(data) {
+        undo.push(data);
+        if (undo.length > 100) {
+            undo.shift();
+        }
+        updateUndoButton();
+    }
     var saveState = function() {
         if (!readyForSaving) {
             return;
@@ -712,18 +811,26 @@ function initRunnerBefunge(logger, storage) {
             }
         }
 
+        pushSave(data);
         storage.save('editor', data);
     };
 
     // -------------------------------------- load state -----------------------------------
     var loadState = function() {
+        var data = null;
         readyForSaving = false;
         try {
-            var data = storage.load('editor');
+            data = storage.load('editor');
+            pushSave(data);
         } catch (err) {
             readyForSaving = true;
             return;
         }
+        loadStateFromData(data);
+    }
+
+    var loadStateFromData = function(data) {
+        readyForSaving = false;
 
         if (!data || data.length != height) {
             readyForSaving = true;
@@ -773,7 +880,7 @@ function initRunnerBefunge(logger, storage) {
         readyForSaving = true;
     };
 
-    // --------------------------------------- cards bulding ---------------------------------
+    // --------------------------------------- cards building ---------------------------------
     var mapSlots = [];
     for (var y = 0; y < height; y++) {
         mapSlots[y] = [];
@@ -827,8 +934,6 @@ function initRunnerBefunge(logger, storage) {
             }
         });
         width = defaultSize;
-
-        saveState();
     }
 
     $('<div id="add-left" class="add-left">+</div>').appendTo('#cardSlots').click(addRowBefore);
@@ -852,86 +957,108 @@ function initRunnerBefunge(logger, storage) {
     buildPileCards();
 
     // -------------------------------------- tooltips -----------------------------------
-    // TODO to remove duplicate
     // TODO to extract whole html to board.js as template
 
     var buildTooltips = function() {
         jQuery.each(commands, function(index) {
-            var elem;
-            if (commands[index].img1 && commands[index].img2 && commands[index].img3 && commands[index].img4) {
-                elem =
-                    '<div class="img-tooltip">' +
-                        '<div class="img-container">' +
-                            '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
-                            '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
-                        '</div>' +
-                        '<div class="img-container">' +
-                            '<img src = "../../resources/icancode/' + commands[index].img3 + '">' +
-                            '<img src = "../../resources/icancode/' + commands[index].img4 + '">' +
-                        '</div>' +
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
-                    '</div>';
-            } else if (commands[index].img1 && commands[index].img2 && commands[index].img3) {
-                elem =
-                    '<div class="img-tooltip">' +
-                        '<div class="img-container">' +
-                            '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
-                        '</div>' +
-                        '<div class="img-container">' +
-                            '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
-                            '<img src = "../../resources/icancode/' + commands[index].img3 + '">' +
-                        '</div>' +
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
-                    '</div>';
-            } else if (commands[index].img1 && commands[index].img2) {
-                elem =
-                    '<div class="img-tooltip">' +
-                        '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
-                        '<img src = "../../resources/icancode/' + commands[index].img2 + '">' +
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
-                    '</div>';
-            } else if (commands[index].img1) {
-                elem =
-                    '<div class="img-tooltip">' +
-                        '<img src = "../../resources/icancode/' + commands[index].img1 + '">' +
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
-                    '</div>';
-            } else {
-                elem =
-                    '<div class="img-tooltip">' +
-                        '<span class="tooltip-desc">' + commands[index].description + '</span>' +
-                    '</div>';
-            }
+            var elem =
+                '<div class="img-tooltip" style="visibility: hidden">' +
+                    '<div class="img-container">' +
+                        ((!!commands[index].img1)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img1 + '">':'') +
+                        ((!!commands[index].img2)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img2 + '">':'') +
+                    '</div>' +
+                    '<div class="img-container">' +
+                        ((!!commands[index].img3)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img3 + '">':'') +
+                        ((!!commands[index].img4)?'<img src = "../../resources/sprite/icancode/befunge/' + commands[index].img4 + '">':'') +
+                    '</div>' +
+                    '<span class="tooltip-desc">' + commands[index].description + '</span>' +
+                '</div>';
 
             var currentTooltip = null;
             var touchMode = false;
             var showTooltip = function(event) {
-                if(touchMode) return false;
+                if (touchMode) return false;
          
-                var slot = $(this);
-                currentTooltip = slot.data('data-type').id;
+                var card = $(this);
+                var slot = card.parent();
+                currentTooltip = card.data('data-type').id;
                 touchMode = event.type === 'touchstart';
 
                 setTimeout(function() {
-                    var tooltip = slot.data('data-type').id;
+                    var tooltip = card.data('data-type').id;
                     if (tooltip == currentTooltip) {
                         slot.append(elem);
-                        $('.img-tooltip').css("z-index", "99");
+                        var el = slot.find('.img-tooltip');
+
+                        el.prepend('<div class="before-tooltip"></div>');
+                        el.append('<div class="after-tooltip"></div>');
+
+                        var changeLeft = function(element, moveLeft) {
+                            element.offset({left: element.offset().left + moveLeft});
+                        }
+
+                        var rightBound = function(element) {
+                            return element.offset().left + element.width();
+                        }
+
+                        var leftBound = function(element) {
+                            return element.offset().left;
+                        }
+
+                        var onLoad = function() {
+                            var before = el.find('.before-tooltip');
+                            var after = el.find('.after-tooltip');
+
+                            var right = rightBound(el) - rightBound($('#cardPile'));
+                            var left = leftBound($('#cardPile')) - leftBound(el);
+                            if (right <= 0) {
+                                right = 0;
+                            }
+                            if (left <= 0) {
+                                left = 0;
+                            }
+                            if (right > 0 || left > 0) {
+                                var delta = right - left;
+                                changeLeft(el, -delta);
+                                changeLeft(before, delta);
+                                changeLeft(after, delta);
+                            }
+
+                            // display:hidden мы не можем использовать потому
+                            // что оперируем позицией элемента до его отображения
+                            el.css("visibility", "visible");
+                        }
+
+                        // если есть изображения в тултипе ждем пока они все загузятся,
+                        // иначе ширина тултипа будеь рссчитана неверно
+                        var images = $(el).find('img');
+                        var loaded = images.length;
+                        if (loaded == 0) {
+                            onLoad();
+                        } else {
+                            images.load(function () {
+                                loaded--;
+                                if (loaded == 0) {
+                                    onLoad();
+                                }
+                            });
+                        }
                     } else {
-                        slot.empty();
+                        slot.find('.img-tooltip').remove();
                     }
                 }, 500);
             }
 
             var hideTooltip = function() {
-                if(touchMode) return false;
+                if (touchMode) return false;
 
-                var slot = $(this);
-                var tooltip = slot.data('data-type').id;
+                var card = $(this);
+                var slot = card.parent();
+                var tooltip = card.data('data-type').id;
                 if (tooltip == currentTooltip) {
                     currentTooltip = null;
                 }
-                slot.empty();
+                slot.find('.img-tooltip').remove();
             }
 
             var handleTouchEnd = function(evt) {
@@ -939,12 +1066,13 @@ function initRunnerBefunge(logger, storage) {
                 hideTooltip.call(this, evt);
             }
 
-            $("#cardPile ." + commands[index].title)[0].addEventListener('touchstart', showTooltip);
-            $("#cardPile ." + commands[index].title)[0].addEventListener('touchend', handleTouchEnd);
-            $("#cardPile ." + commands[index].title)[0].addEventListener('touchmove', handleTouchEnd);
-            $("#cardPile ." + commands[index].title).mouseenter(showTooltip);
-            $("#cardPile ." + commands[index].title).mousedown(hideTooltip);
-            $("#cardPile ." + commands[index].title).mouseleave(hideTooltip);
+            var card = $("#cardPile ." + commands[index].title);
+            card[0].addEventListener('touchstart', showTooltip);
+            card[0].addEventListener('touchend', handleTouchEnd);
+            card[0].addEventListener('touchmove', handleTouchEnd);
+            card.mouseenter(showTooltip);
+            card.mousedown(hideTooltip);
+            card.mouseleave(hideTooltip);
         })
     };
     buildTooltips();
@@ -1056,7 +1184,7 @@ function initRunnerBefunge(logger, storage) {
     };
 
     var buildBoll = function() {
-        var ball = '<div id="ball" class="ball hidden"><img src = "../../resources/icancode/img/sprite/ball.png"></div>';
+        var ball = '<div id="ball" class="ball hidden"><img src = "../../resources/icancode/../sprite/icancode/befunge/ball.png"></div>';
         $("#cardSlots").append(ball);
     };
 
@@ -1179,6 +1307,7 @@ function initRunnerBefunge(logger, storage) {
                 return false;
             }
 
+            // если мы переместили в то же место откуда начали
             if (parked[0] == card[0]) {
                 return false;
             }
@@ -1194,6 +1323,7 @@ function initRunnerBefunge(logger, storage) {
     }
 
     var doNotRevert = false;
+    // переносим из палитры команду
     $('#cardPile .card-item').draggable({
         helper: "clone",
         cursor: 'move',
@@ -1250,8 +1380,12 @@ function initRunnerBefunge(logger, storage) {
                 }
                 var card = ui.draggable;
 
-                var busy = !!slot.data('parked')
-                if (busy) {
+                // переместили в заняый слот
+                var busy = !!slot.data('parked');
+                // переместили в ту же клеточку с которой начали
+                var sameSlot = slot[0] == card.data('parkedTo')[0];
+
+                if (busy && !sameSlot) {
                     if (isOnCardPile(slot) && !isOnCardPile(card.parent())) {
                         //doNotRevert = true;
                         //moveToInitial(card);
@@ -1264,6 +1398,7 @@ function initRunnerBefunge(logger, storage) {
                     moveToInitial(card);
                 } else {
                     if (!isOnCardPile(card.parent())) {
+                        // TODO вообщето тут физически див остается в старом месте меняется только его координаты и привязка в данных, это работает но это не совсем ок
                         park(card, slot);
                     } else {
                         doNotRevert = true;
@@ -1277,6 +1412,7 @@ function initRunnerBefunge(logger, storage) {
     var cloneCardOnSlot = function(card, slot) {
         var newCard = cloneCard(card);
         slot.append(newCard);
+        // переносим карту из поля
         $(newCard).draggable({
             cursor: 'move',
             revert: onDragRevert

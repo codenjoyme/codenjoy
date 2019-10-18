@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -49,7 +49,7 @@ function initProgressbar(container) {
         progressBar.remove(level, "hidden");
     }
     progressBar.countLevels = function(count) {
-        progressBar.countLevelsChanged = true;
+        progressBar.levelsCount = count;
         for (var level = 0; level < progressBar.length; level++) {
             progressBar.name(level, "Level " + (level + 1));
             if (level == count) {

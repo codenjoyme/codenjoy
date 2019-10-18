@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -29,6 +29,7 @@ import com.codenjoy.dojo.icancode.model.interfaces.IItem;
 import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.services.Events;
+import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
@@ -92,6 +93,11 @@ public class ICanCode implements Tickable, IField {
                 .map(it -> (Tickable)it)
                 .forEach(Tickable::tick);
 
+        // после всех перемещений, если герой в полете его надо на 3й леер, иначе приземлить
+        level.getItems(HeroItem.class).stream()
+                .map(it -> (HeroItem)it)
+                .forEach(HeroItem::fixLayer);
+
         for (Player player : players) {
             Hero hero = player.getHero();
 
@@ -112,6 +118,31 @@ public class ICanCode implements Tickable, IField {
     @Override
     public List<Zombie> zombies() {
         return level.getItems(Zombie.class);
+    }
+
+    @Override
+    public List<Laser> lasers() {
+        return level.getItems(Laser.class);
+    }
+
+    @Override
+    public List<Gold> golds() {
+        return level.getItems(Gold.class);
+    }
+
+    @Override
+    public List<LaserMachine> laserMachines() {
+        return level.getItems(LaserMachine.class);
+    }
+
+    @Override
+    public List<ZombiePot> zombiePots() {
+        return level.getItems(ZombiePot.class);
+    }
+
+    @Override
+    public List<Floor> floors() {
+        return level.getItems(Floor.class);
     }
 
     @Override
@@ -165,15 +196,20 @@ public class ICanCode implements Tickable, IField {
 
     @Override
     public void reset() {
-        // TODO think about it
-        List<BaseItem> golds = level.getItems(Gold.class);
+        List<Gold> golds = golds();
 
         if (isMultiplayer) {
             setRandomGold(golds); // TODO test me
         }
 
-        for (BaseItem gold : golds) {
-            ((Gold) gold).reset();
+        golds.forEach(it -> it.reset());
+
+        if (!isMultiplayer) {
+            // TODO test me
+            zombiePots().forEach(it -> it.reset());
+
+            // TODO test me
+            laserMachines().forEach(it -> it.reset());
         }
     }
 
@@ -182,8 +218,8 @@ public class ICanCode implements Tickable, IField {
         return isMultiplayer;
     }
 
-    private void setRandomGold(List<BaseItem> golds) {
-        List<BaseItem> floors = level.getItems(Floor.class);
+    private void setRandomGold(List<Gold> golds) {
+        List<Floor> floors = floors();
 
         for (int i = floors.size() - 1; i > -1; --i) {
             if (floors.get(i).getCell().getItems().size() > 1) {
@@ -191,19 +227,16 @@ public class ICanCode implements Tickable, IField {
             }
         }
 
-        Gold gold;
-        for (BaseItem item : golds) {
-            gold = (Gold) item;
-
+        for (Gold gold : golds) {
             if (gold.getHidden() && !floors.isEmpty()) {
                 int random = dice.next(floors.size());
 
-                Floor floor = (Floor) floors.get(random);
+                Floor floor = floors.get(random);
                 floors.remove(random);
 
-                ICell fromCell = gold.getCell();
+                ICell cell = gold.getCell();
                 floor.getCell().addItem(gold);
-                fromCell.addItem(floor);
+                cell.addItem(floor);
             }
         }
     }
@@ -253,6 +286,11 @@ public class ICanCode implements Tickable, IField {
             @Override
             public int size() {
                 return ICanCode.this.size();
+            }
+
+            @Override
+            public int viewSize() {
+                return Levels.size();
             }
 
             @Override

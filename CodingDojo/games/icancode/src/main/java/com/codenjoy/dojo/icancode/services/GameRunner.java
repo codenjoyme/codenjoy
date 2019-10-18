@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.services;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -25,16 +25,12 @@ package com.codenjoy.dojo.icancode.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.AbstractGameType;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.icancode.model.Elements;
@@ -43,18 +39,9 @@ import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import org.json.JSONObject;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType  {
-
-    private static final List<String> GAMES = Arrays.asList(
-            "iCanCode Contest",
-            "iCanCode Training",
-            "eKids"
-    );
 
     private Parameter<Integer> isTrainingMode;
 
@@ -136,23 +123,24 @@ public class GameRunner extends AbstractGameType implements GameType  {
     @Override
     public PrinterFactory getPrinterFactory() {
         return PrinterFactory.get((BoardReader reader, Player player) -> {
-            // TODO тут ой как некрасиво, при каждой прорисовке создается принтер
-            // TODO да и само по себе это layered как-то сложно вышло
-            LayeredViewPrinter printer = new LayeredViewPrinter(
-                    reader.size(),
-                    () -> player.getField().layeredReader(),
-                    () -> player,
-                    Levels.size(),
-                    2);
-
-            PrinterData data = printer.print();
+            PrinterData data = player.getPrinter().print();
 
             JSONObject result = new JSONObject();
             result.put("layers", data.getLayers());
-            result.put("offset", data.getOffset());
+            // do not change 'offset' key - canvases working
+            result.put("offset", toJson(data.getOffset()));
+            result.put("heroPosition", toJson(player.getHeroOffset(data.getOffset())));
+            result.put("levelFinished", player.isLevelFinished());
             result.put("showName", true);
             return result;
         });
+    }
+
+    private JSONObject toJson(Point point) {
+        JSONObject result = new JSONObject();
+        result.put("x", point.getX());
+        result.put("y", point.getY());
+        return result;
     }
 
 }

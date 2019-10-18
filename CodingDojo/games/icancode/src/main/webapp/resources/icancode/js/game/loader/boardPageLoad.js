@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -140,7 +140,7 @@ var boardPageLoad = function() {
             $('#ide-help-window').html(help);
             $("#modal").removeClass("close");
         } else {
-            window.open('/codenjoy-contest/resources/icancode/landing-icancode-training.html', '_blank');
+            window.open('/codenjoy-contest/resources/icancode/landing-training.html', '_blank');
             window.focus();
         }
     };
@@ -230,7 +230,7 @@ var boardPageLoad = function() {
             buttons.enableAll();
         });
     } else {
-        buttons.enable(helpButton, false);
+        buttons.disableHelp();
 
         var link = $('#register-link').attr('href');
         logger.print('<a href="' + link + '">Please register</a>');

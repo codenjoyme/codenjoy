@@ -69,6 +69,31 @@
         </tr>
     </table>
 
+    <form:form modelAttribute="adminSettings" action="admin" method="POST">
+        <table class="admin-table" id="activeGames">
+            <tr>
+                <td style="width:300px;">
+                    <b>Active games for participants</b>
+                </td>
+            </tr>
+            <c:forEach items="${games}" var="game" varStatus="status">
+                <tr>
+                    <td>
+                        <form:checkbox id="enable-games-${game}" path="games[${status.index}]"/>
+                        <label class="check-label" for="enable-games-${game}"></label>
+                        <span>${game}</span>
+                    </td>
+                </tr>
+            </c:forEach>
+        </table>
+        <tr>
+            <td>
+                <input type="hidden" name="gameName" value="${gameName}"/>
+                <input type="submit" value="Save"/>
+            </td>
+        </tr>
+    </form:form>
+
     <table class="admin-table" id="pauseGame">
         <tr>
             <td>
@@ -155,13 +180,75 @@
         </tr>
     </table>
 
+    <form:form modelAttribute="adminSettings" action="admin" method="POST">
+        <table class="admin-table" id="semifinal">
+            <tr colspan="2">
+                <td><b>Semifinal settings</b></td>
+            </tr>
+            <tr>
+                <td>Enable semifinal</td>
+                <td><form:checkbox path="semifinal.enabled"/></td>
+            <tr>
+            <tr>
+                <td>Ticks timeout</td>
+                <td><form:input path="semifinal.timeout"/></td>
+            </tr>
+            <tr>
+                <td>Current tick</td>
+                <td>${semifinalTick}</td>
+            <tr>
+            </tr>
+                <td>Рercent/Count</td>
+                <td><form:checkbox path="semifinal.percentage"/></td>
+            </tr>
+            <tr>
+                <td>Finalists limit</td>
+                <td><form:input path="semifinal.limit"/></td>
+            </tr>
+            <tr>
+                <td>Reset board</td>
+                <td><form:checkbox path="semifinal.resetBoard"/></td>
+            </tr>
+            <tr>
+                <td>Shuffle board</td>
+                <td><form:checkbox path="semifinal.shuffleBoard"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="gameName" value="${gameName}"/>
+                    <input type="submit" value="Save"/>
+                </td>
+            </tr>
+        </table>
+    </form:form>
+
     <table class="admin-table" id="cleanGame">
         <tr>
+            <tr colspan="2">
+                <td><b>Clean</b></td>
+            </tr>
             <td>
                 <a href="${ctx}/admin?cleanAll&gameName=${gameName}">Clean all scores</a>.
             </td>
         </tr>
     </table>
+
+    <form:form modelAttribute="adminSettings" action="admin" method="POST">
+        <table class="admin-table" id="loadSaveForAll">
+            <tr>
+                <td><b>Load save (progress) for all</b></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="player-save" name="progress" value="${defaultProgress}"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" name="gameName" value="${gameName}"/>
+                    <input type="submit" value="Apply for all"/>
+                </td>
+            </tr>
+        </table>
+    </form:form>
 
     <table class="admin-table" id="cleanGame">
         <tr>
@@ -183,25 +270,39 @@
         </tr>
         <tr>
             <td>
-                <input id="show-tech" type="checkbox">
-                <label class="check-label" for="show-tech"></label>
+                <input id="show-data1" type="checkbox">
+                <label class="check-label" for="show-data1"></label>
+                <span>Show city on registration</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="show-data2" type="checkbox">
+                <label class="check-label" for="show-data2"></label>
                 <span>Show tech skills on registration</span>
             </td>
         </tr>
         <tr>
             <td>
-                <input id="show-university" type="checkbox">
-                <label class="check-label" for="show-university"></label>
-                <span>Show university on registration</span>
+                <input id="show-data3" type="checkbox">
+                <label class="check-label" for="show-data3"></label>
+                <span>Show company / position on registration</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input id="show-data4" type="checkbox">
+                <label class="check-label" for="show-data4"></label>
+                <span>Show experience on registration</span>
             </td>
         </tr>
         <tr>
             <td>
                 <span class="white">Default game</span>
                 <select placeholder="Select default game" id="default-game">
-                    <option value="iCanCode Training">iCanCode Training</option>
-                    <option value="iCanCode Contest">iCanCode Contest</option>
-                    <option value="eKids">eKids</option>
+                    <!--option value="Type1">Type1</option-->
+                    <!--option value="Type2">Type2</option-->
+                    <!--option value="Type3">Type3</option-->
                 </select>
             </td>
         </tr>
@@ -214,6 +315,9 @@
 
     <form:form modelAttribute="adminSettings" action="admin" method="POST">
         <table class="admin-table" id="createNewUsers">
+            <tr colspan="2">
+                <td><b>Create new users</b></td>
+            </tr>
             <tr>
                 <td>NameMask</td>
                 <td>Count</td>
@@ -273,10 +377,11 @@
                     <td><b>Registered Players</b></td>
                 </tr>
                 <tr>
-                    <td class="header">Player name</td>
-                    <td class="header">Player id/email</td>
+                    <td class="header">PlayerId</td>
+                    <td class="header">PlayerName</td>
+                    <td class="header">Score</td>
                     <td class="header">IP</td>
-                    <td class="header">Game name</td>
+                    <td class="header">GameName</td>
                     <td>
                         <a href="${ctx}/admin?saveAll&gameName=${gameName}">SaveAll</a>&nbsp;&nbsp;
                     </td>
@@ -311,9 +416,10 @@
                     </c:choose>
                         <c:choose>
                             <c:when test="${player.active}">
-                                <td><form:input path="players[${status.index}].readableName"/></td>
-                                <td><form:input path="players[${status.index}].name"/></td>
-                                <td><form:input path="players[${status.index}].callbackUrl"/></td>
+                                <td><form:input class="input-id" readonly="true" index="${status.index}" path="players[${status.index}].name"/></td>
+                                <td><form:input class="input-readable" path="players[${status.index}].readableName"/></td>
+                                <td><form:input class="input-score" path="players[${status.index}].score"/></td>
+                                <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
                                 <td><a href="${ctx}/admin?save=${player.name}&gameName=${gameName}">Save</a></td>
                                 <c:choose>
@@ -359,10 +465,12 @@
                                     </c:otherwise>
                                 </c:choose>
                             </c:when>
+
                             <c:otherwise>
-                                <td><input class="uneditable-input" value="${player.readableName}"/></td>
-                                <td><input class="uneditable-input" value="${player.name}"/></td>
-                                <td><input class="uneditable-input" value="${player.callbackUrl}"/></td>
+                                <td><input type="text" readonly="true" class="input-id"       value="${player.name}"/></td>
+                                <td><input type="text" readonly="true" class="input-readable" value="${player.readableName}"/></td>
+                                <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
+                                <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
                                 <td>Save</td>
                                 <c:choose>
@@ -407,7 +515,7 @@
                 <tr>
                     <td>
                         <input type="hidden" name="gameName" value="${gameName}"/>
-                        <input type="submit" value="Save"/>
+                        <input type="submit" value="Save all"/>
                     </td>
                 </tr>
             </table>

@@ -23,13 +23,11 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.*;
 
@@ -110,6 +108,13 @@ public class PlayerGamesView {
         return service.all().stream()
                 .collect(toMap(pg -> pg.getPlayer().getName(),
                         pg -> pg.getPlayer().getScore()));
+    }
+
+    public List<PScoresOf> getScoresFor(String gameName) {
+        return service.all().stream()
+                .filter(pg -> pg.getPlayer().getGameName().equals(gameName))
+                .map(pg -> new PScoresOf(pg))
+                .collect(toList());
     }
 
     public Map<String, String> getReadableNames() {

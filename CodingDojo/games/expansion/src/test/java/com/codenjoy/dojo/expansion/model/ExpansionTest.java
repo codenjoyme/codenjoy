@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -23,7 +23,13 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
+import com.codenjoy.dojo.expansion.model.levels.Level;
+import com.codenjoy.dojo.expansion.model.levels.Levels;
+import com.codenjoy.dojo.expansion.model.levels.LevelsTest;
+import com.codenjoy.dojo.expansion.model.levels.items.Hero;
+import com.codenjoy.dojo.expansion.model.replay.GameLogger;
+import com.codenjoy.dojo.expansion.services.Events;
+import com.codenjoy.dojo.expansion.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -32,18 +38,15 @@ import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.expansion.model.levels.Levels;
-import com.codenjoy.dojo.expansion.model.levels.LevelsTest;
-import com.codenjoy.dojo.expansion.model.levels.OneMultipleGameFactory;
-import com.codenjoy.dojo.expansion.model.levels.items.Hero;
-import com.codenjoy.dojo.expansion.services.Events;
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
+import java.util.List;
+import java.util.function.Supplier;
+
 import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.*;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -55,15 +58,16 @@ import static org.mockito.Mockito.*;
  */
 public class ExpansionTest {
 
-    public static final int FIRE_TICKS = 6;
-    private PlayerBoard game;
+    private IField field;
     private Printer<PrinterData> printer;
 
     private Hero hero;
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private int size = LevelsTest.LEVEL_SIZE;
+    private int size = -1;
+    private int current;
+    private List<Supplier<Level>> levels;
 
     @Before
     public void setup() {
@@ -72,7 +76,6 @@ public class ExpansionTest {
                 .leaveForceCount(1)
                 .regionsScores(0)
                 .roundTicks(10000)
-                .lobbyEnable(false)
                 .defenderHasAdvantage(false)
                 .shufflePlayers(false);
     }
@@ -89,20 +92,12 @@ public class ExpansionTest {
     }
 
     private void givenFl(String... boards) {
-        GameFactory factory = new OneMultipleGameFactory(dice,
-                Levels.collectYours(size, boards),
-                Levels.none());
+        levels = Levels.collectYours(size, boards);
+        current = 0;
         listener = mock(EventListener.class);
-        WaitForAllPlayerLobby lobby = mock(WaitForAllPlayerLobby.class);
-        ProgressBar progressBar = new ProgressBar(factory, () -> lobby);
-        player = new Player(listener, progressBar, null);
-        progressBar.start(null);
-        game = progressBar.getCurrent();
-        hero = game.getPlayers().get(0).getHero();
-
-        printer = new LayeredViewPrinter(game.size(), () -> game.layeredReader(), () -> player, size, ProgressBar.COUNT_LAYERS);
+        player = new Player(listener, null);
+        frameworkShouldGoNextLevel();
     }
-
 
     private void assertL(String expected) {
         assertEquals(TestUtils.injectN(expected),
@@ -193,7 +188,7 @@ public class ExpansionTest {
 
         // when
         hero.increase(new Forces(pt(2, 2), 1));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -210,7 +205,7 @@ public class ExpansionTest {
 
         // when
         hero.increase(new Forces(pt(2, 2), 3));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -227,7 +222,7 @@ public class ExpansionTest {
 
         // when
         hero.increase(new Forces(pt(2, 2), 5));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -266,7 +261,7 @@ public class ExpansionTest {
 
         // when
         hero.increase(new Forces(pt(2, 2), 100));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -298,7 +293,7 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#\n");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -314,7 +309,7 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#\n");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -353,7 +348,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.DOWN));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -386,7 +381,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.UP));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -419,7 +414,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.LEFT));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -452,7 +447,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -485,7 +480,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.LEFT_UP));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -518,7 +513,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.LEFT_DOWN));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -551,7 +546,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.RIGHT_UP));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -584,7 +579,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 6, QDirection.RIGHT_DOWN));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -626,7 +621,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 1, QDirection.LEFT_DOWN),
                 new ForcesMoves(pt(2, 2), 1, QDirection.LEFT_UP)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -664,7 +659,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(1, 1), 1, QDirection.LEFT_DOWN),
                 new ForcesMoves(pt(1, 1), 1, QDirection.LEFT_UP)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("---" +
@@ -702,7 +697,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(1, 1), 1, QDirection.LEFT_DOWN),
                 new ForcesMoves(pt(1, 1), 1, QDirection.LEFT_UP)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("---" +
@@ -735,7 +730,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         // then
         verify(listener).event(Events.WIN(0));
@@ -776,13 +771,16 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         // then
         assertTrue(hero.isWin());
 
+        // framework should do
+        frameworkShouldGoNextLevel();
+
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -806,8 +804,31 @@ public class ExpansionTest {
         assertFalse(hero.isWin());
     }
 
+    private void frameworkShouldGoNextLevel() {
+        if (hero != null
+                && hero.isWin()
+                && hero.isAlive()
+                && current < levels.size() - 1)
+        {
+            current++;
+        }
+        frameworkShouldReloadLevel();
+    }
+
+    private void frameworkShouldReloadLevel() {
+        field = new Expansion(levels.get(current).get(), mock(Ticker.class),
+                dice, mock(GameLogger.class), false);
+        field.newGame(player);
+        hero = field.getPlayers().get(0).getHero();
+
+        printer = new LayeredViewPrinter(
+                () -> field.layeredReader(),
+                () -> player,
+                Levels.COUNT_LAYERS);
+    }
+
     @Test
-    public void shouldStartInNewPlaceWhenAct() {
+    public void shouldStartInNewPlaceWhenReset() {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
@@ -822,10 +843,10 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#\n");
 
         hero.move(new ForcesMoves(pt(1, 2), 2, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         assertE("-----" +
                 "-----" +
@@ -838,6 +859,8 @@ public class ExpansionTest {
                 "-=#008001001-=#\n" +
                 "-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#\n");
+
+        assertEquals(true, player.isAlive());
 
         // when
         hero.reset();
@@ -854,7 +877,11 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#\n");
 
-        game.tick();
+        assertEquals(false, player.isAlive());
+
+        // when
+        field.tick();
+        frameworkShouldReloadLevel();
 
         // then
         assertE("-----" +
@@ -896,7 +923,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(1, 2), 6, QDirection.RIGHT_UP),
                 new ForcesMoves(pt(3, 2), 6, QDirection.LEFT_DOWN)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -929,7 +956,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), 10, QDirection.DOWN));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -965,7 +992,7 @@ public class ExpansionTest {
 
             // when
             hero.move(new ForcesMoves(pt(2, 2), 10, QDirection.DOWN));
-            game.tick();
+            field.tick();
 
             // then
             assertE("-----" +
@@ -1003,7 +1030,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 3, QDirection.LEFT),
                 new ForcesMoves(pt(2, 2), 3, QDirection.RIGHT)
         );
-        game.tick();
+        field.tick();
 
         assertE("-----" +
                 "-----" +
@@ -1023,7 +1050,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 5, QDirection.UP),
                 new ForcesMoves(pt(3, 2), 5, QDirection.UP)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1060,7 +1087,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 4, QDirection.UP),
                 new ForcesMoves(pt(2, 2), 4, QDirection.DOWN)
         );
-        game.tick();
+        field.tick();
 
         assertE("-----" +
                 "--♥--" +
@@ -1080,7 +1107,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 5, QDirection.UP),
                 new ForcesMoves(pt(3, 2), 5, QDirection.UP)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1116,7 +1143,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 3, QDirection.LEFT),
                 new ForcesMoves(pt(2, 2), 3, QDirection.RIGHT)
         );
-        game.tick();
+        field.tick();
 
         assertE("-----" +
                 "-----" +
@@ -1135,7 +1162,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(1, 2), 2, QDirection.RIGHT),
                 new ForcesMoves(pt(3, 2), 2, QDirection.LEFT)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1174,7 +1201,7 @@ public class ExpansionTest {
                 new Forces(pt(3, 1), 10),
                 new Forces(pt(3, 3), 100)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1207,7 +1234,7 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#\n");
 
         hero.move(new ForcesMoves(pt(2, 2), 9, QDirection.DOWN));
-        game.tick();
+        field.tick();
 
         assertE("-----" +
                 "-----" +
@@ -1224,7 +1251,7 @@ public class ExpansionTest {
         // when
         // try but fail
         hero.move(new ForcesMoves(pt(2, 2), 2, QDirection.UP));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1244,7 +1271,7 @@ public class ExpansionTest {
                 new Forces(pt(2, 2), 5),
                 new ForcesMoves(pt(2, 2), 2, QDirection.UP)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1278,7 +1305,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 2), -1, QDirection.DOWN));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1312,7 +1339,7 @@ public class ExpansionTest {
 
         // when
         hero.increase(new Forces(pt(2, 2), -1));
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1349,7 +1376,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 4, QDirection.DOWN), // can do this
                 new ForcesMoves(pt(2, 1), 2, QDirection.LEFT)  // cant do this
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1386,7 +1413,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 2, QDirection.DOWN), // can do this
                 new Forces(pt(2, 2), 2)  // cant do this
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1420,7 +1447,7 @@ public class ExpansionTest {
 
         // when
         hero.increase(new ForcesMoves(pt(2, 2), 10, QDirection.DOWN)); // ignore direction
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1457,7 +1484,7 @@ public class ExpansionTest {
                 new Forces(pt(2, 2), 20),
                 new ForcesMoves(pt(2, 2), 19, QDirection.DOWN)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -1493,7 +1520,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 1, QDirection.LEFT),
                 new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT)
         );
-        game.tick();
+        field.tick();
 
         assertE("-----" +
                 "-----" +
@@ -1513,7 +1540,7 @@ public class ExpansionTest {
                 new Forces(pt(2, 2), 4),
                 new Forces(pt(3, 2), 4)
         );
-        game.tick();
+        field.tick();
 
         assertE("-----" +
                 "-----" +
@@ -1547,7 +1574,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 1, QDirection.LEFT),
                 new ForcesMoves(pt(2, 2), 1, QDirection.RIGHT)
         );
-        game.tick();
+        field.tick();
 
         assertE("-----" +
                 "-----" +
@@ -1567,7 +1594,7 @@ public class ExpansionTest {
                 new Forces(pt(2, 2), 10),
                 new Forces(pt(3, 2), 10)
         );
-        game.tick();
+        field.tick();
 
         assertE("-----" +
                 "-----" +
@@ -1601,7 +1628,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         // then
         verify(listener).event(Events.WIN(0));
@@ -1621,8 +1648,10 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#\n");
 
+
         // when
-        game.tick();
+        frameworkShouldGoNextLevel();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -1679,8 +1708,9 @@ public class ExpansionTest {
 
         // when done 1 level - go to 2
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
-        game.tick();
-        game.tick();
+        field.tick();
+        frameworkShouldGoNextLevel();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -1700,8 +1730,9 @@ public class ExpansionTest {
 
         // when done 2 level - go to 3
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.DOWN));
-        game.tick();
-        game.tick();
+        field.tick();
+        frameworkShouldGoNextLevel();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -1721,8 +1752,9 @@ public class ExpansionTest {
 
         // when done 3 level - go to 4
         hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.LEFT));
-        game.tick();
-        game.tick();
+        field.tick();
+        frameworkShouldGoNextLevel();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -1742,8 +1774,9 @@ public class ExpansionTest {
 
         // when done 4 level - start 4 again
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.UP));
-        game.tick();
-        game.tick();
+        field.tick();
+        frameworkShouldReloadLevel();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -1763,8 +1796,9 @@ public class ExpansionTest {
 
         // when done 4 level - start 4 again
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.UP));
-        game.tick();
-        game.tick();
+        field.tick();
+        frameworkShouldReloadLevel();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -1780,370 +1814,6 @@ public class ExpansionTest {
         assertF("-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#\n" +
                 "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-    }
-
-    @Test
-    public void shouldChangeLevelWhenAllLevelsAreDone() {
-        // given
-        shouldAllLevelsAreDone();
-
-        // when try to change level 1  - success
-        hero.loadLevel(0);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║1E│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "-♥--" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥--" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 2  - success
-        hero.loadLevel(1);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--♥-" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥--" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 3  - success
-        hero.loadLevel(2);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║E1│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--♥-" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥--" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 500 - fail
-        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
-        game.tick();
-        hero.loadLevel(500);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥♥-" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#009001-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 2 - success
-        hero.loadLevel(1);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--♥-" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-    }
-
-    @Test
-    public void shouldWinOnPassedLevelThanCanSelectAnother() {
-        // given
-        shouldAllLevelsAreDone();
-
-        // when win on level then try to change to last - success
-        hero.loadLevel(1);
-        game.tick();
-
-        assertL("╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--♥-" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.DOWN));
-
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║E1│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--♥-" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥--" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-    }
-
-    @Test
-    public void shouldWinOnPassedLevelThanCanSelectAnother_caseWhenGoToMultiple() {
-        // given
-        shouldAllLevelsAreDone();
-
-        // when win on level then try to change to last - success
-        hero.loadLevel(2);
-        game.tick();
-
-        assertL("╔══┐" +
-                "║..│" +
-                "║E1│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--♥-" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.LEFT));
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥--" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥--" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-    }
-
-    @Test
-    public void shouldWinOnPassedLevelThanCanSelectAnother_caseGoFromMultiple() {
-        // given
-        shouldAllLevelsAreDone();
-
-        // when win on level then try to change to last - success
-        hero.loadLevel(3);
-        game.tick();
-
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥--" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥♥-" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#009001-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 3 (previous) - success
-        hero.loadLevel(2);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║E1│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--♥-" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
                 "-=#-=#-=#-=#\n");
     }
 
@@ -2174,7 +1844,7 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#\n");
 
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.DOWN));
-        game.tick();
+        field.tick();
 
         assertL("╔══┐" +
                 "║1E│" +
@@ -2193,7 +1863,8 @@ public class ExpansionTest {
 
         // when
         hero.reset();
-        game.tick();
+        frameworkShouldReloadLevel();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -2213,8 +1884,9 @@ public class ExpansionTest {
 
         // when done 1 level - go to 2
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
-        game.tick();
-        game.tick();
+        field.tick();
+        frameworkShouldGoNextLevel();
+        field.tick();
 
         assertF("-=#-=#-=#-=#\n" +
                 "-=#-=#00A-=#\n" +
@@ -2222,7 +1894,7 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#\n");
 
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -2242,7 +1914,8 @@ public class ExpansionTest {
 
         // when
         hero.reset();
-        game.tick();
+        frameworkShouldReloadLevel();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -2262,8 +1935,9 @@ public class ExpansionTest {
 
         // when done 2 level - go to 3
         hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.DOWN));
-        game.tick();
-        game.tick();
+        field.tick();
+        frameworkShouldGoNextLevel();
+        field.tick();
 
         assertF("-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#\n" +
@@ -2271,7 +1945,7 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#\n");
 
         hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.UP));
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -2291,7 +1965,8 @@ public class ExpansionTest {
 
         // when
         hero.reset();
-        game.tick();
+        frameworkShouldReloadLevel();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -2311,8 +1986,9 @@ public class ExpansionTest {
 
         // when done 3 level - go to 4
         hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.LEFT));
-        game.tick();
-        game.tick();
+        field.tick();
+        frameworkShouldGoNextLevel();
+        field.tick();
 
         assertF("-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#\n" +
@@ -2320,7 +1996,7 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#\n");
 
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -2340,7 +2016,8 @@ public class ExpansionTest {
 
         // when
         hero.reset();
-        game.tick();
+        frameworkShouldGoNextLevel();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -2360,8 +2037,9 @@ public class ExpansionTest {
 
         // when done 4 level - start 4 again
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.UP));
-        game.tick();
-        game.tick();
+        field.tick();
+        frameworkShouldGoNextLevel();
+        field.tick();
 
         assertF("-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#\n" +
@@ -2369,7 +2047,7 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#\n");
 
         hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -2389,7 +2067,8 @@ public class ExpansionTest {
 
         // when
         hero.reset();
-        game.tick();
+        frameworkShouldReloadLevel();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -2405,466 +2084,6 @@ public class ExpansionTest {
         assertF("-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#\n" +
                 "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 1  - success
-        hero.loadLevel(0);
-        game.tick();
-        game.tick();
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.DOWN));
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║1E│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "-♥--" +
-                "-♥--" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#009-=#-=#\n" +
-                "-=#001-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║1E│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "-♥--" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 2  - success
-        hero.loadLevel(1);
-        game.tick();
-        game.tick();
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "-♥♥-" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#001009-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--♥-" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 3  - success
-        hero.loadLevel(2);
-        game.tick();
-        game.tick();
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        hero.move(new ForcesMoves(pt(2, 1), 1, QDirection.UP));
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║E1│" +
-                "└──┘");
-
-        assertE("----" +
-                "--♥-" +
-                "--♥-" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#001-=#\n" +
-                "-=#-=#009-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║..│" +
-                "║E1│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "--♥-" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 4 - success
-        hero.loadLevel(3);
-        game.tick();
-        game.tick();
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥♥-" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#009001-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥--" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 500 - fail
-        hero.move(new ForcesMoves(pt(1, 1), 1, QDirection.RIGHT));
-        game.tick();
-        game.tick();
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#009001-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        hero.loadLevel(500);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥♥-" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#009001-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘");
-
-        assertE("----" +
-                "----" +
-                "-♥--" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 2 - success
-        hero.loadLevel(1);
-        game.tick();
-        game.tick();
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "-♥♥-" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#001009-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when
-        hero.reset();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--♥-" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-    }
-
-    @Test
-    public void shouldSelectLevelWhenNotAllLevelsAreDone() {
-        // given
-        givenFl("╔══┐" +
-                "║1E│" +
-                "║..│" +
-                "└──┘",
-                "╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘",
-                "╔══┐" +
-                "║..│" +
-                "║E1│" +
-                "└──┘",
-                "╔══┐" +
-                "║E.│" +
-                "║1.│" +
-                "└──┘"
-        );
-
-        assertL("╔══┐" +
-                "║1E│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "-♥--" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when done level 1 - go to level 2
-        hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
-        game.tick();
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "--♥-" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level to 1 - success
-        hero.loadLevel(0);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║1E│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "-♥--" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level to 2 - success
-        hero.loadLevel(1);
-        game.tick();
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#-=#00A-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        hero.move(new ForcesMoves(pt(2, 2), 1, QDirection.LEFT));
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "-♥♥-" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#001009-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level to 3 - fail
-        hero.loadLevel(2);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "-♥♥-" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#001009-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level 4 - fail
-        hero.loadLevel(3);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║.1│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE("----" +
-                "-♥♥-" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#001009-=#\n" +
-                "-=#-=#-=#-=#\n" +
-                "-=#-=#-=#-=#\n");
-
-        // when try to change level to 1 - success
-        hero.loadLevel(0);
-        game.tick();
-
-        // then
-        assertL("╔══┐" +
-                "║1E│" +
-                "║..│" +
-                "└──┘");
-
-        assertE("----" +
-                "-♥--" +
-                "----" +
-                "----");
-
-        assertF("-=#-=#-=#-=#\n" +
-                "-=#00A-=#-=#\n" +
-                "-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#\n");
     }
 
@@ -2890,7 +2109,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔══┐" +
@@ -2927,7 +2146,7 @@ public class ExpansionTest {
         assertEquals(10, hero.getForcesPerTick());
 
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT)); // pick up gold
-        game.tick();
+        field.tick();
 
         assertL("╔═══┐" +
                 "║...│" +
@@ -2951,7 +2170,7 @@ public class ExpansionTest {
 
         // when
         hero.increase(new Forces(pt(2, 2), 20)); // only 11 can increase
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔═══┐" +
@@ -2976,7 +2195,7 @@ public class ExpansionTest {
 
         // when
         hero.increase(new Forces(pt(2, 2), 20)); // only 11 can increase
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔═══┐" +
@@ -3021,7 +2240,7 @@ public class ExpansionTest {
             assertEquals(10, hero.getForcesPerTick());
 
             hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT)); // pick up gold
-            game.tick();
+            field.tick();
 
             assertL("╔═══┐" +
                     "║...│" +
@@ -3045,7 +2264,7 @@ public class ExpansionTest {
 
             // when
             hero.increase(new Forces(pt(2, 2), 25)); // only 20 can increase
-            game.tick();
+            field.tick();
 
             // then
             assertL("╔═══┐" +
@@ -3070,7 +2289,7 @@ public class ExpansionTest {
 
             // when
             hero.increase(new Forces(pt(2, 2), 25)); // only 20 can increase
-            game.tick();
+            field.tick();
 
             // then
             assertL("╔═══┐" +
@@ -3104,7 +2323,8 @@ public class ExpansionTest {
 
         // when
         hero.reset(); // reset all gold scores also
-        game.tick();
+        frameworkShouldReloadLevel();
+        field.tick();
 
         assertF("-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#\n" +
@@ -3115,7 +2335,7 @@ public class ExpansionTest {
         assertEquals(10, hero.getForcesPerTick());
 
         hero.move(new ForcesMoves(pt(1, 2), 1, QDirection.UP));
-        game.tick();
+        field.tick();
 
         assertL("╔═══┐" +
                 "║...│" +
@@ -3139,7 +2359,7 @@ public class ExpansionTest {
 
         // when
         hero.increase(new Forces(pt(1, 3), 20)); // only 10 can increase
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔═══┐" +
@@ -3164,7 +2384,7 @@ public class ExpansionTest {
 
         // when
         hero.increase(new Forces(pt(1, 3), 20)); // only 10 can increase
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔═══┐" +
@@ -3208,7 +2428,7 @@ public class ExpansionTest {
         assertEquals(10, hero.getForcesPerTick());
 
         hero.move(new ForcesMoves(pt(1, 3), 2, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         assertF("-=#-=#-=#-=#-=#-=#\n" +
                 "-=#-=#-=#-=#-=#-=#\n" +
@@ -3220,7 +2440,7 @@ public class ExpansionTest {
         assertEquals(11, hero.getForcesPerTick());
 
         hero.move(new ForcesMoves(pt(2, 3), 1, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         assertL("      " +
                 "╔════┐" +
@@ -3251,7 +2471,7 @@ public class ExpansionTest {
                 new Forces(pt(2, 3), 7),  // 7 here
                 new Forces(pt(3, 3), 7)   // 12 - 7 = 5 here
         );
-        game.tick();
+        field.tick();
 
         // then
         assertL("      " +
@@ -3279,7 +2499,7 @@ public class ExpansionTest {
 
         // when
         hero.increase(new Forces(pt(3, 3), 20)); // only 12 possible to increase
-        game.tick();
+        field.tick();
 
         // then
         assertL("      " +
@@ -3323,7 +2543,7 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#\n");
 
         hero.move(new ForcesMoves(pt(1, 2), 2, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         // then
         assertF("-=#-=#-=#-=#-=#\n" +
@@ -3354,7 +2574,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(1, 3), 2, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         // then
         assertL("      " +
@@ -3380,7 +2600,7 @@ public class ExpansionTest {
 
         // when
         hero.move(new ForcesMoves(pt(2, 3), 1, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         // then
         assertL("      " +
@@ -3432,7 +2652,7 @@ public class ExpansionTest {
                 "-=#-=#-=#-=#-=#-=#\n");
 
         hero.remove(new Forces(pt(2, 3), 1));
-        game.tick();
+        field.tick();
 
         assertE("------" +
                 "------" +
@@ -3451,7 +2671,7 @@ public class ExpansionTest {
         // when
         // cant get hidden gold
         hero.move(new ForcesMoves(pt(1, 3), 1, QDirection.RIGHT));
-        game.tick();
+        field.tick();
 
         // then
         assertEquals(12, hero.getForcesPerTick());
@@ -3485,7 +2705,8 @@ public class ExpansionTest {
 
         // when
         hero.reset();
-        game.tick();
+        frameworkShouldReloadLevel();
+        field.tick();
 
         // then
         assertL("      " +
@@ -3512,7 +2733,7 @@ public class ExpansionTest {
 
     private void ticks(int count) {
         for (int i = 0; i < count; i++) {
-            game.tick();
+            field.tick();
         }
     }
 
@@ -3583,7 +2804,7 @@ public class ExpansionTest {
                     new Forces(from, 1),
                     new ForcesMoves(from, 1, QDirection.RIGHT)
             );
-            game.tick();
+            field.tick();
         }
 
         // then
@@ -3644,14 +2865,14 @@ public class ExpansionTest {
                 new Forces(from, 1),
                 new ForcesMoves(from, 1, QDirection.DOWN)
         );
-        game.tick();
+        field.tick();
 
         from = pt(11, 17);
         hero.increaseAndMove(
                 new Forces(from, 1),
                 new ForcesMoves(from, 1, QDirection.RIGHT)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertL("════════════════" +
@@ -3713,7 +2934,7 @@ public class ExpansionTest {
                     new Forces(from, 1),
                     new ForcesMoves(from, 1, QDirection.RIGHT)
             );
-            game.tick();
+            field.tick();
         }
 
         // then
@@ -3774,7 +2995,7 @@ public class ExpansionTest {
                 new Forces(from, 1),
                 new ForcesMoves(from, 1, QDirection.DOWN)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertL("════════════════" +
@@ -3835,7 +3056,7 @@ public class ExpansionTest {
                     new Forces(from, 1),
                     new ForcesMoves(from, 1, QDirection.DOWN)
             );
-            game.tick();
+            field.tick();
         }
 
         assertL("..│  ║.........." +
@@ -3896,7 +3117,7 @@ public class ExpansionTest {
                     new Forces(from, 1),
                     new ForcesMoves(from, 1, QDirection.LEFT)
             );
-            game.tick();
+            field.tick();
         }
 
         // then
@@ -4043,7 +3264,7 @@ public class ExpansionTest {
                 "└─────┘");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔═════┐" +
@@ -4083,7 +3304,7 @@ public class ExpansionTest {
                 "└─────┘");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔═════┐" +
@@ -4123,7 +3344,7 @@ public class ExpansionTest {
                 "└─────┘");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔═════┐" +
@@ -4163,7 +3384,7 @@ public class ExpansionTest {
                 "└─────┘");
 
         // when
-        game.tick();
+        field.tick();
 
         // then
         assertL("╔═════┐" +
@@ -4224,7 +3445,7 @@ public class ExpansionTest {
 
         // when
         hero.message("");
-        game.tick();
+        field.tick();
 
         // then
         verifyNoMoreInteractions(listener);
@@ -4278,7 +3499,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 1, QDirection.UP),
                 new ForcesMoves(pt(2, 2), 1, QDirection.DOWN)
         );
-        game.tick();
+        field.tick();
 
         assertE("-----" +
                 "-----" +
@@ -4318,7 +3539,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(1, 4), 9, QDirection.RIGHT_DOWN),
                 new ForcesMoves(pt(1, 4), 5, QDirection.RIGHT)
         ).send();
-        game.tick();
+        field.tick();
 
         // then
         assertE("------" +
@@ -4350,7 +3571,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(1, 3), 3, QDirection.RIGHT_DOWN),
                 new ForcesMoves(pt(1, 3), 3, QDirection.DOWN)
         ).send();
-        game.tick();
+        field.tick();
 
         // then
         assertE("------" +
@@ -4389,7 +3610,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(1, 2), 1, QDirection.RIGHT_DOWN),
                 new ForcesMoves(pt(1, 2), 1, QDirection.DOWN)
         ).send();
-        game.tick();
+        field.tick();
 
         // then
         assertE("------" +
@@ -4427,7 +3648,7 @@ public class ExpansionTest {
                 new ForcesMoves(pt(2, 2), 1, QDirection.DOWN),
                 new ForcesMoves(pt(2, 2), 1000, QDirection.DOWN)
         );
-        game.tick();
+        field.tick();
 
         // then
         assertE("-----" +
@@ -4461,7 +3682,7 @@ public class ExpansionTest {
 
             // when
             hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.LEFT));
-            game.tick();
+            field.tick();
 
             // then
             assertE("-------" +
@@ -4476,7 +3697,7 @@ public class ExpansionTest {
 
             // when
             hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.LEFT_UP));
-            game.tick();
+            field.tick();
 
             // then
             assertE("-------" +
@@ -4491,7 +3712,7 @@ public class ExpansionTest {
 
             // when
             hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.UP));
-            game.tick();
+            field.tick();
 
             // then
             assertE("-------" +
@@ -4506,7 +3727,7 @@ public class ExpansionTest {
 
             // when
             hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.RIGHT_UP));
-            game.tick();
+            field.tick();
 
             // then
             assertE("-------" +
@@ -4521,7 +3742,7 @@ public class ExpansionTest {
 
             // when
             hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.RIGHT));
-            game.tick();
+            field.tick();
 
             // then
             assertE("-------" +
@@ -4536,7 +3757,7 @@ public class ExpansionTest {
 
             // when
             hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.RIGHT_DOWN));
-            game.tick();
+            field.tick();
 
             // then
             assertE("-------" +
@@ -4551,7 +3772,7 @@ public class ExpansionTest {
 
             // when
             hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.DOWN));
-            game.tick();
+            field.tick();
 
             // then
             assertE("-------" +
@@ -4566,7 +3787,7 @@ public class ExpansionTest {
 
             // when
             hero.move(new ForcesMoves(pt(3, 3), 1, QDirection.LEFT_DOWN));
-            game.tick();
+            field.tick();
 
             // then
             assertE("-------" +

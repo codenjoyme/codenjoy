@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -19,8 +19,9 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var AdminSettings = function(contextPath, gameName, settingsName) {
-    var url = contextPath + '/settings/' + gameName + '/' + settingsName;
+
+var AdminAjax = function(contextPath, url) {
+    var url = contextPath + '/' + url;
 
     var load = function(onSuccess) {
         $.get(url, null, onSuccess, 'json');
@@ -43,3 +44,14 @@ var AdminSettings = function(contextPath, gameName, settingsName) {
         save : save
     }
 }
+
+var AdminSettings = function(contextPath, gameName, settingsName) {
+    var url = 'settings/' + gameName + '/' + settingsName;
+    var ajax = new AdminAjax(contextPath, url);
+
+    return {
+        load : ajax.load,
+        save : ajax.save
+    }
+}
+

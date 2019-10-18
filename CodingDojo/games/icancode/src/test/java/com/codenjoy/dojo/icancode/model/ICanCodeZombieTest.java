@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -265,6 +265,19 @@ public class ICanCodeZombieTest extends AbstractGameTest {
         game.newGame(player);
         game.tick();
         game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "--☺---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        game.tick();
 
         // then
         assertE("------" +
@@ -435,7 +448,14 @@ public class ICanCodeZombieTest extends AbstractGameTest {
         assertE("------" +
                 "------" +
                 "------" +
-                "--♀---" + // TODO тут плеер пропал, он над зомби летит
+                "--♀---" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "------" +
+                "------" +
+                "--*---" +
                 "------" +
                 "------");
 

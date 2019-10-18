@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2018 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<html lang="en">
+  <head>
+    <title>ICanCode : Rules</title>
+    <link href="../css/reset.css" rel="stylesheet" />
+    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="../fonts/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="css/landing-style.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <script src="js/jquery/jquery-3.1.0.min.js"></script>
+    <script src="js/plugins-scroll.js"></script>
+    <script src="../css/bootstrap/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+          $('.dropdown-toggle').dropdown();
+            var url = '/codenjoy-contest/resources/icancode/registration.html';
+            $('.go-registration').click(function() {
+               window.location.href = url;
+            });
+
+          $('#logo').dblclick(function() {
+                var time = 256000;
+                var body = $("html, body");
+
+                body.animate({ scrollTop: $(document).height() }, time, 'linear');
+                setTimeout(function() {
+                    body.animate({scrollTop:0}, time, 'linear');
+                },time);
+                setInterval(function(){
+                    body.animate({ scrollTop: $(document).height() }, time, 'linear');
+                    setTimeout(function() {
+                        body.animate({scrollTop:0}, time, 'linear');
+                    },time);
+                },time*2);
+          });
+
+          $("#nav").on("click","a", function (event) {
+              event.preventDefault();
+              var id = $(this).attr('href'),
+              top = $(id).offset().top;
+              $('body,html').animate({scrollTop: top}, 1000);
+          });
+
+          try {
+              $.browserSelector();
+              if($("html").hasClass("chrome")) {
+                  $.smoothScroll();
+              }
+          } catch(err) {
+
+          };
+
+          $('#scrollup').mouseover( function(){
+              $( this ).animate({opacity: 0.8},100);
+          }).mouseout( function(){
+              $( this ).animate({opacity: 0.5},100);
+          }).click( function(){
+              window.scroll(0 ,0);
+              return false;
+          });
+
+          $(window).scroll(function(){
+              if ( $(document).scrollTop() > 0 ) {
+                  $('#scrollup').fadeIn('fast');
+              } else {
+                  $('#scrollup').fadeOut('fast');
+              }
+          });
+        });
+    </script>
+  </head>
+  <body>
+    <div class="wrapper wrapper-rules">
+      <div class="header-wrap">
+        <div class="container">
+        <header class="header row">
+          <div class="logo-container col-md-6 col-xs-12">
+            <div class="logo-dojo inline" href="#" title="DOJO"><img id="logo" src="img/dojo_logo.png"><span class="logo-title"><span class="text-uppercase after-line">Coding DOJO</span>iCanCode</span></div>
+          </div>
+          <h1 class="nav col-md-6 col-xs-12 text-right rules-title">
+            <div class="dropdown navbar-right" id="nav">
+              <div class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="rules dr">iCanCode</span> Rules<span class="caret"></span></div>
+               <ul class="dropdown-menu">
+                <li class="text-right"><a href="#overview">Game overview</a></li>
+                <li class="text-right"><a href="#core">Core robot methods</a></li>
+                <li class="text-right"><a href="#scanner">Core scanner methods</a></li>
+              </ul>
+            </div>
+          </h1>
+        </header>
+      </div>
+      </div>
+      
+       <section class="section rules-section">
+        <div class="container">
+          <h1 class="title text-uppercase">What you should know about the game?</h1>
+          <a id="overview"></a>
+          <h2 class="subtitle text-uppercase">game overview</h2>
+
+            <p>Robot asks for new orders every second. He should know where to go.
+Help him to collect gold and bring it to finish point - write program and win the contest.
+Send program to Robot by clicking the <button class="button commit">Commit</button> button.
+If something is wrong - check Robot message in the Console.
+You can always stop the program by clicking the <button class="button reset">Reset</button> button.</p>
+          <p>The code looks like the below and will be executed each step (every second):</p>
+              <pre>function program(robot) {
+    // enter yor code here
+}</pre>
+
+          <p>Robot can detect walls and other obstacles with help of Scanner. To use scanner it is necessary to execute the following code:</p>
+          <pre>function program(robot) {
+    var scanner = robot.getScanner();
+    if (scanner.at("RIGHT") != "WALL") {
+        robot.go("RIGHT");
+    };
+}</pre>
+
+        <p>Board can contain the following objects:</p>
+        <ul class="list">
+            <li><span class="list-values text-uppercase">start</span> - <span class="list-values">Starting point. Rebirth place.</span></li>
+            <li><span class="list-values text-uppercase">exit</span> - <span class="list-values"> Finishing point. Bring money here.</span></li>
+            <li><span class="list-values text-uppercase">wall</span> - <span class="list-values"> Board border. It's impossible to jump over it</span></li>
+            <li><span class="list-values text-uppercase">hole</span> - <span class="list-values"> Hole on the floor. Robot will die, if he steps on it. </span></li>
+            <li><span class="list-values text-uppercase">box</span> - <span class="list-values"> A barrier which can be moved. Robot can jump over it. </span></li>
+            <li><span class="list-values text-uppercase">gold</span> - <span class="list-values"> You should collect it and bring to finish point.</span></li>
+            <li><span class="list-values text-uppercase">my_robot</span> - <span class="list-values"> It's  your robot. Help him to collect gold and bring it to finish point.</span></li>
+            <li><span class="list-values text-uppercase">zombie</span> - <span class="list-values"> This is zombie.</span></li>
+            <li><span class="list-values text-uppercase">other_robot</span> - <span class="list-values"> Other players' robot</span></li>
+            <li><span class="list-values text-uppercase">laser_machine</span> - <span class="list-values">Laser machine produces laser beams which can kill robots if intersect  him.</span></li>
+            <li><span class="list-values text-uppercase">laser_machine_ready</span> - <span class="list-values"> In this state laser tells you that next tick it will issue a deadly beam.</span></li>
+            <li><span class="list-values text-uppercase">laser_left</span> - <span class="list-values"> Laser beam is moving left.</span></li>
+            <li><span class="list-values text-uppercase">laser_right</span> - <span class="list-values"> Laser beam is moving right. </span></li>
+            <li><span class="list-values text-uppercase">laser_up</span> - <span class="list-values"> Laser beam is moving up.</span></li>
+            <li><span class="list-values text-uppercase">laser_down</span> - <span class="list-values"> Laser beam is moving down.</span></li>
+        </ul>
+
+        <p>Robot can walk, jump over holes and lasers and pull boxes with the following code:</p>
+          
+          <pre>robot.go("LEFT");
+robot.jump("RIGHT");
+robot.pull("UP");</pre>
+          <p>You can use this method to detect Elements throughout the world:</p>
+          
+          <pre>
+var scanner = robot.getScanner();
+var point = new Point(4, 8);
+if (scanner.at(point) == "HOLE") {
+    // some statement here
+}
+</pre>
+          <p>Coordinate {x:0, y:0} in the left-bottom corner of board.</p>
+          <p>To show data in console use the following code:</p>
+          <pre>
+var someVariable = "someData";
+robot.log(someVariable);</pre>
+            <p>Try this code for check Robot position.</p>
+            <pre>
+robot.log(scanner.getMe());</pre>
+          
+<!-- -----------------------------------------CORE ROBOT METHODS--------------------------------------------------- -->
+          <a id="core"></a>
+          <h2 class="subtitle text-uppercase">Core Robot methods</h2>
+          
+          <p><span class="func">function log(message)</span> - Logs message to console</p>
+          <pre>var message = 'some message';
+robot.log(message);</pre>
+          
+          <p><span class="func">function invert(direction)</span> - Returns inverted direction. Inverts UP to DOWN, RIGHT to LEFT, etc.</p>
+          <pre>assert robot.invert("UP") == "DOWN";
+assert robot.invert("LEFT") == "RIGHT";</pre>
+          
+          <p><span class="func">function cameFrom()</span> - Gets direction robot came from</p>
+          <pre>robot.go("UP");
+// next tick
+assert robot.cameFrom() == "DOWN";</pre>
+          
+          <p><span class="func">function previousDirection()</span> - Gets direction robot goes to</p>
+          <pre>robot.go("UP");
+// next tick
+assert robot.previousDirection() == "UP";</pre>
+          
+          <p><span class="func">function go(direction)</span> - Go to the direction specified. There are 4 corresponding functions for each direction: goLeft, goRight, goUp, goDown.</p>
+          <pre>robot.go("LEFT");
+// robot will go up
+// the same about jump and pull
+// robot.jump("RIGHT");
+// robot.pull("UP");</pre>
+          <p><span class="func">function jump(direction)</span> - Jumps to direction specified. Jumps over a barrier in direction specified. It takes 2 ticks. After that robot moves on 2 cells on the direction.  It is impossible to jump over multiple  barriers in the row. There are 4 corresponding functions for each direction: jumpLeft, jumpRight, jumpUp, jumpDown.</p>
+          <pre>robot.jump("RIGHT");</pre>
+          
+          <p><span class="func">function pull(direction)</span> - Pulls/pushes the box to the direction. It is possible to move the box only forward or backward, “side pulling” is not allowed.  There are 4 corresponding functions for each direction: pullLeft, pullRight, pullUp, pullDown.</p>
+          <pre>robot.pull("UP");</pre>
+
+          <p><span class="func">function fire(direction)</span> - Shoot in a given direction. There are 4 corresponding functions for each direction: fireLeft, fireRight, fireUp, fireDown.</p>
+          <pre>robot.fire("DOWN");</pre>
+
+          <p><span class="func">function getMemory()</span> - Object helps to store/transfer key/value data between moves/ticks, contains the following methods:</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function has(key)</span> - Check if data/value with key specified exist</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function save(key, value)</span> - Saves value with key specified</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function remove(key)</span> - Removes data/value by key</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function load(key)</span> - Gets data/value by key</p>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">function clean()</span> - Removes all the data</p>
+          <pre>var memory = robot.getMemory();
+assert memory.has("key") == false;
+memory.save("key", "value");
+memory.save("key2", "value2");
+assert memory.load("key") == "value";
+assert memory.has("key") == true;
+memory.remove("key");
+assert memory.has("key") == false;
+assert memory.has("key2") == true;
+memory.clean();
+assert memory.has("key2") == false;</pre>
+          
+<!-- -----------------------------------------------------Core Scanner methods--------------------------------------------- -->
+          <a id="scanner"></a>
+          <h2 class="subtitle text-uppercase">Core Scanner methods</h2>
+          
+          <p><span class="func">function at(direction)</span> - Returns element at direction specified. There are 4 corresponding functions for each direction: atLeft, atRight, atUp, atDown.</p>
+          <pre>assert scanner.at("UP") == "HOLE";
+assert scanner.atLeft() == "WALL";
+assert scanner.atRight() == "BOX";
+assert scanner.atUp() == "HOLE";
+assert scanner.atDown() == "GOLD";</pre>
+
+            <p><span class="func">function at(point)</span> - Returns elements at the cell.</p>
+            <pre>assert scanner.at(new Point(6, 2)) == "HOLE,OTHER_ROBOT";
+assert scanner.at(1, 2) == "START,MY_ROBOT";</pre>
+          
+          <p><span class="func">function atNearRobot(dx, dy)</span> - Returns element at the cell with coordinates</p>
+          <pre>var scanner = robot.getScanner();
+var xOffset = 1;
+var yOffset = -2;
+var element = "HOLE";
+assert scanner.atNearRobot(xOffset, yOffset) == element;</pre>
+
+          <p><span class="func">function getMe()</span> - Returns position of your robot ({x:0, y:0} is on left-bottom corner).</p>
+          <pre>var point = scanner.getMe();
+assert point.getX() == 7;
+assert point.getY() == 5;</pre>
+
+          <p><span class="func">function getScannerOffset()</span> - Returns position of your scanner inside map - distance between left-bottom corner of scanner and left-bottom corner of map  with coordinate {x:0, y:0}.</p>
+<pre>var point = scanner.getScannerOffset();
+assert point.getX() == 7;
+assert point.getY() == 5;</pre>
+          
+          <p><span class="func">function getAt(x, y)</span> - Returns element at position specified.</p>
+          <pre>scanner.getAt(12, 7) == ["START", "HERO"];</pre>
+          
+          <p><span class="func">function findAll(elementType)</span> - Returns all positions of element specified. What about fog of war?</p>
+          <pre>var points = scanner.findAll("HOLE");
+assert points == [new Point(5, 12), new Point(3, 7)];
+assert points[0].getX() == 5;
+assert points[0].getY() == 12;</pre>
+          
+          <p><span class="func">function isAt(x, y, elementType)</span> - Checks if position contains element with type specified.</p>
+          <pre>assert scanner.isAt(12, 7, "HOLE") == false;</pre>
+          
+          <p><span class="func">function isAnyOfAt(x, y, elementTypes)</span> - Checks if position contains any elements with types specified.</p>
+          <pre>assert scanner.isAnyOfAt(12, 7, ["HOLE", "START", "HERO"]) == false;</pre>
+          
+          <p><span class="func">function isNear(x, y, elementTypes)</span> - Checks if cells around {x,y} position contains any elements with types specified</p>
+          <pre>assert scanner.isNear(12, 7, ["HOLE", "START", "HERO"]) == true;
+assert scanner.isNear(12, 7, "HERO") == true;
+// near means: atLeft || atRight || atUp || atDown</pre>
+          
+          <p><span class="func">function isBarrierAt(x, y)</span> - Is it impossible to go (not jump) through the cell with {x,y} coordinates.</p>
+          <pre>assert scanner.isBarrierAt(12, 7) == false;</pre>
+          
+          <p><span class="func">function countNear(x, y, elementType)</span> - Returns count of elements with type specified around {x,y} point.</p>
+          <pre>assert scanner.countNear(12, 7, "HOLE") == 0;
+assert scanner.countNear(12, 7, "BOX") == 3;</pre>
+          
+          <p><span class="func">function isMyRobotAlive()</span> - Checks if your robot is alive</p>
+          <pre>assert scanner.isMyRobotAlive() = true; </pre>
+          
+          <p><span class="func">function getElements()</span> - Returns list of element types.</p>
+          <pre>assert scanner.getElements() == ['NONE', 'WALL', 'MY_ROBOT', 'OTHER_ROBOT',
+'LASER_MACHINE', 'LASER_MACHINE_READY',
+'LASER_LEFT', 'LASER_RIGHT', 'LASER_UP', 'LASER_DOWN',
+'START', 'EXIT', 'GOLD', 'HOLE', 'BOX']; </pre>
+
+          <p><span class="func">function getWholeBoard()</span> - Returns all elements on board. This is three-dimensional array [x][y][elements].</p>
+            <pre>assert scanner.getWholeBoard() ==
+[[['WALL'],['WALL'],['WALL'],['WALL']],
+[['WALL'],['START'],['HOLE','OTHER_ROBOT'],['WALL']],
+[['WALL'],['MY_ROBOT'],['GOLD'],['WALL']],
+[['WALL'],['WALL'],['WALL'],['WALL']]];</pre>
+          
+          <p><span class="func">function getOtherRobots()</span> - Returns list of coordinates for all visible enemy Robots. There are corresponding functions for each type of elements: getLaserMachines, getLasers, getWalls,  getBoxes,  getGold,  getStart,  getExit, getHoles</p>
+          
+          <pre>var points = scanner.getOtherRobots();
+assert points == [new Point(5, 12), new Point(3, 7)];
+assert points[0].getX() == 5;
+assert points[0].getY() == 12;</pre>
+          
+          <p><span class="func">function getShortestWay(to)</span> - Return shortest path (list of coordinates) from your robot location to coordinates specified.</p>
+          <pre>var destination = new Point(2, 4);
+var nextStep = scanner.getShortestWay(destination);
+assert nextStep[0].getX() = 3;
+assert nextStep[0].getY() = 4;</pre>
+
+          <p><span class="func">function getShortestWay(from, to)</span> - Return shortest path (list of coordinates) between two coordinates.</p>
+          <pre>var from = new Point(2, 4);
+var to = new Point(2, 4);
+var nextStep = scanner.getShortestWay(from, to);
+assert nextStep[0].getX() = 3;
+assert nextStep[0].getY() = 4;</pre>
+        </div>
+      </section>
+      
+      <footer class="footer">
+        <div class="container">
+          <nav class="footer-nav">
+            <ul class="footer-list inline">
+                <li class="footer-item inline"><a href="http://codenjoy.com" target="blank">About DOJO</a></li>
+                <li class="footer-item inline"><a href="https://github.com/codenjoyme/codenjoy" target="blank">Codenjoy on GitHub</a></li>
+                <li class="footer-item inline"><a href="mailto:codenjoyme@gmail.com" target="blank">Ask me anything</a></li>
+            </ul>
+      </nav>
+        </div>
+      </footer>
+    </div>
+    <div class="scroll-up" id="scrollup"><i class="fa fa-angle-up"></i></div>
+  </body>
+</html>

@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 public class WebSocketRunner implements Closeable {
 
     public static final String DEFAULT_USER = "apofig@gmail.com";
-    private static final String LOCAL = "127.0.0.1:8080";
+    private static final String LOCALHOST = "127.0.0.1";
     public static final String WS_URI_PATTERN = "%s://%s/%s/ws?user=%s&code=%s";
     public static final String BOARD_FORMAT = "^board=(.*)$";
     public static final Pattern BOARD_PATTERN = Pattern.compile(BOARD_FORMAT);
@@ -74,7 +74,8 @@ public class WebSocketRunner implements Closeable {
 
     public static WebSocketRunner runAI(String aiName, String code, Solver solver, ClientBoard board) {
         PRINT_TO_CONSOLE = false;
-        return run(UrlParser.WS_PROTOCOL, LOCAL, CodenjoyContext.get(), aiName, code, solver, board, 1);
+        return run(UrlParser.WS_PROTOCOL, LOCALHOST + ":" + CodenjoyContext.getPort(),
+                CodenjoyContext.getContext(), aiName, code, solver, board, 1);
     }
 
     private static WebSocketRunner run(String protocol,

@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -24,20 +24,32 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.interfaces.IField;
+import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import org.json.JSONObject;
 
 public class Player extends GamePlayer<Hero, IField> {
 
     Hero hero;
     private IField field;
+    private Printer<PrinterData> printer;
 
     public Player(EventListener listener) {
         super(listener);
+        setupPrinter();
+    }
+
+    private void setupPrinter() {
+        printer = new LayeredViewPrinter(
+                () -> field.layeredReader(),
+                () -> this,
+                Levels.COUNT_LAYERS);
     }
 
     public Hero getHero() {
@@ -72,10 +84,26 @@ public class Player extends GamePlayer<Hero, IField> {
         return field;
     }
 
+    // TODO test me
+    public boolean isLevelFinished() {
+        Hero hero = getHero();
+        Point exit = getField().getEndPosition();
+        return hero.getPosition().equals(exit) && !hero.isFlying();
+    }
+
+    // TODO test me
+    public Point getHeroOffset(Point offset) {
+        return getHero().getPosition().relative(offset);
+    }
+
+    public Printer<PrinterData> getPrinter() {
+        return printer;
+    }
+
     public class ICanCodeHeroData implements HeroData {
         @Override
         public Point getCoordinate() {
-            return new PointImpl(Player.this.getHero().getPosition());
+            return Player.this.getHero().getPosition().copy();
         }
 
         @Override
@@ -94,6 +122,5 @@ public class Player extends GamePlayer<Hero, IField> {
             result.put("hello", "world"); // TODO remove me :)
             return result;
         }
-
-    };
+    }
 }

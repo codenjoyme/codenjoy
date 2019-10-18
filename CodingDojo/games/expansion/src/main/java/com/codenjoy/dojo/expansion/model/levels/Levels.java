@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.model.levels;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -27,7 +27,7 @@ import com.codenjoy.dojo.expansion.model.Elements;
 import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.TestUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -36,7 +36,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by oleksandr.baglai on 18.06.2016.
@@ -45,20 +48,14 @@ public class Levels {
 
     private static Logger logger = DLoggerFactory.getLogger(Levels.class);
 
+    public static final int COUNT_LAYERS = 3;
+
     private static Map<String, String> levels = new LinkedHashMap<>();
 
     public static final String DEMO = make("DEMO");
-    public static final String MULTILOBBY = make("MULTILOBBY");
     public static final String BIG_MULTI1 = make("BIG_MULTI1");
-    public static final String BIG_MULTI2 = make("BIG_MULTI2");
     public static final List<String> MULTI = makeAll("MULTI%s");
-    public static final String SINGLE1 = make("SINGLE1");
-    public static final String SINGLE2 = make("SINGLE2");
-    public static final String SINGLE3 = make("SINGLE3");
-    public static final String SINGLE4 = make("SINGLE4");
-    public static final String SINGLE5 = make("SINGLE5");
-    public static final String SINGLE6 = make("SINGLE6");
-    public static final String SINGLE7 = make("SINGLE7");
+    public static final List<String> SINGLE = makeAll("SINGLE%s");
 
     private static String make(String name) {
         String level = loadFromFile(name);
@@ -134,13 +131,7 @@ public class Levels {
         return Files.newInputStream(new File(filePath).toPath());
     }
 
-    public static LevelsFactory collectSingle(int boardSize) {
-        return () -> collect(boardSize,
-                SINGLE1, SINGLE2, SINGLE3, SINGLE4,
-                SINGLE5, SINGLE6, SINGLE7);
-    }
-
-    public static LevelsFactory collectMultiple(int boardSize, String... levels) {
+    public static LevelsFactory collectLevels(int boardSize, List<String> levels) {
         return () -> collect(boardSize, levels);
     }
 
@@ -148,20 +139,17 @@ public class Levels {
         return () -> Arrays.asList();
     }
 
-    public static LevelsFactory collectYours(final int viewSize, final String... boards) {
-        return () -> {
-            List<Level> result = new LinkedList<>();
-            List<String> list = Arrays.asList(boards);
-            for (String board : list) {
-                String name = "level_" + Integer.toHexString(board.hashCode());
-                Level level = new LevelImpl(name, board, viewSize);
-                result.add(level);
-            }
-            return result;
-        };
+    public static List<Supplier<Level>> collectYours(final int viewSize, final String... boards) {
+        return Arrays.stream(boards)
+                .map(board -> {
+                    Supplier<Level> result = () -> new LevelImpl("level_" + Integer.toHexString(board.hashCode()),
+                                    board, viewSize);
+                    return result;
+                })
+                .collect(toList());
     }
 
-    private static List<Level> collect(int viewSize, String... names) {
+    private static List<Level> collect(int viewSize, List<String> names) {
         List<Level> result = new LinkedList<>();
         for (String name : names) {
             result.add(getLevel(viewSize, name));

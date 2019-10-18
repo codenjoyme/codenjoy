@@ -25,6 +25,7 @@ package com.codenjoy.dojo.expansion.model.replay;
 
 import com.codenjoy.dojo.expansion.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.nullobj.NullJoystick;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
@@ -44,7 +45,6 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Oleksandr_Baglai on 2017-09-22.
  */
-@Ignore("TODO: пофиксить создание игры")
 public class ReplayGameTest {
 
     @Test
@@ -61,31 +61,28 @@ public class ReplayGameTest {
         final String[] actualReplayName = {null};
         final String[] actualPlayerName = {null};
 
-        // TODO тут пришлось закомментить
-//        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}")){
-//            @Override
-//            protected LoggerReader getLoggerReader(String replayName, String playerName) {
-//                actualReplayName[0] = replayName;
-//                actualPlayerName[0] = playerName;
-//                return null;
-//            }
-//        };
+        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}")){
+            @Override
+            protected LoggerReader getLoggerReader(String replayName, String playerName) {
+                actualReplayName[0] = replayName;
+                actualPlayerName[0] = playerName;
+                return null;
+            }
+        };
         assertEquals("game-E@1e16c0aa-1", actualReplayName[0]);
         assertEquals("P@57bc27f5", actualPlayerName[0]);
     }
 
     @Test
     public void shouldNullJoystick() {
-        // TODO тут пришлось закомментить
-//        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}"));
-//        assertEquals(NullJoystick.INSTANCE, game.getJoystick());
+        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}"));
+        assertEquals(NullJoystick.INSTANCE, game.getJoystick());
     }
 
     @Test
     public void shouldIsGameOverFalse() {
-        // TODO тут пришлось закомментить
-//        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}"));
-//        assertEquals(false, game.isGameOver());
+        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}"));
+        assertEquals(false, game.isGameOver());
     }
 
 
@@ -276,52 +273,50 @@ public class ReplayGameTest {
 
     @NotNull
     private ReplayGame createGame(int startFrom) {
-        // TODO тут пришлось закомментить
-//        return new ReplayGame(new JSONObject("{'startFromTick':" + startFrom + ",'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}")){
-//                @Override
-//                protected LoggerReader getLoggerReader(String replayName, String playerName) {
-//                    return new LoggerReader() {
-//                        private boolean isOutOf(int tick) {
-//                            return tick < 0 || tick >= boards.size();
-//                        }
-//
-//                        @Override
-//                        public Map<String, JSONObject> getAllLastActions(int tick) {
-//                            if (isOutOf(tick)) {
-//                                return lobbyLastActions;
-//                            }
-//                            return lastActions.get(tick);
-//                        }
-//
-//                        @Override
-//                        public Map<String, JSONObject> getAllBasePositions() {
-//                            return allBasePosition;
-//                        }
-//
-//                        @Override
-//                        public Point getBasePosition(int tick) {
-//                            if (isOutOf(tick)) {
-//                                return lobbyPt;
-//                            }
-//                            return basePositions.get(tick);
-//                        }
-//
-//                        @Override
-//                        public JSONObject getBoard(int tick) {
-//                            if (isOutOf(tick)) {
-//                                return lobbyBoard;
-//                            }
-//                            return boards.get(tick);
-//                        }
-//
-//                        @Override
-//                        public int size() {
-//                            return boards.size();
-//                        }
-//                    };
-//                }
-//            };
-        return null;
+        return new ReplayGame(new JSONObject("{'startFromTick':" + startFrom + ",'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}")){
+                @Override
+                protected LoggerReader getLoggerReader(String replayName, String playerName) {
+                    return new LoggerReader() {
+                        private boolean isOutOf(int tick) {
+                            return tick < 0 || tick >= boards.size();
+                        }
+
+                        @Override
+                        public Map<String, JSONObject> getAllLastActions(int tick) {
+                            if (isOutOf(tick)) {
+                                return lobbyLastActions;
+                            }
+                            return lastActions.get(tick);
+                        }
+
+                        @Override
+                        public Map<String, JSONObject> getAllBasePositions() {
+                            return allBasePosition;
+                        }
+
+                        @Override
+                        public Point getBasePosition(int tick) {
+                            if (isOutOf(tick)) {
+                                return lobbyPt;
+                            }
+                            return basePositions.get(tick);
+                        }
+
+                        @Override
+                        public JSONObject getBoard(int tick) {
+                            if (isOutOf(tick)) {
+                                return lobbyBoard;
+                            }
+                            return boards.get(tick);
+                        }
+
+                        @Override
+                        public int size() {
+                            return boards.size();
+                        }
+                    };
+                }
+            };
     }
 
     private void assertTick(ReplayGame game, int tick) {

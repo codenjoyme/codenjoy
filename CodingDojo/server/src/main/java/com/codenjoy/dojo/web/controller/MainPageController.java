@@ -29,8 +29,10 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +55,7 @@ public class MainPageController {
     private final Validator validator;
     private final ConfigProperties properties;
     private final RoomsAliaser rooms;
+    private final RegistrationService registrationService;
 
     @RequestMapping(value = "/help", method = RequestMethod.GET)
     public String help(Model model) {
@@ -70,16 +73,23 @@ public class MainPageController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getMainPage(HttpServletRequest request, Model model) {
+    public String getMainPage(HttpServletRequest request, Model model, Authentication authentication) {
         String mainPage = properties.getMainPage();
-        if (StringUtils.isEmpty(mainPage)) {
-            if (gameService.getGameNames().size() == 1) {
-                return "redirect:board";
-            }
-            return getMainPage(request, null, model);
-        } else {
+        if (StringUtils.isNotEmpty(mainPage)) {
             model.addAttribute("url", mainPage);
             return "redirect";
+        }
+
+        if (gameService.getGameNames().size() > 1) {
+            return getMainPage(request, null, model);
+        }
+
+        Registration.User principal = (Registration.User) authentication.getPrincipal();
+        // TODO если юзер не авторизирован, то надо вызвать борду со всеми пользователями
+        if (true) {
+            return "redirect:" + registrationService.getBoardUrl(principal.getCode(), principal.getId(), null);
+        } else {
+            return "redirect:board";
         }
     }
 

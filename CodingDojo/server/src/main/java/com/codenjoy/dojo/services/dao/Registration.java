@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
@@ -45,6 +46,7 @@ import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_ADMIN;
 import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_USER;
+import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
 
 public class Registration {
 
@@ -52,9 +54,11 @@ public class Registration {
 
     private CrudConnectionThreadPool pool;
     private PasswordEncoder passwordEncoder;
+    private ConfigProperties properties;
 
-    public Registration(ConnectionThreadPoolFactory factory, String adminEmail, String adminPassword, PasswordEncoder passwordEncoder, boolean initAdminUser) {
+    public Registration(ConnectionThreadPoolFactory factory, String adminEmail, String adminPassword, PasswordEncoder passwordEncoder, ConfigProperties properties, boolean initAdminUser) {
         this.passwordEncoder = passwordEncoder;
+        this.properties = properties;
         adminPassword = passwordEncoder.encode(adminPassword);
         List<String> initialScripts = new ArrayList<>();
         initialScripts.add("CREATE TABLE IF NOT EXISTS users (" +
@@ -103,6 +107,20 @@ public class Registration {
             throw new IllegalStateException("Found more than one user with " + details);
         }
         return count > 0;
+    }
+
+    public User register(String email, String readableName) {
+        String id = Hash.getRandomId();
+        String password = passwordEncoder.encode(randomAlphanumeric(properties.getAutoGenPasswordLen()));
+
+        User user = register(id, email, readableName,
+                password, "{}", GameAuthorities.USER.roles());
+
+        if (!properties.isEmailVerificationNeeded()) {
+            approve(user.getCode());
+        }
+
+        return user;
     }
 
     public User register(String id, String email, String readableName, String password, String data, String... roles) {
@@ -225,12 +243,16 @@ public class Registration {
                 new Object[]{1, code});
     }
 
-    public void updateName(String id, String name) {
+    public void updateReadableName(String id, String name) {
         pool.update("UPDATE users SET readable_name = ? WHERE id = ?;",
                 new Object[]{name, id});
     }
 
-    // TODO test me
+    public void updateId(String name, String id) {
+        pool.update("UPDATE users SET id = ? WHERE readable_name = ?;",
+                new Object[]{id, name});
+    }
+
     public void updateNameAndEmail(String id, String name, String email) {
         pool.update("UPDATE users SET readable_name = ?, email = ? WHERE id = ?;",
                 new Object[]{name, email, id});
@@ -286,8 +308,8 @@ public class Registration {
         });
     }
 
-    public Optional<User> getUserByEmail(String code) {
-        return pool.select("SELECT * FROM users where email = ?", new Object[] {code}, rs -> {
+    public Optional<User> getUserByEmail(String email) {
+        return pool.select("SELECT * FROM users where email = ?", new Object[] {email}, rs -> {
             if (!rs.next()) {
                 return Optional.empty();
             }

@@ -28,6 +28,8 @@ var printBoardOnTextArea = function(data) {
     textarea.value = data;
 }
 
+var cache = [];
+
 var printLogOnTextArea = function(data) {
     var textarea = document.getElementById("log-area");
     var addToEnd = document.getElementById("add-to-end");

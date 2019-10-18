@@ -92,6 +92,19 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SavedRequestAwa
 
         Registration.User principal = (Registration.User) authentication.getPrincipal();
         String gameName = obtainGameName(request, savedRequest);
+        // TODO #984 как воспроизвести чтобы понять зачем этот костыль нужен?
+        // Мы логинимся как нормальный юзер. Потом вылогиниваемся и снова
+        // залогиниваемся как админ и получаем тут ошибку. Почему? Потому
+        // что у нас в requestCache какого-то фига сохоанено с прошлого раза
+        // DefaultSavedRequest и мы пытаемся зайти как нормальный юзер
+        // но на форме логина не было выбрано игрушки потому что там стоит
+        // <c:if test="${not adminLogin}">. Как сделать так, чтобы после логаута
+        // из сессии удалялся DefaultSavedRequest я не разобрался, в том и туду,
+        // а пока тут повисит этот if. Надеюсь он нигде не стрельнет в делах обычных юзеров
+        if (gameName == null) {
+            getRedirectStrategy().sendRedirect(request, response, AdminController.URI);
+            return;
+        }
         String targetUrl = "/" + registrationService.register(principal.getId(),
                 principal.getCode(), gameName, request.getRemoteAddr());
 
@@ -109,6 +122,8 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SavedRequestAwa
         String gameName = ofNullable(queryParamGameName)
                 .orElse(loginFormGameName);
 
+        // TODO при первой загрузке если сразу залогиниться в админку то получаем gameName == null
+        // все потому что там на поле с играми стоит <c:if test="${not adminLogin}">
         log.debug("Game name was chosen: {}", gameName);
 
         return gameName;

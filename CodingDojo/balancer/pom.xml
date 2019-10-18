@@ -6,7 +6,7 @@
 
     <groupId>com.codenjoy</groupId>
     <artifactId>codenjoy-balancer</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <packaging>war</packaging>
 
     <parent>
@@ -28,7 +28,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javax-servlet-api.version>4.0.1</javax-servlet-api.version>
         <apache-jsp.version>9.4.15.v20190215</apache-jsp.version>
-        <jackson.version>2.9.8</jackson.version>
+        <jackson.version>2.9.9</jackson.version>
         <mail-api.version>1.6.2</mail-api.version>
         <json.version>20180813</json.version>
         <logback.version>1.2.3</logback.version>

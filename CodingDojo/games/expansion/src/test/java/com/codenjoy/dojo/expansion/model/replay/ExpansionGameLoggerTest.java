@@ -24,20 +24,17 @@ package com.codenjoy.dojo.expansion.model.replay;
 
 
 import com.codenjoy.dojo.expansion.model.Expansion;
-import com.codenjoy.dojo.expansion.model.Field;
+import com.codenjoy.dojo.expansion.model.IField;
 import com.codenjoy.dojo.expansion.model.Player;
-import com.codenjoy.dojo.expansion.model.ProgressBar;
+import com.codenjoy.dojo.expansion.model.Ticker;
 import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.LevelImpl;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
-import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.services.EventListener;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -55,7 +52,8 @@ public class ExpansionGameLoggerTest {
     public void shouldCallWhenRegisterPlayer() {
         // given
         GameLogger logger = mock(GameLogger.class);
-        Expansion expansion = new Expansion(getLevels(), null, logger, Expansion.MULTIPLE);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.MULTIPLE);
 
         // when
         Player player = createPlayer();
@@ -69,7 +67,8 @@ public class ExpansionGameLoggerTest {
     public void shouldNotCallWhenRegisterPlayerForSingleGame() {
         // given
         GameLogger logger = mock(GameLogger.class);
-        Expansion expansion = new Expansion(getLevels(), null, logger, Expansion.SINGLE);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.SINGLE);
 
         // when
         Player player = createPlayer();
@@ -80,8 +79,8 @@ public class ExpansionGameLoggerTest {
     }
 
     @NotNull
-    private List<Level> getLevels() {
-        return Arrays.asList(new LevelImpl("name", "                ", 4));
+    private Level getLevel() {
+        return new LevelImpl("name", "   1        2   ", 4);
     }
 
     @Test
@@ -90,7 +89,8 @@ public class ExpansionGameLoggerTest {
         GameLogger logger = mock(GameLogger.class);
 
         // when
-        Expansion expansion = new Expansion(getLevels(), null, logger, Expansion.MULTIPLE);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.MULTIPLE);
 
         // then
         verify(logger).start(expansion);
@@ -102,7 +102,8 @@ public class ExpansionGameLoggerTest {
         GameLogger logger = mock(GameLogger.class);
 
         // when
-        Expansion expansion = new Expansion(getLevels(), null, logger, Expansion.SINGLE);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.SINGLE);
 
         // then
         verifyNoMoreInteractions(logger);
@@ -112,8 +113,8 @@ public class ExpansionGameLoggerTest {
     public void shouldCallLogWhenTick() {
         // given
         GameLogger logger = mock(GameLogger.class);
-        Expansion expansion = new Expansion(getLevels(), null, logger, Expansion.MULTIPLE);
-        expansion.loadLevel(0);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.MULTIPLE);
         Player player = createPlayer();
         expansion.newGame(player);
         reset(logger);
@@ -129,8 +130,8 @@ public class ExpansionGameLoggerTest {
     public void shouldNotCallLogWhenTickForSingleGame() {
         // given
         GameLogger logger = mock(GameLogger.class);
-        Expansion expansion = new Expansion(getLevels(), null, logger, Expansion.SINGLE);
-        expansion.loadLevel(0);
+        Expansion expansion = new Expansion(getLevel(), mock(Ticker.class),
+                null, logger, Expansion.SINGLE);
         Player player = createPlayer();
         expansion.newGame(player);
         reset(logger);
@@ -144,15 +145,17 @@ public class ExpansionGameLoggerTest {
 
     @NotNull
     private Player createPlayer() {
-        return new Player(mock(EventListener.class), mock(ProgressBar.class), null) {
+        return new Player(mock(EventListener.class), null) {
             @Override
-            public void newHero(Field field) {
-                setHero(new Hero(){
+            public void newHero(IField field) {
+                Hero hero = new Hero() {
                     @Override
                     public void tick() {
                         // do nothing
                     }
-                });
+                };
+                hero.init(field);
+                setHero(hero);
             }
 
             @Override

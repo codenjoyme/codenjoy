@@ -66,7 +66,7 @@ public class GameServiceImpl implements GameService {
         remove(result,
                 it -> ConstructorUtils.getMatchingAccessibleConstructor(it) == null);
 
-        remove(result, it -> Stream.of("chess", "sokoban", "expansion")
+        remove(result, it -> Stream.of("chess", "sokoban")
                 .anyMatch(name -> it.getPackage().toString().contains(name)));
 
         return result;
@@ -83,16 +83,16 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Set<String> getGameNames() {
-        return cache.keySet();
+    public List<String> getGameNames() {
+        return new LinkedList<>(cache.keySet());
     }
 
     // TODO test me
     @Override
-    public Set<String> getOnlyGameNames() {
+    public List<String> getOnlyGameNames() {
         return getGameNames().stream()
                 .map(GameServiceImpl::removeNumbers)
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     public static String removeNumbers(String gameName) {
@@ -129,5 +129,10 @@ public class GameServiceImpl implements GameService {
         }
 
         return NullGameType.INSTANCE;
+    }
+
+    @Override
+    public String getDefaultGame() {
+        return getGameNames().iterator().next();
     }
 }

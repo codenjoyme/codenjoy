@@ -1,0 +1,136 @@
+.formWrap {
+    max-width: 486px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    font-family: 'Museo Sans Cyrl';
+}
+
+.title {
+    font-size: 20px;
+    text-align: left;
+    color: var(--title-bg-color);
+    padding: 21px;
+    border-bottom: 2px solid var(--primary-color);
+    background: var(--block-bg-color);
+    font-weight: 500;
+}
+
+.backgroundSection {
+    background: var(--block-bg-color);
+    padding: 24px;
+}
+
+.backgroundSection :last-child {
+    margin-bottom: 0;
+}
+
+.inputWrap {
+    position: relative;
+    margin-bottom: 47px;
+}
+
+.input {
+    display: inline-block;
+    width: calc(100% - 30px);
+    line-height: 16px;
+    border: 1px solid var(--primary-color);
+    font-size: 12px;
+    padding: 15px;
+    background: var(--main-bg-color);
+    color: var(--title-bg-color);
+}
+
+.inputError {
+    border: 1px solid #d35d47;
+}
+
+.inputValid {
+    border: 1px solid #cedb56;
+}
+
+.inputIcon {
+    position: absolute;
+    top: 13px;
+    right: 13px;
+    font-size: 24px;
+}
+
+.input:focus {
+    outline: none;
+}
+
+.submit:focus {
+    outline: none;
+}
+
+.submit {
+    display: inline-block;
+    width: 100%;
+    font-size: 15px;
+    text-transform: uppercase;
+    padding: 23px 20px;
+    background: #255465;
+    border: none;
+    color: #668793;
+    cursor: pointer;
+    font-family: 'Museo Sans Cyrl';
+}
+
+.selectWrap {
+    margin-bottom: 47px;
+    color: var(--title-bg-color);
+}
+
+.select {
+    border: 1px solid var(--primary-color);
+}
+
+.selectError {
+    border: 1px solid #d35d47;
+}
+
+.selectValid {
+    border: 1px solid #cedb56;
+}
+
+.checkBox {
+    display: none;
+}
+
+.checkBoxIcon {
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.checkBoxWrap {
+    padding: 21px 25px;
+    display: flex;
+    align-items: center;
+}
+
+.checkBoxItem {
+    cursor: pointer;
+}
+
+.checkBoxLabel {
+    color: var(--title-bg-color);
+    font-size: 12px;
+    text-decoration: underline;
+    font-weight: 300;
+    cursor: pointer;
+}
+
+.systemError {
+    padding: 24px 24px 0;
+    background: var(--block-bg-color);
+    font-size: 16px;
+    font-weight: 200;
+    color: var(--primary-color);
+}
+
+.systemError img {
+    margin-bottom: 22px;
+}

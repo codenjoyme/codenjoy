@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.services;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -27,69 +27,64 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.expansion.client.Board;
 import com.codenjoy.dojo.expansion.client.ai.ApofigBotSolver;
-import com.codenjoy.dojo.expansion.model.Elements;
-import com.codenjoy.dojo.expansion.model.MultipleGameFactory;
-import com.codenjoy.dojo.expansion.model.Single;
-import com.codenjoy.dojo.expansion.model.Ticker;
+import com.codenjoy.dojo.expansion.model.*;
+import com.codenjoy.dojo.expansion.model.levels.Level;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
-import com.codenjoy.dojo.expansion.model.lobby.PlayerLobby;
-import com.codenjoy.dojo.expansion.model.replay.ReplayGame;
+import com.codenjoy.dojo.expansion.model.levels.LevelsFactory;
+import com.codenjoy.dojo.expansion.model.replay.GameLoggerImpl;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * Генератор игор - реализация {@see GameType}
- * Обрати внимание на {@see GameRunner#SINGLE} - там реализовано переключение в режимы "все на одном поле"/"каждый на своем поле"
- */
 public class GameRunner extends AbstractGameType implements GameType  {
 
     private static Logger logger = DLoggerFactory.getLogger(GameRunner.class);
 
     private Dice dice;
-    private MultipleGameFactory gameFactory;
-    private Ticker ticker;
     private int size;
-    protected PlayerLobby lobby;
-    protected List<Game> games;
+    private LevelsFactory singleLevels;
+    private LevelsFactory multipleLevels;
 
     public GameRunner() {
         SettingsWrapper.setup(settings);
 
-        ticker = new Ticker();
-        dice = new RandomDice();
-        games = new LinkedList<>();
+        dice = getDice();
     }
 
     private void initGameFactory() {
-        if (gameFactory == null || settings.changed()) {
+        if (singleLevels == null || settings.changed()) {
             settings.changesReacted();
 
             size = SettingsWrapper.data.boardSize();
-            gameFactory = new MultipleGameFactory(dice,
-                    Levels.collectSingle(SettingsWrapper.data.boardSize()),
-                    Levels.collectMultiple(SettingsWrapper.data.boardSize(),
-                            SettingsWrapper.data.levels().toArray(new String[0]))
-            );
-            loadAnotherLobby();
+
+            singleLevels = Levels.collectLevels(SettingsWrapper.data.boardSize(),
+                    SettingsWrapper.data.singleLevels());
+
+            multipleLevels = Levels.collectLevels(SettingsWrapper.data.boardSize(),
+                    SettingsWrapper.data.multipleLevels());
         }
     }
 
-    private void loadAnotherLobby() {
-        PlayerLobby newLobby = SettingsWrapper.data.getPlayerLobby(gameFactory);
-        if (lobby != null) {
-            lobby.saveStateTo(newLobby);
+    @Override
+    public MultiplayerType getMultiplayerType() {
+        initGameFactory();
+        if (SettingsWrapper.data.singleTrainingMode()) {
+            return MultiplayerType.TRAINING.apply(singleLevels.get().size());
+        } else {
+            return MultiplayerType.QUADRO;
         }
-        lobby = newLobby;
     }
 
     @Override
@@ -99,37 +94,48 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public GameField createGame(int levelNumber) {
-        return null; // TODO разрулить как-то это все
-    }
-
-    public Game newGame(EventListener listener, PrinterFactory factory, String save, String playerName) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Starting new game with save {}", save);
+            logger.debug("Creating GameField for {}", levelNumber);
         }
+
         initGameFactory();
 
-        Game game = null;
-        if (!ReplayGame.isReplay(save)) {
-            boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
-            if (!isTrainingMode) {
-                int total = SettingsWrapper.data.totalSingleLevels();
-                save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
+        if (SettingsWrapper.data.singleTrainingMode()) {
+            boolean isSingle = levelNumber < getMultiplayerType().getLevelsCount();
+            if (isSingle) {
+                Level level = singleLevels.get().get(levelNumber);
+                return new Expansion(level, new Ticker(), dice,
+                        new GameLoggerImpl(), Expansion.SINGLE);
             }
-
-            // TODO разрулить как-то это все
-//            game = new Single(gameFactory, () -> lobby, listener, factory, ticker, dice, save, playerName);
-            game.newGame();
-        } else {
-//            game = new ReplayGame(new JSONObject(save));
         }
 
-        games.add(game);
-        return game;
+        List<Level> levels = multipleLevels.get();
+        Level level = levels.get(dice.next(levels.size()));
+        return new Expansion(level, new Ticker(), dice,
+                new GameLoggerImpl(), Expansion.MULTIPLE);
     }
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerName) {
-        return null; // TODO разрулить как-то это все
+        if (logger.isDebugEnabled()) {
+            logger.debug("Creating GamePlayer for {}", playerName);
+        }
+
+        // TODO понять как достать тут сейв
+//        if (ReplayGame.isReplay(save)) {
+//            return new ReplayGame(new JSONObject(save));
+//        }
+
+//        String save = null;
+//        boolean isTrainingMode = false; // TODO load from game_settings via GameDataController
+//        if (!isTrainingMode) {
+//            int total = SettingsWrapper.data.singleLevels().size();
+//            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
+//        }
+
+        Player player = new Player(listener, playerName);
+
+        return player;
     }
 
     @Override
@@ -165,10 +171,38 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public void tick() {
         processAdminCommands();
         initGameFactory();
-        lobby.tick();
     }
 
     private void processAdminCommands() {
         new CommandParser(this).parse(settings);
+    }
+
+    @Override
+    public PrinterFactory getPrinterFactory() {
+        return PrinterFactory.get((BoardReader reader, Player player) -> {
+            PrinterData data = player.getPrinter().print();
+
+            JSONObject result = new JSONObject();
+            List<String> layers = data.getLayers();
+            String forces = layers.remove(2);
+            result.put("layers", layers);
+            result.put("forces", forces);
+            result.put("myBase", new JSONObject(player.getBasePosition()));
+            result.put("myColor", player.getForcesColor());
+            result.put("tick", player.getField().ticker());
+            result.put("round", player.getRoundTicks());
+            result.put("rounds", SettingsWrapper.data.roundTicks());
+            result.put("available", player.getForcesPerTick());
+            result.put("offset", new JSONObject(data.getOffset()));
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("getBoardAsString for player {} and field {} prepare {}",
+                        player.lg.id(),
+                        player.getField().id(),
+                        JsonUtils.toStringSorted(result));
+            }
+
+            return result;
+        });
     }
 }

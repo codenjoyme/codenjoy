@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -27,8 +27,7 @@
 
 var LengthToXY = function (boardSize) {
     var inversion = function (y) {
-        return y;
-//        return size - 1 - y; TODO думаю стоит проинвертировать y тут
+        return boardSize - 1 - y;
     }
 
     return {
@@ -47,11 +46,15 @@ var LengthToXY = function (boardSize) {
 
 var LAYER1 = 0;
 var LAYER2 = 1;
+var LAYER3 = 2;
 
 var Board = function (boardString) {
     var board = eval(boardString);
-    var layers = board.layers;
-    var size = Math.sqrt(layers[LAYER1].length);
+    var layersString = board.layers;
+    var scannerOffset = board.offset;
+    var heroPosition = board.heroPosition;
+    var levelFinished = board.levelFinished;
+    var size = Math.sqrt(layersString[LAYER1].length);
     var xyl = new LengthToXY(size);
 
     var parseLayer = function (layer) {
@@ -65,30 +68,10 @@ var Board = function (boardString) {
         return map;
     }
 
-    for (var index in layers) {
-        layers[index] = parseLayer(layers[index]);
+    var layers = [];
+    for (var index in layersString) {
+        layers.push(parseLayer(layersString[index]));
     }
-
-    var contains = function (a, obj) {
-        var i = a.length;
-        while (i--) {
-            if (a[i].equals(obj)) {
-                return true;
-            }
-        }
-        return false;
-    };
-
-    var removeDuplicates = function (all) {
-        var result = [];
-        for (var index in all) {
-            var point = all[index];
-            if (!contains(result, point)) {
-                result.push(point);
-            }
-        }
-        return result;
-    };
 
     var isAt = function (x, y, layer, element) {
         if (pt(x, y).isBad(size) || getAt(x, y, layer) == null) {
@@ -112,6 +95,35 @@ var Board = function (boardString) {
         }
         return result;
     };
+
+    var removeAllElements = function(array, element) {
+        var index;
+        while ((index = array.indexOf(element)) !== -1) {
+            array.splice(index, 1);
+        }
+        return array;
+    }
+
+    var getWholeBoard = function() {
+        var result = [];
+        for (var x = 0; x < size; x++) {
+            var arr = [];
+            result.push(arr);
+            for (var y = 0; y < size; y++) {
+                var cell = [];
+                cell.push(getAt(x, y, LAYER1).type);
+                cell.push(getAt(x, y, LAYER2).type);
+                cell.push(getAt(x, y, LAYER3).type);
+                removeAllElements(cell, 'NONE');
+                if (cell.length == 0) {
+                    cell.push('NONE');
+                }
+
+                arr.push(cell);
+            }
+        }
+        return result;
+    }
 
     var findAllElements = function (elements, layer) {
         var result = [];
@@ -147,7 +159,14 @@ var Board = function (boardString) {
     };
 
     var isBarrierAt = function (x, y) {
-        return contains(getBarriers(), pt(x, y));
+        if (!barriersMap) {
+            getBarriers();
+        }
+        return barriersMap[x][y];
+    };
+
+    var isWallAt = function (x, y) {
+        return getAt(x, y, LAYER1).type == 'WALL';
     };
 
     var countNear = function (x, y, layer, element) {
@@ -162,15 +181,10 @@ var Board = function (boardString) {
         return count;
     };
 
-    var getHero = function () {
-        var elements = [Element.ROBOT, Element.ROBOT_FALLING, Element.ROBOT_FLYING, Element.ROBOT_FLYING_ON_BOX, Element.ROBOT_LASER];
-        var result = findAllElements(elements, LAYER2);
-        return result[0];
-    };
-
     var getOtherHeroes = function () {
-        var elements = [Element.ROBOT_OTHER, Element.ROBOT_OTHER_FALLING, Element.ROBOT_OTHER_FLYING, Element.ROBOT_OTHER_FLYING_ON_BOX, Element.ROBOT_OTHER_LASER];
-        return findAllElements(elements, LAYER2);
+        var elements = [Element.ROBOT_OTHER, Element.ROBOT_OTHER_FALLING, Element.ROBOT_OTHER_LASER];
+        return findAllElements(elements, LAYER2)
+            .concat(findAll(Element.ROBOT_OTHER_FLYING, LAYER3));
     };
 
     var getLaserMachines = function () {
@@ -199,9 +213,7 @@ var Board = function (boardString) {
     };
 
     var getBoxes = function () {
-        return findAllElements([Element.BOX,
-            Element.ROBOT_FLYING_ON_BOX,
-            Element.ROBOT_OTHER_FLYING_ON_BOX], LAYER2);
+        return findAll(Element.BOX, LAYER2);
     };
 
     var getStart = function () {
@@ -225,32 +237,69 @@ var Board = function (boardString) {
     };
 
     var isMyRobotAlive = function () {
-        return layers[LAYER2].indexOf(Element.ROBOT_LASER.char) == -1 &&
-            layers[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
+        return layersString[LAYER2].indexOf(Element.ROBOT_LASER.char) == -1 &&
+            layersString[LAYER2].indexOf(Element.ROBOT_FALLING.char) == -1;
     };
 
-    var barriers = null; // TODO optimize this method
+    var barriers = null; // TODO еще разочек подумать над этим методом
+    var barriersMap = null;
     var getBarriers = function () {
         if (!!barriers) {
             return barriers;
         }
-        var all = getWalls();
-        all = all.concat(getLaserMachines());
-        all = all.concat(getBoxes());
-        barriers = removeDuplicates(all);
+
+        barriers = [];
+        barriersMap = Array(size);
+        for (var x = 0; x < size; x++) {
+            barriersMap[x] = new Array(size);
+            for (var y = 0; y < size; y++) {
+                var element1 = getAt(x, y, LAYER1);
+                var element2 = getAt(x, y, LAYER2);
+
+                barriersMap[x][y] = (
+                    element1.type == 'WALL' ||
+                    element1 == Element.HOLE ||
+                    element2 == Element.BOX ||
+                    !!element1.direction
+                );
+
+                if (barriersMap[x][y]) {
+                    barriers.push(pt(x, y));
+                }
+            }
+        }
         return barriers;
     };
 
+    var getFromArray = function(x, y, array, def) {
+        if (x < 0 || y < 0 || x >= size || y >= size) {
+            return def;
+        }
+        return array[x][y];
+    }
+
+    var isBarrier = function(x, y) {
+        return getFromArray(x, y, barriersMap, true);
+    }
+    
     var getShortestWay = function (from, to) {
         if (from.getX() == to.getX() && from.getY() == to.getY()) {
             return [from];
         }
+        if (!barriersMap) {
+            getBarriers();
+        }
+
         var mask = Array(size);
         for (var x = 0; x < size; x++) {
             mask[x] = new Array(size);
             for (var y = 0; y < size; y++) {
-                mask[x][y] = (isBarrierAt(x, y)) ? -1 : 0;
+                mask[x][y] = (isWallAt(x, y)) ? -1 : 0;
             }
+        }
+
+        var getMask = function(x, y) {
+            return getFromArray(x, y, mask, -1);
         }
 
         var current = 1;
@@ -278,22 +327,94 @@ var Board = function (boardString) {
 
         var done = false;
         while (!done) {
+            var maskToString = function() {
+                var string = '01234567890123456789\n';
+                for (var y = 0; y < size; y++) {
+                    for (var x = 0; x < size; x++) {
+                        if (mask[x][y] == -1) {
+                            var s = '*';
+                        } else if (mask[x][y] == 0) {
+                            if (getAt(x, y, LAYER1) == Element.HOLE) {
+                                var s = 'O';
+                            } else if (getAt(x, y, LAYER2) == Element.BOX) {
+                                var s = 'B';
+                            } else if (getAt(x, y, LAYER1) == Element.EXIT) {
+                                var s = 'E';
+                            } else {
+                                var s = ' ';
+                            }
+                        } else {
+                            var s = '' + mask[x][y];
+                        }
+                        if (s.length == 2) s = s[1];
+                        string += s;
+                    }
+                    string += ' ' + y + '\n';
+                }
+                string += '01234567890123456789\n';
+                console.log(string);
+            }
+            // s = 8;
+            // if (s == -1 || current >= s - 1 && current <= s) maskToString();
+
             for (var x = 0; x < size; x++) {
                 for (var y = 0; y < size; y++) {
                     if (mask[x][y] != current) continue;
 
                     comeRound(x, y, function (xx, yy) {
-                        if (mask[xx][yy] == 0) {
-                            mask[xx][yy] = current + 1;
-                            if (xx == to.getX() && yy == to.getY()) {
-                                done = true;
+                        if (getMask(xx, yy) == 0) {
+                            var dx = xx - x;
+                            var dy = yy - y;
+
+                            var px = x - dx;
+                            var py = y - dy;
+
+                            var fx = xx + dx;
+                            var fy = yy + dy;
+
+                            // путь px/py -> x/y -> xx/yy -> fx/fy
+
+                            var can = true;
+                            if (isBarrier(xx, yy) && isBarrier(fx, fy)) {
+                                can = false;
+                            }
+                            if (isBarrier(x, y)) {
+                                if (getMask(px, py) == -1) {
+                                    can = false;
+                                }
+                                if (isBarrier(xx, yy)) {
+                                    can = false;
+                                }
+                            }
+                            // if (s == -1 || current >= s - 1 && current < s) {
+                            //     console.log('px/py: ' + px + ' ' + py);
+                            //     console.log('x/y: ' + x + ' ' + y);
+                            //     console.log('xx/yy: ' + xx + ' ' + yy);
+                            //     console.log('fx/fy: ' + fx + ' ' + fy);
+                            //     console.log('mask[px][py]: ' + mask[px][py]);
+                            //     console.log('isBarrier(px, py): ' + isBarrier(px, py));
+                            //     console.log('isBarrier(x, y): ' + isBarrier(x, y));
+                            //     console.log('isBarrier(xx, yy): ' + isBarrier(xx, yy));
+                            //     console.log('isBarrier(fx, fy): ' + isBarrier(fx, fy));
+                            //     console.log(((can) ? '+' : '-') + (current + 1) + ": [" + x + ":" + y + "] -> [" + xx + ":" + yy + "]");
+                            // }
+
+                            if (can) {
+                                mask[xx][yy] = current + 1;
+                                if (xx == to.getX() && yy == to.getY()) {
+                                    done = true;
+                                }
                             }
                         }
                         return true;
                     });
                 }
             }
+
             current++;
+            if (current > 200) {
+                return [];
+            }
         }
         var point = to;
         done = false;
@@ -323,11 +444,15 @@ var Board = function (boardString) {
     var boardAsString = function (layer) {
         var result = "";
         for (var i = 0; i <= size - 1; i++) {
-            result += layers[layer].substring(i * size, (i + 1) * size);
+            result += layersString[layer].substring(i * size, (i + 1) * size);
             result += "\n";
         }
         return result;
     };
+
+    var getHero = function() {
+        return pt(heroPosition.x, heroPosition.y);
+    }
 
     // thanks http://jsfiddle.net/queryj/g109jvxd/
     String.format = function () {
@@ -345,20 +470,16 @@ var Board = function (boardString) {
     }
 
     var toString = function () {
-        return String.format(
-            "Board layer 1:\n{0}\n" +
-            "Board layer 2:\n{1}\n" +
-            "Robot at: {2}\n" +
-            "Other robots at: {3}\n" +
-            "LaserMachine at: {4}" +
-            "Laser at: {5}" +
-            boardAsString(LAYER1),
-            boardAsString(LAYER2),
-            getHero(),
-            printArray(getOtherHeroes()),
-            printArray(getLaserMachines()),
-            printArray(getLasers())
-        );
+        return "Board layer 1:\n" +
+            boardAsString(LAYER1) + "\n" +
+            "Board layer 2:\n" +
+            boardAsString(LAYER2) + "\n" +
+            "Board layer 3:\n" +
+            boardAsString(LAYER3) + "\n" +
+            "Robot at: " + getHero() + "\n" +
+            "Other robots at: " + printArray(getOtherHeroes()) + "\n" +
+            "LaserMachine at: " + printArray(getLaserMachines()) + "\n" +
+            "Laser at: " + printArray(getLasers()) + "";
     };
 
     return {
@@ -366,6 +487,9 @@ var Board = function (boardString) {
             return size;
         },
         getHero: getHero,
+        isLevelFinished: function() {
+            return levelFinished;
+        },
         getOtherHeroes: getOtherHeroes,
         getLaserMachines: getLaserMachines,
         getLasers: getLasers,
@@ -386,13 +510,20 @@ var Board = function (boardString) {
         layer2: function () {
             return boardAsString(LAYER2)
         },
+        layer3: function () {
+            return boardAsString(LAYER3)
+        },
+        getWholeBoard: getWholeBoard,
         getBarriers: getBarriers,
         findAll: findAll,
         isAnyOfAt: isAnyOfAt,
         isNear: isNear,
         isBarrierAt: isBarrierAt,
         countNear: countNear,
-        getShortestWay: getShortestWay
+        getShortestWay: getShortestWay,
+        getScannerOffset: function () {
+            return pt(scannerOffset.x, scannerOffset.y);
+        }
     };
 };
 

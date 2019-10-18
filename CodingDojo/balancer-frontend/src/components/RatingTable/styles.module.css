@@ -1,0 +1,79 @@
+.ratingTable {
+    color: rgb(161, 176, 187);
+}
+
+.rating {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.ratingGrid {
+    outline: none;
+}
+
+.ratingGrid::-webkit-scrollbar-track {
+    background-color: rgb(34, 34, 34);
+}
+
+.ratingGrid::-webkit-scrollbar {
+    width: 10px;
+}
+
+.ratingGrid::-webkit-scrollbar-thumb {
+    background-color: rgb(48, 113, 137);
+}
+
+.ratingTable:focus,
+.row:focus,
+.selectedRow:focus {
+    outline: 0;
+}
+
+.ratingTable .row,
+.ratingTable .selectedRow,
+.ratingTable .ownRow {
+    background-color: rgb(25, 36, 51);
+    box-sizing: border-box;
+}
+
+.ratingTable .ownRow {
+    background-color: rgb(48, 113, 137);
+}
+
+.ratingTable .selectedRow {
+    border-top: 1.5px solid rgb(65, 199, 220);
+    border-bottom: 1.5px solid rgb(65, 199, 220);
+}
+
+.ratingTable .selectedRow:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-top: 20px solid rgb(65, 199, 220);
+    border-left: 20px solid rgb(25, 36, 51);
+    width: 0;
+}
+
+.ratingTable .ownRow:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-top: 20px solid rgb(65, 199, 220);
+    border-left: 20px solid rgb(48, 113, 137);
+    width: 0;
+}
+
+.ratingTable .header {
+    background-color: rgb(34, 34, 34);
+    box-sizing: border-box;
+    padding: 2px;
+    text-transform: none;
+}
+
+.ratingColumn {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}

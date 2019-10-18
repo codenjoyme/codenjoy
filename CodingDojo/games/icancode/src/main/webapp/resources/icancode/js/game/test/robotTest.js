@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2016 - 2018 EPAM
  * %%
@@ -19,685 +19,969 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-assertEquals = function(expected, actual) {
-    expected = String(expected)
-    actual = String(actual)
-    if (expected !== actual) {
-        throw Error('Expected: "' + expected + '" but was: "' + actual + '"');
+var robotTest = function() {
+    toString = function (data) {
+        if (data === undefined || data == null) {
+            return data;
+        }
+        return JSON.stringify(data).split('"').join('\'');
     }
-}
 
-assertActions = function(expected, actual) {
-    assertEquals(expected, actual);
-    actual.length = 0;
-}
+    assertEquals = function (expected, actual) {
+        expected = toString(expected);
+        actual = toString(actual);
+        if (expected !== actual) {
+            console.log('Expected:');
+            console.log(expected);
 
-assertMoved = function(expectedCameFrom, expectedPrevious, wasMoved) {
-    if (!wasMoved) {
-        expectedCameFrom = "null";
-        expectedPrevious = "null";
+            console.log('Actual:');
+            console.log(actual);
+
+            throw Error('Expected: "' + expected + '" but was: "' + actual + '"');
+        }
     }
-    assertEquals(expectedCameFrom, robot.cameFrom());
-    assertEquals(expectedPrevious, robot.previousDirection());
-}
 
-assertCommand = function(name, wasMoved){
-    var upper = name.toUpperCase();
+    assertActions = function (expected, actual) {
+        assertEquals(expected, actual);
+        actual.length = 0;
+    }
 
-    robot[name]();
-    assertMoved("null", "null", false);
-    assertActions("clean,command[" + upper + "],wait", controllerActions);
+    assertMoved = function (expectedCameFrom, expectedPrevious, wasMoved) {
+        if (!wasMoved) {
+            expectedCameFrom = null;
+            expectedPrevious = null;
+        }
+        assertEquals(expectedCameFrom, robot.cameFrom());
+        assertEquals(expectedPrevious, robot.previousDirection());
+    }
 
-    robot[name]("UP");
-    assertMoved("DOWN", "UP", wasMoved);
-    assertActions("clean,command[" + upper + ",UP],wait", controllerActions);
+    assertCommand = function (name, wasMoved) {
+        var upper = name.toUpperCase();
 
-    robot[name]("LEFT");
-    assertMoved("RIGHT", "LEFT", wasMoved);
-    assertActions("clean,command[" + upper + ",LEFT],wait", controllerActions);
+        robot[name]();
+        assertMoved(null, null, false);
+        assertActions(['clean', 'command[' + upper + ']', 'wait'], controllerActions);
 
-    robot[name]("DOWN");
-    assertMoved("UP", "DOWN", wasMoved);
-    assertActions("clean,command[" + upper + ",DOWN],wait", controllerActions);
+        robot[name]('UP');
+        assertMoved('DOWN', 'UP', wasMoved);
+        assertActions(['clean', 'command[' + upper + ',UP]', 'wait'], controllerActions);
 
-    robot[name]("RIGHT");
-    assertMoved("LEFT", "RIGHT", wasMoved);
-    assertActions("clean,command[" + upper + ",RIGHT],wait", controllerActions);
+        robot[name]('LEFT');
+        assertMoved('RIGHT', 'LEFT', wasMoved);
+        assertActions(['clean', 'command[' + upper + ',LEFT]', 'wait'], controllerActions);
 
-    robot[name]("QWE");
-    assertActions("Unexpected direction value 'QWE' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'.", loggerActions);
-    assertMoved("LEFT", "RIGHT", wasMoved);
-    assertActions("", controllerActions);
+        robot[name]('DOWN');
+        assertMoved('UP', 'DOWN', wasMoved);
+        assertActions(['clean', 'command[' + upper + ',DOWN]', 'wait'], controllerActions);
 
-    robot[name]();
-    assertMoved("null", "null", false);
-    assertActions("clean,command[" + upper + "],wait", controllerActions);
+        robot[name]('RIGHT');
+        assertMoved('LEFT', 'RIGHT', wasMoved);
+        assertActions(['clean', 'command[' + upper + ',RIGHT]', 'wait'], controllerActions);
 
-    // jumpUp, jumpLeft, jumpDown, jumpRight
-    robot[name + "Up"]();
-    assertMoved("DOWN", "UP", wasMoved);
-    assertActions("clean,command[" + upper + ",UP],wait", controllerActions);
+        robot[name]('QWE');
+        assertActions(["Unexpected direction value 'QWE' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'."], loggerActions);
+        assertMoved('LEFT', 'RIGHT', wasMoved);
+        assertActions([], controllerActions);
 
-    robot[name + "Left"]();
-    assertMoved("RIGHT", "LEFT", wasMoved);
-    assertActions("clean,command[" + upper + ",LEFT],wait", controllerActions);
+        robot[name]();
+        assertMoved('null', 'null', false);
+        assertActions(['clean', 'command[' + upper + ']', 'wait'], controllerActions);
 
-    robot[name + "Down"]();
-    assertMoved("UP", "DOWN", wasMoved);
-    assertActions("clean,command[" + upper + ",DOWN],wait", controllerActions);
+        // jumpUp, jumpLeft, jumpDown, jumpRight
+        robot[name + 'Up']();
+        assertMoved('DOWN', 'UP', wasMoved);
+        assertActions(['clean', 'command[' + upper + ',UP]', 'wait'], controllerActions);
 
-    robot[name + "Right"]();
-    assertMoved("LEFT", "RIGHT", wasMoved);
-    assertActions("clean,command[" + upper + ",RIGHT],wait", controllerActions);
-}
+        robot[name + 'Left']();
+        assertMoved('RIGHT', 'LEFT', wasMoved);
+        assertActions(['clean', 'command[' + upper + ',LEFT]', 'wait'], controllerActions);
 
-resetMocks = function () {
-    robot.reset();
-    loggerActions.length = 0;
-    controllerActions.length = 0;
-}
+        robot[name + 'Down']();
+        assertMoved('UP', 'DOWN', wasMoved);
+        assertActions(['clean', 'command[' + upper + ',DOWN]', 'wait'], controllerActions);
 
-runTest = function() {
+        robot[name + 'Right']();
+        assertMoved('LEFT', 'RIGHT', wasMoved);
+        assertActions(['clean', 'command[' + upper + ',RIGHT]', 'wait'], controllerActions);
+    }
+
+    resetMocks = function () {
+        robot.reset();
+        loggerActions.length = 0;
+        controllerActions.length = 0;
+    }
+
     game = {};
+    var loggerActions = [];
+    var controllerActions = [];
 
-    loggerActions = [];
-    var logger = {
-        print : function(message) {
-            loggerActions.push(message);
-        }
-    };
+    runTest = function () {
+        var logger = {
+            print: function (message) {
+                loggerActions.push(message);
+            }
+        };
 
-    controllerActions = [];
-    var controller = {
-        commit : function() {
-            controllerActions.push('commit');
-        },
-        reset : function() {
-            controllerActions.push('reset');
-        },
-        onMessage : function() {
-            controllerActions.push('commit');
-        },
-        reconnect : function() {
-            controllerActions.push('reconnect');
-        },
-        cleanCommand : function() {
-            controllerActions.push('clean');
-        },
-        addCommand : function(command) {
-            controllerActions.push('command[' + command + ']');
-        },
-        waitCommand : function() {
-            controllerActions.push('wait');
-        },
-        winCommand : function() {
-            controllerActions.push('win');
-        }
-    };
+        var controller = {
+            commit: function () {
+                controllerActions.push('commit');
+            },
+            reset: function () {
+                controllerActions.push('reset');
+            },
+            onMessage: function () {
+                controllerActions.push('commit');
+            },
+            reconnect: function () {
+                controllerActions.push('reconnect');
+            },
+            cleanCommand: function () {
+                controllerActions.push('clean');
+            },
+            addCommand: function (command) {
+                controllerActions.push('command[' + command + ']');
+            },
+            waitCommand: function () {
+                controllerActions.push('wait');
+            },
+            winCommand: function () {
+                controllerActions.push('win');
+            }
+        };
 
-    board = 'board={"layers":["' +
-                        '╔═══════┐' + // 0
-                        '║S.$◄...│' + // 1
-                        '║....$O.│' + // 2
-                        '║.$E....│' + // 3
-                        '║˃..O...│' + // 4
-                        '║.O...Z.│' + // 5
-                        '║..˄....│' + // 6
-                        '║..˅˂▼►▲│' + // 7
-                        '└───────┘",' + // 8
-                      // 012345678
-                       '"---------' + // 0
-                        '--☺---^--' + // 1
-                        '-X----x--' + // 2
-                        '-X---B---' + // 3
-                        '--→B-↓%--' + // 4
-                        '-♂♂♀✝B---' + // 5
-                        '--&--↑←--' + // 6
-                        '---------' + // 7
-                        '---------"]}'; // 8
+        board = 'board={"offset":{"x":0,"y":0},' +
+            '"heroPosition":{"x":2,"y":1},' +
+            '"layers":["' +
+            '╔═══════┐' + // 0
+            '║S.$◄..O│' + // 1
+            '║....$O.│' + // 2
+            '║.$E....│' + // 3
+            '║˃..O...│' + // 4
+            '║.O...Z.│' + // 5
+            '║..˄....│' + // 6
+            '║..˅˂▼►▲│' + // 7
+            '└───────┘",' + // 8
+            // 012345678
+            '"---------' + // 0
+            '--☺----o-' + // 1
+            '-X----x☻-' + // 2
+            '-X---B---' + // 3
+            '--→B-↓B--' + // 4
+            '-♂♂♀✝B---' + // 5
+            '--&--↑←--' + // 6
+            '---------' + // 7
+            '---------",' + // 8
+            // 012345678
+            '"---------' + // 0
+            '------*--' + // 1
+            '---------' + // 2
+            '---------' + // 3
+            '------^--' + // 4
+            '---------' + // 5
+            '---------' + // 6
+            '---------' + // 7
+            '---------"' + // 8
+            ']}';
 
 
-    robot = initRobot(logger, controller);
-    var scanner = robot.getScanner();
+        robot = initRobot(logger, controller);
+        var scanner = robot.getScanner();
 
-    // --------- getScanner --------------
-    // at point
-    resetMocks();
+        // --------- board.getWholeBoard -----------
+        resetMocks();
 
-    assertEquals("GOLD",
-        scanner.at(new Point(2, 3)));
+        assertEquals([[['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL']],
+                [['WALL'], ['START'], ['OTHER_ROBOT'], ['OTHER_ROBOT'], ['LASER_MACHINE'], ['ZOMBIE'], ['NONE'], ['NONE'], ['WALL']],
+                [['WALL'], ['MY_ROBOT'], ['NONE'], ['GOLD'], ['LASER_RIGHT'], ['HOLE', 'ZOMBIE'], ['OTHER_ROBOT'], ['NONE'], ['WALL']],
+                [['WALL'], ['GOLD'], ['NONE'], ['EXIT'], ['BOX'], ['ZOMBIE'], ['LASER_MACHINE'], ['LASER_MACHINE'], ['WALL']],
+                [['WALL'], ['LASER_MACHINE_READY'], ['NONE'], ['NONE'], ['HOLE'], ['ZOMBIE_DIE'], ['NONE'], ['LASER_MACHINE'], ['WALL']],
+                [['WALL'], ['NONE'], ['GOLD'], ['BOX'], ['LASER_DOWN'], ['BOX'], ['LASER_UP'], ['LASER_MACHINE_READY'], ['WALL']],
+                [['WALL'], ['MY_ROBOT'], ['HOLE', 'OTHER_ROBOT'], ['NONE'], ['BOX', 'OTHER_ROBOT'], ['ZOMBIE_START'], ['LASER_LEFT'], ['LASER_MACHINE_READY'], ['WALL']],
+                [['WALL'], ['HOLE', 'MY_ROBOT'], ['MY_ROBOT'], ['NONE'], ['NONE'], ['NONE'], ['NONE'], ['LASER_MACHINE_READY'], ['WALL']],
+                [['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL']]],
+            scanner.getWholeBoard());
 
-    assertEquals("GOLD",
-        scanner.at(2, 3));
+        // --------- getScanner --------------
+        // at point
+        resetMocks();
 
-    assertEquals("OTHER_ROBOT",
-        scanner.at(new Point(1, 2)));
+        assertEquals(['GOLD'],
+            scanner.at(new Point(2, 3)));
 
-    assertEquals("OTHER_ROBOT",
-        scanner.at(1, 2));
+        assertEquals(['GOLD'],
+            scanner.at(2, 3));
 
-    assertEquals("HOLE,OTHER_ROBOT",
-        scanner.at(6, 2));
+        assertEquals(['OTHER_ROBOT'],
+            scanner.at(new Point(1, 2)));
 
-    assertEquals("OTHER_ROBOT,BOX",
-        scanner.at(6, 4));
+        assertEquals(['OTHER_ROBOT'],
+            scanner.at(1, 2));
 
-    assertEquals("OTHER_ROBOT", //TODO here also laser
-        scanner.at(2, 6));
+        assertEquals(['HOLE', 'OTHER_ROBOT'],
+            scanner.at(6, 2));
 
-    assertEquals(null,
-        scanner.at(null));
-    assertActions("Expected direction or point but was 'null' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'.", loggerActions);
+        assertEquals(['BOX', 'OTHER_ROBOT'],
+            scanner.at(6, 4));
 
-    assertEquals(null,
-        scanner.at());
-    assertActions("Expected direction or point but was 'undefined' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'.", loggerActions);
+        assertEquals(['OTHER_ROBOT'], //TODO here also laser
+            scanner.at(2, 6));
 
-    assertEquals(null,
-        scanner.at("QWE"));
-    assertActions("Expected direction or point but was 'QWE' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'.", loggerActions);
+        assertEquals(null,
+            scanner.at(null));
+        assertActions(["Expected direction or point but was 'null' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'."], loggerActions);
 
-    // at direction
-    resetMocks();
+        assertEquals(null,
+            scanner.at());
+        assertActions(["Expected direction or point but was 'undefined' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'."], loggerActions);
 
-    assertEquals("START",
-        scanner.at("LEFT"));
+        assertEquals(null,
+            scanner.at('QWE'));
+        assertActions(["Expected direction or point but was 'QWE' please use: 'UP', 'DOWN', 'LEFT', 'RIGHT' or 'new Point(x, y)'."], loggerActions);
 
-    assertEquals("WALL",
-        scanner.at("UP"));
+        // out of board
 
-    assertEquals("NONE",
-        scanner.at("DOWN"));
+        assertEquals(null,
+            scanner.at(0, -1));
+        assertActions(['Your point is out of board: [0,-1].'], loggerActions);
 
-    assertEquals("GOLD",
-        scanner.at("RIGHT"));
+        assertEquals(null,
+            scanner.at(new Point(9, 0)));
+        assertActions(['Your point is out of board: [9,0].'], loggerActions);
 
-    // atLeft, atRight, atUp, atDown
-    resetMocks();
+        // at direction
+        resetMocks();
 
-    assertEquals("START",
-        scanner.atLeft());
+        assertEquals(['START'],
+            scanner.at('LEFT'));
 
-    assertEquals("WALL",
-        scanner.atUp());
+        assertEquals(['WALL'],
+            scanner.at('UP'));
 
-    assertEquals("NONE",
-        scanner.atDown());
+        assertEquals(['NONE'],
+            scanner.at('DOWN'));
 
-    assertEquals("GOLD",
-        scanner.atRight());
+        assertEquals(['GOLD'],
+            scanner.at('RIGHT'));
 
-    // atNearRobot
-    resetMocks();
+        // atLeft, atRight, atUp, atDown
+        resetMocks();
 
-    assertEquals("OTHER_ROBOT",
-        scanner.atNearRobot(-1, 1));
+        assertEquals(['START'],
+            scanner.atLeft());
 
-    assertEquals(null,
-        scanner.atNearRobot());
-    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [].", loggerActions);
+        assertEquals(['WALL'],
+            scanner.atUp());
 
-    assertEquals(null,
-        scanner.atNearRobot("1", "2"));
-    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,2].", loggerActions);
+        assertEquals(['NONE'],
+            scanner.atDown());
 
-    assertEquals(null,
-        scanner.atNearRobot("ASD", "QWE", false));
-    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [ASD,QWE,false].", loggerActions);
+        assertEquals(['GOLD'],
+            scanner.atRight());
 
-    // getMe
-    resetMocks();
+        // atNearRobot
+        resetMocks();
 
-    assertEquals("[2,1]", scanner.getMe());
+        assertEquals(['OTHER_ROBOT'],
+            scanner.atNearRobot(-1, 1));
 
-    // TODO what if Hero not on board?
-    // TODO what if Hero is flying
-    // TODO ...or falling to hole
-    // TODO ...or die on laser?
+        assertEquals(['MY_ROBOT'], // мoй другой робот что летает LAYER3
+            scanner.atNearRobot(4, 0));
 
-    // isAt
-    resetMocks();
+        assertEquals(['BOX', 'OTHER_ROBOT'], // чужой робот, что летает LAYER3
+            scanner.atNearRobot(4, 3));
 
-    assertEquals(false,
-        scanner.isAt(2, 1, 'OTHER_ROBOT'));
+        assertEquals(null,
+            scanner.atNearRobot());
+        assertActions(["You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters []."], loggerActions);
 
-    assertEquals(true,
-        scanner.isAt(2, 1, 'MY_ROBOT'));
+        assertEquals(null,
+            scanner.atNearRobot('1', '2'));
+        assertActions(["You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,2]."], loggerActions);
 
-    assertEquals(false,
-        scanner.isAt(2, 1, ['MY_ROBOT', 'GOLD']));
-    assertEquals(true,
-        scanner.isAnyOfAt(2, 1, ['MY_ROBOT', 'GOLD']));
+        assertEquals(null,
+            scanner.atNearRobot('ASD', 'QWE', false));
+        assertActions(["You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [ASD,QWE,false]."], loggerActions);
 
-    assertEquals(true,
-        scanner.isAt(2, 1, ['MY_ROBOT', 'NONE']));
+        // out of board
 
-    assertEquals(false,
-        scanner.isAt(2, 1, ['OTHER_ROBOT', 'HOLE', "ZOMBIE"]));
+        assertEquals(null,
+            scanner.atNearRobot(0, -10));
+        assertActions(['Your point is out of board: [2,-9].'], loggerActions); // TODO немного вводит в заблуждение, передал: 0, -10, а в сообщении: 2,-9
 
-    assertEquals(false,
-        scanner.isAt(2, 1));
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,1].", loggerActions);
+        assertEquals(null,
+            scanner.atNearRobot(90, 0));
+        assertActions(['Your point is out of board: [92,1].'], loggerActions);
 
-    assertEquals(false,
-        scanner.isAt());
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [].", loggerActions);
+        // getMe
+        resetMocks();
 
-    assertEquals(false,
-        scanner.isAt(1, 2, [3, 4]));
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
+        assertEquals({'x': 2, 'y': 1}, scanner.getMe());
 
-    // getAt
-    resetMocks();
+        // TODO what if Hero not on board?
+        // TODO what if Hero is flying
+        // TODO ...or falling to hole
+        // TODO ...or die on laser?
 
-    assertEquals("MY_ROBOT",
-        scanner.getAt(2, 1));
+        // isAt
+        resetMocks();
 
-    assertEquals("NONE",
-        scanner.getAt(2, 2));
+        assertEquals(false,
+            scanner.isAt(2, 1, 'OTHER_ROBOT'));
 
-    assertEquals("EXIT",
-        scanner.getAt(3, 3));
+        assertEquals(true,
+            scanner.isAt(2, 1, 'MY_ROBOT'));
 
-    assertEquals("GOLD",
-        scanner.getAt(3, 1));
+        assertEquals(false,
+            scanner.isAt(2, 1, ['MY_ROBOT', 'GOLD']));
+        assertEquals(true,
+            scanner.isAnyOfAt(2, 1, ['MY_ROBOT', 'GOLD']));
 
-    assertEquals(null,
-        scanner.getAt());
-    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [].", loggerActions);
+        assertEquals(true,
+            scanner.isAt(2, 1, ['MY_ROBOT', 'NONE']));
 
-    assertEquals(null,
-        scanner.getAt("1", "HERO"));
-    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,HERO].", loggerActions);
+        assertEquals(false,
+            scanner.isAt(2, 1, ['OTHER_ROBOT', 'HOLE', 'ZOMBIE']));
 
-    // findAll
-    resetMocks();
+        assertEquals(true,
+            scanner.isAt(6, 1, ['MY_ROBOT'])); // мой летает на LAYER3
 
-    assertEquals("[2,3],[3,1],[5,2]",
-        scanner.findAll("GOLD"));
+        assertEquals(true,
+            scanner.isAt(6, 4, ['OTHER_ROBOT'])); // чужой летает на LAYER3
 
-    assertEquals("[2,3],[3,1],[5,2]",
-        scanner.findAll(["GOLD"]));
+        assertEquals(false,
+            scanner.isAt(2, 1));
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,1]."], loggerActions);
 
-    assertEquals("",
-        scanner.findAll([]));
+        assertEquals(false,
+            scanner.isAt());
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters []."], loggerActions);
 
-    assertEquals("[2,3],[3,1],[5,2],[1,1],[3,3]",
-        scanner.findAll(["GOLD","START","EXIT"]));
+        assertEquals(false,
+            scanner.isAt(1, 2, [3, 4]));
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4]."], loggerActions);
 
-    assertEquals(null,
+        // out of board
+
+        assertEquals(false,
+            scanner.isAt(-1, 0, 'MY_ROBOT'));
+        assertActions(['Your point is out of board: [-1,0].'], loggerActions);
+
+        assertEquals(false,
+            scanner.isAt(0, 9, 'MY_ROBOT'));
+        assertActions(['Your point is out of board: [0,9].'], loggerActions);
+
+        // getAt
+        resetMocks();
+
+        assertEquals(['MY_ROBOT'],
+            scanner.getAt(2, 1));
+
+        assertEquals(['NONE'],
+            scanner.getAt(2, 2));
+
+        assertEquals(['EXIT'],
+            scanner.getAt(3, 3));
+
+        assertEquals(['GOLD'],
+            scanner.getAt(3, 1));
+
+        assertEquals(['MY_ROBOT'],
+            scanner.getAt(6, 1));
+
+        assertEquals(['BOX', 'OTHER_ROBOT'],
+            scanner.getAt(6, 4));
+
+        assertEquals(null,
+            scanner.getAt());
+        assertActions(["You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters []."], loggerActions);
+
+        assertEquals(null,
+            scanner.getAt('1', 'HERO'));
+        assertActions(["You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,HERO]."], loggerActions);
+
+        // out of board
+
+        assertEquals(null,
+            scanner.getAt(-1, -1));
+        assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
+
+        assertEquals(null,
+            scanner.getAt(9, 9));
+        assertActions(['Your point is out of board: [9,9].'], loggerActions);
+
+        // findAll
+        resetMocks();
+
+        assertEquals([{'x': 2, 'y': 3}, {'x': 3, 'y': 1}, {'x': 5, 'y': 2}],
+            scanner.findAll('GOLD'));
+
+        assertEquals([{'x': 1, 'y': 2}, {'x': 1, 'y': 3}, {'x': 6, 'y': 2}, {'x': 6, 'y': 4}, {'x': 2, 'y': 6}],
+            scanner.findAll('OTHER_ROBOT'));
+
+        assertEquals([{'x': 2, 'y': 1}, {'x': 7, 'y': 1}, {'x': 6, 'y': 1}, {'x': 7, 'y': 2}],
+            scanner.findAll('MY_ROBOT'));
+
+        assertEquals([{'x': 1, 'y': 2}, {'x': 1, 'y': 3}, {'x': 6, 'y': 2}, {'x': 6, 'y': 4}, {'x': 2, 'y': 6}, {
+                'x': 2,
+                'y': 1
+            }, {'x': 7, 'y': 1}, {'x': 6, 'y': 1}, {'x': 7, 'y': 2}],
+            scanner.findAll(['OTHER_ROBOT', 'MY_ROBOT']));
+
+        assertEquals([{'x': 2, 'y': 3}, {'x': 3, 'y': 1}, {'x': 5, 'y': 2}],
+            scanner.findAll(['GOLD']));
+
+        assertEquals([],
+            scanner.findAll([]));
+
+        assertEquals([{'x': 2, 'y': 3}, {'x': 3, 'y': 1}, {'x': 5, 'y': 2}, {'x': 1, 'y': 1}, {'x': 3, 'y': 3}],
+            scanner.findAll(['GOLD', 'START', 'EXIT']));
+
+        assertEquals(null,
             scanner.findAll());
-    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [].", loggerActions);
+        assertActions(["You tried to call function(elements) where 'elements' is string or array of strings, with parameters []."], loggerActions);
 
-    assertEquals(null,
+        assertEquals(null,
             scanner.findAll(1, 2));
-    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1,2].", loggerActions);
+        assertActions(["You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1,2]."], loggerActions);
 
-    assertEquals(null,
+        assertEquals(null,
             scanner.findAll([1, 2]));
-    assertActions("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1,2].", loggerActions);
+        assertActions(["You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1,2]."], loggerActions);
 
-    // isAnyOfAt
-    resetMocks();
+        // isAnyOfAt
+        resetMocks();
 
-    assertEquals(false,
-        scanner.isAnyOfAt(2, 1, 'OTHER_ROBOT'));
+        assertEquals(false,
+            scanner.isAnyOfAt(2, 1, 'OTHER_ROBOT'));
 
-    assertEquals(true,
-        scanner.isAnyOfAt(2, 1, 'MY_ROBOT'));
+        assertEquals(true,
+            scanner.isAnyOfAt(6, 1, ['OTHER_ROBOT', 'MY_ROBOT']));
 
-    assertEquals(true,
-        scanner.isAnyOfAt(2, 1, ['MY_ROBOT', 'GOLD']));
-    assertEquals(false,
-        scanner.isAt(2, 1, ['MY_ROBOT', 'GOLD']));
+        assertEquals(true,
+            scanner.isAnyOfAt(6, 4, ['OTHER_ROBOT', 'MY_ROBOT']));
 
-    assertEquals(false,
-        scanner.isAnyOfAt(2, 1, ['OTHER_ROBOT', 'HOLE', "ZOMBIE"]));
+        assertEquals(true,
+            scanner.isAnyOfAt(2, 1, 'MY_ROBOT'));
 
-    assertEquals(false,
-        scanner.isAnyOfAt(2, 1));
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,1].", loggerActions);
+        assertEquals(true,
+            scanner.isAnyOfAt(2, 1, ['MY_ROBOT', 'GOLD']));
+        assertEquals(false,
+            scanner.isAt(2, 1, ['MY_ROBOT', 'GOLD']));
 
-    assertEquals(false,
-        scanner.isAnyOfAt());
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [].", loggerActions);
+        assertEquals(false,
+            scanner.isAnyOfAt(2, 1, ['OTHER_ROBOT', 'HOLE', 'ZOMBIE']));
 
-    assertEquals(false,
-        scanner.isAnyOfAt(1, 2, [3, 4]));
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
+        assertEquals(false,
+            scanner.isAnyOfAt(2, 1));
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,1]."], loggerActions);
 
-    // isNear
-    resetMocks();
+        assertEquals(false,
+            scanner.isAnyOfAt());
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters []."], loggerActions);
 
-    assertEquals(true,
-        scanner.isNear(2, 2, 'OTHER_ROBOT'));
+        assertEquals(false,
+            scanner.isAnyOfAt(1, 2, [3, 4]));
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4]."], loggerActions);
 
-    assertEquals(true,
-        scanner.isNear(2, 2, 'MY_ROBOT'));
+        // at corners
 
-    assertEquals(false,
-        scanner.isNear(2, 2, 'ZOMBIE'));
+        assertEquals(true,
+            scanner.isAnyOfAt(0, 0, 'WALL'));
 
-    assertEquals(false,
-        scanner.isNear(2, 2, ['ZOMBIE', 'HOLE']));
+        assertEquals(true,
+            scanner.isAnyOfAt(0, 8, ['OTHER_ROBOT', 'WALL']));
 
-    assertEquals(true,
-        scanner.isNear(2, 2, ['MY_ROBOT', 'GOLD']));
+        assertEquals(false,
+            scanner.isAnyOfAt(8, 0, 'GOLD'));
 
-    assertEquals(true,
-        scanner.isNear(2, 2, ['OTHER_ROBOT', 'HOLE', "ZOMBIE"]));
+        assertEquals(false,
+            scanner.isAnyOfAt(8, 8, ['GOLD', 'HOLE']));
 
-    assertEquals(false,
-        scanner.isNear(2, 2));
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,2].", loggerActions);
+        // outside of map
 
-    assertEquals(false,
-        scanner.isNear());
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [].", loggerActions);
+        assertEquals(false,
+            scanner.isAnyOfAt(-1, -1, 'WALL'));
+        assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
 
-    assertEquals(false,
-        scanner.isNear(1, 2, [3, 4]));
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
+        assertEquals(false,
+            scanner.isAnyOfAt(-1, 9, ['OTHER_ROBOT', 'WALL']));
+        assertActions(['Your point is out of board: [-1,9].'], loggerActions);
 
-    // isBarrierAt
-    resetMocks();
+        assertEquals(false,
+            scanner.isAnyOfAt(9, -1, 'GOLD'));
+        assertActions(['Your point is out of board: [9,-1].'], loggerActions);
 
-    assertEquals(false,
-        scanner.isBarrierAt(2, 2));
+        assertEquals(false,
+            scanner.isAnyOfAt(9, 9, ['GOLD', 'HOLE']));
+        assertActions(['Your point is out of board: [9,9].'], loggerActions);
 
-    assertEquals(true,
-        scanner.isBarrierAt(0, 0));
+        // isNear
+        resetMocks();
 
-    assertEquals(true,
-        scanner.isBarrierAt(0, 0));
+        assertEquals(true,
+            scanner.isNear(2, 2, 'OTHER_ROBOT'));
 
-    assertEquals(true,
-        scanner.isBarrierAt(3, 4));
+        assertEquals(true,
+            scanner.isNear(2, 2, 'MY_ROBOT'));
 
-    assertEquals(true,
-        scanner.isBarrierAt(4, 1));
+        assertEquals(false,
+            scanner.isNear(2, 2, 'ZOMBIE'));
 
-    assertEquals(false,
-        scanner.isBarrierAt());
-    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [].", loggerActions);
+        assertEquals(false,
+            scanner.isNear(2, 2, ['ZOMBIE', 'HOLE']));
 
-    assertEquals(false,
-        scanner.isBarrierAt("1", "2"));
-    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,2].", loggerActions);
+        assertEquals(true,
+            scanner.isNear(5, 1, ['OTHER_ROBOT', 'MY_ROBOT']));
 
-    assertEquals(false,
-        scanner.isBarrierAt("ASD", "QWE", false));
-    assertActions("You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [ASD,QWE,false].", loggerActions);
+        assertEquals(true,
+            scanner.isNear(5, 4, ['OTHER_ROBOT', 'MY_ROBOT']));
 
-    // countNear
-    resetMocks();
+        assertEquals(true,
+            scanner.isNear(2, 2, ['MY_ROBOT', 'GOLD']));
 
-    assertEquals(1,
-        scanner.countNear(2, 2, "GOLD"));
+        assertEquals(true,
+            scanner.isNear(2, 2, ['OTHER_ROBOT', 'HOLE', 'ZOMBIE']));
 
-    assertEquals(1,
-        scanner.countNear(2, 2, "MY_ROBOT"));
+        assertEquals(false,
+            scanner.isNear(2, 2));
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,2]."], loggerActions);
 
-    assertEquals(1,
-        scanner.countNear(2, 2, "OTHER_ROBOT"));
+        assertEquals(false,
+            scanner.isNear());
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters []."], loggerActions);
 
-    assertEquals(6, // TODO should be 3
-        scanner.countNear(3, 2, "NONE"));
+        assertEquals(false,
+            scanner.isNear(1, 2, [3, 4]));
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4]."], loggerActions);
 
-    assertEquals(2, // TODO should be 3
-            scanner.countNear(1, 1, "WALL"));
+        // out of board
 
-    assertEquals(false,
-        scanner.countNear(2, 2));
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,2].", loggerActions);
+        assertEquals(false,
+            scanner.isNear(-1, -1, 'GOLD'));
+        assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
 
-    assertEquals(false,
-        scanner.countNear());
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [].", loggerActions);
+        assertEquals(false,
+            scanner.isNear(9, 9, 'GOLD'));
+        assertActions(['Your point is out of board: [9,9].'], loggerActions);
 
-    assertEquals(false,
-        scanner.countNear(1, 2, [3, 4]));
-    assertActions("You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4].", loggerActions);
+        // isBarrierAt
+        resetMocks();
 
-    // getOtherRobots
-    resetMocks();
+        assertEquals(false,
+            scanner.isBarrierAt(2, 2));
 
-    assertEquals("[1,2],[1,3],[2,6],[6,1],[6,2],[6,4]",
-        scanner.getOtherRobots());
+        assertEquals(true,
+            scanner.isBarrierAt(0, 0));
 
-    // getLaserMachines
-    resetMocks();
+        assertEquals(true,
+            scanner.isBarrierAt(0, 0));
 
-    assertEquals("[1,4,RIGHT],[3,6,UP],[3,7,DOWN],[4,1,LEFT],[4,7,LEFT],[5,7,DOWN],[6,7,RIGHT],[7,7,UP]",
-        scanner.getLaserMachines());
+        assertEquals(true,
+            scanner.isBarrierAt(3, 4));
 
-    // getLasers
-    resetMocks();
+        assertEquals(true,
+            scanner.isBarrierAt(4, 1));
 
-    assertEquals("[2,4,RIGHT],[5,4,DOWN],[5,6,UP],[6,6,LEFT]",
-        scanner.getLasers());
+        assertEquals(false,
+            scanner.isBarrierAt());
+        assertActions(["You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters []."], loggerActions);
 
-    // getWalls
-    resetMocks();
+        assertEquals(false,
+            scanner.isBarrierAt('1', '2'));
+        assertActions(["You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [1,2]."], loggerActions);
 
-    assertEquals("[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[1,0],[1,8],[2,0],[2,8],[3,0],[3,8],[4,0],[4,8],[5,0],[5,8],[6,0],[6,8],[7,0],[7,8],[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,6],[8,7],[8,8]",
-        scanner.getWalls());
+        assertEquals(false,
+            scanner.isBarrierAt('ASD', 'QWE', false));
+        assertActions(["You tried to call function(x, y) where 'x' and 'y' are numbers, with parameters [ASD,QWE,false]."], loggerActions);
 
-    // getBoxes
-    resetMocks();
+        // out of board
 
-    assertEquals("[3,4],[5,3],[5,5],[6,4]",
-        scanner.getBoxes());
+        assertEquals(false,
+            scanner.isBarrierAt(-1, -1));
+        assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
 
-    // getGold
-    resetMocks();
+        assertEquals(false,
+            scanner.isBarrierAt(9, 9));
+        assertActions(['Your point is out of board: [9,9].'], loggerActions);
 
-    assertEquals("[2,3],[3,1],[5,2]",
-        scanner.getGold());
+        // countNear
+        resetMocks();
 
-    // getStart
-    resetMocks();
+        assertEquals(1,
+            scanner.countNear(2, 2, 'GOLD'));
 
-    assertEquals("[1,1]",
-        scanner.getStart());
+        assertEquals(1,
+            scanner.countNear(2, 2, 'MY_ROBOT'));
 
-    // getZombieStart
-    resetMocks();
+        assertEquals(0,
+            scanner.countNear(5, 1, ['OTHER_ROBOT']));
 
-    assertEquals("[6,5]",
-        scanner.getZombieStart());
+        assertEquals(1,
+            scanner.countNear(5, 1, ['MY_ROBOT']));
 
-    // getExit
-    resetMocks();
+        assertEquals(1,
+            scanner.countNear(5, 4, ['OTHER_ROBOT', 'MY_ROBOT']));
 
-    assertEquals("[3,3]",
-        scanner.getExit());
+        assertEquals(1,
+            scanner.countNear(2, 2, 'OTHER_ROBOT'));
 
-    // getHoles
-    resetMocks();
+        assertEquals(10, // TODO should be 3
+            scanner.countNear(3, 2, 'NONE'));
 
-    assertEquals("[2,5],[4,4],[6,2]",
-        scanner.getHoles());
+        assertEquals(2, // TODO should be 3
+            scanner.countNear(1, 1, 'WALL'));
 
-    // getBarriers
-    resetMocks();
+        assertEquals(0,
+            scanner.countNear(2, 2));
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [2,2]."], loggerActions);
 
-    assertEquals("[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[1,0],[1,8],[2,0],[2,8],[3,0],[3,8],[4,0],[4,8],[5,0],[5,8],[6,0],[6,8],[7,0],[7,8],[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,6],[8,7],[8,8],[1,4,RIGHT],[3,6,UP],[3,7,DOWN],[4,1,LEFT],[4,7,LEFT],[5,7,DOWN],[6,7,RIGHT],[7,7,UP],[3,4],[5,3],[5,5],[6,4]",
-        scanner.getBarriers());
+        assertEquals(0,
+            scanner.countNear());
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters []."], loggerActions);
 
-    // getElements
-    resetMocks();
+        assertEquals(0,
+            scanner.countNear(1, 2, [3, 4]));
+        assertActions(["You tried to call function(x, y, elements) where 'x' and 'y' are numbers, and 'elements' is string or array of strings, with parameters [1,2,3,4]."], loggerActions);
 
-    assertEquals("NONE,WALL,LASER_MACHINE,LASER_MACHINE_READY,START,EXIT,HOLE,BOX,ZOMBIE_START,GOLD,MY_ROBOT,OTHER_ROBOT,LASER_LEFT,LASER_RIGHT,LASER_UP,LASER_DOWN,ZOMBIE,ZOMBIE_DIE",
-        scanner.getElements());
+        // out of board
 
-    // getShortestWay
-    resetMocks();
+        assertEquals(0,
+            scanner.countNear(-1, -1, 'GOLD'));
+        assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
 
-    assertEquals("[2,1]",
+        assertEquals(0,
+            scanner.countNear(9, 9, 'GOLD'));
+        assertActions(['Your point is out of board: [9,9].'], loggerActions);
+
+        // getOtherRobots
+        resetMocks();
+
+        assertEquals([{'x': 1, 'y': 2}, {'x': 1, 'y': 3}, {'x': 2, 'y': 6}, {'x': 6, 'y': 2}, {'x': 6, 'y': 4}],
+            scanner.getOtherRobots());
+
+        // getLaserMachines
+        resetMocks();
+
+        assertEquals([{'x': 1, 'y': 4, 'direction': 'RIGHT'}, {'x': 3, 'y': 6, 'direction': 'UP'}, {
+                'x': 3,
+                'y': 7,
+                'direction': 'DOWN'
+            }, {'x': 4, 'y': 1, 'direction': 'LEFT'}, {'x': 4, 'y': 7, 'direction': 'LEFT'}, {
+                'x': 5,
+                'y': 7,
+                'direction': 'DOWN'
+            }, {'x': 6, 'y': 7, 'direction': 'RIGHT'}, {'x': 7, 'y': 7, 'direction': 'UP'}],
+            scanner.getLaserMachines());
+
+        // getLasers
+        resetMocks();
+
+        assertEquals([{'x': 2, 'y': 4, 'direction': 'RIGHT'}, {'x': 5, 'y': 4, 'direction': 'DOWN'}, {
+                'x': 5,
+                'y': 6,
+                'direction': 'UP'
+            }, {'x': 6, 'y': 6, 'direction': 'LEFT'}],
+            scanner.getLasers());
+
+        // getWalls
+        resetMocks();
+
+        assertEquals([{'x': 0, 'y': 0}, {'x': 0, 'y': 1}, {'x': 0, 'y': 2}, {'x': 0, 'y': 3}, {'x': 0, 'y': 4}, {
+                'x': 0,
+                'y': 5
+            }, {'x': 0, 'y': 6}, {'x': 0, 'y': 7}, {'x': 0, 'y': 8}, {'x': 1, 'y': 0}, {'x': 1, 'y': 8}, {
+                'x': 2,
+                'y': 0
+            }, {'x': 2, 'y': 8}, {'x': 3, 'y': 0}, {'x': 3, 'y': 8}, {'x': 4, 'y': 0}, {'x': 4, 'y': 8}, {
+                'x': 5,
+                'y': 0
+            }, {'x': 5, 'y': 8}, {'x': 6, 'y': 0}, {'x': 6, 'y': 8}, {'x': 7, 'y': 0}, {'x': 7, 'y': 8}, {
+                'x': 8,
+                'y': 0
+            }, {'x': 8, 'y': 1}, {'x': 8, 'y': 2}, {'x': 8, 'y': 3}, {'x': 8, 'y': 4}, {'x': 8, 'y': 5}, {
+                'x': 8,
+                'y': 6
+            }, {'x': 8, 'y': 7}, {'x': 8, 'y': 8}],
+            scanner.getWalls());
+
+        // getBoxes
+        resetMocks();
+
+        assertEquals([{'x': 3, 'y': 4}, {'x': 5, 'y': 3}, {'x': 5, 'y': 5}, {'x': 6, 'y': 4}],
+            scanner.getBoxes());
+
+        // getGold
+        resetMocks();
+
+        assertEquals([{'x': 2, 'y': 3}, {'x': 3, 'y': 1}, {'x': 5, 'y': 2}],
+            scanner.getGold());
+
+        // getStart
+        resetMocks();
+
+        assertEquals([{'x': 1, 'y': 1}],
+            scanner.getStart());
+
+        // getZombieStart
+        resetMocks();
+
+        assertEquals([{'x': 6, 'y': 5}],
+            scanner.getZombieStart());
+
+        // getExit
+        resetMocks();
+
+        assertEquals([{'x': 3, 'y': 3}],
+            scanner.getExit());
+
+        // getHoles
+        resetMocks();
+
+        assertEquals([{'x': 2, 'y': 5}, {'x': 4, 'y': 4}, {'x': 6, 'y': 2}, {'x': 7, 'y': 1}],
+            scanner.getHoles());
+
+        // getBarriers
+        resetMocks();
+
+        assertEquals([{'x':0,'y':0},{'x':0,'y':1},{'x':0,'y':2},{'x':0,'y':3},{'x':0,'y':4},{'x':0,'y':5},{'x':0,'y':6},{'x':0,'y':7},{'x':0,'y':8},{'x':1,'y':0},{'x':1,'y':4},{'x':1,'y':8},{'x':2,'y':0},{'x':2,'y':5},{'x':2,'y':8},{'x':3,'y':0},{'x':3,'y':4},{'x':3,'y':6},{'x':3,'y':7},{'x':3,'y':8},{'x':4,'y':0},{'x':4,'y':1},{'x':4,'y':4},{'x':4,'y':7},{'x':4,'y':8},{'x':5,'y':0},{'x':5,'y':3},{'x':5,'y':5},{'x':5,'y':7},{'x':5,'y':8},{'x':6,'y':0},{'x':6,'y':2},{'x':6,'y':4},{'x':6,'y':7},{'x':6,'y':8},{'x':7,'y':0},{'x':7,'y':1},{'x':7,'y':7},{'x':7,'y':8},{'x':8,'y':0},{'x':8,'y':1},{'x':8,'y':2},{'x':8,'y':3},{'x':8,'y':4},{'x':8,'y':5},{'x':8,'y':6},{'x':8,'y':7},{'x':8,'y':8}],
+            scanner.getBarriers());
+
+        // getElements
+        resetMocks();
+
+        assertEquals(['NONE', 'WALL', 'LASER_MACHINE', 'LASER_MACHINE_READY', 'START', 'EXIT', 'HOLE', 'BOX', 'ZOMBIE_START', 'GOLD', 'MY_ROBOT', 'OTHER_ROBOT', 'LASER_LEFT', 'LASER_RIGHT', 'LASER_UP', 'LASER_DOWN', 'ZOMBIE', 'ZOMBIE_DIE'],
+            scanner.getElements());
+
+        // getShortestWay deadloop
+        resetMocks();
+
+        assertEquals([],
+            scanner.getShortestWay(new Point(0, 0), scanner.getMe()));
+
+        // getShortestWay with 1 point
+        resetMocks();
+
+        assertEquals([{'x': 2, 'y': 1}],
             scanner.getShortestWay(scanner.getMe()));
 
-    assertEquals("[2,1],[2,2],[2,3],[3,3]",
-        scanner.getShortestWay(scanner.getExit()[0]));
+        assertEquals([{'x': 2, 'y': 1}, {'x': 2, 'y': 2}, {'x': 2, 'y': 3}, {'x': 3, 'y': 3}],
+            scanner.getShortestWay(scanner.getExit()[0]));
 
-    assertEquals("[2,1],[1,1]",
-        scanner.getShortestWay(scanner.getStart()[0]));
+        assertEquals([{'x': 2, 'y': 1}, {'x': 1, 'y': 1}],
+            scanner.getShortestWay(scanner.getStart()[0]));
 
-    assertEquals("[2,1],[2,2],[2,3],[2,4],[2,5],[3,5],[4,5],[4,6],[5,6],[6,6]",
-        scanner.getShortestWay(new Point(6, 6)));
+        assertEquals([{'x':2,'y':1},{'x':2,'y':2},{'x':2,'y':3},{'x':2,'y':4},{'x':2,'y':5},{'x':2,'y':6},{'x':3,'y':6},{'x':4,'y':6},{'x':5,'y':6},{'x':6,'y':6}],
+            scanner.getShortestWay(new Point(6, 6)));
 
-    assertEquals("null",
-        scanner.getShortestWay(1, 2));
-    assertActions("You tried to call function(point) with parameters [1,2].", loggerActions);
+        assertEquals(null,
+            scanner.getShortestWay(1));
+        assertActions(["You tried to call function(point) with parameters [1]."], loggerActions);
 
-    assertEquals("null",
-        scanner.getShortestWay(null));
-    assertActions("You tried to call function(point) with parameters [].", loggerActions);
+        assertEquals(null,
+            scanner.getShortestWay(null));
+        assertActions(["You tried to call function(point) with parameters []."], loggerActions);
 
-    assertEquals("null",
-        scanner.getShortestWay([new Point(1, 2)]));
-    assertActions("You tried to call function(point) with parameters [[1,2]].", loggerActions);
+        assertEquals(null,
+            scanner.getShortestWay([new Point(1, 2)]));
+        assertActions(["You tried to call function(point) with parameters [[1,2]]."], loggerActions);
 
-    assertEquals("null",
-        scanner.getShortestWay(new Point(1, 2), 3));
-    assertActions("You tried to call function(point) with parameters [[1,2],3].", loggerActions);
+        assertEquals(null,
+            scanner.getShortestWay('string'));
+        assertActions(["You tried to call function(point) with parameters [string]."], loggerActions);
 
+        // out of board
 
-    // isMyRobotAlive
-    resetMocks();
+        assertEquals(null,
+            scanner.getShortestWay(pt(-1, -1)));
+        assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
 
-    assertEquals(true,
-        scanner.isMyRobotAlive());
+        assertEquals(null,
+            scanner.getShortestWay(pt(9, 9)));
+        assertActions(['Your point is out of board: [9,9].'], loggerActions);
 
-    // ------------- other Robot methods ---------------
-    // nextLevel
-    robot.nextLevel();
-    assertActions("win,wait", controllerActions);
+        // getShortestWay with 2 points
+        resetMocks();
 
-    // log
-    robot.log("message");
-    robot.log("message2");
-    assertActions("Robot says: message,Robot says: message2", loggerActions);
+        assertEquals([{'x': 2, 'y': 1}],
+            scanner.getShortestWay(new Point(2, 1), scanner.getMe()));
 
-    // invert
-    assertEquals("DOWN", robot.invert("UP"));
-    assertEquals("UP", robot.invert("DOWN"));
-    assertEquals("LEFT", robot.invert("RIGHT"));
-    assertEquals("RIGHT", robot.invert("LEFT"));
+        assertEquals([{'x': 2, 'y': 1}, {'x': 2, 'y': 2}, {'x': 2, 'y': 3}, {'x': 3, 'y': 3}],
+            scanner.getShortestWay(new Point(2, 1), scanner.getExit()[0]));
 
-    assertEquals(undefined, robot.invert("QWE"));
-    assertActions("Unexpected direction value 'QWE' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'.", loggerActions);
+        assertEquals([{'x': 2, 'y': 1}, {'x': 1, 'y': 1}],
+            scanner.getShortestWay(new Point(2, 1), scanner.getStart()[0]));
 
-    assertEquals(undefined, robot.invert(null));
-    assertActions("Unexpected direction value 'null' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'.", loggerActions);
+        assertEquals([{'x':2,'y':1},{'x':2,'y':2},{'x':2,'y':3},{'x':2,'y':4},{'x':2,'y':5},{'x':2,'y':6},{'x':3,'y':6},{'x':4,'y':6},{'x':5,'y':6},{'x':6,'y':6}],
+            scanner.getShortestWay(new Point(2, 1), new Point(6, 6)));
 
-    assertEquals(undefined, robot.invert());
-    assertActions("Unexpected direction value 'undefined' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'.", loggerActions);
+        assertEquals(null,
+            scanner.getShortestWay(1, 2));
+        assertActions(["You tried to call function(point, point) with parameters [1,2]."], loggerActions);
 
-    // go
-    resetMocks();
+        assertEquals(null,
+            scanner.getShortestWay(null, 2));
+        assertActions(["You tried to call function(point, point) with parameters [,2]."], loggerActions);
 
-    assertEquals("null", robot.cameFrom());
-    assertEquals("null", robot.previousDirection());
-    assertActions("", controllerActions);
+        assertEquals(null,
+            scanner.getShortestWay([new Point(1, 2)], [1]));
+        assertActions(["You tried to call function(point, point) with parameters [[1,2],1]."], loggerActions);
 
-    robot.go("UP");
-    assertEquals("DOWN", robot.cameFrom());
-    assertEquals("UP", robot.previousDirection());
-    assertActions("clean,command[UP]", controllerActions);
+        assertEquals(null,
+            scanner.getShortestWay(new Point(1, 2), 3));
+        assertActions(["You tried to call function(point, point) with parameters [[1,2],3]."], loggerActions);
 
-    robot.go("LEFT");
-    assertEquals("RIGHT", robot.cameFrom());
-    assertEquals("LEFT", robot.previousDirection());
-    assertActions("clean,command[LEFT]", controllerActions);
+        // out of board
 
-    robot.go("DOWN");
-    assertEquals("UP", robot.cameFrom());
-    assertEquals("DOWN", robot.previousDirection());
-    assertActions("clean,command[DOWN]", controllerActions);
+        assertEquals(null,
+            scanner.getShortestWay(pt(-1, -1), pt(0, 0)));
+        assertActions(['Your point is out of board: [-1,-1].'], loggerActions);
 
-    robot.go("RIGHT");
-    assertEquals("LEFT", robot.cameFrom());
-    assertEquals("RIGHT", robot.previousDirection());
-    assertActions("clean,command[RIGHT]", controllerActions);
+        assertEquals(null,
+            scanner.getShortestWay(pt(0, 0), pt(9, 9)));
+        assertActions(['Your point is out of board: [9,9].'], loggerActions);
 
-    robot.go("QWE");
-    assertActions("Unexpected direction value 'QWE' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'.", loggerActions);
-    assertEquals("LEFT", robot.cameFrom());
-    assertEquals("RIGHT", robot.previousDirection());
-    assertActions("", controllerActions);
+        // isMyRobotAlive
+        resetMocks();
 
-    // goUp, goLeft, goDown, goRight
-    resetMocks();
+        assertEquals(false,
+            scanner.isMyRobotAlive());
 
-    robot.goUp();
-    assertEquals("DOWN", robot.cameFrom());
-    assertEquals("UP", robot.previousDirection());
-    assertActions("clean,command[UP]", controllerActions);
+        // ------------- other Robot methods ---------------
+        // nextLevel
+        resetMocks();
 
-    robot.goLeft();
-    assertEquals("RIGHT", robot.cameFrom());
-    assertEquals("LEFT", robot.previousDirection());
-    assertActions("clean,command[LEFT]", controllerActions);
+        robot.nextLevel();
+        assertActions(['win', 'wait'], controllerActions);
 
-    robot.goDown();
-    assertEquals("UP", robot.cameFrom());
-    assertEquals("DOWN", robot.previousDirection());
-    assertActions("clean,command[DOWN]", controllerActions);
+        // log
+        resetMocks();
 
-    robot.goRight();
-    assertEquals("LEFT", robot.cameFrom());
-    assertEquals("RIGHT", robot.previousDirection());
-    assertActions("clean,command[RIGHT]", controllerActions);
+        robot.log('message');
+        robot.log('message2');
+        assertActions(['message', 'message2'], loggerActions);
 
-    // reset
-    robot.reset();
-    assertActions("clean", controllerActions);
-    assertEquals("null", robot.cameFrom());
-    assertEquals("null", robot.previousDirection());
+        // invert
+        assertEquals('DOWN', robot.invert('UP'));
+        assertEquals('UP', robot.invert('DOWN'));
+        assertEquals('LEFT', robot.invert('RIGHT'));
+        assertEquals('RIGHT', robot.invert('LEFT'));
 
-    // jump
-    resetMocks();
-    assertCommand("jump", true);
+        assertEquals(undefined, robot.invert('QWE'));
+        assertActions(["Unexpected direction value 'QWE' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'."], loggerActions);
 
-    // pull
-    resetMocks();
-    assertCommand("pull", true);
+        assertEquals(undefined, robot.invert(null));
+        assertActions(["Unexpected direction value 'null' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'."], loggerActions);
 
-    // fire
-    resetMocks();
-    assertCommand("fire", false);
+        assertEquals(undefined, robot.invert());
+        assertActions(["Unexpected direction value 'undefined' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'."], loggerActions);
 
-    // ------------  getMemory ---------------
-    var memory = robot.getMemory();
-    assertEquals(false, memory.has("key"));
+        // go
+        resetMocks();
 
-    memory.save("key", "value");
-    assertEquals(true, memory.has("key"));
-    assertEquals(false, memory.has("key2"));
+        assertEquals(null, robot.cameFrom());
+        assertEquals(null, robot.previousDirection());
+        assertActions([], controllerActions);
 
-    assertEquals("value", memory.load("key"));
-    assertEquals(undefined, memory.load("key2"));
+        robot.go('UP');
+        assertEquals('DOWN', robot.cameFrom());
+        assertEquals('UP', robot.previousDirection());
+        assertActions(['clean', 'command[UP]'], controllerActions);
 
-    memory.save("key2", "value2");
-    assertEquals(true, memory.has("key"));
-    assertEquals(true, memory.has("key2"));
+        robot.go('LEFT');
+        assertEquals('RIGHT', robot.cameFrom());
+        assertEquals('LEFT', robot.previousDirection());
+        assertActions(['clean', 'command[LEFT]'], controllerActions);
 
-    assertEquals("value", memory.load("key"));
-    assertEquals("value2", memory.load("key2"));
+        robot.go('DOWN');
+        assertEquals('UP', robot.cameFrom());
+        assertEquals('DOWN', robot.previousDirection());
+        assertActions(['clean', 'command[DOWN]'], controllerActions);
 
-    memory.remove("key");
-    assertEquals(false, memory.has("key"));
-    assertEquals(true, memory.has("key2"));
+        robot.go('RIGHT');
+        assertEquals('LEFT', robot.cameFrom());
+        assertEquals('RIGHT', robot.previousDirection());
+        assertActions(['clean', 'command[RIGHT]'], controllerActions);
 
-    assertEquals(undefined, memory.load("key"));
-    assertEquals("value2", memory.load("key2"));
+        robot.go('QWE');
+        assertActions(["Unexpected direction value 'QWE' please use: 'UP', 'DOWN', 'LEFT' or 'RIGHT'."], loggerActions);
+        assertEquals('LEFT', robot.cameFrom());
+        assertEquals('RIGHT', robot.previousDirection());
+        assertActions([], controllerActions);
 
-    memory.clean();
-    assertEquals(false, memory.has("key"));
-    assertEquals(false, memory.has("key2"));
+        // goUp, goLeft, goDown, goRight
+        resetMocks();
 
-    assertEquals(undefined, memory.load("key"));
-    assertEquals(undefined, memory.load("key2"));
+        robot.goUp();
+        assertEquals('DOWN', robot.cameFrom());
+        assertEquals('UP', robot.previousDirection());
+        assertActions(['clean', 'command[UP]'], controllerActions);
 
+        robot.goLeft();
+        assertEquals('RIGHT', robot.cameFrom());
+        assertEquals('LEFT', robot.previousDirection());
+        assertActions(['clean', 'command[LEFT]'], controllerActions);
+
+        robot.goDown();
+        assertEquals('UP', robot.cameFrom());
+        assertEquals('DOWN', robot.previousDirection());
+        assertActions(['clean', 'command[DOWN]'], controllerActions);
+
+        robot.goRight();
+        assertEquals('LEFT', robot.cameFrom());
+        assertEquals('RIGHT', robot.previousDirection());
+        assertActions(['clean', 'command[RIGHT]'], controllerActions);
+
+        // reset
+        robot.reset();
+        assertActions(['clean'], controllerActions);
+        assertEquals(null, robot.cameFrom());
+        assertEquals(null, robot.previousDirection());
+
+        // jump
+        resetMocks();
+        assertCommand('jump', true);
+
+        // pull
+        resetMocks();
+        assertCommand('pull', true);
+
+        // fire
+        resetMocks();
+        assertCommand('fire', false);
+
+        // ------------  getMemory ---------------
+        var memory = robot.getMemory();
+        assertEquals(false, memory.has('key'));
+
+        memory.save('key', 'value');
+        assertEquals(true, memory.has('key'));
+        assertEquals(false, memory.has('key2'));
+
+        assertEquals('value', memory.load('key'));
+        assertEquals(undefined, memory.load('key2'));
+
+        memory.save('key2', 'value2');
+        assertEquals(true, memory.has('key'));
+        assertEquals(true, memory.has('key2'));
+
+        assertEquals('value', memory.load('key'));
+        assertEquals('value2', memory.load('key2'));
+
+        memory.remove('key');
+        assertEquals(false, memory.has('key'));
+        assertEquals(true, memory.has('key2'));
+
+        assertEquals(undefined, memory.load('key'));
+        assertEquals('value2', memory.load('key2'));
+
+        memory.clean();
+        assertEquals(false, memory.has('key'));
+        assertEquals(false, memory.has('key2'));
+
+        assertEquals(undefined, memory.load('key'));
+        assertEquals(undefined, memory.load('key2'));
+
+    }
+
+    runTest();
 }

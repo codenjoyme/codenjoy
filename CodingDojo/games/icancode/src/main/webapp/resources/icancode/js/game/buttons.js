@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -52,6 +52,9 @@ function initButtons(onCommitClick, onResetClick, onHelpClick) {
         },
         enableReset : function() {
             enable(resetButton, true);
+        },
+        disableHelp : function() {
+            enable(helpButton, false);
         }
     }
 }

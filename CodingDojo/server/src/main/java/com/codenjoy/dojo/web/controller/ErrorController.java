@@ -22,11 +22,16 @@ package com.codenjoy.dojo.web.controller;
  * #L%
  */
 
+import com.codenjoy.dojo.services.ErrorTicketService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Igor_Petrov@epam.com
@@ -38,9 +43,16 @@ public class ErrorController {
 
     public static final String URI = "/error";
 
+    @Autowired private ErrorTicketService ticket;
+
     @GetMapping(params = "message")
-    public String error(ModelMap model, @RequestParam("message") String message) {
-        model.addAttribute("message", message);
-        return "errorPage";
+    public String error(HttpServletRequest req, ModelMap model, @RequestParam("message") String message) {
+        String url = req.getRequestURL().toString();
+
+        ModelAndView view = ticket.get(url, new IllegalAccessException(message));
+        view.addObject("message", message);
+        model.mergeAttributes(view.getModel());
+
+        return view.getViewName();
     }
 }

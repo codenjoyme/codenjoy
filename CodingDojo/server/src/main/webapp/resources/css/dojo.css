@@ -82,6 +82,14 @@ label.error {
     height:24px;
 }
 
+.admin-table .input-score {
+    width:50px !important;
+}
+
+.admin-table .input-callback {
+    width:90px !important;
+}
+
 .admin-table .player-save {
     width: 300px!important;
     font-size: 12px;

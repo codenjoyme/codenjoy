@@ -245,4 +245,16 @@ public class PointImplTest {
 
         assertEquals(-1, pt.compareTo(null));
     }
+
+    @Test
+    public void shouldRelative() {
+        Point pt = pt(10, 15);
+
+        assertEquals("[9,14]", pt.relative(pt(1, 1)).toString());
+        assertEquals("[8,14]", pt.relative(pt(2, 1)).toString());
+        assertEquals("[9,13]", pt.relative(pt(1, 2)).toString());
+        assertEquals("[11,16]", pt.relative(pt(-1, -1)).toString());
+        assertEquals("[10,15]", pt.relative(pt(0, 0)).toString());
+        assertEquals("[-30,15]", pt.relative(pt(40, 0)).toString());
+    }
 }

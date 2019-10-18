@@ -22,6 +22,21 @@
 
 pages = pages || {};
 
+function defaultRegistrationSettings() {
+    return {
+        showGames: true,
+        showNames: true,
+        showData1: true,
+        showData2: true,
+        showData3: true,
+        showData4: true,
+        defaultGame: null,
+        gameTypes: {
+            icancode: ['JavaScript', 'Contest', 'eKids', 'Befunge']
+        }
+    };
+}
+
 pages.admin = function() {
     var contextPath = game.contextPath = getSettings('contextPath');
 
@@ -44,25 +59,22 @@ pages.admin = function() {
     }
 
     var getRegSettings = function() {
-        return {
-            showGames : $('#show-games').prop('checked'),
-            showNames : $('#show-names').prop('checked'),
-            showTechSkills : $('#show-tech').prop('checked'),
-            showUniversity : $('#show-university').prop('checked'),
-            defaultGame : $('#default-game').find('option:selected').text()
-        };
+        var result = defaultRegistrationSettings();
+
+        result.showGames = $('#show-games').prop('checked');
+        result.showNames = $('#show-names').prop('checked');
+        result.showData1 = $('#show-data1').prop('checked');
+        result.showData2 = $('#show-data2').prop('checked');
+        result.showData3 = $('#show-data3').prop('checked');
+        result.showData4 = $('#show-data4').prop('checked');
+        result.defaultGame = $('#default-game').find('option:selected').text();
+
+        return result;
     }
 
     var setRegSettings = function(data) {
         if ($.isEmptyObject(data)) {
-            data = {
-                showGames: true,
-                showNames: true,
-                showCities: false,
-                showTechSkills: false,
-                showUniversity: false,
-                defaultGame: null
-            };
+            data = defaultRegistrationSettings();
         }
         if (!data.defaultGame) {
             data.defaultGame = $("#default-game option:first").val();
@@ -70,17 +82,74 @@ pages.admin = function() {
 
         $('#show-games').prop('checked', data.showGames);
         $('#show-names').prop('checked', data.showNames);
-        $('#show-tech').prop('checked', data.showTechSkills);
-        $('#show-university').prop('checked', data.showUniversity);
-        $('#default-game').val(data.defaultGame);
+        $('#show-data1').prop('checked', data.showData1);
+        $('#show-data2').prop('checked', data.showData2);
+        $('#show-data3').prop('checked', data.showData3);
+        $('#show-data4').prop('checked', data.showData4);
+
+        var select = $('#default-game');
+        select.children().remove();
+
+        var allTypes = defaultRegistrationSettings().gameTypes;
+        for (var gameName in allTypes) {
+            var gameTypes = allTypes[gameName];
+            for (var index in gameTypes) {
+                var gameType = gameTypes[index];
+                select.append('<option value="' + gameType + '">' + gameType + '</option>');
+            }
+        }
+
+        select.val(data.defaultGame);
     }
 
     $('#registration-save-button').click(function() {
         saveRegSettings();
     });
 
+    // ------------------------ save user details ----------------------
+
+    var setupSaveUserDetails = function() {
+        var ajax = new AdminAjax(contextPath, 'admin/user/info');
+
+        var names = $('[id$=\\.name]');
+        names.each(function(index, obj) {
+            var name = $(obj);
+            var index = name.attr('index');
+            var prefix = '#players' + index + '\\.';
+
+            var setup = function(field) {
+                var input = $(prefix + field);
+                input.on('input', function() {
+                    if (!!input.data('button')) return;
+                    var test = $('<button type="button">Save</button>').click(function () {
+                        var data = {};
+                        data['name'] = name.val();
+                        data[field] = input.val();
+                        ajax.save(data,
+                            function() {
+                                input.data('button', null);
+                                test.remove();
+                            },
+                            function(e) {
+                                alert('error: ' + e);
+                            });
+                    });
+                    input.after(test);
+                    input.data('button', test);
+                });
+            };
+
+            setup('readableName');
+            setup('name');
+            setup('score');
+            setup('callbackUrl');
+            setup('data');
+        });
+    }
+
     // ------------------------ init ----------------------
     validatePlayerRegistration("#adminSettings");
     initHotkeys();
     loadRegSettings();
+    setupSaveUserDetails();
 }

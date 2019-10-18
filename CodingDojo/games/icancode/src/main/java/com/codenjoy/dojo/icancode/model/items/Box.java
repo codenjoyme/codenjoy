@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -27,8 +27,6 @@ import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.icancode.model.enums.FeatureItem;
 
-import java.util.Arrays;
-import java.util.List;
 
 public class Box extends FieldItem {
 
@@ -38,15 +36,6 @@ public class Box extends FieldItem {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        List<Object> objects = Arrays.asList(alsoAtPoint);
-        for (Object object : objects) {
-            if (object == player.getHero().getItem()) {
-                return Elements.ROBO_FLYING_ON_BOX;
-            }
-            if (object instanceof HeroItem) {
-                return Elements.ROBO_OTHER_FLYING_ON_BOX;
-            }
-        }
         return Elements.BOX;
     }
 }

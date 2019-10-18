@@ -35,62 +35,56 @@ OS name: "xxxxxxxxxx", version: "xxx", arch: "xxxxx", family: "xxxxxxx"
 C:\Users\user>
 ```
 - download and install [IntelliJ IDEA Community version](https://www.jetbrains.com/idea/download/)
+- install [Lombok plugin](https://plugins.jetbrains.com/plugin/6317-lombok) for idea
 
-Run your game using Codenjoy-contest module
---------------
+Run Codenjoy server from sources
+--------------------------------
 
-To build a project with your game, do the following:
-
-- download the project from the [codenjoy main repository](https://github.com/codenjoyme/codenjoy)
-- In the `\CodingDojo\server\pom.xml` file, specify the games you need. To achieve this:
-- add a dependency to a selected game in the `dependency` block under a new profile. Profile name should 
-represent game name for simplicity. 
-```xml
-<profile>
-    <id>sampleengine</id>
-    <activation>
-        <property>
-            <name>allGames</name>
-        </property>
-    </activation>
-    <properties>
-        <exclude.sampletext>false</exclude.sampletext>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>sample-engine</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
-</profile>
-```
-- you can add a new game to the `\CodingDojo\pom.xml` parent project in the modules section, or maintain it separately
-```xml
-<modules>
-    <module>games/engine</module>
-    <module>games/sample</module>
-    ...
-    <module>games/your-game</module> <!-- this is your new game -->
-    <module>server</module>
-</modules>
-```
-- configure codenjoy by modifying the settings in the file `\CodingDojo\server\src\main\resources\application.yml`
-- configure codenjoy by modifying the settings in the file `\CodingDojo\server\src\main\webapp\resources\js\init.js`
-- that is, set `email.verification=false` to disable email verification during registration
-- run `mvn clean install` in the `\CodingDojo\games\engine` project to install the UI
-- run `mvn clean install` in the project root to install all other components
-- run `mvn -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring-boot.run.profiles=sqlite spring-boot:run -Pyour-game-profile` 
-in the `\CodingDojo\server` project to launch the game (where 'your-game-profile') is a name of profile that you have set 
-recently in `\CodingDojo\server\pom.xml`
-- a simpler way of launching the game is by running a script in the root of the `\CodingDojo\server\start-server.bat` project
-- in the browser, access [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) and register the player
+To run a project with your game, do the following:
+- clone the project from the [codenjoy main repository](https://github.com/codenjoyme/codenjoy)
+- configure Codenjoy server by modifying the settings in files:
+  * [\CodingDojo\server\src\main\resources\application.yml](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/server/src/main/resources/application.yml)
+  * [\CodingDojo\server\src\main\webapp\resources\js\init.js](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/server/src/main/webapp/resources/js/init.js)
+- run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\engine` project to install the common classes/interfaces
+- build one game
+  * run `mvn clean install -N -DskipTests=true` in the `\CodingDojo\games`
+     project to install only games parent project
+  * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\yourgame`
+     project to install your game
+  * run `clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,yourgame,debug -Dcontext=/codenjoy-contest --server.port=8080 -Pyourgame`
+     in the `\CodingDojo\server` project to launch the game (where 'yourgame')
+     is a name of profile that you have set recently in `\CodingDojo\server\pom.xml`.
+     There may be several games listed separated by commas.
+- build all games
+  * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games` project to install all games
+  * If you want to run all games just run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-contest --server.port=8080 -DallGames`
+- if maven is not installed on you machine, try `mvnw` instead of `mvn`
+- a simpler way of launching Codenjoy with all games is by running a script in the root `\CodingDojo\build-server.bat` then `\CodingDojo\start-server.bat`
+  * please change `set GAMES_TO_RUN=tetris,snake,bomberman` before run `\CodingDojo\build-server.bat`
+  * also you can change properties `--spring.profiles.active=sqlite,debug --context=/codenjoy-contest --server.port=8080` inside `\CodingDojo\start-server.bat`
+    * `context` changes link to the application
+    [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest)
+    * `server.port` the port on which the application starts
+    * `spring.profiles.active`
+      * `sqlite` for the lightweight database (<50 participants)
+      * `postgres` for the postgres database (>50 participants)
+      * `trace` for enable log.debug
+      * `debug` if you want to debug js files (otherwise it will compress and obfuscate)
+      * `yourgame` if you added your custom configuration to the game inside `CodingDojo\games\yourgame\src\main\resources\application-yourgame.yml`
+- after that in the browser access [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) and register the player
 - you can read a description of any game on the help page [http://127.0.0.1:8080/codenjoy-contest/help](http://127.0.0.1:8080/codenjoy-contest/help)
-- in case of any problems, skype Oleksandr Baglai at `alexander.baglay`
+- in case of any problems, please email [apofig@gmail.com](mailto:apofig@gmail.com) or chat to [Skype Oleksandr Baglai](skype:alexander.baglay)
+
+Run Codenjoy in portable mode
+--------------
+There are three scripts to run Codenjoy on Ubuntu and Windows:
+- [how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker-compose#ubuntu-portable-script)
+- [how to run the server on Windows](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/windows-cmd#windows-portable-script)
+- [how to run the server on Linux (simple version)](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker#linux-portable-script-simple-version)
 
 Develop a game
 --------------
-To find out more on how to create a game, [read here](https://github.com/codenjoyme/codenjoy-game)
+To find out more on how to create a game, [read here](https://github.com/codenjoyme/codenjoy-game#create-your-own-codenjoy-game)
 
 Server Configuration
 --------------
@@ -134,9 +128,35 @@ Those mandatory settings are:
 | `spring.security.oauth2.client.provider.dojo.user-info-uri`                                          | `OAUTH2_USERINFO_URI`             | AS Userinfo URI (part after `auth-server.location`)<br> Provides information about user depending on requested scopes and in response to properly authorized request<br>  For more details see OAuth2 RFC                                                                                                                                                                                                         |
 | `spring.security.oauth2.client.provider.dojo.user-name-attribute`                                    | `OAUTH2_USERNAME_ATTR`            | Key for the user name attribute in AS response to Userinfo endpoint request  For more details see OAuth2 RFC                                                                                                                                                                                                                                                                                                      | 
 
+For oauth2 try run `clean install spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug,oauth2 -Dcontext=/codenjoy-contest -DallGames -DOAUTH2_AUTH_SERVER_URL=https://authorization-server.com/core -DOAUTH2_AUTH_URI=/connect/authorize -DOAUTH2_CLIENT_ID=dojo -DOAUTH2_CLIENT_SECRET=secret -DOAUTH2_TOKEN_URI=/connect/token -DOAUTH2_USERINFO_URI=/connect/userinfo -DCLIENT_NAME=dojo`
+Then try go to [/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) from browser, follow authorize steps and play the game.
+
+For sso try run `clean install spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug,oauth2 -Dcontext=/codenjoy-contest -DallGames -DOAUTH2_AUTH_SERVER_URL=https://authorization-server.com/core -DOAUTH2_AUTH_URI=/connect/authorize -DOAUTH2_CLIENT_ID=dojo -DOAUTH2_CLIENT_SECRET=secret -DOAUTH2_TOKEN_URI=/connect/token -DOAUTH2_USERINFO_URI=/connect/userinfo -DCLIENT_NAME=dojo`
+Then try go to [/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) from browser, follow authorize steps and play the game.
+```
+<oauth>
+<error_description>
+Full authentication is required to access this resource
+</error_description>
+<error>unauthorized</error>
+</oauth>
+```
+Don't worry about it. Just download [postman](https://www.getpostman.com/downloads/) and create `GET` request:
+- `http://127.0.0.1/codenjoy-contest/board/rejoining/bomberman`
+- `Authorization` -> `Bearer Token` = `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER`
+After submit you can see html page with board, try find inside:
+```
+<body style="display:none;">
+    <div id="settings" page="board" contextPath="/codenjoy-contest" gameName="bomberman"
+        playerName="t8o7ty34t9h43fpgf9b8" readableName="Stiven Pupkin" code="3465239452394852393"
+        allPlayersScreen="false"></div>
+```
+Another way to add `Authroization: Bearer USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER` header parameter.
+Also you can use [https://jwt.io/](https://jwt.io/) to parse `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER` and get additional data.
+
 Other materials
 --------------
-For [more details, click here](https://github.com/codenjoyme/codenjoy)
+For [more details, click here](https://github.com/codenjoyme/codenjoy#codenjoy)
 
 [Codenjoy team](http://codenjoy.com/portal/?page_id=51)
 ===========

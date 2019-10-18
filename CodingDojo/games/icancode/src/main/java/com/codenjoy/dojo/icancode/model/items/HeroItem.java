@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2016 - 2018 EPAM
  * %%
@@ -51,5 +51,9 @@ public class HeroItem extends FieldItem implements Tickable {
     @Override
     public void tick() {
         hero.tick();
+    }
+
+    public void fixLayer() {
+        hero.fixLayer();
     }
 }

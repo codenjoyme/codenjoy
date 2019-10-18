@@ -50,8 +50,11 @@ public class PlayerServiceImplIntegrationTest {
 
     private PlayerService service;
 
+    private Semifinal semifinal;
+    private ConfigProperties config;
     private ActionLogger actionLogger;
     private AutoSaver autoSaver;
+    private GameSaver saver;
     private GameService gameService;
     private Controller screenController;
     private Controller playerController;
@@ -79,11 +82,21 @@ public class PlayerServiceImplIntegrationTest {
                 PlayerServiceImplIntegrationTest.this.autoSaver
                         = this.autoSaver = mock(AutoSaver.class);
 
+                PlayerServiceImplIntegrationTest.this.saver
+                        = this.saver = mock(GameSaver.class);
+
                 PlayerServiceImplIntegrationTest.this.actionLogger
                         = this.actionLogger = mock(ActionLogger.class);
 
                 PlayerServiceImplIntegrationTest.this.registration
                         = this.registration = mock(Registration.class);
+
+                PlayerServiceImplIntegrationTest.this.config
+                        = this.config = new ConfigProperties();
+                config.setRegistrationOpened(true);
+
+                PlayerServiceImplIntegrationTest.this.semifinal
+                        = this.semifinal = mock(Semifinal.class);
 
                 this.isAINeeded = true;
             }
@@ -110,7 +123,8 @@ public class PlayerServiceImplIntegrationTest {
                 inv -> getOrCreateGameType(inv.getArgument(0))
         );
 
-        // первый плеер зарегался
+        // первый плеер зарегался (у него сейвов нет)
+        when(saver.loadGame(anyString())).thenReturn(PlayerSave.NULL);
         Player player1 = service.register("player1", "callback1", "game1");
         assertEquals("[game1-super-ai@codenjoy.com, player1]", service.getAll().toString());
         assertEquals(true, runners.containsKey("game1-super-ai@codenjoy.com"));

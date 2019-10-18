@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -24,18 +24,15 @@ package com.codenjoy.dojo.expansion.model;
 
 
 import com.codenjoy.dojo.expansion.model.levels.*;
-import com.codenjoy.dojo.expansion.model.lobby.NotWaitPlayerLobby;
-import com.codenjoy.dojo.expansion.model.lobby.PlayerLobby;
-import com.codenjoy.dojo.expansion.model.lobby.WaitForAllPlayerLobby;
-import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.expansion.model.levels.items.Hero;
+import com.codenjoy.dojo.expansion.services.Events;
+import com.codenjoy.dojo.expansion.services.GameRunner;
+import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.QDirection;
-import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
+import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.expansion.model.levels.items.Hero;
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -44,6 +41,7 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
@@ -57,73 +55,78 @@ import static org.mockito.Mockito.when;
  */
 public abstract class AbstractSinglePlayersTest {
 
-    public static final int PLAYER1 = 0;
-    public static final int PLAYER2 = 1;
-    public static final int PLAYER3 = 2;
-    public static final int PLAYER4 = 3;
-    public static final int PLAYER5 = 4;
-    public static final int PLAYER6 = 5;
-    public static final int PLAYER7 = 6;
-    public static final int PLAYER8 = 7;
-    public static final int PLAYER9 = 8;
-    public static final int PLAYER10 = 9;
-    public static final int PLAYER11 = 10;
-    public static final int PLAYER12 = 11;
-    public static final int PLAYER13 = 12;
-    public static final int PLAYER14 = 13;
-    public static final int PLAYER15 = 14;
-    public static final int PLAYER16 = 15;
-    public static final int PLAYER17 = 16;
-    public static final int PLAYER18 = 17;
-    public static final int PLAYER19 = 18;
-    public static final int PLAYER20 = 19;
-    public static final int PLAYER21 = 20;
-    public static final int PLAYER22 = 21;
-    public static final int PLAYER23 = 22;
-    public static final int PLAYER24 = 23;
-    public static final int PLAYER25 = 24;
-    public static final int PLAYER26 = 25;
-    public static final int PLAYER27 = 26;
-    public static final int PLAYER28 = 27;
-    public static final int PLAYER29 = 28;
-    public static final int PLAYER30 = 29;
-    public static final int PLAYER31 = 30;
-    public static final int PLAYER32 = 31;
-    public static final int PLAYER33 = 32;
-    public static final int PLAYER34 = 33;
-    public static final int PLAYER35 = 34;
-    public static final int PLAYER36 = 35;
+    protected static final int PLAYER1 = 0;
+    protected static final int PLAYER2 = 1;
+    protected static final int PLAYER3 = 2;
+    protected static final int PLAYER4 = 3;
+    static final int PLAYER5 = 4;
+    static final int PLAYER6 = 5;
+    static final int PLAYER7 = 6;
+    static final int PLAYER8 = 7;
+    static final int PLAYER9 = 8;
+    static final int PLAYER10 = 9;
+    static final int PLAYER11 = 10;
+    static final int PLAYER12 = 11;
+    static final int PLAYER13 = 12;
+    static final int PLAYER14 = 13;
+    static final int PLAYER15 = 14;
+    static final int PLAYER16 = 15;
+    static final int PLAYER17 = 16;
+    static final int PLAYER18 = 17;
+    static final int PLAYER19 = 18;
+    static final int PLAYER20 = 19;
+    static final int PLAYER21 = 20;
+    static final int PLAYER22 = 21;
+    static final int PLAYER23 = 22;
+    static final int PLAYER24 = 23;
+    static final int PLAYER25 = 24;
+    static final int PLAYER26 = 25;
+    static final int PLAYER27 = 26;
+    static final int PLAYER28 = 27;
+    static final int PLAYER29 = 28;
+    static final int PLAYER30 = 29;
+    static final int PLAYER31 = 30;
+    static final int PLAYER32 = 31;
+    static final int PLAYER33 = 32;
+    static final int PLAYER34 = 33;
+    static final int PLAYER35 = 34;
+    static final int PLAYER36 = 35;
 
-    public int INCREASE = 2;
-    public int MOVE = 1;
+    @NotNull
+    Events WIN() {
+        return Events.WIN(data.winScore());
+    }
 
-    protected Dice dice;
-    protected List<EventListener> listeners;
-    protected List<Single> singles;
-    protected List<Hero> heroes;
+    @NotNull
+    Events DRAW() {
+        return Events.WIN(data.drawScore());
+    }
 
-    private LinkedList<String> levelsMaps;
 
-    private String multipleLevelsMaps;
-    private GameFactory gameFactory;
-    protected Ticker ticker;
-    private int size = LevelsTest.LEVEL_SIZE;
-    private PlayerLobby lobby;
+    protected int INCREASE = 2;
+    protected int MOVE = 1;
+
+    Dice dice;
+
+    protected SoftSpreader spreader;
+
+    protected abstract boolean isSingleTrainingOrMultiple();
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        listeners = new LinkedList<>();
-        singles = new LinkedList<>();
-        heroes = new LinkedList<>();
-        ticker = new Ticker();
+
+        spreader = new SoftSpreader(new GameRunner(){{
+            setDice(dice);
+        }});
+
         SettingsWrapper.setup()
                 .leaveForceCount(1)
                 .regionsScores(0)
                 .roundTicks(10000)
                 .waitingOthers(false)
-                .lobbyEnable(false)
                 .defenderHasAdvantage(false)
+                .singleTrainingMode(isSingleTrainingOrMultiple())
                 .shufflePlayers(false);
     }
 
@@ -135,78 +138,41 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     protected void givenSize(int size) {
-        this.size = size;
+        SettingsWrapper.data.boardSize(size);
     }
 
     protected void givenFl(String... boards) {
-        setupMaps(boards);
-        gameFactory = getGameFactory();
-        lobby = new NotWaitPlayerLobby(gameFactory);
+        SettingsWrapper.single(Arrays.asList(boards)
+                .subList(0, boards.length - 1)
+                .toArray(new String[0]));
+
+        SettingsWrapper.multi(Arrays.asList(boards)
+                .subList(boards.length - 1, boards.length)
+                .toArray(new String[0]));
     }
 
-    protected void givenFlWithWaitForAllLobby(String... boards) {
-        setupMaps(boards);
-        gameFactory = getGameFactory();
-        lobby = new WaitForAllPlayerLobby(gameFactory);
-    }
-
-
-    protected void givenForces(String forces, String layer2) {
-        PlayerBoard current = singles.get(PLAYER1).getProgressBar().getCurrent();
-        LevelImpl level = (LevelImpl)current.getCurrentLevel();
-        level.fillForces(layer2, heroes.toArray(new Hero[0]));
+    protected void givenForces(int player, String forces, String layer2) {
+        LevelImpl level = (LevelImpl) spreader.field(player).getCurrentLevel();
+        level.fillForces(layer2, spreader.heroes());
         level.fillForcesCount(forces);
     }
 
     protected void createPlayers(int count) {
         for (int i = 0; i < count; i++) {
-            createOneMorePlayer();
-        }
-    }
-
-    private void setupMaps(String[] boards) {
-        levelsMaps = new LinkedList<>(Arrays.asList(boards));
-        multipleLevelsMaps = levelsMaps.removeLast();
-    }
-
-    protected void createOneMorePlayer() {
-        EventListener listener = mock(EventListener.class);
-        listeners.add(listener);
-
-        String playerName = String.format("demo%s@codenjoy.com", singles.size() + 1);
-        Single game = null; // TODO тут пришлось закомментить
-                // new Single(gameFactory, () -> lobby, listener, null, ticker, dice, null, playerName);
-        singles.add(game);
-        game.newGame();
-        // heroes.add(game.getPlayer().getHero()); // TODO тут пришлось закомментить
-    }
-
-    private GameFactory getGameFactory() {
-        LevelsFactory single = Levels.collectYours(size, levelsMaps.toArray(new String[0]));
-        LevelsFactory multiple = Levels.collectYours(size, multipleLevelsMaps);
-        return getGameFactory(single, multiple);
-    }
-
-    protected GameFactory getGameFactory(LevelsFactory single, LevelsFactory multiple) {
-        return new OneMultipleGameFactory(dice, single, multiple);
-    }
-
-    protected void tickAll() {
-        for (Single single : singles) {
-            if (single != null) {
-                single.tick();
-            }
+            spreader.createOneMorePlayer();
         }
     }
 
     // делает удобным перемещение героя, что очень надо для этого легаси теста
     @NotNull
-    private Hero getOnlyMovingJoystick(Single single, final int x, final int y) {
-        final Hero hero = (Hero) single.getJoystick();
+    private Hero getOnlyMovingJoystick(int player, final int x, final int y) {
+        final Hero hero = spreader.hero(player);
         final Point pt = pt(x, y);
         return new Hero() {
             @Override
             public void down() {
+                spreader.roomIsBusy(player);
+
                 hero.increaseAndMove(
                         new Forces(pt, INCREASE),
                         new ForcesMoves(pt, MOVE, QDirection.DOWN)
@@ -215,6 +181,8 @@ public abstract class AbstractSinglePlayersTest {
 
             @Override
             public void up() {
+                spreader.roomIsBusy(player);
+
                 hero.increaseAndMove(
                         new Forces(pt, INCREASE),
                         new ForcesMoves(pt, MOVE, QDirection.UP)
@@ -223,6 +191,8 @@ public abstract class AbstractSinglePlayersTest {
 
             @Override
             public void left() {
+                spreader.roomIsBusy(player);
+
                 hero.increaseAndMove(
                         new Forces(pt, INCREASE),
                         new ForcesMoves(pt, MOVE, QDirection.LEFT)
@@ -231,6 +201,8 @@ public abstract class AbstractSinglePlayersTest {
 
             @Override
             public void right() {
+                spreader.roomIsBusy(player);
+
                 hero.increaseAndMove(
                         new Forces(pt, INCREASE),
                         new ForcesMoves(pt, MOVE, QDirection.RIGHT)
@@ -239,58 +211,52 @@ public abstract class AbstractSinglePlayersTest {
 
             @Override
             public void act(int... p) {
+                spreader.roomIsBusy(player);
+
                 hero.act(p);
             }
 
             @Override
             public void message(String command) {
-                hero.message(command);
-            }
+                spreader.roomIsBusy(player);
 
-            @Override
-            public void loadLevel(int level) {
-                hero.loadLevel(level);
+                hero.message(command);
             }
         };
     }
 
     protected Hero hero(int index, int x, int y) {
-        return getOnlyMovingJoystick(single(index), x, y);
+        return getOnlyMovingJoystick(index, x, y);
     }
 
     public Hero hero(int index) {
-        return (Hero) single(index).getJoystick();
-    }
-
-    protected Single single(int index) {
-        return singles.get(index);
-    }
-
-    protected void destroy(int index) {
-        single(index).destroy();
-        singles.set(index, null);
+        return (Hero) spreader.single(index).getJoystick();
     }
 
     protected void assertL(String expected, int index) {
-        Single single = single(index);
+        Single single = spreader.single(index);
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(getBoardAsString(single).getLayers().get(0)));
+                TestUtils.injectN(getLayer(single, 0)));
     }
 
-    private PrinterData getBoardAsString(Single single) {
-        return single.getPrinter().print();
+    private String getLayer(Single single, int layer) {
+        return ((JSONObject) single.getBoardAsString()).getJSONArray("layers").getString(layer);
+    }
+
+    private String getForces(Single single) {
+        return ((JSONObject) single.getBoardAsString()).getString("forces");
     }
 
     protected void assertE(String expected, int index) {
-        Single single = single(index);
+        Single single = spreader.single(index);
         assertEquals(TestUtils.injectN(expected),
-                TestUtils.injectN(getBoardAsString(single).getLayers().get(1)));
+                TestUtils.injectN(getLayer(single, 1)));
     }
 
     protected void assertF(String expected, int index) {
-        Single single = single(index);
+        Single single = spreader.single(index);
         assertEquals(expected,
-                TestUtils.injectNN(getBoardAsString(single).getLayers().get(2)));
+                TestUtils.injectNN(getForces(single)));
     }
 
     protected EventListener verify(int index) {
@@ -298,7 +264,7 @@ public abstract class AbstractSinglePlayersTest {
     }
 
     private EventListener listener(int index) {
-        return listeners.get(index);
+        return spreader.listener(index);
     }
 
     protected void reset(int index) {
@@ -309,16 +275,17 @@ public abstract class AbstractSinglePlayersTest {
         Mockito.verifyNoMoreInteractions(listener(index));
     }
 
-    protected void assertBoardData(String levelProgress, String heroes,
-                                   boolean onlyMyName, String layer1, String layer2,
+    protected void assertBoardData(String levelProgress, String offset,
+                                   String layer1, String layer2,
                                    String forces, Point myBase, int index)
     {
-        JSONObject json = getBoardAsString(index);
+        JSONObject json = getLayer(index);
 
+        // TODO вообще тут эмуляция многих частей codenjoy фреймворка а значит дублирование, и это я уже не стал эмулировать
         assertEquals(levelProgress,
-                JsonUtils.clean(JsonUtils.toStringSorted(json.get("levelProgress"))));
+                levelProgress);
 
-        assertEquals(heroes,
+        assertEquals(offset,
                 JsonUtils.clean(JsonUtils.toStringSorted(json.get("offset"))));
 
         assertEquals(TestUtils.injectN(layer1),
@@ -330,23 +297,17 @@ public abstract class AbstractSinglePlayersTest {
         assertEquals(forces,
                 TestUtils.injectNN(json.getString("forces")));
 
-        assertEquals(true,
-                json.getBoolean("showName"));
-
         assertEquals(JsonUtils.clean(JsonUtils.toStringSorted(myBase)),
                 JsonUtils.clean(JsonUtils.toStringSorted(json.get("myBase"))));
-
-        assertEquals(onlyMyName,
-                json.getBoolean("onlyMyName"));
     }
 
     protected void assertBoardData(int index, String expected) {
-        JSONObject json = getBoardAsString(index);
+        JSONObject json = getLayer(index);
         assertEquals(JsonUtils.clean(JsonUtils.toStringSorted(expected)),
                 JsonUtils.clean(JsonUtils.toStringSorted(json)));
     }
 
-    protected JSONObject getBoardAsString(int index) {
-        return single(index).getBoardAsString();
+    protected JSONObject getLayer(int index) {
+        return (JSONObject) spreader.single(index).getBoardAsString();
     }
 }

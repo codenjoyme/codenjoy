@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -23,21 +23,16 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  */
 
 
+import com.codenjoy.dojo.expansion.client.Command;
+import com.codenjoy.dojo.expansion.model.*;
+import com.codenjoy.dojo.expansion.services.CodeSaver;
 import com.codenjoy.dojo.services.DLoggerFactory;
-import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.codenjoy.dojo.expansion.client.Command;
-import com.codenjoy.dojo.expansion.model.BusyMapException;
-import com.codenjoy.dojo.expansion.model.Expansion;
-import com.codenjoy.dojo.expansion.model.Forces;
-import com.codenjoy.dojo.expansion.model.ForcesMoves;
-import com.codenjoy.dojo.expansion.model.Field;
-import com.codenjoy.dojo.expansion.services.CodeSaver;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -48,7 +43,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 
-public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable {
+public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickable {
 
     private static Logger logger = DLoggerFactory.getLogger(Hero.class);
 
@@ -57,11 +52,9 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
 
     private boolean alive;
     private boolean win;
-    private Integer resetToLevel;
     private List<Gold> gold;
     private List<ForcesMoves> increase;
     private List<ForcesMoves> movements;
-    private Field field;
     private Point position;
     private JSONObject currentAction;
     private JSONObject lastAction;
@@ -74,7 +67,6 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
         increase = null;
         movements = null;
         win = false;
-        resetToLevel = null;
         alive = true;
         gold = new LinkedList<>();
         position = null;
@@ -82,12 +74,13 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
         currentAction = null;
     }
 
-    public void setField(Field field) {
-        this.field = field;
+    @Override
+    public void init(IField field) {
+        super.init(field);
         resetOn(field);
     }
 
-    private void resetOn(Field field) {
+    private void resetOn(IField field) {
         resetFlags();
         position = occupyFreeBase().getCell().copy();
         field.reset();
@@ -110,11 +103,7 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
     }
 
     public void reset() {
-        act(0);
-    }
-
-    public void loadLevel(int level) {
-        act(0, level);
+        die();
     }
 
     @Override
@@ -122,16 +111,8 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
         if (p.length == 0) return;
 
         if (p[0] == 0) {
-            if (p.length == 2) {
-                resetToLevel = p[1];
-            } else {
-                wantsReset();
-            }
+            reset();
         }
-    }
-
-    public void wantsReset() {
-        resetToLevel = -1;
     }
 
     @Override
@@ -189,12 +170,14 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        // так как герои все у нас с координатами -1 -1 то различать их надо по старинке
+        return parentHashCode();
     }
 
     @Override
     public boolean equals(Object o) {
-        return super.equals(o);
+        // так как герои все у нас с координатами -1 -1 то различать их надо по старинке
+        return parentEquals(o);
     }
 
     @Override
@@ -206,12 +189,6 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
             lastAction = currentAction;
         }
         if (!alive) {
-            return;
-        }
-
-        if (resetToLevel != null) {
-            resetToLevel = null;
-            resetOn(field);
             return;
         }
 
@@ -275,16 +252,6 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
         return this.gold.contains(gold);
     }
 
-    public boolean isChangeLevel() {
-        return resetToLevel != null;
-    }
-
-    public int getLevel() {
-        int result = resetToLevel;
-        resetToLevel = null;
-        return result;
-    }
-
     public Point getPosition() {
         return position;
     }
@@ -313,7 +280,6 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
     public void destroy() {
         field.removeFromCell(this);
     }
-
 
     // ----------- only for testing methods -------------
 
@@ -374,7 +340,6 @@ public class Hero extends PlayerHero<Field> implements MessageJoystick, Tickable
                 put("alive", alive);
                 put("win", win);
                 put("gold", gold);
-                put("resetToLevel", resetToLevel);
                 put("position", position);
                 put("lastAction", lastAction);
                 put("field", (field instanceof Expansion) ? ((Expansion)field).lg.id() : field.toString());

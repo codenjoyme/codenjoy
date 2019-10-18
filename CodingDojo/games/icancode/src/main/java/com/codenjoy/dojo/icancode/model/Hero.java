@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -201,7 +201,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
             reset = true;
         } else if (p[0] == -1) { // TODO test me
             ICell end = field.getEndPosition();
-            field.move(this.item, end.getX(), end.getY());
+            field.move(item, end.getX(), end.getY());
         }
     }
 
@@ -278,18 +278,19 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
                 int nextX = direction.changeX(newX);
                 int nextY = direction.changeY(newY);
                 if (!field.isBarrier(nextX, nextY)) {
-                    field.move(this.item, newX, newY);
+                    field.move(item, newX, newY);
                 }
             } else if (!field.isBarrier(newX, newY)) {
-                if (!wasPush) {
+                if (!wasPush && pull) {
                     pullBox(x, y);
                 }
-                field.move(this.item, newX, newY);
+                field.move(item, newX, newY);
 
             } else {
                 if (landOn) {
                     landOn = false;
-                    item.getCell().comeIn(this.item);
+
+                    item.getCell().comeIn(item);
                 }
             }
         }
@@ -298,10 +299,15 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         }
     }
 
-    private void pullBox(int x, int y) {
-        if (!pull) {
-            return;
+    public void fixLayer() {
+        if (flying) {
+            item.getCell().jump(item);
+        } else {
+            item.getCell().landOn(item);
         }
+    }
+
+    private void pullBox(int x, int y) {
         int boxX = direction.inverted().changeX(x);
         int boxY = direction.inverted().changeY(y);
 
