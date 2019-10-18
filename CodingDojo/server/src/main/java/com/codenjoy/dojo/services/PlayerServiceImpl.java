@@ -574,6 +574,16 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public void reloadAllRooms() {
+        lock.writeLock().lock();
+        try {
+            playerGames.reloadAll(true);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
     public Player getRandom(String gameType) {
         lock.readLock().lock();
         try {

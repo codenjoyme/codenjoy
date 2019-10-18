@@ -34,7 +34,9 @@ import org.mockito.InOrder;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -629,6 +631,79 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // then
         assertEquals(2, fields.size());
         assertR("{0=[player2], 1=[player1]}");
+    }
+
+    @Test
+    public void testReloadAll_withShuffle() {
+        // given
+        MultiplayerType type = MultiplayerType.TRIPLE;
+        Player player1 = createPlayer("game", "player1", type);
+        Player player2 = createPlayer("game", "player2", type);
+        Player player3 = createPlayer("game", "player3", type);
+        Player player4 = createPlayer("game", "player4", type);
+        Player player5 = createPlayer("game", "player5", type);
+
+        assertR("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        // when
+        playerGames.reloadAll(true);
+
+        // then
+        Map<Integer, List<String>> rooms = getRooms();
+        assertEquals("[player1, player2, player3, player4, player5]",
+                rooms.values().stream()
+                    .flatMap(List::stream)
+                    .sorted()
+                    .collect(toList())
+                    .toString());
+    }
+
+    @Test
+    public void testReloadAll_withoutShuffle_disposable() {
+        // given
+        MultiplayerType type = MultiplayerType.TEAM.apply(3, MultiplayerType.DISPOSABLE);
+        Player player1 = createPlayer("game", "player1", type);
+        Player player2 = createPlayer("game", "player2", type);
+        Player player3 = createPlayer("game", "player3", type);
+        Player player4 = createPlayer("game", "player4", type);
+        Player player5 = createPlayer("game", "player5", type);
+
+        assertR("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        // when
+        playerGames.reloadAll(false);
+
+        // then
+        assertEquals(4, fields.size());
+        assertR("{1=[player1], " +
+                "2=[player2, player3, player4], " +
+                "3=[player5]}");
+    }
+
+    @Test
+    public void testReloadAll_withoutShuffle_notDisposable() {
+        // TODO почему-то в этом тесте флаг игнорируется, то ли это условия такие, то ли бага
+        // given
+        MultiplayerType type = MultiplayerType.TEAM.apply(3, !MultiplayerType.DISPOSABLE);
+        Player player1 = createPlayer("game", "player1", type);
+        Player player2 = createPlayer("game", "player2", type);
+        Player player3 = createPlayer("game", "player3", type);
+        Player player4 = createPlayer("game", "player4", type);
+        Player player5 = createPlayer("game", "player5", type);
+
+        assertR("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        // when
+        playerGames.reloadAll(false);
+
+        // then
+        assertEquals(4, fields.size());
+        assertR("{1=[player1], " +
+                "2=[player2, player3, player4], " +
+                "3=[player5]}");
     }
 
     @Test
