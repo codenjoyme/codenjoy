@@ -29,10 +29,7 @@ import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
@@ -271,6 +268,17 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     // с обслуживанием последнего оставшегося на той же карте
     public void reload(Game game, JSONObject save) {
         reload(game, save, true);
+    }
+
+    // переводим всех игроков на новые борды
+    // при этом если надо перемешиваем их
+    public void reloadAll(boolean shuffle) {
+        new LinkedList<PlayerGame>(){{
+            addAll(playerGames);
+            if (shuffle) {
+                Collections.shuffle(this);
+            }
+        }}.forEach(pg -> reloadCurrent(pg));
     }
 
     private Player getPlayer(Game game) {
