@@ -225,10 +225,11 @@
     <table class="admin-table" id="cleanGame">
         <tr>
             <tr colspan="2">
-                <td><b>Clean</b></td>
+                <td><b>Clean / Reset</b></td>
             </tr>
             <td>
-                <a href="${ctx}/admin?cleanAll&gameName=${gameName}">Clean all scores</a>.
+                <a href="${ctx}/admin?cleanAll&gameName=${gameName}">Clean all scores</a>. </br>
+                <a href="${ctx}/admin?reloadRooms&gameName=${gameName}">Reload all rooms</a>.
             </td>
         </tr>
     </table>

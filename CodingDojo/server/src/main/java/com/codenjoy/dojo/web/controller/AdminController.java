@@ -44,8 +44,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -487,6 +485,12 @@ public class AdminController {
     @RequestMapping(params = "cleanAll", method = RequestMethod.GET)
     public String cleanAllPlayersScores(Model model, HttpServletRequest request) {
         playerService.cleanAllScores();
+        return getAdmin(request);
+    }
+
+    @RequestMapping(params = "reloadRooms", method = RequestMethod.GET)
+    public String reloadAllPlayersRooms(Model model, HttpServletRequest request) {
+        playerService.reloadAllRooms();
         return getAdmin(request);
     }
 
