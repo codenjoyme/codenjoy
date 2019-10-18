@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client;
+package com.codenjoy.dojo.crossyroad.model;
 
 /*-
  * #%L
@@ -22,19 +22,39 @@ package com.codenjoy.dojo.icancode.client;
  * #L%
  */
 
+import com.codenjoy.dojo.services.*;
 
 /**
- * Created by Oleksandr_Baglai on 2016-10-15.
+ * Артефакт Камень на поле
  */
-public class SolverRunner {
+public class Stone extends PointImpl implements State<Elements, Player>, Tickable {
+    private Direction direction;
 
-    public static void main(String[] args) {
-        if (args == null || args.length == 0 || args[0].equals("java")) {
-            System.out.println("Running Java client");
-            YourSolver.main(args);
-        } else {
-            System.out.println("Running Kotlin client");
-//            YourSolverKt.main(args);
+    public Stone(int x, int y) {
+        super(x, y);
+        direction = Direction.DOWN;
+    }
+
+    public Stone(Point pt) {
+        super(pt);
+    }
+
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.STONE;
+    }
+
+    @Override
+    public void tick() {
+        if (direction != null) {
+            int newX = direction.changeX(x);
+            //int newY = direction.changeY(y);
+            move(newX, y);
         }
+
+    }
+
+    public void down() {
+        move(x, y - 1);
     }
 }

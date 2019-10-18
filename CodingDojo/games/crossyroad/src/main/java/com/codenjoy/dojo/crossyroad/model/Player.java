@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client;
+package com.codenjoy.dojo.crossyroad.model;
 
 /*-
  * #%L
@@ -23,18 +23,32 @@ package com.codenjoy.dojo.icancode.client;
  */
 
 
-/**
- * Created by Oleksandr_Baglai on 2016-10-15.
- */
-public class SolverRunner {
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.crossyroad.services.Events;
 
-    public static void main(String[] args) {
-        if (args == null || args.length == 0 || args[0].equals("java")) {
-            System.out.println("Running Java client");
-            YourSolver.main(args);
-        } else {
-            System.out.println("Running Kotlin client");
-//            YourSolverKt.main(args);
-        }
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
+public class Player extends GamePlayer<Hero, Field> {
+
+    Hero hero;
+    public Player(EventListener listener) {
+        super(listener);
     }
+
+    public Hero getHero() {
+        return hero;
+    }
+
+    @Override
+    public void newHero(Field field) {
+        hero = new Hero(pt(10, 0),20);
+    }
+
+    @Override
+    public boolean isAlive() {
+        return true;
+    }
+
 }

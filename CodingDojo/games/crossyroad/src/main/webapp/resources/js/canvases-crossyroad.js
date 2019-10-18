@@ -1,5 +1,3 @@
-package com.codenjoy.dojo.icancode.client;
-
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
@@ -22,19 +20,4 @@ package com.codenjoy.dojo.icancode.client;
  * #L%
  */
 
-
-/**
- * Created by Oleksandr_Baglai on 2016-10-15.
- */
-public class SolverRunner {
-
-    public static void main(String[] args) {
-        if (args == null || args.length == 0 || args[0].equals("java")) {
-            System.out.println("Running Java client");
-            YourSolver.main(args);
-        } else {
-            System.out.println("Running Kotlin client");
-//            YourSolverKt.main(args);
-        }
-    }
-}
+var doNothing = true;

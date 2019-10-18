@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client;
+package com.codenjoy.dojo.crossyroad.model;
 
 /*-
  * #%L
@@ -23,18 +23,18 @@ package com.codenjoy.dojo.icancode.client;
  */
 
 
-/**
- * Created by Oleksandr_Baglai on 2016-10-15.
- */
-public class SolverRunner {
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-    public static void main(String[] args) {
-        if (args == null || args.length == 0 || args[0].equals("java")) {
-            System.out.println("Running Java client");
-            YourSolver.main(args);
-        } else {
-            System.out.println("Running Kotlin client");
-//            YourSolverKt.main(args);
-        }
+public class Wall extends PointImpl implements State<Elements, Player> {
+
+    public Wall(Point pt) {
+        super(pt);
+    }
+
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return Elements.WALL;
     }
 }

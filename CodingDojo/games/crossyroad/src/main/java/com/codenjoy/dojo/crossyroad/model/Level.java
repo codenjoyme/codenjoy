@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.client;
+package com.codenjoy.dojo.crossyroad.model;
 
 /*-
  * #%L
@@ -23,18 +23,17 @@ package com.codenjoy.dojo.icancode.client;
  */
 
 
-/**
- * Created by Oleksandr_Baglai on 2016-10-15.
- */
-public class SolverRunner {
+import java.util.List;
 
-    public static void main(String[] args) {
-        if (args == null || args.length == 0 || args[0].equals("java")) {
-            System.out.println("Running Java client");
-            YourSolver.main(args);
-        } else {
-            System.out.println("Running Kotlin client");
-//            YourSolverKt.main(args);
-        }
-    }
+public interface Level {
+
+    int getSize();
+
+    List<Hero> getHero();
+
+    List<Wall> getWalls();
+
+    List<Stone> getStones();
+
+    List<Car> getPlatforms();
 }
