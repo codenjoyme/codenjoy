@@ -38,9 +38,9 @@ public class Scores implements PlayerScores {
     public Scores(int startScore, Settings settings) {
         this.score = startScore;
 
-        killYourTankPenalty = settings.addEditBox("Kill your tank penalty").type(Integer.class).def(0);
-        killOtherHeroTankScore = settings.addEditBox("Kill other hero tank score").type(Integer.class).def(50);
-        killOtherAITankScore = settings.addEditBox("Kill other AI tank score").type(Integer.class).def(25);
+        killYourTankPenalty = settings.addEditBox("Kill your tank penalty").type(Integer.class).def(1);
+        killOtherHeroTankScore = settings.addEditBox("Kill other hero tank score").type(Integer.class).def(2);
+        killOtherAITankScore = settings.addEditBox("Kill other AI tank score").type(Integer.class).def(1);
     }
 
     @Override
