@@ -124,10 +124,8 @@ public class Battlecity implements Field {
             }
         }
 
-        for (Tank tank : tanks) {
-            if (tank.isAlive()) {
-                tank.fire();
-            }
+        for (Bullet bullet : getBullets()) {
+            bullet.move();
         }
 
         for (Tank tank : tanks) {
@@ -142,9 +140,13 @@ public class Battlecity implements Field {
                 }
             }
         }
-        for (Bullet bullet : getBullets()) {
-            bullet.move();
+
+        for (Tank tank : tanks) {
+            if (tank.isAlive()) {
+                tank.fire();
+            }
         }
+
 
         for (Construction construction : constructions) {
             if (!tanks.contains(construction) && !getBullets().contains(construction)) {
