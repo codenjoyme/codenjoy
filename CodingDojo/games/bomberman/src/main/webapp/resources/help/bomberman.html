@@ -93,11 +93,11 @@
 
                         <p>Адрес для подключения к игре на сервере http://codenjoy.com:</p>
 
-                        <pre>ws://codenjoy.com:80/codenjoy-contest/ws?user=3edq63tw0bq4w4iem7nb&code=12345678901234567890</pre>
+                        <pre>http://codenjoy.com:80/codenjoy-contest/board/player/{user}?code={code}</pre>
 
                         <p>Адрес для подключения к игре на сервере, развернутом в локальной сети:</p>
 
-                        <pre>ws://server_ip:8080/codenjoy-contest/ws?user=3edq63tw0bq4w4iem7nb&code=12345678901234567890</pre>
+                        <pre>http://$server_ip:8080/codenjoy-contest/board/player/{user}?code={code}</pre>
 
                         <p>Тут 'user' - id игрока, a 'code' - твой security token, его ты можешь получить из адресной
                             строки браузера после регистрации/логина</p>
