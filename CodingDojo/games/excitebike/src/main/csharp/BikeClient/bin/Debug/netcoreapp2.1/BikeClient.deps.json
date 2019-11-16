@@ -1,0 +1,41 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.1",
+    "signature": "884f49f110c8d637715bef93b34f290712ecd7fe"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.1": {
+      "BikeClient/1.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.3-beta1"
+        },
+        "runtime": {
+          "BikeClient.dll": {}
+        }
+      },
+      "Newtonsoft.Json/12.0.3-beta1": {
+        "runtime": {
+          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.3.23619"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BikeClient/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Newtonsoft.Json/12.0.3-beta1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dvGx3CT9tEs9LbgyIw9MZl+sLCFa6yx1NXLKaldRk+N9BgToJpCK2PUv8z2aNbLq6ljtLS93X5gamWxs8DhdRA==",
+      "path": "newtonsoft.json/12.0.3-beta1",
+      "hashPath": "newtonsoft.json.12.0.3-beta1.nupkg.sha512"
+    }
+  }
+}
