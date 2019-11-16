@@ -32,12 +32,14 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
+@Ignore
 public class SingleTest {
 
     private EventListener listener1;

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.lemonade.client.ai.AISolver;
 import com.codenjoy.dojo.lemonade.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.text.DecimalFormat;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class SmokeTest {
 
     private Dice dice;

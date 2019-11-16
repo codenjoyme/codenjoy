@@ -38,6 +38,7 @@ import static org.junit.Assert.*;
 /**
  * Created by Oleksandr_Baglai on 2017-09-21.
  */
+@Ignore
 public class LoggerReaderTest {
 
     private static final String REPLAY =

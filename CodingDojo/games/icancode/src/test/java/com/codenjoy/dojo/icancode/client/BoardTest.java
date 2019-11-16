@@ -24,6 +24,7 @@ package com.codenjoy.dojo.icancode.client;
 
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -31,6 +32,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Mikhail_Udalyi on 20.09.2016.
  */
+@Ignore
 public class BoardTest {
     private Board board;
 

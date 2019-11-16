@@ -38,6 +38,7 @@ import com.codenjoy.dojo.icancode.services.GameRunner;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -52,6 +53,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
+@Ignore
 public class SingleTest {
 
     private Dice dice;

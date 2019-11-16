@@ -30,6 +30,7 @@ import com.codenjoy.dojo.icancode.model.interfaces.IField;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -41,6 +42,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@Ignore
 public class ICanCodeZombieTest extends AbstractGameTest {
 
     @Test
