@@ -42,6 +42,11 @@ public class Scores implements PlayerScores {
     }
 
     @Override
+    public void update(Object score) {
+        this.score = (int) score;
+    }
+
+    @Override
     public Integer getScore() {
         return score;
     }
