@@ -31,6 +31,10 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
     loadCanvasesData();
     var reloading = false;
 
+    function fromEmail(email) {
+        return email.split('@')[0];
+    }
+
     function toId(email) {
         return email.replace(/[@.]/gi, "_");
     }
@@ -95,7 +99,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         playersList.forEach(function (player) {
             var playerName = player.name;
             var id = toId(playerName);
-            var name = playerName.split('@')[0];
+            var name = fromEmail(player.readableName);
             var visible = (allPlayersScreen || !enablePlayerInfoLevel) ? 'none' : 'block';
             templateData.push({name : name, id : id, visible : visible })
         });

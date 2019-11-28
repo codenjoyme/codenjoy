@@ -29,13 +29,11 @@ import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
 import static java.util.stream.Collectors.toList;
@@ -66,12 +64,26 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         lock = new ReentrantReadWriteLock();
     }
 
+    // удаление текущего игрока
+    // с обслуживанием последнего оставшегося на той же карте
+    public void removeCurrent(Player player) {
+        remove(player, false);
+    }
+
+    // удаление текущего игрока
+    // без обслуживания последнего оставшегося на той же карте
     public void remove(Player player) {
+        remove(player, true);
+    }
+
+    private void remove(Player player, boolean reloadAlone) {
         int index = playerGames.indexOf(player);
         if (index == -1) return;
         PlayerGame game = playerGames.remove(index);
 
-        removeWithResetAlone(game.getGame());
+        if (reloadAlone) {
+            removeWithResetAlone(game.getGame());
+        }
 
         game.remove(onRemove);
         game.getGame().on(null);
@@ -236,11 +248,37 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return spreader.isRoomStaffed(field);
     }
 
-    public void reload(Game game, JSONObject save) {
+    // перевод текущего игрока в новую комнату
+    // без обслуживания последнего оставшегося на той же карте
+    public void reloadCurrent(PlayerGame playerGame) {
+        Game game = playerGame.getGame();
+        reload(game, game.getSave(), false);
+    }
+
+    private void reload(Game game, JSONObject save, boolean reloadAlone) {
         GameType gameType = getPlayer(game).getGameType();
-        removeWithResetAlone(game);
+        if (reloadAlone) {
+            removeWithResetAlone(game);
+        }
 
         spreader.play(game, gameType, save);
+    }
+
+    // перевод текущего игрока в новую комнату
+    // с обслуживанием последнего оставшегося на той же карте
+    public void reload(Game game, JSONObject save) {
+        reload(game, save, true);
+    }
+
+    // переводим всех игроков на новые борды
+    // при этом если надо перемешиваем их
+    public void reloadAll(boolean shuffle) {
+        new LinkedList<PlayerGame>(){{
+            addAll(playerGames);
+            if (shuffle) {
+                Collections.shuffle(this);
+            }
+        }}.forEach(pg -> reloadCurrent(pg));
     }
 
     private Player getPlayer(Game game) {
@@ -294,5 +332,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public List<PlayerGame> all() {
         return playerGames;
+    }
+
+    public Stream<PlayerGame> stream() {
+        return playerGames.stream();
     }
 }
