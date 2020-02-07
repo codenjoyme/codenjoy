@@ -7,3 +7,6 @@
 [submodule "CodingDojo/portable/windows-cmd"]
 	path = CodingDojo/portable/windows-cmd
 	url = https://github.com/codenjoyme/codenjoy-portable-windows.git
+[submodule "CodingDojo/games/excitebike"]
+	path = CodingDojo/games/excitebike
+	url = https://github.com/codenjoyme/codenjoy-excitebike.git
