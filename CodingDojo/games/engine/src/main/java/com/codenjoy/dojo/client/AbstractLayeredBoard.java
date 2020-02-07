@@ -99,7 +99,10 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 for (E element : elements) {
-                    if (valueOf(field[numLayer][x][y]).equals(element)) {
+                    E value = valueOf(field[numLayer][x][y]);
+                    if ((value == null && element == null)
+                            || (value != null && value.equals(element)))
+                    {
                         result.add(pt(x, y));
                     }
                 }
