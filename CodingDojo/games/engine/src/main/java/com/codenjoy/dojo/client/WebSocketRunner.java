@@ -190,7 +190,7 @@ public class WebSocketRunner implements Closeable {
                 }
 
                 board.forString(matcher.group(1));
-                print("Board: " + board);
+                print("Board: \n" + board);
 
                 String answer = solver.get(board);
                 print("Answer: " + answer);

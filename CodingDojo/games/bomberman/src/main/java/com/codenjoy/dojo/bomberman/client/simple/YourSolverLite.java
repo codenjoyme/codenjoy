@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.client;
+package com.codenjoy.dojo.bomberman.client.simple;
 
 /*-
  * #%L
@@ -22,67 +22,65 @@ package com.codenjoy.dojo.bomberman.client;
  * #L%
  */
 
+import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
 
-/**
- * User: your name
- */
+import java.util.HashMap;
+
 public class YourSolverLite implements Solver<Board> {
 
+    private Processor processor;
     private Dice dice;
     private Board board;
 
     public YourSolverLite(Dice dice) {
         this.dice = dice;
+        this.processor = new Processor();
     }
 
-    // the method which should be implemented
     @Override
     public String get(Board board) {
         this.board = board;
         if (board.isMyBombermanDead()) return "";
 
-        if (board.isNearMe(
-                "???" +
-                "☻☺?" +
-                "???")) {
-            return "RIGHT";
-        } else if (board.isNearMe(
-                "???" +
-                "?☺☻" +
-                "???")) {
-            return "LEFT";
-        } else if (board.isNearMe(
-                "?☻?" +
-                "?☺?" +
-                "???")) {
-            return "DOWN";
-        } else if (board.isNearMe(
-                "???" +
-                "?☺?" +
-                "?☻?")) {
-            return "UP";
-        }
+        setup();
 
-
-        // put your logic here
-        return Direction.DOWN.toString();
+        return processor.process(board).toString();
     }
 
-    /**
-     * To connect to the game server:
-     * 1. Sign up on the game server. If you did everything right, you'll get to the main game board.
-     * 2. Click on your name on the right hand side panel
-     * 3. Copy the whole link from the browser, paste it inside below method, now you're good to go!
-     */
+    private void setup() {
+        processor.addIf(Direction.RIGHT,
+                "???" +
+                "♥☺?" +
+                "???");
+
+        processor.addIf(Direction.LEFT,
+                "???" +
+                "♥☺?" +
+                "???");
+
+        processor.addIf(Direction.DOWN,
+                "?♥?" +
+                "?☺?" +
+                "???");
+
+        processor.addIf(Direction.UP,
+                "???" +
+                "?☺?" +
+                "?♥?");
+    }
+
     public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Bad format, please run program with 1 argument " +
+                    "like 'http://codenjoy.com:80/codenjoy-contest/board/player/playerId?code=1234567890123456789'");
+        }
         WebSocketRunner.runClient(
-                // paste here board page url from browser after registration
-                "http://127.0.0.1:8080/codenjoy-contest/board/player/0?code=000000000000&gameName=bomberman",
+                args[0],
                 new YourSolverLite(new RandomDice()),
                 new Board());
     }
