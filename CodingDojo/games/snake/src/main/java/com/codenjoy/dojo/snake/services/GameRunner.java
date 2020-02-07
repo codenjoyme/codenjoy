@@ -43,31 +43,33 @@ import com.codenjoy.dojo.snake.model.artifacts.RandomArtifactGenerator;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
-    private final Parameter<Integer> startSnakeLength;
-    private Parameter<Integer> boardSize;
+    private SnakeSettings setup;
 
     public GameRunner() {
-        boardSize = settings.addEditBox("Board size").type(Integer.class).def(15);
-        new Scores(0, settings);  // TODO сеттринги разделены по разным классам, продумать архитектуру
-        startSnakeLength = settings.getParameter("Start snake length").type(Integer.class);
+        setup = new SnakeSettings(settings);
     }
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer) score, settings);
+        // TODO этa настройка работает только, если удалить всех игроков и снова загрузить а надо сделать, чтобы reset all boards кнопка триггерила это тоже
+        if (setup.maxScoreMode().getValue()) {
+            return new MaxScores((Integer) score, setup);
+        } else {
+            return new Scores((Integer) score, setup);
+        }
     }
 
     @Override
     public GameField createGame(int levelNumber) {
         return new Snake(new RandomArtifactGenerator(getDice()),
-                new BasicWalls(boardSize.getValue()),
-                boardSize.getValue(),
-                startSnakeLength.getValue());
+                new BasicWalls(setup.boardSize().getValue()),
+                setup.boardSize().getValue(),
+                setup.startSnakeLength().getValue());
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return boardSize;
+        return setup.boardSize();
     }
 
     @Override
