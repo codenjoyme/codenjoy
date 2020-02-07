@@ -23,15 +23,20 @@ package com.codenjoy.dojo.bomberman.client.simple;
  */
 
 import com.codenjoy.dojo.bomberman.client.Board;
+import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
+import com.google.common.primitives.Chars;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class YourSolverLite implements Solver<Board> {
 
@@ -69,7 +74,11 @@ public class YourSolverLite implements Solver<Board> {
                     continue;
                 }
                 if (Direction.isValid(line)) {
-                    processor.addIf(Direction.valueOf(line), pattern);
+                    if (isValidPattern(pattern)) {
+                        processor.addIf(Direction.valueOf(line), pattern);
+                    } else {
+                        System.out.println("[ERROR] Pattern is not valid: " + pattern);
+                    }
                     pattern = "";
                 } else {
                     pattern += line;
@@ -79,6 +88,26 @@ public class YourSolverLite implements Solver<Board> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isValidPattern(String pattern) {
+        return isValidPatternLength(pattern) && isValidPatternSymbols(pattern);
+    }
+
+    private boolean isValidPatternSymbols(String pattern) {
+        List<Character> allow = Arrays.stream(Elements.values())
+                .map(e -> e.ch())
+                .collect(Collectors.toList());
+        allow.add('.');
+
+        return new LinkedList<>(Chars.asList(pattern.toCharArray())).stream()
+                .filter(ch -> !allow.contains(ch))
+                .count() == 0;
+    }
+
+    private boolean isValidPatternLength(String pattern) {
+        double sqrt = Math.sqrt(pattern.length());
+        return sqrt == Math.floor(sqrt);
     }
 
     public static void main(String[] args) {
