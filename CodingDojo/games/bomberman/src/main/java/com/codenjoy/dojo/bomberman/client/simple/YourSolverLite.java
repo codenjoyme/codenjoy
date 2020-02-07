@@ -33,6 +33,7 @@ import com.google.common.primitives.Chars;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,11 +41,15 @@ import java.util.stream.Collectors;
 
 public class YourSolverLite implements Solver<Board> {
 
+    public static final String MAIN_RULE_FILE_NAME = "/main.rule";
+
     private Processor processor;
+    private File main;
     private Dice dice;
     private Board board;
 
-    public YourSolverLite(Dice dice) {
+    public YourSolverLite(File main, Dice dice) {
+        this.main = main;
         this.dice = dice;
     }
 
@@ -61,13 +66,20 @@ public class YourSolverLite implements Solver<Board> {
     }
 
     private void setup() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(new File("games/bomberman/rules/rule.txt")))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(main))) {
             String line;
             String pattern = "";
             do {
                 line = reader.readLine();
 
                 if (line == null) {
+                    if (!StringUtils.isEmpty(pattern)) {
+                        if (isValidPattern(pattern)) {
+                            System.out.println("[ERROR] Direction is empty for pattern: " + pattern);
+                        } else {
+                            System.out.println("[ERROR] Pattern is not valid: " + pattern);
+                        }
+                    }
                     break;
                 }
                 if (StringUtils.isEmpty(StringUtils.trim(line))) {
@@ -111,13 +123,28 @@ public class YourSolverLite implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("Bad format, please run program with 1 argument " +
-                    "like 'http://codenjoy.com:80/codenjoy-contest/board/player/playerId?code=1234567890123456789'");
+        if (args.length != 2) {
+            System.out.println("[ERROR] Bad format, please run program with 2 arguments: \n" +
+                    "\t\t\t1) board url 'http://codenjoy.com:80/codenjoy-contest/board/player/playerId?code=1234567890123456789'\n" +
+                    "\t\t\t2) rules directory 'games/bomberman/rules'.\n" +
+                    "\t\tArguments are: " + Arrays.toString(args));
+            return;
         }
+
+        File directory = new File(args[1]);
+        if (!directory.exists() || !directory.isDirectory()) {
+            System.out.println("[ERROR] Rules directory not found here: " + directory.getAbsolutePath());
+            return;
+        }
+        File mainRuleFile = new File(directory.getAbsolutePath() + "/" + MAIN_RULE_FILE_NAME);
+        if (!mainRuleFile.exists() || !mainRuleFile.isFile()) {
+            System.out.println("[ERROR] Main rule file not found here: " + mainRuleFile.getAbsolutePath());
+            return;
+        }
+
         WebSocketRunner.runClient(
                 args[0],
-                new YourSolverLite(new RandomDice()),
+                new YourSolverLite(mainRuleFile, new RandomDice()),
                 new Board());
     }
 
