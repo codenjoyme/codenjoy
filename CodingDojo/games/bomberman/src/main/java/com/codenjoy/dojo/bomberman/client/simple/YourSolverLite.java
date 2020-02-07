@@ -28,7 +28,9 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.*;
 import java.util.HashMap;
 
 public class YourSolverLite implements Solver<Board> {
@@ -39,7 +41,6 @@ public class YourSolverLite implements Solver<Board> {
 
     public YourSolverLite(Dice dice) {
         this.dice = dice;
-        this.processor = new Processor();
     }
 
     @Override
@@ -47,31 +48,37 @@ public class YourSolverLite implements Solver<Board> {
         this.board = board;
         if (board.isMyBombermanDead()) return "";
 
+        this.processor = new Processor();
+
         setup();
 
         return processor.process(board).toString();
     }
 
     private void setup() {
-        processor.addIf(Direction.RIGHT,
-                "???" +
-                "♥☺?" +
-                "???");
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File("games/bomberman/rules/rule.txt")))) {
+            String line;
+            String pattern = "";
+            do {
+                line = reader.readLine();
 
-        processor.addIf(Direction.LEFT,
-                "???" +
-                "♥☺?" +
-                "???");
+                if (line == null) {
+                    break;
+                }
+                if (StringUtils.isEmpty(StringUtils.trim(line))) {
+                    continue;
+                }
+                if (Direction.isValid(line)) {
+                    processor.addIf(Direction.valueOf(line), pattern);
+                    pattern = "";
+                } else {
+                    pattern += line;
+                }
+            } while (line != null);
 
-        processor.addIf(Direction.DOWN,
-                "?♥?" +
-                "?☺?" +
-                "???");
-
-        processor.addIf(Direction.UP,
-                "???" +
-                "?☺?" +
-                "?♥?");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

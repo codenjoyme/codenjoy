@@ -162,7 +162,7 @@ public class Board extends AbstractBoard<Elements> {
         Board part = (Board)new Board(){
             @Override
             public Elements valueOf(char ch) {
-                if (ch == '?') return null;
+                if (ch == '.') return null;
                 return super.valueOf(ch);
             }
         }.forString(partInput);
