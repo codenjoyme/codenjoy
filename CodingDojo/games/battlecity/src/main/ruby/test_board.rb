@@ -58,15 +58,6 @@ end
 
 test = XUnit.new
 
-# str = '{"currentFigureType":"T","futureFigures":["I","O","L","Z"],"layers":["' +
-# '.......' +
-# '......I' +
-# '..LL..I' +
-# '...LI.I' +
-# '.SSLI.I' +
-# 'SSOOIOO' +
-# '..OOIOO' +
-# '"],"currentFigurePoint":{"x":1,"y":2}}'
 board = Board.new
 
 formated_data = File.open("test_boards/board1.txt", "r").read
@@ -75,83 +66,18 @@ data = formated_data.split("\n").join('')
 board = Board.new
 board.process(data)
 
-# puts board.board_to_s
 test.assert(formated_data, board.board_to_s + "\n")
 test.assert(Point.new(9.0, 5.0), board.getMe)
+test.assert([[28.0, 20.0], [12.0, 1.0]], board.getBullets)
+test.assert(true, board.isBulletAt(28, 20))
+test.assert(false, board.isGameOver)
+test.assert([
+  [12.0, 4.0], [2.0, 32.0], [28.0, 32.0], [29.0, 32.0], [1.0, 18.0],
+  [31.0, 31.0], [10.0, 19.0], [28.0, 17.0], [2.0, 4.0]], board.getEnemies)
 
-puts(board.getMe)
-
-
-# test.assert("T", board.current_figure_type)
-# test.assert("[1,2]", board.current_figure_point)
-# test.assert('["I", "O", "L", "Z"]', board.future_figures)
-
-# pt1 = Point.new(0, 0)
-# test.assert(ELEMENTS[:NONE], board.get_at(pt1))
-# test.assert(false, board.is_at?(pt1, ELEMENTS[:O_YELLOW]))
-# test.assert(true, board.is_at?(pt1, ELEMENTS[:NONE]))
-# test.assert(true, board.is_at?(pt1, [ELEMENTS[:L_ORANGE], ELEMENTS[:NONE]]))
-# test.assert(true, board.is_free?(pt1))
-
-# pt2 = Point.new(2, 0)
-# test.assert(ELEMENTS[:O_YELLOW], board.get_at(pt2))
-# test.assert(true, board.is_at?(pt2, ELEMENTS[:O_YELLOW]))
-# test.assert(false, board.is_at?(pt2, ELEMENTS[:NONE]))
-# test.assert(false, board.is_at?(pt2, [ELEMENTS[:L_ORANGE], ELEMENTS[:NONE]]))
-# test.assert(false, board.is_free?(pt2))
-
-# pt3 = Point.new(2, 2)
-# test.assert(ELEMENTS[:S_GREEN], board.get_at(pt3))
-# test.assert(false, board.is_at?(pt3, ELEMENTS[:O_YELLOW]))
-# test.assert(false, board.is_at?(pt3, ELEMENTS[:NONE]))
-# test.assert(false, board.is_at?(pt3, [ELEMENTS[:L_ORANGE], ELEMENTS[:NONE]]))
-# test.assert(false, board.is_free?(pt3))
-
-# pt4 = Point.new(3, 4)
-# test.assert(ELEMENTS[:L_ORANGE], board.get_at(pt4))
-# test.assert(false, board.is_at?(pt4, ELEMENTS[:O_YELLOW]))
-# test.assert(false, board.is_at?(pt4, ELEMENTS[:NONE]))
-# test.assert(true, board.is_at?(pt4, [ELEMENTS[:L_ORANGE], ELEMENTS[:NONE]]))
-# test.assert(false, board.is_free?(pt4))
-
-# test.assert('["[0,1]", "[1,1]", "[1,2]", "[2,2]"]',
-#             to_string(board.get(ELEMENTS[:S_GREEN])))
-
-# test.assert('["[2,4]", "[3,2]", "[3,3]", "[3,4]"]',
-#             to_string(board.get(ELEMENTS[:L_ORANGE])))
-
-# test.assert('["[0,1]", "[1,1]", "[1,2]", "[2,2]", "[2,4]", "[3,2]", "[3,3]", "[3,4]"]',
-#             to_string(board.get([ELEMENTS[:L_ORANGE], ELEMENTS[:S_GREEN]])))
-
-# pt5 = Point.new(3, 4)
-# test.assert('[".", "L", ".", "L", ".", "I", ".", "."]', board.get_near(pt5).to_s)
-# test.assert(false, board.is_near?(pt5, ELEMENTS[:T_PURPLE]))
-# test.assert(true, board.is_near?(pt5, ELEMENTS[:I_BLUE]))
-# test.assert(1, board.count_near(pt5, ELEMENTS[:I_BLUE]))
-# test.assert(2, board.count_near(pt5, ELEMENTS[:L_ORANGE]))
-
-# pt6 = Point.new(2, 2)
-# test.assert('["S", "S", ".", "O", ".", "O", "L", "L"]', board.get_near(pt6).to_s)
-# test.assert(true, board.is_near?(pt6, ELEMENTS[:L_ORANGE]))
-# test.assert(false, board.is_near?(pt6, ELEMENTS[:I_BLUE]))
-# test.assert(2, board.count_near(pt6, ELEMENTS[:L_ORANGE]))
-# test.assert(2, board.count_near(pt6, ELEMENTS[:S_GREEN]))
-
-# test.assert('["[0,1]", "[1,1]", "[1,2]", "[2,0]", ' +
-#                 '"[2,1]", "[2,2]", "[2,4]", "[3,0]", ' +
-#                 '"[3,1]", "[3,2]", "[3,3]", "[3,4]", ' +
-#                 '"[4,0]", "[4,1]", "[4,2]", "[4,3]", ' +
-#                 '"[5,0]", "[5,1]", "[6,0]", "[6,1]", ' +
-#                 '"[6,2]", "[6,3]", "[6,4]", "[6,5]"]',
-#             to_string(board.get_figures))
-
-#             test.assert('["[0,0]", "[0,2]", "[0,3]", "[0,4]", ' +
-#                 '"[0,5]", "[0,6]", "[1,0]", "[1,3]", ' +
-#                 '"[1,4]", "[1,5]", "[1,6]", "[2,3]", ' +
-#                 '"[2,5]", "[2,6]", "[3,5]", "[3,6]", ' +
-#                 '"[4,4]", "[4,5]", "[4,6]", "[5,2]", ' +
-#                 '"[5,3]", "[5,4]", "[5,5]", "[5,6]", ' +
-#                 '"[6,6]"]',
-#             to_string(board.get_free_space))
+# test out of board behavior
+%w(getAt isBulletAt).each do |method|
+  test.assert(false, board.send(method, 100, 100))
+end
 
 test.print

@@ -28,13 +28,12 @@ class YourSolver
   # Find solution for this board
   # @param [Board] board
   # @return string
-  #   * act(0) - rotate 90 degree clockwise
-  #   * act(1) - rotate 180 degree
-  #   * act(2) - rotate 90 degree contrclockwise
-  #   * act(0, 0) - clean glass
-  #   * left - move your figure left
-  #   * right - move your figure right
-  #   * down - drop figure
+  # UP:   'up',                // you can move
+  # DOWN: 'down',
+  # LEFT: 'left',
+  # RIGHT:'right',
+  # ACT:  'act',               // fire
+  # STOP: ''                   // stay
   def get_answer(board)
 
     #######################################################################
@@ -42,12 +41,6 @@ class YourSolver
     #                     YOUR ALGORITHM HERE
     #
     #######################################################################
-    # UP:   D(2, 0, 1, 'up'),                 // you can move
-    # DOWN: D(3, 0, -1, 'down'),
-    # LEFT: D(0, -1, 0, 'left'),
-    # RIGHT:D(1, 1, 0, 'right'),
-    # ACT:  D(4, 0, 0, 'act'),               // fire
-    # STOP: D(5, 0, 0, '')                   // stay
 
     return 'up'
   end

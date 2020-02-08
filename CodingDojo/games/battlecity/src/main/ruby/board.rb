@@ -145,6 +145,17 @@ class Board
     AI_TANK_LEFT: '«'
   }
 
+  ENEMIES = [
+    ELEMENTS[:AI_TANK_UP],
+    ELEMENTS[:AI_TANK_DOWN],
+    ELEMENTS[:AI_TANK_LEFT],
+    ELEMENTS[:AI_TANK_RIGHT],
+    ELEMENTS[:OTHER_TANK_UP],
+    ELEMENTS[:OTHER_TANK_DOWN],
+    ELEMENTS[:OTHER_TANK_LEFT],
+    ELEMENTS[:OTHER_TANK_RIGHT]
+  ]
+
   def process(data)
     @raw = data
   end
@@ -187,30 +198,23 @@ class Board
     result[0];
   end
 
-  def getEnemies
-    result = [
-      ELEMENTS[:AI_TANK_UP],
-      ELEMENTS[:AI_TANK_DOWN],
-      ELEMENTS[:AI_TANK_LEFT],
-      ELEMENTS[:AI_TANK_RIGHT],
-      ELEMENTS[:OTHER_TANK_UP],
-      ELEMENTS[:OTHER_TANK_DOWN],
-      ELEMENTS[:OTHER_TANK_LEFT],
-      ELEMENTS[:OTHER_TANK_RIGHT]
-    ].map{ |e| findAll(e) }.flatten.map{ |e| [e.x, e.y] }
+  def find_by_list(list)
+    result = list.map{ |e| findAll(e) }.flatten.map{ |e| [e.x, e.y] }
     return nil if (result.length == 0)
-    result;
+    result
+  end
+
+  def getEnemies
+    find_by_list(ENEMIES)
   end
 
   def getBullets
-    result = findAll(ELEMENTS[:BULLET]).map{ |e| [e.x, e.y] }
-    return nil if (result.length == 0)
-    result;
+    find_by_list([ELEMENTS[:BULLET]])
   end
 
   def isBulletAt(x, y)
     return false if Point.new(x, y).out_of?(size)
-    getAt(x, y) == ELEMENTS[:BULLET];
+    getAt(x, y) == ELEMENTS[:BULLET]
   end
 
   def isGameOver
@@ -219,6 +223,28 @@ class Board
 
   def board_to_s
     Array.new(size).each_with_index.map{ |e, n| @raw[(n * size)..((n + 1) * size - 1)]}.join("\n")
+  end
+
+  def getBarriers
+  #     var result = [];
+  #     result = result.concat(findAll(Elements.BATTLE_WALL));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_TWICE));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_TWICE));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT_TWICE));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT_TWICE));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT_RIGHT));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_DOWN));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_LEFT));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT_UP));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_LEFT));
+  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_RIGHT));
+  #     return sort(result);
+  # };
   end
 
   def to_s
@@ -269,34 +295,6 @@ end
 
 
 
-#     var isBulletAt = function(x, y) {
-#         if (pt(x, y).isOutOf(size)) {
-#             return false;
-#         }
-
-#         return getAt(x, y) == Elements.BULLET;
-#     }
-
-#     var getBarriers = function() {
-#         var result = [];
-#         result = result.concat(findAll(Elements.BATTLE_WALL));
-#         result = result.concat(findAll(Elements.CONSTRUCTION));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_TWICE));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_TWICE));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT_TWICE));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT_TWICE));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT_RIGHT));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_DOWN));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_LEFT));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT_UP));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_LEFT));
-#         result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_RIGHT));
-#         return sort(result);
-#     };
 
 #     var isAnyOfAt = function(x, y, elements) {
 #         if (pt(x, y).isOutOf(size)) {
