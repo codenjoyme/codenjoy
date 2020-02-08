@@ -156,6 +156,32 @@ class Board
     ELEMENTS[:OTHER_TANK_RIGHT]
   ]
 
+  TANK = [
+    ELEMENTS[:TANK_UP],
+    ELEMENTS[:TANK_DOWN],
+    ELEMENTS[:TANK_LEFT],
+    ELEMENTS[:TANK_RIGHT]
+  ]
+
+  BARRIERS = [
+    ELEMENTS[:BATTLE_WALL],
+    ELEMENTS[:CONSTRUCTION],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_DOWN],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_UP],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_LEFT],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_RIGHT],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_DOWN_TWICE],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_UP_TWICE],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_LEFT_TWICE],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_RIGHT_TWICE],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_LEFT_RIGHT],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_UP_DOWN],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_UP_LEFT],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_RIGHT_UP],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_DOWN_LEFT],
+    ELEMENTS[:CONSTRUCTION_DESTROYED_DOWN_RIGHT]
+  ]
+
   def process(data)
     @raw = data
   end
@@ -173,7 +199,7 @@ class Board
     @raw[xyl.getLength(x, y)];
   end
 
-  def isAt(x, y, element)
+  def at?(x, y, element)
     return false if Point.new(x, y).out_of?(size)
     getAt(x, y) == element;
   end
@@ -182,20 +208,15 @@ class Board
     result = []
     @raw.length.times do |i|
       point = xyl.getXY(i);
-      result.push(point) if isAt(point.x, point.y, element)
+      result.push(point) if at?(point.x, point.y, element)
     end
     result;
   end
 
-  def getMe
-    result = [
-      ELEMENTS[:TANK_UP],
-      ELEMENTS[:TANK_DOWN],
-      ELEMENTS[:TANK_LEFT],
-      ELEMENTS[:TANK_RIGHT]
-    ].map{ |e| findAll(e)}.flatten
-    return nil if (result.length == 0)
-    result[0];
+  def get_me
+    me = find_by_list(TANK)
+    return nil if me.nil?
+    find_by_list(TANK).flatten
   end
 
   def find_by_list(list)
@@ -212,39 +233,56 @@ class Board
     find_by_list([ELEMENTS[:BULLET]])
   end
 
-  def isBulletAt(x, y)
+  def get_near(x, y)
+    return false if Point.new(x, y).out_of?(size)
+    result = []
+    (-1..1).each do |dx|
+      (-1..1).each do |dy|
+          next if (dx == 0 && dy == 0)
+          result.push(getAt(x + dx, y + dy))
+      end
+    end
+    result;
+  end
+
+  def barrier_at?(x, y)
+    return false if Point.new(x, y).out_of?(size)
+    get_barriers.include?([x.to_f, y.to_f]);
+  end
+
+  def count_near(x, y, element)
+    get_near(x, y).select{ |e| e == element}.size
+  end
+
+  def near?(x, y, element)
+    n = get_near(x, y)
+    return false if !n
+    n.include?(element);
+  end
+
+  def bullet_at?(x, y)
     return false if Point.new(x, y).out_of?(size)
     getAt(x, y) == ELEMENTS[:BULLET]
   end
 
-  def isGameOver
-    getMe().nil?;
+  def any_of_at?(x, y, elements = [])
+    return false if Point.new(x, y).out_of?(size)
+    elements.each do |e|
+      return true if at?(x, y, e)
+    end
+    false;
+  end
+
+  def game_over?
+    get_me.nil?;
   end
 
   def board_to_s
     Array.new(size).each_with_index.map{ |e, n| @raw[(n * size)..((n + 1) * size - 1)]}.join("\n")
   end
 
-  def getBarriers
-  #     var result = [];
-  #     result = result.concat(findAll(Elements.BATTLE_WALL));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_TWICE));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_TWICE));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT_TWICE));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT_TWICE));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT_RIGHT));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_DOWN));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_LEFT));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT_UP));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_LEFT));
-  #     result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_RIGHT));
-  #     return sort(result);
-  # };
+  def get_barriers
+    find_by_list(BARRIERS)
   end
 
   def to_s
@@ -252,109 +290,7 @@ class Board
       "Board:\n#{board_to_s}",
       "My tank at: #{getMe}",
       "Enemies at: #{getEnemies}",
-      "Bulets at: #{getBullets}"
+      "Bullets at: #{getBullets}"
     ].join("\n")
   end
 end
-
-# var Board = function(board){
-#     var contains  = function(a, obj) {
-#         var i = a.length;
-#         while (i--) {
-#             if (a[i].equals(obj)) {
-#                 return true;
-#             }
-#         }
-#         return false;
-#     };
-
-#     var sort = function(all) {
-#         return all.sort(function(pt1, pt2) {
-#             return (pt1.getY()*1000 + pt1.getX()) -
-#                 (pt2.getY()*1000 + pt2.getX());
-#         });
-#     }
-
-#     var removeDuplicates = function(all) {
-#         var result = [];
-#         for (var index in all) {
-#             var point = all[index];
-#             if (!contains(result, point)) {
-#                 result.push(point);
-#             }
-#         }
-#         return sort(result);
-#     };
-
-#     var boardSize = function() {
-#         return Math.sqrt(board.length);
-#     };
-
-#     var size = boardSize();
-#     var xyl = new LengthToXY(size);
-
-
-
-
-#     var isAnyOfAt = function(x, y, elements) {
-#         if (pt(x, y).isOutOf(size)) {
-#             return false;
-#         }
-#         for (var index in elements) {
-#             var element = elements[index];
-#             if (isAt(x, y, element)) {
-#                 return true;
-#             }
-#         }
-#         return false;
-#     };
-
-#     // TODO применить этот подход в других js клиентах
-#     var getNear = function(x, y) {
-#         var result = [];
-#         for (var dx = -1; dx <= 1; dx++) {
-#             for (var dy = -1; dy <= 1; dy++) {
-#                 if (dx == 0 && dy == 0) continue;
-#                 result.push(getAt(x + dx, y + dy));
-#             }
-#         }
-#         return result;
-#     };
-
-#     var isNear = function(x, y, element) {
-#         return getNear(x, y).includes(element);
-#     };
-
-#     var isBarrierAt = function(x, y) {
-#         if (pt(x, y).isOutOf(size)) {
-#             return true;
-#         }
-
-#         return contains(getBarriers(), pt(x, y));
-#     };
-
-#     var countNear = function(x, y, element) {
-#         return getNear(x, y)
-#                     .filter(function(value) { return value === element })
-#                     .length;
-#     };
-
-#     return {
-#         size : boardSize,
-#         getMe : getMe,
-#         getEnemies : getEnemies,
-#         getBullets : getBullets,
-#         isGameOver : isGameOver,
-#         isAt : isAt,
-#         boardAsString : boardAsString,
-#         toString : toString,
-#         findAll : findAll,
-#         isAnyOfAt : isAnyOfAt,
-#         getNear : getNear,
-#         isNear : isNear,
-#         countNear : countNear,
-#         isBarrierAt : isBarrierAt,
-#         getBarriers : getBarriers,
-#         getAt : getAt
-#     };
-# };

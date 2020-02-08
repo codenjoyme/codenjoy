@@ -67,16 +67,23 @@ board = Board.new
 board.process(data)
 
 test.assert(formated_data, board.board_to_s + "\n")
-test.assert(Point.new(9.0, 5.0), board.getMe)
+test.assert([9.0, 5.0], board.get_me)
 test.assert([[28.0, 20.0], [12.0, 1.0]], board.getBullets)
-test.assert(true, board.isBulletAt(28, 20))
-test.assert(false, board.isGameOver)
+test.assert(true, board.bullet_at?(28, 20))
+test.assert(false, board.game_over?)
+test.assert(true, board.near?(4, 4, Board::ELEMENTS[:CONSTRUCTION]))
+test.assert(false, board.near?(100, 100, Board::ELEMENTS[:CONSTRUCTION]))
+test.assert(547, board.get_barriers.size)
+test.assert(true, board.any_of_at?(9, 5, Board::TANK))
+test.assert(true, board.barrier_at?(28, 13))
+test.assert(5, board.count_near(4, 4, "╬"))
+test.assert(["╨", "└", "╬", "╬", "╬", "╬", "╬", "╩"], board.get_near(4,4))
 test.assert([
   [12.0, 4.0], [2.0, 32.0], [28.0, 32.0], [29.0, 32.0], [1.0, 18.0],
   [31.0, 31.0], [10.0, 19.0], [28.0, 17.0], [2.0, 4.0]], board.getEnemies)
 
 # test out of board behavior
-%w(getAt isBulletAt).each do |method|
+%w(getAt bullet_at? any_of_at?).each do |method|
   test.assert(false, board.send(method, 100, 100))
 end
 

@@ -26,17 +26,20 @@ require_relative 'solver.rb'
 require 'websocket-client-simple'
 
 # Check ARGS
-usage = %Q(\n\nPlease run 'ruby runner.rb BOARD_URL'\n\nExample:\nruby runner.rb http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890\n\n)
+usage = %Q(\n\nPlease run 'ruby runner.rb BOARD_URL'\n\nExample:\nruby runner.rb https://dojorena.io/codenjoy-contest/board/player/70xewv6o7ddy9yphm1u0?code=2603484461919438773\n\n)
 
-# raise usage unless ARGV[0]
+raise usage unless ARGV[0]
 
 # WebSocket object to connect to Codenjoy server
-# ws_url = ARGV[0].dup
-# ws_url["http"] = "ws"
-# ws_url["board/player/"] = "ws?user="
-# ws_url["?code="] = "&code="
+ws_url = ARGV[0].dup
+ws_url["board/player/"] = "ws?user="
+ws_url["?code="] = "&code="
 
-ws_url = "wss://dojorena.io/codenjoy-contest/ws?user=70xewv6o7ddy9yphm1u0&code=2603484461919438773"
+if ws_url.include?("https")
+  ws_url["https"] = "wss"
+else
+  ws_url["https"] = "ws"
+end
 
 ws = WebSocket::Client::Simple.connect ws_url
 
