@@ -23,12 +23,15 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.TestSettings;
+import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -51,12 +54,20 @@ public class TanksEventsTest {
     private Player player;
     private Tank hero;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private Settings settings;
+    private String board = "☼☼☼☼☼" +
+            "☼   ☼" +
+            "☼   ☼" +
+            "☼   ☼" +
+            "☼☼☼☼☼";
 
     @Before
     public void setup() {
+        settings = new TestSettings();
+        LevelImpl level = new LevelImpl(board, mock(Dice.class));
         enemy = tank(1, 5, Direction.DOWN, 1);
 
-        game = new Battlecity(7, mock(Dice.class), Arrays.asList(new Construction[0]), enemy);
+        game = new Battlecity(level, mock(Dice.class), settings);
 
         events = mock(EventListener.class);
         player = player(1, 1, 2, 2, events);

@@ -58,8 +58,9 @@ public class PlayerTransportImpl implements PlayerTransport {
                 }
             }
             if (!messages.isEmpty()) {
-                throw new IOException("Error during send state to all players: " +
-                        messages.toString());
+                log.error("Error during send state to all players: " + messages.toString());
+//                throw new IOException("Error during send state to all players: " +
+//                        messages.toString());
                 // TODO Может не надо тут прокидывать это исключение а просто логгировать факт каждой проблемы отдельно
             }
             log.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", requested);

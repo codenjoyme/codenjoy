@@ -28,11 +28,13 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.List;
 
-public interface Field extends GameField<Player>, Level {
+public interface Field extends GameField<Player> {
 
     boolean isBarrier(int x, int y);
 
     boolean outOfField(int x, int y);
 
     void affect(Bullet bullet);
+
+    int getSize();
 }

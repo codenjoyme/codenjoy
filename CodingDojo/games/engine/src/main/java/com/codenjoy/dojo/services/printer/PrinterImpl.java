@@ -37,17 +37,14 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 class PrinterImpl implements Printer<String> {
     public static final String ERROR_SYMBOL = "Ъ";
     private char[][] field;
-    private final int size;
     private GamePrinter printer;
 
     public static <E extends CharElements, P> Printer getPrinter(BoardReader reader, P player) {
-        return new PrinterImpl(reader.size(),
-                new GamePrinterImpl<E, P>(reader, player));
+        return new PrinterImpl(new GamePrinterImpl<E, P>(reader, player));
     }
 
-    public PrinterImpl(int size, GamePrinter printer) {
+    public PrinterImpl( GamePrinter printer) {
         this.printer = printer;
-        this.size = size;
     }
 
     /**
@@ -76,6 +73,7 @@ class PrinterImpl implements Printer<String> {
     }
 
     private void fillField() {
+        int size = printer.getSize();
         field = new char[size][size];
         printer.init();
 
@@ -87,7 +85,7 @@ class PrinterImpl implements Printer<String> {
             return;
         }
 
-        field[size - 1 - y][x] = ch;
+        field[printer.getSize() - 1 - y][x] = ch;
     }
 
     static class GamePrinterImpl<E extends CharElements, P> implements GamePrinter {
@@ -113,6 +111,11 @@ class PrinterImpl implements Printer<String> {
             len = new byte[size][size];
 
             addAll(board.elements());
+        }
+
+        @Override
+        public int getSize() {
+            return board.size();
         }
 
         private void addAll(Iterable<? extends Point> elements) {
