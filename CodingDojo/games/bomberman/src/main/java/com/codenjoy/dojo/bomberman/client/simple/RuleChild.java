@@ -25,9 +25,28 @@ package com.codenjoy.dojo.bomberman.client.simple;
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.services.Direction;
 
-public interface Rule {
+public class RuleChild implements Rule {
 
-    String pattern();
+    private String pattern;
+    private Direction direction;
 
-    Direction direction(Board board);
+    public RuleChild(String pattern, Direction direction) {
+        this.pattern = pattern;
+        this.direction = direction;
+    }
+
+    @Override
+    public String pattern() {
+        return pattern;
+    }
+
+    @Override
+    public Direction direction(Board board) {
+        return direction;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%s > %s]", pattern, direction);
+    }
 }

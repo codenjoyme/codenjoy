@@ -25,9 +25,37 @@ package com.codenjoy.dojo.bomberman.client.simple;
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.services.Direction;
 
-public interface Rule {
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-    String pattern();
+public class Rules {
 
-    Direction direction(Board board);
+    private List<Rule> rules = new LinkedList<>();
+
+    public void addIf(Direction direction, String pattern) {
+        rules.add(new RuleChild(pattern, direction));
+    }
+
+    public Rules addSubIf(String pattern) {
+        Rules rules = new Rules();
+        this.rules.add(new RuleNode(pattern, rules));
+        return rules;
+    }
+
+    public Direction process(Board board) {
+        return rules.stream()
+                .filter(rule -> board.isNearMe(rule.pattern()))
+                .findFirst()
+                .orElse(new RuleChild("", Direction.STOP))
+                .direction(board);
+    }
+
+    @Override
+    public String toString() {
+        return rules.stream()
+                .map(Rule::toString)
+                .collect(Collectors.toList())
+                .toString();
+    }
 }

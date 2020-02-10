@@ -23,27 +23,19 @@ package com.codenjoy.dojo.bomberman.client.simple;
  */
 
 import com.codenjoy.dojo.bomberman.client.Board;
-import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
-import com.google.common.primitives.Chars;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class YourSolverLite implements Solver<Board> {
 
     public static final String MAIN_RULE_FILE_NAME = "/main.rule";
 
-    private Processor processor;
+    private Rules rules;
     private File main;
     private Dice dice;
     private Board board;
@@ -58,69 +50,12 @@ public class YourSolverLite implements Solver<Board> {
         this.board = board;
         if (board.isMyBombermanDead()) return "";
 
-        this.processor = new Processor();
+        rules = new Rules();
+        new RuleReader().load(rules, main);
 
-        setup();
-
-        return processor.process(board).toString();
+        return rules.process(board).toString();
     }
 
-    private void setup() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(main))) {
-            String line;
-            String pattern = "";
-            do {
-                line = reader.readLine();
-
-                if (line == null) {
-                    if (!StringUtils.isEmpty(pattern)) {
-                        if (isValidPattern(pattern)) {
-                            System.out.println("[ERROR] Direction is empty for pattern: " + pattern);
-                        } else {
-                            System.out.println("[ERROR] Pattern is not valid: " + pattern);
-                        }
-                    }
-                    break;
-                }
-                if (StringUtils.isEmpty(StringUtils.trim(line))) {
-                    continue;
-                }
-                if (Direction.isValid(line)) {
-                    if (isValidPattern(pattern)) {
-                        processor.addIf(Direction.valueOf(line), pattern);
-                    } else {
-                        System.out.println("[ERROR] Pattern is not valid: " + pattern);
-                    }
-                    pattern = "";
-                } else {
-                    pattern += line;
-                }
-            } while (line != null);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private boolean isValidPattern(String pattern) {
-        return isValidPatternLength(pattern) && isValidPatternSymbols(pattern);
-    }
-
-    private boolean isValidPatternSymbols(String pattern) {
-        List<Character> allow = Arrays.stream(Elements.values())
-                .map(e -> e.ch())
-                .collect(Collectors.toList());
-        allow.add('.');
-
-        return new LinkedList<>(Chars.asList(pattern.toCharArray())).stream()
-                .filter(ch -> !allow.contains(ch))
-                .count() == 0;
-    }
-
-    private boolean isValidPatternLength(String pattern) {
-        double sqrt = Math.sqrt(pattern.length());
-        return sqrt == Math.floor(sqrt);
-    }
 
     public static void main(String[] args) {
         if (args.length != 2) {
