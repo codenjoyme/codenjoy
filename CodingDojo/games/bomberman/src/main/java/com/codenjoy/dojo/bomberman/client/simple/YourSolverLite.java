@@ -26,6 +26,7 @@ import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
 
 import java.io.*;
@@ -35,36 +36,15 @@ import static com.codenjoy.dojo.bomberman.client.simple.RuleReader.MAIN_RULE_FIL
 
 public class YourSolverLite implements Solver<Board> {
 
-    private Deque<Object> commands;
-    private Rules rules;
-    private String rulesPlace;
-    private Dice dice;
-    private Board board;
+    private Processor processor;
 
     public YourSolverLite(String rulesPlace, Dice dice) {
-        this.rulesPlace = rulesPlace;
-        this.dice = dice;
-        this.commands = new LinkedList<>(); 
+        this.processor = new Processor(rulesPlace, dice);
     }
 
     @Override
     public String get(Board board) {
-        this.board = board;
-        if (board.isMyBombermanDead()) return "";
-
-        if (commands.isEmpty()) {
-            rules = new Rules();
-
-            RuleReader reader = new RuleReader();
-            reader.load(rules, new File(rulesPlace + MAIN_RULE_FILE_NAME));
-
-            if (reader.hasErrors()) {
-                reader.errors().forEach(System.out::println);
-            }
-
-            commands.addAll(rules.process(board));
-        }
-        return commands.removeFirst().toString();
+        return processor.next(board).toString();
     }
 
     public static void main(String[] args) {

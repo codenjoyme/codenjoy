@@ -216,4 +216,8 @@ public class RuleReader {
     public List<ErrorMessage> errors() {
         return errors;
     }
+
+    public void cleanErrors() {
+        errors.clear();
+    }
 }

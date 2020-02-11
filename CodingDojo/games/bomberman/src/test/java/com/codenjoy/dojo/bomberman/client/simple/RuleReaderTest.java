@@ -12,40 +12,7 @@ import java.util.function.Supplier;
 
 import static org.junit.Assert.assertEquals;
 
-public class RuleReaderTest {
-
-    private File file;
-    private List<File> subFiles;
-    private RuleReader reader;
-    private Supplier<String> lines;
-    private Supplier<String> lines2;
-    private Rules rules;
-
-    @Before
-    public void setup() {
-        // given
-        file = new File("directory/main.rule");
-        rules = new Rules();
-        subFiles = new LinkedList<>();
-        reader = new RuleReader() {
-            @Override
-            public void load(Rules rules, File file) {
-                subFiles.add(file);
-
-                processLines(rules, file, lines2);
-            }
-        };
-    }
-    
-    private Supplier<String> load(String... input) {
-        Deque<String> list = new LinkedList<>(Arrays.asList(input));
-        return () -> {
-            if (list.isEmpty()) {
-                return null;
-            }
-            return list.removeFirst();
-        };
-    }
+public class RuleReaderTest extends AbstractRuleReaderTest {
 
     @Test
     public void shouldNoRules_whenEmptyFile() {
