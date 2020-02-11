@@ -25,14 +25,16 @@ package com.codenjoy.dojo.bomberman.client.simple;
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.services.Direction;
 
+import java.util.List;
+
 public class RuleChild implements Rule {
 
     private String pattern;
-    private Direction direction;
+    private List<Direction> directions;
 
-    public RuleChild(String pattern, Direction direction) {
+    public RuleChild(String pattern, List<Direction> directions) {
         this.pattern = pattern;
-        this.direction = direction;
+        this.directions = directions;
     }
 
     @Override
@@ -41,12 +43,12 @@ public class RuleChild implements Rule {
     }
 
     @Override
-    public Direction direction(Board board) {
-        return direction;
+    public List<Direction> directions(Board board) {
+        return directions;
     }
 
     @Override
     public String toString() {
-        return String.format("[%s > %s]", pattern, direction);
+        return String.format("[%s > %s]", pattern, directions);
     }
 }

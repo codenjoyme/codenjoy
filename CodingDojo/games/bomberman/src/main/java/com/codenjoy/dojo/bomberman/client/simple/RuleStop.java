@@ -22,33 +22,14 @@ package com.codenjoy.dojo.bomberman.client.simple;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.services.Direction;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
+import java.util.Arrays;
 
-public class RuleNode implements Rule {
-
-    private String pattern;
-    private Rules rules;
-
-    public RuleNode(String pattern, Rules rules) {
-        this.pattern = pattern;
-        this.rules = rules;
-    }
-
-    @Override
-    public String pattern() {
-        return pattern;
-    }
-
-    @Override
-    public List<Direction> directions(Board board) {
-        return rules.process(board);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("[%s > %s]", pattern, rules.toString());
+public class RuleStop extends RuleChild {
+    
+    public RuleStop() {
+        super(StringUtils.EMPTY, Arrays.asList(Direction.STOP));
     }
 }

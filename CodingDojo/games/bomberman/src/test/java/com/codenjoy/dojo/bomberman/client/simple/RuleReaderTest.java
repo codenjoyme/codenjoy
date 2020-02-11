@@ -94,11 +94,11 @@ public class RuleReaderTest {
 
         // then
         assertEquals(
-                "[[???♥☺???? > RIGHT], " +
-                "[????☺♥??? > LEFT], " +
-                "[?♥??☺???? > DOWN], " +
-                "[?☼?☼☺??♥? > RIGHT], " +
-                "[????☺??♥? > UP]]", rules.toString());
+                "[[???♥☺???? > [RIGHT]], " +
+                "[????☺♥??? > [LEFT]], " +
+                "[?♥??☺???? > [DOWN]], " +
+                "[?☼?☼☺??♥? > [RIGHT]], " +
+                "[????☺??♥? > [UP]]]", rules.toString());
     }
 
     @Test
@@ -150,14 +150,56 @@ public class RuleReaderTest {
 
         // then
         assertEquals(
-                "[[?☼??☺???? > DOWN], " +
+                "[[?☼??☺???? > [DOWN]], " +
                 "[????????????????????????☺???????????????????????? > [" +
-                    "[?☼??☺ ?☼? > RIGHT], " +
-                    "[?☼??☺ ?#? > RIGHT], " +
-                    "[?#??☺ ?☼? > RIGHT], " +
-                    "[?#??☺ ?#? > RIGHT]]" +
+                    "[?☼??☺ ?☼? > [RIGHT]], " +
+                    "[?☼??☺ ?#? > [RIGHT]], " +
+                    "[?#??☺ ?☼? > [RIGHT]], " +
+                    "[?#??☺ ?#? > [RIGHT]]]" +
                 "], " +
-                "[???☼☺☼?#? > UP]]", rules.toString());
+                "[???☼☺☼?#? > [UP]]]", rules.toString());
+    }
+
+    @Test
+    public void shouldSeveralDirections_whenOneRule() {
+        // given
+        lines = load(
+                "   ",
+                "   ",
+                "   ",
+                "RIGHT,LEFT,DOWN",
+                "",
+                "   ",
+                "   ",
+                "   ",
+                "  LEFT  , RIGHT,   UP",
+                "",
+                "   ",
+                "   ",
+                "   ",
+                "DOWN, UP  ",
+                "",
+                "   ",
+                "   ",
+                "   ",
+                "RIGHT",
+                "",
+                "   ",
+                "   ",
+                "   ",
+                "    UP ,  DOWN, LEFT, RIGHT,RIGHT");
+
+        // when
+        reader.processLines(rules, file, lines);
+
+        // then
+        assertEquals(
+                "[[          > [RIGHT, LEFT, DOWN]], " +
+                "[          > [LEFT, RIGHT, UP]], " +
+                "[          > [DOWN, UP]], " +
+                "[          > [RIGHT]], " +
+                "[          > [UP, DOWN, LEFT, RIGHT, RIGHT]]]", 
+                rules.toString());
     }
     
 }

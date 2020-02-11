@@ -33,8 +33,8 @@ public class Rules {
 
     private List<Rule> rules = new LinkedList<>();
 
-    public void addIf(Direction direction, String pattern) {
-        rules.add(new RuleChild(pattern, direction));
+    public void addIf(List<Direction> directions, String pattern) {
+        rules.add(new RuleChild(pattern, directions));
     }
 
     public Rules addSubIf(String pattern) {
@@ -43,12 +43,12 @@ public class Rules {
         return rules;
     }
 
-    public Direction process(Board board) {
+    public List<Direction> process(Board board) {
         return rules.stream()
                 .filter(rule -> board.isNearMe(rule.pattern()))
                 .findFirst()
-                .orElse(new RuleChild("", Direction.STOP))
-                .direction(board);
+                .orElse(new RuleStop())
+                .directions(board);
     }
 
     @Override

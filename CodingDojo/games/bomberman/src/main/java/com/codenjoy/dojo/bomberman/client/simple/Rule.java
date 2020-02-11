@@ -25,9 +25,11 @@ package com.codenjoy.dojo.bomberman.client.simple;
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.services.Direction;
 
+import java.util.List;
+
 public interface Rule {
 
     String pattern();
 
-    Direction direction(Board board);
+    List<Direction> directions(Board board);
 }

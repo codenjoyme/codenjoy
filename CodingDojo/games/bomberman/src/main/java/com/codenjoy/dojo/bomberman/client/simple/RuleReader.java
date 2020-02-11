@@ -38,6 +38,8 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 public class RuleReader {
 
     public static final String DIRECTIVE_RULE = "RULE ";
@@ -85,16 +87,16 @@ public class RuleReader {
             }
 
             boolean isRuleDirective = line.toUpperCase().startsWith(DIRECTIVE_RULE);
-            boolean isDirectionDirective = Direction.isValid(line);
+            boolean isDirectionsDirective = isValidDirections(line);
 
-            if (isRuleDirective || isDirectionDirective) {
+            if (isRuleDirective || isDirectionsDirective) {
                 if (!isValidPattern(pattern)) {
                     error(Messages.PATTERN_IS_NOT_VALID, file, number, pattern);
                     continue;
                 }
             }
 
-            if (!isRuleDirective && !isDirectionDirective) {
+            if (!isRuleDirective && !isDirectionsDirective) {
                 pattern += line;
                 continue;
             }
@@ -106,11 +108,27 @@ public class RuleReader {
                 Rules sub = rules.addSubIf(pattern);
                 this.load(sub, subFile);
 
-            } else if (isDirectionDirective) {
-                rules.addIf(Direction.valueOf(line), pattern);
+            } else if (isDirectionsDirective) {
+                List<Direction> directions = 
+                        parseDirections(line)
+                                .stream()
+                                .map(s -> Direction.valueOf(s))
+                                .collect(toList());
+                
+                rules.addIf(directions, pattern);
             }
             pattern = "";
         } while (line != null);
+    }
+
+    private boolean isValidDirections(String string) {
+        return !parseDirections(string).stream()
+                .anyMatch(d -> !Direction.isValid(d));
+    }
+
+    private List<String> parseDirections(String string) {
+        return Arrays.asList(string.replaceAll(" ?", "")
+                .split(","));
     }
 
     private void error(String message, File file, int number, String pattern) {
@@ -125,7 +143,7 @@ public class RuleReader {
     private boolean isValidPatternSymbols(String pattern) {
         List<Character> allow = Arrays.stream(Elements.values())
                 .map(e -> e.ch())
-                .collect(Collectors.toList());
+                .collect(toList());
         allow.add(Board.ANY_CHAR);
 
         return new LinkedList<>(Chars.asList(pattern.toCharArray())).stream()
