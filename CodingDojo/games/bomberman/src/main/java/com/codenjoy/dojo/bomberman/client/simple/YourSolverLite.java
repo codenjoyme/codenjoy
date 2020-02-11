@@ -26,20 +26,16 @@ import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
 
-import java.io.*;
 import java.util.*;
-
-import static com.codenjoy.dojo.bomberman.client.simple.RuleReader.MAIN_RULE_FILE_NAME;
 
 public class YourSolverLite implements Solver<Board> {
 
     private Processor processor;
 
     public YourSolverLite(String rulesPlace, Dice dice) {
-        this.processor = new Processor(rulesPlace, dice);
+        this.processor = new Processor(rulesPlace, dice, System.out::println);
     }
 
     @Override
