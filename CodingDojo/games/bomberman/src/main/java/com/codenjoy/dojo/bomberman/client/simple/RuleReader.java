@@ -43,10 +43,13 @@ import static java.util.stream.Collectors.toList;
 public class RuleReader {
 
     public static final String DIRECTIVE_RULE = "RULE ";
+    public static final String MAIN_RULE_FILE_NAME = "/main.rule";
     
     private List<ErrorMessage> errors = new LinkedList<>(); 
 
     public void load(Rules rules, File file) {
+        validate(file);
+        
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
             Supplier<String> lines = () -> {
@@ -61,7 +64,23 @@ public class RuleReader {
             processLines(rules, file, lines);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            errors.add(new ErrorMessage(READING_FILE_ERROR, file));
+            return;
+        }
+    }
+
+    private void validate(File file) {
+        File directory = file.getParentFile();
+        if (!directory.exists() || !directory.isDirectory()) {
+            errors.add(new ErrorMessage(RULES_DIRECTORY_NOT_FOUND_HERE, 
+                    directory.getAbsolutePath()));
+            return;
+        }
+        File mainRuleFile = new File(directory.getAbsolutePath() + MAIN_RULE_FILE_NAME);
+        if (!mainRuleFile.exists() || !mainRuleFile.isFile()) {
+            errors.add(new ErrorMessage(MAIN_RULE_FILE_NOT_FOUND_HERE, 
+                    mainRuleFile.getAbsolutePath()));
+            return;
         }
     }
 

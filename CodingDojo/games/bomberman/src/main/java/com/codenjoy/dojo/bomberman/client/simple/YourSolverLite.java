@@ -29,20 +29,22 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
 import java.io.*;
-import java.util.Arrays;
+import java.util.*;
+
+import static com.codenjoy.dojo.bomberman.client.simple.RuleReader.MAIN_RULE_FILE_NAME;
 
 public class YourSolverLite implements Solver<Board> {
 
-    public static final String MAIN_RULE_FILE_NAME = "/main.rule";
-
+    private Deque<Object> commands;
     private Rules rules;
-    private File main;
+    private String rulesPlace;
     private Dice dice;
     private Board board;
 
-    public YourSolverLite(File main, Dice dice) {
-        this.main = main;
+    public YourSolverLite(String rulesPlace, Dice dice) {
+        this.rulesPlace = rulesPlace;
         this.dice = dice;
+        this.commands = new LinkedList<>(); 
     }
 
     @Override
@@ -50,18 +52,20 @@ public class YourSolverLite implements Solver<Board> {
         this.board = board;
         if (board.isMyBombermanDead()) return "";
 
-        rules = new Rules();
-        
-        RuleReader reader = new RuleReader();
-        reader.load(rules, main);
-        
-        if (reader.hasErrors()) {
-            reader.errors().forEach(System.out::println);
+        if (commands.isEmpty()) {
+            rules = new Rules();
+
+            RuleReader reader = new RuleReader();
+            reader.load(rules, new File(rulesPlace + MAIN_RULE_FILE_NAME));
+
+            if (reader.hasErrors()) {
+                reader.errors().forEach(System.out::println);
+            }
+
+            commands.addAll(rules.process(board));
         }
-
-        return rules.process(board).toString();
+        return commands.removeFirst().toString();
     }
-
 
     public static void main(String[] args) {
         if (args.length != 2) {
@@ -71,23 +75,10 @@ public class YourSolverLite implements Solver<Board> {
                     "\t\tArguments are: " + Arrays.toString(args));
             return;
         }
-
-        File directory = new File(args[1]);
-        if (!directory.exists() || !directory.isDirectory()) {
-            System.out.println("[ERROR] " + Messages.RULES_DIRECTORY_NOT_FOUND_HERE + 
-                    ": " + directory.getAbsolutePath());
-            return;
-        }
-        File mainRuleFile = new File(directory.getAbsolutePath() + "/" + MAIN_RULE_FILE_NAME);
-        if (!mainRuleFile.exists() || !mainRuleFile.isFile()) {
-            System.out.println("[ERROR] " + Messages.MAIN_RULE_FILE_NOT_FOUND_HERE + 
-                    ": " + mainRuleFile.getAbsolutePath());
-            return;
-        }
-
+        
         WebSocketRunner.runClient(
                 args[0],
-                new YourSolverLite(mainRuleFile, new RandomDice()),
+                new YourSolverLite(args[1], new RandomDice()),
                 new Board());
     }
 
