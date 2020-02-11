@@ -36,6 +36,8 @@ import java.util.List;
 
 public class Board extends AbstractBoard<Elements> {
 
+    public static final char ANY_CHAR = '?';
+
     @Override
     public Elements valueOf(char ch) {
         return Elements.valueOf(ch);
@@ -157,12 +159,13 @@ public class Board extends AbstractBoard<Elements> {
         return isBarrierAt(point.getX(), point.getY());
     }
 
+    // TODO refactor me
     public boolean isNearMe(String partInput) {
         Point meAtMap = getBomberman();
         Board part = (Board)new Board(){
             @Override
             public Elements valueOf(char ch) {
-                if (ch == '.') return null;
+                if (ch == ANY_CHAR) return null;
                 return super.valueOf(ch);
             }
         }.forString(partInput);

@@ -59,7 +59,7 @@ public class YourSolverLite implements Solver<Board> {
 
     public static void main(String[] args) {
         if (args.length != 2) {
-            System.out.println("[ERROR] Bad format, please run program with 2 arguments: \n" +
+            System.out.println("[ERROR] " + Messages.BAD_FORMAT_PLEASE_RUN_PROGRAM_WITH_2_ARGUMENTS + ": \n" +
                     "\t\t\t1) board url 'http://codenjoy.com:80/codenjoy-contest/board/player/playerId?code=1234567890123456789'\n" +
                     "\t\t\t2) rules directory 'games/bomberman/rules'.\n" +
                     "\t\tArguments are: " + Arrays.toString(args));
@@ -68,12 +68,14 @@ public class YourSolverLite implements Solver<Board> {
 
         File directory = new File(args[1]);
         if (!directory.exists() || !directory.isDirectory()) {
-            System.out.println("[ERROR] Rules directory not found here: " + directory.getAbsolutePath());
+            System.out.println("[ERROR] " + Messages.RULES_DIRECTORY_NOT_FOUND_HERE + 
+                    ": " + directory.getAbsolutePath());
             return;
         }
         File mainRuleFile = new File(directory.getAbsolutePath() + "/" + MAIN_RULE_FILE_NAME);
         if (!mainRuleFile.exists() || !mainRuleFile.isFile()) {
-            System.out.println("[ERROR] Main rule file not found here: " + mainRuleFile.getAbsolutePath());
+            System.out.println("[ERROR] " + Messages.MAIN_RULE_FILE_NOT_FOUND_HERE + 
+                    ": " + mainRuleFile.getAbsolutePath());
             return;
         }
 

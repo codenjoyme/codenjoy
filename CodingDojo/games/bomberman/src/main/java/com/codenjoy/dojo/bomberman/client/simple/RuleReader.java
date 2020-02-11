@@ -22,6 +22,7 @@ package com.codenjoy.dojo.bomberman.client.simple;
  * #L%
  */
 
+import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.services.Direction;
 import com.google.common.primitives.Chars;
@@ -48,7 +49,8 @@ public class RuleReader {
                 try {
                     return reader.readLine();
                 } catch (IOException e) {
-                    System.out.println("[ERROR] Reading file error: " + file.toString());
+                    System.out.println("[ERROR] " + Messages.READING_FILE_ERROR + 
+                            ": " + file.toString());
                     return null;
                 }
             };
@@ -63,15 +65,17 @@ public class RuleReader {
     public void processLines(Rules rules, File file, Supplier<String> lines)  {
         String line;
         String pattern = "";
+        int number = 0;
         do {
             line = lines.get();
+            number++;
 
             if (line == null) {
                 if (!StringUtils.isEmpty(pattern)) {
                     if (isValidPattern(pattern)) {
-                        System.out.println("[ERROR] Direction is empty for pattern: " + pattern);
+                        error(Messages.DIRECTION_IS_EMPTY_FOR_PATTERN, file, number, pattern);
                     } else {
-                        System.out.println("[ERROR] Pattern is not valid: " + pattern);
+                        error(Messages.PATTERN_IS_NOT_VALID, file, number, pattern);
                     }
                 }
                 break;
@@ -85,7 +89,7 @@ public class RuleReader {
 
             if (isRuleDirective || isDirectionDirective) {
                 if (!isValidPattern(pattern)) {
-                    System.out.println("[ERROR] Pattern is not valid: " + pattern);
+                    error(Messages.PATTERN_IS_NOT_VALID, file, number, pattern);
                     continue;
                 }
             }
@@ -109,6 +113,11 @@ public class RuleReader {
         } while (line != null);
     }
 
+    private void error(String message, File file, int number, String pattern) {
+        System.out.printf("[ERROR] " + message + ": '%s' at %s:%s%n",
+                pattern, file.getName(), number);
+    }
+
     private boolean isValidPattern(String pattern) {
         return isValidPatternLength(pattern) && isValidPatternSymbols(pattern);
     }
@@ -117,7 +126,7 @@ public class RuleReader {
         List<Character> allow = Arrays.stream(Elements.values())
                 .map(e -> e.ch())
                 .collect(Collectors.toList());
-        allow.add('.');
+        allow.add(Board.ANY_CHAR);
 
         return new LinkedList<>(Chars.asList(pattern.toCharArray())).stream()
                 .filter(ch -> !allow.contains(ch))
