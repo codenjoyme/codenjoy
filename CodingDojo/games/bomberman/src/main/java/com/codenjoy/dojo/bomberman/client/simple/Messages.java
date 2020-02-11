@@ -2,6 +2,7 @@ package com.codenjoy.dojo.bomberman.client.simple;
 
 public class Messages {
     public static final String PATTERN_IS_NOT_VALID = "Pattern is not valid";
+    public static final String SYNONYM_IS_NOT_VALID = "Synonym is not valid";
     public static final String DIRECTIONS_IS_EMPTY_FOR_PATTERN = "Directions is empty for pattern";
     public static final String DIRECTIONS_IS_NOT_VALID_FOR_PATTERN = "Direction '%s' is not valid for pattern";
     public static final String READING_FILE_ERROR = "Reading file error";

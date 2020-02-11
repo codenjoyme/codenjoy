@@ -29,10 +29,10 @@ import java.util.List;
 
 public class RuleChild implements Rule {
 
-    private String pattern;
+    private Pattern pattern;
     private List<Direction> directions;
 
-    public RuleChild(String pattern, List<Direction> directions) {
+    public RuleChild(Pattern pattern, List<Direction> directions) {
         this.pattern = pattern;
         this.directions = directions;
     }

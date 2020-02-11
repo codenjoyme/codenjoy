@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.client;
  */
 
 
+import com.codenjoy.dojo.bomberman.client.simple.Pattern;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -160,26 +161,40 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     // TODO refactor me
-    public boolean isNearMe(String partInput) {
+    public boolean isNearMe(Pattern pattern) {
         Point meAtMap = getBomberman();
         Board part = (Board)new Board(){
             @Override
             public Elements valueOf(char ch) {
-                if (ch == ANY_CHAR) return null;
-                return super.valueOf(ch);
+                try {
+                    return super.valueOf(ch);
+                } catch (IllegalArgumentException e) {
+                    return null;
+                }
             }
-        }.forString(partInput);
+        }.forString(pattern.pattern());
 
         Point meAtPart = part.getBomberman();
         Point corner = meAtMap.relative(meAtPart);
 
         for (int dx = 0; dx < part.size; dx++) {
             for (int dy = 0; dy < part.size; dy++) {
-                Elements atMap = this.getAt(corner.getX() + dx, corner.getY() + dy);
-                Elements atPart = part.getAt(dx, dy);
-                if (atPart != null && atMap != atPart) {
-                    return false;
+                Elements real = this.getAt(corner.getX() + dx, corner.getY() + dy);
+                Character mask = part.field(dx, dy).get(0);
+
+                if (mask == ANY_CHAR){
+                    continue;
+                } 
+                
+                if (mask == real.ch()) {
+                    continue;
                 }
+                
+                if (pattern.synonyms().match(mask, real.ch())) {
+                    continue;
+                }
+                            
+                return false;
             }
         }
         return true;

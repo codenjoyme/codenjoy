@@ -29,10 +29,10 @@ import java.util.List;
 
 public class RuleNode implements Rule {
 
-    private String pattern;
+    private Pattern pattern;
     private Rules rules;
 
-    public RuleNode(String pattern, Rules rules) {
+    public RuleNode(Pattern pattern, Rules rules) {
         this.pattern = pattern;
         this.rules = rules;
     }

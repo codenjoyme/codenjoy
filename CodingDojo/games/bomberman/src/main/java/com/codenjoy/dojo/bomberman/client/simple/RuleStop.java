@@ -30,6 +30,6 @@ import java.util.Arrays;
 public class RuleStop extends RuleChild {
     
     public RuleStop() {
-        super(StringUtils.EMPTY, Arrays.asList(Direction.STOP));
+        super(new Pattern(), Arrays.asList(Direction.STOP));
     }
 }

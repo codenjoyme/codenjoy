@@ -35,11 +35,11 @@ public class Rules {
 
     private List<Rule> rules = new LinkedList<>();
 
-    public void addIf(List<Direction> directions, String pattern) {
+    public void addIf(List<Direction> directions, Pattern pattern) {
         rules.add(new RuleChild(pattern, directions));
     }
 
-    public Rules addSubIf(String pattern) {
+    public Rules addSubIf(Pattern pattern) {
         Rules rules = new Rules();
         this.rules.add(new RuleNode(pattern, rules));
         return rules;

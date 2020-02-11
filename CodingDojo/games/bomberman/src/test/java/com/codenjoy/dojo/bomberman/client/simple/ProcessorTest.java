@@ -10,8 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -59,7 +58,7 @@ public class ProcessorTest extends AbstractRuleReaderTest {
                 "   ",
                 "RIGHT,LEFT,DOWN,UP,UP,LEFT");
 
-        when(board.isNearMe(anyString())).thenReturn(true);
+        when(board.isNearMe(any(Pattern.class))).thenReturn(true);
 
         // when then
         assertEquals(Direction.RIGHT, processor.next(board));
@@ -90,7 +89,7 @@ public class ProcessorTest extends AbstractRuleReaderTest {
                 "   ",
                 "BAD RULE");
 
-        when(board.isNearMe(anyString())).thenReturn(true);
+        when(board.isNearMe(any(Pattern.class))).thenReturn(true);
 
         // when 
         Direction direction = processor.next(board);
@@ -142,8 +141,9 @@ public class ProcessorTest extends AbstractRuleReaderTest {
                 "?☺ ",
                 "?#?",
                 "LEFT");
-        
-        when(board.isNearMe(eq("?#??☺ ?☼?"))).thenReturn(true);
+
+        Pattern pattern = new Pattern("?#??☺ ?☼?", null);
+        when(board.isNearMe(eq(pattern))).thenReturn(true);
 
         // when
         Direction direction = processor.next(board);

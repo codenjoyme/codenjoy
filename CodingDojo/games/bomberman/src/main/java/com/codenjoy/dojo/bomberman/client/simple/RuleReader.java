@@ -43,6 +43,7 @@ import static java.util.stream.Collectors.toList;
 public class RuleReader {
 
     public static final String DIRECTIVE_RULE = "RULE ";
+    public static final String DIRECTIVE_SYNONYM = "LET ";
     public static final String MAIN_RULE_FILE_NAME = "/main.rule";
     
     private List<ErrorMessage> errors = new LinkedList<>(); 
@@ -88,6 +89,7 @@ public class RuleReader {
         
         String line;
         String pattern = StringUtils.EMPTY;
+        Synonyms synonyms = new Synonyms();
         int number = 0;
         do {
             line = lines.get();
@@ -95,7 +97,7 @@ public class RuleReader {
 
             if (line == null) {
                 if (!StringUtils.isEmpty(pattern)) {
-                    if (isValidPattern(pattern)) {
+                    if (isValidPattern(new Pattern(pattern, synonyms))) {
                         errors.add(new ErrorMessage(DIRECTIONS_IS_EMPTY_FOR_PATTERN, file, number, pattern));
                     } else {
                         errors.add(new ErrorMessage(PATTERN_IS_NOT_VALID, file, number, pattern));
@@ -109,15 +111,28 @@ public class RuleReader {
                 continue;
             }
 
+            boolean isSynonymDirective = line.toUpperCase().startsWith(DIRECTIVE_SYNONYM);
+            if (isSynonymDirective) {
+                String substring = line.substring(DIRECTIVE_SYNONYM.length());
+                String[] split = substring.split("=");
+                if (split.length != 2 || split[0].length() != 1 || split[1].length() == 0) { 
+                    // TODO test me
+                    errors.add(new ErrorMessage(SYNONYM_IS_NOT_VALID, file, number, line));
+                    continue;
+                }
+
+                synonyms.add(split[0].charAt(0), split[1]);
+                continue;
+            }
+            
             boolean isRuleDirective = line.toUpperCase().startsWith(DIRECTIVE_RULE);
             boolean isDirectionsDirective = isValidDirections(line);
             boolean isJustComma = isJustComma(line);
             boolean isContainsDirection = isContainsDirection(line);
             
             if (isRuleDirective || (isDirectionsDirective && !isJustComma)) {
-                if (!isValidPattern(pattern)) {
-                    errors.add(new ErrorMessage(PATTERN_IS_NOT_VALID, 
-                            file, number, pattern));
+                if (!isValidPattern(new Pattern(pattern, synonyms))) {
+                    errors.add(new ErrorMessage(PATTERN_IS_NOT_VALID, file, number, pattern));
                     
                     pattern = StringUtils.EMPTY;
                     continue;
@@ -139,7 +154,7 @@ public class RuleReader {
                 String fileName = line.substring(DIRECTIVE_RULE.length());
                 File subFile = new File(file.getParent() + "/" + fileName + ".rule");
 
-                Rules sub = rules.addSubIf(pattern);
+                Rules sub = rules.addSubIf(new Pattern(pattern, synonyms));
                 this.load(sub, subFile);
 
                 pattern = StringUtils.EMPTY;
@@ -160,7 +175,7 @@ public class RuleReader {
                     continue;
                 }
                 
-                rules.addIf(directions, pattern);
+                rules.addIf(directions, new Pattern(pattern, synonyms));
 
                 pattern = StringUtils.EMPTY;
                 continue;
@@ -200,17 +215,18 @@ public class RuleReader {
                 .split(","));
     }
     
-    private boolean isValidPattern(String pattern) {
-        return isValidPatternLength(pattern) && isValidPatternSymbols(pattern);
+    private boolean isValidPattern(Pattern pattern) {
+        return isValidPatternLength(pattern.pattern()) && isValidPatternSymbols(pattern);
     }
 
-    private boolean isValidPatternSymbols(String pattern) {
+    private boolean isValidPatternSymbols(Pattern pattern) {
         List<Character> allow = Arrays.stream(Elements.values())
                 .map(e -> e.ch())
                 .collect(toList());
         allow.add(Board.ANY_CHAR);
+        allow.addAll(pattern.synonyms().chars());
 
-        return new LinkedList<>(Chars.asList(pattern.toCharArray())).stream()
+        return new LinkedList<>(Chars.asList(pattern.pattern().toCharArray())).stream()
                 .filter(ch -> !allow.contains(ch))
                 .count() == 0;
     }
