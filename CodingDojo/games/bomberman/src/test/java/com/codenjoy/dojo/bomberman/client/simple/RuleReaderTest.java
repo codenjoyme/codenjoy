@@ -56,6 +56,7 @@ public class RuleReaderTest {
         reader.processLines(rules, file, lines);
 
         // then
+        assertEquals("[]", reader.errors().toString());
         assertEquals("[]", rules.toString());
 
     }
@@ -93,6 +94,7 @@ public class RuleReaderTest {
         reader.processLines(rules, file, lines);
 
         // then
+        assertEquals("[]", reader.errors().toString());
         assertEquals(
                 "[[???♥☺???? > [RIGHT]], " +
                 "[????☺♥??? > [LEFT]], " +
@@ -149,6 +151,7 @@ public class RuleReaderTest {
         reader.processLines(rules, file, lines);
 
         // then
+        assertEquals("[]", reader.errors().toString());
         assertEquals(
                 "[[?☼??☺???? > [DOWN]], " +
                 "[????????????????????????☺???????????????????????? > [" +
@@ -193,6 +196,7 @@ public class RuleReaderTest {
         reader.processLines(rules, file, lines);
 
         // then
+        assertEquals("[]", reader.errors().toString());
         assertEquals(
                 "[[          > [RIGHT, LEFT, DOWN]], " +
                 "[          > [LEFT, RIGHT, UP]], " +
@@ -200,6 +204,101 @@ public class RuleReaderTest {
                 "[          > [RIGHT]], " +
                 "[          > [UP, DOWN, LEFT, RIGHT, RIGHT]]]", 
                 rules.toString());
+    }
+
+    @Test
+    public void shouldErrorInDirectionsList_whenTwoCommasInside() {
+        // given
+        lines = load(
+                "???",
+                "???",
+                "???",
+                "RIGHT,,LEFT,DOWN");
+
+        // when
+        reader.processLines(rules, file, lines);
+
+        // then
+        assertEquals("[[ERROR] Direction 'RIGHT,,LEFT,DOWN' is not valid for pattern: '?????????' at directory\\main.rule:4]",
+                reader.errors().toString());
+
+        assertEquals("[]", rules.toString());
+    }
+
+    @Test
+    public void shouldErrorInDirectionsList_whenOnlyOneComma() {
+        // given
+        lines = load(
+                "???",
+                "???",
+                "???",
+                ",");
+
+        // when
+        reader.processLines(rules, file, lines);
+
+        // then
+        assertEquals("[[ERROR] Direction ',' is not valid for pattern: '?????????' at directory\\main.rule:4]",
+                reader.errors().toString());
+
+        assertEquals("[]", rules.toString());
+    }
+
+    @Test
+    public void shouldErrorInDirectionsList_whenCommaAtLast() {
+        // given
+        lines = load(
+                "???",
+                "???",
+                "???",
+                "UP, ");
+
+        // when
+        reader.processLines(rules, file, lines);
+
+        // then
+        assertEquals("[[ERROR] Direction 'UP, ' is not valid for pattern: '?????????' at directory\\main.rule:4]",
+                reader.errors().toString());
+
+        assertEquals("[]", rules.toString());
+    }
+
+    @Test
+    public void shouldErrorInDirectionsList_whenCommaAtFirst() {
+        // given
+        lines = load(
+                "???",
+                "???",
+                "???",
+                " , UP");
+
+        // when
+        reader.processLines(rules, file, lines);
+
+        // then
+        assertEquals("[[ERROR] Direction ' , UP' is not valid for pattern: '?????????' at directory\\main.rule:4]",
+                reader.errors().toString());
+
+        assertEquals("[]", rules.toString());
+    }
+
+    @Test
+    public void shouldErrorInDirectionsList_whenCommasAtFirstAndLast() {
+        // given
+        lines = load(
+                "???",
+                "???",
+                "???",
+                ",DOWN,");
+
+        // when
+        reader.processLines(rules, file, lines);
+
+        // then
+        assertEquals("[[ERROR] Direction ',DOWN,' is not valid for pattern: '?????????' at directory\\main.rule:4]",
+                reader.errors().toString());
+
+        assertEquals("[]", rules.toString());
     }
     
 }

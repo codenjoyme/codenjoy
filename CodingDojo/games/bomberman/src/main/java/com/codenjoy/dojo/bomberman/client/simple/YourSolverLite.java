@@ -51,7 +51,13 @@ public class YourSolverLite implements Solver<Board> {
         if (board.isMyBombermanDead()) return "";
 
         rules = new Rules();
-        new RuleReader().load(rules, main);
+        
+        RuleReader reader = new RuleReader();
+        reader.load(rules, main);
+        
+        if (reader.hasErrors()) {
+            reader.errors().forEach(System.out::println);
+        }
 
         return rules.process(board).toString();
     }

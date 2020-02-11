@@ -36,13 +36,15 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
+import static com.codenjoy.dojo.bomberman.client.simple.Messages.*;
 import static java.util.stream.Collectors.toList;
 
 public class RuleReader {
 
     public static final String DIRECTIVE_RULE = "RULE ";
+    
+    private List<ErrorMessage> errors = new LinkedList<>(); 
 
     public void load(Rules rules, File file) {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -51,8 +53,7 @@ public class RuleReader {
                 try {
                     return reader.readLine();
                 } catch (IOException e) {
-                    System.out.println("[ERROR] " + Messages.READING_FILE_ERROR + 
-                            ": " + file.toString());
+                    errors.add(new ErrorMessage(READING_FILE_ERROR, file));
                     return null;
                 }
             };
@@ -66,7 +67,7 @@ public class RuleReader {
 
     public void processLines(Rules rules, File file, Supplier<String> lines)  {
         String line;
-        String pattern = "";
+        String pattern = StringUtils.EMPTY;
         int number = 0;
         do {
             line = lines.get();
@@ -75,12 +76,14 @@ public class RuleReader {
             if (line == null) {
                 if (!StringUtils.isEmpty(pattern)) {
                     if (isValidPattern(pattern)) {
-                        error(Messages.DIRECTION_IS_EMPTY_FOR_PATTERN, file, number, pattern);
+                        errors.add(new ErrorMessage(DIRECTIONS_IS_EMPTY_FOR_PATTERN, file, number, pattern));
                     } else {
-                        error(Messages.PATTERN_IS_NOT_VALID, file, number, pattern);
+                        errors.add(new ErrorMessage(PATTERN_IS_NOT_VALID, file, number, pattern));
                     }
                 }
-                break;
+                
+                pattern = StringUtils.EMPTY;
+                continue;
             }
             if (StringUtils.isEmpty(line)) {
                 continue;
@@ -88,12 +91,23 @@ public class RuleReader {
 
             boolean isRuleDirective = line.toUpperCase().startsWith(DIRECTIVE_RULE);
             boolean isDirectionsDirective = isValidDirections(line);
-
-            if (isRuleDirective || isDirectionsDirective) {
+            boolean isJustComma = isJustComma(line);
+            boolean isContainsDirection = isContainsDirection(line);
+            
+            if (isRuleDirective || (isDirectionsDirective && !isJustComma)) {
                 if (!isValidPattern(pattern)) {
-                    error(Messages.PATTERN_IS_NOT_VALID, file, number, pattern);
+                    errors.add(new ErrorMessage(PATTERN_IS_NOT_VALID, 
+                            file, number, pattern));
+                    
+                    pattern = StringUtils.EMPTY;
                     continue;
                 }
+            } else if (isJustComma || isContainsDirection) {
+                errors.add(new ErrorMessage(DIRECTIONS_IS_NOT_VALID_FOR_PATTERN,
+                        file, number, pattern, line));
+
+                pattern = StringUtils.EMPTY;
+                continue;    
             }
 
             if (!isRuleDirective && !isDirectionsDirective) {
@@ -108,6 +122,9 @@ public class RuleReader {
                 Rules sub = rules.addSubIf(pattern);
                 this.load(sub, subFile);
 
+                pattern = StringUtils.EMPTY;
+                continue;
+
             } else if (isDirectionsDirective) {
                 List<Direction> directions = 
                         parseDirections(line)
@@ -115,10 +132,32 @@ public class RuleReader {
                                 .map(s -> Direction.valueOf(s))
                                 .collect(toList());
                 
+                if (directions.isEmpty()) {
+                    errors.add(new ErrorMessage(DIRECTIONS_IS_NOT_VALID_FOR_PATTERN,
+                            file, number, pattern, line));
+
+                    pattern = StringUtils.EMPTY;
+                    continue;
+                }
+                
                 rules.addIf(directions, pattern);
+
+                pattern = StringUtils.EMPTY;
+                continue;
             }
-            pattern = "";
         } while (line != null);
+    }
+
+    private boolean isJustComma(String string) {
+        String trimmed = string.trim();
+        return trimmed.startsWith(",") || trimmed.endsWith(",");
+    }
+
+    private boolean isContainsDirection(String string) {
+        return Arrays.asList(Direction.values()).stream()
+                .map(d -> d.toString().toUpperCase())
+                .filter(d -> string.toUpperCase().contains(d))
+                .count() > 0;
     }
 
     private boolean isValidDirections(String string) {
@@ -130,12 +169,7 @@ public class RuleReader {
         return Arrays.asList(string.replaceAll(" ?", "")
                 .split(","));
     }
-
-    private void error(String message, File file, int number, String pattern) {
-        System.out.printf("[ERROR] " + message + ": '%s' at %s:%s%n",
-                pattern, file.getName(), number);
-    }
-
+    
     private boolean isValidPattern(String pattern) {
         return isValidPatternLength(pattern) && isValidPatternSymbols(pattern);
     }
@@ -156,4 +190,11 @@ public class RuleReader {
         return sqrt == Math.floor(sqrt);
     }
 
+    public boolean hasErrors() {
+        return !errors.isEmpty();
+    }
+
+    public List<ErrorMessage> errors() {
+        return errors;
+    }
 }
