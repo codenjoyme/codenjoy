@@ -38,13 +38,13 @@ public class RuleChild implements Rule {
     }
 
     @Override
-    public String pattern() {
-        return pattern;
+    public List<Direction> directions(Board board) {
+        return directions;
     }
 
     @Override
-    public List<Direction> directions(Board board) {
-        return directions;
+    public Rule findFor(Board board) {
+        return board.isNearMe(pattern) ? this : null;
     }
 
     @Override

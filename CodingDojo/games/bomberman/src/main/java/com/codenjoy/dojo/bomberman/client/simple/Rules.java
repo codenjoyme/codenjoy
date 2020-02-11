@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.Direction;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Rules {
@@ -44,9 +46,7 @@ public class Rules {
     }
 
     public List<Direction> process(Board board) {
-        return rules.stream()
-                .filter(rule -> board.isNearMe(rule.pattern()))
-                .findFirst()
+        return findFor(board)
                 .orElse(new RuleStop())
                 .directions(board);
     }
@@ -57,5 +57,12 @@ public class Rules {
                 .map(Rule::toString)
                 .collect(Collectors.toList())
                 .toString();
+    }
+    
+    public Optional<Rule> findFor(Board board) {
+        return rules.stream()
+                .map(rule -> rule.findFor(board))
+                .filter(Objects::nonNull)
+                .findFirst();
     }
 }

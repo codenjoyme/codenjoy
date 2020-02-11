@@ -38,13 +38,14 @@ public class RuleNode implements Rule {
     }
 
     @Override
-    public String pattern() {
-        return pattern;
+    public List<Direction> directions(Board board) {
+        return rules.process(board);
     }
 
     @Override
-    public List<Direction> directions(Board board) {
-        return rules.process(board);
+    public Rule findFor(Board board) {
+        return rules.findFor(board)
+                .orElse(null);
     }
 
     @Override

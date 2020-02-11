@@ -29,7 +29,7 @@ import java.util.List;
 
 public interface Rule {
 
-    String pattern();
-
     List<Direction> directions(Board board);
+
+    Rule findFor(Board board);
 }

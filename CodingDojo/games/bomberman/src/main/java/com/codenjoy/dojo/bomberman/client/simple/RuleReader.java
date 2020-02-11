@@ -71,20 +71,21 @@ public class RuleReader {
 
     private void validate(File file) {
         File directory = file.getParentFile();
-        if (!directory.exists() || !directory.isDirectory()) {
+        if (directory == null || !directory.exists() || !directory.isDirectory()) {
             errors.add(new ErrorMessage(RULES_DIRECTORY_NOT_FOUND_HERE, 
-                    directory.getAbsolutePath()));
+                    (directory != null) ? directory.getAbsolutePath() : null));
             return;
         }
-        File mainRuleFile = new File(directory.getAbsolutePath() + MAIN_RULE_FILE_NAME);
-        if (!mainRuleFile.exists() || !mainRuleFile.isFile()) {
+        if (!file.exists() || !file.isFile()) {
             errors.add(new ErrorMessage(MAIN_RULE_FILE_NOT_FOUND_HERE, 
-                    mainRuleFile.getAbsolutePath()));
+                    directory.getAbsolutePath()));
             return;
         }
     }
 
-    public void processLines(Rules rules, File file, Supplier<String> lines)  {
+    protected void processLines(Rules rules, File file, Supplier<String> lines)  {
+        onLinesStart();
+        
         String line;
         String pattern = StringUtils.EMPTY;
         int number = 0;
@@ -165,6 +166,16 @@ public class RuleReader {
                 continue;
             }
         } while (line != null);
+
+        onLinesFinish();
+    }
+
+    protected void onLinesFinish() {
+        // do nothing
+    }
+    
+    protected void onLinesStart() {
+        // do nothing
     }
 
     private boolean isJustComma(String string) {

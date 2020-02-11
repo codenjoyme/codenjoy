@@ -11,6 +11,7 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -52,8 +53,8 @@ public class ProcessorTest extends AbstractRuleReaderTest {
     @Test
     public void shouldSeveralDirections_whenOneRule() {
         // given
-        lines2 = load(
-                "   ",
+        cleanLns();
+        loadLns("   ",
                 "   ",
                 "   ",
                 "RIGHT,LEFT,DOWN,UP,UP,LEFT");
@@ -70,7 +71,7 @@ public class ProcessorTest extends AbstractRuleReaderTest {
         
         assertEquals("[]", errors.toString());
     }
-
+    
     @Test
     public void shouldSeveralDirections_whenOneRule_caseSeveralTimes() {
         // given when then
@@ -79,6 +80,77 @@ public class ProcessorTest extends AbstractRuleReaderTest {
         shouldSeveralDirections_whenOneRule();
         
         assertEquals("[]", errors.toString());
+    }
+
+    @Test
+    public void shouldGetErrors_whenbadRule() {
+        // given
+        loadLns("   ",
+                "   ",
+                "   ",
+                "BAD RULE");
+
+        when(board.isNearMe(anyString())).thenReturn(true);
+
+        // when 
+        Direction direction = processor.next(board);
+        
+        // then
+        assertEquals(Direction.STOP, direction);
+
+        assertEquals("[[ERROR] Pattern is not valid: '         BAD RULE' at \\\\main.rule:5]", errors.toString());
+    }
+
+    @Test
+    public void shouldLoadRules_whenRuleDirective() {
+        // given
+        loadLns("?☼?",
+                "?☺?",
+                "???",
+                "DOWN",
+                "",
+                "????????",
+                "????????",
+                "????????",
+                "☺",
+                "????????",
+                "????????",
+                "????????",
+                "RULE right",
+                "",
+                "???",
+                "☼☺☼",
+                "?#?",
+                "LEFT");
+
+        loadLns("?☼?",
+                "?☺ ",
+                "?☼?",
+                "RIGHT",
+                "",
+                "?☼?",
+                "?☺ ",
+                "?#?",
+                "DOWN",
+                "",
+                "?#?",
+                "?☺ ",
+                "?☼?",
+                "UP",
+                "",
+                "?#?",
+                "?☺ ",
+                "?#?",
+                "LEFT");
+        
+        when(board.isNearMe(eq("?#??☺ ?☼?"))).thenReturn(true);
+
+        // when
+        Direction direction = processor.next(board);
+
+        // then 
+        assertEquals(Direction.UP, direction);
+        assertEquals("[]", reader.errors().toString());
     }
 
 }

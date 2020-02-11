@@ -13,10 +13,11 @@ public abstract class AbstractRuleReaderTest {
 
     protected List<File> subFiles;
     protected RuleReader reader;
-    protected Supplier<String> lines;
-    protected Supplier<String> lines2;
     protected File file;
     protected Rules rules;
+    
+    protected List<Supplier<String>> lines;
+    private int linesIndex;
 
     @Before
     public void setup() {
@@ -24,23 +25,41 @@ public abstract class AbstractRuleReaderTest {
         file = new File("directory/main.rule");
         rules = new Rules();
         subFiles = new LinkedList<>();
+
+        cleanLns();
+        
         reader = new RuleReader() {
             @Override
             public void load(Rules rules, File file) {
                 subFiles.add(file);
 
-                processLines(rules, file, lines2);
+                processLines(rules, file, lines.get(linesIndex));
+            }
+
+            @Override
+            protected void onLinesStart() {
+                linesIndex++;
+            }
+            
+            @Override
+            protected void onLinesFinish() {
+                linesIndex--;
             }
         };
     }
 
-    protected Supplier<String> load(String... input) {
+    protected void cleanLns() {
+        lines = new LinkedList<>();
+        linesIndex = 0;
+    }
+
+    protected void loadLns(String... input) {
         Deque<String> list = new LinkedList<>(Arrays.asList(input));
-        return () -> {
+        lines.add(() -> {
             if (list.isEmpty()) {
                 return null;
             }
             return list.removeFirst();
-        };
+        });
     }
 }
