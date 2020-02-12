@@ -38,7 +38,7 @@ ws_url["?code="] = "&code="
 if ws_url.include?("https")
   ws_url["https"] = "wss"
 else
-  ws_url["https"] = "ws"
+  ws_url["http"] = "ws"
 end
 
 ws = WebSocket::Client::Simple.connect ws_url

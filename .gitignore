@@ -36,3 +36,4 @@
 /CodingDojo/games/loderunner/src/main/dotNet/Loderunner/packages/**
 /CodingDojo/games/bomberman/src/main/dotNet/Bomberman/packages/**
 **/node_modules/
+**/package-lock.json
