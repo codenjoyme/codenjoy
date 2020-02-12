@@ -22,16 +22,13 @@ package com.codenjoy.dojo.bomberman.client.simple;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.client.Encoding;
 import com.codenjoy.dojo.services.Direction;
 import com.google.common.primitives.Chars;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,7 +48,7 @@ public class RuleReader {
     public void load(Rules rules, File file) {
         validate(file);
         
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Encoding.UTF8))) {
 
             Supplier<String> lines = () -> {
                 try {

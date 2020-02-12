@@ -22,12 +22,14 @@ package com.codenjoy.dojo.bomberman.client.simple;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.client.Board;
+import com.codenjoy.dojo.client.Encoding;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.*;
 
 public class YourSolverLite implements Solver<Board> {
@@ -35,7 +37,15 @@ public class YourSolverLite implements Solver<Board> {
     private Processor processor;
 
     public YourSolverLite(String rulesPlace, Dice dice) {
-        this.processor = new Processor(rulesPlace, dice, System.out::println);
+        this.processor = new Processor(rulesPlace, dice, this::println);
+    }
+
+    private void println(ErrorMessage message) {
+        try {
+            new PrintStream(System.out, true, Encoding.UTF8).println(message.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

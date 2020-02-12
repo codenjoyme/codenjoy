@@ -1,13 +1,11 @@
-package com.codenjoy.dojo.bomberman.client;
+package com.codenjoy.dojo.bomberman.client.simple;
 
-import com.codenjoy.dojo.bomberman.client.simple.Pattern;
-import com.codenjoy.dojo.bomberman.client.simple.Synonyms;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class BoardIsNearTest {
+public class BoardTest {
 
     private Board board;
     private Synonyms synonyms;
@@ -286,8 +284,8 @@ public class BoardIsNearTest {
     public void shouldIsNearMe_case7() {
         board = board(
                 "☼☼☼" +
-                        "☼☺☼" +
-                        "☼☼☼");
+                "☼☺☼" +
+                "☼☼☼");
         // same
         asrtMsk("?????" +
                 "?☼☼☼?" +

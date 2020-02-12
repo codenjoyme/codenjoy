@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.bomberman.client.simple;
 
-import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import org.junit.Before;

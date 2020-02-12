@@ -99,7 +99,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 for (E element : elements) {
-                    E value = valueOf(field[numLayer][x][y]);
+                    E value = valueOf(field(numLayer, x, y));
                     if ((value == null && element == null)
                             || (value != null && value.equals(element)))
                     {
@@ -134,14 +134,18 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
      * @return Returns element at position specified.
      */
     protected E getAt(int numLayer, int x, int y) {
-        return valueOf(field[numLayer][x][y]);
+        return valueOf(field(numLayer, x, y));
     }
-
+    
+    protected char field(int numLayer, int x, int y) {
+        return field[numLayer][x][y];
+    }
+    
     protected String boardAsString(int numLayer) {
         StringBuilder result = new StringBuilder();
         for (int y = 0; y < size; y++) {
             for (int x = 0; x < size; x++) {
-                result.append(field[numLayer][inversionX(x)][inversionY(y)]);
+                result.append(field(numLayer, inversionX(x), inversionY(y)));
             }
             result.append("\n");
         }
