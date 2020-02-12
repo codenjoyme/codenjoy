@@ -115,8 +115,7 @@ public class RuleReader {
             if (isSynonymDirective) {
                 String substring = line.substring(DIRECTIVE_SYNONYM.length());
                 String[] split = substring.split("=");
-                if (split.length != 2 || split[0].length() != 1 || split[1].length() == 0) { 
-                    // TODO test me
+                if (split.length != 2 || split[0].length() != 1 || split[1].length() <= 1) { 
                     errors.add(new ErrorMessage(SYNONYM_IS_NOT_VALID, file, number, line));
                     continue;
                 }

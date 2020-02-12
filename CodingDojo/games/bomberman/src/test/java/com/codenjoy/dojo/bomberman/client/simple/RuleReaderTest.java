@@ -383,11 +383,189 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
                 LEFT, LEFT, LEFT);
     }
 
+    @Test
+    public void shouldSeveralSynonyms_whenLetCommandsInLine() {
+        // given
+        loadLns("LET B=543",
+                "",
+                "???",
+                "B☺?",
+                "???",
+                "RIGHT,RIGHT,RIGHT",
+                "",
+                "???",
+                "?☺B",
+                "???",
+                "LEFT,LEFT,LEFT",
+                "",
+                "LET C=21҉",
+                "",
+                "?C?",
+                "?☺?",
+                "???",
+                "DOWN,DOWN,DOWN",
+                "",
+                "???",
+                "?☺?",
+                "?C?",
+                "UP,UP,UP");
+
+        // when
+        reader.load(rules, file);
+
+        // then
+        assertEquals("[]", reader.errors().toString());
+        assertEquals(
+                "[[???B☺???? > [RIGHT, RIGHT, RIGHT]], " +
+                "[????☺B??? > [LEFT, LEFT, LEFT]], " +
+                "[?C??☺???? > [DOWN, DOWN, DOWN]], " +
+                "[????☺??C? > [UP, UP, UP]]]", rules.toString());
+    }
+
+    @Test
+    public void shouldCheckBoardWithSynonyms_whenSeveralLetDirectives() {
+        // given
+        shouldSeveralSynonyms_whenLetCommandsInLine();
+
+        // when then 
+        asrtBrd(" 3 " +
+                " ☺ " +
+                "   ",
+                STOP);
+
+        asrtBrd(" 2 " +
+                " ☺ " +
+                "   ",
+                DOWN, DOWN, DOWN);
+
+        // when then
+        asrtBrd("   " +
+                " ☺ " +
+                " 5 ",
+                STOP);
+
+        asrtBrd("   " +
+                " ☺ " +
+                " 1 ",
+                UP, UP, UP);
+        
+        // when then
+        asrtBrd("   " +
+                "1☺ " +
+                "   ",
+                STOP);
+
+        asrtBrd("   " +
+                "4☺ " +
+                "   ",
+                RIGHT, RIGHT, RIGHT);
+
+        // when then
+        asrtBrd("   " +
+                " ☺2" +
+                "   ",
+                STOP);
+
+        asrtBrd("   " +
+                " ☺5" +
+                "   ",
+                LEFT, LEFT, LEFT);
+    }
+
     private void asrtBrd(String given, Direction... expected) {
         Board board = (Board) new Board().forString(given);
         assertEquals(Arrays.asList(expected).toString(), 
                 rules.process(board).toString());
     }
 
+    @Test
+    public void shouldErrorInLetDirective_case1() {
+        // given
+        loadLns("LET bad");
+
+        // when
+        reader.load(rules, file);
+
+        // then
+        assertEquals("[[ERROR] Synonym is not valid: 'LET bad' at directory\\main.rule:1]",
+                reader.errors().toString());
+
+        assertEquals("[]", rules.toString());
+    }
+
+    @Test
+    public void shouldErrorInLetDirective_case2() {
+        // given
+        loadLns("LET bad=bad");
+
+        // when
+        reader.load(rules, file);
+
+        // then
+        assertEquals("[[ERROR] Synonym is not valid: 'LET bad=bad' at directory\\main.rule:1]",
+                reader.errors().toString());
+
+        assertEquals("[]", rules.toString());
+    }
+
+    @Test
+    public void shouldErrorInLetDirective_case3() {
+        // given
+        loadLns("LET bad=bad=bad");
+
+        // when
+        reader.load(rules, file);
+
+        // then
+        assertEquals("[[ERROR] Synonym is not valid: 'LET bad=bad=bad' at directory\\main.rule:1]",
+                reader.errors().toString());
+
+        assertEquals("[]", rules.toString());
+    }
+
+    @Test
+    public void shouldErrorInLetDirective_case4() {
+        // given
+        loadLns("LET b=");
+
+        // when
+        reader.load(rules, file);
+
+        // then
+        assertEquals("[[ERROR] Synonym is not valid: 'LET b=' at directory\\main.rule:1]",
+                reader.errors().toString());
+
+        assertEquals("[]", rules.toString());
+    }
+
+    @Test
+    public void shouldErrorInLetDirective_case5() {
+        // given
+        loadLns("LET  b=c");
+
+        // when
+        reader.load(rules, file);
+
+        // then
+        assertEquals("[[ERROR] Synonym is not valid: 'LET  b=c' at directory\\main.rule:1]",
+                reader.errors().toString());
+
+        assertEquals("[]", rules.toString());
+    }
+
+    @Test
+    public void shouldErrorInLetDirective_case6() {
+        // given
+        loadLns("LET b=c");
+
+        // when
+        reader.load(rules, file);
+
+        // then
+        assertEquals("[[ERROR] Synonym is not valid: 'LET b=c' at directory\\main.rule:1]",
+                reader.errors().toString());
+
+        assertEquals("[]", rules.toString());
+    }
 
 }
