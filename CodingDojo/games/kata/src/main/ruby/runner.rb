@@ -30,6 +30,7 @@ ws.on :message do |msg|
     msg.data =~ /^board=(.*)$/
     json = $1.force_encoding('UTF-8')
     current_level = json["level"]
+    puts "-------------------------------------------------------------------------------------------"
     p msg.data
 
     board.process(json, current_level)

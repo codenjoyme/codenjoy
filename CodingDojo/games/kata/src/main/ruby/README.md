@@ -6,12 +6,12 @@
 2. Read game instructions 
 3. Install WebSocket gem (Ruby and `bundler` gem should be installed):
 ```
-cd codenjoy/CodingDojo/games/kata/src/main/Ruby/
+Unzip kata archire and move to it's root folder.
 bundle install
 ```
 4. Run your client:
 ```
-ruby game.rb 127.0.0.1:8080 3edq63tw0bq4w4iem7nb 20010765231070354251
+ruby runner.rb http://dojorena.com/codenjoy-contest/board/player/rmtsf91ee1xitijsdtxz\?code\=7743500744161891908
 ```
 
 Now you can code your bot, change code of `solver.rb` after block
