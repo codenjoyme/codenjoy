@@ -1,5 +1,24 @@
 ﻿**[Important] This works only for OS Windows**
 
+Unzip [this archive](https://epa.ms/DME34) into folder `d:\bomberman-pseudo-client\` (or use other drive). Please make sure there is no space character ` ` in the folder name - use `-` for word separator, or just use one word folder `d:\client\`.
+
+inside the folder you can see these stuff:
+    
+    ```
+    /jdk8/
+    /maven/
+    /rules/
+    /sources/
+    /0-settings.bat
+    /1-build-engine.bat
+    /2-build-client.bat
+    /3-run-client.bat
+    /README.md
+    ```
+    
+Follow the instructions below to understand how to use it. 
+
+
 ## Registration
 
 1. Go to https://codenjoy.com/ or https://dojorena.io
