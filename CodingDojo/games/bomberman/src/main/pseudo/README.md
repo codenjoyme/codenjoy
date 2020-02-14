@@ -2,7 +2,7 @@
 
 ## Registration
 
-1. Go to `https://codenjoy.com/` or `https://dojorena.io`
+1. Go to https://codenjoy.com/ or https://dojorena.io
 
 2. Press `SignUp`
 
@@ -22,7 +22,7 @@
 
 2. Edit `0-settings.bat` file as text
 
-3. Set `bomberman` game at first line (it is set by default, but please check)
+3. Set `bomberman` game at first line *(it is set by default, but please check)*
 
     ```
     set GAME_TO_RUN=bomberman
@@ -64,17 +64,19 @@
 
 4. You can make a mistake during "programming" your hero. Don’t worry, we will let you know exactly where and why it happened - check command post.
 
-    [ERROR] Pattern is not valid: '???wrong?☺????' at C:\bomberman-pseudo-client-portable\rules\main.rule:91 
+    ```
+    [ERROR] Pattern is not valid: '???wrong?☺????' at C:\bomberman-pseudo-client-portable\rules\main.rule:91
+    ``` 
 
 ##	How to write your rules?
 
-1. There are **several types** of command which you can use, check `*.rules` file.
+1. There are **SEVERAL TYPES** of command which you can use, check `*.rules` file.
 
 2. Indicate what the space around the hero should look like, and then indicate the direction of movement of the hero. 
 
     * Your hero is indicated by the symbol `☺` 
 
-    * The space(mask/pattern/frame) around the hero should be SQUARE forms of any size, it does not matter where the hero is located (in the center of the mask or on its border)
+    * The space (mask/pattern/frame) around the hero should be **SQUARE** forms of any size, it does not matter where the hero is located (in the center of the mask or on its border)
 
       In this example we are interested in what is in 1 cell around the hero
 
@@ -264,7 +266,7 @@
    
     In this script, we said that if a hunter appears around our hero, we must run. And how to run is described in the `runAway.rule` file. If you need to, create it! Inside the new script, you can write everything the same as in the main `main.rule` script.
 
-10. **Do not forget** that each mask should be square (2x2, 3x3, 4x4, 5x5). Also, watch carefully for the symbols ` `  - this is an empty space on the field that is not occupied by anything. The space character ` `  is easy to skip (or add some redundant), so check back carefully.
+10. **DO NOT FORGET** that each mask should be square (2x2, 3x3, 4x4, 5x5). Also, watch carefully for the symbols ` `  - this is an empty space on the field that is not occupied by anything. The **SPACE** character ` `  is easy to skip (or add some redundant), so check back carefully.
 
 11. The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
 
