@@ -2,7 +2,7 @@
 
 1) REGISTRATION
 
-1.1) Go to https://dojorena.io/
+1.1) Go to `https://dojorena.io/`
 
 1.2) Press SignUp
 
@@ -18,7 +18,7 @@
 
     https://dojorena.io/codenjoy-contest/board/player/playerId?code=12345678901234567890&gameName=bomberman
 
-2.2) Edit 0-settings.bat file as text
+2.2) Edit `0-settings.bat` file as text
 
 2.3) Set bomberman game at first line (it is set by default, but please check)
 
@@ -28,9 +28,9 @@
 
     set BOARD_URL=https://dojorena.io/codenjoy-contest/board/player/playerId?code=12345678901234567890&gameName=bomberman
 
-2.5) Save 0-settings.bat file and close
+2.5) Save `0-settings.bat` file and close
 
-3) RUN 3-run-client.bat script
+3) RUN `3-run-client.bat` script
 
 3.1) Wait till board will come. It will be your command post.
 
@@ -44,7 +44,7 @@
     ☼☼☼☼☼☼☼
     Answer: UP
 
-4) OPEN \rules\main.rules file as text
+4) OPEN `\rules\main.rules` file as text
 
 4.1) Now you can write your script to control the hero on the map. How? It's pretty simple. 
 
@@ -54,11 +54,11 @@
 
     [ERROR] Pattern is not valid: '???wrong?☺????' at C:\bomberman-pseudo-client-portable\rules\main.rule:91 
 
-5) There are SEVERAL TYPES of command which you can use, check *.rules file.
+5) There are SEVERAL TYPES of command which you can use, check `*.rules` file.
 
 5.1) Indicate what the space around the hero should look like, and then indicate the direction of movement of the hero
 
-5.1.1) Your hero is indicated by the symbol ☺ 
+5.1.1) Your hero is indicated by the symbol `☺` 
 
 5.1.2) The space(mask/pattern/frame) around the hero should be SQUARE forms of any size, it does not matter where the hero is located (in the center of the mask or on its border)
 
@@ -82,7 +82,7 @@
        
     ☺☼#
 
-5.1.3) The next line after the mask indicate the direction of hero's movement - one of the commands: LEFT, RIGHT, UP, DOWN or the ACT command - put the bomb
+5.1.3) The next line after the mask indicate the direction of hero's movement - one of the commands: `LEFT`, `RIGHT`, `UP`, `DOWN` or the `ACT` command - put the bomb
 
 5.1.3.1) If the picture around the hero looks like this mask, he will run up
 
@@ -109,7 +109,7 @@
     ☼☼☼☼
     RIGHT,UP
 
-5.4) It often happens that you don’t know what symbol will be at this particular point, and you want to generalize. To do this, you have a symbol that means any possible symbol '?' at this point. The past example will be more universal, if described as follows.
+5.4) It often happens that you don’t know what symbol will be at this particular point, and you want to generalize. To do this, you have a symbol that means any possible symbol `?` at this point. The past example will be more universal, if described as follows.
 
     ????
     ??? 
@@ -178,7 +178,7 @@ It is IMPORTANT to understand that the first matched mask will work out in the l
     /// a void
     NONE(' ');                 // this is the only place where you can move your Bomberman
 
-5.6) There are occasions when it is necessary to combine several characters into one group. To do this, use the LET directive A = QWERTYUIOP, where A is the character that can be used in the mask after the LET command, and QWERTYUIOP are the characters that will be substituted for A. For example, we can generalize our past example with saving from the bomb so that the hero does not run away only from a bomb with a timer of 5, but also from 4 3 2 1.
+5.6) There are occasions when it is necessary to combine several characters into one group. To do this, use the `LET directive A = QWERTYUIOP`, where `A `is the character that can be used in the mask after the `LET` command, and `QWERTYUIOP` are the characters that will be substituted for `A`. For example, we can generalize our past example with saving from the bomb so that the hero does not run away only from a bomb with a timer of `5`, but also from `4`, `3`, `2` and `1`.
 
     LET B=54321
 
@@ -210,7 +210,7 @@ It is IMPORTANT to understand that the first matched mask will work out in the l
     ????
     DOWN
 
-5.7) In some cases, you may need to place part of the behavior script in a separate file. For example, if there is no bomb, we do one action, but if the bomb appears, we run away. To do this, instead of a specific command LEFT, RIGHT, UP, DOWN or ACT, you should specify the RULE directive:
+5.7) In some cases, you may need to place part of the behavior script in a separate file. For example, if there is no bomb, we do one action, but if the bomb appears, we run away. To do this, instead of a specific command `LEFT`, `RIGHT`, `UP`, `DOWN` or `ACT`, you should specify the RULE directive:
 
     &☺
     ??
@@ -228,18 +228,20 @@ It is IMPORTANT to understand that the first matched mask will work out in the l
     &☺
     RULE runAway.rule
 
-In this script, we said that if a hunter appears around our hero, we must run. And how to run is described in the runAway.rule file. If you need to, create it! Inside the new script, you can write everything the same as in the main main.rule script.
+In this script, we said that if a hunter appears around our hero, we must run. And how to run is described in the `runAway.rule` file. If you need to, create it! Inside the new script, you can write everything the same as in the main `main.rule` script.
 
-5.8)Do not forget that each mask should be square (2x2, 3x3, 4x4, 5x5). Also, watch carefully for the symbols ' ' - this is an empty space on the field that is not occupied by anything. The space character ' ' is easy to skip, so check back carefully.
+5.8) Do not forget that each mask should be square (2x2, 3x3, 4x4, 5x5). Also, watch carefully for the symbols ` ` - this is an empty space on the field that is not occupied by anything. The space character ` ` is easy to skip (or add some redundant), so check back carefully.
 
-6) The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
+5.9) The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
+
+6) Other stuff
 
 6.1) All participants play on the same field. The winner is the one who for the given time will earn the most points.
 
-6.2) For the destruction of the destructible wall you will get +10
+6.2) For the destruction of the destructible wall you will get `+10`
 
-6.3) If you manage to catch the hunter you will receive +100
+6.3) If you manage to catch the hunter you will receive `+100`
 
-6.4) If you manage to catch another bomberman, you will get +1000
+6.4) If you manage to catch another bomberman, you will get `+1000`
 
 7) Codenjoy!
