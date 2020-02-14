@@ -1,38 +1,40 @@
-﻿0) This works only for OS Windows 
+﻿**[Important] This works only for OS Windows**
 
-1) REGISTRATION
+## Registration
 
-1.1) Go to `https://dojorena.io/`
+1. Go to `https://dojorena.io/`
 
-1.2) Press SignUp
+2. Press SignUp
 
-1.3) Fill in registration form
+3. Fill in registration form
 
-1.3.1) Select Bomberman game
+4. Select Bomberman game
 
-1.3.2) Then press Submit button
+5. Then press Submit button
 
-2) SETUP YOUR CLIENT
+## Setup your client
 
-2.1) Please copy board url from your browser,  it will look like 
+1. Please copy board url from your browser,  it will look like 
 
     https://dojorena.io/codenjoy-contest/board/player/playerId?code=12345678901234567890&gameName=bomberman
 
-2.2) Edit `0-settings.bat` file as text
+2. Edit `0-settings.bat` file as text
 
-2.3) Set bomberman game at first line (it is set by default, but please check)
+3. Set bomberman game at first line (it is set by default, but please check)
 
     set GAME_TO_RUN=bomberman
 
-2.4) Set Board url at second line 
+4. Set Board url at second line 
 
     set BOARD_URL=https://dojorena.io/codenjoy-contest/board/player/playerId?code=12345678901234567890&gameName=bomberman
 
-2.5) Save `0-settings.bat` file and close
+5. Save `0-settings.bat` file and close
 
-3) RUN `3-run-client.bat` script
+## Run your client
 
-3.1) Wait till board will come. It will be your command post.
+1. RUN `3-run-client.bat` script
+
+2. Wait till board will come. It will be your command post.
 
     Board:
     ☼☼☼☼☼☼☼
@@ -44,63 +46,67 @@
     ☼☼☼☼☼☼☼
     Answer: UP
 
-4) OPEN `\rules\main.rules` file as text
+## Write your bot logic
+	
+1. OPEN `\rules\main.rules` file as text
 
-4.1) Now you can write your script to control the hero on the map. How? It's pretty simple. 
+2. Now you can write your script to control the hero on the map. How? It's pretty simple. 
 
-4.2) If you change anything, just save the file and your hero will follow the new directions. Look carefully at this file, this is your field for pseudo coding. Your control panel.
+3. If you change anything, just save the file and your hero will follow the new directions. Look carefully at this file, this is your field for pseudo coding. Your control panel.
 
-4.3) You can make a mistake during "programming" your hero. Don’t worry, we will let you know exactly where and why it happened - check command post.
+4. You can make a mistake during "programming" your hero. Don’t worry, we will let you know exactly where and why it happened - check command post.
 
     [ERROR] Pattern is not valid: '???wrong?☺????' at C:\bomberman-pseudo-client-portable\rules\main.rule:91 
 
-5) There are SEVERAL TYPES of command which you can use, check `*.rules` file.
+##	How to write your rules?
 
-5.1) Indicate what the space around the hero should look like, and then indicate the direction of movement of the hero
+1. There are SEVERAL TYPES of command which you can use, check `*.rules` file.
 
-5.1.1) Your hero is indicated by the symbol `☺` 
+2. Indicate what the space around the hero should look like, and then indicate the direction of movement of the hero
 
-5.1.2) The space(mask/pattern/frame) around the hero should be SQUARE forms of any size, it does not matter where the hero is located (in the center of the mask or on its border)
+    * Your hero is indicated by the symbol `☺` 
 
-5.1.2.1) In this example we are interested in what is in 1 cell around the hero
+    * The space(mask/pattern/frame) around the hero should be SQUARE forms of any size, it does not matter where the hero is located (in the center of the mask or on its border)
 
-    ☼  
-    ☼☺☼
-    ☼  
+      - In this example we are interested in what is in 1 cell around the hero
 
-5.1.2.2) In this example we are interested in what is in 2 cells around the hero
+        ☼  
+        ☼☺☼
+        ☼  
 
-    ☼☼ ☼#
-    ☼☼   
-    ☼☼☺☼#
-    ☼☼   
-    ☼☼☼☼☼
+      - In this example we are interested in what is in 2 cells around the hero
 
-5.1.2.3) In this example we are interested in what is in the upper left corner of the hero
+        ☼☼ ☼#
+        ☼☼   
+        ☼☼☺☼#
+        ☼☼   
+        ☼☼☼☼☼
 
-     ☼#
+      - In this example we are interested in what is in the upper left corner of the hero
+
+         ☼#
        
-    ☺☼#
+        ☺☼#
 
-5.1.3) The next line after the mask indicate the direction of hero's movement - one of the commands: `LEFT`, `RIGHT`, `UP`, `DOWN` or the `ACT` command - put the bomb
+    * The next line after the mask indicate the direction of hero's movement - one of the commands: `LEFT`, `RIGHT`, `UP`, `DOWN` or the `ACT` command - put the bomb
 
-5.1.3.1) If the picture around the hero looks like this mask, he will run up
+      - If the picture around the hero looks like this mask, he will run up
 
-    ☼  
-    ☼☺☼
-    ☼  
-    UP
+        ☼  
+        ☼☺☼
+        ☼  
+        UP
 
-5.1.3.2) And in this case (if nothing prevents the hero) he will go down
+      - And in this case (if nothing prevents the hero) he will go down
 
-    ☼ ☼
-     ☺ 
-    ☼ ☼
-    DOWN
+        ☼ ☼
+         ☺ 
+        ☼ ☼
+        DOWN
 
-5.2) Left bomb will explode after 5 ticks (1 tick - 1 second) and the blast wave will destroy everyone who touches. 
+3. Left bomb will explode after 5 ticks (1 tick - 1 second) and the blast wave will destroy everyone who touches. 
 
-5.3) You can also specify not 1 action, but several separated by commas. This will mean that when a given mask is triggered, the specified tick-by-tick commands will be processed. For example, in the example below, if the hero sees a bomb to his left, then he first goes to the right, and then hides up from the blast wave.
+4. You can also specify not 1 action, but several separated by commas. This will mean that when a given mask is triggered, the specified tick-by-tick commands will be processed. For example, in the example below, if the hero sees a bomb to his left, then he first goes to the right, and then hides up from the blast wave.
 
     ☼☼☼☼
     ☼ ☼ 
@@ -109,7 +115,7 @@
     ☼☼☼☼
     RIGHT,UP
 
-5.4) It often happens that you don’t know what symbol will be at this particular point, and you want to generalize. To do this, you have a symbol that means any possible symbol `?` at this point. The past example will be more universal, if described as follows.
+5. It often happens that you don’t know what symbol will be at this particular point, and you want to generalize. To do this, you have a symbol that means any possible symbol `?` at this point. The past example will be more universal, if described as follows.
 
     ????
     ??? 
@@ -139,9 +145,9 @@
     ????
     DOWN
 
-It is IMPORTANT to understand that the first matched mask will work out in the list of commands and further verification will not be carried out.
+6. It is IMPORTANT to understand that the first matched mask will work out in the list of commands and further verification will not be carried out.
 
-5.5) The legend of possible symbols
+7. The legend of possible symbols
 
     /// This is your Bomberman
     BOMBERMAN('☺'),             // this is what he usually looks like
@@ -178,7 +184,7 @@ It is IMPORTANT to understand that the first matched mask will work out in the l
     /// a void
     NONE(' ');                 // this is the only place where you can move your Bomberman
 
-5.6) There are occasions when it is necessary to combine several characters into one group. To do this, use the `LET directive A = QWERTYUIOP`, where `A `is the character that can be used in the mask after the `LET` command, and `QWERTYUIOP` are the characters that will be substituted for `A`. For example, we can generalize our past example with saving from the bomb so that the hero does not run away only from a bomb with a timer of `5`, but also from `4`, `3`, `2` and `1`.
+8. There are occasions when it is necessary to combine several characters into one group. To do this, use the `LET directive A = QWERTYUIOP`, where `A `is the character that can be used in the mask after the `LET` command, and `QWERTYUIOP` are the characters that will be substituted for `A`. For example, we can generalize our past example with saving from the bomb so that the hero does not run away only from a bomb with a timer of `5`, but also from `4`, `3`, `2` and `1`.
 
     LET B=54321
 
@@ -210,7 +216,7 @@ It is IMPORTANT to understand that the first matched mask will work out in the l
     ????
     DOWN
 
-5.7) In some cases, you may need to place part of the behavior script in a separate file. For example, if there is no bomb, we do one action, but if the bomb appears, we run away. To do this, instead of a specific command `LEFT`, `RIGHT`, `UP`, `DOWN` or `ACT`, you should specify the RULE directive:
+9. In some cases, you may need to place part of the behavior script in a separate file. For example, if there is no bomb, we do one action, but if the bomb appears, we run away. To do this, instead of a specific command `LEFT`, `RIGHT`, `UP`, `DOWN` or `ACT`, you should specify the RULE directive:
 
     &☺
     ??
@@ -228,20 +234,20 @@ It is IMPORTANT to understand that the first matched mask will work out in the l
     &☺
     RULE runAway.rule
 
-In this script, we said that if a hunter appears around our hero, we must run. And how to run is described in the `runAway.rule` file. If you need to, create it! Inside the new script, you can write everything the same as in the main `main.rule` script.
+11. In this script, we said that if a hunter appears around our hero, we must run. And how to run is described in the `runAway.rule` file. If you need to, create it! Inside the new script, you can write everything the same as in the main `main.rule` script.
 
-5.8) Do not forget that each mask should be square (2x2, 3x3, 4x4, 5x5). Also, watch carefully for the symbols ` ` - this is an empty space on the field that is not occupied by anything. The space character ` ` is easy to skip (or add some redundant), so check back carefully.
+12. Do not forget that each mask should be square (2x2, 3x3, 4x4, 5x5). Also, watch carefully for the symbols ` `  - this is an empty space on the field that is not occupied by anything. The space character ` `  is easy to skip (or add some redundant), so check back carefully.
 
-5.9) The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
+13. The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
 
-6) Other stuff
+## Other stuff
 
-6.1) All participants play on the same field. The winner is the one who for the given time will earn the most points.
+1. All participants play on the same field. The winner is the one who for the given time will earn the most points.
 
-6.2) For the destruction of the destructible wall you will get `+10`
+2. For the destruction of the destructible wall you will get `+10`
 
-6.3) If you manage to catch the hunter you will receive `+100`
+3. If you manage to catch the hunter you will receive `+100`
 
-6.4) If you manage to catch another bomberman, you will get `+1000`
+4. If you manage to catch another bomberman, you will get `+1000`
 
-7) Codenjoy!
+## Codenjoy!
