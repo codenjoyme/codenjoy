@@ -62,61 +62,74 @@
 
 1. There are SEVERAL TYPES of command which you can use, check `*.rules` file.
 
-2. Indicate what the space around the hero should look like, and then indicate the direction of movement of the hero
+2. Indicate what the space around the hero should look like, and then indicate the direction of movement of the hero. 
 
     * Your hero is indicated by the symbol `☺` 
 
     * The space(mask/pattern/frame) around the hero should be SQUARE forms of any size, it does not matter where the hero is located (in the center of the mask or on its border)
 
-      - In this example we are interested in what is in 1 cell around the hero
+      In this example we are interested in what is in 1 cell around the hero
 
+       ```
         ☼  
         ☼☺☼
         ☼  
+       ```
 
-      - In this example we are interested in what is in 2 cells around the hero
+      In this example we are interested in what is in 2 cells around the hero
 
+        ```
         ☼☼ ☼#
         ☼☼   
         ☼☼☺☼#
         ☼☼   
         ☼☼☼☼☼
+        ```
 
-      - In this example we are interested in what is in the upper left corner of the hero
+      In this example we are interested in what is in the upper left corner of the hero
 
+        ```
          ☼#
        
         ☺☼#
+        ```
 
     * The next line after the mask indicate the direction of hero's movement - one of the commands: `LEFT`, `RIGHT`, `UP`, `DOWN` or the `ACT` command - put the bomb
 
-      - If the picture around the hero looks like this mask, he will run up
+      If the picture around the hero looks like this mask, he will run up
 
-        ☼  
-        ☼☺☼
-        ☼  
-        UP
+      ```
+      ☼  
+      ☼☺☼
+      ☼  
+      UP
+      ```
 
-      - And in this case (if nothing prevents the hero) he will go down
+      And in this case (if nothing prevents the hero) he will go down
 
-        ☼ ☼
-         ☺ 
-        ☼ ☼
-        DOWN
-
+      ```
+      ☼ ☼
+       ☺ 
+      ☼ ☼
+      DOWN
+      ```
+   
 3. Left bomb will explode after 5 ticks (1 tick - 1 second) and the blast wave will destroy everyone who touches. 
 
 4. You can also specify not 1 action, but several separated by commas. This will mean that when a given mask is triggered, the specified tick-by-tick commands will be processed. For example, in the example below, if the hero sees a bomb to his left, then he first goes to the right, and then hides up from the blast wave.
 
+    ```
     ☼☼☼☼
     ☼ ☼ 
     ☼5☺ 
     ☼ ☼ 
     ☼☼☼☼
     RIGHT,UP
+    ```
 
 5. It often happens that you don’t know what symbol will be at this particular point, and you want to generalize. To do this, you have a symbol that means any possible symbol `?` at this point. The past example will be more universal, if described as follows.
 
+    ```
     ????
     ??? 
     ?5☺ 
@@ -144,11 +157,13 @@
     ?? ?
     ????
     DOWN
+    ```
 
 6. It is IMPORTANT to understand that the first matched mask will work out in the list of commands and further verification will not be carried out.
 
 7. The legend of possible symbols
 
+    ```
     /// This is your Bomberman
     BOMBERMAN('☺'),             // this is what he usually looks like
     BOMB_BOMBERMAN('☻'),        // this is if he is sitting on own bomb
@@ -183,9 +198,11 @@
 
     /// a void
     NONE(' ');                 // this is the only place where you can move your Bomberman
-
+    ```
+   
 8. There are occasions when it is necessary to combine several characters into one group. To do this, use the `LET directive A = QWERTYUIOP`, where `A `is the character that can be used in the mask after the `LET` command, and `QWERTYUIOP` are the characters that will be substituted for `A`. For example, we can generalize our past example with saving from the bomb so that the hero does not run away only from a bomb with a timer of `5`, but also from `4`, `3`, `2` and `1`.
 
+    ```
     LET B=54321
 
     ????
@@ -215,9 +232,11 @@
     ?? ?
     ????
     DOWN
-
+    ```
+    
 9. In some cases, you may need to place part of the behavior script in a separate file. For example, if there is no bomb, we do one action, but if the bomb appears, we run away. To do this, instead of a specific command `LEFT`, `RIGHT`, `UP`, `DOWN` or `ACT`, you should specify the RULE directive:
 
+    ```
     &☺
     ??
     RULE runAway.rule
@@ -233,12 +252,13 @@
     ??
     &☺
     RULE runAway.rule
+    ```
+   
+    In this script, we said that if a hunter appears around our hero, we must run. And how to run is described in the `runAway.rule` file. If you need to, create it! Inside the new script, you can write everything the same as in the main `main.rule` script.
 
-11. In this script, we said that if a hunter appears around our hero, we must run. And how to run is described in the `runAway.rule` file. If you need to, create it! Inside the new script, you can write everything the same as in the main `main.rule` script.
+10. Do not forget that each mask should be square (2x2, 3x3, 4x4, 5x5). Also, watch carefully for the symbols ` `  - this is an empty space on the field that is not occupied by anything. The space character ` `  is easy to skip (or add some redundant), so check back carefully.
 
-12. Do not forget that each mask should be square (2x2, 3x3, 4x4, 5x5). Also, watch carefully for the symbols ` `  - this is an empty space on the field that is not occupied by anything. The space character ` `  is easy to skip (or add some redundant), so check back carefully.
-
-13. The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
+11. The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
 
 ## Other stuff
 
