@@ -169,7 +169,7 @@
     DOWN
     ```
 
-6. It is **important** to understand that the first matched mask will work out in the list of commands and further verification will not be carried out.
+6. It is **IMPORTANT** to understand that the first matched mask will work out in the list of commands and further verification will not be carried out.
 
 7. The legend of possible symbols
 
@@ -266,9 +266,11 @@
    
     In this script, we said that if a hunter appears around our hero, we must run. And how to run is described in the `runAway.rule` file. If you need to, create it! Inside the new script, you can write everything the same as in the main `main.rule` script.
 
-10. **DO NOT FORGET** that each mask should be square (2x2, 3x3, 4x4, 5x5). Also, watch carefully for the symbols ` `  - this is an empty space on the field that is not occupied by anything. The **SPACE** character ` `  is easy to skip (or add some redundant), so check back carefully.
+10. **DO NOT FORGET** that each mask should be square (2x2, 3x3, 4x4, 5x5). 
 
-11. The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
+11. Also, **WATCH CAREFULLY** for the symbols ` `  - this is an empty space on the field that is not occupied by anything. The space character ` `  is easy to skip (or add some redundant), so check back carefully.
+
+12. The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
 
 ## Other stuff
 
