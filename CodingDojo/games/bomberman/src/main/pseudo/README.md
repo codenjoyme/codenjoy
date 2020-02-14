@@ -2,40 +2,47 @@
 
 ## Registration
 
-1. Go to `https://dojorena.io/`
+1. Go to `https://codenjoy.com/` or `https://dojorena.io`
 
-2. Press SignUp
+2. Press `SignUp`
 
 3. Fill in registration form
 
-4. Select Bomberman game
+4. Select `Bomberman` game
 
-5. Then press Submit button
+5. Then press `Submit` button
 
 ## Setup your client
 
-1. Please copy board url from your browser,  it will look like 
+1. Please copy `board url` from your browser,  it will look like 
 
+    ```
     https://dojorena.io/codenjoy-contest/board/player/playerId?code=12345678901234567890&gameName=bomberman
+    ```
 
 2. Edit `0-settings.bat` file as text
 
-3. Set bomberman game at first line (it is set by default, but please check)
+3. Set `bomberman` game at first line (it is set by default, but please check)
 
+    ```
     set GAME_TO_RUN=bomberman
+    ```
 
-4. Set Board url at second line 
+4. Set `board url` at second line 
 
+    ```
     set BOARD_URL=https://dojorena.io/codenjoy-contest/board/player/playerId?code=12345678901234567890&gameName=bomberman
+    ```
 
 5. Save `0-settings.bat` file and close
 
 ## Run your client
 
-1. RUN `3-run-client.bat` script
+1. Run `3-run-client.bat` script
 
 2. Wait till board will come. It will be your command post.
 
+    ```
     Board:
     ☼☼☼☼☼☼☼
     ☼ &  #☼
@@ -45,10 +52,11 @@
     ☼     ☼
     ☼☼☼☼☼☼☼
     Answer: UP
-
+    ```
+   
 ## Write your bot logic
 	
-1. OPEN `\rules\main.rules` file as text
+1. Open `\rules\main.rules` file as text
 
 2. Now you can write your script to control the hero on the map. How? It's pretty simple. 
 
@@ -60,7 +68,7 @@
 
 ##	How to write your rules?
 
-1. There are SEVERAL TYPES of command which you can use, check `*.rules` file.
+1. There are **several types** of command which you can use, check `*.rules` file.
 
 2. Indicate what the space around the hero should look like, and then indicate the direction of movement of the hero. 
 
@@ -159,7 +167,7 @@
     DOWN
     ```
 
-6. It is IMPORTANT to understand that the first matched mask will work out in the list of commands and further verification will not be carried out.
+6. It is **important** to understand that the first matched mask will work out in the list of commands and further verification will not be carried out.
 
 7. The legend of possible symbols
 
@@ -256,7 +264,7 @@
    
     In this script, we said that if a hunter appears around our hero, we must run. And how to run is described in the `runAway.rule` file. If you need to, create it! Inside the new script, you can write everything the same as in the main `main.rule` script.
 
-10. Do not forget that each mask should be square (2x2, 3x3, 4x4, 5x5). Also, watch carefully for the symbols ` `  - this is an empty space on the field that is not occupied by anything. The space character ` `  is easy to skip (or add some redundant), so check back carefully.
+10. **Do not forget** that each mask should be square (2x2, 3x3, 4x4, 5x5). Also, watch carefully for the symbols ` `  - this is an empty space on the field that is not occupied by anything. The space character ` `  is easy to skip (or add some redundant), so check back carefully.
 
 11. The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
 
