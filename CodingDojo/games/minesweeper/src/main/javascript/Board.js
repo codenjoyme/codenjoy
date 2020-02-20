@@ -115,11 +115,11 @@ var Board = function (board, Element, pointClass) {
     };
 
     var getMe = function () {
-        return get(Element.DETECTOR).get(0);
+        return findAll(Element.DETECTOR)[0];
     };
 
     var isGameOver = function () {
-        return !get(Element.BANG).isEmpty();
+        return !findAll(Element.BANG).isEmpty();
     };
 
     var findAll = function (element) {

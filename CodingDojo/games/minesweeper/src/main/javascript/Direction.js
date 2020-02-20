@@ -82,4 +82,13 @@ Direction.valueOf = function (index) {
     return Direction.STOP;
 };
 
+Direction.invert = function(value) {
+   switch (value) {
+       case Direction.DOWN: return Direction.UP;
+       case Direction.UP: return Direction.DOWN;
+       case Direction.LEFT: return Direction.RIGHT;
+       case Direction.RIGHT: return Direction.LEFT;
+   }
+};
+
 if (module) module.exports = Direction;
