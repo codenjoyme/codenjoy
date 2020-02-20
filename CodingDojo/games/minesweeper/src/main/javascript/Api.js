@@ -79,6 +79,8 @@ var Api = function(WSocket, Configuration, Direction, Element, Point, Board, Sol
     }
 
 
+    var solver = new Solver(Direction, Element);
+
     var processBoard = function (boardString) {
         var board = new Board(boardString, Element, Point);
         if (additionalLogging) {
@@ -86,7 +88,7 @@ var Api = function(WSocket, Configuration, Direction, Element, Point, Board, Sol
         }
 
         var logMessage = board + "\n\n";
-        var answer = new Solver(board, Direction).get().toString();
+        var answer =solver.get(board).toString();
         logMessage += "Answer: " + answer + "\n";
         logMessage += "-----------------------------------\n";
 

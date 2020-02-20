@@ -19,12 +19,12 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var Solver =function (board, Direction) {
+var Solver =function (Direction, Element) {
     return {
         /**
          * @return next hero action
          */
-        get: function () {
+        get: function (board) {
 
             // TODO your code here
 
