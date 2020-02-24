@@ -39,7 +39,7 @@ namespace MinesweeperClient
 		/// </summary>
 		protected internal override string Get(Board board)
 		{
-			return "UP";
+			return Direction.Up.ToString();
 		}
 
 	}
