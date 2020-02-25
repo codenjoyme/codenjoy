@@ -55,8 +55,8 @@ class WebClient(WebSocketApp):
         self._server = None
         self._user = None
 
-    def run(self, server, user):
-        super().__init__("{}?user={}".format(server, user))
+    def run(self, server, user, code):
+        super().__init__("{}?user={}&code={}".format(server, user, code))
         self.on_message = _on_message
         self.on_open = _on_open
         self._server = server
