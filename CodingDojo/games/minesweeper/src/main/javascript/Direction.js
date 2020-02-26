@@ -19,7 +19,12 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var D = function (index, dx, dy, name) {
+var D = function (index, dx, dy, name, isAction) {
+
+    var withAct = function(){
+        if (!! isAction) return D(index, dx, dy, name, !!isAction);
+        return D(index, 0, 0, name + ',act', true);
+    };
 
     var changeX = function (x) {
         return x + dx;
@@ -54,17 +59,22 @@ var D = function (index, dx, dy, name) {
 
         getIndex: function () {
             return index;
-        }
+        },
+
+        withAct: withAct,
+
+        isAction: isAction
+
     };
 };
 
 var Direction = {
-    UP: D(2, 0, 1, 'up'),                 // you can move
-    DOWN: D(3, 0, -1, 'down'),
-    LEFT: D(0, -1, 0, 'left'),
-    RIGHT: D(1, 1, 0, 'right'),
-    ACT: D(4, 0, 0, 'act'),                // drop bomb
-    STOP: D(5, 0, 0, '')                   // stay
+    UP: D(2, 0, 1, 'up', false),                 // you can move
+    DOWN: D(3, 0, -1, 'down', false),
+    LEFT: D(0, -1, 0, 'left', false),
+    RIGHT: D(1, 1, 0, 'right', false),
+    ACT: D(4, 0, 0, 'act', true),                // drop bomb
+    STOP: D(5, 0, 0, '', true)                   // stay
 };
 
 Direction.values = function () {
@@ -82,13 +92,5 @@ Direction.valueOf = function (index) {
     return Direction.STOP;
 };
 
-Direction.invert = function(value) {
-   switch (value) {
-       case Direction.DOWN: return Direction.UP;
-       case Direction.UP: return Direction.DOWN;
-       case Direction.LEFT: return Direction.RIGHT;
-       case Direction.RIGHT: return Direction.LEFT;
-   }
-};
 
 if (module) module.exports = Direction;
