@@ -66,14 +66,14 @@ var Point = function (x, y, element) {
 
         change(direction) {
             if(direction.isAction) return new Point(x, y, element);
-            switch (direction) {
-                case Direction.LEFT:
+            switch (direction.getIndex()) {
+                case 0:
                     return this.shiftLeft();
-                case Direction.RIGHT:
+                case 1:
                     return this.shiftRight();
-                case Direction.UP:
+                case 2:
                     return this.shiftTop();
-                case Direction.DOWN:
+                case 3:
                     return this.shiftBottom();
                 default:
                     throw new InvalidOperationException(`Can not change point, using "${direction}" direction`);
