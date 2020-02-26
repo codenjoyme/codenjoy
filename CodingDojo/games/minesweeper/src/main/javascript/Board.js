@@ -44,6 +44,15 @@ var LengthToXY = function (boardSize) {
             var y = inversionY(Math.trunc(length / boardSize));
             return new Point(x, y);
         },
+        getXYExtended: function (length, element) {
+            if (length == -1) {
+                return null;
+            }
+            var x = inversionX(length % boardSize);
+            var y = inversionY(Math.trunc(length / boardSize));
+            return new Point(x, y, element);
+        },
+
 
         getLength: function (x, y) {
             var xx = inversionX(x);
@@ -133,6 +142,16 @@ var Board = function (board, Element, pointClass) {
         return result;
     };
 
+    var findAllExtended = function () {
+        var result = [];
+        for (var i = 0; i < size * size; i++) {
+            var point = xyl.getXYExtended(i, board.charAt(i));
+            result.push(point);
+        }
+        return result;
+    };
+
+
     var getBorders = function () {
         return findAll(Element.BORDER);
     };
@@ -150,6 +169,7 @@ var Board = function (board, Element, pointClass) {
         size: boardSize, // public int size();
 
         get: findAll,  // public List<Point> get(Element... elements);
+        getAllExtended: findAllExtended,
         isAt: isAt,    // public boolean isAt(int x, int y, Element ... elements);
         getAt: getAt,  // public Element getAt(int x, int y);
         getBarriers: getBorders, // public List<Point> getBarriers();

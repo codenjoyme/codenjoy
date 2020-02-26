@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var Point = function (x, y) {
+var Point = function (x, y, element) {
     /**
      * type {Point}
      */
@@ -42,6 +42,10 @@ var Point = function (x, y) {
 
         getY: function () {
             return y;
+        },
+
+        getElement: function(){
+            return element
         },
 
         shiftLeft: function (delta = 1) {
