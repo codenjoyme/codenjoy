@@ -47,6 +47,8 @@ var Api = function(WSocket, Configuration, Direction, Element, Point, Board, Sol
 
     var ws;
 
+    var solver = new Solver(Direction, Element);
+
     function connect() {
         url = url.replace("http", "ws");
         url = url.replace("board/player/", "ws?user=");
@@ -78,9 +80,6 @@ var Api = function(WSocket, Configuration, Direction, Element, Point, Board, Sol
         });
     }
 
-
-    var solver = new Solver(Direction, Element);
-
     var processBoard = function (boardString) {
         var board = new Board(boardString, Element, Point);
         if (additionalLogging) {
@@ -88,7 +87,13 @@ var Api = function(WSocket, Configuration, Direction, Element, Point, Board, Sol
         }
 
         var logMessage = board + "\n\n";
-        var answer =solver.get(board).toString();
+
+        if(!solver) {
+            logMessage('recreate Solver');
+            solver =  new Solver(Direction, Element);
+        }
+        var command = solver.get(board);
+        var answer = command ? command.toString(): " ";
         logMessage += "Answer: " + answer + "\n";
         logMessage += "-----------------------------------\n";
 

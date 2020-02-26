@@ -65,6 +65,7 @@ var Point = function (x, y, element) {
         },
 
         change(direction) {
+            if(direction.isAction) return new Point(x, y, element);
             switch (direction) {
                 case Direction.LEFT:
                     return this.shiftLeft();

@@ -69,8 +69,8 @@ var D = function (index, dx, dy, name, isAction) {
 };
 
 var Direction = {
-    UP: D(2, 0, 1, 'up', false),                 // you can move
-    DOWN: D(3, 0, -1, 'down', false),
+    UP: D(2, 0, -1, 'up', false),                 // you can move
+    DOWN: D(3, 0, 1, 'down', false),
     LEFT: D(0, -1, 0, 'left', false),
     RIGHT: D(1, 1, 0, 'right', false),
     ACT: D(4, 0, 0, 'act', true),                // drop bomb
