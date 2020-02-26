@@ -37,9 +37,9 @@ namespace MinesweeperClient
 		/// <summary>
 		/// Calls each move to make decision what to do (next move)
 		/// </summary>
-		protected internal override string Get(Board board)
+		protected internal override Command Get(Board board)
 		{
-			return Direction.Up.ToString();
+			return Command.MoveTo(Direction.Up);
 		}
 
 	}

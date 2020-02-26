@@ -26,7 +26,7 @@ namespace MinesweeperClient
 {
 	class Program
 	{
-		static string ServerUrl = "http://epruryaw0537.moscow.epam.com:9995/codenjoy-contest/board/player/p3dndmr76u9p8r6we266?code=5325743131220179769";
+		static string ServerUrl = "http://localhost:8080/codenjoy-contest/board/player/eosfdc3azokxvkp04knn?code=5662119423876020191";
 
 		// you can get this code after registration on the server with your email
 		// http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890

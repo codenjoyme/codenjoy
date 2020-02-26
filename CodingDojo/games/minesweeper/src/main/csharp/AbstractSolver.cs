@@ -80,7 +80,7 @@ namespace MinesweeperClient
 						Console.WriteLine("Answer: " + action);
 						Console.SetCursorPosition(0, 0);
 
-						socket.Send(action);
+						socket.Send(action.ToString());
 					}
 				}
 			}
@@ -104,7 +104,7 @@ namespace MinesweeperClient
 							code);
 		}
 
-		protected internal abstract string Get(Board gameBoard);
+		protected internal abstract Command Get(Board gameBoard);
 
 		/// <summary>
 		/// Starts Minesweeper's client shutdown.

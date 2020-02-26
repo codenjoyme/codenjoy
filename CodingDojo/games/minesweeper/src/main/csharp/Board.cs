@@ -59,6 +59,15 @@ namespace MinesweeperClient
 			return result;
 		}
 
+        public List<PointExtendView> GetAllExtended()
+        {
+            var result = new List<PointExtendView>(Size * Size);
+            for (int x = 0; x < Size; x++)
+                for (int y = 0; y < Size; y++)
+                    result.Add(new PointExtendView(x, y, GetAtInternal(x, y)));
+            return result;
+        }
+
 		public bool IsAt(Point point, Element element)
 		{
 			if (point.IsOutOf(Size))
@@ -74,17 +83,17 @@ namespace MinesweeperClient
 			{
 				return Element.NONE;
 			}
-			return (Element)RawBoard[LengthXY.GetLength(point.X, point.Y)];
+			return  GetAtInternal(point.X, point.Y);
 		}
 
-		public Element GetAt(int x, int y)
+        public Element GetAt(int x, int y)
 		{
 			if (x < 0 || x >= Size || y < 0 || y >= Size)
 				throw new Exception("Out of range");
-			return (Element)RawBoard[LengthXY.GetLength(x,y)];
-		}
+            return GetAtInternal(x, y);
+        }
 
-		public List<Point> GetBarriers()
+        public List<Point> GetBarriers()
 		{
 			return Get(Element.BORDER);
 		}
@@ -198,5 +207,10 @@ namespace MinesweeperClient
 
 			return sb.ToString();
 		}
-	}
+
+        private Element GetAtInternal(int x, int y)
+        {
+            return (Element)RawBoard[LengthXY.GetLength(x, y)];
+        }
+    }
 }
