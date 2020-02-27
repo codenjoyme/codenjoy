@@ -7,7 +7,7 @@
     <ProjectGuid>{B2E07AB0-DA70-48AA-8F19-92D91DDA63C0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Minesweeper</RootNamespace>
+    <RootNamespace>MinesweeperClient</RootNamespace>
     <AssemblyName>Minesweeper</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -59,6 +59,7 @@
     <Compile Include="Direction.cs" />
     <Compile Include="Element.cs" />
     <Compile Include="LengthToXY.cs" />
+    <Compile Include="NeighborsType.cs" />
     <Compile Include="Point.cs" />
     <Compile Include="PointExtendView.cs" />
     <Compile Include="WebSocket.cs" />

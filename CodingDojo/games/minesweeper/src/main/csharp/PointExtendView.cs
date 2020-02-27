@@ -92,17 +92,17 @@
 
         public override string ToString()
         {
-            return string.Format("[{0},{1}]", X, Y);
+            return string.Format("[{0},{1},({2})]", X, Y, Element.ToString());
         }
 
         public override bool Equals(object obj)
         {
             if (obj == null) return false;
-            if (!(obj is Point)) return false;
+            if (!(obj is PointExtendView)) return false;
 
-            Point that = (Point)obj;
+            PointExtendView that = (PointExtendView)obj;
 
-            return that.X == this.X && that.Y == this.Y;
+            return that.X == X && that.Y == Y;
         }
 
         public override int GetHashCode()

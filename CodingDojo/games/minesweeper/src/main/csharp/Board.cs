@@ -35,14 +35,15 @@ namespace MinesweeperClient
 		/// </summary>
 		public int Size { get; private set; }
 
-		public Board(String boardString)
+		public Board(string boardString)
 		{
 			RawBoard = boardString.Replace("\n", "");
 			Size = (int)Math.Sqrt(RawBoard.Length);
 			LengthXY = new LengthToXY(Size);
 		}
 
-		public List<Point> Get(Element element)
+
+        public List<Point> Get(Element element)
 		{
 			List<Point> result = new List<Point>();
 
@@ -88,7 +89,7 @@ namespace MinesweeperClient
 
         public Element GetAt(int x, int y)
 		{
-			if (x < 0 || x >= Size || y < 0 || y >= Size)
+			if (IsOutOfField(x,y))
 				throw new Exception("Out of range");
             return GetAtInternal(x, y);
         }
@@ -110,7 +111,7 @@ namespace MinesweeperClient
 			{
 				return false;
 			}
-			return GetAt(point) == element;
+			return GetAtInternal(x,y) == element;
 		}
 
 		public bool IsNear(int x, int y, Element element)
@@ -163,12 +164,12 @@ namespace MinesweeperClient
 
 		public List<Element> GetNear(int x, int y)
 		{
-			List<Element> elements = new List<Element>();
+			List<Element> elements = new List<Element>(8);
 			for (int i = x - 1; i < x + 2; i++)
 			{
 				for (int j = y - 1; j < y + 2; j++)
 				{
-					if (i == x && j == y)
+					if (i == x && j == y || IsOutOfField(i, j))
 						continue;
 					elements.Add(GetAt(i, j));
 				}
@@ -177,18 +178,48 @@ namespace MinesweeperClient
 			return elements;
 		}
 
-		public List<Element> GetNear(Point point)
+        public List<Element> GetNear(Point point)
 		{
 			return GetNear(point.X, point.Y);
 		}
 
-		public bool IsOutOfField(int x, int y)
-		{
-			var point = new Point(x, y);
-			return point.IsOutOf(Size);
-		}
+        public List<PointExtendView> GetNearExtend(int x, int y, NeighborsType nType)
+        {
+            List<PointExtendView> elements = new List<PointExtendView>(nType == NeighborsType.All ? 8 : 4);
+            for (int i = x - 1; i < x + 2; i++)
+            {
+                for (int j = y - 1; j < y + 2; j++)
+                {
 
-		public bool IsOutOfField(Point point)
+                    if ((i != x || j != y) &&
+                        (nType == NeighborsType.All ||
+                         (nType == NeighborsType.Cross && (i == x || j == y)) ||
+                         (nType == NeighborsType.DiagonalCross && (Math.Abs(i - x) - Math.Abs(j - y) == 0))) &&
+                        !IsOutOfField(i, j))
+                        continue;
+                    elements.Add(new PointExtendView(i, j, GetAt(i, j)));
+                }
+            }
+
+            return elements;
+        }
+
+        public List<PointExtendView> GetNearExtend(Point point, NeighborsType nType)
+        {
+            return GetNearExtend(point.X, point.Y, nType);
+        }
+
+        public List<PointExtendView> GetNearExtend(PointExtendView point, NeighborsType nType)
+        {
+            return GetNearExtend(point.X, point.Y, nType);
+        }
+
+        public bool IsOutOfField(int x, int y)
+        {
+            return x < 0 || x >= Size || y < 0 || y >= Size;
+        }
+
+        public bool IsOutOfField(Point point)
 		{
 			return point.IsOutOf(Size);
 		}

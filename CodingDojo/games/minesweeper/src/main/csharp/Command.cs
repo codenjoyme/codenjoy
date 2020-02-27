@@ -13,7 +13,7 @@
 
         public override string ToString()
         {
-            return IsAction ? string.Format("act, {0}", Direction.ToString()) : Direction.ToString();
+            return IsAction && Direction != Direction.Act ? string.Format("{0}, {1}", Direction.Act.ToString(), Direction.ToString()) : Direction.ToString();
         }
 
         public static Command MoveTo(Direction direction)
