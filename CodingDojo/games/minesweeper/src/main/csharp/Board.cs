@@ -196,8 +196,7 @@ namespace MinesweeperClient
                          (nType == NeighborsType.Cross && (i == x || j == y)) ||
                          (nType == NeighborsType.DiagonalCross && (Math.Abs(i - x) - Math.Abs(j - y) == 0))) &&
                         !IsOutOfField(i, j))
-                        continue;
-                    elements.Add(new PointExtendView(i, j, GetAt(i, j)));
+                        elements.Add(new PointExtendView(i, j, GetAt(i, j)));
                 }
             }
 
