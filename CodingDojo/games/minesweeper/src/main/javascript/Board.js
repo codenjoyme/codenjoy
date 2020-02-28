@@ -91,15 +91,6 @@ var Board = function (board, Element, pointClass) {
         return board.charAt(xyl.getLength(x, y));
     };
 
-    var isAnyOfAt = function (x, y, elements) {
-        for (var index in elements) {
-            var element = elements[index];
-            if (isAt(x, y, element)) {
-                return true;
-            }
-        }
-        return false;
-    };
 
     var isNear = function (x, y, element) {
         if (pt(x, y).isOutOf(size)) {
@@ -124,18 +115,20 @@ var Board = function (board, Element, pointClass) {
     };
 
     var getMe = function () {
-        return findAll(Element.DETECTOR)[0];
+        return findAll(Element.BANG, Element.DETECTOR)[0];
     };
 
     var isGameOver = function () {
-        return !findAll(Element.BANG).isEmpty();
+        return findAll(Element.BANG).length != 0;
     };
 
     var findAll = function (element) {
         var result = [];
         for (var i = 0; i < size * size; i++) {
             var point = xyl.getXY(i);
-            if (isAt(point.getX(), point.getY(), element)) {
+            var elements = [point.getX(), point.getY()];
+            elements.push.apply(elements, arguments);
+            if (isAt.apply(null, elements)) {
                 result.push(point);
             }
         }
