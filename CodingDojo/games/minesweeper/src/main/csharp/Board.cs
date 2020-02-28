@@ -21,6 +21,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MinesweeperClient
@@ -43,7 +44,7 @@ namespace MinesweeperClient
 		}
 
 
-        public List<Point> Get(Element element)
+        public List<Point> Get(params Element[] elements)
 		{
 			List<Point> result = new List<Point>();
 
@@ -51,7 +52,7 @@ namespace MinesweeperClient
 			{
 				Point pt = LengthXY.GetXY(i);
 
-				if ((Element)RawBoard[LengthXY.GetLength(pt.X, pt.Y)] == element)
+				if (elements.Contains(GetAtInternal(pt.X, pt.Y)))
 				{
 					result.Add(pt);
 				}
@@ -104,19 +105,18 @@ namespace MinesweeperClient
 			return Get(Element.BORDER);
 		}
 
-		public bool IsAt(int x, int y, Element element)
+		public bool IsAt(int x, int y, params Element[] elements)
 		{
-			var point = new Point(x, y);
-			if (point.IsOutOf(Size))
+			if (IsOutOfField(x, y))
 			{
 				return false;
 			}
-			return GetAtInternal(x,y) == element;
+			return elements.Contains(GetAtInternal(x,y));
 		}
 
-		public bool IsNear(int x, int y, Element element)
+		public bool IsNear(int x, int y, params Element[] elements)
 		{
-			return CountNear(x, y, element) > 0;
+			return CountNear(x, y, elements) > 0;
 		}
 
 		public bool IsBarrierAt(int x, int y)
@@ -124,7 +124,7 @@ namespace MinesweeperClient
 			return IsAt(x, y, Element.BORDER);
 		}
 
-		public int CountNear(int x, int y, Element element)
+		public int CountNear(int x, int y, params Element[] elements)
 		{
 			int count = 0;
 			for (int i = x - 1; i < x + 2; i++)
@@ -133,7 +133,7 @@ namespace MinesweeperClient
 				{
 					if (i == x && j == y)
 						continue;
-					if (IsAt(i, j, element))
+					if (IsAt(i, j, elements))
 						count++;
 				}
 			}
@@ -143,13 +143,7 @@ namespace MinesweeperClient
 
 		public Point GetMe()
 		{
-			var points = Get(Element.HERO);
-			if (points.Count > 0)
-			{
-				return points[0];
-			}
-
-			return new Point();
+			return Get(Element.DEAD_BODY, Element.HERO)[0];
 		}
 
 		public bool IsGameOver()
