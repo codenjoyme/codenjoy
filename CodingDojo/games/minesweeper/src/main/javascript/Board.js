@@ -167,16 +167,12 @@ var Board = function (board, Element, pointClass) {
         getAt: getAt,  // public Element getAt(int x, int y);
         getBarriers: getBorders, // public List<Point> getBarriers();
         getWalls: getBorders, // public List<Point> getWalls();
-        isNear: isNear, //public boolean isNear(int x, int y, Element ... elements);
+        isNear: isNear, //public boolean isNear(int x, int y, Element element);
         getMe: getMe,   // public Point getMe();
         isGameOver: isGameOver, // public boolean isGameOver();
         isBarrierAt: isBarrierAt, // public boolean isBarrierAt(int x, int y);
 
-       /*
-        findAll: findAll,
-        isAnyOfAt: isAnyOfAt,
 
-        */
         toString: toString
     }
 };
