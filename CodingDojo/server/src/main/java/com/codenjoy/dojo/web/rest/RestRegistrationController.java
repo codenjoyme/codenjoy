@@ -65,8 +65,8 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-//    @RequestMapping(value = "/player/{player}/remove/{code}", method = RequestMethod.GET)
-//    @ResponseBody
+    @RequestMapping(value = "/player/{player}/remove/{code}", method = RequestMethod.GET)
+    @ResponseBody
     public synchronized boolean removeUser(@PathVariable("player") String emailOrId,
                               @PathVariable("code") String code)
     {
@@ -85,8 +85,8 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-//    @RequestMapping(value = "/game/{gameName}/players", method = RequestMethod.GET)
-//    @ResponseBody
+    @RequestMapping(value = "/game/{gameName}/players", method = RequestMethod.GET)
+    @ResponseBody
     public List<PlayerInfo> getGamePlayers(@PathVariable("gameName") String gameName) {
         validator.checkGameName(gameName, Validator.CANT_BE_NULL);
 
@@ -121,8 +121,8 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-//    @RequestMapping(value = "/player/create/{adminPassword}", method = RequestMethod.POST)
-//    @ResponseBody
+    @RequestMapping(value = "/player/create/{adminPassword}", method = RequestMethod.POST)
+    @ResponseBody
     public synchronized String createPlayer(@RequestBody PlayerDetailInfo player,
                                @PathVariable("adminPassword") String adminPassword)
     {
@@ -155,8 +155,8 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-//    @RequestMapping(value = "/player/{player}/exists", method = RequestMethod.GET)
-//    @ResponseBody
+    @RequestMapping(value = "/player/{player}/exists", method = RequestMethod.GET)
+    @ResponseBody
     public boolean isPlayerExists(@PathVariable("player") String emailOrId) {
         validator.checkPlayerName(emailOrId, Validator.CANT_BE_NULL);
 

@@ -146,7 +146,7 @@ public class RestBoardController {
         return playerGamesView.getScoresFor(gameName);
     }
 
-//    @RequestMapping(value = "/scores/clear/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/scores/clear/{adminPassword}", method = RequestMethod.GET)
     public boolean clearAllScores(@PathVariable("adminPassword") String adminPassword) {
         validator.checkIsAdmin(adminPassword);
 
@@ -155,7 +155,7 @@ public class RestBoardController {
         return true;
     }
 
-//    @RequestMapping(value = "/game/enabled/{enabled}/{adminPassword}", method = RequestMethod.GET)
+    @RequestMapping(value = "/game/enabled/{enabled}/{adminPassword}", method = RequestMethod.GET)
     public boolean startStopGame(@PathVariable("adminPassword") String adminPassword,
                                   @PathVariable("enabled") boolean enabled)
     {
@@ -215,7 +215,7 @@ public class RestBoardController {
                 registered, sprites, alphabet, players);
     }
 
-    // TOOD test me
+    // TODO test me
     @RequestMapping(value = "/player/{player}/log/{time}", method = RequestMethod.GET)
     public List<BoardLog> changeLevel(@PathVariable("player") String emailOrId,
                                             @PathVariable("time") Long time)
