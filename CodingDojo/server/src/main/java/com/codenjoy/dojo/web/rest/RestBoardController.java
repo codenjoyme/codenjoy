@@ -23,7 +23,20 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
+
+import com.codenjoy.dojo.services.BoardLog;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.GuiPlotColorDecoder;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerGames;
+import com.codenjoy.dojo.services.PlayerGamesView;
+import com.codenjoy.dojo.services.PlayerSave;
+import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.SaveService;
+import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
@@ -33,15 +46,21 @@ import com.codenjoy.dojo.web.rest.pojo.GameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.ServletContext;
-import java.util.*;
-
-import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
-import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/rest")
@@ -146,20 +165,15 @@ public class RestBoardController {
         return playerGamesView.getScoresFor(gameName);
     }
 
-    @RequestMapping(value = "/scores/clear/{adminPassword}", method = RequestMethod.GET)
-    public boolean clearAllScores(@PathVariable("adminPassword") String adminPassword) {
-        validator.checkIsAdmin(adminPassword);
-
+    @RequestMapping(value = "/scores/clear", method = RequestMethod.GET)
+    public boolean clearAllScores() {
         playerService.cleanAllScores();
-
         return true;
     }
 
-    @RequestMapping(value = "/game/enabled/{enabled}/{adminPassword}", method = RequestMethod.GET)
-    public boolean startStopGame(@PathVariable("adminPassword") String adminPassword,
-                                  @PathVariable("enabled") boolean enabled)
+    @RequestMapping(value = "/game/enabled/{enabled}", method = RequestMethod.GET)
+    public boolean startStopGame(@PathVariable("enabled") boolean enabled)
     {
-        validator.checkIsAdmin(adminPassword);
 
         if (enabled) {
             timerService.resume();

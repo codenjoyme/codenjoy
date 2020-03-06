@@ -19,17 +19,16 @@ sender:
     pool.size: 100
 dispatcher:
   url:
-    create: "http://%s/codenjoy-contest/rest/player/create/%s"
     remove: "http://%s/codenjoy-contest/rest/player/%s/remove/%s"
-    get: "http://%s/codenjoy-contest/rest/game/%s/players"
-    clear: "http://%s/codenjoy-contest/rest/scores/clear/%s"
-    exists: "http://%s/codenjoy-contest/rest/player/%s/exists"
-    enabled: "http://%s/codenjoy-contest/rest/game/enabled/%s/%s"
 game:
   type: bomberman
-  servers: localhost:8080
+  servers:
+    - location: localhost:8080
+      schema: http
+      basicAuthUser: admin@codenjoyme.com
+      basicAuthPassword: admin
   room: 10
-  start.day: "2019-01-28"
-  end.day: "2019-02-13"
-  finalists.count: 10
-  final.time: "19:00"
+  start-day: "2019-01-28"
+  end-day: "2019-02-13"
+  finalists-count: 10
+  finale-time: "19:00"

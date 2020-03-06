@@ -22,11 +22,13 @@ package com.codenjoy.dojo.conf;
  * #L%
  */
 
+import com.codenjoy.dojo.services.GameProperties;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -37,6 +39,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  * Created at 4/8/2019
  */
 @Configuration
+@EnableConfigurationProperties(GameProperties.class)
 public class AppConf {
 
     @Bean

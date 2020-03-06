@@ -23,21 +23,30 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import static java.util.stream.Collectors.toList;
+
+import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerGames;
+import com.codenjoy.dojo.services.PlayerGamesView;
+import com.codenjoy.dojo.services.PlayerSave;
+import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
-import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.stream.Collectors.toList;
+import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping(value = "/rest")
@@ -119,12 +128,10 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/player/create/{adminPassword}", method = RequestMethod.POST)
+    @RequestMapping(value = "/player/create", method = RequestMethod.POST)
     @ResponseBody
-    public synchronized String createPlayer(@RequestBody PlayerDetailInfo player,
-                               @PathVariable("adminPassword") String adminPassword)
+    public synchronized String createPlayer(@RequestBody PlayerDetailInfo player)
     {
-        validator.checkIsAdmin(adminPassword);
 
         Registration.User user = player.getRegistration();
         registration.replace(user);

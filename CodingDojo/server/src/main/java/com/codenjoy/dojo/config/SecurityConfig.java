@@ -168,6 +168,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .failureUrl(LoginController.URI + "?failed=true")
                             .permitAll()
                     .and()
+                        .httpBasic()
+                    .and()
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
                             .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))

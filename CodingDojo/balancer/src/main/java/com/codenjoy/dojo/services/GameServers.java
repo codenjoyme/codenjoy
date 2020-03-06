@@ -22,20 +22,22 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import static java.util.Optional.ofNullable;
 
-import javax.annotation.PostConstruct;
+import com.codenjoy.dojo.services.GameProperties.ServerEntry;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class GameServers {
 
     @Autowired ConfigProperties config;
 
-    private List<String> servers = new CopyOnWriteArrayList<>();
+    private List<ServerEntry> servers = new CopyOnWriteArrayList<>();
     private volatile int currentServer;
     private volatile int countRegistered;
 
@@ -54,14 +56,16 @@ public class GameServers {
             }
         }
 
-        return servers.get(currentServer);
+        return ofNullable(servers.get(currentServer))
+            .map(ServerEntry::getLocation)
+            .orElse(null);
     }
 
     public Stream<String> stream() {
-        return servers.stream();
+        return servers.stream().map(ServerEntry::getLocation);
     }
 
-    public void update(List<String> list) {
+    public void update(List<ServerEntry> list) {
         if (list == null || list.isEmpty()) {
             throw new IllegalArgumentException("Game servers list is empty. Nothing to add");
         }
