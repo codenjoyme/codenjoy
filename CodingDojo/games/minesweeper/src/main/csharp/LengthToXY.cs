@@ -1,5 +1,3 @@
-package com.codenjoy.dojo.minesweeper.client;
-
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
@@ -21,37 +19,41 @@ package com.codenjoy.dojo.minesweeper.client;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+using System;
 
+namespace MinesweeperClient
+{
+	public class LengthToXY
+	{
+		public int Size;
 
-import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.minesweeper.model.Elements;
-import com.codenjoy.dojo.services.Point;
+		public LengthToXY(int size)
+		{
+			Size = size;
+		}
 
-import java.util.Collection;
-import java.util.List;
+		private int InversionY(int y)
+		{
+			return Size - 1 - y;
+		}
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
+		private int InversionX(int x)
+		{
+			return x;
+		}
 
-public class Board extends AbstractBoard<Elements> {
+		public int GetLength(int x, int y)
+		{
+			int xx = InversionX(x);
+			int yy = InversionY(y);
+			return yy * Size + xx;
+		}
 
-    @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
-    }
-
-    public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.BORDER);
-    }
-
-    public Point getMe() {
-        return get(Elements.DETECTOR).get(0);
-    }
-
-    public boolean isGameOver() {
-    return !get(Elements.BANG).isEmpty();
-    }
-
-    public List<Point> getWalls() {
-        return get(Elements.BORDER);
-    }
+		public Point GetXY(int length)
+		{
+			int x = InversionX(length % Size);
+			int y = InversionY(length / Size);
+			return new Point(x, y);
+		}
+	}
 }

@@ -1,5 +1,3 @@
-package com.codenjoy.dojo.minesweeper.client;
-
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
@@ -21,37 +19,31 @@ package com.codenjoy.dojo.minesweeper.client;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+using MinesweeperClient;
+using System.Collections.Generic;
+
+namespace MinesweeperClient
+{
+	/// <summary>
+	/// This is Minesweeper client.
+	/// </summary>
+	internal class YourSolver : AbstractSolver
+	{
+		public YourSolver(string server)
+			: base(server)
+		{
+		}
+
+		/// <summary>
+		/// Calls each move to make decision what to do (next move)
+		/// </summary>
+		protected internal override Command Get(Board board)
+		{
+			return Command.MoveTo(Direction.Up);
+		}
+
+	}
 
 
-import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.minesweeper.model.Elements;
-import com.codenjoy.dojo.services.Point;
 
-import java.util.Collection;
-import java.util.List;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
-
-public class Board extends AbstractBoard<Elements> {
-
-    @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
-    }
-
-    public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.BORDER);
-    }
-
-    public Point getMe() {
-        return get(Elements.DETECTOR).get(0);
-    }
-
-    public boolean isGameOver() {
-    return !get(Elements.BANG).isEmpty();
-    }
-
-    public List<Point> getWalls() {
-        return get(Elements.BORDER);
-    }
 }
