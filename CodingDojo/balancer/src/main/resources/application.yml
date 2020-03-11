@@ -20,7 +20,8 @@ sender:
 game:
   type: bomberman
   servers:
-    - location: localhost:8080
+    -
+      location: localhost:8080
       schema: http
       basicAuthUser: admin@codenjoyme.com
       basicAuthPassword: admin
