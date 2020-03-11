@@ -561,7 +561,6 @@
     </profiles>
 
     <dependencies>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -770,6 +769,7 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
+        <!-- TESTING -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
@@ -832,6 +832,7 @@
         </resources>
         <plugins>
             <plugin>
+                <!-- make war runnable with main class -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
