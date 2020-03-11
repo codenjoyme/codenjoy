@@ -23,18 +23,26 @@ package com.codenjoy.dojo.services;
  */
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("game")
 public class GameProperties {
-
+  
   private String type;
-  private List<ServerEntry> servers;
   private int room;
   private String startDay;
   private String endDay;
   private int finalistsCount;
   private String finaleTime;
+  
+  @Value("#{'${game.servers}'.split(',')}")
+  private List<String> servers;
+  
+  private String schema;
+  private String basicAuthUser;
+  private String basicAuthPassword;
 
   public String getType() {
     return type;
@@ -43,12 +51,12 @@ public class GameProperties {
   public void setType(String type) {
     this.type = type;
   }
-
-  public List<ServerEntry> getServers() {
+  
+  public List<String> getServers() {
     return servers;
   }
 
-  public void setServers(List<ServerEntry> servers) {
+  public void setServers(List<String> servers) {
     this.servers = servers;
   }
 
@@ -92,43 +100,27 @@ public class GameProperties {
     this.finaleTime = finaleTime;
   }
 
-  public static class ServerEntry {
+  public String getSchema() {
+    return schema;
+  }
 
-    private String location;
-    private String schema;
-    private String basicAuthUser;
-    private String basicAuthPassword;
+  public void setSchema(String schema) {
+    this.schema = schema;
+  }
 
-    public String getLocation() {
-      return location;
-    }
+  public String getBasicAuthUser() {
+    return basicAuthUser;
+  }
 
-    public void setLocation(String location) {
-      this.location = location;
-    }
+  public void setBasicAuthUser(String basicAuthUser) {
+    this.basicAuthUser = basicAuthUser;
+  }
 
-    public String getBasicAuthUser() {
-      return basicAuthUser;
-    }
+  public String getBasicAuthPassword() {
+    return basicAuthPassword;
+  }
 
-    public void setBasicAuthUser(String basicAuthUser) {
-      this.basicAuthUser = basicAuthUser;
-    }
-
-    public String getBasicAuthPassword() {
-      return basicAuthPassword;
-    }
-
-    public void setBasicAuthPassword(String basicAuthPassword) {
-      this.basicAuthPassword = basicAuthPassword;
-    }
-
-    public String getSchema() {
-      return schema;
-    }
-
-    public void setSchema(String schema) {
-      this.schema = schema;
-    }
+  public void setBasicAuthPassword(String basicAuthPassword) {
+    this.basicAuthPassword = basicAuthPassword;
   }
 }

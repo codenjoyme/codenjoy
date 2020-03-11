@@ -19,12 +19,10 @@ sender:
     pool.size: 100
 game:
   type: bomberman
-  servers:
-    -
-      location: localhost:8080
-      schema: http
-      basicAuthUser: admin@codenjoyme.com
-      basicAuthPassword: admin
+  servers: localhost:8080,localhost:8081
+  schema: http
+  basic-auth-user: admin@codenjoyme.com
+  basic-auth-password: admin
   room: 10
   start-day: "2020-03-01"
   end-day: "2020-03-31"

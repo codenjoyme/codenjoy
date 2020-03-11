@@ -24,7 +24,6 @@ package com.codenjoy.dojo.services;
 
 import static java.util.Optional.ofNullable;
 
-import com.codenjoy.dojo.services.GameProperties.ServerEntry;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
@@ -37,7 +36,7 @@ public class GameServers {
 
     @Autowired ConfigProperties config;
 
-    private List<ServerEntry> servers = new CopyOnWriteArrayList<>();
+    private List<String> servers = new CopyOnWriteArrayList<>();
     private volatile int currentServer;
     private volatile int countRegistered;
 
@@ -56,16 +55,14 @@ public class GameServers {
             }
         }
 
-        return ofNullable(servers.get(currentServer))
-            .map(ServerEntry::getLocation)
-            .orElse(null);
+        return servers.get(currentServer);
     }
 
     public Stream<String> stream() {
-        return servers.stream().map(ServerEntry::getLocation);
+        return servers.stream();
     }
 
-    public void update(List<ServerEntry> list) {
+    public void update(List<String> list) {
         if (list == null || list.isEmpty()) {
             throw new IllegalArgumentException("Game servers list is empty. Nothing to add");
         }

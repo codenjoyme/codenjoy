@@ -22,7 +22,6 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.GameProperties.ServerEntry;
 import com.codenjoy.dojo.services.hash.Hash;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +74,7 @@ public class ConfigProperties {
         return gameProperties.getFinaleTime();
     }
 
-    public List<ServerEntry> getServers() {
+    public List<String> getServers() {
         return gameProperties.getServers();
     }
 
