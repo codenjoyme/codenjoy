@@ -1,5 +1,3 @@
-package com.codenjoy.dojo.minesweeper.client;
-
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
@@ -21,37 +19,30 @@ package com.codenjoy.dojo.minesweeper.client;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+namespace MinesweeperClient
+{
+	public enum Element : short
+	{
 
+		HIDDEN = (short)'*',
+		MINE_1 = (short)'1',
+		MINE_2 = (short)'2',
+		MINE_3 = (short)'3',
+		MINE_4 = (short)'4',
+		MINE_5 = (short)'5',
+		MINE_6 = (short)'6',
+		MINE_7 = (short)'7',
+		MINE_8 = (short)'8',
 
-import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.minesweeper.model.Elements;
-import com.codenjoy.dojo.services.Point;
+		HERO = (short)'☺',
 
-import java.util.Collection;
-import java.util.List;
+		FLAG = (short)'‼',
+		DEAD_BODY = (short)'Ѡ',
+		HERE_WAS_BOMB = (short)'☻',
+		DESTROYED_BOMB = (short)'x',
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
+		NONE = (short)' ',
+		BORDER = (short)'☼',
+	}
 
-public class Board extends AbstractBoard<Elements> {
-
-    @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
-    }
-
-    public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.BORDER);
-    }
-
-    public Point getMe() {
-        return get(Elements.DETECTOR).get(0);
-    }
-
-    public boolean isGameOver() {
-    return !get(Elements.BANG).isEmpty();
-    }
-
-    public List<Point> getWalls() {
-        return get(Elements.BORDER);
-    }
 }

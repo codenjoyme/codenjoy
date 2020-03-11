@@ -1,5 +1,3 @@
-package com.codenjoy.dojo.minesweeper.client;
-
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
@@ -21,37 +19,30 @@ package com.codenjoy.dojo.minesweeper.client;
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+using System;
+using System.Threading;
 
+namespace MinesweeperClient
+{
+	class Program
+	{
+		static string ServerUrl = "http://localhost:8080/codenjoy-contest/board/player/eosfdc3azokxvkp04knn?code=5662119423876020191";
 
-import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.minesweeper.model.Elements;
-import com.codenjoy.dojo.services.Point;
+		// you can get this code after registration on the server with your email
+		// http://server-ip:8080/codenjoy-contest/board/player/your@email.com?code=12345678901234567890
 
-import java.util.Collection;
-import java.util.List;
+		static void Main(string[] args)
+		{
+			Console.SetWindowSize(Console.LargestWindowWidth - 3, Console.LargestWindowHeight - 3);
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
+			// creating custom Minesweeper's Ai client
+			
+			var minesweeper = new YourSolver(ServerUrl);
 
-public class Board extends AbstractBoard<Elements> {
-
-    @Override
-    public Elements valueOf(char ch) {
-        return Elements.valueOf(ch);
-    }
-
-    public boolean isBarrierAt(int x, int y) {
-        return isAt(x, y, Elements.BORDER);
-    }
-
-    public Point getMe() {
-        return get(Elements.DETECTOR).get(0);
-    }
-
-    public boolean isGameOver() {
-    return !get(Elements.BANG).isEmpty();
-    }
-
-    public List<Point> getWalls() {
-        return get(Elements.BORDER);
-    }
+			// starting thread with playing Minesweeper
+			Thread thread = new Thread(minesweeper.Play);
+			thread.Start();
+			thread.Join();
+		}
+	}
 }
