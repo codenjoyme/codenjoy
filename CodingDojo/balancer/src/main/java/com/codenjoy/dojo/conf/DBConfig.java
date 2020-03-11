@@ -60,7 +60,7 @@ public class DBConfig {
     @PostgreSQLProfile
     public static class PostgresConf {
 
-        @Value("${database.url}/${database.name}?user=${database.user}&amp;password=${database.password}")
+        @Value("${database.host}:${database.port}/${database.name:postgres}?user=${database.user}&password=${database.password}")
         private String jdbcString;
 
         @Bean
