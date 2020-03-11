@@ -17,9 +17,6 @@ score:
     time: 10000
 sender:
     pool.size: 100
-dispatcher:
-  url:
-    remove: "http://%s/codenjoy-contest/rest/player/%s/remove/%s"
 game:
   type: bomberman
   servers:
@@ -28,7 +25,7 @@ game:
       basicAuthUser: admin@codenjoyme.com
       basicAuthPassword: admin
   room: 10
-  start-day: "2019-01-28"
-  end-day: "2019-02-13"
+  start-day: "2020-03-01"
+  end-day: "2020-03-31"
   finalists-count: 10
   finale-time: "19:00"
