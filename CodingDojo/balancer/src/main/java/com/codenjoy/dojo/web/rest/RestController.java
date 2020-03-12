@@ -55,6 +55,14 @@ public class RestController {
     public static final String URI = "/rest";
     public static final String REGISTER = "/register";
     public static final String LOGIN = "/login";
+    public static final String PLAYER = "/player";
+    public static final String PLAYERS = PLAYER + "s";
+    public static final String SETTINGS = "/settings";
+    public static final String DEBUG = "/debug";
+    public static final String CONTEST = "/contest";
+    public static final String CACHE = "/cache";
+    public static final String REMOVE = "/remove";
+    public static final String UPDATE = "/update";
 
     private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
@@ -168,7 +176,7 @@ public class RestController {
         T onBalancer(T data);
     }
 
-    @RequestMapping(value = "/player/{player}/active/{code}", method = RequestMethod.GET)
+    @RequestMapping(value = PLAYER + "/{player}/active/{code}", method = RequestMethod.GET)
     @ResponseBody
     public boolean login(@PathVariable("player") String email,
                          @PathVariable("code") String code)
@@ -179,7 +187,7 @@ public class RestController {
         return dispatcher.exists(player.getEmail());
     }
 
-    @RequestMapping(value = "/player/{player}/join/{code}", method = RequestMethod.GET)
+    @RequestMapping(value = PLAYER + "/{player}/join/{code}", method = RequestMethod.GET)
     @ResponseBody
     public boolean joinToGameServer(@PathVariable("player") String email,
                                       @PathVariable("code") String code,
@@ -197,7 +205,7 @@ public class RestController {
         return location != null;
     }
 
-    @RequestMapping(value = "/player/{player}/exit/{code}", method = RequestMethod.GET)
+    @RequestMapping(value = PLAYER + "/{player}/exit/{code}", method = RequestMethod.GET)
     @ResponseBody
     public boolean exitFromGameServer(@PathVariable("player") String email,
                                     @PathVariable("code") String code)
@@ -229,7 +237,7 @@ public class RestController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = UPDATE, method = RequestMethod.POST)
     @ResponseBody
     public ServerLocation changePassword(@RequestBody Player player, HttpServletRequest request) {
         return tryLogin(player, new OnLogin<ServerLocation>(){
@@ -351,7 +359,7 @@ public class RestController {
         return result;
     }
 
-    @RequestMapping(value = "/remove/{player}", method = RequestMethod.GET)
+    @RequestMapping(value = REMOVE + "/{player}", method = RequestMethod.GET)
     @ResponseBody
     public boolean remove(@PathVariable("player") String email) {
 
@@ -382,7 +390,7 @@ public class RestController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/players", method = RequestMethod.GET)
+    @RequestMapping(value = PLAYERS, method = RequestMethod.GET)
     @ResponseBody
     public List<Player> getPlayers() {
         return players.getPlayersDetails();
@@ -403,7 +411,7 @@ public class RestController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/settings", method = RequestMethod.POST)
+    @RequestMapping(value = SETTINGS, method = RequestMethod.POST)
     @ResponseBody
     public boolean saveSettings(@RequestBody ConfigProperties config) {
 
@@ -414,21 +422,21 @@ public class RestController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/settings", method = RequestMethod.GET)
+    @RequestMapping(value = SETTINGS, method = RequestMethod.GET)
     @ResponseBody
     public ConfigProperties getSettings() {
         return config;
     }
 
     // TODO test me
-    @RequestMapping(value = "/debug/get", method = RequestMethod.GET)
+    @RequestMapping(value = DEBUG + "/get", method = RequestMethod.GET)
     @ResponseBody
     public boolean getDebug() {
         return debug.isWorking();
     }
 
     // TODO test me
-    @RequestMapping(value = "/debug/set/{enabled}", method = RequestMethod.GET)
+    @RequestMapping(value = DEBUG + "/set/{enabled}", method = RequestMethod.GET)
     @ResponseBody
     public boolean setDebug(@PathVariable("enabled") boolean enabled) {
         debug.setDebugEnable(enabled);
@@ -436,7 +444,7 @@ public class RestController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/contest/enable/set/{enabled}", method = RequestMethod.GET)
+    @RequestMapping(value = CONTEST + "/enable/set/{enabled}", method = RequestMethod.GET)
     @ResponseBody
     public List<String> startContestStarted(@PathVariable("enabled") boolean enabled) {
 
@@ -456,14 +464,14 @@ public class RestController {
 
 
     // TODO test me
-    @RequestMapping(value = "/contest/enable/get", method = RequestMethod.GET)
+    @RequestMapping(value = CONTEST + "/enable/get", method = RequestMethod.GET)
     @ResponseBody
     public boolean getContestStarted() {
         return timer.isPaused();
     }
 
     // TODO test me
-    @RequestMapping(value = "/cache/clear", method = RequestMethod.GET)
+    @RequestMapping(value = CACHE + "/clear", method = RequestMethod.GET)
     @ResponseBody
     public boolean invalidateCache() {
         dispatcher.clearCache();

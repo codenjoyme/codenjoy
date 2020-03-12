@@ -40,11 +40,6 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
  */
 @EnableWebSecurity
 public class SecurityConf extends WebSecurityConfigurerAdapter {
-
-    public static final String[] UNAUTHORIZED_URIS = {
-            RestController.URI + RestController.REGISTER,
-            RestController.URI + RestController.LOGIN,
-    };
     
     @Value("${admin.login}")
     private String adminLogin;
@@ -71,13 +66,27 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         http.cors()
                 .and()
                     .authorizeRequests()
-                        .antMatchers(UNAUTHORIZED_URIS)
+                        .antMatchers(
+                                "/login",
+                                "/logout",
+                                RestController.URI + RestController.REGISTER,
+                                RestController.URI + RestController.LOGIN)
                             .permitAll()
-                        .antMatchers("/resources/html/admin.html",  RestController.URI + "/**")
+                
+                        .antMatchers(
+                                "/resources/html/admin.html",  
+                                RestController.URI + "/**")
                             .hasRole("ADMIN")
-                        .antMatchers("/**")
-                            .permitAll()
-                        .anyRequest().permitAll()
+                
+                        .antMatchers(
+                                RestController.URI + RestController.UPDATE,
+                                RestController.URI + RestController.PLAYER)
+                            .hasRole("USER")
+                            // TODO надо как-то при создании юзера через /rest/register прописывать роль USER и сохранять в базе, затем сразу логинить
+                            // TODO надо как-то при логине юзера через /rest/login акторизировать этого юзера в spring security                 
+                
+                        .anyRequest()
+                            .denyAll()
                 .and()
                     .headers()
                         .httpStrictTransportSecurity().maxAgeInSeconds(31536000)

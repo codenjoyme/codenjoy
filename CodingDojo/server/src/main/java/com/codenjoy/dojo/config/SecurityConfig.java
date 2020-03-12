@@ -156,7 +156,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             .antMatchers(UNAUTHORIZED_URIS)
                                 .permitAll()
                             .anyRequest()
-                                .hasRole("USER")
+                                .hasRole("USER") 
                     .and()
                         .formLogin()
                             .loginPage(LoginController.URI)
