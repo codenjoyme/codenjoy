@@ -22,6 +22,7 @@ package com.codenjoy.dojo.conf;
  * #L%
  */
 
+import com.codenjoy.dojo.web.rest.RestController;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -40,6 +41,11 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @EnableWebSecurity
 public class SecurityConf extends WebSecurityConfigurerAdapter {
 
+    public static final String[] UNAUTHORIZED_URIS = {
+            RestController.URI + RestController.REGISTER,
+            RestController.URI + RestController.LOGIN,
+    };
+    
     @Value("${admin.login}")
     private String adminLogin;
 
@@ -65,7 +71,9 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         http.cors()
                 .and()
                     .authorizeRequests()
-                        .antMatchers("/resources/html/admin.html", "/rest/**")
+                        .antMatchers(UNAUTHORIZED_URIS)
+                            .permitAll()
+                        .antMatchers("/resources/html/admin.html",  RestController.URI + "/**")
                             .hasRole("ADMIN")
                         .antMatchers("/**")
                             .permitAll()

@@ -49,8 +49,12 @@ import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
-@RequestMapping(value = "/rest")
+@RequestMapping(value = RestController.URI)
 public class RestController {
+
+    public static final String URI = "/rest";
+    public static final String REGISTER = "/register";
+    public static final String LOGIN = "/login";
 
     private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
@@ -100,7 +104,7 @@ public class RestController {
         return dispatcher.disqualified();
     }
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = REGISTER, method = RequestMethod.POST)
     @ResponseBody
     public ServerLocation register(@RequestBody Player player, HttpServletRequest request) {
         String email = player.getEmail();
@@ -206,7 +210,7 @@ public class RestController {
                 player.getCode());
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = LOGIN, method = RequestMethod.POST)
     @ResponseBody
     public ServerLocation login(@RequestBody Player player, HttpServletRequest request) {
         return tryLogin(player, new OnLogin<ServerLocation>(){
