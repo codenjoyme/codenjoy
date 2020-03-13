@@ -44,7 +44,7 @@ import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_FORM_KE
 import static java.util.Optional.ofNullable;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 4/5/2019
  */
 @Component

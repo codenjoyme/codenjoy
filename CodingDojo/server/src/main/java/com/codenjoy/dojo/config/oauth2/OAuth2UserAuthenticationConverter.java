@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 5/17/2019
  */
 @Component

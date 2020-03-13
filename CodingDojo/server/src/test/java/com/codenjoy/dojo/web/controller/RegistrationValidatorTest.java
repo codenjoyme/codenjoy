@@ -47,7 +47,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 4/29/2019
  */
 @RunWith(SpringRunner.class)

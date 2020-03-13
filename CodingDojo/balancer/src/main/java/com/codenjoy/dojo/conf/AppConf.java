@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 4/8/2019
  */
 @Configuration

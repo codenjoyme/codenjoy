@@ -29,7 +29,7 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 import java.util.stream.Stream;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 5/30/2019
  */
 public class DefaultAuthConditional implements Condition {

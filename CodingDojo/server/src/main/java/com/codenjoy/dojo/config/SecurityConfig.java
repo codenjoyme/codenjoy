@@ -60,7 +60,7 @@ import org.springframework.web.filter.CorsFilter;
 import javax.annotation.PostConstruct;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 3/6/2019
  */
 @EnableWebSecurity
