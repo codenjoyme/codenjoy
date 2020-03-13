@@ -113,7 +113,9 @@ public class BoardController {
 
         populateJoiningGameModel(model, code, player);
 
-        return (justBoard == null || !justBoard) ? "board" : "board-only";
+        justBoard = justBoard == null || !justBoard;
+        model.addAttribute("justBoard", justBoard);
+        return justBoard ? "board" : "board-only";
     }
 
     @GetMapping(URI + "/rejoining/{gameName}")
