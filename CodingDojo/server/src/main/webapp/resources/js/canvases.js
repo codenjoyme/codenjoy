@@ -146,6 +146,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
             templateData.push({name : name, id : id, visible : visible })
         });
         $('#players_container script').tmpl(templateData).appendTo('#players_container');
+        if (!!game.canvasCursor) {
+            $('#players_container canvas').css('cursor', game.canvasCursor);
+        }        
         if (!enablePlayerInfo) {
             $(".player_info").hide();
         }

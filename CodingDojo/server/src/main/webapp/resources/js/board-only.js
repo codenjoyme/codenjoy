@@ -38,12 +38,12 @@ pages.boardOnly = function() {
     game.heroInfo = null;
     
     if (window.location.href.includes("click=true")) {
-        $('canvas').css('cursor', 'pointer');
+        game.canvasCursor = 'pointer';
     
         $('body').click(function() {
             window.open(window.location.href.replace('only=true', 'only=false'));            
         });
-   }
+    }
 
     pages.board();
 }

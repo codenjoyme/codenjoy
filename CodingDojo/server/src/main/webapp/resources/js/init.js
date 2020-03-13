@@ -35,6 +35,7 @@ game.showBody = true;
 game.sprites = null;
 game.heroInfo = null;
 game.isDrawByOrder = false;
+game.canvasCursor = 'auto';
 
 game.debug = false;
 game['debugger'] = function() {
