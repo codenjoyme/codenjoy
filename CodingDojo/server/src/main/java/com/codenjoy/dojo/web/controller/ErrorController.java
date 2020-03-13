@@ -43,7 +43,8 @@ public class ErrorController {
 
     public static final String URI = "/error";
 
-    @Autowired private ErrorTicketService ticket;
+    @Autowired 
+    private ErrorTicketService ticket;
 
     @GetMapping(params = "message")
     public String error(HttpServletRequest req, ModelMap model, @RequestParam("message") String message) {

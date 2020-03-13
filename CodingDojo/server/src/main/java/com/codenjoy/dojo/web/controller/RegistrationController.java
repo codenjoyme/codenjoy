@@ -79,7 +79,7 @@ public class RegistrationController {
         model.addAttribute("gameNames", rooms.alises());
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping()
     public String registerByNameOrEmail(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
             populateCommonRegistrationModel(model, false);

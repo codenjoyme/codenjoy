@@ -42,11 +42,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/rest")
@@ -60,7 +56,7 @@ public class RestRegistrationController {
     private final SaveService saveService;
     private final Validator validator;
 
-//    @RequestMapping(value = "/player/{player}/check/{code}", method = RequestMethod.GET)
+//    @GetMapping("/player/{player}/check/{code}")
 //    @ResponseBody
     public boolean checkUserLogin(@PathVariable("player") String emailOrId,
                                   @PathVariable("code") String code)
@@ -72,7 +68,7 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/player/{player}/remove/{code}", method = RequestMethod.GET)
+    @GetMapping("/player/{player}/remove/{code}")
     @ResponseBody
     public synchronized boolean removeUser(@PathVariable("player") String emailOrId,
                               @PathVariable("code") String code)
@@ -92,7 +88,7 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/game/{gameName}/players", method = RequestMethod.GET)
+    @GetMapping("/game/{gameName}/players")
     @ResponseBody
     public List<PlayerInfo> getGamePlayers(@PathVariable("gameName") String gameName) {
         validator.checkGameName(gameName, Validator.CANT_BE_NULL);
@@ -103,7 +99,7 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-//    @RequestMapping(value = "/player/all/info/{adminPassword}", method = RequestMethod.GET)
+//    @GetMapping("/player/all/info/{adminPassword}", method = RequestMethod.GET)
 //    @ResponseBody
     public List<PlayerDetailInfo> getPlayersForMigrate(@PathVariable("adminPassword") String adminPassword) {
         validator.checkIsAdmin(adminPassword);
@@ -128,7 +124,7 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/player/create", method = RequestMethod.POST)
+    @PostMapping("/player/create")
     @ResponseBody
     public synchronized String createPlayer(@RequestBody PlayerDetailInfo player)
     {
@@ -160,7 +156,7 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/player/{player}/exists", method = RequestMethod.GET)
+    @GetMapping("/player/{player}/exists")
     @ResponseBody
     public boolean isPlayerExists(@PathVariable("player") String emailOrId) {
         validator.checkPlayerName(emailOrId, Validator.CANT_BE_NULL);

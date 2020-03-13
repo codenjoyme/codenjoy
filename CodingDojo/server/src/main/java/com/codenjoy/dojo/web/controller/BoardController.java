@@ -58,8 +58,7 @@ public class BoardController {
     private final ConfigProperties properties;
     private final RegistrationService registrationService;
 
-    @RequestMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
-                    method = RequestMethod.GET)
+    @GetMapping(URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}")
     public String boardPlayer(ModelMap model,
                               @PathVariable("playerName") String playerName,
                               @RequestParam(name = "only", required = false) Boolean justBoard)
@@ -70,8 +69,7 @@ public class BoardController {
     }
 
     // TODO удалить это после того как попрошу Олега обновить фронт
-    @RequestMapping(value = URI + "/player/id/{playerId:" + Validator.ID + "}",
-            method = RequestMethod.GET)
+    @GetMapping(URI + "/player/id/{playerId:" + Validator.ID + "}")
     public String boardPlayerById(ModelMap model,
                               @PathVariable("playerId") String playerId,
                               @RequestParam(name = "only", required = false) Boolean justBoard)
@@ -82,7 +80,7 @@ public class BoardController {
     }
 
 
-    @RequestMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}", params = {"code", "remove"}, method = RequestMethod.GET)
+    @GetMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}", params = {"code", "remove"})
     public String removePlayer(@PathVariable("playerName") String playerName, @RequestParam("code") String code) {
         String playerId = validator.checkPlayerCode(playerName, code);
 
@@ -95,9 +93,7 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
-                    params = "code",
-                    method = RequestMethod.GET)
+    @GetMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}", params = "code")
     public String boardPlayer(ModelMap model,
                               @PathVariable("playerName") String playerName,
                               @RequestParam("code") String code,
@@ -141,8 +137,7 @@ public class BoardController {
         model.addAttribute("allPlayersScreen", false);
     }
 
-    @RequestMapping(value = URI + "/log/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
-            method = RequestMethod.GET)
+    @GetMapping(URI + "/log/player/{playerName:" + Validator.EMAIL_OR_ID + "}")
     public String boardPlayerLog(ModelMap model, @PathVariable("playerName") String playerName) {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
 
@@ -159,7 +154,7 @@ public class BoardController {
         return "board-log";
     }
 
-    @RequestMapping(value = URI, method = RequestMethod.GET)
+    @GetMapping(URI)
     public String boardAll() {
         GameType gameType = playerService.getAnyGameWithPlayers();
         if (gameType == NullGameType.INSTANCE) {
@@ -168,7 +163,7 @@ public class BoardController {
         return "redirect:/board/game/" + gameType.name();
     }
 
-    @RequestMapping(value = URI + "/game/{gameName}", method = RequestMethod.GET)
+    @GetMapping(URI + "/game/{gameName}")
     public String boardAllGames(ModelMap model, @PathVariable("gameName") String gameName) {
         validator.checkGameName(gameName, CANT_BE_NULL);
 
@@ -194,7 +189,7 @@ public class BoardController {
         return "board";
     }
 
-    @RequestMapping(value = URI, params = "code", method = RequestMethod.GET)
+    @GetMapping(value = URI, params = "code")
     public String boardAll(ModelMap model, @RequestParam("code") String code) {
         validator.checkCode(code, CAN_BE_NULL);
 
@@ -220,14 +215,14 @@ public class BoardController {
         return "board";
     }
 
-    @RequestMapping(value = "/donate", method = RequestMethod.GET)
+    @GetMapping("/donate")
     public String donate(ModelMap model) {
         model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         model.addAttribute("donateCode", properties.getDonateCode());
         return "donate-form";
     }
 
-    @RequestMapping(value = "/help")
+    @RequestMapping("/help")
     public String help() {
         return "help";
     }

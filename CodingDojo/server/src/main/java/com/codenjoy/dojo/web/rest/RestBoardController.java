@@ -79,17 +79,17 @@ public class RestBoardController {
     private final SaveService saveService;
     private final ActionLogger actionLogger;
 
-//    @RequestMapping(value = "/sprites", method = RequestMethod.GET)
+//    @GetMapping("/sprites")
     public Map<String, List<String>> getAllSprites() {
         return gameService.getSprites();
     }
 
-//    @RequestMapping(value = "/sprites/{gameName}/exists", method = RequestMethod.GET)
+//    @GetMapping("/sprites/{gameName}/exists")
     public boolean isGraphicOrTextGame(@PathVariable("gameName") String gameName) {
         return !getSpritesForGame(gameName).isEmpty();
     }
 
-//    @RequestMapping(value = "/sprites/{gameName}", method = RequestMethod.GET)
+//    @GetMapping("/sprites/{gameName}")
     public List<String> getSpritesForGame(@PathVariable("gameName") String gameName) {
         if (StringUtils.isEmpty(gameName)) {
             return new ArrayList<>();
@@ -97,12 +97,12 @@ public class RestBoardController {
         return gameService.getSprites().get(gameName);
     }
 
-//    @RequestMapping(value = "/sprites/alphabet", method = RequestMethod.GET)
+//    @GetMapping("/sprites/alphabet")
     public String getSpritesAlphabet() {
         return String.valueOf(GuiPlotColorDecoder.GUI.toCharArray());
     }
 
-//    @RequestMapping(value = "/context", method = RequestMethod.GET)
+//    @GetMapping("/context")
     public String getContext() {
         String contextPath = servletContext.getContextPath();
         if (contextPath.charAt(contextPath.length() - 1) == '/') {
@@ -111,7 +111,7 @@ public class RestBoardController {
         return contextPath;
     }
 
-//    @RequestMapping(value = "/game/{gameName}/type", method = RequestMethod.GET)
+//    @GetMapping("/game/{gameName}/type")
     public GameTypeInfo getGameType(@PathVariable("gameName") String gameName) {
         if (StringUtils.isEmpty(gameName)) {
             return new GameTypeInfo(NullGameType.INSTANCE);
@@ -121,7 +121,7 @@ public class RestBoardController {
         return new GameTypeInfo(game);
     }
 
-    @RequestMapping(value = "/player/{player}/{code}/level/{level}", method = RequestMethod.GET)
+    @GetMapping("/player/{player}/{code}/level/{level}")
     public synchronized boolean changeLevel(@PathVariable("player") String emailOrId,
                                 @PathVariable("code") String code,
                                 @PathVariable("level") int level)
@@ -134,7 +134,7 @@ public class RestBoardController {
     }
 
     // TODO test me и вообще где это надо?
-//    @RequestMapping(value = "/player/all/groups", method = RequestMethod.GET)
+//    @GetMapping("/player/all/groups")
     public Map<String, List<List<String>>> getPlayersGroups() {
         Map<String, List<List<String>>> result = new HashMap<>();
         List<Player> players = playerService.getAll();
@@ -155,23 +155,23 @@ public class RestBoardController {
         return result;
     }
 
-//    @RequestMapping(value = "/player/all/scores", method = RequestMethod.GET)
+//    @GetMapping("/player/all/scores")
     public Map<String, Object> getPlayersScores() {
         return playerGamesView.getScores();
     }
 
-    @RequestMapping(value = "/game/{gameName}/scores", method = RequestMethod.GET)
+    @GetMapping("/game/{gameName}/scores")
     public List<PScoresOf> getPlayersScoresForGame(@PathVariable("gameName") String gameName) {
         return playerGamesView.getScoresFor(gameName);
     }
 
-    @RequestMapping(value = "/scores/clear", method = RequestMethod.GET)
+    @GetMapping("/scores/clear")
     public boolean clearAllScores() {
         playerService.cleanAllScores();
         return true;
     }
 
-    @RequestMapping(value = "/game/enabled/{enabled}", method = RequestMethod.GET)
+    @GetMapping("/game/enabled/{enabled}")
     public boolean startStopGame(@PathVariable("enabled") boolean enabled)
     {
 
@@ -185,7 +185,7 @@ public class RestBoardController {
     }
 
     // TODO test me
-//    @RequestMapping(value = "/player/{player}/{code}/reset", method = RequestMethod.GET)
+//    @GetMapping("/player/{player}/{code}/reset")
     public synchronized boolean reset(@PathVariable("player") String emailOrId, @PathVariable("code") String code){
         String id = validator.checkPlayerCode(emailOrId, code);
 
@@ -208,7 +208,7 @@ public class RestBoardController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/player/{player}/{code}/wantsToPlay/{gameName}", method = RequestMethod.GET)
+    @GetMapping("/player/{player}/{code}/wantsToPlay/{gameName}")
     public synchronized PPlayerWantsToPlay playerWantsToPlay(
             @PathVariable("player") String emailOrId,
             @PathVariable("code") String code,
@@ -230,7 +230,7 @@ public class RestBoardController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/player/{player}/log/{time}", method = RequestMethod.GET)
+    @GetMapping("/player/{player}/log/{time}")
     public List<BoardLog> changeLevel(@PathVariable("player") String emailOrId,
                                             @PathVariable("time") Long time)
     {
