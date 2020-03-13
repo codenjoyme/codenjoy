@@ -109,8 +109,17 @@ public class Registration {
         return count > 0;
     }
 
-    public User register(String email, String readableName) {
-        String id = Hash.getRandomId();
+    public User getOrRegister(String id, String email, String readableName) {
+        Registration.User result = getUserById(id)
+                .orElseGet(() -> getUserByEmail(email)
+                    .orElseGet(() -> registerApproved(id, email, readableName)));
+        return result;
+    }
+    
+    public User registerApproved(String id, String email, String readableName) {
+        if (StringUtils.isEmpty(id)) {
+            id = Hash.getRandomId();
+        }
         String password = passwordEncoder.encode(randomAlphanumeric(properties.getAutoGenPasswordLen()));
 
         User user = register(id, email, readableName,
@@ -118,6 +127,7 @@ public class Registration {
 
         if (!properties.isEmailVerificationNeeded()) {
             approve(user.getCode());
+            user.setApproved(1);
         }
 
         return user;
@@ -127,8 +137,10 @@ public class Registration {
         roles = roles.length > 0 ? roles : GameAuthorities.USER.roles();
         String code = Hash.getCode(id, password);
         password = passwordEncoder.encode(password);
+        
         pool.update("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles) VALUES (?,?,?,?,?,?,?,?);",
                 new Object[]{id, email, readableName, 0, password, code, data, GameAuthorities.buildRolesString(roles)});
+        
         return getUserByCode(code);
     }
 
@@ -148,8 +160,7 @@ public class Registration {
                 }
         );
     }
-
-    // TODO test me
+    
     public String checkUser(String id) {
         if (getCodeById(id) != null) {
             return id;
@@ -172,7 +183,6 @@ public class Registration {
         return null;
     }
 
-    // TODO test me
     public String checkUserByPassword(String id, String password) {
         return checkUser(id, Hash.getCode(id, password));
     }
@@ -184,7 +194,6 @@ public class Registration {
         );
     }
 
-    // TODO test me
     public boolean emailIsUsed(String email) {
         return pool.select("SELECT count(*) AS total FROM users WHERE email = ?;",
                 new Object[]{email},
@@ -192,7 +201,6 @@ public class Registration {
         );
     }
 
-    // TODO test me
     public boolean nameIsUsed(String name) {
         return pool.select("SELECT count(*) AS total FROM users WHERE readable_name = ?;",
                 new Object[]{name},
@@ -200,7 +208,6 @@ public class Registration {
         );
     }
 
-    // TODO test me
     public String getEmailById(String id) {
         return pool.select("SELECT email FROM users WHERE id = ?;",
                 new Object[]{id},
@@ -208,7 +215,6 @@ public class Registration {
         );
     }
 
-    // TODO test me
     public String getIdByName(String name) {
         return pool.select("SELECT id FROM users WHERE readable_name = ?;",
                 new Object[]{name},
@@ -216,7 +222,6 @@ public class Registration {
         );
     }
 
-    // TODO test me
     public String getIdByEmail(String email) {
         return pool.select("SELECT id FROM users WHERE email = ?;",
                 new Object[]{email},
@@ -310,6 +315,15 @@ public class Registration {
 
     public Optional<User> getUserByEmail(String email) {
         return pool.select("SELECT * FROM users where email = ?", new Object[] {email}, rs -> {
+            if (!rs.next()) {
+                return Optional.empty();
+            }
+            return Optional.of(extractUser(rs));
+        });
+    }
+
+    public Optional<User> getUserById(String id) {
+        return pool.select("SELECT * FROM users where id = ?", new Object[] {id}, rs -> {
             if (!rs.next()) {
                 return Optional.empty();
             }

@@ -49,14 +49,10 @@ public class OAuth2MappingUserService extends DefaultOAuth2UserService {
         OAuth2User auth = super.loadUser(userRequest);
         Map<String, Object> map = auth.getAttributes();
 
-        String email = (String) map.get("email");
-        String readableName = (String) map.get("name");
-        // TODO тут надо айдишку player брать от регистратора как имя и имейл, иначе регистратор не будет знать как управлять юзером тут через апи
-		// TODO player_id взять если он стоит от регистратора		
+        UserData data = new UserData(map);
 
-        Registration.User user = registration.getUserByEmail(email)
-                .orElseGet(() -> registration.register(email, readableName));
-
+        Registration.User user = registration.getOrRegister(data.id(), data.email(), data.readableName());
+        
         return user;
     }
 }
