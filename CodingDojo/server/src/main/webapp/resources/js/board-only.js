@@ -36,10 +36,12 @@ pages.boardOnly = function() {
     game.showBody = true;
     game.sprites = null;
     game.heroInfo = null;
-
-    $('body').click(function() {
-        window.open(window.location.href.replace('only=true', 'only=false'));
-    });
+    
+    if (window.location.href.includes("click=true")) {
+        $('body').click(function() {
+            window.open(window.location.href.replace('only=true', 'only=false'));
+        });
+   }
 
     pages.board();
 }
