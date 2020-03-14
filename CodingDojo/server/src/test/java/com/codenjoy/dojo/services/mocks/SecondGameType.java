@@ -89,7 +89,7 @@ public class SecondGameType implements GameType {
     }
 
     @Override
-    public Enum[] getPlots() {
+    public CharElements[] getPlots() {
         return Elements.values();
     }
 

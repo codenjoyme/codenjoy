@@ -24,12 +24,14 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -100,14 +102,32 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public Map<String, List<String>> getSpritesNames() {
+        return getStringListMap(plot -> plot.name().toLowerCase());
+    }
+
+    @Override
+    public Map<String, List<String>> getSpritesValues() {
+        return getStringListMap(plot -> String.valueOf(plot.ch()));
+    }
+
+    // TODO test me
+    // TODO может сделать универсальную версию метода с CharElements и ну его два вурхних метода?
+    @Override
     public Map<String, List<String>> getSprites() {
+        return getStringListMap(plot -> plot.name().toLowerCase() + "=" + plot.ch());
+    }
+
+    private Map<String, List<String>> getStringListMap(Function<CharElements, String> mapper) {
         return cache.entrySet().stream()
-                .map(entry -> new HashMap.SimpleEntry<>(
-                        entry.getValue().name(),
-                        Arrays.stream(entry.getValue().getPlots())
-                                .map(plot -> plot.name().toLowerCase())
-                                .collect(toList())
-                ))
+                .map(entry -> 
+                    new HashMap.SimpleEntry<>(
+                            entry.getValue().name(),
+                            Arrays.stream(entry.getValue().getPlots())
+                                    .map(mapper)
+                                    .collect(toList())
+                    )
+                )
                 .collect(toMap(
                         AbstractMap.SimpleEntry::getKey,
                         AbstractMap.SimpleEntry::getValue

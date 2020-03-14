@@ -28,6 +28,7 @@ import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
@@ -79,6 +80,7 @@ public class GameServiceTest {
     private List<String> activeGameNames = new ArrayList<>();
 
     private Map<String, List<String>> expectedPlots;
+    private Map<String, List<String>> expectedPlotsValues;
 
     /**
      * FIXME: Логика здесь дублирует логику GameServiceImpl, и требуется для того, чтобы успешно проходили тесты при запуске сборки
@@ -100,8 +102,16 @@ public class GameServiceTest {
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                         e -> Arrays.stream(e.getValue().getPlots())
-                                .map(Enum::name)
+                                .map(CharElements::name)
                                 .map(String::toLowerCase)
+                                .collect(Collectors.toList())));
+
+        expectedPlotsValues = loadedGameTypes.entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        e -> Arrays.stream(e.getValue().getPlots())
+                                .map(CharElements::ch)
+                                .map(String::valueOf)
                                 .collect(Collectors.toList())));
     }
 
@@ -113,9 +123,15 @@ public class GameServiceTest {
     }
 
     @Test
-    public void shouldGetSprites() {
-        Map<String, List<String>> sprites = gameService.getSprites();
+    public void shouldGetSpritesNames() {
+        Map<String, List<String>> sprites = gameService.getSpritesNames();
         assertEquals(expectedPlots, sprites);
+    }
+    
+    @Test
+    public void shouldGetSpritesValues() {
+        Map<String, List<String>> sprites = gameService.getSpritesValues();
+        assertEquals(expectedPlotsValues, sprites);
     }
 
     @Test
@@ -132,7 +148,7 @@ public class GameServiceTest {
 
     @Test
     public void shouldGetPngForSprites() {
-        Map<String, List<String>> sprites = gameService.getSprites();
+        Map<String, List<String>> sprites = gameService.getSpritesNames();
 
         List<String> errors = new LinkedList<>();
         for (Map.Entry<String, List<String>> entry : sprites.entrySet()) {

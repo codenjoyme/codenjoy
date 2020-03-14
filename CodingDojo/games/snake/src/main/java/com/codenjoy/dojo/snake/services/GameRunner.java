@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snake.client.Board;
 import com.codenjoy.dojo.snake.client.ai.AISolver;
@@ -78,7 +79,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Enum[] getPlots() {
+    public CharElements[] getPlots() {
         return Elements.values();
     }
 

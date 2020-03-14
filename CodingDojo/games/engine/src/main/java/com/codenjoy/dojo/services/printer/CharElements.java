@@ -28,5 +28,8 @@ package com.codenjoy.dojo.services.printer;
  * живность на поле.
  */
 public interface CharElements {
+    
     char ch();
+    
+    String name();
 }

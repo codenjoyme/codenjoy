@@ -36,6 +36,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -75,7 +76,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Enum[] getPlots() {
+    public CharElements[] getPlots() {
         return Elements.values();
     }
 

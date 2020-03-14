@@ -27,14 +27,14 @@ import java.util.List;
 public class PPlayerWantsToPlay {
 
     private String context;
-    private GameTypeInfo gameType;
+    private PGameTypeInfo gameType;
     private boolean registered;
     private List<String> sprites;
     private String alphabet;
     private List<PlayerInfo> players;
 
     public PPlayerWantsToPlay(String context,
-                              GameTypeInfo gameType,
+                              PGameTypeInfo gameType,
                               boolean registered,
                               List<String> sprites,
                               String alphabet,
@@ -52,7 +52,7 @@ public class PPlayerWantsToPlay {
         return context;
     }
 
-    public GameTypeInfo getGameType() {
+    public PGameTypeInfo getGameType() {
         return gameType;
     }
 

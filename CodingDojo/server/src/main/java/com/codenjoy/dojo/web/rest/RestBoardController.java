@@ -23,104 +23,49 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
-import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
-
-import com.codenjoy.dojo.services.BoardLog;
-import com.codenjoy.dojo.services.GameService;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.GuiPlotColorDecoder;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerGames;
-import com.codenjoy.dojo.services.PlayerGamesView;
-import com.codenjoy.dojo.services.PlayerSave;
-import com.codenjoy.dojo.services.PlayerService;
-import com.codenjoy.dojo.services.SaveService;
-import com.codenjoy.dojo.services.TimerService;
+import com.codenjoy.dojo.client.CodenjoyContext;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.web.controller.Validator;
-import com.codenjoy.dojo.web.rest.pojo.GameTypeInfo;
+import com.codenjoy.dojo.web.rest.pojo.PGameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.*;
+
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
+
 @RestController
-@RequestMapping(value = "/rest")
+@RequestMapping("/rest")
 @RequiredArgsConstructor
 public class RestBoardController {
 
     private final GameService gameService;
     private final RestRegistrationController registrationController;
+    private final RestGameController gameController;
     private final PlayerService playerService;
     private final Registration registration;
-    private final ServletContext servletContext;
     private final Validator validator;
     private final PlayerGames playerGames;
     private final PlayerGamesView playerGamesView;
     private final TimerService timerService;
     private final SaveService saveService;
     private final ActionLogger actionLogger;
-
-//    @GetMapping("/sprites")
-    public Map<String, List<String>> getAllSprites() {
-        return gameService.getSprites();
-    }
-
-//    @GetMapping("/sprites/{gameName}/exists")
-    public boolean isGraphicOrTextGame(@PathVariable("gameName") String gameName) {
-        return !getSpritesForGame(gameName).isEmpty();
-    }
-
-//    @GetMapping("/sprites/{gameName}")
-    public List<String> getSpritesForGame(@PathVariable("gameName") String gameName) {
-        if (StringUtils.isEmpty(gameName)) {
-            return new ArrayList<>();
-        }
-        return gameService.getSprites().get(gameName);
-    }
-
-//    @GetMapping("/sprites/alphabet")
-    public String getSpritesAlphabet() {
-        return String.valueOf(GuiPlotColorDecoder.GUI.toCharArray());
-    }
-
-//    @GetMapping("/context")
+    
+    @GetMapping("/context")
     public String getContext() {
-        String contextPath = servletContext.getContextPath();
-        if (contextPath.charAt(contextPath.length() - 1) == '/') {
-            contextPath += contextPath.substring(0, contextPath.length() - 1);
-        }
-        return contextPath;
+        return CodenjoyContext.getContext();
     }
-
-//    @GetMapping("/game/{gameName}/type")
-    public GameTypeInfo getGameType(@PathVariable("gameName") String gameName) {
-        if (StringUtils.isEmpty(gameName)) {
-            return new GameTypeInfo(NullGameType.INSTANCE);
-        }
-        GameType game = gameService.getGame(gameName);
-
-        return new GameTypeInfo(game);
-    }
-
+    
     @GetMapping("/player/{player}/{code}/level/{level}")
     public synchronized boolean changeLevel(@PathVariable("player") String emailOrId,
                                 @PathVariable("code") String code,
@@ -219,10 +164,10 @@ public class RestBoardController {
         validator.checkGameName(gameName, CANT_BE_NULL);
 
         String context = getContext();
-        GameTypeInfo gameType = getGameType(gameName);
+        PGameTypeInfo gameType = gameController.type(gameName);
         boolean registered = registration.checkUser(emailOrId, code) != null;
-        List<String> sprites = getSpritesForGame(gameName);
-        String alphabet = getSpritesAlphabet();
+        List<String> sprites = gameController.spritesNames(gameName);
+        String alphabet = gameController.spritesAlphabet();
         List<PlayerInfo> players = registrationController.getGamePlayers(gameName);
 
         return new PPlayerWantsToPlay(context, gameType,

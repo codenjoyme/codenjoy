@@ -40,6 +40,7 @@ import com.codenjoy.dojo.services.nullobj.NullJoystick;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
@@ -238,7 +239,7 @@ public class PlayerServiceImplTest {
         };
     }
 
-    enum Elements {
+    enum Elements implements CharElements {
         A('1'), B('2'), C('3'), D('4');
 
         private final char ch;
@@ -250,6 +251,11 @@ public class PlayerServiceImplTest {
         @Override
         public String toString() {
             return String.valueOf(ch);
+        }
+
+        @Override
+        public char ch() {
+            return ch;
         }
     }
 

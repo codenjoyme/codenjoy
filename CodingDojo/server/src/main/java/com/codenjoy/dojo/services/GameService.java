@@ -32,6 +32,10 @@ public interface GameService {
 
     List<String> getOnlyGameNames();
 
+    Map<String, List<String>> getSpritesNames();
+    
+    Map<String, List<String>> getSpritesValues();
+
     Map<String, List<String>> getSprites();
 
     GameType getGame(String name);
