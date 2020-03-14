@@ -61,7 +61,7 @@ public class RestGameController {
         PSprites sprites = new PSprites(spritesAlphabet(), spritesUrl(name),
                 spritesNames(name), spritesValues(name));
         
-        return new PGameTypeInfo(game, help(name), client(name), sprites);
+        return new PGameTypeInfo(game, help(name), client(name), ws(), sprites);
     }
 
     @GetMapping("/{name}/help/url")
@@ -70,6 +70,7 @@ public class RestGameController {
             return null;
         }
 
+        // TODO тут было бы неплохо получить так же http[s]://domain:port/ 
         return String.format("/%s/resources/help/%s.html",
                 CodenjoyContext.getContext(), name);
     }
@@ -80,8 +81,17 @@ public class RestGameController {
             return null;
         }
 
+        // TODO тут было бы неплохо получить так же http[s]://domain:port/
         return String.format("/%s/resources/user/%s-servers.zip",
                 CodenjoyContext.getContext(), name);
+    }
+
+    @GetMapping("/ws/url")
+    public String ws() {
+        // TODO тут было бы неплохо получить так же SERVER:PORT 
+        // TODO а еще надо подумать если юзер авторизирован, то можно выдать его PLAYER_ID & CODE 
+        return String.format("ws[s]://SERVER:PORT/%s/ws?user=PLAYER_ID&code=CODE",
+                CodenjoyContext.getContext());
     }
 
     @GetMapping("/sprites")
@@ -122,6 +132,7 @@ public class RestGameController {
             return null;
         }
 
+        // TODO тут было бы неплохо получить так же http[s]://domain:port/
         return String.format("/%s/resources/sprite/%s/%s.png",
                 CodenjoyContext.getContext(), name, "*");
     }

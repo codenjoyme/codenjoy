@@ -39,9 +39,13 @@ public class PGameTypeInfo {
     private MultiplayerType multiplayerType;
     private String helpUrl;
     private String clientUrl;
+    private String wsUrl;
     private PSprites sprites;
 
-    public PGameTypeInfo(GameType type, String helpUrl, String clientUrl, PSprites sprites) {
+    public PGameTypeInfo(GameType type, String helpUrl, 
+                         String clientUrl, String wsUrl,
+                         PSprites sprites) 
+    {
         version = type.getVersion();
         info = type.toString();
         boardSize = type.getBoardSize().getValue();
@@ -49,6 +53,7 @@ public class PGameTypeInfo {
         multiplayerType = type.getMultiplayerType();
         this.helpUrl = helpUrl;
         this.clientUrl = clientUrl;
+        this.wsUrl = wsUrl;
         this.sprites = sprites;
     }
 }
