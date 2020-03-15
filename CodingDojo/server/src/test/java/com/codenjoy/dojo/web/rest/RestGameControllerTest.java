@@ -88,7 +88,8 @@ public class RestGameControllerTest {
 
     @Before
     public void setUp() {
-        mvc = MockMvcBuilders.webAppContextSetup(context).build();    
+        CodenjoyContext.setContext("codenjoy-contest");
+        mvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
     protected String mapToJson(Object obj) {
@@ -132,10 +133,10 @@ public class RestGameControllerTest {
 
     @Test
     public void shouldInfo() {
-        String expected = "{\n" +
+        String expected1 = "{\n" +
                 "  'boardSize':23,\n" +
-                "  'clientUrl':'//resources/user/first-servers.zip',\n" +
-                "  'helpUrl':'//resources/help/first.html',\n" +
+                "  'clientUrl':'/codenjoy-contest/resources/user/first-servers.zip',\n" +
+                "  'helpUrl':'/codenjoy-contest/resources/help/first.html',\n" +
                 "  'info':'GameType[first]',\n" +
                 "  'multiplayerType':{\n" +
                 "    'disposable':true,\n" +
@@ -178,7 +179,7 @@ public class RestGameControllerTest {
                 "      'wall',\n" +
                 "      'hero'\n" +
                 "    ],\n" +
-                "    'url':'//resources/sprite/first/*.png',\n" +
+                "    'url':'/codenjoy-contest/resources/sprite/first/*.png',\n" +
                 "    'values':[\n" +
                 "      ' ',\n" +
                 "      '☼',\n" +
@@ -186,17 +187,80 @@ public class RestGameControllerTest {
                 "    ]\n" +
                 "  },\n" +
                 "  'version':'version 1.11b',\n" +
-                "  'wsUrl':'ws[s]://SERVER:PORT//ws?user=PLAYER_ID&code=CODE'\n" +
+                "  'wsUrl':'ws[s]://SERVER:PORT/codenjoy-contest/ws?user=PLAYER_ID&code=CODE'\n" +
                 "}";
         
-        assertEquals(expected, JsonUtils.prettyPrint(service.type("first")));
-        assertEquals(expected, JsonUtils.prettyPrint(get("/rest/game/first/info")));
+        assertEquals(expected1, JsonUtils.prettyPrint(service.type("first")));
+        assertEquals(expected1, JsonUtils.prettyPrint(get("/rest/game/first/info")));
+
+        String expected2 = "{\n" +
+                "  'boardSize':56,\n" +
+                "  'clientUrl':'/codenjoy-contest/resources/user/second-servers.zip',\n" +
+                "  'helpUrl':'/codenjoy-contest/resources/help/second.html',\n" +
+                "  'info':'GameType[second]',\n" +
+                "  'multiplayerType':{\n" +
+                "    'disposable':false,\n" +
+                "    'levelsCount':10,\n" +
+                "    'multiplayer':true,\n" +
+                "    'multiple':false,\n" +
+                "    'quadro':false,\n" +
+                "    'roomSize':1,\n" +
+                "    'single':false,\n" +
+                "    'singleplayer':false,\n" +
+                "    'team':false,\n" +
+                "    'tournament':false,\n" +
+                "    'training':true,\n" +
+                "    'triple':false,\n" +
+                "    'type':'training'\n" +
+                "  },\n" +
+                "  'parameters':[\n" +
+                "    {\n" +
+                "      'name':'Parameter 3',\n" +
+                "      'options':[\n" +
+                "        43\n" +
+                "      ],\n" +
+                "      'type':'editbox',\n" +
+                "      'value':43\n" +
+                "    },\n" +
+                "    {\n" +
+                "      'name':'Parameter 4',\n" +
+                "      'options':[\n" +
+                "        false,\n" +
+                "        true\n" +
+                "      ],\n" +
+                "      'type':'checkbox',\n" +
+                "      'value':true\n" +
+                "    }\n" +
+                "  ],\n" +
+                "  'sprites':{\n" +
+                "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',\n" +
+                "    'names':[\n" +
+                "      'none',\n" +
+                "      'red',\n" +
+                "      'green',\n" +
+                "      'blue'\n" +
+                "    ],\n" +
+                "    'url':'/codenjoy-contest/resources/sprite/second/*.png',\n" +
+                "    'values':[\n" +
+                "      ' ',\n" +
+                "      'R',\n" +
+                "      'G',\n" +
+                "      'B'\n" +
+                "    ]\n" +
+                "  },\n" +
+                "  'version':'version 12',\n" +
+                "  'wsUrl':'ws[s]://SERVER:PORT/codenjoy-contest/ws?user=PLAYER_ID&code=CODE'\n" +
+                "}";
+
+        assertEquals(expected2, JsonUtils.prettyPrint(service.type("second")));
+        assertEquals(expected2, JsonUtils.prettyPrint(get("/rest/game/second/info")));
+        
+        assertEquals(null, service.type("non-exists"));
+        assertEquals("", get("/rest/game/non-exists/info"));
     }
 
     @Test
     public void shouldHelpUrl() {
-        CodenjoyContext.setContext("codenjoy-contest");
-        
         String expected1 = "/codenjoy-contest/resources/help/first.html";
         assertEquals(expected1, service.help("first"));
         assertEquals(expected1, get("/rest/game/first/help/url"));
@@ -221,5 +285,75 @@ public class RestGameControllerTest {
 
         assertEquals(null, service.client("non-exists"));
         assertEquals("", get("/rest/game/non-exists/client/url"));
+    }
+
+    @Test
+    public void shouldWsUrl() {
+        String expected = "ws[s]://SERVER:PORT/codenjoy-contest/ws?user=PLAYER_ID&code=CODE";
+        assertEquals(expected, service.ws());
+        assertEquals(expected, get("/rest/game/ws/url"));
+    }
+
+    @Test
+    public void shouldAllSprites() {
+        assertEquals("{first=[none= , wall=☼, hero=☺], second=[none= , red=R, green=G, blue=B]}", 
+                service.allSprites().toString());
+        
+        assertEquals("{\"first\":[\"none= \",\"wall=☼\",\"hero=☺\"],\"second\":[\"none= \",\"red=R\",\"green=G\",\"blue=B\"]}", 
+                get("/rest/game/sprites"));
+    }
+
+    @Test
+    public void shouldIsGraphic() {
+        assertEquals(true, service.isGraphic("first"));
+        assertEquals(true, service.isGraphic("second"));
+        assertEquals(null, service.isGraphic("non-exists"));
+        
+        assertEquals("true", get("/rest/game/first/sprites/exists"));
+        assertEquals("true", get("/rest/game/second/sprites/exists"));
+        assertEquals("",     get("/rest/game/non-exists/sprites/exists"));
+    }
+
+    @Test
+    public void shouldSpritesNames() {
+        assertEquals("[none, wall, hero]", service.spritesNames("first").toString());
+        assertEquals("[none, red, green, blue]", service.spritesNames("second").toString());
+        assertEquals(null, service.spritesNames("non-exists"));
+
+        assertEquals("[\"none\",\"wall\",\"hero\"]", 
+                get("/rest/game/first/sprites/names"));
+        assertEquals("[\"none\",\"red\",\"green\",\"blue\"]", 
+                get("/rest/game/second/sprites/names"));
+        assertEquals("", 
+                get("/rest/game/non-exists/sprites/names"));
+    }
+
+    @Test
+    public void shouldSpritesValues() {
+        assertEquals("[ , ☼, ☺]", service.spritesValues("first").toString());
+        assertEquals("[ , R, G, B]", service.spritesValues("second").toString());
+        assertEquals(null, service.spritesValues("non-exists"));
+
+        assertEquals("[\" \",\"☼\",\"☺\"]", get("/rest/game/first/sprites/values"));
+        assertEquals("[\" \",\"R\",\"G\",\"B\"]", get("/rest/game/second/sprites/values"));
+        assertEquals("", get("/rest/game/non-exists/sprites/values"));
+    }
+
+    @Test
+    public void shouldSpritesUrl() {
+        assertEquals("/codenjoy-contest/resources/sprite/first/*.png", service.spritesUrl("first"));
+        assertEquals("/codenjoy-contest/resources/sprite/second/*.png", service.spritesUrl("second"));
+        assertEquals(null, service.spritesUrl("non-exists"));
+
+        assertEquals("/codenjoy-contest/resources/sprite/first/*.png", get("/rest/game/first/sprites/url"));
+        assertEquals("/codenjoy-contest/resources/sprite/second/*.png", get("/rest/game/second/sprites/url"));
+        assertEquals("", get("/rest/game/non-exists/sprites/url"));
+    }
+
+    @Test
+    public void shouldSpritesAlphabet() {
+        String expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        assertEquals(expected, service.spritesAlphabet());
+        assertEquals(expected, get("/rest/game/sprites/alphabet"));
     }
 }
