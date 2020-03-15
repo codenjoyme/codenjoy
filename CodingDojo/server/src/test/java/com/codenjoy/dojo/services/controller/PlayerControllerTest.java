@@ -254,6 +254,9 @@ public class PlayerControllerTest {
             while (++count < 100 && serverMessages.isEmpty()) {
                 Thread.sleep(300);
             }
+            if (count > 100) {
+                return;
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
