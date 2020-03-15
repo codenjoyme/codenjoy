@@ -24,8 +24,13 @@ package com.codenjoy.dojo.web.rest.pojo;
 
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.hero.HeroData;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class PHeroData implements HeroData {
+    
     private Object additionalData;
     private PointImpl coordinate;
     private boolean multiplayer;
@@ -40,42 +45,5 @@ public class PHeroData implements HeroData {
         coordinate = new PointImpl(data.getCoordinate());
         multiplayer = data.isMultiplayer();
         level = data.getLevel();
-    }
-
-    @Override
-    public PointImpl getCoordinate() {
-        return coordinate;
-    }
-
-    @Override
-    public boolean isMultiplayer() {
-        return multiplayer;
-    }
-
-    @Override
-    public int getLevel() {
-        return level;
-    }
-
-    @Override
-    public Object getAdditionalData() {
-        return additionalData;
-    }
-
-
-    public void setAdditionalData(Object additionalData) {
-        this.additionalData = additionalData;
-    }
-
-    public void setCoordinate(PointImpl coordinate) {
-        this.coordinate = coordinate;
-    }
-
-    public void setMultiplayer(boolean multiplayer) {
-        this.multiplayer = multiplayer;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
     }
 }

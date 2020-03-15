@@ -23,8 +23,11 @@ package com.codenjoy.dojo.web.rest.pojo;
  */
 
 import com.codenjoy.dojo.services.Player;
+import lombok.Getter;
 
+@Getter
 public class PlayerInfo {
+    
     private String gameType;
     private String callbackUrl;
     private String name;
@@ -39,29 +42,5 @@ public class PlayerInfo {
         readableName = player.getNotNullReadableName();
         score = String.valueOf(player.getScore());
         code = player.getCode();
-    }
-
-    public String getGameType() {
-        return gameType;
-    }
-
-    public String getCallbackUrl() {
-        return callbackUrl;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getScore() {
-        return score;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getReadableName() {
-        return readableName;
     }
 }

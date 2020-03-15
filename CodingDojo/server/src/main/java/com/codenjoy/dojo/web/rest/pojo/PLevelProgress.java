@@ -23,7 +23,6 @@ package com.codenjoy.dojo.web.rest.pojo;
  */
 
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 
 public class PLevelProgress extends LevelProgress {
 

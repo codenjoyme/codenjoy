@@ -22,8 +22,11 @@ package com.codenjoy.dojo.web.rest.pojo;
  * #L%
  */
 
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
 public class PPlayerWantsToPlay {
 
     private String context;
@@ -46,30 +49,6 @@ public class PPlayerWantsToPlay {
         this.sprites = sprites;
         this.alphabet = alphabet;
         this.players = players;
-    }
-
-    public String getContext() {
-        return context;
-    }
-
-    public PGameTypeInfo getGameType() {
-        return gameType;
-    }
-
-    public boolean isRegistered() {
-        return registered;
-    }
-
-    public List<String> getSprites() {
-        return sprites;
-    }
-
-    public List<PlayerInfo> getPlayers() {
-        return players;
-    }
-
-    public String getAlphabet() {
-        return alphabet;
     }
 
     @Override
