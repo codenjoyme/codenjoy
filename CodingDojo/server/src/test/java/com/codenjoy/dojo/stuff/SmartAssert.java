@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.stuff;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.ComparisonFailure;
 import org.junit.Test;
@@ -12,18 +11,18 @@ import org.junit.runner.notification.RunNotifier;
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.junit.Assert.fail;
 
 public class SmartAssert extends Runner {
 
-    public static final int STACK_TRACE_COUNT = 10;
-    public static final int REAL_ASSERT_DEPTH = 4;
+    public static int STACK_TRACE_COUNT = 10;
     
     private Class test;
     
-    // TODO тут надо решить со статикой
-    private static List<Failure> failures = new LinkedList<>();
+    private static Map<String, List<Failure>> failures = new ConcurrentHashMap<>();
 
     public SmartAssert(Class test) {
         super();
@@ -32,7 +31,8 @@ public class SmartAssert extends Runner {
 
     @Override
     public Description getDescription() {
-        return Description.createTestDescription(test, "This is SmartAssertRunner");
+        return Description.createTestDescription(test, 
+                "Do not panic! You have performed wonders in this... colourful Universe.");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class SmartAssert extends Runner {
                 notifier.fireTestStarted(description(method));
                 
                 method.invoke(testObject);
-                checkResult();
+                checkResult(failures(test.getName()));
                 
                 notifier.fireTestFinished(description(method));
             }
@@ -60,27 +60,26 @@ public class SmartAssert extends Runner {
     }
 
     private static class Failure {
+        
         private String message;
         private List<StackTraceElement> where;
 
-
         private Failure(String expected, String actual) {
             this.message = new ComparisonFailure("", expected, actual).getMessage();
-            where = getLines(REAL_ASSERT_DEPTH, STACK_TRACE_COUNT);
+            where = getLines(STACK_TRACE_COUNT);
         }
 
-        private List<StackTraceElement> getLines(int depth, int count) {
-            Exception exception = new Exception();
-            StackTraceElement[] stackTrace = exception.getStackTrace();
+        private List<StackTraceElement> getLines(int count) {
+            StackTraceElement[] stackTrace = stackTrace();
+            String caller = getCaller().getClassName();
+            
             return new LinkedList<StackTraceElement>(){{
-                add(stackTrace[depth]);
-                for (int i = 1; i < count; i++) {
-                    StackTraceElement element1 = stackTrace[depth];
-                    StackTraceElement element2 = stackTrace[depth + i];
-                    if (element1.getClassName().equals(element2.getClassName())) {
-                        add(element2);
-                    } else {
-                        break;
+                for (int i = 0; i < stackTrace.length; i++) {
+                    if (size() >= count) break;
+                    
+                    StackTraceElement element = stackTrace[i];
+                    if (element.getClassName().equals(caller)) {
+                        add(element);
                     }
                 }
             }};
@@ -96,20 +95,60 @@ public class SmartAssert extends Runner {
         }
     }
 
+    private static StackTraceElement[] stackTrace() {
+        Exception exception = new Exception();
+        return exception.getStackTrace();
+    }
+
+    private static StackTraceElement getCaller() {
+        StackTraceElement[] elements = stackTrace();
+        for (int i = 0; i < elements.length; i++) {
+            StackTraceElement element = elements[i];
+            if (!element.getClassName().equals(SmartAssert.class.getName()) &&
+                    !element.getClassName().contains(SmartAssert.class.getSimpleName() + "$")) {
+                return element;
+            }             
+        }
+        throw new RuntimeException();
+    }
+
     public static void assertEquals(Object expected, Object actual) {
         try {
             Assert.assertEquals(expected, actual);
         } catch (AssertionError e) {
-            failures.add(new Failure(expected.toString(), actual.toString()));
+            failures().add(new Failure(expected.toString(), actual.toString()));
         }
     }
 
+    public static void checkResult(List<Failure> list) {
+        if (list.isEmpty()) return;
+        
+        list.forEach(System.err::println);
+        list.clear();
+        fail("There are errors");
+    }
+    
     public static void checkResult() {
-        if (!failures.isEmpty()) {
-            failures.forEach(failure ->
-                    System.err.println(failure));
-            failures.clear();
-            fail("There are errors");
+        checkResult(failures());
+    }
+
+    public static void checkResult(String caller) {
+        List<Failure> list = failures();
+        if (list.isEmpty()) return;
+
+        list.forEach(System.err::println);
+        list.clear();
+        fail("There are errors");
+    }
+
+    private static List<Failure> failures() {
+        return failures(getCaller().getClassName());    
+    }
+    
+    private static List<Failure> failures(String caller) {
+        if (!failures.containsKey(caller)) {
+            failures.put(caller, new LinkedList<>());
         }
+        return failures.get(caller);
     }
 }
