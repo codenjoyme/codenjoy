@@ -1,4 +1,4 @@
-package com.codenjoy.dojo;
+package com.codenjoy.dojo.stuff;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -19,6 +19,7 @@ public class SmartAssert extends Runner {
 
     public static final int STACK_TRACE_COUNT = 10;
     public static final int REAL_ASSERT_DEPTH = 4;
+    
     private Class test;
     
     // TODO тут надо решить со статикой
@@ -31,7 +32,7 @@ public class SmartAssert extends Runner {
 
     @Override
     public Description getDescription() {
-        return Description .createTestDescription(test, "This is SmartAssertRunner");
+        return Description.createTestDescription(test, "This is SmartAssertRunner");
     }
 
     @Override
@@ -103,7 +104,7 @@ public class SmartAssert extends Runner {
         }
     }
 
-    private void checkResult() {
+    public static void checkResult() {
         if (!failures.isEmpty()) {
             failures.forEach(failure ->
                     System.err.println(failure));

@@ -1,7 +1,7 @@
 package com.codenjoy.dojo.web.rest;
 
-import com.codenjoy.dojo.SmartAssert;
-import static com.codenjoy.dojo.SmartAssert.*;
+import com.codenjoy.dojo.stuff.SmartAssert;
+import static com.codenjoy.dojo.stuff.SmartAssert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 public class SmartAssertTest {
 
     @Test
-    public void test() {
+    public void test() {   
         q1();
         q2();
         assertEquals("z\n3", "3\nz");
