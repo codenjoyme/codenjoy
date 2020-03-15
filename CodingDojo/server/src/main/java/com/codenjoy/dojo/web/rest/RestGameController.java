@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.GuiPlotColorDecoder;
 import com.codenjoy.dojo.web.rest.pojo.PGameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PSprites;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,13 +38,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-// TODO test me
 @RestController
 @RequestMapping("/rest/game")
 @RequiredArgsConstructor
 public class RestGameController {
 
-    private final GameService gameService;
+    @Autowired
+    private GameService gameService;
 
     @GetMapping("/{name}/exists")
     public Boolean exists(@PathVariable("name") String name) {

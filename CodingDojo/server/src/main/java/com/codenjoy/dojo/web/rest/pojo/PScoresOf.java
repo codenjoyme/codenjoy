@@ -25,9 +25,6 @@ package com.codenjoy.dojo.web.rest.pojo;
 import com.codenjoy.dojo.services.PlayerGame;
 import lombok.AllArgsConstructor;
 
-/**
- * Created by Oleksandr_Baglai on 2019-09-20.
- */
 @AllArgsConstructor
 public class PScoresOf {
 

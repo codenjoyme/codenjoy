@@ -128,13 +128,18 @@ public class PlayerServiceImplTest {
 
     @Mock
     private GameType gameType;
+    
     @Mock
     private PlayerScores playerScores1;
+    
     @Mock
     private PlayerScores playerScores2;
+    
     @Mock
     private PlayerScores playerScores3;
+    
     private InformationCollector informationCollector;
+    
     @Mock
     private GraphicPrinter printer;
     private List<Joystick> joysticks = new LinkedList<>();
@@ -144,7 +149,7 @@ public class PlayerServiceImplTest {
     private List<PlayerHero> heroesData = new LinkedList<>();
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
         Mockito.reset(actionLogger, autoSaver, gameService, playerController, playerGames);
         playerGames.clean();
 

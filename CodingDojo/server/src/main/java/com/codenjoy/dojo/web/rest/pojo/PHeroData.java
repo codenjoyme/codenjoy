@@ -25,21 +25,19 @@ package com.codenjoy.dojo.web.rest.pojo;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.hero.HeroData;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PHeroData implements HeroData {
     
     private Object additionalData;
     private PointImpl coordinate;
     private boolean multiplayer;
     private int level;
-
-    public PHeroData() {
-        // do nothing
-    }
-
+    
     public PHeroData(HeroData data) {
         additionalData = data.getAdditionalData();
         coordinate = new PointImpl(data.getCoordinate());

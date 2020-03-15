@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.reflections.Reflections;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -43,10 +42,7 @@ import static java.util.stream.Collectors.toMap;
 public class GameServiceImpl implements GameService {
 
     public static final String ROOMS_SEPARATOR = "-";
-
-    @Autowired private TimerService timer;
-    @Autowired private PlayerService players;
-
+    
     private Map<String, GameType> cache = new TreeMap<>();
 
     public GameServiceImpl() {
@@ -56,8 +52,8 @@ public class GameServiceImpl implements GameService {
         }
     }
 
-    private List<Class<? extends GameType>> allGames() {
-        List<Class<? extends GameType>> result = new LinkedList<>(
+    private List<Class> allGames() {
+        List<Class> result = new LinkedList<>(
                 findInPackage("com.codenjoy.dojo"));
 
         result.sort(Comparator.comparing(Class::getName));
@@ -74,13 +70,13 @@ public class GameServiceImpl implements GameService {
         return result;
     }
 
-    private void remove(List<Class<? extends GameType>> result, Predicate<Class<? extends GameType>> predicate) {
+    private void remove(List<Class> result, Predicate<Class> predicate) {
         result.removeAll(result.stream()
                 .filter(predicate)
                 .collect(Collectors.toList()));
     }
 
-    Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
+    protected Collection<? extends Class> findInPackage(String packageName) {
         return new Reflections(packageName).getSubTypesOf(GameType.class);
     }
 
@@ -89,7 +85,6 @@ public class GameServiceImpl implements GameService {
         return new LinkedList<>(cache.keySet());
     }
 
-    // TODO test me
     @Override
     public List<String> getOnlyGameNames() {
         return getGameNames().stream()
@@ -111,7 +106,6 @@ public class GameServiceImpl implements GameService {
         return getStringListMap(plot -> String.valueOf(plot.ch()));
     }
 
-    // TODO test me
     // TODO может сделать универсальную версию метода с CharElements и ну его два вурхних метода?
     @Override
     public Map<String, List<String>> getSprites() {
@@ -134,7 +128,7 @@ public class GameServiceImpl implements GameService {
                 ));
     }
 
-    GameType loadGameType(Class<? extends GameType> gameType) {
+    private GameType loadGameType(Class<? extends GameType> gameType) {
         try {
             return gameType.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {

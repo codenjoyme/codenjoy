@@ -27,12 +27,14 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.dao.Registration;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class PlayerDetailInfo {
 
     private String name;
@@ -46,10 +48,6 @@ public class PlayerDetailInfo {
     private PLevelProgress progress;
     private List<String> group;
     private Registration.User registration;
-
-    public PlayerDetailInfo() {
-        // do nothing
-    }
 
     public PlayerDetailInfo(Player player, Registration.User registration,
                             Game game, List<String> group)
