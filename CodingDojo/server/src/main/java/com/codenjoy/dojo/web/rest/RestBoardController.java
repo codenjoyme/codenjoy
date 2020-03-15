@@ -63,7 +63,7 @@ public class RestBoardController {
     
     @GetMapping("/context")
     public String getContext() {
-        return CodenjoyContext.getContext();
+        return "/" + CodenjoyContext.getContext();
     }
     
     @GetMapping("/player/{player}/{code}/level/{level}")
