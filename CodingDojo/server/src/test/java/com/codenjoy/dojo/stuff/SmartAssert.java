@@ -120,7 +120,7 @@ public class SmartAssert extends Runner {
         }
     }
 
-    public static void checkResult(List<Failure> list) {
+    private static void checkResult(List<Failure> list) {
         if (list.isEmpty()) return;
         
         list.forEach(System.err::println);
@@ -130,15 +130,6 @@ public class SmartAssert extends Runner {
     
     public static void checkResult() {
         checkResult(failures());
-    }
-
-    public static void checkResult(String caller) {
-        List<Failure> list = failures();
-        if (list.isEmpty()) return;
-
-        list.forEach(System.err::println);
-        list.clear();
-        fail("There are errors");
     }
 
     private static List<Failure> failures() {
