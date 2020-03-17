@@ -29,6 +29,30 @@ td {
 .THREE_MINES {
     background-image: url('../webapp/resources/sprite/minesweeper/three_mines.png');
 }
+.FOUR_MINES {
+    background-image: url('../webapp/resources/sprite/minesweeper/four_mines.png');
+}
+.FIVE_MINES {
+    background-image: url('../webapp/resources/sprite/minesweeper/five_mines.png');
+}
+.SIX_MINES {
+    background-image: url('../webapp/resources/sprite/minesweeper/six_mines.png');
+}
+.SEVEN_MINES {
+    background-image: url('../webapp/resources/sprite/minesweeper/seven_mines.png');
+}
+.EIGHT_MINES {
+    background-image: url('../webapp/resources/sprite/minesweeper/eight_mines.png');
+}
 .DETECTOR {
     background-image: url('../webapp/resources/sprite/minesweeper/detector.png');
+}
+.BANG {
+    background-image: url('../webapp/resources/sprite/minesweeper/bang.png');
+}
+.HERE_IS_BOMB {
+    background-image: url('../webapp/resources/sprite/minesweeper/here_is_bomb.png');
+}
+.DESTROYED_BOMB {
+    background-image: url('../webapp/resources/sprite/minesweeper/destroyed_bomb.png');
 }

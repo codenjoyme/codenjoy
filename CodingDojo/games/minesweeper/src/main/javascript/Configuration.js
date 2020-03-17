@@ -20,7 +20,7 @@
  * #L%
  */
 // Tune you application here
-const connectionString = "http://127.0.0.1:8080/codenjoy-contest/board/player/0?code=000000000000&gameName=minesweeper";
+const connectionString = "http://ecsc00a05a65.epam.com/codenjoy-contest/board/player/0?code=000000000000&gameName=minesweeper";
 const isAdditionalLoggingEnabled = true;
 const connectionTimeout = 1000; // mS
 
