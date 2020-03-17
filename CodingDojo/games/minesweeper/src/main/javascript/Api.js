@@ -79,11 +79,17 @@ var Api = function(WSocket, Configuration, Direction, Element, Point, Board, Sol
             ws.send(answer);
         });
     }
-
+    function createTableVisualisationForBoard(gameboard){
+        return createTable(drawBoard(gameboard).reverse())
+    }
     var processBoard = function (boardString) {
         var board = new Board(boardString, Element, Point);
         if (additionalLogging) {
             printBoardOnTextArea(board.toString());
+        }
+
+        if(!!drawBoard) {
+            createTableVisualisationForBoard(board);
         }
 
         var logMessage = board + "\n\n";

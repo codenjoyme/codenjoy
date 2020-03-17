@@ -1,0 +1,34 @@
+
+td {
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 30px;
+    height: 30px;
+}
+.DETECTOR {
+    background-image: url('../webapp/resources/sprite/minesweeper/detector.png');
+}
+.BORDER {
+    background-image: url('../webapp/resources/sprite/minesweeper/border.png'); 
+}
+.NONE {
+    background-image: url('../webapp/resources/sprite/minesweeper/none.png');
+}
+.FLAG {
+    background-image: url('../webapp/resources/sprite/minesweeper/flag.png');
+}
+.HIDDEN {
+    background-image: url('../webapp/resources/sprite/minesweeper/hidden.png');
+}
+.ONE_MINE {
+    background-image: url('../webapp/resources/sprite/minesweeper/one_mine.png');
+}
+.TWO_MINES {
+    background-image: url('../webapp/resources/sprite/minesweeper/two_mines.png');
+}
+.THREE_MINES {
+    background-image: url('../webapp/resources/sprite/minesweeper/three_mines.png');
+}
+.DETECTOR {
+    background-image: url('../webapp/resources/sprite/minesweeper/detector.png');
+}

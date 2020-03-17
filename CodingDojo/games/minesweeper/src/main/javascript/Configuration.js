@@ -20,7 +20,7 @@
  * #L%
  */
 // Tune you application here
-const connectionString = "http://localhost:8080/codenjoy-contest/board/player/eosfdc3azokxvkp04knn?code=5662119423876020191";
+const connectionString = "http://127.0.0.1:8080/codenjoy-contest/board/player/0?code=000000000000&gameName=minesweeper";
 const isAdditionalLoggingEnabled = true;
 const connectionTimeout = 1000; // mS
 
