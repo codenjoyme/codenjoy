@@ -22,8 +22,8 @@ package com.codenjoy.dojo.conf;
  * #L%
  */
 
+import com.codenjoy.dojo.services.UserService;
 import com.codenjoy.dojo.services.dao.Players;
-import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.web.rest.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,13 +32,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import java.util.Collections;
 
@@ -65,15 +62,9 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService userDetailsService() {
-//        User.UserBuilder userBuilder = User.builder()
-//                .passwordEncoder(pwd -> passwordEncoder().encode(pwd));
-//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-//        manager.createUser(userBuilder.username(adminLogin).password(adminPassword).roles("ADMIN").build());
-//        return manager;
-        return username -> {
-            Player player = players.get(username);
-            return new User(player.getEmail(), player.getPassword(), Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")));
-        };
+       User admin = UserService.buildUserDetails(adminLogin, passwordEncoder().encode(adminPassword),
+               "ROLE_ADMIN", "ROLE_USER");
+       return new UserService(Collections.singletonMap(adminLogin, admin), players);
     }
 
     @Bean
@@ -130,4 +121,5 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .csrf().disable();
 
     }
+
 }
