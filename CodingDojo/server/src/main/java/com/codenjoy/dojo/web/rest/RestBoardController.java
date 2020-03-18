@@ -110,6 +110,12 @@ public class RestBoardController {
         return playerGamesView.getScoresFor(gameName);
     }
 
+    // TODO test me + закончить реализацию - тут стаб
+    @GetMapping("/game/{roomName}/scores")
+    public List<PScoresOf> getPlayersScoresForRoom(@PathVariable("roomName") String roomName) {
+        return playerGamesView.getScoresFor(playerGames.getGameForRoom(roomName));
+    }
+
     @GetMapping("/scores/clear")
     public boolean clearAllScores() {
         playerService.cleanAllScores();
@@ -117,9 +123,7 @@ public class RestBoardController {
     }
 
     @GetMapping("/game/enabled/{enabled}")
-    public boolean startStopGame(@PathVariable("enabled") boolean enabled)
-    {
-
+    public boolean startStopGame(@PathVariable("enabled") boolean enabled) {
         if (enabled) {
             timerService.resume();
         } else {

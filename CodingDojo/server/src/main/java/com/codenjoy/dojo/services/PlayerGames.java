@@ -47,6 +47,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     private Consumer<PlayerGame> onRemove;
     private ReadWriteLock lock;
     private Spreader spreader = new Spreader();
+    private Map<String, String> rooms = new HashMap<>();
 
     public void onAdd(Consumer<PlayerGame> consumer) {
         this.onAdd = consumer;
@@ -336,5 +337,17 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public Stream<PlayerGame> stream() {
         return playerGames.stream();
+    }
+
+    // TODO test me + закончить реализацию - тут стаб
+    public String getGameForRoom(String roomName) {
+        return rooms.get(roomName);
+    }
+
+    // TODO test me + закончить реализацию - тут стаб
+    public void createRoom(String gameName, String roomName) {
+        if (!rooms.containsKey(roomName)) {
+            rooms.put(roomName, gameName);
+        }
     }
 }
