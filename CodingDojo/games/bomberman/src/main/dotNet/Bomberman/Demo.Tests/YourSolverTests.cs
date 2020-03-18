@@ -35,20 +35,20 @@ namespace DemoTests
         [TestMethod]
         public void ShouldSomething()
         {
-            YourSolver d = new YourSolver("any server");
+            YourSolver d = new YourSolver("http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789");
             Board b = new Board("any board");
 
             string firstStep = d.Get(b);
 
-            Assert.AreEqual("Up", firstStep);
+            Assert.AreEqual("Act", firstStep);
 
             string secondStep = d.Get(b);
 
-            Assert.AreEqual("Up", secondStep);
+            Assert.AreEqual("Act", secondStep);
 
             string thirdStep = d.Get(b);
 
-            Assert.AreEqual("Up", thirdStep);
+            Assert.AreEqual("Act", thirdStep);
         }
     }
 }
