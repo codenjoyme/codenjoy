@@ -25,14 +25,9 @@ package com.codenjoy.dojo.web.rest;
 
 import static java.util.stream.Collectors.toList;
 
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerGames;
-import com.codenjoy.dojo.services.PlayerGamesView;
-import com.codenjoy.dojo.services.PlayerSave;
-import com.codenjoy.dojo.services.PlayerService;
-import com.codenjoy.dojo.services.SaveService;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import com.codenjoy.dojo.web.rest.pojo.PlayerId;
@@ -56,6 +51,7 @@ public class RestRegistrationController {
     private final Registration registration;
     private final PlayerService playerService;
     private final PlayerGames playerGames;
+    private final GameService gameService;
     private final PlayerGamesView playerGamesView;
     private final SaveService saveService;
     private final Validator validator;
@@ -136,6 +132,10 @@ public class RestRegistrationController {
                                                   @AuthenticationPrincipal Registration.User user) 
     {
         if (user == null) {
+            return null;
+        }
+        
+        if (gameService.getGame(gameName) instanceof NullGameType) {
             return null;
         }
         

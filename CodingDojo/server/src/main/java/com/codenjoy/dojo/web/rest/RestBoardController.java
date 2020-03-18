@@ -111,7 +111,7 @@ public class RestBoardController {
     }
 
     // TODO test me + закончить реализацию - тут стаб
-    @GetMapping("/game/{roomName}/scores")
+    @GetMapping("/room/{roomName}/scores")
     public List<PScoresOf> getPlayersScoresForRoom(@PathVariable("roomName") String roomName) {
         return playerGamesView.getScoresFor(playerGames.getGameForRoom(roomName));
     }
