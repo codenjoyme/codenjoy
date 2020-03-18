@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
+import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
 import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.Validator;
@@ -38,6 +39,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,8 +74,10 @@ public class RestController {
     @Autowired private Validator validator;
     @Autowired private DebugService debug;
     @Autowired private GameServer game;
-    @Autowired private GameServers gameSerers;
+    @Autowired private GameServers gameServers;
     @Autowired private ConfigProperties config;
+    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired private SecurityContextAuthenticator securityContextAuthenticator;
 
     // TODO test me
     @GetMapping("/score/day/{day}")
@@ -145,8 +149,19 @@ public class RestController {
                 if (location != null) {
                     player.setCode(location.getCode());
                     player.setServer(location.getServer());
-                    players.create(player);
+                    players.create(new Player(
+                            player.getEmail(),
+                            player.getFirstName(),
+                            player.getLastName(),
+                            passwordEncoder.encode(player.getPassword()),
+                            player.getCity(),
+                            player.getSkills(),
+                            player.getComment(),
+                            player.getCode(),
+                            player.getServer()
+                    ));
                 }
+                securityContextAuthenticator.login(request, player.getEmail(), player.getPassword());
                 return location;
             }
         });
@@ -225,7 +240,9 @@ public class RestController {
 
             @Override
             public ServerLocation onSuccess(ServerLocation data) {
-                return recreatePlayerIfNeeded(data, player.getEmail(), getIp(request));
+                ServerLocation serverLocation = recreatePlayerIfNeeded(data, player.getEmail(), getIp(request));
+                securityContextAuthenticator.login(request, player.getEmail(), player.getPassword());
+                return serverLocation;
             }
 
             @Override
@@ -330,7 +347,7 @@ public class RestController {
             return false;
         }
 
-        return exist.getPassword().equals(password)
+        return passwordEncoder.matches(password, exist.getPassword())
                 || exist.getCode().equals(code);
     }
 
@@ -416,7 +433,7 @@ public class RestController {
     public boolean saveSettings(@RequestBody ConfigProperties config) {
 
         this.config.updateFrom(config);
-        gameSerers.update(config.getServers());
+        gameServers.update(config.getServers());
 
         return true;
     }
