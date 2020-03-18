@@ -23,8 +23,21 @@
 var AdminAjax = function(contextPath, url) {
     var url = contextPath + '/' + url;
 
-    var load = function(onSuccess) {
-        $.get(url, null, onSuccess, 'json');
+    var load = function(onSuccess, onError) {
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: null,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: onSuccess,
+            error: function (error) {
+                console.log(error.responseText);
+                if (!!onError) {
+                    onError(error);
+                }
+            }
+        });       
     }
 
     var save = function(info, onSuccess, onError) {
@@ -35,7 +48,12 @@ var AdminAjax = function(contextPath, url) {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: onSuccess,
-            failure: onError
+            error: function (error) {
+                console.log(error.responseText);
+                if (!!onError) {
+                    onError(error);
+                }
+            }
         });
     }
 
@@ -46,7 +64,7 @@ var AdminAjax = function(contextPath, url) {
 }
 
 var AdminSettings = function(contextPath, gameName, settingsName) {
-    var url = 'settings/' + gameName + '/' + settingsName;
+    var url = 'rest/settings/' + gameName + '/' + settingsName;
     var ajax = new AdminAjax(contextPath, url);
 
     return {

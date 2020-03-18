@@ -44,17 +44,20 @@ pages.admin = function() {
     var settings = new AdminSettings(contextPath, 'general', 'registration');
 
     var loadRegSettings = function() {
-        settings.load(function(data) {
-            setRegSettings(data);
-        });
+        settings.load(
+            function(data) {
+                setRegSettings(data);
+            }, function(error) {
+                setRegSettings(null);
+            });
     }
 
     var saveRegSettings = function() {
         settings.save(getRegSettings(),
             function() {
                 loadRegSettings();
-            }, function(errMsg) {
-                console.log(errMsg);
+            }, function(error) {
+                // do nothing
             });
     }
 

@@ -36,7 +36,7 @@ import java.net.URLDecoder;
 @RequiredArgsConstructor
 public class GameDataController {
 
-    public static final String URI = "/settings";
+    public static final String URI = "/rest/settings";
 
     private final GameData gameData;
 
