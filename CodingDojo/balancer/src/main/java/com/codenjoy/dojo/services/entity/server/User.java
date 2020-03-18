@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.entity.server;
 
 public class User {
 
+    private String id;
     private String email;
     private String readableName;
     private int approved;
@@ -35,13 +36,18 @@ public class User {
         // do nothing
     }
 
-    public User(String email, String readableName, int approved, String password, String code, String data) {
+    public User(String id, String email, String readableName, int approved, String password, String code, String data) {
+        this.id = id;
         this.email = email;
         this.readableName = readableName;
         this.approved = approved;
         this.password = password;
         this.code = code;
         this.data = data;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getEmail() {
@@ -71,9 +77,10 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "email='" + email + '\'' +
-                ", readable_name=" + readableName +
-                ", email_approved=" + approved +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", readableName='" + readableName + '\'' +
+                ", approved=" + approved +
                 ", password='" + password + '\'' +
                 ", code='" + code + '\'' +
                 ", data='" + data + '\'' +

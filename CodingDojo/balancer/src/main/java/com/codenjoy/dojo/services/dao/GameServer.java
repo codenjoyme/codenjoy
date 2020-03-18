@@ -70,6 +70,7 @@ public class GameServer {
                 save,
                 new User(
                     id,
+                    email,
                     name,
                     1,
                     password,
