@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="AbstractSolverTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestSolver.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
