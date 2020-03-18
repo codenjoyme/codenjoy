@@ -13,7 +13,7 @@
     "formik": "1.4.2",
     "history": "4.7.2",
     "http-proxy-middleware": "0.19.1",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "md5": "2.2.1",
     "moment": "2.23.0",
     "moment-timezone": "0.5.23",
