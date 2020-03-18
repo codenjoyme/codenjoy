@@ -1,17 +1,15 @@
 For C#:
-- on page http://server/codenjoy-contest/help
+- on page {serverHost}/codenjoy-contest/help, or now for bomberman link is: https://dojorena.io/codenjoy-contest/resources/help/bomberman.html
     + you can read game instructions
-        * server = server_host_ip:8080 server ip inside your LAN
-        * server = codenjoy.com if you play on http://codenjoy.com/codenjoy-contest
-- register your hero on server http://server/codenjoy-contest/register
+        * serverHost = server_host_ip:8080 server ip inside your LAN
+		* serverHost = dojorena.io if you play on https://dojorena.io/codenjoy-contest
+        * serverHost = codenjoy.com if you play on http://codenjoy.com/codenjoy-contest
+- register your hero on server {serverHost}/codenjoy-contest/register
+- after registering you'll be redirected to the game and will recieve URL needed for connecting client
 - open Bomberman.sln in VisualStudio
 - open file Program.cs from "Demo" project
-    + find line and replace value with your email, you entered during registration step
-        * static string UserName = "user@mail.com";
-    + find line and replace 192.168.1.1 to server_host_ip if you play on LAN
-        * static string Server = "192.168.1.1:8080";
-    + or uncomment this line if you want to play on http://codenjoy.com server
-        * static string Server = "codenjoy.com:80";
+    + find line and replace 'ServerUrl' value with your URL address, you recieved  after sign in to the game
+        * static string ServerUrl = "{serverHost}/codenjoy-contest/board/player/1a2b3c4d5e6f7g?code=1234567891011&gameName=bomberman";
 - make "Demo" project as runnable
 - now you can run Demo :)
 - all "game logic" is in the class "YourSolver" in method 
