@@ -1,3 +1,24 @@
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 - 2020 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
 
 td {
     background-repeat: no-repeat;
@@ -6,53 +27,53 @@ td {
     height: 30px;
 }
 .DETECTOR {
-    background-image: url('../webapp/resources/sprite/minesweeper/detector.png');
+    background-image: url('./images/detector.png');
 }
 .BORDER {
-    background-image: url('../webapp/resources/sprite/minesweeper/border.png'); 
+    background-image: url('./images/border.png'); 
 }
 .NONE {
-    background-image: url('../webapp/resources/sprite/minesweeper/none.png');
+    background-image: url('./images/none.png');
 }
 .FLAG {
-    background-image: url('../webapp/resources/sprite/minesweeper/flag.png');
+    background-image: url('./images/flag.png');
 }
 .HIDDEN {
-    background-image: url('../webapp/resources/sprite/minesweeper/hidden.png');
+    background-image: url('./images/hidden.png');
 }
 .ONE_MINE {
-    background-image: url('../webapp/resources/sprite/minesweeper/one_mine.png');
+    background-image: url('./images/one_mine.png');
 }
 .TWO_MINES {
-    background-image: url('../webapp/resources/sprite/minesweeper/two_mines.png');
+    background-image: url('./images/two_mines.png');
 }
 .THREE_MINES {
-    background-image: url('../webapp/resources/sprite/minesweeper/three_mines.png');
+    background-image: url('./images/three_mines.png');
 }
 .FOUR_MINES {
-    background-image: url('../webapp/resources/sprite/minesweeper/four_mines.png');
+    background-image: url('./images/four_mines.png');
 }
 .FIVE_MINES {
-    background-image: url('../webapp/resources/sprite/minesweeper/five_mines.png');
+    background-image: url('./images/five_mines.png');
 }
 .SIX_MINES {
-    background-image: url('../webapp/resources/sprite/minesweeper/six_mines.png');
+    background-image: url('./images/six_mines.png');
 }
 .SEVEN_MINES {
-    background-image: url('../webapp/resources/sprite/minesweeper/seven_mines.png');
+    background-image: url('./images/seven_mines.png');
 }
 .EIGHT_MINES {
-    background-image: url('../webapp/resources/sprite/minesweeper/eight_mines.png');
+    background-image: url('./images/eight_mines.png');
 }
 .DETECTOR {
-    background-image: url('../webapp/resources/sprite/minesweeper/detector.png');
+    background-image: url('./images/detector.png');
 }
 .BANG {
-    background-image: url('../webapp/resources/sprite/minesweeper/bang.png');
+    background-image: url('./images/bang.png');
 }
 .HERE_IS_BOMB {
-    background-image: url('../webapp/resources/sprite/minesweeper/here_is_bomb.png');
+    background-image: url('images/here_is_bomb.png');
 }
 .DESTROYED_BOMB {
-    background-image: url('../webapp/resources/sprite/minesweeper/destroyed_bomb.png');
+    background-image: url('images/destroyed_bomb.png');
 }
