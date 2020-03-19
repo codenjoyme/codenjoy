@@ -63,7 +63,8 @@ public class AdminController {
 
     public static final String URI = "/admin";
 
-    public static final String GAME_NAME_FORM_KEY = "gameName";
+    public static final String GAME_NAME_KEY = "gameName";
+    public static final String ROOM_NAME_KEY = "roomName";
     public static final String CUSTOM_ADMIN_PAGE_KEY = "custom";
 
     private final TimerService timerService;
@@ -105,12 +106,13 @@ public class AdminController {
         return getAdmin(request);
     }
 
+    // TODO ROOM а этот метод вообще зачем?
     @GetMapping(params = {"player", "data"})
     public String loadPlayerGameFromSave(@RequestParam("player") String name,
                                          @RequestParam("data") String save,
                                          Model model, HttpServletRequest request)
     {
-        saveService.load(name, getGameName(request), save);
+        saveService.load(name, getGameRoom(request), getGameName(request), save);
         return "redirect:/board/player/" + name;
     }
 
@@ -329,6 +331,7 @@ public class AdminController {
         if (settings.getGenerateNameMask() != null) {
             String mask = settings.getGenerateNameMask();
             int count = Integer.parseInt(settings.getGenerateCount());
+            String roomName = settings.getGenerateRoomName();
             int numLength = String.valueOf(count).length();
 
             int created = 0;
@@ -343,11 +346,11 @@ public class AdminController {
 
                 created++;
                 String code = getCode(playerName);
-                playerService.register(playerName, "127.0.0.1", settings.getGameName());
+                playerService.register(playerName, "127.0.0.1", roomName, settings.getGameName());
             }
         }
 
-        request.setAttribute(GAME_NAME_FORM_KEY, settings.getGameName());
+        request.setAttribute(GAME_NAME_KEY, settings.getGameName());
         return getAdmin(settings.getGameName());
     }
 
@@ -370,7 +373,7 @@ public class AdminController {
         if (gameName == null) {
             return getAdmin();
         }
-        return "redirect:/admin?" + GAME_NAME_FORM_KEY + "=" + gameName;
+        return "redirect:/admin?" + GAME_NAME_KEY + "=" + gameName;
     }
 
     private String getAdmin() {
@@ -383,7 +386,7 @@ public class AdminController {
 
     @GetMapping()
     public String getAdminPage(Model model,
-                               @RequestParam(value = GAME_NAME_FORM_KEY, required = false) String gameName,
+                               @RequestParam(value = GAME_NAME_KEY, required = false) String gameName,
                                @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
                                            Boolean gameSpecificAdminPage) {
 
@@ -425,10 +428,11 @@ public class AdminController {
         model.addAttribute("adminSettings", settings);
         model.addAttribute("settings", parameters);
         model.addAttribute("semifinalTick", semifinal.getTime());
-        model.addAttribute(GAME_NAME_FORM_KEY, gameName);
+        model.addAttribute(GAME_NAME_KEY, gameName);
         model.addAttribute("gameVersion", game.getVersion());
         model.addAttribute("generateNameMask", "demo%@codenjoy.com");
         model.addAttribute("generateCount", "30");
+        model.addAttribute("generateRoomName", gameName);
         model.addAttribute("timerPeriod", timerService.getPeriod());
 
         MultiplayerType type = gameService.getGame(gameName).getMultiplayerType();
@@ -445,8 +449,16 @@ public class AdminController {
         return "admin";
     }
 
+    private String getGameRoom(HttpServletRequest request) {
+         String roomName = request.getParameter(ROOM_NAME_KEY);
+        if (roomName == null || roomName.equals("null")) {
+            return null;
+        }
+        return roomName;
+    }
+
     private String getGameName(HttpServletRequest request) {
-         String gameName = request.getParameter(GAME_NAME_FORM_KEY);
+        String gameName = request.getParameter(GAME_NAME_KEY);
         if (gameName == null || gameName.equals("null")) {
             return null;
         }
@@ -495,11 +507,11 @@ public class AdminController {
     }
 
     @GetMapping(params = "select")
-    public String selectGame(HttpServletRequest request, Model model, @RequestParam(GAME_NAME_FORM_KEY) String gameName) {
+    public String selectGame(HttpServletRequest request, Model model, @RequestParam(GAME_NAME_KEY) String gameName) {
         if (gameName == null) {
             gameName = getDefaultGame();
         }
-        request.setAttribute(GAME_NAME_FORM_KEY, gameName);
+        request.setAttribute(GAME_NAME_KEY, gameName);
         return getAdmin(request);
     }
 

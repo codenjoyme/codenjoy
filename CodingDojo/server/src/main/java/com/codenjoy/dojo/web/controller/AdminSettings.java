@@ -40,6 +40,7 @@ public class AdminSettings {
     private String gameName;
     private String generateNameMask;
     private String generateCount;
+    private String generateRoomName;
     private String timerPeriod;
     private String progress;
     private SemifinalSettings semifinal;

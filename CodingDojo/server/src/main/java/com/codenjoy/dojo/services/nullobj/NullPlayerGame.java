@@ -24,12 +24,13 @@ package com.codenjoy.dojo.services.nullobj;
 
 
 import com.codenjoy.dojo.services.PlayerGame;
+import org.apache.commons.lang3.StringUtils;
 
 public class NullPlayerGame extends PlayerGame {
 
     public static final PlayerGame INSTANCE = new NullPlayerGame();
 
     private NullPlayerGame() {
-        super(NullPlayer.INSTANCE, NullGame.INSTANCE);
+        super(NullPlayer.INSTANCE, NullGame.INSTANCE, StringUtils.EMPTY);
     }
 }

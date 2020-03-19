@@ -107,13 +107,13 @@ public class RestBoardController {
 
     @GetMapping("/game/{gameName}/scores")
     public List<PScoresOf> getPlayersScoresForGame(@PathVariable("gameName") String gameName) {
-        return playerGamesView.getScoresFor(gameName);
+        return playerGamesView.getScoresForGame(gameName);
     }
 
-    // TODO test me + закончить реализацию - тут стаб
+    // TODO test me
     @GetMapping("/room/{roomName}/scores")
     public List<PScoresOf> getPlayersScoresForRoom(@PathVariable("roomName") String roomName) {
-        return playerGamesView.getScoresFor(playerGames.getGameForRoom(roomName));
+        return playerGamesView.getScoresForRoom(roomName);
     }
 
     @GetMapping("/scores/clear")

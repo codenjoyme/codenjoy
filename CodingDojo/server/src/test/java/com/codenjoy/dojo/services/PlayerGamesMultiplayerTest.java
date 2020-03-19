@@ -128,7 +128,8 @@ public class PlayerGamesMultiplayerTest {
 
     private PlayerGame playerWantsToPlay(GameType gameType, Player player, Object data) {
         player.setGameType(gameType);
-        return playerGames.add(player, null);
+        String roomName = gameType.name();
+        return playerGames.add(player, roomName, null);
     }
 
     private static class GroupsAsserter {

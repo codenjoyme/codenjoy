@@ -142,8 +142,9 @@ Full authentication is required to access this resource
 </oauth>
 ```
 Don't worry about it. Just download [postman](https://www.getpostman.com/downloads/) and create `GET` request:
-- `http://127.0.0.1/codenjoy-contest/board/rejoining/bomberman`
-- `Authorization` -> `Bearer Token` = `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER`
+- `http://127.0.0.1/codenjoy-contest/board/rejoining/bomberman/room/<ROOM_NAME>`
+- or `http://127.0.0.1/codenjoy-contest/board/rejoining/bomberman` 
+- with `Authorization` -> `Bearer Token` = `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER`
 After submit you can see html page with board, try find inside:
 ```
 <body style="display:none;">

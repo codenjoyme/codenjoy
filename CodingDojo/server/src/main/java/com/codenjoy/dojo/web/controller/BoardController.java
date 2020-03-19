@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_FORM_KEY;
+import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_KEY;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
@@ -119,9 +119,21 @@ public class BoardController {
                              HttpServletRequest request,
                              @AuthenticationPrincipal Registration.User user) {
 
+        // TODO ROOM а надо ли тут этот метод вообще, ниже есть более универсальный? 
+        // TODO ROOM так как есть rest методы то может вообще убрать отсюда этих двоих?
+        String roomName = gameName; 
+        return rejoinGame(model, gameName, roomName, request, user);
+    }
+
+    @GetMapping(URI + "/rejoining/{gameName}/room/{roomName}")
+    public String rejoinGame(ModelMap model, @PathVariable("gameName") String gameName,
+                             @PathVariable("roomName") String roomName,
+                             HttpServletRequest request,
+                             @AuthenticationPrincipal Registration.User user) {
+
         Player player = playerService.get(user.getCode());
         if (player == NullPlayer.INSTANCE) {
-            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), gameName);
+            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), roomName, gameName);
         }
 
         populateJoiningGameModel(model, player.getCode(), player);
@@ -130,7 +142,7 @@ public class BoardController {
 
     private void populateJoiningGameModel(ModelMap model, String code, Player player) {
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME_FORM_KEY, player.getGameName());
+        model.addAttribute(GAME_NAME_KEY, player.getGameName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());
@@ -146,7 +158,7 @@ public class BoardController {
             return "redirect:/register?id=" + playerName;
         }
 
-        model.addAttribute(GAME_NAME_FORM_KEY, player.getGameName());
+        model.addAttribute(GAME_NAME_KEY, player.getGameName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());
@@ -173,7 +185,7 @@ public class BoardController {
 
         Player player = playerService.getRandom(gameName);
         if (player == NullPlayer.INSTANCE) {
-            return "redirect:/register?" + GAME_NAME_FORM_KEY + "=" + gameName;
+            return "redirect:/register?" + GAME_NAME_KEY + "=" + gameName;
         }
         GameType gameType = player.getGameType();
         if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
@@ -181,7 +193,7 @@ public class BoardController {
         }
 
         model.addAttribute("code", null);
-        model.addAttribute(GAME_NAME_FORM_KEY, gameName);
+        model.addAttribute(GAME_NAME_KEY, gameName);
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", null);
         model.addAttribute("readableName", null);
@@ -207,7 +219,7 @@ public class BoardController {
 
         String gameName = player.getGameName();
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME_FORM_KEY, gameName);
+        model.addAttribute(GAME_NAME_KEY, gameName);
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());

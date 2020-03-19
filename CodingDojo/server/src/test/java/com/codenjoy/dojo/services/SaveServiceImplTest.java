@@ -78,7 +78,7 @@ public class SaveServiceImplTest {
 
         long time = saveService.save("vasia");
 
-        verify(saver).saveGame(player, "{\"key\":\"value\"}", time);
+        verify(saver).saveGame(player, "room", "{\"key\":\"value\"}", time);
     }
 
     private Player createPlayer(String name) {
@@ -114,13 +114,13 @@ public class SaveServiceImplTest {
     public void shouldNotSavePlayerWhenNotExists() {
         saveService.save("cocacola");
 
-        verify(saver, never()).saveGame(any(Player.class), any(String.class), anyLong());
+        verify(saver, never()).saveGame(any(Player.class), any(String.class), any(String.class), anyLong());
     }
 
     @Test
     public void shouldLoadPlayer_forNotRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "url", "game", 100, null);
+        PlayerSave save = new PlayerSave("vasia", "url", "room", "game", 100, null);
         when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersNotRegistered();
 
@@ -136,7 +136,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayer_forRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "url", "game", 100, null);
+        PlayerSave save = new PlayerSave("vasia", "url", "room", "game", 100, null);
         when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersRegistered();
 
@@ -153,7 +153,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayerWithExternalSave_forNotRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "game", 0, "{'save':'data'}");
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "room", "game", 0, "{'save':'data'}");
         allPlayersNotRegistered();
 
         // when
@@ -168,6 +168,7 @@ public class SaveServiceImplTest {
         assertEquals("{'callbackUrl':'127.0.0.1'," +
                 "'gameName':'game'," +
                 "'name':'vasia'," +
+                "'roomName':'room'," +
                 "'save':'{'save':'data'}'," +
                 "'score':0}", JsonUtils.cleanSorted(save));
         verifyNoMoreInteractions(playerService);
@@ -176,7 +177,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayerWithExternalSave_forRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "game", 0, "{'save':'data'}");
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "room", "game", 0, "{'save':'data'}");
         allPlayersRegistered();
 
         // when
@@ -192,6 +193,7 @@ public class SaveServiceImplTest {
         assertEquals("{'callbackUrl':'127.0.0.1'," +
                 "'gameName':'game'," +
                 "'name':'vasia'," +
+                "'roomName':'room'," +
                 "'save':'{'save':'data'}'," +
                 "'score':0}", JsonUtils.cleanSorted(save));
         verifyNoMoreInteractions(playerService);
@@ -205,7 +207,7 @@ public class SaveServiceImplTest {
 
         PlayerSave save1 = new PlayerSave(activeSavedPlayer);
         PlayerSave save2 = new PlayerSave(activePlayer);
-        PlayerSave save3 = new PlayerSave("name", "http://saved:1234", "saved game", 15, "data for saved");
+        PlayerSave save3 = new PlayerSave("name", "http://saved:1234", "room", "saved game", 15, "data for saved");
 
         when(saver.getSavedList()).thenReturn(Arrays.asList("activeSaved", "saved"));
         when(saver.loadGame("activeSaved")).thenReturn(save1);
@@ -256,8 +258,8 @@ public class SaveServiceImplTest {
 
         long time = saveService.saveAll();
 
-        verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", time);
-        verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", time);
+        verify(saver).saveGame(players.get(0), "room", "{\"key\":\"value1\"}", time);
+        verify(saver).saveGame(players.get(1), "room", "{\"key\":\"value2\"}", time);
     }
 
     @Test

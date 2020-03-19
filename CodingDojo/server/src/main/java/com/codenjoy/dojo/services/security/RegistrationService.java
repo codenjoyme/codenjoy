@@ -68,7 +68,7 @@ public class RegistrationService {
     private final ViewDelegationService viewDelegationService;
     private final GameService gameService;
 
-    public String register(Player player, BindingResult result, HttpServletRequest request, Model model) {
+    public String register(Player player, String roomName, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
             return openRegistrationForm(request, model, null, null, null);
         }
@@ -147,16 +147,15 @@ public class RegistrationService {
                 model.addAttribute("bad_pass", true);
                 return openRegistrationForm(request, model, id, email, name);
             }
-            return connectRegisteredPlayer(player.getCode(), request, id, gameName);
+            return connectRegisteredPlayer(player.getCode(), request, id, roomName, gameName);
         } else {
             model.addAttribute("wait_approve", true);
             return openRegistrationForm(request, model, id, email, name);
         }
     }
 
-    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String gameName) {
-        return "redirect:/" + register(id, code,
-                gameName, request.getRemoteAddr());
+    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String roomName, String gameName) {
+        return "redirect:/" + register(id, code, roomName, gameName, request.getRemoteAddr());
     }
 
     public String openRegistrationForm(HttpServletRequest request, Model model,
@@ -181,7 +180,7 @@ public class RegistrationService {
             }
         }
 
-        String gameName = request.getParameter(AdminController.GAME_NAME_FORM_KEY);
+        String gameName = request.getParameter(AdminController.GAME_NAME_KEY);
         if (!model.containsAttribute("bad_game")) {
             validator.checkGameName(gameName, CAN_BE_NULL);
         }
@@ -202,12 +201,12 @@ public class RegistrationService {
         return getRegister(model);
     }
 
-    public String register(String id, String code, String gameName, String ip) {
+    public String register(String id, String code, String roomName, String gameName, String ip) {
         // TODO #984 вот тут дополнительная защита на всякий
         if (gameName == null) {
             gameName = gameService.getDefaultGame();
         }
-        Player player = playerService.register(id, ip, gameName);
+        Player player = playerService.register(id, ip, roomName, gameName);
         return getBoardUrl(code, player.getName(), gameName);
     }
 

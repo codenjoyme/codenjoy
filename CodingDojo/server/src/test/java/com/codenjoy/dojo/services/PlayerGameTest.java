@@ -43,6 +43,7 @@ public class PlayerGameTest {
     private Game game;
     private PlayerGame playerGame;
     private GameType gameType;
+    private String roomName;
 
     @Before
     public void setup() {
@@ -50,8 +51,9 @@ public class PlayerGameTest {
         player = new Player("player", "url", gameType,
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
         this.game = mock(Game.class);
+        roomName = gameType.name(); 
 
-        playerGame = new PlayerGame(player, this.game);
+        playerGame = new PlayerGame(player, this.game, roomName);
     }
 
     @Test
@@ -89,26 +91,26 @@ public class PlayerGameTest {
     }
 
     @Test
-    public void testEquals_null() throws Exception {
+    public void testEquals_null() {
         // when then
         assertEquals(false, playerGame.equals(null));
     }
 
     @Test
-    public void testEquals_withOtherObject() throws Exception {
+    public void testEquals_withOtherObject() {
         // when then
         assertEquals(false, playerGame.equals(new Object()));
     }
 
     @Test
-    public void testEquals_nullInstance() throws Exception {
+    public void testEquals_nullInstance() {
         // when then
         assertEquals(false, playerGame.equals(NullPlayerGame.INSTANCE));
         assertEquals(true, NullPlayerGame.INSTANCE.equals(NullPlayerGame.INSTANCE));
         assertEquals(true, NullPlayerGame.INSTANCE.equals(NullPlayer.INSTANCE));
     }
     @Test
-    public void testEquals_withPlayer() throws Exception {
+    public void testEquals_withPlayer() {
         // given
         Player otherPlayer = new Player("other player", "other url", PlayerTest.mockGameType("game"),
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
@@ -119,11 +121,12 @@ public class PlayerGameTest {
     }
 
     @Test
-    public void testEquals_playerGameWithPlayer() throws Exception {
+    public void testEquals_playerGameWithPlayer() {
         // given
-        Player otherPlayer = new Player("other player", "other url", PlayerTest.mockGameType("game"),
+        GameType gameType = PlayerTest.mockGameType("game");
+        Player otherPlayer = new Player("other player", "other url", gameType,
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
-        PlayerGame player = new PlayerGame(otherPlayer, NullGame.INSTANCE);
+        PlayerGame player = new PlayerGame(otherPlayer, NullGame.INSTANCE, gameType.name());
 
         // when then
         assertEquals(false, playerGame.equals(player));
@@ -131,10 +134,17 @@ public class PlayerGameTest {
     }
 
     @Test
-    public void testEquals_playerGameWithGame() throws Exception {
+    public void testEquals_roomName() {
+        // when then
+        assertEquals(true, playerGame.equals(roomName));
+        assertEquals(false, playerGame.equals("otherRoom"));
+    }
+
+    @Test
+    public void testEquals_playerGameWithGame() {
         // given
         Game game = new LockedGame(new ReentrantReadWriteLock()).wrap(mock(Game.class));
-        PlayerGame player = new PlayerGame(null, game);
+        PlayerGame player = new PlayerGame(null, game, null);
 
         // when then
         assertEquals(false, playerGame.equals(player));
@@ -142,10 +152,10 @@ public class PlayerGameTest {
     }
 
     @Test
-    public void testEquals_player() throws Exception {
+    public void testEquals_player() {
         // given
-        PlayerGame player = new PlayerGame(null, game);
-        PlayerGame player2 = new PlayerGame(null, mock(Game.class));
+        PlayerGame player = new PlayerGame(null, game, null);
+        PlayerGame player2 = new PlayerGame(null, mock(Game.class), null);
 
         // when then
         assertEquals(true, playerGame.equals(player));
@@ -155,13 +165,13 @@ public class PlayerGameTest {
     }
 
     @Test
-    public void testEquals_field() throws Exception {
+    public void testEquals_field() {
         // given
         Game realGame = mock(Game.class);
         GameField field = mock(GameField.class);
         when(realGame.getField()).thenReturn(field);
         Game game = new LockedGame(new ReentrantReadWriteLock()).wrap(realGame);
-        PlayerGame player = new PlayerGame(null, game);
+        PlayerGame player = new PlayerGame(null, game, null);
 
         // when then
         assertEquals(false, playerGame.equals(field));
@@ -169,13 +179,13 @@ public class PlayerGameTest {
     }
 
     @Test
-    public void testHashCode() throws Exception {
+    public void testHashCode() {
         // when then
         assertEquals(2096629736, playerGame.hashCode());
     }
 
     @Test
-    public void testRemove() throws Exception {
+    public void testRemove() {
         // given
         boolean[] removed = {false};
         Consumer<PlayerGame> onRemove = playerGame -> removed[0] = true;
@@ -189,21 +199,21 @@ public class PlayerGameTest {
     }
 
     @Test
-    public void testGetPlayer() throws Exception {
+    public void testGetPlayer() {
         // when then
         assertSame(player, playerGame.getPlayer());
     }
 
     @Test
-    public void testGetGame() throws Exception {
+    public void testGetGame() {
         // when then
         assertSame(game, playerGame.getGame());
     }
 
     @Test
-    public void testToString() throws Exception {
+    public void testToString() {
         // when then
-        assertEquals(String.format("PlayerGame[player=player, game=%s]",
+        assertEquals(String.format("PlayerGame[player=player, roomName=game, game=%s]",
                 game.getClass().getSimpleName()),
                 playerGame.toString());
     }

@@ -144,6 +144,7 @@ pages.admin = function() {
 
             setup('readableName');
             setup('name');
+            setup('roomName');
             setup('score');
             setup('callbackUrl');
             setup('data');

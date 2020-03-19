@@ -31,30 +31,32 @@ import org.apache.commons.lang3.StringUtils;
 @Setter
 public class PlayerSave {
 
-    public static final PlayerSave NULL = new PlayerSave(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, 0, StringUtils.EMPTY);
+    public static final PlayerSave NULL = new PlayerSave(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, 0, StringUtils.EMPTY);
 
     private Object score;
     private String callbackUrl;
     private String gameName;
+    private String roomName;
     private String name;
     private String save;
 
-    public static PlayerSave get(String name, String callbackUrl, String gameName, Object score, String save) {
-        return new PlayerSave(name, callbackUrl, gameName, score, save);
+    public static PlayerSave get(String name, String callbackUrl, String roomName, String gameName, Object score, String save) {
+        return new PlayerSave(name, callbackUrl, roomName, gameName, score, save);
     }
 
     public PlayerSave(String save) {
         this.save = save;
     }
 
-    public PlayerSave(String name, String callbackUrl, String gameName, Object score, String save) {
+    public PlayerSave(String name, String callbackUrl, String roomName, String gameName, Object score, String save) {
         this.name = name;
         this.gameName = gameName;
+        this.roomName = roomName;
         this.callbackUrl = callbackUrl;
         this.score = score;
         this.save = save;
     }
-
+    
     public PlayerSave(Player save) {
         this.name = save.getName();
         this.gameName = save.getGameName();

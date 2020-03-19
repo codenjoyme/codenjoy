@@ -68,7 +68,7 @@ public class PlayerGameSaverTest {
         Player player = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), scores, info);
 
         long now = System.currentTimeMillis();
-        saver.saveGame(player, "{'key':'value'}", now);
+        saver.saveGame(player, "room", "{'key':'value'}", now);
 
         PlayerSave loaded = saver.loadGame("vasia");
         assertEqualsProperties(player, loaded);
@@ -116,8 +116,8 @@ public class PlayerGameSaverTest {
         Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
 
         long now = System.currentTimeMillis();
-        saver.saveGame(player1, "{'key':'value'}", now);
-        saver.saveGame(player2, "{'key':'value'}", now);
+        saver.saveGame(player1, "room", "{'key':'value'}", now);
+        saver.saveGame(player2, "room", "{'key':'value'}", now);
 
         assertEquals("[vasia, katia]", saver.getSavedList().toString());
     }

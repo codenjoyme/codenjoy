@@ -87,11 +87,13 @@ public class RegistrationController {
         }
 
         String gameName = rooms.getGameName(player.getGameName());
+        String roomName = gameName; // TODO ROOM взять roomName с формы регистрации, либо если не установлено взять как тут
+        
         player.setGameName(gameName);
 
         if (player.getName() == null) {
             player.setName(Hash.getRandomId());
         }
-        return registrationService.register(player, result, request, model);
+        return registrationService.register(player, roomName, result, request, model);
     }
 }

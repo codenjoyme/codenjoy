@@ -34,17 +34,19 @@ public class PlayerGame implements Tickable {
 
     private Player player;
     private Game game;
+    private String roomName;
     private LazyJoystick joystick;
 
-    public PlayerGame(Player player, Game game) {
+    public PlayerGame(Player player, Game game, String roomName) {
         this.player = player;
         this.game = game;
+        this.roomName = roomName;
         this.joystick = new LazyJoystick(game);
     }
 
     // only for searching
     public static PlayerGame by(Game game) {
-        return new PlayerGame(null, game);
+        return new PlayerGame(null, game, null);
     }
 
     @Override
@@ -52,6 +54,10 @@ public class PlayerGame implements Tickable {
         if (o == null) return false;
         if (this == NullPlayerGame.INSTANCE && (o != NullPlayer.INSTANCE && o != NullPlayerGame.INSTANCE)) return false;
 
+        if (o instanceof String) {
+            return o.equals(roomName);
+        }
+        
         if (o instanceof Player) {
             Player p = (Player)o;
 
@@ -103,8 +109,9 @@ public class PlayerGame implements Tickable {
 
     @Override
     public String toString() {
-        return String.format("PlayerGame[player=%s, game=%s]",
+        return String.format("PlayerGame[player=%s, roomName=%s, game=%s]",
                 player,
+                roomName,
                 game.getClass().getSimpleName());
     }
 
@@ -119,6 +126,14 @@ public class PlayerGame implements Tickable {
 
     public GameType getGameType() {
         return player.getGameType();
+    }
+    
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
     public String popLastCommand() {

@@ -99,7 +99,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player register(String name, String ip, String gameName) {
+    public Player register(String name, String ip, String roomName, String gameName) {
         lock.writeLock().lock();
         try {
             log.debug("Registered user {} in game {}", name, gameName);
@@ -108,16 +108,19 @@ public class PlayerServiceImpl implements PlayerService {
                 return NullPlayer.INSTANCE;
             }
 
-            registerAIIfNeeded(name, gameName);
+            registerAIIfNeeded(name, roomName, gameName);
 
             // TODO test me
             PlayerSave save = saver.loadGame(name);
-            if (save != PlayerSave.NULL && gameName.equals(save.getGameName())) {
+            if (save != PlayerSave.NULL 
+                    && gameName.equals(save.getGameName())
+                    && roomName.equals(save.getRoomName())) // TODO ROOM test me 
+            {
                 save.setCallbackUrl(ip);
             } else {
-                save = new PlayerSave(name, ip, gameName, 0, null);
+                save = new PlayerSave(name, ip, roomName, gameName, 0, null);
             }
-            Player player = register(new PlayerSave(name, ip, gameName, save.getScore(), save.getSave()));
+            Player player = register(new PlayerSave(name, ip, roomName, gameName, save.getScore(), save.getSave()));
 
             return player;
         } finally {
@@ -129,14 +132,14 @@ public class PlayerServiceImpl implements PlayerService {
     public void reloadAI(String name) {
         lock.writeLock().lock();
         try {
-            Player player = getPlayer(name);
-            registerAI(name, player.getGameType());
+            PlayerGame playerGame = playerGames.get(name);
+            registerAI(name, playerGame.getRoomName(), playerGame.getGameType()); // TODO ROOM test me
         } finally {
             lock.writeLock().unlock();
         }
     }
 
-    private void registerAIIfNeeded(String forPlayer, String gameName) {
+    private void registerAIIfNeeded(String forPlayer, String roomName, String gameName) {
         if (isAI(forPlayer)) return;
         if (!isAINeeded) return;
 
@@ -147,7 +150,7 @@ public class PlayerServiceImpl implements PlayerService {
         PlayerGame playerGame = playerGames.get(aiName);
 
         if (playerGame instanceof NullPlayerGame) {
-            registerAI(aiName, gameType);
+            registerAI(aiName, roomName, gameType);
         }
     }
 
@@ -155,13 +158,14 @@ public class PlayerServiceImpl implements PlayerService {
         return Hash.getCode(aiName, aiName);
     }
 
-    private void registerAI(String playerName, GameType gameType) {
+    private void registerAI(String playerName, String roomName, GameType gameType) {
         String code = isAI(playerName) ?
                 gerCodeForAI(playerName) :
                 registration.getCodeById(playerName);
 
         setupPlayerAI(() -> getPlayer(PlayerSave.get(playerName,
-                            "127.0.0.1", gameType.name(), 0, null), gameType),
+                            "127.0.0.1", roomName, gameType.name(), // TODO ROOM тут надо roomname 
+                            0, null), gameType),
                 playerName, code, gameType);
     }
 
@@ -244,12 +248,16 @@ public class PlayerServiceImpl implements PlayerService {
 
     private Player getPlayer(PlayerSave playerSave, GameType gameType) {
         String name = playerSave.getName();
+        String roomName = playerSave.getRoomName();
         String gameName = playerSave.getGameName();
         String callbackUrl = playerSave.getCallbackUrl();
 
         Player player = getPlayer(name);
+        PlayerGame oldPlayerGame = playerGames.get(name);
 
-        boolean newPlayer = (player instanceof NullPlayer) || !gameName.equals(player.getGameName());
+        boolean newPlayer = (player instanceof NullPlayer) 
+                || !gameName.equals(player.getGameName())
+                || !roomName.equals(oldPlayerGame.getRoomName()); // TODO ROOM test me
         if (newPlayer) {
             playerGames.remove(player);
 
@@ -261,7 +269,7 @@ public class PlayerServiceImpl implements PlayerService {
             player.setEventListener(listener);
 
             player.setGameType(gameType);
-            PlayerGame playerGame = playerGames.add(player, playerSave);
+            PlayerGame playerGame = playerGames.add(player, roomName, playerSave);
 
             player = playerGame.getPlayer();
 
@@ -477,8 +485,15 @@ public class PlayerServiceImpl implements PlayerService {
             // do nothing
         }
 
+        // TODO ROOM test me
+        boolean updateRoomName = !playerGame.getRoomName().equals(input.getRoomName());
+        if (updateRoomName) {
+            updated.setRoomName(input.getRoomName());
+            playerGames.changeRoom(input.getName(), input.getRoomName());
+        }
+        
         Game game = playerGame.getGame();
-        if (game != null && game.getSave() != null) {
+        if (game != null && (game.getSave() != null || updateRoomName)) {
             String oldSave = game.getSave().toString();
             String newSave = input.getData();
             if (!PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave)) {

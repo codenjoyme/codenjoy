@@ -59,7 +59,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.remove(player);
 
         // then
-        assertEquals(true,playerGames.isEmpty());
+        assertEquals(true, playerGames.isEmpty());
         assertEquals(0, playerGames.size());
 
         verifyRemove(playerGame, field);
@@ -227,8 +227,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testGetGameTypes() {
         // given
         Player player = createPlayer();
-        Player player2 = createPlayer("game2");
-        playerGames.add(player2, null);
+        String gameName = "game2";
+        String roomName = gameName;
+        Player player2 = createPlayer(gameName);
+        playerGames.add(player2, roomName, null);
 
         // when
         List<GameType> gameTypes = playerGames.getGameTypes();
@@ -600,12 +602,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         MultiplayerType type = MultiplayerType.TOURNAMENT;
         Player player1 = createPlayer("game", "player1", type);
         Player player2 = createPlayer("game", "player2", type);
+        String roomName = "game"; 
 
         assertR("{0=[player1, player2]}");
 
         // when
         Game game = playerGames.get(0).getGame();
-        playerGames.reload(game, game.getSave());
+        playerGames.reload(game, roomName, game.getSave());
 
         // then
         // created new field for player3

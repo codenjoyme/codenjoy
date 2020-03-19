@@ -110,9 +110,17 @@ public class PlayerGamesView {
                         pg -> pg.getPlayer().getScore()));
     }
 
-    public List<PScoresOf> getScoresFor(String gameName) {
+    public List<PScoresOf> getScoresForGame(String gameName) {
         return service.all().stream()
                 .filter(pg -> pg.getPlayer().getGameName().equals(gameName))
+                .map(pg -> new PScoresOf(pg))
+                .collect(toList());
+    }
+
+    // TODO test me
+    public List<PScoresOf> getScoresForRoom(String roomName) {
+        return service.all().stream()
+                .filter(pg -> pg.getRoomName().equals(roomName))
                 .map(pg -> new PScoresOf(pg))
                 .collect(toList());
     }

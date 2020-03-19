@@ -125,13 +125,13 @@ public class PlayerServiceImplIntegrationTest {
 
         // первый плеер зарегался (у него сейвов нет)
         when(saver.loadGame(anyString())).thenReturn(PlayerSave.NULL);
-        Player player1 = service.register("player1", "callback1", "game1");
+        Player player1 = service.register("player1", "room1", "callback1", "game1");
         assertEquals("[game1-super-ai@codenjoy.com, player1]", service.getAll().toString());
         assertEquals(true, runners.containsKey("game1-super-ai@codenjoy.com"));
 
         // потом еще двое подоспели на ту же игру
-        Player player2 = service.register("player2", "callback2", "game1");
-        Player player3 = service.register("player3", "callback2", "game1");
+        Player player2 = service.register("player2", "room1", "callback2", "game1");
+        Player player3 = service.register("player3", "room1", "callback2", "game1");
         verify(gameTypes.get("game1"), times(++ai1)).getAI();
         verify(gameTypes.get("game1"), times(ai1)).getBoard();
         assertEquals("[game1-super-ai@codenjoy.com, player1, player2, player3]",
@@ -152,11 +152,11 @@ public class PlayerServiceImplIntegrationTest {
         assertEquals(false, service.contains("player2"));
 
         // потом зарегались на другую игру
-        Player player4 = service.register("player4", "callback4", "game2");
+        Player player4 = service.register("player4", "room2", "callback4", "game2");
         verify(gameTypes.get("game2"), times(++ai2)).getAI();
         verify(gameTypes.get("game2"), times(ai2)).getBoard();
-        Player player5 = service.register("player5", "callback5", "game2");
-        Player player6 = service.register("player6", "callback6", "game1");
+        Player player5 = service.register("player5", "room2", "callback5", "game2");
+        Player player6 = service.register("player6", "room1", "callback6", "game1");
         assertEquals("[game1-super-ai@codenjoy.com, player1, player6]",
                 service.getAll("game1").toString());
         assertEquals("[game2-super-ai@codenjoy.com, player4, player5]",
@@ -189,7 +189,7 @@ public class PlayerServiceImplIntegrationTest {
         assertEquals(true, service.isRegistrationOpened());
         service.closeRegistration();
         assertEquals(false, service.isRegistrationOpened());
-        Player player7 = service.register("player7", "callback7", "game3");
+        Player player7 = service.register("player7", "room3", "callback7", "game3");
         assertEquals(false, service.contains("player7"));
         assertEquals("[]",
                 service.getAll("game3").toString());
@@ -197,7 +197,7 @@ public class PlayerServiceImplIntegrationTest {
         // открыли регистрацию
         service.openRegistration();
         assertEquals(true, service.isRegistrationOpened());
-        player7 = service.register("player7", "callback7", "game3");
+        player7 = service.register("player7", "room3", "callback7", "game3");
         verify(gameTypes.get("game3"), times(++ai3)).getAI();
         verify(gameTypes.get("game3"), times(ai3)).getBoard();
         assertEquals(true, service.contains("player7"));
@@ -232,7 +232,7 @@ public class PlayerServiceImplIntegrationTest {
                 service.getAll("game1").toString());
         assertEquals("[player4_updated, player5_updated]",
                 service.getAll("game2").toString());
-        player1 = service.register("player1_updated", "callback1", "game2");
+        player1 = service.register("player1_updated", "room2", "callback1", "game2");
         assertEquals("[game1-super-ai@codenjoy.com_updated, player6_updated]",
                 service.getAll("game1").toString());
         assertEquals("[player4_updated, player5_updated, game2-super-ai@codenjoy.com, player1_updated]",
@@ -249,14 +249,14 @@ public class PlayerServiceImplIntegrationTest {
         runners.clear();
 
         // грузим плеера из сейва
-        player1 = service.register(new PlayerSave("player1", "callback1", "game1", 120, "{save:true}"));
+        player1 = service.register(new PlayerSave("player1", "callback1", "room1", "game1", 120, "{save:true}"));
         assertEquals("[player1]", service.getAll("game1").toString());
         assertEquals(0, runners.size());
 
         // а теперь AI из сейва
         verify(gameTypes.get("game1"), times(ai1)).getAI();
         verify(gameTypes.get("game1"), times(ai1)).getBoard();
-        player1 = service.register(new PlayerSave("bot-super-ai@codenjoy.com", "callback", "game1", 120, "{save:true}"));
+        player1 = service.register(new PlayerSave("bot-super-ai@codenjoy.com", "callback", "room1", "game1", 120, "{save:true}"));
         assertEquals("[player1, bot-super-ai@codenjoy.com]", service.getAll("game1").toString());
         verify(gameTypes.get("game1"), times(++ai1)).getAI();
         verify(gameTypes.get("game1"), times(ai1)).getBoard();

@@ -114,10 +114,12 @@ public class RestRegistrationController {
                     .filter(it -> it.getEmail().equals(player.getName()))
                     .findFirst()
                     .orElse(null);
-            Game game = playerGames.get(player.getName()).getGame();
-
+            
+            PlayerGame playerGame = playerGames.get(player.getName());
+            Game game = playerGame.getGame();
+            String roomName = playerGame.getRoomName();
             List<String> group = groups.get(player.getName());
-            result.add(new PlayerDetailInfo(player, user, game, group));
+            result.add(new PlayerDetailInfo(player, user, roomName, game, group));
         }
 
         return result;
@@ -139,8 +141,7 @@ public class RestRegistrationController {
             return null;
         }
         
-        playerGames.createRoom(gameName, roomName);
-        playerService.register(user.getId(), request.getRemoteAddr(), gameName);
+        playerService.register(user.getId(), request.getRemoteAddr(), roomName, gameName);
         
         return new PlayerId(user);
     }

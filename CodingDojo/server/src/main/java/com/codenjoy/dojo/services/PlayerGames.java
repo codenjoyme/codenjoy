@@ -47,7 +47,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     private Consumer<PlayerGame> onRemove;
     private ReadWriteLock lock;
     private Spreader spreader = new Spreader();
-    private Map<String, String> rooms = new HashMap<>();
 
     public void onAdd(Consumer<PlayerGame> consumer) {
         this.onAdd = consumer;
@@ -92,7 +91,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private void removeWithResetAlone(Game game) {
         List<PlayerGame> alone = removeAndLeaveAlone(game);
-        alone.forEach(gp -> spreader.play(gp.getGame(), gp.getGameType(), gp.getGame().getSave()));
+        alone.forEach(gp -> spreader.play(gp.getGame(), gp.getRoomName(),
+                gp.getGameType(), gp.getGame().getSave()));
     }
 
     public PlayerGame get(String playerName) {
@@ -109,7 +109,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 .orElse(null);
     }
 
-    public PlayerGame add(Player player, PlayerSave save) {
+    public PlayerGame add(Player player, String roomName, PlayerSave save) {
         GameType gameType = player.getGameType();
 
         GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
@@ -119,11 +119,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 gameType.getPrinterFactory(),
                 gameType.getMultiplayerType());
 
-        spreader.play(single, gameType, parseSave(save));
+        spreader.play(single, roomName, gameType, parseSave(save));
 
         Game game = new LockedGame(lock).wrap(single);
 
-        PlayerGame playerGame = new PlayerGame(player, game);
+        PlayerGame playerGame = new PlayerGame(player, game, roomName);
         if (onAdd != null) {
             onAdd.accept(playerGame);
         }
@@ -205,6 +205,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
         for (PlayerGame playerGame : playerGames) {
             Game game = playerGame.getGame();
+            String roomName = playerGame.getRoomName();
             MultiplayerType multiplayerType = playerGame.getGameType().getMultiplayerType();
             if (game.isGameOver()) {
                 quiet(() -> {
@@ -214,7 +215,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                     if (game.isWin() && multiplayerType.isTraining()) {
                         level = LevelProgress.winLevel(level);
                         if (level != null) {
-                            reload(game, level);
+                            reload(game, roomName, level);
                             // TODO test me
                             playerGame.getPlayer().getEventListener().levelChanged(game.getProgress());
                             return;
@@ -222,7 +223,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                     }
 
                     if (game.shouldLeave() && multiplayerType.isDisposable()) {
-                        reload(game, level);
+                        reload(game, roomName, level);
                         return;
                     }
 
@@ -253,22 +254,25 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     // без обслуживания последнего оставшегося на той же карте
     public void reloadCurrent(PlayerGame playerGame) {
         Game game = playerGame.getGame();
-        reload(game, game.getSave(), false);
+        String event = playerGame.getRoomName();
+        reload(game, event, game.getSave(), false);
     }
 
-    private void reload(Game game, JSONObject save, boolean reloadAlone) {
-        GameType gameType = getPlayer(game).getGameType();
+    private void reload(Game game, String roomName, JSONObject save, boolean reloadAlone) {
+        PlayerGame playerGame = getPlayerGame(game);
+        playerGame.setRoomName(roomName);
+        GameType gameType = playerGame.getGameType();
         if (reloadAlone) {
             removeWithResetAlone(game);
         }
 
-        spreader.play(game, gameType, save);
+        spreader.play(game, roomName, gameType, save);
     }
 
     // перевод текущего игрока в новую комнату
     // с обслуживанием последнего оставшегося на той же карте
-    public void reload(Game game, JSONObject save) {
-        reload(game, save, true);
+    public void reload(Game game, String roomName, JSONObject save) {
+        reload(game, roomName, save, true);
     }
 
     // переводим всех игроков на новые борды
@@ -282,12 +286,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }}.forEach(pg -> reloadCurrent(pg));
     }
 
-    private Player getPlayer(Game game) {
+    private PlayerGame getPlayerGame(Game game) {
         return playerGames.stream()
                 .filter(pg -> pg.equals(by(game)))
                 .findFirst()
-                .orElseThrow(IllegalStateException::new)
-                .getPlayer();
+                .orElseThrow(IllegalStateException::new);
     }
 
     private void quiet(Runnable runnable) {
@@ -309,12 +312,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public void changeLevel(String playerName, int level) {
         PlayerGame playerGame = get(playerName);
+        String event = playerGame.getRoomName();
         Game game = playerGame.getGame();
         JSONObject save = game.getSave();
         LevelProgress progress = new LevelProgress(save);
         if (progress.canChange(level)) {
             progress.change(level);
-            reload(game, progress.saveTo(new JSONObject()));
+            reload(game, event, progress.saveTo(new JSONObject()));
         }
     }
 
@@ -323,8 +327,20 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             return;
         }
         PlayerGame playerGame = get(playerName);
+        String roomName = playerGame.getRoomName();
         Game game = playerGame.getGame();
-        reload(game, save);
+        reload(game, roomName, save);
+    }
+
+    // TODO ROOM test me
+    public void changeRoom(String playerName, String roomName) {
+        if (roomName == null) {
+            return;
+        }
+        PlayerGame playerGame = get(playerName);
+        JSONObject save = playerGame.getGame().getSave();
+        Game game = playerGame.getGame();
+        reload(game, roomName, save);
     }
 
     public PlayerGame get(int index) {
@@ -339,15 +355,4 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return playerGames.stream();
     }
 
-    // TODO test me + закончить реализацию - тут стаб
-    public String getGameForRoom(String roomName) {
-        return rooms.get(roomName);
-    }
-
-    // TODO test me + закончить реализацию - тут стаб
-    public void createRoom(String gameName, String roomName) {
-        if (!rooms.containsKey(roomName)) {
-            rooms.put(roomName, gameName);
-        }
-    }
 }

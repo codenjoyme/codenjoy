@@ -74,7 +74,8 @@ public class TestUtils {
         when(gameType.createPlayer(any(EventListener.class), anyString()))
                 .thenAnswer(inv -> gamePlayer);
 
-        PlayerGame playerGame = playerGames.add(player, save);
+        String roomName = gameType.name();
+        PlayerGame playerGame = playerGames.add(player, roomName, save);
         Env result = new Env();
         result.gamePlayer = gamePlayer;
         result.gameType = gameType;

@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_FORM_KEY;
+import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_KEY;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -92,6 +92,7 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SavedRequestAwa
 
         Registration.User principal = (Registration.User) authentication.getPrincipal();
         String gameName = obtainGameName(request, savedRequest);
+        String roomName = gameName; // TODO ROOM тут надо получить roomName как-то
         // TODO #984 как воспроизвести чтобы понять зачем этот костыль нужен?
         // Мы логинимся как нормальный юзер. Потом вылогиниваемся и снова
         // залогиниваемся как админ и получаем тут ошибку. Почему? Потому
@@ -105,8 +106,8 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SavedRequestAwa
             getRedirectStrategy().sendRedirect(request, response, AdminController.URI);
             return;
         }
-        String targetUrl = "/" + registrationService.register(principal.getId(),
-                principal.getCode(), gameName, request.getRemoteAddr());
+        String targetUrl = "/" + registrationService.register(principal.getId(), 
+                principal.getCode(), roomName, gameName, request.getRemoteAddr());
 
         log.debug("Redirecting to  URL: " + targetUrl);
 
@@ -114,8 +115,8 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SavedRequestAwa
     }
 
     private String obtainGameName(HttpServletRequest request, SavedRequest savedRequest) {
-        String loginFormGameName = request.getParameter(GAME_NAME_FORM_KEY);
-        String[] queryParamGameParameter = ofNullable(savedRequest.getParameterValues(GAME_NAME_FORM_KEY))
+        String loginFormGameName = request.getParameter(GAME_NAME_KEY);
+        String[] queryParamGameParameter = ofNullable(savedRequest.getParameterValues(GAME_NAME_KEY))
                 .orElse(new String[] {});
         String queryParamGameName = queryParamGameParameter.length > 0 ? queryParamGameParameter[0] : null;
 

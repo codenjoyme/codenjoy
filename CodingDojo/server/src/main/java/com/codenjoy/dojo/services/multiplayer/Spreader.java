@@ -38,31 +38,31 @@ public class Spreader {
 
     private Map<String, List<Room>> rooms = new HashMap<>();
 
-    public GameField getField(GamePlayer player, String gameType,
+    public GameField getField(GamePlayer player, String roomName,
                               MultiplayerType type,
                               int roomSize, int levelNumber,
                               Supplier<GameField> supplier)
     {
         Room room = null;
         if (!type.isTraining() || type.isLastLevel(levelNumber)) {
-            room = findUnfilled(gameType);
+            room = findUnfilled(roomName);
         }
         if (room == null) {
             room = new Room(supplier.get(), roomSize, type.isDisposable());
-            add(gameType, room);
+            add(roomName, room);
         }
 
         GameField field = room.getField(player);
         return field;
     }
 
-    private void add(String gameType, Room room) {
-        List<Room> rooms = getRooms(gameType);
+    private void add(String roomName, Room room) {
+        List<Room> rooms = getRooms(roomName);
         rooms.add(room);
     }
 
-    private Room findUnfilled(String gameType) {
-        List<Room> rooms = getRooms(gameType);
+    private Room findUnfilled(String roomName) {
+        List<Room> rooms = getRooms(roomName);
         if (rooms.isEmpty()) {
             return null;
         }
@@ -72,10 +72,10 @@ public class Spreader {
                 .orElse(null);
     }
 
-    private List<Room> getRooms(String gameType) {
-        List<Room> result = rooms.get(gameType);
+    private List<Room> getRooms(String roomName) {
+        List<Room> result = rooms.get(roomName);
         if (result == null) {
-            rooms.put(gameType, result = new LinkedList<>());
+            rooms.put(roomName, result = new LinkedList<>());
         }
         return result;
     }
@@ -121,8 +121,8 @@ public class Spreader {
                 .flatMap(List::stream)
                 .collect(toList());
     }
-
-    public void play(Game game, GameType gameType, JSONObject save) {
+    
+    public void play(Game game, String roomName, GameType gameType, JSONObject save) {
         game.close();
 
         MultiplayerType type = gameType.getMultiplayerType();
@@ -130,7 +130,7 @@ public class Spreader {
         LevelProgress progress = game.getProgress();
         int levelNumber = progress.getCurrent();
         GameField field = getField(game.getPlayer(),
-                gameType.name(),
+                roomName,
                 type,
                 roomSize,
                 levelNumber,

@@ -68,7 +68,7 @@ public class SaveServiceImpl implements SaveService {
     }
 
     private void saveGame(PlayerGame playerGame, long time) {
-        saver.saveGame(playerGame.getPlayer(),
+        saver.saveGame(playerGame.getPlayer(), playerGame.getRoomName(),
                 playerGame.getGame().getSave().toString(),
                 time);
     }
@@ -92,8 +92,8 @@ public class SaveServiceImpl implements SaveService {
     }
 
     @Override
-    public void load(String name, String gameName, String save) {
-        PlayerSave playerSave = new PlayerSave(name, "127.0.0.1", gameName, 0, save);
+    public void load(String name, String roomName, String gameName, String save) {
+        PlayerSave playerSave = new PlayerSave(name, "127.0.0.1", roomName, gameName, 0, save);
         if (playerService.contains(name)) { // TODO test me
             playerService.remove(name);
         }
@@ -111,6 +111,7 @@ public class SaveServiceImpl implements SaveService {
             info.setReadableName(registration.getNameById(player.getName()));
             info.setAIPlayer(player.hasAI());
             info.setScores(player.getScores()); // TODO test me
+            info.setRoomName(playerGames.get(player.getName()).getRoomName()); // TODO ROOM test me
 
             copySave(player, info);
             map.put(player.getName(), info);
@@ -129,7 +130,9 @@ public class SaveServiceImpl implements SaveService {
                 // TODO оптимизнуть два запроса в один
                 String code = registration.getCodeById(name);
                 String readableName = registration.getNameById(name);
-                map.put(name, new PlayerInfo(name, readableName, code, save.getCallbackUrl(), save.getGameName(), true));
+                map.put(name, new PlayerInfo(name, readableName, code, 
+                        save.getCallbackUrl(), save.getRoomName(), 
+                        save.getGameName(), true));
             }
         }
 

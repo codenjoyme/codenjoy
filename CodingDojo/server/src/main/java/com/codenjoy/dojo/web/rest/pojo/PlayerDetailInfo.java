@@ -41,6 +41,7 @@ public class PlayerDetailInfo {
     private String readableName;
     private String callbackUrl;
     private String gameType;
+    private String roomName;
     private PMuptiplayerType multiplayer;
     private String score;
     private String save;
@@ -50,9 +51,10 @@ public class PlayerDetailInfo {
     private Registration.User registration;
 
     public PlayerDetailInfo(Player player, Registration.User registration,
-                            Game game, List<String> group)
+                            String roomName, Game game, List<String> group)
     {
         gameType = player.getGameType().name();
+        this.roomName = roomName;
         multiplayer = new PMuptiplayerType(player.getGameType().getMultiplayerType());
 
         callbackUrl = player.getCallbackUrl();
@@ -68,6 +70,6 @@ public class PlayerDetailInfo {
     }
 
     public PlayerSave buildPlayerSave() {
-        return PlayerSave.get(name, callbackUrl, gameType, Integer.valueOf(score), save);
+        return PlayerSave.get(name, callbackUrl, roomName, gameType, Integer.valueOf(score), save);
     }
 }
