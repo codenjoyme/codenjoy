@@ -3,12 +3,12 @@ package bomberman
 import (
 	"errors"
 	"fmt"
-	"github.com/gorilla/websocket"
 	"log"
 	"net/url"
-	"os"
 	"strings"
 	"sync"
+
+	"github.com/gorilla/websocket"
 )
 
 var stopPtr = STOP
@@ -88,32 +88,8 @@ func getConnection(u url.URL) (*websocket.Conn, error) {
 }
 
 // createURL creates valid connection URL from raw url copied from browser url input in the game window
-// example browserURL: "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&gameName=bomberman"
+// example browserURL: "https://codenjoy.com/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&gameName=bomberman"
 func createURL(browserURL string) (url.URL, error) {
-	// try params from env
-	envHost := os.Getenv("HOST")
-	envPlayer := os.Getenv("PLAYER")
-	envCode := os.Getenv("CODE")
-	if len(envHost) != 0 && len(envPlayer) != 0 && len(envCode) != 0 {
-		log.Println("Took HOST, PLAYER and CODE values from environment")
-		return url.URL{
-			Scheme:   gameProtocol,
-			Host:     envHost,
-			Path:     gamePath,
-			RawQuery: fmt.Sprintf(gameQueryTemplate, envPlayer, envCode),
-		}, nil
-	} else {
-		if len(envHost) == 0 {
-			log.Println("Can't get env variable HOST")
-		}
-		if len(envPlayer) == 0 {
-			log.Println("Can't get env variable PLAYER")
-		}
-		if len(envCode) == 0 {
-			log.Println("Can't get env variable CODE")
-		}
-	}
-
 	// get host name
 	mutatedUrl := strings.Replace(browserURL, "https://", "", 1)
 	urlParts := strings.Split(mutatedUrl, "/")
