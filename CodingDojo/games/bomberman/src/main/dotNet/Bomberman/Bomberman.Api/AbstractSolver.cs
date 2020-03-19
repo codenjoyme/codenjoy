@@ -100,13 +100,9 @@ namespace Bomberman.Api
         /// <returns>The web socket URL.</returns>
         protected internal string GetWebSocketUrl(string serverUrl)
         {
-            var uri = new Uri(serverUrl);
-
-            var server = $"{uri.Host}:{uri.Port}";
-            var userName = uri.Segments.Last();
-            var code = HttpUtility.ParseQueryString(uri.Query).Get("code");
-
-            return $"{uri.Scheme.Replace(Uri.UriSchemeHttp, "ws")}://{server}/codenjoy-contest/ws?user={Uri.EscapeDataString(userName)}&code={code}"; ;
+            return serverUrl.Replace("http", "ws")
+                            .Replace("board/player/", "ws?user=")
+                            .Replace("?code=", "&code=");
         }
 
         private void Socket_OnMessage(object sender, MessageEventArgs e)
