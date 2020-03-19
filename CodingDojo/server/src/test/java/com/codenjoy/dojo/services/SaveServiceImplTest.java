@@ -157,7 +157,7 @@ public class SaveServiceImplTest {
         allPlayersNotRegistered();
 
         // when
-        saveService.load("vasia", "game", "{'save':'data'}");
+        saveService.load("vasia", "room", "game", "{'save':'data'}");
 
         // then
         verifyNoMoreInteractions(saver);
@@ -181,7 +181,7 @@ public class SaveServiceImplTest {
         allPlayersRegistered();
 
         // when
-        saveService.load("vasia", "game", "{'save':'data'}");
+        saveService.load("vasia", "room", "game", "{'save':'data'}");
 
         // then
         verifyNoMoreInteractions(saver);
