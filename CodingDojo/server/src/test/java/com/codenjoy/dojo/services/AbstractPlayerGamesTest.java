@@ -61,16 +61,29 @@ public class AbstractPlayerGamesTest {
     }
 
     protected Player createPlayer(String gameName) {
-        return createPlayer(gameName, "player" + Calendar.getInstance().getTimeInMillis(),
+        return createPlayer("room", gameName);
+    }
+    
+    protected Player createPlayer(String roomName, String gameName) {
+        return createPlayer("player" + Calendar.getInstance().getTimeInMillis(),
+                roomName, gameName,
                 MultiplayerType.SINGLE);
     }
 
-    protected Player createPlayer(String gameName, String name, MultiplayerType type) {
-        return createPlayer(gameName, name, type, null);
+    protected Player createPlayer(String name, MultiplayerType type) {
+        return createPlayer(name, "room", "game", type);  
+    }
+    
+    protected Player createPlayer(String name, String roomName, String gameName, MultiplayerType type) {
+        return createPlayer(name, roomName, gameName, type, null);
     }
 
-    protected Player createPlayer(String gameName, String name, MultiplayerType type, PlayerSave save) {
-        return createPlayer(gameName, name, type, save, "board");
+    protected Player createPlayer(String name, MultiplayerType type, PlayerSave save) {
+        return createPlayer(name, "room", "game", type, save);
+    }
+    
+    protected Player createPlayer(String name, String roomName, String gameName, MultiplayerType type, PlayerSave save) {
+        return createPlayer(name, gameName, roomName, type, save, "board");
     }
 
     protected void verifyRemove(PlayerGame playerGame, GameField field) {
@@ -79,7 +92,7 @@ public class AbstractPlayerGamesTest {
     }
 
     protected Player createPlayerWithScore(int score, String playerName, MultiplayerType type) {
-        Player player = createPlayer("game", playerName, type);
+        Player player = createPlayer(playerName, "room", "game", type);
         setScore(score, player);
         return player;
     }
@@ -100,7 +113,7 @@ public class AbstractPlayerGamesTest {
         when(gamePlayers.get(index).shouldLeave()).thenReturn(!stillPlay);
     }
 
-    protected Player createPlayer(String gameName, String name, MultiplayerType type, PlayerSave save, Object board) {
+    protected Player createPlayer(String name, String gameName, String roomName, MultiplayerType type, PlayerSave save, Object board) {
         GameService gameService = mock(GameService.class);
         GameType gameType = mock(GameType.class);
         gameTypes.add(gameType);
@@ -121,6 +134,7 @@ public class AbstractPlayerGamesTest {
                 TestUtils.getPlayerGame(
                         playerGames,
                         player,
+                        roomName,
                         inv -> {
                             GameField field = mock(GameField.class);
                             when(field.reader()).thenReturn(mock(BoardReader.class));

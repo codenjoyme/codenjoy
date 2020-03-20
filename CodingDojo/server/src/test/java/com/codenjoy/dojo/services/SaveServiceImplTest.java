@@ -56,7 +56,7 @@ public class SaveServiceImplTest {
     private List<GameField> fields;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
         saveService = new SaveServiceImpl(){{
             this.playerGames = SaveServiceImplTest.this.playerGames = new PlayerGames();
             this.playerService = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
@@ -97,9 +97,11 @@ public class SaveServiceImplTest {
             return field;
         };
 
+        String roomName = "room";
         TestUtils.Env env = TestUtils.getPlayerGame(
                 playerGames,
                 player,
+                roomName,
                 answerCreateGame,
                 MultiplayerType.SINGLE,
                 null,

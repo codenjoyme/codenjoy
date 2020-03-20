@@ -87,20 +87,20 @@ public class ActionLoggerTest {
     private void act() throws InterruptedException {
         PlayerGames playerGames = new PlayerGames();
 
-        addPlayer(playerGames, "board1", 123, "player1", "game1");
-        addPlayer(playerGames, "board2", 234, "player2", "game2");
+        addPlayer(playerGames, "board1", 123, "player1", "room", "game1");
+        addPlayer(playerGames, "board2", 234, "player2", "room", "game2");
 
         logger.log(playerGames);
 
         Thread.sleep(1000); // потому что сохранение в базу делается асинхронно и надо подождать
     }
 
-    private void addPlayer(PlayerGames playerGames, String board, int value, String name, String gameName) {
+    private void addPlayer(PlayerGames playerGames, String board, int value, String name, String roomName, String gameName) {
         PlayerScores score = getScore(value);
         Player player = new Player(name, "127.0.0.1", PlayerTest.mockGameType(gameName), score, null);
         player.setEventListener(mock(InformationCollector.class));
 
-        TestUtils.Env env = TestUtils.getPlayerGame(playerGames, player,
+        TestUtils.Env env = TestUtils.getPlayerGame(playerGames, player, roomName,
                 inv -> {
                     GameField field = mock(GameField.class);
                     when(field.reader()).thenReturn(mock(BoardReader.class));

@@ -227,10 +227,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testGetGameTypes() {
         // given
         Player player = createPlayer();
-        String gameName = "game2";
-        String roomName = gameName;
-        Player player2 = createPlayer(gameName);
-        playerGames.add(player2, roomName, null);
+        Player player2 = createPlayer("game2");
+        playerGames.add(player2, "room", null);
 
         // when
         List<GameType> gameTypes = playerGames.getGameTypes();
@@ -304,7 +302,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldNewGame_whenGameOver_caseTrainingMultiplayerType() {
         // given
-        createPlayer("game2", "player2", MultiplayerType.TRAINING.apply(3));
+        createPlayer("player2", "room", "game2", MultiplayerType.TRAINING.apply(3));
 
         reset(fields.get(0));
         when(gamePlayers.get(0).isAlive()).thenReturn(false);
@@ -319,7 +317,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldNextLevel_whenGameOver_andIsWin_caseTrainingMultiplayerType() {
         // given
-        createPlayer("game2", "player2",
+        createPlayer("player2", "room", "game2",
                 MultiplayerType.TRAINING.apply(2));
 
         reset(fields.get(0));
@@ -378,7 +376,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void testChangeLevel_cantBecauseNotPassedLevel() {
         // given
-        createPlayer("game2", "player2",
+        createPlayer("player2", "room", "game2",
                 MultiplayerType.TRAINING.apply(2));
 
         reset(fields.get(0));
@@ -435,7 +433,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void testSetLevel_caseNotPassedLevel() {
         // given
-        createPlayer("game2", "player2",
+        createPlayer("player2", "room", "game2",
                 MultiplayerType.TRAINING.apply(2));
 
         reset(fields.get(0));
@@ -549,9 +547,9 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testResetAloneUsersField_whenRemove() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;
-        Player player1 = createPlayer("game", "player1", type);
-        Player player2 = createPlayer("game", "player2", type);
-        Player player3 = createPlayer("game", "player3", type);
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
 
         assertR("{0=[player1, player2, player3]}");
 
@@ -576,9 +574,9 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testDontResetAloneUsersField_whenRemoveCurrent() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;
-        Player player1 = createPlayer("game", "player1", type);
-        Player player2 = createPlayer("game", "player2", type);
-        Player player3 = createPlayer("game", "player3", type);
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
 
         assertR("{0=[player1, player2, player3]}");
 
@@ -600,15 +598,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testResetAloneUsersField_whenReload() {
         // given
         MultiplayerType type = MultiplayerType.TOURNAMENT;
-        Player player1 = createPlayer("game", "player1", type);
-        Player player2 = createPlayer("game", "player2", type);
-        String roomName = "game"; 
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
 
         assertR("{0=[player1, player2]}");
 
         // when
         Game game = playerGames.get(0).getGame();
-        playerGames.reload(game, roomName, game.getSave());
+        playerGames.reload(game, "room", game.getSave());
 
         // then
         // created new field for player3
@@ -622,8 +619,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testDontResetAloneUsersField_whenReloadCurrent() {
         // given
         MultiplayerType type = MultiplayerType.TOURNAMENT;
-        Player player1 = createPlayer("game", "player1", type);
-        Player player2 = createPlayer("game", "player2", type);
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
 
         assertR("{0=[player1, player2]}");
 
@@ -640,11 +637,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testReloadAll_withShuffle() {
         // given
         MultiplayerType type = MultiplayerType.TRIPLE;
-        Player player1 = createPlayer("game", "player1", type);
-        Player player2 = createPlayer("game", "player2", type);
-        Player player3 = createPlayer("game", "player3", type);
-        Player player4 = createPlayer("game", "player4", type);
-        Player player5 = createPlayer("game", "player5", type);
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
+        Player player4 = createPlayer("player4", type);
+        Player player5 = createPlayer("player5", type);
 
         assertR("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
@@ -666,11 +663,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testReloadAll_withoutShuffle_disposable() {
         // given
         MultiplayerType type = MultiplayerType.TEAM.apply(3, MultiplayerType.DISPOSABLE);
-        Player player1 = createPlayer("game", "player1", type);
-        Player player2 = createPlayer("game", "player2", type);
-        Player player3 = createPlayer("game", "player3", type);
-        Player player4 = createPlayer("game", "player4", type);
-        Player player5 = createPlayer("game", "player5", type);
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
+        Player player4 = createPlayer("player4", type);
+        Player player5 = createPlayer("player5", type);
 
         assertR("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
@@ -690,11 +687,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // TODO почему-то в этом тесте флаг игнорируется, то ли это условия такие, то ли бага
         // given
         MultiplayerType type = MultiplayerType.TEAM.apply(3, !MultiplayerType.DISPOSABLE);
-        Player player1 = createPlayer("game", "player1", type);
-        Player player2 = createPlayer("game", "player2", type);
-        Player player3 = createPlayer("game", "player3", type);
-        Player player4 = createPlayer("game", "player4", type);
-        Player player5 = createPlayer("game", "player5", type);
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
+        Player player4 = createPlayer("player4", type);
+        Player player5 = createPlayer("player5", type);
 
         assertR("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
@@ -714,13 +711,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given when
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player1 = createPlayer("game", "player1", type,
+        Player player1 = createPlayer("player1", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':1,'lastPassed':0}}"));
 
-        Player player2 = createPlayer("game", "player2", type,
+        Player player2 = createPlayer("player2", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':2,'lastPassed':1}}"));
 
-        Player player3 = createPlayer("game", "player3", type,
+        Player player3 = createPlayer("player3", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
         // then
@@ -740,7 +737,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testLoadLevelProgressFromSave_failBecauseBadFormat() {
         // given when
         try {
-            createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3),
+            createPlayer("player1", MultiplayerType.TRAINING.apply(3),
                     new PlayerSave("{'levelProgress':{'total':3,'current':50,'lastPassed':0}}"));
             fail();
         } catch (IllegalArgumentException e) {
@@ -754,13 +751,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given when
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player1 = createPlayer("game", "player1", type,
+        Player player1 = createPlayer("player1", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
-        Player player2 = createPlayer("game", "player2", type,
+        Player player2 = createPlayer("player2", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
-        Player player3 = createPlayer("game", "player3", type,
+        Player player3 = createPlayer("player3", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
         // then
@@ -774,7 +771,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         PlayerSave save = null;
 
         MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        Player player = createPlayer("player1", type, save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -787,7 +784,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         PlayerSave save = new PlayerSave(stringSave);
 
         MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        Player player = createPlayer("player1", type, save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -800,7 +797,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         PlayerSave save = new PlayerSave(stringSave);
 
         MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        Player player = createPlayer("player1", type, save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -813,7 +810,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         PlayerSave save = new PlayerSave(stringSave);
 
         MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        Player player = createPlayer("player1", type, save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -826,7 +823,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         PlayerSave save = new PlayerSave(stringSave);
 
         MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        Player player = createPlayer("player1", type, save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -839,7 +836,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         PlayerSave save = new PlayerSave(stringSave);
 
         MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        Player player = createPlayer("player1", type, save);
 
         // then
         ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
@@ -854,7 +851,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         PlayerSave save = new PlayerSave(stringSave);
 
         MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        Player player = createPlayer("player1", type, save);
 
         // then
         ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
@@ -867,7 +864,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player = createPlayer("game", "player", type,
+        Player player = createPlayer("player", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
         when(fields.get(0).getSave()).thenReturn(null);
@@ -882,7 +879,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player = createPlayer("game", "player", type,
+        Player player = createPlayer("player", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
         when(fields.get(0).getSave()).thenReturn(new JSONObject("{'some':'data'}"));
@@ -898,7 +895,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.SINGLE;
 
-        Player player = createPlayer("game", "player", type,
+        Player player = createPlayer("player", type,
                 new PlayerSave("{'save':'data2'}"));
 
         when(fields.get(0).getSave()).thenReturn(new JSONObject("{'some':'data'}"));
@@ -914,7 +911,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.SINGLE;
 
-        Player player = createPlayer("game", "player", type,
+        Player player = createPlayer("player", type,
                 new PlayerSave("{'save':'data'}"));
 
         when(fields.get(0).getSave()).thenReturn(null);
@@ -930,7 +927,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player = createPlayer("game", "player", type, null,
+        Player player = createPlayer("player", "room", "game", type, null,
                 new JSONObject("{'board':'data'}"));
 
         when(fields.get(0).reader()).thenReturn(mock(BoardReader.class));
@@ -946,7 +943,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player = createPlayer("game", "player", type, null,
+        Player player = createPlayer("player", "room", "game", type, null,
                 "board-data");
 
         when(fields.get(0).reader()).thenReturn(mock(BoardReader.class));
@@ -962,7 +959,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.SINGLE;
 
-        Player player = createPlayer("game", "player", type, null,
+        Player player = createPlayer("player", "room", "game", type, null,
                 "board");
 
         when(fields.get(0).reader()).thenReturn(mock(BoardReader.class));
@@ -975,11 +972,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldNewPlayerGoToFirstLEvel_evenIfOtherOnMultiplayer_forTraining() {
         // given
-        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3),
+        createPlayer("player1", MultiplayerType.TRAINING.apply(3),
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
         // when
-        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(3));
+        createPlayer("player2", MultiplayerType.TRAINING.apply(3));
         playerGames.tick();
 
         // then
@@ -995,8 +992,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldNewPlayerGoToFirstLevel_forTraining() {
         // given
-        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3));
-        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(3));
+        createPlayer("player1", MultiplayerType.TRAINING.apply(3));
+        createPlayer("player2", MultiplayerType.TRAINING.apply(3));
 
         // when
         playerGames.tick();
@@ -1014,8 +1011,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldNewPlayerGoToFirstLevel_forSingle() {
         // given
-        createPlayer("game", "player1", MultiplayerType.SINGLE);
-        createPlayer("game", "player2", MultiplayerType.SINGLE);
+        createPlayer("player1", MultiplayerType.SINGLE);
+        createPlayer("player2", MultiplayerType.SINGLE);
 
         // when
         playerGames.tick();
@@ -1034,8 +1031,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void whatIfTwoPlayersForDifferentTrainings() {
         // given
         // TODO обрати внимание, тут 3 и 5 - для ожной игры, нельзя такого допускать
-        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3));
-        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(5));
+        createPlayer("player1", MultiplayerType.TRAINING.apply(3));
+        createPlayer("player2", MultiplayerType.TRAINING.apply(5));
 
         // when
         playerGames.tick();
@@ -1053,9 +1050,9 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldRemovePlayerFromBoard_whenShouldLeaveIsTrue() {
         // given
-        createPlayer("game", "player1", MultiplayerType.TRIPLE);
-        createPlayer("game", "player2", MultiplayerType.TRIPLE);
-        createPlayer("game", "player3", MultiplayerType.TRIPLE);
+        createPlayer("player1", MultiplayerType.TRIPLE);
+        createPlayer("player2", MultiplayerType.TRIPLE);
+        createPlayer("player3", MultiplayerType.TRIPLE);
 
         reset(fields.get(0));
         assertEquals(1, fields.size());
@@ -1080,8 +1077,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when
         // add another player
-        createPlayer("game", "player4", MultiplayerType.TRIPLE);
-        createPlayer("game", "player5", MultiplayerType.TRIPLE);
+        createPlayer("player4", MultiplayerType.TRIPLE);
+        createPlayer("player5", MultiplayerType.TRIPLE);
 
         // then
         assertEquals(2, fields.size());

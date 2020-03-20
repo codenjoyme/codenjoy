@@ -50,7 +50,12 @@ public class TestUtils {
 
     public static Env getPlayerGame(PlayerGames playerGames,
                                     Player player,
-                                    Answer<Object> answerCreateGame, MultiplayerType type, PlayerSave save, Printer printer) {
+                                    String roomName,
+                                    Answer<Object> answerCreateGame, 
+                                    MultiplayerType type, 
+                                    PlayerSave save, 
+                                    Printer printer) 
+    {
         Joystick joystick = mock(Joystick.class);
         GamePlayer gamePlayer = mock(GamePlayer.class);
         when(gamePlayer.getJoystick()).thenReturn(joystick);
@@ -74,7 +79,6 @@ public class TestUtils {
         when(gameType.createPlayer(any(EventListener.class), anyString()))
                 .thenAnswer(inv -> gamePlayer);
 
-        String roomName = gameType.name();
         PlayerGame playerGame = playerGames.add(player, roomName, save);
         Env result = new Env();
         result.gamePlayer = gamePlayer;
