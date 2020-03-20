@@ -246,7 +246,6 @@ func (b *board) GetFutureBlasts() []Point {
 		}
 	}
 
-	// Remove duplicates
 	return removeDuplicates(futureBlasts)
 }
 
