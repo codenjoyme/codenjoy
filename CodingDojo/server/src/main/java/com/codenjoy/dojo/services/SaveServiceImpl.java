@@ -68,7 +68,7 @@ public class SaveServiceImpl implements SaveService {
     }
 
     private void saveGame(PlayerGame playerGame, long time) {
-        saver.saveGame(playerGame.getPlayer(), playerGame.getRoomName(),
+        saver.saveGame(playerGame.getPlayer(),
                 playerGame.getGame().getSave().toString(),
                 time);
     }

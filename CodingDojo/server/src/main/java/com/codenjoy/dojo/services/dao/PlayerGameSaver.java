@@ -52,14 +52,14 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public void saveGame(Player player, String roomName, String save, long time) {
+    public void saveGame(Player player, String save, long time) {
         pool.update("INSERT INTO saves " +
                         "(time, name, callbackUrl, roomName, gameName, score, save) " +
                         "VALUES (?,?,?,?,?,?,?);",
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
                         player.getName(),
                         player.getCallbackUrl(),
-                        roomName,
+                        player.getRoomName(),
                         player.getGameName(),
                         player.getScore(),
                         save

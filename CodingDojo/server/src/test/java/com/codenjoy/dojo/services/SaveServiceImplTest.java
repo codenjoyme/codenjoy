@@ -78,7 +78,7 @@ public class SaveServiceImplTest {
 
         long time = saveService.save("vasia");
 
-        verify(saver).saveGame(player, "room", "{\"key\":\"value\"}", time);
+        verify(saver).saveGame(player, "{\"key\":\"value\"}", time);
     }
 
     private Player createPlayer(String name) {
@@ -113,8 +113,8 @@ public class SaveServiceImplTest {
     @Test
     public void shouldNotSavePlayerWhenNotExists() {
         saveService.save("cocacola");
+        verify(saver, never()).saveGame(any(Player.class), any(String.class), anyLong());
 
-        verify(saver, never()).saveGame(any(Player.class), any(String.class), any(String.class), anyLong());
     }
 
     @Test
@@ -258,8 +258,8 @@ public class SaveServiceImplTest {
 
         long time = saveService.saveAll();
 
-        verify(saver).saveGame(players.get(0), "room", "{\"key\":\"value1\"}", time);
-        verify(saver).saveGame(players.get(1), "room", "{\"key\":\"value2\"}", time);
+        verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", time);
+        verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", time);
     }
 
     @Test

@@ -43,17 +43,15 @@ public class PlayerGameTest {
     private Game game;
     private PlayerGame playerGame;
     private GameType gameType;
-    private String roomName;
 
     @Before
     public void setup() {
         gameType = PlayerTest.mockGameType("game");
         player = new Player("player", "url", gameType,
                 NullPlayerScores.INSTANCE, NullInformation.INSTANCE);
-        this.game = mock(Game.class);
-        roomName = gameType.name(); 
+        game = mock(Game.class);
 
-        playerGame = new PlayerGame(player, this.game, roomName);
+        playerGame = new PlayerGame(player, game, "room");
     }
 
     @Test
@@ -136,7 +134,7 @@ public class PlayerGameTest {
     @Test
     public void testEquals_roomName() {
         // when then
-        assertEquals(true, playerGame.equals(roomName));
+        assertEquals(true, playerGame.equals("room"));
         assertEquals(false, playerGame.equals("otherRoom"));
     }
 
@@ -213,8 +211,22 @@ public class PlayerGameTest {
     @Test
     public void testToString() {
         // when then
-        assertEquals(String.format("PlayerGame[player=player, roomName=game, game=%s]",
+        assertEquals(String.format("PlayerGame[player=player, roomName=room, game=%s]",
                 game.getClass().getSimpleName()),
                 playerGame.toString());
+    }
+    
+    @Test 
+    public void testSetRoomName_alsoUpdatePlayer() {
+        // given
+        assertEquals("room", playerGame.getRoomName());
+        assertEquals("room", playerGame.getPlayer().getRoomName());
+        
+        // when 
+        playerGame.setRoomName("otherRoom");
+        
+        // then
+        assertEquals("otherRoom", playerGame.getRoomName());
+        assertEquals("otherRoom", playerGame.getPlayer().getRoomName());
     }
 }

@@ -27,11 +27,18 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import lombok.Getter;
 
 import java.util.function.Consumer;
 
+/**
+ * Класс представляет собой игру пользователя, объединяя данные о пользователе в Player,
+ * Игру на которой он играет - Game. Комнату в которой эта игра происходит - playerRoom. 
+ * А так же джойстик которым он играет - Joystick. 
+ */
+@Getter
 public class PlayerGame implements Tickable {
-
+    
     private Player player;
     private Game game;
     private String roomName;
@@ -40,7 +47,7 @@ public class PlayerGame implements Tickable {
     public PlayerGame(Player player, Game game, String roomName) {
         this.player = player;
         this.game = game;
-        this.roomName = roomName;
+        setRoomName(roomName);
         this.joystick = new LazyJoystick(game);
     }
 
@@ -49,6 +56,12 @@ public class PlayerGame implements Tickable {
         return new PlayerGame(null, game, null);
     }
 
+    /**
+     * Есть необходимость искать по разным компонентам этого объекта, 
+     * а потому o - может принимать разные типы
+     * @param o если String - это roomName, 
+     *          может быть так же Player, PlayerGame, GameField
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null) return false;
@@ -95,14 +108,6 @@ public class PlayerGame implements Tickable {
         player.close();
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
     public GameField getField() {
         return game.getField();
     }
@@ -120,20 +125,24 @@ public class PlayerGame implements Tickable {
         joystick.tick();
     }
 
-    public Joystick getJoystick() {
-        return joystick;
-    }
-
     public GameType getGameType() {
         return player.getGameType();
     }
     
-    public String getRoomName() {
-        return roomName;
-    }
-
     public void setRoomName(String roomName) {
         this.roomName = roomName;
+        getPlayer();
+    }
+
+    /*
+     * Так случилось, что roomName содержится в двух местах, 
+     * а потому надо держать в консистентности данные  
+     */
+    public Player getPlayer() {
+        if (player != null) {
+            player.setRoomName(roomName);
+        }
+        return player;
     }
 
     public String popLastCommand() {
