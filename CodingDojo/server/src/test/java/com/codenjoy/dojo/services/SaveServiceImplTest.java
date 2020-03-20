@@ -236,6 +236,8 @@ public class SaveServiceImplTest {
         // given
         Player activeSavedPlayer = createPlayer("activeSaved"); // check sorting order (activeSaved > active)
         Player activePlayer = createPlayer("active");
+        scores(activeSavedPlayer, 10);
+        scores(activePlayer, 11);
 
         PlayerSave save1 = new PlayerSave(activeSavedPlayer);
         PlayerSave save2 = new PlayerSave(activePlayer);
@@ -263,6 +265,7 @@ public class SaveServiceImplTest {
         assertEquals("http://active:1234", active.getCallbackUrl());
         assertEquals("active game", active.getGameName());
         assertEquals("{\"data\":2}", active.getData());
+        assertEquals(11, active.getScore());
         assertTrue(active.isActive());
         assertFalse(active.isSaved());
 
@@ -270,6 +273,7 @@ public class SaveServiceImplTest {
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
         assertEquals("activeSaved game", activeSaved.getGameName());
         assertEquals("{\"data\":1}", activeSaved.getData());
+        assertEquals(10, activeSaved.getScore());
         assertTrue(activeSaved.isActive());
         assertTrue(activeSaved.isSaved());
 
@@ -277,8 +281,13 @@ public class SaveServiceImplTest {
         assertEquals("http://saved:1234", saved.getCallbackUrl());
         assertEquals("saved game", saved.getGameName());
         assertNull(saved.getData());
+        assertEquals(15, saved.getScore());
         assertFalse(saved.isActive());
         assertTrue(saved.isSaved());
+    }
+
+    private void scores(Player player, Object score) {
+        when(player.getScore()).thenReturn(score);
     }
 
     @Test

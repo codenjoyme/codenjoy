@@ -34,13 +34,14 @@ public class PlayerInfo extends Player {
         initScores();
     }
 
-    public PlayerInfo(String name, String readableName, String code, String url, String roomName, String gameName, boolean saved) {
+    public PlayerInfo(String name, String readableName, String code, String url, String roomName, String gameName, Object score, boolean saved) {
         setName(name);
         setReadableName(readableName);
         setCode(code);
         setCallbackUrl(url);
         setGameName(gameName);
         setRoomName(roomName);
+        setScore(score);
         this.saved = saved;
         this.active = false;
         this.hidden = false;

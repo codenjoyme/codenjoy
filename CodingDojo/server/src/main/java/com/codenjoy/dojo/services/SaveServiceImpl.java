@@ -109,17 +109,16 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public List<PlayerInfo> getSaves() {
         Map<String, PlayerInfo> map = new HashMap<>();
-        List<Player> active = players.getAll();
-        for (Player player : active) {
+        for (Player player : players.getAll()) {
             PlayerInfo info = new PlayerInfo(player);
             info.setCode(registration.getCodeById(player.getName()));
             info.setCallbackUrl(player.getCallbackUrl());
             info.setReadableName(registration.getNameById(player.getName()));
             info.setAIPlayer(player.hasAI());
-            info.setScores(player.getScores()); // TODO test me
-            info.setRoomName(playerGames.get(player.getName()).getRoomName()); // TODO ROOM test me
+            info.setScore(player.getScore());
+            info.setRoomName(player.getRoomName()); // TODO ROOM test me
+            setSaveFromField(info, playerGames.get(player.getName()));
 
-            copySave(player, info);
             map.put(player.getName(), info);
         }
 
@@ -138,7 +137,7 @@ public class SaveServiceImpl implements SaveService {
                 String readableName = registration.getNameById(name);
                 map.put(name, new PlayerInfo(name, readableName, code, 
                         save.getCallbackUrl(), save.getRoomName(), 
-                        save.getGameName(), true));
+                        save.getGameName(), save.getScore(), true));
             }
         }
 
@@ -148,8 +147,7 @@ public class SaveServiceImpl implements SaveService {
         return result;
     }
 
-    void copySave(Player player, PlayerInfo info) {
-        PlayerGame playerGame = playerGames.get(player.getName());
+    void setSaveFromField(PlayerInfo info, PlayerGame playerGame) {
         Game game = playerGame.getGame();
         if (game != null && game.getSave() != null) {
             info.setData(game.getSave().toString());

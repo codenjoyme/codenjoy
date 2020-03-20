@@ -123,7 +123,7 @@ public class Player implements ScreenRecipient, Closeable {
     // TODO this method is only for admin save player score
     public void setScore(Object score) {
         initScores();
-        this.scores.update(score);
+        scores.update(score);
     }
 
     void initScores() {
