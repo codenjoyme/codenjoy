@@ -24,7 +24,6 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,8 +33,10 @@ import java.util.*;
 @Component("saveService")
 public class SaveServiceImpl implements SaveService {
 
+    public static final String DEFAULT_CALLBACK_URL = "127.0.0.1";
+
     @Autowired protected GameSaver saver;
-    @Autowired protected PlayerService playerService;
+    @Autowired protected PlayerService players;
     @Autowired protected Registration registration;
     @Autowired protected PlayerGames playerGames;
     @Autowired protected ConfigProperties config;
@@ -76,34 +77,39 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public boolean load(String name) {
         PlayerSave save = saver.loadGame(name);
-        if (save == PlayerSave.NULL) { // TODO test me
-            save = saver.loadGame(Hash.getEmail(name, config.getEmailHash()));
-            if (save == PlayerSave.NULL) {
-                return false;
-            }
-        }
-
-        if (playerService.contains(name)) { // TODO test me
-            playerService.remove(name);
-        }
-        playerService.register(save);
-
+        resetPlayer(name, save);
         return true;
     }
 
+    private void resetPlayer(String name, PlayerSave save) {
+        if (players.contains(name)) {
+            players.remove(name);
+        }
+        players.register(save);
+    }
+
+    /**
+     * Метод для ручной загрузки player из save для заданной gameType / roomName.
+     * Из save если он существует, грузится только callbackUrl пользователя,
+     * все остальное передается с параметрами.
+     * TODO я не уверен, что оно тут надо, т.к. есть вероятно другие версии этого метода
+     */
     @Override
     public void load(String name, String roomName, String gameName, String save) {
-        PlayerSave playerSave = new PlayerSave(name, "127.0.0.1", roomName, gameName, 0, save);
-        if (playerService.contains(name)) { // TODO test me
-            playerService.remove(name);
-        }
-        playerService.register(playerSave);
+        String ip = tryGetIpFromSave(name);
+        PlayerSave playerSave = new PlayerSave(name, ip, roomName, gameName, 0, save);
+        resetPlayer(name, playerSave);
+    }
+
+    private String tryGetIpFromSave(String name) {
+        PlayerSave saved = saver.loadGame(name);
+        return (saved == PlayerSave.NULL) ? DEFAULT_CALLBACK_URL : saved.getCallbackUrl();
     }
 
     @Override
     public List<PlayerInfo> getSaves() {
         Map<String, PlayerInfo> map = new HashMap<>();
-        List<Player> active = playerService.getAll();
+        List<Player> active = players.getAll();
         for (Player player : active) {
             PlayerInfo info = new PlayerInfo(player);
             info.setCode(registration.getCodeById(player.getName()));

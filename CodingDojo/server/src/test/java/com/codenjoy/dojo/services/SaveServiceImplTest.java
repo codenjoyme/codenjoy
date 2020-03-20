@@ -28,14 +28,12 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.utils.JsonUtils;
-import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.Answer;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,7 +57,7 @@ public class SaveServiceImplTest {
     public void setUp() {
         saveService = new SaveServiceImpl(){{
             this.playerGames = SaveServiceImplTest.this.playerGames = new PlayerGames();
-            this.playerService = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
+            this.players = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
             this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);
             this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);
         }};
@@ -138,7 +136,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayer_forRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "url", "room", "game", 100, null);
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "room", "game", 100, null);
         when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersRegistered();
 
@@ -153,51 +151,83 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void shouldLoadPlayerWithExternalSave_forNotRegistered() {
+    public void shouldLoadPlayerWithExternalSave_forNotRegistered_caseSaveExists() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "room", "game", 0, "{'save':'data'}");
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "room", "game", 0, "{'save':'data'}");
+        when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersNotRegistered();
 
         // when
         saveService.load("vasia", "room", "game", "{'save':'data'}");
 
         // then
+        verify(saver).loadGame("vasia");
         verifyNoMoreInteractions(saver);
 
         verify(playerService).contains("vasia");
         ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
         verify(playerService).register(captor.capture());
-        assertEquals("{'callbackUrl':'127.0.0.1'," +
+        PlayerSave actual = captor.getValue();
+        assertEquals("{'callbackUrl':'127.0.0.2'," +
                 "'gameName':'game'," +
                 "'name':'vasia'," +
                 "'roomName':'room'," +
                 "'save':'{'save':'data'}'," +
-                "'score':0}", JsonUtils.cleanSorted(save));
+                "'score':0}", JsonUtils.cleanSorted(actual));
+        verifyNoMoreInteractions(playerService);
+    }
+
+    @Test
+    public void shouldLoadPlayerWithExternalSave_forNotRegistered_caseSaveNotExists() {
+        // given
+        when(saver.loadGame("vasia")).thenReturn(PlayerSave.NULL);
+        allPlayersNotRegistered();
+
+        // when
+        saveService.load("vasia", "room", "game", "{'save':'data'}");
+
+        // then
+        verify(saver).loadGame("vasia");
+        verifyNoMoreInteractions(saver);
+
+        verify(playerService).contains("vasia");
+        ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
+        verify(playerService).register(captor.capture());
+        PlayerSave actual = captor.getValue();
+        assertEquals("{'callbackUrl':'" + SaveServiceImpl.DEFAULT_CALLBACK_URL + "'," +
+                "'gameName':'game'," +
+                "'name':'vasia'," +
+                "'roomName':'room'," +
+                "'save':'{'save':'data'}'," +
+                "'score':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
     }
 
     @Test
     public void shouldLoadPlayerWithExternalSave_forRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "room", "game", 0, "{'save':'data'}");
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "room", "game", 0, "{'save':'data'}");
+        when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersRegistered();
 
         // when
         saveService.load("vasia", "room", "game", "{'save':'data'}");
 
         // then
+        verify(saver).loadGame("vasia");
         verifyNoMoreInteractions(saver);
 
         verify(playerService).contains("vasia");
-        verify(playerService).remove("vasia");
+        verify(playerService).remove("vasia");  // << difference
         ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
         verify(playerService).register(captor.capture());
-        assertEquals("{'callbackUrl':'127.0.0.1'," +
+        PlayerSave actual = captor.getValue();
+        assertEquals("{'callbackUrl':'127.0.0.2'," +
                 "'gameName':'game'," +
                 "'name':'vasia'," +
                 "'roomName':'room'," +
                 "'save':'{'save':'data'}'," +
-                "'score':0}", JsonUtils.cleanSorted(save));
+                "'score':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
     }
 
@@ -310,8 +340,8 @@ public class SaveServiceImplTest {
     }
 
     private void allPlayersRegistered() {
-        boolean REGISTERED = true;
-        when(playerService.contains(anyString())).thenReturn(REGISTERED);
+        boolean registered = true;
+        when(playerService.contains(anyString())).thenReturn(registered);
     }
 
     @Test
