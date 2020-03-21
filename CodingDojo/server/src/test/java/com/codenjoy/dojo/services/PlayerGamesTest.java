@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -324,8 +325,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldNextLevel_whenGameOver_andIsWin_caseTrainingMultiplayerType() {
         // given
-        createPlayer("player2", "room", "game2",
-                MultiplayerType.TRAINING.apply(2));
+        Player player = createPlayer(MultiplayerType.TRAINING.apply(2));
 
         reset(fields.get(0));
         assertEquals(1, fields.size());
@@ -333,14 +333,16 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(true);
 
         // then
-        assertProgress("player2", "{'current':0,'passed':-1,'total':2,'valid':true}");
+        assertProgress("player", "{'current':0,'passed':-1,'total':2,'valid':true}");
 
         // when
         // win + gameOver > next level
         playerGames.tick();
 
         // then
-        assertProgress("player2", "{'current':1,'passed':0,'total':2,'valid':true}");
+        String progress1 = "{'current':1,'passed':0,'total':2,'valid':true}";
+        assertProgress("player", progress1);
+        verifyPlayerEventListenerLevelChanged("player", progress1);
 
         int newField = fields.size() - 1;
         assertEquals(2, fields.size());
@@ -352,7 +354,9 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
+        String progress2 = "{'current':2,'passed':1,'total':2,'valid':true}";
+        assertProgress("player", progress2);
+        verifyPlayerEventListenerLevelChanged("player", progress2);
 
         newField = fields.size() - 1;
         assertEquals(3, fields.size());
@@ -364,7 +368,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
+        assertProgress("player", "{'current':2,'passed':1,'total':2,'valid':true}");
+        verifyPlayerEventListenerLevelChanged("player", null);
 
         newField = fields.size() - 1;
         assertEquals(3, fields.size());
@@ -375,8 +380,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void testChangeLevel_cantBecauseNotPassedLevel() {
         // given
-        createPlayer("player2", "room", "game2",
-                MultiplayerType.TRAINING.apply(2));
+        createPlayer(MultiplayerType.TRAINING.apply(2));
 
         reset(fields.get(0));
         assertEquals(1, fields.size());
@@ -385,13 +389,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         String same = "{'current':0,'passed':-1,'total':2,'valid':true}";
-        assertProgress("player2", same);
+        assertProgress("player", same);
 
         // when
-        playerGames.changeLevel("player2", 1);
+        playerGames.changeLevel("player", 1);
 
         // then
-        assertProgress("player2", same);
+        assertProgress("player", same);
 
         assertEquals(1, fields.size());
         verify(fields.get(0), never()).newGame(gamePlayers.get(0));
@@ -407,14 +411,16 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
+        assertProgress("player", "{'current':2,'passed':1,'total':2,'valid':true}");
 
         // when
         // change decrease - create new field
-        playerGames.changeLevel("player2", 1);
+        playerGames.changeLevel("player", 1);
 
         // then
-        assertProgress("player2", "{'current':1,'passed':1,'total':2,'valid':true}");
+        String progress = "{'current':1,'passed':1,'total':2,'valid':true}";
+        assertProgress("player", progress);
+        verifyPlayerEventListenerLevelChanged("player", progress);
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
@@ -424,8 +430,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void testSetLevel_caseNotPassedLevel() {
         // given
-        createPlayer("player2", "room", "game2",
-                MultiplayerType.TRAINING.apply(2));
+        createPlayer(MultiplayerType.TRAINING.apply(2));
 
         reset(fields.get(0));
         assertEquals(1, fields.size());
@@ -434,14 +439,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         String same = "{'current':0,'passed':-1,'total':2,'valid':true}";
-        assertProgress("player2", same);
+        assertProgress("player", same);
 
         // when
         // change increase - don't create new field
-        playerGames.setLevel("player2", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
+        playerGames.setLevel("player", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
 
         // then
-        assertProgress("player2", "{'current':1,'passed':1,'total':2,'valid':true}");
+        assertProgress("player", "{'current':1,'passed':1,'total':2,'valid':true}");
 
         int newField = fields.size() - 1;
         assertEquals(2, fields.size());
@@ -458,14 +463,16 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
+        assertProgress("player", "{'current':2,'passed':1,'total':2,'valid':true}");
 
         // when
         // change decrease - create new field
-        playerGames.setLevel("player2", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
+        playerGames.setLevel("player", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
 
         // then
-        assertProgress("player2", "{'current':1,'passed':1,'total':2,'valid':true}");
+        String progress = "{'current':1,'passed':1,'total':2,'valid':true}";
+        assertProgress("player", progress);
+        verifyPlayerEventListenerLevelChanged("player", progress);
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
@@ -482,13 +489,15 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
+        assertProgress("player", "{'current':2,'passed':1,'total':2,'valid':true}");
 
         // when
-        playerGames.setLevel("player2", new JSONObject("{}"));
+        playerGames.setLevel("player", new JSONObject("{}"));
 
         // then
-        assertProgress("player2", "{'current':0,'passed':-1,'total':2,'valid':true}");
+        String progress = "{'current':0,'passed':-1,'total':2,'valid':true}";
+        assertProgress("player", progress);
+        verifyPlayerEventListenerLevelChanged("player", progress);
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
@@ -505,13 +514,15 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
+        String same = "{'current':2,'passed':1,'total':2,'valid':true}";
+        assertProgress("player", same);
 
         // when
-        playerGames.setLevel("player2", null);
+        playerGames.setLevel("player", null);
 
         // then
-        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
+        assertProgress("player", same);
+        verifyPlayerEventListenerLevelChanged("player", null);
 
         int newField = fields.size() - 1;
         assertEquals(3, fields.size());
@@ -810,6 +821,18 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
         verify(fields.get(field)).loadSave(captor.capture());
         assertEquals(expected, captor.getAllValues().toString());
+    }
+
+    private void verifyPlayerEventListenerLevelChanged(String playerName, String expected) {
+        ArgumentCaptor<LevelProgress> captor = ArgumentCaptor.forClass(LevelProgress.class);
+        Player player = playerGames.get(playerName).getPlayer();
+        if (expected == null) {
+            verifyNoMoreInteractions(player.getEventListener());
+        } else {
+            verify(player.getEventListener(), times(1)).levelChanged(captor.capture());
+            assertEquals(expected, captor.getValue().toString());
+        }
+        reset(player.getEventListener());
     }
 
     @Test

@@ -216,8 +216,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                         level = LevelProgress.winLevel(level);
                         if (level != null) {
                             reload(game, roomName, level);
-                            // TODO test me
-                            playerGame.getPlayer().getEventListener().levelChanged(game.getProgress());
+                            fireOnLevelChanged(playerGame);
                             return;
                         }
                     }
@@ -246,6 +245,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         getGameTypes().forEach(GameType::quietTick);
     }
 
+    private void fireOnLevelChanged(PlayerGame playerGame) {
+        Game game = playerGame.getGame();
+        Player player = playerGame.getPlayer();
+        player.getEventListener().levelChanged(game.getProgress());
+    }
+
     private boolean isMatchCanBeStarted(GameField field) {
         return spreader.isRoomStaffed(field);
     }
@@ -254,8 +259,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     // без обслуживания последнего оставшегося на той же карте
     public void reloadCurrent(PlayerGame playerGame) {
         Game game = playerGame.getGame();
-        String event = playerGame.getRoomName();
-        reload(game, event, game.getSave(), false);
+        String roomName = playerGame.getRoomName();
+        reload(game, roomName, game.getSave(), false);
     }
 
     private void reload(Game game, String roomName, JSONObject save, boolean reloadAlone) {
@@ -312,13 +317,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public void changeLevel(String playerName, int level) {
         PlayerGame playerGame = get(playerName);
-        String event = playerGame.getRoomName();
+        String roomName = playerGame.getRoomName();
         Game game = playerGame.getGame();
         JSONObject save = game.getSave();
         LevelProgress progress = new LevelProgress(save);
         if (progress.canChange(level)) {
             progress.change(level);
-            reload(game, event, progress.saveTo(new JSONObject()));
+            reload(game, roomName, progress.saveTo(new JSONObject()));
+            fireOnLevelChanged(playerGame);
         }
     }
 
@@ -330,6 +336,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         String roomName = playerGame.getRoomName();
         Game game = playerGame.getGame();
         reload(game, roomName, save);
+        fireOnLevelChanged(playerGame);
     }
 
     public void changeRoom(String playerName, String roomName) {

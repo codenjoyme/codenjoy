@@ -72,6 +72,10 @@ public class AbstractPlayerGamesTest {
                 MultiplayerType.SINGLE);
     }
 
+    protected Player createPlayer(MultiplayerType type) {
+        return createPlayer("player", "room", "game", type);
+    }
+
     protected Player createPlayer(String name, MultiplayerType type) {
         return createPlayer(name, "room", "game", type);  
     }
