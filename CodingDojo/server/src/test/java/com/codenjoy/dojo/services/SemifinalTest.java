@@ -502,7 +502,7 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         ticksTillTimeout();
 
         // then
-        NavigableMap<Integer, Collection<String>> rooms = getRooms();
+        Map<Integer, Collection<String>> rooms = getRooms();
         Collection<String> room2 = rooms.get(2);
         Collection<String> room3 = rooms.get(3);
 

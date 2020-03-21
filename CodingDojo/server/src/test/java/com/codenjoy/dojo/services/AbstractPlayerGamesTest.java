@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,6 +35,11 @@ import org.json.JSONObject;
 import org.junit.Before;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
@@ -67,7 +72,7 @@ public class AbstractPlayerGamesTest {
     protected Player createPlayer(String gameName) {
         return createPlayer("room", gameName);
     }
-    
+
     protected Player createPlayer(String roomName, String gameName) {
         return createPlayer("player" + Calendar.getInstance().getTimeInMillis(),
                 roomName, gameName,
@@ -79,9 +84,9 @@ public class AbstractPlayerGamesTest {
     }
 
     protected Player createPlayer(String name, MultiplayerType type) {
-        return createPlayer(name, "room", "game", type);  
+        return createPlayer(name, "room", "game", type);
     }
-    
+
     protected Player createPlayer(String name, String roomName, String gameName, MultiplayerType type) {
         return createPlayer(name, roomName, gameName, type, null);
     }
@@ -89,7 +94,7 @@ public class AbstractPlayerGamesTest {
     protected Player createPlayer(String name, MultiplayerType type, PlayerSave save) {
         return createPlayer(name, "room", "game", type, save);
     }
-    
+
     protected Player createPlayer(String name, String roomName, String gameName, MultiplayerType type, PlayerSave save) {
         return createPlayer(name, gameName, roomName, type, save, "board");
     }
@@ -180,7 +185,7 @@ public class AbstractPlayerGamesTest {
         assertEquals(expected, getRooms().toString());
     }
 
-    public NavigableMap<Integer, Collection<String>> getRooms() {
+    public Map<Integer, Collection<String>> getRooms3() {
         return playerGames.stream()
                 .collect(TreeMultimap::<Integer, String>create,
                         (map, playerGame) -> map
@@ -188,6 +193,72 @@ public class AbstractPlayerGamesTest {
                                 .add(playerGame.getPlayer().getName()),
                         TreeMultimap::putAll)
                 .asMap();
+    }
+
+    public Map<Integer, Collection<String>> getRooms4() {
+        return playerGames.stream()
+                .collect(toMultimap(
+                        pg -> fields.indexOf(pg.getField()),
+                        pg -> pg.getPlayer().getName()));
+    }
+
+    public Collector<PlayerGame, TreeMultimap, Map> toMultimap(
+            Function<PlayerGame, Integer> key,
+            Function<PlayerGame, String> value)
+    {
+        return new Collector<PlayerGame, TreeMultimap, Map>() {
+            @Override
+            public Supplier<TreeMultimap> supplier() {
+                return () -> TreeMultimap.create();
+            }
+
+            @Override
+            public BiConsumer<TreeMultimap, PlayerGame> accumulator() {
+                return (map, pg) -> map.get(key.apply(pg)).add(value.apply(pg));
+            }
+
+            @Override
+            public BinaryOperator<TreeMultimap> combiner() {
+                return null;
+            }
+
+            @Override
+            public Function<TreeMultimap, Map> finisher() {
+                return map -> map.asMap();
+            }
+
+            @Override
+            public Set<Characteristics> characteristics() {
+                return Collections.emptySet();
+            }
+        };
+    }
+
+    public Map<Integer, Collection<String>> getRooms2() {
+        Map<Integer, Collection<String>> result = new TreeMap<>();
+
+        for (PlayerGame playerGame : playerGames) {
+            int index = fields.indexOf(playerGame.getField());
+            String name = playerGame.getPlayer().getName();
+
+            if (!result.containsKey(index)) {
+                result.put(index, new LinkedList<>());
+            }
+            result.get(index).add(name);
+        }
+        return result;
+    }
+
+    public Map<Integer, Collection<String>> getRooms() {
+        TreeMultimap<Integer, String> result = TreeMultimap.create();
+
+        for (PlayerGame playerGame : playerGames) {
+            int index = fields.indexOf(playerGame.getField());
+            String name = playerGame.getPlayer().getName();
+
+            result.get(index).add(name);
+        }
+        return result.asMap();
     }
 
     public void assertRoomsNames(String expected) {

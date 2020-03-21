@@ -634,7 +634,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.reloadAll(true);
 
         // then
-        NavigableMap<Integer, Collection<String>> rooms = getRooms();
+        Map<Integer, Collection<String>> rooms = getRooms();
         assertEquals("[player1, player2, player3, player4, player5]",
                 rooms.values().stream()
                     .flatMap(Collection::stream)
