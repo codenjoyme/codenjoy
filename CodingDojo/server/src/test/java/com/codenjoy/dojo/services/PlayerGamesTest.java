@@ -33,9 +33,7 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
@@ -636,10 +634,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.reloadAll(true);
 
         // then
-        Map<Integer, List<String>> rooms = getRooms();
+        NavigableMap<Integer, Collection<String>> rooms = getRooms();
         assertEquals("[player1, player2, player3, player4, player5]",
                 rooms.values().stream()
-                    .flatMap(List::stream)
+                    .flatMap(Collection::stream)
                     .sorted()
                     .collect(toList())
                     .toString());

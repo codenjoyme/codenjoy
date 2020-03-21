@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.google.common.collect.TreeMultimap;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -175,23 +176,22 @@ public class AbstractPlayerGamesTest {
     }
 
     public void assertR(String expected) {
-        Map<Integer, List<String>> result = getRooms();
-
-        assertEquals(expected, result.toString());
+        assertEquals(expected, getRooms().toString());
     }
 
-    public Map<Integer, List<String>> getRooms() {
+    public NavigableMap<Integer, Collection<String>> getRooms() {
         Map<String, Integer> map = playerGames.stream()
                 .collect(LinkedHashMap::new,
-                        (m, pg) -> m.put(pg.getPlayer().getName(), fields.indexOf(pg.getField())),
+                        (m, pg) -> m.put(pg.getPlayer().getName(),
+                                fields.indexOf(pg.getField())),
                         Map::putAll);
 
+
+
         return map.entrySet().stream()
-                .collect(TreeMap::new, (m, e) -> {
-                    if (!m.containsKey(e.getValue())) {
-                        m.put(e.getValue(), new LinkedList<>());
-                    }
-                    m.get(e.getValue()).add(e.getKey());
-                }, Map::putAll);
+                .collect(TreeMultimap::<Integer, String>create,
+                        (m, e) -> m.get(e.getValue()).add(e.getKey()),
+                        TreeMultimap::putAll)
+                .asMap();
     }
 }

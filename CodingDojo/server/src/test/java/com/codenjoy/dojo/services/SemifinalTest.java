@@ -502,9 +502,9 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         ticksTillTimeout();
 
         // then
-        Map<Integer, List<String>> rooms = getRooms();
-        List<String> room2 = rooms.get(2);
-        List<String> room3 = rooms.get(3);
+        NavigableMap<Integer, Collection<String>> rooms = getRooms();
+        Collection<String> room2 = rooms.get(2);
+        Collection<String> room3 = rooms.get(3);
 
 //        assertR("{2=[playerX], " +
 //                "3=[playerY, playerZ, playerA]}");
@@ -515,7 +515,7 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         } catch (AssertionError e) {
             e.printStackTrace();
         }
-        assertEquals(false, room3.contains(room2.get(0)));
+        assertEquals(false, room3.contains(room2.iterator().next()));
         assertEquals(false, room3.contains("player2")); // losers
         assertEquals(false, room3.contains("player3"));
         assertEquals(false, room3.contains("player6"));
