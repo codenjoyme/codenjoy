@@ -51,7 +51,7 @@ public class TestUtils {
     public static Env getPlayerGame(PlayerGames playerGames,
                                     Player player,
                                     String roomName,
-                                    Answer<Object> answerCreateGame, 
+                                    Answer<Object> getGame,
                                     MultiplayerType type, 
                                     PlayerSave save, 
                                     Printer printer) 
@@ -71,7 +71,7 @@ public class TestUtils {
         }
 
         when(gameType.getMultiplayerType()).thenReturn(type);
-        when(gameType.createGame(anyInt())).thenAnswer(answerCreateGame);
+        when(gameType.createGame(anyInt())).thenAnswer(getGame);
         PrinterFactory printerFactory = mock(PrinterFactory.class);
         when(gameType.getPrinterFactory()).thenReturn(printerFactory);
         when(printerFactory.getPrinter(any(BoardReader.class), any()))

@@ -67,18 +67,25 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     }
 
     @Test
-    public void testGet() {
-        // given
-        Player player = createPlayer();
+    public void testGet_notExists() {
+        // when
+        PlayerGame playerGame = playerGames.get("bla");
 
-        assertEquals(NullPlayerGame.INSTANCE, playerGames.get("bla"));
+        // then
+        assertEquals(NullPlayerGame.INSTANCE, playerGame);
+    }
+
+    @Test
+    public void testGet_exists() {
+        // given
+        Player player = createPlayer("game");
 
         // when
         PlayerGame playerGame = playerGames.get(player.getName());
 
         // then
         assertEquals(player, playerGame.getPlayer());
-//        assertEquals(game, playerGame.getGame());
+        assertEquals(fields.get(0), playerGame.getGame().getField());
     }
 
     @Test
@@ -326,18 +333,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(true);
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':0,'passed':-1,'total':2,'valid':true}");
 
         // when
         // win + gameOver > next level
         playerGames.tick();
 
         // then
-        assertEquals("{'current':1,'passed':0,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':1,'passed':0,'total':2,'valid':true}");
 
         int newField = fields.size() - 1;
         assertEquals(2, fields.size());
@@ -349,9 +352,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
 
         newField = fields.size() - 1;
         assertEquals(3, fields.size());
@@ -363,9 +364,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
 
         newField = fields.size() - 1;
         assertEquals(3, fields.size());
@@ -386,17 +385,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         String same = "{'current':0,'passed':-1,'total':2,'valid':true}";
-        assertEquals(same,
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", same);
 
         // when
         playerGames.changeLevel("player2", 1);
 
         // then
-        assertEquals(same,
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", same);
 
         assertEquals(1, fields.size());
         verify(fields.get(0), never()).newGame(gamePlayers.get(0));
@@ -412,18 +407,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
 
         // when
         // change decrease - create new field
         playerGames.changeLevel("player2", 1);
 
         // then
-        assertEquals("{'current':1,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':1,'passed':1,'total':2,'valid':true}");
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
@@ -443,18 +434,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         String same = "{'current':0,'passed':-1,'total':2,'valid':true}";
-        assertEquals(same,
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", same);
 
         // when
         // change increase - don't create new field
         playerGames.setLevel("player2", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
 
         // then
-        assertEquals("{'current':1,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':1,'passed':1,'total':2,'valid':true}");
 
         int newField = fields.size() - 1;
         assertEquals(2, fields.size());
@@ -471,18 +458,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
 
         // when
         // change decrease - create new field
         playerGames.setLevel("player2", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
 
         // then
-        assertEquals("{'current':1,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':1,'passed':1,'total':2,'valid':true}");
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
@@ -499,17 +482,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
 
         // when
         playerGames.setLevel("player2", new JSONObject("{}"));
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':0,'passed':-1,'total':2,'valid':true}");
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
@@ -526,17 +505,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
 
         // when
         playerGames.setLevel("player2", null);
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player2", "{'current':2,'passed':1,'total':2,'valid':true}");
 
         int newField = fields.size() - 1;
         assertEquals(3, fields.size());
@@ -722,15 +697,9 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         assertEquals(3, fields.size());
-
-        assertEquals("{'current':1,'passed':0,'total':3,'valid':true}",
-                playerGames.get("player1").getGame().getProgress().toString());
-
-        assertEquals("{'current':2,'passed':1,'total':3,'valid':true}",
-                playerGames.get("player2").getGame().getProgress().toString());
-
-        assertEquals("{'current':3,'passed':2,'total':3,'valid':true}",
-                playerGames.get("player3").getGame().getProgress().toString());
+        assertProgress("player1", "{'current':1,'passed':0,'total':3,'valid':true}");
+        assertProgress("player2", "{'current':2,'passed':1,'total':3,'valid':true}");
+        assertProgress("player3", "{'current':3,'passed':2,'total':3,'valid':true}");
     }
 
     @Test
@@ -834,9 +803,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayerFromSave("player1", save);
 
         // then
+        verifyFiledLoadSave(0, "[{\"some\":\"data\"}]");
+    }
+
+    private void verifyFiledLoadSave(int field, String expected) {
         ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
-        verify(fields.get(0)).loadSave(captor.capture());
-        assertEquals("[{\"some\":\"data\"}]", captor.getAllValues().toString());
+        verify(fields.get(field)).loadSave(captor.capture());
+        assertEquals(expected, captor.getAllValues().toString());
     }
 
     @Test
@@ -847,9 +820,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayerFromSave("player1", save);
 
         // then
-        ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
-        verify(fields.get(0)).loadSave(captor.capture());
-        assertEquals("[{\"some\":\"data\"}]", captor.getAllValues().toString());
+        verifyFiledLoadSave(0, "[{\"some\":\"data\"}]");
     }
 
     private Player createPlayerFromSave(String name, String save) {
@@ -930,9 +901,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(fields.get(0).reader()).thenReturn(mock(BoardReader.class));
 
         // when then
-        assertEquals("{\"board\":\"data\"," +
-                        "\"levelProgress\":{\"total\":3,\"current\":0,\"lastPassed\":-1}}",
-                playerGames.get("player").getGame().getBoardAsString().toString());
+        assertBoard("player",
+                "{\"board\":\"data\"," +
+                        "\"levelProgress\":{\"total\":3,\"current\":0,\"lastPassed\":-1}}");
+    }
+
+    private void assertBoard(String playerName, String expected) {
+        assertEquals(expected,
+                playerGames.get(playerName).getGame().getBoardAsString().toString());
     }
 
     @Test
@@ -946,9 +922,9 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(fields.get(0).reader()).thenReturn(mock(BoardReader.class));
 
         // when then
-        assertEquals("{\"board\":\"board-data\"," +
-                        "\"levelProgress\":{\"total\":3,\"current\":0,\"lastPassed\":-1}}",
-                playerGames.get("player").getGame().getBoardAsString().toString());
+        assertBoard("player",
+                "{\"board\":\"board-data\"," +
+                        "\"levelProgress\":{\"total\":3,\"current\":0,\"lastPassed\":-1}}");
     }
 
     @Test
@@ -962,8 +938,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(fields.get(0).reader()).thenReturn(mock(BoardReader.class));
 
         // when then
-        assertEquals("board",
-                playerGames.get("player").getGame().getBoardAsString().toString());
+        assertBoard("player", "board");
     }
 
     @Test
@@ -977,13 +952,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertEquals("{'current':3,'passed':2,'total':3,'valid':true}",
-                playerGames.get("player1")
-                        .getGame().getProgress().toString());
-
-        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player1", "{'current':3,'passed':2,'total':3,'valid':true}");
+        assertProgress("player2", "{'current':0,'passed':-1,'total':3,'valid':true}");
     }
 
     @Test
@@ -996,13 +966,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
-                playerGames.get("player1")
-                        .getGame().getProgress().toString());
-
-        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player1", "{'current':0,'passed':-1,'total':3,'valid':true}");
+        assertProgress("player2", "{'current':0,'passed':-1,'total':3,'valid':true}");
     }
 
     @Test
@@ -1015,19 +980,20 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
-                playerGames.get("player1")
-                        .getGame().getProgress().toString());
+        assertProgress("player1", "{'current':0,'passed':-1,'total':1,'valid':true}");
+        assertProgress("player2", "{'current':0,'passed':-1,'total':1,'valid':true}");
+    }
 
-        assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
-                playerGames.get("player2")
+    private void assertProgress(String player, String expected) {
+        assertEquals(expected,
+                playerGames.get(player)
                         .getGame().getProgress().toString());
     }
 
     @Test
     public void whatIfTwoPlayersForDifferentTrainings() {
         // given
-        // TODO обрати внимание, тут 3 и 5 - для ожной игры, нельзя такого допускать
+        // TODO обрати внимание, тут 3 и 5 - для одной игры, нельзя такого допускать
         createPlayer("player1", MultiplayerType.TRAINING.apply(3));
         createPlayer("player2", MultiplayerType.TRAINING.apply(5));
 
@@ -1035,13 +1001,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
-                playerGames.get("player1")
-                        .getGame().getProgress().toString());
-
-        assertEquals("{'current':0,'passed':-1,'total':5,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player1", "{'current':0,'passed':-1,'total':3,'valid':true}");
+        assertProgress("player2", "{'current':0,'passed':-1,'total':5,'valid':true}");
     }
 
     @Test
