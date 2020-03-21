@@ -82,8 +82,11 @@ public class SaveServiceImplTest {
     private Player createPlayer(String name) {
         Player player = mock(Player.class);
         when(player.getName()).thenReturn(name);
+        when(player.getCode()).thenReturn("code_" + name);
         when(player.getData()).thenReturn("data for " + name);
         when(player.getGameName()).thenReturn(name + " game");
+        when(player.getRoomName()).thenReturn("room");
+        when(player.hasAI()).thenReturn(true);
         when(player.getCallbackUrl()).thenReturn("http://" + name + ":1234");
         when(player.getEventListener()).thenReturn(mock(InformationCollector.class));
         when(playerService.get(name)).thenReturn(player);
@@ -241,7 +244,7 @@ public class SaveServiceImplTest {
 
         PlayerSave save1 = new PlayerSave(activeSavedPlayer);
         PlayerSave save2 = new PlayerSave(activePlayer);
-        PlayerSave save3 = new PlayerSave("name", "http://saved:1234", "room", "saved game", 15, "data for saved");
+        PlayerSave save3 = new PlayerSave("saved", "http://saved:1234", "room", "saved game", 15, "data for saved");
 
         when(saver.getSavedList()).thenReturn(Arrays.asList("activeSaved", "saved"));
         when(saver.loadGame("activeSaved")).thenReturn(save1);
@@ -250,6 +253,10 @@ public class SaveServiceImplTest {
 
         when(fields.get(0).getSave()).thenReturn(new JSONObject("{'data':1}"));
         when(fields.get(1).getSave()).thenReturn(new JSONObject("{'data':2}"));
+
+        setupRegistration("activeSaved");
+        setupRegistration("active");
+        setupRegistration("saved");
 
         // when
         List<PlayerInfo> games = saveService.getSaves();
@@ -262,28 +269,45 @@ public class SaveServiceImplTest {
         PlayerInfo saved = games.get(2);
 
         assertEquals("active", active.getName());
+        assertEquals("code_active", active.getCode());
+        assertEquals("readable_active", active.getReadableName());
         assertEquals("http://active:1234", active.getCallbackUrl());
         assertEquals("active game", active.getGameName());
         assertEquals("{\"data\":2}", active.getData());
         assertEquals(11, active.getScore());
+        assertEquals("room", active.getRoomName());
+        assertEquals(true, active.isAiPlayer());
         assertTrue(active.isActive());
         assertFalse(active.isSaved());
 
         assertEquals("activeSaved", activeSaved.getName());
+        assertEquals("code_activeSaved", activeSaved.getCode());
+        assertEquals("readable_activeSaved", activeSaved.getReadableName());
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
         assertEquals("activeSaved game", activeSaved.getGameName());
         assertEquals("{\"data\":1}", activeSaved.getData());
         assertEquals(10, activeSaved.getScore());
+        assertEquals("room", activeSaved.getRoomName());
+        assertEquals(true, activeSaved.isAiPlayer());
         assertTrue(activeSaved.isActive());
         assertTrue(activeSaved.isSaved());
 
         assertEquals("saved", saved.getName());
+        assertEquals("code_saved", saved.getCode());
+        assertEquals("readable_saved", saved.getReadableName());
         assertEquals("http://saved:1234", saved.getCallbackUrl());
         assertEquals("saved game", saved.getGameName());
         assertNull(saved.getData());
         assertEquals(15, saved.getScore());
+        assertEquals("room", saved.getRoomName());
+        assertEquals(false, saved.isAiPlayer());
         assertFalse(saved.isActive());
         assertTrue(saved.isSaved());
+    }
+
+    private void setupRegistration(String id) {
+        when(registration.getNameById(id)).thenReturn("readable_" + id);
+        when(registration.getCodeById(id)).thenReturn("code_" + id);
     }
 
     private void scores(Player player, Object score) {

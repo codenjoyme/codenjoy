@@ -112,11 +112,7 @@ public class SaveServiceImpl implements SaveService {
         for (Player player : players.getAll()) {
             PlayerInfo info = new PlayerInfo(player);
             info.setCode(registration.getCodeById(player.getName()));
-            info.setCallbackUrl(player.getCallbackUrl());
             info.setReadableName(registration.getNameById(player.getName()));
-            info.setAIPlayer(player.hasAI());
-            info.setScore(player.getScore());
-            info.setRoomName(player.getRoomName()); // TODO ROOM test me
             setSaveFromField(info, playerGames.get(player.getName()));
 
             map.put(player.getName(), info);
@@ -135,9 +131,8 @@ public class SaveServiceImpl implements SaveService {
                 // TODO оптимизнуть два запроса в один
                 String code = registration.getCodeById(name);
                 String readableName = registration.getNameById(name);
-                map.put(name, new PlayerInfo(name, readableName, code, 
-                        save.getCallbackUrl(), save.getRoomName(), 
-                        save.getGameName(), save.getScore(), true));
+                PlayerInfo info = new PlayerInfo(save, readableName, code);
+                map.put(name, info);
             }
         }
 

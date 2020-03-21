@@ -49,6 +49,9 @@ public class PlayerInfo extends Player {
 
     public PlayerInfo(Player player) {
         this(player.getName(), player.getCode(), player.getCallbackUrl(), player.getGameName());
+        setAIPlayer(player.hasAI());
+        setScore(player.getScore());
+        setRoomName(player.getRoomName());
     }
 
     public PlayerInfo(String name, String code, String url, String gameName) {
@@ -58,6 +61,12 @@ public class PlayerInfo extends Player {
         setGameName(gameName);
         this.saved = false;
         this.active = true;
+    }
+
+    public PlayerInfo(PlayerSave save, String readableName, String code) {
+        this(save.getName(), readableName, code,
+                save.getCallbackUrl(), save.getRoomName(),
+                save.getGameName(), save.getScore(), true);
     }
 
     public boolean isSaved() {
