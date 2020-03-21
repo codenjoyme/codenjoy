@@ -26,7 +26,9 @@ import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.multiplayer.Room;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.TreeMultimap;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +36,7 @@ import org.junit.Before;
 
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -173,7 +176,7 @@ public class AbstractPlayerGamesTest {
         }
     }
 
-    public void assertR(String expected) {
+    public void assertRooms(String expected) {
         assertEquals(expected, getRooms().toString());
     }
 
@@ -185,6 +188,33 @@ public class AbstractPlayerGamesTest {
                                 .add(playerGame.getPlayer().getName()),
                         TreeMultimap::putAll)
                 .asMap();
+    }
+
+    public void assertRoomsNames(String expected) {
+        assertEquals(expected, getRoomNames().toString());
+    }
+
+    // TODO порефакторить под настроение
+    public Map<String, Collection<List<String>>> getRoomNames() {
+        return playerGames.getRooms().entrySet().stream()
+                .collect(HashMultimap::<String, List<String>>create,
+                        (map, entry) -> {
+                            List<Room> rooms = entry.getValue();
+                            List<List<String>> list = rooms.stream()
+                                    .map(room -> room.getPlayers().stream()
+                                                    .map(player -> getPlayer(player).getName())
+                                                    .collect(toList())
+                                    )
+                                    .collect(toList());
+                            map.get(entry.getKey())
+                                    .addAll(list);
+                        },
+                        HashMultimap::putAll)
+                .asMap();
+    }
+
+    private Player getPlayer(GamePlayer player) {
+        return playerGames.get(gamePlayers.indexOf(player)).getPlayer();
     }
 
 }

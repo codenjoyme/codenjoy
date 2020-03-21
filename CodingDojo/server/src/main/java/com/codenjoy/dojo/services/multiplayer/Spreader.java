@@ -160,4 +160,9 @@ public class Spreader {
         }
         return rooms.get(0).isStuffed();
     }
+
+    // for testing only
+    public Map<String, List<Room>> getRooms() {
+        return rooms;
+    }
 }

@@ -26,6 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Room {
+
     private GameField field;
     private int count;
     private int wasCount;

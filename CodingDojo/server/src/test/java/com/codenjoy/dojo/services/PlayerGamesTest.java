@@ -535,7 +535,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player2 = createPlayer("player2", type);
         Player player3 = createPlayer("player3", type);
 
-        assertR("{0=[player1, player2, player3]}");
+        assertRooms("{0=[player1, player2, player3]}");
 
         // when
         playerGames.remove(player1);
@@ -549,7 +549,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // then
         // created new field for player3
         assertEquals(2, fields.size());
-        assertR("{1=[player3]}");
+        assertRooms("{1=[player3]}");
 
         verify(fields.get(1), times(1)).newGame(gamePlayers.get(2));
     }
@@ -562,7 +562,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player2 = createPlayer("player2", type);
         Player player3 = createPlayer("player3", type);
 
-        assertR("{0=[player1, player2, player3]}");
+        assertRooms("{0=[player1, player2, player3]}");
 
         // when
         playerGames.removeCurrent(player1);
@@ -575,7 +575,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         assertEquals(1, fields.size());
-        assertR("{0=[player3]}");
+        assertRooms("{0=[player3]}");
     }
 
     @Test
@@ -585,7 +585,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player1 = createPlayer("player1", type);
         Player player2 = createPlayer("player2", type);
 
-        assertR("{0=[player1, player2]}");
+        assertRooms("{0=[player1, player2]}");
 
         // when
         Game game = playerGames.get(0).getGame();
@@ -594,7 +594,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // then
         // created new field for player3
         assertEquals(2, fields.size());
-        assertR("{1=[player1, player2]}");
+        assertRooms("{1=[player1, player2]}");
 
         verify(fields.get(1), times(1)).newGame(gamePlayers.get(1));
     }
@@ -606,7 +606,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player1 = createPlayer("player1", type);
         Player player2 = createPlayer("player2", type);
 
-        assertR("{0=[player1, player2]}");
+        assertRooms("{0=[player1, player2]}");
 
         // when
         PlayerGame playerGame = playerGames.get(0);
@@ -614,7 +614,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         assertEquals(2, fields.size());
-        assertR("{0=[player2], 1=[player1]}");
+        assertRooms("{0=[player2], 1=[player1]}");
     }
 
     @Test
@@ -627,7 +627,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player4 = createPlayer("player4", type);
         Player player5 = createPlayer("player5", type);
 
-        assertR("{0=[player1, player2, player3], " +
+        assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
 
         // when
@@ -653,7 +653,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player4 = createPlayer("player4", type);
         Player player5 = createPlayer("player5", type);
 
-        assertR("{0=[player1, player2, player3], " +
+        assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
 
         // when
@@ -661,7 +661,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         assertEquals(4, fields.size());
-        assertR("{1=[player1], " +
+        assertRooms("{1=[player1], " +
                 "2=[player2, player3, player4], " +
                 "3=[player5]}");
     }
@@ -677,7 +677,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player4 = createPlayer("player4", type);
         Player player5 = createPlayer("player5", type);
 
-        assertR("{0=[player1, player2, player3], " +
+        assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
 
         // when
@@ -685,7 +685,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         assertEquals(4, fields.size());
-        assertR("{1=[player1], " +
+        assertRooms("{1=[player1], " +
                 "2=[player2, player3, player4], " +
                 "3=[player5]}");
     }
@@ -1082,14 +1082,17 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player2", "room", "game", type);
         createPlayer("player3", "room", "game", type);
 
-        assertR("{0=[player1, player2, player3]}");
+        assertRooms("{0=[player1, player2, player3]}");
 
         // when
         playerGames.changeRoom("player1", "otherRoom");
 
         // then
-        assertR("{0=[player2, player3], " +
+        assertRooms("{0=[player2, player3], " +
                 "1=[player1]}");
+
+        assertRoomsNames("{otherRoom=[[player1]], " +
+                "room=[[player2, player3]]}");
     }
 
     @Test
@@ -1100,15 +1103,18 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player2", "room", "game", type);
         createPlayer("player3", "room", "game", type);
 
-        assertR("{0=[player1, player2, player3]}");
+        assertRooms("{0=[player1, player2, player3]}");
 
         // when
         playerGames.changeRoom("player1", "otherRoom");
         playerGames.changeRoom("player3", "otherRoom");
 
         // then
-        assertR("{1=[player1, player3], " +
+        assertRooms("{1=[player1, player3], " +
                 "2=[player2]}"); // второй покинул alone комнату и зашел в новую
+
+        assertRoomsNames("{otherRoom=[[player1, player3]], " +
+                "room=[[player2]]}");
     }
 
     @Test
@@ -1119,13 +1125,15 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player2", "room", "game", type);
         createPlayer("player3", "room", "game", type);
 
-        assertR("{0=[player1, player2, player3]}");
+        assertRooms("{0=[player1, player2, player3]}");
 
         // when
         playerGames.changeRoom("player1", null);
 
         // then
-        assertR("{0=[player1, player2, player3]}");
+        assertRooms("{0=[player1, player2, player3]}");
+
+        assertRoomsNames("{room=[[player1, player2, player3]]}");
     }
 
     @Test
@@ -1135,16 +1143,42 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player1", "room", "game", type, new PlayerSave("{\"some\":\"data1\"}"));
         createPlayer("player2", "room", "game", type, new PlayerSave("{\"some\":\"data2\"}"));
 
-        assertR("{0=[player1, player2]}");
+        assertRooms("{0=[player1, player2]}");
 
         // when
         playerGames.changeRoom("player1", "otherRoom");
 
         // then
-        assertR("{1=[player2], " +
+        assertRooms("{1=[player2], " +
                 "2=[player1]}");
 
         assertSave("player1", "{\"some\":\"data1\"}");
         assertSave("player2", "{\"some\":\"data2\"}");
+    }
+
+    @Test
+    public void testChangeRoom_caseTournament() {
+        // given
+        MultiplayerType type = MultiplayerType.TOURNAMENT;
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4]}");
+
+        assertRoomsNames("{room=[[player1, player2], [player3, player4]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player2", "otherRoom");
+
+        // then
+        assertRooms("{1=[player3, player4], " +
+                "3=[player1, player2]}");
+
+        assertRoomsNames("{otherRoom=[[player1, player2]], " +
+                "room=[[player3, player4]]}");
     }
 }
