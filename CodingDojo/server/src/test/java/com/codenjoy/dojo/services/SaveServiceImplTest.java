@@ -37,6 +37,7 @@ import org.mockito.stubbing.Answer;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -254,9 +255,9 @@ public class SaveServiceImplTest {
         when(fields.get(0).getSave()).thenReturn(new JSONObject("{'data':1}"));
         when(fields.get(1).getSave()).thenReturn(new JSONObject("{'data':2}"));
 
-        setupRegistration("activeSaved");
-        setupRegistration("active");
-        setupRegistration("saved");
+        createUser("activeSaved");
+        createUser("active");
+        createUser("saved");
 
         // when
         List<PlayerInfo> games = saveService.getSaves();
@@ -305,9 +306,13 @@ public class SaveServiceImplTest {
         assertTrue(saved.isSaved());
     }
 
-    private void setupRegistration(String id) {
-        when(registration.getNameById(id)).thenReturn("readable_" + id);
-        when(registration.getCodeById(id)).thenReturn("code_" + id);
+    private void createUser(String id) {
+        Optional<Registration.User> user = Optional.of(new Registration.User() {{
+            setCode("code_" + id);
+            setReadableName("readable_" + id);
+        }});
+
+        when(registration.getUserById(id)).thenReturn(user);
     }
 
     private void scores(Player player, Object score) {

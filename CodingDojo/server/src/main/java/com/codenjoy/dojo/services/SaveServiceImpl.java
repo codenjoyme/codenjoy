@@ -111,8 +111,7 @@ public class SaveServiceImpl implements SaveService {
         Map<String, PlayerInfo> map = new HashMap<>();
         for (Player player : players.getAll()) {
             PlayerInfo info = new PlayerInfo(player);
-            info.setCode(registration.getCodeById(player.getName()));
-            info.setReadableName(registration.getNameById(player.getName()));
+            setDataFromRegistration(info, player.getName());
             setSaveFromField(info, playerGames.get(player.getName()));
 
             map.put(player.getName(), info);
@@ -128,10 +127,9 @@ public class SaveServiceImpl implements SaveService {
                 info.setSaved(true);
             } else {
                 PlayerSave save = saver.loadGame(name);
-                // TODO оптимизнуть два запроса в один
-                String code = registration.getCodeById(name);
-                String readableName = registration.getNameById(name);
-                PlayerInfo info = new PlayerInfo(save, readableName, code);
+                PlayerInfo info = new PlayerInfo(save, null, null);
+                setDataFromRegistration(info, name);
+
                 map.put(name, info);
             }
         }
@@ -140,6 +138,14 @@ public class SaveServiceImpl implements SaveService {
         Collections.sort(result, Comparator.comparing(Player::getName));
 
         return result;
+    }
+
+    private void setDataFromRegistration(PlayerInfo info, String name) {
+        registration.getUserById(name)
+                .ifPresent((user) -> {
+                    info.setCode(user.getCode());
+                    info.setReadableName(user.getReadableName());
+                });
     }
 
     void setSaveFromField(PlayerInfo info, PlayerGame playerGame) {
