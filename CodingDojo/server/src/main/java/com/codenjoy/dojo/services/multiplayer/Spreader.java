@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
@@ -91,8 +93,9 @@ public class Spreader {
         GamePlayer player = game.getPlayer();
         List<Room> playerRooms = roomsFor(player);
 
+        // TODO вынести содержимое в room
         playerRooms.forEach(room -> {
-            List<GamePlayer> players = room.getPlayers();
+            List<GamePlayer> players = room.players();
             players.remove(player);
 
             if (players.size() == 1) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
@@ -161,8 +164,9 @@ public class Spreader {
         return rooms.get(0).isStuffed();
     }
 
-    // for testing only
-    public Map<String, List<Room>> getRooms() {
-        return rooms;
+    public <T> List<T> forEach(BiFunction<String, List<Room>, T> mapper) {
+        return rooms.entrySet().stream()
+                .map(e -> mapper.apply(e.getKey(), e.getValue()))
+                .collect(toList());
     }
 }

@@ -22,8 +22,13 @@ package com.codenjoy.dojo.services.multiplayer;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Player;
+
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toList;
 
 public class Room {
 
@@ -76,8 +81,13 @@ public class Room {
         return this.field.equals(field);
     }
 
-    public List<GamePlayer> getPlayers() {
-        return players;
+    public <T> List<T> players(Function<GamePlayer, T> mapper) {
+        return players.stream()
+                .map(mapper)
+                .collect(toList());
     }
 
+    List<GamePlayer> players() {
+        return players;
+    }
 }

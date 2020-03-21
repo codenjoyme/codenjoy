@@ -35,11 +35,6 @@ import org.json.JSONObject;
 import org.junit.Before;
 
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
@@ -185,70 +180,6 @@ public class AbstractPlayerGamesTest {
         assertEquals(expected, getRooms().toString());
     }
 
-    public Map<Integer, Collection<String>> getRooms3() {
-        return playerGames.stream()
-                .collect(TreeMultimap::<Integer, String>create,
-                        (map, playerGame) -> map
-                                .get(fields.indexOf(playerGame.getField()))
-                                .add(playerGame.getPlayer().getName()),
-                        TreeMultimap::putAll)
-                .asMap();
-    }
-
-    public Map<Integer, Collection<String>> getRooms4() {
-        return playerGames.stream()
-                .collect(toMultimap(
-                        pg -> fields.indexOf(pg.getField()),
-                        pg -> pg.getPlayer().getName()));
-    }
-
-    public Collector<PlayerGame, TreeMultimap, Map> toMultimap(
-            Function<PlayerGame, Integer> key,
-            Function<PlayerGame, String> value)
-    {
-        return new Collector<PlayerGame, TreeMultimap, Map>() {
-            @Override
-            public Supplier<TreeMultimap> supplier() {
-                return () -> TreeMultimap.create();
-            }
-
-            @Override
-            public BiConsumer<TreeMultimap, PlayerGame> accumulator() {
-                return (map, pg) -> map.get(key.apply(pg)).add(value.apply(pg));
-            }
-
-            @Override
-            public BinaryOperator<TreeMultimap> combiner() {
-                return null;
-            }
-
-            @Override
-            public Function<TreeMultimap, Map> finisher() {
-                return map -> map.asMap();
-            }
-
-            @Override
-            public Set<Characteristics> characteristics() {
-                return Collections.emptySet();
-            }
-        };
-    }
-
-    public Map<Integer, Collection<String>> getRooms2() {
-        Map<Integer, Collection<String>> result = new TreeMap<>();
-
-        for (PlayerGame playerGame : playerGames) {
-            int index = fields.indexOf(playerGame.getField());
-            String name = playerGame.getPlayer().getName();
-
-            if (!result.containsKey(index)) {
-                result.put(index, new LinkedList<>());
-            }
-            result.get(index).add(name);
-        }
-        return result;
-    }
-
     public Map<Integer, Collection<String>> getRooms() {
         TreeMultimap<Integer, String> result = TreeMultimap.create();
 
@@ -265,27 +196,27 @@ public class AbstractPlayerGamesTest {
         assertEquals(expected, getRoomNames().toString());
     }
 
-    // TODO порефакторить под настроение
     public Map<String, Collection<List<String>>> getRoomNames() {
-        return playerGames.getRooms().entrySet().stream()
-                .collect(HashMultimap::<String, List<String>>create,
-                        (map, entry) -> {
-                            List<Room> rooms = entry.getValue();
-                            List<List<String>> list = rooms.stream()
-                                    .map(room -> room.getPlayers().stream()
-                                                    .map(player -> getPlayer(player).getName())
-                                                    .collect(toList())
-                                    )
-                                    .collect(toList());
-                            map.get(entry.getKey())
-                                    .addAll(list);
-                        },
-                        HashMultimap::putAll)
-                .asMap();
+        HashMultimap<String, List<String>> result = HashMultimap.create();
+
+        playerGames.spreader().forEach(
+                (roomName, rooms) ->
+                        result.putAll(roomName, players(rooms))
+        );
+
+        return result.asMap();
     }
 
-    private Player getPlayer(GamePlayer player) {
-        return playerGames.get(gamePlayers.indexOf(player)).getPlayer();
+    private List<List<String>> players(List<Room> rooms) {
+        return rooms.stream()
+                .map(room -> room.players(this::name))
+                .collect(toList());
+    }
+
+    private String name(GamePlayer player) {
+        int index = gamePlayers.indexOf(player);
+        PlayerGame playerGame = playerGames.get(index);
+        return playerGame.getPlayer().getName();
     }
 
 }
