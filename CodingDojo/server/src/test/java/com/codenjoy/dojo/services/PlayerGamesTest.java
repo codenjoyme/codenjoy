@@ -767,11 +767,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
     @Test
     public void testLoadFromSave_whenNullPlayerSave() {
-        // given when
+        // given
         PlayerSave save = null;
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("player1", type, save);
+        // when
+        createPlayer("player1", MultiplayerType.SINGLE, save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -779,12 +779,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
     @Test
     public void testLoadFromSave_whenNullSaveInPlayerSave() {
-        // given when
-        String stringSave = null;
-        PlayerSave save = new PlayerSave(stringSave);
+        // given
+        String save = null;
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("player1", type, save);
+        // when
+        createPlayerFromSave("player1", save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -792,12 +791,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
     @Test
     public void testLoadFromSave_whenEmptyStringSaveInPlayerSave() {
-        // given when
-        String stringSave = "";
-        PlayerSave save = new PlayerSave(stringSave);
+        // given
+        String save = "";
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("player1", type, save);
+        // when
+        createPlayerFromSave("player1", save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -805,12 +803,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
     @Test
     public void testLoadFromSave_whenNullStringSaveInPlayerSave() {
-        // given when
-        String stringSave = "null";
-        PlayerSave save = new PlayerSave(stringSave);
+        // given
+        String save = null;
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("player1", type, save);
+        // when
+        createPlayerFromSave("player1", save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -818,12 +815,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
     @Test
     public void testLoadFromSave_whenEmptyJsonSaveInPlayerSave() {
-        // given when
-        String stringSave = "{}";
-        PlayerSave save = new PlayerSave(stringSave);
+        // given
+        String save = "{}";
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("player1", type, save);
+        // when
+        createPlayerFromSave("player1", save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -831,12 +827,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
     @Test
     public void testLoadFromSave_saveGoesToField() {
-        // given when
-        String stringSave = "{\"some\":\"data\"}";
-        PlayerSave save = new PlayerSave(stringSave);
+        // given
+        String save = "{\"some\":\"data\"}";
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("player1", type, save);
+        // when
+        createPlayerFromSave("player1", save);
 
         // then
         ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
@@ -847,16 +842,18 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void testLoadFromSave_saveGoesToField_anyLevelProgressWillRemove() {
         // given when
-        String stringSave = "{'levelProgress':{'total':3,'current':3,'lastPassed':2},'some':'data'}";
-        PlayerSave save = new PlayerSave(stringSave);
+        String save = "{'levelProgress':{'total':3,'current':3,'lastPassed':2},'some':'data'}";
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("player1", type, save);
+        createPlayerFromSave("player1", save);
 
         // then
         ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
         verify(fields.get(0)).loadSave(captor.capture());
         assertEquals("[{\"some\":\"data\"}]", captor.getAllValues().toString());
+    }
+
+    private Player createPlayerFromSave(String name, String save) {
+        return createPlayer(name, MultiplayerType.SINGLE, new PlayerSave(save));
     }
 
     @Test
@@ -870,8 +867,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(fields.get(0).getSave()).thenReturn(null);
 
         // when then
-        assertEquals("{\"levelProgress\":{\"total\":3,\"current\":3,\"lastPassed\":2}}",
-                playerGames.get("player").getGame().getSave().toString());
+        assertSave("player", "{\"levelProgress\":{\"total\":3,\"current\":3,\"lastPassed\":2}}");
     }
 
     @Test
@@ -885,9 +881,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(fields.get(0).getSave()).thenReturn(new JSONObject("{'some':'data'}"));
 
         // when then
-        assertEquals("{\"field\":{\"some\":\"data\"}," +
-                        "\"levelProgress\":{\"total\":3,\"current\":3,\"lastPassed\":2}}",
-                playerGames.get("player").getGame().getSave().toString());
+        assertSave("player", "{\"field\":{\"some\":\"data\"}," +
+                        "\"levelProgress\":{\"total\":3,\"current\":3,\"lastPassed\":2}}");
     }
 
     @Test
@@ -901,9 +896,12 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(fields.get(0).getSave()).thenReturn(new JSONObject("{'some':'data'}"));
 
         // when then
-        assertEquals("{\"some\":\"data\"}",
-                playerGames.get("player").getGame().getSave().toString());
+        assertSave("player", "{\"some\":\"data\"}");
 
+    }
+
+    private void assertSave(String playerName, String expected) {
+        assertEquals(expected, playerGames.get(playerName).getGame().getSave().toString());
     }
 
     @Test
@@ -917,8 +915,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(fields.get(0).getSave()).thenReturn(null);
 
         // when then
-        assertEquals("{}",
-                playerGames.get("player").getGame().getSave().toString());
+        assertSave("player", "{}");
 
     }
 
@@ -1095,4 +1092,77 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     }
 
 
+    @Test
+    public void testChangeRoom_oneLeftTwoRemained() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+
+        assertR("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+
+        // then
+        assertR("{0=[player2, player3], " +
+                "1=[player1]}");
+    }
+
+    @Test
+    public void testChangeRoom_twoLeftOneRemained() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+
+        assertR("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player3", "otherRoom");
+
+        // then
+        assertR("{1=[player1, player3], " +
+                "2=[player2]}"); // второй покинул alone комнату и зашел в новую
+    }
+
+    @Test
+    public void testChangeRoom_nullRoomDoNothing() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+
+        assertR("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.changeRoom("player1", null);
+
+        // then
+        assertR("{0=[player1, player2, player3]}");
+    }
+
+    @Test
+    public void testChangeRoom_keepSave() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type, new PlayerSave("{\"some\":\"data1\"}"));
+        createPlayer("player2", "room", "game", type, new PlayerSave("{\"some\":\"data2\"}"));
+
+        assertR("{0=[player1, player2]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+
+        // then
+        assertR("{1=[player2], " +
+                "2=[player1]}");
+
+        assertSave("player1", "{\"some\":\"data1\"}");
+        assertSave("player2", "{\"some\":\"data2\"}");
+    }
 }

@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 
 import java.util.*;
@@ -113,7 +115,10 @@ public class AbstractPlayerGamesTest {
         when(gamePlayers.get(index).shouldLeave()).thenReturn(!stillPlay);
     }
 
-    protected Player createPlayer(String name, String gameName, String roomName, MultiplayerType type, PlayerSave save, Object board) {
+    protected Player createPlayer(String name, String gameName,
+                                  String roomName, MultiplayerType type,
+                                  PlayerSave save, Object board)
+    {
         GameService gameService = mock(GameService.class);
         GameType gameType = mock(GameType.class);
         gameTypes.add(gameType);
@@ -138,6 +143,7 @@ public class AbstractPlayerGamesTest {
                         inv -> {
                             GameField field = mock(GameField.class);
                             when(field.reader()).thenReturn(mock(BoardReader.class));
+                            when(field.getSave()).thenReturn(getSaveJson(save));
                             fields.add(field);
                             return field;
                         },
@@ -150,6 +156,18 @@ public class AbstractPlayerGamesTest {
         gamePlayers.add(env.gamePlayer);
 
         return player;
+    }
+
+    private JSONObject getSaveJson(PlayerSave save) {
+        if (save == null || save.getSave() == null) {
+            return null;
+        }
+
+        try {
+            return new JSONObject(save.getSave());
+        } catch (JSONException e) {
+            return null;
+        }
     }
 
     public void assertR(String expected) {

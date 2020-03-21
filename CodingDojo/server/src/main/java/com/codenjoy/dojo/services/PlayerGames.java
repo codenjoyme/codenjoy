@@ -297,8 +297,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         ((Tickable)() -> runnable.run()).quietTick();
     }
 
-
-    public void clean() {
+    // for testing only
+    void clean() {
         new LinkedList<>(playerGames)
                 .forEach(pg -> remove(pg.getPlayer()));
     }
@@ -332,7 +332,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         reload(game, roomName, save);
     }
 
-    // TODO ROOM test me
     public void changeRoom(String playerName, String roomName) {
         if (roomName == null) {
             return;
