@@ -1,8 +1,13 @@
 language: java
 jdk:
         - oraclejdk9
+before_install:
+  - wget http://apache.mirror.gtcomm.net/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz
+  - tar xzvf apache-maven-3.6.0-bin.tar.gz
+  - export PATH=`pwd`/apache-maven-3.6.0/bin:$PATH
+  - mvn -v
 script:
-        - cd CodingDojo && ./server/mvnw clean install
+        - cd CodingDojo && mvn clean install
 cache:
   directories:
   - .autoconf
