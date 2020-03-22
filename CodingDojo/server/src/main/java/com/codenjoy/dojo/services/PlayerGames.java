@@ -42,7 +42,7 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
-    private List<PlayerGame> playerGames = new LinkedList<>();
+    private List<PlayerGame> all = new LinkedList<>();
 
     private Consumer<PlayerGame> onAdd;
     private Consumer<PlayerGame> onRemove;
@@ -78,9 +78,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private void remove(Player player, boolean reloadAlone) {
-        int index = playerGames.indexOf(player);
+        int index = all.indexOf(player);
         if (index == -1) return;
-        PlayerGame game = playerGames.remove(index);
+        PlayerGame game = all.remove(index);
 
         if (reloadAlone) {
             removeWithResetAlone(game.getGame());
@@ -97,14 +97,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public PlayerGame get(String playerName) {
-        return playerGames.stream()
+        return all.stream()
                 .filter(pg -> pg.getPlayer().getName().equals(playerName))
                 .findFirst()
                 .orElse(NullPlayerGame.INSTANCE);
     }
 
     public PlayerGame get(GamePlayer player) {
-        return playerGames.stream()
+        return all.stream()
                 .filter(pg -> pg.getGame().getPlayer().equals(player))
                 .findFirst()
                 .orElse(null);
@@ -138,26 +138,30 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public PlayerGame add(Player player, String roomName, PlayerSave save) {
         GameType gameType = player.getGameType();
 
-        GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
-                player.getName());
-
-        Single single = new Single(gamePlayer,
-                gameType.getPrinterFactory(),
-                gameType.getMultiplayerType());
-
-        play(single, roomName, gameType, parseSave(save));
+        Single single = buildSingle(player, gameType);
 
         Game game = new LockedGame(lock).wrap(single);
+
+        play(game, roomName, gameType, parseSave(save));
 
         PlayerGame playerGame = new PlayerGame(player, game, roomName);
         if (onAdd != null) {
             onAdd.accept(playerGame);
         }
-        playerGames.add(playerGame);
+        all.add(playerGame);
         return playerGame;
     }
 
-    JSONObject parseSave(PlayerSave save) {
+    private Single buildSingle(Player player, GameType gameType) {
+        GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
+                player.getName());
+
+        return new Single(gamePlayer,
+                gameType.getPrinterFactory(),
+                gameType.getMultiplayerType());
+    }
+
+    private JSONObject parseSave(PlayerSave save) {
         if (save == null || PlayerSave.isSaveNull(save.getSave())) {
             return new JSONObject();
         }
@@ -165,37 +169,35 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private List<PlayerGame> removeAndLeaveAlone(Game game) {
-        if (spreader.contains(game.getPlayer())) {
-            List<GamePlayer> alone = spreader.remove(game.getPlayer());
-            List<PlayerGame> result = alone.stream()
-                    .map(p -> get(p))
-                    .collect(toList());
-            while (result.contains(null)) { // TODO как-то странно так делать
-                result.remove(null);
-            }
-            return result;
-        } else {
+        if (!spreader.contains(game.getPlayer())) {
             return Arrays.asList();
         }
+
+        List<GamePlayer> alone = spreader.remove(game.getPlayer());
+
+        return alone.stream()
+                .map(p -> get(p))       // GamePlayer
+                .filter(p -> p != null) // PlayerGame
+                .collect(toList());
     }
 
     public boolean isEmpty() {
-        return playerGames.isEmpty();
+        return all.isEmpty();
     }
 
     @Override
     public Iterator<PlayerGame> iterator() {
-        return playerGames.iterator();
+        return all.iterator();
     }
 
     public List<Player> players() {
-        return playerGames.stream()
+        return all.stream()
                 .map(PlayerGame::getPlayer)
                 .collect(toList());
     }
 
     public int size() {
-        return playerGames.size();
+        return all.size();
     }
 
     public void clear() {
@@ -203,7 +205,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public List<PlayerGame> getAll(String gameType) {
-        return playerGames.stream()
+        return all.stream()
                 .filter(pg -> pg.getPlayer().getGameName().equals(gameType))
                 .collect(toList());
     }
@@ -211,7 +213,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public List<GameType> getGameTypes() {
         List<GameType> result = new LinkedList<>();
 
-        for (PlayerGame playerGame : playerGames) {
+        for (PlayerGame playerGame : all) {
             GameType gameType = playerGame.getGameType();
             if (!result.contains(gameType)) {
                 result.add(gameType);
@@ -224,12 +226,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     @Override
     public void tick() {
         // по всем джойстикам отправили сообщения играм
-        playerGames.forEach(PlayerGame::quietTick);
+        all.forEach(PlayerGame::quietTick);
 
         // если в TRAINING кто-то isWin то мы его относим на следующий уровень
         // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
         // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
-        for (PlayerGame playerGame : playerGames) {
+        for (PlayerGame playerGame : all) {
             Game game = playerGame.getGame();
             String roomName = playerGame.getRoomName();
             MultiplayerType multiplayerType = playerGame.getGameType().getMultiplayerType();
@@ -261,7 +263,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // независимо от типа игры нам нужно тикнуть все
         //      но только те, которые не DISPOSABLE и одновременно
         //      недокомплектованные пользователями
-        playerGames.stream()
+        all.stream()
                 .map(PlayerGame::getField)
                 .distinct()
                 .filter(this::isMatchCanBeStarted)
@@ -310,7 +312,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     // при этом если надо перемешиваем их
     public void reloadAll(boolean shuffle) {
         new LinkedList<PlayerGame>(){{
-            addAll(playerGames);
+            addAll(all);
             if (shuffle) {
                 Collections.shuffle(this);
             }
@@ -318,7 +320,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private PlayerGame getPlayerGame(Game game) {
-        return playerGames.stream()
+        return all.stream()
                 .filter(pg -> pg.equals(by(game)))
                 .findFirst()
                 .orElseThrow(IllegalStateException::new);
@@ -330,12 +332,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     // for testing only
     void clean() {
-        new LinkedList<>(playerGames)
+        new LinkedList<>(all)
                 .forEach(pg -> remove(pg.getPlayer()));
     }
 
     public List<Player> getPlayers(String gameName) {
-        return playerGames.stream()
+        return all.stream()
                 .map(playerGame -> playerGame.getPlayer())
                 .filter(player -> player.getGameName().equals(gameName))
                 .collect(toList());
@@ -376,15 +378,15 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public PlayerGame get(int index) {
-        return playerGames.get(index);
+        return all.get(index);
     }
 
     public List<PlayerGame> all() {
-        return playerGames;
+        return all;
     }
 
     public Stream<PlayerGame> stream() {
-        return playerGames.stream();
+        return all.stream();
     }
 
     public Multimap<String, Room> rooms() {
