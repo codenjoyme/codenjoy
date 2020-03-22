@@ -1,6 +1,6 @@
 language: java
 jdk:
-        - oraclejdk9
+        - oraclejdk10
 script:
         - cd CodingDojo && mvn clean install
 cache:
