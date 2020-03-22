@@ -33,8 +33,8 @@ namespace Bomberman.Api.Tests
         public void ShouldProvideWebSocketUrlFromServerAddress(string scheme)
         {
             // Arrange.
-            var serverUrl = $"{scheme}://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789";
-            var expectedWebSocketUrl = $"{scheme.Replace(Uri.UriSchemeHttp, "ws")}://codenjoy.com:80/codenjoy-contest/ws?user=3edq63tw0bq4w4iem7nb&code=1234567890123456789";
+            var serverUrl = $"{scheme}://unit-test/board/player/0000000001111?code=88888888888";
+            var expectedWebSocketUrl = serverUrl.Replace("http", "ws").Replace("board/player/", "ws?user=").Replace("?code=", "&code=");
 
             var solver = new TestSolver(serverUrl);
 

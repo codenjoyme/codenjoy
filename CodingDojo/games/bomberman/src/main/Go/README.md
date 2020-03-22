@@ -2,7 +2,7 @@
 Client for the bomberman game
 
 
-Check details at: https://dojorena.io/codenjoy-contest/resources/help/bomberman.html
+Check details at: https://codenjoy.com//codenjoy-contest/resources/help/bomberman.html
 
 To install this package run:
  > `go get github.com/dnahurnyi/bomberman`
@@ -20,7 +20,7 @@ import (
 )
 
 func main() {
-	browserURL := "https://dojorena.io/codenjoy-contest/board/player/{player-id}?code={code}&gameName=bomberman"
+	browserURL := "https://codenjoy.com//codenjoy-contest/board/player/{player-id}?code={code}&gameName=bomberman"
 	game, c := bomberman.StartGame(browserURL)
 
 	for {

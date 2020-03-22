@@ -35,7 +35,7 @@ namespace DemoTests
         [TestMethod]
         public void ShouldSomething()
         {
-            YourSolver d = new YourSolver("http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789");
+            YourSolver d = new YourSolver("any server");
             Board b = new Board("any board");
 
             string firstStep = d.Get(b);
