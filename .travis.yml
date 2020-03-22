@@ -7,3 +7,4 @@ cache:
   directories:
   - .autoconf
   - $HOME/.m2
+dist: trusty
