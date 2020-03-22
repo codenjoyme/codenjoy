@@ -75,8 +75,16 @@ public class SingleTest {
         }
     }
 
-    private void givenFl(String... boards) {
-        Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
+    void givenFl(String... boards) {
+        givenFl(viewSize(boards[0]), boards);
+    }
+
+    int viewSize(String board) {
+        return (int)Math.sqrt(board.length());
+    }
+
+    void givenFl(int viewSize, String... boards) {
+        Levels.VIEW_SIZE = viewSize;
         Deque<String> strings = new LinkedList<>(Arrays.asList(boards));
         String multiple = strings.removeLast();
         singles1 = createLevels(strings);
@@ -1771,7 +1779,7 @@ public class SingleTest {
         assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':1,'y':1}\n" +
+                "heroPosition: {'x':1,'y':3}\n" +
                 "\n" +
                 "╔═══┐\n" +
                 "║SE.│\n" +
@@ -1795,7 +1803,7 @@ public class SingleTest {
         assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':1,'y':1}\n" +
+                "heroPosition: {'x':1,'y':3}\n" +
                 "\n" +
                 "╔═══┐\n" +
                 "║SE.│\n" +
@@ -1863,7 +1871,7 @@ public class SingleTest {
         assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':1}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':2,'y':1}\n" +
+                "heroPosition: {'x':2,'y':3}\n" +
                 "\n" +
                 "╔═══┐\n" +
                 "║S..│\n" +
@@ -1932,13 +1940,14 @@ public class SingleTest {
                 "║..................│" +
                 "║.................E│" +
                 "└──────────────────┘";
-        givenFl(field, field);
+        givenFl(Levels.VIEW_SIZE_TESTING,
+                field, field);
 
         // when then
         assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':0,'y':0}\n" +
+                "offset: {'x':0,'y':4}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':1,'y':1}\n" +
+                "heroPosition: {'x':1,'y':14}\n" +
                 "\n" +
                 "╔═══════════════\n" +
                 "║S..............\n" +
@@ -1992,9 +2001,9 @@ public class SingleTest {
                 "----------------\n", single1);
 
         assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':0,'y':0}\n" +
+                "offset: {'x':0,'y':4}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':1,'y':1}\n" +
+                "heroPosition: {'x':1,'y':14}\n" +
                 "\n" +
                 "╔═══════════════\n" +
                 "║S..............\n" +
@@ -2057,9 +2066,9 @@ public class SingleTest {
 
         // then
         assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':4,'y':0}\n" +
+                "offset: {'x':4,'y':4}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':14,'y':1}\n" +
+                "heroPosition: {'x':14,'y':14}\n" +
                 "\n" +
                 "═══════════════┐\n" +
                 "...............│\n" +
@@ -2113,9 +2122,9 @@ public class SingleTest {
                 "----------------\n", single1);
 
         assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':0,'y':4}\n" +
+                "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':1,'y':14}\n" +
+                "heroPosition: {'x':1,'y':1}\n" +
                 "\n" +
                 "║....│  ║.......\n" +
                 "║..┌─┘  └─╗.....\n" +
@@ -2184,9 +2193,9 @@ public class SingleTest {
 
         // then
         assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':4,'y':0}\n" +
+                "offset: {'x':4,'y':4}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':4,'y':11}\n" +
+                "heroPosition: {'x':4,'y':4}\n" +
                 "\n" +
                 "═══════════════┐\n" +
                 "...............│\n" +
@@ -2240,9 +2249,9 @@ public class SingleTest {
                 "----------------\n", single1);
 
         assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':0,'y':4}\n" +
+                "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':11,'y':4}\n" +
+                "heroPosition: {'x':11,'y':11}\n" +
                 "\n" +
                 "║....│  ║.......\n" +
                 "║..┌─┘  └─╗.....\n" +
@@ -2304,9 +2313,9 @@ public class SingleTest {
 
         // then
         assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':3,'y':0}\n" +
+                "offset: {'x':3,'y':4}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':4,'y':11}\n" +
+                "heroPosition: {'x':4,'y':4}\n" +
                 "\n" +
                 "════════════════\n" +
                 "................\n" +
@@ -2360,9 +2369,9 @@ public class SingleTest {
                 "----------------\n", single1);
 
         assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':0,'y':3}\n" +
+                "offset: {'x':0,'y':1}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':11,'y':4}\n" +
+                "heroPosition: {'x':11,'y':11}\n" +
                 "\n" +
                 "║....┌──╗.......\n" +
                 "║....│  ║.......\n" +

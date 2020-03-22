@@ -25,6 +25,7 @@ package com.codenjoy.dojo.bomberman.client.simple;
 import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
 
+import java.nio.file.FileSystems;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,6 +36,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class RuleReaderTest extends AbstractRuleReaderTest {
+
+    public static final String SEP = FileSystems.getDefault().getSeparator();
 
     @Test
     public void shouldNoRules_whenEmptyFile() {
@@ -219,7 +222,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Direction 'RIGHT,,LEFT,DOWN' is not valid for pattern: '?????????' at directory\\main.rule:4]",
+        assertEquals("[[ERROR] Direction 'RIGHT,,LEFT,DOWN' is not valid for pattern: '?????????' at directory" + SEP + "main.rule:4]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());
@@ -237,7 +240,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Direction ',' is not valid for pattern: '?????????' at directory\\main.rule:4]",
+        assertEquals("[[ERROR] Direction ',' is not valid for pattern: '?????????' at directory" + SEP + "main.rule:4]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());
@@ -255,7 +258,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Direction 'UP, ' is not valid for pattern: '?????????' at directory\\main.rule:4]",
+        assertEquals("[[ERROR] Direction 'UP, ' is not valid for pattern: '?????????' at directory" + SEP + "main.rule:4]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());
@@ -274,7 +277,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Direction ' , UP' is not valid for pattern: '?????????' at directory\\main.rule:4]",
+        assertEquals("[[ERROR] Direction ' , UP' is not valid for pattern: '?????????' at directory" + SEP + "main.rule:4]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());
@@ -297,7 +300,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Directions is empty for pattern: '?????????' at directory\\main.rule:9]",
+        assertEquals("[[ERROR] Directions is empty for pattern: '?????????' at directory" + SEP + "main.rule:9]",
                 reader.errors().toString());
 
         assertEquals("[[????????? > [UP]]]", rules.toString());
@@ -316,7 +319,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Pattern is not valid: '????????' at directory\\main.rule:4]",
+        assertEquals("[[ERROR] Pattern is not valid: '????????' at directory" + SEP + "main.rule:4]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());
@@ -335,7 +338,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Direction ',DOWN,' is not valid for pattern: '?????????' at directory\\main.rule:4]",
+        assertEquals("[[ERROR] Direction ',DOWN,' is not valid for pattern: '?????????' at directory" + SEP + "main.rule:4]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());
@@ -508,7 +511,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Synonym is not valid: 'LET bad' at directory\\main.rule:1]",
+        assertEquals("[[ERROR] Synonym is not valid: 'LET bad' at directory" + SEP + "main.rule:1]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());
@@ -523,7 +526,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Synonym is not valid: 'LET bad=bad' at directory\\main.rule:1]",
+        assertEquals("[[ERROR] Synonym is not valid: 'LET bad=bad' at directory" + SEP + "main.rule:1]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());
@@ -538,7 +541,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Synonym is not valid: 'LET bad=bad=bad' at directory\\main.rule:1]",
+        assertEquals("[[ERROR] Synonym is not valid: 'LET bad=bad=bad' at directory" + SEP + "main.rule:1]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());
@@ -553,7 +556,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Synonym is not valid: 'LET b=' at directory\\main.rule:1]",
+        assertEquals("[[ERROR] Synonym is not valid: 'LET b=' at directory" + SEP + "main.rule:1]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());
@@ -568,7 +571,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Synonym is not valid: 'LET  b=c' at directory\\main.rule:1]",
+        assertEquals("[[ERROR] Synonym is not valid: 'LET  b=c' at directory" + SEP + "main.rule:1]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());
@@ -583,7 +586,7 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         reader.load(rules, file);
 
         // then
-        assertEquals("[[ERROR] Synonym is not valid: 'LET b=c' at directory\\main.rule:1]",
+        assertEquals("[[ERROR] Synonym is not valid: 'LET b=c' at directory" + SEP + "main.rule:1]",
                 reader.errors().toString());
 
         assertEquals("[]", rules.toString());

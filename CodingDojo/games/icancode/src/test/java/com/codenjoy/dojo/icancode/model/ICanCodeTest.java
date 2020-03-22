@@ -24,6 +24,7 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.services.Events;
+import com.codenjoy.dojo.icancode.services.Levels;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -2659,7 +2660,8 @@ public class ICanCodeTest extends AbstractGameTest {
     @Test
     public void shouldScrollingView() {
         //given
-        givenFl("╔══════════════════┐" +
+        givenFl(Levels.VIEW_SIZE_TESTING,
+                "╔══════════════════┐" +
                 "║S.................│" +
                 "║..................│" +
                 "║....┌──╗..........│" +
@@ -2873,7 +2875,8 @@ public class ICanCodeTest extends AbstractGameTest {
     @Test
     public void shouldStartOnCenter() {
         //given
-        givenFl("╔════════════════════════════════════┐" +
+        givenFl(Levels.VIEW_SIZE_TESTING,
+                "╔════════════════════════════════════┐" +
                 "║....................................│" +
                 "║....................................│" +
                 "║....................................│" +

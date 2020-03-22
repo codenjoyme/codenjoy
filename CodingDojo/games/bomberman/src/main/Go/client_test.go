@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
-	"os"
 	"strings"
 	"testing"
 
@@ -59,7 +58,6 @@ func Test_createURL(t *testing.T) {
 		browserUrl    string
 		expectedURL   url.URL
 		expectedError error
-		setEnv        func()
 	}
 
 	tests := []tstruct{
@@ -73,49 +71,26 @@ func Test_createURL(t *testing.T) {
 				RawQuery: fmt.Sprintf(gameQueryTemplate, "793wdxskw521spo4mn1y", "531459153668826800"),
 			},
 			expectedError: nil,
-			setEnv: func() {
-				// Don't set any variable
-			},
-		}, {
-			name:       "Success, get from env",
-			browserUrl: "",
-			expectedURL: url.URL{
-				Scheme:   gameProtocol,
-				Host:     "dojorena.io",
-				Path:     gamePath,
-				RawQuery: fmt.Sprintf(gameQueryTemplate, "793wdxskw521spo4mn1y", "531459153668826800"),
-			},
-			expectedError: nil,
-			setEnv: func() {
-				os.Setenv("HOST", "dojorena.io")
-				os.Setenv("PLAYER", "793wdxskw521spo4mn1y")
-				os.Setenv("CODE", "531459153668826800")
-			},
 		}, {
 			name:          "Invalid host",
 			browserUrl:    "dojorena.iocodenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&gameName=bomberman",
 			expectedURL:   url.URL{},
 			expectedError: errors.New("Invalid URL, can't get host name, url: " + "dojorena.iocodenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800&gameName=bomberman"),
-			setEnv:        func() {},
 		}, {
 			name:          "Invalid player ID",
 			browserUrl:    "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1ycode=531459153668826800&gameName=bomberman",
 			expectedURL:   url.URL{},
 			expectedError: errors.New("Invalid URL, can't get player ID, url: " + "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1ycode=531459153668826800&gameName=bomberman"),
-			setEnv:        func() {},
 		}, {
 			name:          "Invalid game code",
 			browserUrl:    "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800gameName=bomberman",
 			expectedURL:   url.URL{},
 			expectedError: errors.New("Invalid URL, can't get game code, url: " + "https://dojorena.io/codenjoy-contest/board/player/793wdxskw521spo4mn1y?code=531459153668826800gameName=bomberman"),
-			setEnv:        func() {},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			os.Clearenv()
-			tt.setEnv()
 			url, err := createURL(tt.browserUrl)
 			assert.Equal(t, tt.expectedURL, url)
 			assert.Equal(t, tt.expectedError, err)

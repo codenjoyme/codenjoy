@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Direction;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.nio.file.FileSystems;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,6 +37,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ProcessorTest extends AbstractRuleReaderTest {
+
+    public static final String SEP = FileSystems.getDefault().getSeparator();
 
     private Processor processor;
     private Board board;
@@ -49,7 +52,7 @@ public class ProcessorTest extends AbstractRuleReaderTest {
         errors = new LinkedList<>();
         board = mock(Board.class);
         
-        processor = new Processor("/", mock(Dice.class), this.errors::add) {
+        processor = new Processor("", mock(Dice.class), this.errors::add) {
             @Override
             protected RuleReader getReader() {
                 return reader;
@@ -118,7 +121,7 @@ public class ProcessorTest extends AbstractRuleReaderTest {
         // then
         assertEquals(Direction.STOP, direction);
 
-        assertEquals("[[ERROR] Pattern is not valid: '         BAD RULE' at \\\\main.rule:5]", errors.toString());
+        assertEquals("[[ERROR] Pattern is not valid: '         BAD RULE' at " + SEP + "main.rule:5]", errors.toString());
     }
 
     @Test
