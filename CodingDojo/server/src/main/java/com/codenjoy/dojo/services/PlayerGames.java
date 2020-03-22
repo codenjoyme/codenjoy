@@ -92,7 +92,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private void removeWithResetAlone(Game game) {
         List<PlayerGame> alone = removeAndLeaveAlone(game);
-        alone.forEach(gp -> spreader.play(gp.getGame(), gp.getRoomName(),
+        alone.forEach(gp -> play(gp.getGame(), gp.getRoomName(),
                 gp.getGameType(), gp.getGame().getSave()));
     }
 
@@ -110,6 +110,31 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 .orElse(null);
     }
 
+    private void play(Game game, String roomName, GameType gameType, JSONObject save) {
+        game.close();
+
+        MultiplayerType type = gameType.getMultiplayerType();
+        int roomSize = type.loadProgress(game, save);
+        LevelProgress progress = game.getProgress();
+        int levelNumber = progress.getCurrent();
+        GameField field = spreader.fieldFor(game.getPlayer(),
+                roomName,
+                type,
+                roomSize,
+                levelNumber,
+                () -> {
+                    game.getPlayer().setProgress(progress);
+                    return gameType.createGame(levelNumber);
+                });
+
+        game.on(field);
+
+        game.newGame();
+        if (save != null && !save.keySet().isEmpty()) {
+            game.loadSave(save);
+        }
+    }
+
     public PlayerGame add(Player player, String roomName, PlayerSave save) {
         GameType gameType = player.getGameType();
 
@@ -120,7 +145,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 gameType.getPrinterFactory(),
                 gameType.getMultiplayerType());
 
-        spreader.play(single, roomName, gameType, parseSave(save));
+        play(single, roomName, gameType, parseSave(save));
 
         Game game = new LockedGame(lock).wrap(single);
 
@@ -140,8 +165,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private List<PlayerGame> removeAndLeaveAlone(Game game) {
-        if (spreader.contains(game)) {
-            List<GamePlayer> alone = spreader.remove(game);
+        if (spreader.contains(game.getPlayer())) {
+            List<GamePlayer> alone = spreader.remove(game.getPlayer());
             List<PlayerGame> result = alone.stream()
                     .map(p -> get(p))
                     .collect(toList());
@@ -272,7 +297,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             removeWithResetAlone(game);
         }
 
-        spreader.play(game, roomName, gameType, save);
+        play(game, roomName, gameType, save);
     }
 
     // перевод текущего игрока в новую комнату

@@ -22,20 +22,15 @@ package com.codenjoy.dojo.services.multiplayer;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Player;
-
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
-
-import static java.util.stream.Collectors.toList;
 
 public class Room {
 
-    private GameField field;
-    private int count;
+    private final GameField field;
+    private final int count;
     private int wasCount;
-    private boolean disposable;
+    private final boolean disposable;
     private List<GamePlayer> players = new LinkedList<>();
 
     public Room(GameField field, int count, boolean disposable) {
@@ -44,7 +39,7 @@ public class Room {
         this.disposable = disposable;
     }
 
-    public GameField getField(GamePlayer player) {
+    public GameField join(GamePlayer player) {
         if (!players.contains(player)) {
             wasCount++;
             players.add(player);
@@ -60,6 +55,10 @@ public class Room {
         }
     }
 
+    public boolean isEmpty() {
+        return players.isEmpty();
+    }
+
     public boolean isStuffed() {
         if (disposable) {
             return wasCount == count;
@@ -69,16 +68,14 @@ public class Room {
     }
 
     public boolean contains(GamePlayer player) {
-        return players.stream()
-                .filter(p -> p.equals(player))
-                .count() != 0;
+        return players.contains(player);
     }
 
-    public boolean isFor(GameField field) {
-        if (this.field == null) { // TODO точно такое может быть?
-            return field == null;
+    public boolean isFor(GameField input) {
+        if (field == null) { // TODO точно такое может быть?
+            return input == null;
         }
-        return this.field.equals(field);
+        return field.equals(input);
     }
 
     public List<GamePlayer> players() {
