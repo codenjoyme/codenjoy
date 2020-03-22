@@ -30,8 +30,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
@@ -88,29 +86,23 @@ public class Spreader {
      * оставаться на борде не имеет смысла
      */
     public List<GamePlayer> remove(Game game) {
-        List<GamePlayer> removed = new LinkedList<>();
-
         GamePlayer player = game.getPlayer();
-        List<Room> playerRooms = roomsFor(player);
 
-        // TODO вынести содержимое в room
-        playerRooms.forEach(room -> {
-            List<GamePlayer> players = room.getPlayers();
-            players.remove(player);
+        List<Room> rooms = roomsFor(player);
 
-            if (players.size() == 1) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
-                GamePlayer lastPlayer = players.iterator().next();
-                if (!lastPlayer.wantToStay()) {
-                    removed.add(lastPlayer);
-                    players.remove(lastPlayer);
-                }
-            }
-            if (players.isEmpty()) {
-                rooms.values().forEach(it -> it.remove(room));
-            }
-        });
+        List<GamePlayer> removed = rooms.stream()
+                .flatMap(room -> room.remove(player).stream())
+                .collect(toList());
+
+        rooms.forEach(this::removeIfEmpty);
 
         return removed;
+    }
+
+    private void removeIfEmpty(Room room) {
+        if (room.players().isEmpty()) {
+            rooms.values().forEach(list -> list.remove(room));
+        }
     }
 
     private List<Room> roomsFor(GamePlayer player) {

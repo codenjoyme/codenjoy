@@ -81,8 +81,29 @@ public class Room {
         return this.field.equals(field);
     }
 
-    public List<GamePlayer> getPlayers() {
+    public List<GamePlayer> players() {
         return players;
+    }
+
+    /**
+     * @param player Игрок который закончил играть в этой room и будет удален
+     * @return Все игроки этой комнаты, которых так же надо пристроить в новой room,
+     *         т.к. им тут оставаться нет смысла
+     */
+    public List<GamePlayer> remove(GamePlayer player) {
+        List<GamePlayer> removed = new LinkedList<>();
+
+        players.remove(player);
+
+        if (players.size() == 1) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
+            GamePlayer last = players.iterator().next();
+            if (!last.wantToStay()) {
+                removed.add(last);
+                players.remove(last);
+            }
+        }
+
+        return removed;
     }
 
 }

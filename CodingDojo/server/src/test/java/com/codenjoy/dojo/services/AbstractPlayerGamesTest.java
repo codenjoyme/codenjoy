@@ -213,7 +213,7 @@ public class AbstractPlayerGamesTest {
     }
 
     private List<String> players(Room room) {
-        return map(room.getPlayers(), this::name);
+        return map(room.players(), this::name);
     }
 
     private <T, R> List<R> map(List<T> list, Function<T, R> function) {
