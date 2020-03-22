@@ -29,13 +29,13 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Room;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 
 import java.util.*;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
@@ -182,7 +182,7 @@ public class AbstractPlayerGamesTest {
     }
 
     public Map<Integer, Collection<String>> getRooms() {
-        TreeMultimap<Integer, String> result = TreeMultimap.create();
+        Multimap<Integer, String> result = TreeMultimap.create();
 
         for (PlayerGame playerGame : playerGames) {
             int index = fields.indexOf(playerGame.getField());
@@ -198,27 +198,17 @@ public class AbstractPlayerGamesTest {
     }
 
     public Map<String, Collection<List<String>>> getRoomNames() {
-        HashMultimap<String, List<String>> result = HashMultimap.create();
+        Multimap<String, List<String>> result = HashMultimap.create();
 
-        playerGames.getRooms().entrySet().forEach(
-                entry ->
-                        result.get(entry.getKey())
-                            .addAll(players(entry.getValue())));
+        playerGames.rooms().forEach(
+                (key, value) -> result.get(key).add(players(value)));
 
         return result.asMap();
     }
 
-    private List<List<String>> players(List<Room> rooms) {
-        return map(rooms, this::players);
-    }
-
     private List<String> players(Room room) {
-        return map(room.players(), this::name);
-    }
-
-    private <T, R> List<R> map(List<T> list, Function<T, R> function) {
-        return list.stream()
-                .map(function)
+        return room.players().stream()
+                .map(this::name)
                 .collect(toList());
     }
 

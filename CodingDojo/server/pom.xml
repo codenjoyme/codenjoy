@@ -24,10 +24,11 @@
              they are not in spring boot  -->
         <json.version>20180813</json.version>
         <commons-collections.version>4.4</commons-collections.version>
-        <reflections.version>0.9.11</reflections.version>
+        <reflections.version>0.9.12</reflections.version>
         <fest-reflect.version>1.4.1</fest-reflect.version>
         <selenium.version>2.53.1</selenium.version>
         <fest-assert.version>1.4</fest-assert.version>
+        <guava.version>28.2-jre</guava.version>
         <!-- end -->
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -702,6 +703,11 @@
         </dependency>
         <!-- JETTY ENDS -->
 
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>javax.mail-api</artifactId>

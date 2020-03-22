@@ -24,19 +24,19 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.GameType;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
 
 public class Spreader {
 
-    private Map<String, List<Room>> rooms = new HashMap<>();
+    private Multimap<String, Room> rooms = LinkedHashMultimap.create();
 
     public GameField getField(GamePlayer player, String roomName,
                               MultiplayerType type,
@@ -57,12 +57,11 @@ public class Spreader {
     }
 
     private void add(String roomName, Room room) {
-        List<Room> rooms = getRooms(roomName);
-        rooms.add(room);
+        rooms.get(roomName).add(room);
     }
 
     private Room findUnfilled(String roomName) {
-        List<Room> rooms = getRooms(roomName);
+        Collection<Room> rooms = rooms(roomName);
         if (rooms.isEmpty()) {
             return null;
         }
@@ -72,12 +71,8 @@ public class Spreader {
                 .orElse(null);
     }
 
-    private List<Room> getRooms(String roomName) {
-        List<Room> result = rooms.get(roomName);
-        if (result == null) {
-            rooms.put(roomName, result = new LinkedList<>());
-        }
-        return result;
+    private Collection<Room> rooms(String roomName) {
+        return rooms.get(roomName);
     }
 
     /**
@@ -100,9 +95,13 @@ public class Spreader {
     }
 
     private void removeIfEmpty(Room room) {
-        if (room.players().isEmpty()) {
-            rooms.values().forEach(list -> list.remove(room));
-        }
+        if (!room.players().isEmpty()) return;
+
+        rooms.entries().stream()
+                .filter(entry -> entry.getValue() == room)
+                .map(entry -> entry.getKey())
+                .distinct()
+                .forEach(key -> rooms.remove(key, room));
     }
 
     private List<Room> roomsFor(GamePlayer player) {
@@ -111,10 +110,8 @@ public class Spreader {
                     .collect(toList());
     }
 
-    private List<Room> allRooms() {
-        return rooms.values().stream()
-                .flatMap(List::stream)
-                .collect(toList());
+    private Collection<Room> allRooms() {
+        return rooms.values();
     }
     
     public void play(Game game, String roomName, GameType gameType, JSONObject save) {
@@ -156,8 +153,7 @@ public class Spreader {
         return rooms.get(0).isStuffed();
     }
 
-    // for testing only
-    public Map<String, List<Room>> getRooms() {
+    public Multimap<String, Room> rooms() {
         return rooms;
     }
 }

@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.google.common.collect.Multimap;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -361,9 +362,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return playerGames.stream();
     }
 
-    // for testing only
-    Map<String, List<Room>> getRooms() {
-        return spreader.getRooms();
+    public Multimap<String, Room> rooms() {
+        return spreader.rooms();
     }
 
 }
