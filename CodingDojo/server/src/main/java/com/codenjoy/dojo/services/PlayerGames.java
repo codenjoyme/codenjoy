@@ -361,8 +361,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return playerGames.stream();
     }
 
-    public Spreader spreader() {
-        return spreader;
+    // for testing only
+    Map<String, List<Room>> getRooms() {
+        return spreader.getRooms();
     }
 
 }

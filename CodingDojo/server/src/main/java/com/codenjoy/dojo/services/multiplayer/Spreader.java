@@ -95,7 +95,7 @@ public class Spreader {
 
         // TODO вынести содержимое в room
         playerRooms.forEach(room -> {
-            List<GamePlayer> players = room.players();
+            List<GamePlayer> players = room.getPlayers();
             players.remove(player);
 
             if (players.size() == 1) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
@@ -164,9 +164,8 @@ public class Spreader {
         return rooms.get(0).isStuffed();
     }
 
-    public <T> List<T> forEach(BiFunction<String, List<Room>, T> mapper) {
-        return rooms.entrySet().stream()
-                .map(e -> mapper.apply(e.getKey(), e.getValue()))
-                .collect(toList());
+    // for testing only
+    public Map<String, List<Room>> getRooms() {
+        return rooms;
     }
 }

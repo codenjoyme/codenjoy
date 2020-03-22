@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import org.junit.Before;
 
 import java.util.*;
+import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
@@ -199,24 +200,30 @@ public class AbstractPlayerGamesTest {
     public Map<String, Collection<List<String>>> getRoomNames() {
         HashMultimap<String, List<String>> result = HashMultimap.create();
 
-        playerGames.spreader().forEach(
-                (roomName, rooms) ->
-                        result.putAll(roomName, players(rooms))
-        );
+        playerGames.getRooms().entrySet().forEach(
+                entry ->
+                        result.get(entry.getKey())
+                            .addAll(players(entry.getValue())));
 
         return result.asMap();
     }
 
     private List<List<String>> players(List<Room> rooms) {
-        return rooms.stream()
-                .map(room -> room.players(this::name))
+        return map(rooms, this::players);
+    }
+
+    private List<String> players(Room room) {
+        return map(room.getPlayers(), this::name);
+    }
+
+    private <T, R> List<R> map(List<T> list, Function<T, R> function) {
+        return list.stream()
+                .map(function)
                 .collect(toList());
     }
 
     private String name(GamePlayer player) {
-        int index = gamePlayers.indexOf(player);
-        PlayerGame playerGame = playerGames.get(index);
-        return playerGame.getPlayer().getName();
+        return playerGames.get(gamePlayers.indexOf(player)).getPlayer().getName();
     }
 
 }

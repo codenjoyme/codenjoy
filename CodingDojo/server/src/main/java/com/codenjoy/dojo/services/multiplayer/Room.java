@@ -81,13 +81,8 @@ public class Room {
         return this.field.equals(field);
     }
 
-    public <T> List<T> players(Function<GamePlayer, T> mapper) {
-        return players.stream()
-                .map(mapper)
-                .collect(toList());
-    }
-
-    List<GamePlayer> players() {
+    public List<GamePlayer> getPlayers() {
         return players;
     }
+
 }
