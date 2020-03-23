@@ -31,6 +31,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.stream.Stream;
+
 @Component
 @RequiredArgsConstructor
 public class DebugService extends Suspendable {
@@ -49,11 +51,15 @@ public class DebugService extends Suspendable {
 
     @Override
     public boolean isWorking() {
-        return appProperties.getLogging().stream()
-                .map(LoggerFactory::getLogger)
-                .map(Logger.class::cast)
+        return loggers()
                 .map(Logger::getLevel)
                 .anyMatch(Level.DEBUG::equals);
+    }
+
+    private Stream<Logger> loggers() {
+        return appProperties.getLogging().stream()
+                .map(LoggerFactory::getLogger)
+                .map(Logger.class::cast);
     }
 
     @Override
@@ -62,9 +68,6 @@ public class DebugService extends Suspendable {
     }
 
     private void changePackageLoggingLevels(Level level) {
-        appProperties.getLogging().stream()
-                .map(LoggerFactory::getLogger)
-                .map(Logger.class::cast)
-                .forEach(logger -> logger.setLevel(level));
+        loggers().forEach(logger -> logger.setLevel(level));
     }
 }
