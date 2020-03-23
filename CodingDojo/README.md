@@ -71,6 +71,11 @@ To run a project with your game, do the following:
       * `trace` for enable log.debug
       * `debug` if you want to debug js files (otherwise it will compress and obfuscate)
       * `yourgame` if you added your custom configuration to the game inside `CodingDojo\games\yourgame\src\main\resources\application-yourgame.yml`
+- another way to run game from war
+  * build war file `mvn clean package -DskipTests=true -DallGames` in the `\CodingDojo\server` project to build server with all games
+  * build war file `mvn clean package -DskipTests=true -Pyourgame` in the `\CodingDojo\server` project to build server with (one or) several games
+    * `yourgame` can be a CSV list `yourgame1,yourgame2` 
+  * run war like jar file `java -jar codenjoy-contest.war --spring.profiles.active=sqlite,debug,yourgame` in the `\CodingDojo\server\target`              
 - after that in the browser access [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) and register the player
 - you can read a description of any game on the help page [http://127.0.0.1:8080/codenjoy-contest/help](http://127.0.0.1:8080/codenjoy-contest/help)
 - in case of any problems, please email [apofig@gmail.com](mailto:apofig@gmail.com) or chat to [Skype Oleksandr Baglai](skype:alexander.baglay)
