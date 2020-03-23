@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.controller;
  */
 
 import com.codenjoy.dojo.services.ErrorTicketService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -39,21 +40,47 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 @RequestMapping(ErrorController.URI)
-public class ErrorController {
+public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
 
     public static final String URI = "/error";
+    public static final String JAVAX_SERVLET_ERROR_MESSAGE = "javax.servlet.error.message";
+    public static final String JAVAX_SERVLET_ERROR_EXCEPTION = "javax.servlet.error.exception";
 
-    @Autowired 
+    @Autowired
     private ErrorTicketService ticket;
 
+    @RequestMapping()
+    public String error(HttpServletRequest req, ModelMap model) {
+        Exception throwable = (Exception)req.getAttribute(JAVAX_SERVLET_ERROR_EXCEPTION);
+        if (throwable != null) {
+            return error(throwable, req, model);
+        }
+
+        String message = (String) req.getAttribute(JAVAX_SERVLET_ERROR_MESSAGE);
+        if (!StringUtils.isEmpty(message)) {
+            return error(message, req, model);
+        }
+
+        return error("Something wrong", req, model);
+    }
+
     @GetMapping(params = "message")
-    public String error(HttpServletRequest req, ModelMap model, @RequestParam("message") String message) {
+    public String error(@RequestParam("message") String message, HttpServletRequest req, ModelMap model) {
+        IllegalAccessException exception = new IllegalAccessException(message);
+        return error(exception, req, model);
+    }
+
+    private String error(Exception exception, HttpServletRequest req, ModelMap model) {
         String url = req.getRequestURL().toString();
 
-        ModelAndView view = ticket.get(url, new IllegalAccessException(message));
-        view.addObject("message", message);
+        ModelAndView view = ticket.get(url, exception);
         model.mergeAttributes(view.getModel());
 
         return view.getViewName();
+    }
+
+    @Override
+    public String getErrorPath() {
+        return URI;
     }
 }
