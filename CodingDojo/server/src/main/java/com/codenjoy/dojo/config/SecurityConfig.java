@@ -88,7 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             // all players board
             BoardController.URI + "/game/**",
-            "/rest/player/null/null/wantsToPlay/**",
+            "/rest/player/null/null/wantsToPlay/**", // TODO а тут точно null/null
             "/screen-ws/**",
     };
 
