@@ -24,7 +24,7 @@
              they are not in spring boot  -->
         <json.version>20180813</json.version>
         <commons-collections.version>4.4</commons-collections.version>
-        <reflections.version>0.9.12</reflections.version>
+        <reflections.version>0.9.11</reflections.version>
         <fest-reflect.version>1.4.1</fest-reflect.version>
         <selenium.version>2.53.1</selenium.version>
         <fest-assert.version>1.4</fest-assert.version>
@@ -737,6 +737,17 @@
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>${reflections.version}</version>
+            <!--
+                0.9.12 версия не содержит уже guava но не работает как 0.9.11,
+                которая содержит guava не той версии, что  мы используем в проекте,
+                а потому тут guava исключаем
+             -->
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.easytesting</groupId>
