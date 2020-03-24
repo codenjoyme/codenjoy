@@ -66,7 +66,7 @@ public class NullGameType implements GameType {
 
     @Override
     public String name() {
-        throw exception();
+        return getClass().getSimpleName();
     }
 
     @Override
