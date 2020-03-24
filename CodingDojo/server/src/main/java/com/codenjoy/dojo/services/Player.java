@@ -58,6 +58,7 @@ public class Player implements ScreenRecipient, Closeable {
     private String password;
     private String passwordConfirmation;
     private PlayerScores scores;
+    private Object score;
     private Information info;
     private GameType gameType;
     private InformationCollector eventListener;
@@ -117,40 +118,13 @@ public class Player implements ScreenRecipient, Closeable {
     }
 
     public Object getScore() {
-        return (scores != null) ? scores.getScore() : null;
+        return (scores != null) ? scores.getScore() : score;
     }
 
-    // TODO this method is only for admin save player score
     public void setScore(Object score) {
-        initScores();
-        scores.update(score);
-    }
-
-    void initScores() {
-        if (scores == null) {
-            scores = new PlayerScores() {
-                int score;
-
-                @Override
-                public Object getScore() {
-                    return score;
-                }
-
-                @Override
-                public int clear() {
-                    return score = 0;
-                }
-
-                @Override
-                public void update(Object score) {
-                    this.score = Integer.valueOf(score.toString());
-                }
-
-                @Override
-                public void event(Object event) {
-
-                }
-            };
+        this.score = score;
+        if (scores != null) {
+            scores.update(score);
         }
     }
 

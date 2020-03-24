@@ -22,34 +22,36 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class PlayerInfo extends Player {
 
     private boolean saved;
     private boolean active;
     private boolean hidden;
-    private boolean hasAI;
+    private boolean aiPlayer;
 
-    public PlayerInfo() {
-        initScores();
-    }
-
-    public PlayerInfo(String name, String readableName, String code, String url, String roomName, String gameName, Object score, boolean saved) {
+    private PlayerInfo(String name, String readableName, String code, String url, String roomName, String gameName, Object scoreValue, boolean saved) {
         setName(name);
         setReadableName(readableName);
         setCode(code);
         setCallbackUrl(url);
         setGameName(gameName);
         setRoomName(roomName);
-        setScore(score);
+        setScore(scoreValue);
         this.saved = saved;
-        this.active = false;
-        this.hidden = false;
+        active = false;
+        hidden = false;
     }
 
     public PlayerInfo(Player player) {
         this(player.getName(), player.getCode(), player.getCallbackUrl(), player.getGameName());
-        setAIPlayer(player.hasAI());
+        aiPlayer = player.hasAI();
         setScore(player.getScore());
         setRoomName(player.getRoomName());
     }
@@ -59,8 +61,8 @@ public class PlayerInfo extends Player {
         setCode(code);
         setCallbackUrl(url);
         setGameName(gameName);
-        this.saved = false;
-        this.active = true;
+        saved = false;
+        active = true;
     }
 
     public PlayerInfo(PlayerSave save, String readableName, String code) {
@@ -69,35 +71,4 @@ public class PlayerInfo extends Player {
                 save.getGameName(), save.getScore(), true);
     }
 
-    public boolean isSaved() {
-        return saved;
-    }
-
-    public void setSaved(boolean saved) {
-        this.saved = saved;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public boolean isHidden() {
-        return hidden;
-    }
-
-    public void setHidden(boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    public boolean isAiPlayer() {
-        return hasAI;
-    }
-
-    public void setAIPlayer(boolean hasAI) {
-        this.hasAI = hasAI;
-    }
 }
