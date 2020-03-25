@@ -26,6 +26,7 @@ from math import sqrt
 from point import Point
 from element import Element
 
+
 class Board:
     """ Class describes the Board field for Bomberman game."""
     def __init__(self, board_string):
@@ -88,7 +89,7 @@ class Board:
         points.update(self.get_meat_choppers())
         points.update(self.get_other_bombermans())
         return list(points)
-        
+
     def get_walls(self):
         """ Retuns the list of walls Element Points."""
         return self._find_all(Element('WALL'))
@@ -96,7 +97,7 @@ class Board:
     def get_destroy_walls(self):
         """ """
         return  self._find_all(Element('DESTROY_WALL'))
-        
+
     def get_bombs(self):
         """ Returns the list of bombs points."""
         points = set()
@@ -125,7 +126,7 @@ class Board:
                                                      (_bx, _by - 1))])
         return ([_pt for _pt in _points if not (_pt.is_bad(self._size) or
                                                 _pt in self.get_walls())])
-        
+
     def is_near(self, x, y, elem):
         _is_near = False
         if not Point(x, y).is_bad(self._size):
