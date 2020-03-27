@@ -70,6 +70,6 @@ public class PlayerDetailInfo {
     }
 
     public PlayerSave buildPlayerSave() {
-        return PlayerSave.get(name, callbackUrl, roomName, gameType, Integer.valueOf(score), save);
+        return new PlayerSave(name, callbackUrl, roomName, gameType, Integer.valueOf(score), save);
     }
 }

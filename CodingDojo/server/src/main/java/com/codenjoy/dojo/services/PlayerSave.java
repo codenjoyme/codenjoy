@@ -33,16 +33,12 @@ public class PlayerSave {
 
     public static final PlayerSave NULL = new PlayerSave(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, 0, StringUtils.EMPTY);
 
-    private Object score;
-    private String callbackUrl;
-    private String gameName;
-    private String roomName;
     private String name;
+    private String callbackUrl;
+    private String roomName;
+    private String gameName;
+    private Object score;
     private String save;
-
-    public static PlayerSave get(String name, String callbackUrl, String roomName, String gameName, Object score, String save) {
-        return new PlayerSave(name, callbackUrl, roomName, gameName, score, save);
-    }
 
     public PlayerSave(String save) {
         this.save = save;
@@ -56,7 +52,7 @@ public class PlayerSave {
         this.score = score;
         this.save = save;
     }
-    
+
     public PlayerSave(Player save) {
         this.name = save.getName();
         this.gameName = save.getGameName();
