@@ -22,13 +22,13 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import lombok.experimental.UtilityClass;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-/**
- * Created by indigo on 04.08.2016.
- */
+@UtilityClass
 public class VersionReader {
 
     public static final String NO_VERSION = "no version";
