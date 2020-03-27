@@ -73,8 +73,8 @@ public class ActionLoggerTest {
 
         act();
 
-        assertEquals("[BoardLog{playerName='player1', time='123456789', board='board1', command='[]', gameType='game1', score=123}, " +
-                "BoardLog{playerName='player2', time='123456789', board='board2', command='[]', gameType='game2', score=234}]", logger.getAll().toString());
+        assertEquals("[BoardLog(time=123456789, playerName=player1, gameType=game1, score=123, board=board1, command=[]), " +
+                "BoardLog(time=123456789, playerName=player2, gameType=game2, score=234, board=board2, command=[])]", logger.getAll().toString());
     }
 
     @Test
