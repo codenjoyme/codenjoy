@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.google.common.collect.Multimap;
+import lombok.experimental.FieldNameConstants;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +41,7 @@ import static com.codenjoy.dojo.services.PlayerGame.by;
 import static java.util.stream.Collectors.toList;
 
 @Component
+@FieldNameConstants
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private List<PlayerGame> all = new LinkedList<>();

@@ -749,7 +749,7 @@ public class PlayerServiceImplTest {
     }
 
     private List<PlayerGame> getPlayerGames() {
-        return field("all").ofType(List.class).in(playerGames).get();
+        return field(PlayerGames.Fields.all).ofType(List.class).in(playerGames).get();
     }
 
     @Test
@@ -811,7 +811,7 @@ public class PlayerServiceImplTest {
 
         setup(game1);
 
-        List list = Reflection.field("all").ofType(List.class).in(playerGames).get();
+        List list = Reflection.field(PlayerGames.Fields.all).ofType(List.class).in(playerGames).get();
         PlayerGame playerGame = (PlayerGame)list.remove(0);
         PlayerGame spy = spy(playerGame);
         list.add(spy);
