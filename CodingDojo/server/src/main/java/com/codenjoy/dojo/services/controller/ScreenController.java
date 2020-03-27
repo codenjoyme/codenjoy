@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -38,6 +39,7 @@ public class ScreenController implements Controller<Map<ScreenRecipient, ScreenD
 
     private final PlayerTransport transport;
 
+    // autowiring by name
     public ScreenController(PlayerTransport screenPlayerTransport) {
         this.transport = screenPlayerTransport;
     }
