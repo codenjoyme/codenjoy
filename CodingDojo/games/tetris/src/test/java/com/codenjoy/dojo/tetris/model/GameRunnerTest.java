@@ -43,6 +43,7 @@
 // * Date: 17.12.13
 // * Time: 4:47
 // */
+// TODO доделать этот тест
 //public class TetrisRunnerTest {
 //
 //    private Hero hero;
