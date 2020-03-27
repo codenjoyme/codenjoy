@@ -37,7 +37,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-public class NullGameType implements GameType {
+public final class NullGameType implements GameType {
 
     public static final GameType INSTANCE = new NullGameType();
 

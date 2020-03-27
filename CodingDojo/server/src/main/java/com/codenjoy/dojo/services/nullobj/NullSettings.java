@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.settings;
+package com.codenjoy.dojo.services.nullobj;
 
 /*-
  * #%L
@@ -23,10 +23,13 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+
 import java.util.LinkedList;
 import java.util.List;
 
-public class NullSettings implements Settings {
+public final class NullSettings implements Settings {
 
     public static final Settings INSTANCE = new NullSettings();
 

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.settings;
+package com.codenjoy.dojo.services.nullobj;
 
 /*-
  * #%L
@@ -23,13 +23,14 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-public class NullParameter<T> implements Parameter<T> {
+public final class NullParameter<T> implements Parameter<T> {
 
     public static final Parameter INSTANCE = new NullParameter();
 
