@@ -87,7 +87,7 @@ public class SaveServiceImplTest {
         when(player.getData()).thenReturn("data for " + name);
         when(player.getGameName()).thenReturn(name + " game");
         when(player.getRoomName()).thenReturn("room");
-        when(player.hasAI()).thenReturn(true);
+        when(player.hasAi()).thenReturn(true);
         when(player.getCallbackUrl()).thenReturn("http://" + name + ":1234");
         when(player.getEventListener()).thenReturn(mock(InformationCollector.class));
         when(playerService.get(name)).thenReturn(player);

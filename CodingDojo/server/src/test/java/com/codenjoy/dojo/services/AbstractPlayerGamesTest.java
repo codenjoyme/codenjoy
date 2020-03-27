@@ -138,7 +138,7 @@ public class AbstractPlayerGamesTest {
         player.setEventListener(mock(InformationCollector.class));
         Closeable ai = mock(Closeable.class);
         ais.put(player, ai);
-        player.setAI(ai);
+        player.setAi(ai);
 
         playerGames.onAdd(pg -> lazyJoysticks.add(pg.getJoystick()));
 

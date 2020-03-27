@@ -51,7 +51,7 @@ public class PlayerInfo extends Player {
 
     public PlayerInfo(Player player) {
         this(player.getName(), player.getCode(), player.getCallbackUrl(), player.getGameName());
-        aiPlayer = player.hasAI();
+        aiPlayer = player.hasAi();
         setScore(player.getScore());
         setRoomName(player.getRoomName());
         setReadableName(player.getReadableName());

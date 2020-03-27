@@ -140,7 +140,7 @@ public class Player implements ScreenRecipient, Closeable {
         }
     }
 
-    public boolean hasAI() {
+    public boolean hasAi() {
         return ai != null;
     }
 

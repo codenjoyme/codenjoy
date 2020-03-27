@@ -80,7 +80,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected Semifinal semifinal;
 
     @Value("${game.ai}")
-    protected boolean isAINeeded;
+    protected boolean isAiNeeded;
 
     @PostConstruct
     public void init() {
@@ -141,7 +141,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void registerAIIfNeeded(String forPlayer, String roomName, String gameName) {
         if (isAI(forPlayer)) return;
-        if (!isAINeeded) return;
+        if (!isAiNeeded) return;
 
         GameType gameType = gameService.getGame(gameName);
 
@@ -163,7 +163,7 @@ public class PlayerServiceImpl implements PlayerService {
                 gerCodeForAI(playerName) :
                 registration.getCodeById(playerName);
 
-        setupPlayerAI(() -> getPlayer(PlayerSave.get(playerName,
+        setupPlayerAI(() -> getPlayer(new PlayerSave(playerName,
                             "127.0.0.1", roomName, gameType.name(), // TODO ROOM тут надо roomname 
                             0, null), gameType),
                 playerName, code, gameType);
@@ -174,7 +174,7 @@ public class PlayerServiceImpl implements PlayerService {
         if (ai != null) {
             Player player = getPlayer.get();
             player.setReadableName(StringUtils.capitalize(gameType.name()) + " SuperAI");
-            player.setAI(ai);
+            player.setAi(ai);
         }
     }
 

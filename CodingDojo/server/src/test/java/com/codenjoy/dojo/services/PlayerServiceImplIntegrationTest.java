@@ -98,7 +98,7 @@ public class PlayerServiceImplIntegrationTest {
                 PlayerServiceImplIntegrationTest.this.semifinal
                         = this.semifinal = mock(Semifinal.class);
 
-                this.isAINeeded = true;
+                this.isAiNeeded = true;
             }
 
             @Override

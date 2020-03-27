@@ -125,7 +125,7 @@ public class AdminController {
     @GetMapping(params = "reloadAllAI")
     public String reloadAllAI(Model model, HttpServletRequest request) {
         playerService.getAll()
-                .stream().filter(not(Player::hasAI))
+                .stream().filter(not(Player::hasAi))
                 .map(Player::getName)
                 .forEach(playerService::reloadAI);
 
