@@ -26,6 +26,7 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.dao.Registration;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,13 +60,6 @@ import static org.mockito.Mockito.when;
 })
 public class RegistrationValidatorTest {
 
-    private final static Player PLAYER = new Player()
-            .setEmail("someuser@sample.org")
-            .setReadableName("Readable Name")
-            .setPassword("12345")
-            .setPasswordConfirmation("12345")
-            .setGameName("dummy");
-
     @Autowired
     private RegistrationValidator validator;
 
@@ -75,76 +69,118 @@ public class RegistrationValidatorTest {
     @SpyBean
     private Validator commonValidator;
 
+    private Player player;
+    private Errors errors;
+
+    @Before
+    public void setUp() {
+        errors = makeErrors();
+        player = new Player(){{
+            setEmail("someuser@sample.org");
+            setReadableName("Readable Name");
+            setPassword("12345");
+            setPasswordConfirmation("12345");
+            setGameName("dummy");
+        }};
+    }
+
     @Test
     public void shouldPassValidUser() {
-        Errors errors = makeErrors();
-        validator.validate(PLAYER, errors);
+        // when
+        validator.validate(player, errors);
 
+        // then
         assertTrue("Valid player binding result must contain no errors", !errors.hasErrors());
     }
 
     @Test
     public void shouldValidateNicknameStructure() {
-        String readableName = "Unreadablename";
-        Errors errors = makeErrors();
+        // given
+        player.setReadableName("Unreadablename");
 
-        validator.validate(PLAYER.withReadableName(readableName), errors);
+        // when
+        validator.validate(player, errors);
+        
+        // then
         assertError(errors, "readableName", "registration.nickname.invalid");
     }
 
     @Test
     public void shouldValidateUsernameUniqueness() {
+        // given
         String nonUniqueName = "Nonunique Name";
         when(registration.nameIsUsed(nonUniqueName)).thenReturn(true);
-        Errors errors = makeErrors();
+        player.setReadableName(nonUniqueName);
 
-        validator.validate(PLAYER.withReadableName(nonUniqueName), errors);
+        // when
+        validator.validate(player, errors);
+        
+        // then
         assertError(errors,"readableName", "registration.nickname.alreadyUsed");
     }
 
     @Test
     public void shouldValidateEmailUniqueness() {
+        // given
         String nonUniqueEmail = "duplicate@sample.org";
         when(registration.emailIsUsed(nonUniqueEmail)).thenReturn(true);
-        Errors errors = makeErrors();
+        player.setEmail(nonUniqueEmail);
 
-        validator.validate(PLAYER.withEmail(nonUniqueEmail), errors);
+        // when
+        validator.validate(player, errors);
+        
+        // then
         assertError(errors, "email", "registration.email.alreadyUsed");
     }
 
     @Test
     public void shouldRejectEmptyPassword() {
-        String emptyPassword = "";
-        Errors errors = makeErrors();
+        // given
+        player.setPassword("");
 
-        validator.validate(PLAYER.withPassword(emptyPassword), errors);
+        // when
+        validator.validate(player, errors);
+        
+        // then
         assertError(errors, "password", "registration.password.empty");
     }
 
     @Test
     public void shouldRejectShortPassword() {
-        String shortPassword = "1234";
-        Errors errors = makeErrors();
+        // given
+        player.setPassword("1234");
 
-        validator.validate(PLAYER.withPassword(shortPassword), errors);
+        // when
+        validator.validate(player, errors);
+        
+        // then
         assertError(errors, "password", "registration.password.length");
     }
 
     @Test
     public void shouldCheckPasswordConfirmation() {
-        Errors errors = makeErrors();
+        // given
+        player.setPassword("12345");
+        player.setPasswordConfirmation("1234");
 
-        validator.validate(PLAYER.withPassword("12345").withPasswordConfirmation("1234"), errors);
+        // when
+        validator.validate(player, errors);
+        
+        // then
         assertError(errors,"passwordConfirmation", "registration.password.invalidConfirmation");
     }
 
     @Test
     public void shouldValidateGameName() {
+        // given
         String invalidGameName = "invalidGame";
-        Errors errors = makeErrors();
         when(commonValidator.checkGameName(invalidGameName, Validator.CANT_BE_NULL)).thenReturn(false);
+        player.setGameName(invalidGameName);
 
-        validator.validate(PLAYER.withGameName(invalidGameName), errors);
+        // when
+        validator.validate(player, errors);
+
+        // then
         assertError(errors, "gameName", "registration.game.invalid");
     }
 

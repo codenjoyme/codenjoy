@@ -31,16 +31,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
-import lombok.experimental.Wither;
 import org.apache.commons.lang3.StringUtils;
 
 import static com.codenjoy.dojo.services.GameServiceImpl.removeNumbers;
 
 @Getter
 @Setter
-@Accessors(chain = true)
-@Wither
 @NoArgsConstructor
 @AllArgsConstructor
 public class Player implements ScreenRecipient, Closeable {
@@ -74,10 +70,6 @@ public class Player implements ScreenRecipient, Closeable {
         this.gameType = gameType;
         this.scores = scores;
         this.info = info;
-    }
-
-    public GameType getGameType() {
-        return gameType;
     }
 
     @Override
@@ -139,18 +131,6 @@ public class Player implements ScreenRecipient, Closeable {
     // TODO test me
     public String getGameNameOnly() {
         return removeNumbers(getGameName());
-    }
-
-    public InformationCollector getEventListener() {
-        return eventListener;
-    }
-
-    public void setGameType(GameType gameType) {
-        this.gameType = gameType;
-    }
-
-    public void setAI(Closeable ai) {
-        this.ai = ai;
     }
 
     @Override
