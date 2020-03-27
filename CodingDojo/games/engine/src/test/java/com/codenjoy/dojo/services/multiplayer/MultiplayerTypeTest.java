@@ -24,11 +24,16 @@ package com.codenjoy.dojo.services.multiplayer;
 
 
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.Progressive;
 import com.codenjoy.dojo.services.nullobj.NullGame;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Delegate;
 import org.json.JSONObject;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class MultiplayerTypeTest {
 
@@ -203,26 +208,11 @@ public class MultiplayerTypeTest {
         assertEquals(Integer.MAX_VALUE, type.getRoomSize(new LevelProgress(3, 3, 3)));
     }
 
-    public class AGame extends NullGame {
-
-        private LevelProgress progress;
-
-        @Override
-        public void setProgress(LevelProgress progress) {
-            this.progress = progress;
-        }
-
-        @Override
-        public LevelProgress getProgress() {
-            return progress;
-        }
-    }
-
     @Test
     public void loadProgress_forAnyType() {
         // given
         MultiplayerType type = MultiplayerType.SINGLE;
-        Game game = new AGame();
+        Game game = new StubGame();
         JSONObject save = new JSONObject("{'any':'data'}");
 
         // when
@@ -238,7 +228,7 @@ public class MultiplayerTypeTest {
     public void loadProgress_forTrainingType_atFirstSingleLevel() {
         // given
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
-        Game game = new AGame();
+        Game game = new StubGame();
         JSONObject save = new JSONObject("{'levelProgress':{'total':3,'current':1,'lastPassed':0}}");
 
         // when
@@ -254,7 +244,7 @@ public class MultiplayerTypeTest {
     public void loadProgress_forTrainingType_atLastMultipleLevel() {
         // given
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
-        Game game = new AGame();
+        Game game = new StubGame();
         JSONObject save = new JSONObject("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}");
 
         // when
@@ -264,5 +254,16 @@ public class MultiplayerTypeTest {
         assertEquals(Integer.MAX_VALUE, roomSize);
         assertEquals("{'current':3,'passed':2,'total':3,'valid':true}",
                 game.getProgress().toString());
+    }
+
+    private static class StubGame implements Game {
+
+        @Delegate(excludes = Progressive.class)
+        private Game game = NullGame.INSTANCE;
+
+        @Setter
+        @Getter
+        private LevelProgress progress;
+
     }
 }
