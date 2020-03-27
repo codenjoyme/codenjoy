@@ -45,7 +45,6 @@ public class CodenjoyContestApplication extends SpringBootServletInitializer {
         return application.sources(CodenjoyContestApplication.class);
     }
 
-
     public static void main(String[] args) {
         SpringApplication.run(CodenjoyContestApplication.class, args);
     }
