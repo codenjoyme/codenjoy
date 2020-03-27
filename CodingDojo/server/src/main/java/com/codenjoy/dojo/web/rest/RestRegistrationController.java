@@ -35,6 +35,8 @@ import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -45,16 +47,16 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/rest")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RestRegistrationController {
 
-    private final Registration registration;
-    private final PlayerService playerService;
-    private final PlayerGames playerGames;
-    private final GameService gameService;
-    private final PlayerGamesView playerGamesView;
-    private final SaveService saveService;
-    private final Validator validator;
+    private Registration registration;
+    private PlayerService playerService;
+    private PlayerGames playerGames;
+    private GameService gameService;
+    private PlayerGamesView playerGamesView;
+    private SaveService saveService;
+    private Validator validator;
 
 //    @GetMapping("/player/{player}/check/{code}")
 //    @ResponseBody
@@ -149,9 +151,7 @@ public class RestRegistrationController {
     // TODO test me
     @PostMapping("/player/create")
     @ResponseBody
-    public synchronized String createPlayer(@RequestBody PlayerDetailInfo player)
-    {
-
+    public synchronized String createPlayer(@RequestBody PlayerDetailInfo player) {
         Registration.User user = player.getRegistration();
         registration.replace(user);
 

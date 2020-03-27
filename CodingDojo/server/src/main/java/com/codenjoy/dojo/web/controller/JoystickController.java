@@ -29,21 +29,20 @@ import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/joystick")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class JoystickController {
 
-    private final Registration registration;
-    private final PlayerService playerService;
-    private final Validator validator;
+    private Registration registration;
+    private PlayerService playerService;
+    private Validator validator;
 
     @GetMapping()
     public String joystick(@RequestParam("playerName") String playerName,

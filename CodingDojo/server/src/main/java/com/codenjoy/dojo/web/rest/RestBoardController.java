@@ -33,6 +33,7 @@ import com.codenjoy.dojo.web.rest.pojo.PGameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,26 +47,26 @@ import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @RestController
 @RequestMapping("/rest")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RestBoardController {
 
-    private final GameService gameService;
-    private final RestRegistrationController registrationController;
-    private final RestGameController gameController;
-    private final PlayerService playerService;
-    private final Registration registration;
-    private final Validator validator;
-    private final PlayerGames playerGames;
-    private final PlayerGamesView playerGamesView;
-    private final TimerService timerService;
-    private final SaveService saveService;
-    private final ActionLogger actionLogger;
-    
+    private GameService gameService;
+    private RestRegistrationController registrationController;
+    private RestGameController gameController;
+    private PlayerService playerService;
+    private Registration registration;
+    private Validator validator;
+    private PlayerGames playerGames;
+    private PlayerGamesView playerGamesView;
+    private TimerService timerService;
+    private SaveService saveService;
+    private ActionLogger actionLogger;
+
     @GetMapping("/context")
     public String getContext() {
         return "/" + CodenjoyContext.getContext();
     }
-    
+
     @GetMapping("/player/{player}/{code}/level/{level}")
     public synchronized boolean changeLevel(@PathVariable("player") String emailOrId,
                                 @PathVariable("code") String code,

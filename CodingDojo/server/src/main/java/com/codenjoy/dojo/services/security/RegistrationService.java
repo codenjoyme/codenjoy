@@ -55,20 +55,20 @@ import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
  * Created at 4/5/2019
  */
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RegistrationService {
 
-    private final MailService mailService;
-    private final LinkService linkService;
-    private final Registration registration;
-    private final Validator validator;
-    private final RoomsAliaser rooms;
-    private final PlayerService playerService;
-    private final ConfigProperties properties;
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
-    private final ViewDelegationService viewDelegationService;
-    private final GameService gameService;
+    private MailService mailService;
+    private LinkService linkService;
+    private Registration registration;
+    private Validator validator;
+    private RoomsAliaser rooms;
+    private PlayerService playerService;
+    private ConfigProperties properties;
+    private AuthenticationManager authenticationManager;
+    private UserDetailsService userDetailsService;
+    private ViewDelegationService viewDelegationService;
+    private GameService gameService;
 
     public String register(Player player, String roomName, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {

@@ -30,18 +30,12 @@ import lombok.SneakyThrows;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Getter
+@AllArgsConstructor
 public class ConnectionThread extends Thread {
+
     private Runnable task;
     private Connection connection;
-
-    public ConnectionThread(Runnable task, Connection connection) {
-        this.task = task;
-        this.connection = connection;
-    }
-
-    public Connection getConnection() {
-        return connection;
-    }
 
     @Override
     public void run() {

@@ -23,8 +23,12 @@ package com.codenjoy.dojo.services.multiplayer;
  */
 
 import com.codenjoy.dojo.utils.JsonUtils;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.json.JSONObject;
 
+@AllArgsConstructor
+@Getter
 public class LevelProgress {
 
     protected int total;
@@ -35,12 +39,6 @@ public class LevelProgress {
         this.current = 0;
         this.passed = -1;
         this.total = 1;
-    }
-
-    public LevelProgress(int total, int current, int passed) {
-        this.total = total;
-        this.current = current;
-        this.passed = passed;
     }
 
     public LevelProgress(MultiplayerType type) {
@@ -95,18 +93,6 @@ public class LevelProgress {
 
         json.put("levelProgress", progress);
         return json;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public int getCurrent() {
-        return current;
-    }
-
-    public int getPassed() {
-        return passed;
     }
 
     public void change(int level, int passed) {

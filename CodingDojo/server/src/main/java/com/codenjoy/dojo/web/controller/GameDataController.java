@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.dao.GameData;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +34,12 @@ import java.net.URLDecoder;
 
 @Controller
 @RequestMapping(GameDataController.URI)
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class GameDataController {
 
     public static final String URI = "/rest/settings";
 
-    private final GameData gameData;
+    private GameData gameData;
 
     @GetMapping("/{gameType}/{key}")
     public @ResponseBody String get(@PathVariable("gameType") String gameType, @PathVariable("key") String key) {

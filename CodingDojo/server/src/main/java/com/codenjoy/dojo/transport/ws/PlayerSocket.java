@@ -40,9 +40,9 @@ public class PlayerSocket {
     private boolean requested;
     private Runnable onClose;
 
-    public PlayerSocket(String id, boolean whoFirst) {
+    public PlayerSocket(String id, boolean requested) {
         this.id = id;
-        requested = whoFirst;
+        this.requested = requested;
     }
 
     @OnWebSocketMessage

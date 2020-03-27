@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.security.RegistrationService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
@@ -46,16 +47,16 @@ import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class MainPageController {
 
-    private final PlayerService playerService;
-    private final Registration registration;
-    private final GameService gameService;
-    private final Validator validator;
-    private final ConfigProperties properties;
-    private final RoomsAliaser rooms;
-    private final RegistrationService registrationService;
+    private PlayerService playerService;
+    private Registration registration;
+    private GameService gameService;
+    private Validator validator;
+    private ConfigProperties properties;
+    private RoomsAliaser rooms;
+    private RegistrationService registrationService;
 
     @GetMapping("/help")
     public String help(Model model) {

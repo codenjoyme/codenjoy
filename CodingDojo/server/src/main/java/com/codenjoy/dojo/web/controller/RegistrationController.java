@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.security.RegistrationService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,17 +41,17 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping(RegistrationController.URI)
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RegistrationController {
 
     private static final String ADMIN = "/admin";
     public static final String URI = "/register";
 
-    private final PlayerService playerService;
-    private final RoomsAliaser rooms;
-    private final ConfigProperties properties;
-    private final RegistrationValidator registrationValidator;
-    private final RegistrationService registrationService;
+    private PlayerService playerService;
+    private RoomsAliaser rooms;
+    private ConfigProperties properties;
+    private RegistrationValidator registrationValidator;
+    private RegistrationService registrationService;
 
     @InitBinder
     private void initBinder(WebDataBinder webDataBinder) {

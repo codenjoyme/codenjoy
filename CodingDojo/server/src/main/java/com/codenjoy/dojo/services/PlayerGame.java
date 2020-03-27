@@ -48,7 +48,7 @@ public class PlayerGame implements Tickable {
         this.player = player;
         this.game = game;
         setRoomName(roomName);
-        this.joystick = new LazyJoystick(game);
+        joystick = new LazyJoystick(game);
     }
 
     // only for searching

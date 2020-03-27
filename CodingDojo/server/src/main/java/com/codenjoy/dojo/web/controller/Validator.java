@@ -60,14 +60,14 @@ public class Validator {
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties properties;
 
-    private final Pattern email;
-    private final Pattern id;
-    private final Pattern readableNameLat;
-    private final Pattern readableNameCyr;
-    private final Pattern nickName;
-    private final Pattern gameName;
-    private final Pattern code;
-    private final Pattern md5;
+    private Pattern email;
+    private Pattern id;
+    private Pattern readableNameLat;
+    private Pattern readableNameCyr;
+    private Pattern nickName;
+    private Pattern gameName;
+    private Pattern code;
+    private Pattern md5;
 
     public Validator() {
         email = Pattern.compile(EMAIL);

@@ -24,41 +24,22 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.hero.HeroData;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 public class GameData {
 
-    private final int boardSize;
-    private final GuiPlotColorDecoder decoder;
-    private final Map<String, Object> scores;
-    private final List<String> group;
-    private final Map<String, HeroData> coordinates;
+    @Getter private int boardSize;
+    @Getter private GuiPlotColorDecoder decoder;
+    private Map<String, Object> scores;
+    private List<String> group;
+    private Map<String, HeroData> coordinates;
     private Map<String, String> readableNames;
-
-
-    public GameData(int boardSize, GuiPlotColorDecoder decoder,
-                    Map<String, Object> scores, List<String> group,
-                    Map<String, HeroData> coordinates,
-                    Map<String, String> readableNames)
-    {
-        this.boardSize = boardSize;
-        this.decoder = decoder;
-        this.scores = scores;
-        this.group = group;
-        this.coordinates = coordinates;
-        this.readableNames = readableNames;
-    }
-
-    public GuiPlotColorDecoder getDecoder() {
-        return decoder;
-    }
-
-    public int getBoardSize() {
-        return boardSize;
-    }
 
     public JSONObject getScores() {
         return new JSONObject(scores);

@@ -22,13 +22,12 @@ package com.codenjoy.dojo.services.jdbc;
  * #L%
  */
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class PostgreSQLConnectionThreadPoolFactory implements ConnectionThreadPoolFactory {
 
     private String database;
-
-    public PostgreSQLConnectionThreadPoolFactory(String database) {
-        this.database = database;
-    }
 
     @Override
     public CrudConnectionThreadPool create(String... createTableSqls) {
