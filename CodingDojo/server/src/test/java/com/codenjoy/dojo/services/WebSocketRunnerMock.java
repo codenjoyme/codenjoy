@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import lombok.SneakyThrows;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
@@ -61,11 +62,7 @@ public class WebSocketRunnerMock {
 
     public void start() {
         new Thread(() -> {
-            try {
-                this.start(server, userName, code);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            start(server, userName, code);
             Runtime.getRuntime().addShutdownHook(new Thread() {
                 @Override
                 public void run() {
@@ -93,7 +90,8 @@ public class WebSocketRunnerMock {
         session.close();
     }
 
-    private void start(String server, String userName, String code) throws Exception {
+    @SneakyThrows
+    private void start(String server, String userName, String code)  {
         wsClient = new WebSocketClient();
         wsClient.start();
 
@@ -155,19 +153,21 @@ public class WebSocketRunnerMock {
             if (answer == null) {
                 throw new IllegalArgumentException("Answer is null!");
             }
-            try {
-                if (!answered) {
-                    for (int index = 0; index < times; index++) {
-                        session.getRemote().sendString(answer);
-                    }
-                    if (onlyOnce) {
-                        answered = true;
-                    }
+            if (!answered) {
+                for (int index = 0; index < times; index++) {
+                    send();
                 }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                if (onlyOnce) {
+                    answered = true;
+                }
             }
+
             request = data;
         }
+    }
+
+    @SneakyThrows
+    private void send() {
+        session.getRemote().sendString(answer);
     }
 }

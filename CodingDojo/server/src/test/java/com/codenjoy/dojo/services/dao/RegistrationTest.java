@@ -118,8 +118,8 @@ public class RegistrationTest {
             Registration.User user = service.getUserByCode("bad_code");
             fail("Expected exception");
         } catch (Exception e) {
-            assertEquals("java.lang.RuntimeException: " +
-                    "java.util.concurrent.ExecutionException: " +
+            // then
+            assertEquals("java.util.concurrent.ExecutionException: " +
                     "org.springframework.security.core.userdetails.UsernameNotFoundException: " +
                     "User with code 'bad_code' does not exist", e.toString());
         }

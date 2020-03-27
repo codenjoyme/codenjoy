@@ -22,6 +22,7 @@ package com.codenjoy.dojo.stuff;
  * #L%
  */
 
+import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.ComparisonFailure;
 import org.junit.Test;
@@ -58,22 +59,19 @@ public class SmartAssert extends Runner {
     }
 
     @Override
+    @SneakyThrows
     public void run(RunNotifier notifier) {
         System.out.println("running the tests from SmartAssert: " + test);
-        try {
-            Object testObject = test.newInstance();
-            for (Method method : test.getMethods()) {
-                if (!method.isAnnotationPresent(Test.class)) continue;
-                
-                notifier.fireTestStarted(description(method));
-                
-                method.invoke(testObject);
-                checkResult(failures(test.getName()));
-                
-                notifier.fireTestFinished(description(method));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        Object testObject = test.newInstance();
+        for (Method method : test.getMethods()) {
+            if (!method.isAnnotationPresent(Test.class)) continue;
+
+            notifier.fireTestStarted(description(method));
+
+            method.invoke(testObject);
+            checkResult(failures(test.getName()));
+
+            notifier.fireTestFinished(description(method));
         }
     }
 

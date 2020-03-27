@@ -23,15 +23,19 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 
+import lombok.SneakyThrows;
+
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class CrudConnectionThreadPool extends ConnectionThreadPool {
 
-    public CrudConnectionThreadPool(int count, Get get) {
-       super(count, get);
+    public CrudConnectionThreadPool(int count, Supplier<Connection> factory) {
+       super(count, factory);
     }
 
     public <T> T select(String query, Object[] parameters, ObjectMapper<T> mapper) {

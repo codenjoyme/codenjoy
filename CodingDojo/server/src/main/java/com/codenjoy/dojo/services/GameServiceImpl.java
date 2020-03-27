@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.printer.CharElements;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.reflections.Reflections;
 import org.springframework.stereotype.Component;
@@ -128,12 +129,9 @@ public class GameServiceImpl implements GameService {
                 ));
     }
 
+    @SneakyThrows
     private GameType loadGameType(Class<? extends GameType> gameType) {
-        try {
-            return gameType.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+        return gameType.newInstance();
     }
 
     @Override

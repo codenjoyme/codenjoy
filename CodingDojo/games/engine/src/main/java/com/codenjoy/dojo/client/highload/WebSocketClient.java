@@ -25,6 +25,7 @@ package com.codenjoy.dojo.client.highload;
 
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.client.UrlParser;
+import lombok.SneakyThrows;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.api.Session;
 
@@ -59,13 +60,9 @@ public class WebSocketClient implements Closeable {
         }
     }
 
+    @SneakyThrows
     private static URI getUri(String protocol, String server, String context, String userName, String code) {
-        try {
-            String url = String.format(WS_URI_PATTERN, protocol, server, context, userName, code);
-            return new URI(url);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+       return new URI(String.format(WS_URI_PATTERN, protocol, server, context, userName, code));
     }
 
     private org.eclipse.jetty.websocket.client.WebSocketClient createClient() {

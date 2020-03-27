@@ -29,7 +29,9 @@ import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.web.controller.AdminController;
 import com.codenjoy.dojo.web.controller.RoomsAliaser;
 import com.codenjoy.dojo.web.controller.Validator;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -117,18 +119,14 @@ public class RegistrationService {
 
                     String context = CodenjoyContext.getContext();
                     String link = "http://" + hostIp + "/" + context + "/register?approve=" + storage.getLink();
-                    try {
-                        mailService.sendEmail(id, "Codenjoy регистрация",
-                                "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
-                                        "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a><br>" +
-                                        "Он направит тебя к игре.<br>" +
-                                        "<br>" +
-                                        "Если тебя удивило это письмо, просто удали его.<br>" +
-                                        "<br>" +
-                                        "<a href=\"http://codenjoy.com\">Команда Codenjoy</a>");
-                    } catch (MessagingException e) {
-                        throw new RuntimeException("Error sending email", e);
-                    }
+
+                    sendEmail(id, "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
+                            "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a><br>" +
+                            "Он направит тебя к игре.<br>" +
+                            "<br>" +
+                            "Если тебя удивило это письмо, просто удали его.<br>" +
+                            "<br>" +
+                            "<a href=\"http://codenjoy.com\">Команда Codenjoy</a>", "Codenjoy регистрация");
                 } else {
                     registration.approve(code);
                     approved = true;
@@ -152,6 +150,11 @@ public class RegistrationService {
             model.addAttribute("wait_approve", true);
             return openRegistrationForm(request, model, id, email, name);
         }
+    }
+
+    @SneakyThrows
+    private void sendEmail(String id, String body, String title) {
+        mailService.sendEmail(id, title, body);
     }
 
     public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String roomName, String gameName) {

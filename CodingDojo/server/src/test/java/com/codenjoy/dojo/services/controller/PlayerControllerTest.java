@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.nullobj.NullInformation;
 import com.codenjoy.dojo.services.nullobj.NullPlayerScores;
+import lombok.SneakyThrows;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -244,21 +245,17 @@ public class PlayerControllerTest {
         assertEquals("[left]", serverMessages.toString());
     }
 
+    // TODO как-нибудь когда будет достаточно времени и желания позапускать этот тест и разгадать, почему зависает тут тест
+    @SneakyThrows
     private void waitForPlayerResponse(int times) {
-        try {
+        Thread.sleep(300);
+        for (int index = 0; index < times; index++) {
+            playerController.requestControl(player, "some-request-" + index);
+        }
+        int count = 0;
+        while (count < 20 && serverMessages.isEmpty()) {
             Thread.sleep(300);
-            for (int index = 0; index < times; index++) {
-                playerController.requestControl(player, "some-request-" + index);
-            }
-            int count = 0;
-            while (++count < 100 && serverMessages.isEmpty()) {
-                Thread.sleep(300);
-            }
-            if (count >= 100) {
-                return;
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            count++;
         }
     }
 

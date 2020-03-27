@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 
+import lombok.SneakyThrows;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,36 +32,37 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+// TODO унести этот класс из Server + Balancer в Engine? или другую либину и заюзать в одном месте
 public class ConnectionThreadPool {
-    private ExecutorService executorService;
 
+    private ExecutorService executorService;
     private List<Connection> connections = new LinkedList<>();
 
-    public ConnectionThreadPool(int count, final Get get) {
-        executorService = Executors.newFixedThreadPool(count, runnable -> {
-            Connection connection = null;
-            try {
-                connection = get.connection();
-            } catch (Exception e) {
-                throw new RuntimeException("Error get connection", e);
-            }
-            connections.add(connection);
-            return new ConnectionThread(runnable, connection);
-        });
+    public ConnectionThreadPool(int count, Supplier<Connection> factory) {
+        executorService = Executors.newFixedThreadPool(count, openConnection(factory));
     }
 
+    private ThreadFactory openConnection(Supplier<Connection> factory) {
+        return runnable -> {
+            Connection connection = factory.get();
+            connections.add(connection);
+            return new ConnectionThread(runnable, connection);
+        };
+    }
+
+    @SneakyThrows
     public void close() {
         for (Connection connection : connections) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            // TODO если один свалился, то хоть другие закрой, а?
+            connection.close();
         }
         executorService.shutdown();
     }
 
+    @SneakyThrows
     public <T> T run(final For<T> runner) {
         Future<T> submit = executorService.submit(() -> {
             ConnectionThread thread = (ConnectionThread) Thread.currentThread();
@@ -67,13 +70,7 @@ public class ConnectionThreadPool {
             return runner.run(connection);
         });
 
-        try {
-            return submit.get();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        return submit.get();
     }
 
     public void removeDatabase() {

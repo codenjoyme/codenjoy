@@ -23,6 +23,10 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.SneakyThrows;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -44,14 +48,15 @@ public class ConnectionThread extends Thread {
         try {
             task.run();
         } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                    connection = null;
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            close();
+        }
+    }
+
+    @SneakyThrows
+    private void close() {
+        if (connection != null) {
+            connection.close();
+            connection = null;
         }
     }
 }

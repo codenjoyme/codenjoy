@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.stuff.SmartAssert;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -98,31 +99,22 @@ public class RestGameControllerTest {
         SmartAssert.checkResult();
     }
 
+    @SneakyThrows
     protected String mapToJson(Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    
-    protected <T> T mapFromJson(String json, Class<T> clazz) {
-        try {
-            return new ObjectMapper().readValue(json, clazz);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return new ObjectMapper().writeValueAsString(obj);
     }
 
+    @SneakyThrows
+    protected <T> T mapFromJson(String json, Class<T> clazz) {
+        return new ObjectMapper().readValue(json, clazz);
+    }
+
+    @SneakyThrows
     private String get(String uri) {
-        try {
-            MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
-                    .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-            assertEquals(200, mvcResult.getResponse().getStatus());
-            return mvcResult.getResponse().getContentAsString();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        assertEquals(200, mvcResult.getResponse().getStatus());
+        return mvcResult.getResponse().getContentAsString();
     }
 
     @Test

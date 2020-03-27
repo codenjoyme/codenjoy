@@ -23,29 +23,31 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 
+import lombok.SneakyThrows;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.function.Supplier;
 
 public class PostgreSQLConnectionThreadPool extends CrudConnectionThreadPool {
 
     private static final int CONNECTIONS_COUNT = 10;
 
-    public PostgreSQLConnectionThreadPool(final String database, String... createTableSqls) {
-        super(CONNECTIONS_COUNT, () -> {
-            Class.forName("org.postgresql.Driver");
-
-            String url = "jdbc:postgresql://" + database;
-            Connection result = DriverManager.getConnection(url);
-
-            return result;
-        });
+    public PostgreSQLConnectionThreadPool(String database, String... createTableSqls) {
+        super(CONNECTIONS_COUNT, () -> getConnection(database));
 
         for (String sql : createTableSqls) {
             createDB(sql);
         }
     }
 
-    private void createDB(final String sql) {
+    @SneakyThrows
+    private static Connection getConnection(String database) {
+        Class.forName("org.postgresql.Driver");
+        return DriverManager.getConnection("jdbc:postgresql://" + database);
+    }
+
+    private void createDB(String sql) {
         update(sql);
     }
 
