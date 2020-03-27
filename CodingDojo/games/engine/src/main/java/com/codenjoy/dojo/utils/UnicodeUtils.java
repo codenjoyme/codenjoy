@@ -23,11 +23,10 @@ package com.codenjoy.dojo.utils;
  */
 
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringEscapeUtils;
 
-/**
- * Created by indigo on 2017-03-04.
- */
+@UtilityClass
 public class UnicodeUtils {
 
     public static String unescapeJava(String data) {

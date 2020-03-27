@@ -30,7 +30,9 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class TestUtils {
 
     public static final int COUNT_NUMBERS = 3;
