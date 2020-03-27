@@ -107,8 +107,8 @@ public class SingleTest {
         HeroData heroData = game.getHero();
 
         // then
-        assertEquals("HeroData[coordinate=[3,5], level=0, " +
-                        "multiplayer=false, additionalData=null]",
+        assertEquals("HeroDataImpl(level=0, coordinate=[3,5], " +
+                        "isMultiplayer=false, additionalData=null)",
                 heroData.toString());
     }
 
@@ -126,8 +126,8 @@ public class SingleTest {
         HeroData heroData = game.getHero();
 
         // then
-        assertEquals("HeroData[coordinate=[7,9], level=0, " +
-                        "multiplayer=true, additionalData=null]",
+        assertEquals("HeroDataImpl(level=0, coordinate=[7,9], " +
+                        "isMultiplayer=true, additionalData=null)",
                 heroData.toString());
     }
 }
