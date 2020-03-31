@@ -152,6 +152,9 @@
                 <includes>
                     <include>**/*</include>
                 </includes>
+                <excludes>
+                    <exclude>**/sprite/**/src/*</exclude>
+                </excludes>
             </resource>
             <resource>
                 <directory>src</directory>
