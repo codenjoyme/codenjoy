@@ -39,10 +39,10 @@ public class PlayerGameSaver implements GameSaver {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS saves (" +
                         "time varchar(255), " +
-                        "name varchar(255), " +
-                        "callbackUrl varchar(255)," +
-                        "roomName varchar(255)," +
-                        "gameName varchar(255)," +
+                        "player_id varchar(255), " +
+                        "callback_url varchar(255)," +
+                        "room_name varchar(255)," +
+                        "game_name varchar(255)," +
                         "score int," +
                         "save varchar(255));");
     }
@@ -54,7 +54,7 @@ public class PlayerGameSaver implements GameSaver {
     @Override
     public void saveGame(Player player, String save, long time) {
         pool.update("INSERT INTO saves " +
-                        "(time, name, callbackUrl, roomName, gameName, score, save) " +
+                        "(time, player_id, callback_url, room_name, game_name, score, save) " +
                         "VALUES (?,?,?,?,?,?,?);",
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
                         player.getName(),
@@ -67,17 +67,17 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public PlayerSave loadGame(String name) {
-        return pool.select("SELECT * FROM saves WHERE name = ? ORDER BY time DESC LIMIT 1;",
-                new Object[]{name},
+    public PlayerSave loadGame(String id) {
+        return pool.select("SELECT * FROM saves WHERE player_id = ? ORDER BY time DESC LIMIT 1;",
+                new Object[]{id},
                 rs -> {
                     if (rs.next()) {
-                        String callbackUrl = rs.getString("callbackUrl");
+                        String callbackUrl = rs.getString("callback_url");
                         int score = rs.getInt("score");
-                        String roomName = rs.getString("roomName");
-                        String gameName = rs.getString("gameName");
+                        String roomName = rs.getString("room_name");
+                        String gameName = rs.getString("game_name");
                         String save = rs.getString("save");
-                        return new PlayerSave(name, callbackUrl, roomName, gameName, score, save);
+                        return new PlayerSave(id, callbackUrl, roomName, gameName, score, save);
                     } else {
                         return PlayerSave.NULL;
                     }
@@ -87,12 +87,12 @@ public class PlayerGameSaver implements GameSaver {
 
     @Override
     public List<String> getSavedList() {
-        return pool.select("SELECT DISTINCT name FROM saves;", // TODO убедиться, что загружены самые последние
+        return pool.select("SELECT DISTINCT player_id FROM saves;", // TODO убедиться, что загружены самые последние
                 rs -> {
                     List<String> result = new LinkedList<>();
                     while (rs.next()) {
-                        String name = rs.getString("name");
-                        result.add(name);
+                        String id = rs.getString("player_id");
+                        result.add(id);
                     }
                     return result;
                 }
@@ -100,8 +100,8 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public void delete(String name) {
-        pool.update("DELETE FROM saves WHERE name = ?;",
-                new Object[]{name});
+    public void delete(String id) {
+        pool.update("DELETE FROM saves WHERE player_id = ?;",
+                new Object[]{id});
     }
 }

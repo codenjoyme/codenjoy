@@ -75,13 +75,13 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles(SQLiteProfile.NAME)
 public class PlayerServiceImplTest {
 
-    public static final String VASYA = "vasya@mail.com";
-    public static final String VASYA_AI = "vasya-super-ai@codenjoy.com";
-    public static final String PETYA = "petya@mail.com";
-    public static final String KATYA = "katya@mail.com";
-    public static final String OLIA = "olia@mail.com";
-    public static final String VASYA_URL = "http://vasya@mail.com:1234";
-    public static final String PETYA_URL = "http://petya@mail.com:1234";
+    public static final String VASYA = "vasya";
+    public static final String VASYA_AI = "vasya-super-ai";
+    public static final String PETYA = "petya";
+    public static final String KATYA = "katya";
+    public static final String OLIA = "olia";
+    public static final String VASYA_URL = "http://vasya:1234";
+    public static final String PETYA_URL = "http://petya:1234";
 
     private ArgumentCaptor<Map> screenSendCaptor;
     private ArgumentCaptor<Player> playerCaptor;
@@ -199,8 +199,8 @@ public class PlayerServiceImplTest {
         when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
 
         doAnswer(inv -> {
-            String email = inv.getArgument(0);
-            return "readable_" + email.split("@")[0];
+            String id = inv.getArgument(0);
+            return "readable_" + id;
         }).when(registration).getNameById(anyString());
 
         playerGames.clear();
@@ -377,23 +377,23 @@ public class PlayerServiceImplTest {
         Map<ScreenRecipient, Object> data = screenSendCaptor.getValue();
 
         assertEquals(
-                "{vasya@mail.com=PlayerData[" +
-                    "BoardSize:15, Board:'ABCD', GameName:'game', " +
-                    "Score:123, Info:'', " +
-                    "Scores:'{'vasya@mail.com':123}', " +
-                    "HeroesData:'{" +
-                        "'coordinates':{'vasya@mail.com':{'coordinate':{'x':1,'y':2},'level':0,'multiplayer':false}}," +
-                        "'group':['vasya@mail.com']," +
-                        "'readableNames':{'vasya@mail.com':'readable_vasya'}" +
-                        "}'], " +
-                "petya@mail.com=PlayerData[" +
+                "{petya=PlayerData[" +
                     "BoardSize:15, Board:'DCBA', GameName:'game', " +
                     "Score:234, Info:'', " +
-                    "Scores:'{'petya@mail.com':234}', " +
+                    "Scores:'{'petya':234}', " +
                     "HeroesData:'{" +
-                        "'coordinates':{'petya@mail.com':{'coordinate':{'x':3,'y':4},'level':0,'multiplayer':false}}," +
-                        "'group':['petya@mail.com']," +
-                        "'readableNames':{'petya@mail.com':'readable_petya'}" +
+                        "'coordinates':{'petya':{'coordinate':{'x':3,'y':4},'level':0,'multiplayer':false}}," +
+                        "'group':['petya']," +
+                        "'readableNames':{'petya':'readable_petya'}" +
+                        "}'], " +
+                "vasya=PlayerData[" +
+                    "BoardSize:15, Board:'ABCD', GameName:'game', " +
+                    "Score:123, Info:'', " +
+                    "Scores:'{'vasya':123}', " +
+                    "HeroesData:'{" +
+                        "'coordinates':{'vasya':{'coordinate':{'x':1,'y':2},'level':0,'multiplayer':false}}," +
+                        "'group':['vasya']," +
+                        "'readableNames':{'vasya':'readable_vasya'}" +
                         "}']}",
                 data.toString().replaceAll("\"", "'"));
     }
@@ -489,9 +489,9 @@ public class PlayerServiceImplTest {
         assertEquals(NullPlayer.class, player.getClass());
     }
 
-    private Player createPlayer(String userName) {
-        Player player = playerService.register(userName, getCallbackUrl(userName),
-                userName + "room", userName + "game");
+    private Player createPlayer(String id) {
+        Player player = playerService.register(id, getCallbackUrl(id),
+                id + "room", id + "game");
         players.add(player);
 
         if (player != NullPlayer.INSTANCE) {
@@ -501,14 +501,14 @@ public class PlayerServiceImplTest {
         return player;
     }
 
-    private String getCallbackUrl(String userName) {
-        return "http://" + userName + ":1234";
+    private String getCallbackUrl(String id) {
+        return "http://" + id + ":1234";
     }
 
-    private String getBoardFor(Player vasya) {
+    private String getBoardFor(Player player) {
         Map sentScreens = screenSendCaptor.getValue();
         Map<Player, PlayerData> value = sentScreens;
-        return value.get(vasya).getBoard().toString();
+        return value.get(player).getBoard().toString();
     }
 
     private void assertSentToPlayers(Player ... players) throws IOException {
@@ -1254,7 +1254,7 @@ public class PlayerServiceImplTest {
     }
 
     private void assertVasyaAndPetya(List<Player> all) {
-        assertEquals("[vasya@mail.com, petya@mail.com]", all.toString());
+        assertEquals("[vasya, petya]", all.toString());
 
         Player player1 = all.get(0);
         assertEquals(VASYA_URL, player1.getCallbackUrl());

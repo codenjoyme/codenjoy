@@ -30,7 +30,6 @@ import com.codenjoy.dojo.web.controller.AdminController;
 import com.codenjoy.dojo.web.controller.RoomsAliaser;
 import com.codenjoy.dojo.web.controller.Validator;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,7 +42,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
@@ -79,7 +77,7 @@ public class RegistrationService {
         String email = player.getEmail();
         String name = player.getReadableName();
         String gameName = player.getGameName();
-        validator.checkPlayerName(id, CANT_BE_NULL);
+        validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkEmail(email, CANT_BE_NULL);
         validator.checkGameName(gameName, CANT_BE_NULL);
 
@@ -179,7 +177,7 @@ public class RegistrationService {
             email = registration.getEmailById(id);
             name = registration.getNameById(id);
             if (!model.containsAttribute("bad_email")) {
-                validator.checkPlayerName(email, CAN_BE_NULL);
+                validator.checkEmail(email, CAN_BE_NULL);
             }
         }
 
@@ -213,11 +211,11 @@ public class RegistrationService {
         return getBoardUrl(code, player.getName(), gameName);
     }
 
-    public String getBoardUrl(String code, String playerName, String gameName) {
-        validator.checkPlayerName(playerName, CAN_BE_NULL);
+    public String getBoardUrl(String code, String id, String gameName) {
+        validator.checkPlayerId(id, CAN_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
 
-        return "board/player/" + playerName + "?code=" + code + viewDelegationService.buildBoardParam(gameName);
+        return "board/player/" + id + "?code=" + code + viewDelegationService.buildBoardParam(gameName);
     }
 
     private String getIp(HttpServletRequest request) {

@@ -98,9 +98,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 gp.getGameType(), gp.getGame().getSave()));
     }
 
-    public PlayerGame get(String playerName) {
+    public PlayerGame get(String id) {
         return all.stream()
-                .filter(pg -> pg.getPlayer().getName().equals(playerName))
+                .filter(pg -> pg.getPlayer().getName().equals(id))
                 .findFirst()
                 .orElse(NullPlayerGame.INSTANCE);
     }

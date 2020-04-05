@@ -46,20 +46,20 @@ public interface PlayerTransport {
     /**
      * Случается, когда игрок зарегистрировался в игре на страничке регистрации
      * Only one endpoint per player is allowed
-     * @param id идентификатор пользователя - его email
+     * @param id идентификатор пользователя
      * @param responseHandler обработчик
      */
     void registerPlayerEndpoint(String id, ResponseHandler responseHandler);
 
     /**
      * Случается, когда игрока удалили на админке
-     * @param id идентификатор пользователя - его email
+     * @param id идентификатор пользователя
      */
     void unregisterPlayerEndpoint(String id);
 
     /**
      * Случается, когда игрок подключился по вебсокетам к серверу
-     * @param id идентификатор пользователя - его email
+     * @param id идентификатор пользователя
      * @param playerSocket вебсокет
      */
     void registerPlayerSocket(String id, PlayerSocket playerSocket);

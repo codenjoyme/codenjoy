@@ -32,6 +32,6 @@ public class DefaultAuthenticationService implements AuthenticationService {
 
     @Override
     public String authenticate(HttpServletRequest request) {
-        return request.getParameter("user");
+            return request.getParameter("user");
     }
 }

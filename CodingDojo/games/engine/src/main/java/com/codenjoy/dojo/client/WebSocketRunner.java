@@ -48,7 +48,7 @@ public class WebSocketRunner implements Closeable {
     public static final String WS_URI_PATTERN = "%s://%s/%s/ws?user=%s&code=%s";
     public static final String BOARD_FORMAT = "^board=(.*)$";
     public static final Pattern BOARD_PATTERN = Pattern.compile(BOARD_FORMAT);
-    public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
+    public static String BOT_ID_SUFFIX = "-super-ai";
 
     public static boolean PRINT_TO_CONSOLE = true;
     public static int TIMEOUT = 10000;
@@ -75,23 +75,23 @@ public class WebSocketRunner implements Closeable {
                 solver, board, ATTEMPTS);
     }
 
-    public static WebSocketRunner runAI(String aiName, String code, Solver solver, ClientBoard board) {
+    public static WebSocketRunner runAI(String id, String code, Solver solver, ClientBoard board) {
         PRINT_TO_CONSOLE = false;
         return run(UrlParser.WS_PROTOCOL, LOCALHOST + ":" + CodenjoyContext.getPort(),
-                CodenjoyContext.getContext(), aiName, code, solver, board, 1);
+                CodenjoyContext.getContext(), id, code, solver, board, 1);
     }
 
     private static WebSocketRunner run(String protocol,
                                        String server, String context,
-                                       String userName, String code,
+                                       String id, String code,
                                        Solver solver, ClientBoard board,
                                        int countAttempts) {
-        return run(getUri(protocol, server, context, userName, code), solver, board, countAttempts);
+        return run(getUri(protocol, server, context, id, code), solver, board, countAttempts);
     }
 
     @SneakyThrows
-    private static URI getUri(String protocol, String server, String context, String userName, String code) {
-        return new URI(String.format(WS_URI_PATTERN, protocol, server, context, userName, code));
+    private static URI getUri(String protocol, String server, String context, String id, String code) {
+        return new URI(String.format(WS_URI_PATTERN, protocol, server, context, id, code));
     }
 
     public static WebSocketRunner run(URI uri, Solver solver, ClientBoard board, int countAttempts) {

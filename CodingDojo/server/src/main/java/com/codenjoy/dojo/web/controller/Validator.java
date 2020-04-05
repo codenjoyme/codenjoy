@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.dao.Registration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.regex.Pattern;
@@ -45,17 +44,14 @@ public class Validator {
     public static final boolean CAN_BE_NULL = true;
     public static final boolean CANT_BE_NULL = !CAN_BE_NULL;
 
-    public static final String EMAIL_PART = "(?:[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6})";
-    public static final String EMAIL = "^" + EMAIL_PART + "$";
-    public static final String ID_PART = "[A-Za-z0-9]{1," + MAX_PLAYER_ID_LENGTH + "}";
-    public static final String ID = "^" + ID_PART + "$";
-    public static final String EMAIL_OR_ID = "^(?:" + EMAIL_PART + ")|(?:" + ID_PART + ")$";
-    public static final String GAME = "^[A-Za-z][A-Za-z0-9+_.-]{0,48}[A-Za-z0-9]$";
-    public static final String CODE = "^[0-9]{1," + MAX_PLAYER_CODE_LENGTH + "}$";
-    public static final String MD5 = "^[A-Za-f0-9]{32}$";
-    public static final String READABLE_NAME_LAT = "^[A-Za-z]{1,50}$";
-    public static final String READABLE_NAME_CYR = "^[А-Яа-яЁёҐґІіІіЄє]{1,50}$";
-    public static final String NICK_NAME = "^[0-9A-Za-zА-Яа-яЁёҐґІіІіЄє ]{1,50}$";
+    private static final String EMAIL = "^(?:[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6})$";
+    private static final String ID = "^[A-Za-z0-9-]{1," + MAX_PLAYER_ID_LENGTH + "}$";
+    private static final String GAME = "^[A-Za-z][A-Za-z0-9+_.-]{0,48}[A-Za-z0-9]$";
+    private static final String CODE = "^[0-9]{1," + MAX_PLAYER_CODE_LENGTH + "}$";
+    private static final String MD5 = "^[A-Za-f0-9]{32}$";
+    private static final String READABLE_NAME_LAT = "^[A-Za-z]{1,50}$";
+    private static final String READABLE_NAME_CYR = "^[А-Яа-яЁёҐґІіІіЄє]{1,50}$";
+    private static final String NICK_NAME = "^[0-9A-Za-zА-Яа-яЁёҐґІіІіЄє ]{1,50}$";
 
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties properties;
@@ -87,7 +83,7 @@ public class Validator {
         }
     }
 
-    public boolean checkReadableName(String input) {
+    public boolean isReadableName(String input) {
         boolean empty = isEmpty(input);
         if (empty || !isFullName(input)) {
             return false;
@@ -95,7 +91,7 @@ public class Validator {
         return true;
     }
 
-    public boolean checkNickName(String input) {
+    public boolean isNickName(String input) {
         boolean empty = isEmpty(input);
         if (empty || !nickName.matcher(input).matches()) {
             return false;
@@ -126,22 +122,27 @@ public class Validator {
         return false;
     }
 
-    public void checkPlayerName(String input, boolean canBeNull) {
+    public void checkPlayerId(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
         if (!(empty && canBeNull ||
-                !empty && (isEmail(input) || id.matcher(input).matches())))
+                !empty && id.matcher(input).matches()))
         {
-            throw new IllegalArgumentException(String.format("Player name/id is invalid: '%s'", input));
+            throw new IllegalArgumentException(String.format("Player id is invalid: '%s'", input));
         }
     }
 
-    // TODO test me
-    public boolean checkEmail(String input, boolean canBeNull) {
+    public boolean isEmail(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
-        if (!(empty && canBeNull || !empty && isEmail(input))) {
-            return false;
+        if (empty && canBeNull || !empty && isEmail(input)) {
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    public void checkEmail(String input, boolean canBeNull) {
+        if (!isEmail(input, canBeNull)) {
+            throw new IllegalArgumentException(String.format("Player email is invalid: '%s'", input));
+        }
     }
 
     private boolean isEmail(String input) {
@@ -163,12 +164,18 @@ public class Validator {
         return StringUtils.isEmpty(input) || input.equalsIgnoreCase("null");
     }
 
-    public boolean checkGameName(String input, boolean canBeNull) {
+    public boolean isGameName(String input, boolean canBeNull) {
         boolean empty = isEmpty(input);
         if (!(empty && canBeNull || !empty && gameName.matcher(input).matches())) {
             return false;
         }
         return true;
+    }
+
+    public void checkGameName(String input, boolean canBeNull) {
+        if (!isGameName(input, canBeNull)) {
+            throw new IllegalArgumentException(String.format("Game name is invalid: '%s'", input));
+        }
     }
 
     public void checkMD5(String input) {
@@ -183,19 +190,15 @@ public class Validator {
         }
     }
 
-    public String checkPlayerCode(String emailOrId, String code) {
-        checkPlayerName(emailOrId, CANT_BE_NULL);
+    public void checkPlayerCode(String id, String code) {
+        checkPlayerId(id, CANT_BE_NULL);
         checkCode(code, CANT_BE_NULL);
-        String id = registration.checkUser(emailOrId, code);
-        if (id == null) {
-            throw new IllegalArgumentException(String.format("Player code is invalid: '%s' for player: '%s'", code, emailOrId));
+        if (registration.checkUser(id, code) == null) {
+            throw new IllegalArgumentException(String.format("Player code is invalid: '%s' for player: '%s'", code, id));
         }
-        return id;
     }
 
-    public void checkIsAdmin(String password) {
-        if (!DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()).equals(password)){
-            throw new RuntimeException("Unauthorized admin access");
-        }
+    public void checkRoomName(String roomName, boolean cantBeNull) {
+        checkGameName(roomName, cantBeNull);
     }
 }

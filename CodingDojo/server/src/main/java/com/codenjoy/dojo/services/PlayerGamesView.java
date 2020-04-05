@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.*;
 
@@ -111,18 +112,19 @@ public class PlayerGamesView {
     }
 
     public List<PScoresOf> getScoresForGame(String gameName) {
+        return scoresFor(pg -> pg.getPlayer().getGameName().equals(gameName));
+    }
+
+    private List<PScoresOf> scoresFor(Predicate<PlayerGame> predicate) {
         return service.all().stream()
-                .filter(pg -> pg.getPlayer().getGameName().equals(gameName))
+                .filter(predicate)
                 .map(pg -> new PScoresOf(pg))
                 .collect(toList());
     }
 
     // TODO test me
     public List<PScoresOf> getScoresForRoom(String roomName) {
-        return service.all().stream()
-                .filter(pg -> pg.getRoomName().equals(roomName))
-                .map(pg -> new PScoresOf(pg))
-                .collect(toList());
+        return scoresFor(pg -> pg.getRoomName().equals(roomName));
     }
 
     public Map<String, String> getReadableNames() {

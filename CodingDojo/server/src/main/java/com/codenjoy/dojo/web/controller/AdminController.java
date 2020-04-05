@@ -80,8 +80,8 @@ public class AdminController {
     private final Semifinal semifinal;
 
     @GetMapping(params = "save")
-    public String savePlayerGame(@RequestParam("save") String name, Model model, HttpServletRequest request) {
-        saveService.save(name);
+    public String savePlayerGame(@RequestParam("save") String id, Model model, HttpServletRequest request) {
+        saveService.save(id);
         return getAdmin(request);
     }
 
@@ -101,24 +101,24 @@ public class AdminController {
     }
 
     @GetMapping(params = "load")
-    public String loadPlayerGame(@RequestParam("load") String name, Model model, HttpServletRequest request) {
-        saveService.load(name);
+    public String loadPlayerGame(@RequestParam("load") String id, Model model, HttpServletRequest request) {
+        saveService.load(id);
         return getAdmin(request);
     }
 
     // TODO ROOM а этот метод вообще зачем?
     @GetMapping(params = {"player", "data"})
-    public String loadPlayerGameFromSave(@RequestParam("player") String name,
+    public String loadPlayerGameFromSave(@RequestParam("player") String id,
                                          @RequestParam("data") String save,
                                          Model model, HttpServletRequest request)
     {
-        saveService.load(name, getGameRoom(request), getGameName(request), save);
-        return "redirect:/board/player/" + name;
+        saveService.load(id, getGameRoom(request), getGameName(request), save);
+        return "redirect:/board/player/" + id;
     }
 
     @GetMapping(params = "reloadAI")
-    public String reloadAI(@RequestParam("reloadAI") String name, Model model, HttpServletRequest request) {
-        playerService.reloadAI(name);
+    public String reloadAI(@RequestParam("reloadAI") String id, Model model, HttpServletRequest request) {
+        playerService.reloadAI(id);
         return getAdmin(request);
     }
 
@@ -149,8 +149,8 @@ public class AdminController {
     }
 
     @GetMapping(params = "removeSave")
-    public String removePlayerSave(@RequestParam("removeSave") String name, HttpServletRequest request) {
-        saveService.removeSave(name);
+    public String removePlayerSave(@RequestParam("removeSave") String id, HttpServletRequest request) {
+        saveService.removeSave(id);
         return getAdmin(request);
     }
 
@@ -338,15 +338,15 @@ public class AdminController {
             int index = 0;
             while (created != count) {
                 String number = StringUtils.leftPad(String.valueOf(++index), numLength, "0");
-                String playerName = mask.replaceAll("%", number);
+                String id = mask.replaceAll("%", number);
 
-                if (playerService.contains(playerName) && index < playerService.getAll().size()) {
+                if (playerService.contains(id) && index < playerService.getAll().size()) {
                     continue;
                 }
 
                 created++;
-                String code = getCode(playerName);
-                playerService.register(playerName, "127.0.0.1", roomName, settings.getGameName());
+                String code = getCode(id);
+                playerService.register(id, "127.0.0.1", roomName, settings.getGameName());
             }
         }
 
@@ -354,11 +354,11 @@ public class AdminController {
         return getAdmin(settings.getGameName());
     }
 
-    private String getCode(String playerName) {
-        if (registration.registered(playerName)) {
-            return registration.login(playerName, playerName);
+    private String getCode(String id) {
+        if (registration.registered(id)) {
+            return registration.login(id, id);
         } else {
-            return registration.register(playerName, playerName, playerName, playerName, "", GameAuthorities.USER.roles()).getCode();
+            return registration.register(id, id, id, id, "", GameAuthorities.USER.roles()).getCode();
         }
     }
 
@@ -430,7 +430,7 @@ public class AdminController {
         model.addAttribute("semifinalTick", semifinal.getTime());
         model.addAttribute(GAME_NAME_KEY, gameName);
         model.addAttribute("gameVersion", game.getVersion());
-        model.addAttribute("generateNameMask", "demo%@codenjoy.com");
+        model.addAttribute("generateNameMask", "demo%");
         model.addAttribute("generateCount", "30");
         model.addAttribute("generateRoomName", gameName);
         model.addAttribute("timerPeriod", timerService.getPeriod());

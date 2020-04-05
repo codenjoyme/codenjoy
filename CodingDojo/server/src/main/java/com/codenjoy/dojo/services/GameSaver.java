@@ -30,9 +30,9 @@ public interface GameSaver {
     
     void saveGame(Player player, String save, long time);
     
-    PlayerSave loadGame(String name);
+    PlayerSave loadGame(String id);
     
     List<String> getSavedList();
     
-    void delete(String name);
+    void delete(String id);
 }

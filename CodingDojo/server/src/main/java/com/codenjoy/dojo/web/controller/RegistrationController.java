@@ -81,7 +81,7 @@ public class RegistrationController {
     }
 
     @PostMapping()
-    public String registerByNameOrEmail(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
+    public String registerByName(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
             populateCommonRegistrationModel(model, false);
             return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getReadableName());

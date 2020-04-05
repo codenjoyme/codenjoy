@@ -21,6 +21,7 @@
  */
 var currentCommand = null;
 
+// TODO playerId
 function initJoystick(playerName, registered, code, contextPath) {
     if (!registered) {
         return;
@@ -36,7 +37,7 @@ function initJoystick(playerName, registered, code, contextPath) {
         if (!game.enableJoystick) return;
 
         $.ajax({ url:contextPath + "/joystick",
-                data:'command=' + command + '&playerName=' + playerName + "&code=" + code,
+                data:'command=' + command + '&player=' + playerName + "&code=" + code,
                 dataType:"json",
                 cache:false,
                 complete:ok,

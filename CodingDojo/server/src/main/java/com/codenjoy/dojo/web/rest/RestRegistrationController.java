@@ -28,6 +28,7 @@ import static java.util.stream.Collectors.toList;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import com.codenjoy.dojo.web.rest.pojo.PlayerId;
@@ -37,8 +38,8 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -58,24 +59,24 @@ public class RestRegistrationController {
     private SaveService saveService;
     private Validator validator;
 
-//    @GetMapping("/player/{player}/check/{code}")
-//    @ResponseBody
-    public boolean checkUserLogin(@PathVariable("player") String emailOrId,
+    @GetMapping("/player/{player}/check/{code}")
+    @ResponseBody
+    public boolean checkUserLogin(@PathVariable("player") String id,
                                   @PathVariable("code") String code)
     {
-        validator.checkPlayerName(emailOrId, Validator.CANT_BE_NULL);
+        validator.checkPlayerId(id, Validator.CANT_BE_NULL);
         validator.checkCode(code, Validator.CANT_BE_NULL);
 
-        return registration.checkUser(emailOrId, code) != null;
+        return registration.checkUser(id, code) != null;
     }
 
     // TODO test me
     @GetMapping("/player/{player}/remove/{code}")
     @ResponseBody
-    public synchronized boolean removeUser(@PathVariable("player") String emailOrId,
+    public synchronized boolean removeUser(@PathVariable("player") String id,
                               @PathVariable("code") String code)
     {
-        String id = validator.checkPlayerCode(emailOrId, code);
+        validator.checkPlayerCode(id, code);
 
         // оставляем только актуальные на сейчас очки, мало ли захочет залогиниться назад
         // TODO как-то тут не очень оставлять последние очки, иначе пользователь потеряет их, что тоже не ок
@@ -101,11 +102,10 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-//    @GetMapping("/player/all/info/{adminPassword}", method = RequestMethod.GET)
-//    @ResponseBody
-    public List<PlayerDetailInfo> getPlayersForMigrate(@PathVariable("adminPassword") String adminPassword) {
-        validator.checkIsAdmin(adminPassword);
-
+    @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
+    @GetMapping("/player/all/info")
+    @ResponseBody
+    public List<PlayerDetailInfo> getPlayersForMigrate() {
         List<Player> players = playerService.getAll();
         List<Registration.User> users = registration.getUsers();
         Map<String, List<String>> groups = playerGamesView.getGroupsMap();
@@ -113,7 +113,7 @@ public class RestRegistrationController {
         List<PlayerDetailInfo> result = new LinkedList<>();
         for (Player player : players) {
             Registration.User user = users.stream()
-                    .filter(it -> it.getEmail().equals(player.getName()))
+                    .filter(it -> it.getId().equals(player.getName()))
                     .findFirst()
                     .orElse(null);
             
@@ -127,7 +127,7 @@ public class RestRegistrationController {
         return result;
     }
 
-    // TODO test me + закончить реализацию - тут стаб
+    // TODO test me
     @GetMapping("/room/{roomName}/game/{gameName}/join")
     @ResponseBody
     public synchronized PlayerId joinPlayerInRoom(@PathVariable("gameName") String gameName,
@@ -181,10 +181,10 @@ public class RestRegistrationController {
     // TODO test me
     @GetMapping("/player/{player}/exists")
     @ResponseBody
-    public boolean isPlayerExists(@PathVariable("player") String emailOrId) {
-        validator.checkPlayerName(emailOrId, Validator.CANT_BE_NULL);
+    public boolean isPlayerExists(@PathVariable("player") String id) {
+        validator.checkPlayerId(id, Validator.CANT_BE_NULL);
 
-        String id = registration.checkUser(emailOrId);
-        return (id != null) && playerService.contains(id);
+        return registration.checkUser(id) != null
+                && playerService.contains(id);
     }
 }

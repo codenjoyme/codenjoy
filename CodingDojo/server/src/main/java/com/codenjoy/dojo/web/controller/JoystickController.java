@@ -45,18 +45,18 @@ public class JoystickController {
     private Validator validator;
 
     @GetMapping()
-    public String joystick(@RequestParam("playerName") String playerName,
+    public String joystick(@RequestParam("player") String id, // TODO playerId
                            @RequestParam("code") String code,
                            @RequestParam("command") String command)
     {
         validator.checkCommand(command);
-        String playerId = validator.checkPlayerCode(playerName, code);
+        validator.checkPlayerCode(id, code);
 
-        Player registeredPlayer = playerService.get(playerId);
-        if (registeredPlayer == NullPlayer.INSTANCE || !registeredPlayer.getName().equals(playerName)) {
+        Player registeredPlayer = playerService.get(id);
+        if (registeredPlayer == NullPlayer.INSTANCE || !registeredPlayer.getName().equals(id)) {
             return "fail";
         }
-        Joystick joystick = playerService.getJoystick(playerName);
+        Joystick joystick = playerService.getJoystick(id);
 
         new PlayerCommand(joystick, command).execute();
 

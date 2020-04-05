@@ -102,12 +102,12 @@ public class PlayerServiceImplIntegrationTest {
             }
 
             @Override
-            protected WebSocketRunner runAI(String aiName, String code, Solver solver, ClientBoard board) {
+            protected WebSocketRunner runAI(String id, String code, Solver solver, ClientBoard board) {
                 WebSocketRunner runner = mock(WebSocketRunner.class);
                 doAnswer(inv -> {
                     return null; // for debug
                 }).when(runner).close();
-                runners.put(aiName, runner);
+                runners.put(id, runner);
                 return runner;
             }
 
@@ -126,25 +126,25 @@ public class PlayerServiceImplIntegrationTest {
         // первый плеер зарегался (у него сейвов нет)
         when(saver.loadGame(anyString())).thenReturn(PlayerSave.NULL);
         Player player1 = service.register("player1", "room1", "callback1", "game1");
-        assertEquals("[game1-super-ai@codenjoy.com, player1]", service.getAll().toString());
-        assertEquals(true, runners.containsKey("game1-super-ai@codenjoy.com"));
+        assertEquals("[game1-super-ai, player1]", service.getAll().toString());
+        assertEquals(true, runners.containsKey("game1-super-ai"));
 
         // потом еще двое подоспели на ту же игру
         Player player2 = service.register("player2", "room1", "callback2", "game1");
         Player player3 = service.register("player3", "room1", "callback2", "game1");
         verify(gameTypes.get("game1"), times(++ai1)).getAI();
         verify(gameTypes.get("game1"), times(ai1)).getBoard();
-        assertEquals("[game1-super-ai@codenjoy.com, player1, player2, player3]",
+        assertEquals("[game1-super-ai, player1, player2, player3]",
                 service.getAll().toString());
 
         // второй вышел
         service.remove("player2");
-        assertEquals("[game1-super-ai@codenjoy.com, player1, player3]",
+        assertEquals("[game1-super-ai, player1, player3]",
                 service.getAll().toString());
 
         // и третий тоже
         service.remove("player3");
-        assertEquals("[game1-super-ai@codenjoy.com, player1]",
+        assertEquals("[game1-super-ai, player1]",
                 service.getAll().toString());
 
         // смотрим есть ли пользователи
@@ -157,33 +157,33 @@ public class PlayerServiceImplIntegrationTest {
         verify(gameTypes.get("game2"), times(ai2)).getBoard();
         Player player5 = service.register("player5", "room2", "callback5", "game2");
         Player player6 = service.register("player6", "room1", "callback6", "game1");
-        assertEquals("[game1-super-ai@codenjoy.com, player1, player6]",
+        assertEquals("[game1-super-ai, player1, player6]",
                 service.getAll("game1").toString());
-        assertEquals("[game2-super-ai@codenjoy.com, player4, player5]",
+        assertEquals("[game2-super-ai, player4, player5]",
                 service.getAll("game2").toString());
 
         // при этом у нас теперь два AI
-        assertEquals(true, service.contains("game1-super-ai@codenjoy.com"));
-        assertEquals(true, service.contains("game2-super-ai@codenjoy.com"));
-        assertEquals(true, runners.containsKey("game1-super-ai@codenjoy.com"));
-        assertEquals(true, runners.containsKey("game2-super-ai@codenjoy.com"));
+        assertEquals(true, service.contains("game1-super-ai"));
+        assertEquals(true, service.contains("game2-super-ai"));
+        assertEquals(true, runners.containsKey("game1-super-ai"));
+        assertEquals(true, runners.containsKey("game2-super-ai"));
 
         // взяли игру с плеерами
         assertEquals("game1", service.getAnyGameWithPlayers().name());
 
         // и рендомных прееров
-        assertEquals("game1-super-ai@codenjoy.com",
+        assertEquals("game1-super-ai",
                 service.getRandom("game1").toString());
-        assertEquals("game2-super-ai@codenjoy.com",
+        assertEquals("game2-super-ai",
                 service.getRandom("game2").toString());
 
         // несложно понять что берется просто первый в очереди
-        verifyNoMoreInteractions(runners.get("game2-super-ai@codenjoy.com"));
-        service.remove("game2-super-ai@codenjoy.com");
-        verify(runners.get("game2-super-ai@codenjoy.com"), times(1)).close();
+        verifyNoMoreInteractions(runners.get("game2-super-ai"));
+        service.remove("game2-super-ai");
+        verify(runners.get("game2-super-ai"), times(1)).close();
         assertEquals("player4",
                 service.getRandom("game2").toString());
-        runners.remove("game2-super-ai@codenjoy.com");
+        runners.remove("game2-super-ai");
 
         // закрыли регистрацию
         assertEquals(true, service.isRegistrationOpened());
@@ -201,41 +201,41 @@ public class PlayerServiceImplIntegrationTest {
         verify(gameTypes.get("game3"), times(++ai3)).getAI();
         verify(gameTypes.get("game3"), times(ai3)).getBoard();
         assertEquals(true, service.contains("player7"));
-        assertEquals("[game3-super-ai@codenjoy.com, player7]",
+        assertEquals("[game3-super-ai, player7]",
                 service.getAll("game3").toString());
-        assertEquals(true, runners.containsKey("game1-super-ai@codenjoy.com"));
-        assertEquals(false, runners.containsKey("game2-super-ai@codenjoy.com"));
-        assertEquals(true, runners.containsKey("game3-super-ai@codenjoy.com"));
+        assertEquals(true, runners.containsKey("game1-super-ai"));
+        assertEquals(false, runners.containsKey("game2-super-ai"));
+        assertEquals(true, runners.containsKey("game3-super-ai"));
 
         // загрузили AI вместо плеера
         service.reloadAI("player7");
         verify(gameTypes.get("game3"), times(++ai3)).getAI();
         verify(gameTypes.get("game3"), times(ai3)).getBoard();
-        assertEquals("[game3-super-ai@codenjoy.com, player7]",
+        assertEquals("[game3-super-ai, player7]",
                 service.getAll("game3").toString());
-        assertEquals(true, runners.containsKey("game1-super-ai@codenjoy.com"));
-        assertEquals(false, runners.containsKey("game2-super-ai@codenjoy.com"));
-        assertEquals(true, runners.containsKey("game3-super-ai@codenjoy.com"));
+        assertEquals(true, runners.containsKey("game1-super-ai"));
+        assertEquals(false, runners.containsKey("game2-super-ai"));
+        assertEquals(true, runners.containsKey("game3-super-ai"));
         assertEquals(true, runners.containsKey("player7"));
 
         // обновили описание ребят
         List<PlayerInfo> infos = service.getAll().stream().map(player -> new PlayerInfo(player.getName() + "_updated",
                 player.getCode(), player.getCallbackUrl(), player.getGameName())).collect(toList());
         service.updateAll(infos);
-        assertEquals("[game1-super-ai@codenjoy.com_updated, " +
+        assertEquals("[game1-super-ai_updated, " +
                 "player1_updated, player4_updated, player5_updated, " +
-                "player6_updated, game3-super-ai@codenjoy.com_updated, " +
+                "player6_updated, game3-super-ai_updated, " +
                 "player7_updated]", service.getAll().toString());
 
         // зарегали существующего пользователя в другую игру
-        assertEquals("[game1-super-ai@codenjoy.com_updated, player1_updated, player6_updated]",
+        assertEquals("[game1-super-ai_updated, player1_updated, player6_updated]",
                 service.getAll("game1").toString());
         assertEquals("[player4_updated, player5_updated]",
                 service.getAll("game2").toString());
         player1 = service.register("player1_updated", "room2", "callback1", "game2");
-        assertEquals("[game1-super-ai@codenjoy.com_updated, player6_updated]",
+        assertEquals("[game1-super-ai_updated, player6_updated]",
                 service.getAll("game1").toString());
-        assertEquals("[player4_updated, player5_updated, game2-super-ai@codenjoy.com, player1_updated]",
+        assertEquals("[player4_updated, player5_updated, game2-super-ai, player1_updated]",
                 service.getAll("game2").toString()); // TODO какого фига сюда AI ломится? Там же есть ребята уже
 
         // удалили всех нафиг
@@ -243,8 +243,8 @@ public class PlayerServiceImplIntegrationTest {
         assertEquals("[]", service.getAll("game1").toString());
         assertEquals("[]", service.getAll("game2").toString());
         assertEquals("[]", service.getAll("game3").toString());
-        verify(runners.get("game1-super-ai@codenjoy.com"), times(1)).close();
-        verify(runners.get("game3-super-ai@codenjoy.com"), times(1)).close();
+        verify(runners.get("game1-super-ai"), times(1)).close();
+        verify(runners.get("game3-super-ai"), times(1)).close();
         verify(runners.get("player7"), times(1)).close();
         runners.clear();
 
@@ -256,11 +256,11 @@ public class PlayerServiceImplIntegrationTest {
         // а теперь AI из сейва
         verify(gameTypes.get("game1"), times(ai1)).getAI();
         verify(gameTypes.get("game1"), times(ai1)).getBoard();
-        player1 = service.register(new PlayerSave("bot-super-ai@codenjoy.com", "callback", "room1", "game1", 120, "{save:true}"));
-        assertEquals("[player1, bot-super-ai@codenjoy.com]", service.getAll("game1").toString());
+        player1 = service.register(new PlayerSave("bot-super-ai", "callback", "room1", "game1", 120, "{save:true}"));
+        assertEquals("[player1, bot-super-ai]", service.getAll("game1").toString());
         verify(gameTypes.get("game1"), times(++ai1)).getAI();
         verify(gameTypes.get("game1"), times(ai1)).getBoard();
-        assertEquals(true, runners.containsKey("bot-super-ai@codenjoy.com"));
+        assertEquals(true, runners.containsKey("bot-super-ai"));
     }
 
     private GameType getOrCreateGameType(String name) {

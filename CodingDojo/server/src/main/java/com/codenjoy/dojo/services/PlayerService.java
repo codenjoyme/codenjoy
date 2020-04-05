@@ -27,14 +27,14 @@ import java.util.List;
 
 public interface PlayerService extends Tickable {
 
-    Player register(String name, String ip, String roomName, String gameName);
+    Player register(String id, String ip, String roomName, String gameName);
     Player register(PlayerSave save);
     List<Player> getAll();
     List<Player> getAll(String gameName);
-    void remove(String name);
+    void remove(String id);
     void update(Player player);
-    boolean contains(String name);
-    Player get(String name);
+    boolean contains(String id);
+    Player get(String id);
     void updateAll(List<PlayerInfo> players);
     void removeAll();
     Player getRandom(String gameType);
@@ -44,11 +44,11 @@ public interface PlayerService extends Tickable {
     void reloadAllRooms();
     void loadSaveForAll(String gameName, String save);
 
-    Joystick getJoystick(String name); // TODO Как-то тут этот метод не вяжется, но ладно пока пусть остается
+    Joystick getJoystick(String id); // TODO Как-то тут этот метод не вяжется, но ладно пока пусть остается
 
     void closeRegistration();
     boolean isRegistrationOpened();
     void openRegistration();
 
-    void reloadAI(String name);
+    void reloadAI(String id);
 }

@@ -54,7 +54,7 @@ public class ActionLogger extends Suspendable {
     public ActionLogger(ConnectionThreadPoolFactory factory) {
         pool = factory.create("CREATE TABLE IF NOT EXISTS player_boards (" +
                     "time varchar(255), " +
-                    "player_name varchar(255), " +
+                    "player_id varchar(255), " +
                     "game_type varchar(255), " +
                     "score varchar(255), " +
                     "command varchar(255), " +
@@ -74,7 +74,7 @@ public class ActionLogger extends Suspendable {
     public void saveToDB() {
         pool.run(connection -> {
             String sql = "INSERT INTO player_boards " +
-                    "(time, player_name, game_type, score, command, board) " +
+                    "(time, player_id, game_type, score, command, board) " +
                     "VALUES (?,?,?,?,?,?);";
 
             BoardLog data;
@@ -87,7 +87,7 @@ public class ActionLogger extends Suspendable {
                     }
 
                     stmt.setString(1, JDBCTimeUtils.toString(new Date(data.getTime())));
-                    stmt.setString(2, data.getPlayerName());
+                    stmt.setString(2, data.getPlayerId());
                     stmt.setString(3, data.getGameType());
                     stmt.setString(4, data.getScore().toString());
                     stmt.setString(5, data.getCommand());
@@ -140,21 +140,21 @@ public class ActionLogger extends Suspendable {
     }
 
     // TODO test me
-    public long getLastTime(String player) {
-        return pool.select("SELECT MAX(time) AS time FROM player_boards WHERE player_name = ?;",
-                new Object[]{ player },
+    public long getLastTime(String id) {
+        return pool.select("SELECT MAX(time) AS time FROM player_boards WHERE player_id = ?;",
+                new Object[]{ id },
                 rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
     }
 
     // TODO test me
-    public List<BoardLog> getBoardLogsFor(String player, long time, int count) {
+    public List<BoardLog> getBoardLogsFor(String id, long time, int count) {
         return pool.select(
-                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_name = ? AND time <= ? ORDER BY time ASC LIMIT ?) AS before" +
+                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND time <= ? ORDER BY time ASC LIMIT ?) AS before" +
                     " UNION " +
-                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_name = ? AND time > ? ORDER BY time ASC LIMIT ?) AS after;",
+                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND time > ? ORDER BY time ASC LIMIT ?) AS after;",
                 new Object[]{
-                    player, JDBCTimeUtils.toString(new java.util.Date(time)), count + 1,
-                    player, JDBCTimeUtils.toString(new java.util.Date(time)), count
+                    id, JDBCTimeUtils.toString(new java.util.Date(time)), count + 1,
+                    id, JDBCTimeUtils.toString(new java.util.Date(time)), count
                 },
                 rs -> getBoardLogs(rs));
     }

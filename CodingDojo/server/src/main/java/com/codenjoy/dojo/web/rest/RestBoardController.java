@@ -28,13 +28,14 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PGameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,11 +69,11 @@ public class RestBoardController {
     }
 
     @GetMapping("/player/{player}/{code}/level/{level}")
-    public synchronized boolean changeLevel(@PathVariable("player") String emailOrId,
+    public synchronized boolean changeLevel(@PathVariable("player") String id,
                                 @PathVariable("code") String code,
                                 @PathVariable("level") int level)
     {
-        String id = validator.checkPlayerCode(emailOrId, code);
+        validator.checkPlayerCode(id, code);
 
         playerGames.changeLevel(id, level);
 
@@ -80,7 +81,8 @@ public class RestBoardController {
     }
 
     // TODO test me и вообще где это надо?
-//    @GetMapping("/player/all/groups")
+    @GetMapping("/player/all/groups")
+    @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
     public Map<String, List<List<String>>> getPlayersGroups() {
         Map<String, List<List<String>>> result = new HashMap<>();
         List<Player> players = playerService.getAll();
@@ -101,7 +103,8 @@ public class RestBoardController {
         return result;
     }
 
-//    @GetMapping("/player/all/scores")
+    @GetMapping("/player/all/scores")
+    @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
     public Map<String, Object> getPlayersScores() {
         return playerGamesView.getScores();
     }
@@ -118,12 +121,14 @@ public class RestBoardController {
     }
 
     @GetMapping("/scores/clear")
+    @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
     public boolean clearAllScores() {
         playerService.cleanAllScores();
         return true;
     }
 
     @GetMapping("/game/enabled/{enabled}")
+    @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
     public boolean startStopGame(@PathVariable("enabled") boolean enabled) {
         if (enabled) {
             timerService.resume();
@@ -135,9 +140,9 @@ public class RestBoardController {
     }
 
     // TODO test me
-//    @GetMapping("/player/{player}/{code}/reset")
-    public synchronized boolean reset(@PathVariable("player") String emailOrId, @PathVariable("code") String code){
-        String id = validator.checkPlayerCode(emailOrId, code);
+    @GetMapping("/player/{player}/{code}/reset")
+    public synchronized boolean reset(@PathVariable("player") String id, @PathVariable("code") String code){
+        validator.checkPlayerCode(id, code);
 
         if (!playerService.contains(id)) {
             return false;
@@ -160,17 +165,17 @@ public class RestBoardController {
     // TODO test me
     @GetMapping("/player/{player}/{code}/wantsToPlay/{gameName}")
     public synchronized PPlayerWantsToPlay playerWantsToPlay(
-            @PathVariable("player") String emailOrId,
+            @PathVariable("player") String id,
             @PathVariable("code") String code,
             @PathVariable("gameName") String gameName)
     {
-        validator.checkPlayerName(emailOrId, CAN_BE_NULL);
+        validator.checkPlayerId(id, CAN_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
         validator.checkGameName(gameName, CANT_BE_NULL);
 
         String context = getContext();
         PGameTypeInfo gameType = gameController.type(gameName);
-        boolean registered = registration.checkUser(emailOrId, code) != null;
+        boolean registered = registration.checkUser(id, code) != null;
         List<String> sprites = gameController.spritesNames(gameName);
         String alphabet = gameController.spritesAlphabet();
         List<PlayerInfo> players = registrationController.getGamePlayers(gameName);
@@ -181,12 +186,14 @@ public class RestBoardController {
 
     // TODO test me
     @GetMapping("/player/{player}/log/{time}")
-    public List<BoardLog> changeLevel(@PathVariable("player") String emailOrId,
+    public List<BoardLog> changeLevel(@PathVariable("player") String id,
                                             @PathVariable("time") Long time)
     {
-        validator.checkPlayerName(emailOrId, CANT_BE_NULL);
+        validator.checkPlayerId(id, CANT_BE_NULL);
 
-        String id = registration.checkUser(emailOrId);
+        if (registration.checkUser(id) == null) {
+            return Arrays.asList();
+        }
 
         if (time == null || time == 0) {
             time = actionLogger.getLastTime(id);
@@ -211,6 +218,7 @@ public class RestBoardController {
 
     @GetMapping("/{gameName}/status")
     public Map<String, Object> checkGameIsActive(@PathVariable("gameName") String gameName) {
-        return Collections.singletonMap("active", playerGames.getPlayers(gameName).size() > 0);
+        boolean active = playerGames.getPlayers(gameName).size() > 0;
+        return Collections.singletonMap("active", active);
     }
 }

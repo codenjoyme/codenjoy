@@ -52,14 +52,14 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public void loadAll() {
-        for (String playerName : saver.getSavedList()) {
-            load(playerName);
+        for (String id : saver.getSavedList()) {
+            load(id);
         }
     }
 
     @Override
-    public long save(String name) {
-        PlayerGame playerGame = playerGames.get(name);
+    public long save(String id) {
+        PlayerGame playerGame = playerGames.get(id);
         if (playerGame != NullPlayerGame.INSTANCE) {
             long now = System.currentTimeMillis();
             saveGame(playerGame, now);
@@ -75,15 +75,15 @@ public class SaveServiceImpl implements SaveService {
     }
 
     @Override
-    public boolean load(String name) {
-        PlayerSave save = saver.loadGame(name);
-        resetPlayer(name, save);
+    public boolean load(String id) {
+        PlayerSave save = saver.loadGame(id);
+        resetPlayer(id, save);
         return true;
     }
 
-    private void resetPlayer(String name, PlayerSave save) {
-        if (players.contains(name)) {
-            players.remove(name);
+    private void resetPlayer(String id, PlayerSave save) {
+        if (players.contains(id)) {
+            players.remove(id);
         }
         players.register(save);
     }
@@ -95,14 +95,14 @@ public class SaveServiceImpl implements SaveService {
      * TODO я не уверен, что оно тут надо, т.к. есть вероятно другие версии этого метода
      */
     @Override
-    public void load(String name, String roomName, String gameName, String save) {
-        String ip = tryGetIpFromSave(name);
-        PlayerSave playerSave = new PlayerSave(name, ip, roomName, gameName, 0, save);
-        resetPlayer(name, playerSave);
+    public void load(String id, String roomName, String gameName, String save) {
+        String ip = tryGetIpFromSave(id);
+        PlayerSave playerSave = new PlayerSave(id, ip, roomName, gameName, 0, save);
+        resetPlayer(id, playerSave);
     }
 
-    private String tryGetIpFromSave(String name) {
-        PlayerSave saved = saver.loadGame(name);
+    private String tryGetIpFromSave(String id) {
+        PlayerSave saved = saver.loadGame(id);
         return (saved == PlayerSave.NULL) ? DEFAULT_CALLBACK_URL : saved.getCallbackUrl();
     }
 
@@ -118,19 +118,19 @@ public class SaveServiceImpl implements SaveService {
         }
 
         List<String> savedList = saver.getSavedList();
-        for (String name : savedList) {
-            if (name == null) continue;
+        for (String id : savedList) {
+            if (id == null) continue;
 
-            boolean found = map.containsKey(name);
+            boolean found = map.containsKey(id);
             if (found) {
-                PlayerInfo info = map.get(name);
+                PlayerInfo info = map.get(id);
                 info.setSaved(true);
             } else {
-                PlayerSave save = saver.loadGame(name);
+                PlayerSave save = saver.loadGame(id);
                 PlayerInfo info = new PlayerInfo(save, null, null);
-                setDataFromRegistration(info, name);
+                setDataFromRegistration(info, id);
 
-                map.put(name, info);
+                map.put(id, info);
             }
         }
 
@@ -156,14 +156,14 @@ public class SaveServiceImpl implements SaveService {
     }
 
     @Override
-    public void removeSave(String name) {
-        saver.delete(name);
+    public void removeSave(String id) {
+        saver.delete(id);
     }
 
     @Override
     public void removeAllSaves() {
-        for (String playerName : saver.getSavedList()) {
-            saver.delete(playerName);
+        for (String id : saver.getSavedList()) {
+            saver.delete(id);
         }
     }
 

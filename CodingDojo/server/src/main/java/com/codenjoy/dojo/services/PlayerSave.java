@@ -33,7 +33,7 @@ public class PlayerSave {
 
     public static final PlayerSave NULL = new PlayerSave(StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, 0, StringUtils.EMPTY);
 
-    private String name;
+    private String name; // TODO playerId
     private String callbackUrl;
     private String roomName;
     private String gameName;

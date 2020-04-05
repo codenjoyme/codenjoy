@@ -37,7 +37,7 @@ import java.sql.SQLException;
 public class BoardLog {
 
     private long time;
-    private String playerName;
+    private String playerId;
     private String gameType;
     private Object score;
     private String board;
@@ -46,7 +46,7 @@ public class BoardLog {
     public BoardLog(ResultSet resultSet) {
         try {
             time = JDBCTimeUtils.getTimeLong(resultSet);
-            playerName = resultSet.getString("player_name");
+            playerId = resultSet.getString("player_id");
             gameType = resultSet.getString("game_type");
             score = resultSet.getInt("score");
             board = resultSet.getString("board");

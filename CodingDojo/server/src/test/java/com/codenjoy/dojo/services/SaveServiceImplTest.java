@@ -80,17 +80,17 @@ public class SaveServiceImplTest {
         verify(saver).saveGame(player, "{\"key\":\"value\"}", time);
     }
 
-    private Player createPlayer(String name) {
+    private Player createPlayer(String id) {
         Player player = mock(Player.class);
-        when(player.getName()).thenReturn(name);
-        when(player.getCode()).thenReturn("code_" + name);
-        when(player.getData()).thenReturn("data for " + name);
-        when(player.getGameName()).thenReturn(name + " game");
+        when(player.getName()).thenReturn(id);
+        when(player.getCode()).thenReturn("code_" + id);
+        when(player.getData()).thenReturn("data for " + id);
+        when(player.getGameName()).thenReturn(id + " game");
         when(player.getRoomName()).thenReturn("room");
         when(player.hasAi()).thenReturn(true);
-        when(player.getCallbackUrl()).thenReturn("http://" + name + ":1234");
+        when(player.getCallbackUrl()).thenReturn("http://" + id + ":1234");
         when(player.getEventListener()).thenReturn(mock(InformationCollector.class));
-        when(playerService.get(name)).thenReturn(player);
+        when(playerService.get(id)).thenReturn(player);
         players.add(player);
 
         Answer<Object> answerCreateGame = inv1 -> {
