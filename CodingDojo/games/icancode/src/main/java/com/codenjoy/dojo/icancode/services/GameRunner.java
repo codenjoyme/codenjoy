@@ -113,7 +113,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerId) {
         if (isTrainingMode.getValue() == 0) { // TODO найти как это загрузить
 //            int total = Levels.collectSingle().size();
 //            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
