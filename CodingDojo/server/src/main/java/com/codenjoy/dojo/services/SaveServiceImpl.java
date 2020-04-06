@@ -97,13 +97,12 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public void load(String id, String roomName, String gameName, String save) {
         String ip = tryGetIpFromSave(id);
-        PlayerSave playerSave = new PlayerSave(id, ip, roomName, gameName, 0, save);
-        resetPlayer(id, playerSave);
+        resetPlayer(id, new PlayerSave(id, ip, roomName, gameName, 0, save));
     }
 
     private String tryGetIpFromSave(String id) {
-        PlayerSave saved = saver.loadGame(id);
-        return (saved == PlayerSave.NULL) ? DEFAULT_CALLBACK_URL : saved.getCallbackUrl();
+        PlayerSave save = saver.loadGame(id);
+        return (save == PlayerSave.NULL) ? DEFAULT_CALLBACK_URL : save.getCallbackUrl();
     }
 
     @Override
@@ -111,10 +110,10 @@ public class SaveServiceImpl implements SaveService {
         Map<String, PlayerInfo> map = new HashMap<>();
         for (Player player : players.getAll()) {
             PlayerInfo info = new PlayerInfo(player);
-            setDataFromRegistration(info, player.getName());
-            setSaveFromField(info, playerGames.get(player.getName()));
+            setDataFromRegistration(info, player.getId());
+            setSaveFromField(info, playerGames.get(player.getId()));
 
-            map.put(player.getName(), info);
+            map.put(player.getId(), info);
         }
 
         List<String> savedList = saver.getSavedList();
@@ -135,7 +134,7 @@ public class SaveServiceImpl implements SaveService {
         }
 
         List<PlayerInfo> result = new LinkedList<>(map.values());
-        Collections.sort(result, Comparator.comparing(Player::getName));
+        Collections.sort(result, Comparator.comparing(playerInfo -> playerInfo.getId()));
 
         return result;
     }

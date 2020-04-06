@@ -112,7 +112,7 @@ public class PlayerGameSaverTest {
     }
 
     private void assertEqualsProperties(Player expected, PlayerSave actual) {
-        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getCallbackUrl(), actual.getCallbackUrl());
         assertEquals(expected.getScore(), actual.getScore());
         assertEquals(expected.getRoomName(), actual.getRoomName());

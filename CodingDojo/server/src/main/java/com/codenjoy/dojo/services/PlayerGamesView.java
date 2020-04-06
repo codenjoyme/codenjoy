@@ -47,10 +47,10 @@ public class PlayerGamesView {
 
         return service.all().stream()
                 .collect(toMap(
-                        pg -> pg.getPlayer().getName(),
+                        pg -> pg.getPlayer().getId(),
                         pg -> {
                             GameType gameType = pg.getGameType();
-                            String player = pg.getPlayer().getName();
+                            String player = pg.getPlayer().getId();
                             List<String> group = groupsMap.get(player);
 
                             return new GameData(
@@ -78,7 +78,7 @@ public class PlayerGamesView {
 
     private Map<String, HeroData> getCoordinates() {
         return service.all().stream()
-                .collect(toMap(pg -> pg.getPlayer().getName(),
+                .collect(toMap(pg -> pg.getPlayer().getId(),
                         pg -> pg.getGame().getHero()));
     }
 
@@ -100,14 +100,14 @@ public class PlayerGamesView {
                     .collect(groupingBy(PlayerGame::getField))
                     .values().stream()
                     .map(group -> group.stream()
-                            .map(pg -> pg.getPlayer().getName())
+                            .map(pg -> pg.getPlayer().getId())
                             .collect(toList()))
                     .collect(toList());
     }
 
     public Map<String, Object> getScores() {
         return service.all().stream()
-                .collect(toMap(pg -> pg.getPlayer().getName(),
+                .collect(toMap(pg -> pg.getPlayer().getId(),
                         pg -> pg.getPlayer().getScore()));
     }
 
@@ -129,7 +129,7 @@ public class PlayerGamesView {
 
     public Map<String, String> getReadableNames() {
         return service.all().stream()
-                .collect(toMap(pg -> pg.getPlayer().getName(),
+                .collect(toMap(pg -> pg.getPlayer().getId(),
                         pg -> pg.getPlayer().getNotNullReadableName()));
     }
 }

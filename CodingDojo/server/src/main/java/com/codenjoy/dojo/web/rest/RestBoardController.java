@@ -90,7 +90,7 @@ public class RestBoardController {
         for (List<String> group : groups) {
             String playerId = group.get(0);
             Player player = players.stream()
-                    .filter(p -> p.getName().equals(playerId))
+                    .filter(p -> p.getId().equals(playerId))
                     .findFirst()
                     .orElse(NullPlayer.INSTANCE);
 

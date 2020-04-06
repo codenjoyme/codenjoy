@@ -53,6 +53,7 @@ public class PlayerTransportImpl implements PlayerTransport {
                     requested++;
                     pair.sendMessage(state);
                 } catch (Exception e) {
+                    log.error("Error during send state to: " + pair.getId(), e);
                     messages.add(e.getMessage());
                 }
             }

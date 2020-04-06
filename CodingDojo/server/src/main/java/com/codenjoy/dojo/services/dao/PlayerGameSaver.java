@@ -57,7 +57,7 @@ public class PlayerGameSaver implements GameSaver {
                         "(time, player_id, callback_url, room_name, game_name, score, save) " +
                         "VALUES (?,?,?,?,?,?,?);",
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
-                        player.getName(),
+                        player.getId(),
                         player.getCallbackUrl(),
                         player.getRoomName(),
                         player.getGameName(),

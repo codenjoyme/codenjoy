@@ -37,7 +37,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PlayerDetailInfo {
 
-    private String name;
+    private String id;
     private String readableName;
     private String callbackUrl;
     private String gameType;
@@ -59,7 +59,7 @@ public class PlayerDetailInfo {
 
         callbackUrl = player.getCallbackUrl();
         score = String.valueOf(player.getScore());
-        name = player.getName();
+        id = player.getId();
 
         this.registration = registration;
 
@@ -70,6 +70,6 @@ public class PlayerDetailInfo {
     }
 
     public PlayerSave buildPlayerSave() {
-        return new PlayerSave(name, callbackUrl, roomName, gameType, Integer.valueOf(score), save);
+        return new PlayerSave(id, callbackUrl, roomName, gameType, Integer.valueOf(score), save);
     }
 }

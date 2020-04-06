@@ -36,8 +36,8 @@ public class PlayerInfo extends Player {
     private boolean hidden;
     private boolean aiPlayer;
 
-    private PlayerInfo(String name, String readableName, String code, String url, String roomName, String gameName, Object scoreValue, boolean saved) {
-        setName(name);
+    private PlayerInfo(String id, String readableName, String code, String url, String roomName, String gameName, Object scoreValue, boolean saved) {
+        setId(id);
         setReadableName(readableName);
         setCode(code);
         setCallbackUrl(url);
@@ -50,15 +50,15 @@ public class PlayerInfo extends Player {
     }
 
     public PlayerInfo(Player player) {
-        this(player.getName(), player.getCode(), player.getCallbackUrl(), player.getGameName());
+        this(player.getId(), player.getCode(), player.getCallbackUrl(), player.getGameName());
         aiPlayer = player.hasAi();
         setScore(player.getScore());
         setRoomName(player.getRoomName());
         setReadableName(player.getReadableName());
     }
 
-    public PlayerInfo(String name, String code, String url, String gameName) {
-        setName(name);
+    public PlayerInfo(String id, String code, String url, String gameName) {
+        setId(id);
         setCode(code);
         setCallbackUrl(url);
         setGameName(gameName);
@@ -67,7 +67,7 @@ public class PlayerInfo extends Player {
     }
 
     public PlayerInfo(PlayerSave save, String readableName, String code) {
-        this(save.getName(), readableName, code,
+        this(save.getId(), readableName, code,
                 save.getCallbackUrl(), save.getRoomName(),
                 save.getGameName(), save.getScore(), true);
     }

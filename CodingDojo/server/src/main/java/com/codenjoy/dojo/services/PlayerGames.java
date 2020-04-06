@@ -100,7 +100,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public PlayerGame get(String id) {
         return all.stream()
-                .filter(pg -> pg.getPlayer().getName().equals(id))
+                .filter(pg -> pg.getPlayer().getId().equals(id))
                 .findFirst()
                 .orElse(NullPlayerGame.INSTANCE);
     }
@@ -156,7 +156,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private Single buildSingle(Player player, GameType gameType) {
         GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
-                player.getName());
+                player.getId());
 
         return new Single(gamePlayer,
                 gameType.getPrinterFactory(),
@@ -345,8 +345,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 .collect(toList());
     }
 
-    public void changeLevel(String playerName, int level) {
-        PlayerGame playerGame = get(playerName);
+    public void changeLevel(String playerId, int level) {
+        PlayerGame playerGame = get(playerId);
         String roomName = playerGame.getRoomName();
         Game game = playerGame.getGame();
         JSONObject save = game.getSave();
@@ -358,22 +358,22 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         }
     }
 
-    public void setLevel(String playerName, JSONObject save) {
+    public void setLevel(String playerId, JSONObject save) {
         if (save == null) {
             return;
         }
-        PlayerGame playerGame = get(playerName);
+        PlayerGame playerGame = get(playerId);
         String roomName = playerGame.getRoomName();
         Game game = playerGame.getGame();
         reload(game, roomName, save);
         fireOnLevelChanged(playerGame);
     }
 
-    public void changeRoom(String playerName, String roomName) {
+    public void changeRoom(String playerId, String roomName) {
         if (roomName == null) {
             return;
         }
-        PlayerGame playerGame = get(playerName);
+        PlayerGame playerGame = get(playerId);
         JSONObject save = playerGame.getGame().getSave();
         Game game = playerGame.getGame();
         reload(game, roomName, save);

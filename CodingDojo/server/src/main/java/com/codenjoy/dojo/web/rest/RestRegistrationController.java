@@ -113,14 +113,14 @@ public class RestRegistrationController {
         List<PlayerDetailInfo> result = new LinkedList<>();
         for (Player player : players) {
             Registration.User user = users.stream()
-                    .filter(it -> it.getId().equals(player.getName()))
+                    .filter(it -> it.getId().equals(player.getId()))
                     .findFirst()
                     .orElse(null);
-            
-            PlayerGame playerGame = playerGames.get(player.getName());
+
+            PlayerGame playerGame = playerGames.get(player.getId());
             Game game = playerGame.getGame();
             String roomName = playerGame.getRoomName();
-            List<String> group = groups.get(player.getName());
+            List<String> group = groups.get(player.getId());
             result.add(new PlayerDetailInfo(player, user, roomName, game, group));
         }
 
@@ -158,7 +158,7 @@ public class RestRegistrationController {
         boolean fromSave = player.getScore() == null;
         if (fromSave) {
             // делаем попытку грузить по сейву
-            if (!saveService.load(player.getName())) {
+            if (!saveService.load(player.getId())) {
                 // неудача - обнуляем все
                 player.setSave("{}");
                 player.setScore("0");
@@ -171,7 +171,7 @@ public class RestRegistrationController {
             PlayerSave save = player.buildPlayerSave();
             playerService.register(save);
 
-            playerGames.setLevel(player.getName(),
+            playerGames.setLevel(player.getId(),
                     new JSONObject(player.getSave()));
         }
 

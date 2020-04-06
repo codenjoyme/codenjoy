@@ -73,7 +73,7 @@ public class RegistrationService {
             return openRegistrationForm(request, model, null, null, null);
         }
 
-        String id = player.getName();
+        String id = player.getId();
         String email = player.getEmail();
         String name = player.getReadableName();
         String gameName = player.getGameName();
@@ -188,7 +188,7 @@ public class RegistrationService {
 
         Player player = new Player();
         player.setEmail(email);
-        player.setName(id);
+        player.setId(id);
         player.setReadableName(name);
         player.setGameName(rooms.getAlias(gameName));
         if (!model.containsAttribute("player")) {
@@ -208,7 +208,7 @@ public class RegistrationService {
             gameName = gameService.getDefaultGame();
         }
         Player player = playerService.register(id, ip, roomName, gameName);
-        return getBoardUrl(code, player.getName(), gameName);
+        return getBoardUrl(code, player.getId(), gameName);
     }
 
     public String getBoardUrl(String code, String id, String gameName) {

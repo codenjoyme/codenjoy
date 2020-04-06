@@ -126,7 +126,7 @@ public class AdminController {
     public String reloadAllAI(Model model, HttpServletRequest request) {
         playerService.getAll()
                 .stream().filter(not(Player::hasAi))
-                .map(Player::getName)
+                .map(Player::getId)
                 .forEach(playerService::reloadAI);
 
         return getAdmin(request);

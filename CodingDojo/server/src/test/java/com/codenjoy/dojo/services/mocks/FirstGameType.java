@@ -130,7 +130,7 @@ public class FirstGameType extends AbstractGameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerId) {
         return null;
     }
 

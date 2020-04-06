@@ -219,7 +219,7 @@ public class PlayerServiceImplIntegrationTest {
         assertEquals(true, runners.containsKey("player7"));
 
         // обновили описание ребят
-        List<PlayerInfo> infos = service.getAll().stream().map(player -> new PlayerInfo(player.getName() + "_updated",
+        List<PlayerInfo> infos = service.getAll().stream().map(player -> new PlayerInfo(player.getId() + "_updated",
                 player.getCode(), player.getCallbackUrl(), player.getGameName())).collect(toList());
         service.updateAll(infos);
         assertEquals("[game1-super-ai_updated, " +

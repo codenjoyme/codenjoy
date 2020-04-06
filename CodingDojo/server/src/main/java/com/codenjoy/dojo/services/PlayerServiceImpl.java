@@ -179,28 +179,28 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player register(PlayerSave playerSave) {
+    public Player register(PlayerSave save) {
         lock.writeLock().lock();
         try {
-            return justRegister(playerSave);
+            return justRegister(save);
         } finally {
             lock.writeLock().unlock();
         }
     }
 
-    private Player justRegister(PlayerSave playerSave) {
-        String name = playerSave.getName();
-        String gameName = playerSave.getGameName();
+    private Player justRegister(PlayerSave save) {
+        String id = save.getId();
+        String gameName = save.getGameName();
 
         GameType gameType = gameService.getGame(gameName);
         if (gameType instanceof NullGameType) {
             return NullPlayer.INSTANCE;
         }
-        Player player = getPlayer(playerSave, gameType);
+        Player player = getPlayer(save, gameType);
 
-        if (isAI(name)) {
+        if (isAI(id)) {
             setupPlayerAI(() -> player,
-                    name, gerCodeForAI(name), gameType);
+                    id, gerCodeForAI(id), gameType);
         }
 
         return player;
@@ -246,11 +246,11 @@ public class PlayerServiceImpl implements PlayerService {
         return WebSocketRunner.runAI(id, code, solver, board);
     }
 
-    private Player getPlayer(PlayerSave playerSave, GameType gameType) {
-        String name = playerSave.getName();
-        String roomName = playerSave.getRoomName();
-        String gameName = playerSave.getGameName();
-        String callbackUrl = playerSave.getCallbackUrl();
+    private Player getPlayer(PlayerSave save, GameType gameType) {
+        String name = save.getId();
+        String roomName = save.getRoomName();
+        String gameName = save.getGameName();
+        String callbackUrl = save.getCallbackUrl();
 
         Player player = getPlayer(name);
         PlayerGame oldPlayerGame = playerGames.get(name);
@@ -261,7 +261,7 @@ public class PlayerServiceImpl implements PlayerService {
         if (newPlayer) {
             playerGames.remove(player);
 
-            PlayerScores playerScores = gameType.getPlayerScores(playerSave.getScore());
+            PlayerScores playerScores = gameType.getPlayerScores(save.getScore());
             InformationCollector listener = new InformationCollector(playerScores);
 
             player = new Player(name, callbackUrl,
@@ -269,11 +269,11 @@ public class PlayerServiceImpl implements PlayerService {
             player.setEventListener(listener);
 
             player.setGameType(gameType);
-            PlayerGame playerGame = playerGames.add(player, roomName, playerSave);
+            PlayerGame playerGame = playerGames.add(player, roomName, save);
 
             player = playerGame.getPlayer();
 
-            player.setReadableName(registration.getNameById(player.getName()));
+            player.setReadableName(registration.getNameById(player.getId()));
 
             log.debug("Player {} starting new game {}", name, playerGame.getGame());
         } else {
@@ -330,7 +330,7 @@ public class PlayerServiceImpl implements PlayerService {
                     requested++;
                 }
             } catch (Exception e) {
-                log.error("Unable to send control request to player " + player.getName() +
+                log.error("Unable to send control request to player " + player.getId() +
                         " URL: " + player.getCallbackUrl(), e);
             }
         }
@@ -352,7 +352,7 @@ public class PlayerServiceImpl implements PlayerService {
             Player player = playerGame.getPlayer();
             try {
                 String gameType = playerGame.getGameType().name();
-                GameData gameData = gameDataMap.get(player.getName());
+                GameData gameData = gameDataMap.get(player.getId());
 
                 // TODO вот например для бомбера всем отдаются одни и те же борды, отличие только в паре спрайтов
                 Object board = game.getBoardAsString(); // TODO дольше всего строчка выполняется, прооптимизировать!
@@ -369,7 +369,7 @@ public class PlayerServiceImpl implements PlayerService {
                         gameData.getScores(),
                         gameData.getHeroesData()));
             } catch (Exception e) {
-                log.error("Unable to send screen updates to player " + player.getName() +
+                log.error("Unable to send screen updates to player " + player.getId() +
                         " URL: " + player.getCallbackUrl(), e);
                 e.printStackTrace();
             }
@@ -413,7 +413,8 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             Player player = getPlayer(id);
 
-            log.debug("Unregistered user {} from game {}", player.getName(), player.getGameName());
+            log.debug("Unregistered user {} from game {}",
+                    player.getId(), player.getGameName());
 
             playerGames.remove(player);
         } finally {
@@ -431,7 +432,7 @@ public class PlayerServiceImpl implements PlayerService {
             Iterator<PlayerInfo> iterator = players.iterator();
             while (iterator.hasNext()) {
                 Player player = iterator.next();
-                if (player.getName() == null) {
+                if (player.getId() == null) {
                     iterator.remove();
                 }
             }
@@ -452,7 +453,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void update(Player player) { // TODO test me
         lock.writeLock().lock();
         try {
-            updatePlayer(playerGames.get(player.getName()), player);
+            updatePlayer(playerGames.get(player.getId()), player);
         } finally {
             lock.writeLock().unlock();
         }
@@ -468,13 +469,13 @@ public class PlayerServiceImpl implements PlayerService {
         boolean updateReadableName = StringUtils.isNotEmpty(input.getReadableName());
         if (updateReadableName) {
             updated.setReadableName(input.getReadableName());
-            registration.updateReadableName(input.getName(), input.getReadableName());
+            registration.updateReadableName(input.getId(), input.getReadableName());
         }
 
-        boolean updateId = !playerGame.getPlayer().getName().equals(input.getName());
+        boolean updateId = !playerGame.getPlayer().getId().equals(input.getId());
         if (updateId) {
-            updated.setName(input.getName());
-            registration.updateId(input.getReadableName(), input.getName());
+            updated.setId(input.getId());
+            registration.updateId(input.getReadableName(), input.getId());
         }
 
         try {
@@ -486,10 +487,11 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         // TODO ROOM test me
-        boolean updateRoomName = !playerGame.getRoomName().equals(input.getRoomName());
+        boolean updateRoomName = input.getRoomName() != null
+                && !playerGame.getRoomName().equals(input.getRoomName());
         if (updateRoomName) {
             updated.setRoomName(input.getRoomName());
-            playerGames.changeRoom(input.getName(), input.getRoomName());
+            playerGames.changeRoom(input.getId(), input.getRoomName());
         }
         
         Game game = playerGame.getGame();
@@ -498,7 +500,7 @@ public class PlayerServiceImpl implements PlayerService {
             String newSave = input.getData();
             if (!PlayerSave.isSaveNull(newSave) && !newSave.equals(oldSave)) {
                 playerGames.setLevel(
-                        input.getName(),
+                        input.getId(),
                         new JSONObject(newSave));
             }
         }
@@ -510,7 +512,7 @@ public class PlayerServiceImpl implements PlayerService {
         try {
             List<Player> players = playerGames.getPlayers(gameName);
             players.forEach(player -> playerGames.setLevel(
-                    player.getName(),
+                    player.getId(),
                     new JSONObject(newSave)));
         } finally {
             lock.writeLock().unlock();

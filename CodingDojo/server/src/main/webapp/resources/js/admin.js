@@ -113,11 +113,13 @@ pages.admin = function() {
 
     var setupSaveUserDetails = function() {
         var ajax = new AdminAjax(contextPath, 'admin/user/info');
+        var PLAYER_ID = 'id';
 
-        var names = $('[id$=\\.name]');
-        names.each(function(index, obj) {
-            var name = $(obj);
-            var index = name.attr('index');
+        var elements = $('[id$=\\.' + PLAYER_ID + ']');
+        elements.each(function(index, obj) {
+            var element = $(obj);
+            var index = element.attr('index');
+            var playerId = element.val();
             var prefix = '#players' + index + '\\.';
 
             var setup = function(field) {
@@ -126,7 +128,7 @@ pages.admin = function() {
                     if (!!input.data('button')) return;
                     var test = $('<button type="button">Save</button>').click(function () {
                         var data = {};
-                        data['name'] = name.val();
+                        data[PLAYER_ID] = playerId;
                         data[field] = input.val();
                         ajax.save(data,
                             function() {
@@ -143,7 +145,7 @@ pages.admin = function() {
             };
 
             setup('readableName');
-            setup('name');
+            setup(PLAYER_ID);
             setup('roomName');
             setup('score');
             setup('callbackUrl');

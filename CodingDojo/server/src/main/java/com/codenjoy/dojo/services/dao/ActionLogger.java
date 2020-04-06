@@ -109,7 +109,7 @@ public class ActionLogger extends Suspendable {
         for (PlayerGame playerGame : playerGames) {
             Player player = playerGame.getPlayer();
             cache.add(new BoardLog(tick,
-                    player.getName(),
+                    player.getId(),
                     player.getGameName(),
                     player.getScore(),
                     playerGame.getGame().getBoardAsString().toString(),

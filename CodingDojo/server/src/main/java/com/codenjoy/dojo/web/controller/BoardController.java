@@ -78,7 +78,7 @@ public class BoardController {
             return "redirect:/register?id=" + id;
         }
 
-        playerService.remove(player.getName());
+        playerService.remove(player.getId());
         return "redirect:/";
     }
 
@@ -140,7 +140,7 @@ public class BoardController {
         model.addAttribute("code", code);
         model.addAttribute(GAME_NAME_KEY, player.getGameName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
-        model.addAttribute("playerName", player.getName()); // TODO playerId
+        model.addAttribute("playerId", player.getId());
         model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("allPlayersScreen", false);
     }
@@ -156,7 +156,7 @@ public class BoardController {
 
         model.addAttribute(GAME_NAME_KEY, player.getGameName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
-        model.addAttribute("playerName", player.getName()); // TODO playerId
+        model.addAttribute("playerId", player.getId());
         model.addAttribute("readableName", player.getReadableName());
 
         return "board-log";
@@ -189,13 +189,13 @@ public class BoardController {
         }
         GameType gameType = player.getGameType();
         if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
-            return "redirect:/board/player/" + player.getName() + code(code);
+            return "redirect:/board/player/" + player.getId() + code(code);
         }
 
         model.addAttribute("code", code);
         model.addAttribute(GAME_NAME_KEY, gameName);
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
-        model.addAttribute("playerName", null); // TODO playerId
+        model.addAttribute("playerId", null);
         model.addAttribute("readableName", null);
         model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
         return "board";
@@ -214,14 +214,14 @@ public class BoardController {
             return "redirect:/register";
         }
         if (player.getGameType().getMultiplayerType() != MultiplayerType.SINGLE) {
-            return "redirect:/board/player/" + player.getName() + code(code);
+            return "redirect:/board/player/" + player.getId() + code(code);
         }
 
         String gameName = player.getGameName();
         model.addAttribute("code", code);
         model.addAttribute(GAME_NAME_KEY, gameName);
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
-        model.addAttribute("playerName", player.getName()); // TODO playerId
+        model.addAttribute("playerId", player.getId());
         model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("allPlayersScreen", true);
         return "board";

@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -92,8 +91,8 @@ public class RegistrationController {
         
         player.setGameName(gameName);
 
-        if (player.getName() == null) {
-            player.setName(Hash.getRandomId());
+        if (player.getId() == null) {
+            player.setId(Hash.getRandomId());
         }
         return registrationService.register(player, roomName, result, request, model);
     }

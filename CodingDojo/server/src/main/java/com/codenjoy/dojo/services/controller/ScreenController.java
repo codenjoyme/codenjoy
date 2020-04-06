@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -57,17 +56,17 @@ public class ScreenController implements Controller<Map<ScreenRecipient, ScreenD
     @Override
     public boolean requestControl(Player player, Map<ScreenRecipient, ScreenData> data) throws IOException {
         // TODO этот метод вообще не используется
-        return transport.sendState(player.getName(), data);
+        return transport.sendState(player.getId(), data);
     }
 
     @Override
     public void registerPlayerTransport(Player player, Void nothing) {
-        transport.registerPlayerEndpoint(player.getName(),
+        transport.registerPlayerEndpoint(player.getId(),
                 new ScreenResponseHandler(transport, player));
     }
 
     @Override
     public void unregisterPlayerTransport(Player player) {
-        transport.unregisterPlayerEndpoint(player.getName());
+        transport.unregisterPlayerEndpoint(player.getId());
     }
 }

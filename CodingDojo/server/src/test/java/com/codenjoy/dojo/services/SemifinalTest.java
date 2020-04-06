@@ -548,7 +548,7 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     private void assertActive(Player...players) {
         assertEquals(Arrays.asList(players)
                         .stream()
-                        .map(Player::getName)
+                        .map(Player::getId)
                         .collect(toList())
                         .toString(),
                 playerGames.players().toString());

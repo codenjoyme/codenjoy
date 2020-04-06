@@ -53,7 +53,7 @@ public class JoystickController {
         validator.checkPlayerCode(id, code);
 
         Player registeredPlayer = playerService.get(id);
-        if (registeredPlayer == NullPlayer.INSTANCE || !registeredPlayer.getName().equals(id)) {
+        if (registeredPlayer == NullPlayer.INSTANCE || !registeredPlayer.getId().equals(id)) {
             return "fail";
         }
         Joystick joystick = playerService.getJoystick(id);

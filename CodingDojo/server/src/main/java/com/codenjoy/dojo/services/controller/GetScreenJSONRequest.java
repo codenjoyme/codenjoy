@@ -52,7 +52,7 @@ class GetScreenJSONRequest {
     }
 
     public boolean isFor(Player player) {
-        return getPlayers().contains(player.getName());
+        return getPlayers().contains(player.getId());
     }
 
     public String getGameName() {

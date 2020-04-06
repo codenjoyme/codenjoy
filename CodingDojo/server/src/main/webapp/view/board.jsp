@@ -38,7 +38,7 @@
     <script src="${ctx}/resources/js/${gameNameOnly}.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" page="board" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+    <div id="settings" page="board" contextPath="${ctx}" gameName="${gameName}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
 
     <%@include file="forkMe.jsp"%>
 

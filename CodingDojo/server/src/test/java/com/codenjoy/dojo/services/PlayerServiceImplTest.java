@@ -271,7 +271,7 @@ public class PlayerServiceImplTest {
         Player player = playerService.get(VASYA);
 
         assertEquals("game", player.getGameName());
-        assertEquals(VASYA, player.getName());
+        assertEquals(VASYA, player.getId());
         assertNull(player.getPassword());
         assertNull(player.getCode());
         assertEquals(VASYA_URL, player.getCallbackUrl());
@@ -304,10 +304,10 @@ public class PlayerServiceImplTest {
         assertTrue(playerService.isRegistrationOpened());
 
         player = createPlayer(VASYA);
-        assertSame(VASYA, player.getName());
+        assertSame(VASYA, player.getId());
 
         player = playerService.get(VASYA);
-        assertSame(VASYA, player.getName());
+        assertSame(VASYA, player.getId());
     }
 
     @Test
@@ -595,7 +595,7 @@ public class PlayerServiceImplTest {
 
     private void assertVasya(Player player) {
         assertNotSame(NullPlayer.class, player.getClass());
-        assertEquals(VASYA, player.getName());
+        assertEquals(VASYA, player.getId());
         assertEquals(null, player.getPassword());
         assertEquals(null, player.getCode());
         assertEquals(VASYA_URL, player.getCallbackUrl());
@@ -603,7 +603,7 @@ public class PlayerServiceImplTest {
 
     private void assertPetya(Player player) {
         assertNotSame(NullPlayer.class, player.getClass());
-        assertEquals(PETYA, player.getName());
+        assertEquals(PETYA, player.getId());
         assertEquals(null, player.getPassword());
         assertNull(player.getCode());
         assertEquals(PETYA_URL, player.getCallbackUrl());
@@ -898,7 +898,7 @@ public class PlayerServiceImplTest {
 
     private int getIndexOf(String player) {
         Player found = players.stream()
-                .filter(p -> p.getName().equals(player))
+                .filter(p -> p.getId().equals(player))
                 .findFirst()
                 .orElse(null);
         int indexOf = players.indexOf(found);
@@ -1153,7 +1153,7 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA);
         createPlayer(PETYA);
 
-        assertEquals(VASYA, playerService.getRandom(gameType.name()).getName());
+        assertEquals(VASYA, playerService.getRandom(gameType.name()).getId());
     }
 
     @Test
@@ -1291,7 +1291,7 @@ public class PlayerServiceImplTest {
 
     private void assertSaveLoaded(Player player, String save) {
         ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
-        verify(playerGames).setLevel(eq(player.getName()), captor.capture());
+        verify(playerGames).setLevel(eq(player.getId()), captor.capture());
         assertEquals(save, captor.getAllValues().toString());
     }
 
@@ -1350,7 +1350,7 @@ public class PlayerServiceImplTest {
     }
 
     private void assertSaveNotLoaded(Player player) {
-        verify(playerGames, never()).setLevel(eq(player.getName()), any(JSONObject.class));
+        verify(playerGames, never()).setLevel(eq(player.getId()), any(JSONObject.class));
     }
 
     @Test
@@ -1409,7 +1409,7 @@ public class PlayerServiceImplTest {
         PlayerGame playerGame = playerGames.get(VASYA);
         assertEquals(gameName, playerGame.getPlayer().getGameName());
         Player player = playerGame.getPlayer();
-        assertEquals(VASYA, player.getName());
+        assertEquals(VASYA, player.getId());
         assertNotNull(VASYA, player.getAi());
     }
 
@@ -1430,7 +1430,7 @@ public class PlayerServiceImplTest {
         PlayerGame playerGame = playerGames.get(VASYA_AI);
         assertEquals("game", playerGame.getPlayer().getGameName());
         Player player = playerGame.getPlayer();
-        assertEquals(VASYA_AI, player.getName());
+        assertEquals(VASYA_AI, player.getId());
         assertNotNull(VASYA, player.getAi());
 
     }

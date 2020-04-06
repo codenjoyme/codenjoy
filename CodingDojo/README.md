@@ -154,7 +154,7 @@ After submit you can see html page with board, try find inside:
 ```
 <body style="display:none;">
     <div id="settings" page="board" contextPath="/codenjoy-contest" gameName="bomberman"
-        playerName="t8o7ty34t9h43fpgf9b8" readableName="Stiven Pupkin" code="3465239452394852393"
+        playerId="t8o7ty34t9h43fpgf9b8" readableName="Stiven Pupkin" code="3465239452394852393"
         allPlayersScreen="false"></div>
 ```
 Another way to add `Authroization: Bearer USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER` header parameter.

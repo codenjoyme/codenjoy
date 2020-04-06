@@ -50,7 +50,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         assertEquals(false, playerGames.isEmpty());
         assertEquals(1, playerGames.size());
-        PlayerGame playerGame = playerGames.get(player.getName());
+        PlayerGame playerGame = playerGames.get(player.getId());
         GameField field = playerGame.getGame().getField();
         playerGames.onRemove(pg -> removed = pg);
 
@@ -80,7 +80,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player = createPlayer("game");
 
         // when
-        PlayerGame playerGame = playerGames.get(player.getName());
+        PlayerGame playerGame = playerGames.get(player.getId());
 
         // then
         assertEquals(player, playerGame.getPlayer());
@@ -111,7 +111,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertEquals(false, playerGames.isEmpty());
         assertEquals(2, playerGames.size());
 
-        PlayerGame playerGame = playerGames.get(otherPlayer.getName());
+        PlayerGame playerGame = playerGames.get(otherPlayer.getId());
 
         // TODO интересная бага, время от времени при запуске всех тестов parent проекта этот ассерт слетает потому что == не то же самое что equals. Интересный квест почему. Не критично, просто любопытно
         // System.out.println("==> " + (otherPlayer == playerGame.getPlayer()));
@@ -207,13 +207,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         Player player2 = createPlayer();
         Player player3 = createPlayer();
 
-        PlayerGame playerGame1 = playerGames.get(player.getName());
+        PlayerGame playerGame1 = playerGames.get(player.getId());
         GameField field1 = playerGame1.getGame().getField();
 
-        PlayerGame playerGame2 = playerGames.get(player2.getName());
+        PlayerGame playerGame2 = playerGames.get(player2.getId());
         GameField field2 = playerGame2.getGame().getField();
 
-        PlayerGame playerGame3 = playerGames.get(player3.getName());
+        PlayerGame playerGame3 = playerGames.get(player3.getId());
         GameField field3 = playerGame3.getGame().getField();
 
         assertEquals(3, playerGames.size());
@@ -821,9 +821,9 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertEquals(expected, captor.getAllValues().toString());
     }
 
-    private void verifyPlayerEventListenerLevelChanged(String playerName, String expected) {
+    private void verifyPlayerEventListenerLevelChanged(String playerId, String expected) {
         ArgumentCaptor<LevelProgress> captor = ArgumentCaptor.forClass(LevelProgress.class);
-        Player player = playerGames.get(playerName).getPlayer();
+        Player player = playerGames.get(playerId).getPlayer();
         if (expected == null) {
             verifyNoMoreInteractions(player.getEventListener());
         } else {

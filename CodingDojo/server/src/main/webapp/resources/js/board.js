@@ -24,7 +24,7 @@ pages = pages || {};
 
 pages.board = function() {
     game.gameName = getSettings('gameName');
-    game.playerName = getSettings('playerName');
+    game.playerId = getSettings('playerId');
     game.readableName = getSettings('readableName');
     game.code = getSettings('code');
     game.allPlayersScreen = getSettings('allPlayersScreen');
@@ -35,7 +35,7 @@ pages.board = function() {
 }
 
 function initBoardPage(game, onLoad) {
-    loadData('/rest/player/' + game.playerName + '/' + game.code + '/wantsToPlay/' + game.gameName, function(gameData) {
+    loadData('/rest/player/' + game.playerId + '/' + game.code + '/wantsToPlay/' + game.gameName, function(gameData) {
         game.contextPath = gameData.context;
         game.multiplayerType = gameData.gameType.multiplayerType;
         game.boardSize = gameData.gameType.boardSize;
@@ -50,7 +50,7 @@ function initBoardPage(game, onLoad) {
             game.players = players;
         } else {
             for (var index in players) {
-                if (players[index].name == game.playerName) {
+                if (players[index].id == game.playerId) {
                     game.players = [players[index]];
                 }
             }
@@ -64,7 +64,7 @@ function initBoardPage(game, onLoad) {
 
 function initBoardComponents(game) {
     initBoards(game.players, game.allPlayersScreen,
-            game.gameName, game.playerName, game.contextPath);
+            game.gameName, game.playerId, game.contextPath);
 
     if (typeof initCanvasesGame == 'function') {
         initCanvasesGame(game.contextPath, game.players, game.allPlayersScreen,
@@ -92,14 +92,14 @@ function initBoardComponents(game) {
     }
 
     if (typeof initJoystick == 'function') {
-        if (!!game.playerName) {
-            initJoystick(game.playerName, game.registered,
+        if (!!game.playerId) {
+            initJoystick(game.playerId, game.registered,
                 game.code, game.contextPath);
         }
     }
 
     if (game.enableLeadersTable) {
-        initLeadersTable(game.contextPath, game.playerName, game.code);
+        initLeadersTable(game.contextPath, game.playerId, game.code);
     }
 
     if (!game.enableForkMe) {

@@ -38,7 +38,7 @@ pages.boardLog = function() {
     game.heroInfo = null;
 
     game.gameName = getSettings('gameName');
-    game.playerName = getSettings('playerName');
+    game.playerId = getSettings('playerId');
     game.readableName = getSettings('readableName');
     game.contextPath = getSettings('contextPath');
     game.code = null;
@@ -60,15 +60,15 @@ function initBoardLogComponents(game) {
         game.sprites, game.alphabet, game.spriteElements,
         game.drawBoard);
 
-    initLogs(game.gameName, game.boardSize, game.alphabet, game.playerName);
+    initLogs(game.gameName, game.boardSize, game.alphabet, game.playerId);
 
     if (game.showBody) {
         $(document.body).show();
     }
 }
 
-function loadLogs(playerName, time, onLoad) {
-    loadData('/rest/player/' + playerName + '/log/' + time, function(gameData) {
+function loadLogs(playerId, time, onLoad) {
+    loadData('/rest/player/' + playerId + '/log/' + time, function(gameData) {
         onLoad(gameData);
     });
 }
@@ -78,31 +78,31 @@ var currentTick = 0;
 var firstTick = null;
 var lastTick = null;
 
-function initLogs(gameName, boardSize, alphabet, playerName) {
+function initLogs(gameName, boardSize, alphabet, playerId) {
 
     function loadTick(time) {
         currentTick = time;
         var tick = logTicks[time];
 
         var data = {};
-        var info = data[playerName] = {};
+        var info = data[playerId] = {};
         info.score = tick.score;
         info.gameName = tick.gameType;
         info.scores = {};
-        info.scores[playerName] = tick.score;
+        info.scores[playerId] = tick.score;
         info.boardSize = boardSize;
         info.board = tick.board;
         info.info = "";
         info.heroesData = {};
         info.heroesData.readableNames = {};
-        info.heroesData.readableNames[playerName] = playerName;
+        info.heroesData.readableNames[playerId] = playerId;
         info.heroesData.coordinates = {};
-        var coordinates = info.heroesData.coordinates[playerName] = {};
+        var coordinates = info.heroesData.coordinates[playerId] = {};
         coordinates.coordinate = {x:-1, y:-1};
         coordinates.level = 0;
         coordinates.multiplayer = false;
         info.heroesData.group = [];
-        info.heroesData.group[0] = playerName;
+        info.heroesData.group[0] = playerId;
 
         $('body').trigger('board-updated', data);
     }
@@ -115,7 +115,7 @@ function initLogs(gameName, boardSize, alphabet, playerName) {
             return;
         }
 
-        loadLogs(playerName, time, function(ticks) {
+        loadLogs(playerId, time, function(ticks) {
             var max = 0;
             for (var index in ticks) {
                 var tick = ticks[index];

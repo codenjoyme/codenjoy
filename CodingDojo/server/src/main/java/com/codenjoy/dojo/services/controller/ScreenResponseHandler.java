@@ -81,16 +81,16 @@ public class ScreenResponseHandler implements ResponseHandler {
 
     @Override
     public void onClose(PlayerSocket socket, int statusCode, String reason) {
-        log.debug("Websocket closed: {} from player: {} status code: {} reason: {}", player.getName(), statusCode, reason);
+        log.debug("Websocket closed: {} from player: {} status code: {} reason: {}", player.getId(), statusCode, reason);
     }
 
     @Override
     public void onError(PlayerSocket socket, Throwable error) {
-        log.error("Request error: player: {}, error: {}", player.getName(), error);
+        log.error("Request error: player: {}, error: {}", player.getId(), error);
     }
 
     @Override
     public void onConnect(PlayerSocket socket, Session session) {
-        log.debug("Connected: player: {}, session: {}", player.getName(), session);
+        log.debug("Connected: player: {}, session: {}", player.getId(), session);
     }
 }

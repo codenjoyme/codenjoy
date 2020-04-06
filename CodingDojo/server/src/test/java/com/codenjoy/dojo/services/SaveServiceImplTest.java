@@ -82,7 +82,7 @@ public class SaveServiceImplTest {
 
     private Player createPlayer(String id) {
         Player player = mock(Player.class);
-        when(player.getName()).thenReturn(id);
+        when(player.getId()).thenReturn(id);
         when(player.getCode()).thenReturn("code_" + id);
         when(player.getData()).thenReturn("data for " + id);
         when(player.getGameName()).thenReturn(id + " game");
@@ -174,7 +174,7 @@ public class SaveServiceImplTest {
         PlayerSave actual = captor.getValue();
         assertEquals("{'callbackUrl':'127.0.0.2'," +
                 "'gameName':'game'," +
-                "'name':'vasia'," +
+                "'id':'vasia'," +
                 "'roomName':'room'," +
                 "'save':'{'save':'data'}'," +
                 "'score':0}", JsonUtils.cleanSorted(actual));
@@ -200,7 +200,7 @@ public class SaveServiceImplTest {
         PlayerSave actual = captor.getValue();
         assertEquals("{'callbackUrl':'" + SaveServiceImpl.DEFAULT_CALLBACK_URL + "'," +
                 "'gameName':'game'," +
-                "'name':'vasia'," +
+                "'id':'vasia'," +
                 "'roomName':'room'," +
                 "'save':'{'save':'data'}'," +
                 "'score':0}", JsonUtils.cleanSorted(actual));
@@ -228,7 +228,7 @@ public class SaveServiceImplTest {
         PlayerSave actual = captor.getValue();
         assertEquals("{'callbackUrl':'127.0.0.2'," +
                 "'gameName':'game'," +
-                "'name':'vasia'," +
+                "'id':'vasia'," +
                 "'roomName':'room'," +
                 "'save':'{'save':'data'}'," +
                 "'score':0}", JsonUtils.cleanSorted(actual));
@@ -269,7 +269,7 @@ public class SaveServiceImplTest {
         PlayerInfo activeSaved = games.get(1);
         PlayerInfo saved = games.get(2);
 
-        assertEquals("active", active.getName());
+        assertEquals("active", active.getId());
         assertEquals("code_active", active.getCode());
         assertEquals("readable_active", active.getReadableName());
         assertEquals("http://active:1234", active.getCallbackUrl());
@@ -281,7 +281,7 @@ public class SaveServiceImplTest {
         assertTrue(active.isActive());
         assertFalse(active.isSaved());
 
-        assertEquals("activeSaved", activeSaved.getName());
+        assertEquals("activeSaved", activeSaved.getId());
         assertEquals("code_activeSaved", activeSaved.getCode());
         assertEquals("readable_activeSaved", activeSaved.getReadableName());
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
@@ -293,7 +293,7 @@ public class SaveServiceImplTest {
         assertTrue(activeSaved.isActive());
         assertTrue(activeSaved.isSaved());
 
-        assertEquals("saved", saved.getName());
+        assertEquals("saved", saved.getId());
         assertEquals("code_saved", saved.getCode());
         assertEquals("readable_saved", saved.getReadableName());
         assertEquals("http://saved:1234", saved.getCallbackUrl());

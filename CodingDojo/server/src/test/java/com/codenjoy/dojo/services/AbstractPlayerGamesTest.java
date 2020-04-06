@@ -186,7 +186,7 @@ public class AbstractPlayerGamesTest {
 
         for (PlayerGame playerGame : playerGames) {
             int index = fields.indexOf(playerGame.getField());
-            String name = playerGame.getPlayer().getName();
+            String name = playerGame.getPlayer().getId();
 
             result.get(index).add(name);
         }
@@ -213,7 +213,7 @@ public class AbstractPlayerGamesTest {
     }
 
     private String name(GamePlayer player) {
-        return playerGames.get(gamePlayers.indexOf(player)).getPlayer().getName();
+        return playerGames.get(gamePlayers.indexOf(player)).getPlayer().getId();
     }
 
 }
