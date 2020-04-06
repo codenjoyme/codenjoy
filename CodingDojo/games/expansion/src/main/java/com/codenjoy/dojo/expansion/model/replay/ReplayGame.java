@@ -29,11 +29,9 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.nullobj.NullJoystick;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
@@ -45,7 +43,7 @@ public class ReplayGame implements Game {
 
     private static final String START_FROM_TICK = "startFromTick";
     private static final String REPLAY_NAME = "replayName";
-    private static final String PLAYER_NAME = "playerName";
+    private static final String PLAYER_ID = "playerId";
 
     private final int startFrom;
     private int tick;
@@ -64,9 +62,9 @@ public class ReplayGame implements Game {
     public ReplayGame(JSONObject save) {
         String replayName = save.getString(REPLAY_NAME);
         startFrom = save.optInt(START_FROM_TICK, 0);
-        String playerName = save.getString(PLAYER_NAME);
+        String playerId = save.getString(PLAYER_ID);
 
-        this.loggerReader = getLoggerReader(replayName, playerName);
+        this.loggerReader = getLoggerReader(replayName, playerId);
         start = false;
         tick = -1;
         if (!data.delayReplay()) {
@@ -75,8 +73,8 @@ public class ReplayGame implements Game {
     }
 
     @NotNull
-    protected LoggerReader getLoggerReader(String replayName, String playerName) {
-        return new LoggerReaderImpl(replayName, playerName);
+    protected LoggerReader getLoggerReader(String replayName, String playerId) {
+        return new LoggerReaderImpl(replayName, playerId);
     }
 
     @Override

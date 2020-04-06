@@ -117,9 +117,9 @@ public class GameRunner extends AbstractGameType implements GameType  {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String id) {
+    public GamePlayer createPlayer(EventListener listener, String playerId) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Creating GamePlayer for {}", id);
+            logger.debug("Creating GamePlayer for {}", playerId);
         }
 
         // TODO понять как достать тут сейв
@@ -134,7 +134,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 //            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
 //        }
 
-        Player player = new Player(listener, id);
+        Player player = new Player(listener, playerId);
 
         return player;
     }

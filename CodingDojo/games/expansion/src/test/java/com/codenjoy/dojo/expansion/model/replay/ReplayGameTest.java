@@ -61,11 +61,11 @@ public class ReplayGameTest {
         final String[] actualReplayName = {null};
         final String[] actualPlayerName = {null};
 
-        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}")){
+        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}")){
             @Override
-            protected LoggerReader getLoggerReader(String replayName, String playerName) {
+            protected LoggerReader getLoggerReader(String replayName, String playerId) {
                 actualReplayName[0] = replayName;
-                actualPlayerName[0] = playerName;
+                actualPlayerName[0] = playerId;
                 return null;
             }
         };
@@ -75,13 +75,13 @@ public class ReplayGameTest {
 
     @Test
     public void shouldNullJoystick() {
-        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}"));
+        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}"));
         assertEquals(NullJoystick.INSTANCE, game.getJoystick());
     }
 
     @Test
     public void shouldIsGameOverFalse() {
-        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}"));
+        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}"));
         assertEquals(false, game.isGameOver());
     }
 
@@ -273,9 +273,9 @@ public class ReplayGameTest {
 
     @NotNull
     private ReplayGame createGame(int startFrom) {
-        return new ReplayGame(new JSONObject("{'startFromTick':" + startFrom + ",'replayName':'game-E@1e16c0aa-1','playerName':'P@57bc27f5'}")){
+        return new ReplayGame(new JSONObject("{'startFromTick':" + startFrom + ",'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}")){
                 @Override
-                protected LoggerReader getLoggerReader(String replayName, String playerName) {
+                protected LoggerReader getLoggerReader(String replayName, String playerId) {
                     return new LoggerReader() {
                         private boolean isOutOf(int tick) {
                             return tick < 0 || tick >= boards.size();
