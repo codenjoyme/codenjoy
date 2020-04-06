@@ -33,10 +33,6 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
     loadCanvasesData();
     var reloading = false;
 
-    function toId(email) {
-        return email.replace(/[@.]/gi, "_");
-    }
-
     function goToHomePage() {
         window.location.href = contextPath;
     }
@@ -47,15 +43,15 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
         loadPlayers(function(newPlayers) {
             var remove = [];
             var create = [];
-            var playerNames = getNames(players);
-            var newPlayerNames = getNames(newPlayers);
+            var playerIds = getNames(players);
+            var newPlayerIds = getNames(newPlayers);
             newPlayers.forEach(function (newPlayer) {
-                if ($.inArray(newPlayer.name, playerNames) == -1) {
+                if ($.inArray(newPlayer.id, playerIds) == -1) {
                     create.push(newPlayer);
                 }
             });
             players.forEach(function (player) {
-                if ($.inArray(player.name, newPlayerNames) == -1) {
+                if ($.inArray(player.id, newPlayerIds) == -1) {
                     remove.push(player);
                 }
             });
@@ -88,16 +84,15 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
 
     function removeHtml(playersList) {
         playersList.forEach(function (player) {
-            $('#div_' + toId(player.name)).remove();
+            $('#div_' + player.id).remove();
         });
     }
 
     function buildHtml(playersList) {
         var templateData = [];
         playersList.forEach(function (player) {
-            var playerName = player.name;
-            var id = toId(playerName);
-            var name = playerName.split('@')[0];
+            var id = player.id;
+            var name = player.readableName;
             var visible = (allPlayersScreen || !enablePlayerInfoLevel) ? 'none' : 'block';
             templateData.push({name : name, id : id, visible : visible })
         });
@@ -109,19 +104,19 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
 
     function removeCanvases(playersList) {
         playersList.forEach(function (player) {
-            delete canvases[player.name];
-            delete infoPools[player.name];
+            delete canvases[player.id];
+            delete infoPools[player.id];
         });
     }
 
     function buildCanvases(playersList) {
         playersList.forEach(function (player) {
-            canvases[player.name] = createCanvas(toId(player.name));
-            infoPools[player.name] = [];
+            canvases[player.id] = createCanvas(player.id);
+            infoPools[player.id] = [];
         });
     }
 
-    var getBoardDrawer = function(canvas, playerName, playerData, allPlayersScreen) {
+    var getBoardDrawer = function(canvas, playerId, playerData, allPlayersScreen) {
         var getBoard = function() {
             return playerData.board;
         }
@@ -278,7 +273,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
             drawLayers : drawLayers,
             drawPlayerNames : drawPlayerNames,
             canvas : canvas,
-            playerName : playerName,
+            playerId : playerId,
             playerData : playerData,
             allPlayersScreen : allPlayersScreen
         };
@@ -299,8 +294,8 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
         return div[0];
     }
 
-    function showScoreInformation(playerName, information) {
-        var infoPool = infoPools[playerName];
+    function showScoreInformation(playerId, information) {
+        var infoPool = infoPools[playerId];
 
         if (information != '') {
             var arr = information.split(', ');
@@ -313,7 +308,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
         }
         if (infoPool.length == 0) return;
 
-        var score = $("#score_info_" + toId(playerName));
+        var score = $("#score_info_" + playerId);
         if (score.is(':visible')) {
             return;
         }
@@ -321,7 +316,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
         var text = '<center>' + infoPool.join('<br>') + '</center>';
         infoPool.splice(0, infoPool.length);
 
-        var canvas = $("#" + toId(playerName));
+        var canvas = $("#" + playerId);
         var size = calculateTextSize(text);
         score.css({
                 position: "absolute",
@@ -336,7 +331,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
         score.show().delay(700).fadeOut(200, function() {
             score.hide();
 
-            showScoreInformation(playerName, '');
+            showScoreInformation(playerId, '');
         });
     }
 
@@ -428,7 +423,7 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
     function getNames(playerList) {
         var result = [];
         playerList.forEach(function (player) {
-            result.push(player.name);
+            result.push(player.id);
         });
         return result;
     }
@@ -474,23 +469,23 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
             }
         } else {
             for (var i in players) {
-                var player = players[i].name;
+                var player = players[i].id;
                 drawUserCanvas(player, data[player], false);
             }
         }
     }
 
-    function drawUserCanvas(playerName, data, allPlayersScreen) {
-        resizeCanvas(toId(playerName));
-        var canvas = canvases[playerName];
-        drawBoard(getBoardDrawer(canvas, playerName, data, allPlayersScreen));
+    function drawUserCanvas(playerId, data, allPlayersScreen) {
+        resizeCanvas(playerId);
+        var canvas = canvases[playerId];
+        drawBoard(getBoardDrawer(canvas, playerId, data, allPlayersScreen));
 
-        $("#score_" + toId(playerName)).text(data.score);
+        $("#score_" + playerId).text(data.score);
 
-        showScoreInformation(playerName, data.info);
+        showScoreInformation(playerId, data.info);
 
         if (!allPlayersScreen) {
-            $("#level_" + toId(playerName)).text(data.heroesData.coordinates[playerName] .level + 1);
+            $("#level_" + playerId).text(data.heroesData.coordinates[playerId] .level + 1);
         }
     }
 
