@@ -29,7 +29,7 @@ var boardAllPageLoad = function() {
         game.debugger();
     }
 
-    initLeadersTable(game.contextPath, game.playerName, game.code,
+    initLeadersTable(game.contextPath, game.playerId, game.code,
         function(count, you, link, name, score, maxLength, level) {
             var star = '';
             if (count == 1) {

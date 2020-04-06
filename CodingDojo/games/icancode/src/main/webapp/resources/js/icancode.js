@@ -44,7 +44,7 @@ if (typeof game == 'undefined') {
     game = {};
     game.demo = true;
     game.code = 123;
-    game.playerName = 'user@gmail.com';
+    game.playerId = 'userId';
     game.readableName = 'Stiven Pupkin';
     initLayout = function(game, html, context, transformations, scripts, onLoad) {
         onLoad();

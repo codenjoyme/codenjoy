@@ -165,7 +165,7 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
     var preparePart = function(date, part, index, count) {
         var SEP = "|$%&|";
         return "message('" +
-                    game.playerName + SEP +
+                    game.playerId + SEP +
                     date.getTime() + SEP +
                     index + SEP +
                     count + SEP +

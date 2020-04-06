@@ -59,7 +59,7 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
     });
 
     var changeLevel = function(level) {
-        var url = '/rest/player/' + game.playerName + '/' + game.code + '/level/' + level;
+        var url = '/rest/player/' + game.playerId + '/' + game.code + '/level/' + level;
         loadData(url, function(status) {
              // do nothing
         });
@@ -70,13 +70,13 @@ function initLevelProgress(game, socket, onUpdate, onChangeLevel) {
     }
 
     $('body').bind("board-updated", function (events, data) {
-        if (game.playerName == '' || !data[game.playerName]) {
+        if (game.playerId == '' || !data[game.playerId]) {
             return;
         }
 
         $('body').trigger("tick");
 
-        var board = data[game.playerName].board;
+        var board = data[game.playerId].board;
 
         var level = board.levelProgress.current;
         var countLevels = board.levelProgress.total;
