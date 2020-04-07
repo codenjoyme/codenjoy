@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.services;
  */
 
 
+import com.codenjoy.dojo.client.Encoding;
 import com.codenjoy.dojo.icancode.services.levels.*;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
@@ -75,7 +76,7 @@ public class LevelsTest {
     }
 
     private String getMap(String level) {
-        return Levels.resize(level, Levels.VIEW_SIZE_TESTING);
+        return Levels.resize(Encoding.removeN(level), Levels.VIEW_SIZE_TESTING);
     }
 
     @Test
