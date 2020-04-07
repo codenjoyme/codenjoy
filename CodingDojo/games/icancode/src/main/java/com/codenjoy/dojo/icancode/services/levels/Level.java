@@ -1,14 +1,16 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public interface Level {
 
     static List<String> extendBefunge(Level level, String... commands) {
-        List<String> result = level.befungeCommands();
-        result.addAll(Arrays.asList(commands));
-        return result;
+        return new LinkedList<String>(){{
+            addAll(level.befungeCommands());
+            addAll(Arrays.asList(commands));
+        }};
     }
 
     default String help() {
