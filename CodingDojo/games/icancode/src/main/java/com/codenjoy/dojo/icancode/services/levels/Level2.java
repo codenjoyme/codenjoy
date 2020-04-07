@@ -61,14 +61,14 @@ public class Level2 implements Level {
 
     @Override
     public String map() {
-        return "        " +
-                "   ###  " +
-                "   #S#  " +
-                "   #.#  " +
-                "   #.#  " +
-                "   #E#  " +
-                "   ###  " +
-                "        ";
+        return  "        \n" +
+                "   ###  \n" +
+                "   #S#  \n" +
+                "   #.#  \n" +
+                "   #.#  \n" +
+                "   #E#  \n" +
+                "   ###  \n" +
+                "        \n";
     }
 
     @Override

@@ -46,14 +46,14 @@ public class Level7 implements Level {
 
     @Override
     public String map() {
-        return "        " +
-                " ###    " +
-                " #E#    " +
-                " #.#    " +
-                " #.#### " +
-                " #...S# " +
-                " ###### " +
-                "        ";
+        return  "        \n" +
+                " ###    \n" +
+                " #E#    \n" +
+                " #.#    \n" +
+                " #.#### \n" +
+                " #...S# \n" +
+                " ###### \n" +
+                "        \n";
     }
 
     @Override

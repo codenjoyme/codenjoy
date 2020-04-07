@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.services;
  */
 
 
+import com.codenjoy.dojo.client.Encoding;
 import com.codenjoy.dojo.icancode.services.levels.*;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -96,7 +97,7 @@ public final class Levels {
     }
 
     public static ILevel load(String levelMap) {
-        return new LevelImpl(resize(decorate(levelMap), size()));
+        return new LevelImpl(resize(decorate(Encoding.removeN(levelMap)), size()));
     }
 
     // TODO я думаю этот метод не нужен тут, так как он дублирует Layered view

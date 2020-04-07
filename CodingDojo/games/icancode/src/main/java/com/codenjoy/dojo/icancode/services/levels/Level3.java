@@ -44,14 +44,14 @@ public class Level3 implements Level {
 
     @Override
     public String map() {
-        return "        " +
-                "        " +
-                " ###### " +
-                " #E..S# " +
-                " ###### " +
-                "        " +
-                "        " +
-                "        ";
+        return  "        \n" +
+                "        \n" +
+                " ###### \n" +
+                " #E..S# \n" +
+                " ###### \n" +
+                "        \n" +
+                "        \n" +
+                "        \n";
     }
 
     @Override

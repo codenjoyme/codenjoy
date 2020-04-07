@@ -24,15 +24,6 @@ var initLevelInfo = function(contextPath) {
     var settings = null;
     var count = 0;
 
-    var splitMap = function(value) {
-        var size = parseInt(Math.sqrt(value.length));
-        return value.replace(new RegExp('(.{' + size + '})', 'g'), '$1\n')
-    }
-
-    var joinMap = function(value) {
-        return value.replace(new RegExp('\n', 'g'), '');
-    }
-
     var decode = function(value) {
         return value;
     }
@@ -70,7 +61,7 @@ var initLevelInfo = function(contextPath) {
     }
 
     var save = function(number, level) {
-        saveParameter('level' + number + '.map', joinMap(level.map));
+        saveParameter('level' + number + '.map', encode(level.map));
         saveParameter('level' + number + '.help', encode(level.help));
         saveParameter('level' + number + '.defaultCode', encode(level.defaultCode));
         saveParameter('level' + number + '.winCode', encode(level.winCode));
@@ -95,7 +86,7 @@ var initLevelInfo = function(contextPath) {
         }
 
         return {
-            map :             splitMap(decode(get('level' + number + '.map').value)),
+            map :             decode(get('level' + number + '.map').value),
             help :            decode(get('level' + number + '.help').value),
             defaultCode :     decode(get('level' + number + '.defaultCode').value),
             winCode :         decode(get('level' + number + '.winCode').value),
