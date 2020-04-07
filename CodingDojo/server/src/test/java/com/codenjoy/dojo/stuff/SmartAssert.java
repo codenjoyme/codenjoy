@@ -114,7 +114,7 @@ public class SmartAssert extends Runner {
             // TODO почему-то тут idea не полхватывает expected: but was:
             return  "org.junit.ComparisonFailure: " + message + "\n" +
                     "\t\texpected: " + expected + "\n" +
-                    "\t\tactual: " + actual + "\n" +
+                    "\t\tactual:   " + actual + "\n" +
                         where.stream()
                             .map(s -> "\t" + s + "\n")
                             .reduce("", (left, right) -> left + right);
