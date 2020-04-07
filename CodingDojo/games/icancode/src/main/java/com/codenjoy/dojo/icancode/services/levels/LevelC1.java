@@ -1,0 +1,98 @@
+package com.codenjoy.dojo.icancode.services.levels;
+
+public class LevelC1 implements Level {
+    
+    @Override
+    public String help() {
+        return "In this case, we have Holes. Robot will fall down, if you won’t avoid it.<br>\n" +
+                "You can use this method to detect Holes:<br>\n" +
+                "<pre>var scanner = robot.getScanner();\n" +
+                "if (scanner.at(\"LEFT\") == \"HOLE\") {\n" +
+                "    // some statement here\n" +
+                "}</pre>\n" +
+
+                "And these new methods for jumping through it:<br>\n" +
+                "<pre>robot.jumpLeft();\n" +
+                "robot.jumpRight();\n" +
+                "robot.jumpUp();\n" +
+                "robot.jumpDown();\n" +
+                "robot.jump(\"LEFT\");</pre>\n" +
+
+                "Also you can add new method to robot by:\n" +
+                "<pre>robot.doSmthNew = function(parameter) {\n" +
+                "    // some statement here\n" +
+                "}</pre>\n" +
+
+                "Remember ! Your program should work for all previous levels too.";
+    }
+
+    @Override
+    public String defaultCode() {
+        return new LevelB1().defaultCode();
+    }
+
+    @Override
+    public String winCode() {
+        return "function program(robot) {\n" +
+                "    var scanner = robot.getScanner();\n" +
+                "    var dest = scanner.getGold();\n" +
+                "    if (dest.length === 0) {\n" +
+                "        dest = scanner.getExit();\n" +
+                "    }\n" +
+                "    var to = scanner.getShortestWay(dest[0])[1];\n" +
+                "    var from = scanner.getMe();\n" +
+                "\n" +
+                "    robot.goOverHole = function(direction) {\n" +
+                "        if (scanner.at(direction) != \"HOLE\") {\n" +
+                "            robot.go(direction);\n" +
+                "        } else {\n" +
+                "            robot.jump(direction);\n" +
+                "        }\n" +
+                "    };\n" +
+                "    \n" +
+                "    var dx = to.getX() - from.getX(); \n" +
+                "    var dy = to.getY() - from.getY(); \n" +
+                "    if (dx > 0) {\n" +
+                "        robot.goOverHole(\"RIGHT\");\n" +
+                "    } else if (dx < 0) {\n" +
+                "        robot.goOverHole(\"LEFT\");\n" +
+                "    } else if (dy > 0) {\n" +
+                "        robot.goOverHole(\"DOWN\");\n" +
+                "    } else if (dy < 0) {\n" +
+                "        robot.goOverHole(\"UP\");\n" +
+                "    }\n" +
+                "}";
+    }
+
+    @Override
+    public String map() {
+        return "          " +
+                " ######## " +
+                " #S.O..$# " +
+                " #......# " +
+                " ####...# " +
+                "    #..O# " +
+                " ####...# " +
+                " #...O.E# " +
+                " ######## " +
+                "          ";
+    }
+
+    @Override
+    public String autocomplete() {
+        return "{" +
+                "	'robot.':{" +
+                "		'synonyms':[]," +
+                "		'values':['goOverHole()', 'jump()', 'jumpLeft()', 'jumpRight()', 'jumpUp()', 'jumpDown()']" +
+                "	}," +
+                "	'.jump(':{" +
+                "		'synonyms':[]," +
+                "		'values':['\\\'RIGHT\\'', '\\'DOWN\\'', '\\'LEFT\\'', '\\'UP\\'']" +
+                "	}," +
+                "	' == ':{" +
+                "		'synonyms':[' != ']," +
+                "		'values':['\\'HOLE\\'']" +
+                "	}" +
+                "}";
+    }
+}
