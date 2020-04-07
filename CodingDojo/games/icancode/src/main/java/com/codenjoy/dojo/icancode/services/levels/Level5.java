@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
+import java.util.List;
+
 public class Level5 implements Level {
     
     @Override
@@ -66,6 +68,14 @@ public class Level5 implements Level {
                 "    #E# " +
                 "    ### " +
                 "        ";
+    }
+
+    @Override
+    public List<String> befungeCommands() {
+        return Level.extendBefunge(new Level4(),
+                "if", "scanner-at",
+                "value-right", "value-down",
+                "value-wall", "value-ground");
     }
 
 }

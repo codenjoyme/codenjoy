@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
+import java.util.List;
+
 public class LevelC1 implements Level {
     
     @Override
@@ -94,5 +96,13 @@ public class LevelC1 implements Level {
                 "		'values':['\\'HOLE\\'']" +
                 "	}" +
                 "}";
+    }
+
+    @Override
+    public List<String> befungeCommands() {
+        return Level.extendBefunge(new LevelB1(),
+                "value-hole",
+                "robot-jump-left", "robot-jump-right", "robot-jump-up", "robot-jump-down",
+                "robot-jump");
     }
 }

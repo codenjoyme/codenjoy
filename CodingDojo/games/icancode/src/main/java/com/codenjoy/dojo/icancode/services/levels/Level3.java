@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
+import java.util.List;
+
 public class Level3 implements Level {
     
     @Override
@@ -72,5 +74,10 @@ public class Level3 implements Level {
                 "        'values':['\\'RIGHT\\'', '\\'DOWN\\'', '\\'LEFT\\'', '\\'UP\\'']" +
                 "    }" +
                 "}";
+    }
+
+    @Override
+    public List<String> befungeCommands() {
+        return Level.extendBefunge(new Level2(), "robot-left");
     }
 }

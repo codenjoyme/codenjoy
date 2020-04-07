@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
+import java.util.List;
+
 public class LevelZ implements Level {
     
     @Override
@@ -109,6 +111,11 @@ public class LevelZ implements Level {
                 " #˄#   #.$....˂# ####.BO..OB# #˃....# " +
                 " ###   #...$...#    ######### #...B.# " +
                 "       #########              ####### ";
+    }
+
+    @Override
+    public List<String> befungeCommands() {
+        return Level.extendBefunge(new LevelG1());
     }
     
 }

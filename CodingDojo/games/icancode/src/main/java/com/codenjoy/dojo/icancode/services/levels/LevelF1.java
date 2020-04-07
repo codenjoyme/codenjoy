@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
+import java.util.List;
+
 public class LevelF1 implements Level {
     
     @Override
@@ -54,5 +56,11 @@ public class LevelF1 implements Level {
                 "		'values':['\\'ZOMBIE\\'']" +
                 "	}" +
                 "}";
+    }
+
+    @Override
+    public List<String> befungeCommands() {
+        return Level.extendBefunge(new LevelE1(),
+                "value-zombie");
     }
 }

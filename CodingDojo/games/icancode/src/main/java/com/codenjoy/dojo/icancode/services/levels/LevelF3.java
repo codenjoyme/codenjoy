@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
+import java.util.List;
+
 public class LevelF3 implements Level {
     
     @Override
@@ -67,5 +69,12 @@ public class LevelF3 implements Level {
                 "		'values': ['\\'RIGHT\\'', '\\'DOWN\\'', '\\'LEFT\\'', '\\'UP\\'']" +
                 "	}," +
                 "}";
+    }
+
+    @Override
+    public List<String> befungeCommands() {
+        return Level.extendBefunge(new LevelF2(),
+                // TODO этой команды в befunge не существует (достаточно одной универсальной команды)
+                "robot-fire");
     }
 }

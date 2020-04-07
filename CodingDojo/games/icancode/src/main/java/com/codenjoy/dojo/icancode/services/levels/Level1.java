@@ -1,5 +1,8 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Level1 implements Level {
     
     @Override
@@ -59,5 +62,10 @@ public class Level1 implements Level {
                 "        \"values\":[\"goDown()\", \"goUp()\", \"goLeft()\", \"goRight()\"]" +
                 "    }" +
                 "}";
+    }
+
+    @Override
+    public List<String> befungeCommands() {
+        return Arrays.asList("start", "finish", "robot-right");
     }
 }

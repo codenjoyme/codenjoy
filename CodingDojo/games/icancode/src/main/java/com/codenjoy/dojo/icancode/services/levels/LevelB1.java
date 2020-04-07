@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
+import java.util.List;
+
 public class LevelB1 implements Level {
     
     @Override
@@ -77,5 +79,13 @@ public class LevelB1 implements Level {
                 "		'values':['getGold()', 'getExit()', 'getShortestWay()', 'getMe()']" +
                 "	}" +
                 "}";
+    }
+
+    @Override
+    public List<String> befungeCommands() {
+        return Level.extendBefunge(new Level9(),
+                "gold", "value-end", "value-start",
+                // TODO не хватает в befunge команды поиска кратчайшего пути
+                "print-stack");
     }
 }

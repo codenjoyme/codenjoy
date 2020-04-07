@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
+import java.util.List;
+
 public class LevelC2 implements Level {
     
     @Override
@@ -62,5 +64,10 @@ public class LevelC2 implements Level {
                 "		'values':['atNearRobot()']" +
                 "	}" +
                 "}";
+    }
+
+    @Override
+    public List<String> befungeCommands() {
+        return Level.extendBefunge(new LevelC1());
     }
 }

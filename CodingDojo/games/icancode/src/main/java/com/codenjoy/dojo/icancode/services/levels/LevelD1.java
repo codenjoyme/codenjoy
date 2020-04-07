@@ -1,5 +1,7 @@
 package com.codenjoy.dojo.icancode.services.levels;
 
+import java.util.List;
+
 public class LevelD1 implements Level {
     
     @Override
@@ -90,5 +92,13 @@ public class LevelD1 implements Level {
                 "		'values':['\\'RIGHT\\'', '\\'DOWN\\'', '\\'LEFT\\'', '\\'UP\\'']" +
                 "	}" +
                 "}";
+    }
+
+    @Override
+    public List<String> befungeCommands() {
+        return Level.extendBefunge(new LevelC2(),
+                "value-box",
+                // TODO этой команды в befunge не существует (достаточно одной универсальной команды)
+                "robot-pull");
     }
 }

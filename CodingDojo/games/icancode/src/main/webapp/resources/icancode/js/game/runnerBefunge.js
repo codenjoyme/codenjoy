@@ -368,7 +368,7 @@ function initRunnerBefunge(logger, storage) {
             process: cursorRightCommand,
             description: 'Командный курсор двигайся вправо.',
             minLevel: 3,
-            hidden: true
+            hidden: true // TODO а почему только тут true?
         },
 
         {
@@ -378,7 +378,7 @@ function initRunnerBefunge(logger, storage) {
             process: cursorLeftCommand,
             description: 'Командный курсор двигайся влево.',
             minLevel: 3,
-            hidden: true
+            hidden: true // TODO а почему только тут true?
         },
 
         {
@@ -388,7 +388,7 @@ function initRunnerBefunge(logger, storage) {
             process: cursorUpCommand,
             description: 'Командный курсор двигайся вверх.',
             minLevel: 3,
-            hidden: true
+            hidden: true // TODO а почему только тут true?
         },
 
         {
@@ -398,7 +398,7 @@ function initRunnerBefunge(logger, storage) {
             process: cursorDownCommand,
             description: 'Командный курсор двигайся вниз.',
             minLevel: 3,
-            hidden: true
+            hidden: true // TODO а почему только тут true?
         },
 
         {
