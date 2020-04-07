@@ -111,7 +111,7 @@ public class RestSettingsControllerTest {
         first.addEditBox("two").type(Integer.class).def(12);
 
         second.addSelect("three", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option1");
-        second.addCheckBox("four").type(Boolean.class).def(false);
+        second.addEditBox("four").type(String.class).def("some-data");
 
     }
 
@@ -167,7 +167,7 @@ public class RestSettingsControllerTest {
 
         assertEquals("{\"parameters\":[" +
                         "{\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option1\"}," +
-                        "{\"name\":\"four\",\"options\":[false],\"type\":\"checkbox\",\"value\":false}]}",
+                        "{\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
                 service.get("second", RestSettingsController.SETTINGS));
     }
 
@@ -181,7 +181,7 @@ public class RestSettingsControllerTest {
         assertEquals("true", get("/rest/settings/first/one"));
         assertEquals("135", get("/rest/settings/first/two"));
         assertEquals("option2", service.get("second", "three"));
-        assertEquals("false", service.get("second", "four"));
+        assertEquals("some-data", service.get("second", "four"));
 
         // then
         assertEquals("{\"parameters\":[" +
@@ -191,7 +191,7 @@ public class RestSettingsControllerTest {
 
         assertEquals("{\"parameters\":[" +
                         "{\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option2\"}," +
-                        "{\"name\":\"four\",\"options\":[false],\"type\":\"checkbox\",\"value\":false}]}",
+                        "{\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
                 service.get("second", RestSettingsController.SETTINGS));
     }
 
@@ -204,6 +204,15 @@ public class RestSettingsControllerTest {
         // then
         assertEquals("true", service.get("first", "one"));
         assertEquals("135", service.get("first", "two"));
+    }
+
+    @Test
+    public void shouldSet_replaceNOnJson() {
+        // when
+        assertEquals("{}", service.set("second", "four", quotes("updated\\ndata")));
+
+        // then
+        assertEquals("updated\ndata", service.get("second", "four"));
     }
 
     private String quotes(String input) {

@@ -87,6 +87,8 @@ public class RestSettingsController {
             value = value.substring(1, value.length() - 1);
         }
 
+        value = value.replace("\\n", "\n");
+
         return URLDecoder.decode(value, Encoding.UTF8);
     }
 }

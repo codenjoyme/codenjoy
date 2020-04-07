@@ -34,11 +34,11 @@ var initLevelInfo = function(contextPath) {
     }
 
     var decode = function(value) {
-        if (typeof value == 'string') {
-            return value.replace('\n', '\n');
-        } else {
-            return value;
-        }
+        return value;
+    }
+
+    var encode = function(value) {
+        return value;
     }
 
     var get = function(key) {
@@ -71,10 +71,10 @@ var initLevelInfo = function(contextPath) {
 
     var save = function(number, level) {
         saveParameter('level' + number + '.map', joinMap(level.map));
-        saveParameter('level' + number + '.help', level.help);
-        saveParameter('level' + number + '.defaultCode', level.defaultCode);
-        saveParameter('level' + number + '.winCode', level.winCode);
-        saveParameter('level' + number + '.refactoringCode', level.refactoringCode);
+        saveParameter('level' + number + '.help', encode(level.help));
+        saveParameter('level' + number + '.defaultCode', encode(level.defaultCode));
+        saveParameter('level' + number + '.winCode', encode(level.winCode));
+        saveParameter('level' + number + '.refactoringCode', encode(level.refactoringCode));
 //        saveParameter('level' + number + '.autocomplete', JSON.stringify(level.autocomplete)); // TODO разобраться с этим
     }
 
