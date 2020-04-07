@@ -60,37 +60,50 @@ var initLevelInfo = function(contextPath) {
         ajax.save(value);
     }
 
-    var save = function(number, level) {
+    var toNumber = function(index) {
+        // так как уровни в настройках хрантся начиная с номера 1,
+        // а уровни в прогрессбаре с 0
+        return index + 1;
+    }
+
+    var save = function(index, level) {
+        var number = toNumber(index);
         saveParameter('level' + number + '.map', encode(level.map));
         saveParameter('level' + number + '.help', encode(level.help));
         saveParameter('level' + number + '.defaultCode', encode(level.defaultCode));
         saveParameter('level' + number + '.winCode', encode(level.winCode));
         saveParameter('level' + number + '.refactoringCode', encode(level.refactoringCode));
+        saveParameter('level' + number + '.befungeCommands', encode(level.befungeCommands));
 //        saveParameter('level' + number + '.autocomplete', JSON.stringify(level.autocomplete)); // TODO разобраться с этим
     }
 
-    var getLevel = function(number) {
-        if (number >= count) {
+    var getLevel = function(index) {
+        if (index >= count) {
             return {
-                'help':'<pre>// under construction</pre>',
-                'defaultCode':'function program(robot) {\n'  +
+                map:'',
+                help:'<pre>// under construction</pre>',
+                defaultCode:'function program(robot) {\n'  +
                 '    // TODO write your code here\n' +
                 '}',
-                'winCode':'function program(robot) {\n'  +
+                winCode:'function program(robot) {\n'  +
                 '    robot.nextLevel();\n' +
                 '}',
-                'refactoringCode':'function program(robot) {\n'  +
+                refactoringCode:'function program(robot) {\n'  +
                 '    robot.nextLevel();\n' +
-                '}'
+                '}',
+                autocomplete:'{}',
+                befungeCommands:''
             };
         }
 
+        var number = toNumber(index);
         return {
             map :             decode(get('level' + number + '.map').value),
             help :            decode(get('level' + number + '.help').value),
             defaultCode :     decode(get('level' + number + '.defaultCode').value),
             winCode :         decode(get('level' + number + '.winCode').value),
             refactoringCode : decode(get('level' + number + '.refactoringCode').value),
+            befungeCommands : decode(get('level' + number + '.befungeCommands').value),
 //            autocomplete :    JSON.parse(get('level' + number + '.autocomplete').value) // TODO разобраться с этим
         };
     }

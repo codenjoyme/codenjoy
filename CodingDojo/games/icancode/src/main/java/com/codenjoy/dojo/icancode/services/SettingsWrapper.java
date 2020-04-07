@@ -94,6 +94,7 @@ public final class SettingsWrapper {
         settings.addEditBox(prefix + "refactoringCode").multiline().type(String.class).def(level.refactoringCode());
         settings.addEditBox(prefix + "winCode").multiline().type(String.class).def(level.winCode());
         settings.addEditBox(prefix + "autocomplete").multiline().type(String.class).def(level.autocomplete().replace("'", "\""));
+        settings.addEditBox(prefix + "befungeCommands").multiline().type(String.class).def(String.join("\n", level.befungeCommands()));
         return this;
     }
 

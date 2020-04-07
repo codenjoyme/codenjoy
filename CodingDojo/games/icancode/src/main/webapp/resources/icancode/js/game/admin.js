@@ -25,19 +25,21 @@ function initAdmin(contextPath) {
 
     // ----------------------- init ace editors -------------------
 
+    var mapEditor = initEditor(libs, 'map');
+    mapEditor.setShowInvisibles(true);
+    var helpEditor = initEditor(libs, 'help');
     var defaultEditor = initEditor(libs, 'default');
     var winEditor = initEditor(libs, 'win');
     var refactoredEditor = initEditor(libs, 'refactored');
-    var helpEditor = initEditor(libs, 'help');
-    var mapEditor = initEditor(libs, 'map');
-    mapEditor.setShowInvisibles(true);
+    var befungeCommandsEditor = initEditor(libs, 'befungeCommands');
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        mapEditor.resize(true);
+        helpEditor.resize(true);
         defaultEditor.resize(true);
         winEditor.resize(true);
         refactoredEditor.resize(true);
-        helpEditor.resize(true);
-        mapEditor.resize(true);
+        befungeCommandsEditor.resize(true);
     })
 
     // ----------------------- init scrollbar ----------------------
@@ -74,20 +76,18 @@ function initAdmin(contextPath) {
     var levelInfo = initLevelInfo(contextPath);
 
     var saveLevel = function() {
-        var number = progressBar.selected + 1;
-
-        var current = levelInfo.getLevel(number);
-
+        var index = progressBar.selected;
+        var current = levelInfo.getLevel(index);
         var updated = {
             map :             mapEditor.getValue(),
             help :            helpEditor.getValue(),
             defaultCode :     defaultEditor.getValue(),
             winCode :         winEditor.getValue(),
             refactoringCode : refactoredEditor.getValue(),
+            befungeCommands : befungeCommandsEditor.getValue(),
             autocomplete :    current.autocomplete // TODO научиться редактировать
         };
-
-        levelInfo.save(number, updated);
+        levelInfo.save(index, updated);
     }
 
     var setEditorValue = function(editor, value) {
@@ -96,13 +96,14 @@ function initAdmin(contextPath) {
     }
 
     var loadLevel = function() {
-        var level = levelInfo.getLevel(progressBar.selected + 1);
+        var level = levelInfo.getLevel(progressBar.selected);
 
+        setEditorValue(mapEditor, level.map);
+        setEditorValue(helpEditor, level.help);
         setEditorValue(defaultEditor, level.defaultCode);
         setEditorValue(winEditor, level.winCode);
         setEditorValue(refactoredEditor, level.refactoringCode);
-        setEditorValue(helpEditor, level.help);
-        setEditorValue(mapEditor, level.map);
+        setEditorValue(befungeCommandsEditor, level.befungeCommands);
         // autocomplete.setValue(level.autocomplete); // TODO научиться редактировать
     }
 

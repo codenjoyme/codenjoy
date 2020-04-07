@@ -73,22 +73,24 @@
             <div>
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation">
+                        <a href="#map" aria-controls="map" role="tab"
+                           data-toggle="tab">Level Map</a></li>
+                    <li role="presentation">
+                        <a href="#help" aria-controls="help" role="tab"
+                           data-toggle="tab">Help code</a></li>
                     <li role="presentation" class="active">
                         <a href="#default" aria-controls="default" role="tab"
                            data-toggle="tab">Default code</a></li>
                     <li role="presentation">
                         <a href="#win" aria-controls="win" role="tab"
-                           data-toggle="tab">Win code</a>
-                    </li>
+                           data-toggle="tab">Win code</a></li>
                     <li role="presentation">
                         <a href="#refactored" aria-controls="refactored" role="tab"
                            data-toggle="tab">Refactored code</a></li>
                     <li role="presentation">
-                        <a href="#help" aria-controls="help" role="tab"
-                           data-toggle="tab">Help code</a></li>
-                    <li role="presentation">
-                        <a href="#map" aria-controls="map" role="tab"
-                           data-toggle="tab">Level Map</a></li>
+                        <a href="#befungeCommands" aria-controls="befungeCommands" role="tab"
+                           data-toggle="tab">Befunge commands</a></li>
                     <li role="presentation">
                         <a href="#methods" aria-controls="methods" role="tab"
                            data-toggle="tab">Methods</a>
@@ -97,11 +99,12 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="default" placeholder="// Enter default code"></div>
+                    <div role="tabpanel" class="tab-pane active" id="map" placeholder="// Enter level map"></div>
+                    <div role="tabpanel" class="tab-pane" id="help" placeholder="// Enter help code"></div>
+                    <div role="tabpanel" class="tab-pane" id="default" placeholder="// Enter default code"></div>
                     <div role="tabpanel" class="tab-pane" id="win" placeholder="// Enter win code"></div>
                     <div role="tabpanel" class="tab-pane" id="refactored" placeholder="// Enter refactored code"></div>
-                    <div role="tabpanel" class="tab-pane" id="help" placeholder="// Enter help code"></div>
-                    <div role="tabpanel" class="tab-pane" id="map" placeholder="// Enter level map"></div>
+                    <div role="tabpanel" class="tab-pane" id="befungeCommands" placeholder="// Enter refactored code"></div>
                     <div role="tabpanel" class="tab-pane mCustomScrollbar" id="methods">
                         <p class="message">Select enabled methods for this level</p>
                         <div class="method">

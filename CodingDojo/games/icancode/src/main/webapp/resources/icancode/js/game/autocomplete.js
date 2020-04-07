@@ -93,7 +93,7 @@ var initAutocomplete = function(level, levelInfo) {
             continue;
         }
 
-        var data = levelInfo.getLevel(levelIndex + 1).autocomplete;
+        var data = levelInfo.getLevel(levelIndex).autocomplete;
 
         if (!data) {
             continue;
