@@ -44,38 +44,24 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType  {
 
-    private Parameter<Integer> isTrainingMode;
-
     public GameRunner() {
         setupSettings();
     }
 
-    @SuppressWarnings("unchecked")
     private void setupSettings() {
-        new Scores(0, settings);
-        isTrainingMode = settings
-                .addEditBox("Is training mode")
-                .type(Integer.class).def(1);
+        SettingsWrapper.setup(settings);
     }
     
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer)score, settings);
+        return new Scores((Integer)score, SettingsWrapper.data);
     }
 
     @Override
     public GameField createGame(int levelNumber) {
+        ILevel level = loadLevel(levelNumber);
         boolean isSingle = levelNumber < getMultiplayerType().getLevelsCount();
-        if (isSingle) {
-            ILevel levels = loadLevel(levelNumber);
-            return new ICanCode(levels,
-                    getDice(),
-                    ICanCode.SINGLE);
-        } else {
-            return new ICanCode(Levels.getMultiple(),
-                    getDice(),
-                    ICanCode.MULTIPLE);
-        }
+        return new ICanCode(level, getDice(), isSingle ? ICanCode.SINGLE : ICanCode.MULTIPLE);
     }
 
     @Override
@@ -90,11 +76,12 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TRAINING.apply(Levels.getSingleMaps().size());
+        return MultiplayerType.TRAINING.apply(Levels.all().size());
     }
 
     public ILevel loadLevel(int level) {
-        return Levels.loadLevel(level);
+        // +1 потому что мы хотим дать юзерам считать не от 0, а от 1
+        return Levels.loadLevel(level + 1);
     }
 
     @Override
@@ -114,7 +101,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId) {
-        if (isTrainingMode.getValue() == 0) { // TODO найти как это загрузить
+        if (SettingsWrapper.data.isTrainingMode() == 0) { // TODO найти как это загрузить
 //            int total = Levels.collectSingle().size();
 //            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
