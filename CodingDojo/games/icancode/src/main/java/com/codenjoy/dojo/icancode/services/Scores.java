@@ -59,7 +59,7 @@ public class Scores implements PlayerScores {
 
         if (events.getType() == Events.Type.WIN) {
             if (!events.isMultiple()) {
-                score += settings.winScore(); // TODO test me
+                score += settings.winScore();
             }
             score += settings.goldScore() * events.getGoldCount();
         } else if (events.getType() == Events.Type.LOOSE) {
