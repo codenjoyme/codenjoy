@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.nullobj;
  */
 
 
+import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -54,18 +55,13 @@ public final class NullParameter<T> implements Parameter<T> {
     }
 
     @Override
-    public void update(T value) {
-        // do nothing
+    public Parameter<T> update(T value) {
+        return null;
     }
 
     @Override
     public Parameter<T> def(T value) {
         return INSTANCE;
-    }
-
-    @Override
-    public boolean itsMe(String name) {
-        return false;
     }
 
     @Override

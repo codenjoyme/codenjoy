@@ -23,8 +23,7 @@ package com.codenjoy.dojo.services.nullobj;
  */
 
 
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -43,17 +42,17 @@ public final class NullSettings implements Settings {
     }
 
     @Override
-    public Parameter<?> addEditBox(String name) {
+    public EditBox<?> addEditBox(String name) {
         return null;
     }
 
     @Override
-    public Parameter<?> addSelect(String name, List<Object> strings) {
+    public SelectBox<?> addSelect(String name, List<Object> strings) {
         return null;
     }
 
     @Override
-    public Parameter<Boolean> addCheckBox(String name) {
+    public CheckBox<Boolean> addCheckBox(String name) {
         return null;
     }
 

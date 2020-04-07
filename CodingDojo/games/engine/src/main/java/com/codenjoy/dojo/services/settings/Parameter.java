@@ -46,7 +46,7 @@ public interface Parameter<T> {
 
     String getName();
 
-    void update(T value);
+    Parameter<T> update(T value);
 
     /**
      * Так ты указываешь значение по умолчанию. Обычно этого достаточно для ввода значения.
@@ -56,12 +56,14 @@ public interface Parameter<T> {
      */
     Parameter<T> def(T value);
 
-    boolean itsMe(String name);
-
     <V> Parameter<V> type(Class<V> integerClass);
 
     Parameter<T> parser(Function<String, T> parser);
 
+    /**
+     * Установка значения по индексу (актуально для SelectBox и CheckBox)
+     * @param index
+     */
     void select(int index);
 
     boolean changed();

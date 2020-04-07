@@ -294,6 +294,19 @@ public class SettingsTest {
     }
 
     @Test
+    public void shouldToString() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").multiline().type(Integer.class).def(10).update(15);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option1").update("option2");
+        Parameter<Boolean> check = settings.addCheckBox("check").def(true).update(false);
+
+        // when then
+        assertEquals("[edit:Integer = multiline[true] def[10] val[15]]", edit.toString());
+        assertEquals("[select:String = options[option1, option2, option3] def[0] val[1]]", select.toString());
+        assertEquals("[check:Boolean = def[true] val[false]]", check.toString());
+    }
+
+    @Test
     public void shouldSetFlagChangedOnlyWhenChangeValue() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);

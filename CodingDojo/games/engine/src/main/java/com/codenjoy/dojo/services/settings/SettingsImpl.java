@@ -37,29 +37,29 @@ public class SettingsImpl implements Settings {
     }
 
     @Override
-    public Parameter<?> addEditBox(String name) {
-        if (map.containsKey(name)) return map.get(name);
+    public EditBox<?> addEditBox(String name) {
+        return (EditBox<?>) (map.containsKey(name)
+                ? map.get(name)
+                : put(name, new EditBox(name)));
+    }
 
-        return put(name, new EditBox(name));
+    @Override
+    public SelectBox<?> addSelect(String name, List<Object> options) {
+        return (SelectBox<?>) (map.containsKey(name)
+                ? map.get(name)
+                : put(name, new SelectBox(name, options)));
+    }
+
+    @Override
+    public CheckBox<Boolean> addCheckBox(String name) {
+        return (CheckBox<Boolean>) (map.containsKey(name)
+                ? map.get(name)
+                : put(name, new CheckBox<Boolean>(name).type(Boolean.class)));
     }
 
     private Parameter put(String name, Parameter parameter) {
         map.put(name, parameter);
         return parameter;
-    }
-
-    @Override
-    public Parameter<?> addSelect(String name, List<Object> strings) {
-        if (map.containsKey(name)) return map.get(name);
-
-        return put(name, new SelectBox(name, strings));
-    }
-
-    @Override
-    public Parameter<Boolean> addCheckBox(String name) {
-        if (map.containsKey(name)) return (Parameter<Boolean>) map.get(name);
-
-        return put(name, new CheckBox<Boolean>(name).type(Boolean.class));
     }
 
     @Override

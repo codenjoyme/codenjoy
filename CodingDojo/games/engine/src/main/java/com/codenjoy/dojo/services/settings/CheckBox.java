@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.settings;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
@@ -51,9 +52,9 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     }
 
     @Override
-    public void update(T value) {
+    public CheckBox<T> update(T value) {
         if (value == null) {
-            return;
+            return null;
         }
         Boolean b = parse(value);
         if (b == null) {
@@ -61,6 +62,7 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
         } else {
             set(code(b));
         }
+        return this;
     }
 
     private T code(boolean value) {
@@ -73,6 +75,16 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
         } else {
             return tryParse(Boolean.valueOf(value));
         }
+    }
+
+    @Override
+    public <V> CheckBox<V> type(Class<V> type) {
+        return (CheckBox<V>) super.type(type);
+    }
+
+    @Override
+    public CheckBox<T> parser(Function<String, T> parser) {
+        return (CheckBox<T>) super.parser(parser);
     }
 
     private Boolean parse(T value) {
@@ -89,14 +101,9 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     }
 
     @Override
-    public Parameter<T> def(T value) {
+    public CheckBox<T> def(T value) {
         this.def = value;
         return this;
-    }
-
-    @Override
-    public boolean itsMe(String name) {
-        return this.name.equals(name);
     }
 
     @Override
@@ -114,5 +121,13 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
         }};
     }
 
+    @Override
+    public String toString() {
+        return String.format("[%s:%s = def[%s] val[%s]]",
+                name,
+                type.getSimpleName(),
+                def,
+                get());
+    }
 
 }

@@ -35,25 +35,13 @@ import java.util.List;
  */
 public interface Settings {
 
-    /**
-     * @return список всех констант
-     */
     List<Parameter<?>> getParameters();
 
-    /**
-     * @param name имя константы
-     * @return враппер над константой
-     */
-    Parameter<?> addEditBox(String name);
+    EditBox<?> addEditBox(String name);
 
-    Parameter<?> addSelect(String name, List<Object> strings);
+    SelectBox<?> addSelect(String name, List<Object> strings);
 
-    /**
-     * @param name имя константы
-     * @return враппер над константой boolean типа
-     */
-    Parameter<Boolean> addCheckBox(String name);
-
+    CheckBox<Boolean> addCheckBox(String name);
 
     <T> Parameter<T> getParameter(String name);
 
@@ -76,8 +64,6 @@ public interface Settings {
      */
     void changesReacted();
 
-    /**
-     * Очистить все параметры
-     */
     void clear();
+
 }

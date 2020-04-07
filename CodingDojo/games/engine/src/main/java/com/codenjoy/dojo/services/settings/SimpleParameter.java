@@ -55,17 +55,13 @@ public class SimpleParameter<T> implements Parameter<T> {
     }
 
     @Override
-    public void update(Object value) {
+    public Parameter<T> update(Object value) {
         this.value = (T) value;
+        return this;
     }
 
     @Override
     public Parameter def(Object value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean itsMe(String name) {
         throw new UnsupportedOperationException();
     }
 

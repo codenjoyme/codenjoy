@@ -57,10 +57,11 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
     }
 
     @Override
-    public void update(T value) {
+    public SelectBox<T> update(T value) {
         checkIsPresent(value);
         set(options.indexOf(value));
 
+        return this;
     }
 
     private void checkIsPresent(T value) {
@@ -70,23 +71,18 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
     }
 
     @Override
-    public Parameter<T> def(T value) {
+    public SelectBox<T> def(T value) {
         checkIsPresent(value);
         this.def = options.indexOf(value);
         return this;
     }
 
-    @Override
-    public boolean itsMe(String name) {
-        return this.name.equals(name);
-    }
-
-    public <V> Parameter<V> type(Class<V> integerClass) {
-        return (Parameter<V>) this;
+    public <V> SelectBox<V> type(Class<V> integerClass) {
+        return (SelectBox<V>) this;
     }
 
     @Override
-    public Parameter<T> parser(Function<String, T> parser) {
+    public SelectBox<T> parser(Function<String, T> parser) {
         throw new UnsupportedOperationException();
     }
 
@@ -98,5 +94,15 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
     @Override
     public List<T> getOptions() {
         return options;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%s:%s = options%s def[%s] val[%s]]",
+                name,
+                "String",
+                options.toString(),
+                def,
+                get());
     }
 }
