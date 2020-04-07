@@ -30,6 +30,7 @@ function initAdmin(contextPath) {
     var refactoredEditor = initEditor(libs, 'refactored');
     var helpEditor = initEditor(libs, 'help');
     var mapEditor = initEditor(libs, 'map');
+    mapEditor.setShowInvisibles(true);
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         defaultEditor.resize(true);
@@ -49,7 +50,7 @@ function initAdmin(contextPath) {
     // ----------------------- init progressbar -------------------
     var progressBar = initProgressbar('progress-bar');
     progressBar.select = function(level) {
-        progressBar.selected = level;
+        progressBar.selected = parseInt(level);
         this.all('level-done');
         this.active(level);
     }
@@ -61,66 +62,58 @@ function initAdmin(contextPath) {
         }
 
         var level = element.attr('level');
-        updateLevelsData();
-        progressBar.select(level - 1);
-        loadLevelsData();
+        saveLevel();
+        progressBar.loadLevel(level);
     });
+    progressBar.loadLevel = function(level) {
+        progressBar.select(level);
+        loadLevel();
+    }
 
-    // ------------------------ communicate with server -----------------------
     // ------------------------ levels settings -----------------------
-    var levelsInfo = [];
-    var levels = new AdminSettings(contextPath, 'icancode', 'levels');
+    var levelInfo = initLevelInfo(contextPath);
 
-    var loadLevels = function() {
-        levels.load(
-            function(data) {
-                loadLevelsData(data);
-            }, function(error) {
-                loadLevelsData(null);
-            });
-    }
+    var saveLevel = function() {
+        var number = progressBar.selected + 1;
 
-    var saveLevels = function() {
-        levels.save(levelsInfo,
-            function() {
-                loadLevels();
-            });
-    }
+        var current = levelInfo.getLevel(number);
 
-    // ------------------------ collected levels data ----------------------
-    var updateLevelsData = function() {
         var updated = {
-            level : progressBar.selected + 1,
-            init : defaultEditor.getValue(),
-            win : winEditor.getValue(),
-            refactored : refactoredEditor.getValue(),
-            help : helpEditor.getValue(),
-            map : mapEditor.getValue()
+            map :             mapEditor.getValue(),
+            help :            helpEditor.getValue(),
+            defaultCode :     defaultEditor.getValue(),
+            winCode :         winEditor.getValue(),
+            refactoringCode : refactoredEditor.getValue(),
+            autocomplete :    current.autocomplete // TODO научиться редактировать
         };
 
-        levelsInfo[progressBar.selected] = updated;
+        levelInfo.save(number, updated);
     }
 
-    var loadLevelsData = function(data) {
-        if (!!data) {
-            levelsInfo = data;
-        }
-        var info = levelsInfo[progressBar.selected] || {init:'', win:'', refactored:'', help:'', map:''};
-
-        defaultEditor.setValue(info.init);
-        winEditor.setValue(info.win);
-        refactoredEditor.setValue(info.refactored);
-        helpEditor.setValue(info.help);
-        mapEditor.setValue(info.map);
+    var setEditorValue = function(editor, value) {
+        editor.setValue(value);
+        editor.selection.clearSelection();
     }
 
-    var levelsSaveButton = $('#levels-save-button');
-    levelsSaveButton.click(function() {
-        updateLevelsData();
-        saveLevels();
+    var loadLevel = function() {
+        var level = levelInfo.getLevel(progressBar.selected + 1);
+
+        setEditorValue(defaultEditor, level.defaultCode);
+        setEditorValue(winEditor, level.winCode);
+        setEditorValue(refactoredEditor, level.refactoringCode);
+        setEditorValue(helpEditor, level.help);
+        setEditorValue(mapEditor, level.map);
+        // autocomplete.setValue(level.autocomplete); // TODO научиться редактировать
+    }
+
+    var saveButton = $('#levels-save-button');
+    saveButton.click(function() {
+        saveLevel();
     });
 
     // --------------------- starting -------------------------
-    progressBar.select(0);
-    loadLevels();
+    levelInfo.load(function() {
+        progressBar.countLevels(levelInfo.getCount());
+        progressBar.loadLevel(0);
+    });
 };
