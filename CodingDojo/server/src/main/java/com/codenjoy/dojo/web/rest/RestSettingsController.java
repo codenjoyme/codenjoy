@@ -42,6 +42,7 @@ public class RestSettingsController {
 
     public static final String URI = "/rest/settings";
     public static final String SETTINGS = "_settings_";
+    public static final String GENERAL = "general";
 
     private GameData gameData;
     private Validator validator;
@@ -49,15 +50,19 @@ public class RestSettingsController {
     @GetMapping("/{gameType}/{key}")
     public String get(@PathVariable("gameType") String game, @PathVariable("key") String key) {
         validator.checkNotEmpty(key);
-        GameType type = validator.checkGameType(game);
+        validator.checkGameName(game, Validator.CANT_BE_NULL);
 
-        Settings settings = type.getSettings();
-        if (key.equals(SETTINGS)) {
-            return new JSONObject(settings).toString();
-        }
+        if (!GENERAL.equals(game)) {
+            GameType type = validator.checkGameType(game);
 
-        if (settings.hasParameter(key)) {
-            return settings.getParameter(key).getValue().toString();
+            Settings settings = type.getSettings();
+            if (key.equals(SETTINGS)) {
+                return new JSONObject(settings).toString();
+            }
+
+            if (settings.hasParameter(key)) {
+                return settings.getParameter(key).getValue().toString();
+            }
         }
 
         return gameData.get(game, key);
@@ -66,16 +71,22 @@ public class RestSettingsController {
     @PostMapping("/{gameType}/{key}")
     public String set(@PathVariable("gameType") String game, @PathVariable("key") String key, @RequestBody String value) {
         validator.checkNotEmpty(key);
-        GameType type = validator.checkGameType(game);
+        validator.checkGameName(game, Validator.CANT_BE_NULL);
 
         value = encode(value);
 
-        Settings settings = type.getSettings();
-        if (settings.hasParameter(key)) {
-            settings.getParameter(key).update(value);
-        } else {
-            gameData.set(game, key, value);
+        if (!GENERAL.equals(game)) {
+            GameType type = validator.checkGameType(game);
+
+
+            Settings settings = type.getSettings();
+            if (settings.hasParameter(key)) {
+                settings.getParameter(key).update(value);
+                return "{}";
+            }
         }
+
+        gameData.set(game, key, value);
 
         return "{}";
     }
@@ -87,8 +98,6 @@ public class RestSettingsController {
             value = value.substring(1, value.length() - 1);
         }
 
-        value = value.replace("\\n", "\n");
-
-        return URLDecoder.decode(value, Encoding.UTF8);
+        return URLDecoder.decode(Encoding.replaceN(value), Encoding.UTF8);
     }
 }

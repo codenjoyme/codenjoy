@@ -162,12 +162,34 @@ public class RestSettingsControllerTest {
         // then do not touch any settings
         assertEquals("{\"parameters\":[" +
                         "{\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
-                        "{\"name\":\"two\",\"options\":[12],\"type\":\"editbox\",\"value\":12}]}",
+                        "{\"multiline\":false,\"name\":\"two\",\"options\":[12],\"type\":\"editbox\",\"value\":12}]}",
                 get("/rest/settings/first/" + RestSettingsController.SETTINGS));
 
         assertEquals("{\"parameters\":[" +
                         "{\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option1\"}," +
-                        "{\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
+                        "{\"multiline\":false,\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
+                service.get("second", RestSettingsController.SETTINGS));
+    }
+
+    @Test
+    public void shouldGetSet_caseGameDataAsStorage_caseGeneral() {
+        // when
+        assertEquals("{}", service.set(RestSettingsController.GENERAL, "key", "value"));
+        assertEquals("{}", post("/rest/settings/" + RestSettingsController.GENERAL + "/key2", "value2"));
+
+        // then
+        assertEquals("value", get("/rest/settings/" + RestSettingsController.GENERAL + "/key"));
+        assertEquals("value2", service.get(RestSettingsController.GENERAL, "key2"));
+
+        // then do not touch any settings
+        assertEquals("{\"parameters\":[" +
+                        "{\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
+                        "{\"multiline\":false,\"name\":\"two\",\"options\":[12],\"type\":\"editbox\",\"value\":12}]}",
+                get("/rest/settings/first/" + RestSettingsController.SETTINGS));
+
+        assertEquals("{\"parameters\":[" +
+                        "{\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option1\"}," +
+                        "{\"multiline\":false,\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
                 service.get("second", RestSettingsController.SETTINGS));
     }
 
@@ -186,12 +208,12 @@ public class RestSettingsControllerTest {
         // then
         assertEquals("{\"parameters\":[" +
                         "{\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
-                        "{\"name\":\"two\",\"options\":[12,135],\"type\":\"editbox\",\"value\":135}]}",
+                        "{\"multiline\":false,\"name\":\"two\",\"options\":[12,135],\"type\":\"editbox\",\"value\":135}]}",
                 get("/rest/settings/first/" + RestSettingsController.SETTINGS));
 
         assertEquals("{\"parameters\":[" +
                         "{\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option2\"}," +
-                        "{\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
+                        "{\"multiline\":false,\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
                 service.get("second", RestSettingsController.SETTINGS));
     }
 
@@ -208,11 +230,20 @@ public class RestSettingsControllerTest {
 
     @Test
     public void shouldSet_replaceNOnJson() {
-        // when
-        assertEquals("{}", service.set("second", "four", quotes("updated\\ndata")));
+        assertReplaceN("updated\ndata", "updated\\ndata");
+        assertReplaceN("updated\ndata", "updated\\rdata");
+        assertReplaceN("updated\ndata", "updated\\r\\ndata");
+        assertReplaceN("updated\ndata", "updated\\n\\rdata");
+        assertReplaceN("updated\ndata", "updated\n\\rdata");
+        assertReplaceN("updated\ndata", "updated\\r\ndata");
+        assertReplaceN("updated\ndata", "updated\n\rdata");
+        assertReplaceN("updated\ndata", "updated\ndata");
+        assertReplaceN("updated\ndata", "updated\rdata");
+    }
 
-        // then
-        assertEquals("updated\ndata", service.get("second", "four"));
+    private void assertReplaceN(String expected, String input) {
+        assertEquals("{}", service.set("second", "four", quotes(input)));
+        assertEquals(expected, service.get("second", "four"));
     }
 
     private String quotes(String input) {
