@@ -86,12 +86,12 @@ public final class SettingsWrapper {
 
     public SettingsWrapper addLevel(int index, Level level) {
         String prefix = levelPrefix(index);
-        settings.addEditBox(prefix + "map").type(String.class).def(level.map());
-        settings.addEditBox(prefix + "help").type(String.class).def(level.help());
-        settings.addEditBox(prefix + "defaultCode").type(String.class).def(level.defaultCode());
-        settings.addEditBox(prefix + "refactoringCode").type(String.class).def(level.refactoringCode());
-        settings.addEditBox(prefix + "winCode").type(String.class).def(level.winCode());
-        settings.addEditBox(prefix + "autocomplete").type(String.class).def(level.autocomplete().replace("'", "\""));
+        settings.addEditBox(prefix + "map").multiline().type(String.class).def(level.map());
+        settings.addEditBox(prefix + "help").multiline().type(String.class).def(level.help());
+        settings.addEditBox(prefix + "defaultCode").multiline().type(String.class).def(level.defaultCode());
+        settings.addEditBox(prefix + "refactoringCode").multiline().type(String.class).def(level.refactoringCode());
+        settings.addEditBox(prefix + "winCode").multiline().type(String.class).def(level.winCode());
+        settings.addEditBox(prefix + "autocomplete").multiline().type(String.class).def(level.autocomplete().replace("'", "\""));
         settings.addEditBox("levels.count").type(Integer.class).def(0).update(index);
         return this;
     }

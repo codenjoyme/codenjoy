@@ -351,8 +351,11 @@
                                 <td><form:select path="parameters[${status.index}]"
                                         items="${element.options}"/></td>
                             </c:when>
-                            <c:when test="${element.type == 'editbox'}">
+                            <c:when test="${element.type == 'editbox' && !element.multiline}">
                                 <td><form:input path="parameters[${status.index}]"/></td>
+                            </c:when>
+                            <c:when test="${element.type == 'editbox' && element.multiline}">
+                                <td><form:textarea rows="5" cols="50" path="parameters[${status.index}]"/></td>
                             </c:when>
                             <c:when test="${element.type == 'checkbox'}">
                                 <td><form:checkbox path="parameters[${status.index}]"/></td>
