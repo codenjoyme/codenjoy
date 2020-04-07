@@ -75,6 +75,8 @@ label.error {
 .admin-table {
     background-color: papayawhip;
     margin:10px;
+    font-family: monospace;
+    font-size: 14px;
 }
 
 .admin-table input[type="text"] {
