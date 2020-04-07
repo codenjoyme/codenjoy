@@ -27,6 +27,7 @@ import com.codenjoy.dojo.config.meta.OAuth2Profile;
 import com.codenjoy.dojo.config.meta.SSOProfile;
 import com.codenjoy.dojo.config.oauth2.OAuth2MappingUserService;
 import com.codenjoy.dojo.web.controller.*;
+import com.codenjoy.dojo.web.rest.RestSettingsController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -84,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             ADMIN_LOGIN_PROCESSING_URI,
             MVCConf.RESOURCES_URI,
             ErrorController.URI,
-            GameDataController.URI + "/**",
+            RestSettingsController.URI + "/**",
 
             // all players board
             BoardController.URI + "/game/**",

@@ -36,6 +36,15 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 
 public class SecondGameType extends AbstractGameType {
+
+    private final SettingsImpl result;
+
+    public SecondGameType() {
+        result = new SettingsImpl();
+        result.addEditBox("Parameter 3").type(Integer.class).def(43);
+        result.addCheckBox("Parameter 4").type(Boolean.class).def(false).update(true);
+    }
+
     @Override
     public PlayerScores getPlayerScores(Object score) {
 
@@ -109,9 +118,6 @@ public class SecondGameType extends AbstractGameType {
 
     @Override
     public Settings getSettings() {
-        SettingsImpl result = new SettingsImpl();
-        result.addEditBox("Parameter 3").type(Integer.class).def(43);
-        result.addCheckBox("Parameter 4").type(Boolean.class).def(false).update(true);
         return result;
     }
 

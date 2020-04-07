@@ -23,7 +23,10 @@ package com.codenjoy.dojo.web.controller;
  */
 
 import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.nullobj.NullGameType;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,12 +47,14 @@ public class ValidatorTest {
     private ConfigProperties properties;
     private Registration registration;
     private Validator validator;
+    private GameService gameService;
 
     @Before
     public void setUp() {
         validator = new Validator(){{
             ValidatorTest.this.registration = this.registration = mock(Registration.class);
             ValidatorTest.this.properties = this.properties = mock(ConfigProperties.class);
+            ValidatorTest.this.gameService = this.gameService = mock(GameService.class);
         }};
     }
 
@@ -779,6 +784,56 @@ public class ValidatorTest {
         } catch (Exception e) {
             assertEquals(expected, e.getMessage());
         }
+    }
+
+    @Test
+    public void validateCheckNotEmpty() {
+        shouldError("Parameter is null: 'Null'",
+                () -> validator.checkNotEmpty("Null"));
+
+        shouldError("Parameter is null: 'null'",
+                () -> validator.checkNotEmpty(null));
+
+        shouldError("Parameter is null: 'NULL'",
+                () -> validator.checkNotEmpty("NULL"));
+
+        shouldError("Parameter is null: 'null'",
+                () -> validator.checkNotEmpty("null"));
+
+        shouldError("Parameter is null: ''",
+                () -> validator.checkNotEmpty(""));
+
+        shouldOk(() -> validator.checkNotEmpty("not-empty"));
+    }
+
+    @Test
+    public void validateCheckGameType() {
+        // empty string
+        shouldError("Game name is invalid: 'Null'",
+                () -> validator.checkGameType("Null"));
+
+        shouldError("Game name is invalid: 'null'",
+                () -> validator.checkGameType(null));
+
+        shouldError("Game name is invalid: 'NULL'",
+                () -> validator.checkGameType("NULL"));
+
+        shouldError("Game name is invalid: 'null'",
+                () -> validator.checkGameType("null"));
+
+        shouldError("Game name is invalid: ''",
+                () -> validator.checkGameType(""));
+
+        shouldOk(() -> validator.checkGameType("not-empty"));
+
+        // other cases
+        when(gameService.getGame("valid-game")).thenReturn(mock(GameType.class));
+        when(gameService.getGame("bad-game")).thenReturn(NullGameType.INSTANCE);
+
+        shouldOk(() -> validator.checkGameType("valid-game"));
+
+        shouldError("Game not found: bad-game",
+                () -> validator.checkGameType("bad-game"));
     }
 
 }

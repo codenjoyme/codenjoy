@@ -49,6 +49,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -64,10 +65,10 @@ import java.util.Collection;
 @Import(RestGameControllerTest.ContextConfiguration.class)
 @WebAppConfiguration
 public class RestGameControllerTest {
-    
+
     @TestConfiguration
     public static class ContextConfiguration {
-        
+
         @Bean("gameService")
         public GameServiceImpl gameService() {
             return new GameServiceImpl(){
@@ -111,7 +112,18 @@ public class RestGameControllerTest {
 
     @SneakyThrows
     private String get(String uri) {
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
+        return process(MockMvcRequestBuilders.get(uri));
+    }
+
+    @SneakyThrows
+    private String post(String uri, String data) {
+        return process(MockMvcRequestBuilders.post(uri, data)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(data));
+    }
+
+    private String process(MockHttpServletRequestBuilder post) throws Exception {
+        MvcResult mvcResult = mvc.perform(post
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         assertEquals(200, mvcResult.getResponse().getStatus());
         return mvcResult.getResponse().getContentAsString();

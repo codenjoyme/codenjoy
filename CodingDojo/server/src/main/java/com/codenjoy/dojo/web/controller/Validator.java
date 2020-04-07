@@ -24,8 +24,11 @@ package com.codenjoy.dojo.web.controller;
 
 
 import com.codenjoy.dojo.services.ConfigProperties;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.nullobj.NullGameType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -55,6 +58,7 @@ public class Validator {
 
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties properties;
+    @Autowired protected GameService gameService;
 
     private Pattern email;
     private Pattern id;
@@ -176,6 +180,22 @@ public class Validator {
         if (!isGameName(input, canBeNull)) {
             throw new IllegalArgumentException(String.format("Game name is invalid: '%s'", input));
         }
+    }
+
+    public void checkNotEmpty(String input) {
+        if (isEmpty(input)) {
+            throw new IllegalArgumentException(String.format("Parameter is null: '%s'", input));
+        }
+    }
+
+    public GameType checkGameType(String input) {
+        checkGameName(input, Validator.CANT_BE_NULL);
+
+        GameType type = gameService.getGame(input);
+        if (type == NullGameType.INSTANCE) {
+            throw new IllegalArgumentException("Game not found: " + input);
+        }
+        return type;
     }
 
     public void checkMD5(String input) {
