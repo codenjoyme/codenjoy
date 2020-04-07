@@ -101,7 +101,7 @@ var initAdditionalLink = function() {
 game.onBoardAllPageLoad = function() {
     initLayout(game.gameName, 'leaderboard.html', game.contextPath,
         null,
-        ['js/game/loader/boardAllPageLoad.js'],
+        ['js/game/loader/board-all-page-load.js'],
         function() {
             boardAllPageLoad();
             initHelpLink();
