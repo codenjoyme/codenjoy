@@ -23,27 +23,27 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 public class SettingsImpl implements Settings {
 
-    private List<Parameter<?>> parameters = new LinkedList<>();
-    private Map<String, Parameter<?>> map = new HashMap<>();
+    private Map<String, Parameter<?>> map = new LinkedHashMap<>();
 
     @Override
     public List<Parameter<?>> getParameters() {
-        return new LinkedList<>(parameters);
+        return new LinkedList<>(map.values());
     }
 
     @Override
     public Parameter<?> addEditBox(String name) {
         if (map.containsKey(name)) return map.get(name);
 
-        Parameter<?> parameter = new EditBox(name);
-        parameters.add(parameter);
+        return put(name, new EditBox(name));
+    }
+
+    private Parameter put(String name, Parameter parameter) {
         map.put(name, parameter);
         return parameter;
     }
@@ -52,68 +52,56 @@ public class SettingsImpl implements Settings {
     public Parameter<?> addSelect(String name, List<Object> strings) {
         if (map.containsKey(name)) return map.get(name);
 
-        Parameter<?> parameter = new SelectBox(name, strings);
-        parameters.add(parameter);
-        map.put(name, parameter);
-        return parameter;
+        return put(name, new SelectBox(name, strings));
     }
 
     @Override
     public Parameter<Boolean> addCheckBox(String name) {
         if (map.containsKey(name)) return (Parameter<Boolean>) map.get(name);
 
-        Parameter<Boolean> parameter = new CheckBox(name);
-        parameter.type(Boolean.class);
-        parameters.add(parameter);
-        map.put(name, parameter);
-        return parameter;
+        return put(name, new CheckBox<Boolean>(name).type(Boolean.class));
+    }
+
+    @Override
+    public boolean hasParameter(String name) {
+        return map.containsKey(name);
     }
 
     @Override
     public Parameter<?> getParameter(String name) {
-        for (Parameter<?> p : parameters) {
-            if (p.itsMe(name)) {
-                return p;
-            }
+        if (map.containsKey(name)) {
+            return map.get(name);
         }
         throw new IllegalArgumentException(String.format("Parameter with name '%s' not found", name));
     }
 
     @Override
-    public void removeParameter(String name) { // TODO test me
-        for (Parameter<?> p : parameters.toArray(new Parameter[0])) {
-            if (p.itsMe(name)) {
-                parameters.remove(p);
-                return;
-            }
-        }
-        throw new IllegalArgumentException(String.format("Parameter with name '%s' not found", name));
+    public void removeParameter(String name) {
+        map.remove(name);
     }
 
     @Override
     public boolean changed() {
-        boolean result = false;
-        for (Parameter<?> parameter : parameters) {
-            result |= parameter.changed();
-        }
-        return result;
+        return map.values().stream()
+                .anyMatch(Parameter::changed);
     }
 
     @Override
     public List<String> whatChanged() {
-        List<String> result = new LinkedList<>();
-        for (Parameter<?> parameter : parameters) {
-            if (parameter.changed()) {
-                result.add(parameter.getName());
-            }
-        }
-        return result;
+        return map.values().stream()
+                .filter(Parameter::changed)
+                .map(Parameter::getName)
+                .collect(toList());
     }
 
     @Override
     public void changesReacted() {
-        for (Parameter<?> parameter : parameters) {
-            parameter.changesReacted();
-        }
+        map.values()
+                .forEach(Parameter::changesReacted);
+    }
+
+    @Override
+    public void clear() {
+        map.clear();
     }
 }

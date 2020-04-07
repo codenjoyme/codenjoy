@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -33,15 +34,24 @@ import static org.junit.Assert.assertSame;
 
 public class SettingsTest {
 
+    private Settings settings;
+
+    @Before
+    public void setup() {
+        settings = new SettingsImpl();
+    }
+
     @Test
     public void shouldGetAllOptionsContainsCreatedParameter() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
         Parameter<Integer> select = settings.addSelect("select", Arrays.asList("option1")).type(Integer.class);
         Parameter<Integer> check = settings.addCheckBox("check").type(Integer.class);
 
+        // when
         List<Parameter<?>> options = settings.getParameters();
+
+        // then
         assertEquals(true, options.contains(edit));
         assertEquals(true, options.contains(select));
         assertEquals(true, options.contains(check));
@@ -49,11 +59,13 @@ public class SettingsTest {
 
     @Test
     public void shouldUpdatePreviousIfPresent() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
+
+        // when
         Parameter<Integer> edit2 = settings.addEditBox("edit").type(Integer.class);
 
+        // then
         assertSame(edit, edit2);
 
         List<Parameter<?>> options = settings.getParameters();
@@ -62,71 +74,103 @@ public class SettingsTest {
 
     @Test
     public void shouldGetParameterByNameReturnsSameParameter() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(5);
 
+        // when
         assertSame(edit, settings.getParameter("edit"));
 
+        // then
         edit.update(12);
         assertEquals(12, edit.getValue().intValue());
     }
 
     @Test
     public void shouldChangedValueWhenChangeIt() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
         Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2")).type(String.class);
         Parameter<Boolean> check = settings.addCheckBox("check");
 
+        // when
         edit.update(12);
         assertEquals(12, edit.getValue().intValue());
 
+        // when then
         select.select(1);
         assertEquals("option2", select.getValue());
 
+        // when then
         check.update(true);
         assertEquals(true, check.getValue());
     }
 
     @Test
-    public void shouldCanSetDefaultValue() {
-        Settings settings = new SettingsImpl();
-
+    public void shouldHasParameter() {
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(5);
         Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option3");
         Parameter<Boolean> check = settings.addCheckBox("check").def(true);
 
+        // when then
+        assertEquals(true, settings.hasParameter("edit"));
+        assertEquals(true, settings.hasParameter("select"));
+        assertEquals(true, settings.hasParameter("check"));
+
+        assertEquals(false, settings.hasParameter("not-exists"));
+    }
+
+    @Test
+    public void shouldCanSetDefaultValue() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
+        Parameter<Boolean> check = settings.addCheckBox("check");
+
+        // when
+        edit.def(5);
+        select.def("option3");
+        check.def(true);
+
+        // then
         assertEquals(5, edit.getValue().intValue());
         assertEquals("option3", select.getValue());
         assertEquals(true, check.getValue());
 
+        // when then
         edit.update(12);
         assertEquals(12, edit.getValue().intValue());
 
+        // when then
         select.select(1);
         assertEquals("option2", select.getValue());
 
+        // when then
         select.update("option1");
         assertEquals("option1", select.getValue());
 
+        // when then
         check.update(false);
         assertEquals(false, check.getValue());
 
+        // when then
         check.select(1);
         assertEquals(true, check.getValue());
     }
 
     @Test
     public void shouldDefaultValueIsNullIfNotSet() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
         Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
         Parameter<Boolean> check = settings.addCheckBox("check");
 
+        // when not
+        // edit.def(5);
+        // select.def("option3");
+        // check.def(true);
 
+        // then
         assertEquals(null, edit.getValue());
         assertEquals(null, select.getValue());
         assertEquals(null, check.getValue());
@@ -134,12 +178,12 @@ public class SettingsTest {
 
     @Test
     public void shouldGetType() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
         Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
         Parameter<Boolean> check = settings.addCheckBox("check");
 
+        // when then
         assertEquals("editbox", edit.getType());
         assertEquals("selectbox", select.getType());
         assertEquals("checkbox", check.getType());
@@ -147,8 +191,7 @@ public class SettingsTest {
 
     @Test
     public void shouldGetOptions() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(42);
         Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
         Parameter<Boolean> check = settings.addCheckBox("check").def(true);
@@ -157,6 +200,7 @@ public class SettingsTest {
         select.update("option1");
         check.update(false);
 
+        // when then
         assertEquals("[42, 12]", edit.getOptions().toString());
         assertEquals("[option1, option2, option3]", select.getOptions().toString());
         assertEquals("[true, false]", check.getOptions().toString());
@@ -164,10 +208,9 @@ public class SettingsTest {
 
     @Test
     public void shouldSetFlagChangedWhenChangeSomething() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
-        Parameter<String> select = settings.addSelect("select", Arrays.<Object>asList("option1", "option2", "option3")).type(String.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
         Parameter<Boolean> check = settings.addCheckBox("check");
 
         assertEquals(false, edit.changed());
@@ -219,27 +262,62 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldSetFlagChangedOnlyWhenChangeValue() {
-        Settings settings = new SettingsImpl();
-
+    public void shouldRemoveParameterByName() {
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
-        Parameter<String> select = settings.addSelect("select", Arrays.<Object>asList("option1", "option2", "option3")).type(String.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
         Parameter<Boolean> check = settings.addCheckBox("check");
 
+        // when
+        settings.removeParameter("edit");
+
+        // then
+        assertEquals(false, settings.hasParameter("edit"));
+        assertEquals(true, settings.hasParameter("select"));
+        assertEquals(true, settings.hasParameter("check"));
+    }
+
+    @Test
+    public void shouldClearAllParameters() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
+        Parameter<Boolean> check = settings.addCheckBox("check");
+
+        // when
+        settings.clear();
+
+        // then
+        assertEquals(false, settings.hasParameter("edit"));
+        assertEquals(false, settings.hasParameter("select"));
+        assertEquals(false, settings.hasParameter("check"));
+    }
+
+    @Test
+    public void shouldSetFlagChangedOnlyWhenChangeValue() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
+        Parameter<Boolean> check = settings.addCheckBox("check");
+
+        // when
         edit.update(1);
         select.update("option1");
         check.update(true);
         settings.changesReacted();
 
+        // then
         assertEquals(false, edit.changed());
         assertEquals(false, select.changed());
         assertEquals(false, check.changed());
         assertEquals(false, settings.changed());
 
-        // when then
+        // when
         edit.update(1);
         select.update("option1");
         check.update(true);
+
+        // then
         assertEquals(false, edit.changed());
         assertEquals(false, select.changed());
         assertEquals(false, check.changed());
@@ -248,24 +326,27 @@ public class SettingsTest {
 
     @Test
     public void shouldSetFlagChangedOnlyWhenChangeValue_nullCases() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
-        Parameter<String> select = settings.addSelect("select", Arrays.<Object>asList("option1", "option2", "option3")).type(String.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
         Parameter<Boolean> check = settings.addCheckBox("check");
 
+        // when
         edit.update(null);
         check.update(null);
         settings.changesReacted();
 
+        // then
         assertEquals(false, edit.changed());
         assertEquals(false, select.changed());
         assertEquals(false, check.changed());
         assertEquals(false, settings.changed());
 
-        // when then
+        // when
         edit.update(null);
         check.update(null);
+
+        // then
         assertEquals(false, edit.changed());
         assertEquals(false, select.changed());
         assertEquals(false, check.changed());
@@ -274,23 +355,23 @@ public class SettingsTest {
 
     @Test
     public void shouldSetStringToBooleanEditBox() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Boolean> edit = settings.addEditBox("edit")
                 .type(Boolean.class).def(true);
 
         assertEquals(true, edit.getValue());
 
+        // when
         List<Parameter> parameters = (List)settings.getParameters();
         parameters.get(0).update("false");
 
+        // then
         assertEquals(false, edit.getValue());
     }
 
     @Test
     public void shouldToBooleanCheckBox() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Boolean> edit = settings.addCheckBox("check")
                 .type(Boolean.class).def(true);
 
@@ -299,42 +380,41 @@ public class SettingsTest {
         List<Parameter> parameters = (List)settings.getParameters();
         Parameter parameter = parameters.get(0);
 
+        // when then
         parameter.update("false");
-
         assertEquals(false, edit.getValue());
 
+        // when then
         parameter.update(true);
-
         assertEquals(true, edit.getValue());
 
+        // when then
         parameter.update(0);
-
         assertEquals(false, edit.getValue());
 
+        // when then
         parameter.update("1");
-
         assertEquals(true, edit.getValue());
     }
 
     @Test
     public void shouldSetStringToIntegerEditBox() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit")
                 .type(Integer.class).def(21);
 
         assertEquals(21, edit.getValue().intValue());
 
         List<Parameter> parameters = (List)settings.getParameters();
-        parameters.get(0).update("42");
 
+        // when then
+        parameters.get(0).update("42");
         assertEquals(42, edit.getValue().intValue());
     }
 
     @Test
     public void shouldToIntegerCheckBox() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addCheckBox("check")
                 .type(Integer.class).def(1);
 
@@ -343,57 +423,56 @@ public class SettingsTest {
         List<Parameter> parameters = (List)settings.getParameters();
         Parameter parameter = parameters.get(0);
 
+        // when then
         parameter.update("0");
-
         assertEquals(0, edit.getValue().intValue());
 
+        // when then
         parameter.update(1);
-
         assertEquals(1, edit.getValue().intValue());
 
+        // when then
         parameter.update(false);
-
         assertEquals(0, edit.getValue().intValue());
 
+        // when then
         parameter.update("true");
-
         assertEquals(1, edit.getValue().intValue());
     }
 
     @Test
     public void shouldSetStringToDoubleEditBox() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Double> edit = settings.addEditBox("edit")
                 .type(Double.class).def(2.1);
 
         assertEquals(2.1, edit.getValue(), 0);
 
         List<Parameter> parameters = (List)settings.getParameters();
-        parameters.get(0).update("4.2");
 
+        // when then
+        parameters.get(0).update("4.2");
         assertEquals(4.2, edit.getValue(), 0);
     }
 
     @Test
     public void shouldSetStringToStringEditBox() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<String> edit = settings.addEditBox("edit")
                 .type(String.class).def("default");
 
         assertEquals("default", edit.getValue());
 
         List<Parameter> parameters = (List)settings.getParameters();
-        parameters.get(0).update("updated");
 
+        // when then
+        parameters.get(0).update("updated");
         assertEquals("updated", edit.getValue());
     }
 
     @Test
     public void shouldToStringCheckBox() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<String> edit = settings.addCheckBox("check")
                 .type(String.class).def("false");
 
@@ -402,20 +481,20 @@ public class SettingsTest {
         List<Parameter> parameters = (List)settings.getParameters();
         Parameter parameter = parameters.get(0);
 
+        // when then
         parameter.update("true");
-
         assertEquals("true", edit.getValue());
 
+        // when then
         parameter.update(0);
-
         assertEquals("false", edit.getValue());
 
+        // when then
         parameter.update("1");
-
         assertEquals("true", edit.getValue());
 
+        // when then
         parameter.update(false);
-
         assertEquals("false", edit.getValue());
     }
 
@@ -436,8 +515,7 @@ public class SettingsTest {
 
     @Test
     public void shouldSetStringToObjectEditBox() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Foo> edit = settings.addEditBox("edit")
                 .type(Foo.class).def(new Foo(1, 2))
                 .parser(string -> new Foo(
@@ -448,16 +526,16 @@ public class SettingsTest {
         assertEquals(2, edit.getValue().b);
 
         List<Parameter> parameters = (List)settings.getParameters();
-        parameters.get(0).update("[3,4]");
 
+        // when then
+        parameters.get(0).update("[3,4]");
         assertEquals(3, edit.getValue().a);
         assertEquals(4, edit.getValue().b);
     }
 
     @Test
     public void shouldSetStringToObjectCheckBox() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Foo> edit = settings.addCheckBox("check")
                 .type(Foo.class).def(new Foo(2, 2))
                 .parser(string -> new Foo(
@@ -468,23 +546,23 @@ public class SettingsTest {
         assertEquals(2, edit.getValue().b);
 
         List<Parameter> parameters = (List)settings.getParameters();
-        parameters.get(0).update(true);
 
+        // when then
+        parameters.get(0).update(true);
         assertEquals(1, edit.getValue().a);
         assertEquals(0, edit.getValue().b);
 
+        // when then
         parameters.get(0).update(false);
-
         assertEquals(0, edit.getValue().a);
         assertEquals(1, edit.getValue().b);
     }
 
     @Test
     public void shouldWhatChanged() {
-        Settings settings = new SettingsImpl();
-
+        // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
-        Parameter<String> select = settings.addSelect("select", Arrays.<Object>asList("option1", "option2", "option3")).type(String.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
         Parameter<Boolean> check = settings.addCheckBox("check");
 
         // when then

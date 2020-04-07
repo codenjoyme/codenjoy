@@ -57,6 +57,8 @@ public interface Settings {
 
     <T> Parameter<T> getParameter(String name);
 
+    boolean hasParameter(String name);
+
     void removeParameter(String name);
 
     /**
@@ -73,4 +75,9 @@ public interface Settings {
      * Так ты сообщаешь что отреагировал на все изменения.
      */
     void changesReacted();
+
+    /**
+     * Очистить все параметры
+     */
+    void clear();
 }

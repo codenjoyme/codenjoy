@@ -39,7 +39,7 @@ public final class NullSettings implements Settings {
 
     @Override
     public List<Parameter<?>> getParameters() {
-        return new LinkedList<Parameter<?>>();
+        return new LinkedList<>();
     }
 
     @Override
@@ -55,6 +55,11 @@ public final class NullSettings implements Settings {
     @Override
     public Parameter<Boolean> addCheckBox(String name) {
         return null;
+    }
+
+    @Override
+    public boolean hasParameter(String name) {
+        return false;
     }
 
     @Override
@@ -79,6 +84,11 @@ public final class NullSettings implements Settings {
 
     @Override
     public void changesReacted() {
+        // do nothing
+    }
+
+    @Override
+    public void clear() {
         // do nothing
     }
 }
