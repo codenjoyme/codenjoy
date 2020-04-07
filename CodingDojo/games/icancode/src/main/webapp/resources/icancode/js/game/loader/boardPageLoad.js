@@ -136,7 +136,7 @@ var boardPageLoad = function() {
         var multiple = levelProgress.isCurrentLevelMultiple();
 
         if (!multiple) {
-            var help = levelInfo.getInfo(level).help;
+            var help = levelInfo.getLevel(level).help;
             $('#ide-help-window').html(help);
             $("#modal").removeClass("close");
         } else {
@@ -165,7 +165,7 @@ var boardPageLoad = function() {
         runner = initRunnerBefunge(logger, storage);
     } else {
         var getCurrentLevelInfo = function(){
-            return levelInfo.getInfo(levelProgress.getCurrentLevel());
+            return levelInfo.getLevel(levelProgress.getCurrentLevel());
         };
         runner = initRunnerJs(game, libs, getCurrentLevelInfo, storage);
     }
@@ -213,28 +213,37 @@ var boardPageLoad = function() {
     resetRobot();
 
     // ----------------------- init level info -----------------------------
-    var levelInfo = initLevelInfo();
+    var levelInfo = initLevelInfo(game.contextPath);
+    levelInfo.load(
+        function() {
+            startingUi();
+        },
+        function(error){
+            alert('Error when loading levels from server: ' + error);
+        });
 
     // ----------------------- starting UI -------------------
-    if (game.demo) {
-        var data = '{"' + game.playerId + '":{"board":"{"levelProgress":{"total":18,"current":3,"lastPassed":15,"multiple":false},"layers":["OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOCDDDDEOOOOOOOOOOJXBBYFOOOOOOOOOOIHHHHGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]}","gameName":"icancode","score":150,"maxLength":0,"length":0,"level":1,"boardSize":16,"info":"","scores":"{"' + game.playerId + '":150}","coordinates":"{"' + game.playerId + '":{"y":8,"x":9}}"}}';
-        $('body').trigger('board-updated', JSON.parse(data));
-    }
-    buttons.disableAll();
-    $(document.body).show();
+    var startingUi = function() {
+        if (game.demo) {
+            var data = '{"' + game.playerId + '":{"board":"{"levelProgress":{"total":18,"current":3,"lastPassed":15,"multiple":false},"layers":["OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOCDDDDEOOOOOOOOOOJXBBYFOOOOOOOOOOIHHHHGOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO","AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]}","gameName":"icancode","score":150,"maxLength":0,"length":0,"level":1,"boardSize":16,"info":"","scores":"{"' + game.playerId + '":150}","coordinates":"{"' + game.playerId + '":{"y":8,"x":9}}"}}';
+            $('body').trigger('board-updated', JSON.parse(data));
+        }
+        buttons.disableAll();
+        $(document.body).show();
 
-    if (!!game.code) {
-        runner.loadSettings();
+        if (!!game.code) {
+            runner.loadSettings();
 
-        socket.connect(function() {
-            buttons.enableAll();
-        });
-    } else {
-        buttons.disableHelp();
+            socket.connect(function() {
+                buttons.enableAll();
+            });
+        } else {
+            buttons.disableHelp();
 
-        var link = $('#register-link').attr('href');
-        logger.print('<a href="' + link + '">Please register</a>');
+            var link = $('#register-link').attr('href');
+            logger.print('<a href="' + link + '">Please register</a>');
 
-        runner.setStubValue();
+            runner.setStubValue();
+        }
     }
 };

@@ -89,11 +89,11 @@ var initAutocomplete = function(level, levelInfo) {
     autocompleteMaps = {};
 
     for (var levelIndex = 0; levelIndex <= level; levelIndex++) {
-        if (!levelInfo.getInfo) {
+        if (!levelInfo.getLevel) {
             continue;
         }
 
-        var data = levelInfo.getInfo(levelIndex + 1).autocomplete;
+        var data = levelInfo.getLevel(levelIndex + 1).autocomplete;
 
         if (!data) {
             continue;
