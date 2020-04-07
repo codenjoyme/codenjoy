@@ -51,7 +51,7 @@ License along with this program.  If not, see
                 <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <c:if test="${activeProfiles.contains('icancode')}">
                     <!-- TODO to remove from here -->
-                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/i_can_code_Logo.png"></a>
+                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/robot-logo.png"></a>
                     <span class="title icancode-title">ICanCode</span>
                 </c:if>
             </div>
