@@ -35,7 +35,7 @@ public final class SettingsWrapper {
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> goldScore;
     private final Parameter<Integer> loosePenalty;
-    private final Parameter<Integer> isTrainingMode;
+    private final Parameter<Boolean> isTrainingMode;
     private final Settings settings;
 
     public static SettingsWrapper setup(Settings settings) {
@@ -54,7 +54,7 @@ public final class SettingsWrapper {
         winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
-        isTrainingMode = settings.addEditBox("Is training mode").type(Integer.class).def(1);
+        isTrainingMode = settings.addCheckBox("Is training mode").type(Boolean.class).def(true);
 
         Levels.setup();
     }
@@ -71,7 +71,7 @@ public final class SettingsWrapper {
         return winScore.getValue();
     }
 
-    public int isTrainingMode() {
+    public boolean isTrainingMode() {
         return isTrainingMode.getValue();
     }
 
@@ -85,6 +85,8 @@ public final class SettingsWrapper {
     }
 
     public SettingsWrapper addLevel(int index, Level level) {
+        settings.addEditBox("levels.count").type(Integer.class).def(0).update(index);
+
         String prefix = levelPrefix(index);
         settings.addEditBox(prefix + "map").multiline().type(String.class).def(level.map());
         settings.addEditBox(prefix + "help").multiline().type(String.class).def(level.help());
@@ -92,7 +94,6 @@ public final class SettingsWrapper {
         settings.addEditBox(prefix + "refactoringCode").multiline().type(String.class).def(level.refactoringCode());
         settings.addEditBox(prefix + "winCode").multiline().type(String.class).def(level.winCode());
         settings.addEditBox(prefix + "autocomplete").multiline().type(String.class).def(level.autocomplete().replace("'", "\""));
-        settings.addEditBox("levels.count").type(Integer.class).def(0).update(index);
         return this;
     }
 
@@ -117,7 +118,7 @@ public final class SettingsWrapper {
         return this;
     }
 
-    public SettingsWrapper isTrainingMode(int value) {
+    public SettingsWrapper isTrainingMode(boolean value) {
         isTrainingMode.update(value);
         return this;
     }
