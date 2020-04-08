@@ -157,22 +157,6 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         return true;
     };
 
-    var cursorRightCommand = function(x, y) {
-        direction = Direction.RIGHT;
-    }
-
-    var cursorLeftCommand = function(x, y) {
-        direction = Direction.LEFT;
-    }
-
-    var cursorDownCommand = function(x, y) {
-        direction = Direction.DOWN;
-    }
-
-    var cursorUpCommand = function(x, y) {
-        direction = Direction.UP;
-    }
-
     var cursorMirrorTopBottomCommand = function(x, y) {
         direction = direction.mirrorTopBottom();
     }
@@ -351,6 +335,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'start',
             process: startCommand,
             description: 'Выполнение команд начинается тут.',
+            // hidden: true, // так можно сделать если хочется временно спрятать команду
             img1: 'start.png'
         },
 
@@ -361,42 +346,6 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: finishCommand,
             description: 'Выполнение команд останавливается тут.',
             img1: 'finish.png'
-        },
-
-        {
-            id: 'cursor-right',
-            type: 1,
-            title: 'cursor-right',
-            process: cursorRightCommand,
-            description: 'Командный курсор двигайся вправо.',
-            hidden: true // TODO а почему только тут true?
-        },
-
-        {
-            id: 'cursor-left',
-            type: 1,
-            title: 'cursor-left',
-            process: cursorLeftCommand,
-            description: 'Командный курсор двигайся влево.',
-            hidden: true // TODO а почему только тут true?
-        },
-
-        {
-            id: 'cursor-up',
-            type: 1,
-            title: 'cursor-up',
-            process: cursorUpCommand,
-            description: 'Командный курсор двигайся вверх.',
-            hidden: true // TODO а почему только тут true?
-        },
-
-        {
-            id: 'cursor-down',
-            type: 1,
-            title: 'cursor-down',
-            process: cursorDownCommand,
-            description: 'Командный курсор двигайся вниз.',
-            hidden: true // TODO а почему только тут true?
         },
 
         {
