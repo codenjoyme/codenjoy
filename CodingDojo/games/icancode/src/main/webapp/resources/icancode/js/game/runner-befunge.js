@@ -166,7 +166,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
     }
 
     var printStackCommand = function(x, y) {
-        logger.print('Stack [' + stack + ']');
+        logger.print('Stack [' + [].concat(stack).reverse() + ']');
     }
 
     var activateProcedure1Command = function(x, y) {
