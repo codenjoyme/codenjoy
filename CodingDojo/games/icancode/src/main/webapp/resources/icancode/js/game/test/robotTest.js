@@ -150,37 +150,37 @@ var robotTest = function() {
         };
 
         board = 'board={"offset":{"x":0,"y":0},' +
-            '"heroPosition":{"x":2,"y":1},' +
+            '"heroPosition":{"x":2,"y":7},' +
             '"layers":["' +
-            '╔═══════┐' + // 0
-            '║S.$◄..O│' + // 1
-            '║....$O.│' + // 2
-            '║.$E....│' + // 3
-            '║˃..O...│' + // 4
-            '║.O...Z.│' + // 5
-            '║..˄....│' + // 6
-            '║..˅˂▼►▲│' + // 7
-            '└───────┘",' + // 8
-            // 012345678
-            '"---------' + // 0
-            '--☺----o-' + // 1
-            '-X----x☻-' + // 2
-            '-X---B---' + // 3
-            '--→B-↓B--' + // 4
-            '-♂♂♀✝B---' + // 5
-            '--&--↑←--' + // 6
-            '---------' + // 7
-            '---------",' + // 8
-            // 012345678
-            '"---------' + // 0
-            '------*--' + // 1
-            '---------' + // 2
-            '---------' + // 3
-            '------^--' + // 4
-            '---------' + // 5
-            '---------' + // 6
-            '---------' + // 7
-            '---------"' + // 8
+            '╔═══════┐' +   // 8
+            '║S.$◄..O│' +   // 7
+            '║....$O.│' +   // 6
+            '║.$E....│' +   // 5
+            '║˃..O...│' +   // 4
+            '║.O...Z.│' +   // 3
+            '║..˄....│' +   // 2
+            '║..˅˂▼►▲│' +   // 1
+            '└───────┘",' + // 0
+          // 012345678
+            '"---------' +  // 8
+            '--☺----o-' +   // 7
+            '-X----x☻-' +   // 6
+            '-X---B---' +   // 5
+            '--→B-↓B--' +   // 4
+            '-♂♂♀✝B---' +   // 3
+            '--&--↑←--' +   // 2
+            '---------' +   // 1
+            '---------",' + // 0
+          // 012345678
+            '"---------' +  // 1
+            '------*--' +   // 2
+            '---------' +   // 3
+            '---------' +   // 3
+            '------^--' +   // 4
+            '---------' +   // 3
+            '---------' +   // 2
+            '---------' +   // 1
+            '---------"' +  // 0
             ']}';
 
 
@@ -190,15 +190,18 @@ var robotTest = function() {
         // --------- board.getWholeBoard -----------
         resetMocks();
 
-        assertEquals([[['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL']],
-                [['WALL'], ['START'], ['OTHER_ROBOT'], ['OTHER_ROBOT'], ['LASER_MACHINE'], ['ZOMBIE'], ['NONE'], ['NONE'], ['WALL']],
-                [['WALL'], ['MY_ROBOT'], ['NONE'], ['GOLD'], ['LASER_RIGHT'], ['HOLE', 'ZOMBIE'], ['OTHER_ROBOT'], ['NONE'], ['WALL']],
-                [['WALL'], ['GOLD'], ['NONE'], ['EXIT'], ['BOX'], ['ZOMBIE'], ['LASER_MACHINE'], ['LASER_MACHINE'], ['WALL']],
-                [['WALL'], ['LASER_MACHINE_READY'], ['NONE'], ['NONE'], ['HOLE'], ['ZOMBIE_DIE'], ['NONE'], ['LASER_MACHINE'], ['WALL']],
-                [['WALL'], ['NONE'], ['GOLD'], ['BOX'], ['LASER_DOWN'], ['BOX'], ['LASER_UP'], ['LASER_MACHINE_READY'], ['WALL']],
-                [['WALL'], ['MY_ROBOT'], ['HOLE', 'OTHER_ROBOT'], ['NONE'], ['BOX', 'OTHER_ROBOT'], ['ZOMBIE_START'], ['LASER_LEFT'], ['LASER_MACHINE_READY'], ['WALL']],
-                [['WALL'], ['HOLE', 'MY_ROBOT'], ['MY_ROBOT'], ['NONE'], ['NONE'], ['NONE'], ['NONE'], ['LASER_MACHINE_READY'], ['WALL']],
-                [['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL'], ['WALL']]],
+        assertEquals([[['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],
+                    ['WALL']],[['WALL'],['NONE'],['NONE'],['ZOMBIE'],['LASER_MACHINE'],['OTHER_ROBOT'],
+                    ['OTHER_ROBOT'],['START'],['WALL']],[['WALL'],['NONE'],['OTHER_ROBOT'],['HOLE','ZOMBIE'],
+                    ['LASER_RIGHT'],['GOLD'],['NONE'],['MY_ROBOT'],['WALL']],[['WALL'],['LASER_MACHINE'],
+                    ['LASER_MACHINE'],['ZOMBIE'],['BOX'],['EXIT'],['NONE'],['GOLD'],['WALL']],[['WALL'],
+                    ['LASER_MACHINE'],['NONE'],['ZOMBIE_DIE'],['HOLE'],['NONE'],['NONE'],
+                    ['LASER_MACHINE_READY'],['WALL']],[['WALL'],['LASER_MACHINE_READY'],['LASER_UP'],
+                    ['BOX'],['LASER_DOWN'],['BOX'],['GOLD'],['NONE'],['WALL']],[['WALL'],
+                    ['LASER_MACHINE_READY'],['LASER_LEFT'],['ZOMBIE_START'],['BOX','OTHER_ROBOT'],['NONE'],
+                    ['HOLE','OTHER_ROBOT'],['MY_ROBOT'],['WALL']],[['WALL'],['LASER_MACHINE_READY'],
+                    ['NONE'],['NONE'],['NONE'],['NONE'],['MY_ROBOT'],['HOLE','MY_ROBOT'],['WALL']],
+                    [['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL'],['WALL']]],
             scanner.getWholeBoard());
 
         // --------- getScanner --------------
@@ -206,25 +209,25 @@ var robotTest = function() {
         resetMocks();
 
         assertEquals(['GOLD'],
-            scanner.at(new Point(2, 3)));
+            scanner.at(new Point(2, 5)));
 
         assertEquals(['GOLD'],
-            scanner.at(2, 3));
+            scanner.at(2, 5));
 
         assertEquals(['OTHER_ROBOT'],
-            scanner.at(new Point(1, 2)));
+            scanner.at(new Point(1, 6)));
 
         assertEquals(['OTHER_ROBOT'],
-            scanner.at(1, 2));
+            scanner.at(1, 6));
 
         assertEquals(['HOLE', 'OTHER_ROBOT'],
-            scanner.at(6, 2));
+            scanner.at(6, 6));
 
         assertEquals(['BOX', 'OTHER_ROBOT'],
             scanner.at(6, 4));
 
         assertEquals(['OTHER_ROBOT'], //TODO here also laser
-            scanner.at(2, 6));
+            scanner.at(2, 2));
 
         assertEquals(null,
             scanner.at(null));
@@ -282,13 +285,13 @@ var robotTest = function() {
         resetMocks();
 
         assertEquals(['OTHER_ROBOT'],
-            scanner.atNearRobot(-1, 1));
+            scanner.atNearRobot(-1, -1));
 
         assertEquals(['MY_ROBOT'], // мoй другой робот что летает LAYER3
             scanner.atNearRobot(4, 0));
 
         assertEquals(['BOX', 'OTHER_ROBOT'], // чужой робот, что летает LAYER3
-            scanner.atNearRobot(4, 3));
+            scanner.atNearRobot(4, -3));
 
         assertEquals(null,
             scanner.atNearRobot());
@@ -304,18 +307,19 @@ var robotTest = function() {
 
         // out of board
 
+        // TODO немного вводит в заблуждение, передал: 0, -10, а в сообщении: 2,-9 - все потом что отнимаются координаты игрока моего
         assertEquals(null,
             scanner.atNearRobot(0, -10));
-        assertActions(['Your point is out of board: [2,-9].'], loggerActions); // TODO немного вводит в заблуждение, передал: 0, -10, а в сообщении: 2,-9
+        assertActions(['Your point is out of board: [2,-3].'], loggerActions);
 
         assertEquals(null,
             scanner.atNearRobot(90, 0));
-        assertActions(['Your point is out of board: [92,1].'], loggerActions);
+        assertActions(['Your point is out of board: [92,7].'], loggerActions);
 
         // getMe
         resetMocks();
 
-        assertEquals({'x': 2, 'y': 1}, scanner.getMe());
+        assertEquals({'x': 2, 'y': 7}, scanner.getMe());
 
         // TODO what if Hero not on board?
         // TODO what if Hero is flying
@@ -326,24 +330,24 @@ var robotTest = function() {
         resetMocks();
 
         assertEquals(false,
-            scanner.isAt(2, 1, 'OTHER_ROBOT'));
+            scanner.isAt(2, 7, 'OTHER_ROBOT'));
 
         assertEquals(true,
-            scanner.isAt(2, 1, 'MY_ROBOT'));
+            scanner.isAt(2, 7, 'MY_ROBOT'));
 
         assertEquals(false,
-            scanner.isAt(2, 1, ['MY_ROBOT', 'GOLD']));
+            scanner.isAt(2, 7, ['MY_ROBOT', 'GOLD']));
         assertEquals(true,
-            scanner.isAnyOfAt(2, 1, ['MY_ROBOT', 'GOLD']));
+            scanner.isAnyOfAt(2, 7, ['MY_ROBOT', 'GOLD']));
 
         assertEquals(true,
-            scanner.isAt(2, 1, ['MY_ROBOT', 'NONE']));
+            scanner.isAt(2, 7, ['MY_ROBOT', 'NONE']));
 
         assertEquals(false,
-            scanner.isAt(2, 1, ['OTHER_ROBOT', 'HOLE', 'ZOMBIE']));
+            scanner.isAt(2, 7, ['OTHER_ROBOT', 'HOLE', 'ZOMBIE']));
 
         assertEquals(true,
-            scanner.isAt(6, 1, ['MY_ROBOT'])); // мой летает на LAYER3
+            scanner.isAt(6, 7, ['MY_ROBOT'])); // мой летает на LAYER3
 
         assertEquals(true,
             scanner.isAt(6, 4, ['OTHER_ROBOT'])); // чужой летает на LAYER3
@@ -374,19 +378,19 @@ var robotTest = function() {
         resetMocks();
 
         assertEquals(['MY_ROBOT'],
-            scanner.getAt(2, 1));
+            scanner.getAt(2, 7));
 
         assertEquals(['NONE'],
-            scanner.getAt(2, 2));
+            scanner.getAt(2, 6));
 
         assertEquals(['EXIT'],
-            scanner.getAt(3, 3));
+            scanner.getAt(3, 5));
 
         assertEquals(['GOLD'],
-            scanner.getAt(3, 1));
+            scanner.getAt(3, 7));
 
         assertEquals(['MY_ROBOT'],
-            scanner.getAt(6, 1));
+            scanner.getAt(6, 7));
 
         assertEquals(['BOX', 'OTHER_ROBOT'],
             scanner.getAt(6, 4));
@@ -412,28 +416,26 @@ var robotTest = function() {
         // findAll
         resetMocks();
 
-        assertEquals([{'x': 2, 'y': 3}, {'x': 3, 'y': 1}, {'x': 5, 'y': 2}],
+        assertEquals([{'x': 2, 'y': 5}, {'x': 3, 'y': 7}, {'x': 5, 'y': 6}],
             scanner.findAll('GOLD'));
 
-        assertEquals([{'x': 1, 'y': 2}, {'x': 1, 'y': 3}, {'x': 6, 'y': 2}, {'x': 6, 'y': 4}, {'x': 2, 'y': 6}],
+        assertEquals([{'x': 1, 'y': 5},{'x': 1, 'y': 6},{'x': 6, 'y': 6},{'x': 6, 'y': 4},{'x': 2, 'y': 2}],
             scanner.findAll('OTHER_ROBOT'));
 
-        assertEquals([{'x': 2, 'y': 1}, {'x': 7, 'y': 1}, {'x': 6, 'y': 1}, {'x': 7, 'y': 2}],
+        assertEquals([{'x': 2, 'y': 7}, {'x': 7, 'y': 7}, {'x': 6, 'y': 7}, {'x': 7, 'y': 6}],
             scanner.findAll('MY_ROBOT'));
 
-        assertEquals([{'x': 1, 'y': 2}, {'x': 1, 'y': 3}, {'x': 6, 'y': 2}, {'x': 6, 'y': 4}, {'x': 2, 'y': 6}, {
-                'x': 2,
-                'y': 1
-            }, {'x': 7, 'y': 1}, {'x': 6, 'y': 1}, {'x': 7, 'y': 2}],
+        assertEquals([{'x': 1, 'y': 5}, {'x': 1, 'y': 6}, {'x': 6, 'y': 6}, {'x': 6, 'y': 4}, {'x': 2, 'y': 2},
+                    {'x': 2, 'y': 7}, {'x': 7, 'y': 7}, {'x': 6, 'y': 7}, {'x': 7, 'y': 6}],
             scanner.findAll(['OTHER_ROBOT', 'MY_ROBOT']));
 
-        assertEquals([{'x': 2, 'y': 3}, {'x': 3, 'y': 1}, {'x': 5, 'y': 2}],
+        assertEquals([{'x': 2, 'y': 5}, {'x': 3, 'y': 7}, {'x': 5, 'y': 6}],
             scanner.findAll(['GOLD']));
 
         assertEquals([],
             scanner.findAll([]));
 
-        assertEquals([{'x': 2, 'y': 3}, {'x': 3, 'y': 1}, {'x': 5, 'y': 2}, {'x': 1, 'y': 1}, {'x': 3, 'y': 3}],
+        assertEquals([{'x': 2, 'y': 5}, {'x': 3, 'y': 7}, {'x': 5, 'y': 6}, {'x': 1, 'y': 7}, {'x': 3, 'y': 5}],
             scanner.findAll(['GOLD', 'START', 'EXIT']));
 
         assertEquals(null,
@@ -452,24 +454,25 @@ var robotTest = function() {
         resetMocks();
 
         assertEquals(false,
-            scanner.isAnyOfAt(2, 1, 'OTHER_ROBOT'));
+            scanner.isAnyOfAt(2, 7, 'OTHER_ROBOT'));
 
         assertEquals(true,
-            scanner.isAnyOfAt(6, 1, ['OTHER_ROBOT', 'MY_ROBOT']));
+            scanner.isAnyOfAt(6, 7, ['OTHER_ROBOT', 'MY_ROBOT']));
 
         assertEquals(true,
             scanner.isAnyOfAt(6, 4, ['OTHER_ROBOT', 'MY_ROBOT']));
 
         assertEquals(true,
-            scanner.isAnyOfAt(2, 1, 'MY_ROBOT'));
+            scanner.isAnyOfAt(2, 7, 'MY_ROBOT'));
 
         assertEquals(true,
-            scanner.isAnyOfAt(2, 1, ['MY_ROBOT', 'GOLD']));
+            scanner.isAnyOfAt(2, 7, ['MY_ROBOT', 'GOLD']));
+        
         assertEquals(false,
-            scanner.isAt(2, 1, ['MY_ROBOT', 'GOLD']));
+            scanner.isAt(2, 7, ['MY_ROBOT', 'GOLD']));
 
         assertEquals(false,
-            scanner.isAnyOfAt(2, 1, ['OTHER_ROBOT', 'HOLE', 'ZOMBIE']));
+            scanner.isAnyOfAt(2, 7, ['OTHER_ROBOT', 'HOLE', 'ZOMBIE']));
 
         assertEquals(false,
             scanner.isAnyOfAt(2, 1));
@@ -486,16 +489,16 @@ var robotTest = function() {
         // at corners
 
         assertEquals(true,
-            scanner.isAnyOfAt(0, 0, 'WALL'));
+            scanner.isAnyOfAt(0, 8, 'WALL'));
 
         assertEquals(true,
-            scanner.isAnyOfAt(0, 8, ['OTHER_ROBOT', 'WALL']));
+            scanner.isAnyOfAt(0, 0, ['OTHER_ROBOT', 'WALL']));
 
         assertEquals(false,
-            scanner.isAnyOfAt(8, 0, 'GOLD'));
+            scanner.isAnyOfAt(8, 8, 'GOLD'));
 
         assertEquals(false,
-            scanner.isAnyOfAt(8, 8, ['GOLD', 'HOLE']));
+            scanner.isAnyOfAt(8, 0, ['GOLD', 'HOLE']));
 
         // outside of map
 
@@ -519,28 +522,28 @@ var robotTest = function() {
         resetMocks();
 
         assertEquals(true,
-            scanner.isNear(2, 2, 'OTHER_ROBOT'));
+            scanner.isNear(2, 6, 'OTHER_ROBOT'));
 
         assertEquals(true,
-            scanner.isNear(2, 2, 'MY_ROBOT'));
+            scanner.isNear(2, 6, 'MY_ROBOT'));
 
         assertEquals(false,
-            scanner.isNear(2, 2, 'ZOMBIE'));
+            scanner.isNear(2, 6, 'ZOMBIE'));
 
         assertEquals(false,
-            scanner.isNear(2, 2, ['ZOMBIE', 'HOLE']));
+            scanner.isNear(2, 6, ['ZOMBIE', 'HOLE']));
 
         assertEquals(true,
-            scanner.isNear(5, 1, ['OTHER_ROBOT', 'MY_ROBOT']));
+            scanner.isNear(5, 7, ['OTHER_ROBOT', 'MY_ROBOT']));
 
         assertEquals(true,
             scanner.isNear(5, 4, ['OTHER_ROBOT', 'MY_ROBOT']));
 
         assertEquals(true,
-            scanner.isNear(2, 2, ['MY_ROBOT', 'GOLD']));
+            scanner.isNear(2, 6, ['MY_ROBOT', 'GOLD']));
 
         assertEquals(true,
-            scanner.isNear(2, 2, ['OTHER_ROBOT', 'HOLE', 'ZOMBIE']));
+            scanner.isNear(2, 6, ['OTHER_ROBOT', 'HOLE', 'ZOMBIE']));
 
         assertEquals(false,
             scanner.isNear(2, 2));
@@ -568,19 +571,19 @@ var robotTest = function() {
         resetMocks();
 
         assertEquals(false,
-            scanner.isBarrierAt(2, 2));
+            scanner.isBarrierAt(2, 6));
 
         assertEquals(true,
-            scanner.isBarrierAt(0, 0));
+            scanner.isBarrierAt(0, 8));
 
         assertEquals(true,
-            scanner.isBarrierAt(0, 0));
+            scanner.isBarrierAt(0, 8));
 
         assertEquals(true,
             scanner.isBarrierAt(3, 4));
 
         assertEquals(true,
-            scanner.isBarrierAt(4, 1));
+            scanner.isBarrierAt(4, 7));
 
         assertEquals(false,
             scanner.isBarrierAt());
@@ -608,28 +611,28 @@ var robotTest = function() {
         resetMocks();
 
         assertEquals(1,
-            scanner.countNear(2, 2, 'GOLD'));
+            scanner.countNear(2, 6, 'GOLD'));
 
         assertEquals(1,
-            scanner.countNear(2, 2, 'MY_ROBOT'));
+            scanner.countNear(2, 6, 'MY_ROBOT'));
 
         assertEquals(0,
-            scanner.countNear(5, 1, ['OTHER_ROBOT']));
+            scanner.countNear(5, 7, ['OTHER_ROBOT']));
 
         assertEquals(1,
-            scanner.countNear(5, 1, ['MY_ROBOT']));
+            scanner.countNear(5, 7, ['MY_ROBOT']));
 
         assertEquals(1,
             scanner.countNear(5, 4, ['OTHER_ROBOT', 'MY_ROBOT']));
 
         assertEquals(1,
-            scanner.countNear(2, 2, 'OTHER_ROBOT'));
+            scanner.countNear(2, 6, 'OTHER_ROBOT'));
 
         assertEquals(10, // TODO should be 3
-            scanner.countNear(3, 2, 'NONE'));
+            scanner.countNear(3, 6, 'NONE'));
 
         assertEquals(2, // TODO should be 3
-            scanner.countNear(1, 1, 'WALL'));
+            scanner.countNear(1, 7, 'WALL'));
 
         assertEquals(0,
             scanner.countNear(2, 2));
@@ -656,52 +659,33 @@ var robotTest = function() {
         // getOtherRobots
         resetMocks();
 
-        assertEquals([{'x': 1, 'y': 2}, {'x': 1, 'y': 3}, {'x': 2, 'y': 6}, {'x': 6, 'y': 2}, {'x': 6, 'y': 4}],
+        assertEquals([{'x': 1, 'y': 5}, {'x': 1, 'y': 6}, {'x': 2, 'y': 2}, {'x': 6, 'y': 6}, {'x': 6, 'y': 4}],
             scanner.getOtherRobots());
 
         // getLaserMachines
         resetMocks();
 
-        assertEquals([{'x': 1, 'y': 4, 'direction': 'RIGHT'}, {'x': 3, 'y': 6, 'direction': 'UP'}, {
-                'x': 3,
-                'y': 7,
-                'direction': 'DOWN'
-            }, {'x': 4, 'y': 1, 'direction': 'LEFT'}, {'x': 4, 'y': 7, 'direction': 'LEFT'}, {
-                'x': 5,
-                'y': 7,
-                'direction': 'DOWN'
-            }, {'x': 6, 'y': 7, 'direction': 'RIGHT'}, {'x': 7, 'y': 7, 'direction': 'UP'}],
+        assertEquals([{'x': 1, 'y': 4, 'direction': 'RIGHT'}, {'x': 3, 'y': 1, 'direction': 'DOWN'},
+                {'x': 3, 'y': 2,'direction': 'UP'}, {'x': 4, 'y': 1, 'direction': 'LEFT'}, {'x': 4, 'y': 7, 'direction': 'LEFT'},
+                {'x': 5, 'y': 1, 'direction': 'DOWN'}, {'x': 6, 'y': 1, 'direction': 'RIGHT'}, {'x': 7, 'y': 1, 'direction': 'UP'}],
             scanner.getLaserMachines());
 
         // getLasers
         resetMocks();
 
-        assertEquals([{'x': 2, 'y': 4, 'direction': 'RIGHT'}, {'x': 5, 'y': 4, 'direction': 'DOWN'}, {
-                'x': 5,
-                'y': 6,
-                'direction': 'UP'
-            }, {'x': 6, 'y': 6, 'direction': 'LEFT'}],
+        assertEquals([{'x': 2, 'y': 4, 'direction': 'RIGHT'}, {'x': 5,'y': 2,'direction': 'UP'},
+                {'x': 5, 'y': 4, 'direction': 'DOWN'}, {'x': 6, 'y': 2, 'direction': 'LEFT'}],
             scanner.getLasers());
 
         // getWalls
         resetMocks();
 
-        assertEquals([{'x': 0, 'y': 0}, {'x': 0, 'y': 1}, {'x': 0, 'y': 2}, {'x': 0, 'y': 3}, {'x': 0, 'y': 4}, {
-                'x': 0,
-                'y': 5
-            }, {'x': 0, 'y': 6}, {'x': 0, 'y': 7}, {'x': 0, 'y': 8}, {'x': 1, 'y': 0}, {'x': 1, 'y': 8}, {
-                'x': 2,
-                'y': 0
-            }, {'x': 2, 'y': 8}, {'x': 3, 'y': 0}, {'x': 3, 'y': 8}, {'x': 4, 'y': 0}, {'x': 4, 'y': 8}, {
-                'x': 5,
-                'y': 0
-            }, {'x': 5, 'y': 8}, {'x': 6, 'y': 0}, {'x': 6, 'y': 8}, {'x': 7, 'y': 0}, {'x': 7, 'y': 8}, {
-                'x': 8,
-                'y': 0
-            }, {'x': 8, 'y': 1}, {'x': 8, 'y': 2}, {'x': 8, 'y': 3}, {'x': 8, 'y': 4}, {'x': 8, 'y': 5}, {
-                'x': 8,
-                'y': 6
-            }, {'x': 8, 'y': 7}, {'x': 8, 'y': 8}],
+        assertEquals([{'x': 0, 'y': 0}, {'x': 0, 'y': 1}, {'x': 0, 'y': 2}, {'x': 0, 'y': 3}, {'x': 0, 'y': 4},
+                    {'x': 0, 'y': 5}, {'x': 0, 'y': 6}, {'x': 0, 'y': 7}, {'x': 0, 'y': 8}, {'x': 1, 'y': 0}, {'x': 1, 'y': 8},
+                    {'x': 2, 'y': 0}, {'x': 2, 'y': 8}, {'x': 3, 'y': 0}, {'x': 3, 'y': 8}, {'x': 4, 'y': 0}, {'x': 4, 'y': 8},
+                    {'x': 5, 'y': 0}, {'x': 5, 'y': 8}, {'x': 6, 'y': 0}, {'x': 6, 'y': 8}, {'x': 7, 'y': 0}, {'x': 7, 'y': 8},
+                    {'x': 8, 'y': 0}, {'x': 8, 'y': 1}, {'x': 8, 'y': 2}, {'x': 8, 'y': 3}, {'x': 8, 'y': 4}, {'x': 8, 'y': 5},
+                    {'x': 8, 'y': 6}, {'x': 8, 'y': 7}, {'x': 8, 'y': 8}],
             scanner.getWalls());
 
         // getBoxes
@@ -713,37 +697,45 @@ var robotTest = function() {
         // getGold
         resetMocks();
 
-        assertEquals([{'x': 2, 'y': 3}, {'x': 3, 'y': 1}, {'x': 5, 'y': 2}],
+        assertEquals([{'x': 2, 'y': 5}, {'x': 3, 'y': 7}, {'x': 5, 'y': 6}],
             scanner.getGold());
 
         // getStart
         resetMocks();
 
-        assertEquals([{'x': 1, 'y': 1}],
+        assertEquals([{'x': 1, 'y': 7}],
             scanner.getStart());
 
         // getZombieStart
         resetMocks();
 
-        assertEquals([{'x': 6, 'y': 5}],
+        assertEquals([{'x': 6, 'y': 3}],
             scanner.getZombieStart());
 
         // getExit
         resetMocks();
 
-        assertEquals([{'x': 3, 'y': 3}],
+        assertEquals([{'x': 3, 'y': 5}],
             scanner.getExit());
 
         // getHoles
         resetMocks();
 
-        assertEquals([{'x': 2, 'y': 5}, {'x': 4, 'y': 4}, {'x': 6, 'y': 2}, {'x': 7, 'y': 1}],
+        assertEquals([{'x': 2, 'y': 3}, {'x': 4, 'y': 4}, {'x': 6, 'y': 6}, {'x': 7, 'y': 7}],
             scanner.getHoles());
 
         // getBarriers
         resetMocks();
 
-        assertEquals([{'x':0,'y':0},{'x':0,'y':1},{'x':0,'y':2},{'x':0,'y':3},{'x':0,'y':4},{'x':0,'y':5},{'x':0,'y':6},{'x':0,'y':7},{'x':0,'y':8},{'x':1,'y':0},{'x':1,'y':4},{'x':1,'y':8},{'x':2,'y':0},{'x':2,'y':5},{'x':2,'y':8},{'x':3,'y':0},{'x':3,'y':4},{'x':3,'y':6},{'x':3,'y':7},{'x':3,'y':8},{'x':4,'y':0},{'x':4,'y':1},{'x':4,'y':4},{'x':4,'y':7},{'x':4,'y':8},{'x':5,'y':0},{'x':5,'y':3},{'x':5,'y':5},{'x':5,'y':7},{'x':5,'y':8},{'x':6,'y':0},{'x':6,'y':2},{'x':6,'y':4},{'x':6,'y':7},{'x':6,'y':8},{'x':7,'y':0},{'x':7,'y':1},{'x':7,'y':7},{'x':7,'y':8},{'x':8,'y':0},{'x':8,'y':1},{'x':8,'y':2},{'x':8,'y':3},{'x':8,'y':4},{'x':8,'y':5},{'x':8,'y':6},{'x':8,'y':7},{'x':8,'y':8}],
+        assertEquals([{'x':0,'y':0},{'x':0,'y':1},{'x':0,'y':2},{'x':0,'y':3},{'x':0,'y':4},
+                    {'x':0,'y':5},{'x':0,'y':6},{'x':0,'y':7},{'x':0,'y':8},{'x':1,'y':0},{'x':1,'y':4},
+                    {'x':1,'y':8},{'x':2,'y':0},{'x':2,'y':3},{'x':2,'y':8},{'x':3,'y':0},{'x':3,'y':1},
+                    {'x':3,'y':2},{'x':3,'y':4},{'x':3,'y':8},{'x':4,'y':0},{'x':4,'y':1},{'x':4,'y':4},
+                    {'x':4,'y':7},{'x':4,'y':8},{'x':5,'y':0},{'x':5,'y':1},{'x':5,'y':3},{'x':5,'y':5},
+                    {'x':5,'y':8},{'x':6,'y':0},{'x':6,'y':1},{'x':6,'y':4},{'x':6,'y':6},{'x':6,'y':8},
+                    {'x':7,'y':0},{'x':7,'y':1},{'x':7,'y':7},{'x':7,'y':8},{'x':8,'y':0},{'x':8,'y':1},
+                    {'x':8,'y':2},{'x':8,'y':3},{'x':8,'y':4},{'x':8,'y':5},{'x':8,'y':6},{'x':8,'y':7},
+                    {'x':8,'y':8}],
             scanner.getBarriers());
 
         // getElements
@@ -761,17 +753,18 @@ var robotTest = function() {
         // getShortestWay with 1 point
         resetMocks();
 
-        assertEquals([{'x': 2, 'y': 1}],
+        assertEquals([{'x': 2, 'y': 7}],
             scanner.getShortestWay(scanner.getMe()));
 
-        assertEquals([{'x': 2, 'y': 1}, {'x': 2, 'y': 2}, {'x': 2, 'y': 3}, {'x': 3, 'y': 3}],
+        assertEquals([{'x': 2, 'y': 7}, {'x': 2, 'y': 6}, {'x': 2, 'y': 5}, {'x': 3, 'y': 5}],
             scanner.getShortestWay(scanner.getExit()[0]));
 
-        assertEquals([{'x': 2, 'y': 1}, {'x': 1, 'y': 1}],
+        assertEquals([{'x': 2, 'y': 7}, {'x': 1, 'y': 7}],
             scanner.getShortestWay(scanner.getStart()[0]));
 
-        assertEquals([{'x':2,'y':1},{'x':2,'y':2},{'x':2,'y':3},{'x':2,'y':4},{'x':2,'y':5},{'x':2,'y':6},{'x':3,'y':6},{'x':4,'y':6},{'x':5,'y':6},{'x':6,'y':6}],
-            scanner.getShortestWay(new Point(6, 6)));
+        assertEquals([{'x':2,'y':7},{'x':2,'y':6},{'x':2,'y':5},{'x':2,'y':4},{'x':2,'y':3},
+                     {'x':2,'y':2},{'x':3,'y':2},{'x':4,'y':2},{'x':5,'y':2},{'x':6,'y':2}],
+            scanner.getShortestWay(new Point(6, 2)));
 
         assertEquals(null,
             scanner.getShortestWay(1));
@@ -802,17 +795,18 @@ var robotTest = function() {
         // getShortestWay with 2 points
         resetMocks();
 
-        assertEquals([{'x': 2, 'y': 1}],
-            scanner.getShortestWay(new Point(2, 1), scanner.getMe()));
+        assertEquals([{'x': 2, 'y': 7}],
+            scanner.getShortestWay(new Point(2, 7), scanner.getMe()));
 
-        assertEquals([{'x': 2, 'y': 1}, {'x': 2, 'y': 2}, {'x': 2, 'y': 3}, {'x': 3, 'y': 3}],
-            scanner.getShortestWay(new Point(2, 1), scanner.getExit()[0]));
+        assertEquals([{'x': 2, 'y': 7}, {'x': 2, 'y': 6}, {'x': 2, 'y': 5}, {'x': 3, 'y': 5}],
+            scanner.getShortestWay(new Point(2, 7), scanner.getExit()[0]));
 
-        assertEquals([{'x': 2, 'y': 1}, {'x': 1, 'y': 1}],
-            scanner.getShortestWay(new Point(2, 1), scanner.getStart()[0]));
+        assertEquals([{'x': 2, 'y': 7}, {'x': 1, 'y': 7}],
+            scanner.getShortestWay(new Point(2, 7), scanner.getStart()[0]));
 
-        assertEquals([{'x':2,'y':1},{'x':2,'y':2},{'x':2,'y':3},{'x':2,'y':4},{'x':2,'y':5},{'x':2,'y':6},{'x':3,'y':6},{'x':4,'y':6},{'x':5,'y':6},{'x':6,'y':6}],
-            scanner.getShortestWay(new Point(2, 1), new Point(6, 6)));
+        assertEquals([{'x':2,'y':7},{'x':2,'y':6},{'x':2,'y':5},{'x':2,'y':4},{'x':2,'y':3},
+                    {'x':2,'y':2},{'x':3,'y':2},{'x':4,'y':2},{'x':5,'y':2},{'x':6,'y':2}],
+            scanner.getShortestWay(new Point(2, 7), new Point(6, 2)));
 
         assertEquals(null,
             scanner.getShortestWay(1, 2));
