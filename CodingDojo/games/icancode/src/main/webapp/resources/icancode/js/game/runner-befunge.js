@@ -318,7 +318,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
     }
 
     var valueEndCommand = function(x, y) {
-        stack.push('END');
+        stack.push('EXIT');
     }
 
     var valueBoxCommand = function(x, y) {
