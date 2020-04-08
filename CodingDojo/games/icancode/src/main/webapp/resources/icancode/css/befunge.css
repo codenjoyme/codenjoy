@@ -196,6 +196,18 @@
   height: 23px;
 }
 
+.robot-pull::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1503px -10px;
+  width: 22px;
+  height: 22px;
+}
+
+.robot-fire::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1476px -10px;
+  width: 22px;
+  height: 22px;
+}
+
 .if::after {
 	background: url(../img/befunge_sprite.png) no-repeat -500px -11px;
 	width: 23px;

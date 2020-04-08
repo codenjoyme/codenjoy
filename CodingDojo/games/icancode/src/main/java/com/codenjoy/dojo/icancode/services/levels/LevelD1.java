@@ -98,7 +98,6 @@ public class LevelD1 implements Level {
     public List<String> befungeCommands() {
         return Level.extendBefunge(new LevelC2(),
                 "value-box",
-                // TODO этой команды в befunge не существует (достаточно одной универсальной команды)
                 "robot-pull");
     }
 }

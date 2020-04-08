@@ -285,6 +285,16 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         robot.jump(value);
     }
 
+    var robotPullCommand = function(x, y) {
+        var value = popFromStack();
+        robot.pull(value);
+    }
+
+    var robotFireCommand = function(x, y) {
+        var value = popFromStack();
+        robot.fire(value);
+    }
+
     var ifCommand = function(x, y) {
         var leftValue = popFromStack();
         var point = direction.change(cursor);
@@ -321,7 +331,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         stack.push('WALL');
     }
 
-    var valueNullCommand = function(x, y) {
+    var valueNULLCommand = function(x, y) {
         stack.push(null);
     }
 
@@ -418,7 +428,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             type: 1,
             title: 'check-stack',
             process: checkStack,
-            description: 'Если команды ранее не сохранили никакие значения - ведет себя как Null.',
+            description: 'Если другие команды ранее не сохраняли никаких значений - ведет себя как NULL.',
         },
 
         {
@@ -481,7 +491,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             type: 1,
             title: 'robot-came-from',
             process: robotCameFromCommand,
-            description: 'Указывает откуда пришел герой только что. Если герой не двигался - команда вернет Null.',
+            description: 'Указывает откуда пришел герой только что. Если герой не двигался - команда вернет NULL.',
             img1: 'robot-came-from.png'
         },
 
@@ -490,7 +500,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             type: 1,
             title: 'robot-previous-direction',
             process: robotPreviousDirectionCommand,
-            description: 'Указывает куда ходил герой в прошлый раз. Если герой не двигался - команда вернет Null.',
+            description: 'Указывает куда ходил герой в прошлый раз. Если герой не двигался - команда вернет NULL.',
             img1: 'robot-previous-direction.png'
         },
 
@@ -596,6 +606,30 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             img2: 'jump-right.png',
             img3: gameName + '/robot-jump-left.png',
             img4: gameName + '/robot-jump-right.png'
+        },
+
+        {
+            id: 'robot-pull',
+            type: 2,
+            title: 'robot-pull',
+            process: robotPullCommand,
+            description: 'Команда герою тянуть/толкать в заданном направлении. Cторону необходимо указать предварительно.',
+            img1: 'pull-left.png',
+            img2: 'pull-right.png',
+            img3: gameName + '/robot-pull-left.png',
+            img4: gameName + '/robot-pull-right.png'
+        },
+
+        {
+            id: 'robot-fire',
+            type: 2,
+            title: 'robot-fire',
+            process: robotFireCommand,
+            description: 'Команда герою стрелять в заданном направлении. Cторону необходимо указать предварительно.',
+            img1: 'fire-left.png',
+            img2: 'fire-right.png',
+            img3: gameName + '/robot-fire-left.png',
+            img4: gameName + '/robot-fire-right.png'
         },
 
         {
