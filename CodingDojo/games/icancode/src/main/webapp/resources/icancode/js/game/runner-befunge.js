@@ -108,6 +108,18 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         return value;
     }
 
+    // команда берет вершину стека и клонирует ее для возможности использовать дважды
+    // если в стеке ничего нет, тогда там появится value null
+    // используется для того, чтобы проанализировать вершину стека (например IF командой)
+    // не нарушая его структуры для других команд
+    var checkStack = function() {
+        if (stack.length == 0) {
+            stack.push(null);
+        } else {
+            stack.push(stack[stack.length - 1]);
+        }
+    }
+
     var startCommand = function(x, y) {
         cursor = pt(x, y);
         direction = Direction.RIGHT;
@@ -399,6 +411,14 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'shortest-way', // TODO дублирование с id устранить
             process: robotShortestWay,
             description: 'Найти кратчайший путь к элементу. Весь путь сохранится для последующих команд.',
+        },
+
+        {
+            id: 'check-stack',
+            type: 1,
+            title: 'check-stack',
+            process: checkStack,
+            description: 'Если команды ранее не сохранили никакие значения - ведет себя как Null.',
         },
 
         {

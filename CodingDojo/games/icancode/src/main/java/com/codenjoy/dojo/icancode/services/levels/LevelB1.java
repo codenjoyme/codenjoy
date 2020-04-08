@@ -85,7 +85,7 @@ public class LevelB1 implements Level {
     public List<String> befungeCommands() {
         return Level.extendBefunge(new Level9(),
                 "value-gold", "value-end", "value-start",
-                "shortest-way",
+                "shortest-way", "check-stack",
                 "print-stack");
     }
 }

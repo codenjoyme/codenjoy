@@ -328,6 +328,12 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   height: 22px;
 }
 
+.check-stack::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1446px -10px;
+  width: 22px;
+  height: 22px;
+}
+
 .mirror-top-bottom::after {
   background: url(../img/befunge_sprite.png) no-repeat -1135px -12px;
   width: 22px;
