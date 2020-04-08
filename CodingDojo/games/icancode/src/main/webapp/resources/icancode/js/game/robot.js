@@ -126,6 +126,14 @@ function initRobot(logger, controller) {
         var valid = (arg.length == 1 && isValidElements(arg[0]));
         if (!valid) {
             logger.print("You tried to call function(elements) where 'elements' is string or array of strings, with parameters [" + Array.from(arg).join(',') + "].");
+        } else {
+            var data = arg[0];
+            var isArray = Array.isArray(data);
+            var data = (!isArray) ? [data] : data;
+            valid = data.length == 0 || data.every(e => Element.getElementsTypes().indexOf(e) !== -1);
+            if (!valid) {
+                logger.print("You tried to call function(elements) where 'elements' is string or array of strings, for non exists element [" + Array.from(arg).join(',') + "].");
+            }
         }
         return valid;
     }
@@ -145,8 +153,12 @@ function initRobot(logger, controller) {
             typeof object.getY == 'function');
     }
 
+    var isArgumentPoint = function(arg) {
+        return (arg.length == 1 && isPoint(arg[0]));
+    }
+
     var validatePoint = function(arg, size) {
-        var valid = (arg.length == 1 && isPoint(arg[0]));
+        var valid = isArgumentPoint(arg);
         if (!valid) {
             logger.print("You tried to call function(point) with parameters [" + Array.from(arg).join(',') + "].");
         } else {
@@ -580,18 +592,60 @@ function initRobot(logger, controller) {
                 return at(Direction.DOWN);
             }
 
-            var getShortestWay = function(pt1, pt2) {
-                if (!pt2) {
-                    if (!validatePoint(arguments, size)) {
-                        return null;
+            var getShortestWayTo = function(elementType) {
+                var points = findAll(elementType);
+                var paths = [];
+                for (var index in points) {
+                    var point = points[index];
+
+                    var path = getShortestWay(point)
+                    paths.push(path);
+                }
+
+                var shortest = 1000;
+                var shortestIndex = -1;
+                for (var index in paths) {
+                    var path = paths[index];
+
+                    if (path.length == 0) {
+                        continue;
                     }
-                    return b.getShortestWay(hero, pt1);
-                } else {
+
+                    if (path.length < shortest) {
+                        shortest = path.length;
+                        shortestIndex = index;
+                    }
+                }
+
+                if (shortestIndex == -1) {
+                    return;
+                }
+
+                return paths[shortestIndex];
+            }
+
+            var getShortestWay = function(pt1OrElementType, pt2) {
+                if (!!pt2) {
+                    var pt1 = pt1OrElementType;
                     if (!validate2Points(arguments, size)) {
                         return null;
                     }
                     return b.getShortestWay(pt1, pt2);
                 }
+
+                if (isArgumentPoint(arguments)) {
+                    var elementType = pt1OrElementType;
+                    if (!validatePoint(arguments, size)) {
+                        return null;
+                    }
+                    return b.getShortestWay(hero, elementType);
+                }
+
+                if (!validateElements(arguments)) {
+                    return null;
+                }
+                var pt = pt1OrElementType;
+                return getShortestWayTo(pt);
             }
 
             var getWholeBoard = function() {

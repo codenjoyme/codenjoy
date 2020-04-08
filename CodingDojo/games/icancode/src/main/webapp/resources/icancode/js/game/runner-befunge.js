@@ -212,6 +212,25 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         stack.push(value);
     }
 
+    var robotShortestWay = function(x, y) {
+        var value = popFromStack();
+        var scanner = robot.getScanner();
+        var ptFrom = scanner.getMe();
+
+        var path = scanner.getShortestWay(value);
+        for (var index in path) {
+            if (index == 0) {
+                continue;
+            }
+
+            var ptTo = path[index];
+            var direction = Direction.where(ptFrom, ptTo);
+            // добавляем не в конец стека, а в голову
+            stack.unshift(direction.name());
+            ptFrom = ptTo;
+        }
+    }
+
     var robotGoLeftCommand = function(x, y) {
         robot.go('LEFT');
     }
@@ -372,6 +391,14 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'print-stack',
             process: printStackCommand,
             description: 'Напечатать в консоли все значения, сохраненные командами.',
+        },
+
+        {
+            id: 'shortest-way',
+            type: 1,
+            title: 'shortest-way', // TODO дублирование с id устранить
+            process: robotShortestWay,
+            description: 'Найти кратчайший путь к элементу. Весь путь сохранится для последующих команд.',
         },
 
         {
@@ -1377,8 +1404,8 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         isProgramCompiled: function() {
             return true;
         },
-        runProgram: function(r) {
-            robot = r;
+        runProgram: function(input) {
+            robot = input;
             board.start();
             var deadLoopCounter = 0;
             while (++deadLoopCounter < 200 && running) {

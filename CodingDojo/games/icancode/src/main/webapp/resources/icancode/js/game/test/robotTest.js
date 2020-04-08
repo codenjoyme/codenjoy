@@ -766,21 +766,45 @@ var robotTest = function() {
                      {'x':2,'y':2},{'x':3,'y':2},{'x':4,'y':2},{'x':5,'y':2},{'x':6,'y':2}],
             scanner.getShortestWay(new Point(6, 2)));
 
+        // to elements
+
+        assertEquals([{'x': 2, 'y': 7}],
+            scanner.getShortestWay('MY_ROBOT'));
+
+        assertEquals([{'x': 2, 'y': 7}, {'x': 2, 'y': 6}, {'x': 2, 'y': 5}, {'x': 3, 'y': 5}],
+            scanner.getShortestWay('EXIT'));
+
+        assertEquals([{'x': 2, 'y': 7}, {'x': 1, 'y': 7}],
+            scanner.getShortestWay('START'));
+
+        assertEquals([{'x':2,'y':7},{'x':2,'y':6},{'x':2,'y':5},{'x':2,'y':4},{'x':2,'y':3}],
+            scanner.getShortestWay(['ZOMBIE']));
+
+        assertEquals([{'x':2,'y':7},{'x':3,'y':7}],
+            scanner.getShortestWay(['GOLD']));
+
+        assertEquals([{'x':2,'y':7},{'x':3,'y':7}],
+            scanner.getShortestWay(['ZOMBIE','GOLD']));
+
         assertEquals(null,
             scanner.getShortestWay(1));
-        assertActions(["You tried to call function(point) with parameters [1]."], loggerActions);
+        assertActions(["You tried to call function(elements) where 'elements' is string or array of strings, with parameters [1]."], loggerActions);
 
         assertEquals(null,
             scanner.getShortestWay(null));
-        assertActions(["You tried to call function(point) with parameters []."], loggerActions);
+        assertActions(["You tried to call function(elements) where 'elements' is string or array of strings, with parameters []."], loggerActions);
 
         assertEquals(null,
             scanner.getShortestWay([new Point(1, 2)]));
-        assertActions(["You tried to call function(point) with parameters [[1,2]]."], loggerActions);
+        assertActions(["You tried to call function(elements) where 'elements' is string or array of strings, with parameters [[1,2]]."], loggerActions);
 
         assertEquals(null,
             scanner.getShortestWay('string'));
-        assertActions(["You tried to call function(point) with parameters [string]."], loggerActions);
+        assertActions(["You tried to call function(elements) where 'elements' is string or array of strings, for non exists element [string]."], loggerActions);
+
+        assertEquals(null,
+            scanner.getShortestWay(['ZOMBIE', 'string']));
+        assertActions(["You tried to call function(elements) where 'elements' is string or array of strings, for non exists element [ZOMBIE,string]."], loggerActions);
 
         // out of board
 

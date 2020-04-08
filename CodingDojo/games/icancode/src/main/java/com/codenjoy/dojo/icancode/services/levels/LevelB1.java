@@ -84,8 +84,8 @@ public class LevelB1 implements Level {
     @Override
     public List<String> befungeCommands() {
         return Level.extendBefunge(new Level9(),
-                "gold", "value-end", "value-start",
-                // TODO не хватает в befunge команды поиска кратчайшего пути
+                "value-gold", "value-end", "value-start",
+                "shortest-way",
                 "print-stack");
     }
 }

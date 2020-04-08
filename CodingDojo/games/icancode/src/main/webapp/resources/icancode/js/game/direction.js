@@ -151,3 +151,10 @@ Direction.valueOf = function(index) {
     }
     return Direction.STOP;
 };
+
+Direction.where = function(from, to) {
+    var dx = to.x - from.x;
+    var dy = to.y - from.y;
+
+    return Direction.values().find(d => (d.changeX(0) == dx) && (d.changeY(0) == dy));
+}
