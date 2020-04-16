@@ -35,7 +35,7 @@ public class PGameTypeInfo {
     private String version;
     private String info;
     private int boardSize;
-    private List<Parameter<?>> parameters;
+    private List<Parameter> parameters;
     private MultiplayerType multiplayerType;
     private String helpUrl;
     private String clientUrl;
