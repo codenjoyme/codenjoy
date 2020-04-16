@@ -49,7 +49,7 @@ public class RestSettingsController {
 
     @GetMapping("/{gameType}/{key}")
     public String get(@PathVariable("gameType") String game, @PathVariable("key") String key) {
-        validator.checkNotEmpty(key);
+        validator.checkNotEmpty("key", key);
         validator.checkGameName(game, Validator.CANT_BE_NULL);
 
         if (!GENERAL.equals(game)) {
@@ -70,14 +70,13 @@ public class RestSettingsController {
 
     @PostMapping("/{gameType}/{key}")
     public String set(@PathVariable("gameType") String game, @PathVariable("key") String key, @RequestBody String value) {
-        validator.checkNotEmpty(key);
+        validator.checkNotEmpty("key", key);
         validator.checkGameName(game, Validator.CANT_BE_NULL);
 
         value = encode(value);
 
         if (!GENERAL.equals(game)) {
             GameType type = validator.checkGameType(game);
-
 
             Settings settings = type.getSettings();
             if (settings.hasParameter(key)) {
