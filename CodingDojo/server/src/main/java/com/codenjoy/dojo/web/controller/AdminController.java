@@ -313,7 +313,7 @@ public class AdminController {
         List<Exception> errors = new LinkedList<>();
         if (settings.getParameters() != null) {
             Settings gameSettings = gameService.getGame(settings.getGameName()).getSettings();
-            List<Parameter> parameters = (List) gameSettings.getParameters();
+            List<Parameter> parameters = gameSettings.getParameters();
             for (int index = 0; index < parameters.size(); index++) {
                 try {
                     Parameter parameter = parameters.get(index);
@@ -408,7 +408,7 @@ public class AdminController {
         }
 
         Settings gameSettings = game.getSettings();
-        List<Parameter<?>> parameters = gameSettings.getParameters();
+        List<Parameter> parameters = gameSettings.getParameters();
 
         AdminSettings settings = new AdminSettings();
 

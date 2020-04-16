@@ -32,7 +32,7 @@ public class SettingsImpl implements Settings {
     private Map<String, Parameter<?>> map = new LinkedHashMap<>();
 
     @Override
-    public List<Parameter<?>> getParameters() {
+    public List<Parameter> getParameters() {
         return new LinkedList<>(map.values());
     }
 

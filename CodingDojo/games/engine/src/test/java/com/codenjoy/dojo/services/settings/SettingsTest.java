@@ -49,7 +49,7 @@ public class SettingsTest {
         Parameter<Integer> check = settings.addCheckBox("check").type(Integer.class);
 
         // when
-        List<Parameter<?>> options = settings.getParameters();
+        List<Parameter> options = settings.getParameters();
 
         // then
         assertEquals(true, options.contains(edit));
@@ -68,7 +68,7 @@ public class SettingsTest {
         // then
         assertSame(edit, edit2);
 
-        List<Parameter<?>> options = settings.getParameters();
+        List<Parameter> options = settings.getParameters();
         assertEquals(1, options.size());
     }
 

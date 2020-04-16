@@ -35,14 +35,16 @@ import java.util.List;
  */
 public interface Settings {
 
-    List<Parameter<?>> getParameters();
+    List<Parameter> getParameters();
 
+    // TODO а тут точно надо <?> ?
     EditBox<?> addEditBox(String name);
 
     SelectBox<?> addSelect(String name, List<Object> strings);
 
     CheckBox<Boolean> addCheckBox(String name);
 
+    // TODO а тут точно надо <T> ?
     <T> Parameter<T> getParameter(String name);
 
     boolean hasParameter(String name);
