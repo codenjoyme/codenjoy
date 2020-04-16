@@ -29,6 +29,8 @@ import java.util.function.Function;
 
 public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
+    public static final String TYPE = "editbox";
+
     private String name;
     private T def;
     private boolean multiline;
@@ -49,7 +51,7 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
     @Override
     public String getType() {
-        return "editbox";
+        return TYPE;
     }
 
     @Override

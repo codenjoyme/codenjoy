@@ -29,6 +29,8 @@ import java.util.function.Function;
 
 public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
+    public static final String TYPE = "checkbox";
+
     private T def;
     private String name;
 
@@ -43,7 +45,7 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
     @Override
     public String getType() {
-        return "checkbox";
+        return TYPE;
     }
 
     @Override

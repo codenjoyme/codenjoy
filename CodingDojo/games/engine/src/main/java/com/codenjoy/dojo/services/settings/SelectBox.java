@@ -28,6 +28,8 @@ import java.util.function.Function;
 
 public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
+    public static final String TYPE = "selectbox";
+
     private String name;
     private List<T> options;
     private Integer def;
@@ -48,7 +50,7 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
     @Override
     public String getType() {
-        return "selectbox";
+        return TYPE;
     }
 
     @Override

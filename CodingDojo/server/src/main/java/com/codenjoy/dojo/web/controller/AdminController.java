@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.security.ViewDelegationService;
+import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import lombok.RequiredArgsConstructor;
@@ -363,7 +364,7 @@ public class AdminController {
     }
 
     private Object fixForCheckbox(Parameter parameter, Object value) {
-        if (value == null && parameter.getType().equals("checkbox")) {
+        if (value == null && parameter.getType().equals(CheckBox.TYPE)) {
             return false; // потому что так работает <form:checkbox
         }
         return value;
