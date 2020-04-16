@@ -37,7 +37,7 @@ public final class NullSettings implements Settings {
     }
 
     @Override
-    public List<Parameter<?>> getParameters() {
+    public List<Parameter> getParameters() {
         return new LinkedList<>();
     }
 

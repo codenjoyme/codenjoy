@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services.nullobj;
  */
 
 
-import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang3.StringUtils;
 
