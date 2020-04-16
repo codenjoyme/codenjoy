@@ -50,8 +50,11 @@ public class Semifinal implements Tickable {
 
     @Override
     public void tick() {
-        // если режим включен не очищаем
+        // если режим включен - выходим
         if (!settings.isEnabled()) return;
+
+        // если не с кем работать - выходим
+        if (playerGames.isEmpty()) return;
 
         // ждем заданное количество тиков
         if (++time % settings.getTimeout() != 0) return;

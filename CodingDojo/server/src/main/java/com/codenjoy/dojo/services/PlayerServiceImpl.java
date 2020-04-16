@@ -78,6 +78,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties config;
     @Autowired protected Semifinal semifinal;
+    @Autowired protected SimpleProfiler profiler;
 
     @Value("${game.ai}")
     protected boolean isAiNeeded;
@@ -286,10 +287,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
-            long time = 0;
-            log.debug("==================================================================================");
-            log.debug("PlayerService.tick() starts");
-            time = System.currentTimeMillis();
+            profiler.start("PlayerService.tick()");
 
             actionLogger.log(playerGames);
             autoSaver.tick();
@@ -298,18 +296,9 @@ public class PlayerServiceImpl implements PlayerService {
             sendScreenUpdates();
             requestControls();
 
-            if (log.isDebugEnabled()) {
-                time = System.currentTimeMillis() - time;
-                log.debug("PlayerService.tick() for all {} games is {} ms",
-                        playerGames.size(), time);
-            }
-
-            if (playerGames.isEmpty()) {
-                return;
-            }
-
             semifinal.tick();
 
+            profiler.end();
         } catch (Error e) {
             e.printStackTrace();
             log.error("PlayerService.tick() throws", e);
