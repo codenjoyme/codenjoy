@@ -55,7 +55,6 @@ public class RestRegistrationController {
     private PlayerService playerService;
     private PlayerGames playerGames;
     private GameService gameService;
-    private PlayerGamesView playerGamesView;
     private SaveService saveService;
     private Validator validator;
 
@@ -99,32 +98,6 @@ public class RestRegistrationController {
         return playerService.getAll(gameName).stream()
                 .map(PlayerInfo::new)
                 .collect(toList());
-    }
-
-    // TODO test me
-    @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
-    @GetMapping("/player/all/info")
-    @ResponseBody
-    public List<PlayerDetailInfo> getPlayersForMigrate() {
-        List<Player> players = playerService.getAll();
-        List<Registration.User> users = registration.getUsers();
-        Map<String, List<String>> groups = playerGamesView.getGroupsMap();
-
-        List<PlayerDetailInfo> result = new LinkedList<>();
-        for (Player player : players) {
-            Registration.User user = users.stream()
-                    .filter(it -> it.getId().equals(player.getId()))
-                    .findFirst()
-                    .orElse(null);
-
-            PlayerGame playerGame = playerGames.get(player.getId());
-            Game game = playerGame.getGame();
-            String roomName = playerGame.getRoomName();
-            List<String> group = groups.get(player.getId());
-            result.add(new PlayerDetailInfo(player, user, roomName, game, group));
-        }
-
-        return result;
     }
 
     // TODO test me

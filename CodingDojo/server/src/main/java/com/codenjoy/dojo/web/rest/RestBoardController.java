@@ -27,21 +27,21 @@ import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PGameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import lombok.AllArgsConstructor;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
@@ -59,7 +59,6 @@ public class RestBoardController {
     private Validator validator;
     private PlayerGames playerGames;
     private PlayerGamesView playerGamesView;
-    private TimerService timerService;
     private SaveService saveService;
     private ActionLogger actionLogger;
 
@@ -80,35 +79,6 @@ public class RestBoardController {
         return true;
     }
 
-    // TODO test me и вообще где это надо?
-    @GetMapping("/player/all/groups")
-    @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
-    public Map<String, List<List<String>>> getPlayersGroups() {
-        Map<String, List<List<String>>> result = new HashMap<>();
-        List<Player> players = playerService.getAll();
-        List<List<String>> groups = playerGamesView.getGroups();
-        for (List<String> group : groups) {
-            String playerId = group.get(0);
-            Player player = players.stream()
-                    .filter(p -> p.getId().equals(playerId))
-                    .findFirst()
-                    .orElse(NullPlayer.INSTANCE);
-
-            String gameName = player.getGameName();
-            if (!result.containsKey(gameName)) {
-                result.put(gameName, new LinkedList<>());
-            }
-            result.get(gameName).add(group);
-        }
-        return result;
-    }
-
-    @GetMapping("/player/all/scores")
-    @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
-    public Map<String, Object> getPlayersScores() {
-        return playerGamesView.getScores();
-    }
-
     @GetMapping("/game/{gameName}/scores")
     public List<PScoresOf> getPlayersScoresForGame(@PathVariable("gameName") String gameName) {
         return playerGamesView.getScoresForGame(gameName);
@@ -118,25 +88,6 @@ public class RestBoardController {
     @GetMapping("/room/{roomName}/scores")
     public List<PScoresOf> getPlayersScoresForRoom(@PathVariable("roomName") String roomName) {
         return playerGamesView.getScoresForRoom(roomName);
-    }
-
-    @GetMapping("/scores/clear")
-    @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
-    public boolean clearAllScores() {
-        playerService.cleanAllScores();
-        return true;
-    }
-
-    @GetMapping("/game/enabled/{enabled}")
-    @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
-    public boolean startStopGame(@PathVariable("enabled") boolean enabled) {
-        if (enabled) {
-            timerService.resume();
-        } else {
-            timerService.pause();
-        }
-
-        return timerService.isPaused();
     }
 
     // TODO test me
