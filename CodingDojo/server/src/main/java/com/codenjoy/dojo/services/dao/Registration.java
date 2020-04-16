@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.jdbc.CrudConnectionThreadPool;
 import com.codenjoy.dojo.services.security.GameAuthorities;
+import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -63,12 +64,14 @@ public class Registration {
         List<String> initialScripts = new ArrayList<>();
         initialScripts.add("CREATE TABLE IF NOT EXISTS users (" +
                 "email varchar(255), " +
+                "phone varchar(255), " +
                 "id varchar(255), " +
                 "readable_name varchar(255), " +
                 "email_approved int, " +
                 "password varchar(255)," +
                 "code varchar(255)," +
                 "data varchar(255)," +
+                "verification_code varchar(255)," +
                 "roles varchar(255));");
         if (initAdminUser) {
             initialScripts.add(String.format("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles)" +
@@ -109,20 +112,20 @@ public class Registration {
         return count > 0;
     }
 
-    public User getOrRegister(String id, String email, String readableName) {
+    public User getOrRegister(String id, String email, String phone, String readableName) {
         Registration.User result = getUserById(id)
                 .orElseGet(() -> getUserByEmail(email)
-                    .orElseGet(() -> registerApproved(id, email, readableName)));
+                    .orElseGet(() -> registerApproved(id, email, phone, readableName)));
         return result;
     }
     
-    public User registerApproved(String id, String email, String readableName) {
+    public User registerApproved(String id, String email, String phone, String readableName) {
         if (StringUtils.isEmpty(id)) {
             id = Hash.getRandomId();
         }
         String password = passwordEncoder.encode(randomAlphanumeric(properties.getAutoGenPasswordLen()));
 
-        User user = register(id, email, readableName,
+        User user = register(id, email, phone, readableName,
                 password, "{}", GameAuthorities.USER.roles());
 
         if (!properties.isEmailVerificationNeeded()) {
@@ -133,13 +136,13 @@ public class Registration {
         return user;
     }
 
-    public User register(String id, String email, String readableName, String password, String data, String... roles) {
+    public User register(String id, String email, String phone, String readableName, String password, String data, String... roles) {
         roles = roles.length > 0 ? roles : GameAuthorities.USER.roles();
         String code = Hash.getCode(id, password);
         password = passwordEncoder.encode(password);
         
-        pool.update("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles) VALUES (?,?,?,?,?,?,?,?);",
-                new Object[]{id, email, readableName, 0, password, code, data, GameAuthorities.buildRolesString(roles)});
+        pool.update("INSERT INTO users (id, email, phone, readable_name, email_approved, password, code, data, roles) VALUES (?,?,?,?,?,?,?,?);",
+                new Object[]{id, email, phone, readableName, 0, password, code, data, GameAuthorities.buildRolesString(roles)});
         
         return getUserByCode(code);
     }
@@ -258,6 +261,11 @@ public class Registration {
                 new Object[]{id, name});
     }
 
+    public void updateVerificationCode(String phone, String verificationCode) {
+        pool.update("UPDATE users SET verification_code = ? WHERE phone = ?;",
+                new Object[]{verificationCode, phone});
+    }
+
     public void updateNameAndEmail(String id, String name, String email) {
         pool.update("UPDATE users SET readable_name = ?, email = ? WHERE id = ?;",
                 new Object[]{name, email, id});
@@ -269,24 +277,28 @@ public class Registration {
     @Accessors(chain = true)
     public static class User extends org.springframework.security.core.userdetails.User implements OAuth2User {
         private String email;
+        private String phone;
         private String id;
         private String readableName;
         private int approved;
         private String code;
         private String data;
+        private String verificationCode;
 
         public User() {
             super("anonymous", "", Collections.emptyList());
         }
 
-        public User(String id, String email, String readableName, int approved, String password, String code, String data, String... roles) {
+        public User(String id, String email, String phone, String readableName, int approved, String password, String code, String data, String verificationCode, String... roles) {
             super(email, password, Stream.of(roles).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
             this.id = id;
+            this.phone = phone;
             this.email = email;
             this.readableName = readableName;
             this.approved = approved;
             this.code = code;
             this.data = data;
+            this.verificationCode = verificationCode;
         }
 
         public void setCode(String code) {
@@ -322,6 +334,15 @@ public class Registration {
         });
     }
 
+    public Optional<User> getUserByPhone(String phone) {
+        return pool.select("SELECT * FROM users where phone = ?", new Object[] {phone}, rs -> {
+            if (!rs.next()) {
+                return Optional.empty();
+            }
+            return Optional.of(extractUser(rs));
+        });
+    }
+
     public Optional<User> getUserById(String id) {
         return pool.select("SELECT * FROM users where id = ?", new Object[] {id}, rs -> {
             if (!rs.next()) {
@@ -345,11 +366,13 @@ public class Registration {
         return new User(
                 rs.getString("id"),
                 rs.getString("email"),
+                rs.getString("phone"),
                 rs.getString("readable_name"),
                 rs.getInt("email_approved"),
                 rs.getString("password"),
                 rs.getString("code"),
                 rs.getString("data"),
+                rs.getString("verification_code"),
                 GameAuthorities.splitRolesString(rs.getString("roles")));
     }
 
@@ -360,12 +383,16 @@ public class Registration {
             user.setCode(code);
         }
 
-        Object[] parameters = {user.getReadableName(), user.getEmail(), 1, passwordEncoder.encode(user.getPassword()), code, user.getData(), GameAuthorities.authoritiesToRolesString(user.getAuthorities()), user.getId()};
+        String authorities = user.getAuthorities().isEmpty()
+                ? ROLE_USER
+                : GameAuthorities.authoritiesToRolesString(user.getAuthorities());
+
+        Object[] parameters = {user.getReadableName(), user.getEmail(), user.getPhone(), user.getApproved(), passwordEncoder.encode(user.getPassword()), code, user.getData(), user.getVerificationCode(), authorities, user.getId()};
         if (getCodeById(user.getId()) == null) {
-            pool.update("INSERT INTO users (readable_name, email, email_approved, password, code, data, roles, id) VALUES (?,?,?,?,?,?,?,?);",
+            pool.update("INSERT INTO users (readable_name, email, phone, email_approved, password, code, data, verification_code, roles, id) VALUES (?,?,?,?,?,?,?,?,?,?);",
                     parameters);
         } else {
-            pool.update("UPDATE users SET readable_name = ?, email = ?, email_approved = ?, password = ?, code = ?, data = ?, roles = ? WHERE id = ?;",
+            pool.update("UPDATE users SET readable_name = ?, email = ?, phone = ?, email_approved = ?, password = ?, code = ?, data = ?, verification_code = ?, roles = ? WHERE id = ?;",
                     parameters);
         }
     }

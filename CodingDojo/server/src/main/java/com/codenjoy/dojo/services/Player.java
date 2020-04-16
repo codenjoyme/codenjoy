@@ -45,6 +45,7 @@ public class Player implements ScreenRecipient, Closeable {
 
     private String id;
     private String email;
+    private String phone;
     private String readableName;
     private String code;
     private String data;

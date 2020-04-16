@@ -358,7 +358,7 @@ public class AdminController {
         if (registration.registered(id)) {
             return registration.login(id, id);
         } else {
-            return registration.register(id, id, id, id, "", GameAuthorities.USER.roles()).getCode();
+            return registration.register(id, id, id, id, null, "", GameAuthorities.USER.roles()).getCode();
         }
     }
 

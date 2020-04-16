@@ -29,18 +29,22 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
+import com.codenjoy.dojo.services.security.RegistrationService;
 import com.codenjoy.dojo.web.controller.Validator;
-import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
-import com.codenjoy.dojo.web.rest.pojo.PlayerId;
-import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
+import com.codenjoy.dojo.web.rest.pojo.*;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,12 +56,14 @@ import javax.servlet.http.HttpServletRequest;
 public class RestRegistrationController {
 
     private Registration registration;
+    private RegistrationService registrationService;
     private PlayerService playerService;
     private PlayerGames playerGames;
     private GameService gameService;
     private PlayerGamesView playerGamesView;
     private SaveService saveService;
     private Validator validator;
+    private SmsService smsService;
 
     @GetMapping("/player/{player}/check/{code}")
     @ResponseBody
@@ -153,12 +159,22 @@ public class RestRegistrationController {
     @ResponseBody
     public synchronized String createPlayer(@RequestBody PlayerDetailInfo player) {
         Registration.User user = player.getRegistration();
+
+        boolean isNotRegistred = !registration.registered(user.getId());
+        if(isNotRegistred) {
+            user.setVerificationCode(smsService.generateVerificationCode());
+        }
+
         registration.replace(user);
+
+        if(isNotRegistred) {
+            smsService.sendSmsTo(user.getPhone(), user.getVerificationCode(), SmsService.SmsType.REGISTRATION);
+        }
 
         boolean fromSave = player.getScore() == null;
         if (fromSave) {
             // делаем попытку грузить по сейву
-            if (!saveService.load(player.getId())) {
+            if (!saveService.load(player.getName())) {
                 // неудача - обнуляем все
                 player.setSave("{}");
                 player.setScore("0");
@@ -171,7 +187,7 @@ public class RestRegistrationController {
             PlayerSave save = player.buildPlayerSave();
             playerService.register(save);
 
-            playerGames.setLevel(player.getId(),
+            playerGames.setLevel(player.getName(),
                     new JSONObject(player.getSave()));
         }
 
@@ -186,5 +202,32 @@ public class RestRegistrationController {
 
         return registration.checkUser(id) != null
                 && playerService.contains(id);
+    }
+
+    @PostMapping("player/confirm")
+    public ResponseEntity<String> confirmRegistration(@RequestBody PPhoneCode phoneCode) {
+        if(registrationService.confirmRegistration(phoneCode)) {
+            return ResponseEntity.ok("Success");
+        }
+
+        return ResponseEntity.unprocessableEntity().body("Invalid confirmation code!");
+    }
+
+    @PostMapping("player/resend")
+    @ResponseStatus(HttpStatus.OK)
+    public void resendRegistrationCode(@RequestBody PPhone phone) {
+        registrationService.resendConfirmRegistrationCode(phone);
+    }
+
+    @PostMapping("player/reset")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendResetPasswordCode(@RequestBody PPhone phone) {
+       registrationService.resendResetPasswordCode(phone);
+    }
+
+    @PostMapping("player/validate-reset")
+    @ResponseStatus(HttpStatus.OK)
+    public void validateResetPasswordCode(@RequestBody PPhoneCode phoneCode) {
+        System.out.println();
     }
 }

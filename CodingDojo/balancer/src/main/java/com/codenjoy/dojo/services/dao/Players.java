@@ -41,6 +41,7 @@ public class Players {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS players (" +
                         "email varchar(255), " +
+                        "phone varchar(255), " +
                         "first_name varchar(255), " +
                         "last_name varchar(255), " +
                         "password varchar(255)," +
@@ -74,6 +75,7 @@ public class Players {
     private Player getPlayer(ResultSet rs) throws SQLException {
         return new Player(
                 rs.getString("email"),
+                rs.getString("phone"),
                 rs.getString("first_name"),
                 rs.getString("last_name"),
                 rs.getString("password"),
@@ -99,6 +101,7 @@ public class Players {
                         result.add(
                             new ServerLocation(
                                 rs.getString("email"),
+                                rs.getString("phone"),
                                 null, // TODO установить это поле в сервисе
                                 rs.getString("code"),
                                 rs.getString("server")));
@@ -123,17 +126,25 @@ public class Players {
     }
 
 
-    public String getServer(String email) {
+    public String getServerByEmail(String email) {
         return pool.select("SELECT server FROM players WHERE email = ?;",
                 new Object[]{email},
                 rs -> rs.next() ? rs.getString("server") : null
         );
     }
 
+    public String getServerByPhone(String phone) {
+        return pool.select("SELECT server FROM players WHERE phone = ?;",
+                new Object[]{phone},
+                rs -> rs.next() ? rs.getString("server") : null
+        );
+    }
+
+
     public void create(Player player) {
         pool.update("INSERT INTO players (first_name, last_name, password, " +
-                        "city, skills, comment, code, server, email) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?);",
+                        "city, skills, comment, code, server, phone, email) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?,?);",
                 getObjects(player));
     }
 
@@ -159,6 +170,7 @@ public class Players {
                 player.getComment(),
                 player.getCode(),
                 player.getServer(),
+                player.getPhone(),
                 player.getEmail(),
         };
     }

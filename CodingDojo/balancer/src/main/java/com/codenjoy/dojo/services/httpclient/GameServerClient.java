@@ -24,9 +24,12 @@ package com.codenjoy.dojo.services.httpclient;
 
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
+import com.codenjoy.dojo.web.rest.dto.PhoneCodeDTO;
+import com.codenjoy.dojo.web.rest.dto.PhoneDTO;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -55,4 +58,21 @@ public interface GameServerClient {
 
     @RequestLine("GET /codenjoy-contest/rest/player/{id}/remove/{code}")
     Boolean removePlayer(@Param("id") String id, @Param("code") String code);
+
+
+    @RequestLine("POST /codenjoy-contest/rest/player/confirm")
+    @Headers({"Content-Type: application/json"})
+    void confirmRegistration(PhoneCodeDTO phoneCodeDTO);
+
+    @RequestLine("POST /codenjoy-contest/rest/player/resend")
+    @Headers({"Content-Type: application/json"})
+    void sendRegistrationCode(PhoneDTO phoneDTO);
+
+    @RequestLine("POST /codenjoy-contest/rest/player/reset")
+    @Headers({"Content-Type: application/json"})
+    void sendResetPasswordCode(PhoneDTO phoneDTO);
+
+    @RequestLine("POST /codenjoy-contest/rest/player/validate-reset")
+    @Headers({"Content-Type: application/json"})
+    void validateResetPasswordCode(PhoneCodeDTO phoneCodeDTO);
 }

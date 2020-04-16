@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.services.entity;
+package com.codenjoy.dojo.web.rest.pojo;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2019 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,36 +23,11 @@ package com.codenjoy.dojo.services.entity;
  */
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class ServerLocation {
-
-    private String email;
+@Setter
+public class PPhoneCode {
     private String phone;
-    private String id;
     private String code;
-    private String server;
-
-    public ServerLocation() {
-        // do nothing
-    }
-
-    public ServerLocation(String email, String phone, String id, String code, String server) {
-        this.email = email;
-        this.phone = phone;
-        this.id = id;
-        this.code = code;
-        this.server = server;
-    }
-
-    @Override
-    public String toString() {
-        return "ServerLocation{" +
-                "email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", id='" + id + '\'' +
-                ", code='" + code + '\'' +
-                ", server='" + server + '\'' +
-                '}';
-    }
 }

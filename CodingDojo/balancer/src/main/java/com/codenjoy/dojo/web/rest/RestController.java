@@ -30,6 +30,8 @@ import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
+import com.codenjoy.dojo.web.rest.dto.PhoneCodeDTO;
+import com.codenjoy.dojo.web.rest.dto.PhoneDTO;
 import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
 import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import com.codenjoy.dojo.web.controller.LoginException;
@@ -138,6 +140,7 @@ public class RestController {
             public ServerLocation onGame() {
                 return dispatcher.registerNew(
                         player.getEmail(),
+                        player.getPhone(),
                         getFullName(player),
                         player.getPassword(),
                         getIp(request)
@@ -151,6 +154,7 @@ public class RestController {
                     player.setServer(location.getServer());
                     players.create(new Player(
                             player.getEmail(),
+                            player.getPhone(),
                             player.getFirstName(),
                             player.getLastName(),
                             passwordEncoder.encode(player.getPassword()),
@@ -214,6 +218,7 @@ public class RestController {
         ServerLocation location = dispatcher.registerIfNotExists(
                 player.getServer(),
                 player.getEmail(),
+                player.getPhone(),
                 getFullName(player),
                 player.getPassword(),
                 getIp(request));
@@ -276,7 +281,7 @@ public class RestController {
                     player.setCode(Hash.getCode(email, newPassword));
                 }
 
-                player.resetNullFileds(old);
+                player.resetNullFields(old);
                 players.update(player);
 
                 return recreatePlayerIfNeeded(location, email, getIp(request));
@@ -297,6 +302,7 @@ public class RestController {
                 return dispatcher.registerIfNotExists(
                         current.getServer(),
                         current.getEmail(),
+                        current.getPhone(),
                         getFullName(players.get(current.getEmail())),
                         current.getCode(),
                         callback);
@@ -320,6 +326,7 @@ public class RestController {
 
     private <T> T tryLogin(Player player, OnLogin<T> onLogin) {
         String email = player.getEmail();
+        String phone = player.getPhone();
         String password = player.getPassword();
         String code = player.getCode();
 
@@ -329,13 +336,14 @@ public class RestController {
 
         Player exist = players.get(email);
         if (!isValid(exist, password, code)) {
-            return onLogin.onFailed(new ServerLocation(email, null, null, null));
+            return onLogin.onFailed(new ServerLocation(email, phone, null, null, null));
         }
 
-        String server = players.getServer(email);
+        String server = players.getServerByEmail(email);
 
         return onLogin.onSuccess(
                 new ServerLocation(email,
+                        phone,
                         Hash.getId(email, config.getEmailHash()),
                         exist.getCode(),
                         server
@@ -495,4 +503,32 @@ public class RestController {
         return true;
     }
 
+
+    @PostMapping(REGISTER + "/confirm")
+    @ResponseStatus(HttpStatus.OK)
+    public void confirmRegistration(@RequestBody PhoneCodeDTO confirmRegistration) {
+        String server = players.getServerByPhone(confirmRegistration.getPhone());
+        game.confirmRegistration(server, confirmRegistration);
+    }
+
+    @PostMapping(REGISTER + "/resend")
+    @ResponseStatus(HttpStatus.OK)
+    public void resendRegistrationCode(@RequestBody PhoneDTO phone) {
+        String server = players.getServerByPhone(phone.getPhone());
+        game.sendRegistrationCode(server, phone);
+    }
+
+    @PostMapping(REGISTER + "/reset")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendResetPasswordCode(@RequestBody PhoneDTO phone) {
+        String server = players.getServerByPhone(phone.getPhone());
+        game.sendResetPasswordCode(server, phone);
+    }
+
+    @PostMapping(REGISTER + "/validate-reset")
+    @ResponseStatus(HttpStatus.OK)
+    public void validateResetPasswordCode(@RequestBody PhoneCodeDTO phone) {
+        String server = players.getServerByPhone(phone.getPhone());
+        game.validateResetPasswordCode(server, phone);
+    }
 }
