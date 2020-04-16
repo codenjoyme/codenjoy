@@ -91,7 +91,7 @@ public class BoardController {
     {
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
-        validator.checkGameName(gameName, CAN_BE_NULL);
+        validator.checkGameName(gameName, CAN_BE_NULL); // TODO а зачем тут вообще gameName?
 
         Player player = playerService.get(id);
         if (player == NullPlayer.INSTANCE) {
@@ -176,6 +176,7 @@ public class BoardController {
                                 @PathVariable("gameName") String gameName,
                                 @RequestParam(value = "code", required = false) String code)
     {
+        // TODO возможно тут CAN_BE_NULL, иначе проверка (gameName == null) никогда не true
         validator.checkGameName(gameName, CANT_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
 
