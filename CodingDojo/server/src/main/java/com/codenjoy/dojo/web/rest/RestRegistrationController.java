@@ -163,6 +163,7 @@ public class RestRegistrationController {
         boolean isNotRegistred = !registration.registered(user.getId());
         if(isNotRegistred) {
             user.setVerificationCode(smsService.generateVerificationCode());
+            user.setVerificationCode(SmsService.SmsType.REGISTRATION.name());
         }
 
         registration.replace(user);
@@ -226,8 +227,11 @@ public class RestRegistrationController {
     }
 
     @PostMapping("player/validate-reset")
-    @ResponseStatus(HttpStatus.OK)
-    public void validateResetPasswordCode(@RequestBody PPhoneCode phoneCode) {
-        System.out.println();
+    public ResponseEntity<String> validateResetPasswordCode(@RequestBody PPhoneCode phoneCode) {
+        if(registrationService.validateCodeResetPassword(phoneCode)) {
+            return ResponseEntity.ok("Success");
+        }
+
+        return ResponseEntity.unprocessableEntity().body("Invalid confirmation code!");
     }
 }

@@ -242,17 +242,16 @@ public class RegistrationService {
     public boolean confirmRegistration(PPhoneCode phoneCode) {
         Registration.User user = registration.getUserByPhone(phoneCode.getPhone())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        if(user.getApproved() == 1) {
+        if (user.getApproved() == 1) {
             throw new RuntimeException("User already confirmed");
         }
-        if(!StringUtils.isEmpty(user.getVerificationCode()) && user.getVerificationCode().equals(phoneCode.getCode())) {
+
+        if(validateCode(phoneCode.getCode(), SmsService.SmsType.REGISTRATION, user)) {
             registration.approve(user.getCode());
-            registration.updateVerificationCode(phoneCode.getPhone(), null);
-        } else {
-            return false;
+            registration.updateVerificationCode(phoneCode.getPhone(), null, null);
         }
 
-        return true;
+        return false;
     }
 
     public void resendConfirmRegistrationCode(PPhone phone) {
@@ -262,7 +261,7 @@ public class RegistrationService {
             throw new RuntimeException("User already confirmed");
         }
         String verificationCode = smsService.generateVerificationCode();
-        registration.updateVerificationCode(phone.getPhone(), verificationCode);
+        registration.updateVerificationCode(phone.getPhone(), verificationCode, SmsService.SmsType.REGISTRATION.name());
         smsService.sendSmsTo(phone.getPhone(), verificationCode, SmsService.SmsType.REGISTRATION);
     }
 
@@ -270,8 +269,26 @@ public class RegistrationService {
         registration.getUserByPhone(phone.getPhone())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         String verificationCode = smsService.generateVerificationCode();
-        registration.updateVerificationCode(phone.getPhone(), verificationCode);
+        registration.updateVerificationCode(phone.getPhone(), verificationCode, SmsService.SmsType.PASSWORD_RESET.name());
         smsService.sendSmsTo(phone.getPhone(), verificationCode, SmsService.SmsType.PASSWORD_RESET);
+    }
+
+    public boolean validateCodeResetPassword(PPhoneCode phoneCode) {
+        Registration.User user = registration.getUserByPhone(phoneCode.getPhone())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if(validateCode(phoneCode.getCode(), SmsService.SmsType.PASSWORD_RESET, user)) {
+
+            //TODO generate random password
+            registration.updateVerificationCode(phoneCode.getPhone(), null, null);
+        }
+
+        return true;
+    }
+
+    private boolean validateCode(String smsCode, SmsService.SmsType codeType, Registration.User user) {
+        return (!StringUtils.isEmpty(smsCode) && smsCode.equals(user.getVerificationCode()))
+                && (!StringUtils.isEmpty(codeType) && codeType.name().equals(user.getVerificationType()));
     }
 
 }

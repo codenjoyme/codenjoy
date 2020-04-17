@@ -72,6 +72,7 @@ public class Registration {
                 "code varchar(255)," +
                 "data varchar(255)," +
                 "verification_code varchar(255)," +
+                "verification_type varchar(255)," +
                 "roles varchar(255));");
         if (initAdminUser) {
             initialScripts.add(String.format("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles)" +
@@ -261,9 +262,9 @@ public class Registration {
                 new Object[]{id, name});
     }
 
-    public void updateVerificationCode(String phone, String verificationCode) {
-        pool.update("UPDATE users SET verification_code = ? WHERE phone = ?;",
-                new Object[]{verificationCode, phone});
+    public void updateVerificationCode(String phone, String verificationCode, String verificationType) {
+        pool.update("UPDATE users SET verification_code = ?, verification_type  WHERE phone = ?;",
+                new Object[]{verificationCode, verificationType, phone});
     }
 
     public void updateNameAndEmail(String id, String name, String email) {
@@ -284,12 +285,14 @@ public class Registration {
         private String code;
         private String data;
         private String verificationCode;
+        private String verificationType;
 
         public User() {
             super("anonymous", "", Collections.emptyList());
         }
 
-        public User(String id, String email, String phone, String readableName, int approved, String password, String code, String data, String verificationCode, String... roles) {
+        public User(String id, String email, String phone, String readableName, int approved, String password, String code, String data, String verificationCode, String verificationType,
+                    String... roles) {
             super(email, password, Stream.of(roles).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
             this.id = id;
             this.phone = phone;
@@ -299,6 +302,7 @@ public class Registration {
             this.code = code;
             this.data = data;
             this.verificationCode = verificationCode;
+            this.verificationType = verificationType;
         }
 
         public void setCode(String code) {
@@ -373,6 +377,7 @@ public class Registration {
                 rs.getString("code"),
                 rs.getString("data"),
                 rs.getString("verification_code"),
+                rs.getString("verification_type"),
                 GameAuthorities.splitRolesString(rs.getString("roles")));
     }
 
@@ -387,12 +392,12 @@ public class Registration {
                 ? ROLE_USER
                 : GameAuthorities.authoritiesToRolesString(user.getAuthorities());
 
-        Object[] parameters = {user.getReadableName(), user.getEmail(), user.getPhone(), user.getApproved(), passwordEncoder.encode(user.getPassword()), code, user.getData(), user.getVerificationCode(), authorities, user.getId()};
+        Object[] parameters = {user.getReadableName(), user.getEmail(), user.getPhone(), user.getApproved(), passwordEncoder.encode(user.getPassword()), code, user.getData(), user.getVerificationCode(), user.getVerificationType(), authorities, user.getId()};
         if (getCodeById(user.getId()) == null) {
-            pool.update("INSERT INTO users (readable_name, email, phone, email_approved, password, code, data, verification_code, roles, id) VALUES (?,?,?,?,?,?,?,?,?,?);",
+            pool.update("INSERT INTO users (readable_name, email, phone, email_approved, password, code, data, verification_code, verification_code, roles, id) VALUES (?,?,?,?,?,?,?,?,?,?,?);",
                     parameters);
         } else {
-            pool.update("UPDATE users SET readable_name = ?, email = ?, phone = ?, email_approved = ?, password = ?, code = ?, data = ?, verification_code = ?, roles = ? WHERE id = ?;",
+            pool.update("UPDATE users SET readable_name = ?, email = ?, phone = ?, email_approved = ?, password = ?, code = ?, data = ?, verification_code = ?, verification_code = ?, roles = ? WHERE id = ?;",
                     parameters);
         }
     }
