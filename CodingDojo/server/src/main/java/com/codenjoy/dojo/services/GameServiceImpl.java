@@ -24,12 +24,14 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.codenjoy.dojo.services.printer.CharElements;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.reflections.Reflections;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,10 +43,7 @@ import static java.util.stream.Collectors.toMap;
 public class GameServiceImpl implements GameService {
 
     public static final String ROOMS_SEPARATOR = "-";
-
-    @Autowired private TimerService timer;
-    @Autowired private PlayerService players;
-
+    
     private Map<String, GameType> cache = new TreeMap<>();
 
     public GameServiceImpl() {
@@ -54,8 +53,8 @@ public class GameServiceImpl implements GameService {
         }
     }
 
-    private List<Class<? extends GameType>> allGames() {
-        List<Class<? extends GameType>> result = new LinkedList<>(
+    private List<Class> allGames() {
+        List<Class> result = new LinkedList<>(
                 findInPackage("com.codenjoy.dojo"));
 
         result.sort(Comparator.comparing(Class::getName));
@@ -72,13 +71,13 @@ public class GameServiceImpl implements GameService {
         return result;
     }
 
-    private void remove(List<Class<? extends GameType>> result, Predicate<Class<? extends GameType>> predicate) {
+    private void remove(List<Class> result, Predicate<Class> predicate) {
         result.removeAll(result.stream()
                 .filter(predicate)
                 .collect(Collectors.toList()));
     }
 
-    Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
+    protected Collection<? extends Class> findInPackage(String packageName) {
         return new Reflections(packageName).getSubTypesOf(GameType.class);
     }
 
@@ -87,7 +86,6 @@ public class GameServiceImpl implements GameService {
         return new LinkedList<>(cache.keySet());
     }
 
-    // TODO test me
     @Override
     public List<String> getOnlyGameNames() {
         return getGameNames().stream()
@@ -100,26 +98,40 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public Map<String, List<String>> getSpritesNames() {
+        return getStringListMap(plot -> plot.name().toLowerCase());
+    }
+
+    @Override
+    public Map<String, List<String>> getSpritesValues() {
+        return getStringListMap(plot -> String.valueOf(plot.ch()));
+    }
+
+    // TODO может сделать универсальную версию метода с CharElements и ну его два вурхних метода?
+    @Override
     public Map<String, List<String>> getSprites() {
+        return getStringListMap(plot -> plot.name().toLowerCase() + "=" + plot.ch());
+    }
+
+    private Map<String, List<String>> getStringListMap(Function<CharElements, String> mapper) {
         return cache.entrySet().stream()
-                .map(entry -> new HashMap.SimpleEntry<>(
-                        entry.getValue().name(),
-                        Arrays.stream(entry.getValue().getPlots())
-                                .map(plot -> plot.name().toLowerCase())
-                                .collect(toList())
-                ))
+                .map(entry -> 
+                    new HashMap.SimpleEntry<>(
+                            entry.getValue().name(),
+                            Arrays.stream(entry.getValue().getPlots())
+                                    .map(mapper)
+                                    .collect(toList())
+                    )
+                )
                 .collect(toMap(
                         AbstractMap.SimpleEntry::getKey,
                         AbstractMap.SimpleEntry::getValue
                 ));
     }
 
-    GameType loadGameType(Class<? extends GameType> gameType) {
-        try {
-            return gameType.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows
+    private GameType loadGameType(Class<? extends GameType> gameType) {
+        return gameType.newInstance();
     }
 
     @Override

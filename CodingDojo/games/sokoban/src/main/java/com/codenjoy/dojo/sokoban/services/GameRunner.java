@@ -26,6 +26,7 @@ package com.codenjoy.dojo.sokoban.services;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.sokoban.client.Board;
 import com.codenjoy.dojo.sokoban.client.ai.ApofigSolver;
 import com.codenjoy.dojo.services.*;
@@ -81,7 +82,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Enum[] getPlots() {
+    public CharElements[] getPlots() {
         return Elements.values();
     }
 

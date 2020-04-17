@@ -256,4 +256,5 @@ public class BoardTest {
         assertEquals(false, board.isMyBombermanDead());
         assertEquals(true, board("Ѡ").isMyBombermanDead());
     }
+    
 }

@@ -31,6 +31,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+// TODO уйти на покой!
 public class SpringMockerJettyRunner extends JettyRunner {
 
     private List<String> mocks = new LinkedList<>();

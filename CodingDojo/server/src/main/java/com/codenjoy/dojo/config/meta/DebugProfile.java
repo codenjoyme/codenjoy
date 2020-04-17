@@ -30,7 +30,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 4/1/2019
  */
 @Target({ElementType.TYPE, ElementType.METHOD})

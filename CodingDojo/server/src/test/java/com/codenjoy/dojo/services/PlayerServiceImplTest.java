@@ -40,6 +40,7 @@ import com.codenjoy.dojo.services.nullobj.NullJoystick;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
@@ -127,13 +128,18 @@ public class PlayerServiceImplTest {
 
     @Mock
     private GameType gameType;
+    
     @Mock
     private PlayerScores playerScores1;
+    
     @Mock
     private PlayerScores playerScores2;
+    
     @Mock
     private PlayerScores playerScores3;
+    
     private InformationCollector informationCollector;
+    
     @Mock
     private GraphicPrinter printer;
     private List<Joystick> joysticks = new LinkedList<>();
@@ -143,7 +149,7 @@ public class PlayerServiceImplTest {
     private List<PlayerHero> heroesData = new LinkedList<>();
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
         Mockito.reset(actionLogger, autoSaver, gameService, playerController, playerGames);
         playerGames.clean();
 
@@ -238,7 +244,7 @@ public class PlayerServiceImplTest {
         };
     }
 
-    enum Elements {
+    enum Elements implements CharElements {
         A('1'), B('2'), C('3'), D('4');
 
         private final char ch;
@@ -250,6 +256,11 @@ public class PlayerServiceImplTest {
         @Override
         public String toString() {
             return String.valueOf(ch);
+        }
+
+        @Override
+        public char ch() {
+            return ch;
         }
     }
 
@@ -479,7 +490,8 @@ public class PlayerServiceImplTest {
     }
 
     private Player createPlayer(String userName) {
-        Player player = playerService.register(userName, getCallbackUrl(userName), userName + "game");
+        Player player = playerService.register(userName, getCallbackUrl(userName),
+                userName + "room", userName + "game");
         players.add(player);
 
         if (player != NullPlayer.INSTANCE) {
@@ -520,7 +532,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldCreatePlayerFromSavedPlayerGameWhenPlayerNotRegisterYet() {
         // given
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", 100, null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "room", "game", 100, null);
 
         // when
         playerService.register(save);
@@ -542,7 +554,7 @@ public class PlayerServiceImplTest {
         Player registeredPlayer = createPlayer(VASYA);
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_game", 200, null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_room", "other_game", 200, null);
 
         // when
         playerService.register(save);
@@ -565,7 +577,7 @@ public class PlayerServiceImplTest {
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
         assertEquals(0, registeredPlayer.getScore());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", 200, null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "room", "game", 200, null);
 
         // when
         playerService.register(save);
@@ -737,7 +749,7 @@ public class PlayerServiceImplTest {
     }
 
     private List<PlayerGame> getPlayerGames() {
-        return field("playerGames").ofType(List.class).in(playerGames).get();
+        return field(PlayerGames.Fields.all).ofType(List.class).in(playerGames).get();
     }
 
     @Test
@@ -799,7 +811,7 @@ public class PlayerServiceImplTest {
 
         setup(game1);
 
-        List list = Reflection.field("playerGames").ofType(List.class).in(playerGames).get();
+        List list = Reflection.field(PlayerGames.Fields.all).ofType(List.class).in(playerGames).get();
         PlayerGame playerGame = (PlayerGame)list.remove(0);
         PlayerGame spy = spy(playerGame);
         list.add(spy);
@@ -1406,7 +1418,7 @@ public class PlayerServiceImplTest {
         // given
         when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
         when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
-        PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "game", 100, null);
+        PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "room", "game", 100, null);
 
         // when
         playerService.register(save);

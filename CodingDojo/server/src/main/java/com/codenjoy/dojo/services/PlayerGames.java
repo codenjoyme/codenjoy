@@ -26,6 +26,8 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.google.common.collect.Multimap;
+import lombok.experimental.FieldNameConstants;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
@@ -39,9 +41,10 @@ import static com.codenjoy.dojo.services.PlayerGame.by;
 import static java.util.stream.Collectors.toList;
 
 @Component
+@FieldNameConstants
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
-    private List<PlayerGame> playerGames = new LinkedList<>();
+    private List<PlayerGame> all = new LinkedList<>();
 
     private Consumer<PlayerGame> onAdd;
     private Consumer<PlayerGame> onRemove;
@@ -77,9 +80,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private void remove(Player player, boolean reloadAlone) {
-        int index = playerGames.indexOf(player);
+        int index = all.indexOf(player);
         if (index == -1) return;
-        PlayerGame game = playerGames.remove(index);
+        PlayerGame game = all.remove(index);
 
         if (reloadAlone) {
             removeWithResetAlone(game.getGame());
@@ -91,46 +94,76 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private void removeWithResetAlone(Game game) {
         List<PlayerGame> alone = removeAndLeaveAlone(game);
-        alone.forEach(gp -> spreader.play(gp.getGame(), gp.getGameType(), gp.getGame().getSave()));
+        alone.forEach(gp -> play(gp.getGame(), gp.getRoomName(),
+                gp.getGameType(), gp.getGame().getSave()));
     }
 
     public PlayerGame get(String playerName) {
-        return playerGames.stream()
+        return all.stream()
                 .filter(pg -> pg.getPlayer().getName().equals(playerName))
                 .findFirst()
                 .orElse(NullPlayerGame.INSTANCE);
     }
 
     public PlayerGame get(GamePlayer player) {
-        return playerGames.stream()
+        return all.stream()
                 .filter(pg -> pg.getGame().getPlayer().equals(player))
                 .findFirst()
                 .orElse(null);
     }
 
-    public PlayerGame add(Player player, PlayerSave save) {
+    private void play(Game game, String roomName, GameType gameType, JSONObject save) {
+        game.close();
+
+        MultiplayerType type = gameType.getMultiplayerType();
+        int roomSize = type.loadProgress(game, save);
+        LevelProgress progress = game.getProgress();
+        int levelNumber = progress.getCurrent();
+        GameField field = spreader.fieldFor(game.getPlayer(),
+                roomName,
+                type,
+                roomSize,
+                levelNumber,
+                () -> {
+                    game.getPlayer().setProgress(progress);
+                    return gameType.createGame(levelNumber);
+                });
+
+        game.on(field);
+
+        game.newGame();
+        if (save != null && !save.keySet().isEmpty()) {
+            game.loadSave(save);
+        }
+    }
+
+    public PlayerGame add(Player player, String roomName, PlayerSave save) {
         GameType gameType = player.getGameType();
 
-        GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
-                player.getName());
-
-        Single single = new Single(gamePlayer,
-                gameType.getPrinterFactory(),
-                gameType.getMultiplayerType());
-
-        spreader.play(single, gameType, parseSave(save));
+        Single single = buildSingle(player, gameType);
 
         Game game = new LockedGame(lock).wrap(single);
 
-        PlayerGame playerGame = new PlayerGame(player, game);
+        play(game, roomName, gameType, parseSave(save));
+
+        PlayerGame playerGame = new PlayerGame(player, game, roomName);
         if (onAdd != null) {
             onAdd.accept(playerGame);
         }
-        playerGames.add(playerGame);
+        all.add(playerGame);
         return playerGame;
     }
 
-    JSONObject parseSave(PlayerSave save) {
+    private Single buildSingle(Player player, GameType gameType) {
+        GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
+                player.getName());
+
+        return new Single(gamePlayer,
+                gameType.getPrinterFactory(),
+                gameType.getMultiplayerType());
+    }
+
+    private JSONObject parseSave(PlayerSave save) {
         if (save == null || PlayerSave.isSaveNull(save.getSave())) {
             return new JSONObject();
         }
@@ -138,37 +171,35 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     private List<PlayerGame> removeAndLeaveAlone(Game game) {
-        if (spreader.contains(game)) {
-            List<GamePlayer> alone = spreader.remove(game);
-            List<PlayerGame> result = alone.stream()
-                    .map(p -> get(p))
-                    .collect(toList());
-            while (result.contains(null)) { // TODO как-то странно так делать
-                result.remove(null);
-            }
-            return result;
-        } else {
+        if (!spreader.contains(game.getPlayer())) {
             return Arrays.asList();
         }
+
+        List<GamePlayer> alone = spreader.remove(game.getPlayer());
+
+        return alone.stream()
+                .map(p -> get(p))       // GamePlayer
+                .filter(p -> p != null) // PlayerGame
+                .collect(toList());
     }
 
     public boolean isEmpty() {
-        return playerGames.isEmpty();
+        return all.isEmpty();
     }
 
     @Override
     public Iterator<PlayerGame> iterator() {
-        return playerGames.iterator();
+        return all.iterator();
     }
 
     public List<Player> players() {
-        return playerGames.stream()
+        return all.stream()
                 .map(PlayerGame::getPlayer)
                 .collect(toList());
     }
 
     public int size() {
-        return playerGames.size();
+        return all.size();
     }
 
     public void clear() {
@@ -176,7 +207,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     }
 
     public List<PlayerGame> getAll(String gameType) {
-        return playerGames.stream()
+        return all.stream()
                 .filter(pg -> pg.getPlayer().getGameName().equals(gameType))
                 .collect(toList());
     }
@@ -184,7 +215,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     public List<GameType> getGameTypes() {
         List<GameType> result = new LinkedList<>();
 
-        for (PlayerGame playerGame : playerGames) {
+        for (PlayerGame playerGame : all) {
             GameType gameType = playerGame.getGameType();
             if (!result.contains(gameType)) {
                 result.add(gameType);
@@ -197,13 +228,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     @Override
     public void tick() {
         // по всем джойстикам отправили сообщения играм
-        playerGames.forEach(PlayerGame::quietTick);
+        all.forEach(PlayerGame::quietTick);
 
         // если в TRAINING кто-то isWin то мы его относим на следующий уровень
         // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
         // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
-        for (PlayerGame playerGame : playerGames) {
+        for (PlayerGame playerGame : all) {
             Game game = playerGame.getGame();
+            String roomName = playerGame.getRoomName();
             MultiplayerType multiplayerType = playerGame.getGameType().getMultiplayerType();
             if (game.isGameOver()) {
                 quiet(() -> {
@@ -213,15 +245,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                     if (game.isWin() && multiplayerType.isTraining()) {
                         level = LevelProgress.winLevel(level);
                         if (level != null) {
-                            reload(game, level);
-                            // TODO test me
-                            playerGame.getPlayer().getEventListener().levelChanged(game.getProgress());
+                            reload(game, roomName, level);
+                            fireOnLevelChanged(playerGame);
                             return;
                         }
                     }
 
                     if (game.shouldLeave() && multiplayerType.isDisposable()) {
-                        reload(game, level);
+                        reload(game, roomName, level);
                         return;
                     }
 
@@ -234,7 +265,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // независимо от типа игры нам нужно тикнуть все
         //      но только те, которые не DISPOSABLE и одновременно
         //      недокомплектованные пользователями
-        playerGames.stream()
+        all.stream()
                 .map(PlayerGame::getField)
                 .distinct()
                 .filter(this::isMatchCanBeStarted)
@@ -242,6 +273,12 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(GameType::quietTick);
+    }
+
+    private void fireOnLevelChanged(PlayerGame playerGame) {
+        Game game = playerGame.getGame();
+        Player player = playerGame.getPlayer();
+        player.getEventListener().levelChanged(game.getProgress());
     }
 
     private boolean isMatchCanBeStarted(GameField field) {
@@ -252,55 +289,57 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     // без обслуживания последнего оставшегося на той же карте
     public void reloadCurrent(PlayerGame playerGame) {
         Game game = playerGame.getGame();
-        reload(game, game.getSave(), false);
+        String roomName = playerGame.getRoomName();
+        reload(game, roomName, game.getSave(), false);
     }
 
-    private void reload(Game game, JSONObject save, boolean reloadAlone) {
-        GameType gameType = getPlayer(game).getGameType();
+    private void reload(Game game, String roomName, JSONObject save, boolean reloadAlone) {
+        PlayerGame playerGame = getPlayerGame(game);
+        playerGame.setRoomName(roomName);
+        GameType gameType = playerGame.getGameType();
         if (reloadAlone) {
             removeWithResetAlone(game);
         }
 
-        spreader.play(game, gameType, save);
+        play(game, roomName, gameType, save);
     }
 
     // перевод текущего игрока в новую комнату
     // с обслуживанием последнего оставшегося на той же карте
-    public void reload(Game game, JSONObject save) {
-        reload(game, save, true);
+    public void reload(Game game, String roomName, JSONObject save) {
+        reload(game, roomName, save, true);
     }
 
     // переводим всех игроков на новые борды
     // при этом если надо перемешиваем их
     public void reloadAll(boolean shuffle) {
         new LinkedList<PlayerGame>(){{
-            addAll(playerGames);
+            addAll(all);
             if (shuffle) {
                 Collections.shuffle(this);
             }
         }}.forEach(pg -> reloadCurrent(pg));
     }
 
-    private Player getPlayer(Game game) {
-        return playerGames.stream()
+    private PlayerGame getPlayerGame(Game game) {
+        return all.stream()
                 .filter(pg -> pg.equals(by(game)))
                 .findFirst()
-                .orElseThrow(IllegalStateException::new)
-                .getPlayer();
+                .orElseThrow(IllegalStateException::new);
     }
 
     private void quiet(Runnable runnable) {
         ((Tickable)() -> runnable.run()).quietTick();
     }
 
-
-    public void clean() {
-        new LinkedList<>(playerGames)
+    // for testing only
+    void clean() {
+        new LinkedList<>(all)
                 .forEach(pg -> remove(pg.getPlayer()));
     }
 
     public List<Player> getPlayers(String gameName) {
-        return playerGames.stream()
+        return all.stream()
                 .map(playerGame -> playerGame.getPlayer())
                 .filter(player -> player.getGameName().equals(gameName))
                 .collect(toList());
@@ -308,12 +347,14 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public void changeLevel(String playerName, int level) {
         PlayerGame playerGame = get(playerName);
+        String roomName = playerGame.getRoomName();
         Game game = playerGame.getGame();
         JSONObject save = game.getSave();
         LevelProgress progress = new LevelProgress(save);
         if (progress.canChange(level)) {
             progress.change(level);
-            reload(game, progress.saveTo(new JSONObject()));
+            reload(game, roomName, progress.saveTo(new JSONObject()));
+            fireOnLevelChanged(playerGame);
         }
     }
 
@@ -322,19 +363,36 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             return;
         }
         PlayerGame playerGame = get(playerName);
+        String roomName = playerGame.getRoomName();
         Game game = playerGame.getGame();
-        reload(game, save);
+        reload(game, roomName, save);
+        fireOnLevelChanged(playerGame);
+    }
+
+    public void changeRoom(String playerName, String roomName) {
+        if (roomName == null) {
+            return;
+        }
+        PlayerGame playerGame = get(playerName);
+        JSONObject save = playerGame.getGame().getSave();
+        Game game = playerGame.getGame();
+        reload(game, roomName, save);
     }
 
     public PlayerGame get(int index) {
-        return playerGames.get(index);
+        return all.get(index);
     }
 
     public List<PlayerGame> all() {
-        return playerGames;
+        return all;
     }
 
     public Stream<PlayerGame> stream() {
-        return playerGames.stream();
+        return all.stream();
     }
+
+    public Multimap<String, Room> rooms() {
+        return spreader.rooms();
+    }
+
 }

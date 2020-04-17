@@ -39,7 +39,8 @@ import java.util.Calendar;
 @Slf4j
 public class ErrorTicketService {
 
-    @Autowired private DebugService debug;
+    @Autowired
+    private DebugService debug;
 
     public ModelAndView get(String url, Exception exception) {
         String ticket = ticket();

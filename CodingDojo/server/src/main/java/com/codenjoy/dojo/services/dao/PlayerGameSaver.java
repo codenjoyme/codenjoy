@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.GameSaver;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.jdbc.*;
-import org.springframework.stereotype.Component;
 
 import java.sql.Date;
 import java.util.*;
@@ -42,6 +41,7 @@ public class PlayerGameSaver implements GameSaver {
                         "time varchar(255), " +
                         "name varchar(255), " +
                         "callbackUrl varchar(255)," +
+                        "roomName varchar(255)," +
                         "gameName varchar(255)," +
                         "score int," +
                         "save varchar(255));");
@@ -52,13 +52,14 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public void saveGame(final Player player, final String save, long time) {
+    public void saveGame(Player player, String save, long time) {
         pool.update("INSERT INTO saves " +
-                        "(time, name, callbackUrl, gameName, score, save) " +
-                        "VALUES (?,?,?,?,?,?);",
+                        "(time, name, callbackUrl, roomName, gameName, score, save) " +
+                        "VALUES (?,?,?,?,?,?,?);",
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
                         player.getName(),
                         player.getCallbackUrl(),
+                        player.getRoomName(),
                         player.getGameName(),
                         player.getScore(),
                         save
@@ -66,16 +67,17 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public PlayerSave loadGame(final String name) {
+    public PlayerSave loadGame(String name) {
         return pool.select("SELECT * FROM saves WHERE name = ? ORDER BY time DESC LIMIT 1;",
                 new Object[]{name},
                 rs -> {
                     if (rs.next()) {
                         String callbackUrl = rs.getString("callbackUrl");
                         int score = rs.getInt("score");
+                        String roomName = rs.getString("roomName");
                         String gameName = rs.getString("gameName");
                         String save = rs.getString("save");
-                        return new PlayerSave(name, callbackUrl, gameName, score, save);
+                        return new PlayerSave(name, callbackUrl, roomName, gameName, score, save);
                     } else {
                         return PlayerSave.NULL;
                     }
@@ -98,7 +100,7 @@ public class PlayerGameSaver implements GameSaver {
     }
 
     @Override
-    public void delete(final String name) {
+    public void delete(String name) {
         pool.update("DELETE FROM saves WHERE name = ?;",
                 new Object[]{name});
     }

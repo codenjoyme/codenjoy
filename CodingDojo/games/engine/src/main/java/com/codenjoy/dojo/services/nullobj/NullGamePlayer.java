@@ -26,11 +26,11 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-public class NullGamePlayer extends GamePlayer {
+public final class NullGamePlayer extends GamePlayer {
 
     public static final GamePlayer INSTANCE = new NullGamePlayer();
 
-    public NullGamePlayer(){
+    private NullGamePlayer(){
         super(event -> {});
     }
 

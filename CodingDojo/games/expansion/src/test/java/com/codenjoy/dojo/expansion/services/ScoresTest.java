@@ -23,6 +23,7 @@ package com.codenjoy.dojo.expansion.services;
  */
 
 
+import org.json.JSONObject;
 import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
@@ -81,5 +82,41 @@ public class ScoresTest {
         assertEquals(0, score());
     }
 
+    @Test
+    public void testUpdate() {
+        // given
+        scores = new Scores("{'score':0}");
+
+        // when then
+        scores.update(new Object());
+        assertScore(0);
+
+        // when then
+        scores.update("1");
+        assertScore(1);
+
+        // when then
+        scores.update(2);
+        assertScore(2);
+
+        // when then
+        scores.update("{\"score\":3,\"rounds\":[0]}");
+        assertScore(3);
+        assertRounds("[0]");
+
+        // when then
+        scores.update(new JSONObject("{\"score\":4,\"rounds\":[1,2]}"));
+        assertScore(4);
+        assertRounds("[1,2]");
+
+    }
+
+    private void assertScore(int expected) {
+        assertEquals(expected, scores.getScore().getInt(Scores.SCORE));
+    }
+
+    private void assertRounds(String expected) {
+        assertEquals(expected, scores.getScore().getJSONArray(Scores.ROUNDS).toString());
+    }
 
 }

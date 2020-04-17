@@ -101,7 +101,10 @@
                 <version>${maven-antrun.version}</version>
                 <executions>
                     <execution>
-                        <phase>verify</phase>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
                         <inherited>false</inherited>
                         <configuration combine.self="override">
                             <target>
@@ -147,22 +150,11 @@
                                      includes="**/*"
                                      update="true"/>
 
-                                <zip destfile="${project.build.directory}/${project.artifactId}.jar"
-                                     basedir="src/main/webapp"
-                                     includes="resources/user/*.zip"
-                                     excludes=""
-                                     update="true"/>
-
-                                <zip destfile="${project.build.directory}/${project.artifactId}-sources.jar"
-                                     basedir="src/main/webapp"
-                                     includes="resources/user/*.zip"
-                                     excludes=""
-                                     update="true"/>
+                                <copy todir="target/classes/resources/user">
+                                    <fileset dir="${user.resources}"/>
+                                </copy>
                             </target>
                         </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

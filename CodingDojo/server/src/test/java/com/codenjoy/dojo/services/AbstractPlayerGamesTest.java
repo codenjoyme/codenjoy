@@ -10,12 +10,12 @@ package com.codenjoy.dojo.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,17 +26,22 @@ import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.multiplayer.Room;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.TreeMultimap;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by Oleksandr_Baglai on 2019-10-12.
@@ -61,16 +66,33 @@ public class AbstractPlayerGamesTest {
     }
 
     protected Player createPlayer(String gameName) {
-        return createPlayer(gameName, "player" + Calendar.getInstance().getTimeInMillis(),
+        return createPlayer("room", gameName);
+    }
+
+    protected Player createPlayer(String roomName, String gameName) {
+        return createPlayer("player" + Calendar.getInstance().getTimeInMillis(),
+                roomName, gameName,
                 MultiplayerType.SINGLE);
     }
 
-    protected Player createPlayer(String gameName, String name, MultiplayerType type) {
-        return createPlayer(gameName, name, type, null);
+    protected Player createPlayer(MultiplayerType type) {
+        return createPlayer("player", "room", "game", type);
     }
 
-    protected Player createPlayer(String gameName, String name, MultiplayerType type, PlayerSave save) {
-        return createPlayer(gameName, name, type, save, "board");
+    protected Player createPlayer(String name, MultiplayerType type) {
+        return createPlayer(name, "room", "game", type);
+    }
+
+    protected Player createPlayer(String name, String roomName, String gameName, MultiplayerType type) {
+        return createPlayer(name, roomName, gameName, type, null);
+    }
+
+    protected Player createPlayer(String name, MultiplayerType type, PlayerSave save) {
+        return createPlayer(name, "room", "game", type, save);
+    }
+
+    protected Player createPlayer(String name, String roomName, String gameName, MultiplayerType type, PlayerSave save) {
+        return createPlayer(name, gameName, roomName, type, save, "board");
     }
 
     protected void verifyRemove(PlayerGame playerGame, GameField field) {
@@ -79,7 +101,7 @@ public class AbstractPlayerGamesTest {
     }
 
     protected Player createPlayerWithScore(int score, String playerName, MultiplayerType type) {
-        Player player = createPlayer("game", playerName, type);
+        Player player = createPlayer(playerName, "room", "game", type);
         setScore(score, player);
         return player;
     }
@@ -100,7 +122,10 @@ public class AbstractPlayerGamesTest {
         when(gamePlayers.get(index).shouldLeave()).thenReturn(!stillPlay);
     }
 
-    protected Player createPlayer(String gameName, String name, MultiplayerType type, PlayerSave save, Object board) {
+    protected Player createPlayer(String name, String gameName,
+                                  String roomName, MultiplayerType type,
+                                  PlayerSave save, Object board)
+    {
         GameService gameService = mock(GameService.class);
         GameType gameType = mock(GameType.class);
         gameTypes.add(gameType);
@@ -113,7 +138,7 @@ public class AbstractPlayerGamesTest {
         player.setEventListener(mock(InformationCollector.class));
         Closeable ai = mock(Closeable.class);
         ais.put(player, ai);
-        player.setAI(ai);
+        player.setAi(ai);
 
         playerGames.onAdd(pg -> lazyJoysticks.add(pg.getJoystick()));
 
@@ -121,9 +146,11 @@ public class AbstractPlayerGamesTest {
                 TestUtils.getPlayerGame(
                         playerGames,
                         player,
+                        roomName,
                         inv -> {
                             GameField field = mock(GameField.class);
                             when(field.reader()).thenReturn(mock(BoardReader.class));
+                            when(field.getSave()).thenReturn(getSaveJson(save));
                             fields.add(field);
                             return field;
                         },
@@ -138,24 +165,55 @@ public class AbstractPlayerGamesTest {
         return player;
     }
 
-    public void assertR(String expected) {
-        Map<Integer, List<String>> result = getRooms();
+    private JSONObject getSaveJson(PlayerSave save) {
+        if (save == null || save.getSave() == null) {
+            return null;
+        }
 
-        assertEquals(expected, result.toString());
+        try {
+            return new JSONObject(save.getSave());
+        } catch (JSONException e) {
+            return null;
+        }
     }
 
-    public Map<Integer, List<String>> getRooms() {
-        Map<String, Integer> map = playerGames.stream()
-                .collect(LinkedHashMap::new,
-                        (m, pg) -> m.put(pg.getPlayer().getName(), fields.indexOf(pg.getField())),
-                        Map::putAll);
-
-        return map.entrySet().stream()
-                .collect(TreeMap::new, (m, e) -> {
-                    if (!m.containsKey(e.getValue())) {
-                        m.put(e.getValue(), new LinkedList<>());
-                    }
-                    m.get(e.getValue()).add(e.getKey());
-                }, Map::putAll);
+    public void assertRooms(String expected) {
+        assertEquals(expected, getRooms().toString());
     }
+
+    public Map<Integer, Collection<String>> getRooms() {
+        Multimap<Integer, String> result = TreeMultimap.create();
+
+        for (PlayerGame playerGame : playerGames) {
+            int index = fields.indexOf(playerGame.getField());
+            String name = playerGame.getPlayer().getName();
+
+            result.get(index).add(name);
+        }
+        return result.asMap();
+    }
+
+    public void assertRoomsNames(String expected) {
+        assertEquals(expected, getRoomNames().toString());
+    }
+
+    public Map<String, Collection<List<String>>> getRoomNames() {
+        Multimap<String, List<String>> result = HashMultimap.create();
+
+        playerGames.rooms().forEach(
+                (key, value) -> result.get(key).add(players(value)));
+
+        return result.asMap();
+    }
+
+    private List<String> players(Room room) {
+        return room.players().stream()
+                .map(this::name)
+                .collect(toList());
+    }
+
+    private String name(GamePlayer player) {
+        return playerGames.get(gamePlayers.indexOf(player)).getPlayer().getName();
+    }
+
 }

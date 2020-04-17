@@ -72,7 +72,11 @@ public class AbstractGameTest {
     }
 
     void givenFl(String board) {
-        Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
+        givenFl(viewSize(board), board);
+    }
+
+    void givenFl(int viewSize, String board) {
+        Levels.VIEW_SIZE = viewSize;
         ILevel level = createLevels(new String[]{board}).get(0);
         game = new ICanCode(level, dice, ICanCode.SINGLE);
         listener = mock(EventListener.class);
@@ -94,6 +98,10 @@ public class AbstractGameTest {
                 () -> game.layeredReader(),
                 () -> player,
                 COUNT_LAYERS);
+    }
+
+    int viewSize(String board) {
+        return (int)Math.sqrt(board.length());
     }
 
     List<ILevel> createLevels(String[] boards) {

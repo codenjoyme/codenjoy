@@ -30,14 +30,15 @@ import org.springframework.stereotype.Component;
 
 @Component("wsContextListener")
 public class ApplicationContextListener implements ApplicationContextAware {
-    private static ApplicationContext applicationContext;
+
+    private static ApplicationContext context;
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+    public void setApplicationContext(ApplicationContext context) throws BeansException {
+        this.context = context;
     }
 
     public static ApplicationContext getContext() {
-        return applicationContext;
+        return context;
     }
 }

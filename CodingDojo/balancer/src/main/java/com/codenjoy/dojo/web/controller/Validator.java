@@ -27,15 +27,13 @@ import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.DigestUtils;
-import org.springframework.util.StringUtils;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 
 /**
  * Created by Oleksandr_Baglai on 2018-06-26.
@@ -135,12 +133,6 @@ public class Validator {
             throw new IllegalArgumentException("Player code is invalid: " + code);
         }
         return player;
-    }
-
-    public void checkIsAdmin(String adminPassword) {
-        if (!DigestUtils.md5DigestAsHex(properties.getAdminPassword().getBytes()).equals(adminPassword)){
-            throw new LoginException("Unauthorized admin access");
-        }
     }
 
     public void checkPositiveInteger(int count) {

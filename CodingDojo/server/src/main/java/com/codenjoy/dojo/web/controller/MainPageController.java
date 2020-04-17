@@ -30,13 +30,14 @@ import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.security.RegistrationService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -46,24 +47,24 @@ import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @Controller
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class MainPageController {
 
-    private final PlayerService playerService;
-    private final Registration registration;
-    private final GameService gameService;
-    private final Validator validator;
-    private final ConfigProperties properties;
-    private final RoomsAliaser rooms;
-    private final RegistrationService registrationService;
+    private PlayerService playerService;
+    private Registration registration;
+    private GameService gameService;
+    private Validator validator;
+    private ConfigProperties properties;
+    private RoomsAliaser rooms;
+    private RegistrationService registrationService;
 
-    @RequestMapping(value = "/help", method = RequestMethod.GET)
+    @GetMapping("/help")
     public String help(Model model) {
         model.addAttribute("gameNames", gameService.getOnlyGameNames());
         return "help";
     }
 
-    @RequestMapping(value = "/help", params = "gameName", method = RequestMethod.GET)
+    @GetMapping(value = "/help", params = "gameName")
     public String helpForGame(@RequestParam("gameName") String gameName) {
         validator.checkGameName(gameName, CANT_BE_NULL);
 
@@ -72,7 +73,7 @@ public class MainPageController {
         return "redirect:resources/help/" + gameName + suffix + ".html";
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping("/")
     public String getMainPage(HttpServletRequest request, Model model, Authentication authentication) {
         String mainPage = properties.getMainPage();
         if (StringUtils.isNotEmpty(mainPage)) {
@@ -93,7 +94,7 @@ public class MainPageController {
         }
     }
 
-    @RequestMapping(value = "/", params = "code", method = RequestMethod.GET)
+    @GetMapping(value = "/", params = "code")
     public String getMainPage(HttpServletRequest request,
                               @RequestParam("code") String code,
                               Model model)
@@ -113,7 +114,7 @@ public class MainPageController {
         return "main";
     }
 
-    @RequestMapping(value = "/denied")
+    @RequestMapping("/denied")
     public ModelAndView displayAccessDeniedPage(){
         return new ModelAndView(){{
             addObject("message", "Invalid Username or Password");

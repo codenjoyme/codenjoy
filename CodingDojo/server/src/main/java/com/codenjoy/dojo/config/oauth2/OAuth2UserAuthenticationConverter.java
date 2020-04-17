@@ -33,7 +33,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 5/17/2019
  */
 @Component
@@ -49,11 +49,10 @@ public class OAuth2UserAuthenticationConverter extends DefaultUserAuthentication
         if (auth != null) {
             return auth;
         }
-        String email = (String) map.get("email");
-        String readableName = (String) map.get("name");
 
-        Registration.User user = registration.getUserByEmail(email)
-                .orElseGet(() -> registration.register(email, readableName));
+        UserData data = new UserData(map);
+
+        Registration.User user = registration.getOrRegister(data.id(), data.email(), data.readableName());
 
         return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
     }

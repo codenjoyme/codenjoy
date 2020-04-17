@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.client;
  */
 
 
+import com.codenjoy.dojo.bomberman.client.simple.Pattern;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -35,6 +36,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Board extends AbstractBoard<Elements> {
+
+    public static final char ANY_CHAR = '?';
 
     @Override
     public Elements valueOf(char ch) {
@@ -156,5 +159,5 @@ public class Board extends AbstractBoard<Elements> {
     public boolean isBarrierAt(Point point) {
         return isBarrierAt(point.getX(), point.getY());
     }
-
+    
 }

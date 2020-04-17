@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 
+import lombok.experimental.UtilityClass;
 import org.sqlite.date.FastDateFormat;
 
 import java.sql.ResultSet;
@@ -33,7 +34,9 @@ import java.util.Date;
 /**
  * Created by indigo on 13.08.2016.
  */
+@UtilityClass
 public class JDBCTimeUtils {
+
     private static final FastDateFormat formatter = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     public static long getTimeLong(ResultSet resultSet) throws SQLException {

@@ -25,7 +25,7 @@ package com.codenjoy.dojo.services.nullobj;
 
 import com.codenjoy.dojo.services.PlayerScores;
 
-public class NullPlayerScores implements PlayerScores {
+public final class NullPlayerScores implements PlayerScores {
 
     public static final PlayerScores INSTANCE = new NullPlayerScores();
 

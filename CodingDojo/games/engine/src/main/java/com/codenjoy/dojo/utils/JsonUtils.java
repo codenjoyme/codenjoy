@@ -24,6 +24,7 @@ package com.codenjoy.dojo.utils;
 
 
 import com.cedarsoftware.util.io.JsonWriter;
+import lombok.experimental.UtilityClass;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.SortedJSONArray;
@@ -33,9 +34,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by indigo on 2017-03-04.
- */
+@UtilityClass
 public class JsonUtils {
 
     public static List<String> getStrings(JSONArray array) {

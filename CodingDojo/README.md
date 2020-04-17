@@ -51,13 +51,13 @@ To run a project with your game, do the following:
      project to install only games parent project
   * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\yourgame`
      project to install your game
-  * run `clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,yourgame,debug -Dcontext=/codenjoy-contest --server.port=8080 -Pyourgame`
+  * run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,yourgame,debug -Dcontext=/codenjoy-contest --Dserver.port=8080 -Pyourgame`
      in the `\CodingDojo\server` project to launch the game (where 'yourgame')
      is a name of profile that you have set recently in `\CodingDojo\server\pom.xml`.
      There may be several games listed separated by commas.
 - build all games
   * run `mvn clean install -DskipTests=true` in the `\CodingDojo\games` project to install all games
-  * If you want to run all games just run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-contest --server.port=8080 -DallGames`
+  * If you want to run all games just run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-contest --Dserver.port=8080 -DallGames`
 - if maven is not installed on you machine, try `mvnw` instead of `mvn`
 - a simpler way of launching Codenjoy with all games is by running a script in the root `\CodingDojo\build-server.bat` then `\CodingDojo\start-server.bat`
   * please change `set GAMES_TO_RUN=tetris,snake,bomberman` before run `\CodingDojo\build-server.bat`
@@ -71,6 +71,11 @@ To run a project with your game, do the following:
       * `trace` for enable log.debug
       * `debug` if you want to debug js files (otherwise it will compress and obfuscate)
       * `yourgame` if you added your custom configuration to the game inside `CodingDojo\games\yourgame\src\main\resources\application-yourgame.yml`
+- another way to run game from war
+  * build war file `mvn clean package -DskipTests=true -DallGames` in the `\CodingDojo\server` project to build server with all games
+  * build war file `mvn clean package -DskipTests=true -Pyourgame` in the `\CodingDojo\server` project to build server with (one or) several games
+    * `yourgame` can be a CSV list `yourgame1,yourgame2` 
+  * run war like jar file `java -jar codenjoy-contest.war --spring.profiles.active=sqlite,debug,yourgame` in the `\CodingDojo\server\target`              
 - after that in the browser access [http://127.0.0.1:8080/codenjoy-contest](http://127.0.0.1:8080/codenjoy-contest) and register the player
 - you can read a description of any game on the help page [http://127.0.0.1:8080/codenjoy-contest/help](http://127.0.0.1:8080/codenjoy-contest/help)
 - in case of any problems, please email [apofig@gmail.com](mailto:apofig@gmail.com) or chat to [Skype Oleksandr Baglai](skype:alexander.baglay)
@@ -78,9 +83,9 @@ To run a project with your game, do the following:
 Run Codenjoy in portable mode
 --------------
 There are three scripts to run Codenjoy on Ubuntu and Windows:
-- [how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker-compose#ubuntu-portable-script)
-- [how to run the server on Windows](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/windows-cmd#windows-portable-script)
-- [how to run the server on Linux (simple version)](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/portable/linux-docker#linux-portable-script-simple-version)
+- [how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy-portable-linux.git#ubuntu-portable-script)
+- [how to run the server on Windows](https://github.com/codenjoyme/codenjoy-portable-windows.git#windows-portable-script)
+- [how to run the server on Linux (simple version)](https://github.com/codenjoyme/codenjoy-portable-linux-lite.git#linux-portable-script-simple-version)
 
 Develop a game
 --------------
@@ -142,8 +147,9 @@ Full authentication is required to access this resource
 </oauth>
 ```
 Don't worry about it. Just download [postman](https://www.getpostman.com/downloads/) and create `GET` request:
-- `http://127.0.0.1/codenjoy-contest/board/rejoining/bomberman`
-- `Authorization` -> `Bearer Token` = `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER`
+- `http://127.0.0.1/codenjoy-contest/board/rejoining/bomberman/room/<ROOM_NAME>`
+- or `http://127.0.0.1/codenjoy-contest/board/rejoining/bomberman` 
+- with `Authorization` -> `Bearer Token` = `USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER`
 After submit you can see html page with board, try find inside:
 ```
 <body style="display:none;">

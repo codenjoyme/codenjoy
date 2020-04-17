@@ -29,7 +29,9 @@ import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.web.controller.AdminController;
 import com.codenjoy.dojo.web.controller.RoomsAliaser;
 import com.codenjoy.dojo.web.controller.Validator;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -49,26 +51,26 @@ import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 4/5/2019
  */
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RegistrationService {
 
-    private final MailService mailService;
-    private final LinkService linkService;
-    private final Registration registration;
-    private final Validator validator;
-    private final RoomsAliaser rooms;
-    private final PlayerService playerService;
-    private final ConfigProperties properties;
-    private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
-    private final ViewDelegationService viewDelegationService;
-    private final GameService gameService;
+    private MailService mailService;
+    private LinkService linkService;
+    private Registration registration;
+    private Validator validator;
+    private RoomsAliaser rooms;
+    private PlayerService playerService;
+    private ConfigProperties properties;
+    private AuthenticationManager authenticationManager;
+    private UserDetailsService userDetailsService;
+    private ViewDelegationService viewDelegationService;
+    private GameService gameService;
 
-    public String register(Player player, BindingResult result, HttpServletRequest request, Model model) {
+    public String register(Player player, String roomName, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
             return openRegistrationForm(request, model, null, null, null);
         }
@@ -117,18 +119,14 @@ public class RegistrationService {
 
                     String context = CodenjoyContext.getContext();
                     String link = "http://" + hostIp + "/" + context + "/register?approve=" + storage.getLink();
-                    try {
-                        mailService.sendEmail(id, "Codenjoy регистрация",
-                                "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
-                                        "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a><br>" +
-                                        "Он направит тебя к игре.<br>" +
-                                        "<br>" +
-                                        "Если тебя удивило это письмо, просто удали его.<br>" +
-                                        "<br>" +
-                                        "<a href=\"http://codenjoy.com\">Команда Codenjoy</a>");
-                    } catch (MessagingException e) {
-                        throw new RuntimeException("Error sending email", e);
-                    }
+
+                    sendEmail(id, "Пожалуйста, подтверди регистрацию кликом на этот линк<br>" +
+                            "<a target=\"_blank\" href=\"" + link + "\">" + link + "</a><br>" +
+                            "Он направит тебя к игре.<br>" +
+                            "<br>" +
+                            "Если тебя удивило это письмо, просто удали его.<br>" +
+                            "<br>" +
+                            "<a href=\"http://codenjoy.com\">Команда Codenjoy</a>", "Codenjoy регистрация");
                 } else {
                     registration.approve(code);
                     approved = true;
@@ -147,16 +145,20 @@ public class RegistrationService {
                 model.addAttribute("bad_pass", true);
                 return openRegistrationForm(request, model, id, email, name);
             }
-            return connectRegisteredPlayer(player.getCode(), request, id, gameName);
+            return connectRegisteredPlayer(player.getCode(), request, id, roomName, gameName);
         } else {
             model.addAttribute("wait_approve", true);
             return openRegistrationForm(request, model, id, email, name);
         }
     }
 
-    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String gameName) {
-        return "redirect:/" + register(id, code,
-                gameName, request.getRemoteAddr());
+    @SneakyThrows
+    private void sendEmail(String id, String body, String title) {
+        mailService.sendEmail(id, title, body);
+    }
+
+    public String connectRegisteredPlayer(String code, HttpServletRequest request, String id, String roomName, String gameName) {
+        return "redirect:/" + register(id, code, roomName, gameName, request.getRemoteAddr());
     }
 
     public String openRegistrationForm(HttpServletRequest request, Model model,
@@ -181,7 +183,7 @@ public class RegistrationService {
             }
         }
 
-        String gameName = request.getParameter(AdminController.GAME_NAME_FORM_KEY);
+        String gameName = request.getParameter(AdminController.GAME_NAME_KEY);
         if (!model.containsAttribute("bad_game")) {
             validator.checkGameName(gameName, CAN_BE_NULL);
         }
@@ -202,12 +204,12 @@ public class RegistrationService {
         return getRegister(model);
     }
 
-    public String register(String id, String code, String gameName, String ip) {
+    public String register(String id, String code, String roomName, String gameName, String ip) {
         // TODO #984 вот тут дополнительная защита на всякий
         if (gameName == null) {
             gameName = gameService.getDefaultGame();
         }
-        Player player = playerService.register(id, ip, gameName);
+        Player player = playerService.register(id, ip, roomName, gameName);
         return getBoardUrl(code, player.getName(), gameName);
     }
 

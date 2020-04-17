@@ -61,21 +61,28 @@ public class PlayerGameSaverTest {
     }
 
     @Test
-    public void shouldWorks_saveLoadPlayerGame() {
+    public void shouldSaveLoadPlayerGame() {
+        // given
         PlayerScores scores = getScores(10);
         Information info = getInfo("Some info");
         GameService gameService = getGameService(scores);
         Player player = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), scores, info);
+        player.setRoomName("room");
 
+        // when
         long now = System.currentTimeMillis();
         saver.saveGame(player, "{'key':'value'}", now);
 
         PlayerSave loaded = saver.loadGame("vasia");
+        
+        // then
         assertEqualsProperties(player, loaded);
         assertEquals("{'key':'value'}", loaded.getSave());
 
+        // when
         saver.delete("vasia");
 
+        // then
         assertEquals("[]", saver.getSavedList().toString());
     }
 
@@ -108,17 +115,23 @@ public class PlayerGameSaverTest {
         assertEquals(expected.getName(), actual.getName());
         assertEquals(expected.getCallbackUrl(), actual.getCallbackUrl());
         assertEquals(expected.getScore(), actual.getScore());
+        assertEquals(expected.getRoomName(), actual.getRoomName());
     }
 
     @Test
-    public void shouldWorks_getSavedList() {
+    public void shouldGetSavedList() {
+        // given
         Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
         Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
+        player1.setRoomName("room");
+        player2.setRoomName("room");
 
+        // when
         long now = System.currentTimeMillis();
         saver.saveGame(player1, "{'key':'value'}", now);
         saver.saveGame(player2, "{'key':'value'}", now);
 
+        // then
         assertEquals("[vasia, katia]", saver.getSavedList().toString());
     }
 }

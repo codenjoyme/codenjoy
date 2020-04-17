@@ -23,12 +23,14 @@ package com.codenjoy.dojo.services.hash;
  */
 
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+@UtilityClass
 public class Hash {
 
     public static String md5(String string) {

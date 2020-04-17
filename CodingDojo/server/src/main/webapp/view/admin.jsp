@@ -99,10 +99,10 @@
             <td>
                 <c:choose>
                     <c:when test="${paused}">
-                        <b>The codenjoy was suspended</b></br> <a href="${ctx}/admin?resume&gameName=${gameName}">Resume game</a>.
+                        <b>The Codenjoy was suspended</b></br> <a href="${ctx}/admin?resume&gameName=${gameName}">Resume game</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The codenjoy is active</b></br> <a href="${ctx}/admin?pause&gameName=${gameName}">Pause game</a>.
+                        <b>The Codenjoy is active</b></br> <a href="${ctx}/admin?pause&gameName=${gameName}">Pause game</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -322,9 +322,11 @@
             <tr>
                 <td>NameMask</td>
                 <td>Count</td>
+                <td>RoomName</td>
             <tr>
                 <td><input type="text" name="generateNameMask" value="${generateNameMask}"/></td>
                 <td><input type="text" name="generateCount" value="${generateCount}"/></td>
+                <td><input type="text" name="generateRoomName" value="${generateRoomName}"/></td>
             </tr>
             <tr>
                 <td>
@@ -380,6 +382,7 @@
                 <tr>
                     <td class="header">PlayerId</td>
                     <td class="header">PlayerName</td>
+                    <td class="header">RoomName</td>
                     <td class="header">Score</td>
                     <td class="header">IP</td>
                     <td class="header">GameName</td>
@@ -419,6 +422,7 @@
                             <c:when test="${player.active}">
                                 <td><form:input class="input-id" readonly="true" index="${status.index}" path="players[${status.index}].name"/></td>
                                 <td><form:input class="input-readable" path="players[${status.index}].readableName"/></td>
+                                <td><form:input class="input-room" path="players[${status.index}].roomName"/></td>
                                 <td><form:input class="input-score" path="players[${status.index}].score"/></td>
                                 <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
@@ -470,6 +474,7 @@
                             <c:otherwise>
                                 <td><input type="text" readonly="true" class="input-id"       value="${player.name}"/></td>
                                 <td><input type="text" readonly="true" class="input-readable" value="${player.readableName}"/></td>
+                                <td><input type="text" readonly="true" class="input-room" value="${player.roomName}"/></td>
                                 <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
                                 <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>

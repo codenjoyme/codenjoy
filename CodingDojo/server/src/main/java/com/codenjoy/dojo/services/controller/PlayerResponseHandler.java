@@ -23,26 +23,21 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
-import org.slf4j.Logger;
 
 @Slf4j
+@AllArgsConstructor
 public class PlayerResponseHandler implements ResponseHandler {
 
     private Player player;
     private Joystick joystick;
-
-    public PlayerResponseHandler(Player player, Joystick joystick) {
-        this.player = player;
-        this.joystick = joystick;
-    }
 
     @Override
     public void onResponse(PlayerSocket socket, String message) {

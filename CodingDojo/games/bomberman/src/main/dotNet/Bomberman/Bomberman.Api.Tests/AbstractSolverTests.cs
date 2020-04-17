@@ -2,7 +2,7 @@
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -20,7 +20,6 @@
  * #L%
  */
 using System;
-using Bomberman.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bomberman.Api.Tests
@@ -29,14 +28,20 @@ namespace Bomberman.Api.Tests
     public class AbstractSolverTests
     {
         [TestMethod]
-        public void ShouldProvideWebSocketUrlFromServerAddress()
+        [DataRow("http")]
+        [DataRow("https")]
+        public void ShouldProvideWebSocketUrlFromServerAddress(string scheme)
         {
-            var serverUrl = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789";
+            // Arrange.
+            var serverUrl = $"{scheme}://unit-test/board/player/0000000001111?code=88888888888";
+            var expectedWebSocketUrl = serverUrl.Replace("http", "ws").Replace("board/player/", "ws?user=").Replace("?code=", "&code=");
 
-            var result = AbstractSolver.GetWebSocketUrl(serverUrl);
+            var solver = new TestSolver(serverUrl);
 
-            var expectedWebSocketUrl = "ws://codenjoy.com:80/codenjoy-contest/ws?user=3edq63tw0bq4w4iem7nb&code=1234567890123456789";
+            // Act.
+            var result = solver.GetWebSocketUrl(serverUrl);
 
+            // Assert.
             Assert.AreEqual(expectedWebSocketUrl, result);
         }
     }

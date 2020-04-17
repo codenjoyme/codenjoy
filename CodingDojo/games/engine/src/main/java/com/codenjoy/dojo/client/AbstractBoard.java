@@ -94,6 +94,14 @@ public abstract class AbstractBoard<E extends CharElements> extends AbstractLaye
         return result;
     }
 
+    protected List<Character> field(int x, int y) {
+        return new LinkedList<Character>(){{
+            for (int layer = 0; layer < countLayers(); ++layer) {
+                add(field(layer, x, y));                
+            }             
+        }};
+    }
+
     public List<E> getAllAt(Point point) {
         return getAllAt(point.getX(), point.getY());
     }

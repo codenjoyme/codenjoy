@@ -128,7 +128,11 @@ public class Levels {
         if (stream != null) {
             return stream;
         }
-        return Files.newInputStream(new File(filePath).toPath());
+        File file = new File(filePath);
+        if (!file.exists()) {
+            return null;
+        }
+        return Files.newInputStream(file.toPath());
     }
 
     public static LevelsFactory collectLevels(int boardSize, List<String> levels) {

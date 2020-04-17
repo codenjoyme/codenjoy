@@ -22,8 +22,13 @@ package com.codenjoy.dojo.conf;
  * #L%
  */
 
+import com.codenjoy.dojo.services.UserService;
+import com.codenjoy.dojo.services.dao.Players;
+import com.codenjoy.dojo.web.rest.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -31,20 +36,24 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import java.util.Collections;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 4/8/2019
  */
 @EnableWebSecurity
 public class SecurityConf extends WebSecurityConfigurerAdapter {
-
+    
     @Value("${admin.login}")
     private String adminLogin;
 
     @Value("${admin.password}")
     private String adminPassword;
+
+    @Autowired
+    private Players players;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -53,11 +62,15 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        User.UserBuilder userBuilder = User.builder()
-                .passwordEncoder(pwd -> passwordEncoder().encode(pwd));
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(userBuilder.username(adminLogin).password(adminPassword).roles("ADMIN").build());
-        return manager;
+       User admin = UserService.buildUserDetails(adminLogin, passwordEncoder().encode(adminPassword),
+               "ROLE_ADMIN", "ROLE_USER");
+       return new UserService(Collections.singletonMap(adminLogin, admin), players);
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Override
@@ -65,11 +78,27 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
         http.cors()
                 .and()
                     .authorizeRequests()
-                        .antMatchers("/html/admin.html", "/rest/**")
-                            .hasRole("ADMIN")
-                        .antMatchers("/**")
+                        .antMatchers(
+                                "/login",
+//                                RestController.URI + "/score/day/**",
+                                "/logout",
+                                RestController.URI + RestController.REGISTER,
+                                RestController.URI + RestController.LOGIN)
                             .permitAll()
-                        .anyRequest().permitAll()
+                .antMatchers(
+                        RestController.URI + RestController.UPDATE,
+                        RestController.URI + "/score/day/**",
+                        RestController.URI + RestController.PLAYER)
+                .hasRole("USER")
+
+                        .antMatchers(
+                                "/resources/html/**",
+                                RestController.URI + "/**"
+                        )
+                            .hasRole("ADMIN")
+
+                        .anyRequest()
+                            .denyAll()
                 .and()
                     .headers()
                         .httpStrictTransportSecurity().maxAgeInSeconds(31536000)
@@ -92,4 +121,5 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                 .csrf().disable();
 
     }
+
 }

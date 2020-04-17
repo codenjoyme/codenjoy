@@ -23,15 +23,18 @@ package com.codenjoy.dojo.web.rest.pojo;
  */
 
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class PMuptiplayerType {
+    
     private String type;
     private int roomSize;
     private int levelsCount;
-
-    public PMuptiplayerType() {
-        // do nothing
-    }
 
     public PMuptiplayerType(MultiplayerType multiplayer) {
         type = multiplayer.getType();
@@ -39,27 +42,4 @@ public class PMuptiplayerType {
         levelsCount = multiplayer.getLevelsCount();
     }
 
-    public int getLevelsCount() {
-        return levelsCount;
-    }
-
-    public int getRoomSize() {
-        return roomSize;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public void setRoomSize(int roomSize) {
-        this.roomSize = roomSize;
-    }
-
-    public void setLevelsCount(int levelsCount) {
-        this.levelsCount = levelsCount;
-    }
 }

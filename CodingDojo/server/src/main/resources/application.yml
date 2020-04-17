@@ -64,7 +64,6 @@ admin:
 log.debug: false
 app:
   logging:
-    - com.epam.dojo
     - com.codenjoy
 logging:
   level:

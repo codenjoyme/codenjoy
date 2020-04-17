@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.utils.JsonUtils;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
@@ -58,21 +59,31 @@ public class GuiPlotColorDecoderTest {
         assertEquals("DCBA", decoder.encodeForBrowser("4321"));
     }
 
-    public enum Elements1 {
+    public enum Elements1 implements CharElements {
         STONE, HERO, GOLD;
 
         @Override
         public String toString() {
-            return "" + super.toString().charAt(0);
+            return "" + ch();
+        }
+
+        @Override
+        public char ch() {
+            return super.toString().charAt(0);
         }
     }
 
-    public enum Elements2 {
+    public enum Elements2 implements CharElements {
         SPACE, HERO;
 
         @Override
         public String toString() {
-            return "" + super.toString().charAt(0);
+            return "" + ch();
+        }
+
+        @Override
+        public char ch() {
+            return super.toString().charAt(0);
         }
     }
 

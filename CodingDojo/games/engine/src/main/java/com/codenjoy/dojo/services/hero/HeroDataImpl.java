@@ -25,15 +25,19 @@ package com.codenjoy.dojo.services.hero;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
+import lombok.Getter;
+import lombok.ToString;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
+@Getter
+@ToString
 public class HeroDataImpl implements HeroData {
 
-    private final Point coordinate;
-    private final boolean isMultiplayer;
-    private final Object additionalData;
-    private final int level;
+    private int level;
+    private Point coordinate;
+    private boolean isMultiplayer;
+    private Object additionalData;
 
     HeroDataImpl(int level, Point coordinate, boolean isMultiplayer, Object additionalData) {
         if (coordinate == null) {
@@ -44,16 +48,6 @@ public class HeroDataImpl implements HeroData {
         this.level = level;
         this.isMultiplayer = isMultiplayer;
         this.additionalData = additionalData;
-    }
-
-    @Override
-    public String toString() {
-        return "HeroData[" +
-                "coordinate=" + coordinate +
-                ", level=" + level +
-                ", multiplayer=" + isMultiplayer +
-                ", additionalData=" + additionalData +
-                ']';
     }
 
     public HeroDataImpl(int level, Point coordinate, boolean isMultiplayer) {
@@ -70,26 +64,6 @@ public class HeroDataImpl implements HeroData {
 
     public HeroDataImpl(boolean isMultiplayer) {
         this(0, null, isMultiplayer, null);
-    }
-
-    @Override
-    public Point getCoordinate() {
-        return coordinate;
-    }
-
-    @Override
-    public Object getAdditionalData() {
-        return additionalData;
-    }
-
-    @Override
-    public boolean isMultiplayer() {
-        return isMultiplayer;
-    }
-
-    @Override
-    public int getLevel() {
-        return level;
     }
 
 }

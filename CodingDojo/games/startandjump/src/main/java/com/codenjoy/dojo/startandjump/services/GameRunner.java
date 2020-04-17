@@ -25,6 +25,7 @@ package com.codenjoy.dojo.startandjump.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.startandjump.client.Board;
 import com.codenjoy.dojo.startandjump.client.ai.AISolver;
 import com.codenjoy.dojo.startandjump.model.*;
@@ -89,7 +90,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Enum[] getPlots() {
+    public CharElements[] getPlots() {
         return Elements.values();
     }
 

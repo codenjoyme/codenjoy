@@ -26,15 +26,22 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.dao.Registration;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class PlayerDetailInfo {
 
     private String name;
     private String readableName;
     private String callbackUrl;
     private String gameType;
+    private String roomName;
     private PMuptiplayerType multiplayer;
     private String score;
     private String save;
@@ -43,14 +50,11 @@ public class PlayerDetailInfo {
     private List<String> group;
     private Registration.User registration;
 
-    public PlayerDetailInfo() {
-        // do nothing
-    }
-
     public PlayerDetailInfo(Player player, Registration.User registration,
-                            Game game, List<String> group)
+                            String roomName, Game game, List<String> group)
     {
         gameType = player.getGameType().name();
+        this.roomName = roomName;
         multiplayer = new PMuptiplayerType(player.getGameType().getMultiplayerType());
 
         callbackUrl = player.getCallbackUrl();
@@ -66,94 +70,6 @@ public class PlayerDetailInfo {
     }
 
     public PlayerSave buildPlayerSave() {
-        return PlayerSave.get(name, callbackUrl, gameType, Integer.valueOf(score), save);
-    }
-
-    public String getReadableName() {
-        return readableName;
-    }
-
-    public String getGameType() {
-        return gameType;
-    }
-
-    public String getCallbackUrl() {
-        return callbackUrl;
-    }
-
-    public String getScore() {
-        return score;
-    }
-
-    public Registration.User getRegistration() {
-        return registration;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public PLevelProgress getProgress() {
-        return progress;
-    }
-
-    public String getSave() {
-        return save;
-    }
-
-    public PHeroData getHero() {
-        return hero;
-    }
-
-    public List<String> getGroup() {
-        return group;
-    }
-
-    public PMuptiplayerType getMultiplayer() {
-        return multiplayer;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCallbackUrl(String callbackUrl) {
-        this.callbackUrl = callbackUrl;
-    }
-
-    public void setGameType(String gameType) {
-        this.gameType = gameType;
-    }
-
-    public void setMultiplayer(PMuptiplayerType multiplayer) {
-        this.multiplayer = multiplayer;
-    }
-
-    public void setScore(String score) {
-        this.score = score;
-    }
-
-    public void setSave(String save) {
-        this.save = save;
-    }
-
-    public void setHero(PHeroData hero) {
-        this.hero = hero;
-    }
-
-    public void setProgress(PLevelProgress progress) {
-        this.progress = progress;
-    }
-
-    public void setGroup(List<String> group) {
-        this.group = group;
-    }
-
-    public void setRegistration(Registration.User registration) {
-        this.registration = registration;
-    }
-
-    public void setReadableName(String readableName) {
-        this.readableName = readableName;
+        return new PlayerSave(name, callbackUrl, roomName, gameType, Integer.valueOf(score), save);
     }
 }

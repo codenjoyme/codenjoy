@@ -90,6 +90,10 @@ label.error {
     width:90px !important;
 }
 
+.admin-table .input-room {
+    width:90px !important;
+}
+
 .admin-table .player-save {
     width: 300px!important;
     font-size: 12px;

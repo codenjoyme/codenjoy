@@ -71,7 +71,14 @@ function initRegistration(waitApprove, contextPath) {
     function configureFormFromAdminSettings(onFinish) {
         var general = new AdminSettings(contextPath, 'general', 'registration');
 
-        general.load(function(data) {
+        general.load(
+            function(data) {
+                onLoad(data);
+            }, function(error) {
+                onLoad(null);            
+            });
+        
+        var onLoad = function(data) {
             if ($.isEmptyObject(data)) {
                 data = defaultRegistrationSettings();
             }
@@ -91,7 +98,7 @@ function initRegistration(waitApprove, contextPath) {
             if (!!onFinish) {
                 onFinish();
             }
-        });
+        } 
     }
 
     function loadRegistrationPage() {

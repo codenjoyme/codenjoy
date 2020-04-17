@@ -23,17 +23,15 @@ package com.codenjoy.dojo.services;
  */
 
 
+import lombok.AllArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+@AllArgsConstructor
 public class GuiPlotColorDecoder {
 
     public static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private Object[] values;
-
-    public GuiPlotColorDecoder(Object[] values) {
-        this.values = values;
-    }
 
     private char getGuiChar(char consoleChar) {
         return GUI.charAt(getIndex(consoleChar));

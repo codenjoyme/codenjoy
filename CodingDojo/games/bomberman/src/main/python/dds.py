@@ -27,7 +27,6 @@ from random import choice
 from board import Board
 from element import Element
 from direction import Direction
-import src.main.python.direction as direct
 
 
 class DirectionSolver:
@@ -56,6 +55,7 @@ class DirectionSolver:
         # here's how we find the current Point of our bomberman
         _bm = self._board.get_bomberman()
         _bm_x, _bm_y = _bm.get_x(), _bm.get_y()
+
         # Let's check whether our bomberman is not surrounded by walls
         if 4 == self._board.count_near(_bm_x, _bm_y, Element('DESTROY_WALL')):
             print("It seems like walls surround you. Self-destroying.")

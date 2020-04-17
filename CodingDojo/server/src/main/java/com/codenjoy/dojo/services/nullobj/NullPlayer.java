@@ -26,7 +26,7 @@ package com.codenjoy.dojo.services.nullobj;
 import com.codenjoy.dojo.services.Player;
 import org.apache.commons.lang3.StringUtils;
 
-public class NullPlayer extends Player {
+public final class NullPlayer extends Player {
 
     public static final Player INSTANCE = new NullPlayer();
 

@@ -66,11 +66,8 @@ public class LevelsFactory {
             Object result = constructor.newInstance(dice, playerQueue);
             return (Levels)result;
         } catch (ReflectiveOperationException e) {
-            return throwRuntime(e);
+            throw new RuntimeException("Error during load game levels", e);
         }
     }
 
-    private Levels throwRuntime(Exception e) {
-        throw new RuntimeException("Error during load game levels", e);
-    }
 }

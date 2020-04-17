@@ -24,39 +24,42 @@ package com.codenjoy.dojo.snake.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
+// Классический подсчет очков, где очки постоянно агреггируются от игре к игре.
+// "Инкриз" очков рассчитывается из текущего размера змеи в момент съедания яблока.
+// Тогда как камень укорачивает только длинну (-10), ровно как и суицид (до 2х).
+// В нконтролирруемой по времени игре побеждает тот, кто дольше играл, если это не ок -
+// стоит выбирать MaxScore стратегию подсчета очков.  Включается опция на админке
+// путем установки настройки игры "Max score mode" в false.
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> gameOverPenalty;
-    private final Parameter<Integer> startSnakeLength;
-    private final Parameter<Integer> eatStonePenalty;
-    private final Parameter<Integer> eatStoneDecrease;
+    protected volatile int score;
+    protected volatile int length;  // TODO remove from here
+    protected SnakeSettings setup;
 
-    private volatile int score;
-    private volatile int length;  // TODO remove from here
+    public Scores(int startScore, SnakeSettings setup) {
+        this.setup = setup;
+        score = startScore;
+        initLength();
+    }
 
-    public Scores(int startScore, Settings settings) {
-        this.score = startScore;
-
-        gameOverPenalty = settings.addEditBox("Game over penalty").type(Integer.class).def(0);
-        startSnakeLength = settings.addEditBox("Start snake length").type(Integer.class).def(2);
-        eatStonePenalty = settings.addEditBox("Eat stone penalty").type(Integer.class).def(0);
-        eatStoneDecrease = settings.addEditBox("Eat stone decrease").type(Integer.class).def(10);
-
-        length = startSnakeLength.getValue();
+    protected void initLength() {
+        length = setup.startSnakeLength().getValue();
     }
 
     @Override
     public int clear() {
-        length = startSnakeLength.getValue();
+        initLength();
         return score = 0;
     }
 
     @Override
     public Integer getScore() {
         return score;
+    }
+
+    public Integer getLength() {
+        return length;
     }
 
     @Override
@@ -69,22 +72,22 @@ public class Scores implements PlayerScores {
             snakeEatStone();
         }
         score = Math.max(0, score);
-        length = Math.max(startSnakeLength.getValue(), length);
+        length = Math.max(setup.startSnakeLength().getValue(), length);
     }
 
-    private void snakeIsDead() {
-        score -= gameOverPenalty.getValue();
-        length = startSnakeLength.getValue();
+    protected void snakeIsDead() {
+        score -= setup.gameOverPenalty().getValue();
+        initLength();
     }
 
-    private void snakeEatApple() {
+    protected void snakeEatApple() {
         length++;
         score += length;
     }
 
-    private void snakeEatStone() {
-        score -= eatStonePenalty.getValue();
-        length -= eatStoneDecrease.getValue();
+    protected void snakeEatStone() {
+        score -= setup.eatStonePenalty().getValue();
+        length -= setup.eatStoneDecrease().getValue();
     }
 
     @Override

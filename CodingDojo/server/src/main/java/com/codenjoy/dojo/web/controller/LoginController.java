@@ -25,6 +25,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.security.RegistrationService;
 import com.codenjoy.dojo.services.security.ViewDelegationService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,21 +33,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 3/25/2019
  */
 @Controller
 @RequestMapping(LoginController.URI)
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class LoginController {
     private static final String ADMIN = "/admin";
     public static final String URI = "/login";
     public static final String ADMIN_URI =  URI + ADMIN;
 
-    private final PlayerService playerService;
-    private final RoomsAliaser rooms;
-    private final RegistrationService registrationService;
-    private final ViewDelegationService viewDelegationService;
+    private PlayerService playerService;
+    private RoomsAliaser rooms;
+    private RegistrationService registrationService;
+    private ViewDelegationService viewDelegationService;
 
     @GetMapping
     public String register(Model model) {

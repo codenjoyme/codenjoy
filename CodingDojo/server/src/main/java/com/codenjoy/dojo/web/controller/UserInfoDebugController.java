@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 4/1/2019
  *
  * @deprecated Deprecated by design, must not be used in production

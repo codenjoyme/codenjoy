@@ -25,41 +25,35 @@ package com.codenjoy.dojo.web.rest.pojo;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Parameter;
+import lombok.Getter;
 
 import java.util.List;
 
-public class GameTypeInfo {
-    private final String version;
-    private final String info;
-    private final int boardSize;
-    private final List<Parameter<?>> parameters;
-    private final MultiplayerType multiplayerType;
+@Getter
+public class PGameTypeInfo {
+    
+    private String version;
+    private String info;
+    private int boardSize;
+    private List<Parameter<?>> parameters;
+    private MultiplayerType multiplayerType;
+    private String helpUrl;
+    private String clientUrl;
+    private String wsUrl;
+    private PSprites sprites;
 
-    public GameTypeInfo(GameType gameType) {
-        version = gameType.getVersion();
-        info = gameType.toString();
-        boardSize = gameType.getBoardSize().getValue();
-        parameters = gameType.getSettings().getParameters();
-        multiplayerType = gameType.getMultiplayerType();
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public int getBoardSize() {
-        return boardSize;
-    }
-
-    public List<Parameter<?>> getParameters() {
-        return parameters;
-    }
-
-    public MultiplayerType getMultiplayerType() {
-        return multiplayerType;
+    public PGameTypeInfo(GameType type, String helpUrl, 
+                         String clientUrl, String wsUrl,
+                         PSprites sprites) 
+    {
+        version = type.getVersion();
+        info = type.toString();
+        boardSize = type.getBoardSize().getValue();
+        parameters = type.getSettings().getParameters();
+        multiplayerType = type.getMultiplayerType();
+        this.helpUrl = helpUrl;
+        this.clientUrl = clientUrl;
+        this.wsUrl = wsUrl;
+        this.sprites = sprites;
     }
 }

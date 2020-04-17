@@ -30,6 +30,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -61,6 +63,8 @@ public class LoggerReaderTest {
             "    OOOO O  O OO    " +
             "                    " +
             "                    ";
+
+    private static final String SEP = FileSystems.getDefault().getSeparator();
 
     @Test
     public void testParseFile() throws IOException {
@@ -366,12 +370,12 @@ public class LoggerReaderTest {
 
     private String saveToFile(String data) throws IOException {
         String replayName = "testReplay-" + unique();
-        File file = new File("gameData\\" + replayName + ".txt");
+        File file = new File("gameData" + SEP + replayName + ".txt");
         file.getParentFile().mkdirs();
         file.createNewFile();
 
         FileOutputStream fos = new FileOutputStream(file);
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8));
 
         List<String> lines = Arrays.asList(data.split("\n"));
 

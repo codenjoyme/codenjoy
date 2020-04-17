@@ -26,10 +26,14 @@ package com.codenjoy.dojo.services.printer.layeredview;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.LinkedList;
 import java.util.List;
 
+@Getter
+@Setter
 public class PrinterData {
 
     private List<String> layers;
@@ -49,32 +53,9 @@ public class PrinterData {
         layers.add(layer);
     }
 
-    public List<String> getLayers() {
-        return layers;
-    }
-
-    public Point getOffset() {
-        return offset;
-    }
-
     @Override
     public String toString() {
         return JsonUtils.toStringSorted(this);
     }
 
-    public void setViewSize(int viewSize) {
-        this.viewSize = viewSize;
-    }
-
-    public int getViewSize() {
-        return viewSize;
-    }
-
-    public void setMapSize(int mapSize) {
-        this.mapSize = mapSize;
-    }
-
-    public int getMapSize() {
-        return mapSize;
-    }
 }

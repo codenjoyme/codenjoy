@@ -28,17 +28,16 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.utils.JsonUtils;
-import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.Answer;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -56,10 +55,10 @@ public class SaveServiceImplTest {
     private List<GameField> fields;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() {
         saveService = new SaveServiceImpl(){{
             this.playerGames = SaveServiceImplTest.this.playerGames = new PlayerGames();
-            this.playerService = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
+            this.players = SaveServiceImplTest.this.playerService = mock(PlayerService.class);
             this.saver = SaveServiceImplTest.this.saver = mock(GameSaver.class);
             this.registration = SaveServiceImplTest.this.registration = mock(Registration.class);
         }};
@@ -84,8 +83,11 @@ public class SaveServiceImplTest {
     private Player createPlayer(String name) {
         Player player = mock(Player.class);
         when(player.getName()).thenReturn(name);
+        when(player.getCode()).thenReturn("code_" + name);
         when(player.getData()).thenReturn("data for " + name);
         when(player.getGameName()).thenReturn(name + " game");
+        when(player.getRoomName()).thenReturn("room");
+        when(player.hasAi()).thenReturn(true);
         when(player.getCallbackUrl()).thenReturn("http://" + name + ":1234");
         when(player.getEventListener()).thenReturn(mock(InformationCollector.class));
         when(playerService.get(name)).thenReturn(player);
@@ -97,9 +99,11 @@ public class SaveServiceImplTest {
             return field;
         };
 
+        String roomName = "room";
         TestUtils.Env env = TestUtils.getPlayerGame(
                 playerGames,
                 player,
+                roomName,
                 answerCreateGame,
                 MultiplayerType.SINGLE,
                 null,
@@ -113,14 +117,14 @@ public class SaveServiceImplTest {
     @Test
     public void shouldNotSavePlayerWhenNotExists() {
         saveService.save("cocacola");
-
         verify(saver, never()).saveGame(any(Player.class), any(String.class), anyLong());
+
     }
 
     @Test
     public void shouldLoadPlayer_forNotRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "url", "game", 100, null);
+        PlayerSave save = new PlayerSave("vasia", "url", "room", "game", 100, null);
         when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersNotRegistered();
 
@@ -136,7 +140,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldLoadPlayer_forRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "url", "game", 100, null);
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "room", "game", 100, null);
         when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersRegistered();
 
@@ -151,49 +155,83 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void shouldLoadPlayerWithExternalSave_forNotRegistered() {
+    public void shouldLoadPlayerWithExternalSave_forNotRegistered_caseSaveExists() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "game", 0, "{'save':'data'}");
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "room", "game", 0, "{'save':'data'}");
+        when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersNotRegistered();
 
         // when
-        saveService.load("vasia", "game", "{'save':'data'}");
+        saveService.load("vasia", "room", "game", "{'save':'data'}");
 
         // then
+        verify(saver).loadGame("vasia");
         verifyNoMoreInteractions(saver);
 
         verify(playerService).contains("vasia");
         ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
         verify(playerService).register(captor.capture());
-        assertEquals("{'callbackUrl':'127.0.0.1'," +
+        PlayerSave actual = captor.getValue();
+        assertEquals("{'callbackUrl':'127.0.0.2'," +
                 "'gameName':'game'," +
                 "'name':'vasia'," +
+                "'roomName':'room'," +
                 "'save':'{'save':'data'}'," +
-                "'score':0}", JsonUtils.cleanSorted(save));
+                "'score':0}", JsonUtils.cleanSorted(actual));
+        verifyNoMoreInteractions(playerService);
+    }
+
+    @Test
+    public void shouldLoadPlayerWithExternalSave_forNotRegistered_caseSaveNotExists() {
+        // given
+        when(saver.loadGame("vasia")).thenReturn(PlayerSave.NULL);
+        allPlayersNotRegistered();
+
+        // when
+        saveService.load("vasia", "room", "game", "{'save':'data'}");
+
+        // then
+        verify(saver).loadGame("vasia");
+        verifyNoMoreInteractions(saver);
+
+        verify(playerService).contains("vasia");
+        ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
+        verify(playerService).register(captor.capture());
+        PlayerSave actual = captor.getValue();
+        assertEquals("{'callbackUrl':'" + SaveServiceImpl.DEFAULT_CALLBACK_URL + "'," +
+                "'gameName':'game'," +
+                "'name':'vasia'," +
+                "'roomName':'room'," +
+                "'save':'{'save':'data'}'," +
+                "'score':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
     }
 
     @Test
     public void shouldLoadPlayerWithExternalSave_forRegistered() {
         // given
-        PlayerSave save = new PlayerSave("vasia", "127.0.0.1", "game", 0, "{'save':'data'}");
+        PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "room", "game", 0, "{'save':'data'}");
+        when(saver.loadGame("vasia")).thenReturn(save);
         allPlayersRegistered();
 
         // when
-        saveService.load("vasia", "game", "{'save':'data'}");
+        saveService.load("vasia", "room", "game", "{'save':'data'}");
 
         // then
+        verify(saver).loadGame("vasia");
         verifyNoMoreInteractions(saver);
 
         verify(playerService).contains("vasia");
-        verify(playerService).remove("vasia");
+        verify(playerService).remove("vasia");  // << difference
         ArgumentCaptor<PlayerSave> captor = ArgumentCaptor.forClass(PlayerSave.class);
         verify(playerService).register(captor.capture());
-        assertEquals("{'callbackUrl':'127.0.0.1'," +
+        PlayerSave actual = captor.getValue();
+        assertEquals("{'callbackUrl':'127.0.0.2'," +
                 "'gameName':'game'," +
                 "'name':'vasia'," +
+                "'roomName':'room'," +
                 "'save':'{'save':'data'}'," +
-                "'score':0}", JsonUtils.cleanSorted(save));
+                "'score':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
     }
 
@@ -202,10 +240,12 @@ public class SaveServiceImplTest {
         // given
         Player activeSavedPlayer = createPlayer("activeSaved"); // check sorting order (activeSaved > active)
         Player activePlayer = createPlayer("active");
+        scores(activeSavedPlayer, 10);
+        scores(activePlayer, 11);
 
         PlayerSave save1 = new PlayerSave(activeSavedPlayer);
         PlayerSave save2 = new PlayerSave(activePlayer);
-        PlayerSave save3 = new PlayerSave("name", "http://saved:1234", "saved game", 15, "data for saved");
+        PlayerSave save3 = new PlayerSave("saved", "http://saved:1234", "room", "saved game", 15, "data for saved");
 
         when(saver.getSavedList()).thenReturn(Arrays.asList("activeSaved", "saved"));
         when(saver.loadGame("activeSaved")).thenReturn(save1);
@@ -214,6 +254,10 @@ public class SaveServiceImplTest {
 
         when(fields.get(0).getSave()).thenReturn(new JSONObject("{'data':1}"));
         when(fields.get(1).getSave()).thenReturn(new JSONObject("{'data':2}"));
+
+        createUser("activeSaved");
+        createUser("active");
+        createUser("saved");
 
         // when
         List<PlayerInfo> games = saveService.getSaves();
@@ -226,25 +270,53 @@ public class SaveServiceImplTest {
         PlayerInfo saved = games.get(2);
 
         assertEquals("active", active.getName());
+        assertEquals("code_active", active.getCode());
+        assertEquals("readable_active", active.getReadableName());
         assertEquals("http://active:1234", active.getCallbackUrl());
         assertEquals("active game", active.getGameName());
         assertEquals("{\"data\":2}", active.getData());
+        assertEquals(11, active.getScore());
+        assertEquals("room", active.getRoomName());
+        assertEquals(true, active.isAiPlayer());
         assertTrue(active.isActive());
         assertFalse(active.isSaved());
 
         assertEquals("activeSaved", activeSaved.getName());
+        assertEquals("code_activeSaved", activeSaved.getCode());
+        assertEquals("readable_activeSaved", activeSaved.getReadableName());
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
         assertEquals("activeSaved game", activeSaved.getGameName());
         assertEquals("{\"data\":1}", activeSaved.getData());
+        assertEquals(10, activeSaved.getScore());
+        assertEquals("room", activeSaved.getRoomName());
+        assertEquals(true, activeSaved.isAiPlayer());
         assertTrue(activeSaved.isActive());
         assertTrue(activeSaved.isSaved());
 
         assertEquals("saved", saved.getName());
+        assertEquals("code_saved", saved.getCode());
+        assertEquals("readable_saved", saved.getReadableName());
         assertEquals("http://saved:1234", saved.getCallbackUrl());
         assertEquals("saved game", saved.getGameName());
         assertNull(saved.getData());
+        assertEquals(15, saved.getScore());
+        assertEquals("room", saved.getRoomName());
+        assertEquals(false, saved.isAiPlayer());
         assertFalse(saved.isActive());
         assertTrue(saved.isSaved());
+    }
+
+    private void createUser(String id) {
+        Optional<Registration.User> user = Optional.of(new Registration.User() {{
+            setCode("code_" + id);
+            setReadableName("readable_" + id);
+        }});
+
+        when(registration.getUserById(id)).thenReturn(user);
+    }
+
+    private void scores(Player player, Object score) {
+        when(player.getScore()).thenReturn(score);
     }
 
     @Test
@@ -306,8 +378,8 @@ public class SaveServiceImplTest {
     }
 
     private void allPlayersRegistered() {
-        boolean REGISTERED = true;
-        when(playerService.contains(anyString())).thenReturn(REGISTERED);
+        boolean registered = true;
+        when(playerService.contains(anyString())).thenReturn(registered);
     }
 
     @Test

@@ -22,6 +22,7 @@
 # #L%
 ###
 
+from argparse import ArgumentError
 
 _ELEMENTS = dict(
     # The Bomberman

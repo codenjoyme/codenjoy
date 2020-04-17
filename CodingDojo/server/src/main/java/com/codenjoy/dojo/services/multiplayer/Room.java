@@ -26,10 +26,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Room {
-    private GameField field;
-    private int count;
+
+    private final GameField field;
+    private final int count;
     private int wasCount;
-    private boolean disposable;
+    private final boolean disposable;
     private List<GamePlayer> players = new LinkedList<>();
 
     public Room(GameField field, int count, boolean disposable) {
@@ -38,7 +39,7 @@ public class Room {
         this.disposable = disposable;
     }
 
-    public GameField getField(GamePlayer player) {
+    public GameField join(GamePlayer player) {
         if (!players.contains(player)) {
             wasCount++;
             players.add(player);
@@ -54,6 +55,10 @@ public class Room {
         }
     }
 
+    public boolean isEmpty() {
+        return players.isEmpty();
+    }
+
     public boolean isStuffed() {
         if (disposable) {
             return wasCount == count;
@@ -63,20 +68,39 @@ public class Room {
     }
 
     public boolean contains(GamePlayer player) {
-        return players.stream()
-                .filter(p -> p.equals(player))
-                .count() != 0;
+        return players.contains(player);
     }
 
-    public boolean isFor(GameField field) {
-        if (this.field == null) { // TODO точно такое может быть?
-            return field == null;
+    public boolean isFor(GameField input) {
+        if (field == null) { // TODO точно такое может быть?
+            return input == null;
         }
-        return this.field.equals(field);
+        return field.equals(input);
     }
 
-    public List<GamePlayer> getPlayers() {
+    public List<GamePlayer> players() {
         return players;
+    }
+
+    /**
+     * @param player Игрок который закончил играть в этой room и будет удален
+     * @return Все игроки этой комнаты, которых так же надо пристроить в новой room,
+     *         т.к. им тут оставаться нет смысла
+     */
+    public List<GamePlayer> remove(GamePlayer player) {
+        List<GamePlayer> removed = new LinkedList<>();
+
+        players.remove(player);
+
+        if (players.size() == 1) { // TODO ##1 тут может не надо выходить если тип игры MULTIPLAYER
+            GamePlayer last = players.iterator().next();
+            if (!last.wantToStay()) {
+                removed.add(last);
+                players.remove(last);
+            }
+        }
+
+        return removed;
     }
 
 }

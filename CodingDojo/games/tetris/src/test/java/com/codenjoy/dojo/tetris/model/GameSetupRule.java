@@ -37,6 +37,7 @@
 //import static org.mockito.Mockito.mock;
 //import static org.mockito.Mockito.when;
 //
+// TODO доделать этот тест
 //public class GameSetupRule implements MethodRule {
 //
 //    private final Class<? extends Tetris> gameClass;

@@ -23,99 +23,69 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
-import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.File;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.reset;
+import static org.junit.Assert.assertEquals;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 18:51
- */
-@SpringBootTest(classes = CodenjoyContestApplication.class)
-@RunWith(SpringRunner.class)
-@ActiveProfiles(SQLiteProfile.NAME)
 public class GameServiceTest {
-
-    @SuppressWarnings("unchecked")
-    private static final Set<Class<? extends GameType>> GAME_TEST_FILTER =
-            Sets.newHashSet(NullGameType.class, AbstractGameType.class);
-
-    @MockBean
-    private TimerService timer;
-
-    @MockBean
-    private PlayerService players;
-
-    @Autowired
+    
     private GameServiceImpl gameService;
 
-    @Autowired
-    private ApplicationContext appCtx;
-
-    private Map<String, GameType> loadedGameTypes;
-
-    private List<String> activeGameNames = new ArrayList<>();
-
-    private Map<String, List<String>> expectedPlots;
-
-    /**
-     * FIXME: Логика здесь дублирует логику GameServiceImpl, и требуется для того, чтобы успешно проходили тесты при запуске сборки
-     *  с maven профилями других игр. Иначе в скриптах придется отдельно запускать сборку для прогона тестов (без профилей игр),
-     *  и только затем сборку с -DskipTests в профиле необходимой для ивента игры.
-     */
     @Before
     public void setup() {
-        reset(timer, players);
+        forGames(FirstGameType.class, SecondGameType.class);
+    }
 
-        loadedGameTypes = gameService.findInPackage("com.codenjoy.dojo")
-                .stream()
-                .filter(gameClass -> !GAME_TEST_FILTER.contains(gameClass))
-                .map(gameService::loadGameType)
-                .peek(game -> activeGameNames.add(game.name()))
-                .collect(Collectors.toMap(GameType::name, Function.identity()));
-
-        expectedPlots = loadedGameTypes.entrySet()
-                .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey,
-                        e -> Arrays.stream(e.getValue().getPlots())
-                                .map(Enum::name)
-                                .map(String::toLowerCase)
-                                .collect(Collectors.toList())));
+    private void forGames(Class... classes) {
+        gameService = new GameServiceImpl() {
+            @Override
+            public Collection<? extends Class> findInPackage(String packageName) {
+                return Arrays.asList(classes);
+            }
+        };
     }
 
     @Test
     public void shouldGetGameNames() {
-        assertThat("Games list must contain 'first', 'second' games, and" +
-                " games loaded by active maven profiles", gameService.getGameNames(),
-                containsInAnyOrder(activeGameNames.toArray()));
+        assertEquals("[first, second]", 
+                gameService.getGameNames().toString());
     }
 
     @Test
+    public void shouldGetSpritesNames() {
+        assertEquals("{first=[none, wall, hero], second=[none, red, green, blue]}", 
+                gameService.getSpritesNames().toString());
+    }
+    
+    @Test
+    public void shouldGetOnlyGameNames() {
+        assertEquals("[first, second]", 
+                gameService.getOnlyGameNames().toString());
+    }
+    
+    @Test
+    public void shouldGetSpritesValues() {
+        assertEquals("{first=[ , ☼, ☺], second=[ , R, G, B]}", 
+                gameService.getSpritesValues().toString());
+    }
+    
+    @Test
     public void shouldGetSprites() {
-        Map<String, List<String>> sprites = gameService.getSprites();
-        assertEquals(expectedPlots, sprites);
+        assertEquals("{first=[none= , wall=☼, hero=☺], second=[none= , red=R, green=G, blue=B]}", 
+                gameService.getSprites().toString());
+    }
+    
+    @Test
+    public void shouldGetDefaultGame() {
+        assertEquals("first", 
+                gameService.getDefaultGame());
     }
 
     @Test
@@ -130,22 +100,30 @@ public class GameServiceTest {
                 gameService.getGame("not-exists").getClass());
     }
 
+    // TODO этот тест надо запускать с парамером mvn test -DallGames иначе не тянутся дипенденси игр а хотелось бы их чекнуть так же 
     @Test
     public void shouldGetPngForSprites() {
-        Map<String, List<String>> sprites = gameService.getSprites();
-
+        // given
+        forGames(new GameServiceImpl().findInPackage("com.codenjoy.dojo").toArray(new Class[0]));
+        
+        // when
+        Map<String, List<String>> sprites = gameService.getSpritesNames();
+        System.out.println(sprites.toString());
+        
+        // then
         List<String> errors = new LinkedList<>();
         for (Map.Entry<String, List<String>> entry : sprites.entrySet()) {
             for (String sprite : entry.getValue()) {
                 String spriteUri = String.format("/%s/%s.png", entry.getKey(), sprite);
                 File file = new File("target/test-classes/sprite" + spriteUri);
-                if (!file.exists() && !appCtx.getResource("/sprite" + spriteUri).exists()) {
+                if (!file.exists() && !new File("/sprite" + spriteUri).exists()) {
                     errors.add("Файл не найден: " + file.getAbsolutePath());
                 }
             }
         }
 
-        assertTrue(errors.toString().replace(',', '\n'), errors.isEmpty());
+        assertEquals(errors.toString().replace(',', '\n'), 
+                true, errors.isEmpty());
     }
 
 }

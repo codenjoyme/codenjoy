@@ -72,17 +72,18 @@ function initAdmin(contextPath) {
     var levels = new AdminSettings(contextPath, 'icancode', 'levels');
 
     var loadLevels = function() {
-        levels.load(function(data) {
-            loadLevelsData(data);
-        });
+        levels.load(
+            function(data) {
+                loadLevelsData(data);
+            }, function(error) {
+                loadLevelsData(null);
+            });
     }
 
     var saveLevels = function() {
         levels.save(levelsInfo,
             function() {
                 loadLevels();
-            }, function(errMsg) {
-                console.log(errMsg);
             });
     }
 

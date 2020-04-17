@@ -32,7 +32,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 3/6/2019
  */
 @SpringBootApplication
@@ -44,7 +44,6 @@ public class CodenjoyContestApplication extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(CodenjoyContestApplication.class);
     }
-
 
     public static void main(String[] args) {
         SpringApplication.run(CodenjoyContestApplication.class, args);

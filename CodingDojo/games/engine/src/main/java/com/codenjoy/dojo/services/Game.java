@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import org.json.JSONObject;
 
-public interface Game extends Closeable {
+public interface Game extends Closeable, Progressive {
 
     /**
      * @return Джойстик для управления ботом игрока
@@ -116,7 +116,4 @@ public interface Game extends Closeable {
      */
     void on(GameField field);
 
-    void setProgress(LevelProgress progress);
-
-    LevelProgress getProgress();
 }

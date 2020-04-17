@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_FORM_KEY;
+import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_KEY;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
@@ -58,8 +58,7 @@ public class BoardController {
     private final ConfigProperties properties;
     private final RegistrationService registrationService;
 
-    @RequestMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
-                    method = RequestMethod.GET)
+    @GetMapping(URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}")
     public String boardPlayer(ModelMap model,
                               @PathVariable("playerName") String playerName,
                               @RequestParam(name = "only", required = false) Boolean justBoard)
@@ -70,8 +69,7 @@ public class BoardController {
     }
 
     // TODO удалить это после того как попрошу Олега обновить фронт
-    @RequestMapping(value = URI + "/player/id/{playerId:" + Validator.ID + "}",
-            method = RequestMethod.GET)
+    @GetMapping(URI + "/player/id/{playerId:" + Validator.ID + "}")
     public String boardPlayerById(ModelMap model,
                               @PathVariable("playerId") String playerId,
                               @RequestParam(name = "only", required = false) Boolean justBoard)
@@ -82,7 +80,7 @@ public class BoardController {
     }
 
 
-    @RequestMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}", params = {"code", "remove"}, method = RequestMethod.GET)
+    @GetMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}", params = {"code", "remove"})
     public String removePlayer(@PathVariable("playerName") String playerName, @RequestParam("code") String code) {
         String playerId = validator.checkPlayerCode(playerName, code);
 
@@ -95,9 +93,7 @@ public class BoardController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
-                    params = "code",
-                    method = RequestMethod.GET)
+    @GetMapping(value = URI + "/player/{playerName:" + Validator.EMAIL_OR_ID + "}", params = "code")
     public String boardPlayer(ModelMap model,
                               @PathVariable("playerName") String playerName,
                               @RequestParam("code") String code,
@@ -113,7 +109,9 @@ public class BoardController {
 
         populateJoiningGameModel(model, code, player);
 
-        return (justBoard == null || !justBoard) ? "board" : "board-only";
+        justBoard = justBoard != null && justBoard;
+        model.addAttribute("justBoard", justBoard);
+        return justBoard ? "board-only" : "board";
     }
 
     @GetMapping(URI + "/rejoining/{gameName}")
@@ -121,9 +119,21 @@ public class BoardController {
                              HttpServletRequest request,
                              @AuthenticationPrincipal Registration.User user) {
 
+        // TODO ROOM а надо ли тут этот метод вообще, ниже есть более универсальный? 
+        // TODO ROOM так как есть rest методы то может вообще убрать отсюда этих двоих?
+        String roomName = gameName; 
+        return rejoinGame(model, gameName, roomName, request, user);
+    }
+
+    @GetMapping(URI + "/rejoining/{gameName}/room/{roomName}")
+    public String rejoinGame(ModelMap model, @PathVariable("gameName") String gameName,
+                             @PathVariable("roomName") String roomName,
+                             HttpServletRequest request,
+                             @AuthenticationPrincipal Registration.User user) {
+
         Player player = playerService.get(user.getCode());
         if (player == NullPlayer.INSTANCE) {
-            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), gameName);
+            return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), roomName, gameName);
         }
 
         populateJoiningGameModel(model, player.getCode(), player);
@@ -132,15 +142,14 @@ public class BoardController {
 
     private void populateJoiningGameModel(ModelMap model, String code, Player player) {
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME_FORM_KEY, player.getGameName());
+        model.addAttribute(GAME_NAME_KEY, player.getGameName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("allPlayersScreen", false);
     }
 
-    @RequestMapping(value = URI + "/log/player/{playerName:" + Validator.EMAIL_OR_ID + "}",
-            method = RequestMethod.GET)
+    @GetMapping(URI + "/log/player/{playerName:" + Validator.EMAIL_OR_ID + "}")
     public String boardPlayerLog(ModelMap model, @PathVariable("playerName") String playerName) {
         validator.checkPlayerName(playerName, CANT_BE_NULL);
 
@@ -149,7 +158,7 @@ public class BoardController {
             return "redirect:/register?id=" + playerName;
         }
 
-        model.addAttribute(GAME_NAME_FORM_KEY, player.getGameName());
+        model.addAttribute(GAME_NAME_KEY, player.getGameName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());
@@ -157,7 +166,7 @@ public class BoardController {
         return "board-log";
     }
 
-    @RequestMapping(value = URI, method = RequestMethod.GET)
+    @GetMapping(URI)
     public String boardAll() {
         GameType gameType = playerService.getAnyGameWithPlayers();
         if (gameType == NullGameType.INSTANCE) {
@@ -166,7 +175,7 @@ public class BoardController {
         return "redirect:/board/game/" + gameType.name();
     }
 
-    @RequestMapping(value = URI + "/game/{gameName}", method = RequestMethod.GET)
+    @GetMapping(URI + "/game/{gameName}")
     public String boardAllGames(ModelMap model, @PathVariable("gameName") String gameName) {
         validator.checkGameName(gameName, CANT_BE_NULL);
 
@@ -176,7 +185,7 @@ public class BoardController {
 
         Player player = playerService.getRandom(gameName);
         if (player == NullPlayer.INSTANCE) {
-            return "redirect:/register?" + GAME_NAME_FORM_KEY + "=" + gameName;
+            return "redirect:/register?" + GAME_NAME_KEY + "=" + gameName;
         }
         GameType gameType = player.getGameType();
         if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
@@ -184,7 +193,7 @@ public class BoardController {
         }
 
         model.addAttribute("code", null);
-        model.addAttribute(GAME_NAME_FORM_KEY, gameName);
+        model.addAttribute(GAME_NAME_KEY, gameName);
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", null);
         model.addAttribute("readableName", null);
@@ -192,7 +201,7 @@ public class BoardController {
         return "board";
     }
 
-    @RequestMapping(value = URI, params = "code", method = RequestMethod.GET)
+    @GetMapping(value = URI, params = "code")
     public String boardAll(ModelMap model, @RequestParam("code") String code) {
         validator.checkCode(code, CAN_BE_NULL);
 
@@ -210,7 +219,7 @@ public class BoardController {
 
         String gameName = player.getGameName();
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME_FORM_KEY, gameName);
+        model.addAttribute(GAME_NAME_KEY, gameName);
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerName", player.getName());
         model.addAttribute("readableName", player.getReadableName());
@@ -218,14 +227,14 @@ public class BoardController {
         return "board";
     }
 
-    @RequestMapping(value = "/donate", method = RequestMethod.GET)
+    @GetMapping("/donate")
     public String donate(ModelMap model) {
         model.addAttribute("today", new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         model.addAttribute("donateCode", properties.getDonateCode());
         return "donate-form";
     }
 
-    @RequestMapping(value = "/help")
+    @RequestMapping("/help")
     public String help() {
         return "help";
     }

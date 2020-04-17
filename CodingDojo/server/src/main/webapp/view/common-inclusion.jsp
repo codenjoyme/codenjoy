@@ -42,7 +42,7 @@
 
 <sec:authorize access="isAuthenticated()">
     <!-- TODO to remove games from here -->
-    <c:if test="${gameNameOnly != 'icancode' && gameNameOnly != 'expansion'}" >
+    <c:if test="${!justBoard && gameNameOnly != 'icancode' && gameNameOnly != 'expansion'}" >
         <body>
             <a href="${ctx}/process_logout" class="logout-link">Logout</a>
         </body>

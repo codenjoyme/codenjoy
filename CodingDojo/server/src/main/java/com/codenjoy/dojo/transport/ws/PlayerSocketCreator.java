@@ -23,13 +23,12 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
-import org.slf4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -39,20 +38,12 @@ import java.util.Map;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
+@AllArgsConstructor
 public class PlayerSocketCreator implements WebSocketCreator {
 
     private PlayerTransport transport;
     private AuthenticationService authenticationService;
     private boolean waitForClient;
-
-    public PlayerSocketCreator(PlayerTransport transport,
-                               AuthenticationService authenticationService,
-                               boolean waitForClient)
-    {
-        this.authenticationService = authenticationService;
-        this.transport = transport;
-        this.waitForClient = waitForClient;
-    }
 
     @Override
     public PlayerSocket createWebSocket(ServletUpgradeRequest servletRequest, ServletUpgradeResponse response) {

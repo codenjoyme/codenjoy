@@ -34,6 +34,7 @@
 
         <user.resources>src/main/webapp/resources/user</user.resources>
         <client.sources>${user.resources}/${module.name}-servers.zip</client.sources>
+        <client.java.package>java/com/codenjoy/dojo/${module.name}</client.java.package>
     </properties>
 
     <repositories>
@@ -76,6 +77,7 @@
         <module>tetris</module>
         <module>sokoban</module>
         <module>lemonade</module>
+        <module>excitebike</module>
     </modules>
 
     <dependencyManagement>
@@ -151,6 +153,9 @@
                 <includes>
                     <include>**/*</include>
                 </includes>
+                <excludes>
+                    <exclude>**/sprite/**/src/*</exclude>
+                </excludes>
             </resource>
             <resource>
                 <directory>src</directory>
@@ -217,19 +222,23 @@
                     <version>${maven-antrun.version}</version>
                     <executions>
                         <execution>
-                            <phase>verify</phase>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
                             <configuration>
                                 <target>
                                     <zip destfile="${client.sources}"
                                          basedir="."
-                                         includes="src/main/java/com/codenjoy/dojo/${module.name}/client/*.java,
-                                               src/main/java/com/codenjoy/dojo/${module.name}/model/Elements.java,
-                                               src/test/java/com/codenjoy/dojo/${module.name}/client/*.java,
+                                         includes="src/main/${client.java.package}/client/*.java,
+                                               src/main/${client.java.package}/model/elements/*.java,
+                                               src/main/${client.java.package}/model/Elements.java,
+                                               src/test/${client.java.package}/client/*.java,
                                                README.*,
                                                src/license/**,
                                                **/pom.xml"
-                                         excludes="src/main/java/com/codenjoy/dojo/${module.name}/client/ai/*,
-                                               src/test/java/com/codenjoy/dojo/${module.name}/client/ai/*,
+                                         excludes="src/main/${client.java.package}/client/ai/*,
+                                               src/test/${client.java.package}/client/ai/*,
                                                **/target/**"
                                          update="true"/>
 
@@ -242,22 +251,9 @@
                                                 **/target/**"
                                          update="true"/>
 
-                                    <zip destfile="${project.build.directory}/${project.artifactId}.jar"
-                                         basedir="src/main/webapp"
-                                         includes="resources/user/${module.name}-servers.zip"
-                                         excludes=""
-                                         update="true"/>
-
-                                    <zip destfile="${project.build.directory}/${project.artifactId}-sources.jar"
-                                         basedir="src/main/webapp"
-                                         includes="resources/user/${module.name}-servers.zip"
-                                         excludes=""
-                                         update="true"/>
+                                    <copy file="${client.sources}" todir="target/classes/resources/user"/>
                                 </target>
                             </configuration>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
                         </execution>
                     </executions>
                 </plugin>

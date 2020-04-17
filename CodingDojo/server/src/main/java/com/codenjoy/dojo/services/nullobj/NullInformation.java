@@ -26,7 +26,7 @@ package com.codenjoy.dojo.services.nullobj;
 import com.codenjoy.dojo.services.Information;
 import org.apache.commons.lang3.StringUtils;
 
-public class NullInformation implements Information {
+public final class NullInformation implements Information {
 
     public static final Information INSTANCE = new NullInformation();
 

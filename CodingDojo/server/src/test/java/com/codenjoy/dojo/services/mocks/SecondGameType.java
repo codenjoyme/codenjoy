@@ -25,22 +25,41 @@ package com.codenjoy.dojo.services.mocks;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PlayerScores;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 
-public class SecondGameType implements GameType {
+public class SecondGameType extends AbstractGameType {
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return null;
+
+        return new PlayerScores() {
+            @Override
+            public Object getScore() {
+                return 43;
+            }
+
+            @Override
+            public int clear() {
+                return 0;
+            }
+
+            @Override
+            public void update(Object score) {
+
+            }
+
+            @Override
+            public void event(Object event) {
+
+            }
+        };
     }
 
     @Override
@@ -50,17 +69,12 @@ public class SecondGameType implements GameType {
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return null;
+        return new SimpleParameter<Integer>(56);
     }
 
     @Override
     public String name() {
         return "second";
-    }
-
-    @Override
-    public void tick() {
-        // do nothing
     }
 
     public enum Elements implements CharElements {
@@ -89,13 +103,16 @@ public class SecondGameType implements GameType {
     }
 
     @Override
-    public Enum[] getPlots() {
+    public CharElements[] getPlots() {
         return Elements.values();
     }
 
     @Override
     public Settings getSettings() {
-        return null;
+        SettingsImpl result = new SettingsImpl();
+        result.addEditBox("Parameter 3").type(Integer.class).def(43);
+        result.addCheckBox("Parameter 4").type(Boolean.class).def(false).update(true);
+        return result;
     }
 
     @Override
@@ -110,26 +127,16 @@ public class SecondGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.SINGLE;
+        return MultiplayerType.TRAINING.apply(10);
     }
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerName) {
         return null;
     }
-
-    @Override
-    public Dice getDice() {
-        return null;
-    }
-
-    @Override
-    public PrinterFactory getPrinterFactory() {
-        return null;
-    }
-
+    
     @Override
     public String getVersion() {
-        return null;
+        return "version 12";
     }
 }

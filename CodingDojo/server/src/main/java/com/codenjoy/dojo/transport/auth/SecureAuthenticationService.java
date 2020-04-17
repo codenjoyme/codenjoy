@@ -24,10 +24,8 @@ package com.codenjoy.dojo.transport.auth;
 
 
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.dao.Registration;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -56,7 +54,7 @@ public class SecureAuthenticationService implements AuthenticationService {
             return null;
         }
 
-        if (isAI(user)){
+        if (isAi(user)){
             log.debug("User {} with code {} logged in as AI", user, code);
 
             return user;
@@ -75,7 +73,7 @@ public class SecureAuthenticationService implements AuthenticationService {
         return result;
     }
 
-    private boolean isAI(String user) {
+    private boolean isAi(String user) {
         return user.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX);
     }
 }

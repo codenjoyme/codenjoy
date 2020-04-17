@@ -22,7 +22,6 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
-import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import com.codenjoy.dojo.transport.ws.PlayerTransportImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +31,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 3/6/2019
  */
 @Configuration

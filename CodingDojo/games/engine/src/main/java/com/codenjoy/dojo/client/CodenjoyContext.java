@@ -22,7 +22,9 @@ package com.codenjoy.dojo.client;
  * #L%
  */
 
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class CodenjoyContext {
 
     private static String CONTEXT = "codenjoy-contest";

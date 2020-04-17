@@ -20,13 +20,13 @@
  * #L%
  */
 using System;
-using System.Threading;
+using System.Threading.Tasks;
 
 namespace Demo
 {
     class Program
     {
-        
+
         // you can get this code after registration on the server with your email
         static string ServerUrl = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789";
 
@@ -38,7 +38,7 @@ namespace Demo
             var bot = new YourSolver(ServerUrl);
 
             // starting thread with playing game
-            (new Thread(bot.Play)).Start();
+            Task.Run(bot.Play);
 
             // waiting for any key
             Console.ReadKey();

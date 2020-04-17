@@ -28,16 +28,17 @@ import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ControlWebSocketServlet extends WebSocketServlet {
 
-    private final TimerService timer;
-    private final PlayerTransport transport;
-    private final AuthenticationService authentication;
+    private TimerService timer;
+    private PlayerTransport transport;
+    private AuthenticationService authentication;
 
     @Override
     public void configure(WebSocketServletFactory webSocketServletFactory) {

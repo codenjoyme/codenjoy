@@ -33,7 +33,7 @@ public class Scores implements PlayerScores {
 
     private static Logger logger = DLoggerFactory.getLogger(Scores.class);
 
-    private final static String SCORE = "score";
+    public final static String SCORE = "score";
     public static final String ROUNDS = "rounds";
 
     private volatile int score;
@@ -60,9 +60,32 @@ public class Scores implements PlayerScores {
         return score = 0;
     }
 
+    // TODO есть ли случай, когда надо вот это вот все?
     @Override
-    public void update(Object score) {
-        this.score = Integer.valueOf(score.toString());
+    public void update(Object data) {
+        if (data instanceof String) {
+            try {
+                data = new JSONObject((String)data);
+            } catch (Exception e) {
+                try {
+                    data = Integer.valueOf((String)data);
+                } catch (Exception e2) {
+                    // do nothing, we don't know how to parse this format
+                }
+            }
+        }
+
+        if (data instanceof Integer) {
+            score = Integer.valueOf(data.toString());
+            log.put(SCORE, score);
+        } else if (data instanceof JSONObject) {
+            JSONObject json = (JSONObject) data;
+            score = Integer.valueOf(json.getInt(SCORE));
+            log.put(SCORE, score);
+            log.put(ROUNDS, json.getJSONArray(ROUNDS));
+        } else {
+            // do nothing, we don't know how to parse this format
+        }
     }
 
     @Override

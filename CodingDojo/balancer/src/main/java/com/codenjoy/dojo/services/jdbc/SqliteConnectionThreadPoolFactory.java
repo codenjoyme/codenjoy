@@ -26,14 +26,14 @@ import com.codenjoy.dojo.services.ContextPathGetter;
 
 public class SqliteConnectionThreadPoolFactory implements ConnectionThreadPoolFactory {
 
-    private String dbFile;
+    private String database;
 
-    public SqliteConnectionThreadPoolFactory(String dbFile, ContextPathGetter context) {
-        this.dbFile = dbFile.replace(".db", "_" + context.getContext() + ".db");
+    public SqliteConnectionThreadPoolFactory(String database, ContextPathGetter context) {
+        this.database = database.replace(".db", "_" + context.getContext() + ".db");
     }
 
     @Override
     public CrudConnectionThreadPool create(String... createTableSqls) {
-        return new SqliteConnectionThreadPool(dbFile, createTableSqls);
+        return new SqliteConnectionThreadPool(database, createTableSqls);
     }
 }

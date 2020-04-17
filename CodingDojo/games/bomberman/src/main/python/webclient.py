@@ -57,22 +57,12 @@ def _on_close(webclient):
 
 class WebClient(WebSocketApp):
 
-    def __init__(self, solver):
-        # assert solver not None
+    def __init__(self, url, header=[],
+                 on_open=None, on_message=None, on_error=None,
+                 on_close=None, keep_running=True, get_mask_key=None, solver=None):
         self._solver = solver
-        self._server = None
-        self._user = None
-
-    def run(self, serverandport, user, code):
-        super().__init__(
-            "ws://{}/codenjoy-contest/ws?user={}&code={}".format(serverandport, user, code))
-        self.on_open = _on_open
-        self.on_close = _on_close
-        self.on_error = _on_error
-        self.on_message = _on_message
-        self._server = serverandport
-        self._user = user
-        self.run_forever()
+        self.retries = 0
+        super().__init__(url, [], _on_open, _on_message, _on_error, _on_close)
 
 
 if __name__ == '__main__':

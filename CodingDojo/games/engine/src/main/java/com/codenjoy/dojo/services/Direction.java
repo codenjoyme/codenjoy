@@ -60,6 +60,20 @@ public enum Direction {
     }
 
     /**
+     * @param string any string
+     * @return true if this is valid direction -
+     * one of: LEFT, RIGHT, UP, DOWN, ACT, STOP; in any case
+     */
+    public static boolean isValid(String string) {
+        try {
+            Direction.valueOf(string.toUpperCase());
+            return true;
+        } catch (NullPointerException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    /**
      * @param x Given point.x.
      * @return New point.x that will be after move from current point.x in given direction.
      */

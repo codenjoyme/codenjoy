@@ -22,9 +22,17 @@ package com.codenjoy.dojo.lemonade.model;
  * #L%
  */
 
-public enum WeatherForecast {
+import com.codenjoy.dojo.services.printer.CharElements;
+
+public enum WeatherForecast implements CharElements {
+    
     SUNNY,
     CLOUDY,
     HOT_AND_DRY,
-    UNKNOWN
+    UNKNOWN;
+
+    @Override
+    public char ch() {
+        return name().toLowerCase().charAt(0);
+    }
 }

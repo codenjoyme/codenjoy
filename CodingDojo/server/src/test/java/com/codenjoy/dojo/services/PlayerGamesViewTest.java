@@ -158,7 +158,7 @@ public class PlayerGamesViewTest {
         addNewPlayer(gameType2, 789, getHeroData(24, pt(8, 7), "data9"));
 
         // when
-        List<PScoresOf> scores = playerGamesView.getScoresFor("gameName1");
+        List<PScoresOf> scores = playerGamesView.getScoresForGame("gameName1");
 
         // then
         assertEquals("[" +
@@ -272,7 +272,8 @@ public class PlayerGamesViewTest {
 
         Controller controller = mock(Controller.class);
         controllers.add(controller);
-        PlayerGame playerGame = playerGames.add(player, null);
+        String roomName = gameType.name();
+        PlayerGame playerGame = playerGames.add(player, roomName, null);
         games.add(playerGame.getGame());
         return playerGame;
     }

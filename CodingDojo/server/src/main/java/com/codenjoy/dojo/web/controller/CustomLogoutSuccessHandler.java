@@ -25,6 +25,7 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.services.dao.Registration;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -38,12 +39,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Slf4j
 public class CustomLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler implements LogoutSuccessHandler {
 
-    private final PlayerService playerService;
-    private final SaveService saveService;
+    private PlayerService playerService;
+    private SaveService saveService;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request,

@@ -60,7 +60,7 @@ import org.springframework.web.filter.CorsFilter;
 import javax.annotation.PostConstruct;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 3/6/2019
  */
 @EnableWebSecurity
@@ -88,7 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             // all players board
             BoardController.URI + "/game/**",
-            "/rest/player/null/null/wantsToPlay/**",
+            "/rest/player/null/null/wantsToPlay/**", // TODO а тут точно null/null
             "/screen-ws/**",
     };
 
@@ -156,7 +156,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             .antMatchers(UNAUTHORIZED_URIS)
                                 .permitAll()
                             .anyRequest()
-                                .hasRole("USER")
+                                .hasRole("USER") 
                     .and()
                         .formLogin()
                             .loginPage(LoginController.URI)
@@ -167,6 +167,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .successHandler(authenticationSuccessHandler)
                                 .failureUrl(LoginController.URI + "?failed=true")
                             .permitAll()
+                    .and()
+                        .httpBasic()
                     .and()
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
