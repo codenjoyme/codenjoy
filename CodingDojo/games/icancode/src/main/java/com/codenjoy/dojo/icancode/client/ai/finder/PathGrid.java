@@ -44,7 +44,7 @@ public class PathGrid implements IPathGrid {
     }
 
     public PathGrid(Board board) {
-        this(board.size(), board.size());
+        this(board.boardSize(), board.boardSize());
 
         Point me = board.getMe();
 

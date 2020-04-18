@@ -29,7 +29,6 @@ import com.codenjoy.dojo.loderunner.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.List;
@@ -64,7 +63,7 @@ public class AISolver implements Solver<Board> {
 
                 int yd = Direction.DOWN.changeY(y);
                 if (where != Direction.DOWN &&
-                        !pt(x, yd).isOutOf(board.size()) &&
+                        !pt(x, yd).isOutOf(board.boardSize()) &&
                         !board.aWall(x, yd) &&
                         !board.aLadder(x, yd) &&
                         !board.aLadder(x, y) &&
@@ -91,7 +90,7 @@ public class AISolver implements Solver<Board> {
     }
 
     public List<Direction> getDirections(Board board) {
-        int size = board.size();
+        int size = board.boardSize();
         Point from = board.getMe();
         List<Point> to = board.get(Elements.GOLD);
         DeikstraFindWay.Possible map = possible(board);

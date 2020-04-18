@@ -24,7 +24,6 @@ package com.codenjoy.dojo.client;
 
 
 import com.codenjoy.dojo.services.Point;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -330,7 +329,7 @@ public class AbstractLayeredBoardTest {
 
     @Test
     public void shouldWork_size() {
-        assertEquals(4, board.size());
+        assertEquals(4, board.boardSize());
     }
 
     @Test

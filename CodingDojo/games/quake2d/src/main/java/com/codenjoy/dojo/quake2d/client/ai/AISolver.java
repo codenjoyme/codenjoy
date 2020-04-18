@@ -22,10 +22,8 @@ package com.codenjoy.dojo.quake2d.client.ai;
  * #L%
  */
 
-import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.quake2d.client.Board;
 import com.codenjoy.dojo.quake2d.model.Elements;
 import com.codenjoy.dojo.services.*;
@@ -91,7 +89,7 @@ public class AISolver implements Solver<Board> {
     }
 
     public List<Direction> getDirections(Board board) {
-        int size = board.size();
+        int size = board.boardSize();
         int priority;
 //        Elements elementOfPriority;
         Point from = board.getMe();

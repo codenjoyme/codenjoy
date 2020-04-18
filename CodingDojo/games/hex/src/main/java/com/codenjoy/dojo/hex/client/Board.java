@@ -28,7 +28,6 @@ import com.codenjoy.dojo.hex.model.Elements;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.Collection;
-import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -62,7 +61,7 @@ public class Board extends AbstractBoard<Elements> {
 
     public boolean isBarrierAt(int x, int y) {
         Point pt = pt(x, y);
-        return getBarriers().contains(pt) || pt.isOutOf(size());
+        return getBarriers().contains(pt) || pt.isOutOf(boardSize());
     }
 
     public boolean isGameOver() {

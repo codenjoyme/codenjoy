@@ -393,7 +393,7 @@ public class Board extends AbstractBoard<Elements> {
     public List<Direction> getShortestWay(Point from, List<Point> to) {
         DeikstraFindWay.Possible map = possible();
         DeikstraFindWay findWay = new DeikstraFindWay();
-        List<Direction> shortestWay = findWay.getShortestWay(size(), from, to, map);
+        List<Direction> shortestWay = findWay.getShortestWay(boardSize(), from, to, map);
         return shortestWay;
     }
 

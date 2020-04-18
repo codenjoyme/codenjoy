@@ -81,7 +81,7 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
 
     public abstract E valueOf(char ch);
 
-    public int size() {
+    public int boardSize() {
         return size;
     }
 

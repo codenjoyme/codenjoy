@@ -41,8 +41,8 @@ public class AISolver implements Solver<Board> {
     public String get(Board board) {
         this.board = board;
 
-        int x = dice.next(board.size());
-        int y = dice.next(board.size());
+        int x = dice.next(board.boardSize());
+        int y = dice.next(board.boardSize());
         Direction direction = Direction.random(dice);
 
         return String.format("ACT(%s,%s),%s", x, y, direction);

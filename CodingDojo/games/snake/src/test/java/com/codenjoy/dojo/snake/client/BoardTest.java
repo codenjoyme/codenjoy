@@ -46,7 +46,7 @@ public class BoardTest {
 
         assertEquals("[[1,2]]", board.getApples().toString());
         assertEquals("[2,2]", board.getHead().toString());
-        assertEquals(4, board.size());
+        assertEquals(4, board.boardSize());
         assertEquals(false, board.isGameOver());
         assertEquals("[[1,1]]", board.getStones().toString());
 

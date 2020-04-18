@@ -356,13 +356,13 @@ public class AISolverTest {
         solver.getDirections(board);
         Map<Point, List<Direction>> possibleWays = solver.getWay().getPossibleWays();
 
-        char[][] chars = new char[board.size() * 3][board.size() * 3];
+        char[][] chars = new char[board.boardSize() * 3][board.boardSize() * 3];
         for (int x = 0; x < chars.length; x++) {
             Arrays.fill(chars[x], ' ');
         }
 
-        for (int x = 0; x < board.size(); x++) {
-            for (int y = 0; y < board.size(); y++) {
+        for (int x = 0; x < board.boardSize(); x++) {
+            for (int y = 0; y < board.boardSize(); y++) {
                 int cx = x*3 + 1;
                 int cy = y*3 + 1;
 

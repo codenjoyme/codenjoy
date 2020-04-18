@@ -164,7 +164,7 @@ public class DeikstraFindWayTest {
         List<Point> starts = board.get(Elements.START);
         Point start = starts.get(0);
         List<Point> goals = board.get(Elements.FINISH);
-        List<Direction> way = new DeikstraFindWay().getShortestWay(board.size(),
+        List<Direction> way = new DeikstraFindWay().getShortestWay(board.boardSize(),
                 start, goals,
                 new DeikstraFindWay.Possible() {
                     @Override

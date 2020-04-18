@@ -96,9 +96,9 @@ public class BotSolver extends AbstractSolver {
             Direction pd = previousCommand != null ? previousCommand.direction : Direction.random();
 
             if (pd == LEFT || pd == RIGHT) {
-                for (int y = 0; y < board.size(); ++y) {
-                    if (!board.isBarrierAt(pd == LEFT ? 0 : board.size() - 1, y)) {
-                        targetCell = new PointImpl(pd == LEFT ? 0 : board.size() - 1, y);
+                for (int y = 0; y < board.boardSize(); ++y) {
+                    if (!board.isBarrierAt(pd == LEFT ? 0 : board.boardSize() - 1, y)) {
+                        targetCell = new PointImpl(pd == LEFT ? 0 : board.boardSize() - 1, y);
                         path = board.findPath(me, targetCell);
                         if (path != null) {
                             scoutTarget = targetCell;
@@ -109,9 +109,9 @@ public class BotSolver extends AbstractSolver {
             }
 
             if (pd == UP || pd == DOWN) {
-                for (int x = 0; x < board.size(); ++x) {
-                    if (!board.isBarrierAt(x, pd == UP ? 0 : board.size() - 1)) {
-                        targetCell = new PointImpl(x, pd == UP ? 0 : board.size() - 1);
+                for (int x = 0; x < board.boardSize(); ++x) {
+                    if (!board.isBarrierAt(x, pd == UP ? 0 : board.boardSize() - 1)) {
+                        targetCell = new PointImpl(x, pd == UP ? 0 : board.boardSize() - 1);
                         path = board.findPath(me, targetCell);
                         if (path != null) {
                             scoutTarget = targetCell;

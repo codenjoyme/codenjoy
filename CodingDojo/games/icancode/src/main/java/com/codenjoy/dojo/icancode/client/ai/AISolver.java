@@ -101,7 +101,7 @@ public class AISolver extends AbstractSolver {
     List<Direction> getShortestWay(Board board, List<Point> to) {
         DeikstraFindWay.Possible map = possible(board);
         DeikstraFindWay findWay = new DeikstraFindWay();
-        List<Direction> shortestWay = findWay.getShortestWay(board.size(), board.getMe(), to, map);
+        List<Direction> shortestWay = findWay.getShortestWay(board.boardSize(), board.getMe(), to, map);
         return shortestWay;
     }
 }

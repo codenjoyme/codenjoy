@@ -129,7 +129,7 @@ public class AISolver implements Solver<Board> {
     }
 
     public List<Direction> getDirections(Board board, Point... excludePoints) {
-        int size = board.size();
+        int size = board.boardSize();
 
         Point from = board.getMe();
         List<Point> to = board.get(APPLE, GOLD, FURY_PILL, FLYING_PILL); //, FLYING_PILL, FURY_PILL

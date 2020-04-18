@@ -49,7 +49,7 @@ public class AISolver implements Solver<Board> {
         Flipper flipper = new Flipper(new GetChip() {
             @Override
             public Chip chip(Point point) {
-                if (point.isOutOf(board.size())) {
+                if (point.isOutOf(board.boardSize())) {
                     return Chip.NULL; // TODO почему?
                 }
                 Elements element = board.getAt(point.getX(), point.getY());

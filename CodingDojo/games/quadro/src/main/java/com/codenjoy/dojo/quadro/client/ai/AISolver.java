@@ -37,6 +37,6 @@ public class AISolver implements Solver<Board> {
 
     @Override
     public String get(final Board board) {
-        return String.format("ACT(%s)", dice.next(board.size()));
+        return String.format("ACT(%s)", dice.next(board.boardSize()));
     }
 }

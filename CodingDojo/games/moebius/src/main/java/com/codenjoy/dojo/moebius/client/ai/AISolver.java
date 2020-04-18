@@ -39,8 +39,8 @@ public class AISolver implements Solver<Board> {
     public String get(final Board board) {
         if (board.isGameOver()) return "";
         return String.format("ACT(%s,%s)",
-                dice.next(board.size()),
-                dice.next(board.size()));
+                dice.next(board.boardSize()),
+                dice.next(board.boardSize()));
     }
 
 }

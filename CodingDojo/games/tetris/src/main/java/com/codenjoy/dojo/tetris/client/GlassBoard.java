@@ -37,7 +37,7 @@ public class GlassBoard extends AbstractBoard<Elements> {
 
     @Override
     protected int inversionY(int y) {
-        return size() - 1 - y;
+        return boardSize() - 1 - y;
     }
 
     public boolean isFree(int x, int y) {

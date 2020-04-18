@@ -97,7 +97,7 @@ public class AISolver implements Solver<Board> {
     }
 
     public List<Direction> getDirections(Board board) {
-        int size = board.size();
+        int size = board.boardSize();
         if (bombsNear(board)) {
             return Arrays.asList(Direction.random(dice));
         }

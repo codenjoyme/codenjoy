@@ -108,11 +108,11 @@ public class AISolver implements Solver<Board> {
         if (way.isEmpty()) {
             int distance = 0;
             Point longest = null;
-            for (int x = 0; x < board.size(); x++) {
-                for (int y = 0; y < board.size(); y++) {
+            for (int x = 0; x < board.boardSize(); x++) {
+                for (int y = 0; y < board.boardSize(); y++) {
                     if (isBarrierAt(x, y)) continue;
                     Point pt = pt(x, y);
-                    way = this.way.getShortestWay(board.size(), from, Arrays.asList(pt), possible);
+                    way = this.way.getShortestWay(board.boardSize(), from, Arrays.asList(pt), possible);
                     if (distance < way.size()) {
                         distance = way.size();
                         longest = pt;
@@ -126,7 +126,7 @@ public class AISolver implements Solver<Board> {
     }
 
     private List<Direction> getWay(Point from, List<Point> to) {
-        return this.way.getShortestWay(board.size(), from, to, possible);
+        return this.way.getShortestWay(board.boardSize(), from, to, possible);
     }
 }
 

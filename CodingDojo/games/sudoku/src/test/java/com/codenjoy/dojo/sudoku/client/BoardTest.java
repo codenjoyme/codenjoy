@@ -116,8 +116,8 @@ public class BoardTest {
 
     private String checkXY() {
         String result = "";
-        for (int y = 0; y < board.size(); y++) {
-            for (int x = 0; x < board.size(); x++) {
+        for (int y = 0; y < board.boardSize(); y++) {
+            for (int x = 0; x < board.boardSize(); x++) {
                 result += format(board.getAt(x, y).toString());
             }
             result += '\n';

@@ -46,7 +46,7 @@ public class YourSolver implements Solver<Board> {
     public String get(Board board) {
         this.board = board;
 
-        return String.format("ACT(%s)", dice.next(board.size()));
+        return String.format("ACT(%s)", dice.next(board.boardSize()));
     }
 
     public static void main(String[] args) {

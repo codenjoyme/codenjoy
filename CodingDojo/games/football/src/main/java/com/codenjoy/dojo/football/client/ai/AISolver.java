@@ -114,7 +114,7 @@ public class AISolver implements Solver<Board> {
     }
 
     public List<Direction> getDirections(Board board, Point from) {
-        int size = board.size();
+        int size = board.boardSize();
         List<Point> to = new ArrayList<>();
 
         Point ball = board.getBall();

@@ -25,12 +25,10 @@ package com.codenjoy.dojo.sokoban.client.ai;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.sokoban.client.Board;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.Elements;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.List;
@@ -98,7 +96,7 @@ public class ApofigSolver implements Solver<Board> {
     }
 
     public List<Direction> getDirections(Board board) {
-        int size = board.size();
+        int size = board.boardSize();
 
 
         Point from = board.getMe();

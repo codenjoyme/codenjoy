@@ -36,7 +36,7 @@ public class Board extends AbstractBoard<Elements> {
 
     @Override
     protected int inversionY(int y) { // TODO исправить это
-        return size() - 1 - y;
+        return boardSize() - 1 - y;
     }
 
     @Override

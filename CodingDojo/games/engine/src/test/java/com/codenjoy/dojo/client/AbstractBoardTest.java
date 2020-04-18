@@ -166,7 +166,7 @@ public class AbstractBoardTest {
 
     @Test
     public void shouldWork_size() {
-        assertEquals(4, board.size());
+        assertEquals(4, board.boardSize());
     }
 
     @Test

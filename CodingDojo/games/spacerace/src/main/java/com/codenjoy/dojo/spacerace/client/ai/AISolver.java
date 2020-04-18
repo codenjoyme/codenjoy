@@ -42,7 +42,7 @@ public class AISolver implements Solver<Board> {
         String result = "";
         int x = board.getMe().getX();
 
-        if (vpravo && (x < board.size() - 5)||(x < 5)){
+        if (vpravo && (x < board.boardSize() - 5)||(x < 5)){
             result = Direction.RIGHT.toString();
             vpravo = true;
         } else {

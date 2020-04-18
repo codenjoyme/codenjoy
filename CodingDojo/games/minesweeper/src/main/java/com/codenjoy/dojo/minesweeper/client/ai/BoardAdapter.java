@@ -28,7 +28,6 @@ import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.minesweeper.model.Elements;
 import com.utils.BoardImpl;
 import com.utils.Point;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,7 +61,7 @@ public class BoardAdapter extends BoardImpl {
         if (board == null) {
             return 15;
         }
-        return board.size();
+        return board.boardSize();
     }
 
     @Override
