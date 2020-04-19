@@ -43,4 +43,11 @@ public interface GamePrinter {
     interface Filler {
         void set(int x, int y, char ch);
     }
+
+    /**
+     * Получаем размер текущего игрового поля
+     * @return
+     */
+    int getSize();
+
 }

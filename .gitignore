@@ -4,6 +4,10 @@
 **/bin
 **/obj
 **/Gemfile.lock
+**/.settings
+**/.vscode
+**/target
+**/database
 /CodingDojo/repo
 /CodingDojo/repo/**
 /CodingDojo/**/*.log
@@ -37,3 +41,6 @@
 /CodingDojo/games/bomberman/src/main/dotNet/Bomberman/packages/**
 **/node_modules/
 **/package-lock.json
+**/.project
+**/.classpath
+**/.factorypath
