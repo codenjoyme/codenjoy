@@ -3251,6 +3251,68 @@ public class ICanCodeTest extends AbstractGameTest {
     }
 
     @Test
+    public void shouldMovedBoxWhenHeroPushItOnGold_whenGoldIsHidden() {
+        // given
+        givenFl("╔════┐" +
+                "║.B$S│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.left();
+        game.tick();
+
+        hero.down();
+        game.tick();
+
+        hero.left();
+        game.tick();
+
+        hero.left();
+        game.tick();
+
+        hero.up();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║...S│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "-☺B---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        hero.pull();
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║...S│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
     public void shouldNotMovedBoxWhenHeroPushItOnLaserMachine() {
         // given
         givenFl("╔════┐" +

@@ -338,7 +338,12 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
             return false;
         }
 
-        if (field.isAt(newX, newY, Gold.class, HeroItem.class)) {
+        if (field.isAt(newX, newY, HeroItem.class)) {
+            return false;
+        }
+
+        Gold gold = (Gold)field.getIfPresent(Gold.class, newX, newY);
+        if (gold != null && !gold.getHidden()) {
             return false;
         }
 
