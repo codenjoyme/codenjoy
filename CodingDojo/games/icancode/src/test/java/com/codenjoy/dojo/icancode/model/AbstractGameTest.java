@@ -83,6 +83,8 @@ public class AbstractGameTest {
         player = new Player(listener);
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
+
+        // логика добавления нового героя на start позиции для 'X' символа
         level.getItems(HeroItem.class)
                 .forEach(item -> {
                     HeroItem heroItem = (HeroItem) item;
@@ -91,6 +93,7 @@ public class AbstractGameTest {
                         game.newGame(player);
                         Hero hero = player.getHero();
                         heroItem.init(hero);
+                        item.removeFromCell();
                     }
                 });
 

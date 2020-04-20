@@ -3719,14 +3719,29 @@ public class ICanCodeTest extends AbstractGameTest {
     public void shouldNotMovedBoxWhenHeroPushItOnOtherHero() {
         // given
         givenFl("╔════┐" +
-                "║SBX.│" +
+                "║SB..│" +
+                "║....│" +
+                "║....│" +
+                "║...X│" + // X - значит на S появится новый герой-соперник
+                "└────┘");
+
+        hero.down();
+        game.tick();
+
+        assertL("╔════┐" +
+                "║S...│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
 
-        hero.down();
-        game.tick();
+        assertE("------" +
+                "-XB---" +
+                "-☺----" +
+                "------" +
+                "------" +
+                "------");
+
         hero.right();
         game.tick();
         hero.right();
@@ -3749,6 +3764,7 @@ public class ICanCodeTest extends AbstractGameTest {
                 "------");
 
         // when
+        hero.pull();
         hero.left();
         game.tick();
 
