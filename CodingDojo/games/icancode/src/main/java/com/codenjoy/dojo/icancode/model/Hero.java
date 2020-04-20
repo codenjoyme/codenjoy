@@ -271,31 +271,32 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
 
-            if (pull) {
-                if (tryPushBox(newX, newY)) {
-                    pull = false;
-                }
-            }
-
             if (flying && (field.isAt(newX, newY, Box.class) || field.isAt(newX, newY, LaserMachine.class))) {
                 int nextX = direction.changeX(newX);
                 int nextY = direction.changeY(newY);
                 if (!field.isBarrier(nextX, nextY)) {
                     field.move(item, newX, newY);
                 }
-            } else if (!field.isBarrier(newX, newY)) {
-                if (pull) {
-                    if (tryPullBox(x, y)) {
+            } else {
+                if (pull && !landOn) {
+                    if (tryPushBox(newX, newY)) {
                         pull = false;
                     }
                 }
-                field.move(item, newX, newY);
 
-            } else {
-                if (landOn) {
-                    landOn = false;
+                if (field.isBarrier(newX, newY)) {
+                    if (landOn) {
+                        landOn = false;
 
-                    item.getCell().comeIn(item);
+                        item.getCell().comeIn(item);
+                    }
+                } else {
+                    if (pull) {
+                        if (tryPullBox(x, y)) {
+                            pull = false;
+                        }
+                    }
+                    field.move(item, newX, newY);
                 }
             }
         }
