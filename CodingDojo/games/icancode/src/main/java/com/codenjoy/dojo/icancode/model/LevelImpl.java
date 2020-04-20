@@ -36,6 +36,7 @@ import com.codenjoy.dojo.services.Point;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.fest.reflect.core.Reflection.constructor;
 
 public class LevelImpl implements ILevel {
@@ -105,9 +106,8 @@ public class LevelImpl implements ILevel {
 
     @Override
     public boolean isBarrier(int x, int y) {
-        boolean isAbroad = x > size - 1 || x < 0 || y < 0 || y > size - 1;
-
-        return isAbroad || !getCell(x, y).isPassable();
+        return pt(x, y).isOutOf(size)
+                || !getCell(x, y).isPassable();
     }
 
     @Override
@@ -127,8 +127,6 @@ public class LevelImpl implements ILevel {
 
         return result;
     }
-
-
 
     @Override
     public void setField(IField field) {
