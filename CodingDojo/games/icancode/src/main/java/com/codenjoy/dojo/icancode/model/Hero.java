@@ -272,7 +272,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
 
-            boolean wasPush = pushBox(newX, newY);
+            pushBox(newX, newY);
 
             if (flying && (field.isAt(newX, newY, Box.class) || field.isAt(newX, newY, LaserMachine.class))) {
                 int nextX = direction.changeX(newX);
@@ -281,7 +281,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
                     field.move(item, newX, newY);
                 }
             } else if (!field.isBarrier(newX, newY)) {
-                if (!wasPush && pull) {
+                if (pull) {
                     pullBox(x, y);
                 }
                 field.move(item, newX, newY);
@@ -320,35 +320,35 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         pull = false;
     }
 
-    private boolean pushBox(int x, int y) {
+    private void pushBox(int x, int y) {
         if (!pull) {
-            return false;
+            return;
         }
 
         IItem item = field.getIfPresent(Box.class, x, y);
 
         if (item == null) {
-            return false;
+            return;
         }
 
         int newX = direction.changeX(x);
         int newY = direction.changeY(y);
 
         if (field.isBarrier(newX, newY)) {
-            return false;
+            return;
         }
 
         if (field.isAt(newX, newY, HeroItem.class)) {
-            return false;
+            return;
         }
 
         Gold gold = (Gold)field.getIfPresent(Gold.class, newX, newY);
         if (gold != null && !gold.getHidden()) {
-            return false;
+            return;
         }
 
         field.move(item, newX, newY);
-        return true;
+        pull = false;
     }
 
     public Point getPosition() {
