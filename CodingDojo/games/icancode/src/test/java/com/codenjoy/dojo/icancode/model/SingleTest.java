@@ -147,7 +147,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldNextLevelWhenFinishCurrent() {
+    public void shouldNextLevel_whenFinishCurrent() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +
@@ -1553,7 +1553,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldSelectLevelWhenAllLevelsAreDone() {
+    public void shouldSelectLevel_whenAllLevelsAreDone() {
         // given
         shouldAllLevelsAreDone();
 
@@ -2737,7 +2737,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldChangeLevelWhenAllLevelsAreDone() {
+    public void shouldChangeLevel_whenAllLevelsAreDone() {
         // given
         shouldAllLevelsAreDone_case2();
 
@@ -3011,7 +3011,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldResetLevelWhenAllLevelsAreDone() {
+    public void shouldResetLevel_whenAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +
@@ -3436,7 +3436,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldSelectLevelWhenNotAllLevelsAreDone() {
+    public void shouldSelectLevel_whenNotAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +
