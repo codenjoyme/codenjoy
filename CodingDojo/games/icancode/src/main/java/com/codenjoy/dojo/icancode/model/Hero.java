@@ -32,7 +32,6 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.icancode.model.items.*;
 
 import java.util.Arrays;
 
@@ -272,7 +271,11 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
 
-            pushBox(newX, newY);
+            if (pull) {
+                if (tryPushBox(newX, newY)) {
+                    pull = false;
+                }
+            }
 
             if (flying && (field.isAt(newX, newY, Box.class) || field.isAt(newX, newY, LaserMachine.class))) {
                 int nextX = direction.changeX(newX);
@@ -282,7 +285,9 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
                 }
             } else if (!field.isBarrier(newX, newY)) {
                 if (pull) {
-                    pullBox(x, y);
+                    if (tryPullBox(x, y)) {
+                        pull = false;
+                    }
                 }
                 field.move(item, newX, newY);
 
@@ -307,48 +312,44 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         }
     }
 
-    private void pullBox(int x, int y) {
+    private boolean tryPullBox(int x, int y) {
         int boxX = direction.inverted().changeX(x);
         int boxY = direction.inverted().changeY(y);
 
         IItem item = field.getIfPresent(Box.class, boxX, boxY);
         if (item == null) {
-            return;
+            return false;
         }
 
         field.move(item, x, y);
-        pull = false;
+        return true;
     }
 
-    private void pushBox(int x, int y) {
-        if (!pull) {
-            return;
-        }
-
+    private boolean tryPushBox(int x, int y) {
         IItem item = field.getIfPresent(Box.class, x, y);
 
         if (item == null) {
-            return;
+            return false;
         }
 
         int newX = direction.changeX(x);
         int newY = direction.changeY(y);
 
         if (field.isBarrier(newX, newY)) {
-            return;
+            return false;
         }
 
         if (field.isAt(newX, newY, HeroItem.class)) {
-            return;
+            return false;
         }
 
         Gold gold = (Gold)field.getIfPresent(Gold.class, newX, newY);
         if (gold != null && !gold.getHidden()) {
-            return;
+            return false;
         }
 
         field.move(item, newX, newY);
-        pull = false;
+        return true;
     }
 
     public Point getPosition() {
