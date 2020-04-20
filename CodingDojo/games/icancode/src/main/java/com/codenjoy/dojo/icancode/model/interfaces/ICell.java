@@ -42,9 +42,9 @@ public interface ICell extends Point {
 
     <T extends IItem> T getItem(int layer);
 
-    <T extends IItem> List<T> getItems(Class clazz);
+    <T extends IItem> List<T> items(Class clazz);
 
-    <T extends IItem> List<T> getItems();
+    <T extends IItem> List<T> items();
 
     void removeItem(IItem item);
 

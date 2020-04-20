@@ -33,7 +33,6 @@ import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
-import com.codenjoy.dojo.icancode.model.items.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -176,7 +175,7 @@ public class ICanCode implements Tickable, IField {
 
     @Override
     public IItem getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
-        for (IItem item : getCell(x, y).getItems()) {
+        for (IItem item : getCell(x, y).items()) {
             if (item.getClass().equals(clazz)) {
                 return item;
             }
@@ -222,7 +221,7 @@ public class ICanCode implements Tickable, IField {
         List<Floor> floors = floors();
 
         for (int i = floors.size() - 1; i > -1; --i) {
-            if (floors.get(i).getCell().getItems().size() > 1) {
+            if (floors.get(i).getCell().items().size() > 1) {
                 floors.remove(i);
             }
         }

@@ -116,7 +116,7 @@ public class LevelImpl implements ILevel {
         List<T> items;
 
         for (int i = 0; i < cells.length; ++i) {
-            items = cells[i].getItems();
+            items = cells[i].items();
 
             for (int j = 0; j < items.size(); ++j) {
                 if (clazz.isInstance(items.get(j))) {

@@ -66,7 +66,7 @@ public abstract class BaseItem implements IItem {
         if (cell == null) {
             return Arrays.asList();
         }
-        List<IItem> items = cell.getItems();
+        List<IItem> items = cell.items();
         items.remove(this);
         return items;
     }

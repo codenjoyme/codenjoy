@@ -33,8 +33,10 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
@@ -43,8 +45,6 @@ public class Cell extends PointImpl implements ICell {
 
     private List<IItem> items = new ArrayList<>();
 
-    //================================ Constructors ================================
-
     public Cell(int x, int y) {
         super(x, y);
     }
@@ -52,8 +52,6 @@ public class Cell extends PointImpl implements ICell {
     public Cell(Point point) {
         super(point);
     }
-
-    //================================ Implements ================================
 
     @Override
     public void addItem(IItem item) {
@@ -64,38 +62,31 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public void comeIn(IItem comingItem) {
-        for (int i = 0; i < items.size(); ++i) {
-            IItem cellItem = items.get(i);
-
-            if (!cellItem.equals(comingItem)) {
-                cellItem.action(comingItem);
-                comingItem.action(cellItem);
-            }
-        }
+    public void comeIn(IItem input) {
+        items().stream()
+                .filter(item -> !item.equals(input))
+                .forEach(item -> {
+                    item.action(input);
+                    input.action(item);
+                });
     }
 
     @Override
     public boolean isPassable() {
-        for (int i = 0; i < items.size(); ++i) {
-            if (items.get(i).hasFeatures(new FeatureItem[]{FeatureItem.IMPASSABLE})) {
-                return false;
-            }
-        }
-
-        return true;
+        return !items.stream()
+                .anyMatch(item -> item.hasFeatures(new FeatureItem[]{FeatureItem.IMPASSABLE}));
     }
 
     @Override
     public <T extends IItem> T getItem(T type) {
-        for (int i = 0; i < items.size(); ++i) {
+        return (T) streamOf(type.getClass())
+                .findFirst()
+                .orElse(null);
+    }
 
-            if (items.get(i).getClass() == type.getClass()) {
-                return (T) items.get(i);
-            }
-        }
-
-        return null;
+    private Stream<IItem> streamOf(Class clazz) {
+        return items.stream()
+                .filter(item -> item.getClass() == clazz);
     }
 
     @Override
@@ -108,22 +99,14 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public <T extends IItem> List<T> getItems(Class clazz) {
-        List<T> result = new LinkedList<>();
-
-        for (int i = 0; i < items.size(); ++i) {
-
-            if (items.get(i).getClass() == clazz) {
-                result.add((T) items.get(i));
-            }
-        }
-
-        return result;
+    public <T extends IItem> List<T> items(Class type) {
+        return (List<T>)streamOf(type)
+                .collect(toList());
     }
 
     @Override
-    public <T extends IItem> List<T> getItems() {
-        return (List<T>) new LinkedList<>(items);
+    public <T extends IItem> List<T> items() {
+        return (List<T>)new LinkedList<>(items);
     }
 
     @Override
@@ -162,7 +145,7 @@ public class Cell extends PointImpl implements ICell {
     public void landOn(IItem item) {
         boolean heroOn3Layer = (items.indexOf(item) == LAYER3);
         if (!heroOn3Layer) {
-            // нас не интересуют случаи, когда герой не на третьем слое (в полете)
+            // нас не интересуют случаи, когда герой не на третьем слое (не в полете)
             return;
         }
 
