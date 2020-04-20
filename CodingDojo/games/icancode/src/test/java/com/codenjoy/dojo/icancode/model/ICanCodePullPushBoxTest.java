@@ -1315,6 +1315,70 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
+    public void shouldForgetPullCommand_whenNoBoxOnThisTick() {
+        // given
+        givenFl("╔════┐" +
+                "║S.B.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.pull(); // холостой
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "------" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "--☺B--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "------" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
     public void shouldCantMovedBox_whenJump_case1() {
         // given
         givenFl("╔════┐" +

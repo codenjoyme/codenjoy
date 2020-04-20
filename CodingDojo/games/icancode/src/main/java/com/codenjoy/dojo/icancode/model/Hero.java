@@ -286,8 +286,6 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
 
                 if (field.isBarrier(newX, newY)) {
                     if (landOn) {
-                        landOn = false;
-
                         item.getCell().comeIn(item);
                     }
                 } else {
@@ -303,6 +301,8 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         if (!flying) {
             direction = null;
         }
+        landOn = false;
+        pull = false;
     }
 
     public void fixLayer() {
