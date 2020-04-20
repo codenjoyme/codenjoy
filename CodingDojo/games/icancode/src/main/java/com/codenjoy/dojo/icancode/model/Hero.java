@@ -90,7 +90,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
 
     private void reset(IField field) {
         resetFlags();
-        field.getStartPosition().addItem(this.item);
+        field.getStartPosition().add(this.item);
         field.reset();
     }
 

@@ -66,10 +66,10 @@ public class LevelImpl implements ILevel {
 
                 if (element.getLayer() != Elements.Layers.LAYER1) {
                     Elements atBottom = Elements.valueOf(Elements.FLOOR.ch());
-                    cell.addItem(getBaseItem(atBottom));
+                    cell.add(getBaseItem(atBottom));
                 }
 
-                cell.addItem(item);
+                cell.add(item);
                 cells[xy.getLength(x, y)] = cell;
                 ++indexChar;
             }

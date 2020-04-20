@@ -93,7 +93,7 @@ public abstract class BaseItem implements IItem {
     @Override
     public void removeFromCell() {
         if (getCell() != null) {
-            getCell().removeItem(this);
+            getCell().remove(this);
             setCell(null);
         }
     }

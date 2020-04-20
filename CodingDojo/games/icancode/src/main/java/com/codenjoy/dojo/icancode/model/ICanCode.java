@@ -164,7 +164,7 @@ public class ICanCode implements Tickable, IField {
     @Override
     public void move(IItem item, int x, int y) {
         ICell cell = level.getCell(x, y);
-        cell.addItem(item);
+        cell.add(item);
         cell.comeIn(item);
     }
 
@@ -234,8 +234,8 @@ public class ICanCode implements Tickable, IField {
                 floors.remove(random);
 
                 ICell cell = gold.getCell();
-                floor.getCell().addItem(gold);
-                cell.addItem(floor);
+                floor.getCell().add(gold);
+                cell.add(floor);
             }
         }
     }
@@ -295,7 +295,7 @@ public class ICanCode implements Tickable, IField {
             @Override
             public BiFunction<Integer, Integer, State> elements() {
                 ICell[] cells = ICanCode.this.level.getCells();
-                return (index, layer) -> cells[index].getItem(layer);
+                return (index, layer) -> cells[index].item(layer);
             }
 
             @Override

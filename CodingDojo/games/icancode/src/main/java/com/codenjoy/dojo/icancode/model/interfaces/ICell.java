@@ -32,21 +32,21 @@ import java.util.List;
  */
 public interface ICell extends Point {
 
-    void addItem(IItem item);
+    void add(IItem item);
 
     void comeIn(IItem item);
 
     boolean isPassable();
 
-    <T extends IItem> T getItem(T type);
+    <T extends IItem> T item(T type);
 
-    <T extends IItem> T getItem(int layer);
+    <T extends IItem> T item(int layer);
 
     <T extends IItem> List<T> items(Class clazz);
 
     <T extends IItem> List<T> items();
 
-    void removeItem(IItem item);
+    void remove(IItem item);
 
     void jump(IItem item);
 
