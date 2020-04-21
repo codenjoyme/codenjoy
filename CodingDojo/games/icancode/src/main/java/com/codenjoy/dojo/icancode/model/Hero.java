@@ -24,7 +24,7 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.interfaces.Cell;
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
+import com.codenjoy.dojo.icancode.model.interfaces.Field;
 import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
@@ -35,7 +35,7 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.Arrays;
 
-public class Hero extends PlayerHero<IField> implements State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private boolean alive;
     private boolean win;
@@ -82,13 +82,13 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
     }
 
     @Override
-    public void init(IField field) {
+    public void init(Field field) {
         super.init(field);
         item.setField(field);
         reset(field);
     }
 
-    private void reset(IField field) {
+    private void reset(Field field) {
         resetFlags();
         field.getStartPosition().add(this.item);
         field.reset();

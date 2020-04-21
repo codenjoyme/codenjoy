@@ -24,7 +24,7 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.interfaces.Cell;
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
+import com.codenjoy.dojo.icancode.model.interfaces.Field;
 import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.interfaces.Level;
 import com.codenjoy.dojo.icancode.model.items.*;
@@ -38,7 +38,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class ICanCode implements Tickable, IField {
+public class ICanCode implements Tickable, Field {
 
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;

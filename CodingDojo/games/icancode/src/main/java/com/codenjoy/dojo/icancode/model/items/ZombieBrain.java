@@ -22,7 +22,7 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
+import com.codenjoy.dojo.icancode.model.interfaces.Field;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
@@ -33,7 +33,7 @@ import static java.util.stream.Collectors.toList;
 
 public class ZombieBrain {
 
-    public Direction whereToGo(Point zombie, IField field) {
+    public Direction whereToGo(Point zombie, Field field) {
         List<Point> heroes = field.getLevel().getItems(HeroItem.class).stream()
                 .map(item -> item.getCell()).collect(toList());
         if (heroes.isEmpty()) {
@@ -47,14 +47,14 @@ public class ZombieBrain {
         return nextStep;
     }
 
-    List<Direction> getShortestWay(IField field, Point from, List<Point> to) {
+    List<Direction> getShortestWay(Field field, Point from, List<Point> to) {
         DeikstraFindWay.Possible map = possible(field);
         DeikstraFindWay findWay = new DeikstraFindWay();
         List<Direction> shortestWay = findWay.getShortestWay(field.size(), from, to, map);
         return shortestWay;
     }
 
-    private DeikstraFindWay.Possible possible(IField field) {
+    private DeikstraFindWay.Possible possible(Field field) {
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point from, Direction where) {
@@ -81,7 +81,7 @@ public class ZombieBrain {
         };
     }
 
-    boolean isNotFree(int x, int y, IField field) {
+    boolean isNotFree(int x, int y, Field field) {
         return field.isBarrier(x, y)
                 || field.isAt(x, y, Hole.class)
                 || field.isAt(x, y, Box.class);

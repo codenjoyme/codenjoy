@@ -34,7 +34,7 @@ import com.codenjoy.dojo.icancode.model.Player;
 
 import java.util.List;
 
-public interface IField extends GameField<Player> {
+public interface Field extends GameField<Player> {
 
     boolean isBarrier(int x, int y);
 

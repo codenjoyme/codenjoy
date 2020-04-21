@@ -26,7 +26,7 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
+import com.codenjoy.dojo.icancode.model.interfaces.Field;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
@@ -302,7 +302,7 @@ public class ICanCodeZombieTest extends AbstractGameTest {
 
     OngoingStubbing<Direction> givenZombie() {
         Zombie.BRAIN = mock(ZombieBrain.class);
-        return when(Zombie.BRAIN.whereToGo(any(Point.class), any(IField.class)));
+        return when(Zombie.BRAIN.whereToGo(any(Point.class), any(Field.class)));
     }
 
     @Test

@@ -41,5 +41,5 @@ public interface Level {
 
     boolean isBarrier(int x, int y);
 
-    void setField(IField field);
+    void setField(Field field);
 }

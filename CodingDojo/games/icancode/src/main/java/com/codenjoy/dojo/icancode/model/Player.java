@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
+import com.codenjoy.dojo.icancode.model.interfaces.Field;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -34,10 +34,10 @@ import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import org.json.JSONObject;
 
-public class Player extends GamePlayer<Hero, IField> {
+public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
-    private IField field;
+    private Field field;
     private Printer<PrinterData> printer;
 
     public Player(EventListener listener) {
@@ -56,7 +56,7 @@ public class Player extends GamePlayer<Hero, IField> {
         return hero;
     }
 
-    public void newHero(IField field) {
+    public void newHero(Field field) {
         this.field = field;
         if (hero == null) {
             hero = new Hero(Elements.ROBO);
@@ -80,7 +80,7 @@ public class Player extends GamePlayer<Hero, IField> {
         return new ICanCodeHeroData();
     }
 
-    public IField getField() {
+    public Field getField() {
         return field;
     }
 

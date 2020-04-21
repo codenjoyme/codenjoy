@@ -24,7 +24,7 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.interfaces.Cell;
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
+import com.codenjoy.dojo.icancode.model.interfaces.Field;
 import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.interfaces.Level;
 import com.codenjoy.dojo.icancode.model.items.BaseItem;
@@ -129,7 +129,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public void setField(IField field) {
+    public void setField(Field field) {
         List<FieldItem> items = getItems(FieldItem.class);
 
         for (int i = 0; i < items.size(); ++i) {

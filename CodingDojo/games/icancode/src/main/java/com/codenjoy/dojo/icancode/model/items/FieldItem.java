@@ -23,12 +23,12 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
+import com.codenjoy.dojo.icancode.model.interfaces.Field;
 import com.codenjoy.dojo.icancode.model.Elements;
 
 public class FieldItem extends BaseItem {
 
-    protected IField field;
+    protected Field field;
 
     public FieldItem(Elements element) {
         super(element);
@@ -38,7 +38,7 @@ public class FieldItem extends BaseItem {
         super(element, passable);
     }
 
-    public void setField(IField value) {
+    public void setField(Field value) {
         field = value;
     }
 
