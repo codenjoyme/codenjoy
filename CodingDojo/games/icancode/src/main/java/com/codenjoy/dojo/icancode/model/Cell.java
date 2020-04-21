@@ -38,11 +38,7 @@ public interface Cell extends Point {
 
     boolean passable();
 
-    <T extends Item> T item(T type);
-
     <T extends Item> T item(int layer);
-
-    <T extends Item> List<T> items(Class clazz);
 
     <T extends Item> List<T> items();
 

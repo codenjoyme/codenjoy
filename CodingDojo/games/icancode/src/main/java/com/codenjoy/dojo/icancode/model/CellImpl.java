@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.PointImpl;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
 import static java.util.stream.Collectors.toList;
@@ -70,30 +69,12 @@ public class CellImpl extends PointImpl implements Cell {
     }
 
     @Override
-    public <T extends Item> T item(T type) {
-        return (T) streamOf(type.getClass())
-                .findFirst()
-                .orElse(null);
-    }
-
-    private Stream<Item> streamOf(Class clazz) {
-        return items.stream()
-                .filter(item -> item.getClass() == clazz);
-    }
-
-    @Override
     public <T extends Item> T item(int layer) {
         if (items.size() <= layer) {
             return (T) new Air();
         }
 
         return (T) items.get(layer);
-    }
-
-    @Override
-    public <T extends Item> List<T> items(Class type) {
-        return (List<T>)streamOf(type)
-                .collect(toList());
     }
 
     @Override

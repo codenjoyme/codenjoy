@@ -33,6 +33,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.fest.reflect.core.Reflection.constructor;
 
 public class LevelImpl implements Level {
+
     private Cell[] cells;
     private int size;
     private LengthToXY xy;
