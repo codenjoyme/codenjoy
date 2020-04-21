@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
+import com.codenjoy.dojo.services.entity.ServerLocation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -42,12 +43,13 @@ public class RegistrationService {
 
     private final SmsService smsService;
     private final Players playersRepo;
+    private final ConfigProperties config;
 
     public String generateVerificationCode() {
         return RandomStringUtils.randomNumeric(CODE_LENGTH);
     }
 
-    public boolean confirmRegistration(String phone, String code) {
+    public ServerLocation confirmRegistration(String phone, String code) {
         Player player = playersRepo.getByPhone(phone)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -58,10 +60,11 @@ public class RegistrationService {
         if (validateCode(code, VerificationType.REGISTRATION, player)) {
             playersRepo.approveByPhone(phone);
             playersRepo.updateVerificationCode(phone, null, null);
-            return true;
+            return new ServerLocation(player.getEmail(), player.getPhone(), config.getId(player.getEmail()),
+                    player.getCode(), player.getServer());
         }
 
-        return false;
+        throw new IllegalArgumentException("Invalid verification code");
     }
 
     public void resendConfirmRegistrationCode(String phone) {

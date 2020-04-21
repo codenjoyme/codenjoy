@@ -127,6 +127,7 @@ public class RestController {
         String email = player.getEmail();
         validator.all(
                 () -> validator.checkEmail(email, CANT_BE_NULL),
+                () -> validator.checkPhoneNumber(player.getPhone(), CANT_BE_NULL),
                 () -> validator.checkString("FirstName", player.getFirstName()),
                 () -> validator.checkString("LastName", player.getLastName()),
                 () -> validator.checkMD5(player.getPassword(), CANT_BE_NULL),
@@ -143,7 +144,7 @@ public class RestController {
             public ServerLocation onGame() {
                 return dispatcher.registerNew(
                         player.getEmail(),
-                        player.getPhone(),
+                        validator.phoneNormalizer(player.getPhone()),
                         getFullName(player),
                         player.getPassword(),
                         getIp(request)
@@ -513,28 +514,34 @@ public class RestController {
 
 
     @PostMapping(REGISTER + "/confirm")
-    public ResponseEntity<String> confirmRegistration(@RequestBody PhoneCodeDTO phoneCodeDTO) {
-        return registrationService.confirmRegistration(phoneCodeDTO.getPhone(), phoneCodeDTO.getCode())
-                ? ResponseEntity.ok("success")
-                : ResponseEntity.unprocessableEntity().body("Invalid verification code");
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ServerLocation> confirmRegistration(@RequestBody PhoneCodeDTO phoneCodeDTO) {
+        return ResponseEntity.ok(registrationService.
+                confirmRegistration(phoneValidateNormalize(phoneCodeDTO.getPhone()), phoneCodeDTO.getCode()));
     }
 
     @PostMapping(REGISTER + "/resend")
     @ResponseStatus(HttpStatus.OK)
     public void resendRegistrationCode(@RequestBody PhoneDTO phoneDTO) {
-        registrationService.resendConfirmRegistrationCode(phoneDTO.getPhone());
+        registrationService.resendConfirmRegistrationCode(phoneValidateNormalize(phoneDTO.getPhone()));
     }
 
     @PostMapping(REGISTER + "/reset")
     @ResponseStatus(HttpStatus.OK)
     public void sendResetPasswordCode(@RequestBody PhoneDTO phoneDTO) {
-        registrationService.resendResetPasswordCode(phoneDTO.getPhone());
+        registrationService.resendResetPasswordCode(phoneValidateNormalize(phoneDTO.getPhone()));
     }
 
     @PostMapping(REGISTER + "/validate-reset")
     public ResponseEntity<String> validateResetPasswordCode(@RequestBody PhoneCodeDTO phoneCodeDTO) {
-        return registrationService.validateCodeResetPassword(phoneCodeDTO.getPhone(), phoneCodeDTO.getCode())
+        return registrationService
+                .validateCodeResetPassword(phoneValidateNormalize(phoneCodeDTO.getPhone()), phoneCodeDTO.getCode())
                 ? ResponseEntity.ok("success")
-                : ResponseEntity.unprocessableEntity().body("Invalid verification code");
+                : ResponseEntity.badRequest().body("Invalid verification code");
+    }
+
+    private String phoneValidateNormalize(String phone) {
+         validator.checkPhoneNumber(phone, CANT_BE_NULL);
+         return validator.phoneNormalizer(phone);
     }
 }
