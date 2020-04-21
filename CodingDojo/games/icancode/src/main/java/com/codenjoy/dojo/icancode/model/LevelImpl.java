@@ -23,9 +23,6 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.items.BaseItem;
-import com.codenjoy.dojo.icancode.model.items.ElementsMapper;
-import com.codenjoy.dojo.icancode.model.items.FieldItem;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 

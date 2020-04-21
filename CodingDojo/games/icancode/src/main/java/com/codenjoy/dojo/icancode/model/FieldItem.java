@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.items;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -22,9 +22,6 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
-
-import com.codenjoy.dojo.icancode.model.Field;
-import com.codenjoy.dojo.icancode.model.Elements;
 
 public class FieldItem extends BaseItem {
 

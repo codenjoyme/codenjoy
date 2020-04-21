@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.items;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -22,11 +22,6 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
-
-import com.codenjoy.dojo.icancode.model.Cell;
-import com.codenjoy.dojo.icancode.model.Item;
-import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.Player;
 
 import java.util.Arrays;
 import java.util.List;

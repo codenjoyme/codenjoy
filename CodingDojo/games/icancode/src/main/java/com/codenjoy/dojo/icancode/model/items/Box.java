@@ -24,6 +24,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.icancode.model.FieldItem;
 import com.codenjoy.dojo.icancode.model.Player;
 
 

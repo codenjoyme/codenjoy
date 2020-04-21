@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
+import com.codenjoy.dojo.icancode.model.BaseItem;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.icancode.model.Elements;
 

@@ -22,13 +22,13 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
+import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.services.Levels;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;

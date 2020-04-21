@@ -23,10 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.Item;
-import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.Hero;
-import com.codenjoy.dojo.icancode.model.Player;
+import com.codenjoy.dojo.icancode.model.*;
 
 public class Gold extends BaseItem {
 

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.items;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.icancode.model.items.*;
 
 import java.util.EnumMap;
 import java.util.Map;
