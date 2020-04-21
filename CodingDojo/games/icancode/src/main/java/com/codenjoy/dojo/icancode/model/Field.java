@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.interfaces;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -30,7 +30,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
-import com.codenjoy.dojo.icancode.model.Player;
 
 import java.util.List;
 

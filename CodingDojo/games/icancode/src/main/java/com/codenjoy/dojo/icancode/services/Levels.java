@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.LevelImpl;
-import com.codenjoy.dojo.icancode.model.interfaces.Level;
+import com.codenjoy.dojo.icancode.model.Level;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;

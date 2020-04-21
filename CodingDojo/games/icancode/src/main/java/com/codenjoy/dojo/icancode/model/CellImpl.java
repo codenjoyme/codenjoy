@@ -23,8 +23,6 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.Cell;
-import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.items.Air;
 import com.codenjoy.dojo.services.PointImpl;
 

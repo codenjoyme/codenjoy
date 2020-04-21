@@ -23,7 +23,6 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.Field;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;

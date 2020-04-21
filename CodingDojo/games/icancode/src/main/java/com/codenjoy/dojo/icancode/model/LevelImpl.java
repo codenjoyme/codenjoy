@@ -23,10 +23,6 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.Cell;
-import com.codenjoy.dojo.icancode.model.interfaces.Field;
-import com.codenjoy.dojo.icancode.model.interfaces.Item;
-import com.codenjoy.dojo.icancode.model.interfaces.Level;
 import com.codenjoy.dojo.icancode.model.items.BaseItem;
 import com.codenjoy.dojo.icancode.model.items.ElementsMapper;
 import com.codenjoy.dojo.icancode.model.items.FieldItem;

@@ -22,7 +22,7 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.interfaces.Item;
+import com.codenjoy.dojo.icancode.model.Item;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.icancode.model.Elements;

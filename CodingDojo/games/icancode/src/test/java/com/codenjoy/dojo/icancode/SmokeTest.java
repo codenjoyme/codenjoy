@@ -29,7 +29,7 @@ import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.icancode.client.Board;
 import com.codenjoy.dojo.icancode.client.ai.AISolver;
-import com.codenjoy.dojo.icancode.model.interfaces.Level;
+import com.codenjoy.dojo.icancode.model.Level;
 import org.junit.Ignore;
 import org.junit.Test;
 

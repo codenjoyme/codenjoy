@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.Field;
+import com.codenjoy.dojo.icancode.model.Field;
 import com.codenjoy.dojo.icancode.model.Elements;
 
 public class FieldItem extends BaseItem {

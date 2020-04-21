@@ -22,7 +22,7 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.interfaces.Field;
+import com.codenjoy.dojo.icancode.model.Field;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;

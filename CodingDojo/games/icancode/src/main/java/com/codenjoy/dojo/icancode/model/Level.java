@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.interfaces;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L

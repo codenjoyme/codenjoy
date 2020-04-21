@@ -37,7 +37,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.icancode.model.Player;
-import com.codenjoy.dojo.icancode.model.interfaces.Level;
+import com.codenjoy.dojo.icancode.model.Level;
 import org.json.JSONObject;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
