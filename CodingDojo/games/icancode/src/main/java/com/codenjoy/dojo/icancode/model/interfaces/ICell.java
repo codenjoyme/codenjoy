@@ -36,7 +36,7 @@ public interface ICell extends Point {
 
     void comeIn(IItem item);
 
-    boolean isPassable();
+    boolean passable();
 
     <T extends IItem> T item(T type);
 

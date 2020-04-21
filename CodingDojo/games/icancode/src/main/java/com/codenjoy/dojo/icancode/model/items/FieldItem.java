@@ -25,7 +25,6 @@ package com.codenjoy.dojo.icancode.model.items;
 
 import com.codenjoy.dojo.icancode.model.interfaces.IField;
 import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.enums.FeatureItem;
 
 public class FieldItem extends BaseItem {
 
@@ -35,8 +34,8 @@ public class FieldItem extends BaseItem {
         super(element);
     }
 
-    public FieldItem(Elements element, FeatureItem[] features) {
-        super(element, features);
+    public FieldItem(Elements element, boolean passable) {
+        super(element, passable);
     }
 
     public void setField(IField value) {

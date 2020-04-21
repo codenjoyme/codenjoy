@@ -27,7 +27,6 @@ import com.codenjoy.dojo.icancode.model.interfaces.ICell;
 import com.codenjoy.dojo.icancode.model.interfaces.IItem;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Player;
-import com.codenjoy.dojo.icancode.model.enums.FeatureItem;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,18 +36,21 @@ import java.util.List;
  */
 public abstract class BaseItem implements IItem {
 
+    public static final boolean PASSABLE = true;
+    public static final boolean IMPASSABLE = !PASSABLE;
+
     private ICell cell;
-    private FeatureItem[] features;
+    private boolean passable;
     private Elements element;
 
     public BaseItem(Elements element) {
         this.element = element;
-        this.features = new FeatureItem[0];
+        this.passable = true;
     }
 
-    public BaseItem(Elements element, FeatureItem[] features) {
+    public BaseItem(Elements element, boolean passable) {
         this.element = element;
-        this.features = features.clone();
+        this.passable = passable;
     }
 
     @Override
@@ -139,16 +141,8 @@ public abstract class BaseItem implements IItem {
     }
 
     @Override
-    public boolean hasFeatures(FeatureItem[] features) {
-        for (int i = 0; i < this.features.length; ++i) {
-            for (int j = 0; j < features.length; ++j) {
-                if (this.features[i] == features[j]) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+    public boolean passable() {
+        return passable;
     }
 
     @Override

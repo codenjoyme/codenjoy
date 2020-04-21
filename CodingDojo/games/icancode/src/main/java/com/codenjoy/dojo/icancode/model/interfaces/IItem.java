@@ -26,7 +26,6 @@ package com.codenjoy.dojo.icancode.model.interfaces;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Player;
-import com.codenjoy.dojo.icancode.model.enums.FeatureItem;
 
 import java.util.List;
 
@@ -34,6 +33,7 @@ import java.util.List;
  * Created by Mikhail_Udalyi on 01.07.2016.
  */
 public interface IItem extends State<Elements, Player> {
+
     void action(IItem item);
 
     ICell getCell();
@@ -42,7 +42,7 @@ public interface IItem extends State<Elements, Player> {
 
     void setCell(ICell value);
 
-    boolean hasFeatures(FeatureItem[] features);
+    boolean passable();
 
     void removeFromCell();
 }

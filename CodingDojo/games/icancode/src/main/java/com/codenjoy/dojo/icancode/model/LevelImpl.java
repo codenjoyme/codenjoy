@@ -107,7 +107,7 @@ public class LevelImpl implements ILevel {
     @Override
     public boolean isBarrier(int x, int y) {
         return pt(x, y).isOutOf(size)
-                || !getCell(x, y).isPassable();
+                || !getCell(x, y).passable();
     }
 
     @Override

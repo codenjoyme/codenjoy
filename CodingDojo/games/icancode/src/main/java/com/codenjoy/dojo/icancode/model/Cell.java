@@ -23,7 +23,6 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.enums.FeatureItem;
 import com.codenjoy.dojo.icancode.model.interfaces.ICell;
 import com.codenjoy.dojo.icancode.model.interfaces.IItem;
 import com.codenjoy.dojo.icancode.model.items.Air;
@@ -72,9 +71,9 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public boolean isPassable() {
-        return !items.stream()
-                .anyMatch(item -> item.hasFeatures(new FeatureItem[]{FeatureItem.IMPASSABLE}));
+    public boolean passable() {
+        return items.stream()
+                .allMatch(item -> item.passable());
     }
 
     @Override

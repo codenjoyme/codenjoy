@@ -25,13 +25,12 @@ package com.codenjoy.dojo.icancode.model.items;
 
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Player;
-import com.codenjoy.dojo.icancode.model.enums.FeatureItem;
 
 
 public class Box extends FieldItem {
 
     public Box(Elements el) {
-        super(el, new FeatureItem[]{FeatureItem.IMPASSABLE});
+        super(el, IMPASSABLE);
     }
 
     @Override
