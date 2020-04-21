@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.properties;
 
 /*-
  * #%L
@@ -22,22 +22,27 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.stereotype.Service;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
 
-@Service
-public class SmsService {
+@Getter
+@Setter
+@Configuration
+@RequiredArgsConstructor
+@ConfigurationProperties("sms")
+public class SmsProperties {
 
-    private final static int CODE_LENGTH = 6;
+    private SmsTextProperties text;
 
-    public enum SmsType {REGISTRATION, PASSWORD_RESET}
-
-    public String generateVerificationCode() {
-        return RandomStringUtils.randomNumeric(CODE_LENGTH);
+    @Getter
+    @Setter
+    @ConfigurationProperties("text")
+    public static class SmsTextProperties {
+        private String registration;
+        private String resetPassword;
+        private String newPassword;
     }
-
-    public void sendSmsTo(String phone, String code, SmsType smsType) {
-        System.out.println(String.format("SMS to %s with code %s of type %s", phone, code, smsType.name()));
-    }
-
 }

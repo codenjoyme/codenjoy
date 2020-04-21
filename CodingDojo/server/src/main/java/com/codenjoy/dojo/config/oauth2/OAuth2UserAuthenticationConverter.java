@@ -52,7 +52,7 @@ public class OAuth2UserAuthenticationConverter extends DefaultUserAuthentication
 
         UserData data = new UserData(map);
 
-        Registration.User user = registration.getOrRegister(data.id(), data.email(), null, data.readableName());
+        Registration.User user = registration.getOrRegister(data.id(), data.email(), data.readableName());
 
         return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
     }

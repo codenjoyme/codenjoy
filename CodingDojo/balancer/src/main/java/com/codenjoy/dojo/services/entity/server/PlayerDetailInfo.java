@@ -22,9 +22,14 @@ package com.codenjoy.dojo.services.entity.server;
  * #L%
  */
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class PlayerDetailInfo {
 
-    private String name;
+    private String id;
     private String readableName;
     private String callbackUrl;
     private String gameType;
@@ -36,80 +41,23 @@ public class PlayerDetailInfo {
         // do nothing
     }
 
-    public PlayerDetailInfo(String name, String readableName, String callbackUrl, String gameType,
+    public PlayerDetailInfo(String id, String readableName, String callbackUrl, String gameType,
                             String score, String save, User registration)
     {
-        this.name = name;
+        this.id = id;
         this.readableName = readableName;
         this.callbackUrl = callbackUrl;
         this.gameType = gameType;
         this.score = score;
         this.save = save;
-        this.registration = registration;
-    }
-
-
-    public String getGameType() {
-        return gameType;
-    }
-
-    public String getCallbackUrl() {
-        return callbackUrl;
-    }
-
-    public String getScore() {
-        return score;
-    }
-
-    public User getRegistration() {
-        return registration;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSave() {
-        return save;
-    }
-
-    public String getReadableName() {
-        return readableName;
-    }
-
-    public void setReadableName(String readableName) {
-        this.readableName = readableName;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setCallbackUrl(String callbackUrl) {
-        this.callbackUrl = callbackUrl;
-    }
-
-    public void setGameType(String gameType) {
-        this.gameType = gameType;
-    }
-
-    public void setScore(String score) {
-        this.score = score;
-    }
-
-    public void setSave(String save) {
-        this.save = save;
-    }
-
-    public void setRegistration(User registration) {
         this.registration = registration;
     }
 
     @Override
     public String toString() {
         return "PlayerDetailInfo{" +
-                "name='" + name + '\'' +
-                ", id='" + readableName + '\'' +
+                "id='" + id + '\'' +
+                ", readableName='" + readableName + '\'' +
                 ", callbackUrl='" + callbackUrl + '\'' +
                 ", gameType='" + gameType + '\'' +
                 ", score='" + score + '\'' +

@@ -32,6 +32,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class Players {
 
@@ -49,7 +50,10 @@ public class Players {
                         "skills varchar(255)," +
                         "comment varchar(255)," +
                         "code varchar(255)," +
-                        "server varchar(255));");
+                        "server varchar(255)," +
+                        "approved int," +
+                        "verification_code varchar(255)," +
+                        "verification_type varchar(255));");
     }
 
     void removeDatabase() {
@@ -83,7 +87,11 @@ public class Players {
                 rs.getString("skills"),
                 rs.getString("comment"),
                 rs.getString("code"),
-                rs.getString("server"));
+                rs.getString("server"),
+                rs.getInt("approved"),
+                rs.getString("verification_code"),
+                rs.getString("verification_type")
+        );
     }
 
     public List<Player> getPlayers(List<String> emails) {
@@ -118,6 +126,13 @@ public class Players {
         );
     }
 
+    public Optional<Player> getByPhone(String phone) {
+        return pool.select("SELECT * FROM players WHERE phone = ?;",
+                new Object[]{phone},
+                rs -> rs.next() ? Optional.of(getPlayer(rs)) : Optional.empty()
+        );
+    }
+
     public String getCode(String email) {
         return pool.select("SELECT code FROM players WHERE email = ?;",
                 new Object[]{email},
@@ -143,8 +158,8 @@ public class Players {
 
     public void create(Player player) {
         pool.update("INSERT INTO players (first_name, last_name, password, " +
-                        "city, skills, comment, code, server, phone, email) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?,?);",
+                        "city, skills, comment, code, server, phone, email, approved, verification_code, verification_type) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);",
                 getObjects(player));
     }
 
@@ -160,6 +175,16 @@ public class Players {
                 server, code, email);
     }
 
+    public void approveByPhone(String phone) {
+        pool.update("UPDATE players SET approved = ? WHERE phone = ?;",
+                1, phone);
+    }
+
+    public void updateVerificationCode(String phone, String verificationCode, String verificationType) {
+        pool.update("UPDATE players SET verification_code = ?, verification_type = ? WHERE phone = ?;",
+                verificationCode, verificationType, phone);
+    }
+
     private Object[] getObjects(Player player) {
         return new Object[]{
                 player.getFirstName(),
@@ -172,6 +197,9 @@ public class Players {
                 player.getServer(),
                 player.getPhone(),
                 player.getEmail(),
+                player.getApproved(),
+                player.getVerificationCode(),
+                player.getVerificationType(),
         };
     }
 

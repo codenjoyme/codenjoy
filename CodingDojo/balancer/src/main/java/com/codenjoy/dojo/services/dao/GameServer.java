@@ -32,10 +32,6 @@ import com.codenjoy.dojo.services.httpclient.GameClientResolver;
 import com.codenjoy.dojo.services.httpclient.GameServerClientException;
 import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import java.util.List;
-
-import com.codenjoy.dojo.web.rest.dto.PhoneCodeDTO;
-import com.codenjoy.dojo.web.rest.dto.PhoneDTO;
-import feign.RequestLine;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -77,7 +73,7 @@ public class GameServer {
                     email,
                     phone,
                     name,
-                    0,
+                    1,
                     password,
                     code,
                     null)
@@ -154,57 +150,4 @@ public class GameServer {
             return false;
         }
     }
-
-    public void confirmRegistration(String server, PhoneCodeDTO phoneCodeDTO) {
-        try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Confirm registration for phone {} with code {} on server {}",
-                        phoneCodeDTO.getPhone(), phoneCodeDTO.getCode(), server);
-            }
-            gameClientResolver.resolveClient(server).confirmRegistration(phoneCodeDTO);
-        } catch (GameServerClientException e) {
-            logger.error("Error occurred while confirm registration process", e);
-            throw e;
-        }
-    }
-
-    public void sendRegistrationCode(String server, PhoneDTO phoneDTO) {
-        try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Sending registration code for the phone {} on server {}",
-                        phoneDTO.getPhone(), server);
-            }
-            gameClientResolver.resolveClient(server).sendRegistrationCode(phoneDTO);
-        } catch (GameServerClientException e) {
-            logger.error("Error occurred during sending registration code", e);
-            throw e;
-        }
-    }
-
-    public void sendResetPasswordCode(String server, PhoneDTO phoneDTO) {
-        try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Sending reset password code for the phone {} on server {}",
-                        phoneDTO.getPhone(), server);
-            }
-            gameClientResolver.resolveClient(server).sendResetPasswordCode(phoneDTO);
-        } catch (GameServerClientException e) {
-            logger.error("Error occurred while sending reset password code", e);
-            throw e;
-        }
-    }
-
-    public void validateResetPasswordCode(String server, PhoneCodeDTO phoneCodeDTO) {
-        try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Validating reset password code the phone {} with code {} on server {}",
-                        phoneCodeDTO.getPhone(), phoneCodeDTO.getCode(), server);
-            }
-            gameClientResolver.resolveClient(server).validateResetPasswordCode(phoneCodeDTO);
-        } catch (GameServerClientException e) {
-            logger.error("Error occurred while validating reset password code", e);
-            throw e;
-        }
-    }
-
 }

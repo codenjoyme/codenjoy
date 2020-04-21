@@ -51,7 +51,7 @@ public class OAuth2MappingUserService extends DefaultOAuth2UserService {
 
         UserData data = new UserData(map);
 
-        Registration.User user = registration.getOrRegister(data.id(), data.email(), null, data.readableName());
+        Registration.User user = registration.getOrRegister(data.id(), data.email(), data.readableName());
         
         return user;
     }

@@ -29,8 +29,6 @@ import com.codenjoy.dojo.services.mail.MailService;
 import com.codenjoy.dojo.web.controller.AdminController;
 import com.codenjoy.dojo.web.controller.RoomsAliaser;
 import com.codenjoy.dojo.web.controller.Validator;
-import com.codenjoy.dojo.web.rest.pojo.PPhone;
-import com.codenjoy.dojo.web.rest.pojo.PPhoneCode;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,7 +37,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -70,7 +67,6 @@ public class RegistrationService {
     private UserDetailsService userDetailsService;
     private ViewDelegationService viewDelegationService;
     private GameService gameService;
-    private SmsService smsService;
 
     public String register(Player player, String roomName, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
@@ -101,7 +97,7 @@ public class RegistrationService {
                 if (!playerService.isRegistrationOpened()) {
                     return openRegistrationForm(request, model, id, email, name);
                 }
-                Registration.User user = registration.register(id, player.getEmail(), player.getPhone(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles());
+                Registration.User user = registration.register(id, player.getEmail(), player.getReadableName(), player.getPassword(), player.getData(), GameAuthorities.USER.roles());
                 code = user.getCode();
             } else {
                 code = registration.getCodeById(id);
@@ -238,57 +234,4 @@ public class RegistrationService {
         model.addAttribute("gameNames", rooms.alises());
         return "register";
     }
-
-    public boolean confirmRegistration(PPhoneCode phoneCode) {
-        Registration.User user = registration.getUserByPhone(phoneCode.getPhone())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        if (user.getApproved() == 1) {
-            throw new RuntimeException("User already confirmed");
-        }
-
-        if(validateCode(phoneCode.getCode(), SmsService.SmsType.REGISTRATION, user)) {
-            registration.approve(user.getCode());
-            registration.updateVerificationCode(phoneCode.getPhone(), null, null);
-        }
-
-        return false;
-    }
-
-    public void resendConfirmRegistrationCode(PPhone phone) {
-        Registration.User user = registration.getUserByPhone(phone.getPhone())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        if(user.getApproved() == 1) {
-            throw new RuntimeException("User already confirmed");
-        }
-        String verificationCode = smsService.generateVerificationCode();
-        registration.updateVerificationCode(phone.getPhone(), verificationCode, SmsService.SmsType.REGISTRATION.name());
-        smsService.sendSmsTo(phone.getPhone(), verificationCode, SmsService.SmsType.REGISTRATION);
-    }
-
-    public void resendResetPasswordCode(PPhone phone) {
-        registration.getUserByPhone(phone.getPhone())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        String verificationCode = smsService.generateVerificationCode();
-        registration.updateVerificationCode(phone.getPhone(), verificationCode, SmsService.SmsType.PASSWORD_RESET.name());
-        smsService.sendSmsTo(phone.getPhone(), verificationCode, SmsService.SmsType.PASSWORD_RESET);
-    }
-
-    public boolean validateCodeResetPassword(PPhoneCode phoneCode) {
-        Registration.User user = registration.getUserByPhone(phoneCode.getPhone())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        if(validateCode(phoneCode.getCode(), SmsService.SmsType.PASSWORD_RESET, user)) {
-
-            //TODO generate random password
-            registration.updateVerificationCode(phoneCode.getPhone(), null, null);
-        }
-
-        return true;
-    }
-
-    private boolean validateCode(String smsCode, SmsService.SmsType codeType, Registration.User user) {
-        return (!StringUtils.isEmpty(smsCode) && smsCode.equals(user.getVerificationCode()))
-                && (!StringUtils.isEmpty(codeType) && codeType.name().equals(user.getVerificationType()));
-    }
-
 }

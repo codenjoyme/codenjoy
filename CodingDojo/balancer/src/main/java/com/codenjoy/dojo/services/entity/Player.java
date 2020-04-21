@@ -38,6 +38,9 @@ public class Player {
     private String comment;
     private String code;
     private String server;
+    private int approved;
+    private String verificationCode;
+    private String verificationType;
 
     public Player() {
         // do nothing
@@ -58,8 +61,8 @@ public class Player {
 
     public Player(String email, String phone, String firstName, String lastName,
                   String password, String city, String skills,
-                  String comment, String code, String server)
-    {
+                  String comment, String code, String server,
+                  int approved, String verificationCode, String verificationType) {
         this.email = email;
         this.phone = phone;
         this.firstName = firstName;
@@ -70,6 +73,9 @@ public class Player {
         this.comment = comment;
         this.code = code;
         this.server = server;
+        this.approved = approved;
+        this.verificationCode = verificationCode;
+        this.verificationType = verificationType;
     }
 
     @Override
@@ -85,6 +91,9 @@ public class Player {
                 ", comment='" + comment + '\'' +
                 ", code='" + code + '\'' +
                 ", server='" + server + '\'' +
+                ", approved=" + approved +
+                ", verificationCode='" + verificationCode + '\'' +
+                ", verificationType='" + verificationType + '\'' +
                 '}';
     }
 
@@ -107,5 +116,8 @@ public class Player {
         comment = StringUtils.isEmpty(comment) ? player.comment : comment;
         code = StringUtils.isEmpty(code) ? player.code : code;
         server = StringUtils.isEmpty(server) ? player.server : server;
+
+        verificationCode = StringUtils.isEmpty(verificationCode) ? player.verificationCode : verificationCode;
+        verificationType = StringUtils.isEmpty(verificationType) ? player.verificationType : verificationType;
     }
 }
