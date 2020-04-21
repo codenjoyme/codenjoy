@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.interfaces;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -23,23 +23,26 @@ package com.codenjoy.dojo.icancode.model.interfaces;
  */
 
 
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
 
 import java.util.List;
 
-public interface ILevel {
+/**
+ * Created by Mikhail_Udalyi on 01.07.2016.
+ */
+public interface Item extends State<Elements, Player> {
 
-    ICell getCell(int x, int y);
+    void action(Item item);
 
-    ICell getCell(Point point);
+    Cell getCell();
 
-    int getSize();
+    List<Item> getItemsInSameCell(int layer);
 
-    <T extends IItem> List<T> getItems(Class clazz);
+    void setCell(Cell value);
 
-    ICell[] getCells();
+    boolean passable();
 
-    boolean isBarrier(int x, int y);
+    void removeFromCell();
 
-    void setField(IField field);
+    int layer();
 }

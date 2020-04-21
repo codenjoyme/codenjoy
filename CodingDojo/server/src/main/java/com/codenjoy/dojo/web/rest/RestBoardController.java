@@ -33,6 +33,8 @@ import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import lombok.AllArgsConstructor;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -156,15 +158,25 @@ public class RestBoardController {
             return Arrays.asList();
         }
 
-        // TODO Как-то тут сложно
+        // TODO Как-то тут сложно и долго грузится
+        // TODO а еще если участник играл в одну игру, а потом переключился в бомбер и там продолжал, то тут будет ошибка так как одной игрой парсим другую
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameService.getGame(result.get(0).getGameType()).getPlots());
 
+        // TODO доделать для icancode
         result.forEach(log -> {
-            String board = log.getBoard().replaceAll("\n", "");
-            log.setBoard((String) decoder.encodeForBrowser(board));
+            Object board = tryJson(log.getBoard());
+            log.setBoard(decoder.encodeForBrowser(board).toString());
         });
 
         return result;
+    }
+
+    private Object tryJson(String board) {
+        try {
+            return new JSONObject(board);
+        } catch (JSONException e) {
+            return board;
+        }
     }
 
     @GetMapping("/{gameName}/status")

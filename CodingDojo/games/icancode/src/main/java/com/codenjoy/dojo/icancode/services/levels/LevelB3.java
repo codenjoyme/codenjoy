@@ -2,20 +2,14 @@ package com.codenjoy.dojo.icancode.services.levels;
 
 import java.util.List;
 
-public class LevelB1 implements Level {
+public class LevelB3 implements Level {
     
     @Override
     public String help() {
-        return "You can use new methods for the scanner:<br>\n" +
-                "<pre>var goldPoints = scanner.getGold();\n" +
-                "var startPoint = scanner.getStart();\n" +
-                "var exitPoint = scanner.getExit();\n" +
-                "var robotPoint = scanner.getMe();</pre>\n" +
+        return "Wow! You can use this amazing method for the scanner:<br>\n" +
+                "<pre>var destinationPoints = scanner.getGold();\n" +
+                "var nextPoint = scanner.getShortestWay(destinationPoints[0]);</pre>\n" +
                 "Coordinate {x:0, y:0} in the left-top corner of board.<br><br>\n" +
-
-                "Try this code for check Robot position.<br>\n" +
-                "<pre>robot.log(scanner.getMe());</pre>\n" +
-                "So you should collect all the golden bags in the Maze.<br><br>\n" +
 
                 "Remember ! Your program should work for all previous levels too.";
     }
@@ -25,14 +19,14 @@ public class LevelB1 implements Level {
         return "function program(robot) {\n" +
                 "    var scanner = robot.getScanner();\n" +
                 "    var dest = scanner.getGold();\n" +
-                "    var start = scanner.getStart();\n" +
+                "    var next = scanner.getShortestWay(dest[0])[1];\n" +
                 "    var exit = scanner.getExit();\n" +
                 "    var from = scanner.getMe();\n" +
                 "    // TODO write your code here\n" +
                 "}";
     }
 
-    @Override // TODO попробовать решить без getShortestWay
+    @Override
     public String winCode() {
         return "function program(robot) {\n" +
                 "    var scanner = robot.getScanner();\n" +
@@ -60,14 +54,14 @@ public class LevelB1 implements Level {
     @Override
     public String map() {
         return  "          \n" +
-                "          \n" +
                 " ######## \n" +
-                " #S....E# \n" +
-                " ###..### \n" +
-                "   #$$#   \n" +
-                "   #$$#   \n" +
-                "   ####   \n" +
-                "          \n" +
+                " #S...$.# \n" +
+                " #..###.# \n" +
+                " #..# #.# \n" +
+                " #.$###$# \n" +
+                " #......# \n" +
+                " #$.$..E# \n" +
+                " ######## \n" +
                 "          \n";
     }
 
@@ -76,14 +70,15 @@ public class LevelB1 implements Level {
         return "{" +
                 "	'scanner.':{" +
                 "		'synonyms':['robot.getScanner().']," +
-                "		'values':['getGold()', 'getExit()', 'getStart()', 'getMe()']" +
+                "		'values':['getShortestWay()']" +
                 "	}" +
                 "}";
     }
 
     @Override
     public List<String> befungeCommands() {
-        return Level.extendBefunge(new Level9(),
-                "value-gold", "value-end", "value-start");
+        return Level.extendBefunge(new LevelB2(),
+                "shortest-way", "check-stack",
+                "print-stack");
     }
 }

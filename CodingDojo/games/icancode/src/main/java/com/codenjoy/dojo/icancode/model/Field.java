@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.interfaces;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -30,23 +30,22 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
-import com.codenjoy.dojo.icancode.model.Player;
 
 import java.util.List;
 
-public interface IField extends GameField<Player> {
+public interface Field extends GameField<Player> {
 
     boolean isBarrier(int x, int y);
 
-    ICell getStartPosition();
+    Cell getStartPosition();
 
-    ICell getEndPosition();
+    Cell getEndPosition();
 
-    void move(IItem item, int x, int y);
+    void move(Item item, int x, int y);
 
-    ICell getCell(int x, int y);
+    Cell getCell(int x, int y);
 
-    IItem getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
+    Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
 
     boolean isAt(int x, int y, Class<? extends BaseItem>... clazz);
 
@@ -58,7 +57,7 @@ public interface IField extends GameField<Player> {
 
     Dice dice();
 
-    ILevel getLevel();
+    Level getLevel();
 
     void fire(State owner, Direction direction, Point from);
 

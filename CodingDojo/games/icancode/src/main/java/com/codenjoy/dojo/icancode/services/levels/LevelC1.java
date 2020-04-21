@@ -30,7 +30,7 @@ public class LevelC1 implements Level {
 
     @Override
     public String defaultCode() {
-        return new LevelB1().defaultCode();
+        return new LevelB3().defaultCode();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class LevelC1 implements Level {
 
     @Override
     public List<String> befungeCommands() {
-        return Level.extendBefunge(new LevelB1(),
+        return Level.extendBefunge(new LevelB3(),
                 "value-hole",
                 "robot-jump-left", "robot-jump-right", "robot-jump-up", "robot-jump-down",
                 "robot-jump");

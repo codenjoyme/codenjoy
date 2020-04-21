@@ -181,7 +181,7 @@ public class LayeredViewPrinterTest {
             }
 
             @Override
-            public Object[] itemsInSameCell(State item) {
+            public Object[] itemsInSameCell(State item, int layer) {
                 Point pt = (Point) item;
                 int length = lxy.getLength(pt.getX(), pt.getY());
                 State inCell = elements().apply(length, 0);

@@ -23,20 +23,16 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.ICell;
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.icancode.model.items.*;
 
 import java.util.Arrays;
 
-public class Hero extends PlayerHero<IField> implements State<Elements, Player> {
+public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private boolean alive;
     private boolean win;
@@ -83,15 +79,15 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
     }
 
     @Override
-    public void init(IField field) {
+    public void init(Field field) {
         super.init(field);
         item.setField(field);
         reset(field);
     }
 
-    private void reset(IField field) {
+    private void reset(Field field) {
         resetFlags();
-        field.getStartPosition().addItem(this.item);
+        field.getStartPosition().add(this.item);
         field.reset();
     }
 
@@ -200,7 +196,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         } else if (p[0] == 0) {
             reset = true;
         } else if (p[0] == -1) { // TODO test me
-            ICell end = field.getEndPosition();
+            Cell end = field.getEndPosition();
             field.move(item, end.getX(), end.getY());
         }
     }
@@ -272,31 +268,38 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
 
-            boolean wasPush = pushBox(newX, newY);
-
             if (flying && (field.isAt(newX, newY, Box.class) || field.isAt(newX, newY, LaserMachine.class))) {
                 int nextX = direction.changeX(newX);
                 int nextY = direction.changeY(newY);
                 if (!field.isBarrier(nextX, nextY)) {
                     field.move(item, newX, newY);
                 }
-            } else if (!field.isBarrier(newX, newY)) {
-                if (!wasPush && pull) {
-                    pullBox(x, y);
-                }
-                field.move(item, newX, newY);
-
             } else {
-                if (landOn) {
-                    landOn = false;
+                if (pull && !landOn) {
+                    if (tryPushBox(newX, newY)) {
+                        pull = false;
+                    }
+                }
 
-                    item.getCell().comeIn(item);
+                if (field.isBarrier(newX, newY)) {
+                    if (landOn) {
+                        item.getCell().comeIn(item);
+                    }
+                } else {
+                    if (pull) {
+                        if (tryPullBox(x, y)) {
+                            pull = false;
+                        }
+                    }
+                    field.move(item, newX, newY);
                 }
             }
         }
         if (!flying) {
             direction = null;
         }
+        landOn = false;
+        pull = false;
     }
 
     public void fixLayer() {
@@ -307,25 +310,21 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         }
     }
 
-    private void pullBox(int x, int y) {
+    private boolean tryPullBox(int x, int y) {
         int boxX = direction.inverted().changeX(x);
         int boxY = direction.inverted().changeY(y);
 
-        IItem item = field.getIfPresent(Box.class, boxX, boxY);
+        Item item = field.getIfPresent(Box.class, boxX, boxY);
         if (item == null) {
-            return;
-        }
-
-        field.move(item, x, y);
-        pull = false;
-    }
-
-    private boolean pushBox(int x, int y) {
-        if (!pull) {
             return false;
         }
 
-        IItem item = field.getIfPresent(Box.class, x, y);
+        field.move(item, x, y);
+        return true;
+    }
+
+    private boolean tryPushBox(int x, int y) {
+        Item item = field.getIfPresent(Box.class, x, y);
 
         if (item == null) {
             return false;
@@ -338,7 +337,12 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
             return false;
         }
 
-        if (field.isAt(newX, newY, Gold.class, HeroItem.class)) {
+        if (field.isAt(newX, newY, HeroItem.class)) {
+            return false;
+        }
+
+        Gold gold = (Gold)field.getIfPresent(Gold.class, newX, newY);
+        if (gold != null && !gold.getHidden()) {
             return false;
         }
 

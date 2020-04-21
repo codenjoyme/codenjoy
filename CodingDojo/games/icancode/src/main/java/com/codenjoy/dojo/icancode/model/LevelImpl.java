@@ -23,28 +23,23 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.ICell;
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
-import com.codenjoy.dojo.icancode.model.items.BaseItem;
-import com.codenjoy.dojo.icancode.model.items.ElementsMapper;
-import com.codenjoy.dojo.icancode.model.items.FieldItem;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.fest.reflect.core.Reflection.constructor;
 
-public class LevelImpl implements ILevel {
-    private ICell[] cells;
+public class LevelImpl implements Level {
+
+    private Cell[] cells;
     private int size;
     private LengthToXY xy;
 
     public LevelImpl(String map) {
-        cells = new ICell[map.length()];
+        cells = new Cell[map.length()];
         size = (int) Math.sqrt(map.length());
         xy = new LengthToXY(size);
         if (size*size != map.length()) {
@@ -60,16 +55,16 @@ public class LevelImpl implements ILevel {
         for (int y = size - 1; y > -1; --y) {
             for (int x = 0; x < size; ++x) {
 
-                Cell cell = new Cell(x, y);
+                CellImpl cell = new CellImpl(x, y);
                 Elements element = Elements.valueOf(map.charAt(indexChar));
                 BaseItem item = getBaseItem(element);
 
                 if (element.getLayer() != Elements.Layers.LAYER1) {
                     Elements atBottom = Elements.valueOf(Elements.FLOOR.ch());
-                    cell.addItem(getBaseItem(atBottom));
+                    cell.add(getBaseItem(atBottom));
                 }
 
-                cell.addItem(item);
+                cell.add(item);
                 cells[xy.getLength(x, y)] = cell;
                 ++indexChar;
             }
@@ -89,34 +84,33 @@ public class LevelImpl implements ILevel {
     }
 
     @Override
-    public ICell getCell(int x, int y) {
+    public Cell getCell(int x, int y) {
         return cells[xy.getLength(x, y)];
     }
 
     @Override
-    public ICell getCell(Point point) {
+    public Cell getCell(Point point) {
         return getCell(point.getX(), point.getY());
     }
 
     @Override
-    public ICell[] getCells() {
+    public Cell[] getCells() {
         return cells.clone();
     }
 
     @Override
     public boolean isBarrier(int x, int y) {
-        boolean isAbroad = x > size - 1 || x < 0 || y < 0 || y > size - 1;
-
-        return isAbroad || !getCell(x, y).isPassable();
+        return pt(x, y).isOutOf(size)
+                || !getCell(x, y).passable();
     }
 
     @Override
-    public <T extends IItem> List<T> getItems(Class clazz) {
+    public <T extends Item> List<T> getItems(Class clazz) {
         List<T> result = new LinkedList<>();
         List<T> items;
 
         for (int i = 0; i < cells.length; ++i) {
-            items = cells[i].getItems();
+            items = cells[i].items();
 
             for (int j = 0; j < items.size(); ++j) {
                 if (clazz.isInstance(items.get(j))) {
@@ -128,10 +122,8 @@ public class LevelImpl implements ILevel {
         return result;
     }
 
-
-
     @Override
-    public void setField(IField field) {
+    public void setField(Field field) {
         List<FieldItem> items = getItems(FieldItem.class);
 
         for (int i = 0; i < items.size(); ++i) {

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.items;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -23,23 +23,19 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
-import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.enums.FeatureItem;
-
 public class FieldItem extends BaseItem {
 
-    protected IField field;
+    protected Field field;
 
     public FieldItem(Elements element) {
         super(element);
     }
 
-    public FieldItem(Elements element, FeatureItem[] features) {
-        super(element, features);
+    public FieldItem(Elements element, boolean passable) {
+        super(element, passable);
     }
 
-    public void setField(IField value) {
+    public void setField(Field value) {
         field = value;
     }
 

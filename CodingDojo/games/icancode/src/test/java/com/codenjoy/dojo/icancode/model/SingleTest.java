@@ -32,8 +32,6 @@ import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,8 +57,8 @@ public class SingleTest {
     private EventListener listener2;
     private Single single1;
     private Single single2;
-    private List<ILevel> singles1;
-    private List<ILevel> singles2;
+    private List<Level> singles1;
+    private List<Level> singles2;
     private ICanCode gameMultiple;
 
     @Before
@@ -90,7 +88,7 @@ public class SingleTest {
         singles1 = createLevels(strings);
         singles2 = createLevels(strings);
 
-        ILevel levelMultiple = createLevels(Arrays.asList(multiple)).get(0);
+        Level levelMultiple = createLevels(Arrays.asList(multiple)).get(0);
         gameMultiple = new ICanCode(levelMultiple, dice, ICanCode.MULTIPLE);
 
         listener1 = mock(EventListener.class);
@@ -116,10 +114,10 @@ public class SingleTest {
         return (Hero)single2.getJoystick();
     }
 
-    private List<ILevel> createLevels(Collection<String> boards) {
-        List<ILevel> levels = new LinkedList<>();
+    private List<Level> createLevels(Collection<String> boards) {
+        List<Level> levels = new LinkedList<>();
         for (String board : boards) {
-            ILevel level = new LevelImpl(board);
+            Level level = new LevelImpl(board);
             levels.add(level);
         }
         return levels;
@@ -147,7 +145,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldNextLevelWhenFinishCurrent() {
+    public void shouldNextLevel_whenFinishCurrent() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +
@@ -603,6 +601,199 @@ public class SingleTest {
                 "----");
     }
 
+    @Test
+    public void shouldSeveralPlayersAtOneField_checkDrawing() {
+        // given
+        shouldSeveralPlayersCollectionAtLastLevel();
+
+        allAtFloor();
+
+        // when
+        hero2().jump();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        assertF(single1,
+                "----" +
+                "-^--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-X--" +
+                "----" +
+                "----");
+
+
+        assertF(single2,
+                "----" +
+                "-*--" +
+                "----" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        allAtFloor();
+
+        // when
+        hero1().jump();
+        hero2().jump();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "----" +
+                "----");
+
+        assertF(single1,
+                "----" +
+                "-*--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "----" +
+                "----" +
+                "----");
+
+
+        assertF(single2,
+                "----" +
+                "-*--" +
+                "----" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        allAtFloor();
+
+        // when
+        hero1().jump();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-X--" +
+                "----" +
+                "----");
+
+        assertF(single1,
+                "----" +
+                "-*--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+
+        assertF(single2,
+                "----" +
+                "-^--" +
+                "----" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        allAtFloor();
+
+    }
+
+    private void allAtFloor() {
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        assertF(single1,
+                "----" +
+                "----" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+
+        assertF(single2,
+                "----" +
+                "----" +
+                "----" +
+                "----");
+    }
+
     int count = 0;
     private void tick(Single single) {
         ICanCode field = (ICanCode)single.getField();
@@ -628,7 +819,7 @@ public class SingleTest {
     }
 
     private void nextlevel(Single single, ICanCode field) {
-        List<ILevel> levels = this.singles1;
+        List<Level> levels = this.singles1;
         if (levels.indexOf(field.getLevel()) == -1) {
             levels = this.singles2;
             if (levels.indexOf(field.getLevel()) == -1) {
@@ -644,7 +835,7 @@ public class SingleTest {
         loadLevel(single, levels, index + 1, false);
     }
 
-    private boolean loadLevel(Single single, List<ILevel> levels, int index, boolean ask) {
+    private boolean loadLevel(Single single, List<Level> levels, int index, boolean ask) {
         LevelProgress progress = single.getProgress();
         if (ask) {
             if (!progress.canChange(index)) {
@@ -1553,7 +1744,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldSelectLevelWhenAllLevelsAreDone() {
+    public void shouldSelectLevel_whenAllLevelsAreDone() {
         // given
         shouldAllLevelsAreDone();
 
@@ -2737,7 +2928,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldChangeLevelWhenAllLevelsAreDone() {
+    public void shouldChangeLevel_whenAllLevelsAreDone() {
         // given
         shouldAllLevelsAreDone_case2();
 
@@ -3011,7 +3202,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldResetLevelWhenAllLevelsAreDone() {
+    public void shouldResetLevel_whenAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +
@@ -3436,7 +3627,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldSelectLevelWhenNotAllLevelsAreDone() {
+    public void shouldSelectLevel_whenNotAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +

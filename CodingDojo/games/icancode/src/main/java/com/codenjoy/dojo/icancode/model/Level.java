@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.enums;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -23,9 +23,23 @@ package com.codenjoy.dojo.icancode.model.enums;
  */
 
 
-/**
- * Created by Mikhail_Udalyi on 01.07.2016.
- */
-public enum FeatureItem {
-    IMPASSABLE
+import com.codenjoy.dojo.services.Point;
+
+import java.util.List;
+
+public interface Level {
+
+    Cell getCell(int x, int y);
+
+    Cell getCell(Point point);
+
+    int getSize();
+
+    <T extends Item> List<T> getItems(Class clazz);
+
+    Cell[] getCells();
+
+    boolean isBarrier(int x, int y);
+
+    void setField(Field field);
 }
