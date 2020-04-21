@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.ICell;
+import com.codenjoy.dojo.icancode.model.interfaces.Cell;
 import com.codenjoy.dojo.icancode.model.interfaces.IField;
 import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.items.*;
@@ -199,7 +199,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         } else if (p[0] == 0) {
             reset = true;
         } else if (p[0] == -1) { // TODO test me
-            ICell end = field.getEndPosition();
+            Cell end = field.getEndPosition();
             field.move(item, end.getX(), end.getY());
         }
     }

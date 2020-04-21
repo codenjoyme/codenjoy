@@ -29,15 +29,15 @@ import java.util.List;
 
 public interface Level {
 
-    ICell getCell(int x, int y);
+    Cell getCell(int x, int y);
 
-    ICell getCell(Point point);
+    Cell getCell(Point point);
 
     int getSize();
 
     <T extends Item> List<T> getItems(Class clazz);
 
-    ICell[] getCells();
+    Cell[] getCells();
 
     boolean isBarrier(int x, int y);
 

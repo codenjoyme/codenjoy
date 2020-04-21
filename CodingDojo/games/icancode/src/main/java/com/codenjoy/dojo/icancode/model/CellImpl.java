@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.ICell;
+import com.codenjoy.dojo.icancode.model.interfaces.Cell;
 import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.items.Air;
 import com.codenjoy.dojo.services.PointImpl;
@@ -39,11 +39,11 @@ import static java.util.stream.Collectors.toList;
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public class Cell extends PointImpl implements ICell {
+public class CellImpl extends PointImpl implements Cell {
 
     private List<Item> items = new ArrayList<>();
 
-    public Cell(int x, int y) {
+    public CellImpl(int x, int y) {
         super(x, y);
     }
 

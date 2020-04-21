@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.ICell;
+import com.codenjoy.dojo.icancode.model.interfaces.Cell;
 import com.codenjoy.dojo.icancode.model.interfaces.IField;
 import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.interfaces.Level;
@@ -40,12 +40,12 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.fest.reflect.core.Reflection.constructor;
 
 public class LevelImpl implements Level {
-    private ICell[] cells;
+    private Cell[] cells;
     private int size;
     private LengthToXY xy;
 
     public LevelImpl(String map) {
-        cells = new ICell[map.length()];
+        cells = new Cell[map.length()];
         size = (int) Math.sqrt(map.length());
         xy = new LengthToXY(size);
         if (size*size != map.length()) {
@@ -61,7 +61,7 @@ public class LevelImpl implements Level {
         for (int y = size - 1; y > -1; --y) {
             for (int x = 0; x < size; ++x) {
 
-                Cell cell = new Cell(x, y);
+                CellImpl cell = new CellImpl(x, y);
                 Elements element = Elements.valueOf(map.charAt(indexChar));
                 BaseItem item = getBaseItem(element);
 
@@ -90,17 +90,17 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public ICell getCell(int x, int y) {
+    public Cell getCell(int x, int y) {
         return cells[xy.getLength(x, y)];
     }
 
     @Override
-    public ICell getCell(Point point) {
+    public Cell getCell(Point point) {
         return getCell(point.getX(), point.getY());
     }
 
     @Override
-    public ICell[] getCells() {
+    public Cell[] getCells() {
         return cells.clone();
     }
 

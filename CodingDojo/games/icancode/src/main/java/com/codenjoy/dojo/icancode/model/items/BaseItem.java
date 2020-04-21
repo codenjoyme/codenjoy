@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.ICell;
+import com.codenjoy.dojo.icancode.model.interfaces.Cell;
 import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Player;
@@ -39,7 +39,7 @@ public abstract class BaseItem implements Item {
     public static final boolean PASSABLE = true;
     public static final boolean IMPASSABLE = !PASSABLE;
 
-    private ICell cell;
+    private Cell cell;
     private boolean passable;
     private Elements element;
 
@@ -59,7 +59,7 @@ public abstract class BaseItem implements Item {
     }
 
     @Override
-    public ICell getCell() {
+    public Cell getCell() {
         return cell;
     }
 
@@ -88,7 +88,7 @@ public abstract class BaseItem implements Item {
     }
 
     @Override
-    public void setCell(ICell value) {
+    public void setCell(Cell value) {
         cell = value;
     }
 

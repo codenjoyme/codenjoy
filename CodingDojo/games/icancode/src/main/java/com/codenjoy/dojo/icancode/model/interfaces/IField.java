@@ -38,13 +38,13 @@ public interface IField extends GameField<Player> {
 
     boolean isBarrier(int x, int y);
 
-    ICell getStartPosition();
+    Cell getStartPosition();
 
-    ICell getEndPosition();
+    Cell getEndPosition();
 
     void move(Item item, int x, int y);
 
-    ICell getCell(int x, int y);
+    Cell getCell(int x, int y);
 
     Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
 
