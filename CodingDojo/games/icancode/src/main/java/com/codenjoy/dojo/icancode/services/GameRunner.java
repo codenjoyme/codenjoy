@@ -76,7 +76,8 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TRAINING.apply(Levels.all().size());
+        // -1 потому что считаются только SINGLE уровни не включая последнего MULTIPLE
+        return MultiplayerType.TRAINING.apply(Levels.all().size() - 1);
     }
 
     public Level loadLevel(int level) {
