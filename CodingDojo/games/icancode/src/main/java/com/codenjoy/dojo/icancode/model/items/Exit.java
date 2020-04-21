@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
+import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Hero;
 
@@ -34,7 +34,7 @@ public class Exit extends BaseItem {
     }
 
     @Override
-    public void action(IItem item) {
+    public void action(Item item) {
         HeroItem heroItem = getIf(item, HeroItem.class);
         if (heroItem == null) {
             return;

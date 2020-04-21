@@ -24,7 +24,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.icancode.model.interfaces.ICell;
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
+import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Player;
 
@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public abstract class BaseItem implements IItem {
+public abstract class BaseItem implements Item {
 
     public static final boolean PASSABLE = true;
     public static final boolean IMPASSABLE = !PASSABLE;
@@ -54,7 +54,7 @@ public abstract class BaseItem implements IItem {
     }
 
     @Override
-    public void action(IItem item) {
+    public void action(Item item) {
         // do nothing
     }
 
@@ -64,11 +64,11 @@ public abstract class BaseItem implements IItem {
     }
 
     @Override
-    public List<IItem> getItemsInSameCell() {
+    public List<Item> getItemsInSameCell() {
         if (cell == null) {
             return Arrays.asList();
         }
-        List<IItem> items = cell.items();
+        List<Item> items = cell.items();
         items.remove(this);
         return items;
     }

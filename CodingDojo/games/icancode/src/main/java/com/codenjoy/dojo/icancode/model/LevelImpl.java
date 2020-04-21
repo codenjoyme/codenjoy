@@ -25,7 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.interfaces.ICell;
 import com.codenjoy.dojo.icancode.model.interfaces.IField;
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
+import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import com.codenjoy.dojo.icancode.model.items.BaseItem;
 import com.codenjoy.dojo.icancode.model.items.ElementsMapper;
@@ -111,7 +111,7 @@ public class LevelImpl implements ILevel {
     }
 
     @Override
-    public <T extends IItem> List<T> getItems(Class clazz) {
+    public <T extends Item> List<T> getItems(Class clazz) {
         List<T> result = new LinkedList<>();
         List<T> items;
 

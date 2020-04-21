@@ -24,9 +24,8 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.interfaces.ICell;
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
+import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.items.Air;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.ArrayList;
@@ -42,18 +41,14 @@ import static java.util.stream.Collectors.toList;
  */
 public class Cell extends PointImpl implements ICell {
 
-    private List<IItem> items = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
 
     public Cell(int x, int y) {
         super(x, y);
     }
 
-    public Cell(Point point) {
-        super(point);
-    }
-
     @Override
-    public void add(IItem item) {
+    public void add(Item item) {
         item.removeFromCell();
 
         items.add(item);
@@ -61,7 +56,7 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public void comeIn(IItem input) {
+    public void comeIn(Item input) {
         items().stream()
                 .filter(item -> !item.equals(input))
                 .forEach(item -> {
@@ -77,19 +72,19 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public <T extends IItem> T item(T type) {
+    public <T extends Item> T item(T type) {
         return (T) streamOf(type.getClass())
                 .findFirst()
                 .orElse(null);
     }
 
-    private Stream<IItem> streamOf(Class clazz) {
+    private Stream<Item> streamOf(Class clazz) {
         return items.stream()
                 .filter(item -> item.getClass() == clazz);
     }
 
     @Override
-    public <T extends IItem> T item(int layer) {
+    public <T extends Item> T item(int layer) {
         if (items.size() <= layer) {
             return (T) new Air();
         }
@@ -98,18 +93,18 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public <T extends IItem> List<T> items(Class type) {
+    public <T extends Item> List<T> items(Class type) {
         return (List<T>)streamOf(type)
                 .collect(toList());
     }
 
     @Override
-    public <T extends IItem> List<T> items() {
+    public <T extends Item> List<T> items() {
         return (List<T>)new LinkedList<>(items);
     }
 
     @Override
-    public void remove(IItem item) {
+    public void remove(Item item) {
         for (int i = 0; i < items.size(); ++i) {
             if (items.get(i) == item) {
                 items.remove(i);
@@ -120,7 +115,7 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public void jump(IItem item) {
+    public void jump(Item item) {
         boolean heroOn2Layer = items.indexOf(item) == LAYER2;
         if (!heroOn2Layer) {
             // нас не интересуют случаи, когда герой не на втором слое
@@ -141,7 +136,7 @@ public class Cell extends PointImpl implements ICell {
     }
 
     @Override
-    public void landOn(IItem item) {
+    public void landOn(Item item) {
         boolean heroOn3Layer = (items.indexOf(item) == LAYER3);
         if (!heroOn3Layer) {
             // нас не интересуют случаи, когда герой не на третьем слое (не в полете)

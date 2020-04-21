@@ -25,7 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.interfaces.ICell;
 import com.codenjoy.dojo.icancode.model.interfaces.IField;
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
+import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.services.Events;
@@ -151,7 +151,7 @@ public class ICanCode implements Tickable, IField {
 
     @Override
     public ICell getStartPosition() {
-        List<IItem> items = level.getItems(Start.class);
+        List<Item> items = level.getItems(Start.class);
         int index = dice.next(items.size());
         return items.get(index).getCell();
     }
@@ -162,7 +162,7 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
-    public void move(IItem item, int x, int y) {
+    public void move(Item item, int x, int y) {
         ICell cell = level.getCell(x, y);
         cell.add(item);
         cell.comeIn(item);
@@ -174,8 +174,8 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
-    public IItem getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
-        for (IItem item : getCell(x, y).items()) {
+    public Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
+        for (Item item : getCell(x, y).items()) {
             if (item.getClass().equals(clazz)) {
                 return item;
             }
@@ -305,7 +305,7 @@ public class ICanCode implements Tickable, IField {
 
             @Override
             public Object[] itemsInSameCell(State item) {
-                return ((IItem) item).getItemsInSameCell().toArray();
+                return ((Item) item).getItemsInSameCell().toArray();
             }
         };
     }

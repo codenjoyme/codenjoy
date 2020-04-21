@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
+import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Hero;
 import com.codenjoy.dojo.icancode.model.Player;
@@ -57,7 +57,7 @@ public class Gold extends BaseItem {
     }
 
     @Override
-    public void action(IItem item) {
+    public void action(Item item) {
         if (hidden) return; // TODO test me
 
         HeroItem heroItem = getIf(item, HeroItem.class);

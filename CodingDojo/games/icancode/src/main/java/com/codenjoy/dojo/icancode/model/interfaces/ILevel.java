@@ -35,7 +35,7 @@ public interface ILevel {
 
     int getSize();
 
-    <T extends IItem> List<T> getItems(Class clazz);
+    <T extends Item> List<T> getItems(Class clazz);
 
     ICell[] getCells();
 

@@ -42,11 +42,11 @@ public interface IField extends GameField<Player> {
 
     ICell getEndPosition();
 
-    void move(IItem item, int x, int y);
+    void move(Item item, int x, int y);
 
     ICell getCell(int x, int y);
 
-    IItem getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
+    Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
 
     boolean isAt(int x, int y, Class<? extends BaseItem>... clazz);
 

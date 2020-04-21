@@ -25,7 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.interfaces.ICell;
 import com.codenjoy.dojo.icancode.model.interfaces.IField;
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
+import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
 import com.codenjoy.dojo.services.Direction;
@@ -317,7 +317,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
         int boxX = direction.inverted().changeX(x);
         int boxY = direction.inverted().changeY(y);
 
-        IItem item = field.getIfPresent(Box.class, boxX, boxY);
+        Item item = field.getIfPresent(Box.class, boxX, boxY);
         if (item == null) {
             return false;
         }
@@ -327,7 +327,7 @@ public class Hero extends PlayerHero<IField> implements State<Elements, Player> 
     }
 
     private boolean tryPushBox(int x, int y) {
-        IItem item = field.getIfPresent(Box.class, x, y);
+        Item item = field.getIfPresent(Box.class, x, y);
 
         if (item == null) {
             return false;

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
+import com.codenjoy.dojo.icancode.model.interfaces.Item;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
@@ -69,7 +69,7 @@ public class Laser extends FieldItem implements Tickable {
     }
 
     @Override
-    public void action(IItem item) {
+    public void action(Item item) {
         HeroItem heroItem = getIf(item, HeroItem.class);
         if (heroItem != null) {
             Hero hero = heroItem.getHero();
