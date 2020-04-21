@@ -76,6 +76,8 @@ public final class Levels {
                 new Level8(),
                 new Level9(),
                 new LevelB1(),
+                new LevelB2(),
+                new LevelB3(),
                 new LevelC1(),
                 new LevelC2(),
                 new LevelD1(),

@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.services.levels;
 
 import java.util.List;
 
-public class LevelB1 implements Level {
+public class LevelB2 implements Level {
     
     @Override
     public String help() {
@@ -60,30 +60,19 @@ public class LevelB1 implements Level {
     @Override
     public String map() {
         return  "          \n" +
-                "          \n" +
-                " ######## \n" +
+                "   ####   \n" +
+                "   #$$#   \n" +
+                "   #$$#   \n" +
+                " ###..### \n" +
                 " #S....E# \n" +
                 " ###..### \n" +
                 "   #$$#   \n" +
                 "   #$$#   \n" +
-                "   ####   \n" +
-                "          \n" +
-                "          \n";
-    }
-
-    @Override
-    public String autocomplete() {
-        return "{" +
-                "	'scanner.':{" +
-                "		'synonyms':['robot.getScanner().']," +
-                "		'values':['getGold()', 'getExit()', 'getStart()', 'getMe()']" +
-                "	}" +
-                "}";
+                "   ####   \n";
     }
 
     @Override
     public List<String> befungeCommands() {
-        return Level.extendBefunge(new Level9(),
-                "value-gold", "value-end", "value-start");
+        return Level.extendBefunge(new LevelB1());
     }
 }
