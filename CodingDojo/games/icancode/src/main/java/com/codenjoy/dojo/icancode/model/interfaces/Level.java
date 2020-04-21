@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
-public interface ILevel {
+public interface Level {
 
     ICell getCell(int x, int y);
 

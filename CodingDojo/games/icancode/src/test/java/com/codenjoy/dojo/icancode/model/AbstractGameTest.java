@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
+import com.codenjoy.dojo.icancode.model.interfaces.Level;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.services.Levels;
 import org.junit.Before;
@@ -77,7 +77,7 @@ public class AbstractGameTest {
 
     void givenFl(int viewSize, String board) {
         Levels.VIEW_SIZE = viewSize;
-        ILevel level = createLevels(new String[]{board}).get(0);
+        Level level = createLevels(new String[]{board}).get(0);
         game = new ICanCode(level, dice, ICanCode.SINGLE);
         listener = mock(EventListener.class);
         player = new Player(listener);
@@ -107,10 +107,10 @@ public class AbstractGameTest {
         return (int)Math.sqrt(board.length());
     }
 
-    List<ILevel> createLevels(String[] boards) {
-        List<ILevel> levels = new LinkedList<>();
+    List<Level> createLevels(String[] boards) {
+        List<Level> levels = new LinkedList<>();
         for (String board : boards) {
-            ILevel level = new LevelImpl(board);
+            Level level = new LevelImpl(board);
             levels.add(level);
         }
         return levels;

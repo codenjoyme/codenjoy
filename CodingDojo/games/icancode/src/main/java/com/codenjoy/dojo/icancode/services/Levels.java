@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.LevelImpl;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
+import com.codenjoy.dojo.icancode.model.interfaces.Level;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -64,7 +64,7 @@ public final class Levels {
             " ############## " +
             "                ";
 
-    public static List<Level> all() {
+    public static List<com.codenjoy.dojo.icancode.services.levels.Level> all() {
         return Arrays.asList(
                 new Level1(),
                 new Level2(),
@@ -92,11 +92,11 @@ public final class Levels {
         all().forEach(level -> SettingsWrapper.data.addLevel(index.incrementAndGet(), level));
     }
 
-    public static ILevel loadLevel(int level) {
+    public static Level loadLevel(int level) {
         return load(SettingsWrapper.data.levelMap(level));
     }
 
-    public static ILevel load(String levelMap) {
+    public static Level load(String levelMap) {
         return new LevelImpl(resize(decorate(Encoding.removeN(levelMap)), size()));
     }
 

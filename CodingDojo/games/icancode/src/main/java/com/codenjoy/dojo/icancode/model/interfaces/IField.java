@@ -58,7 +58,7 @@ public interface IField extends GameField<Player> {
 
     Dice dice();
 
-    ILevel getLevel();
+    Level getLevel();
 
     void fire(State owner, Direction direction, Point from);
 

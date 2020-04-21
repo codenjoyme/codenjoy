@@ -26,7 +26,7 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.interfaces.ICell;
 import com.codenjoy.dojo.icancode.model.interfaces.IField;
 import com.codenjoy.dojo.icancode.model.interfaces.Item;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
+import com.codenjoy.dojo.icancode.model.interfaces.Level;
 import com.codenjoy.dojo.icancode.model.items.BaseItem;
 import com.codenjoy.dojo.icancode.model.items.ElementsMapper;
 import com.codenjoy.dojo.icancode.model.items.FieldItem;
@@ -39,7 +39,7 @@ import java.util.List;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.fest.reflect.core.Reflection.constructor;
 
-public class LevelImpl implements ILevel {
+public class LevelImpl implements Level {
     private ICell[] cells;
     private int size;
     private LengthToXY xy;

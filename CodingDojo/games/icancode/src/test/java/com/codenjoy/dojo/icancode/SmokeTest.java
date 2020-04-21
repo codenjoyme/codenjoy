@@ -29,7 +29,7 @@ import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.icancode.client.Board;
 import com.codenjoy.dojo.icancode.client.ai.AISolver;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
+import com.codenjoy.dojo.icancode.model.interfaces.Level;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -65,7 +65,7 @@ public class SmokeTest {
             }
 
             @Override
-            public ILevel loadLevel(int level) {
+            public Level loadLevel(int level) {
                 return Levels.load(
                         "                " +
                         " ############## " +

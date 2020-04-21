@@ -37,7 +37,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.icancode.model.Player;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
+import com.codenjoy.dojo.icancode.model.interfaces.Level;
 import org.json.JSONObject;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -59,7 +59,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public GameField createGame(int levelNumber) {
-        ILevel level = loadLevel(levelNumber);
+        Level level = loadLevel(levelNumber);
         boolean isSingle = levelNumber < getMultiplayerType().getLevelsCount();
         return new ICanCode(level, getDice(), isSingle ? ICanCode.SINGLE : ICanCode.MULTIPLE);
     }
@@ -79,7 +79,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
         return MultiplayerType.TRAINING.apply(Levels.all().size());
     }
 
-    public ILevel loadLevel(int level) {
+    public Level loadLevel(int level) {
         // +1 потому что мы хотим дать юзерам считать не от 0, а от 1
         return Levels.loadLevel(level + 1);
     }

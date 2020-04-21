@@ -26,7 +26,7 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.interfaces.ICell;
 import com.codenjoy.dojo.icancode.model.interfaces.IField;
 import com.codenjoy.dojo.icancode.model.interfaces.Item;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
+import com.codenjoy.dojo.icancode.model.interfaces.Level;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
@@ -44,12 +44,12 @@ public class ICanCode implements Tickable, IField {
     public static final boolean MULTIPLE = true;
 
     private Dice dice;
-    private ILevel level;
+    private Level level;
 
     private List<Player> players;
     private boolean isMultiplayer;
 
-    public ICanCode(ILevel level, Dice dice, boolean isMultiplayer) {
+    public ICanCode(Level level, Dice dice, boolean isMultiplayer) {
         this.level = level;
         level.setField(this);
         this.dice = dice;
@@ -316,7 +316,7 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
-    public ILevel getLevel() {
+    public Level getLevel() {
         return level;
     }
 }

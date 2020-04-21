@@ -32,8 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
+import com.codenjoy.dojo.icancode.model.interfaces.Level;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,8 +58,8 @@ public class SingleTest {
     private EventListener listener2;
     private Single single1;
     private Single single2;
-    private List<ILevel> singles1;
-    private List<ILevel> singles2;
+    private List<Level> singles1;
+    private List<Level> singles2;
     private ICanCode gameMultiple;
 
     @Before
@@ -90,7 +89,7 @@ public class SingleTest {
         singles1 = createLevels(strings);
         singles2 = createLevels(strings);
 
-        ILevel levelMultiple = createLevels(Arrays.asList(multiple)).get(0);
+        Level levelMultiple = createLevels(Arrays.asList(multiple)).get(0);
         gameMultiple = new ICanCode(levelMultiple, dice, ICanCode.MULTIPLE);
 
         listener1 = mock(EventListener.class);
@@ -116,10 +115,10 @@ public class SingleTest {
         return (Hero)single2.getJoystick();
     }
 
-    private List<ILevel> createLevels(Collection<String> boards) {
-        List<ILevel> levels = new LinkedList<>();
+    private List<Level> createLevels(Collection<String> boards) {
+        List<Level> levels = new LinkedList<>();
         for (String board : boards) {
-            ILevel level = new LevelImpl(board);
+            Level level = new LevelImpl(board);
             levels.add(level);
         }
         return levels;
@@ -628,7 +627,7 @@ public class SingleTest {
     }
 
     private void nextlevel(Single single, ICanCode field) {
-        List<ILevel> levels = this.singles1;
+        List<Level> levels = this.singles1;
         if (levels.indexOf(field.getLevel()) == -1) {
             levels = this.singles2;
             if (levels.indexOf(field.getLevel()) == -1) {
@@ -644,7 +643,7 @@ public class SingleTest {
         loadLevel(single, levels, index + 1, false);
     }
 
-    private boolean loadLevel(Single single, List<ILevel> levels, int index, boolean ask) {
+    private boolean loadLevel(Single single, List<Level> levels, int index, boolean ask) {
         LevelProgress progress = single.getProgress();
         if (ask) {
             if (!progress.canChange(index)) {
