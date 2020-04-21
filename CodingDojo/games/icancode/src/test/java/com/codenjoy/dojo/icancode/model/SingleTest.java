@@ -588,9 +588,143 @@ public class SingleTest {
                 "----" +
                 "----");
 
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+    }
+
+    @Test
+    public void shouldSeveralPlayersAtOneField_checkDrawing() {
+        // given
+        shouldSeveralPlayersCollectionAtLastLevel();
+
+        allAtFloor();
+
+        // when
+        hero2().jump();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
         assertF(single1,
                 "----" +
-                "-☺--" +  // TODO Вот если два игрока в одной клетке, то почему второй рисуется как я и на LAYER3?
+                "-^--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-X--" +
+                "----" +
+                "----");
+
+
+        assertF(single2,
+                "----" +
+                "-*--" +
+                "----" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        allAtFloor();
+
+        // when
+        hero1().jump();
+        hero2().jump();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "----" +
+                "----");
+
+        assertF(single1,
+                "----" +
+                "-*--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "----" +
+                "----" +
+                "----");
+
+
+        assertF(single2,
+                "----" +
+                "-*--" +
+                "----" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        allAtFloor();
+
+        // when
+        hero1().jump();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-X--" +
+                "----" +
+                "----");
+
+        assertF(single1,
+                "----" +
+                "-*--" +
                 "----" +
                 "----");
 
@@ -609,7 +743,53 @@ public class SingleTest {
 
         assertF(single2,
                 "----" +
-                "-☺--" +  // TODO Вот если два игрока в одной клетке, то почему второй рисуется как я и на LAYER3?
+                "-^--" +
+                "----" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        allAtFloor();
+
+    }
+
+    private void allAtFloor() {
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        assertF(single1,
+                "----" +
+                "----" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+
+        assertF(single2,
+                "----" +
+                "----" +
                 "----" +
                 "----");
     }

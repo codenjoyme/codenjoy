@@ -36,11 +36,13 @@ public interface Item extends State<Elements, Player> {
 
     Cell getCell();
 
-    List<Item> getItemsInSameCell();
+    List<Item> getItemsInSameCell(int layer);
 
     void setCell(Cell value);
 
     boolean passable();
 
     void removeFromCell();
+
+    int layer();
 }

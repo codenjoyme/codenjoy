@@ -25,20 +25,22 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.items.Air;
 import com.codenjoy.dojo.services.PointImpl;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.ListMultimap;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
-import static java.util.stream.Collectors.toList;
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
 
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
 public class CellImpl extends PointImpl implements Cell {
 
-    private List<Item> items = new ArrayList<>();
+    private ListMultimap<Integer, Item> items = LinkedListMultimap.create();
 
     public CellImpl(int x, int y) {
         super(x, y);
@@ -48,7 +50,7 @@ public class CellImpl extends PointImpl implements Cell {
     public void add(Item item) {
         item.removeFromCell();
 
-        items.add(item);
+        items.put(item.layer(), item);
         item.setCell(this);
     }
 
@@ -64,77 +66,62 @@ public class CellImpl extends PointImpl implements Cell {
 
     @Override
     public boolean passable() {
-        return items.stream()
+        return items.values().stream()
                 .allMatch(item -> item.passable());
     }
 
     @Override
     public <T extends Item> T item(int layer) {
-        if (items.size() <= layer) {
-            return (T) new Air();
-        }
-
-        return (T) items.get(layer);
+        Collection<Item> list = items.get(layer);
+        return (T) (list.isEmpty() ? new Air() : list.iterator().next());
     }
 
     @Override
     public <T extends Item> List<T> items() {
-        return (List<T>)new LinkedList<>(items);
+        return (List<T>)new LinkedList<>(items.values());
+    }
+
+    @Override
+    public <T extends Item> List<T> items(int layer) {
+        return (List<T>)new LinkedList<>(items.get(layer));
     }
 
     @Override
     public void remove(Item item) {
-        for (int i = 0; i < items.size(); ++i) {
-            if (items.get(i) == item) {
-                items.remove(i);
-                return;
-            }
-        }
-        items.remove(item);
+        items.values().remove(item);
     }
 
     @Override
     public void jump(Item item) {
-        boolean heroOn2Layer = items.indexOf(item) == LAYER2;
+        int index = items.get(LAYER2).indexOf(item);
+        boolean heroOn2Layer = index != -1;
         if (!heroOn2Layer) {
             // нас не интересуют случаи, когда герой не на втором слое
             return;
         }
 
-        // если герой на втором слое, то в прыжке его надо перенести на 3й
-        boolean twoLayers = (items.size() - 1 == LAYER2);
-        boolean threeLayers = (items.size() - 1 == LAYER3);
-
-        if (twoLayers) {
-            // если два слоя, то добавляем воздух
-            items.add(LAYER2, new Air());
-        } else if (threeLayers) {
-            // если три слоя, то ставим игрока выше
-            items.add(items.remove(LAYER2));
-        }
+        Item removed = items.get(LAYER2).remove(index);
+        items.get(LAYER3).add(removed);
     }
 
     @Override
     public void landOn(Item item) {
-        boolean heroOn3Layer = (items.indexOf(item) == LAYER3);
+        int index = items.get(LAYER3).indexOf(item);
+        boolean heroOn3Layer = index != -1;
         if (!heroOn3Layer) {
             // нас не интересуют случаи, когда герой не на третьем слое (не в полете)
             return;
         }
 
-        boolean isAirOnSecondLayer = (items.get(LAYER2) instanceof Air);
-        if (isAirOnSecondLayer) {
-            // если в процессе полета на втором слое был воздух мы его удаляем
-            // TODO подумать о сценарии, когда воздух остался в клетке, а мы ее покинули
-            items.remove(LAYER2);
-        }
+        Item removed = items.get(LAYER3).remove(index);
+        items.get(LAYER2).add(removed);
     }
 
     //================================ Overrides ================================
 
     @Override
     public String toString() {
-        return String.format("Cell[%s,%s]=%s", x, y, items);
+        return String.format("Cell[%s,%s]=%s", x, y, items());
     }
 
 }

@@ -35,7 +35,7 @@ public class ElementsMapper {
     public static Map<Elements, Class<? extends BaseItem>> map =
             new EnumMap<Elements, Class<? extends BaseItem>>(Elements.class)
     {{
-        put(EMPTY, None.class);
+        put(EMPTY, Air.class);
         put(FLOOR, Floor.class);
 
         put(ANGLE_IN_LEFT, Wall.class);
@@ -97,5 +97,14 @@ public class ElementsMapper {
             throw new IllegalArgumentException("Please add element class: " + element.getClass());
         }
         return result;
+    }
+
+    public static int levelFor(Class<? extends BaseItem> clazz) {
+        return map.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(clazz))
+                .findFirst()
+                .get()
+                .getKey()
+                .getLayer();
     }
 }

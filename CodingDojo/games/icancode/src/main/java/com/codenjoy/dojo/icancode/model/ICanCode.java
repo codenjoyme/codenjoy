@@ -300,8 +300,8 @@ public class ICanCode implements Tickable, Field {
             }
 
             @Override
-            public Object[] itemsInSameCell(State item) {
-                return ((Item) item).getItemsInSameCell().toArray();
+            public Object[] itemsInSameCell(State item, int layer) {
+                return ((Item) item).getItemsInSameCell(layer).toArray();
             }
         };
     }

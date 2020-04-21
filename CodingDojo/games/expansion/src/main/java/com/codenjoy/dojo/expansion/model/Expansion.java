@@ -642,8 +642,9 @@ public class Expansion implements Tickable, IField {
             }
 
             @Override
-            public Object[] itemsInSameCell(State item) {
+            public Object[] itemsInSameCell(State item, int layer) {
                 if (item instanceof Item) {
+                    // TODO передавать дальше int layer и вообще сделать как в icancode от 2020-04-20
                     return ((Item) item).getItemsInSameCell().toArray();
                 } else {
                     return new Object[0];

@@ -28,9 +28,11 @@ import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Hero;
 import com.codenjoy.dojo.icancode.model.Player;
 
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
+
 public class HeroItem extends FieldItem implements Tickable {
 
-    private Hero hero;
+    protected Hero hero;
 
     public HeroItem(Elements element) {
         super(element);
@@ -56,5 +58,14 @@ public class HeroItem extends FieldItem implements Tickable {
 
     public void fixLayer() {
         hero.fixLayer();
+    }
+
+    @Override
+    public int layer() {
+        if (hero != null && hero.isFlying()) {
+            return LAYER3;
+        }
+
+        return super.layer();
     }
 }

@@ -59,11 +59,11 @@ public abstract class BaseItem implements Item {
     }
 
     @Override
-    public List<Item> getItemsInSameCell() {
+    public List<Item> getItemsInSameCell(int layer) {
         if (cell == null) {
             return Arrays.asList();
         }
-        List<Item> items = cell.items();
+        List<Item> items = cell.items(layer);
         items.remove(this);
         return items;
     }
@@ -95,34 +95,10 @@ public abstract class BaseItem implements Item {
         }
     }
 
+    // не переопределять этот метод, тут все чик-чик!
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        BaseItem baseItem = (BaseItem) o;
-
-        if (cell == null && baseItem.cell != null) {
-            return false;
-        }
-        if (cell != null && baseItem.cell == null) {
-            return false;
-        }
-
-        if (cell == null) {
-            if (baseItem.cell == null) {
-                return element == baseItem.element;
-            } else {
-                return false;
-            }
-        } else {
-            return element == baseItem.element && cell.equals(baseItem.cell);
-        }
-
+        return this == o;
     }
 
     @Override
@@ -143,5 +119,10 @@ public abstract class BaseItem implements Item {
     @Override
     public int hashCode() {
         return element.hashCode();
+    }
+
+    @Override
+    public int layer() {
+        return ElementsMapper.levelFor(this.getClass());
     }
 }

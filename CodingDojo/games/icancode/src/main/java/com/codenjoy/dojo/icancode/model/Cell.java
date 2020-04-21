@@ -40,6 +40,8 @@ public interface Cell extends Point {
 
     <T extends Item> T item(int layer);
 
+    <T extends Item> List<T> items(int layer);
+
     <T extends Item> List<T> items();
 
     void remove(Item item);
