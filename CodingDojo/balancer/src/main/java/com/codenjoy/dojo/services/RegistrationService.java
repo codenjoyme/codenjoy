@@ -25,10 +25,13 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.ServerLocation;
+import com.codenjoy.dojo.services.hash.Hash;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -44,6 +47,7 @@ public class RegistrationService {
     private final SmsService smsService;
     private final Players playersRepo;
     private final ConfigProperties config;
+    private final PasswordEncoder passwordEncoder;
 
     public String generateVerificationCode() {
         return RandomStringUtils.randomNumeric(CODE_LENGTH);
@@ -99,14 +103,21 @@ public class RegistrationService {
             throw new IllegalArgumentException("User is not active");
         }
 
-        if (validateCode(code, VerificationType.PASSWORD_RESET, player)) {
+        return validateCode(code, VerificationType.PASSWORD_RESET, player);
+    }
 
-            //TODO generate random password
-            playersRepo.updateVerificationCode(phone, null, null);
-            return true;
-        }
+    public Player resetPassword(String phone) {
+        Player player = playersRepo.getByPhone(phone)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        String newPassword = RandomStringUtils.randomAlphabetic(8);
+        String hashedPassword = DigestUtils.md5Hex(newPassword);
+        String encodePassword = passwordEncoder.encode(hashedPassword);
+        player.setPassword(encodePassword);
+        player.setCode(Hash.getCode(player.getEmail(), newPassword));
+        playersRepo.update(player);
+        smsService.sendSmsTo(phone, newPassword, SmsService.SmsType.NEW_PASSWORD);
 
-        return false;
+        return player;
     }
 
     private boolean validateCode(String smsCode, VerificationType codeType, Player player) {

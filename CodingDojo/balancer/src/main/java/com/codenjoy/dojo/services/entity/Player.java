@@ -105,6 +105,10 @@ public class Player {
         this.server = server;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void resetNullFields(Player player) {
         email = StringUtils.isEmpty(email) ? player.email : email;
         phone = StringUtils.isEmpty(phone) ? player.phone : phone;

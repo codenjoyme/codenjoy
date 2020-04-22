@@ -166,8 +166,8 @@ public class Players {
     public void update(Player player) {
         pool.update("UPDATE players SET first_name = ?, last_name = ?, " +
                         "password = ?, city = ?, skills = ?, comment = ?, " +
-                        "code = ?, server = ? WHERE email = ?;",
-                getObjects(player));
+                        "code = ?, server = ?, phone = ? WHERE email = ?;",
+                getObjectsForUpdate(player));
     }
 
     public void updateServer(String email, String server, String code) {
@@ -200,6 +200,21 @@ public class Players {
                 player.getApproved(),
                 player.getVerificationCode(),
                 player.getVerificationType(),
+        };
+    }
+
+    private Object[] getObjectsForUpdate(Player player) {
+        return new Object[]{
+                player.getFirstName(),
+                player.getLastName(),
+                player.getPassword(),
+                player.getCity(),
+                player.getSkills(),
+                player.getComment(),
+                player.getCode(),
+                player.getServer(),
+                player.getPhone(),
+                player.getEmail(),
         };
     }
 

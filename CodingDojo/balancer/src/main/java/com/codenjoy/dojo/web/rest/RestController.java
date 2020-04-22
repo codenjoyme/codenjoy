@@ -268,7 +268,7 @@ public class RestController {
     }
 
     // TODO test me
-    @PostMapping(UPDATE)
+//    @PostMapping(UPDATE)
     @ResponseBody
     public ServerLocation changePassword(@RequestBody Player player, HttpServletRequest request) {
         return tryLogin(player, new OnLogin<ServerLocation>(){
@@ -534,10 +534,18 @@ public class RestController {
 
     @PostMapping(REGISTER + "/validate-reset")
     public ResponseEntity<String> validateResetPasswordCode(@RequestBody PhoneCodeDTO phoneCodeDTO) {
-        return registrationService
-                .validateCodeResetPassword(phoneValidateNormalize(phoneCodeDTO.getPhone()), phoneCodeDTO.getCode())
-                ? ResponseEntity.ok("success")
-                : ResponseEntity.badRequest().body("Invalid verification code");
+        String phone = phoneValidateNormalize(phoneCodeDTO.getPhone());
+        boolean isResetAllowed = registrationService
+                .validateCodeResetPassword(phone, phoneCodeDTO.getCode());
+        if(isResetAllowed) {
+            Player player = registrationService.resetPassword(phone);
+            if (game.existsOnServer(player.getServer(), player.getEmail())) {
+                game.remove(player.getServer(), player.getEmail(), player.getCode());
+            }
+            return ResponseEntity.ok("success");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid verification code");
+        }
     }
 
     private String phoneValidateNormalize(String phone) {
