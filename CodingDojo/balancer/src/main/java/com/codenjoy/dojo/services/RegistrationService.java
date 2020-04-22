@@ -103,7 +103,12 @@ public class RegistrationService {
             throw new IllegalArgumentException("User is not active");
         }
 
-        return validateCode(code, VerificationType.PASSWORD_RESET, player);
+        if (validateCode(code, VerificationType.PASSWORD_RESET, player)) {
+            playersRepo.updateVerificationCode(phone, null, null);
+            return true;
+        }
+
+        return false;
     }
 
     public Player resetPassword(String phone) {
@@ -113,7 +118,7 @@ public class RegistrationService {
         String hashedPassword = DigestUtils.md5Hex(newPassword);
         String encodePassword = passwordEncoder.encode(hashedPassword);
         player.setPassword(encodePassword);
-        player.setCode(Hash.getCode(player.getEmail(), newPassword));
+        player.setCode(Hash.getCode(player.getEmail(), hashedPassword));
         playersRepo.update(player);
         smsService.sendSmsTo(phone, newPassword, SmsService.SmsType.NEW_PASSWORD);
 
