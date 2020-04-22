@@ -59,6 +59,9 @@ public enum Elements implements CharElements {
                                 // you'd better kill this piece of ... meat, you'll get score points for it
     DEAD_MEAT_CHOPPER('x'),     // this is chopper corpse
 
+    /// perks
+    BOMB_BLAST_RADIUS_INCREASE('+'), // Bomb blast radius increase. Timed-out.  Applicable only to new bombs.
+
     /// a void
     NONE(' ');                 // this is the only place where you can move your Bomberman
 
