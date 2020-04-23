@@ -104,4 +104,16 @@ public class SettingsImpl implements Settings {
     public void clear() {
         map.clear();
     }
+
+    @Override
+    public void updateAll(List<Parameter> parameters) {
+        parameters.forEach(parameter -> {
+            String name = parameter.getName();
+            if (map.containsKey(name)) {
+                ((Parameter<Object>) map.get(name)).update(parameter.getValue());
+            } else {
+                map.put(name, parameter);
+            }
+        });
+    }
 }

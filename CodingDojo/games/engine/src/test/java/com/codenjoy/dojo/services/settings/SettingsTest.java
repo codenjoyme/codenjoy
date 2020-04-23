@@ -782,4 +782,34 @@ public class SettingsTest {
         check.update(true);
         assertEquals("[]", settings.whatChanged().toString());
     }
+
+    @Test
+    public void shouldUpdateAll() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(12);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option1");
+        Parameter<Boolean> check = settings.addCheckBox("check").def(true);
+
+        assertEquals("[[edit:Integer = multiline[false] def[12] val[null]], " +
+                "[select:String = options[option1, option2, option3] def[0] val[null]], " +
+                "[check:Boolean = def[true] val[null]]]",
+                settings.getParameters().toString());
+
+        // when
+        settings.updateAll(new LinkedList<Parameter>(){{
+            add(new EditBox<String>("edit").type(String.class).multiline(true).def("123").update("24"));
+            add(new CheckBox("check").type(String.class).def(false).update("0"));
+            add(new SelectBox("new", Arrays.asList(1, 2, 3)).type(Integer.class).def(1).update(3));
+        }});
+
+        // then
+        assertEquals(
+                // для существующих обновится только value
+                "[[edit:Integer = multiline[false] def[12] val[24]], " +
+                "[select:String = options[option1, option2, option3] def[0] val[null]], " +
+                "[check:Boolean = def[true] val[false]], " +
+                // новые запишутся полностью
+                "[new:String = options[1, 2, 3] def[0] val[2]]]",
+                settings.getParameters().toString());
+    }
 }

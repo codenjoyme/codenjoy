@@ -90,4 +90,9 @@ public final class NullSettings implements Settings {
     public void clear() {
         // do nothing
     }
+
+    @Override
+    public void updateAll(List<Parameter> parameters) {
+        // do nothing
+    }
 }
