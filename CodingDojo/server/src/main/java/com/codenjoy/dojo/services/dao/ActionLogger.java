@@ -105,10 +105,11 @@ public class ActionLogger extends Suspendable {
     public void log(PlayerGames playerGames) {
         if (!active || playerGames.size() == 0) return;
 
-        long tick = now();
+        // для всех players одно и то же время используется - фактически как id группы сейвов
+        long time = now();
         for (PlayerGame playerGame : playerGames.active()) {
             Player player = playerGame.getPlayer();
-            cache.add(new BoardLog(tick,
+            cache.add(new BoardLog(time,
                     player.getId(),
                     player.getGameName(),
                     player.getScore(),
@@ -139,7 +140,6 @@ public class ActionLogger extends Suspendable {
             }};
     }
 
-    // TODO test
     public long getLastTime(String id) {
         return pool.select("SELECT MAX(time) AS time FROM player_boards WHERE player_id = ?;",
                 new Object[]{ id },

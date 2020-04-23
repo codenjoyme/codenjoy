@@ -45,6 +45,7 @@ public class ActionLoggerTest {
     private static ActionLogger logger;
     private RoomService roomService;
     private PlayerGames playerGames;
+    private long time;
 
     @Before
     public void setup() {
@@ -60,15 +61,19 @@ public class ActionLoggerTest {
         {
             @Override
             protected long now() {
-                return 123456789L;
+                // кроме того, что вернет время еще и увеличит его на 1 для следующих сейвов
+                return time++;
             }
         };
         logger.setTicks(1);
+        this.time = 100;
 
         playerGames = new PlayerGames(){{
             ActionLoggerTest.this.roomService = this.roomService = mock(RoomService.class);
         }};
+        allRoomsAreActive();
     }
+
 
     @After
     public void tearDown() {
@@ -86,8 +91,12 @@ public class ActionLoggerTest {
         log(playerGames);
 
         // then
-        assertEquals("[BoardLog(time=123456789, playerId=player1, gameType=game1, score=123, board=board1, command=[]), " +
-                "BoardLog(time=123456789, playerId=player2, gameType=game2, score=234, board=board2, command=[])]",
+        assertSaved("[BoardLog(time=100, playerId=player1, gameType=game1, score=123, board=board1, command=[]), " +
+                "BoardLog(time=100, playerId=player2, gameType=game2, score=234, board=board2, command=[])]");
+    }
+
+    private void assertSaved(String expected) {
+        assertEquals(expected,
                 logger.getAll().toString());
     }
 
@@ -109,14 +118,13 @@ public class ActionLoggerTest {
     @Test
     public void shouldNotLog_whenNotEnabled() {
         // given
-        allRoomsAreActive();
         givenPlayers();
 
         // when
         log(playerGames);
 
         // then
-        assertEquals("[]", logger.getAll().toString());
+        assertSaved("[]");
     }
 
     private void givenPlayers() {
@@ -124,9 +132,9 @@ public class ActionLoggerTest {
         addPlayer(playerGames, "board2", 234, "player2", "room2", "game2");
     }
 
-    private void addPlayer(PlayerGames playerGames, String board, int value, String name, String roomName, String gameName) {
-        PlayerScores score = getScore(value);
-        Player player = new Player(name, "127.0.0.1", PlayerTest.mockGameType(gameName), score, null);
+    private void addPlayer(PlayerGames playerGames, String board, int scoreValue, String id, String roomName, String gameName) {
+        PlayerScores score = getScore(scoreValue);
+        Player player = new Player(id, "127.0.0.1", PlayerTest.mockGameType(gameName), score, null);
         player.setEventListener(mock(InformationCollector.class));
 
         TestUtils.Env env = TestUtils.getPlayerGame(playerGames, player, roomName,
@@ -141,9 +149,9 @@ public class ActionLoggerTest {
     }
 
     private PlayerScores getScore(int value) {
-        PlayerScores score = mock(PlayerScores.class);
-        when(score.getScore()).thenReturn(value);
-        return score;
+        PlayerScores result = mock(PlayerScores.class);
+        when(result.getScore()).thenReturn(value);
+        return result;
     }
 
     // есть несколько игроков из разных комнат, одна из которых находится на паузе -
@@ -152,7 +160,6 @@ public class ActionLoggerTest {
     public void shouldLog_whenEnabled_onlyForActiveRooms() {
         // given
         logger.resume();
-        allRoomsAreActive();
         thisRoomIsNotActive("room2");
         givenPlayers();
 
@@ -160,9 +167,27 @@ public class ActionLoggerTest {
         log(playerGames);
 
         // then
-        assertEquals("[BoardLog(time=123456789, playerId=player1, gameType=game1, score=123, board=board1, command=[])]",
-                logger.getAll().toString());
+        assertSaved("[BoardLog(time=100, playerId=player1, gameType=game1, score=123, board=board1, command=[])]");
     }
 
+    @Test
+    public void shouldGetLastTime_whenSeveralSaves() {
+        // given
+        logger.resume();
+        givenPlayers();
+
+        // when
+        log(playerGames); // time = 100
+        log(playerGames); // time = 101
+        log(playerGames); // time = 102
+        log(playerGames); // time = 103
+
+        // then
+        assertEquals(103,
+                logger.getLastTime("player1"));
+
+        assertEquals(103,
+                logger.getLastTime("player2"));
+    }
 
 }
