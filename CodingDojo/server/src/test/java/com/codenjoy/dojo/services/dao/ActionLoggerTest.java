@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import lombok.SneakyThrows;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,12 +36,15 @@ import org.junit.Test;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class ActionLoggerTest {
 
     private static ActionLogger logger;
+    private RoomService roomService;
+    private PlayerGames playerGames;
 
     @Before
     public void setup() {
@@ -60,6 +64,10 @@ public class ActionLoggerTest {
             }
         };
         logger.setTicks(1);
+
+        playerGames = new PlayerGames(){{
+            ActionLoggerTest.this.roomService = this.roomService = mock(RoomService.class);
+        }};
     }
 
     @After
@@ -68,31 +76,52 @@ public class ActionLoggerTest {
     }
 
     @Test
-    public void shouldLogWhenEnabled() throws InterruptedException {
+    public void shouldLog_whenEnabled() {
+        // given
         logger.resume();
+        allRoomsAreActive();
+        givenPlayers();
 
-        act();
+        // when
+        log(playerGames);
 
+        // then
         assertEquals("[BoardLog(time=123456789, playerId=player1, gameType=game1, score=123, board=board1, command=[]), " +
-                "BoardLog(time=123456789, playerId=player2, gameType=game2, score=234, board=board2, command=[])]", logger.getAll().toString());
+                "BoardLog(time=123456789, playerId=player2, gameType=game2, score=234, board=board2, command=[])]",
+                logger.getAll().toString());
     }
 
-    @Test
-    public void shouldNotLogWhenNotEnabled() throws InterruptedException {
-        act();
-
-        assertEquals("[]", logger.getAll().toString());
+    private void allRoomsAreActive() {
+        when(roomService.isActive(anyString())).thenReturn(true);
     }
 
-    private void act() throws InterruptedException {
-        PlayerGames playerGames = new PlayerGames();
+    private void thisRoomIsNotActive(String room) {
+        when(roomService.isActive(room)).thenReturn(false);
+    }
 
-        addPlayer(playerGames, "board1", 123, "player1", "room", "game1");
-        addPlayer(playerGames, "board2", 234, "player2", "room", "game2");
-
+    @SneakyThrows
+    private void log(PlayerGames playerGames) {
         logger.log(playerGames);
 
         Thread.sleep(1000); // потому что сохранение в базу делается асинхронно и надо подождать
+    }
+
+    @Test
+    public void shouldNotLog_whenNotEnabled() {
+        // given
+        allRoomsAreActive();
+        givenPlayers();
+
+        // when
+        log(playerGames);
+
+        // then
+        assertEquals("[]", logger.getAll().toString());
+    }
+
+    private void givenPlayers() {
+        addPlayer(playerGames, "board1", 123, "player1", "room1", "game1");
+        addPlayer(playerGames, "board2", 234, "player2", "room2", "game2");
     }
 
     private void addPlayer(PlayerGames playerGames, String board, int value, String name, String roomName, String gameName) {
@@ -116,5 +145,24 @@ public class ActionLoggerTest {
         when(score.getScore()).thenReturn(value);
         return score;
     }
+
+    // есть несколько игроков из разных комнат, одна из которых находится на паузе -
+    // так вот те ребята, что на паузе просто не будут сейвиться в базе и все
+    @Test
+    public void shouldLog_whenEnabled_onlyForActiveRooms() {
+        // given
+        logger.resume();
+        allRoomsAreActive();
+        thisRoomIsNotActive("room2");
+        givenPlayers();
+
+        // when
+        log(playerGames);
+
+        // then
+        assertEquals("[BoardLog(time=123456789, playerId=player1, gameType=game1, score=123, board=board1, command=[])]",
+                logger.getAll().toString());
+    }
+
 
 }
