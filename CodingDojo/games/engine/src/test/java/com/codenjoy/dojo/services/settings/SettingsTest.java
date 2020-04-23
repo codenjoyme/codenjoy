@@ -222,6 +222,33 @@ public class SettingsTest {
     }
 
     @Test
+    public void shouldEditBox_canBeMultiline() {
+        // given when
+        EditBox<String> edit1 = settings.addEditBox("edit1").type(String.class).multiline();
+        EditBox<String> edit2 = settings.addEditBox("edit2").type(String.class).multiline(true);
+        EditBox<String> edit3 = settings.addEditBox("edit3").type(String.class).multiline(false);
+        EditBox<String> edit4 = settings.addEditBox("edit4").type(String.class);
+
+        // then
+        assertEquals(true, edit1.isMultiline());
+        assertEquals(true, edit2.isMultiline());
+        assertEquals(false, edit3.isMultiline());
+        assertEquals(false, edit4.isMultiline());
+
+        // when
+        edit1.multiline(false);
+        edit2.multiline(false);
+        edit3.multiline(true);
+        edit4.multiline(true);
+
+        // then
+        assertEquals(false, edit1.isMultiline());
+        assertEquals(false, edit2.isMultiline());
+        assertEquals(true, edit3.isMultiline());
+        assertEquals(true, edit4.isMultiline());
+    }
+
+    @Test
     public void shouldGetOptions() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(42);

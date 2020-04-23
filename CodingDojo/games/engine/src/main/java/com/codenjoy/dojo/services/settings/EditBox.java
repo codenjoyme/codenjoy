@@ -95,6 +95,11 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
         return this;
     }
 
+    public EditBox<T> multiline(boolean multiline) {
+        this.multiline = multiline;
+        return this;
+    }
+
     public EditBox<T> multiline() {
         multiline = true;
         return this;
