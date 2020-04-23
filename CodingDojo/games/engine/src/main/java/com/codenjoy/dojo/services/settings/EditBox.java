@@ -109,8 +109,9 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     public List<T> getOptions() {
         return new LinkedList<T>(){{
             add(def);
-            if (EditBox.this.get() != null) {
-                add(EditBox.this.get());
+            T value = EditBox.this.get();
+            if (value != null && !this.contains(value)) {
+                add(value);
             }
         }};
     }

@@ -225,17 +225,34 @@ public class SettingsTest {
     public void shouldGetOptions() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(42);
-        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option2");
         Parameter<Boolean> check = settings.addCheckBox("check").def(true);
 
+        // then
+        assertEquals("[42]", edit.getOptions().toString());
+        assertEquals("[option1, option2, option3]", select.getOptions().toString());
+        assertEquals("[true]", check.getOptions().toString()); // TODO хорошо бы тут чтобы были все варианты
+
+        // when
         edit.update(12);
         select.update("option1");
         check.update(false);
 
-        // when then
+        // then
         assertEquals("[42, 12]", edit.getOptions().toString());
         assertEquals("[option1, option2, option3]", select.getOptions().toString());
         assertEquals("[true, false]", check.getOptions().toString());
+
+        // when set default
+        edit.update(42);
+        select.update("option2");
+        check.update(true);
+
+        // when then
+        assertEquals("[42]", edit.getOptions().toString());
+        assertEquals("[option1, option2, option3]", select.getOptions().toString());
+        assertEquals("[true]", check.getOptions().toString());
+
     }
 
     @Test

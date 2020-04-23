@@ -117,8 +117,9 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     public List<T> getOptions() {
         return new LinkedList<T>(){{
             add(def);
-            if (CheckBox.this.get() != null) {
-                add(CheckBox.this.get());
+            T value = CheckBox.this.get();
+            if (value != null && !this.contains(value)) {
+                add(value);
             }
         }};
     }

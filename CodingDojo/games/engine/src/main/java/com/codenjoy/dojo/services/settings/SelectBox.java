@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -95,7 +96,7 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
     @Override
     public List<T> getOptions() {
-        return options;
+        return new LinkedList<T>(options);
     }
 
     @Override
