@@ -146,10 +146,17 @@ public class ActionLogger extends Suspendable {
                 rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
     }
 
-    // TODO test me
+    /**
+     * Метод возвращает count записей вокруг текущего времени time для заданного player id.
+     * Итого вернется count записей до отметки time, запись равная time и count записей после отметки time.
+     * @param id player id
+     * @param time отметка времени информация о записях вокруг которой нам интересна
+     * @param count количество записей выбираемых из базы до и после отметки time
+     * @return все сохраненные записи
+     */
     public List<BoardLog> getBoardLogsFor(String id, long time, int count) {
         return pool.select(
-                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND time <= ? ORDER BY time ASC LIMIT ?) AS before" +
+                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND time <= ? ORDER BY time DESC LIMIT ?) AS before_and_equals" +
                     " UNION " +
                     "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND time > ? ORDER BY time ASC LIMIT ?) AS after;",
                 new Object[]{
