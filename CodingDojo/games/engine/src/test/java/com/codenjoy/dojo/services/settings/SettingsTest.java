@@ -29,8 +29,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 public class SettingsTest {
 
@@ -171,6 +170,24 @@ public class SettingsTest {
         // when then
         check.select(1);
         assertEquals(true, check.getValue());
+    }
+
+    @Test
+    public void shouldCanSetDefaultValue_whenNotInSelectOptionsList() {
+        // given
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
+
+        try {
+            // when
+            select.def("newValue");
+            fail("expected exception");
+        } catch (IllegalArgumentException e) {
+            // then
+            assertEquals("No option 'newValue' in set [option1, option2, option3]", e.getMessage());
+        }
+
+        // then
+        assertEquals(null, select.getDefault());
     }
 
     @Test

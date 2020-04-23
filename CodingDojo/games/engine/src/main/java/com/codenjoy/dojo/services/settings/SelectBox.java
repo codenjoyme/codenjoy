@@ -110,6 +110,9 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
     @Override
     public T getDefault() {
+        if (def == null) {
+            return null;
+        }
         return options.get(def);
     }
 }
