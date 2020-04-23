@@ -36,7 +36,7 @@ public class SimpleParameter<T> implements Parameter<T> {
     }
 
     public static Parameter<Integer> v(int value) {
-        return new SimpleParameter<Integer>(value);
+        return new SimpleParameter<>(value);
     }
 
     @Override
@@ -47,6 +47,11 @@ public class SimpleParameter<T> implements Parameter<T> {
     @Override
     public String getType() {
         return "noui";
+    }
+
+    @Override
+    public Class<?> getValueType() {
+        return (value != null) ? value.getClass() : Object.class;
     }
 
     @Override
@@ -96,7 +101,7 @@ public class SimpleParameter<T> implements Parameter<T> {
     }
 
     @Override
-    public Parameter type(Class integerClass) {
+    public Parameter type(Class type) {
         throw new UnsupportedOperationException();
     }
 }

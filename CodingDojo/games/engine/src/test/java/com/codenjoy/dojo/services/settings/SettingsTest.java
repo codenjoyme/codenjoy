@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -102,6 +103,94 @@ public class SettingsTest {
         // when then
         check.update(true);
         assertEquals(true, check.getValue());
+    }
+
+    @Test
+    public void shouldGetValueType_caseSetType() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(24);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2")).type(String.class).def("option1");
+        Parameter<Boolean> check = settings.addCheckBox("check").type(Boolean.class).def(true);
+        Parameter<String> simple = new SimpleParameter<>("value");
+
+        // when then
+        assertEquals(Integer.class, edit.getValueType());
+        assertEquals(String.class, select.getValueType());
+        assertEquals(Boolean.class, check.getValueType());
+        assertEquals(String.class, simple.getValueType());
+    }
+
+    @Test
+    public void shouldGetValueType_caseNotSetType() {
+        // given
+        Parameter<Object> edit = (Parameter<Object>) settings.addEditBox("edit");
+        edit.update(23);
+
+        Parameter<Object> select = (Parameter<Object>) settings.addSelect("select", Arrays.asList("option1", "option2"));
+        select.update("option1");
+
+        Parameter<Boolean> check = settings.addCheckBox("check");
+        check.update(true);
+
+        Parameter<Object> simple = new SimpleParameter<>("value");
+        simple.update("new");
+
+        // when then
+        assertEquals(Integer.class, edit.getValueType());
+        assertEquals(String.class, select.getValueType());
+        assertEquals(Boolean.class, check.getValueType());
+        assertEquals(String.class, simple.getValueType());
+    }
+
+    @Test
+    public void shouldGetValueType_caseNotSetType_caseNullValues_withoutDefault() {
+        // given
+        Parameter<Object> edit = (Parameter<Object>) settings.addEditBox("edit");
+        edit.update(null);
+
+        Parameter<Object> select = (Parameter<Object>) settings.addSelect("select", Arrays.asList(new String(), null));
+        select.update(null);
+
+        Parameter<Boolean> check = settings.addCheckBox("check");
+        check.update(null);
+
+        Parameter<Object> simple = new SimpleParameter<>("value");
+        simple.update(null);
+
+        // when then
+        assertEquals(Object.class, edit.getValueType());
+        assertEquals(String.class, select.getValueType());
+        assertEquals(Boolean.class, check.getValueType());
+        assertEquals(Object.class, simple.getValueType());
+    }
+
+    @Test
+    public void shouldGetValueType_caseNotSetType_caseNullValues_withDefault() {
+        // given
+        Parameter<Object> edit = (Parameter<Object>) settings.addEditBox("edit");
+        edit.def("string").update(null);
+
+        Parameter<Object> select = (Parameter<Object>) settings.addSelect("select", Arrays.asList("option", null));
+        select.def("option").update(null);
+
+        Parameter<Boolean> check = settings.addCheckBox("check");
+        check.def(true).update(null);
+
+        // when then
+        assertEquals(String.class, edit.getValueType());
+        assertEquals(String.class, select.getValueType());
+        assertEquals(Boolean.class, check.getValueType());
+    }
+
+    @Test
+    public void shouldGetValueType_caseSelectBoxWithoutOptions() {
+        // given
+        SelectBox<?> select1 = settings.addSelect("select1", Arrays.asList());
+        SelectBox<?> select2 = settings.addSelect("select2", new LinkedList<Object>(){{ add(null); }});
+
+        // when then
+        assertEquals(Object.class, select1.getValueType());
+        assertEquals(Object.class, select2.getValueType());
     }
 
     @Test

@@ -49,6 +49,11 @@ public final class NullParameter<T> implements Parameter<T> {
     }
 
     @Override
+    public Class<?> getValueType() {
+        return Object.class;
+    }
+
+    @Override
     public String getName() {
         return StringUtils.EMPTY;
     }
@@ -64,7 +69,7 @@ public final class NullParameter<T> implements Parameter<T> {
     }
 
     @Override
-    public <V> Parameter<V> type(Class<V> integerClass) {
+    public <V> Parameter<V> type(Class<V> type) {
         return INSTANCE;
     }
 

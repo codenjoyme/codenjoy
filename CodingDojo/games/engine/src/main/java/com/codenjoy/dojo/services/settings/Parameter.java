@@ -44,6 +44,11 @@ public interface Parameter<T> {
      */
     String getType();
 
+    /**
+     * @return Тип значения
+     */
+    Class<?> getValueType();
+
     String getName();
 
     Parameter<T> update(T value);
@@ -56,7 +61,7 @@ public interface Parameter<T> {
      */
     Parameter<T> def(T value);
 
-    <V> Parameter<V> type(Class<V> integerClass);
+    <V> Parameter<V> type(Class<V> type);
 
     Parameter<T> parser(Function<String, T> parser);
 

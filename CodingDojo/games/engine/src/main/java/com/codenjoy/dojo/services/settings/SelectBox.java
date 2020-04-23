@@ -60,6 +60,11 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
     }
 
     @Override
+    public Class<?> getValueType() {
+        return (!options.isEmpty() && options.get(0) != null) ? options.get(0).getClass() : Object.class;
+    }
+
+    @Override
     public SelectBox<T> update(T value) {
         checkIsPresent(value);
         set(options.indexOf(value));
@@ -80,7 +85,7 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
         return this;
     }
 
-    public <V> SelectBox<V> type(Class<V> integerClass) {
+    public <V> SelectBox<V> type(Class<V> type) {
         return (SelectBox<V>) this;
     }
 
