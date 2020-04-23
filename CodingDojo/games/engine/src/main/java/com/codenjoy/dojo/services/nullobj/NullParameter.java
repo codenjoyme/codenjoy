@@ -92,4 +92,9 @@ public final class NullParameter<T> implements Parameter<T> {
     public List<T> getOptions() {
         return Arrays.asList();
     }
+
+    @Override
+    public T getDefault() {
+        return null;
+    }
 }

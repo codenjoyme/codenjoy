@@ -71,4 +71,6 @@ public interface Parameter<T> {
     void changesReacted();
 
     List<T> getOptions();
+
+    T getDefault();
 }

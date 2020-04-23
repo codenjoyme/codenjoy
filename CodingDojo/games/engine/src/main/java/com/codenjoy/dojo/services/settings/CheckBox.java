@@ -124,6 +124,11 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     }
 
     @Override
+    public T getDefault() {
+        return def;
+    }
+
+    @Override
     public String toString() {
         return String.format("[%s:%s = def[%s] val[%s]]",
                 name,

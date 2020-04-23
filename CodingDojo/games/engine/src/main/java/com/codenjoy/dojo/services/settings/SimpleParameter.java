@@ -91,6 +91,11 @@ public class SimpleParameter<T> implements Parameter<T> {
     }
 
     @Override
+    public T getDefault() {
+        return value;
+    }
+
+    @Override
     public Parameter type(Class integerClass) {
         throw new UnsupportedOperationException();
     }

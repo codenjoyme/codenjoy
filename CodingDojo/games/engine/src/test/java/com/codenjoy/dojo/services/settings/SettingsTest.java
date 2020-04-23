@@ -106,6 +106,21 @@ public class SettingsTest {
     }
 
     @Test
+    public void shouldGetDefaultValue_whenSetIt() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(24);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2")).type(String.class).def("option1");
+        Parameter<Boolean> check = settings.addCheckBox("check").def(true);
+        Parameter<String> simple = new SimpleParameter<>("value");
+
+        // when then
+        assertEquals(24, edit.getDefault().intValue());
+        assertEquals("option1", select.getDefault());
+        assertEquals(true, check.getDefault());
+        assertEquals("value", simple.getDefault());
+    }
+
+    @Test
     public void shouldHasParameter() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(5);

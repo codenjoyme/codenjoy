@@ -124,4 +124,9 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
                 def,
                 get());
     }
+
+    @Override
+    public T getDefault() {
+        return def;
+    }
 }
