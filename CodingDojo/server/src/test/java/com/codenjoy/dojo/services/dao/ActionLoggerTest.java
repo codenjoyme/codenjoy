@@ -35,6 +35,8 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
@@ -45,6 +47,7 @@ import static org.mockito.Mockito.when;
 public class ActionLoggerTest {
 
     private static ActionLogger logger;
+    private ExecutorService executor;
     private RoomService roomService;
     private PlayerGames playerGames;
     private long time;
@@ -61,6 +64,11 @@ public class ActionLoggerTest {
                                 }
                             }))
         {
+            {
+                // пригодится, когда будем дожидаться завершения сохранения
+                ActionLoggerTest.this.executor = executor;
+            }
+
             @Override
             protected long now() {
                 // кроме того, что вернет время еще и увеличит его на 1 для следующих сейвов
@@ -68,7 +76,7 @@ public class ActionLoggerTest {
             }
         };
         logger.setTicks(1);
-        this.time = 100;
+        time = 100;
 
         playerGames = new PlayerGames(){{
             ActionLoggerTest.this.roomService = this.roomService = mock(RoomService.class);
@@ -91,6 +99,7 @@ public class ActionLoggerTest {
 
         // when
         log(playerGames);
+        waitFor();
 
         // then
         assertLogs("BoardLog(time=101, playerId=player1, gameType=game1, score=123, board=player1Board:101, command=[])\n" +
@@ -109,8 +118,18 @@ public class ActionLoggerTest {
     @SneakyThrows
     private void log(PlayerGames playerGames) {
         logger.log(playerGames);
+    }
 
-        Thread.sleep(300); // потому что сохранение в базу делается асинхронно и надо подождать
+    /**
+     * Так как логгирование происходит в отдельном потоке, то нам надо дождаться завершения его
+     * перед тем как пойдем проверять результаты работы метода логгирования
+     */
+    @SneakyThrows
+    private void waitFor() {
+        executor.shutdown();
+        if (!executor.isTerminated()) {
+            executor.awaitTermination(10, TimeUnit.SECONDS);
+        }
     }
 
     @Test
@@ -120,6 +139,7 @@ public class ActionLoggerTest {
 
         // when
         log(playerGames);
+        waitFor();
 
         // then
         assertLogs("",
@@ -165,6 +185,7 @@ public class ActionLoggerTest {
 
         // when
         log(playerGames);
+        waitFor();
 
         // then
         assertLogs("BoardLog(time=101, playerId=player1, gameType=game1, score=123, board=player1Board:101, command=[])",
@@ -182,6 +203,7 @@ public class ActionLoggerTest {
         log(playerGames); // time = 102
         log(playerGames); // time = 103
         log(playerGames); // time = 104
+        waitFor();
 
         // then
         assertEquals(104,
@@ -209,6 +231,7 @@ public class ActionLoggerTest {
         log(playerGames); // time = 109
         log(playerGames); // time = 110
         log(playerGames); // time = 111
+        waitFor();
 
         // then
         assertLogs("BoardLog(time=101, playerId=player1, gameType=game1, score=123, board=player1Board:101, command=[])\n" +

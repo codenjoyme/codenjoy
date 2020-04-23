@@ -45,7 +45,7 @@ public class ActionLogger extends Suspendable {
     @Value("${board.save.ticks}")
     private int ticks;
 
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    protected ExecutorService executor = Executors.newSingleThreadExecutor();
     private Queue<BoardLog> cache = new ConcurrentLinkedQueue<>();
     private int count;
 
