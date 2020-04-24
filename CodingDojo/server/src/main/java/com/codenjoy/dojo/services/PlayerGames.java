@@ -46,6 +46,9 @@ import static java.util.stream.Collectors.toList;
 @FieldNameConstants
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
+    public static final boolean ALL = true;
+    public static final boolean ACTIVE = !ALL;
+
     private List<PlayerGame> all = new LinkedList<>();
 
     private Consumer<PlayerGame> onAdd;
@@ -428,4 +431,15 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return spreader.rooms();
     }
 
+    /**
+     * @param isAll включать все комнаты или только активные
+     * @return Все найденные комнаты для всех играющих
+     */
+    public List<String> getRooms(boolean isAll) {
+        return all.stream()
+                .filter(((Predicate<PlayerGame>) pg -> isAll).or(withActive()))
+                .map(PlayerGame::getRoomName)
+                .distinct()
+                .collect(toList());
+    }
 }

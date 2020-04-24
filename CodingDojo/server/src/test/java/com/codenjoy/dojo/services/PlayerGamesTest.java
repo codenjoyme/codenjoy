@@ -1208,8 +1208,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         MultiplayerType type = MultiplayerType.SINGLE;
         createPlayer("player1", "room1", "game1", type);
         createPlayer("player2", "room1", "game1", type);
-        createPlayer("player3", "room2", "game2", type);
-        createPlayer("player4", "room2", "game2", type);
+        createPlayer("player3", "room2", "game2", type); // paused
+        createPlayer("player4", "room2", "game2", type); // paused
         createPlayer("player5", "room3", "game1", type);
 
         when(roomService.isActive("room2")).thenReturn(false);
@@ -1217,6 +1217,23 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when then
         assertPlayers("[player1, player2, player5]", playerGames.getAll(playerGames.withActive()));
         assertPlayers("[player1, player2, player5]", playerGames.active());
+    }
+
+    @Test
+    public void testGetRooms() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room1", "game1", type);
+        createPlayer("player3", "room2", "game2", type); // paused
+        createPlayer("player4", "room2", "game2", type); // paused
+        createPlayer("player5", "room3", "game1", type);
+
+        when(roomService.isActive("room2")).thenReturn(false);
+
+        // when then
+        assertEquals("[room1, room3]", playerGames.getRooms(ACTIVE).toString());
+        assertEquals("[room1, room2, room3]", playerGames.getRooms(ALL).toString());
     }
 
     private void assertPlayers(String expected, List<PlayerGame> list) {
