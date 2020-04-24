@@ -35,6 +35,7 @@ import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
@@ -206,10 +207,18 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         players().forEach(this::remove);
     }
 
-    public List<PlayerGame> getAll(String gameType) {
+    public List<PlayerGame> getAll(Predicate<PlayerGame> predicate) {
         return all.stream()
-                .filter(pg -> pg.getPlayer().getGameName().equals(gameType))
+                .filter(predicate)
                 .collect(toList());
+    }
+
+    public static Predicate<PlayerGame> withType(String gameType) {
+        return pg -> pg.getPlayer().getGameName().equals(gameType);
+    }
+
+    public static Predicate<PlayerGame> withAll() {
+        return pg -> true;
     }
 
     public List<GameType> getGameTypes() {
@@ -313,12 +322,17 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     // переводим всех игроков на новые борды
     // при этом если надо перемешиваем их
     public void reloadAll(boolean shuffle) {
-        new LinkedList<PlayerGame>(){{
-            addAll(all);
-            if (shuffle) {
-                Collections.shuffle(this);
-            }
-        }}.forEach(pg -> reloadCurrent(pg));
+        reloadAll(shuffle, withAll());
+    }
+
+    public void reloadAll(boolean shuffle, Predicate<PlayerGame> predicate) {
+        List<PlayerGame> games = getAll(predicate);
+
+        if (shuffle) {
+            Collections.shuffle(games);
+        }
+
+        games.forEach(pg -> reloadCurrent(pg));
     }
 
     private PlayerGame getPlayerGame(Game game) {

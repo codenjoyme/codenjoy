@@ -35,6 +35,8 @@ import org.mockito.InOrder;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.PlayerGames.withAll;
+import static com.codenjoy.dojo.services.PlayerGames.withType;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -152,29 +154,6 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertEquals(player, players.get(0));
         assertEquals(otherPlayer, players.get(1));
         assertEquals(2, players.size());
-    }
-
-    @Test
-    public void testGetAll() {
-        // given
-        Player player = createPlayer();
-        Player secondPlayer = createPlayer();
-        Player thirdPlayer = createPlayer("game2");
-
-        // when
-        List<PlayerGame> result = playerGames.getAll("game");
-
-        // then
-        assertEquals(2, result.size());
-        assertEquals(player, result.get(0).getPlayer());
-        assertEquals(secondPlayer, result.get(1).getPlayer());
-
-        // when
-        List<PlayerGame> result2 = playerGames.getAll("game2");
-
-        // then
-        assertEquals(1, result2.size());
-        assertEquals(thirdPlayer, result2.get(0).getPlayer());
     }
 
     @Test
@@ -1180,5 +1159,41 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         assertRoomsNames("{otherRoom=[[player1, player2]], " +
                 "room=[[player3, player4]]}");
+    }
+
+    @Test
+    public void testGetAll_withType() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room", "game1", type);
+        createPlayer("player2", "room", "game1", type);
+        createPlayer("player3", "room", "game2", type);
+        createPlayer("player4", "room", "game3", type);
+
+        // when then
+        assertPlayers("[player1, player2]", playerGames.getAll(withType("game1")));
+        assertPlayers("[player3]", playerGames.getAll(withType("game2")));
+        assertPlayers("[player4]", playerGames.getAll(withType("game3")));
+    }
+
+    @Test
+    public void testGetAll_withAll() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room", "game1", type);
+        createPlayer("player2", "room", "game1", type);
+        createPlayer("player3", "room", "game2", type);
+        createPlayer("player4", "room", "game3", type);
+
+        // when then
+        assertPlayers("[player1, player2, player3, player4]", playerGames.getAll(withAll()));
+    }
+
+    private void assertPlayers(String expected, List<PlayerGame> list) {
+        assertEquals(expected,
+                list.stream()
+                        .map(it -> it.getPlayer().getId())
+                        .collect(toList())
+                        .toString());
     }
 }
