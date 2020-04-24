@@ -36,7 +36,12 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> destroyWallCount;
     private final Parameter<Integer> boardSize;
     private final Parameter<Integer> meatChoppersCount;
+    private final Parameter<Integer> perkDropRatio;
+    private final Parameter<Integer> perkBombBlastRadiusInc;
+    private final Parameter<Integer> timeoutBombBlastRadiusInc;
+
     private Dice dice;
+
 
     public OptionGameSettings(Settings settings, Dice dice) {
         bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(1);
@@ -45,6 +50,11 @@ public class OptionGameSettings implements GameSettings {
         destroyWallCount = settings.addEditBox("Destroy wall count").type(Integer.class).def(boardSize.getValue()*boardSize.getValue()/10);
         meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(DefaultGameSettings.MEAT_CHOPPERS_COUNT);
         this.dice = dice;
+
+        // perks. Set value to 0 = perk is disabled.
+        perkDropRatio = settings.addEditBox("Perks drop ratio in %").type(Integer.class).def(20); // 20%
+        perkBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase").type(Integer.class).def(20);
+        timeoutBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase effect timeout").type(Integer.class).def(5);
     }
 
     @Override
@@ -58,6 +68,11 @@ public class OptionGameSettings implements GameSettings {
             @Override
             public int bombsPower() {
                 return bombPower.getValue();
+            }
+
+            @Override
+            public int perksDropRate() {
+                return perkDropRatio.getValue();
             }
         };
     }
@@ -80,4 +95,6 @@ public class OptionGameSettings implements GameSettings {
     public Parameter<Integer> getBoardSize() {
         return boardSize;
     }
+
+
 }

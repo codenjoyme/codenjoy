@@ -23,7 +23,9 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.DESTROYED_WALL;
 import static com.codenjoy.dojo.bomberman.model.Elements.DESTROYABLE_WALL;
@@ -49,9 +51,18 @@ public class DestroyWall extends Wall implements State<Elements, Player> {
         }
 
         if (blast != null) {
-            return DESTROYED_WALL;
+            return shouldPerkBeDropped(player);
         } else {
             return DESTROYABLE_WALL;
         }
+    }
+
+    private Elements shouldPerkBeDropped(Player player) {
+        GameSettings settings = player.getSettings();
+        Dice dice = player.getHero().getDice();
+        //TODO
+        // int probability = dice.next(100 + settings.getLevel().perksDropRate());
+
+        return DESTROYED_WALL;
     }
 }

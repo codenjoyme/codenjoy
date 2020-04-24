@@ -2055,4 +2055,17 @@ public class BombermanTest {
     // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
     // чертики тоже могут ставить бомбы
 
+
+    // Perks related test here
+    @Test
+    public void shouldPerkBeDropped_whenWallIsDestroyed() {
+        hero.act();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☻    \n");
+    }
 }

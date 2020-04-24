@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.model.perks.PerkSettings;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 public interface GameSettings {
@@ -33,4 +34,17 @@ public interface GameSettings {
     Hero getBomberman(Level level);
 
     Parameter<Integer> getBoardSize();
+
+    /**
+     * Use this method to get setting for particular perk when needed in business logic.
+     *
+     * @param element enum value
+     * @return {@link PerkSettings} by default it is zero enabled.
+     * GameSettings implementation have to handle it as needed.
+     * @see Elements
+     */
+    default PerkSettings getPerkSettings(Elements element) {
+        return new PerkSettings(0,0);
+    }
+
 }

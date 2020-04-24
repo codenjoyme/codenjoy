@@ -65,7 +65,7 @@ public enum Elements implements CharElements {
     /// a void
     NONE(' ');                 // this is the only place where you can move your Bomberman
 
-    public final static String BOMBS = "12345";
+    public static final String BOMBS = "12345";
 
     final char ch;
 

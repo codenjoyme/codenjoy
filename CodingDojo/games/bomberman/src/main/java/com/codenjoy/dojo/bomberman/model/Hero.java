@@ -23,10 +23,17 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.model.perks.HeroPerks;
+import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
 
@@ -38,6 +45,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private boolean alive;
     private boolean bomb;
     private Direction direction;
+
+    private HeroPerks perks = new HeroPerks();
 
     public Hero(Level level, Dice dice) {
         super(-1, -1);
@@ -141,7 +150,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private void setBomb(int bombX, int bombY) {
         if (field.getBombs(this).size() < level.bombsCount()) {
-            field.drop(new Bomb(this, bombX, bombY, level.bombsPower(), field));
+            Perk bombBlastInc = perks.getPerk(BOMB_BLAST_RADIUS_INCREASE);
+            int boost = bombBlastInc != null ? bombBlastInc.getValue() : 0;
+
+            field.drop(new Bomb(this, bombX, bombY, level.bombsPower() + boost, field));
         }
     }
 
@@ -186,9 +198,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
+    public Dice getDice() {
+        return dice;
+    }
+
     @Override
     public void tick() {
-
+        perks.tick();
     }
 }
 
