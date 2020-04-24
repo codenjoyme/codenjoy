@@ -28,3 +28,8 @@ game:
   end-day: "2020-03-31"
   finalists-count: 10
   finale-time: "19:00"
+sms:
+  text:
+    registration: "Vash kod pidtverdzennya reestratsui: %s.\nCodenjoy Team."
+    reset-password: "Vash kod pidtverdzennya zminy parolu: %s.\nCodenjoy Team."
+    new-password: "Vash parol zmineno.\nNovyi parol: %s.\nCodenjoy Team."

@@ -32,6 +32,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class Players {
 
@@ -41,6 +42,7 @@ public class Players {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS players (" +
                         "email varchar(255), " +
+                        "phone varchar(255), " +
                         "first_name varchar(255), " +
                         "last_name varchar(255), " +
                         "password varchar(255)," +
@@ -48,7 +50,10 @@ public class Players {
                         "skills varchar(255)," +
                         "comment varchar(255)," +
                         "code varchar(255)," +
-                        "server varchar(255));");
+                        "server varchar(255)," +
+                        "approved int," +
+                        "verification_code varchar(255)," +
+                        "verification_type varchar(255));");
     }
 
     void removeDatabase() {
@@ -74,6 +79,7 @@ public class Players {
     private Player getPlayer(ResultSet rs) throws SQLException {
         return new Player(
                 rs.getString("email"),
+                rs.getString("phone"),
                 rs.getString("first_name"),
                 rs.getString("last_name"),
                 rs.getString("password"),
@@ -81,7 +87,11 @@ public class Players {
                 rs.getString("skills"),
                 rs.getString("comment"),
                 rs.getString("code"),
-                rs.getString("server"));
+                rs.getString("server"),
+                rs.getInt("approved"),
+                rs.getString("verification_code"),
+                rs.getString("verification_type")
+        );
     }
 
     public List<Player> getPlayers(List<String> emails) {
@@ -99,6 +109,7 @@ public class Players {
                         result.add(
                             new ServerLocation(
                                 rs.getString("email"),
+                                rs.getString("phone"),
                                 null, // TODO установить это поле в сервисе
                                 rs.getString("code"),
                                 rs.getString("server")));
@@ -115,6 +126,13 @@ public class Players {
         );
     }
 
+    public Optional<Player> getByPhone(String phone) {
+        return pool.select("SELECT * FROM players WHERE phone = ?;",
+                new Object[]{phone},
+                rs -> rs.next() ? Optional.of(getPlayer(rs)) : Optional.empty()
+        );
+    }
+
     public String getCode(String email) {
         return pool.select("SELECT code FROM players WHERE email = ?;",
                 new Object[]{email},
@@ -123,30 +141,48 @@ public class Players {
     }
 
 
-    public String getServer(String email) {
+    public String getServerByEmail(String email) {
         return pool.select("SELECT server FROM players WHERE email = ?;",
                 new Object[]{email},
                 rs -> rs.next() ? rs.getString("server") : null
         );
     }
 
+    public String getServerByPhone(String phone) {
+        return pool.select("SELECT server FROM players WHERE phone = ?;",
+                new Object[]{phone},
+                rs -> rs.next() ? rs.getString("server") : null
+        );
+    }
+
+
     public void create(Player player) {
         pool.update("INSERT INTO players (first_name, last_name, password, " +
-                        "city, skills, comment, code, server, email) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?);",
+                        "city, skills, comment, code, server, phone, email, approved, verification_code, verification_type) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);",
                 getObjects(player));
     }
 
     public void update(Player player) {
         pool.update("UPDATE players SET first_name = ?, last_name = ?, " +
                         "password = ?, city = ?, skills = ?, comment = ?, " +
-                        "code = ?, server = ? WHERE email = ?;",
-                getObjects(player));
+                        "code = ?, server = ?, phone = ? WHERE email = ?;",
+                getObjectsForUpdate(player));
     }
 
     public void updateServer(String email, String server, String code) {
         pool.update("UPDATE players SET server = ?, code = ? WHERE email = ?;",
                 server, code, email);
+    }
+
+    public void approveByPhone(String phone) {
+        pool.update("UPDATE players SET approved = ? WHERE phone = ?;",
+                1, phone);
+    }
+
+    public void updateVerificationCode(String phone, String verificationCode, String verificationType) {
+        pool.update("UPDATE players SET verification_code = ?, verification_type = ? WHERE phone = ?;",
+                verificationCode, verificationType, phone);
     }
 
     private Object[] getObjects(Player player) {
@@ -159,6 +195,25 @@ public class Players {
                 player.getComment(),
                 player.getCode(),
                 player.getServer(),
+                player.getPhone(),
+                player.getEmail(),
+                player.getApproved(),
+                player.getVerificationCode(),
+                player.getVerificationType(),
+        };
+    }
+
+    private Object[] getObjectsForUpdate(Player player) {
+        return new Object[]{
+                player.getFirstName(),
+                player.getLastName(),
+                player.getPassword(),
+                player.getCity(),
+                player.getSkills(),
+                player.getComment(),
+                player.getCode(),
+                player.getServer(),
+                player.getPhone(),
                 player.getEmail(),
         };
     }
