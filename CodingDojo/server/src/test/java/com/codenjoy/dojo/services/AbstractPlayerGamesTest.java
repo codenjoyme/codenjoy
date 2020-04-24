@@ -55,10 +55,15 @@ public class AbstractPlayerGamesTest {
     protected List<Joystick> lazyJoysticks = new LinkedList<>();
     protected List<GamePlayer> gamePlayers = new LinkedList<>();
     protected List<GameField> fields = new LinkedList<>();
+    protected RoomService roomService;
 
     @Before
     public void setUp() {
         playerGames = new PlayerGames();
+
+        roomService = playerGames.roomService = mock(RoomService.class);
+        // по умолчанию все комнаты активны
+        when(roomService.isActive(anyString())).thenReturn(true);
     }
 
     protected Player createPlayer() {

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.google.common.collect.Multimap;
 import lombok.experimental.FieldNameConstants;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -51,6 +52,9 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     private Consumer<PlayerGame> onRemove;
     private ReadWriteLock lock;
     private Spreader spreader = new Spreader();
+
+    @Autowired
+    protected RoomService roomService;
 
     public void onAdd(Consumer<PlayerGame> consumer) {
         this.onAdd = consumer;
@@ -223,6 +227,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public static Predicate<PlayerGame> withRoom(String room) {
         return pg -> pg.getRoomName().equals(room);
+    }
+
+    public Predicate<PlayerGame> withActive() {
+        return playerGame -> roomService.isActive(playerGame.getRoomName());
     }
 
     public List<GameType> getGameTypes() {
@@ -403,6 +411,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public List<PlayerGame> all() {
         return all;
+    }
+
+    /**
+     * @return Отдает только те игры, для которых комната не находится на паузе
+     */
+    public List<PlayerGame> active() {
+        return getAll(withActive());
     }
 
     public Stream<PlayerGame> stream() {

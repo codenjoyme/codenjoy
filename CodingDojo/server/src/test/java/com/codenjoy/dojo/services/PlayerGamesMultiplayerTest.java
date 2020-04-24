@@ -69,6 +69,11 @@ public class PlayerGamesMultiplayerTest {
     @Before
     public void setup() {
         playerGames = new PlayerGames();
+
+        playerGames.roomService = mock(RoomService.class);
+        // по умолчанию все комнаты активны
+        when(playerGames.roomService.isActive(anyString())).thenReturn(true);
+
         printerFactory = mock(PrinterFactory.class);
 
         single = setupGameType("single", MultiplayerType.SINGLE);

@@ -1202,6 +1202,23 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertPlayers("[player3, player4]", playerGames.getAll(withRoom("room2")));
     }
 
+    @Test
+    public void testGetAll_withActive() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room1", "game1", type);
+        createPlayer("player3", "room2", "game2", type);
+        createPlayer("player4", "room2", "game2", type);
+        createPlayer("player5", "room3", "game1", type);
+
+        when(roomService.isActive("room2")).thenReturn(false);
+
+        // when then
+        assertPlayers("[player1, player2, player5]", playerGames.getAll(playerGames.withActive()));
+        assertPlayers("[player1, player2, player5]", playerGames.active());
+    }
+
     private void assertPlayers(String expected, List<PlayerGame> list) {
         assertEquals(expected,
                 list.stream()
