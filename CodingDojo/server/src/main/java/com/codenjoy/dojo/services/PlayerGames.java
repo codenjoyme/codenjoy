@@ -221,6 +221,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return pg -> true;
     }
 
+    public static Predicate<PlayerGame> withRoom(String room) {
+        return pg -> pg.getRoomName().equals(room);
+    }
+
     public List<GameType> getGameTypes() {
         List<GameType> result = new LinkedList<>();
 

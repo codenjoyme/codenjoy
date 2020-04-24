@@ -35,8 +35,7 @@ import org.mockito.InOrder;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.services.PlayerGames.withAll;
-import static com.codenjoy.dojo.services.PlayerGames.withType;
+import static com.codenjoy.dojo.services.PlayerGames.*;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -1187,6 +1186,20 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when then
         assertPlayers("[player1, player2, player3, player4]", playerGames.getAll(withAll()));
+    }
+
+    @Test
+    public void testGetAll_withRoom() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room1", "game1", type);
+        createPlayer("player3", "room2", "game2", type);
+        createPlayer("player4", "room2", "game2", type);
+
+        // when then
+        assertPlayers("[player1, player2]", playerGames.getAll(withRoom("room1")));
+        assertPlayers("[player3, player4]", playerGames.getAll(withRoom("room2")));
     }
 
     private void assertPlayers(String expected, List<PlayerGame> list) {
