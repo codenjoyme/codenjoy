@@ -21,7 +21,6 @@
 /CodingDojo/games/**/libs
 /CodingDojo/games/**/README.txt
 /CodingDojo/games/**/webapp/resources/user/*.zip
-/CodingDojo/balancer-frontend
 /CodingDojo/*-portable
 /CodingDojo/stuff
 /_temp/**
