@@ -11,6 +11,7 @@ import _ from 'lodash';
 import { registerConfirmStart, registerResendStart } from '../../redux/register';
 import { book } from '../../routes';
 import { CustomInputComponent } from '../common/customInput';
+import errorImg from '../common/Bomb_server_Error.jpg';
 // own
 import styles from '../common/styles.module.css';
 
@@ -35,6 +36,7 @@ class RegisterConfirmForm extends Component {
                 <h1 className={ title }>Новий Гравець</h1>
                 { _.get(registerErrors, 'system') && (
                     <div className={ systemError }>
+                        <img src={ errorImg } alt='' />
                         Через непередбачуваний політ діда Мороза антени було
                         пошкоджено. <br />
                         Як тільки пошкодження будуть усунені, сервіс буде
@@ -52,6 +54,10 @@ class RegisterConfirmForm extends Component {
                                     name='code'
                                     placeholder='SMS-код'
                                     component={ CustomInputComponent }
+                                    errors={ _.get(
+                                        registerErrors,
+                                        'credentials',
+                                    ) }
                                 />
                             </div>
                             <div className={ `${checkBoxLabel} ${registerConfirmResend}` }><span onClick={ this.handleResend }>Надіслати ще раз</span></div>

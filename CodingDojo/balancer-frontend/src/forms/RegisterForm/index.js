@@ -14,7 +14,7 @@ import { PrivacyPolicyModal } from '../../components';
 import { CustomInputComponent } from '../common/customInput';
 import { CustomCheckboxComponent } from '../common/customCheckbox';
 import { CustomSelectComponent } from '../common/customSelect';
-import errorSnake from '../common/DuneSnake-icon.svg';
+import errorImg from '../common/Bomb_server_Error.jpg';
 
 // own
 import styles from '../common/styles.module.css';
@@ -107,7 +107,7 @@ class LoginForm extends Component {
                 <h1 className={ title }>Новий гравець</h1>
                 { _.get(registerErrors, 'system') && (
                     <div className={ systemError }>
-                        <img src={ errorSnake } alt='' />
+                        <img src={ errorImg } alt='' />
                         Через непередбачуваний політ діда Мороза антени було
                         пошкоджено. <br />
                         Як тільки пошкодження будуть усунені, сервіс буде
