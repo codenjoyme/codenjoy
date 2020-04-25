@@ -12,6 +12,8 @@ import {
     HomePage,
     PrivacyPolicyPage,
     PrivacyRulesPage,
+    ForgotPasswordPage,
+    RegisterConfirmPage,
 } from '../pages';
 import { book } from './index.js';
 
@@ -24,6 +26,8 @@ export default class Public extends Component {
                 <Route exact component={ BoardPage } path={ book.board } />
                 <Route exact component={ LoginPage } path={ book.login } />
                 <Route exact component={ RegisterPage } path={ book.register } />
+                <Route exact component={ ForgotPasswordPage } path={ book.forgotPassword } />
+                <Route exact component={ RegisterConfirmPage } path={ book.registerConfirm } />
                 <Route
                     exact
                     component={ PrivacyPolicyPage }

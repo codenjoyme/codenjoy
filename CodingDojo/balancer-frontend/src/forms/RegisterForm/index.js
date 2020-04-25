@@ -2,9 +2,12 @@
 import React, { Component } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
+
 import * as Yup from 'yup';
 import _ from 'lodash';
-
+import { book } from '../../routes';
 // proj
 import { register, setVisiblePrivacyModal } from '../../redux/register';
 import { PrivacyPolicyModal } from '../../components';
@@ -16,7 +19,7 @@ import errorSnake from '../common/DuneSnake-icon.svg';
 // own
 import styles from '../common/styles.module.css';
 
-const { formWrap, title, submit, backgroundSection, systemError } = styles;
+const { formWrap, title, submit, backgroundSection, systemError, checkBoxText } = styles;
 
 const requiredShortString = Yup.string()
     .min(2, 'Too Short!')
@@ -26,6 +29,8 @@ const optionalString = Yup.string().nullable(true);
 
 const RegisterSchema = Yup.object().shape({
     password:  requiredShortString,
+    phone:     requiredShortString,
+    updates:   Yup.boolean().oneOf([ true ]),
     firstName: requiredShortString,
     lastName:  requiredShortString,
     city:      requiredShortString,
@@ -86,6 +91,13 @@ const options = [
 ];
 
 class LoginForm extends Component {
+    componentDidUpdate() {
+        const { history, shouldConfirmRegistration } = this.props;
+        if(shouldConfirmRegistration) {
+            history.push(`${book.registerConfirm}`)
+        }
+    }
+
     render() {
         const { register, setVisiblePrivacyModal } = this.props;
         const { visiblePrivacyModal, registerErrors, isLoading } = this.props;
@@ -108,11 +120,13 @@ class LoginForm extends Component {
                         lastName:        '',
                         firstName:       '',
                         passwordConfirm: '',
+                        phone:           '',
                         city:            '',
                         email:           '',
                         skills:          '',
                         others:          '',
                         terms:           false,
+                        updates:         true,
                     } }
                     validationSchema={ RegisterSchema }
                     onSubmit={ payload => {
@@ -146,6 +160,12 @@ class LoginForm extends Component {
                                         'credentials',
                                     ) }
                                     placeholder='Електронна пошта*'
+                                    component={ CustomInputComponent }
+                                />
+                                <Field
+                                    type='phone'
+                                    name='phone'
+                                    placeholder='Номер телефону*'
                                     component={ CustomInputComponent }
                                 />
                                 <Field
@@ -186,11 +206,25 @@ class LoginForm extends Component {
                                 component={ CustomCheckboxComponent }
                                 label={
                                     <div
+                                        className={ checkBoxText }
                                         onClick={ () =>
                                             setVisiblePrivacyModal(true)
                                         }
                                     >
                                         Погоджуюсь с політикою конфіденційності*
+                                    </div>
+                                }
+                                type='checkbox'
+                            />
+
+                            <Field
+                                name='updates'
+                                component={ CustomCheckboxComponent }
+                                label={
+                                    <div
+                                        className={ checkBoxText }
+                                    >
+                                        Я хочу отримувати листи про можливість віддаленої роботи в EPAM: вакансії, новини статті, заходи та іншу інформацію, пов'язану з інноваційною програмою для IT-спеціалістів та розробників, які хочуть працювати віддалено
                                     </div>
                                 }
                                 type='checkbox'
@@ -210,7 +244,7 @@ class LoginForm extends Component {
                                     className={ submit }
                                     type='submit'
                                 >
-                                    Зареєструватися
+                                    Продовжити
                                 </button>
                             </div>
                         </Form>
@@ -222,14 +256,18 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps = state => ({
-    registerErrors:      state.register.registerErrors,
-    isLoading:           state.register.isLoading,
-    visiblePrivacyModal: state.register.visiblePrivacyModal,
+    registerErrors:            state.register.registerErrors,
+    isLoading:                 state.register.isLoading,
+    visiblePrivacyModal:       state.register.visiblePrivacyModal,
+    shouldConfirmRegistration: state.register.shouldConfirmRegistration,
 });
 
 const mapDispatchToProps = { register, setVisiblePrivacyModal };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps,
+    ),
+    withRouter,
 )(LoginForm);

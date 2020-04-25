@@ -1,19 +1,21 @@
 // core
 import React, { Component } from 'react';
 import { Formik, Form, Field } from 'formik';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as Yup from 'yup';
 import _ from 'lodash';
 
 // proj
 import { login } from '../../redux/auth';
+import { book } from '../../routes';
 import { CustomInputComponent } from '../common/customInput';
 import errorSnake from '../common/DuneSnake-icon.svg';
 
 // own
 import styles from '../common/styles.module.css';
 
-const { formWrap, title, submit, backgroundSection, systemError } = styles;
+const { formWrap, title, submit, backgroundSection, systemError, checkBoxLabel, forgotPasswordLink } = styles;
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -74,6 +76,9 @@ class LoginForm extends Component {
                         </Form>
                     ) }
                 </Formik>
+                <NavLink to={ book.forgotPassword }>
+                    <div className={ `${checkBoxLabel} ${forgotPasswordLink}` }><span>Забув пароль?</span></div>
+                </NavLink>
             </div>
         );
     }
