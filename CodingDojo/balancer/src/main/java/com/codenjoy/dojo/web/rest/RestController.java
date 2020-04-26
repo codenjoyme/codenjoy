@@ -159,7 +159,7 @@ public class RestController {
                     String verificationCode = registrationService.generateVerificationCode();
                     players.create(new Player(
                             player.getEmail(),
-                            player.getPhone(),
+                            validator.phoneNormalizer(player.getPhone()),
                             player.getFirstName(),
                             player.getLastName(),
                             passwordEncoder.encode(player.getPassword()),
