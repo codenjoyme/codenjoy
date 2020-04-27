@@ -58,22 +58,20 @@ const generalErrorNotification = () => {
 export function* resetPasswordSaga({payload}) {
     const body = {phone: payload.phone};
     try {
-        const response = yield call(
+        yield call(
             fetchAPI,
             'POST',
             'rest/register/reset',
             null,
             body,
+            { rawResponse: true },
         );
-        if (!response.code) {
-            yield call(generalErrorNotification);
-            yield put(resetPasswordFail({ credentials: true }));
-        } else {
-            yield call(toast.success, 'Код підтвердження успішно надісланий на Ваш телефон!', {
-                position: toast.POSITION.TOP_RIGHT,
-            });
-            yield put(resetPasswordSuccess());
-        }
+
+        yield call(toast.success, 'Код підтвердження успішно надісланий на Ваш телефон!', {
+            position: toast.POSITION.TOP_RIGHT,
+        });
+        yield put(resetPasswordSuccess());
+
     } catch (err) {
         const failParams =
             err.status === 400 ? { credentials: true } : { system: true };
@@ -84,24 +82,20 @@ export function* resetPasswordSaga({payload}) {
 
 export function* resetPasswordValidateSaga({payload}) {
     try {
-        const response = yield call(
+        yield call(
             fetchAPI,
             'POST',
             'rest/register/validate-reset',
             null,
             payload,
+            { rawResponse: true },
         );
-        if (!response.code) {
-            yield call(generalErrorNotification);
-            yield put(resetPasswordValidateFail({ credentials: true }));
-        } else {
-            yield call(toast.success, 'Новий пароль успішно надісланий на Ваш телефон!', {
-                position: toast.POSITION.TOP_RIGHT,
-            });
-            yield delay(3000);
-            yield put(resetPasswordValidateSuccess());
-            yield call(history.replace, book.login);
-        }
+        yield call(toast.success, 'Новий пароль успішно надісланий на Ваш телефон!', {
+            position: toast.POSITION.TOP_RIGHT,
+        });
+        yield delay(3000);
+        yield put(resetPasswordValidateSuccess());
+        yield call(history.replace, book.login);
     } catch (err) {
         const failParams =
             err.status === 400 ? { credentials: true } : { system: true };
