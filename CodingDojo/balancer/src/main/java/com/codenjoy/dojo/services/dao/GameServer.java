@@ -94,7 +94,7 @@ public class GameServer {
                         email, server);
             }
 
-            return gameClientResolver.resolveClient(server).checkPlayerExists(email);
+            return gameClientResolver.resolveClient(server).checkPlayerExists(config.getId(email));
         } catch (GameServerClientException e) {
             logger.error("Error check player exists on server: " + server, e);
             return false;

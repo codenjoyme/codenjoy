@@ -30,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -54,8 +53,7 @@ public class RegistrationService {
     }
 
     public ServerLocation confirmRegistration(String phone, String code) {
-        Player player = playersRepo.getByPhone(phone)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Player player = getByPhone(phone);
 
         if (player.getApproved() == 1) {
             throw new IllegalArgumentException("User already confirmed");
@@ -72,8 +70,7 @@ public class RegistrationService {
     }
 
     public void resendConfirmRegistrationCode(String phone) {
-        Player player = playersRepo.getByPhone(phone)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Player player = getByPhone(phone);
         if (player.getApproved() == 1) {
             throw new IllegalArgumentException("User already confirmed");
         }
@@ -84,7 +81,7 @@ public class RegistrationService {
 
     public void resendResetPasswordCode(String phone) {
         Player player = playersRepo.getByPhone(phone)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         if (player.getApproved() == 0) {
             throw new IllegalArgumentException("User is not active");
@@ -96,8 +93,7 @@ public class RegistrationService {
     }
 
     public boolean validateCodeResetPassword(String phone, String code) {
-        Player player = playersRepo.getByPhone(phone)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Player player = getByPhone(phone);
 
         if (player.getApproved() == 0) {
             throw new IllegalArgumentException("User is not active");
@@ -112,8 +108,7 @@ public class RegistrationService {
     }
 
     public Player resetPassword(String phone) {
-        Player player = playersRepo.getByPhone(phone)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Player player = getByPhone(phone);
         String newPassword = RandomStringUtils.randomAlphabetic(8);
         String hashedPassword = DigestUtils.md5Hex(newPassword);
         String encodePassword = passwordEncoder.encode(hashedPassword);
@@ -128,6 +123,11 @@ public class RegistrationService {
     private boolean validateCode(String smsCode, VerificationType codeType, Player player) {
         return (!StringUtils.isEmpty(smsCode) && smsCode.equals(player.getVerificationCode()))
                 && (codeType != null && codeType.name().equals(player.getVerificationType()));
+    }
+
+    private Player getByPhone(String phone) {
+        return playersRepo.getByPhone(phone)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 }
 

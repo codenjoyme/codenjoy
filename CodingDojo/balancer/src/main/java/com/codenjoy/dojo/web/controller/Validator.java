@@ -149,7 +149,7 @@ public class Validator {
     }
 
     public void checkPhoneNumber(String phone, boolean canBeNull) {
-        if(!StringUtils.isEmpty(phone) && !canBeNull && !phoneNumber.matcher(phone).matches()) {
+        if((StringUtils.isEmpty(phone) && !canBeNull) || !phoneNumber.matcher(phone).matches()) {
             throw new IllegalArgumentException("Invalid phone number: " + phone);
         }
     }
