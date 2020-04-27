@@ -60,8 +60,11 @@ public enum Elements implements CharElements {
     DEAD_MEAT_CHOPPER('x'),     // this is chopper corpse
 
     /// perks
-    BOMB_BLAST_RADIUS_INCREASE('+'), // Bomb blast radius increase. Timed-out.  Applicable only to new bombs.
+    BOMB_BLAST_RADIUS_INCREASE('+'), // Bomb blast radius increase. Applicable only to new bombs. The perk is temporary.
 
+    BOMB_COUNT_INCREASE('c'), // Increase available bombs count. Number of extra bombs can be set in settings. The perk is temporary.
+
+    BOMB_IMMUNE('i'), // Do not die after bomb blast. Temporary.
     /// a void
     NONE(' ');                 // this is the only place where you can move your Bomberman
 
