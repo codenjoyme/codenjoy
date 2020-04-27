@@ -167,6 +167,10 @@ class LoginForm extends Component {
                                     name='phone'
                                     placeholder='Номер телефону*'
                                     component={ CustomInputComponent }
+                                    errors={ _.get(
+                                        registerErrors,
+                                        'credentials',
+                                    ) }
                                 />
                                 <Field
                                     type='password'

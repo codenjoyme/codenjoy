@@ -207,22 +207,19 @@ export function* registerResendTask() {
 
     const phone = yield select(getPhone);
     try {
-        const response = yield call(
+        yield call(
             fetchAPI,
             'POST',
             'rest/register/resend',
             null,
             {phone},
+            { rawResponse: true },
         );
-        if (!response.code) {
-            yield call(generalErrorNotification);
-            yield put(registerResendFail({ credentials: true }));
-        } else {
-            yield call(toast.success, 'Код успішно надісланий на Ваш телефон!', {
-                position: toast.POSITION.TOP_RIGHT,
-            });
-            yield put(registerResendSuccess());
-        }
+
+        yield call(toast.success, 'Код успішно надісланий на Ваш телефон!', {
+            position: toast.POSITION.TOP_RIGHT,
+        });
+        yield put(registerResendSuccess());
     } catch (err) {
         const failParams =
             err.status === 400 ? { credentials: true } : { system: true };
