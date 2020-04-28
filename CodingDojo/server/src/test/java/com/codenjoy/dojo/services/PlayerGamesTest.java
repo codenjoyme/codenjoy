@@ -364,6 +364,91 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         return when(roomService.isActive(room)).thenReturn(active);
     }
 
+    @Test
+    public void shouldTickFields_onlyDistinctFields() {
+        // given
+        createPlayer("player1", "room1", "game1", MultiplayerType.MULTIPLE); // field 0
+        createPlayer("player2", "room1", "game1", MultiplayerType.MULTIPLE);
+
+        createPlayer("player3", "room2", "game2", MultiplayerType.SINGLE); // field 1
+        createPlayer("player4", "room2", "game2", MultiplayerType.SINGLE); // field 2
+
+        resetAllFields();
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals(3, fields.size()); // only 3 fields created
+        verifyFieldTicked(0);
+        verifyFieldTicked(1);
+        verifyFieldTicked(2);
+    }
+
+    @Test
+    public void shouldTickFields_onlyStuffedRooms() {
+        // given
+
+        // field 0 not stuffed
+        createPlayer("player1", "room1", "game1", MultiplayerType.TRIPLE);
+        createPlayer("player2", "room1", "game1", MultiplayerType.TRIPLE);
+
+        // field 1 stuffed
+        createPlayer("player3", "room2", "game1", MultiplayerType.TRIPLE);
+        createPlayer("player4", "room2", "game1", MultiplayerType.TRIPLE);
+        createPlayer("player5", "room2", "game1", MultiplayerType.TRIPLE);
+
+        resetAllFields();
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals(2, fields.size()); // only 2 fields created
+        verifyFieldTicked(0, NEVER);
+        verifyFieldTicked(1);
+    }
+
+    @Test
+    public void shouldTickFields_skipNonActiveRooms() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room2", "game2", type); // paused
+        createPlayer("player3", "room3", "game1", type);
+
+        setActive("room2", false);
+
+        resetAllFields();
+
+        // when
+        playerGames.tick();
+
+        // then
+        verifyFieldTicked(0);
+        verifyFieldTicked(1, NEVER); // because paused
+        verifyFieldTicked(2);
+
+        // when
+        setActive("room2", true);
+        resetAllFields();
+
+        playerGames.tick();
+
+        // then
+        verifyFieldTicked(0);
+        verifyFieldTicked(1); // because active
+        verifyFieldTicked(2);
+    }
+
+    private void verifyFieldTicked(int index) {
+        verifyFieldTicked(index, ONCE);
+    }
+
+    private void verifyFieldTicked(int index, int times) {
+        verify(fields.get(index), times(times)).quietTick();
+    }
+
     private void verifyNewGameCreated(int index) {
         verifyNewGameCreated(index, ONCE);
     }

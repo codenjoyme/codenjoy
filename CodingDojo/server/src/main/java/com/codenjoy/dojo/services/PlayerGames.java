@@ -292,10 +292,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // независимо от типа игры нам нужно тикнуть все
         //      но только те, которые не DISPOSABLE и одновременно
         //      недокомплектованные пользователями
-        all.stream()
+        //      а так же котмнаты которых активны
+        active.stream()
                 .map(PlayerGame::getField)
                 .distinct()
-                .filter(this::isMatchCanBeStarted)
+                .filter(spreader::isRoomStaffed)
                 .forEach(GameField::quietTick);
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
@@ -306,10 +307,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         Game game = playerGame.getGame();
         Player player = playerGame.getPlayer();
         player.getEventListener().levelChanged(game.getProgress());
-    }
-
-    private boolean isMatchCanBeStarted(GameField field) {
-        return spreader.isRoomStaffed(field);
     }
 
     // перевод текущего игрока в новую комнату
