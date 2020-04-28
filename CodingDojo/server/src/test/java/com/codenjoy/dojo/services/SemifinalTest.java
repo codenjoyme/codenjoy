@@ -201,6 +201,59 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     }
 
     @Test
+    public void shouldCut50PercentUsers_whenAccurateCut_whenSeveralRooms() {
+        // given
+        settings.setPercentage(true);
+        settings.setLimit(50);
+
+        Player player1 = createPlayerWithScore(100, "room1");
+        Player player2 = createPlayerWithScore(90, "room1");
+        Player player3 = createPlayerWithScore(80, "room1");
+        Player player4 = createPlayerWithScore(70, "room1");
+        Player player5 = createPlayerWithScore(60, "room1");
+        Player player6 = createPlayerWithScore(50, "room1");
+        Player player7 = createPlayerWithScore(40, "room1");
+        Player player8 = createPlayerWithScore(30, "room1");
+
+        Player player9 = createPlayerWithScore(20, "room2");
+        Player player10 = createPlayerWithScore(10, "room2");
+        Player player11 = createPlayerWithScore(9, "room2");
+        Player player12 = createPlayerWithScore(8, "room2");
+        Player player13 = createPlayerWithScore(7, "room2");
+        Player player14 = createPlayerWithScore(6, "room2");
+        Player player15 = createPlayerWithScore(5, "room2");
+        Player player16 = createPlayerWithScore(4, "room2");
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, // room1
+                player9, player10, player11, player12);  // room2
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, // room1
+                player9, player10);    // room2
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1,  // room1
+                player9);      // room2
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, // room1
+                player9);     // room2
+    }
+
+    @Test
     public void shouldCut30PercentUsers_whenNotAccurateCut() {
         // given
         settings.setPercentage(true);

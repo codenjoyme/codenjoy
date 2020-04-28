@@ -121,6 +121,12 @@ public class AbstractPlayerGamesTest {
         return player;
     }
 
+    protected Player createPlayerWithScore(int score, String roomName) {
+        Player player = createPlayer(roomName, "game");
+        setScore(score, player);
+        return player;
+    }
+
     protected void setPlayerStatus(int index, boolean stillPlay) {
         when(gamePlayers.get(index).isAlive()).thenReturn(stillPlay);
         when(gamePlayers.get(index).isWin()).thenReturn(!stillPlay);
