@@ -251,8 +251,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     @Override
     public void tick() {
+        List<PlayerGame> active = active();
+
         // по всем джойстикам отправили сообщения играм
-        all.forEach(PlayerGame::quietTick);
+        active.forEach(PlayerGame::quietTick);
 
         // если в TRAINING кто-то isWin то мы его относим на следующий уровень
         // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле

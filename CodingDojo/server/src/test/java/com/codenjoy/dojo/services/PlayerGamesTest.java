@@ -239,6 +239,34 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     }
 
     @Test
+    public void shouldTickLazyJoystickWhenTick_skipNonActiveRooms() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room2", "game2", type); // paused
+        createPlayer("player3", "room3", "game1", type);
+
+        setActive("room2", false);
+
+        lazyJoysticks.get(0).right();
+        verifyNoMoreInteractions(joysticks.get(0));
+
+        lazyJoysticks.get(1).up();
+        verifyNoMoreInteractions(joysticks.get(1));
+
+        lazyJoysticks.get(2).down();
+        verifyNoMoreInteractions(joysticks.get(2));
+
+        // when
+        playerGames.tick();
+
+        // then
+        verify(joysticks.get(0)).right();
+        verifyNoMoreInteractions(joysticks.get(1)); // because paused
+        verify(joysticks.get(2)).down();
+    }
+
+    @Test
     public void shouldTickGameType() {
         // given
         createPlayer("game2");
