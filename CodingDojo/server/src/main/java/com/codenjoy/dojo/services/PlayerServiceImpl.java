@@ -165,7 +165,7 @@ public class PlayerServiceImpl implements PlayerService {
                 registration.getCodeById(id);
 
         setupPlayerAI(() -> getPlayer(new PlayerSave(id,
-                            "127.0.0.1", roomName, gameType.name(), // TODO ROOM тут надо roomname 
+                            "127.0.0.1", roomName, gameType.name(),
                             0, null), gameType),
                 id, code, gameType);
     }
@@ -310,7 +310,7 @@ public class PlayerServiceImpl implements PlayerService {
     private void requestControls() {
         int requested = 0;
 
-        for (PlayerGame playerGame : playerGames) {
+        for (PlayerGame playerGame : playerGames.active()) {
             Player player = playerGame.getPlayer();
             try {
                 String board = cacheBoards.get(player);
