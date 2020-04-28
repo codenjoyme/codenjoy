@@ -73,7 +73,7 @@ public class SaveServiceImplTest {
     @Test
     public void shouldSavePlayerWhenExists() {
         Player player = createPlayer("vasia");
-        when(fields.get(0).getSave()).thenReturn(new JSONObject("{'key':'value'}"));
+        fieldSave(0, "{'key':'value'}");
 
         long time = saveService.save("vasia");
 
@@ -81,12 +81,16 @@ public class SaveServiceImplTest {
     }
 
     private Player createPlayer(String id) {
+        return createPlayer(id, "room");
+    }
+
+    private Player createPlayer(String id, String room) {
         Player player = mock(Player.class);
         when(player.getId()).thenReturn(id);
         when(player.getCode()).thenReturn("code_" + id);
         when(player.getData()).thenReturn("data for " + id);
-        when(player.getGameName()).thenReturn(id + " game");
-        when(player.getRoomName()).thenReturn("room");
+        when(player.getGameName()).thenReturn("game " + room);
+        when(player.getRoomName()).thenReturn(room);
         when(player.hasAi()).thenReturn(true);
         when(player.getCallbackUrl()).thenReturn("http://" + id + ":1234");
         when(player.getEventListener()).thenReturn(mock(InformationCollector.class));
@@ -99,11 +103,10 @@ public class SaveServiceImplTest {
             return field;
         };
 
-        String roomName = "room";
         TestUtils.Env env = TestUtils.getPlayerGame(
                 playerGames,
                 player,
-                roomName,
+                room,
                 answerCreateGame,
                 MultiplayerType.SINGLE,
                 null,
@@ -118,7 +121,6 @@ public class SaveServiceImplTest {
     public void shouldNotSavePlayerWhenNotExists() {
         saveService.save("cocacola");
         verify(saver, never()).saveGame(any(Player.class), any(String.class), anyLong());
-
     }
 
     @Test
@@ -245,15 +247,15 @@ public class SaveServiceImplTest {
 
         PlayerSave save1 = new PlayerSave(activeSavedPlayer);
         PlayerSave save2 = new PlayerSave(activePlayer);
-        PlayerSave save3 = new PlayerSave("saved", "http://saved:1234", "room", "saved game", 15, "data for saved");
+        PlayerSave save3 = new PlayerSave("saved", "http://saved:1234", "room", "saved game room", 15, "data for saved");
 
         when(saver.getSavedList()).thenReturn(Arrays.asList("activeSaved", "saved"));
         when(saver.loadGame("activeSaved")).thenReturn(save1);
         when(saver.loadGame("active")).thenReturn(save2);
         when(saver.loadGame("saved")).thenReturn(save3);
 
-        when(fields.get(0).getSave()).thenReturn(new JSONObject("{'data':1}"));
-        when(fields.get(1).getSave()).thenReturn(new JSONObject("{'data':2}"));
+        fieldSave(0, "{'data':1}");
+        fieldSave(1, "{'data':2}");
 
         createUser("activeSaved");
         createUser("active");
@@ -273,7 +275,7 @@ public class SaveServiceImplTest {
         assertEquals("code_active", active.getCode());
         assertEquals("readable_active", active.getReadableName());
         assertEquals("http://active:1234", active.getCallbackUrl());
-        assertEquals("active game", active.getGameName());
+        assertEquals("game room", active.getGameName());
         assertEquals("{\"data\":2}", active.getData());
         assertEquals(11, active.getScore());
         assertEquals("room", active.getRoomName());
@@ -285,7 +287,7 @@ public class SaveServiceImplTest {
         assertEquals("code_activeSaved", activeSaved.getCode());
         assertEquals("readable_activeSaved", activeSaved.getReadableName());
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
-        assertEquals("activeSaved game", activeSaved.getGameName());
+        assertEquals("game room", activeSaved.getGameName());
         assertEquals("{\"data\":1}", activeSaved.getData());
         assertEquals(10, activeSaved.getScore());
         assertEquals("room", activeSaved.getRoomName());
@@ -297,7 +299,7 @@ public class SaveServiceImplTest {
         assertEquals("code_saved", saved.getCode());
         assertEquals("readable_saved", saved.getReadableName());
         assertEquals("http://saved:1234", saved.getCallbackUrl());
-        assertEquals("saved game", saved.getGameName());
+        assertEquals("saved game room", saved.getGameName());
         assertNull(saved.getData());
         assertEquals(15, saved.getScore());
         assertEquals("room", saved.getRoomName());
@@ -320,11 +322,12 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void testSaveAll() {
+    public void shouldSaveAll() {
         createPlayer("first");
         createPlayer("second");
-        when(fields.get(0).getSave()).thenReturn(new JSONObject("{'key':'value1'}"));
-        when(fields.get(1).getSave()).thenReturn(new JSONObject("{'key':'value2'}"));
+
+        fieldSave(0, "{'key':'value1'}");
+        fieldSave(1, "{'key':'value2'}");
 
         long time = saveService.saveAll();
 
@@ -333,7 +336,28 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void testLoadAll() {
+    public void shouldSaveAll_forRoomName() {
+        createPlayer("first", "room1");
+        createPlayer("second", "room1");
+        createPlayer("third", "room2");
+
+        fieldSave(0, "{'key':'value1'}");
+        fieldSave(1, "{'key':'value2'}");
+        fieldSave(2, "{'key':'value3'}");
+
+        long time = saveService.saveAll("room1");
+
+        verify(saver).saveGame(players.get(0), "{\"key\":\"value1\"}", time);
+        verify(saver).saveGame(players.get(1), "{\"key\":\"value2\"}", time);
+        verifyNoMoreInteractions(saver);
+    }
+
+    private void fieldSave(int index, String save) {
+        when(fields.get(index).getSave()).thenReturn(new JSONObject(save));
+    }
+
+    @Test
+    public void shouldLoadAll() {
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
         allPlayersNotRegistered();
 
@@ -357,7 +381,7 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void testLoadAll_whenRegistered() {
+    public void shouldLoadAll_whenRegistered() {
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
         allPlayersRegistered();
 
@@ -383,14 +407,14 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void testRemoveSave() {
+    public void shouldRemoveSave() {
         saveService.removeSave("player");
 
         verify(saver).delete("player");
     }
 
     @Test
-    public void testRemoveAllSaves() {
+    public void shouldRemoveAllSaves() {
         when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
 
         saveService.removeAllSaves();
