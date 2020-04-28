@@ -699,8 +699,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         // created new field for player3
-        assertEquals(2, fields.size());
         assertRooms("{1=[player3]}");
+        assertEquals(2, fields.size());
 
         verify(fields.get(1), times(ONCE)).newGame(gamePlayers.get(2));
     }
@@ -725,8 +725,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.removeCurrent(player2);
 
         // then
-        assertEquals(1, fields.size());
         assertRooms("{0=[player3]}");
+        assertEquals(1, fields.size());
     }
 
     @Test
@@ -744,8 +744,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         // created new field for player3
-        assertEquals(2, fields.size());
         assertRooms("{1=[player1, player2]}");
+        assertEquals(2, fields.size());
 
         verifyNewGameCreated(1);
     }
@@ -764,8 +764,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.reloadCurrent(playerGame);
 
         // then
-        assertEquals(2, fields.size());
         assertRooms("{0=[player2], 1=[player1]}");
+        assertEquals(2, fields.size());
     }
 
     @Test
@@ -811,10 +811,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.reloadAll(false);
 
         // then
-        assertEquals(4, fields.size());
         assertRooms("{1=[player1], " +
                 "2=[player2, player3, player4], " +
                 "3=[player5]}");
+        assertEquals(4, fields.size());
     }
 
     @Test
@@ -835,10 +835,62 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.reloadAll(false);
 
         // then
-        assertEquals(4, fields.size());
         assertRooms("{1=[player1], " +
                 "2=[player2, player3, player4], " +
                 "3=[player5]}");
+        assertEquals(4, fields.size());
+    }
+
+    @Test
+    public void testReloadAll_forRoom() {
+        // given
+        MultiplayerType type = MultiplayerType.TRIPLE;
+        Player player1 = createPlayer("player1", "room1", "game1", type);
+        Player player2 = createPlayer("player2", "room1", "game1", type);
+        Player player3 = createPlayer("player3", "room1", "game1", type);
+        Player player4 = createPlayer("player4", "room1", "game1", type);
+
+        Player player5 = createPlayer("player5", "room2", "game1", type);
+        Player player6 = createPlayer("player6", "room2", "game1", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4], " +
+                "2=[player5, player6]}");
+
+        // when
+        playerGames.reloadAll(false, withRoom("room1"));
+
+        // then
+        assertRooms("{1=[player1, player2], " +
+                "2=[player5, player6], " + // didn't touch because room2
+                "3=[player3, player4]}");
+        assertEquals(4, fields.size());
+    }
+
+    @Test
+    public void testReloadAll_forGame() {
+        // given
+        MultiplayerType type = MultiplayerType.TRIPLE;
+        Player player1 = createPlayer("player1", "room1", "game1", type);
+        Player player2 = createPlayer("player2", "room1", "game1", type);
+        Player player3 = createPlayer("player3", "room1", "game1", type);
+        Player player4 = createPlayer("player4", "room1", "game1", type);
+
+        Player player5 = createPlayer("player5", "room2", "game2", type);
+        Player player6 = createPlayer("player6", "room2", "game2", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4], " +
+                "2=[player5, player6]}");
+
+        // when
+        playerGames.reloadAll(false, withType("game1"));
+
+        // then
+        assertRooms("{1=[player1, player2], " +
+                "2=[player5, player6], " + // didn't touch because game2
+                "3=[player3, player4]}");
+        assertEquals(4, fields.size());
     }
 
     @Test
