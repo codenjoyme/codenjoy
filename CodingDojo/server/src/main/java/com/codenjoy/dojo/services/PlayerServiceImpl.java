@@ -53,6 +53,8 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
+import static com.codenjoy.dojo.services.PlayerGames.withRoom;
+
 @Component("playerService")
 @Slf4j
 public class PlayerServiceImpl implements PlayerService {
@@ -537,6 +539,17 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             playerGames.clear();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void removeAll(String roomName) {
+        lock.writeLock().lock();
+        try {
+            playerGames.getAll(withRoom(roomName))
+                    .forEach(playerGames.all()::remove);
         } finally {
             lock.writeLock().unlock();
         }

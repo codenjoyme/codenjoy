@@ -66,6 +66,7 @@ import java.util.*;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static java.util.stream.Collectors.toList;
 import static org.fest.reflect.core.Reflection.field;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -735,6 +736,42 @@ public class PlayerServiceImplTest {
         // then
         verify(game1).close();
         verify(game2).close();
+    }
+
+    @Test
+    public void shouldRemoveAll() {
+        // given
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        // when
+        playerService.removeAll();
+
+        // then
+        assertPlayers("[]");
+    }
+
+    @Test
+    public void shouldRemoveAll_forRoom() {
+        // given
+        createPlayer(VASYA, "room1", "game1");
+        createPlayer(PETYA, "room1", "game1");
+        createPlayer(KATYA, "room2", "game1");
+        createPlayer("olga", "room3", "game3");
+
+        // when
+        playerService.removeAll("room1");
+
+        // then
+        assertPlayers("[katya, olga]");
+    }
+
+    private void assertPlayers(String expected) {
+        assertEquals(expected,
+                playerService.getAll().stream()
+                        .map(Player::getId)
+                        .collect(toList())
+                        .toString());
     }
 
     @Test
