@@ -126,6 +126,10 @@ public class AbstractPlayerGamesTest {
         return player;
     }
 
+    protected void setActive(String room, boolean active) {
+        when(roomService.isActive(room)).thenReturn(active);
+    }
+
     protected Player createPlayerWithScore(int score, String roomName) {
         Player player = createPlayer(roomName, "game");
         setScore(score, player);

@@ -33,7 +33,6 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
@@ -358,10 +357,6 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         verifyNewGameCreated(0);
         verifyNewGameCreated(1); // because active
         verifyNewGameCreated(2);
-    }
-
-    private OngoingStubbing<Boolean> setActive(String room, boolean active) {
-        return when(roomService.isActive(room)).thenReturn(active);
     }
 
     @Test

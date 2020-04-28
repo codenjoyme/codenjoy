@@ -52,7 +52,7 @@ public class Semifinal implements Tickable {
     @Override
     public void tick() {
         // если режим включен - выходим
-        // TODO эта настройка должна включаться и выключаться не для всех комнат, а для заданных
+        // TODO эта настройка должна включаться и выключаться не для всех комнат, а для заданных в настройках
         if (!settings.isEnabled()) return;
 
         // если не с кем работать - выходим
@@ -65,7 +65,7 @@ public class Semifinal implements Tickable {
         // получаем мапу по комнатам, где значениями являются сортированные
         // по очкам списки PlayerGame
         Map<String, List<PlayerGame>> map =
-                playerGames.getRooms(ALL).stream()  // TODO test me
+                playerGames.getRooms(ACTIVE).stream()
                     .collect(toMap(room -> room,
                             room -> playerGames.getAll(withRoom(room))
                                         .stream()
@@ -100,7 +100,7 @@ public class Semifinal implements Tickable {
 
         // если после удаления надо перегруппировать участников по бордам
         if (settings.isResetBoard()) {
-            playerGames.reloadAll(settings.isShuffleBoard());  // TODO test me
+            playerGames.reloadAll(settings.isShuffleBoard(), playerGames.withActive());
         }
     }
 
