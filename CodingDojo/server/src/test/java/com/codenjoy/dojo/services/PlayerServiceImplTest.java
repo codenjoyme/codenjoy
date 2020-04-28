@@ -135,15 +135,6 @@ public class PlayerServiceImplTest {
     @Mock
     private GameType gameType;
     
-    @Mock
-    private PlayerScores playerScores1;
-    
-    @Mock
-    private PlayerScores playerScores2;
-    
-    @Mock
-    private PlayerScores playerScores3;
-    
     private InformationCollector informationCollector;
     
     @Mock
@@ -153,6 +144,7 @@ public class PlayerServiceImplTest {
     private List<GameField> gameFields = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
     private List<PlayerHero> heroesData = new LinkedList<>();
+    private List<PlayerScores> playerScores = new LinkedList<>();
 
     @Before
     public void setUp() {
@@ -166,24 +158,23 @@ public class PlayerServiceImplTest {
         plotsCaptor = ArgumentCaptor.forClass(List.class);
         boardCaptor = ArgumentCaptor.forClass(String.class);
 
-        when(playerScores1.getScore()).thenReturn(0);
-
-        when(playerScores2.getScore()).thenReturn(0);
-
-        when(playerScores3.getScore()).thenReturn(0);
-
         when(printer.print(any(), any())).thenReturn("1234");
 
         when(gameService.getGame(anyString())).thenReturn(gameType);
 
         when(gameType.getBoardSize()).thenReturn(v(15));
-        when(gameType.getPlayerScores(anyInt())).thenReturn(playerScores1, playerScores2, playerScores3);
+        when(gameType.getPlayerScores(anyInt())).thenAnswer(inv -> {
+            PlayerScores scores = mock(PlayerScores.class);
+            when(scores.getScore()).thenReturn(0);
+            playerScores.add(scores);
+            return scores;
+        });
         when(gameType.createGame(anyInt())).thenAnswer(inv -> {
-            GameField gameField = mock(GameField.class);
-            gameFields.add(gameField);
+            GameField field = mock(GameField.class);
+            gameFields.add(field);
 
-            when(gameField.reader()).thenReturn(mock(BoardReader.class));
-            return gameField;
+            when(field.reader()).thenReturn(mock(BoardReader.class));
+            return field;
         });
         heroesData.addAll(Arrays.asList(heroData(1, 2), heroData(3, 4), heroData(5, 6), heroData(7, 8)));
         when(gameType.createPlayer(any(EventListener.class), anyString()))
@@ -409,8 +400,8 @@ public class PlayerServiceImplTest {
         when(printer.print(any(), any()))
                 .thenReturn("1234")
                 .thenReturn("4321");
-        when(playerScores1.getScore()).thenReturn(123);
-        when(playerScores2.getScore()).thenReturn(234);
+        when(playerScores(0).getScore()).thenReturn(123);
+        when(playerScores(1).getScore()).thenReturn(234);
 
         // when
         playerService.tick();
@@ -445,7 +436,7 @@ public class PlayerServiceImplTest {
     public void shouldNewUserHasZeroScores_whenLastLogged_ifOtherPlayerHasPositiveScores() {
         // given
         Player vasya = createPlayer(VASYA);
-        when(playerScores1.getScore()).thenReturn(10);
+        when(playerScores(0).getScore()).thenReturn(10);
 
         // when
         Player petya = createPlayer(PETYA);
@@ -458,15 +449,15 @@ public class PlayerServiceImplTest {
     public void shouldNewUserHasMinimumPlayersScores_whenLastLogged_ifSomePlayersHasNegativeScores() {
         // given
         Player vasya = createPlayer(VASYA);
-        when(playerScores1.getScore()).thenReturn(10);
+        when(playerScores(0).getScore()).thenReturn(10);
 
         Player petya = createPlayer(PETYA);
         assertEquals(10, vasya.getScore());
         assertEquals(0, petya.getScore());
 
         // when
-        when(playerScores1.getScore()).thenReturn(5);
-        when(playerScores2.getScore()).thenReturn(10);
+        when(playerScores(0).getScore()).thenReturn(5);
+        when(playerScores(1).getScore()).thenReturn(10);
         Player katya = createPlayer(KATYA);
         assertEquals(5, vasya.getScore());
         assertEquals(10, petya.getScore());
@@ -479,8 +470,8 @@ public class PlayerServiceImplTest {
         // given
         Player vasya = createPlayer(VASYA);
         Player petya = createPlayer(PETYA);
-        when(playerScores1.getScore()).thenReturn(5);
-        when(playerScores2.getScore()).thenReturn(10);
+        when(playerScores(0).getScore()).thenReturn(5);
+        when(playerScores(1).getScore()).thenReturn(10);
 
         // when
         playerService.tick();
@@ -592,7 +583,7 @@ public class PlayerServiceImplTest {
 
         // then
         verify(gameType).getPlayerScores(100);
-        when(playerScores1.getScore()).thenReturn(100);
+        when(playerScores(0).getScore()).thenReturn(100);
 
         Player player = playerService.get(VASYA);
 
@@ -614,7 +605,7 @@ public class PlayerServiceImplTest {
 
         // then
         verify(gameType).getPlayerScores(200);
-        when(playerScores2.getScore()).thenReturn(200);
+        when(playerScores(1).getScore()).thenReturn(200);
 
         Player player = playerService.get(VASYA);
 
@@ -637,7 +628,7 @@ public class PlayerServiceImplTest {
 
         // then
         verify(gameType).getPlayerScores(0);
-        when(playerScores2.getScore()).thenReturn(0);
+        when(playerScores(1).getScore()).thenReturn(0);
 
         Player player = playerService.get(VASYA);
 
@@ -677,7 +668,7 @@ public class PlayerServiceImplTest {
         informationCollector = createPlayer(VASYA).getEventListener();
 
         // when, then
-        when(playerScores1.getScore()).thenReturn(10, 13);
+        when(playerScores(0).getScore()).thenReturn(10, 13);
         informationCollector.levelChanged(new LevelProgress(2, 1, 1));
         informationCollector.event("event1");
         checkInfo("+3, Level 2");
@@ -689,9 +680,9 @@ public class PlayerServiceImplTest {
         informationCollector = createPlayer(VASYA).getEventListener();
 
         // when, then
-        when(playerScores1.getScore()).thenReturn(10, 9);
+        when(playerScores(0).getScore()).thenReturn(10, 9);
         informationCollector.event("event1");
-        when(playerScores1.getScore()).thenReturn(10, 8);
+        when(playerScores(0).getScore()).thenReturn(10, 8);
         informationCollector.event("event2");
         checkInfo("-1, -2");
     }
@@ -702,7 +693,7 @@ public class PlayerServiceImplTest {
         informationCollector = createPlayer(VASYA).getEventListener();
 
         // when, then
-        when(playerScores1.getScore()).thenReturn(10, 13);
+        when(playerScores(0).getScore()).thenReturn(10, 13);
         informationCollector.event("event1");
         checkInfo("+3");
     }
@@ -757,13 +748,13 @@ public class PlayerServiceImplTest {
         createPlayer(VASYA, "room1", "game1");
         createPlayer(PETYA, "room1", "game1");
         createPlayer(KATYA, "room2", "game1");
-        createPlayer("olga", "room3", "game3");
+        createPlayer(OLIA,  "room3", "game3");
 
         // when
         playerService.removeAll("room1");
 
         // then
-        assertPlayers("[katya, olga]");
+        assertPlayers("[katya, olia]");
     }
 
     private void assertPlayers(String expected) {
@@ -1218,26 +1209,65 @@ public class PlayerServiceImplTest {
     }
 
     @Test
+    public void shouldNewGame_whenCreatePlayer() {
+        // given when
+        createPlayer(VASYA);
+        createPlayer(PETYA);
+
+        // then
+        verify(gameField(VASYA)).newGame(any());
+        verify(gameField(PETYA)).newGame(any());
+
+        assertEquals(2, gameFields.size());
+        assertEquals(2, playerScores.size());
+    }
+
+    @Test
     public void shouldCleanAllScores() {
         // given
         createPlayer(VASYA);
         createPlayer(PETYA);
-
-        verify(gameField(VASYA)).newGame(any());
-        verify(gameField(PETYA)).newGame(any());
-
+        
         // when
         playerService.cleanAllScores();
 
         // then
-        verify(playerScores1).clear();
-        verify(playerScores2).clear();
-        verifyNoMoreInteractions(playerScores3);
+        verify(playerScores(0)).clear();
+        verify(playerScores(1)).clear();
 
         verify(gameField(VASYA)).clearScore();
         verify(gameField(PETYA)).clearScore();
 
         verify(semifinal).clean();
+    }
+
+    @Test
+    public void shouldCleanAllScores_forRoom() {
+        // given
+        createPlayer(VASYA, "room1", "game1");
+        createPlayer(PETYA, "room1", "game1");
+        createPlayer(KATYA, "room2", "game1");
+        createPlayer(OLIA,  "room3", "game3");
+
+        // when
+        playerService.cleanAllScores("room1");
+
+        // then
+        verify(playerScores(0)).clear();
+        verify(playerScores(1)).clear();
+        verifyNoMoreInteractions(playerScores(2));
+        verifyNoMoreInteractions(playerScores(3));
+
+        verify(gameField(VASYA)).clearScore();
+        verify(gameField(PETYA)).clearScore();
+        verify(gameField(KATYA), never()).clearScore();
+        verify(gameField(OLIA), never()).clearScore();
+
+        verify(semifinal).clean();
+    }
+
+    private PlayerScores playerScores(int index) {
+        return playerScores.get(index);
     }
 
     @Test

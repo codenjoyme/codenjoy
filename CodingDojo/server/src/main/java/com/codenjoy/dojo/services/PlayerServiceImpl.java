@@ -593,6 +593,19 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public void cleanAllScores(String roomName) {
+        lock.writeLock().lock();
+        try {
+            semifinal.clean(); // TODO semifinal должен научиться работать для определенных комнат
+
+            playerGames.getAll(withRoom(roomName))
+                .forEach(PlayerGame::clearScore);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
     public void reloadAllRooms() {
         lock.writeLock().lock();
         try {
