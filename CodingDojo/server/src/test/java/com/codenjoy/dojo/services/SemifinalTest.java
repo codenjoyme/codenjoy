@@ -200,7 +200,7 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         assertActive(player1);
     }
 
-    @Test
+    @Test // TODO а еще проверить что игнорятся неактивные комнаты
     public void shouldCut50PercentUsers_whenAccurateCut_whenSeveralRooms() {
         // given
         settings.setPercentage(true);
@@ -528,6 +528,49 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         assertEquals(4, fields.size());
         assertRooms("{2=[player1], " +
                 "3=[player4, player5, player8]}");
+    }
+
+    @Test // TODO так же проверить исключение неактивных комнат
+    public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple_whenSeveralRooms() {
+        // given
+        settings.setResetBoard(true);
+
+        int winner = 100;
+        int looser = 1;
+        createPlayerWithScore(winner, "player1-1", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-1", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-2", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-2", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-3", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-3", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-4", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-4", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-5", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-5", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-6", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-6", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-7", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-7", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-8", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-8", "room2", MultiplayerType.TRIPLE);
+
+        // обрати внимание, что тут схоже с предыдущим тестом
+        assertRooms("{0=[player1-1, player1-2, player1-3], " +
+                "1=[player2-1, player2-2, player2-3], " +
+                "2=[player1-4, player1-5, player1-6], " +
+                "3=[player2-4, player2-5, player2-6], " +
+                "4=[player1-7, player1-8], " +
+                "5=[player2-7, player2-8]}");
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertEquals(8, fields.size());
+        assertRooms("{4=[player1-1], " +
+                "5=[player2-1], " +
+                "6=[player1-4, player1-5, player1-8], " +
+                "7=[player2-4, player2-5, player2-8]}");
     }
 
     @Test

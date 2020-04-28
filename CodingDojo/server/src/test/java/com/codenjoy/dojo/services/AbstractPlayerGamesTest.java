@@ -97,6 +97,7 @@ public class AbstractPlayerGamesTest {
     }
 
     protected Player createPlayer(String name, String roomName, String gameName, MultiplayerType type, PlayerSave save) {
+        // TODO распутать клубок, тут для одинаковых roomName должны быть и gameName тоже одинаковые, иначе идея может быть нарушена тестами
         return createPlayer(name, gameName, roomName, type, save, "board");
     }
 
@@ -106,7 +107,11 @@ public class AbstractPlayerGamesTest {
     }
 
     protected Player createPlayerWithScore(int score, String playerName, MultiplayerType type) {
-        Player player = createPlayer(playerName, "room", "game", type);
+        return createPlayerWithScore(score, playerName, "room", type);
+    }
+
+    protected Player createPlayerWithScore(int score, String playerName, String roomName, MultiplayerType type) {
+        Player player = createPlayer(playerName, roomName, "game " + roomName, type);
         setScore(score, player);
         return player;
     }
