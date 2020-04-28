@@ -259,9 +259,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // если в TRAINING кто-то isWin то мы его относим на следующий уровень
         // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
         // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
-        for (PlayerGame playerGame : all) {
+        for (PlayerGame playerGame : active) {
             Game game = playerGame.getGame();
             String roomName = playerGame.getRoomName();
+
             MultiplayerType multiplayerType = playerGame.getGameType().getMultiplayerType();
             if (game.isGameOver()) {
                 quiet(() -> {

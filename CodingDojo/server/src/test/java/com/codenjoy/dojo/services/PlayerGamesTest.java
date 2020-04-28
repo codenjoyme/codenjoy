@@ -32,6 +32,8 @@ import org.json.JSONObject;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
+import org.mockito.Mockito;
+import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
@@ -41,6 +43,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class PlayerGamesTest extends AbstractPlayerGamesTest {
+
+    private static final int NEVER = 0;
+    public static final int ONCE = 1;
 
     private PlayerGame removed;
 
@@ -301,14 +306,70 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void shouldNewGame_whenGameOver_caseAnyMultiplayerType() {
         // given
         createPlayer();
-        reset(fields.get(0));
-        when(gamePlayers.get(0).isAlive()).thenReturn(false);
+        resetAllFields();
+        int index = 0;
+        playerIsNotAlive(index);
 
         // when
         playerGames.tick();
 
         // then
-        verify(fields.get(0), times(1)).newGame(gamePlayers.get(0));
+        verifyNewGameCreated(0);
+    }
+
+    private void playerIsNotAlive(int index) {
+        when(gamePlayers.get(index).isAlive()).thenReturn(false);
+    }
+
+    private void resetAllFields() {
+        fields.forEach(Mockito::reset);
+    }
+
+    @Test
+    public void shouldNewGame_whenGameOver_caseAnyMultiplayerType_skipNonActiveRooms() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room2", "game2", type); // paused
+        createPlayer("player3", "room3", "game1", type);
+
+        setActive("room2", false);
+
+        resetAllFields();
+        playerIsNotAlive(0);
+        playerIsNotAlive(1);
+        playerIsNotAlive(2);
+
+        // when
+        playerGames.tick();
+
+        // then
+        verifyNewGameCreated(0);
+        verifyNewGameCreated(1, NEVER); // because paused
+        verifyNewGameCreated(2);
+
+        // when
+        setActive("room2", true);
+        resetAllFields();
+
+        playerGames.tick();
+
+        // then
+        verifyNewGameCreated(0);
+        verifyNewGameCreated(1); // because active
+        verifyNewGameCreated(2);
+    }
+
+    private OngoingStubbing<Boolean> setActive(String room, boolean active) {
+        return when(roomService.isActive(room)).thenReturn(active);
+    }
+
+    private void verifyNewGameCreated(int index) {
+        verifyNewGameCreated(index, ONCE);
+    }
+
+    private void verifyNewGameCreated(int index, int times) {
+        verify(fields.get(index), times(times)).newGame(gamePlayers.get(index));
     }
 
     @Test
@@ -316,14 +377,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         createPlayer("player2", "room", "game2", MultiplayerType.TRAINING.apply(3));
 
-        reset(fields.get(0));
-        when(gamePlayers.get(0).isAlive()).thenReturn(false);
+        resetAllFields();
+        playerIsNotAlive(0);
 
         // when
         playerGames.tick();
 
         // then
-        verify(fields.get(0), times(1)).newGame(gamePlayers.get(0));
+        verifyNewGameCreated(0);
     }
 
     @Test
@@ -331,10 +392,10 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         Player player = createPlayer(MultiplayerType.TRAINING.apply(2));
 
-        reset(fields.get(0));
+        resetAllFields();
         assertEquals(1, fields.size());
-        when(gamePlayers.get(0).isAlive()).thenReturn(false);
-        when(gamePlayers.get(0).isWin()).thenReturn(true);
+        playerIsNotAlive(0);
+        playerIsWin(0);
 
         // then
         assertProgress("player", "{'current':0,'passed':-1,'total':2,'valid':true}");
@@ -350,7 +411,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         int newField = fields.size() - 1;
         assertEquals(2, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
         reset(fields.get(newField));
 
         // when
@@ -364,7 +425,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         newField = fields.size() - 1;
         assertEquals(3, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
         reset(fields.get(newField));
 
         // when
@@ -377,8 +438,12 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         newField = fields.size() - 1;
         assertEquals(3, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
         reset(fields.get(newField));
+    }
+
+    private void playerIsWin(int index) {
+        when(gamePlayers.get(index).isWin()).thenReturn(true);
     }
 
     @Test
@@ -386,7 +451,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         createPlayer(MultiplayerType.TRAINING.apply(2));
 
-        reset(fields.get(0));
+        resetAllFields();
         assertEquals(1, fields.size());
         when(gamePlayers.get(0).isAlive()).thenReturn(true);
         when(gamePlayers.get(0).isWin()).thenReturn(false);
@@ -428,7 +493,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
     }
 
     @Test
@@ -436,7 +501,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // given
         createPlayer(MultiplayerType.TRAINING.apply(2));
 
-        reset(fields.get(0));
+        resetAllFields();
         assertEquals(1, fields.size());
         when(gamePlayers.get(0).isAlive()).thenReturn(true);
         when(gamePlayers.get(0).isWin()).thenReturn(false);
@@ -454,7 +519,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         int newField = fields.size() - 1;
         assertEquals(2, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
     }
 
     @Test
@@ -480,7 +545,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
     }
 
     @Test
@@ -505,7 +570,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
     }
 
     @Test
@@ -557,7 +622,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertEquals(2, fields.size());
         assertRooms("{1=[player3]}");
 
-        verify(fields.get(1), times(1)).newGame(gamePlayers.get(2));
+        verify(fields.get(1), times(ONCE)).newGame(gamePlayers.get(2));
     }
 
     @Test
@@ -602,7 +667,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertEquals(2, fields.size());
         assertRooms("{1=[player1, player2]}");
 
-        verify(fields.get(1), times(1)).newGame(gamePlayers.get(1));
+        verifyNewGameCreated(1);
     }
 
     @Test
@@ -833,7 +898,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         if (expected == null) {
             verifyNoMoreInteractions(player.getEventListener());
         } else {
-            verify(player.getEventListener(), times(1)).levelChanged(captor.capture());
+            verify(player.getEventListener(), times(ONCE)).levelChanged(captor.capture());
             assertEquals(expected, captor.getValue().toString());
         }
         reset(player.getEventListener());
@@ -1039,7 +1104,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player2", MultiplayerType.TRIPLE);
         createPlayer("player3", MultiplayerType.TRIPLE);
 
-        reset(fields.get(0));
+        resetAllFields();
         assertEquals(1, fields.size());
 
         setPlayerStatus(0, true);  // still play on board
@@ -1053,7 +1118,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // then
         int newField = fields.size() - 1;
         assertEquals(2, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(2));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(2));
 
         assertEquals(3, playerGames.size());
         assertEquals(fields.get(0), playerGames.get("player1").getField());
@@ -1240,7 +1305,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player4", "room2", "game2", type); // paused
         createPlayer("player5", "room3", "game1", type);
 
-        when(roomService.isActive("room2")).thenReturn(false);
+        setActive("room2", false);
 
         // when then
         assertPlayers("[player1, player2, player5]", playerGames.getAll(playerGames.withActive()));
@@ -1257,7 +1322,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player4", "room2", "game2", type); // paused
         createPlayer("player5", "room3", "game1", type);
 
-        when(roomService.isActive("room2")).thenReturn(false);
+        setActive("room2", false);
 
         // when then
         assertEquals("[room1, room3]", playerGames.getRooms(ACTIVE).toString());
