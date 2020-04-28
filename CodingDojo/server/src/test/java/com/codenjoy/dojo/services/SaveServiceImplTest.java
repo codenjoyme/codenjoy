@@ -39,6 +39,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codenjoy.dojo.services.PlayerSave.NULL;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -118,13 +119,29 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void shouldNotSavePlayerWhenNotExists() {
+    public void shouldNotSavePlayer_whenNotExists() {
+        // when
         saveService.save("cocacola");
+
+        // then
         verify(saver, never()).saveGame(any(Player.class), any(String.class), anyLong());
     }
 
     @Test
-    public void shouldLoadPlayer_forNotRegistered() {
+    public void shouldLoadPlayer_whenSaveNotFound() {
+        // given
+        when(saver.loadGame("vasia")).thenReturn(NULL);
+
+        // when
+        boolean load = saveService.load("vasia");
+
+        // then
+        assertEquals(false, load);
+        verifyNoMoreInteractions(playerService);
+    }
+
+    @Test
+    public void shouldLoadPlayer_whenNotRegistered() {
         // given
         PlayerSave save = new PlayerSave("vasia", "url", "room", "game", 100, null);
         when(saver.loadGame("vasia")).thenReturn(save);
@@ -140,7 +157,7 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void shouldLoadPlayer_forRegistered() {
+    public void shouldLoadPlayer_whenRegistered() {
         // given
         PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "room", "game", 100, null);
         when(saver.loadGame("vasia")).thenReturn(save);
@@ -157,7 +174,7 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void shouldLoadPlayerWithExternalSave_forNotRegistered_caseSaveExists() {
+    public void shouldLoadPlayerWithExternalSave_whenNotRegistered_caseSaveExists() {
         // given
         PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "room", "game", 0, "{'save':'data'}");
         when(saver.loadGame("vasia")).thenReturn(save);
@@ -184,9 +201,9 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void shouldLoadPlayerWithExternalSave_forNotRegistered_caseSaveNotExists() {
+    public void shouldLoadPlayerWithExternalSave_whenNotRegistered_caseSaveNotExists() {
         // given
-        when(saver.loadGame("vasia")).thenReturn(PlayerSave.NULL);
+        when(saver.loadGame("vasia")).thenReturn(NULL);
         allPlayersNotRegistered();
 
         // when
@@ -210,7 +227,7 @@ public class SaveServiceImplTest {
     }
 
     @Test
-    public void shouldLoadPlayerWithExternalSave_forRegistered() {
+    public void shouldLoadPlayerWithExternalSave_whenRegistered() {
         // given
         PlayerSave save = new PlayerSave("vasia", "127.0.0.2", "room", "game", 0, "{'save':'data'}");
         when(saver.loadGame("vasia")).thenReturn(save);

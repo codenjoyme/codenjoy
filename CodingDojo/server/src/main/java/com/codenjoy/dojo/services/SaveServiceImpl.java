@@ -88,6 +88,10 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public boolean load(String id) {
         PlayerSave save = saver.loadGame(id);
+        if (save == PlayerSave.NULL) {
+            return false;
+        }
+
         resetPlayer(id, save);
         return true;
     }
