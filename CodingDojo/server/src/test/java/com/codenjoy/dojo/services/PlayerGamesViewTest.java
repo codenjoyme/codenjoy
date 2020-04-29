@@ -202,8 +202,11 @@ public class PlayerGamesViewTest {
         List<List<String>> groups = playerGamesView.getGroupsByField();
 
         // then
-        assertEquals("[[user3, user4], " +   // group 1
-                        "[user1, user2]]",   // group 2
+        groups.forEach(list -> Collections.sort(list));
+        Collections.sort(groups, Comparator.comparing(Object::toString));
+
+        assertEquals("[[user1, user2], " +   // group 1
+                        "[user3, user4]]",   // group 2
                 groups.toString());
     }
 

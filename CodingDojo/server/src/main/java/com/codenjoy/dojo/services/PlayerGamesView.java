@@ -106,7 +106,6 @@ public class PlayerGamesView {
 
     private List<List<String>> getGroupBy(Function<PlayerGame, Object> function) {
         return service.all().stream()
-                    .sorted(Comparator.comparing(o -> o.getPlayer().getId()))
                     .collect(groupingBy(function))
                     .values().stream()
                     .map(group -> group.stream()

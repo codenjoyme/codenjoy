@@ -29,6 +29,8 @@ import lombok.Setter;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -49,7 +51,9 @@ public class PParameter {
         this.name = p.getName();
         this.def = String.valueOf(p.getDefault());
         this.multiline = (p instanceof EditBox) && ((EditBox) p).isMultiline();
-        this.options = p.getOptions();
+        this.options = (List)(p.getOptions()).stream()
+                .map(it -> it.toString())
+                .collect(toList());
     }
 
     public Parameter build() {

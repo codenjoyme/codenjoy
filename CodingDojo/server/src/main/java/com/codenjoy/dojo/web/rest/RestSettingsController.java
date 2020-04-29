@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.dao.GameData;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.Validator;
+import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
@@ -57,7 +58,8 @@ public class RestSettingsController {
 
             Settings settings = type.getSettings();
             if (key.equals(SETTINGS)) {
-                return new JSONObject(settings).toString();
+                PParameters parameters = new PParameters(settings.getParameters());
+                return new JSONObject(parameters).toString();
             }
 
             if (settings.hasParameter(key)) {
