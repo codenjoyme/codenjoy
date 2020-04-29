@@ -453,4 +453,82 @@ public class RestAdminControllerTest {
         reset(playerGame.getField());
         reset(playerGame.getGame().getPlayer());
     }
+
+    @Test
+    public void shouldSaveAllAndLoad() {
+        // given
+        register("player1", "ip1", "room1", "first");
+        register("player2", "ip2", "room1", "first");
+
+        register("player3", "ip3", "room2", "first");
+
+        register("player4", "ip4", "room3", "second");
+
+        service.setScores("room1", "player1", "10");
+        service.setScores("room1", "player2", "20");
+        service.setScores("room2", "player3", "30");
+        service.setScores("room3", "player4", "40");
+
+        assertScores("{player1=10, player2=20, player3=30, player4=40}");
+
+        // when
+        service.saveAll("room1");
+        assertEquals("", get("/rest/admin/room/room2/saveAll"));
+
+        assertEquals("", get("/rest/admin/room/room1/scores/clear"));
+        assertEquals("", get("/rest/admin/room/room2/scores/clear"));
+        assertEquals("", get("/rest/admin/room/room3/scores/clear"));
+
+        // then
+        assertScores("{player1=0, player2=0, player3=0, player4=0}");
+
+        // when
+        service.load("room1", "player1"); // save exists
+        // service.load("room1", "player2"); // do not load
+        assertEquals("", get("/rest/admin/room/room2/load/player3")); // save exists
+        assertEquals("", get("/rest/admin/room/room3/load/player4")); // save not exists
+
+        // then
+        assertScores("{player1=10, player2=0, player3=30, player4=0}");
+
+        // when
+        service.gameOverAll("room1");
+        service.gameOverAll("room2");
+        service.gameOverAll("room3");
+
+        // then
+        assertScores("{}");
+
+        service.load("room1", "player1"); // save exists
+        // service.load("room1", "player2"); // do not load
+        service.load("room2", "player3"); // save exists
+        service.load("room3", "player4"); // save not exists
+
+        // then
+        assertScores("{player1=10, player3=30}");
+    }
+
+    @Test
+    public void shouldSaveAllAndLoad_validation() {
+        // when then
+        assertException("Room name is invalid: '$bad$'",
+                () -> service.saveAll("$bad$"));
+
+        assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
+                "/rest/admin/room/$bad$/saveAll");
+
+        // when then
+        assertException("Room name is invalid: '$bad$'",
+                () -> service.load("$bad$", "validPlayer"));
+
+        assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
+                "/rest/admin/room/$bad$/load/validPlayer");
+
+        // when then
+        assertException("Player id is invalid: '$bad$'",
+                () -> service.load("validRoom", "$bad$"));
+
+        assertError("java.lang.IllegalArgumentException: Player id is invalid: '$bad$'",
+                "/rest/admin/room/validRoom/load/$bad$");
+    }
 }

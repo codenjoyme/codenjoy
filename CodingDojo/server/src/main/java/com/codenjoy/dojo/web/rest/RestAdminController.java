@@ -51,6 +51,7 @@ public class RestAdminController {
 
     private Validator validator;
     private PlayerService playerService;
+    private SaveService saveService;
     private PlayerGamesView playerGamesView;
     private TimerService timerService;
     private RoomService roomService;
@@ -190,4 +191,22 @@ public class RestAdminController {
 
         playerService.removeAll(roomName);
     }
+
+    @GetMapping(ROOM + "/load/{player}")
+    public void load(@PathVariable("roomName") String roomName,
+                     @PathVariable("player") String id)
+    {
+        validator.checkRoomName(roomName, CANT_BE_NULL);
+        validator.checkPlayerId(id, CANT_BE_NULL);
+
+        saveService.load(id);
+    }
+
+    @GetMapping(ROOM + "/saveAll")
+    public void saveAll(@PathVariable("roomName") String roomName) {
+        validator.checkRoomName(roomName, CANT_BE_NULL);
+
+        saveService.saveAll(roomName);
+    }
+
 }
