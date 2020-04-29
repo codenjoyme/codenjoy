@@ -114,11 +114,15 @@ public class RestAdminControllerTest {
     @Autowired
     private SaveService saveService;
 
+    @Autowired
+    private ErrorTicketService ticketService;
+
     @Before
     public void setUp() {
         CodenjoyContext.setContext("codenjoy-contest");
 
         debugService.resume();
+        ticketService.setPrintStackTrace(false);
 
         playerService.removeAll();
         saveService.removeAllSaves();
