@@ -6,8 +6,8 @@ public class Level9 implements Level {
     
     @Override
     public String help() {
-        // TODO другое сообщение дать
-        return "This is final LevelA Maze. Good luck !<br><br>\n" +
+        return "Let's complicate the task. If you have developed your algorithm " +
+                "well, the Robot will not get lost here. Check it out!<br><br>\n" +
                 "Remember ! Your program should work for all previous levels too.";
     }
 
