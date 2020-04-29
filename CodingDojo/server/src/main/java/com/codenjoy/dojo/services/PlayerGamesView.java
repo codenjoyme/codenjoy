@@ -114,7 +114,6 @@ public class PlayerGamesView {
                     .collect(toList());
     }
 
-    // TODO test me
     public Map<String, Object> getScores() {
         return service.all().stream()
                 .collect(toMap(pg -> pg.getPlayer().getId(),

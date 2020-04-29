@@ -144,6 +144,10 @@ public class PlayerGamesViewTest {
         assertEquals(expectedGroup2, toString(dataMap.get("user4")));
     }
 
+    private <T> Map<String, T> sortKeys(Map<String, T> map) {
+        return new TreeMap<>(map);
+    }
+
     @Test
     public void testGetGroupsMap_usersInSameGroup() {
         // given
@@ -158,10 +162,6 @@ public class PlayerGamesViewTest {
                 "user3=[user1, user2, user3, user4], " +
                 "user4=[user1, user2, user3, user4]}",
                 sortKeys(map).toString());
-    }
-
-    private Map<String, List<String>> sortKeys(Map<String, List<String>> map) {
-        return new TreeMap<>(map);
     }
 
     @Test
@@ -202,15 +202,18 @@ public class PlayerGamesViewTest {
         List<List<String>> groups = playerGamesView.getGroupsByField();
 
         // then
-        assertEquals("[[user1, user2], " +   // group 1
-                        "[user3, user4]]",   // group 2
+        assertEquals("[[user3, user4], " +   // group 1
+                        "[user1, user2]]",   // group 2
                 groups.toString());
     }
 
     private void givenUsersInSeveralGroups_inOneGeneralGameRoom() {
         GameField field1 = mock(GameField.class);
         GameField field2 = mock(GameField.class);
-        List<GameField> fields = new LinkedList<>(Arrays.asList(field1, field1, field2, field2));
+        List<GameField> fields = new LinkedList<GameField>(){{
+            addAll(Arrays.asList(field1, field1));
+            addAll(Arrays.asList(field2, field2));
+        }};
         GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
 
         // комната будет у всех одна, общая игровая gameName1
@@ -224,7 +227,10 @@ public class PlayerGamesViewTest {
     private void givenUsersInSeveralGroups_withDifferentRooms() {
         GameField field1 = mock(GameField.class);
         GameField field2 = mock(GameField.class);
-        List<GameField> fields = new LinkedList<>(Arrays.asList(field1, field1, field2, field2));
+        List<GameField> fields = new LinkedList<GameField>(){{
+            addAll(Arrays.asList(field1, field1));
+            addAll(Arrays.asList(field2, field2));
+        }};
         GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
 
         // отличия от givenUsersInSeveralGroups метода только в явно указанных комнатах тут
@@ -287,7 +293,13 @@ public class PlayerGamesViewTest {
     @Test
     public void testGetScoresForRoom() {
         // given
-        GameType gameType = addNewGameType("gameName1", 1234, inv -> mock(GameField.class));
+        GameField field1 = mock(GameField.class);
+        GameField field2 = mock(GameField.class);
+        List<GameField> fields = new LinkedList<GameField>(){{
+            addAll(Arrays.asList(field1, field1, field1, field1));
+            addAll(Arrays.asList(field2, field2));
+        }};
+        GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
 
         addNewPlayer(gameType, "room1", 123, getHeroData(10, pt(1, 2), "data1"));
         addNewPlayer(gameType, "room1", 234, getHeroData(11, pt(3, 4), "data2"));
@@ -295,19 +307,45 @@ public class PlayerGamesViewTest {
         addNewPlayer(gameType, "room1", 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4")));
 
         // юзера которые не должны войти в запрос
-        addNewPlayer(gameType, 678, getHeroData(23, pt(5, 6), "data8"));
-        addNewPlayer(gameType, 789, getHeroData(24, pt(8, 7), "data9"));
+        addNewPlayer(gameType, "room2", 678, getHeroData(23, pt(5, 6), "data8"));
+        addNewPlayer(gameType, "room2", 789, getHeroData(24, pt(8, 7), "data9"));
 
         // when
         List<PScoresOf> scores = playerGamesView.getScoresForRoom("room1");
 
         // then
-        assertEquals("[" +
-                        "{'score':123,'id':'user1'}," +
+        assertEquals("[{'score':123,'id':'user1'}," +
                         "{'score':234,'id':'user2'}," +
                         "{'score':345,'id':'user3'}," +
                         "{'score':456,'id':'user4'}]",
                 JsonUtils.clean(JsonUtils.toStringSorted(new JSONArray(scores))));
+    }
+
+    @Test
+    public void testGetScores() {
+        // given
+        GameField field1 = mock(GameField.class);
+        GameField field2 = mock(GameField.class);
+        List<GameField> fields = new LinkedList<GameField>(){{
+            addAll(Arrays.asList(field1, field1, field1, field1));
+            addAll(Arrays.asList(field2, field2));
+        }};
+        GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
+
+        addNewPlayer(gameType, "room1", 123, getHeroData(10, pt(1, 2), "data1"));
+        addNewPlayer(gameType, "room1", 234, getHeroData(11, pt(3, 4), "data2"));
+        addNewPlayer(gameType, "room1", 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}")));
+        addNewPlayer(gameType, "room1", 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4")));
+
+        addNewPlayer(gameType, "room2", 678, getHeroData(23, pt(5, 6), "data8"));
+        addNewPlayer(gameType, "room2", 789, getHeroData(24, pt(8, 7), "data9"));
+
+        // when
+        Map<String, Object> scores = playerGamesView.getScores();
+
+        // then
+        assertEquals("{user1=123, user2=234, user3=345, user4=456, user5=678, user6=789}",
+                sortKeys(scores).toString());
     }
 
     @Test
