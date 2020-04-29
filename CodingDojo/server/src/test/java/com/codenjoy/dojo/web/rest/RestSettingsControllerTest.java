@@ -161,13 +161,13 @@ public class RestSettingsControllerTest {
 
         // then do not touch any settings
         assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
-                        "{\"multiline\":false,\"name\":\"two\",\"options\":[12],\"type\":\"editbox\",\"value\":12}]}",
+                        "{\"default\":true,\"valueType\":\"class java.lang.Boolean\",\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
+                        "{\"default\":12,\"multiline\":false,\"valueType\":\"class java.lang.Integer\",\"name\":\"two\",\"options\":[12],\"type\":\"editbox\",\"value\":12}]}",
                 get("/rest/settings/first/" + RestSettingsController.SETTINGS));
 
         assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option1\"}," +
-                        "{\"multiline\":false,\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
+                        "{\"default\":\"option1\",\"valueType\":\"class java.lang.String\",\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option1\"}," +
+                        "{\"default\":\"some-data\",\"multiline\":false,\"valueType\":\"class java.lang.String\",\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
                 service.get("second", RestSettingsController.SETTINGS));
     }
 
@@ -183,13 +183,13 @@ public class RestSettingsControllerTest {
 
         // then do not touch any settings
         assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
-                        "{\"multiline\":false,\"name\":\"two\",\"options\":[12],\"type\":\"editbox\",\"value\":12}]}",
+                        "{\"default\":true,\"valueType\":\"class java.lang.Boolean\",\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
+                        "{\"default\":12,\"multiline\":false,\"valueType\":\"class java.lang.Integer\",\"name\":\"two\",\"options\":[12],\"type\":\"editbox\",\"value\":12}]}",
                 get("/rest/settings/first/" + RestSettingsController.SETTINGS));
 
         assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option1\"}," +
-                        "{\"multiline\":false,\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
+                        "{\"default\":\"option1\",\"valueType\":\"class java.lang.String\",\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option1\"}," +
+                        "{\"default\":\"some-data\",\"multiline\":false,\"valueType\":\"class java.lang.String\",\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
                 service.get("second", RestSettingsController.SETTINGS));
     }
 
@@ -207,13 +207,13 @@ public class RestSettingsControllerTest {
 
         // then
         assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
-                        "{\"multiline\":false,\"name\":\"two\",\"options\":[12,135],\"type\":\"editbox\",\"value\":135}]}",
+                        "{\"default\":true,\"valueType\":\"class java.lang.Boolean\",\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
+                        "{\"default\":12,\"multiline\":false,\"valueType\":\"class java.lang.Integer\",\"name\":\"two\",\"options\":[12,135],\"type\":\"editbox\",\"value\":135}]}",
                 get("/rest/settings/first/" + RestSettingsController.SETTINGS));
 
         assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option2\"}," +
-                        "{\"multiline\":false,\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
+                        "{\"default\":\"option1\",\"valueType\":\"class java.lang.String\",\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option2\"}," +
+                        "{\"default\":\"some-data\",\"multiline\":false,\"valueType\":\"class java.lang.String\",\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
                 service.get("second", RestSettingsController.SETTINGS));
     }
 

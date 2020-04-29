@@ -165,21 +165,26 @@ public class RestGameControllerTest {
                 "  },\n" +
                 "  'parameters':[\n" +
                 "    {\n" +
+                "      'default':12,\n" +
+                "      'multiline':false,\n" +
                 "      'name':'Parameter 1',\n" +
                 "      'options':[\n" +
                 "        12,\n" +
                 "        15\n" +
                 "      ],\n" +
                 "      'type':'editbox',\n" +
-                "      'value':15\n" +
+                "      'value':15,\n" +
+                "      'valueType':'class java.lang.Integer'\n" +
                 "    },\n" +
                 "    {\n" +
+                "      'default':true,\n" +
                 "      'name':'Parameter 2',\n" +
                 "      'options':[\n" +
                 "        true\n" +
                 "      ],\n" +
                 "      'type':'checkbox',\n" +
-                "      'value':true\n" +
+                "      'value':true,\n" +
+                "      'valueType':'class java.lang.Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
                 "  'sprites':{\n" +
@@ -225,21 +230,26 @@ public class RestGameControllerTest {
                 "  },\n" +
                 "  'parameters':[\n" +
                 "    {\n" +
+                "      'default':43,\n" +
+                "      'multiline':false,\n" +
                 "      'name':'Parameter 3',\n" +
                 "      'options':[\n" +
                 "        43\n" +
                 "      ],\n" +
                 "      'type':'editbox',\n" +
-                "      'value':43\n" +
+                "      'value':43,\n" +
+                "      'valueType':'class java.lang.Integer'\n" +
                 "    },\n" +
                 "    {\n" +
+                "      'default':false,\n" +
                 "      'name':'Parameter 4',\n" +
                 "      'options':[\n" +
                 "        false,\n" +
                 "        true\n" +
                 "      ],\n" +
                 "      'type':'checkbox',\n" +
-                "      'value':true\n" +
+                "      'value':true,\n" +
+                "      'valueType':'class java.lang.Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
                 "  'sprites':{\n" +
