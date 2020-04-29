@@ -180,6 +180,33 @@ public class PlayerGamesViewTest {
                 sortKeys(map).toString());
     }
 
+    @Test
+    public void testGetGroupsByField_usersInSameGroup() {
+        // given
+        givenUsersInSameGroup();
+
+        // when
+        List<List<String>> groups = playerGamesView.getGroupsByField();
+
+        // then
+        assertEquals("[[user1, user2, user3, user4]]", // all together
+                groups.toString());
+    }
+
+    @Test
+    public void testGetGroupsByField_usersInSeveralGroups() {
+        // given
+        givenUsersInSeveralGroups();
+
+        // when
+        List<List<String>> groups = playerGamesView.getGroupsByField();
+
+        // then
+        assertEquals("[[user3, user4], " +   // group 1
+                        "[user1, user2]]",   // group 2
+                groups.toString());
+    }
+
     private void givenUsersInSeveralGroups() {
         GameField field1 = mock(GameField.class);
         GameField field2 = mock(GameField.class);
