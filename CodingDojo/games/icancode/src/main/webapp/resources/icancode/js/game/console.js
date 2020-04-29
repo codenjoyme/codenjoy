@@ -39,11 +39,11 @@ function initLogger() {
         console.log(error);
         print('Error: ' + error.message);
         if (!!isCompile) {
-            print('For details please check browser console, ' +
+            print('For details please check browser console (Ctrl-Shift-J), ' +
                   'fix error in your code, ' +
                   'then press \'COMMIT\' again.');
         } else {
-            print('For debug please open browser console, ' +
+            print('For debug please open browser console (Ctrl-Shift-J), ' +
                   'write \'debugger;\' in your code, ' +
                   'then press \'COMMIT\' again.');
         }
