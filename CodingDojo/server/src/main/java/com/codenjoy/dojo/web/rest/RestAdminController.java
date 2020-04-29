@@ -27,18 +27,18 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
+import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 
 @RestController
 @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
@@ -47,10 +47,13 @@ import java.util.Map;
 public class RestAdminController {
 
     public static final String URI = "/rest/admin";
+    public static final String ROOM = "/room/{roomName}";
 
+    private Validator validator;
     private PlayerService playerService;
     private PlayerGamesView playerGamesView;
     private TimerService timerService;
+    private RoomService roomService;
     private Registration registration;
     private PlayerGames playerGames;
 
@@ -124,6 +127,22 @@ public class RestAdminController {
         }
 
         return result;
+    }
+
+    @GetMapping(ROOM + "/pause/{enabled}")
+    public void setEnabled(@PathVariable("roomName") String roomName,
+                           @PathVariable("enabled") boolean enabled)
+    {
+        validator.checkRoomName(roomName, CANT_BE_NULL);
+
+        roomService.setActive(roomName, enabled);
+    }
+
+    @GetMapping(ROOM + "/pause")
+    public boolean getEnabled(@PathVariable("roomName") String roomName) {
+        validator.checkRoomName(roomName, CANT_BE_NULL);
+
+        return roomService.isActive(roomName);
     }
 
 }
