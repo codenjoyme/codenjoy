@@ -27,7 +27,10 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.Validator;
+import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
@@ -38,7 +41,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.codenjoy.dojo.services.SemifinalSettings.SEMIFINAL;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @Secured(GameAuthoritiesConstants.ROLE_ADMIN)
@@ -57,6 +62,7 @@ public class RestAdminController {
     private RoomService roomService;
     private Registration registration;
     private PlayerGames playerGames;
+    private SemifinalSettings semifinalSettings;
 
     // TODO test me и вообще где это надо?
     @GetMapping("/player/all/groups")
@@ -173,6 +179,52 @@ public class RestAdminController {
         validator.checkRoomName(roomName, CANT_BE_NULL);
 
         playerService.reloadAllRooms(roomName);
+    }
+
+    /**
+     * @param roomName имя комнаты, для которой мы хотим получить настройки
+     * @param gameName имя игры указывается тут, потому что этот метод будет
+     *                 дергаться еще до первого зарегистрированного пользователя
+     *                 в комнату, а потому откуда codenjoy знает про связку комната + игра?
+     * @return кастомные настройки для этой комнаты
+     */
+    @GetMapping(ROOM + "/settings/{gameName}")
+    public PParameters getSettings(@PathVariable("roomName") String roomName,
+                                   @PathVariable("gameName") String gameName)
+    {
+        validator.checkRoomName(roomName, CANT_BE_NULL);
+        GameType type = validator.checkGameType(gameName);
+
+        // TODO настройки должны распостраняться только на эту комнату
+        Settings settings = type.getSettings();
+        List<Parameter> result = settings.getParameters();
+        result.addAll(semifinalSettings.parameters());
+
+        return new PParameters(result);
+    }
+
+    @PostMapping(ROOM + "/settings/{gameName}")
+    public void setSettings(@PathVariable("roomName") String roomName,
+                            @PathVariable("gameName") String gameName,
+                            @RequestBody PParameters input)
+    {
+        validator.checkRoomName(roomName, CANT_BE_NULL);
+        validator.checkNotNull("parameters", input);
+        validator.checkNotNull("parameters", input.getParameters());
+
+        GameType type = validator.checkGameType(gameName);
+
+        // TODO настройки должны распостраняться только на эту комнату
+        Settings settings = type.getSettings();
+
+        List<Parameter> parameters = input.build();
+        semifinalSettings.update(parameters);
+
+        List<Parameter> other = parameters.stream()
+                .filter(parameter -> !parameter.getName().startsWith(SEMIFINAL))
+                .collect(toList());
+
+        settings.updateAll(other);
     }
 
     // TODO заменить во всех Rest и других controller's: roomName -> room, gameName -> game
