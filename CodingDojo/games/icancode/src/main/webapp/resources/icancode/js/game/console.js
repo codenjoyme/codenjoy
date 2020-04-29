@@ -35,13 +35,18 @@ function initLogger() {
         }
     }
 
-    var error = function(error, functionName) {
+    var error = function(error, isCompile) {
         console.log(error);
         print('Error: ' + error.message);
-        print('For details check browser console. ' +
-                'For debug open /resouces/js/icancode.js and ' +
-                'set breakpoint into "' + functionName + '" function. ' +
-                'Fix your bug then try again.');
+        if (!!isCompile) {
+            print('For details please check browser console, ' +
+                  'fix error in your code, ' +
+                  'then press \'COMMIT\' again.');
+        } else {
+            print('For debug please open browser console, ' +
+                  'write \'debugger;\' in your code, ' +
+                  'then press \'COMMIT\' again.');
+        }
     }
 
     var clean = function() {
