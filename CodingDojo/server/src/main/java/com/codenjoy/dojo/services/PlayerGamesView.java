@@ -135,7 +135,6 @@ public class PlayerGamesView {
         return scoresFor(pg -> pg.getRoomName().equals(roomName));
     }
 
-    // TODO test me
     public Map<String, String> getReadableNames() {
         return service.all().stream()
                 .collect(toMap(pg -> pg.getPlayer().getId(),

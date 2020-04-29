@@ -408,6 +408,21 @@ public class PlayerGamesViewTest {
         assertEquals(expectedGroup4, toString(dataMap.get("user4")));
     }
 
+    @Test
+    public void testGetReadableNames() {
+        // given
+        givenUsersInSameGroup();
+
+        // when
+        Map<String, String> names = playerGamesView.getReadableNames();
+
+        // then
+        assertEquals("{user1=readable_user1, user2=readable_user2, " +
+                        "user3=readable_user3, user4=readable_user4}",
+                sortKeys(names).toString());
+
+    }
+
     private String toString(GameData gameData) {
         return JsonUtils.clean(JsonUtils.toStringSorted(gameData));
     }
@@ -449,8 +464,10 @@ public class PlayerGamesViewTest {
         gamePlayers.add(gamePlayer);
         heroesData.add(heroData);
 
-        Player player = new Player(getNextName(), "http://" + getNextName() + ".com:8080", gameType, gameScore, null);
+        String name = getNextName();
+        Player player = new Player(name, "http://" + name + ".com:8080", gameType, gameScore, null);
         player.setEventListener(mock(InformationCollector.class));
+        player.setReadableName("readable_" + name);
         players.add(player);
 
         Controller controller = mock(Controller.class);
