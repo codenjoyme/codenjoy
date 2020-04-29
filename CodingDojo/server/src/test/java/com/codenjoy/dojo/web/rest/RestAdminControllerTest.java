@@ -111,6 +111,9 @@ public class RestAdminControllerTest {
     @Autowired
     private PlayerGames playerGames;
 
+    @Autowired
+    private SaveService saveService;
+
     @Before
     public void setUp() {
         CodenjoyContext.setContext("codenjoy-contest");
@@ -118,6 +121,7 @@ public class RestAdminControllerTest {
         debugService.resume();
 
         playerService.removeAll();
+        saveService.removeAllSaves();
 
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
         SecurityContextHolder.getContext()
