@@ -32,29 +32,9 @@ public class LevelB2 implements Level {
                 "}";
     }
 
-    @Override // TODO попробовать решить без getShortestWay
+    @Override
     public String winCode() {
-        return "function program(robot) {\n" +
-                "    var scanner = robot.getScanner();\n" +
-                "    var dest = scanner.getGold();\n" +
-                "    if (dest.length === 0) {\n" +
-                "        dest = scanner.getExit();\n" +
-                "    }\n" +
-                "    var to = scanner.getShortestWay(dest[0])[1];\n" +
-                "    var from = scanner.getMe();\n" +
-                "    \n" +
-                "    var dx = to.getX() - from.getX();\n" +
-                "    var dy = to.getY() - from.getY();\n" +
-                "    if (dx > 0) {\n" +
-                "        robot.goRight();\n" +
-                "    } else if (dx < 0) {\n" +
-                "        robot.goLeft();\n" +
-                "    } else if (dy > 0) {\n" +
-                "        robot.goDown();\n" +
-                "    } else if (dy < 0) {\n" +
-                "        robot.goUp();\n" +
-                "    }\n" +
-                "}";
+        return new LevelB1().winCode();
     }
 
     @Override

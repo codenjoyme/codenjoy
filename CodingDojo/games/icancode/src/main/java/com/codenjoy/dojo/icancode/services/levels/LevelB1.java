@@ -41,28 +41,62 @@ public class LevelB1 implements Level {
                 "}";
     }
 
-    @Override // TODO попробовать решить без getShortestWay
+    @Override
     public String winCode() {
         return "function program(robot) {\n" +
                 "    var scanner = robot.getScanner();\n" +
-                "    var dest = scanner.getGold();\n" +
-                "    if (dest.length === 0) {\n" +
-                "        dest = scanner.getExit();\n" +
-                "    }\n" +
-                "    var to = scanner.getShortestWay(dest[0])[1];\n" +
-                "    var from = scanner.getMe();\n" +
                 "    \n" +
-                "    var dx = to.getX() - from.getX();\n" +
-                "    var dy = to.getY() - from.getY();\n" +
-                "    if (dx > 0) {\n" +
-                "        robot.goRight();\n" +
-                "    } else if (dx < 0) {\n" +
-                "        robot.goLeft();\n" +
-                "    } else if (dy > 0) {\n" +
-                "        robot.goDown();\n" +
-                "    } else if (dy < 0) {\n" +
-                "        robot.goUp();\n" +
+                "    var where = freeDirections(scanner, robot);\n" +
+                "    var dest = destination(scanner);\n" +
+                "    var me = scanner.getMe();\n" +
+                "    \n" +
+                "    var min = 1000;\n" +
+                "    var direction = null;\n" +
+                "    for (var i in where) {\n" +
+                "        var from = next(me, where[i]);\n" +
+                "        for (var j in dest) {\n" +
+                "            var len = distance(from, dest[j]);\n" +
+                "            if (min > len) {\n" +
+                "                direction = where[i];\n" +
+                "                min = len;\n" +
+                "            }\n" +
+                "        }\n" +
                 "    }\n" +
+                "    robot.go(direction);\n" +
+                "}\n" +
+                "\n" +
+                "function destination(scanner) {\n" +
+                "    var result = scanner.getGold();\n" +
+                "    if (result.length > 0) {\n" +
+                "        return result;\n" +
+                "    }\n" +
+                "    return scanner.getExit();\n" +
+                "}\n" +
+                "\n" +
+                "function next(from, direction) {\n" +
+                "    return Direction.get(direction).change(from);\n" +
+                "}\n" +
+                "\n" +
+                "function distance(from, to) {\n" +
+                "    return Math.sqrt(\n" +
+                "        Math.pow(to.getX() - from.getX(), 2) +\n" +
+                "        Math.pow(to.getY() - from.getY(), 2)\n" +
+                "    );\n" +
+                "}\n" +
+                "\n" +
+                "function freeDirections(scanner, robot) {\n" +
+                "    var directions = [\"RIGHT\", \"DOWN\", \"LEFT\", \"UP\"];\n" +
+                "    var result = [];\n" +
+                "    for (var index in directions) {\n" +
+                "        var direction = directions[index];\n" +
+                "        if (robot.cameFrom() == direction) {\n" +
+                "            continue;\n" +
+                "        }\n" +
+                "        if (scanner.at(direction) != \"WALL\") {\n" +
+                "            result.push(direction);\n" +
+                "        }\n" +
+                "    }\n" +
+                "    return result;\n" +
                 "}";
     }
 

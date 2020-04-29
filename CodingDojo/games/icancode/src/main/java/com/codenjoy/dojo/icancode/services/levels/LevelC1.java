@@ -37,10 +37,7 @@ public class LevelC1 implements Level {
     public String winCode() {
         return "function program(robot) {\n" +
                 "    var scanner = robot.getScanner();\n" +
-                "    var dest = scanner.getGold();\n" +
-                "    if (dest.length === 0) {\n" +
-                "        dest = scanner.getExit();\n" +
-                "    }\n" +
+                "    var dest = destination(scanner);\n" +
                 "    var to = scanner.getShortestWay(dest[0])[1];\n" +
                 "    var from = scanner.getMe();\n" +
                 "\n" +
@@ -59,10 +56,18 @@ public class LevelC1 implements Level {
                 "    } else if (dx < 0) {\n" +
                 "        robot.goOverHole(\"LEFT\");\n" +
                 "    } else if (dy > 0) {\n" +
-                "        robot.goOverHole(\"DOWN\");\n" +
-                "    } else if (dy < 0) {\n" +
                 "        robot.goOverHole(\"UP\");\n" +
+                "    } else if (dy < 0) {\n" +
+                "        robot.goOverHole(\"DOWN\");\n" +
                 "    }\n" +
+                "}\n" +
+                "\n" +
+                "function destination(scanner) {\n" +
+                "    var result = scanner.getGold();\n" +
+                "    if (result.length > 0) {\n" +
+                "        return result;\n" +
+                "    }\n" +
+                "    return scanner.getExit();\n" +
                 "}";
     }
 
