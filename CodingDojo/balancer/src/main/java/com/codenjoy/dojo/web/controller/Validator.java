@@ -41,6 +41,10 @@ import org.springframework.util.StringUtils;
 @Controller
 public class Validator {
 
+    public static final String PHONE_PLUS_PREFIX = "+";
+    public static final String PHONE_COUNTRY_CODE_PREFIX = "38";
+    public static final String PHONE_FULL_COUNTRY_CODE_PREFIX = PHONE_PLUS_PREFIX + PHONE_COUNTRY_CODE_PREFIX;
+
     public static final boolean CAN_BE_NULL = true;
     public static final boolean CANT_BE_NULL = !CAN_BE_NULL;
 
@@ -49,6 +53,7 @@ public class Validator {
     public static final String CODE = "^[0-9]{1,50}$";
     public static final String MD5 = "^[A-Za-f0-9]{32}$";
     public static final String DAY = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$";
+    public static final String PHONE_NUMBER = "^(\\+38|38)?0([0-9]{2})([0-9]{7})$";
 
     @Autowired private Players players;
     @Autowired private ConfigProperties properties;
@@ -58,6 +63,7 @@ public class Validator {
     private final Pattern code;
     private final Pattern md5;
     private final Pattern day;
+    private final Pattern phoneNumber;
 
     public Validator() {
         email = Pattern.compile(EMAIL);
@@ -65,6 +71,7 @@ public class Validator {
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
         day = Pattern.compile(DAY);
+        phoneNumber = Pattern.compile(PHONE_NUMBER);
     }
 
     public void checkEmail(String input, boolean canBeNull) {
@@ -141,6 +148,12 @@ public class Validator {
         }
     }
 
+    public void checkPhoneNumber(String phone, boolean canBeNull) {
+        if((StringUtils.isEmpty(phone) && !canBeNull) || !phoneNumber.matcher(phone).matches()) {
+            throw new IllegalArgumentException("Invalid phone number: " + phone);
+        }
+    }
+
     public void all(Runnable... validators) {
         List<String> messages = new LinkedList<>();
         Arrays.stream(validators)
@@ -160,6 +173,16 @@ public class Validator {
         } else {
             throw new IllegalArgumentException("Something wrong with parameters on this request: " +
                     messages.toString());
+        }
+    }
+
+    public String phoneNormalizer(String phone) {
+        if (phone.startsWith(PHONE_COUNTRY_CODE_PREFIX)) {
+            return PHONE_PLUS_PREFIX + phone;
+        } else if(phone.startsWith("0")) {
+            return PHONE_FULL_COUNTRY_CODE_PREFIX + phone;
+        } else {
+            return phone;
         }
     }
 }

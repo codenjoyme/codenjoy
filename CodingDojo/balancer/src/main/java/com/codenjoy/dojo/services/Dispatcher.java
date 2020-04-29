@@ -67,13 +67,13 @@ public class Dispatcher {
         lastTime = scores.getLastTime(now());
     }
 
-    public ServerLocation registerNew(String email, String name, String password, String callbackUrl) {
+    public ServerLocation registerNew(String email, String phone, String name, String password, String callbackUrl) {
         String server = gameServers.getNextServer();
 
-        return registerOnServer(server, email, name, password, callbackUrl, "0", "{}");
+        return registerOnServer(server, email, phone, name, password, callbackUrl, "0", "{}");
     }
 
-    public ServerLocation registerIfNotExists(String server, String email, String name, String code, String callbackUrl) {
+    public ServerLocation registerIfNotExists(String server, String email, String phone, String name, String code, String callbackUrl) {
         if (game.existsOnServer(server, email)) {
             return null;
         }
@@ -88,18 +88,19 @@ public class Dispatcher {
         Player player = players.get(email);
         String score = null; // будет попытка загрузиться с сейва
         String save = null;
-        return registerOnServer(server, email, name, player.getPassword(), callbackUrl, score, save);
+        return registerOnServer(server, email, phone, name, player.getPassword(), callbackUrl, score, save);
     }
 
-    public ServerLocation registerOnServer(String server, String email, String name, String password, String callbackUrl, String score, String save) {
+    public ServerLocation registerOnServer(String server, String email, String phone, String name, String password, String callbackUrl, String score, String save) {
         if (logger.isDebugEnabled()) {
             logger.debug("User {} go to {}", email, server);
         }
 
-        String code = game.createNewPlayer(server, email, name, password, callbackUrl, score, save);
+        String code = game.createNewPlayer(server, email, phone, name, password, callbackUrl, score, save);
 
         return new ServerLocation(
                 email,
+                phone,
                 config.getId(email),
                 code,
                 server

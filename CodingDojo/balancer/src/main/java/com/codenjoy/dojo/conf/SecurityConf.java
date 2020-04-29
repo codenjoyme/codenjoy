@@ -82,7 +82,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                                 "/login",
 //                                RestController.URI + "/score/day/**",
                                 "/logout",
-                                RestController.URI + RestController.REGISTER,
+                                RestController.URI + RestController.REGISTER + "/**",
                                 RestController.URI + RestController.LOGIN)
                             .permitAll()
                 .antMatchers(

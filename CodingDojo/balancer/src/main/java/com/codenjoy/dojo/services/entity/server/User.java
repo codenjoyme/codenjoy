@@ -22,10 +22,14 @@ package com.codenjoy.dojo.services.entity.server;
  * #L%
  */
 
+import lombok.Getter;
+
+@Getter
 public class User {
 
     private String id;
     private String email;
+    private String phone;
     private String readableName;
     private int approved;
     private String password;
@@ -36,9 +40,10 @@ public class User {
         // do nothing
     }
 
-    public User(String id, String email, String readableName, int approved, String password, String code, String data) {
+    public User(String id, String email, String phone, String readableName, int approved, String password, String code, String data) {
         this.id = id;
         this.email = email;
+        this.phone = phone;
         this.readableName = readableName;
         this.approved = approved;
         this.password = password;
@@ -46,39 +51,12 @@ public class User {
         this.data = data;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getReadableName() {
-        return readableName;
-    }
-
-    public int getApproved() {
-        return approved;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getData() {
-        return data;
-    }
-
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
                 ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
                 ", readableName='" + readableName + '\'' +
                 ", approved=" + approved +
                 ", password='" + password + '\'' +

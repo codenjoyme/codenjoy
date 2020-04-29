@@ -22,11 +22,14 @@ package com.codenjoy.dojo.services.entity;
  * #L%
  */
 
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+@Getter
 public class Player {
 
     private String email;
+    private String phone;
     private String firstName;
     private String lastName;
     private String password;
@@ -35,27 +38,33 @@ public class Player {
     private String comment;
     private String code;
     private String server;
+    private int approved;
+    private String verificationCode;
+    private String verificationType;
 
     public Player() {
         // do nothing
     }
 
-    public Player(String email, String password) {
+    public Player(String email, String phone, String password) {
         this.email = email;
+        this.phone = phone;
         this.password = password;
     }
 
-    public Player(String email, String code, String server) {
+    public Player(String email, String phone, String code, String server) {
         this.email = email;
+        this.phone = phone;
         this.code = code;
         this.server = server;
     }
 
-    public Player(String email, String firstName, String lastName,
+    public Player(String email, String phone, String firstName, String lastName,
                   String password, String city, String skills,
-                  String comment, String code, String server)
-    {
+                  String comment, String code, String server,
+                  int approved, String verificationCode, String verificationType) {
         this.email = email;
+        this.phone = phone;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -64,48 +73,16 @@ public class Player {
         this.comment = comment;
         this.code = code;
         this.server = server;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getServer() {
-        return server;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getSkills() {
-        return skills;
-    }
-
-    public String getComment() {
-        return comment;
+        this.approved = approved;
+        this.verificationCode = verificationCode;
+        this.verificationType = verificationType;
     }
 
     @Override
     public String toString() {
         return "Player{" +
                 "email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
@@ -114,6 +91,9 @@ public class Player {
                 ", comment='" + comment + '\'' +
                 ", code='" + code + '\'' +
                 ", server='" + server + '\'' +
+                ", approved=" + approved +
+                ", verificationCode='" + verificationCode + '\'' +
+                ", verificationType='" + verificationType + '\'' +
                 '}';
     }
 
@@ -125,8 +105,13 @@ public class Player {
         this.server = server;
     }
 
-    public void resetNullFileds(Player player) {
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void resetNullFields(Player player) {
         email = StringUtils.isEmpty(email) ? player.email : email;
+        phone = StringUtils.isEmpty(phone) ? player.phone : phone;
         firstName = StringUtils.isEmpty(firstName) ? player.firstName : firstName;
         lastName = StringUtils.isEmpty(lastName) ? player.lastName : lastName;
         password = StringUtils.isEmpty(password) ? player.password : password;
@@ -135,5 +120,8 @@ public class Player {
         comment = StringUtils.isEmpty(comment) ? player.comment : comment;
         code = StringUtils.isEmpty(code) ? player.code : code;
         server = StringUtils.isEmpty(server) ? player.server : server;
+
+        verificationCode = StringUtils.isEmpty(verificationCode) ? player.verificationCode : verificationCode;
+        verificationType = StringUtils.isEmpty(verificationType) ? player.verificationType : verificationType;
     }
 }

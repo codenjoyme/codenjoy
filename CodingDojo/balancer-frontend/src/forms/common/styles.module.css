@@ -108,7 +108,7 @@
 .checkBoxWrap {
     padding: 21px 25px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .checkBoxItem {
@@ -133,4 +133,34 @@
 
 .systemError img {
     margin-bottom: 22px;
+}
+
+.checkBoxText {
+    line-height: 1.6;
+}
+
+.forgotPasswordLink {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 25px 0;
+}
+
+.fpPhoneWrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 47px;
+}
+.fpPhone {
+    font-size: 20px;
+    color: var(--title-bg-color);
+    margin-right: 15px;
+
+}
+.fpInput {
+    flex: 1;
+}
+.registerConfirmResend {
+    padding: 25px;
+    position: relative;
+    text-align: right;
 }

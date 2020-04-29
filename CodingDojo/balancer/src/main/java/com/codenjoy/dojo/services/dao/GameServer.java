@@ -48,7 +48,7 @@ public class GameServer {
         return gameClientResolver.resolveClient(server).getPlayerInfos(config.getGameType());
     }
 
-    public String createNewPlayer(String server, String email, String name,
+    public String createNewPlayer(String server, String email, String phone, String name,
                                   String password, String callbackUrl,
                                   String score, String save)
     {
@@ -71,6 +71,7 @@ public class GameServer {
                 new User(
                     id,
                     email,
+                    phone,
                     name,
                     1,
                     password,
@@ -93,7 +94,7 @@ public class GameServer {
                         email, server);
             }
 
-            return gameClientResolver.resolveClient(server).checkPlayerExists(email);
+            return gameClientResolver.resolveClient(server).checkPlayerExists(config.getId(email));
         } catch (GameServerClientException e) {
             logger.error("Error check player exists on server: " + server, e);
             return false;
@@ -149,6 +150,4 @@ public class GameServer {
             return false;
         }
     }
-
-
 }

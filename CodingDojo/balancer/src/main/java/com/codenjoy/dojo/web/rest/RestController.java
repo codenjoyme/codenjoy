@@ -30,6 +30,8 @@ import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
+import com.codenjoy.dojo.web.rest.dto.PhoneCodeDTO;
+import com.codenjoy.dojo.web.rest.dto.PhoneDTO;
 import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
 import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import com.codenjoy.dojo.web.controller.LoginException;
@@ -39,6 +41,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -78,6 +81,8 @@ public class RestController {
     @Autowired private ConfigProperties config;
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private SecurityContextAuthenticator securityContextAuthenticator;
+    @Autowired private RegistrationService registrationService;
+    @Autowired private SmsService smsService;
 
     // TODO test me
     @GetMapping("/score/day/{day}")
@@ -101,7 +106,7 @@ public class RestController {
     @PostMapping("/score/disqualify/{player}")
     @ResponseBody
     public boolean disqualify(@RequestBody List<String> players) {
-        players.stream().forEach(email -> validator.checkEmail(email, CANT_BE_NULL));
+        players.forEach(email -> validator.checkEmail(email, CANT_BE_NULL));
 
         dispatcher.disqualify(players);
 
@@ -120,8 +125,10 @@ public class RestController {
     @ResponseBody
     public ServerLocation register(@RequestBody Player player, HttpServletRequest request) {
         String email = player.getEmail();
+
         validator.all(
                 () -> validator.checkEmail(email, CANT_BE_NULL),
+                () -> validator.checkPhoneNumber(player.getPhone(), CANT_BE_NULL),
                 () -> validator.checkString("FirstName", player.getFirstName()),
                 () -> validator.checkString("LastName", player.getLastName()),
                 () -> validator.checkMD5(player.getPassword(), CANT_BE_NULL),
@@ -129,7 +136,9 @@ public class RestController {
                 () -> validator.checkString("Skills", player.getSkills())
         );
 
-        if (players.getCode(email) != null) {
+        String phone = validator.phoneNormalizer(player.getPhone());
+
+        if (players.getCode(email) != null || players.getByPhone(phone).isPresent()) {
             throw new IllegalArgumentException("User already registered");
         }
 
@@ -138,6 +147,7 @@ public class RestController {
             public ServerLocation onGame() {
                 return dispatcher.registerNew(
                         player.getEmail(),
+                        phone,
                         getFullName(player),
                         player.getPassword(),
                         getIp(request)
@@ -149,8 +159,10 @@ public class RestController {
                 if (location != null) {
                     player.setCode(location.getCode());
                     player.setServer(location.getServer());
+                    String verificationCode = registrationService.generateVerificationCode();
                     players.create(new Player(
                             player.getEmail(),
+                            phone,
                             player.getFirstName(),
                             player.getLastName(),
                             passwordEncoder.encode(player.getPassword()),
@@ -158,8 +170,12 @@ public class RestController {
                             player.getSkills(),
                             player.getComment(),
                             player.getCode(),
-                            player.getServer()
+                            player.getServer(),
+                            0,
+                            verificationCode,
+                            RegistrationService.VerificationType.REGISTRATION.name()
                     ));
+                    smsService.sendSmsTo(player.getPhone(), verificationCode, SmsService.SmsType.REGISTRATION);
                 }
                 securityContextAuthenticator.login(request, player.getEmail(), player.getPassword());
                 return location;
@@ -214,6 +230,7 @@ public class RestController {
         ServerLocation location = dispatcher.registerIfNotExists(
                 player.getServer(),
                 player.getEmail(),
+                player.getPhone(),
                 getFullName(player),
                 player.getPassword(),
                 getIp(request));
@@ -254,7 +271,7 @@ public class RestController {
     }
 
     // TODO test me
-    @PostMapping(UPDATE)
+//    @PostMapping(UPDATE)
     @ResponseBody
     public ServerLocation changePassword(@RequestBody Player player, HttpServletRequest request) {
         return tryLogin(player, new OnLogin<ServerLocation>(){
@@ -276,7 +293,7 @@ public class RestController {
                     player.setCode(Hash.getCode(email, newPassword));
                 }
 
-                player.resetNullFileds(old);
+                player.resetNullFields(old);
                 players.update(player);
 
                 return recreatePlayerIfNeeded(location, email, getIp(request));
@@ -297,6 +314,7 @@ public class RestController {
                 return dispatcher.registerIfNotExists(
                         current.getServer(),
                         current.getEmail(),
+                        current.getPhone(),
                         getFullName(players.get(current.getEmail())),
                         current.getCode(),
                         callback);
@@ -320,6 +338,7 @@ public class RestController {
 
     private <T> T tryLogin(Player player, OnLogin<T> onLogin) {
         String email = player.getEmail();
+        String phone = player.getPhone();
         String password = player.getPassword();
         String code = player.getCode();
 
@@ -329,13 +348,14 @@ public class RestController {
 
         Player exist = players.get(email);
         if (!isValid(exist, password, code)) {
-            return onLogin.onFailed(new ServerLocation(email, null, null, null));
+            return onLogin.onFailed(new ServerLocation(email, phone, null, null, null));
         }
 
-        String server = players.getServer(email);
+        String server = players.getServerByEmail(email);
 
         return onLogin.onSuccess(
                 new ServerLocation(email,
+                        phone,
                         Hash.getId(email, config.getEmailHash()),
                         exist.getCode(),
                         server
@@ -343,7 +363,7 @@ public class RestController {
     }
 
     private boolean isValid(Player exist, String password, String code) {
-        if (exist == null) {
+        if (exist == null || exist.getApproved() == 0) {
             return false;
         }
 
@@ -414,7 +434,7 @@ public class RestController {
     }
 
     // 400 for bad registration and validation error
-    @ExceptionHandler({IllegalArgumentException.class})
+    @ExceptionHandler({IllegalArgumentException.class, UsernameNotFoundException.class})
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
         return new ResponseEntity<>(GlobalExceptionHandler.getPrintableMessage(e),
                 HttpStatus.BAD_REQUEST);
@@ -495,4 +515,45 @@ public class RestController {
         return true;
     }
 
+
+    @PostMapping(REGISTER + "/confirm")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ServerLocation> confirmRegistration(@RequestBody PhoneCodeDTO phoneCodeDTO) {
+        return ResponseEntity.ok(registrationService.
+                confirmRegistration(phoneValidateNormalize(phoneCodeDTO.getPhone()), phoneCodeDTO.getCode()));
+    }
+
+    @PostMapping(REGISTER + "/resend")
+    @ResponseStatus(HttpStatus.OK)
+    public void resendRegistrationCode(@RequestBody PhoneDTO phoneDTO) {
+        registrationService.resendConfirmRegistrationCode(phoneValidateNormalize(phoneDTO.getPhone()));
+    }
+
+    @PostMapping(REGISTER + "/reset")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendResetPasswordCode(@RequestBody PhoneDTO phoneDTO) {
+        registrationService.resendResetPasswordCode(phoneValidateNormalize(phoneDTO.getPhone()));
+    }
+
+    @PostMapping(REGISTER + "/validate-reset")
+    public ResponseEntity<String> validateResetPasswordCode(@RequestBody PhoneCodeDTO phoneCodeDTO) {
+        String phone = phoneValidateNormalize(phoneCodeDTO.getPhone());
+        boolean isResetAllowed = registrationService
+                .validateCodeResetPassword(phone, phoneCodeDTO.getCode());
+        if(isResetAllowed) {
+            Player player = players.getByPhone(phone).orElseThrow(() -> new IllegalArgumentException("User not found"));
+            if (game.existsOnServer(player.getServer(), player.getEmail())) {
+                game.remove(player.getServer(), player.getEmail(), player.getCode());
+            }
+            registrationService.resetPassword(phone);
+            return ResponseEntity.ok("success");
+        } else {
+            return ResponseEntity.badRequest().body("Invalid verification code");
+        }
+    }
+
+    private String phoneValidateNormalize(String phone) {
+         validator.checkPhoneNumber(phone, CANT_BE_NULL);
+         return validator.phoneNormalizer(phone);
+    }
 }
