@@ -174,7 +174,7 @@ public class RestGameControllerTest {
                 "      ],\n" +
                 "      'type':'editbox',\n" +
                 "      'value':15,\n" +
-                "      'valueType':'class java.lang.Integer'\n" +
+                "      'valueType':'Integer'\n" +
                 "    },\n" +
                 "    {\n" +
                 "      'default':true,\n" +
@@ -184,7 +184,7 @@ public class RestGameControllerTest {
                 "      ],\n" +
                 "      'type':'checkbox',\n" +
                 "      'value':true,\n" +
-                "      'valueType':'class java.lang.Boolean'\n" +
+                "      'valueType':'Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
                 "  'sprites':{\n" +
@@ -238,7 +238,7 @@ public class RestGameControllerTest {
                 "      ],\n" +
                 "      'type':'editbox',\n" +
                 "      'value':43,\n" +
-                "      'valueType':'class java.lang.Integer'\n" +
+                "      'valueType':'Integer'\n" +
                 "    },\n" +
                 "    {\n" +
                 "      'default':false,\n" +
@@ -249,7 +249,7 @@ public class RestGameControllerTest {
                 "      ],\n" +
                 "      'type':'checkbox',\n" +
                 "      'value':true,\n" +
-                "      'valueType':'class java.lang.Boolean'\n" +
+                "      'valueType':'Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
                 "  'sprites':{\n" +

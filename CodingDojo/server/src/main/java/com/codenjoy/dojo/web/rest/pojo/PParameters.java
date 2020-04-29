@@ -28,7 +28,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -41,7 +40,7 @@ public class PParameters {
 
     public PParameters(List<Parameter> parameters) {
         this.parameters  = parameters.stream()
-                .map(p -> new PParameter(p))
+                .map(PParameter::new)
                 .collect(toList());
     }
 
