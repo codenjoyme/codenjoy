@@ -6,16 +6,25 @@ public class LevelB1 implements Level {
     
     @Override
     public String help() {
-        return "You can use new methods for the scanner:<br>\n" +
+        return "Look at that gold! You can get extra points for it. \n" +
+                "Most likely the Robot will simply ignore it. \n" +
+                "Try retraining the Robot and collect all golden bags.<br><br>\n" +
+
+                "You can use new methods for the scanner:<br>\n" +
                 "<pre>var goldPoints = scanner.getGold();\n" +
                 "var startPoint = scanner.getStart();\n" +
                 "var exitPoint = scanner.getExit();\n" +
                 "var robotPoint = scanner.getMe();</pre>\n" +
-                "Coordinate {x:0, y:0} in the left-top corner of board.<br><br>\n" +
+                "Coordinate {x:0, y:0} in the left-bottom corner of board.<br><br>\n" +
 
                 "Try this code for check Robot position.<br>\n" +
                 "<pre>robot.log(scanner.getMe());</pre>\n" +
-                "So you should collect all the golden bags in the Maze.<br><br>\n" +
+                "So you should collect all golden bags in the Maze.<br><br>\n" +
+
+                "If it’s very difficult, try to use debug.\n" +
+                "Just open browser console (Ctrl-Shift-J),\n" +
+                "write \\'debugger;\\' in your code,\n" +
+                "then press \\'COMMIT\\' button again.\n" +
 
                 "Remember ! Your program should work for all previous levels too.";
     }

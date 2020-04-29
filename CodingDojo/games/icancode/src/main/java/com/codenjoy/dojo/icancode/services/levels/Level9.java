@@ -6,7 +6,7 @@ public class Level9 implements Level {
     
     @Override
     public String help() {
-        return "Let's complicate the task. If you have developed your algorithm " +
+        return "Let's complicate the task. If you have developed your algorithm \n" +
                 "well, the Robot will not get lost here. Check it out!<br><br>\n" +
                 "Remember ! Your program should work for all previous levels too.";
     }
