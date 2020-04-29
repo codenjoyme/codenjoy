@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -280,5 +281,58 @@ public class PlayerGamesViewTest {
 
     private String getNextName() {
         return "user" + (players.size() + 1);
+    }
+
+    enum Elements1 implements CharElements {
+        A('a'),
+        B('b'),
+        C('c');
+
+        private final char ch;
+
+        Elements1(char ch) {
+            this.ch = ch;
+        }
+
+        @Override
+        public char ch() {
+            return ch;
+        }
+    }
+
+    enum Elements2 implements CharElements {
+        ONE('1'),
+        TWO('2'),
+        THREE('3'),
+        FOUR('4');
+
+        private final char ch;
+
+        Elements2(char ch) {
+            this.ch = ch;
+        }
+
+        @Override
+        public char ch() {
+            return ch;
+        }
+    }
+
+    @Test
+    public void shouldGetDecoders() {
+        // given
+        GameType gameType1 = addNewGameType("gameName1", 1234, inv -> mock(GameField.class));
+        when(gameType1.getPlots()).thenReturn(Elements1.values());
+
+        GameType gameType2 = addNewGameType("gameName2", 1234, inv -> mock(GameField.class));
+        when(gameType2.getPlots()).thenReturn(Elements2.values());
+
+        addNewPlayer(gameType1, 123, getHeroData(10, pt(1, 2), "data1"));
+        addNewPlayer(gameType2, 234, getHeroData(11, pt(3, 4), "data2"));
+
+        // when then
+        assertEquals("{gameName1=[abc -> ABC], " +
+                        "gameName2=[1234 -> ABCD]}",
+                playerGamesView.getDecoders().toString());
     }
 }
