@@ -96,6 +96,10 @@ public class PlayerGamesView {
         return result;
     }
 
+    public List<List<String>> getGroupsByRooms() {
+        return getGroupBy(PlayerGame::getRoomName);
+    }
+
     public List<List<String>> getGroupsByField() {
         return getGroupBy(PlayerGame::getField);
     }

@@ -111,7 +111,7 @@ public class PlayerGamesViewTest {
     @Test
     public void testGetGamesDataMap_usersInSeveralGroups() {
         // given
-        givenUsersInSeveralGroups();
+        givenUsersInSeveralGroups_inOneGeneralGameRoom();
 
         // when
         Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
@@ -167,7 +167,7 @@ public class PlayerGamesViewTest {
     @Test
     public void testGetGroupsMap_usersInSeveralGroups() {
         // given
-        givenUsersInSeveralGroups();
+        givenUsersInSeveralGroups_inOneGeneralGameRoom();
 
         // when
         Map<String, List<String>> map = playerGamesView.getGroupsMap();
@@ -196,27 +196,70 @@ public class PlayerGamesViewTest {
     @Test
     public void testGetGroupsByField_usersInSeveralGroups() {
         // given
-        givenUsersInSeveralGroups();
+        givenUsersInSeveralGroups_inOneGeneralGameRoom();
 
         // when
         List<List<String>> groups = playerGamesView.getGroupsByField();
 
         // then
-        assertEquals("[[user3, user4], " +   // group 1
-                        "[user1, user2]]",   // group 2
+        assertEquals("[[user1, user2], " +   // group 1
+                        "[user3, user4]]",   // group 2
                 groups.toString());
     }
 
-    private void givenUsersInSeveralGroups() {
+    private void givenUsersInSeveralGroups_inOneGeneralGameRoom() {
         GameField field1 = mock(GameField.class);
         GameField field2 = mock(GameField.class);
         List<GameField> fields = new LinkedList<>(Arrays.asList(field1, field1, field2, field2));
         GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
 
+        // комната будет у всех одна, общая игровая gameName1
+        // но сама игра говорит, что fields будут у них не общие
         addNewPlayer(gameType, 123, getHeroData(10, pt(1, 2), "data1"));
         addNewPlayer(gameType, 234, getHeroData(11, pt(3, 4), "data2"));
         addNewPlayer(gameType, 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}")));
         addNewPlayer(gameType, 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4")));
+    }
+
+    private void givenUsersInSeveralGroups_withDifferentRooms() {
+        GameField field1 = mock(GameField.class);
+        GameField field2 = mock(GameField.class);
+        List<GameField> fields = new LinkedList<>(Arrays.asList(field1, field1, field2, field2));
+        GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
+
+        // отличия от givenUsersInSeveralGroups метода только в явно указанных комнатах тут
+        // симулируем тут две комнаты для одной игры
+        addNewPlayer(gameType, "room1", 123, getHeroData(10, pt(1, 2), "data1"));
+        addNewPlayer(gameType, "room1", 234, getHeroData(11, pt(3, 4), "data2"));
+        addNewPlayer(gameType, "room2", 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}")));
+        addNewPlayer(gameType, "room2", 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4")));
+    }
+
+    @Test
+    public void testGetGroupsByRooms_usersInSeveralGroups_separatedByRooms() {
+        // given
+        givenUsersInSeveralGroups_withDifferentRooms();
+
+        // when
+        List<List<String>> groups = playerGamesView.getGroupsByRooms();
+
+        // then
+        assertEquals("[[user1, user2], " +   // group 1
+                        "[user3, user4]]",   // group 2
+                groups.toString());
+    }
+
+    @Test
+    public void testGetGroupsByRooms_usersInSeveralGroups_inOneGeneralGameRoom() {
+        // given
+        givenUsersInSeveralGroups_inOneGeneralGameRoom();
+
+        // when
+        List<List<String>> groups = playerGamesView.getGroupsByRooms();
+
+        // then
+        assertEquals("[[user1, user2, user3, user4]]", // all together
+                groups.toString());
     }
 
     @Test
@@ -330,6 +373,10 @@ public class PlayerGamesViewTest {
     }
 
     private PlayerGame addNewPlayer(GameType gameType, int scores, HeroData heroData) {
+        return addNewPlayer(gameType, gameType.name(), scores, heroData);
+    }
+
+    private PlayerGame addNewPlayer(GameType gameType, String roomName, int scores, HeroData heroData) {
         PlayerScores gameScore = mock(PlayerScores.class);
         when(gameScore.getScore()).thenReturn(scores);
 
@@ -344,7 +391,6 @@ public class PlayerGamesViewTest {
 
         Controller controller = mock(Controller.class);
         controllers.add(controller);
-        String roomName = gameType.name();
         PlayerGame playerGame = playerGames.add(player, roomName, null);
         games.add(playerGame.getGame());
         return playerGame;
