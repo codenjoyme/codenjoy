@@ -103,6 +103,9 @@ public class RestAdminControllerTest {
     private DebugService debugService;
 
     @Autowired
+    private PlayerService playerService;
+
+    @Autowired
     private PlayerGamesView playerGamesView;
 
     @Autowired
@@ -113,6 +116,8 @@ public class RestAdminControllerTest {
         CodenjoyContext.setContext("codenjoy-contest");
 
         debugService.resume();
+
+        playerService.removeAll();
 
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
         SecurityContextHolder.getContext()
@@ -254,4 +259,84 @@ public class RestAdminControllerTest {
         }
     }
 
+    @Test
+    public void shouldSetClearScores() {
+        // given
+        register("player1", "ip1", "room1", "first");
+        register("player2", "ip2", "room1", "first");
+
+        register("player3", "ip3", "room2", "first");
+
+        register("player4", "ip4", "room3", "second");
+
+        assertScores("{player1=0, player2=0, player3=0, player4=0}");
+
+        // when
+        service.setScores("room1", "player1", "10");
+        service.setScores("room1", "player2", "20");
+        assertEquals("", get("/rest/admin/room/room2/scores/player3/set/30"));
+        assertEquals("", get("/rest/admin/room/room3/scores/player4/set/40"));
+
+        // then
+        assertScores("{player1=10, player2=20, player3=30, player4=40}");
+
+        // when
+        assertEquals("", get("/rest/admin/room/room1/scores/clear"));
+
+        // then
+        assertScores("{player1=0, player2=0, player3=30, player4=40}");
+
+        // when
+        service.cleanScores("room2");
+
+        // then
+        assertScores("{player1=0, player2=0, player3=0, player4=40}");
+    }
+
+    private void assertScores(String expected) {
+        assertEquals(expected, playerGamesView.getScores().toString());
+    }
+
+    @Test
+    public void shouldSetClearScores_validation() {
+        // when then
+        assertException("Room name is invalid: '$bad$'",
+                () -> service.cleanScores("$bad$"));
+
+        assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
+                "/rest/admin/room/$bad$/scores/clear");
+
+        // when then
+        assertException("Room name is invalid: '$bad$'",
+                () -> service.setScores("$bad$", "id", "12"));
+
+        assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
+                "/rest/admin/room/$bad$/scores/player3/set/30");
+
+        // when then
+        assertException("Parameter score is empty: ''",
+                () -> service.setScores("room", "id", ""));
+
+        assertError("java.lang.IllegalArgumentException: Parameter score is empty: 'null'",
+                "/rest/admin/room/room/scores/player3/set/null");
+
+        // when then
+        assertException("Player id is invalid: '$badPlayer$'",
+                () -> service.setScores("room", "$badPlayer$", "10"));
+
+        assertError("java.lang.IllegalArgumentException: Player id is invalid: '$badPlayer$'",
+                "/rest/admin/room/room/scores/$badPlayer$/set/30");
+    }
+
+    private PlayerGame register(String id, String ip, String roomName, String gameName) {
+        playerService.register(id, ip, roomName, gameName);
+        PlayerGame playerGame = playerGames.get(id);
+        resetMocks(playerGame);
+        return playerGame;
+    }
+
+    private void resetMocks(PlayerGame playerGame) {
+        reset(playerGame.getField());
+        reset(playerGame.getGame().getPlayer());
+    }
 }

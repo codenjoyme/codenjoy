@@ -145,4 +145,26 @@ public class RestAdminController {
         return roomService.isActive(roomName);
     }
 
+    @GetMapping(ROOM + "/scores/clear")
+    public void cleanScores(@PathVariable("roomName") String roomName) {
+        validator.checkRoomName(roomName, CANT_BE_NULL);
+
+        playerService.cleanAllScores(roomName);
+    }
+
+    @GetMapping(ROOM + "/scores/{player}/set/{score}")
+    public void setScores(@PathVariable("roomName") String roomName,
+                          @PathVariable("player") String id,
+                          @PathVariable("score") String score)
+    {
+        validator.checkNotEmpty("score", score);
+        validator.checkPlayerInRoom(id, roomName);
+
+        Player player = playerService.get(id);
+        player.setRoomName(null);
+        player.setData(null);
+        player.setScore(score);
+        playerService.update(player);
+    }
+
 }
