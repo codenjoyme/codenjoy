@@ -173,4 +173,21 @@ public class RestAdminController {
 
         playerService.reloadAllRooms(roomName);
     }
+
+    // TODO заменить во всех Rest и других controller's: roomName -> room, gameName -> game
+    @GetMapping(ROOM + "/gameOver/{player}")
+    public void gameOver(@PathVariable("roomName") String roomName,
+                         @PathVariable("player") String id)
+    {
+        validator.checkPlayerInRoom(id, roomName);
+
+        playerService.remove(id);
+    }
+
+    @GetMapping(ROOM + "/gameOverAll")
+    public void gameOverAll(@PathVariable("roomName") String roomName) {
+        validator.checkRoomName(roomName, CANT_BE_NULL);
+
+        playerService.removeAll(roomName);
+    }
 }

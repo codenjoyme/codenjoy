@@ -361,6 +361,83 @@ public class RestAdminControllerTest {
                 "/rest/admin/room/$bad$/reload");
     }
 
+    @Test
+    public void shouldGameOverInRoom() {
+        // given
+        register("player1", "ip1", "room1", "first");
+        register("player2", "ip2", "room1", "first");
+        register("player3", "ip3", "room1", "first");
+
+        register("player4", "ip4", "room2", "first");
+        register("player5", "ip5", "room2", "first");
+
+        register("player6", "ip6", "room3", "second");
+
+        register("player7", "ip7", "room4", "second");
+
+        // when
+        assertEquals("", get("/rest/admin/room/room3/gameOver/player6"));
+
+        // then
+        assertRooms("[[player7], [player1, player2, player3], [player4, player5]]");
+
+        // when
+        assertEquals("", get("/rest/admin/room/room1/gameOverAll"));
+
+        // then
+        assertRooms("[[player7], [player4, player5]]");
+
+        // when
+        service.gameOver("room4", "player7");
+
+        // then
+        assertRooms("[[player4, player5]]");
+
+        // when
+        service.gameOverAll("room2");
+
+        // then
+        assertRooms("[]");
+    }
+
+    private void assertRooms(String expected) {
+        assertEquals(expected, playerGamesView.getGroupsByRooms().toString());
+    }
+
+    @Test
+    public void shouldGameOverInRoom_validation() {
+        // given
+        register("validPlayer", "ip", "validRoom", "first");
+
+        // when then
+        assertException("Room name is invalid: '$bad$'",
+                () -> service.gameOverAll("$bad$"));
+
+        assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
+                "/rest/admin/room/$bad$/gameOverAll");
+
+        // when then
+        assertException("Room name is invalid: '$bad$'",
+                () -> service.gameOver("$bad$", "validPlayer"));
+
+        assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
+                "/rest/admin/room/$bad$/gameOver/validPlayer");
+
+        // when then
+        assertException("Player id is invalid: '$bad$'",
+                () -> service.gameOver("validRoom", "$bad$"));
+
+        assertError("java.lang.IllegalArgumentException: Player id is invalid: '$bad$'",
+                "/rest/admin/room/validRoom/gameOver/$bad$");
+
+        // when then
+        assertException("Player 'validPlayer' is not in room 'otherRoom'",
+                () -> service.gameOver("otherRoom", "validPlayer"));
+
+        assertError("java.lang.IllegalArgumentException: Player 'validPlayer' is not in room 'otherRoom'",
+                "/rest/admin/room/otherRoom/gameOver/validPlayer");
+    }
+
     private void verifyNewGame(PlayerGame playerGame, VerificationMode mode) {
         verify(playerGame.getField(), mode).newGame(playerGame.getGame().getPlayer());
     }
