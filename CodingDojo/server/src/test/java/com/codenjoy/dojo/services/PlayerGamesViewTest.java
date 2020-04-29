@@ -77,13 +77,7 @@ public class PlayerGamesViewTest {
     @Test
     public void testGetGamesDataMap_usersInSameGroup() {
         // given
-        GameField field = mock(GameField.class); // same group
-        GameType gameType = addNewGameType("gameName1", 1234, inv -> field);
-
-        addNewPlayer(gameType, 123, getHeroDataForAllPlayers(10, pt(1, 2), "data1"));
-        addNewPlayer(gameType, 234, getHeroDataForAllPlayers(11, pt(3, 4), "data2"));
-        addNewPlayer(gameType, 345, getHeroDataForAllPlayers(12, pt(5, 6), new JSONObject("{'key':'value'}")));
-        addNewPlayer(gameType, 456, getHeroDataForAllPlayers(13, pt(7, 8), Arrays.asList("data3, data4")));
+        givenUsersInSameGroup();
 
         // when
         Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
@@ -104,18 +98,20 @@ public class PlayerGamesViewTest {
         assertEquals(expectedGroup, toString(dataMap.get("user1")));
     }
 
+    private void givenUsersInSameGroup() {
+        GameField field = mock(GameField.class); // same group
+        GameType gameType = addNewGameType("gameName1", 1234, inv -> field);
+
+        addNewPlayer(gameType, 123, getHeroDataForAllPlayers(10, pt(1, 2), "data1"));
+        addNewPlayer(gameType, 234, getHeroDataForAllPlayers(11, pt(3, 4), "data2"));
+        addNewPlayer(gameType, 345, getHeroDataForAllPlayers(12, pt(5, 6), new JSONObject("{'key':'value'}")));
+        addNewPlayer(gameType, 456, getHeroDataForAllPlayers(13, pt(7, 8), Arrays.asList("data3, data4")));
+    }
+
     @Test
     public void testGetGamesDataMap_usersInGroup() {
         // given
-        GameField field1 = mock(GameField.class);
-        GameField field2 = mock(GameField.class);
-        List<GameField> fields = new LinkedList<>(Arrays.asList(field1, field1, field2, field2));
-        GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
-
-        addNewPlayer(gameType, 123, getHeroData(10, pt(1, 2), "data1"));
-        addNewPlayer(gameType, 234, getHeroData(11, pt(3, 4), "data2"));
-        addNewPlayer(gameType, 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}")));
-        addNewPlayer(gameType, 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4")));
+        givenUsersInGroup();
 
         // when
         Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
@@ -146,6 +142,50 @@ public class PlayerGamesViewTest {
 
         assertEquals(expectedGroup2, toString(dataMap.get("user3")));
         assertEquals(expectedGroup2, toString(dataMap.get("user4")));
+    }
+
+    @Test
+    public void testGetGroupsMap_usersInSameGroup() {
+        // given
+        givenUsersInSameGroup();
+
+        // when
+        Map<String, List<String>> map = playerGamesView.getGroupsMap();
+
+        // then
+        assertEquals("{user1=[user1, user2, user3, user4], " + // all together
+                "user2=[user1, user2, user3, user4], " +
+                "user3=[user1, user2, user3, user4], " +
+                "user4=[user1, user2, user3, user4]}",
+                map.toString());
+    }
+
+    @Test
+    public void testGetGroupsMap_usersInGroup() {
+        // given
+        givenUsersInGroup();
+
+        // when
+        Map<String, List<String>> map = playerGamesView.getGroupsMap();
+
+        // then
+        assertEquals("{user1=[user1, user2], " + // group 1
+                "user2=[user1, user2], " +
+                "user3=[user3, user4], " +       // group 2
+                "user4=[user3, user4]}",
+                map.toString());
+    }
+
+    private void givenUsersInGroup() {
+        GameField field1 = mock(GameField.class);
+        GameField field2 = mock(GameField.class);
+        List<GameField> fields = new LinkedList<>(Arrays.asList(field1, field1, field2, field2));
+        GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
+
+        addNewPlayer(gameType, 123, getHeroData(10, pt(1, 2), "data1"));
+        addNewPlayer(gameType, 234, getHeroData(11, pt(3, 4), "data2"));
+        addNewPlayer(gameType, 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}")));
+        addNewPlayer(gameType, 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4")));
     }
 
     @Test

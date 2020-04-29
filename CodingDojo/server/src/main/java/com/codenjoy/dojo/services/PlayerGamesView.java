@@ -83,7 +83,6 @@ public class PlayerGamesView {
                         pg -> pg.getGame().getHero()));
     }
 
-    // TODO test me
     public Map<String, List<String>> getGroupsMap() {
         Map<String, List<String>> result = new LinkedHashMap<>();
         for (List<String> group : getGroups()) {
