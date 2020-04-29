@@ -332,6 +332,39 @@ public class RestAdminControllerTest {
                 "/rest/admin/room/room/scores/$badPlayer$/set/30");
     }
 
+    @Test
+    public void shouldReloadAllPlayersInRoom() {
+        // given
+        PlayerGame playerGame1 = register("player1", "ip1", "room1", "first");
+        PlayerGame playerGame2 = register("player2", "ip2", "room1", "first");
+
+        PlayerGame playerGame3 = register("player3", "ip3", "room2", "first");
+
+        PlayerGame playerGame4 = register("player4", "ip4", "room3", "second");
+
+        // when
+        assertEquals("", get("/rest/admin/room/room1/reload"));
+
+        // then
+        verifyNewGame(playerGame1, atLeastOnce());
+        verifyNewGame(playerGame2, atLeastOnce());
+        verifyNewGame(playerGame3, never());
+        verifyNewGame(playerGame4, never());
+    }
+
+    @Test
+    public void shouldReloadAllPlayersInRoom_validation() {
+        assertException("Room name is invalid: '$bad$'",
+                () -> service.reload("$bad$"));
+
+        assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
+                "/rest/admin/room/$bad$/reload");
+    }
+
+    private void verifyNewGame(PlayerGame playerGame, VerificationMode mode) {
+        verify(playerGame.getField(), mode).newGame(playerGame.getGame().getPlayer());
+    }
+
     private PlayerGame register(String id, String ip, String roomName, String gameName) {
         playerService.register(id, ip, roomName, gameName);
         PlayerGame playerGame = playerGames.get(id);

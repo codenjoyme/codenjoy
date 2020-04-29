@@ -167,4 +167,10 @@ public class RestAdminController {
         playerService.update(player);
     }
 
+    @GetMapping(ROOM + "/reload")
+    public void reload(@PathVariable("roomName") String roomName) {
+        validator.checkRoomName(roomName, CANT_BE_NULL);
+
+        playerService.reloadAllRooms(roomName);
+    }
 }
