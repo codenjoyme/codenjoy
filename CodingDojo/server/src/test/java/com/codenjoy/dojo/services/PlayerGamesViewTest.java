@@ -263,7 +263,7 @@ public class PlayerGamesViewTest {
     }
 
     @Test
-    public void testGetScoresJson() {
+    public void testGetScoresForGame() {
         // given
         testGetGamesDataMap_singleGames();
 
@@ -281,6 +281,32 @@ public class PlayerGamesViewTest {
                     "{'score':234,'id':'user2'}," +
                     "{'score':345,'id':'user3'}," +
                     "{'score':456,'id':'user4'}]",
+                JsonUtils.clean(JsonUtils.toStringSorted(new JSONArray(scores))));
+    }
+
+    @Test
+    public void testGetScoresForRoom() {
+        // given
+        GameType gameType = addNewGameType("gameName1", 1234, inv -> mock(GameField.class));
+
+        addNewPlayer(gameType, "room1", 123, getHeroData(10, pt(1, 2), "data1"));
+        addNewPlayer(gameType, "room1", 234, getHeroData(11, pt(3, 4), "data2"));
+        addNewPlayer(gameType, "room1", 345, getHeroData(12, pt(5, 6), new JSONObject("{'key':'value'}")));
+        addNewPlayer(gameType, "room1", 456, getHeroData(13, pt(7, 8), Arrays.asList("data3, data4")));
+
+        // юзера которые не должны войти в запрос
+        addNewPlayer(gameType, 678, getHeroData(23, pt(5, 6), "data8"));
+        addNewPlayer(gameType, 789, getHeroData(24, pt(8, 7), "data9"));
+
+        // when
+        List<PScoresOf> scores = playerGamesView.getScoresForRoom("room1");
+
+        // then
+        assertEquals("[" +
+                        "{'score':123,'id':'user1'}," +
+                        "{'score':234,'id':'user2'}," +
+                        "{'score':345,'id':'user3'}," +
+                        "{'score':456,'id':'user4'}]",
                 JsonUtils.clean(JsonUtils.toStringSorted(new JSONArray(scores))));
     }
 

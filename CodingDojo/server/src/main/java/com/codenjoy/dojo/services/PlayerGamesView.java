@@ -132,7 +132,6 @@ public class PlayerGamesView {
                 .collect(toList());
     }
 
-    // TODO test me
     public List<PScoresOf> getScoresForRoom(String roomName) {
         return scoresFor(pg -> pg.getRoomName().equals(roomName));
     }
