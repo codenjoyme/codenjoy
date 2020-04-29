@@ -21,11 +21,6 @@ public class LevelB1 implements Level {
                 "<pre>robot.log(scanner.getMe());</pre>\n" +
                 "So you should collect all golden bags in the Maze.<br><br>\n" +
 
-                "If it’s very difficult, try to use debug.\n" +
-                "Just open browser console (Ctrl-Shift-J),\n" +
-                "write \\'debugger;\\' in your code,\n" +
-                "then press \\'COMMIT\\' button again.\n" +
-
                 "Remember ! Your program should work for all previous levels too.";
     }
 

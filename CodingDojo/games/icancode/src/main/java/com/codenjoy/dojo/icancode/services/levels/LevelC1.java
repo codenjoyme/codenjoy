@@ -30,7 +30,7 @@ public class LevelC1 implements Level {
 
     @Override
     public String defaultCode() {
-        return new LevelB3().defaultCode();
+        return new LevelB4().defaultCode();
     }
 
     @Override

@@ -80,7 +80,7 @@ public class LevelsTest {
     }
 
     @Test
-    public void testLevel2() {
+    public void testLevelB3() {
         String map = getMap(new LevelB3().map());
 
         asrtMap("                " +
@@ -121,7 +121,48 @@ public class LevelsTest {
     }
 
     @Test
-    public void testLevel3() {
+    public void testLevelB4() {
+        String map = getMap(new LevelB4().map());
+
+        asrtMap("                " +
+                "   ###          " +
+                "   #E#########  " +
+                "   #...$$$...#  " +
+                "   #########.#  " +
+                "           #$#  " +
+                "   #########.#  " +
+                "   #....S....#  " +
+                "   #.#########  " +
+                "   #$#          " +
+                "   #.#########  " +
+                "   #...$$$...#  " +
+                "   #########E#  " +
+                "           ###  " +
+                "                " +
+                "                ", map);
+
+        String decorate = Levels.decorate(map);
+
+        asrtMap("                " +
+                "   ╔═┐          " +
+                "   ║E╚═══════┐  " +
+                "   ║...$$$...│  " +
+                "   └───────╗.│  " +
+                "           ║$│  " +
+                "   ╔═══════╝.│  " +
+                "   ║....S....│  " +
+                "   ║.┌───────┘  " +
+                "   ║$│          " +
+                "   ║.╚═══════┐  " +
+                "   ║...$$$...│  " +
+                "   └───────╗E│  " +
+                "           └─┘  " +
+                "                " +
+                "                ", decorate);
+    }
+
+    @Test
+    public void testLevelC1() {
         String map = getMap(new LevelC1().map());
 
         asrtMap("                " +
@@ -162,7 +203,7 @@ public class LevelsTest {
     }
 
     @Test
-    public void testLevel4() {
+    public void testLevelC2() {
         String map = getMap(new LevelC2().map());
 
         asrtMap("                " +
@@ -203,7 +244,7 @@ public class LevelsTest {
     }
 
     @Test
-    public void testLevel5() {
+    public void testLevelD1() {
         String map = getMap(new LevelD1().map());
 
         asrtMap("                " +
@@ -244,7 +285,7 @@ public class LevelsTest {
     }
 
     @Test
-    public void testLevel6() {
+    public void testLevelE1() {
         String map = getMap(new LevelE1().map());
 
         asrtMap("                " +
@@ -285,7 +326,7 @@ public class LevelsTest {
     }
 
     @Test
-    public void testLevel7() {
+    public void testLevelF1() {
         String map = getMap(new LevelF1().map());
 
         asrtMap("                " +
@@ -326,7 +367,7 @@ public class LevelsTest {
     }
 
     @Test
-    public void testLevel8() {
+    public void testLevelF2() {
         String map = getMap(new LevelF2().map());
 
         asrtMap("                " +
@@ -367,7 +408,7 @@ public class LevelsTest {
     }
 
     @Test
-    public void testLevel9() {
+    public void testLevelF3() {
         String map = getMap(new LevelF3().map());
 
         asrtMap("    ############### " +
@@ -416,7 +457,7 @@ public class LevelsTest {
     }
 
     @Test
-    public void testLevel10() {
+    public void testLevelG1() {
         String map = getMap(new LevelG1().map());
 
         asrtMap("  ############  ############# " +
@@ -526,7 +567,7 @@ public class LevelsTest {
     }
 
     @Test
-    public void testLevel13() {
+    public void testLevel9() {
         String map = getMap(new Level9().map());
 
         asrtMap("                " +
