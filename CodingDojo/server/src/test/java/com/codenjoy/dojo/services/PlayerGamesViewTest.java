@@ -109,9 +109,9 @@ public class PlayerGamesViewTest {
     }
 
     @Test
-    public void testGetGamesDataMap_usersInGroup() {
+    public void testGetGamesDataMap_usersInSeveralGroups() {
         // given
-        givenUsersInGroup();
+        givenUsersInSeveralGroups();
 
         // when
         Map<String, GameData> dataMap = playerGamesView.getGamesDataMap();
@@ -157,13 +157,17 @@ public class PlayerGamesViewTest {
                 "user2=[user1, user2, user3, user4], " +
                 "user3=[user1, user2, user3, user4], " +
                 "user4=[user1, user2, user3, user4]}",
-                map.toString());
+                sortKeys(map).toString());
+    }
+
+    private Map<String, List<String>> sortKeys(Map<String, List<String>> map) {
+        return new TreeMap<>(map);
     }
 
     @Test
-    public void testGetGroupsMap_usersInGroup() {
+    public void testGetGroupsMap_usersInSeveralGroups() {
         // given
-        givenUsersInGroup();
+        givenUsersInSeveralGroups();
 
         // when
         Map<String, List<String>> map = playerGamesView.getGroupsMap();
@@ -173,10 +177,10 @@ public class PlayerGamesViewTest {
                 "user2=[user1, user2], " +
                 "user3=[user3, user4], " +       // group 2
                 "user4=[user3, user4]}",
-                map.toString());
+                sortKeys(map).toString());
     }
 
-    private void givenUsersInGroup() {
+    private void givenUsersInSeveralGroups() {
         GameField field1 = mock(GameField.class);
         GameField field2 = mock(GameField.class);
         List<GameField> fields = new LinkedList<>(Arrays.asList(field1, field1, field2, field2));
