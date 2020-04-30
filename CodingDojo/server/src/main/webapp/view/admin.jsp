@@ -259,42 +259,42 @@
             <td>
                 <input id="show-games" type="checkbox">
                 <label class="check-label" for="show-games"></label>
-                <span>Show games list on registration</span>
+                <span>Show GamesList on registration</span>
             </td>
         </tr>
         <tr>
             <td>
                 <input id="show-names" type="checkbox">
                 <label class="check-label" for="show-names"></label>
-                <span>Show first/last names on registration</span>
+                <span>Show First/Last names on registration</span>
             </td>
         </tr>
         <tr>
             <td>
                 <input id="show-data1" type="checkbox">
                 <label class="check-label" for="show-data1"></label>
-                <span>Show city on registration</span>
+                <span>Show Country/City on registration</span>
             </td>
         </tr>
         <tr>
             <td>
                 <input id="show-data2" type="checkbox">
                 <label class="check-label" for="show-data2"></label>
-                <span>Show tech skills on registration</span>
+                <span>Show TechSkills on registration</span>
             </td>
         </tr>
         <tr>
             <td>
                 <input id="show-data3" type="checkbox">
                 <label class="check-label" for="show-data3"></label>
-                <span>Show company / position on registration</span>
+                <span>Show Company/Position on registration</span>
             </td>
         </tr>
         <tr>
             <td>
                 <input id="show-data4" type="checkbox">
                 <label class="check-label" for="show-data4"></label>
-                <span>Show experience on registration</span>
+                <span>Show Experience on registration</span>
             </td>
         </tr>
         <tr>
