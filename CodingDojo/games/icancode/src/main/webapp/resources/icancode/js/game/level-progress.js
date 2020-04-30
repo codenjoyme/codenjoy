@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initLevelProgress(game, socket, onChangeLevel) {
+function initLevelProgress(game, onChangeLevel) {
 
     if (game.debug) {
         game.debugger();
@@ -102,8 +102,27 @@ function initLevelProgress(game, socket, onChangeLevel) {
 
         scrollProgress();
 
-        onChangeLevel(level, multiple, lastPassed);
+        fireOnChangeLevel(level, multiple, lastPassed);
     });
+
+    var oldLastPassed = -1;
+    var oldLevel = -1;
+    var fireOnChangeLevel = function(level, multiple, lastPassed) {
+        var levelIncreased = oldLevel < level;
+        if (levelIncreased) {
+            oldLevel = level;
+        }
+        var lastPassedIncreased = oldLastPassed < lastPassed;
+        var win = false;
+        if (lastPassedIncreased) {
+            var firstWin = (lastPassed == 0 && level == 1 && oldLastPassed == -1);
+            win = (firstWin || oldLastPassed != -1);
+            oldLastPassed = lastPassed;
+        }
+        if (!!onChangeLevel) {
+            onChangeLevel(level, multiple, lastPassed, levelIncreased, win);
+        }
+    }
 
     return {
         getCurrentLevel: function () {

@@ -23,11 +23,21 @@
  * Created by Mikhail_Udalyi on 09.08.2016.
  */
 
-var boardAllPageLoad = function() {
+var boardAllPageLoad = function(showProgress) {
 
     if (game.debug) {
         game.debugger();
     }
+
+    // ----------------------- init progressbar -------------------
+    $("#progress-bar-container").toggle(showProgress);
+    if (showProgress) {
+        var onChangeLevel = function(level, multiple, lastPassed, levelIncreased, win) {
+            // do nothing
+        }
+        var levelProgress = initLevelProgress(game, onChangeLevel);
+    }
+    // ----------------------- init leaders table -------------------
 
     initLeadersTable(game.contextPath, game.playerId, game.code,
         function(count, you, link, name, score, maxLength, level) {
@@ -43,6 +53,8 @@ var boardAllPageLoad = function() {
                 '<td class="center">' + score + '</td>' +
                 '</tr>';
         });
+
+    // ----------------- init visibility hotkeys ----------------------
 
     var leader = $('.board');
     var glasses = $('.glasses');
@@ -107,6 +119,8 @@ var boardAllPageLoad = function() {
             leaderKey = false;
         }
     });
+
+    // ------------------------ starting ---- ----------------------
 
     $('#table-logs').removeClass('table');
     $('#table-logs').removeClass('table-striped');
