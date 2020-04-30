@@ -32,11 +32,11 @@ function defaultRegistrationSettings() {
         showData4: true,
         defaultGame: null,
         gameTypes: {
-            icancode: [
+            icancode: [   // TODO вынести это как-то в настройки игры icancode
                 {'name' : 'JavaScript', 'title':'JavaScript (browser version)'},
                 {'name' : 'Contest',    'title':'Java | Kotlin | .Net | JavaScript'},
-                {'name' : 'Befunge',    'title':'Befunge (esoteric language)'}
-                {'name' : 'eKids',      'title':'For Kids'},
+                {'name' : 'Befunge',    'title':'Befunge (esoteric language)'},
+                {'name' : 'eKids',      'title':'For Kids'}
             ]
         }
     };
