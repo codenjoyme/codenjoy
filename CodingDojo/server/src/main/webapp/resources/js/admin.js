@@ -75,7 +75,7 @@ pages.admin = function() {
         result.showData2 = $('#show-data2').prop('checked');
         result.showData3 = $('#show-data3').prop('checked');
         result.showData4 = $('#show-data4').prop('checked');
-        result.defaultGame = $('#default-game').find('option:selected').text();
+        result.defaultGame = $('#default-game').find('option:selected').val();
 
         return result;
     }
