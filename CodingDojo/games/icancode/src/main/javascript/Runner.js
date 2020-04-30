@@ -121,8 +121,8 @@ var el = function(char, type, direction) {
 
 var D = function(index, dx, dy, name){
 
-    var change = function(pt) {
-        return pt(changeX(pt.getX()), changeY(pt.getY()));
+    var change = function(point) {
+        return pt(changeX(point.getX()), changeY(point.getY()));
     };
 
     var changeX = function(x) {
@@ -130,7 +130,7 @@ var D = function(index, dx, dy, name){
     };
 
     var changeY = function(y) {
-        return y - dy;
+        return y + dy;
     };
 
     var inverted = function() {
@@ -161,6 +161,8 @@ var D = function(index, dx, dy, name){
         changeX : changeX,
 
         changeY : changeY,
+
+        change : change,
 
         inverted : inverted,
 
@@ -337,7 +339,7 @@ var LAYER3 = 2;
 
 var LengthToXY = function (boardSize) {
     var inversion = function (y) {
-        return y;
+        return boardSize - 1 - y;
     }
 
     return {

@@ -42,27 +42,27 @@ var robotTest = function() {
     }   
 
     var boardString = 'board={"offset":{"x":0,"y":0},' +
-        '"heroPosition":{"x":2,"y":1},' +
+        '"heroPosition":{"x":2,"y":7},' +
         '"layers":["' +
-        '╔═══════┐' + // 0
-        '║S.$◄..O│' + // 1
-        '║....$O.│' + // 2
-        '║.$E....│' + // 3
+        '╔═══════┐' + // 8
+        '║S.$◄..O│' + // 7
+        '║....$O.│' + // 6
+        '║.$E....│' + // 5
         '║˃..O...│' + // 4
-        '║.O...Z.│' + // 5
-        '║..˄....│' + // 6
-        '║..˅˂▼►▲│' + // 7
-        '└───────┘",' + // 8
+        '║.O...Z.│' + // 3
+        '║..˄....│' + // 2
+        '║..˅˂▼►▲│' + // 1
+        '└───────┘",' + // 0
       // 012345678
-       '"---------' + // 0
-        '--☺----o-' + // 1
-        '-X----x☻-' + // 2
-        '-X---B---' + // 3
+       '"---------' + // 8
+        '--☺----o-' + // 7
+        '-X----x☻-' + // 6
+        '-X---B---' + // 5
         '--→B-↓B--' + // 4
-        '-♂♂♀✝B---' + // 5
-        '--&--↑←--' + // 6
-        '---------' + // 7
-        '---------",' + // 8
+        '-♂♂♀✝B---' + // 3
+        '--&--↑←--' + // 2
+        '---------' + // 1
+        '---------",' + // 0
       // 012345678
        '"---------' + // 0
         '------*--' + // 1
@@ -117,19 +117,19 @@ var robotTest = function() {
     // getAt
 
     assertEquals(Element.GOLD,
-        board.getAt(LAYER1, 2, 3));
+        board.getAt(LAYER1, 2, 5));
 
     assertEquals(Element.ROBOT_OTHER,
-        board.getAt(LAYER2, 1, 2));
+        board.getAt(LAYER2, 1, 6));
 
     assertEquals(Element.ROBOT_OTHER,
-        board.getAt(LAYER2, 1, 2));
+        board.getAt(LAYER2, 1, 6));
 
     assertEquals(Element.HOLE,
-        board.getAt(LAYER1, 6, 2));
+        board.getAt(LAYER1, 6, 6));
 
     assertEquals(Element.ROBOT_OTHER_FALLING,
-        board.getAt(LAYER2, 6, 2));
+        board.getAt(LAYER2, 6, 6));
 
     assertEquals(Element.BOX,
         board.getAt(LAYER2, 6, 4));
@@ -138,40 +138,40 @@ var robotTest = function() {
         board.getAt(LAYER3, 6, 4));
 
     assertEquals(Element.FLOOR,
-        board.getAt(LAYER1, 2, 6));
-
-    assertEquals(Element.ROBOT_OTHER_LASER,
-        board.getAt(LAYER2, 2, 6));
-
-    assertEquals(Element.FLOOR,
-        board.getAt(LAYER1, 2, 1));
-
-    assertEquals(Element.ROBOT,
-        board.getAt(LAYER2, 2, 1));
-
-    assertEquals(Element.FLOOR,
         board.getAt(LAYER1, 2, 2));
 
-    assertEquals(Element.EMPTY,
+    assertEquals(Element.ROBOT_OTHER_LASER,
         board.getAt(LAYER2, 2, 2));
 
-    assertEquals(Element.EMPTY,
-        board.getAt(LAYER3, 2, 2));
+    assertEquals(Element.FLOOR,
+        board.getAt(LAYER1, 2, 7));
 
-    assertEquals(Element.EXIT,
-        board.getAt(LAYER1, 3, 3));
-
-    assertEquals(Element.GOLD,
-        board.getAt(LAYER1, 3, 1));
+    assertEquals(Element.ROBOT,
+        board.getAt(LAYER2, 2, 7));
 
     assertEquals(Element.FLOOR,
-        board.getAt(LAYER1, 6, 1));
+        board.getAt(LAYER1, 2, 6));
 
     assertEquals(Element.EMPTY,
-        board.getAt(LAYER2, 6, 1));
+        board.getAt(LAYER2, 2, 6));
+
+    assertEquals(Element.EMPTY,
+        board.getAt(LAYER3, 2, 6));
+
+    assertEquals(Element.EXIT,
+        board.getAt(LAYER1, 3, 5));
+
+    assertEquals(Element.GOLD,
+        board.getAt(LAYER1, 3, 7));
+
+    assertEquals(Element.FLOOR,
+        board.getAt(LAYER1, 6, 7));
+
+    assertEquals(Element.EMPTY,
+        board.getAt(LAYER2, 6, 7));
 
     assertEquals(Element.ROBOT_FLYING,
-        board.getAt(LAYER3, 6, 1));
+        board.getAt(LAYER3, 6, 7));
 
     assertEquals(Element.BOX,
         board.getAt(LAYER2, 6, 4));
@@ -182,7 +182,7 @@ var robotTest = function() {
     // isNear
 
     assertEquals(false,
-        board.isNear(LAYER2, -1, 1, Element.ROBOT_OTHER)); // координаты невалидные
+        board.isNear(LAYER2, -1, 7, Element.ROBOT_OTHER)); // координаты невалидные
 
     // мoй другой робот что летает LAYER3
     assertEquals(Element.ROBOT_OTHER_FLYING,
@@ -192,27 +192,27 @@ var robotTest = function() {
 
     // чужой робот, что летает LAYER3
     assertEquals(Element.ROBOT_FLYING,
-            board.getAt(LAYER3, 6, 1));
+            board.getAt(LAYER3, 6, 7));
     assertEquals(true,
-        board.isNear(LAYER3, 6, 0, Element.ROBOT_FLYING));
+        board.isNear(LAYER3, 6, 8, Element.ROBOT_FLYING));
 
     assertEquals(true,
-        board.isNear(LAYER2, 2, 2, Element.ROBOT_OTHER));
+        board.isNear(LAYER2, 2, 6, Element.ROBOT_OTHER));
 
     assertEquals(true,
-        board.isNear(LAYER2, 2, 2, Element.ROBOT));
+        board.isNear(LAYER2, 2, 6, Element.ROBOT));
 
     assertEquals(false,
-        board.isNear(LAYER2, 2, 2, Element.FEMALE_ZOMBIE));
+        board.isNear(LAYER2, 2, 6, Element.FEMALE_ZOMBIE));
 
     assertEquals(false,
-        board.isNear(LAYER2, 2, 2, [Element.FEMALE_ZOMBIE, Element.HOLE]));
+        board.isNear(LAYER2, 2, 6, [Element.FEMALE_ZOMBIE, Element.HOLE]));
 
     assertEquals(false,
-        board.isNear(LAYER2, 5, 1, [Element.ROBOT_OTHER, Element.ROBOT_FLYING]));
+        board.isNear(LAYER2, 5, 7, [Element.ROBOT_OTHER, Element.ROBOT_FLYING]));
 
     assertEquals(true,
-        board.isNear(LAYER3, 5, 1, [Element.ROBOT_OTHER, Element.ROBOT_FLYING]));
+        board.isNear(LAYER3, 5, 7, [Element.ROBOT_OTHER, Element.ROBOT_FLYING]));
 
     assertEquals(false,
         board.isNear(LAYER2, 5, 4, [Element.ROBOT_OTHER_FLYING, Element.ROBOT]));
@@ -221,14 +221,14 @@ var robotTest = function() {
         board.isNear(LAYER3, 5, 4, [Element.ROBOT_OTHER_FLYING, Element.ROBOT]));
 
     assertEquals(true,
-        board.isNear(LAYER2, 2, 2, [Element.ROBOT, Element.GOLD]));
+        board.isNear(LAYER2, 2, 6, [Element.ROBOT, Element.GOLD]));
 
     assertEquals(true,
-        board.isNear(LAYER2, 2, 2, [Element.ROBOT_OTHER, Element.HOLE, Element.FEMALE_ZOMBIE]));
+        board.isNear(LAYER2, 2, 6, [Element.ROBOT_OTHER, Element.HOLE, Element.FEMALE_ZOMBIE]));
 
     // getMe
 
-    assertEquals({'x': 2, 'y': 1}, board.getMe());
+    assertEquals({'x': 2, 'y': 7}, board.getMe());
 
     // TODO what if Hero not on board?
     // TODO what if Hero is flying
@@ -238,32 +238,32 @@ var robotTest = function() {
     // isAt
 
     assertEquals(false,
-        board.isAt(LAYER2, 2, 1, Element.ROBOT_OTHER));
+        board.isAt(LAYER2, 2, 7, Element.ROBOT_OTHER));
     assertEquals(true,
-        board.isAt(LAYER2, 2, 1, Element.ROBOT));
+        board.isAt(LAYER2, 2, 7, Element.ROBOT));
 
     assertEquals(false,
-        board.isAt(LAYER1, 2, 1, Element.ROBOT_OTHER));
+        board.isAt(LAYER1, 2, 7, Element.ROBOT_OTHER));
     assertEquals(false,
-        board.isAt(LAYER1, 2, 1, Element.ROBOT));
+        board.isAt(LAYER1, 2, 7, Element.ROBOT));
 
     assertEquals(false,
-        board.isAt(LAYER1, 2, 1, [Element.GOLD, Element.ROBOT]));
+        board.isAt(LAYER1, 2, 7, [Element.GOLD, Element.ROBOT]));
     assertEquals(true,
-        board.isAt(LAYER2, 2, 1, [Element.GOLD, Element.ROBOT]));
+        board.isAt(LAYER2, 2, 7, [Element.GOLD, Element.ROBOT]));
 
     assertEquals(true,
-        board.isAt(LAYER2, 2, 1, [Element.ROBOT, Element.FLOOR]));
+        board.isAt(LAYER2, 2, 7, [Element.ROBOT, Element.FLOOR]));
 
     assertEquals(false,
-        board.isAt(LAYER2, 2, 1, [Element.ROBOT_OTHER, Element.HOLE, Element.FEMALE_ZOMBIE]));
+        board.isAt(LAYER2, 2, 7, [Element.ROBOT_OTHER, Element.HOLE, Element.FEMALE_ZOMBIE]));
 
     // мой летает на LAYER3
     assertEquals(true,
-        board.isAt(LAYER3, 6, 1, [Element.ROBOT_FLYING]));
+        board.isAt(LAYER3, 6, 7, [Element.ROBOT_FLYING]));
 
     assertEquals(false,
-        board.isAt(LAYER2, 6, 1, [Element.ROBOT_FLYING]));
+        board.isAt(LAYER2, 6, 7, [Element.ROBOT_FLYING]));
 
     // чужой летает на LAYER3
     assertEquals(true,
@@ -275,129 +275,134 @@ var robotTest = function() {
     // at corners
 
     assertEquals(true,
-        board.isAt(LAYER1, 0, 0, Element.ANGLE_IN_LEFT));
+        board.isAt(LAYER1, 0, 8, Element.ANGLE_IN_LEFT));
 
     assertEquals(true,
-        board.isAt(LAYER1, 0, 8, [Element.ROBOT_OTHER, Element.ANGLE_BACK_LEFT]));
+        board.isAt(LAYER1, 0, 0, [Element.ROBOT_OTHER, Element.ANGLE_BACK_LEFT]));
 
     assertEquals(false,
-        board.isAt(LAYER1, 8, 0, Element.GOLD));
+        board.isAt(LAYER1, 8, 8, Element.GOLD));
 
     assertEquals(false,
-        board.isAt(LAYER1, 8, 8, [Element.GOLD, Element.HOLE]));
+        board.isAt(LAYER1, 8, 0, [Element.GOLD, Element.HOLE]));
 
     // get
 
-    assertEquals([{'x': 2, 'y': 3}, {'x': 3, 'y': 1}, {'x': 5, 'y': 2}],
+    assertEquals([{'x': 2, 'y': 5}, {'x': 3, 'y': 7}, {'x': 5, 'y': 6}],
         board.get(LAYER1, Element.GOLD));
 
-    assertEquals([{'x': 1, 'y': 2}, {'x': 1, 'y': 3}],
+    assertEquals([{'x': 1, 'y': 5}, {'x': 1, 'y': 6}],
         board.get(LAYER2, Element.ROBOT_OTHER));
 
     assertEquals([{'x': 6, 'y': 4}],
         board.get(LAYER3, Element.ROBOT_OTHER_FLYING));
 
-    assertEquals([{'x': 6, 'y': 2}],
+    assertEquals([{'x': 6, 'y': 6}],
         board.get(LAYER2, Element.ROBOT_OTHER_FALLING));
 
-    assertEquals([{'x': 2, 'y': 6}],
+    assertEquals([{'x': 2, 'y': 2}],
         board.get(LAYER2, Element.ROBOT_OTHER_LASER));
 
-    assertEquals([{'x': 2, 'y': 1}],
+    assertEquals([{'x': 2, 'y': 7}],
         board.get(LAYER2, Element.ROBOT));
 
-    assertEquals([{'x':6,'y':1}],
+    assertEquals([{'x':6,'y':7}],
         board.get(LAYER3, Element.ROBOT_FLYING));
 
-    assertEquals([{'x': 7, 'y': 1}],
+    assertEquals([{'x': 7, 'y': 7}],
         board.get(LAYER2, Element.ROBOT_FALLING));
 
-    assertEquals([{'x': 7, 'y': 2}],
+    assertEquals([{'x': 7, 'y': 6}],
         board.get(LAYER2, Element.ROBOT_LASER));
 
-    assertEquals([{'x':1,'y':2},{'x':1,'y':3},{'x':2,'y':1},{'x':2,'y':6},{'x':6,'y':2},{'x':7,'y':1},{'x':7,'y':2}],
+    assertEquals([{'x':1,'y':5},{'x':1,'y':6},{'x':2,'y':2},{'x':2,'y':7},{'x':6,'y':6},{'x':7,'y':6},{'x':7,'y':7}],
         board.get(LAYER2, [Element.ROBOT, Element.ROBOT_FLYING, Element.ROBOT_FALLING, Element.ROBOT_LASER,
                             Element.ROBOT_OTHER, Element.ROBOT_OTHER_FLYING, Element.ROBOT_OTHER_FALLING, Element.ROBOT_OTHER_LASER]));
 
-    assertEquals([{'x': 6, 'y': 1}, {'x': 6, 'y': 4}],
+    assertEquals([{'x': 6, 'y': 4}, {'x': 6, 'y': 7}],
         board.get(LAYER3, [Element.ROBOT, Element.ROBOT_FLYING, Element.ROBOT_FALLING, Element.ROBOT_LASER,
                             Element.ROBOT_OTHER, Element.ROBOT_OTHER_FLYING, Element.ROBOT_OTHER_FALLING, Element.ROBOT_OTHER_LASER]));
 
-    assertEquals([{'x': 2, 'y': 3}, {'x': 3, 'y': 1}, {'x': 5, 'y': 2}],
+    assertEquals([{'x': 2, 'y': 5}, {'x': 3, 'y': 7}, {'x': 5, 'y': 6}],
         board.get(LAYER1, [Element.GOLD]));
 
     assertEquals([],
         board.get(LAYER1, []));
 
-    assertEquals([{'x':1,'y':1},{'x':2,'y':3},{'x':3,'y':1},{'x':3,'y':3},{'x':5,'y':2}],
+    assertEquals([{'x':1,'y':7},{'x':2,'y':5},{'x':3,'y':5},{'x':3,'y':7},{'x':5,'y':6}],
         board.get(LAYER1, [Element.GOLD, Element.START, Element.EXIT]));
 
     // isBarrierAt    
 
     assertEquals(false,
-        board.isBarrierAt(2, 2));
+        board.isBarrierAt(2, 6));
 
     assertEquals(true,
-        board.isBarrierAt(0, 0));
+        board.isBarrierAt(0, 8));
 
     assertEquals(true,
-        board.isBarrierAt(0, 0));
+        board.isBarrierAt(0, 8));
 
     assertEquals(true,
         board.isBarrierAt(3, 4));
 
     assertEquals(true,
-        board.isBarrierAt(4, 1));
+        board.isBarrierAt(4, 7));
 
     // countNear    
 
     assertEquals(1,
-        board.countNear(LAYER1, 2, 2, Element.GOLD));
+        board.countNear(LAYER1, 2, 6, Element.GOLD));
 
     assertEquals(1,
-        board.countNear(LAYER2, 2, 2, Element.ROBOT));
+        board.countNear(LAYER2, 2, 6, Element.ROBOT));
 
     assertEquals(0,
-        board.countNear(LAYER2, 5, 1, [Element.ROBOT_OTHER]));
+        board.countNear(LAYER2, 5, 7, [Element.ROBOT_OTHER]));
 
     assertEquals(1,
-        board.countNear(LAYER3, 5, 1, [Element.ROBOT_FLYING]));
+        board.countNear(LAYER3, 5, 7, [Element.ROBOT_FLYING]));
 
     assertEquals(1,
         board.countNear(LAYER3, 5, 4, [Element.ROBOT_OTHER_FLYING, Element.ROBOT]));
 
     assertEquals(1,
-        board.countNear(LAYER2, 2, 2, Element.ROBOT_OTHER));
+        board.countNear(LAYER2, 2, 6, Element.ROBOT_OTHER));
 
     assertEquals(4,
-        board.countNear(LAYER2, 3, 2, Element.EMPTY));
+        board.countNear(LAYER2, 3, 6, Element.EMPTY));
 
     assertEquals(2,
-        board.countNear(LAYER1, 1, 1, [Element.WALL_FRONT, Element.WALL_LEFT]));
+        board.countNear(LAYER1, 1, 7, [Element.WALL_FRONT, Element.WALL_LEFT]));
 
     // getOtherRobots
    
-    assertEquals([{'x': 1, 'y': 2}, {'x': 1, 'y': 3}, {'x': 2, 'y': 6}, {'x': 6, 'y': 2}, {'x': 6, 'y': 4}],
+    assertEquals([{'x': 1, 'y': 5}, {'x': 1, 'y': 6}, {'x': 2, 'y': 2},
+                    {'x': 6, 'y': 6}, {'x': 6, 'y': 4}], // TODO не сортируется, должно быть наоборот по Y 4 потом 6
         board.getOtherHeroes());
 
     // getLaserMachines
     
-    assertEquals([{'x':1,'y':4,'direction':'right'},{'x':3,'y':6,'direction':'up'},{'x':3,'y':7,'direction':'down'},{'x':4,'y':1,'direction':'left'},{'x':4,'y':7,'direction':'left'},{'x':5,'y':7,'direction':'down'},{'x':6,'y':7,'direction':'right'},{'x':7,'y':7,'direction':'up'}],
+    assertEquals([{'x':1,'y':4,'direction':'right'},{'x':3,'y':1,'direction':'down'},
+                {'x':3,'y':2,'direction':'up'},{'x':4,'y':1,'direction':'left'},
+                    {'x':4,'y':7,'direction':'left'},{'x':5,'y':1,'direction':'down'},
+                    {'x':6,'y':1,'direction':'right'},{'x':7,'y':1,'direction':'up'}],
         board.getLaserMachines());
 
     // getLasers
     
-    assertEquals([{'x':2,'y':4,'direction':'right'},{'x':5,'y':4,'direction':'down'},{'x':5,'y':6,'direction':'up'},{'x':6,'y':6,'direction':'left'}],
+    assertEquals([{'x':2,'y':4,'direction':'right'},{'x':5,'y':2,'direction':'up'},
+                {'x':5,'y':4,'direction':'down'},{'x':6,'y':2,'direction':'left'}],
         board.getLasers());
 
     // getWalls
     
-    assertEquals([{'x': 0, 'y': 0}, {'x': 0, 'y': 1}, {'x': 0, 'y': 2}, {'x': 0, 'y': 3}, {'x': 0, 'y': 4}, {'x': 0,'y': 5},
-         {'x': 0, 'y': 6}, {'x': 0, 'y': 7}, {'x': 0, 'y': 8}, {'x': 1, 'y': 0}, {'x': 1, 'y': 8}, {'x': 2,'y': 0},
-         {'x': 2, 'y': 8}, {'x': 3, 'y': 0}, {'x': 3, 'y': 8}, {'x': 4, 'y': 0}, {'x': 4, 'y': 8}, {'x': 5,'y': 0},
-         {'x': 5, 'y': 8}, {'x': 6, 'y': 0}, {'x': 6, 'y': 8}, {'x': 7, 'y': 0}, {'x': 7, 'y': 8}, {'x': 8,'y': 0},
-         {'x': 8, 'y': 1}, {'x': 8, 'y': 2}, {'x': 8, 'y': 3}, {'x': 8, 'y': 4}, {'x': 8, 'y': 5}, {'x': 8,'y': 6},
-         {'x': 8, 'y': 7}, {'x': 8, 'y': 8}],
+    assertEquals([{'x':0,'y':0},{'x':0,'y':1},{'x':0,'y':2},{'x':0,'y':3},{'x':0,'y':4},
+                {'x':0,'y':5},{'x':0,'y':6},{'x':0,'y':7},{'x':0,'y':8},{'x':1,'y':0},{'x':1,'y':8},
+                {'x':2,'y':0},{'x':2,'y':8},{'x':3,'y':0},{'x':3,'y':8},{'x':4,'y':0},{'x':4,'y':8},
+                {'x':5,'y':0},{'x':5,'y':8},{'x':6,'y':0},{'x':6,'y':8},{'x':7,'y':0},{'x':7,'y':8},
+                {'x':8,'y':0},{'x':8,'y':1},{'x':8,'y':2},{'x':8,'y':3},{'x':8,'y':4},{'x':8,'y':5},
+                {'x':8,'y':6},{'x':8,'y':7},{'x':8,'y':8}],
         board.getWalls());
 
     // getBoxes
@@ -407,36 +412,51 @@ var robotTest = function() {
 
     // getGold
   
-    assertEquals([{'x': 2, 'y': 3}, {'x': 3, 'y': 1}, {'x': 5, 'y': 2}],
+    assertEquals([{'x': 2, 'y': 5}, {'x': 3, 'y': 7}, {'x': 5, 'y': 6}],
         board.getGold());
 
     // getStart
     
-    assertEquals([{'x': 1, 'y': 1}],
+    assertEquals([{'x': 1, 'y': 7}],
         board.getStarts());
 
     // getZombieStart
     
-    assertEquals([{'x': 6, 'y': 5}],
+    assertEquals([{'x': 6, 'y': 3}],
         board.getZombieStart());
 
     // getExit
     
-    assertEquals([{'x': 3, 'y': 3}],
+    assertEquals([{'x': 3, 'y': 5}],
         board.getExits());
 
     // getHoles
     
-    assertEquals([{'x': 2, 'y': 5}, {'x': 4, 'y': 4}, {'x': 6, 'y': 2}, {'x': 7, 'y': 1}],
+    assertEquals([{'x': 2, 'y': 3}, {'x': 4, 'y': 4}, {'x': 6, 'y': 6}, {'x': 7, 'y': 7}],
         board.getHoles());
 
     // getBarriers
     
-    assertEquals([{'x':0,'y':0},{'x':0,'y':1},{'x':0,'y':2},{'x':0,'y':3},{'x':0,'y':4},{'x':0,'y':5},{'x':0,'y':6},{'x':0,'y':7},{'x':0,'y':8},{'x':1,'y':0},{'x':1,'y':4},{'x':1,'y':8},{'x':2,'y':0},{'x':2,'y':5},{'x':2,'y':8},{'x':3,'y':0},{'x':3,'y':4},{'x':3,'y':6},{'x':3,'y':7},{'x':3,'y':8},{'x':4,'y':0},{'x':4,'y':1},{'x':4,'y':4},{'x':4,'y':7},{'x':4,'y':8},{'x':5,'y':0},{'x':5,'y':3},{'x':5,'y':5},{'x':5,'y':7},{'x':5,'y':8},{'x':6,'y':0},{'x':6,'y':2},{'x':6,'y':4},{'x':6,'y':7},{'x':6,'y':8},{'x':7,'y':0},{'x':7,'y':1},{'x':7,'y':7},{'x':7,'y':8},{'x':8,'y':0},{'x':8,'y':1},{'x':8,'y':2},{'x':8,'y':3},{'x':8,'y':4},{'x':8,'y':5},{'x':8,'y':6},{'x':8,'y':7},{'x':8,'y':8}],
+    assertEquals([{'x':0,'y':0},{'x':0,'y':1},{'x':0,'y':2},{'x':0,'y':3},{'x':0,'y':4},
+                {'x':0,'y':5},{'x':0,'y':6},{'x':0,'y':7},{'x':0,'y':8},{'x':1,'y':0},{'x':1,'y':4},
+                {'x':1,'y':8},{'x':2,'y':0},{'x':2,'y':3},{'x':2,'y':8},{'x':3,'y':0},{'x':3,'y':1},
+                {'x':3,'y':2},{'x':3,'y':4},{'x':3,'y':8},{'x':4,'y':0},{'x':4,'y':1},{'x':4,'y':4},
+                {'x':4,'y':7},{'x':4,'y':8},{'x':5,'y':0},{'x':5,'y':1},{'x':5,'y':3},{'x':5,'y':5},
+                {'x':5,'y':8},{'x':6,'y':0},{'x':6,'y':1},{'x':6,'y':4},{'x':6,'y':6},{'x':6,'y':8},
+                {'x':7,'y':0},{'x':7,'y':1},{'x':7,'y':7},{'x':7,'y':8},{'x':8,'y':0},{'x':8,'y':1},
+                {'x':8,'y':2},{'x':8,'y':3},{'x':8,'y':4},{'x':8,'y':5},{'x':8,'y':6},{'x':8,'y':7},
+                {'x':8,'y':8}],
         board.getBarriers());
 
     // isMyRobotAlive
     
     assertEquals(false,
         board.isMeAlive());
+
+    // Direction
+
+    assertEquals({'x': 0, 'y': 1}, Direction.UP.change(pt(0, 0)));
+    assertEquals({'x': 0, 'y':-1}, Direction.DOWN.change(pt(0, 0)));
+    assertEquals({'x':-1, 'y': 0}, Direction.LEFT.change(pt(0, 0)));
+    assertEquals({'x': 1, 'y': 0}, Direction.RIGHT.change(pt(0, 0)));
 }
