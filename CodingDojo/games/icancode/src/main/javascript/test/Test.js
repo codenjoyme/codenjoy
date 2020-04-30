@@ -383,16 +383,16 @@ var robotTest = function() {
 
     // getLaserMachines
     
-    assertEquals([{'x':1,'y':4,'direction':'right'},{'x':3,'y':1,'direction':'down'},
-                {'x':3,'y':2,'direction':'up'},{'x':4,'y':1,'direction':'left'},
-                    {'x':4,'y':7,'direction':'left'},{'x':5,'y':1,'direction':'down'},
-                    {'x':6,'y':1,'direction':'right'},{'x':7,'y':1,'direction':'up'}],
+    assertEquals([{'x':1,'y':4,'direction':'RIGHT'},{'x':3,'y':1,'direction':'DOWN'},
+                {'x':3,'y':2,'direction':'UP'},{'x':4,'y':1,'direction':'LEFT'},
+                    {'x':4,'y':7,'direction':'LEFT'},{'x':5,'y':1,'direction':'DOWN'},
+                    {'x':6,'y':1,'direction':'RIGHT'},{'x':7,'y':1,'direction':'UP'}],
         board.getLaserMachines());
 
     // getLasers
     
-    assertEquals([{'x':2,'y':4,'direction':'right'},{'x':5,'y':2,'direction':'up'},
-                {'x':5,'y':4,'direction':'down'},{'x':6,'y':2,'direction':'left'}],
+    assertEquals([{'x':2,'y':4,'direction':'RIGHT'},{'x':5,'y':2,'direction':'UP'},
+                {'x':5,'y':4,'direction':'DOWN'},{'x':6,'y':2,'direction':'LEFT'}],
         board.getLasers());
 
     // getWalls

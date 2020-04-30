@@ -121,16 +121,16 @@ var el = function(char, type, direction) {
 
 var D = function(index, dx, dy, name){
 
-    var change = function(point) {
-        return pt(changeX(point.getX()), changeY(point.getY()));
-    };
-
     var changeX = function(x) {
         return x + dx;
     };
 
     var changeY = function(y) {
         return y + dy;
+    };
+
+    var change = function(point) {
+        return pt(changeX(point.getX()), changeY(point.getY()));
     };
 
     var inverted = function() {
@@ -145,49 +145,99 @@ var D = function(index, dx, dy, name){
 
     var clockwise = function() {
         switch (this) {
-            case Direction.LEFT : return Direction.UP;
+            case Direction.UP : return Direction.LEFT;
+            case Direction.LEFT : return Direction.DOWN;
+            case Direction.DOWN : return Direction.RIGHT;
+            case Direction.RIGHT : return Direction.UP;
+            default : return Direction.STOP;
+        }
+    };
+
+    var contrClockwise = function() {
+        switch (this) {
             case Direction.UP : return Direction.RIGHT;
             case Direction.RIGHT : return Direction.DOWN;
             case Direction.DOWN : return Direction.LEFT;
+            case Direction.LEFT : return Direction.UP;
+            default : return Direction.STOP;
+        }
+    };
+
+    var mirrorTopBottom = function() {
+        switch (this) {
+            case Direction.UP : return Direction.LEFT;
+            case Direction.RIGHT : return Direction.DOWN;
+            case Direction.DOWN : return Direction.RIGHT;
+            case Direction.LEFT : return Direction.UP;
+            default : return Direction.STOP;
+        }
+    };
+
+    var mirrorBottomTop = function() {
+        switch (this) {
+            case Direction.UP : return Direction.RIGHT;
+            case Direction.RIGHT : return Direction.UP;
+            case Direction.DOWN : return Direction.LEFT;
+            case Direction.LEFT : return Direction.DOWN;
             default : return Direction.STOP;
         }
     };
 
     var toString = function() {
-        return name;
+        return name.toUpperCase();
     };
+
+    var getIndex = function() {
+        return index;
+    }
 
     return {
         changeX : changeX,
-
         changeY : changeY,
-
         change : change,
-
         inverted : inverted,
-
+        clockwise : clockwise,
+        contrClockwise : contrClockwise,
+        mirrorTopBottom : mirrorTopBottom,
+        mirrorBottomTop : mirrorBottomTop,
         toString : toString,
-
-        getIndex : function() {
-            return index;
-        }
+        getIndex : getIndex
     };
 };
 
 var Direction = {
-    UP   : D(2, 0, 1, 'up'),                // you can move
-    DOWN : D(3, 0, -1, 'down'),
-    LEFT : D(0, -1, 0, 'left'),
-    RIGHT : D(1, 1, 0, 'right'),
-    JUMP : D(4, 0, 0, 'act(1)'),            // jump
-    PULL : D(5, 0, 0, 'act(2)'),            // pull box
-    FIRE : D(6, 0, 0, 'act(3)'),            // fire
-    DIE  : D(7, 0, 0, 'act(0)'),            // die
-    STOP : D(8, 0, 0, '')                   // stay
+    UP : D(2, 0, 1, 'UP'),
+    DOWN : D(3, 0, -1, 'DOWN'),
+    LEFT : D(0, -1, 0, 'LEFT'),
+    RIGHT : D(1, 1, 0, 'RIGHT'),
+    JUMP : D(4, 0, 0, 'ACT(1)'),            // jump
+    PULL : D(5, 0, 0, 'ACT(2)'),            // pull box
+    FIRE : D(6, 0, 0, 'ACT(3)'),            // fire
+    DIE  : D(7, 0, 0, 'ACT(0)'),            // die
+    STOP : D(8, 0, 0, ''),                   // stay
+
+    get : function(direction) {
+        if (typeof direction.getIndex == 'function') {
+            return direction;
+        }
+
+        direction = String(direction);
+        direction = direction.toUpperCase();
+        for (var name in Direction) {
+            var d = Direction[name];
+            if (typeof d == 'function') {
+                continue;
+            }
+            if (direction == d.name()) {
+                return Direction[name];
+            }
+        }
+        return null;
+    }
 };
 
 Direction.values = function() {
-   return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.JUMP, Direction.PULL, Direction.FIRE, Direction.DIE, Direction.STOP];
+    return [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT, Direction.JUMP, Direction.PULL, Direction.FIRE, Direction.DIE, Direction.STOP];
 };
 
 Direction.valueOf = function(indexOrName) {
@@ -200,6 +250,13 @@ Direction.valueOf = function(indexOrName) {
     }
     return Direction.STOP;
 };
+
+Direction.where = function(from, to) {
+    var dx = to.x - from.x;
+    var dy = to.y - from.y;
+
+    return Direction.values().find(d => (d.changeX(0) == dx) && (d.changeY(0) == dy));
+}
 
 var Element = {
     EMPTY: el('-', 'NONE'),
@@ -333,10 +390,6 @@ var pt = function (x, y) {
     return new Point(x, y);
 };
 
-var LAYER1 = 0;
-var LAYER2 = 1;
-var LAYER3 = 2;
-
 var LengthToXY = function (boardSize) {
     var inversion = function (y) {
         return boardSize - 1 - y;
@@ -356,7 +409,12 @@ var LengthToXY = function (boardSize) {
     };
 };
 
-var Board = function (board) {    
+var LAYER1 = 0;
+var LAYER2 = 1;
+var LAYER3 = 2;
+
+var Board = function (boardString) {
+    var board = eval(boardString);
     var layersString = board.layers;
     var scannerOffset = board.offset;
     var heroPosition = board.heroPosition;
@@ -455,6 +513,16 @@ var Board = function (board) {
         return result;
     };
 
+    var isAnyOfAt = function (layer, x, y, elements) {
+        for (var index in elements) {
+            var element = elements[index];
+            if (isAt(x, y, layer, element)) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     var isNear = function (layer, x, y, element) {
         if (pt(x, y).isBad(size)) {
             return false;
@@ -479,8 +547,8 @@ var Board = function (board) {
             return 0;
         }
         var count = 0;
-        if (isAt(layer, x + 1, y, element)) count++;
         if (isAt(layer, x - 1, y, element)) count++;
+        if (isAt(layer, x + 1, y, element)) count++;
         if (isAt(layer, x, y - 1, element)) count++;
         if (isAt(layer, x, y + 1, element)) count++;
         return count;
@@ -593,6 +661,165 @@ var Board = function (board) {
         return getFromArray(x, y, barriersMap, true);
     }
 
+    var getShortestWay = function (from, to) {
+        if (from.getX() == to.getX() && from.getY() == to.getY()) {
+            return [from];
+        }
+        if (!barriersMap) {
+            getBarriers();
+        }
+
+        var mask = Array(size);
+        for (var x = 0; x < size; x++) {
+            mask[x] = new Array(size);
+            for (var y = 0; y < size; y++) {
+                mask[x][y] = (isWallAt(x, y)) ? -1 : 0;
+            }
+        }
+
+        var getMask = function(x, y) {
+            return getFromArray(x, y, mask, -1);
+        }
+
+        var current = 1;
+        mask[from.getX()][from.getY()] = current;
+
+        var isOutOf = function (x, y) {
+            return (x < 0 || y < 0 || x >= size || y >= size);
+        }
+
+        var comeRound = function (x, y, onElement) {
+            var dd = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+            for (var i in dd) {
+                var dx = dd[i][0];
+                var dy = dd[i][1];
+
+                var xx = x + dx;
+                var yy = y + dy;
+                if (isOutOf(xx, yy)) continue;
+
+                var stop = !onElement(xx, yy);
+
+                if (stop) return;
+            }
+        }
+
+        var done = false;
+        while (!done) {
+            var maskToString = function() {
+                var string = '01234567890123456789\n';
+                for (var y = 0; y < size; y++) {
+                    for (var x = 0; x < size; x++) {
+                        if (mask[x][y] == -1) {
+                            var s = '*';
+                        } else if (mask[x][y] == 0) {
+                            if (getAt(x, y, LAYER1) == Element.HOLE) {
+                                var s = 'O';
+                            } else if (getAt(x, y, LAYER2) == Element.BOX) {
+                                var s = 'B';
+                            } else if (getAt(x, y, LAYER1) == Element.EXIT) {
+                                var s = 'E';
+                            } else {
+                                var s = ' ';
+                            }
+                        } else {
+                            var s = '' + mask[x][y];
+                        }
+                        if (s.length == 2) s = s[1];
+                        string += s;
+                    }
+                    string += ' ' + y + '\n';
+                }
+                string += '01234567890123456789\n';
+                console.log(string);
+            }
+            // s = 8;
+            // if (s == -1 || current >= s - 1 && current <= s) maskToString();
+
+            for (var x = 0; x < size; x++) {
+                for (var y = 0; y < size; y++) {
+                    if (mask[x][y] != current) continue;
+
+                    comeRound(x, y, function (xx, yy) {
+                        if (getMask(xx, yy) == 0) {
+                            var dx = xx - x;
+                            var dy = yy - y;
+
+                            var px = x - dx;
+                            var py = y - dy;
+
+                            var fx = xx + dx;
+                            var fy = yy + dy;
+
+                            // путь px/py -> x/y -> xx/yy -> fx/fy
+
+                            var can = true;
+                            if (isBarrier(xx, yy) && isBarrier(fx, fy)) {
+                                can = false;
+                            }
+                            if (isBarrier(x, y)) {
+                                if (getMask(px, py) == -1) {
+                                    can = false;
+                                }
+                                if (isBarrier(xx, yy)) {
+                                    can = false;
+                                }
+                            }
+                            // if (s == -1 || current >= s - 1 && current < s) {
+                            //     console.log('px/py: ' + px + ' ' + py);
+                            //     console.log('x/y: ' + x + ' ' + y);
+                            //     console.log('xx/yy: ' + xx + ' ' + yy);
+                            //     console.log('fx/fy: ' + fx + ' ' + fy);
+                            //     console.log('mask[px][py]: ' + mask[px][py]);
+                            //     console.log('isBarrier(px, py): ' + isBarrier(px, py));
+                            //     console.log('isBarrier(x, y): ' + isBarrier(x, y));
+                            //     console.log('isBarrier(xx, yy): ' + isBarrier(xx, yy));
+                            //     console.log('isBarrier(fx, fy): ' + isBarrier(fx, fy));
+                            //     console.log(((can) ? '+' : '-') + (current + 1) + ": [" + x + ":" + y + "] -> [" + xx + ":" + yy + "]");
+                            // }
+
+                            if (can) {
+                                mask[xx][yy] = current + 1;
+                                if (xx == to.getX() && yy == to.getY()) {
+                                    done = true;
+                                }
+                            }
+                        }
+                        return true;
+                    });
+                }
+            }
+
+            current++;
+            if (current > 200) {
+                return [];
+            }
+        }
+        var point = to;
+        done = false;
+        current = mask[point.getX()][point.getY()];
+        var path = [];
+        path.push(point);
+        while (!done) {
+            comeRound(point.getX(), point.getY(), function (xx, yy) {
+                if (mask[xx][yy] == current - 1) {
+                    point = pt(xx, yy);
+                    current--;
+
+                    path.push(point);
+
+                    if (current == 1) {
+                        done = true;
+                    }
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        return path.reverse();
+    }
+
     var boardAsString = function (layer) {
         var result = "";
         for (var i = 0; i <= size - 1; i++) {
@@ -700,11 +927,11 @@ var Board = function (board) {
         size: function () {
             return size;
         },
-        getMe: getMe, 
+        getMe: getMe,
         isLevelFinished: function() {
             return levelFinished;
         },
-        getOtherHeroes: getOtherHeroes, 
+        getOtherHeroes: getOtherHeroes,
         getLaserMachines: getLaserMachines,
         getLasers: getLasers,
         getWalls: getWalls,
@@ -715,10 +942,10 @@ var Board = function (board) {
         getZombieStart: getZombieStart,
         getExits: getExits,
         getHoles: getHoles,
-        isMeAlive: isMeAlive, 
-        isAt: isAt, 
+        isMeAlive: isMeAlive,
+        isAt: isAt,
         getAt: getAt,
-        get: get, 
+        get: get,
         toString: toString,
         layer1: function () {
             return boardAsString(LAYER1)
@@ -730,10 +957,12 @@ var Board = function (board) {
             return boardAsString(LAYER3)
         },
         getWholeBoard: getWholeBoard,
-        getBarriers: getBarriers,        
+        getBarriers: getBarriers,
+        isAnyOfAt: isAnyOfAt,
         isNear: isNear,
-        isBarrierAt: isBarrierAt, 
-        countNear: countNear, 
+        isBarrierAt: isBarrierAt,
+        countNear: countNear,
+        getShortestWay: getShortestWay,
         getScannerOffset: function () {
             return pt(scannerOffset.x, scannerOffset.y);
         }
@@ -817,7 +1046,7 @@ var YourSolver = function(board){
 
             // TODO your code here
 
-            return Command.go(Direction.RIGHT);
+            return Command.go(Direction.JUMP);
         }
     };
 };
