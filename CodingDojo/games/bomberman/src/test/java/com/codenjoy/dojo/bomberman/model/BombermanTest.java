@@ -28,8 +28,10 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -2059,13 +2061,14 @@ public class BombermanTest {
     // Perks related test here
     @Test
     public void shouldPerkBeDropped_whenWallIsDestroyed() {
-        hero.act();
-        field.tick();
-
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                "☻    \n");
+//        hero.act();
+//        field.tick();
+//
+//        asrtBrd("     \n" +
+//                "     \n" +
+//                "     \n" +
+//                "     \n" +
+//                "☻    \n");
+        throw new NotImplementedException("WIP");
     }
 }
