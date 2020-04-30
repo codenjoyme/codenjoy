@@ -35,16 +35,4 @@ public interface GameSettings {
 
     Parameter<Integer> getBoardSize();
 
-    /**
-     * Use this method to get setting for particular perk when needed in business logic.
-     *
-     * @param element enum value
-     * @return {@link PerkSettings} by default it is zero enabled.
-     * GameSettings implementation have to handle it as needed.
-     * @see Elements
-     */
-    default PerkSettings getPerkSettings(Elements element) {
-        return new PerkSettings(0,0);
-    }
-
 }
