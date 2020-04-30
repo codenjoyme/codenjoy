@@ -247,18 +247,19 @@ function initRegistration(waitApprove, contextPath) {
         var select = $(selector).find('select');
         select.children().remove();
 
-        var currentGameName = null;
+        var current = null;
         for (var index in gameTypes) {
             var types = gameTypes[index];
             if (gameName == index && !!types) {
-                currentGameName = types;
+                current = types;
                 break;
             }
         }
 
-        for (var index in currentGameName) {
-            var gameType = currentGameName[index];
-            select.append('<option value="' + gameType + '">' + gameType + '</option>');
+        for (var index in current) {
+            var name = current[index].name;
+            var title = current[index].title;
+            select.append('<option value="' + name + '">' + title + '</option>');
         }
 
         return select;
@@ -282,7 +283,7 @@ function initRegistration(waitApprove, contextPath) {
     }
 
     function saveDataToLocalStorage() {
-        localStorage.setItem(KEYS.game.type, $('#gameType').find('option:selected').text());
+        localStorage.setItem(KEYS.game.type, $('#gameType').find('option:selected').val());
         localStorage.setItem(KEYS.game.name, $('#gameName').find('option:selected').text());
         localStorage.setItem(KEYS.userData.email, $('#email input').val());
         localStorage.setItem(KEYS.userData.readableName, $('#readableName input').val());
