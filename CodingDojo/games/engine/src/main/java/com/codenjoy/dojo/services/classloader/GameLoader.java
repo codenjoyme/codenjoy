@@ -26,22 +26,27 @@ import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
+@Slf4j
 public class GameLoader {
 
     public Map<String, Class> loadGames(File directory) {
-        List<GameLocator> jars = Arrays.stream(directory.listFiles())
+        File[] array = directory.listFiles();
+        if (array == null) {
+            log.warn("Plugins folder '{}' not exists. Skipping...", directory);
+            return new HashMap<>();
+        }
+
+        List<GameLocator> jars = Arrays.stream(array)
                 .filter(it -> it.getName().endsWith(".jar"))
                 .map(it -> new GameLocator(it.getName().split("[.-]")[0], it.getAbsolutePath()))
                 .collect(toList());
