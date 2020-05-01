@@ -2,7 +2,9 @@ server:
   servlet.context-path: ${context:/codenjoy-contest}
   ip: 127.0.0.1
   port: 8080
-  plugins.path: ./external
+  resources.path: ./external/resurces/
+  plugins.path: ./external/
+  plugins.resources.path: ./external/*.jar!/resources/
 
 rest-sender:
   pool-size: 100

@@ -53,8 +53,11 @@ public class MVCConf implements WebMvcConfigurer {
     @Value("${server.servlet.context-path}")
     private String servletContextRoot;
 
-    @Value("${server.plugins.path}")
-    private String pluginsPath;
+    @Value("${server.plugins.resources.path}")
+    private String pluginsResourcesPath;
+
+    @Value("${server.resources.path}")
+    private String resourcesPath;
 
     @Autowired
     private TimerService timer;
@@ -78,8 +81,8 @@ public class MVCConf implements WebMvcConfigurer {
                     .addResourceLocations(
                             "/resources/",
                             "classpath:/resources/",
-                            "file:" + pluginsPath,
-                            "jar:file:" + pluginsPath + "/*.jar!/resources/"
+                            "file:" + resourcesPath,
+                            "jar:file:" + pluginsResourcesPath
                     )
                     .setCachePeriod(cachePeriod);
     }
