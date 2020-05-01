@@ -51,7 +51,7 @@ public class GameServiceImpl implements GameService {
 
     private Map<String, GameType> cache = new TreeMap<>();
 
-    @Value("${server.plugins.path}")
+    @Value("${plugins.path}")
     private String pluginsPath;
 
     @PostConstruct
