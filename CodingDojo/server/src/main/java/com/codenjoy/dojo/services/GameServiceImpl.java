@@ -29,8 +29,11 @@ import com.codenjoy.dojo.services.printer.CharElements;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.reflections.Reflections;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -43,11 +46,16 @@ import static java.util.stream.Collectors.toMap;
 @Component("gameService")
 public class GameServiceImpl implements GameService {
 
+    // TODO кажется это старый код комнат, его можно убрать после окончательной имплементации комнат
     public static final String ROOMS_SEPARATOR = "-";
-    
+
     private Map<String, GameType> cache = new TreeMap<>();
 
-    public GameServiceImpl() {
+    @Value("${server.plugins.path}")
+    private String pluginsPath;
+
+    @PostConstruct
+    public void init() {
         for (Class<? extends GameType> clazz : allGames()) {
             GameType gameType = loadGameType(clazz);
             cache.put(gameType.name(), gameType);
@@ -66,21 +74,19 @@ public class GameServiceImpl implements GameService {
         remove(result,
                 it -> ConstructorUtils.getMatchingAccessibleConstructor(it) == null);
 
+        // TODO вынести в application.yml все удаляемые игры
         remove(result, it -> Stream.of("chess", "sokoban")
                 .anyMatch(name -> it.getPackage().toString().contains(name)));
 
-
-        loadFromExternal(result);
+        loadFromPlugins(result);
 
         return result;
     }
 
-    private void loadFromExternal(List<Class> result) {
-        remove(result, it -> Stream.of("a2048", "battlecity")
-                .anyMatch(name -> it.getPackage().toString().contains(name)));
-
-        new GameLoader().loadGames()
-                .entrySet().forEach(it -> result.add(it.getValue()));
+    private void loadFromPlugins(List<Class> result) {
+        File directory = new File(pluginsPath);
+        Map<String, Class> games = new GameLoader().loadGames(directory);
+        result.addAll(games.values());
     }
 
     private void remove(List<Class> result, Predicate<Class> predicate) {

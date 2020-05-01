@@ -40,6 +40,7 @@ public class GameServiceTest {
 
     @Before
     public void setup() {
+        gameService.init();
         forGames(FirstGameType.class, SecondGameType.class);
     }
 

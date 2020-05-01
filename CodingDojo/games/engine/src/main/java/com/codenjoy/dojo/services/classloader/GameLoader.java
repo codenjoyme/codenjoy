@@ -32,22 +32,25 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 public class GameLoader {
 
-    public Map<String, Class> loadGames() {
-        String dir = "C:\\Java\\iCanCode\\codenjoy\\CodingDojo\\games";
-        return loadAll(
-                new GameLocator("a2048", dir + "\\a2048\\target\\a2048-engine.jar"),
-                new GameLocator("battlecity", dir + "\\battlecity\\target\\battlecity-engine.jar")
-        );
+    public Map<String, Class> loadGames(File directory) {
+        List<GameLocator> jars = Arrays.stream(directory.listFiles())
+                .filter(it -> it.getName().endsWith(".jar"))
+                .map(it -> new GameLocator(it.getName().split("[.-]")[0], it.getAbsolutePath()))
+                .collect(toList());
+
+        return loadAll(jars);
     }
 
-    public Map<String, Class> loadAll(GameLocator... jars) {
-        return Arrays.stream(jars)
+    public Map<String, Class> loadAll(List<GameLocator> jars) {
+        return jars.stream()
                 .map(this::load)
                 .collect(toMap(it -> it.getName(), it -> it.getClazz()));
     }
@@ -66,7 +69,8 @@ public class GameLoader {
 
     @SneakyThrows
     public static void main(String[] args) {
-        GameType gameType = (GameType)new GameLoader().loadGames().get("a2048").newInstance();
+        File directory = new File("C:\\Java\\iCanCode\\codenjoy\\CodingDojo\\external");
+        GameType gameType = (GameType)new GameLoader().loadGames(directory).get("a2048").newInstance();
         GameField game = gameType.createGame(0);
         game.newGame(gameType.createPlayer(event -> {}, "id"));
         game.tick();
