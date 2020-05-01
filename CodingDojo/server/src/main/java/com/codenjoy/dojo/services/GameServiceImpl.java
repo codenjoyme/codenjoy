@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.classloader.GameLoader;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import lombok.SneakyThrows;
@@ -68,7 +69,18 @@ public class GameServiceImpl implements GameService {
         remove(result, it -> Stream.of("chess", "sokoban")
                 .anyMatch(name -> it.getPackage().toString().contains(name)));
 
+
+        loadFromExternal(result);
+
         return result;
+    }
+
+    private void loadFromExternal(List<Class> result) {
+        remove(result, it -> Stream.of("a2048", "battlecity")
+                .anyMatch(name -> it.getPackage().toString().contains(name)));
+
+        new GameLoader().loadGames()
+                .entrySet().forEach(it -> result.add(it.getValue()));
     }
 
     private void remove(List<Class> result, Predicate<Class> predicate) {
