@@ -43,7 +43,8 @@ public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
     private static final String JAR = "jar";
     public static final String PREFIX = JAR + ":file:";
 
-    private Map<String, Map<String, File>> cache = map().get();
+    private Map<String, Map<String, File>> jarsCache = map().get();
+    private Map<String, Resource> resourcesCache = map().get();
 
     private Supplier<ConcurrentHashMap> map() {
         return () -> new ConcurrentHashMap<>();
@@ -56,6 +57,10 @@ public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
             @Override
             @SneakyThrows
             protected Resource getResource(String resource, Resource location) {
+                if (resourcesCache.containsKey(resource)) {
+                    return resourcesCache.get(resource);
+                }
+
                 Resource relative = location.createRelative(resource);
                 String path = relative.getURI().toString();
 
@@ -70,6 +75,7 @@ public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
                     for (File jar : jars) {
                         Resource result = getResource(resource, rootInJar, jar);
                         if (result != null) {
+                            resourcesCache.put(resource, result);
                             return result;
                         }
                     }
@@ -87,17 +93,17 @@ public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
     }
 
     private List<File> getJars(String jarFolder, String resource) {
-        if (!cache.containsKey(jarFolder)) {
-            cache.put(jarFolder, map().get());
+        if (!jarsCache.containsKey(jarFolder)) {
+            jarsCache.put(jarFolder, map().get());
 
-            Map<String, File> jars = cache.get(jarFolder);
+            Map<String, File> jars = jarsCache.get(jarFolder);
             File directory = new File(jarFolder);
             File[] files = directory.listFiles((dir, name) -> name.endsWith("." + JAR));
             Arrays.stream(files)
                     .forEach(file -> jars.put(file.getName().split("[\\.\\-_]")[0], file));
         }
 
-        Map<String, File> jars = cache.get(jarFolder);
+        Map<String, File> jars = jarsCache.get(jarFolder);
 
         List<File> found = jars.entrySet().stream()
                 .filter(entry -> resource.contains(entry.getKey()))
