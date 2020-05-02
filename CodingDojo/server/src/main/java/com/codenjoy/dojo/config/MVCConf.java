@@ -105,24 +105,23 @@ public class MVCConf implements WebMvcConfigurer {
                     Resource relative = location.createRelative(resourcePath);
                     String path = relative.getURI().toString();
 
-                    if (!path.startsWith(PREFIX) || !path.contains("*." + JAR)) {
-                        return super.getResource(resourcePath, location);
-                    }
-
-                    String[] split = path.split("\\*\\." + JAR);
-                    String left = split[0].substring(PREFIX.length());
-                    String right = split[1];
-                    String middle = right.substring(0, right.indexOf(resourcePath));
-                    File directory = new File(left);
-                    List<File> jars = Arrays.asList(directory.listFiles((dir, name) -> name.endsWith("." + JAR)));
-                    for (File jar : jars) {
-                        URL url = new URL(PREFIX + jar.getPath().replace('\\', '/') + middle);
-                        FileUrlResource resource = new FileUrlResource(url);
-                        Resource result = super.getResource(resourcePath, resource);
-                        if (result != null) {
-                            return result;
+                    if (path.startsWith(PREFIX) && path.contains("*." + JAR)) {
+                        String[] split = path.split("\\*\\." + JAR);
+                        String left = split[0].substring(PREFIX.length());
+                        String right = split[1];
+                        String middle = right.substring(0, right.indexOf(resourcePath));
+                        File directory = new File(left);
+                        List<File> jars = Arrays.asList(directory.listFiles((dir, name) -> name.endsWith("." + JAR)));
+                        for (File jar : jars) {
+                            URL url = new URL(PREFIX + jar.getPath().replace('\\', '/') + middle);
+                            FileUrlResource resource = new FileUrlResource(url);
+                            Resource result = super.getResource(resourcePath, resource);
+                            if (result != null) {
+                                return result;
+                            }
                         }
                     }
+
                     return super.getResource(resourcePath, location);
                 }
             }));
