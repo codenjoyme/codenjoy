@@ -4,6 +4,9 @@ server:
   port: 8080
 
 plugins:
+  game:
+    exclude: chess, sokoban
+    package: com.codenjoy.dojo
   path: ./external/
   static: ./external/static/
   resources: ./external/*.jar!/resources/

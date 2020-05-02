@@ -54,6 +54,12 @@ public class GameServiceImpl implements GameService {
     @Value("${plugins.path}")
     private String pluginsPath;
 
+    @Value("${plugins.game.exclude}")
+    private String[] excludeGames;
+
+    @Value("${plugins.game.package}")
+    private String gamePackage;
+
     @PostConstruct
     public void init() {
         for (Class<? extends GameType> clazz : allGames()) {
@@ -64,7 +70,7 @@ public class GameServiceImpl implements GameService {
 
     private List<Class> allGames() {
         List<Class> result = new LinkedList<>(
-                findInPackage("com.codenjoy.dojo"));
+                findInPackage(gamePackage));
 
         result.sort(Comparator.comparing(Class::getName));
 
@@ -74,11 +80,10 @@ public class GameServiceImpl implements GameService {
         remove(result,
                 it -> ConstructorUtils.getMatchingAccessibleConstructor(it) == null);
 
-        // TODO вынести в application.yml все удаляемые игры
-        remove(result, it -> Stream.of("chess", "sokoban")
-                .anyMatch(name -> it.getPackage().toString().contains(name)));
-
         loadFromPlugins(result);
+
+        remove(result, it -> Stream.of(excludeGames)
+                .anyMatch(name -> it.getPackage().toString().contains(name)));
 
         return result;
     }
