@@ -32,75 +32,79 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class JarResourceHttpRequestHandler extends ResourceHttpRequestHandler {
 
     private static final String JAR = "jar";
     public static final String PREFIX = JAR + ":file:";
 
+    private Map<String, Map<String, File>> cache = map().get();
+
+    private Supplier<ConcurrentHashMap> map() {
+        return () -> new ConcurrentHashMap<>();
+    }
+
     public JarResourceHttpRequestHandler(String... locations) {
-        setLocationValues(Arrays.asList(
-                locations
-        ));
+        setLocationValues(Arrays.asList(locations));
 
         setResourceResolvers(Arrays.asList(new PathResourceResolver() {
             @Override
             @SneakyThrows
-            protected Resource getResource(String resourcePath, Resource location) {
-                Resource relative = location.createRelative(resourcePath);
+            protected Resource getResource(String resource, Resource location) {
+                Resource relative = location.createRelative(resource);
                 String path = relative.getURI().toString();
 
                 if (path.startsWith(PREFIX) && path.contains("*." + JAR)) {
                     String[] split = path.split("\\*\\." + JAR);
-                    String left = split[0].substring(PREFIX.length());
-                    String right = split[1];
-                    String middle = right.substring(0, right.indexOf(resourcePath));
+                    String jarFolder = split[0].substring(PREFIX.length());
+                    String fileInJar = split[1];
+                    String rootInJar = fileInJar.substring(0, fileInJar.indexOf(resource));
 
-                    File directory = new File(left);
-                    List<File> jars = Arrays.asList(directory.listFiles((dir, name) -> name.endsWith("." + JAR)));
-
-                    Collections.sort(jars,
-                            (jar1, jar2) -> compare(jar1.getPath(), jar2.getPath(), resourcePath));
+                    List<File> jars = getJars(jarFolder, resource);
 
                     for (File jar : jars) {
-                        Resource result = getResource(resourcePath, middle, jar);
+                        Resource result = getResource(resource, rootInJar, jar);
                         if (result != null) {
                             return result;
                         }
                     }
                 }
 
-                return super.getResource(resourcePath, location);
+                return super.getResource(resource, location);
             }
 
-            private Resource getResource(String resourcePath, String middle, File jar) throws IOException {
-                URL url = new URL(PREFIX + jar.getPath().replace('\\', '/') + middle);
+            private Resource getResource(String resourcePath, String fileInJar, File jar) throws IOException {
+                URL url = new URL(PREFIX + jar.getPath().replace('\\', '/') + fileInJar);
                 FileUrlResource resource = new FileUrlResource(url);
                 return super.getResource(resourcePath, resource);
             }
         }));
     }
 
-    private int compare(String left1, String left2, String right) {
-        // разбираем все на токены из слов
-        String regex = "[.\\/-_]";
-        String[] splitL1 = left1.split(regex);
-        String[] splitL2 = left2.split(regex);
-        String[] splitR = right.split(regex);
+    private List<File> getJars(String jarFolder, String resource) {
+        if (!cache.containsKey(jarFolder)) {
+            cache.put(jarFolder, map().get());
 
-        // и сравниваем какие пары между собой глубже совпадают
-        return Integer.compare(overlap(splitL2, splitR), overlap(splitL1, splitR));
+            Map<String, File> jars = cache.get(jarFolder);
+            File directory = new File(jarFolder);
+            File[] files = directory.listFiles((dir, name) -> name.endsWith("." + JAR));
+            Arrays.stream(files)
+                    .forEach(file -> jars.put(file.getName().split("[\\.\\-_]")[0], file));
+        }
+
+        Map<String, File> jars = cache.get(jarFolder);
+
+        List<File> found = jars.entrySet().stream()
+                .filter(entry -> resource.contains(entry.getKey()))
+                .map(entry -> entry.getValue())
+                .collect(Collectors.toList());
+
+        return found;
     }
 
-    private int overlap(String[] left, String[] right) {
-        // тут хитро, узнаем насколько уменьшилось количество элементов, если мы все запакуем в Set (и устраним дубликаты)
-        return left.length + right.length -
-                new HashSet<String>(){{
-                    addAll(Arrays.asList(left));
-                    addAll(Arrays.asList(right));
-                }}.size();
-    }
 }
