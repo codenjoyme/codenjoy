@@ -62,6 +62,8 @@ public class GameServiceImpl implements GameService {
 
     @PostConstruct
     public void init() {
+        // TODO сделать перезагрузку этого всего контента по запросу админа, но только для тех игрушек, что обновились
+        // TODO так же надо будет для новозагруженной игры всех юзеров перезапустить
         for (Class<? extends GameType> clazz : allGames()) {
             GameType gameType = loadGameType(clazz);
             cache.put(gameType.name(), gameType);

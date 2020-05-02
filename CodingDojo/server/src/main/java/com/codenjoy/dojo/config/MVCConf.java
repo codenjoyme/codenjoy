@@ -22,31 +22,25 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import static com.codenjoy.dojo.services.JarResourceHttpRequestHandler.*;
+import com.codenjoy.dojo.services.JarResourceHttpRequestHandler;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import com.codenjoy.dojo.transport.control.ControlWebSocketServlet;
 import com.codenjoy.dojo.transport.screen.ws.ScreenWebSocketServlet;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
-import lombok.SneakyThrows;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileUrlResource;
-import org.springframework.core.io.Resource;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
-import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
-import java.io.File;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -87,45 +81,11 @@ public class MVCConf implements WebMvcConfigurer {
 
     @Bean
     public ResourceHttpRequestHandler resourceHttpRequestHandler() {
-        final String JAR = "jar";
-        final String PREFIX = JAR + ":file:";
-
-        return new ResourceHttpRequestHandler() {{
-            setLocationValues(Arrays.asList(
-                    "/resources/",
-                    "classpath:/resources/",
-                    "file:" + pluginsStatic,
-                    PREFIX + pluginsResources
-            ));
-
-            setResourceResolvers(Arrays.asList(new PathResourceResolver() {
-                @Override
-                @SneakyThrows
-                protected Resource getResource(String resourcePath, Resource location) {
-                    Resource relative = location.createRelative(resourcePath);
-                    String path = relative.getURI().toString();
-
-                    if (path.startsWith(PREFIX) && path.contains("*." + JAR)) {
-                        String[] split = path.split("\\*\\." + JAR);
-                        String left = split[0].substring(PREFIX.length());
-                        String right = split[1];
-                        String middle = right.substring(0, right.indexOf(resourcePath));
-                        File directory = new File(left);
-                        List<File> jars = Arrays.asList(directory.listFiles((dir, name) -> name.endsWith("." + JAR)));
-                        for (File jar : jars) {
-                            URL url = new URL(PREFIX + jar.getPath().replace('\\', '/') + middle);
-                            FileUrlResource resource = new FileUrlResource(url);
-                            Resource result = super.getResource(resourcePath, resource);
-                            if (result != null) {
-                                return result;
-                            }
-                        }
-                    }
-
-                    return super.getResource(resourcePath, location);
-                }
-            }));
-        }};
+        return new JarResourceHttpRequestHandler(
+                "/resources/",
+                "classpath:/resources/",
+                "file:" + pluginsStatic,
+                PREFIX + pluginsResources);
     }
 
     @Bean
