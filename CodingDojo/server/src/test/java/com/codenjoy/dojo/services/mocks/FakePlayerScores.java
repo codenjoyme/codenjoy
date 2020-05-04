@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.icancode.model.items;
+package com.codenjoy.dojo.services.mocks;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,13 +22,33 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
+import com.codenjoy.dojo.services.PlayerScores;
 
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.icancode.model.Elements;
+public class FakePlayerScores implements PlayerScores {
 
-public class None extends BaseItem {
+    private Object score;
 
-    public None(Point point) {
-        super(Elements.EMPTY);
+    public FakePlayerScores(Object score) {
+        this.score = score;
+    }
+
+    @Override
+    public Object getScore() {
+        return score;
+    }
+
+    @Override
+    public int clear() {
+        return (int)(score = 0);
+    }
+
+    @Override
+    public void update(Object score) {
+        this.score = score;
+    }
+
+    @Override
+    public void event(Object event) {
+
     }
 }

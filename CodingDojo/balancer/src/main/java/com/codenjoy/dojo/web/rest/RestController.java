@@ -125,6 +125,7 @@ public class RestController {
     @ResponseBody
     public ServerLocation register(@RequestBody Player player, HttpServletRequest request) {
         String email = player.getEmail();
+
         validator.all(
                 () -> validator.checkEmail(email, CANT_BE_NULL),
                 () -> validator.checkPhoneNumber(player.getPhone(), CANT_BE_NULL),
@@ -135,7 +136,9 @@ public class RestController {
                 () -> validator.checkString("Skills", player.getSkills())
         );
 
-        if (players.getCode(email) != null) {
+        String phone = validator.phoneNormalizer(player.getPhone());
+
+        if (players.getCode(email) != null || players.getByPhone(phone).isPresent()) {
             throw new IllegalArgumentException("User already registered");
         }
 
@@ -144,7 +147,7 @@ public class RestController {
             public ServerLocation onGame() {
                 return dispatcher.registerNew(
                         player.getEmail(),
-                        validator.phoneNormalizer(player.getPhone()),
+                        phone,
                         getFullName(player),
                         player.getPassword(),
                         getIp(request)
@@ -159,7 +162,7 @@ public class RestController {
                     String verificationCode = registrationService.generateVerificationCode();
                     players.create(new Player(
                             player.getEmail(),
-                            validator.phoneNormalizer(player.getPhone()),
+                            phone,
                             player.getFirstName(),
                             player.getLastName(),
                             passwordEncoder.encode(player.getPassword()),
@@ -538,10 +541,11 @@ public class RestController {
         boolean isResetAllowed = registrationService
                 .validateCodeResetPassword(phone, phoneCodeDTO.getCode());
         if(isResetAllowed) {
-            Player player = registrationService.resetPassword(phone);
+            Player player = players.getByPhone(phone).orElseThrow(() -> new IllegalArgumentException("User not found"));
             if (game.existsOnServer(player.getServer(), player.getEmail())) {
                 game.remove(player.getServer(), player.getEmail(), player.getCode());
             }
+            registrationService.resetPassword(phone);
             return ResponseEntity.ok("success");
         } else {
             return ResponseEntity.badRequest().body("Invalid verification code");

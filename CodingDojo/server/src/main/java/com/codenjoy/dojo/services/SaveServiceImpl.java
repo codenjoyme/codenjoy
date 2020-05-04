@@ -30,6 +30,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+ import static com.codenjoy.dojo.services.PlayerGames.withRoom;
+
 @Component("saveService")
 public class SaveServiceImpl implements SaveService {
 
@@ -43,11 +45,20 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public long saveAll() {
+        return saveAll(playerGames.all());
+    }
+
+    private long saveAll(List<PlayerGame> playerGames) {
         long now = System.currentTimeMillis();
         for (PlayerGame playerGame : playerGames) {
             saveGame(playerGame, now);
         }
         return now;
+    }
+
+    @Override
+    public long saveAll(String roomName) {
+        return saveAll(playerGames.getAll(withRoom(roomName)));
     }
 
     @Override
@@ -77,6 +88,10 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public boolean load(String id) {
         PlayerSave save = saver.loadGame(id);
+        if (save == PlayerSave.NULL) {
+            return false;
+        }
+
         resetPlayer(id, save);
         return true;
     }

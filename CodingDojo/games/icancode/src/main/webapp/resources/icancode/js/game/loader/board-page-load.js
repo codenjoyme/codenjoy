@@ -212,27 +212,16 @@ var boardPageLoad = function() {
         var socket = initSocket(game, buttons, logger, onSocketMessage, onSocketClose);
 
         // ----------------------- init progressbar -------------------
-        var oldLastPassed = -1;
-        var oldLevel = -1;
-        var onChangeLevel = function(level, multiple, lastPassed) {
-            var levelIncreased = oldLevel < level;
-            if (levelIncreased) {
-                oldLevel = level;
+        var onChangeLevel = function(level, multiple, lastPassed, isLevelIncreased, isWin) {
+            if (isWin) {
+                win.show();
             }
-            var lastPassedIncreased = oldLastPassed < lastPassed;
-            if (lastPassedIncreased) {
-                var isFirstWin = (lastPassed == 0 && level == 1 && oldLastPassed == -1);
-                if (isFirstWin || oldLastPassed != -1) {
-                    win.show();
-                }
-                oldLastPassed = lastPassed;
-            }
-            if (levelIncreased) {
+            if (isLevelIncreased) {
                 runner.levelUpdate(level, multiple, lastPassed);
             }
             initAutocomplete(level, levelInfo);
         }
-        levelProgress = initLevelProgress(game, socket, onChangeLevel);
+        levelProgress = initLevelProgress(game, onChangeLevel);
 
         // ------------------------ init controller ----------------------
         controller = initController(socket, runner, logger, buttons, levelProgress, function() {

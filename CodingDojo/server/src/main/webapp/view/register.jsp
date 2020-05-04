@@ -98,7 +98,7 @@ License along with this program.  If not, see
             </div>
             <!-- add attribute 'not-empty' to the div if you want to enable validation -->
             <div id="data1" class="field not-valid" not-empty hidden>
-                <input type="text" placeholder="City"/>
+                <input type="text" placeholder="Country / City"/>
                 <span class="icon fa"></span>
             </div>
             <div id="data2" class="field not-valid" not-empty hidden>

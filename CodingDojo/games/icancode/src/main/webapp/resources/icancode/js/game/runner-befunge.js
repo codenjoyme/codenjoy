@@ -331,7 +331,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         stack.push('WALL');
     }
 
-    var valueNULLCommand = function(x, y) {
+    var valueNullCommand = function(x, y) {
         stack.push(null);
     }
 

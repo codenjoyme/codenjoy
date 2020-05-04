@@ -23,52 +23,64 @@ package com.codenjoy.dojo.services.nullobj;
  */
 
 
-import com.codenjoy.dojo.services.settings.*;
+import com.codenjoy.dojo.services.settings.Parameter;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
-public final class NullSettings implements Settings {
+public final class NullParameter<T> implements Parameter<T> {
 
-    public static final Settings INSTANCE = new NullSettings();
+    public static final Parameter INSTANCE = new NullParameter();
 
-    private NullSettings() {
+    private NullParameter() {
         // do nothing
     }
 
     @Override
-    public List<Parameter<?>> getParameters() {
-        return new LinkedList<>();
+    public T getValue() {
+        return (T)new Object();
     }
 
     @Override
-    public EditBox<?> addEditBox(String name) {
+    public String getType() {
+        return StringUtils.EMPTY;
+    }
+
+    @Override
+    public Class<?> getValueType() {
+        return Object.class;
+    }
+
+    @Override
+    public String getName() {
+        return StringUtils.EMPTY;
+    }
+
+    @Override
+    public Parameter<T> update(T value) {
         return null;
     }
 
     @Override
-    public SelectBox<?> addSelect(String name, List<Object> strings) {
-        return null;
+    public Parameter<T> def(T value) {
+        return INSTANCE;
     }
 
     @Override
-    public CheckBox<Boolean> addCheckBox(String name) {
-        return null;
+    public <V> Parameter<V> type(Class<V> type) {
+        return INSTANCE;
     }
 
     @Override
-    public boolean hasParameter(String name) {
-        return false;
+    public Parameter<T> parser(Function<String, T> parser) {
+        return INSTANCE;
     }
 
     @Override
-    public void removeParameter(String name) {
+    public void select(int index) {
         // do nothing
-    }
-
-    @Override
-    public Parameter<?> getParameter(String name) {
-        return null;
     }
 
     @Override
@@ -77,17 +89,17 @@ public final class NullSettings implements Settings {
     }
 
     @Override
-    public List<String> whatChanged() {
-        return new LinkedList<>();
-    }
-
-    @Override
     public void changesReacted() {
         // do nothing
     }
 
     @Override
-    public void clear() {
-        // do nothing
+    public List<T> getOptions() {
+        return Arrays.asList();
+    }
+
+    @Override
+    public T getDefault() {
+        return null;
     }
 }

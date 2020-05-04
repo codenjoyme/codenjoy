@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.enums;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -23,9 +23,29 @@ package com.codenjoy.dojo.icancode.model.enums;
  */
 
 
-/**
- * Created by Mikhail_Udalyi on 01.07.2016.
- */
-public enum FeatureItem {
-    IMPASSABLE
+public class FieldItem extends BaseItem {
+
+    protected Field field;
+
+    public FieldItem(Elements element) {
+        super(element);
+    }
+
+    public FieldItem(Elements element, boolean passable) {
+        super(element, passable);
+    }
+
+    public void setField(Field value) {
+        field = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

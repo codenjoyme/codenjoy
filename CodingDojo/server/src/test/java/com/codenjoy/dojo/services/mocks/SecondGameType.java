@@ -29,11 +29,15 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class SecondGameType extends AbstractGameType {
 
@@ -47,38 +51,20 @@ public class SecondGameType extends AbstractGameType {
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-
-        return new PlayerScores() {
-            @Override
-            public Object getScore() {
-                return 43;
-            }
-
-            @Override
-            public int clear() {
-                return 0;
-            }
-
-            @Override
-            public void update(Object score) {
-
-            }
-
-            @Override
-            public void event(Object event) {
-
-            }
-        };
+        return new FakePlayerScores(score);
     }
 
     @Override
     public GameField createGame(int levelNumber) {
-        return null;
+        GameField field = mock(GameField.class);
+        BoardReader reader = mock(BoardReader.class);
+        when(field.reader()).thenReturn(reader);
+        return field;
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return new SimpleParameter<Integer>(56);
+        return new SimpleParameter<>(56);
     }
 
     @Override
@@ -138,7 +124,7 @@ public class SecondGameType extends AbstractGameType {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return null;
+        return mock(GamePlayer.class);
     }
     
     @Override

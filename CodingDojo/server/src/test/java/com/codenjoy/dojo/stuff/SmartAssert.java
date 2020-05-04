@@ -142,8 +142,12 @@ public class SmartAssert extends Runner {
         try {
             Assert.assertEquals(expected, actual);
         } catch (AssertionError e) {
-            failures().add(new Failure(expected.toString(), actual.toString()));
+            failures().add(new Failure(toString(expected), toString(actual)));
         }
+    }
+
+    private static String toString(Object value) {
+        return (value == null) ? null : value.toString();
     }
 
     private static void checkResult(List<Failure> list) {

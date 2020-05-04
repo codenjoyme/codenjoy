@@ -32,7 +32,12 @@ function defaultRegistrationSettings() {
         showData4: true,
         defaultGame: null,
         gameTypes: {
-            icancode: ['JavaScript', 'Contest', 'eKids', 'Befunge']
+            icancode: [   // TODO вынести это как-то в настройки игры icancode
+                {'name' : 'JavaScript', 'title':'JavaScript (browser version)'},
+                {'name' : 'Contest',    'title':'Java | Kotlin | .Net | JavaScript'},
+                {'name' : 'Befunge',    'title':'Befunge (esoteric language)'},
+                {'name' : 'eKids',      'title':'For Kids'}
+            ]
         }
     };
 }
@@ -70,7 +75,7 @@ pages.admin = function() {
         result.showData2 = $('#show-data2').prop('checked');
         result.showData3 = $('#show-data3').prop('checked');
         result.showData4 = $('#show-data4').prop('checked');
-        result.defaultGame = $('#default-game').find('option:selected').text();
+        result.defaultGame = $('#default-game').find('option:selected').val();
 
         return result;
     }
@@ -97,8 +102,9 @@ pages.admin = function() {
         for (var gameName in allTypes) {
             var gameTypes = allTypes[gameName];
             for (var index in gameTypes) {
-                var gameType = gameTypes[index];
-                select.append('<option value="' + gameType + '">' + gameType + '</option>');
+                var name = gameTypes[index].name;
+                var title = gameTypes[index].title;
+                select.append('<option value="' + name + '">' + title + '</option>');
             }
         }
 

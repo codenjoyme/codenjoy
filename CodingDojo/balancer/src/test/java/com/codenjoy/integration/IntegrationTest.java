@@ -151,6 +151,7 @@ public class IntegrationTest {
         verify(game).createNewPlayer(
                 "localhost:8080",
                 "test@gmail.com",
+                "+380955674523",
                 "Stiven Pupkin",
                 "13cf481db24b78c69ed39ab8663408c0",
                 "127.0.0.1",
@@ -226,6 +227,7 @@ public class IntegrationTest {
         verify(game).createNewPlayer(
                 "localhost:8080",
                 "test@gmail.com",
+                "+380955674523",
                 "Stiven Pupkin",
                 "13cf481db24b78c69ed39ab8663408c0",
                 "127.0.0.1",
@@ -402,6 +404,7 @@ public class IntegrationTest {
         verify(game).createNewPlayer(
                 "localhost:8080",
                 "test@gmail.com",
+                "+380955674523",
                 "Stiven Pupkin",
                 "13cf481db24b78c69ed39ab8663408c0",
                 "127.0.0.1",
@@ -427,12 +430,12 @@ public class IntegrationTest {
     }
 
     private void shouldCreateNewPlayerOnGame(String code) {
-        doReturn(code).when(game).createNewPlayer(anyString(), anyString(),
+        doReturn(code).when(game).createNewPlayer(anyString(), anyString(), anyString(),
                 anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
     private void shouldThrowWhenCreateNewPlayerOnGame(Exception exception) {
-        doThrow(exception).when(game).createNewPlayer(anyString(), anyString(),
+        doThrow(exception).when(game).createNewPlayer(anyString(), anyString(), anyString(),
                 anyString(), anyString(), anyString(), anyString(), anyString());
     }
 

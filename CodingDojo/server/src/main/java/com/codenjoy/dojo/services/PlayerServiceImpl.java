@@ -53,6 +53,8 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
 
+import static com.codenjoy.dojo.services.PlayerGames.withRoom;
+
 @Component("playerService")
 @Slf4j
 public class PlayerServiceImpl implements PlayerService {
@@ -78,6 +80,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties config;
     @Autowired protected Semifinal semifinal;
+    @Autowired protected SimpleProfiler profiler;
 
     @Value("${game.ai}")
     protected boolean isAiNeeded;
@@ -164,7 +167,7 @@ public class PlayerServiceImpl implements PlayerService {
                 registration.getCodeById(id);
 
         setupPlayerAI(() -> getPlayer(new PlayerSave(id,
-                            "127.0.0.1", roomName, gameType.name(), // TODO ROOM тут надо roomname 
+                            "127.0.0.1", roomName, gameType.name(),
                             0, null), gameType),
                 id, code, gameType);
     }
@@ -286,10 +289,7 @@ public class PlayerServiceImpl implements PlayerService {
     public void tick() {
         lock.writeLock().lock();
         try {
-            long time = 0;
-            log.debug("==================================================================================");
-            log.debug("PlayerService.tick() starts");
-            time = System.currentTimeMillis();
+            profiler.start("PlayerService.tick()");
 
             actionLogger.log(playerGames);
             autoSaver.tick();
@@ -298,18 +298,9 @@ public class PlayerServiceImpl implements PlayerService {
             sendScreenUpdates();
             requestControls();
 
-            if (log.isDebugEnabled()) {
-                time = System.currentTimeMillis() - time;
-                log.debug("PlayerService.tick() for all {} games is {} ms",
-                        playerGames.size(), time);
-            }
-
-            if (playerGames.isEmpty()) {
-                return;
-            }
-
             semifinal.tick();
 
+            profiler.end();
         } catch (Error e) {
             e.printStackTrace();
             log.error("PlayerService.tick() throws", e);
@@ -321,7 +312,7 @@ public class PlayerServiceImpl implements PlayerService {
     private void requestControls() {
         int requested = 0;
 
-        for (PlayerGame playerGame : playerGames) {
+        for (PlayerGame playerGame : playerGames.active()) {
             Player player = playerGame.getPlayer();
             try {
                 String board = cacheBoards.get(player);
@@ -554,6 +545,17 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public void removeAll(String roomName) {
+        lock.writeLock().lock();
+        try {
+            playerGames.getAll(withRoom(roomName))
+                    .forEach(playerGames.all()::remove);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
     public Joystick getJoystick(String id) {
         lock.writeLock().lock();
         try {
@@ -591,10 +593,33 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public void cleanAllScores(String roomName) {
+        lock.writeLock().lock();
+        try {
+            semifinal.clean(); // TODO semifinal должен научиться работать для определенных комнат
+
+            playerGames.getAll(withRoom(roomName))
+                .forEach(PlayerGame::clearScore);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
     public void reloadAllRooms() {
         lock.writeLock().lock();
         try {
             playerGames.reloadAll(true);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
+    public void reloadAllRooms(String roomName) {
+        lock.writeLock().lock();
+        try {
+            playerGames.reloadAll(true, withRoom(roomName));
         } finally {
             lock.writeLock().unlock();
         }

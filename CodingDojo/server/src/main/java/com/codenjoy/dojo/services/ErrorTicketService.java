@@ -42,12 +42,19 @@ public class ErrorTicketService {
     @Autowired
     private DebugService debug;
 
+    private boolean printStackTrace = true;
+
     public ModelAndView get(String url, Exception exception) {
         String ticket = ticket();
 
-        log.error("[TICKET:URL] {}:{} {}", ticket, url, exception);
-        System.err.printf("[TICKET:URL] %s:%s%n", ticket, url);
-        exception.printStackTrace();
+        // TODO очень было бы здорово, если бы мы хранили все исключения и отдавали бы их на админке
+        String message = printStackTrace ? exception.toString() : exception.toString();
+        log.error("[TICKET:URL] {}:{} {}", ticket, url, message);
+        System.err.printf("[TICKET:URL] %s:%s %s%n", ticket, url, message);
+
+        if (printStackTrace) {
+            exception.printStackTrace();
+        }
 
         ModelAndView result = new ModelAndView();
         result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -66,26 +73,40 @@ public class ErrorTicketService {
 
         result.addObject("message", exception.getClass().getName() + ": " + exception.getMessage());
         result.addObject("url", url);
+        if (!printStackTrace) {
+            exception.setStackTrace(new StackTraceElement[0]);
+        }
         result.addObject("exception", exception);
 
         if (url.contains("/rest/")) {
-            result.addObject("stackTrace", ExceptionUtils.getStackTrace(exception));
+            result.addObject("stackTrace", prepareJsonStackTrace(exception));
             result.setView(new MappingJackson2JsonView(){{
                 setPrettyPrint(true);
             }});
             return result;
         }
 
-        StringWriter writer = new StringWriter();
-        exception.printStackTrace(new PrintWriter(writer));
-        String text = writer.toString()
-                .replaceAll("\\n\\r", "\n")
-                .replaceAll("\\n\\n", "\n")
-                .replaceAll("\\n", "<br>");
+        String text = prepareStackTrace(exception);
         result.addObject("stacktrace", text);
 
         shouldErrorPage(result);
         return result;
+    }
+
+    private String prepareJsonStackTrace(Exception exception) {
+        return printStackTrace ? ExceptionUtils.getStackTrace(exception) : "";
+    }
+
+    private String prepareStackTrace(Exception exception) {
+        if (printStackTrace) {
+            StringWriter writer = new StringWriter();
+            exception.printStackTrace(new PrintWriter(writer));
+            return writer.toString()
+                    .replaceAll("\\n\\r", "\n")
+                    .replaceAll("\\n\\n", "\n")
+                    .replaceAll("\\n", "<br>");
+        }
+        return "";
     }
 
     private void shouldJsonResult(ModelAndView result) {
@@ -101,5 +122,9 @@ public class ErrorTicketService {
     private String ticket() {
         return Hash.md5("anotherSoul" + Hash.md5("someSoul" +
                 Calendar.getInstance().getTimeInMillis()));
+    }
+
+    public void setPrintStackTrace(boolean printStackTrace) {
+        this.printStackTrace = printStackTrace;
     }
 }

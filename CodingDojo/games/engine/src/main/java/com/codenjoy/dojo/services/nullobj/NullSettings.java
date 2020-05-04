@@ -23,60 +23,52 @@ package com.codenjoy.dojo.services.nullobj;
  */
 
 
-import com.codenjoy.dojo.services.settings.CheckBox;
-import com.codenjoy.dojo.services.settings.Parameter;
-import org.apache.commons.lang3.StringUtils;
+import com.codenjoy.dojo.services.settings.*;
 
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
 
-public final class NullParameter<T> implements Parameter<T> {
+public final class NullSettings implements Settings {
 
-    public static final Parameter INSTANCE = new NullParameter();
+    public static final Settings INSTANCE = new NullSettings();
 
-    private NullParameter() {
+    private NullSettings() {
         // do nothing
     }
 
     @Override
-    public T getValue() {
-        return (T)new Object();
+    public List<Parameter> getParameters() {
+        return new LinkedList<>();
     }
 
     @Override
-    public String getType() {
-        return StringUtils.EMPTY;
-    }
-
-    @Override
-    public String getName() {
-        return StringUtils.EMPTY;
-    }
-
-    @Override
-    public Parameter<T> update(T value) {
+    public EditBox<?> addEditBox(String name) {
         return null;
     }
 
     @Override
-    public Parameter<T> def(T value) {
-        return INSTANCE;
+    public SelectBox<?> addSelect(String name, List<Object> strings) {
+        return null;
     }
 
     @Override
-    public <V> Parameter<V> type(Class<V> integerClass) {
-        return INSTANCE;
+    public CheckBox<Boolean> addCheckBox(String name) {
+        return null;
     }
 
     @Override
-    public Parameter<T> parser(Function<String, T> parser) {
-        return INSTANCE;
+    public boolean hasParameter(String name) {
+        return false;
     }
 
     @Override
-    public void select(int index) {
+    public void removeParameter(String name) {
         // do nothing
+    }
+
+    @Override
+    public Parameter<?> getParameter(String name) {
+        return null;
     }
 
     @Override
@@ -85,12 +77,22 @@ public final class NullParameter<T> implements Parameter<T> {
     }
 
     @Override
+    public List<String> whatChanged() {
+        return new LinkedList<>();
+    }
+
+    @Override
     public void changesReacted() {
         // do nothing
     }
 
     @Override
-    public List<T> getOptions() {
-        return Arrays.asList();
+    public void clear() {
+        // do nothing
+    }
+
+    @Override
+    public void updateAll(List<Parameter> parameters) {
+        // do nothing
     }
 }

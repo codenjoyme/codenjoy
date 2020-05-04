@@ -31,14 +31,11 @@ public class LevelD1 implements Level {
     public String winCode() {
         return "function program(robot) {\n" +
                 "    var scanner = robot.getScanner();\n" +
-                "    var dest = scanner.getGold();\n" +
-                "    if (dest.length === 0) {\n" +
-                "        dest = scanner.getExit();\n" +
-                "    }\n" +
+                "    var dest = destination(scanner);\n" +
                 "    var to = scanner.getShortestWay(dest[0])[1];\n" +
                 "    var from = scanner.getMe();\n" +
                 "\n" +
-                "    robot.goOverHole = function(direction) {\n" +
+                "    robot.goOver = function(direction) {\n" +
                 "        if (scanner.at(direction) != \"HOLE\" && \n" +
                 "            scanner.at(direction) != \"BOX\") \n" +
                 "        {\n" +
@@ -51,14 +48,22 @@ public class LevelD1 implements Level {
                 "    var dx = to.getX() - from.getX(); \n" +
                 "    var dy = to.getY() - from.getY(); \n" +
                 "    if (dx > 0) {\n" +
-                "        robot.goOverHole(\"RIGHT\");\n" +
+                "        robot.goOver(\"RIGHT\");\n" +
                 "    } else if (dx < 0) {\n" +
-                "        robot.goOverHole(\"LEFT\");\n" +
+                "        robot.goOver(\"LEFT\");\n" +
                 "    } else if (dy > 0) {\n" +
-                "        robot.goOverHole(\"DOWN\");\n" +
+                "        robot.goOver(\"UP\");\n" +
                 "    } else if (dy < 0) {\n" +
-                "        robot.goOverHole(\"UP\");\n" +
+                "        robot.goOver(\"DOWN\");\n" +
                 "    }\n" +
+                "}\n" +
+                "\n" +
+                "function destination(scanner) {\n" +
+                "    var result = scanner.getGold();\n" +
+                "    if (result.length > 0) {\n" +
+                "        return result;\n" +
+                "    }\n" +
+                "    return scanner.getExit();\n" +
                 "}";
     }
 

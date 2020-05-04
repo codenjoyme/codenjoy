@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.icancode.model.interfaces;
+package com.codenjoy.dojo.web.rest.pojo;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2019 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,24 +22,31 @@ package com.codenjoy.dojo.icancode.model.interfaces;
  * #L%
  */
 
-
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.settings.Parameter;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-public interface ILevel {
+import static java.util.stream.Collectors.toList;
 
-    ICell getCell(int x, int y);
+@Getter
+@Setter
+@NoArgsConstructor
+public class PParameters {
 
-    ICell getCell(Point point);
+    private List<PParameter> parameters;
 
-    int getSize();
+    public PParameters(List<Parameter> parameters) {
+        this.parameters  = parameters.stream()
+                .map(PParameter::new)
+                .collect(toList());
+    }
 
-    <T extends IItem> List<T> getItems(Class clazz);
-
-    ICell[] getCells();
-
-    boolean isBarrier(int x, int y);
-
-    void setField(IField field);
+    public List<Parameter> build() {
+        return parameters.stream()
+                .map(PParameter::build)
+                .collect(toList());
+    }
 }

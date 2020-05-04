@@ -29,12 +29,14 @@ import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.google.common.collect.Multimap;
 import lombok.experimental.FieldNameConstants;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.PlayerGame.by;
@@ -44,12 +46,18 @@ import static java.util.stream.Collectors.toList;
 @FieldNameConstants
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
+    public static final boolean ALL = true;
+    public static final boolean ACTIVE = !ALL;
+
     private List<PlayerGame> all = new LinkedList<>();
 
     private Consumer<PlayerGame> onAdd;
     private Consumer<PlayerGame> onRemove;
     private ReadWriteLock lock;
     private Spreader spreader = new Spreader();
+
+    @Autowired
+    protected RoomService roomService;
 
     public void onAdd(Consumer<PlayerGame> consumer) {
         this.onAdd = consumer;
@@ -206,10 +214,26 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         players().forEach(this::remove);
     }
 
-    public List<PlayerGame> getAll(String gameType) {
+    public List<PlayerGame> getAll(Predicate<PlayerGame> predicate) {
         return all.stream()
-                .filter(pg -> pg.getPlayer().getGameName().equals(gameType))
+                .filter(predicate)
                 .collect(toList());
+    }
+
+    public static Predicate<PlayerGame> withType(String gameType) {
+        return pg -> pg.getPlayer().getGameName().equals(gameType);
+    }
+
+    public static Predicate<PlayerGame> withAll() {
+        return pg -> true;
+    }
+
+    public static Predicate<PlayerGame> withRoom(String room) {
+        return pg -> pg.getRoomName().equals(room);
+    }
+
+    public Predicate<PlayerGame> withActive() {
+        return playerGame -> roomService.isActive(playerGame.getRoomName());
     }
 
     public List<GameType> getGameTypes() {
@@ -227,15 +251,18 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     @Override
     public void tick() {
+        List<PlayerGame> active = active();
+
         // по всем джойстикам отправили сообщения играм
-        all.forEach(PlayerGame::quietTick);
+        active.forEach(PlayerGame::quietTick);
 
         // если в TRAINING кто-то isWin то мы его относим на следующий уровень
         // если в DISPOSABLE уровнях кто-то shouldLeave то мы его перезагружаем - от этого он появится на другом поле
         // а для всех остальных, кто уже isGameOver - создаем новые игры на том же поле
-        for (PlayerGame playerGame : all) {
+        for (PlayerGame playerGame : active) {
             Game game = playerGame.getGame();
             String roomName = playerGame.getRoomName();
+
             MultiplayerType multiplayerType = playerGame.getGameType().getMultiplayerType();
             if (game.isGameOver()) {
                 quiet(() -> {
@@ -265,10 +292,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         // независимо от типа игры нам нужно тикнуть все
         //      но только те, которые не DISPOSABLE и одновременно
         //      недокомплектованные пользователями
-        all.stream()
+        //      а так же котмнаты которых активны
+        active.stream()
                 .map(PlayerGame::getField)
                 .distinct()
-                .filter(this::isMatchCanBeStarted)
+                .filter(spreader::isRoomStaffed)
                 .forEach(GameField::quietTick);
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
@@ -279,10 +307,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         Game game = playerGame.getGame();
         Player player = playerGame.getPlayer();
         player.getEventListener().levelChanged(game.getProgress());
-    }
-
-    private boolean isMatchCanBeStarted(GameField field) {
-        return spreader.isRoomStaffed(field);
     }
 
     // перевод текущего игрока в новую комнату
@@ -313,12 +337,17 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     // переводим всех игроков на новые борды
     // при этом если надо перемешиваем их
     public void reloadAll(boolean shuffle) {
-        new LinkedList<PlayerGame>(){{
-            addAll(all);
-            if (shuffle) {
-                Collections.shuffle(this);
-            }
-        }}.forEach(pg -> reloadCurrent(pg));
+        reloadAll(shuffle, withAll());
+    }
+
+    public void reloadAll(boolean shuffle, Predicate<PlayerGame> predicate) {
+        List<PlayerGame> games = getAll(predicate);
+
+        if (shuffle) {
+            Collections.shuffle(games);
+        }
+
+        games.forEach(pg -> reloadCurrent(pg));
     }
 
     private PlayerGame getPlayerGame(Game game) {
@@ -387,6 +416,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return all;
     }
 
+    /**
+     * @return Отдает только те игры, для которых комната не находится на паузе
+     */
+    public List<PlayerGame> active() {
+        return getAll(withActive());
+    }
+
     public Stream<PlayerGame> stream() {
         return all.stream();
     }
@@ -395,4 +431,15 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return spreader.rooms();
     }
 
+    /**
+     * @param isAll включать все комнаты или только активные
+     * @return Все найденные комнаты для всех играющих
+     */
+    public List<String> getRooms(boolean isAll) {
+        return all.stream()
+                .filter(((Predicate<PlayerGame>) pg -> isAll).or(withActive()))
+                .map(PlayerGame::getRoomName)
+                .distinct()
+                .collect(toList());
+    }
 }

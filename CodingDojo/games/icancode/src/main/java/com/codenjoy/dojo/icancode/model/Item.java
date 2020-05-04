@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.interfaces;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -23,32 +23,26 @@ package com.codenjoy.dojo.icancode.model.interfaces;
  */
 
 
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
 
 import java.util.List;
 
 /**
- * Created by Mikhail_Udalyi on 08.06.2016.
+ * Created by Mikhail_Udalyi on 01.07.2016.
  */
-public interface ICell extends Point {
+public interface Item extends State<Elements, Player> {
 
-    void addItem(IItem item);
+    void action(Item item);
 
-    void comeIn(IItem item);
+    Cell getCell();
 
-    boolean isPassable();
+    List<Item> getItemsInSameCell(int layer);
 
-    <T extends IItem> T getItem(T type);
+    void setCell(Cell value);
 
-    <T extends IItem> T getItem(int layer);
+    boolean passable();
 
-    <T extends IItem> List<T> getItems(Class clazz);
+    void removeFromCell();
 
-    <T extends IItem> List<T> getItems();
-
-    void removeItem(IItem item);
-
-    void jump(IItem item);
-
-    void landOn(IItem item);
+    int layer();
 }

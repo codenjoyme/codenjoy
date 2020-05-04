@@ -55,10 +55,15 @@ public class AbstractPlayerGamesTest {
     protected List<Joystick> lazyJoysticks = new LinkedList<>();
     protected List<GamePlayer> gamePlayers = new LinkedList<>();
     protected List<GameField> fields = new LinkedList<>();
+    protected RoomService roomService;
 
     @Before
     public void setUp() {
         playerGames = new PlayerGames();
+
+        roomService = playerGames.roomService = mock(RoomService.class);
+        // по умолчанию все комнаты активны
+        when(roomService.isActive(anyString())).thenReturn(true);
     }
 
     protected Player createPlayer() {
@@ -92,6 +97,7 @@ public class AbstractPlayerGamesTest {
     }
 
     protected Player createPlayer(String name, String roomName, String gameName, MultiplayerType type, PlayerSave save) {
+        // TODO распутать клубок, тут для одинаковых roomName должны быть и gameName тоже одинаковые, иначе идея может быть нарушена тестами
         return createPlayer(name, gameName, roomName, type, save, "board");
     }
 
@@ -101,7 +107,11 @@ public class AbstractPlayerGamesTest {
     }
 
     protected Player createPlayerWithScore(int score, String playerName, MultiplayerType type) {
-        Player player = createPlayer(playerName, "room", "game", type);
+        return createPlayerWithScore(score, playerName, "room", type);
+    }
+
+    protected Player createPlayerWithScore(int score, String playerName, String roomName, MultiplayerType type) {
+        Player player = createPlayer(playerName, roomName, "game " + roomName, type);
         setScore(score, player);
         return player;
     }
@@ -112,6 +122,16 @@ public class AbstractPlayerGamesTest {
 
     protected Player createPlayerWithScore(int score) {
         Player player = createPlayer();
+        setScore(score, player);
+        return player;
+    }
+
+    protected void setActive(String room, boolean active) {
+        when(roomService.isActive(room)).thenReturn(active);
+    }
+
+    protected Player createPlayerWithScore(int score, String roomName) {
+        Player player = createPlayer(roomName, "game");
         setScore(score, player);
         return player;
     }

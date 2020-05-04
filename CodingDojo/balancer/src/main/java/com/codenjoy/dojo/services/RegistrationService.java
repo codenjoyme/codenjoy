@@ -107,7 +107,7 @@ public class RegistrationService {
         return false;
     }
 
-    public Player resetPassword(String phone) {
+    public void resetPassword(String phone) {
         Player player = getByPhone(phone);
         String newPassword = RandomStringUtils.randomAlphabetic(8);
         String hashedPassword = DigestUtils.md5Hex(newPassword);
@@ -116,8 +116,6 @@ public class RegistrationService {
         player.setCode(Hash.getCode(player.getEmail(), hashedPassword));
         playersRepo.update(player);
         smsService.sendSmsTo(phone, newPassword, SmsService.SmsType.NEW_PASSWORD);
-
-        return player;
     }
 
     private boolean validateCode(String smsCode, VerificationType codeType, Player player) {

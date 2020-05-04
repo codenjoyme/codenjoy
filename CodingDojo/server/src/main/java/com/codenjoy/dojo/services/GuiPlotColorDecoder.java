@@ -23,23 +23,27 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.printer.CharElements;
 import lombok.AllArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.stream.Collector;
 
 @AllArgsConstructor
 public class GuiPlotColorDecoder {
 
     public static String GUI = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    private Object[] values;
+    private CharElements[] values;
 
-    private char getGuiChar(char consoleChar) {
-        return GUI.charAt(getIndex(consoleChar));
+    private char getGuiChar(char ch) {
+        return GUI.charAt(getIndex(ch));
     }
 
     private int getIndex(char ch) {
         for (int index = 0; index < values.length; index++) {
-            if (values[index].toString().equals(String.valueOf(ch))) {
+            if (values[index].ch() == ch) {
                 return index;
             }
         }
@@ -81,5 +85,27 @@ public class GuiPlotColorDecoder {
             chars[index] = getGuiChar(chars[index]);
         }
         return String.copyValueOf(chars);
+    }
+
+    @Override
+    public String toString() {
+        String values = getValues();
+        return String.format("[%s -> %s]",
+                values,
+                GUI.substring(0, values.length()));
+    }
+
+    private String getValues() {
+        return Arrays.stream(values)
+                .map(CharElements::ch)
+                .collect(asString());
+    }
+
+    public static Collector<Character, StringBuilder, String> asString() {
+        return Collector.of(
+                    StringBuilder::new,
+                    StringBuilder::append,
+                    StringBuilder::append,
+                    StringBuilder::toString);
     }
 }

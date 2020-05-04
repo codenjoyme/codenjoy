@@ -6,6 +6,8 @@ export const book = Object.freeze({
     registration:        '/registration',
     login:               '/login',
     register:            '/register',
+    registerConfirm:     '/register-confirm',
+    forgotPassword:      '/forgot-password',
     exception:           '/exception',
     exceptionStatusCode: '/exception/:statusCode',
     terms:               '/terms',

@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.dao.GameData;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.controller.Validator;
+import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.json.JSONObject;
@@ -49,7 +50,7 @@ public class RestSettingsController {
 
     @GetMapping("/{gameType}/{key}")
     public String get(@PathVariable("gameType") String game, @PathVariable("key") String key) {
-        validator.checkNotEmpty(key);
+        validator.checkNotEmpty("key", key);
         validator.checkGameName(game, Validator.CANT_BE_NULL);
 
         if (!GENERAL.equals(game)) {
@@ -57,7 +58,8 @@ public class RestSettingsController {
 
             Settings settings = type.getSettings();
             if (key.equals(SETTINGS)) {
-                return new JSONObject(settings).toString();
+                PParameters parameters = new PParameters(settings.getParameters());
+                return new JSONObject(parameters).toString();
             }
 
             if (settings.hasParameter(key)) {
@@ -70,14 +72,13 @@ public class RestSettingsController {
 
     @PostMapping("/{gameType}/{key}")
     public String set(@PathVariable("gameType") String game, @PathVariable("key") String key, @RequestBody String value) {
-        validator.checkNotEmpty(key);
+        validator.checkNotEmpty("key", key);
         validator.checkGameName(game, Validator.CANT_BE_NULL);
 
         value = encode(value);
 
         if (!GENERAL.equals(game)) {
             GameType type = validator.checkGameType(game);
-
 
             Settings settings = type.getSettings();
             if (settings.hasParameter(key)) {

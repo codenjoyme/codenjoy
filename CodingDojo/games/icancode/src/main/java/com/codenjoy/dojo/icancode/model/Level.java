@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.interfaces;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -23,26 +23,23 @@ package com.codenjoy.dojo.icancode.model.interfaces;
  */
 
 
-import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.Player;
-import com.codenjoy.dojo.icancode.model.enums.FeatureItem;
+import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
-/**
- * Created by Mikhail_Udalyi on 01.07.2016.
- */
-public interface IItem extends State<Elements, Player> {
-    void action(IItem item);
+public interface Level {
 
-    ICell getCell();
+    Cell getCell(int x, int y);
 
-    List<IItem> getItemsInSameCell();
+    Cell getCell(Point point);
 
-    void setCell(ICell value);
+    int getSize();
 
-    boolean hasFeatures(FeatureItem[] features);
+    <T extends Item> List<T> getItems(Class clazz);
 
-    void removeFromCell();
+    Cell[] getCells();
+
+    boolean isBarrier(int x, int y);
+
+    void setField(Field field);
 }

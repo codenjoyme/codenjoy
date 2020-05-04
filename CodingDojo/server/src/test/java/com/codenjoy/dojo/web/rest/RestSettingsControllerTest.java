@@ -160,15 +160,19 @@ public class RestSettingsControllerTest {
         assertEquals("value2", service.get("second", "key2"));
 
         // then do not touch any settings
-        assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
-                        "{\"multiline\":false,\"name\":\"two\",\"options\":[12],\"type\":\"editbox\",\"value\":12}]}",
-                get("/rest/settings/first/" + RestSettingsController.SETTINGS));
+        assertEquals("{'parameters':[" +
+                        "{'def':'true','valueType':'Boolean','multiline':false,'name':'one','options':['true'],'type':'checkbox','value':'true'}," +
+                        "{'def':'12','valueType':'Integer','multiline':false,'name':'two','options':['12'],'type':'editbox','value':'12'}]}",
+                fix(get("/rest/settings/first/" + RestSettingsController.SETTINGS)));
 
-        assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option1\"}," +
-                        "{\"multiline\":false,\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
-                service.get("second", RestSettingsController.SETTINGS));
+        assertEquals("{'parameters':[" +
+                        "{'def':'option1','valueType':'String','multiline':false,'name':'three','options':['option1','option2','option3'],'type':'selectbox','value':'option1'}," +
+                        "{'def':'some-data','valueType':'String','multiline':false,'name':'four','options':['some-data'],'type':'editbox','value':'some-data'}]}",
+                fix(service.get("second", RestSettingsController.SETTINGS)));
+    }
+
+    private String fix(String input) {
+        return input.replace('\"', '\'');
     }
 
     @Test
@@ -182,15 +186,15 @@ public class RestSettingsControllerTest {
         assertEquals("value2", service.get(RestSettingsController.GENERAL, "key2"));
 
         // then do not touch any settings
-        assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
-                        "{\"multiline\":false,\"name\":\"two\",\"options\":[12],\"type\":\"editbox\",\"value\":12}]}",
-                get("/rest/settings/first/" + RestSettingsController.SETTINGS));
+        assertEquals("{'parameters':[" +
+                        "{'def':'true','valueType':'Boolean','multiline':false,'name':'one','options':['true'],'type':'checkbox','value':'true'}," +
+                        "{'def':'12','valueType':'Integer','multiline':false,'name':'two','options':['12'],'type':'editbox','value':'12'}]}",
+                fix(get("/rest/settings/first/" + RestSettingsController.SETTINGS)));
 
-        assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option1\"}," +
-                        "{\"multiline\":false,\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
-                service.get("second", RestSettingsController.SETTINGS));
+        assertEquals("{'parameters':[" +
+                        "{'def':'option1','valueType':'String','multiline':false,'name':'three','options':['option1','option2','option3'],'type':'selectbox','value':'option1'}," +
+                        "{'def':'some-data','valueType':'String','multiline':false,'name':'four','options':['some-data'],'type':'editbox','value':'some-data'}]}",
+                fix(service.get("second", RestSettingsController.SETTINGS)));
     }
 
     @Test
@@ -206,15 +210,15 @@ public class RestSettingsControllerTest {
         assertEquals("some-data", service.get("second", "four"));
 
         // then
-        assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"one\",\"options\":[true],\"type\":\"checkbox\",\"value\":true}," +
-                        "{\"multiline\":false,\"name\":\"two\",\"options\":[12,135],\"type\":\"editbox\",\"value\":135}]}",
-                get("/rest/settings/first/" + RestSettingsController.SETTINGS));
+        assertEquals("{'parameters':[" +
+                        "{'def':'true','valueType':'Boolean','multiline':false,'name':'one','options':['true'],'type':'checkbox','value':'true'}," +
+                        "{'def':'12','valueType':'Integer','multiline':false,'name':'two','options':['12','135'],'type':'editbox','value':'135'}]}",
+                fix(get("/rest/settings/first/" + RestSettingsController.SETTINGS)));
 
-        assertEquals("{\"parameters\":[" +
-                        "{\"name\":\"three\",\"options\":[\"option1\",\"option2\",\"option3\"],\"type\":\"selectbox\",\"value\":\"option2\"}," +
-                        "{\"multiline\":false,\"name\":\"four\",\"options\":[\"some-data\"],\"type\":\"editbox\",\"value\":\"some-data\"}]}",
-                service.get("second", RestSettingsController.SETTINGS));
+        assertEquals("{'parameters':[" +
+                        "{'def':'option1','valueType':'String','multiline':false,'name':'three','options':['option1','option2','option3'],'type':'selectbox','value':'option2'}," +
+                        "{'def':'some-data','valueType':'String','multiline':false,'name':'four','options':['some-data'],'type':'editbox','value':'some-data'}]}",
+                fix(service.get("second", RestSettingsController.SETTINGS)));
     }
 
     @Test

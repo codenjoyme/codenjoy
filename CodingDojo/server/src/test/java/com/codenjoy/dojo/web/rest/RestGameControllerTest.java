@@ -54,7 +54,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -165,21 +164,27 @@ public class RestGameControllerTest {
                 "  },\n" +
                 "  'parameters':[\n" +
                 "    {\n" +
+                "      'def':'12',\n" +
+                "      'multiline':false,\n" +
                 "      'name':'Parameter 1',\n" +
                 "      'options':[\n" +
-                "        12,\n" +
-                "        15\n" +
+                "        '12',\n" +
+                "        '15'\n" +
                 "      ],\n" +
                 "      'type':'editbox',\n" +
-                "      'value':15\n" +
+                "      'value':'15',\n" +
+                "      'valueType':'Integer'\n" +
                 "    },\n" +
                 "    {\n" +
+                "      'def':'true',\n" +
+                "      'multiline':false,\n" +
                 "      'name':'Parameter 2',\n" +
                 "      'options':[\n" +
-                "        true\n" +
+                "        'true'\n" +
                 "      ],\n" +
                 "      'type':'checkbox',\n" +
-                "      'value':true\n" +
+                "      'value':'true',\n" +
+                "      'valueType':'Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
                 "  'sprites':{\n" +
@@ -199,7 +204,7 @@ public class RestGameControllerTest {
                 "  'version':'version 1.11b',\n" +
                 "  'wsUrl':'ws[s]://SERVER:PORT/codenjoy-contest/ws?user=PLAYER_ID&code=CODE'\n" +
                 "}";
-        
+
         assertEquals(expected1, JsonUtils.prettyPrint(service.type("first")));
         assertEquals(expected1, JsonUtils.prettyPrint(get("/rest/game/first/info")));
 
@@ -225,21 +230,27 @@ public class RestGameControllerTest {
                 "  },\n" +
                 "  'parameters':[\n" +
                 "    {\n" +
+                "      'def':'43',\n" +
+                "      'multiline':false,\n" +
                 "      'name':'Parameter 3',\n" +
                 "      'options':[\n" +
-                "        43\n" +
+                "        '43'\n" +
                 "      ],\n" +
                 "      'type':'editbox',\n" +
-                "      'value':43\n" +
+                "      'value':'43',\n" +
+                "      'valueType':'Integer'\n" +
                 "    },\n" +
                 "    {\n" +
+                "      'def':'false',\n" +
+                "      'multiline':false,\n" +
                 "      'name':'Parameter 4',\n" +
                 "      'options':[\n" +
-                "        false,\n" +
-                "        true\n" +
+                "        'false',\n" +
+                "        'true'\n" +
                 "      ],\n" +
                 "      'type':'checkbox',\n" +
-                "      'value':true\n" +
+                "      'value':'true',\n" +
+                "      'valueType':'Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
                 "  'sprites':{\n" +

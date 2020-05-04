@@ -78,7 +78,7 @@ public class TimerService implements Runnable {
     }
 
     public boolean isPaused() {
-        return this.paused;
+        return paused;
     }
 
     public void changePeriod(long period) {

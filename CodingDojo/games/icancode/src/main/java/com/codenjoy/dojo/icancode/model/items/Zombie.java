@@ -22,12 +22,9 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
+import com.codenjoy.dojo.icancode.model.*;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.Hero;
-import com.codenjoy.dojo.icancode.model.Player;
 
 public class Zombie extends FieldItem implements Tickable {
 
@@ -54,7 +51,7 @@ public class Zombie extends FieldItem implements Tickable {
     }
 
     @Override
-    public void action(IItem item) {
+    public void action(Item item) {
         if (die) return;
 
         HeroItem heroItem = getIf(item, HeroItem.class);

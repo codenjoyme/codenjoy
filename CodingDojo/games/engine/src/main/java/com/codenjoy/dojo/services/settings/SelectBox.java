@@ -23,10 +23,13 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
 public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
+
+    public static final String TYPE = "selectbox";
 
     private String name;
     private List<T> options;
@@ -48,12 +51,17 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
     @Override
     public String getType() {
-        return "selectbox";
+        return TYPE;
     }
 
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public Class<?> getValueType() {
+        return (!options.isEmpty() && options.get(0) != null) ? options.get(0).getClass() : Object.class;
     }
 
     @Override
@@ -77,7 +85,7 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
         return this;
     }
 
-    public <V> SelectBox<V> type(Class<V> integerClass) {
+    public <V> SelectBox<V> type(Class<V> type) {
         return (SelectBox<V>) this;
     }
 
@@ -93,7 +101,7 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
     @Override
     public List<T> getOptions() {
-        return options;
+        return new LinkedList<T>(options);
     }
 
     @Override
@@ -104,5 +112,13 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
                 options.toString(),
                 def,
                 get());
+    }
+
+    @Override
+    public T getDefault() {
+        if (def == null) {
+            return null;
+        }
+        return options.get(def);
     }
 }

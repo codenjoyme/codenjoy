@@ -27,10 +27,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 public class SettingsTest {
 
@@ -49,7 +49,7 @@ public class SettingsTest {
         Parameter<Integer> check = settings.addCheckBox("check").type(Integer.class);
 
         // when
-        List<Parameter<?>> options = settings.getParameters();
+        List<Parameter> options = settings.getParameters();
 
         // then
         assertEquals(true, options.contains(edit));
@@ -58,7 +58,7 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldUpdatePreviousIfPresent() {
+    public void shouldUpdatePrevious_ifPresent() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
 
@@ -68,12 +68,12 @@ public class SettingsTest {
         // then
         assertSame(edit, edit2);
 
-        List<Parameter<?>> options = settings.getParameters();
+        List<Parameter> options = settings.getParameters();
         assertEquals(1, options.size());
     }
 
     @Test
-    public void shouldGetParameterByNameReturnsSameParameter() {
+    public void shouldGetParameterByName_returnsSameParameter() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(5);
 
@@ -86,7 +86,7 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldChangedValueWhenChangeIt() {
+    public void shouldChangedValue_whenChangeIt() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
         Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2")).type(String.class);
@@ -103,6 +103,124 @@ public class SettingsTest {
         // when then
         check.update(true);
         assertEquals(true, check.getValue());
+    }
+
+    @Test
+    public void shouldGetValueType_caseSetType() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(24);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2")).type(String.class).def("option1");
+        Parameter<Boolean> check = settings.addCheckBox("check").type(Boolean.class).def(true);
+        Parameter<String> simple = new SimpleParameter<>("value");
+
+        // when then
+        assertEquals(Integer.class, edit.getValueType());
+        assertEquals(String.class, select.getValueType());
+        assertEquals(Boolean.class, check.getValueType());
+        assertEquals(String.class, simple.getValueType());
+    }
+
+    @Test
+    public void shouldGetValueType_caseNotSetType() {
+        // given
+        Parameter<Object> edit = (Parameter<Object>) settings.addEditBox("edit");
+        edit.update(23);
+
+        Parameter<Object> select = (Parameter<Object>) settings.addSelect("select", Arrays.asList("option1", "option2"));
+        select.update("option1");
+
+        Parameter<Boolean> check = settings.addCheckBox("check");
+        check.update(true);
+
+        Parameter<Object> simple = new SimpleParameter<>("value");
+        simple.update("new");
+
+        // when then
+        assertEquals(Integer.class, edit.getValueType());
+        assertEquals(String.class, select.getValueType());
+        assertEquals(Boolean.class, check.getValueType());
+        assertEquals(String.class, simple.getValueType());
+    }
+
+    @Test
+    public void shouldGetValueType_caseNotSetType_caseNullValues_withoutDefault() {
+        // given
+        Parameter<Object> edit = (Parameter<Object>) settings.addEditBox("edit");
+        edit.update(null);
+
+        Parameter<Object> select = (Parameter<Object>) settings.addSelect("select", Arrays.asList(new String(), null));
+        select.update(null);
+
+        Parameter<Boolean> check = settings.addCheckBox("check");
+        check.update(null);
+
+        Parameter<Object> simple = new SimpleParameter<>("value");
+        simple.update(null);
+
+        // when then
+        assertEquals(Object.class, edit.getValueType());
+        assertEquals(String.class, select.getValueType());
+        assertEquals(Boolean.class, check.getValueType());
+        assertEquals(Object.class, simple.getValueType());
+    }
+
+    @Test
+    public void shouldGetValueType_caseNotSetType_caseNullValues_withDefault() {
+        // given
+        Parameter<Object> edit = (Parameter<Object>) settings.addEditBox("edit");
+        edit.def("string").update(null);
+
+        Parameter<Object> select = (Parameter<Object>) settings.addSelect("select", Arrays.asList("option", null));
+        select.def("option").update(null);
+
+        Parameter<Boolean> check = settings.addCheckBox("check");
+        check.def(true).update(null);
+
+        // when then
+        assertEquals(String.class, edit.getValueType());
+        assertEquals(String.class, select.getValueType());
+        assertEquals(Boolean.class, check.getValueType());
+    }
+
+    @Test
+    public void shouldGetValueType_caseSelectBoxWithoutOptions() {
+        // given
+        SelectBox<?> select1 = settings.addSelect("select1", Arrays.asList());
+        SelectBox<?> select2 = settings.addSelect("select2", new LinkedList<Object>(){{ add(null); }});
+
+        // when then
+        assertEquals(Object.class, select1.getValueType());
+        assertEquals(Object.class, select2.getValueType());
+    }
+
+    @Test
+    public void shouldGetDefaultValue_whenSetIt() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(24);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2")).type(String.class).def("option1");
+        Parameter<Boolean> check = settings.addCheckBox("check").def(true);
+        Parameter<String> simple = new SimpleParameter<>("value");
+
+        // when then
+        assertEquals(24, edit.getDefault().intValue());
+        assertEquals("option1", select.getDefault());
+        assertEquals(true, check.getDefault());
+        assertEquals("value", simple.getDefault());
+    }
+
+    @Test
+    public void shouldGetDefaultValue_whenNotSetIt() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2")).type(String.class);
+        Parameter<Boolean> check = settings.addCheckBox("check");
+        Parameter<String> simple = new SimpleParameter<>("value");
+
+        // when then
+        assertEquals(null, edit.getDefault());
+        assertEquals(null, select.getDefault());
+        assertEquals(null, check.getDefault());
+        assertEquals("value", simple.getDefault());
     }
 
     @Test
@@ -159,7 +277,25 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldDefaultValueIsNullIfNotSet() {
+    public void shouldCanSetDefaultValue_whenNotInSelectOptionsList() {
+        // given
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
+
+        try {
+            // when
+            select.def("newValue");
+            fail("expected exception");
+        } catch (IllegalArgumentException e) {
+            // then
+            assertEquals("No option 'newValue' in set [option1, option2, option3]", e.getMessage());
+        }
+
+        // then
+        assertEquals(null, select.getDefault());
+    }
+
+    @Test
+    public void shouldDefaultValueIsNull_whenNotSet() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
         Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
@@ -190,24 +326,68 @@ public class SettingsTest {
     }
 
     @Test
+    public void shouldEditBox_canBeMultiline() {
+        // given when
+        EditBox<String> edit1 = settings.addEditBox("edit1").type(String.class).multiline();
+        EditBox<String> edit2 = settings.addEditBox("edit2").type(String.class).multiline(true);
+        EditBox<String> edit3 = settings.addEditBox("edit3").type(String.class).multiline(false);
+        EditBox<String> edit4 = settings.addEditBox("edit4").type(String.class);
+
+        // then
+        assertEquals(true, edit1.isMultiline());
+        assertEquals(true, edit2.isMultiline());
+        assertEquals(false, edit3.isMultiline());
+        assertEquals(false, edit4.isMultiline());
+
+        // when
+        edit1.multiline(false);
+        edit2.multiline(false);
+        edit3.multiline(true);
+        edit4.multiline(true);
+
+        // then
+        assertEquals(false, edit1.isMultiline());
+        assertEquals(false, edit2.isMultiline());
+        assertEquals(true, edit3.isMultiline());
+        assertEquals(true, edit4.isMultiline());
+    }
+
+    @Test
     public void shouldGetOptions() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(42);
-        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option2");
         Parameter<Boolean> check = settings.addCheckBox("check").def(true);
 
+        // then
+        assertEquals("[42]", edit.getOptions().toString());
+        assertEquals("[option1, option2, option3]", select.getOptions().toString());
+        assertEquals("[true]", check.getOptions().toString()); // TODO хорошо бы тут чтобы были все варианты
+
+        // when
         edit.update(12);
         select.update("option1");
         check.update(false);
 
-        // when then
+        // then
         assertEquals("[42, 12]", edit.getOptions().toString());
         assertEquals("[option1, option2, option3]", select.getOptions().toString());
         assertEquals("[true, false]", check.getOptions().toString());
+
+        // when set default
+        edit.update(42);
+        select.update("option2");
+        check.update(true);
+
+        // when then
+        assertEquals("[42]", edit.getOptions().toString());
+        assertEquals("[option1, option2, option3]", select.getOptions().toString());
+        assertEquals("[true]", check.getOptions().toString());
+
     }
 
     @Test
-    public void shouldSetFlagChangedWhenChangeSomething() {
+    public void shouldSetFlagChanged_whenChangeSomething() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
         Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
@@ -294,7 +474,7 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldToString() {
+    public void shouldToStringWorksFine() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").multiline().type(Integer.class).def(10).update(15);
         Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option1").update("option2");
@@ -307,7 +487,7 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldSetFlagChangedOnlyWhenChangeValue() {
+    public void shouldSetFlagChangedOnly_whenChangeValue() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
         Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
@@ -338,7 +518,7 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldSetFlagChangedOnlyWhenChangeValue_nullCases() {
+    public void shouldSetFlagChangedOnly_whenChangeValue_nullCases() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class);
         Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class);
@@ -367,7 +547,7 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldSetStringToBooleanEditBox() {
+    public void shouldSetStringToBoolean_forEditBox() {
         // given
         Parameter<Boolean> edit = settings.addEditBox("edit")
                 .type(Boolean.class).def(true);
@@ -375,7 +555,7 @@ public class SettingsTest {
         assertEquals(true, edit.getValue());
 
         // when
-        List<Parameter> parameters = (List)settings.getParameters();
+        List<Parameter> parameters = settings.getParameters();
         parameters.get(0).update("false");
 
         // then
@@ -383,14 +563,14 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldToBooleanCheckBox() {
+    public void shouldToBoolean_forCheckBox() {
         // given
         Parameter<Boolean> edit = settings.addCheckBox("check")
                 .type(Boolean.class).def(true);
 
         assertEquals(true, edit.getValue());
 
-        List<Parameter> parameters = (List)settings.getParameters();
+        List<Parameter> parameters = settings.getParameters();
         Parameter parameter = parameters.get(0);
 
         // when then
@@ -411,14 +591,14 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldSetStringToIntegerEditBox() {
+    public void shouldSetStringToInteger_forEditBox() {
         // given
         Parameter<Integer> edit = settings.addEditBox("edit")
                 .type(Integer.class).def(21);
 
         assertEquals(21, edit.getValue().intValue());
 
-        List<Parameter> parameters = (List)settings.getParameters();
+        List<Parameter> parameters = settings.getParameters();
 
         // when then
         parameters.get(0).update("42");
@@ -426,14 +606,14 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldToIntegerCheckBox() {
+    public void shouldToInteger_forCheckBox() {
         // given
         Parameter<Integer> edit = settings.addCheckBox("check")
                 .type(Integer.class).def(1);
 
         assertEquals(1, edit.getValue().intValue());
 
-        List<Parameter> parameters = (List)settings.getParameters();
+        List<Parameter> parameters = settings.getParameters();
         Parameter parameter = parameters.get(0);
 
         // when then
@@ -454,14 +634,14 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldSetStringToDoubleEditBox() {
+    public void shouldSetStringToDouble_forEditBox() {
         // given
         Parameter<Double> edit = settings.addEditBox("edit")
                 .type(Double.class).def(2.1);
 
         assertEquals(2.1, edit.getValue(), 0);
 
-        List<Parameter> parameters = (List)settings.getParameters();
+        List<Parameter> parameters = settings.getParameters();
 
         // when then
         parameters.get(0).update("4.2");
@@ -469,14 +649,14 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldSetStringToStringEditBox() {
+    public void shouldSetStringToString_forEditBox() {
         // given
         Parameter<String> edit = settings.addEditBox("edit")
                 .type(String.class).def("default");
 
         assertEquals("default", edit.getValue());
 
-        List<Parameter> parameters = (List)settings.getParameters();
+        List<Parameter> parameters = settings.getParameters();
 
         // when then
         parameters.get(0).update("updated");
@@ -484,14 +664,14 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldToStringCheckBox() {
+    public void shouldToString_forCheckBox() {
         // given
         Parameter<String> edit = settings.addCheckBox("check")
                 .type(String.class).def("false");
 
         assertEquals("false", edit.getValue());
 
-        List<Parameter> parameters = (List)settings.getParameters();
+        List<Parameter> parameters = settings.getParameters();
         Parameter parameter = parameters.get(0);
 
         // when then
@@ -527,7 +707,7 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldSetStringToObjectEditBox() {
+    public void shouldSetStringToObject_forEditBox() {
         // given
         Parameter<Foo> edit = settings.addEditBox("edit")
                 .type(Foo.class).def(new Foo(1, 2))
@@ -538,7 +718,7 @@ public class SettingsTest {
         assertEquals(1, edit.getValue().a);
         assertEquals(2, edit.getValue().b);
 
-        List<Parameter> parameters = (List)settings.getParameters();
+        List<Parameter> parameters = settings.getParameters();
 
         // when then
         parameters.get(0).update("[3,4]");
@@ -547,7 +727,7 @@ public class SettingsTest {
     }
 
     @Test
-    public void shouldSetStringToObjectCheckBox() {
+    public void shouldSetStringToObject_forCheckBox() {
         // given
         Parameter<Foo> edit = settings.addCheckBox("check")
                 .type(Foo.class).def(new Foo(2, 2))
@@ -558,7 +738,7 @@ public class SettingsTest {
         assertEquals(2, edit.getValue().a);
         assertEquals(2, edit.getValue().b);
 
-        List<Parameter> parameters = (List)settings.getParameters();
+        List<Parameter> parameters = settings.getParameters();
 
         // when then
         parameters.get(0).update(true);
@@ -601,5 +781,35 @@ public class SettingsTest {
         select.update("option1");
         check.update(true);
         assertEquals("[]", settings.whatChanged().toString());
+    }
+
+    @Test
+    public void shouldUpdateAll() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(12);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option1");
+        Parameter<Boolean> check = settings.addCheckBox("check").def(true);
+
+        assertEquals("[[edit:Integer = multiline[false] def[12] val[null]], " +
+                "[select:String = options[option1, option2, option3] def[0] val[null]], " +
+                "[check:Boolean = def[true] val[null]]]",
+                settings.getParameters().toString());
+
+        // when
+        settings.updateAll(new LinkedList<Parameter>(){{
+            add(new EditBox<String>("edit").type(String.class).multiline(true).def("123").update("24"));
+            add(new CheckBox("check").type(String.class).def(false).update("0"));
+            add(new SelectBox("new", Arrays.asList(1, 2, 3)).type(Integer.class).def(1).update(3));
+        }});
+
+        // then
+        assertEquals(
+                // для существующих обновится только value
+                "[[edit:Integer = multiline[false] def[12] val[24]], " +
+                "[select:String = options[option1, option2, option3] def[0] val[null]], " +
+                "[check:Boolean = def[true] val[false]], " +
+                // новые запишутся полностью
+                "[new:String = options[1, 2, 3] def[0] val[2]]]",
+                settings.getParameters().toString());
     }
 }

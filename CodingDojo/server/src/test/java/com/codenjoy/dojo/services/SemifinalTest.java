@@ -201,6 +201,114 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
     }
 
     @Test
+    public void shouldCut50PercentUsers_whenAccurateCut_whenSeveralRooms() {
+        // given
+        settings.setPercentage(true);
+        settings.setLimit(50);
+
+        Player player1 = createPlayerWithScore(100, "room1");
+        Player player2 = createPlayerWithScore(90, "room1");
+        Player player3 = createPlayerWithScore(80, "room1");
+        Player player4 = createPlayerWithScore(70, "room1");
+        Player player5 = createPlayerWithScore(60, "room1");
+        Player player6 = createPlayerWithScore(50, "room1");
+        Player player7 = createPlayerWithScore(40, "room1");
+        Player player8 = createPlayerWithScore(30, "room1");
+
+        Player player9 = createPlayerWithScore(20, "room2");
+        Player player10 = createPlayerWithScore(10, "room2");
+        Player player11 = createPlayerWithScore(9, "room2");
+        Player player12 = createPlayerWithScore(8, "room2");
+        Player player13 = createPlayerWithScore(7, "room2");
+        Player player14 = createPlayerWithScore(6, "room2");
+        Player player15 = createPlayerWithScore(5, "room2");
+        Player player16 = createPlayerWithScore(4, "room2");
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, // room1
+                player9, player10, player11, player12);  // room2
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, // room1
+                player9, player10);    // room2
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1,  // room1
+                player9);      // room2
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, // room1
+                player9);     // room2
+    }
+
+    @Test
+    public void shouldCut50PercentUsers_whenAccurateCut_whenSeveralRooms_someIsNotActive() {
+        // given
+        settings.setPercentage(true);
+        settings.setLimit(50);
+
+        Player player1 = createPlayerWithScore(100, "room1");
+        Player player2 = createPlayerWithScore(90, "room1");
+        Player player3 = createPlayerWithScore(80, "room1");
+        Player player4 = createPlayerWithScore(70, "room1");
+        Player player5 = createPlayerWithScore(60, "room1");
+        Player player6 = createPlayerWithScore(50, "room1");
+        Player player7 = createPlayerWithScore(40, "room1");
+        Player player8 = createPlayerWithScore(30, "room1");
+
+        Player player9  = createPlayerWithScore(20, "room2");
+        Player player10 = createPlayerWithScore(10, "room2");
+        Player player11 = createPlayerWithScore(9, "room2");
+        Player player12 = createPlayerWithScore(8, "room2");
+        Player player13 = createPlayerWithScore(7, "room2");
+        Player player14 = createPlayerWithScore(6, "room2");
+        Player player15 = createPlayerWithScore(5, "room2");
+        Player player16 = createPlayerWithScore(4, "room2");
+
+        setActive("room1", false);
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5, player6, player7, player8, // all not active room1
+                player9, player10, player11, player12);  // room2
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5, player6, player7, player8, // all not active room1
+                player9, player10);    // room2
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5, player6, player7, player8,  // all not active room1
+                player9);      // room2
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertActive(player1, player2, player3, player4, player5, player6, player7, player8, // all not active room1
+                player9);     // room2
+    }
+
+    @Test
     public void shouldCut30PercentUsers_whenNotAccurateCut() {
         // given
         settings.setPercentage(true);
@@ -472,9 +580,98 @@ public class SemifinalTest extends AbstractPlayerGamesTest {
         ticksTillTimeout();
 
         // then
-        assertEquals(4, fields.size());
         assertRooms("{2=[player1], " +
                 "3=[player4, player5, player8]}");
+        assertEquals(4, fields.size());
+    }
+
+    @Test
+    public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple_whenSeveralRooms() {
+        // given
+        settings.setResetBoard(true);
+
+        int winner = 100;
+        int looser = 1;
+        createPlayerWithScore(winner, "player1-1", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-1", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-2", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-2", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-3", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-3", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-4", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-4", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-5", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-5", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-6", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-6", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-7", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-7", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-8", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-8", "room2", MultiplayerType.TRIPLE);
+
+        // обрати внимание, что тут схоже с предыдущим тестом
+        assertRooms("{0=[player1-1, player1-2, player1-3], " +
+                "1=[player2-1, player2-2, player2-3], " +
+                "2=[player1-4, player1-5, player1-6], " +
+                "3=[player2-4, player2-5, player2-6], " +
+                "4=[player1-7, player1-8], " +
+                "5=[player2-7, player2-8]}");
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertRooms("{4=[player1-1], " +
+                "5=[player2-1], " +
+                "6=[player1-4, player1-5, player1-8], " +
+                "7=[player2-4, player2-5, player2-8]}");
+        assertEquals(8, fields.size());
+    }
+
+    @Test
+    public void shouldCleanScoresAfterCut_whenSetResetBoard_caseTriple_whenSeveralRooms_someIsNotActive() {
+        // given
+        settings.setResetBoard(true);
+
+        int winner = 100;
+        int looser = 1;
+        createPlayerWithScore(winner, "player1-1", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-1", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-2", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-2", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-3", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-3", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-4", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-4", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-5", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-5", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-6", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-6", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player1-7", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(looser, "player2-7", "room2", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player1-8", "room1", MultiplayerType.TRIPLE);
+        createPlayerWithScore(winner, "player2-8", "room2", MultiplayerType.TRIPLE);
+
+        setActive("room1", false);
+
+        // обрати внимание, что тут схоже с предыдущим тестом
+        assertRooms("{0=[player1-1, player1-2, player1-3], " +
+                "1=[player2-1, player2-2, player2-3], " +
+                "2=[player1-4, player1-5, player1-6], " +
+                "3=[player2-4, player2-5, player2-6], " +
+                "4=[player1-7, player1-8], " +
+                "5=[player2-7, player2-8]}");
+
+        // when
+        ticksTillTimeout();
+
+        // then
+        assertRooms("{0=[player1-1, player1-2, player1-3], " + // didn't touch this because not active
+                "2=[player1-4, player1-5, player1-6], " +      // -- " --
+                "4=[player1-7, player1-8], " +                 // -- " --
+                "5=[player2-1], " +
+                "6=[player2-4, player2-5, player2-8]}");
+        assertEquals(7, fields.size());
     }
 
     @Test

@@ -86,7 +86,7 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
                 try {
                     runner.runProgram(getRobot());
                 } catch (e) {
-                    logger.error(e, 'runProgram');
+                    logger.error(e, false);
                     finish();
                     buttons.error();
                     return;
@@ -120,7 +120,7 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
             var robot = getRobot();
             runner.compileProgram(robot);
         } catch (e) {
-            logger.error(e, 'compileProgram');
+            logger.error(e, true);
             finish();
             buttons.error();
             buttons.enableReset();

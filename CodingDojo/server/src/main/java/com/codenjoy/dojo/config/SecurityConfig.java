@@ -212,6 +212,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .userService(oAuth2MappingUserService)
                         .and()
                     .and()
+                        .httpBasic()
+                    .and()
                         .logout()
                             .logoutUrl(LOGOUT_PROCESSING_URI)
                             .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_PROCESSING_URI))

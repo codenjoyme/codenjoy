@@ -64,9 +64,9 @@ public class LevelZ implements Level {
                 "    } else if (dx < 0) {\n" +
                 "        robot.goOverHole(\"LEFT\");\n" +
                 "    } else if (dy > 0) {\n" +
-                "        robot.goOverHole(\"DOWN\");\n" +
-                "    } else if (dy < 0) {\n" +
                 "        robot.goOverHole(\"UP\");\n" +
+                "    } else if (dy < 0) {\n" +
+                "        robot.goOverHole(\"DOWN\");\n" +
                 "    }\n" +
                 "}\n";
     }

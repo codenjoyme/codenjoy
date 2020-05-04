@@ -23,10 +23,7 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.GameService;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PlayerCommand;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +46,8 @@ public class Validator {
 
     private static final String EMAIL = "^(?:[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6})$";
     private static final String ID = "^[A-Za-z0-9-]{1," + MAX_PLAYER_ID_LENGTH + "}$";
-    private static final String GAME = "^[A-Za-z][A-Za-z0-9+_.-]{0,48}[A-Za-z0-9]$";
+    private static final String GAME_NAME = "^[A-Za-z][A-Za-z0-9+_.-]{0,48}[A-Za-z0-9]$";
+    private static final String ROOM_NAME = GAME_NAME;
     private static final String CODE = "^[0-9]{1," + MAX_PLAYER_CODE_LENGTH + "}$";
     private static final String MD5 = "^[A-Za-f0-9]{32}$";
     private static final String READABLE_NAME_LAT = "^[A-Za-z]{1,50}$";
@@ -59,6 +57,7 @@ public class Validator {
     @Autowired protected Registration registration;
     @Autowired protected ConfigProperties properties;
     @Autowired protected GameService gameService;
+    @Autowired protected PlayerService playerService;
 
     private Pattern email;
     private Pattern id;
@@ -66,6 +65,7 @@ public class Validator {
     private Pattern readableNameCyr;
     private Pattern nickName;
     private Pattern gameName;
+    private Pattern roomName;
     private Pattern code;
     private Pattern md5;
 
@@ -75,7 +75,8 @@ public class Validator {
         readableNameLat = Pattern.compile(READABLE_NAME_LAT);
         readableNameCyr = Pattern.compile(READABLE_NAME_CYR);
         nickName = Pattern.compile(NICK_NAME);
-        gameName = Pattern.compile(GAME);
+        gameName = Pattern.compile(GAME_NAME);
+        roomName = Pattern.compile(ROOM_NAME);
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
     }
@@ -104,7 +105,7 @@ public class Validator {
         return true;
     }
 
-    private boolean isFullName(String input) {
+    public boolean isFullName(String input) {
         String[] parts = input.split(" ");
         if (parts == null || parts.length != 2) {
             return false;
@@ -127,20 +128,17 @@ public class Validator {
     }
 
     public void checkPlayerId(String input, boolean canBeNull) {
-        boolean empty = isEmpty(input);
-        if (!(empty && canBeNull ||
-                !empty && id.matcher(input).matches()))
-        {
+        if (!isPlayerId(input, canBeNull)) {
             throw new IllegalArgumentException(String.format("Player id is invalid: '%s'", input));
         }
     }
 
+    public boolean isPlayerId(String input, boolean canBeNull) {
+        return is(input, canBeNull, id);
+    }
+
     public boolean isEmail(String input, boolean canBeNull) {
-        boolean empty = isEmpty(input);
-        if (empty && canBeNull || !empty && isEmail(input)) {
-            return true;
-        }
-        return false;
+        return is(input, canBeNull, email);
     }
 
     public void checkEmail(String input, boolean canBeNull) {
@@ -149,31 +147,40 @@ public class Validator {
         }
     }
 
-    private boolean isEmail(String input) {
-        return input != null
-                && input.length() <= MAX_PLAYER_ID_LENGTH
-                && email.matcher(input).matches();
+    public boolean isCode(String input, boolean canBeNull) {
+        return is(input, canBeNull, code);
     }
 
     public void checkCode(String input, boolean canBeNull) {
-        boolean empty = isEmpty(input);
-        if (!(empty && canBeNull ||
-                !empty && code.matcher(input).matches()))
-        {
+        if (!isCode(input, canBeNull)) {
             throw new IllegalArgumentException(String.format("Player code is invalid: '%s'", input));
         }
     }
 
-    private boolean isEmpty(String input) {
+    public boolean isEmpty(String input) {
         return StringUtils.isEmpty(input) || input.equalsIgnoreCase("null");
     }
 
     public boolean isGameName(String input, boolean canBeNull) {
+        return is(input, canBeNull, gameName);
+    }
+
+    public boolean isRoomName(String input, boolean canBeNull) {
+        return is(input, canBeNull, roomName);
+    }
+
+    public boolean is(String input, boolean canBeNull, Pattern pattern) {
         boolean empty = isEmpty(input);
-        if (!(empty && canBeNull || !empty && gameName.matcher(input).matches())) {
+        if (!(empty && canBeNull || !empty && pattern.matcher(input).matches())) {
             return false;
         }
         return true;
+    }
+
+    public void checkRoomName(String input, boolean canBeNull) {
+        if (!isRoomName(input, canBeNull)) {
+            throw new IllegalArgumentException(String.format("Room name is invalid: '%s'", input));
+        }
     }
 
     public void checkGameName(String input, boolean canBeNull) {
@@ -182,12 +189,13 @@ public class Validator {
         }
     }
 
-    public void checkNotEmpty(String input) {
+    public void checkNotEmpty(String name, String input) {
         if (isEmpty(input)) {
-            throw new IllegalArgumentException(String.format("Parameter is null: '%s'", input));
+            throw new IllegalArgumentException(String.format("Parameter %s is empty: '%s'", name, input));
         }
     }
 
+    // TODO возможно хорошая идея использовать его всегда вместо checkGameName везде по коду
     public GameType checkGameType(String input) {
         checkGameName(input, Validator.CANT_BE_NULL);
 
@@ -218,7 +226,18 @@ public class Validator {
         }
     }
 
-    public void checkRoomName(String roomName, boolean cantBeNull) {
-        checkGameName(roomName, cantBeNull);
+    public void checkNotNull(String name, Object input) {
+        if (input == null) {
+            throw new IllegalArgumentException(String.format("Object '%s' null", name));
+        }
+    }
+
+    public void checkPlayerInRoom(String id, String roomName) {
+        checkRoomName(roomName, CANT_BE_NULL);
+        checkPlayerId(id, CANT_BE_NULL);
+
+        if (!playerService.get(id).getRoomName().equals(roomName)) {
+            throw new IllegalArgumentException(String.format("Player '%s' is not in room '%s'", id, roomName));
+        }
     }
 }

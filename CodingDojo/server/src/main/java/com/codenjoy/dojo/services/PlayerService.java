@@ -37,11 +37,14 @@ public interface PlayerService extends Tickable {
     Player get(String id);
     void updateAll(List<PlayerInfo> players);
     void removeAll();
+    void removeAll(String roomName);
     Player getRandom(String gameType);
     GameType getAnyGameWithPlayers();
 
     void cleanAllScores();
+    void cleanAllScores(String roomName);
     void reloadAllRooms();
+    void reloadAllRooms(String roomName);
     void loadSaveForAll(String gameName, String save);
 
     Joystick getJoystick(String id); // TODO Как-то тут этот метод не вяжется, но ладно пока пусть остается

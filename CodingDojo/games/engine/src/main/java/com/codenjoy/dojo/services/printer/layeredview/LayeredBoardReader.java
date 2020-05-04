@@ -38,5 +38,5 @@ public interface LayeredBoardReader {
 
     Point viewCenter(Object player);
 
-    Object[] itemsInSameCell(State item);
+    Object[] itemsInSameCell(State item, int layer);
 }

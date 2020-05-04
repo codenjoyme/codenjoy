@@ -23,34 +23,29 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.ICell;
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
-import com.codenjoy.dojo.icancode.model.items.*;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class ICanCode implements Tickable, IField {
+public class ICanCode implements Tickable, Field {
 
     public static final boolean SINGLE = false;
     public static final boolean MULTIPLE = true;
 
     private Dice dice;
-    private ILevel level;
+    private Level level;
 
     private List<Player> players;
     private boolean isMultiplayer;
 
-    public ICanCode(ILevel level, Dice dice, boolean isMultiplayer) {
+    public ICanCode(Level level, Dice dice, boolean isMultiplayer) {
         this.level = level;
         level.setField(this);
         this.dice = dice;
@@ -151,32 +146,32 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
-    public ICell getStartPosition() {
-        List<IItem> items = level.getItems(Start.class);
+    public Cell getStartPosition() {
+        List<Item> items = level.getItems(Start.class);
         int index = dice.next(items.size());
         return items.get(index).getCell();
     }
 
     @Override
-    public ICell getEndPosition() {
+    public Cell getEndPosition() {
         return level.getItems(Exit.class).get(0).getCell();
     }
 
     @Override
-    public void move(IItem item, int x, int y) {
-        ICell cell = level.getCell(x, y);
-        cell.addItem(item);
+    public void move(Item item, int x, int y) {
+        Cell cell = level.getCell(x, y);
+        cell.add(item);
         cell.comeIn(item);
     }
 
     @Override
-    public ICell getCell(int x, int y) {
+    public Cell getCell(int x, int y) {
         return level.getCell(x, y);
     }
 
     @Override
-    public IItem getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
-        for (IItem item : getCell(x, y).getItems()) {
+    public Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
+        for (Item item : getCell(x, y).items()) {
             if (item.getClass().equals(clazz)) {
                 return item;
             }
@@ -222,7 +217,7 @@ public class ICanCode implements Tickable, IField {
         List<Floor> floors = floors();
 
         for (int i = floors.size() - 1; i > -1; --i) {
-            if (floors.get(i).getCell().getItems().size() > 1) {
+            if (floors.get(i).getCell().items().size() > 1) {
                 floors.remove(i);
             }
         }
@@ -234,9 +229,9 @@ public class ICanCode implements Tickable, IField {
                 Floor floor = floors.get(random);
                 floors.remove(random);
 
-                ICell cell = gold.getCell();
-                floor.getCell().addItem(gold);
-                cell.addItem(floor);
+                Cell cell = gold.getCell();
+                floor.getCell().add(gold);
+                cell.add(floor);
             }
         }
     }
@@ -295,8 +290,8 @@ public class ICanCode implements Tickable, IField {
 
             @Override
             public BiFunction<Integer, Integer, State> elements() {
-                ICell[] cells = ICanCode.this.level.getCells();
-                return (index, layer) -> cells[index].getItem(layer);
+                Cell[] cells = ICanCode.this.level.getCells();
+                return (index, layer) -> cells[index].item(layer);
             }
 
             @Override
@@ -305,8 +300,8 @@ public class ICanCode implements Tickable, IField {
             }
 
             @Override
-            public Object[] itemsInSameCell(State item) {
-                return ((IItem) item).getItemsInSameCell().toArray();
+            public Object[] itemsInSameCell(State item, int layer) {
+                return ((Item) item).getItemsInSameCell(layer).toArray();
             }
         };
     }
@@ -317,7 +312,7 @@ public class ICanCode implements Tickable, IField {
     }
 
     @Override
-    public ILevel getLevel() {
+    public Level getLevel() {
         return level;
     }
 }

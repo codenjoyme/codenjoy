@@ -29,6 +29,8 @@ import java.util.function.Function;
 
 public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
+    public static final String TYPE = "editbox";
+
     private String name;
     private T def;
     private boolean multiline;
@@ -49,7 +51,7 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
     @Override
     public String getType() {
-        return "editbox";
+        return TYPE;
     }
 
     @Override
@@ -93,6 +95,11 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
         return this;
     }
 
+    public EditBox<T> multiline(boolean multiline) {
+        this.multiline = multiline;
+        return this;
+    }
+
     public EditBox<T> multiline() {
         multiline = true;
         return this;
@@ -107,8 +114,9 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     public List<T> getOptions() {
         return new LinkedList<T>(){{
             add(def);
-            if (EditBox.this.get() != null) {
-                add(EditBox.this.get());
+            T value = EditBox.this.get();
+            if (value != null && !this.contains(value)) {
+                add(value);
             }
         }};
     }
@@ -121,5 +129,10 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
                 multiline,
                 def,
                 get());
+    }
+
+    @Override
+    public T getDefault() {
+        return def;
     }
 }

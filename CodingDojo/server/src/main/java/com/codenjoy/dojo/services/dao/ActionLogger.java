@@ -45,7 +45,7 @@ public class ActionLogger extends Suspendable {
     @Value("${board.save.ticks}")
     private int ticks;
 
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    protected ExecutorService executor = Executors.newSingleThreadExecutor();
     private Queue<BoardLog> cache = new ConcurrentLinkedQueue<>();
     private int count;
 
@@ -105,10 +105,11 @@ public class ActionLogger extends Suspendable {
     public void log(PlayerGames playerGames) {
         if (!active || playerGames.size() == 0) return;
 
-        long tick = now();
-        for (PlayerGame playerGame : playerGames) {
+        // для всех players одно и то же время используется - фактически как id группы сейвов
+        long time = now();
+        for (PlayerGame playerGame : playerGames.active()) {
             Player player = playerGame.getPlayer();
-            cache.add(new BoardLog(tick,
+            cache.add(new BoardLog(time,
                     player.getId(),
                     player.getGameName(),
                     player.getScore(),
@@ -139,17 +140,23 @@ public class ActionLogger extends Suspendable {
             }};
     }
 
-    // TODO test me
     public long getLastTime(String id) {
         return pool.select("SELECT MAX(time) AS time FROM player_boards WHERE player_id = ?;",
                 new Object[]{ id },
                 rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
     }
 
-    // TODO test me
+    /**
+     * Метод возвращает count записей вокруг текущего времени time для заданного player id.
+     * Итого вернется count записей до отметки time, запись равная time и count записей после отметки time.
+     * @param id player id
+     * @param time отметка времени информация о записях вокруг которой нам интересна
+     * @param count количество записей выбираемых из базы до и после отметки time
+     * @return все сохраненные записи
+     */
     public List<BoardLog> getBoardLogsFor(String id, long time, int count) {
         return pool.select(
-                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND time <= ? ORDER BY time ASC LIMIT ?) AS before" +
+                    "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND time <= ? ORDER BY time DESC LIMIT ?) AS before_and_equals" +
                     " UNION " +
                     "SELECT * FROM (SELECT * FROM player_boards WHERE player_id = ? AND time > ? ORDER BY time ASC LIMIT ?) AS after;",
                 new Object[]{

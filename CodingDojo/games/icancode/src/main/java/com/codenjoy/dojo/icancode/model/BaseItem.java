@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.items;
+package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
@@ -23,50 +23,47 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.ICell;
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
-import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.Player;
-import com.codenjoy.dojo.icancode.model.enums.FeatureItem;
-
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Created by Mikhail_Udalyi on 08.06.2016.
  */
-public abstract class BaseItem implements IItem {
+public abstract class BaseItem implements Item {
 
-    private ICell cell;
-    private FeatureItem[] features;
+    public static final boolean PASSABLE = true;
+    public static final boolean IMPASSABLE = !PASSABLE;
+
+    private Cell cell;
+    private boolean passable;
     private Elements element;
 
     public BaseItem(Elements element) {
         this.element = element;
-        this.features = new FeatureItem[0];
+        this.passable = true;
     }
 
-    public BaseItem(Elements element, FeatureItem[] features) {
+    public BaseItem(Elements element, boolean passable) {
         this.element = element;
-        this.features = features.clone();
+        this.passable = passable;
     }
 
     @Override
-    public void action(IItem item) {
+    public void action(Item item) {
         // do nothing
     }
 
     @Override
-    public ICell getCell() {
+    public Cell getCell() {
         return cell;
     }
 
     @Override
-    public List<IItem> getItemsInSameCell() {
+    public List<Item> getItemsInSameCell(int layer) {
         if (cell == null) {
             return Arrays.asList();
         }
-        List<IItem> items = cell.getItems();
+        List<Item> items = cell.items(layer);
         items.remove(this);
         return items;
     }
@@ -86,46 +83,22 @@ public abstract class BaseItem implements IItem {
     }
 
     @Override
-    public void setCell(ICell value) {
+    public void setCell(Cell value) {
         cell = value;
     }
 
     @Override
     public void removeFromCell() {
         if (getCell() != null) {
-            getCell().removeItem(this);
+            getCell().remove(this);
             setCell(null);
         }
     }
 
+    // не переопределять этот метод, тут все чик-чик!
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        BaseItem baseItem = (BaseItem) o;
-
-        if (cell == null && baseItem.cell != null) {
-            return false;
-        }
-        if (cell != null && baseItem.cell == null) {
-            return false;
-        }
-
-        if (cell == null) {
-            if (baseItem.cell == null) {
-                return element == baseItem.element;
-            } else {
-                return false;
-            }
-        } else {
-            return element == baseItem.element && cell.equals(baseItem.cell);
-        }
-
+        return this == o;
     }
 
     @Override
@@ -139,20 +112,17 @@ public abstract class BaseItem implements IItem {
     }
 
     @Override
-    public boolean hasFeatures(FeatureItem[] features) {
-        for (int i = 0; i < this.features.length; ++i) {
-            for (int j = 0; j < features.length; ++j) {
-                if (this.features[i] == features[j]) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+    public boolean passable() {
+        return passable;
     }
 
     @Override
     public int hashCode() {
         return element.hashCode();
+    }
+
+    @Override
+    public int layer() {
+        return ElementsMapper.levelFor(this.getClass());
     }
 }
