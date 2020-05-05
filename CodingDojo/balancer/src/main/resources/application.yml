@@ -33,3 +33,7 @@ sms:
     registration: "Vash kod pidtverdzennya reestratsui: %s.\nCodenjoy Team."
     reset-password: "Vash kod pidtverdzennya zminy parolu: %s.\nCodenjoy Team."
     new-password: "Vash parol zmineno.\nNovyi parol: %s.\nCodenjoy Team."
+  gateway:
+    send-endpoint: http://sms-fly.com/api/api.noai.php
+    user: 380989207390
+    password: 123456789
