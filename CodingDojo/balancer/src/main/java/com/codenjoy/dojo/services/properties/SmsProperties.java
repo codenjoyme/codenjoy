@@ -36,6 +36,7 @@ import org.springframework.context.annotation.Configuration;
 public class SmsProperties {
 
     private SmsTextProperties text;
+    private GatewayProperties gateway;
 
     @Getter
     @Setter
@@ -45,4 +46,13 @@ public class SmsProperties {
         private String resetPassword;
         private String newPassword;
     }
+    @Getter
+    @Setter
+    @ConfigurationProperties("gateway")
+    public static class GatewayProperties {
+        private String sendEndpoint;
+        private String user;
+        private String password;
+    }
+
 }
