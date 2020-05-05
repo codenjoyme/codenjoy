@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.Single;
@@ -31,7 +32,6 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -2061,14 +2061,27 @@ public class BombermanTest {
     // Perks related test here
     @Test
     public void shouldPerkBeDropped_whenWallIsDestroyed() {
-//        hero.act();
-//        field.tick();
-//
-//        asrtBrd("     \n" +
-//                "     \n" +
-//                "     \n" +
-//                "     \n" +
-//                "☻    \n");
-        throw new NotImplementedException("WIP");
+        givenBoardWithDestroyWalls(6);
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 3);
+        PerksSettingsWrapper.setDropRatio(20); // 20%
+        when(bombermanDice.next(any(Integer.class))).thenReturn(10,30); // must drop the perk
+
+        hero.act();
+        field.tick();
+        hero.up();
+        field.tick();
+        hero.up();
+        field.tick();
+        hero.right();
+        field.tick();
+
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "# ☺  #\n" +
+                "#҉# ##\n" +
+                "+҉҉  #\n" +
+                "# ####\n");
     }
+
+
 }

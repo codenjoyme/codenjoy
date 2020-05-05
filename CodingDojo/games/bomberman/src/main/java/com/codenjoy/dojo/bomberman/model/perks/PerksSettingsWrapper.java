@@ -77,7 +77,7 @@ public class PerksSettingsWrapper {
      * step for next range = 100 / 4 = 25,
      * ranges for perks are: 0..5, 30..35, 60..65, 90..95
      */
-    public static Elements dropPerk(Dice dice) {
+    public static Elements nextPerkDrop(Dice dice) {
         int perksTotal = settings.size();
 
         if (perksTotal != 0) {
