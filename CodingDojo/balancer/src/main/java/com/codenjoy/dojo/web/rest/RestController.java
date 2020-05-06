@@ -69,6 +69,7 @@ public class RestController {
     public static final String REMOVE = "/remove";
     public static final String CONFIRM = "/confirm";
     public static final String UPDATE = "/update";
+    public static final String SCORE = "/score";
 
     private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
@@ -86,7 +87,7 @@ public class RestController {
     @Autowired private SmsService smsService;
 
     // TODO test me
-    @GetMapping("/score/day/{day}")
+    @GetMapping(SCORE + "/day/{day}")
     @ResponseBody
     public List<PlayerScore> dayScores(@PathVariable("day") String day) {
         validator.checkDay(day);
@@ -96,7 +97,7 @@ public class RestController {
 
     // TODO test me
     // TODO add to admin page
-    @GetMapping("/score/finalists")
+    @GetMapping(SCORE + "/finalists")
     @ResponseBody
     public List<PlayerScore> finalistsScores() {
         return dispatcher.getFinalists();
@@ -104,7 +105,7 @@ public class RestController {
 
     // TODO test me
     // TODO add to admin page
-    @PostMapping("/score/disqualify/{player}")
+    @PostMapping(SCORE + "/disqualify/{player}")
     @ResponseBody
     public boolean disqualify(@RequestBody List<String> players) {
         players.forEach(email -> validator.checkEmail(email, CANT_BE_NULL));
@@ -116,7 +117,7 @@ public class RestController {
 
     // TODO test me
     // TODO add to admin page
-    @GetMapping("/score/disqualified")
+    @GetMapping(SCORE + "/disqualified")
     @ResponseBody
     public List<String> disqualified() {
         return dispatcher.disqualified();
