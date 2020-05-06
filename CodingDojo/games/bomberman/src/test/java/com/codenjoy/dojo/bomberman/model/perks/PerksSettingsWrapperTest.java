@@ -30,6 +30,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
@@ -38,6 +41,8 @@ public class PerksSettingsWrapperTest {
     private final int percents = 100;
     @Mock
     Dice dice;
+
+    private static final Elements NO_PERK = Elements.DESTROYED_WALL;
 
     @Test
     public void dropPerk() {
@@ -48,23 +53,23 @@ public class PerksSettingsWrapperTest {
 
         Mockito.when(dice.next(percents)).thenReturn(0);
         Elements perk = PerksSettingsWrapper.nextPerkDrop(dice);
-        assertNotEquals("Range 0..9 = perk", Elements.NONE, perk);
+        assertNotEquals("Range 0..9 = perk", NO_PERK, perk);
 
         Mockito.when(dice.next(percents)).thenReturn(10);
         perk = PerksSettingsWrapper.nextPerkDrop(dice);
-        assertEquals("Range 10..60 = none", Elements.NONE, perk);
+        assertEquals("Range 10..60 = none", NO_PERK, perk);
 
         Mockito.when(dice.next(percents)).thenReturn(60);
         perk = PerksSettingsWrapper.nextPerkDrop(dice);
-        assertNotEquals("Range 60..70 = perk", Elements.NONE, perk);
+        assertNotEquals("Range 60..70 = perk", NO_PERK, perk);
 
         Mockito.when(dice.next(percents)).thenReturn(69);
         perk = PerksSettingsWrapper.nextPerkDrop(dice);
-        assertNotEquals("Range 60..70 (exclusive) = perk", Elements.NONE, perk);
+        assertNotEquals("Range 60..70 (exclusive) = perk", NO_PERK, perk);
 
         Mockito.when(dice.next(percents)).thenReturn(70);
         perk = PerksSettingsWrapper.nextPerkDrop(dice);
-        assertEquals("Range 70...100 = none", Elements.NONE, perk);
+        assertEquals("Range 70...100 = none", NO_PERK, perk);
 
     }
 }
