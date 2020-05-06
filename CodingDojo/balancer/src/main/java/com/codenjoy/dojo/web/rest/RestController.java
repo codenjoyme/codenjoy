@@ -515,12 +515,17 @@ public class RestController {
         return true;
     }
 
-
     @PostMapping(REGISTER + "/confirm")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ServerLocation> confirmRegistration(@RequestBody PhoneCodeDTO phoneCodeDTO) {
         return ResponseEntity.ok(registrationService.
                 confirmRegistration(phoneValidateNormalize(phoneCodeDTO.getPhone()), phoneCodeDTO.getCode()));
+    }
+
+    @GetMapping(REGISTER + "/confirm/{player}/code")
+    @ResponseBody
+    public String getVerificationCode(@PathVariable("player") String email) {
+        return players.get(email).getVerificationCode();
     }
 
     @PostMapping(REGISTER + "/resend")

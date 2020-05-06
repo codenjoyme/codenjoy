@@ -134,6 +134,16 @@ var loginUser = function(email, password) {
     });
 };
 
+var getConfirmCode = function(email) {
+    _ajax('get-confirm', {
+        type: 'GET',
+        url: server('balancer') + '/register/confirm/' + email + '/code',
+        after: function(data){
+            $('#confirm-code').val(data);
+        }
+    });
+};
+
 var confirmUser = function(phone, code) {
     _ajax('confirm', {
         type: 'POST',
@@ -291,6 +301,13 @@ $(document).ready(function() {
         loginUser(
             preffix + $('#login-email').val(),
             preffix + $('#login-password').val()
+        );
+    });
+
+    $('#get-confirm').click(function() {
+        var preffix = $('#preffix').val();
+        getConfirmCode(
+            preffix + $('#get-confirm-email').val()
         );
     });
 
