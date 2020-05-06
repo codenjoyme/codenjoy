@@ -58,7 +58,7 @@ public class GameServiceImpl implements GameService {
     private String pluginsPath;
 
     @Value("${plugins.game.exclude}")
-    private String[] excludeGames;
+    protected String[] excludeGames;
 
     @Value("${plugins.game.package}")
     private String gamePackage;
@@ -89,8 +89,10 @@ public class GameServiceImpl implements GameService {
             loadFromPlugins(result);
         }
 
-        remove(result, it -> Stream.of(excludeGames)
-                .anyMatch(name -> it.getPackage().toString().contains(name)));
+        if (excludeGames != null) {
+            remove(result, it -> Stream.of(excludeGames)
+                    .anyMatch(name -> it.getPackage().toString().contains(name)));
+        }
 
         return result;
     }

@@ -40,12 +40,17 @@ public class GameServiceTest {
 
     @Before
     public void setup() {
-        gameService.init();
         forGames(FirstGameType.class, SecondGameType.class);
+        gameService.init();
     }
 
     private void forGames(Class... classes) {
         gameService = new GameServiceImpl() {
+
+            {
+                excludeGames = new String[0];
+            }
+
             @Override
             public Collection<? extends Class> findInPackage(String packageName) {
                 return Arrays.asList(classes);
