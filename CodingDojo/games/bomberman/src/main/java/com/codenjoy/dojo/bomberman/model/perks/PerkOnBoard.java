@@ -23,23 +23,30 @@ package com.codenjoy.dojo.bomberman.model.perks;
  */
 
 import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.bomberman.model.Player;
+import com.codenjoy.dojo.bomberman.model.Wall;
+import com.codenjoy.dojo.services.State;
 
-public class BombBlastIncrease extends Perk {
-    public BombBlastIncrease(int value, int timeout) {
-        super(Elements.BOMB_BLAST_RADIUS_INCREASE, value, timeout);
+public class PerkOnBoard extends Wall implements State<Elements, Player> {
+
+    private final Perk perk;
+
+    public PerkOnBoard(int x, int y, Perk perk) {
+        super(x, y);
+        this.perk = perk;
     }
 
     @Override
-    public void tick() {
-        setTimer(getTimer() - 1);
+    public Wall copy() {
+        return new PerkOnBoard(this.x, this.y, perk);
     }
 
-    /**
-     * In case player grabs another such a perk while current one is active still,
-     * timer will be reset to initial time-out value.
-     */
     @Override
-    public Perk combine(Perk perk) {
-        return new BombBlastIncrease(getValue(), getTimeout());
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return perk != null ? this.perk.state(player, alsoAtPoint) : Elements.NONE;
+    }
+
+    public Perk getPerk() {
+        return perk;
     }
 }

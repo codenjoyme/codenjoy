@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.bomberman.services;
+package com.codenjoy.dojo.bomberman.model.perks;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,6 +22,24 @@ package com.codenjoy.dojo.bomberman.services;
  * #L%
  */
 
-public enum Events {
-    KILL_DESTROY_WALL, KILL_MEAT_CHOPPER, KILL_BOMBERMAN, KILL_OTHER_BOMBERMAN, DROP_PERK;
+import com.codenjoy.dojo.bomberman.model.Elements;
+
+public class BombBlastRadiusIncrease extends Perk {
+    public BombBlastRadiusIncrease(int value, int timeout) {
+        super(Elements.BOMB_BLAST_RADIUS_INCREASE, value, timeout);
+    }
+
+    @Override
+    public void tick() {
+        setTimer(getTimer() - 1);
+    }
+
+    /**
+     * In case player grabs another such a perk while current one is active still,
+     * timer will be reset to initial time-out value.
+     */
+    @Override
+    public Perk combine(Perk perk) {
+        return new BombBlastRadiusIncrease(getValue(), getTimeout());
+    }
 }

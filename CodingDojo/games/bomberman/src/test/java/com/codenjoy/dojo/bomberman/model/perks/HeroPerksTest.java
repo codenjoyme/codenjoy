@@ -25,8 +25,6 @@ package com.codenjoy.dojo.bomberman.model.perks;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import org.junit.Test;
 
-import java.util.Collection;
-
 import static org.junit.Assert.*;
 
 public class HeroPerksTest {
@@ -34,7 +32,7 @@ public class HeroPerksTest {
     @Test
     public void should_reset_timer_when_add_Bomb_Blast_Increase_Twice() {
         HeroPerks hp = new HeroPerks();
-        BombBlastIncrease bip = new BombBlastIncrease(2, 5);
+        BombBlastRadiusIncrease bip = new BombBlastRadiusIncrease(2, 5);
         Elements e = Elements.BOMB_BLAST_RADIUS_INCREASE;
 
         hp.add(bip);
@@ -53,7 +51,7 @@ public class HeroPerksTest {
     @Test
     public void should_remove_Perk_on_expiration() {
         HeroPerks hp = new HeroPerks();
-        BombBlastIncrease bip = new BombBlastIncrease(2, 2);
+        BombBlastRadiusIncrease bip = new BombBlastRadiusIncrease(2, 2);
         hp.add(bip);
 
         hp.tick();

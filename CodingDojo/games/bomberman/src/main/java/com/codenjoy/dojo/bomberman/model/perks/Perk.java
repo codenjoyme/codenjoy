@@ -98,6 +98,8 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
         this.timer = timer;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

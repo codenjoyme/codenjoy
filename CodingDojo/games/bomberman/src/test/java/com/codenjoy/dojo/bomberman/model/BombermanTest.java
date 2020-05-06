@@ -1911,6 +1911,7 @@ public class BombermanTest {
         bombsPower(5);
         withWalls(new DestroyWallAt(3, 0, new WallsImpl()));
         givenBoard(7);
+        when(bombermanDice.next(anyInt())).thenReturn(101); // don't drop perk by accident
 
         hero.act();
         hero.up();
@@ -2064,7 +2065,7 @@ public class BombermanTest {
         givenBoardWithDestroyWalls(6);
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 3);
         PerksSettingsWrapper.setDropRatio(20); // 20%
-        when(bombermanDice.next(any(Integer.class))).thenReturn(10,30); // must drop the perk
+        when(bombermanDice.next(anyInt())).thenReturn(10,30); // must drop 1 perk
 
         hero.act();
         field.tick();
@@ -2074,13 +2075,52 @@ public class BombermanTest {
         field.tick();
         hero.right();
         field.tick();
+        field.tick();
 
         asrtBrd("######\n" +
                 "# # ##\n" +
                 "# ☺  #\n" +
                 "#҉# ##\n" +
                 "+҉҉  #\n" +
-                "# ####\n");
+                "#H####\n");
+    }
+
+    @Test
+    public void shouldBombBlastRadiusIncrease_whenBBRIperk() {
+        // BBRI = Bomb Blast Radius Increase perk
+
+        givenBoardWithDestroyWalls(6);
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        PerksSettingsWrapper.setDropRatio(20); // 20%
+        when(bombermanDice.next(anyInt())).thenReturn(10); // must drop 2 perks
+        hero.act();
+        field.tick();
+        hero.right();
+        field.tick();
+        hero.right();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "#҉# ##\n" +
+                "+҉҉☺ #\n" +
+                "#+####\n");
+
+        // go for perk
+        hero.left();
+        field.tick();
+        hero.left();
+        field.tick();
+
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                "+☺   #\n" +
+                "#+####\n");
     }
 
 

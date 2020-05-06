@@ -76,6 +76,9 @@ public class PerksSettingsWrapper {
      * E.g. for 4 perks range will be 20/4 = 5,
      * step for next range = 100 / 4 = 25,
      * ranges for perks are: 0..5, 30..35, 60..65, 90..95
+     *
+     * @deprecated Need to switch to the more optimal algorithm in next releases
+     * Theory is here https://www.keithschwarz.com/darts-dice-coins/
      */
     public static Elements nextPerkDrop(Dice dice) {
         int perksTotal = settings.size();
@@ -96,6 +99,6 @@ public class PerksSettingsWrapper {
                 upperBoundary = lowerBoundary + chanceRange;
             }
         }
-        return Elements.NONE;
+        return Elements.DESTROYED_WALL;
     }
 }
