@@ -28,6 +28,9 @@ import org.apache.commons.lang3.StringUtils;
 @Getter
 public class Player {
 
+    public static final int APPROVED = 1;
+    public static final int NOT_APPROVED = 0;
+
     private String email;
     private String phone;
     private String firstName;

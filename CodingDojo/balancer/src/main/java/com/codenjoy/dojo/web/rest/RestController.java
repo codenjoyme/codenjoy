@@ -363,7 +363,7 @@ public class RestController {
     }
 
     private boolean isValid(Player exist, String password, String code) {
-        if (exist == null || exist.getApproved() == 0) {
+        if (exist == null || exist.getApproved() == Player.NOT_APPROVED) {
             return false;
         }
 
