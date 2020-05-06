@@ -53,7 +53,7 @@ public class OptionGameSettings implements GameSettings {
 
         // perks. Set value to 0 = perk is disabled.
         perkDropRatio = settings.addEditBox("Perks drop ratio in %").type(Integer.class).def(20); // 20%
-        perkBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase").type(Integer.class).def(5);
+        perkBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase").type(Integer.class).def(2);
         timeoutBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase effect timeout").type(Integer.class).def(10);
     }
 
