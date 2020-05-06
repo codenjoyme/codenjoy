@@ -109,6 +109,7 @@ var registerUser = function(email, phone, firstName,
             '"skills" : "' + skills + '", ' +
             '"comment" : "' + comment + '"}',
         after: function(data){
+            $('#confirm-code').val(data.code);
             $('#join-code').val(data.code);
             $('#code').val(data.code);
 
@@ -130,6 +131,16 @@ var loginUser = function(email, password) {
 
             autoIncrement();
         }
+    });
+};
+
+var confirmUser = function(phone, code) {
+    _ajax('confirm', {
+        type: 'POST',
+        url: server('balancer') + '/register/confirm',
+        contentType: 'application/json; charset=utf-8',
+        data: '{"phone": "' + phone + '", ' +
+            '"code" : "' + code + '"}'
     });
 };
 
@@ -280,6 +291,14 @@ $(document).ready(function() {
         loginUser(
             preffix + $('#login-email').val(),
             preffix + $('#login-password').val()
+        );
+    });
+
+    $('#confirm').click(function() {
+        var preffix = $('#preffix').val();
+        confirmUser(
+            $('#confirm-phone').val(),
+            $('#confirm-code').val()
         );
     });
 
