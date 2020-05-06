@@ -4,6 +4,7 @@ server:
   port: 8080
 
 plugins:
+  enable: false
   game:
     exclude: chess, sokoban
     package: com.codenjoy.dojo
