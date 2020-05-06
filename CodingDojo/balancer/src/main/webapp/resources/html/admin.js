@@ -91,7 +91,7 @@ var autoIncrement = function() {
     }
 }
 
-var registerUser = function(email, firstName,
+var registerUser = function(email, phone, firstName,
                             lastName, password, code,
                             city, skills, comment, whatToDo)
 {
@@ -100,6 +100,7 @@ var registerUser = function(email, firstName,
         url: server('balancer') + '/' + whatToDo,
         contentType: 'application/json; charset=utf-8',
         data: '{"email": "' + email + '", ' +
+            '"phone" : "' + phone + '", ' +
             '"firstName" : "' + firstName + '", ' +
             '"lastName" : "' + lastName + '", ' +
             '"password" : "' + password + '", ' +
@@ -261,6 +262,7 @@ $(document).ready(function() {
             }
             registerUser(
                 preffix + $('#email').val(),
+                $('#phone').val(),
                 preffix + $('#first-name').val(),
                 preffix + $('#last-name').val(),
                 password,
