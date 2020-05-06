@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 
 import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_ADMIN;
 import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_USER;
+import static java.util.stream.Collectors.toList;
 
 public enum GameAuthorities {
 
@@ -45,31 +46,39 @@ public enum GameAuthorities {
 
     private Set<String> roles;
 
-    public List<GrantedAuthority> authorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+    public Collection<? extends GrantedAuthority> authorities() {
+        return toGranted(this.roles);
     }
 
-    public String[] roles() {
-        return roles.toArray(new String[roles.size()]);
+    public Set<String> roles() {
+        return roles;
     }
 
-
-    public static String buildRolesString(String... roles) {
+    public static String joinRoles(Collection<String> roles) {
         return String.join(",", roles);
     }
 
-    public static String[] splitRolesString(String roles) {
+    public static List<String> splitRoles(String roles) {
         return Stream.of(roles.split(","))
                 .map(String::trim)
-                .collect(Collectors.toList())
-                .toArray(new String[] {});
+                .collect(toList());
     }
 
-    public static String authoritiesToRolesString(Collection<GrantedAuthority> authorities) {
+    public static Collection<? extends GrantedAuthority> toGranted(Collection<String> roles) {
+        return roles.stream()
+                .map(role -> (GrantedAuthority) () -> role)
+                .collect(toList());
+    }
+
+    public static String toRoles(Collection<GrantedAuthority> authorities) {
         return authorities.stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
+    }
+
+    private Collection<? extends GrantedAuthority> toGranted(Set<String> roles) {
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(toList());
     }
 }

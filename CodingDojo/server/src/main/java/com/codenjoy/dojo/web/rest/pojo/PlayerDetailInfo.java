@@ -49,7 +49,7 @@ public class PlayerDetailInfo {
     private PHeroData hero;
     private PLevelProgress progress;
     private List<String> group;
-    private Registration.User registration;
+    private PUser registration;
 
     public PlayerDetailInfo(Player player, Registration.User registration,
                             String roomName, Game game, List<String> group)
@@ -62,7 +62,7 @@ public class PlayerDetailInfo {
         score = String.valueOf(player.getScore());
         id = player.getId();
 
-        this.registration = registration;
+        this.registration = new PUser(registration);
 
         progress = new PLevelProgress(game.getProgress());
         save = game.getSave().toString();
