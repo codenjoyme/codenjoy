@@ -131,7 +131,7 @@ public class RestController {
                 () -> validator.checkPhoneNumber(player.getPhone(), CANT_BE_NULL),
                 () -> validator.checkString("FirstName", player.getFirstName()),
                 () -> validator.checkString("LastName", player.getLastName()),
-                () -> validator.checkMD5(player.getPassword(), CANT_BE_NULL),
+                () -> validator.checkString("Password", player.getPassword()),
                 () -> validator.checkString("City", player.getCity()),
                 () -> validator.checkString("Skills", player.getSkills())
         );
@@ -343,7 +343,7 @@ public class RestController {
         String code = player.getCode();
 
         validator.checkEmail(email, CANT_BE_NULL); // TODO test me
-        validator.checkMD5(password, CAN_BE_NULL); // TODO test me
+        validator.checkString("Password", password); // TODO test me
         validator.checkCode(code, CAN_BE_NULL); // TODO test me
 
         Player exist = players.get(email);
