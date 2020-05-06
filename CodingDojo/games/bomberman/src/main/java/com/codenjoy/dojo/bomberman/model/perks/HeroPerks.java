@@ -25,8 +25,9 @@ package com.codenjoy.dojo.bomberman.model.perks;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.services.Tickable;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HeroPerks implements Tickable {
@@ -45,8 +46,8 @@ public class HeroPerks implements Tickable {
         return perks.get(element.name());
     }
 
-    public Collection<Perk> getPerksList() {
-        return perks.values();
+    public List<Perk> getPerksList() {
+        return new ArrayList<>(perks.values());
     }
 
     @Override

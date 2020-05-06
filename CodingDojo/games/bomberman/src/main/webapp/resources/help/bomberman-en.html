@@ -194,8 +194,10 @@
     DEAD_MEAT_CHOPPER('x'),     // this is chopper corpse
 
     /// perks
-    BOMB_BLAST_RADIUS_INCREASE('+'), // Increase bomb blast radius. Applicable only to newly created bombs.
-                                     // Perk is deactivated on time-out.
+    /// Values, time-outs, drop rate of perks can be adjusted by game administrator.
+    /// Here we provide default values.
+    BOMB_BLAST_RADIUS_INCREASE('+'), // Increase bomb blast radius (power = 5). Applicable only to newly created bombs.
+                                     // Perk is deactivated on time-out (10 ticks).
 
     /// a void
     NONE(' ');                 // this is the only place where you can move your Bomberman</pre>

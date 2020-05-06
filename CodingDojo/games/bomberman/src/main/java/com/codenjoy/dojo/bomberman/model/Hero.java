@@ -25,9 +25,11 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.model.perks.HeroPerks;
 import com.codenjoy.dojo.bomberman.model.perks.Perk;
+import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
@@ -140,6 +142,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
         if (!field.isBarrier(newX, newY, WITHOUT_MEAT_CHOPPER)) {
             move(newX, newY);
+            PerkOnBoard perk = ((Bomberman) field).getPerkAtPoint(newX, newY);
+            if (perk != null) {
+                addPerk(perk.getPerk());
+            }
         }
         direction = null;
 
@@ -206,6 +212,15 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public void tick() {
         perks.tick();
+    }
+
+    public List<Perk> getPerks() {
+        return perks.getPerksList();
+    }
+    // Extremely hard to test without it ...
+    // TODO: check if it is an exposure & vulnerability for AI clients
+    public void addPerk(Perk perk) {
+        perks.add(perk);
     }
 }
 

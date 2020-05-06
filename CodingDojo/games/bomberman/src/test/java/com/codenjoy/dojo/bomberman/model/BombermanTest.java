@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,26 +23,24 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.model.perks.BombBlastRadiusIncrease;
+import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -65,7 +63,7 @@ public class BombermanTest {
     private Player player;
     private List bombermans;
     private Bomberman field;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private final PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
     public void setUp() throws Exception {
@@ -76,7 +74,7 @@ public class BombermanTest {
         canDropBombs(1);
         bombsPower(1);
         walls = mock(WallsImpl.class);
-        when(walls.iterator()).thenReturn(new LinkedList<Wall>().iterator());
+        when(walls.iterator()).thenReturn(Collections.emptyIterator());
         settings = mock(GameSettings.class);
         listener = mock(EventListener.class);
 
@@ -84,6 +82,7 @@ public class BombermanTest {
         when(settings.getLevel()).thenReturn(level);
         initBomberman();
         givenBoard(SIZE);
+        PerksSettingsWrapper.clear();
     }
 
     private void initBomberman() {
@@ -1116,14 +1115,14 @@ public class BombermanTest {
     public void shouldWallProtectsBomberman2() {
         assertBombPower(5,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼       ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉      ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉ ☺    ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉҉҉҉҉҉ ☼\n" +
-                "☼☼☼☼☼☼☼☼☼\n");
+                        "☼       ☼\n" +
+                        "☼҉☼ ☼ ☼ ☼\n" +
+                        "☼҉      ☼\n" +
+                        "☼҉☼ ☼ ☼ ☼\n" +
+                        "☼҉ ☺    ☼\n" +
+                        "☼҉☼ ☼ ☼ ☼\n" +
+                        "☼҉҉҉҉҉҉ ☼\n" +
+                        "☼☼☼☼☼☼☼☼☼\n");
 
         assertBombermanAlive();
     }
@@ -1137,42 +1136,42 @@ public class BombermanTest {
     public void shouldChangeBombPower_to2() {
         assertBombPower(2,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼       ☼\n" +
-                "☼ ☼ ☼ ☼ ☼\n" +
-                "☼       ☼\n" +
-                "☼ ☼ ☼ ☼ ☼\n" +
-                "☼҉ ☺    ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉҉҉    ☼\n" +
-                "☼☼☼☼☼☼☼☼☼\n");
+                        "☼       ☼\n" +
+                        "☼ ☼ ☼ ☼ ☼\n" +
+                        "☼       ☼\n" +
+                        "☼ ☼ ☼ ☼ ☼\n" +
+                        "☼҉ ☺    ☼\n" +
+                        "☼҉☼ ☼ ☼ ☼\n" +
+                        "☼҉҉҉    ☼\n" +
+                        "☼☼☼☼☼☼☼☼☼\n");
     }
 
     @Test
     public void shouldChangeBombPower_to3() {
         assertBombPower(3,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼       ☼\n" +
-                "☼ ☼ ☼ ☼ ☼\n" +
-                "☼       ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉ ☺    ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉҉҉҉   ☼\n" +
-                "☼☼☼☼☼☼☼☼☼\n");
+                        "☼       ☼\n" +
+                        "☼ ☼ ☼ ☼ ☼\n" +
+                        "☼       ☼\n" +
+                        "☼҉☼ ☼ ☼ ☼\n" +
+                        "☼҉ ☺    ☼\n" +
+                        "☼҉☼ ☼ ☼ ☼\n" +
+                        "☼҉҉҉҉   ☼\n" +
+                        "☼☼☼☼☼☼☼☼☼\n");
     }
 
     @Test
     public void shouldChangeBombPower_to6() {
         assertBombPower(6,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼҉      ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉      ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉ ☺    ☼\n" +
-                "☼҉☼ ☼ ☼ ☼\n" +
-                "☼҉҉҉҉҉҉҉☼\n" +
-                "☼☼☼☼☼☼☼☼☼\n");
+                        "☼҉      ☼\n" +
+                        "☼҉☼ ☼ ☼ ☼\n" +
+                        "☼҉      ☼\n" +
+                        "☼҉☼ ☼ ☼ ☼\n" +
+                        "☼҉ ☺    ☼\n" +
+                        "☼҉☼ ☼ ☼ ☼\n" +
+                        "☼҉҉҉҉҉҉҉☼\n" +
+                        "☼☼☼☼☼☼☼☼☼\n");
     }
 
     private void assertBombPower(int power, String expected) {
@@ -1676,20 +1675,6 @@ public class BombermanTest {
         verify(listener).event(Events.KILL_DESTROY_WALL);
     }
 
-    static class DestroyWallAt extends WallsDecorator {
-
-        public DestroyWallAt(int x, int y, Walls walls) {
-            super(walls);
-            walls.add(new DestroyWall(x, y));
-        }
-
-        @Override
-        public Wall destroy(int x, int y) {   // неразрушаемая стенка
-            return walls.get(x, y);
-        }
-
-    }
-
     private void givenBoardWithDestroyWallsAt(int x, int y) {
         withWalls(new DestroyWallAt(x, y, new WallsImpl()));
         givenBoard(SIZE);
@@ -1716,21 +1701,6 @@ public class BombermanTest {
                 "x҉҉ ☺\n");
 
         verify(listener).event(Events.KILL_MEAT_CHOPPER);
-    }
-
-
-    static class MeatChopperAt extends WallsDecorator {
-
-        public MeatChopperAt(int x, int y, Walls walls) {
-            super(walls);
-            walls.add(new MeatChopper(x, y));
-        }
-
-        @Override
-        public Wall destroy(int x, int y) {   // неубиваемый монстрик
-            return walls.get(x, y);
-        }
-
     }
 
     private void givenBoardWithMeatChopperAt(int x, int y) {
@@ -2052,20 +2022,13 @@ public class BombermanTest {
 
     }
 
-
-    // под разрущающейся стенкой может быть приз - это специальная стенка
-    // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
-    // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
-    // чертики тоже могут ставить бомбы
-
-
     // Perks related test here
     @Test
     public void shouldPerkBeDropped_whenWallIsDestroyed() {
         givenBoardWithDestroyWalls(6);
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 3);
         PerksSettingsWrapper.setDropRatio(20); // 20%
-        when(bombermanDice.next(anyInt())).thenReturn(10,30); // must drop 1 perk
+        when(bombermanDice.next(anyInt())).thenReturn(10, 30); // must drop 1 perk
 
         hero.act();
         field.tick();
@@ -2086,7 +2049,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombBlastRadiusIncrease_whenBBRIperk() {
+    public void shouldBombermanAcquirePerk_whenMoveToFieldWithPerk() {
         // BBRI = Bomb Blast Radius Increase perk
 
         givenBoardWithDestroyWalls(6);
@@ -2109,7 +2072,18 @@ public class BombermanTest {
                 "+҉҉☺ #\n" +
                 "#+####\n");
 
+        field.tick();
+
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                "+  ☺ #\n" +
+                "#+####\n");
+
         // go for perk
+        hero.left();
+        field.tick();
         hero.left();
         field.tick();
         hero.left();
@@ -2119,8 +2093,65 @@ public class BombermanTest {
                 "# # ##\n" +
                 "#    #\n" +
                 "# # ##\n" +
-                "+☺   #\n" +
+                "☺    #\n" +
                 "#+####\n");
+
+        assertEquals("Hero had to acquire new perk", 1, player.getHero().getPerks().size());
+
+    }
+
+
+    // под разрущающейся стенкой может быть приз - это специальная стенка
+    // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
+    // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
+    // чертики тоже могут ставить бомбы
+
+    @Test
+    public void shouldBombBlastRadiusIncrease_whenBBRIperk() {
+        givenBoardWithDestroyWalls(6);
+        player.getHero().addPerk(new BombBlastRadiusIncrease(4,3));
+
+        hero.act();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        asrtBrd("#H####\n" +
+                "#҉# ##\n" +
+                "#҉   #\n" +
+                "#҉# ##\n" +
+                "HѠ҉҉҉H\n" +
+                "#H####\n");
+    }
+
+    static class DestroyWallAt extends WallsDecorator {
+
+        public DestroyWallAt(int x, int y, Walls walls) {
+            super(walls);
+            walls.add(new DestroyWall(x, y));
+        }
+
+        @Override
+        public Wall destroy(int x, int y) {   // неразрушаемая стенка
+            return walls.get(x, y);
+        }
+
+    }
+
+    static class MeatChopperAt extends WallsDecorator {
+
+        public MeatChopperAt(int x, int y, Walls walls) {
+            super(walls);
+            walls.add(new MeatChopper(x, y));
+        }
+
+        @Override
+        public Wall destroy(int x, int y) {   // неубиваемый монстрик
+            return walls.get(x, y);
+        }
+
     }
 
 

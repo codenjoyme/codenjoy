@@ -29,6 +29,7 @@ import com.codenjoy.dojo.bomberman.model.perks.PerkSettings;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 
@@ -62,6 +63,10 @@ public class Bomberman implements Field {
 
     public List<PerkOnBoard> getPerks() {
         return new ArrayList<PerkOnBoard>(perks.values());
+    }
+
+    public PerkOnBoard getPerkAtPoint(int x, int y) {
+        return perks.get(PointImpl.pt(x, y));
     }
 
     @Override

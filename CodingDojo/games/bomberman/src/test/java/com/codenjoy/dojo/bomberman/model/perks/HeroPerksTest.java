@@ -25,6 +25,9 @@ package com.codenjoy.dojo.bomberman.model.perks;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import org.junit.Test;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 public class HeroPerksTest {
@@ -61,6 +64,21 @@ public class HeroPerksTest {
         hp.tick();
         perksCount = hp.getPerksList().size();
         assertEquals("Perks list must be empty", 0, perksCount);
+    }
+
+    @Test
+    public void should_not_modify_Perks_after_clone() {
+        HeroPerks hp = new HeroPerks();
+        BombBlastRadiusIncrease bip = new BombBlastRadiusIncrease(2, 2);
+        hp.add(bip);
+
+        List<Perk> list = hp.getPerksList();
+
+        assertEquals( 1, list.size());
+
+        list.clear();
+
+        assertEquals("Must not be mutated", 1, hp.getPerksList().size());
     }
 
 }
