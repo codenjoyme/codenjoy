@@ -22,7 +22,11 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.httpclient.SmsGatewayClient;
 import com.codenjoy.dojo.services.properties.SmsProperties;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,9 +36,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SmsService {
 
+    private static final String SEND_SMS_OPERATION = "SENDSMS";
+
     public enum SmsType {REGISTRATION, PASSWORD_RESET, NEW_PASSWORD}
 
     private final SmsProperties smsProperties;
+
+    private final SmsGatewayClient gatewayClient;
 
 
     public void sendSmsTo(String phone, String code, SmsType smsType) {
@@ -42,6 +50,9 @@ public class SmsService {
         if(log.isDebugEnabled()) {
             log.debug(String.format("SMS to %s:\n%s", phone, smsContent));
         }
+
+        SmsSendRequest smsSendRequest = new SmsSendRequest(phone, smsContent);
+        gatewayClient.sendSms(smsSendRequest);
     }
 
     private String buildMessage(String value, SmsType smsType) {
@@ -59,5 +70,30 @@ public class SmsService {
                 throw new IllegalArgumentException();
             }
         }
+    }
+
+    @Getter
+    @JacksonXmlRootElement(localName = "request")
+    public static class SmsSendRequest {
+        @JacksonXmlProperty
+        private final String operation;
+        @JacksonXmlProperty
+        private final Message message;
+
+        public SmsSendRequest(String receiver, String smsBody) {
+            operation = SEND_SMS_OPERATION;
+            message = new Message(receiver, smsBody);
+        }
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public static class Message {
+        @JacksonXmlProperty(isAttribute = true)
+        private int lifetime = 4;
+        @JacksonXmlProperty
+        private final String recipient;
+        @JacksonXmlProperty
+        private final String body;
     }
 }
