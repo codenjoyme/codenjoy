@@ -85,18 +85,15 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                                 RestController.URI + RestController.REGISTER + "/**",
                                 RestController.URI + RestController.LOGIN)
                             .permitAll()
-                .antMatchers(
-                        RestController.URI + RestController.UPDATE,
-                        RestController.URI + "/score/day/**",
-                        RestController.URI + RestController.PLAYER)
-                .hasRole("USER")
-
+                        .antMatchers(
+                                RestController.URI + RestController.UPDATE,
+                                RestController.URI + "/score/day/**",
+                                RestController.URI + RestController.PLAYER)
+                            .hasRole("USER")
                         .antMatchers(
                                 "/resources/html/**",
-                                RestController.URI + "/**"
-                        )
+                                RestController.URI + "/**")
                             .hasRole("ADMIN")
-
                         .anyRequest()
                             .denyAll()
                 .and()
