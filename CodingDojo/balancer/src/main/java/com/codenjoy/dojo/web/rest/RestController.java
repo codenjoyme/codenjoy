@@ -67,6 +67,7 @@ public class RestController {
     public static final String CONTEST = "/contest";
     public static final String CACHE = "/cache";
     public static final String REMOVE = "/remove";
+    public static final String CONFIRM = "/confirm";
     public static final String UPDATE = "/update";
 
     private static Logger logger = DLoggerFactory.getLogger(RestController.class);
@@ -209,7 +210,7 @@ public class RestController {
 
     @GetMapping(PLAYER + "/{player}/active/{code}")
     @ResponseBody
-    public boolean login(@PathVariable("player") String email,
+    public boolean isJoinedToGameServer(@PathVariable("player") String email,
                          @PathVariable("code") String code)
     {
         Player player = validator.checkPlayerCode(email, code); // TODO test me
@@ -522,7 +523,7 @@ public class RestController {
                 confirmRegistration(phoneValidateNormalize(phoneCodeDTO.getPhone()), phoneCodeDTO.getCode()));
     }
 
-    @GetMapping(REGISTER + "/confirm/{player}/code")
+    @GetMapping(CONFIRM + "/{player}/code")
     @ResponseBody
     public String getVerificationCode(@PathVariable("player") String email) {
         return players.get(email).getVerificationCode();

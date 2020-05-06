@@ -88,7 +88,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                         .antMatchers(
                                 RestController.URI + RestController.UPDATE,
                                 RestController.URI + "/score/day/**",
-                                RestController.URI + RestController.PLAYER)
+                                RestController.URI + RestController.PLAYER + "/**")
                             .hasRole("USER")
                         .antMatchers(
                                 "/resources/html/**",

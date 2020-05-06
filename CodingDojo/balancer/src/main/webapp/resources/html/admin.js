@@ -137,7 +137,7 @@ var loginUser = function(email, password) {
 var getConfirmCode = function(email) {
     _ajax('get-confirm', {
         type: 'GET',
-        url: server('balancer') + '/register/confirm/' + email + '/code',
+        url: server('balancer') + '/confirm/' + email + '/code',
         after: function(data){
             $('#confirm-code').val(data);
         }
