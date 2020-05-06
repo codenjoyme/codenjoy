@@ -66,6 +66,7 @@ public class GameServer {
                 name,
                 callbackUrl,
                 config.getGameType(),
+                config.getGameType(),
                 score,
                 save,
                 new User(

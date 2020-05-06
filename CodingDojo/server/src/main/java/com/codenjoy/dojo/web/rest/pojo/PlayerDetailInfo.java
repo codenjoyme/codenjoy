@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -70,6 +71,9 @@ public class PlayerDetailInfo {
     }
 
     public PlayerSave buildPlayerSave() {
+        if (StringUtils.isEmpty(roomName)) { // TODO test me
+            roomName = gameType;
+        }
         return new PlayerSave(id, callbackUrl, roomName, gameType, Integer.valueOf(score), save);
     }
 }
