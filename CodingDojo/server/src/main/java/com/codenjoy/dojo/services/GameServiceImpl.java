@@ -51,6 +51,9 @@ public class GameServiceImpl implements GameService {
 
     private Map<String, GameType> cache = new TreeMap<>();
 
+    @Value("${plugins.enable}")
+    private boolean pluginsEnable;
+
     @Value("${plugins.path}")
     private String pluginsPath;
 
@@ -82,7 +85,9 @@ public class GameServiceImpl implements GameService {
         remove(result,
                 it -> ConstructorUtils.getMatchingAccessibleConstructor(it) == null);
 
-        loadFromPlugins(result);
+        if (pluginsEnable) {
+            loadFromPlugins(result);
+        }
 
         remove(result, it -> Stream.of(excludeGames)
                 .anyMatch(name -> it.getPackage().toString().contains(name)));
