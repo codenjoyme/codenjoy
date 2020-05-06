@@ -277,13 +277,12 @@ $(document).ready(function() {
         $('#' + action).click(function() {
             var preffix = $('#preffix').val();
 
-            var password = $('#password').val();
             registerUser(
                 preffix + $('#email').val(),
                 $('#phone').val(),
                 preffix + $('#first-name').val(),
                 preffix + $('#last-name').val(),
-                password,
+                preffix + $('#password').val(),
                 $('#code').val(),
                 preffix + $('#city').val(),
                 preffix + $('#skills').val(),

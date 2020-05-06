@@ -171,7 +171,7 @@ public class RestController {
                             player.getComment(),
                             player.getCode(),
                             player.getServer(),
-                            0,
+                            Player.NOT_APPROVED,
                             verificationCode,
                             RegistrationService.VerificationType.REGISTRATION.name()
                     ));
