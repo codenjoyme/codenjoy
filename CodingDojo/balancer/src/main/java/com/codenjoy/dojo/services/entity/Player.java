@@ -55,6 +55,11 @@ public class Player {
         this.password = password;
     }
 
+    public Player(String email, String code) {
+        this.email = email;
+        this.code = code;
+    }
+
     public Player(String email, String phone, String code, String server) {
         this.email = email;
         this.phone = phone;

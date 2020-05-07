@@ -109,14 +109,17 @@ var registerUser = function(email, phone, firstName,
             '"skills" : "' + skills + '", ' +
             '"comment" : "' + comment + '"}',
         after: function(data){
-            $('#confirm-code').val(data.code);
-            $('#join-code').val(data.code);
-            $('#code').val(data.code);
+            updateCode(data.code);
 
             autoIncrement();
         }
     });
 };
+
+var updateCode = function(code) {
+    $('#join-code').val(code);
+    $('#code').val(code);
+}
 
 var loginUser = function(email, password) {
     _ajax('login', {
@@ -126,8 +129,7 @@ var loginUser = function(email, password) {
         data: '{"email": "' + email + '", ' +
             '"password" : "' + password + '"}',
         after: function(data){
-            $('#join-code').val(data.code);
-            $('#code').val(data.code);
+            updateCode(data.code);
 
             autoIncrement();
         }
@@ -139,7 +141,9 @@ var getConfirmCode = function(email) {
         type: 'GET',
         url: server('balancer') + '/confirm/' + email + '/code',
         after: function(data){
-            $('#confirm-code').val(data);
+            if (data.statusText != 'OK') {
+                $('#confirm-code').val(data);
+            }
         }
     });
 };
@@ -158,6 +162,11 @@ var joinExitStatusUser = function(email, code, whatToDo) {
     _ajax('join', {
         type: 'GET',
         url: server('balancer') + '/player/' + email + '/' + whatToDo + '/' + code,
+        after: function(data){
+            if (!!data.code) {
+                updateCode(data.code);
+            }
+        }
     });
 };
 
@@ -294,6 +303,30 @@ $(document).ready(function() {
 
     registerOrUpdate('register');
     registerOrUpdate('update');
+
+    var sync = function(ids) {
+        for (var index in ids) {
+            var id = ids[index];
+
+            syncChange(id, ids);
+        }
+    }
+
+    var syncChange = function(id, ids) {
+        $(id).change(function() {
+            for (var index2 in ids) {
+                var id2 = ids[index2];
+                if (id == id2) continue;
+
+                $(id2).val($(id).val());
+            }
+        });
+    }
+
+    sync(['#phone', '#confirm-phone']);
+    sync(['#email', '#get-confirm-email', '#login-email', '#remove-email', '#join-email']);
+    sync(['#password', '#login-password']);
+    sync(['#code', '#join-code']);
 
     $('#login').click(function() {
         var preffix = $('#preffix').val();
