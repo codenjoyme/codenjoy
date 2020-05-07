@@ -1,7 +1,7 @@
 // vendor
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import classnames from 'classnames';
+// import classnames from 'classnames';
 import { Link } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
@@ -69,14 +69,14 @@ const BOARD_EXAMPLE_2 = `
 ☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼
 `;
 
-const { boardExample, mask, highligte, highligteNotes, mb15 } = Styles;
+const { boardExample, mask, highligte, highligteNotes } = Styles;
 
 class RulesContainer extends Component {
     render() {
-        const { server, code, email } = this.props;
-        const loggedIn = [ server, code, email ].every(Boolean);
+        const { server, code, id } = this.props;
+        const loggedIn = [ server, code, id ].every(Boolean);
         const connectionUrl = loggedIn
-            ? getGameConnectionString(server, code, email)
+            ? getGameConnectionString(server, code, id)
             : void 0;
 
         const javaClientLink = loggedIn ? (
@@ -236,13 +236,13 @@ class RulesContainer extends Component {
                     <p>
                         Перше завдання - написати websocket клієнта, який підключиться до сервера. Потім змусити героя слухатися команди. Таким чином, гравець підготується до основної грі. Основна мета - вести осмислену гру і перемогти, набравши найбільшу кількість балів.
                     </p>
-                    <h2 className={ classnames('title', mb15) }>
+                    { /* <h2 className={ classnames('title', mb15) }>
                         Правила, бали, особливі випадки і підказки
-                    </h2>
-                    { /* <div className={ classnames('subTitle', mb30) }>
-                        Раунди/матчі:
-                    </div>
-                    <p>
+                        </h2>
+                        <div className={ classnames('subTitle', mb30) }>
+                            Раунди/матчі:
+                        </div>
+                        <p>
                         Матч складається з 1 Раунду.
                         <br />
                         Учасник, який закінчив гру, одразу попадає до нової
@@ -463,7 +463,7 @@ class RulesContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-    email:  state.auth.email,
+    id:     state.auth.id,
     server: state.auth.server,
     code:   state.auth.code,
 });
