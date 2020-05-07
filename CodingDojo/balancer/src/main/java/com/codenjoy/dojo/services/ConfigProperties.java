@@ -69,8 +69,4 @@ public class ConfigProperties {
         return Hash.getId(email, emailHash);
     }
 
-    public String getAdminToken() {
-        return DigestUtils.md5DigestAsHex(adminPassword.getBytes());
-    }
-
 }

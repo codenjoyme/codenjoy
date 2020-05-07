@@ -89,7 +89,7 @@ public class Scores {
                     pool.fillStatement(stmt,
                             formatter.format(date),
                             JDBCTimeUtils.toString(date),
-                            info.getName(),
+                            info.getId(),
                             Integer.valueOf(info.getScore()));
                     return true;
                 });

@@ -22,49 +22,25 @@ package com.codenjoy.dojo.services.entity.server;
  * #L%
  */
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class PlayerInfo {
 
     private String gameType;
     private String callbackUrl;
-    private String name;
+    private String id;
+    private String readableName;
     private String score;
     private String code;
 
-    public PlayerInfo() {
-        // do nothing
-    }
-
-    public PlayerInfo(String gameType, String callbackUrl, String name, String score, String code) {
-        this.gameType = gameType;
-        this.callbackUrl = callbackUrl;
-        this.name = name;
+    public PlayerInfo(String id, String score) {
+        this.id = id;
         this.score = score;
-        this.code = code;
-    }
-
-    public PlayerInfo(String name, String score) {
-        this.name = name;
-        this.score = score;
-    }
-
-    public String getGameType() {
-        return gameType;
-    }
-
-    public String getCallbackUrl() {
-        return callbackUrl;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getScore() {
-        return score;
-    }
-
-    public String getCode() {
-        return code;
     }
 
     @Override
@@ -72,13 +48,14 @@ public class PlayerInfo {
         return "PlayerInfo{" +
                 "gameType='" + gameType + '\'' +
                 ", callbackUrl='" + callbackUrl + '\'' +
-                ", name='" + name + '\'' +
+                ", id='" + id + '\'' +
+                ", readableName='" + readableName + '\'' +
                 ", score='" + score + '\'' +
                 ", code='" + code + '\'' +
                 '}';
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(String id) {
+        this.id = id;
     }
 }
