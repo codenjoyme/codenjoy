@@ -114,16 +114,16 @@ To run a project with your game, do the following:
       * `start-day` start day of tournament in `YYYY-MM-DD` format
       * `end-day`  day of tournament in `YYYY-MM-DD` format
       * `finalists-count` number of daily finalists
-      * `finale-time` final time in `HH-MM` format
+      * `final-time` final time in `HH-MM` format
 - run [Codenjoy server](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo#run-balancer-server-from-sources) in the `\CodingDojo\server` project
 - run Balancer server in the `\CodingDojo\balancer` project 
   * run `mvn clean install -DskipTests=true`  
-  * run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-balancer -Dserver.port=8081 -Dgame.type=yourgame -Dgame.servers=localhost:8080 -Droom=1 -Dstart-day=2020-03-01 -Dend-day=2020-03-31 -Dfinalists-count=10 -Dfinale-time=19:00`
+  * run `mvn clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,debug -Dcontext=/codenjoy-balancer -Dserver.port=8081 -Dgame.type=yourgame -Dgame.servers=localhost:8080 -Droom=1 -Dstart-day=2020-03-01 -Dend-day=2020-03-31 -Dfinalists-count=10 -Dfinal-time=19:00`
 - if maven is not installed on you machine, try `mvnw` instead of `mvn`
 - a simpler way of launching Balancer is by running a script in the root `\CodingDojo\build-balancer.bat` then `\CodingDojo\start-balancer.bat` (do not forget to start codenjoy server before) 
 - another way to run Balancer from war
   * build war file `mvn clean package -DskipTests=true` in the `\CodingDojo\balancer` project to build balancer
-  * run war like jar file `java -jar codenjoy-balancer.war --spring.profiles.active=sqlite,debug --context=/codenjoy-balancer --server.port=8081 --game.type=yourgame --game.servers=localhost:8080 --room=1 --start-day=2020-03-01 --end-day=2020-03-31 --finalists-count=10 --finale-time=19:00` in the `\CodingDojo\balancer\target`              
+  * run war like jar file `java -jar codenjoy-balancer.war --spring.profiles.active=sqlite,debug --context=/codenjoy-balancer --server.port=8081 --game.type=yourgame --game.servers=localhost:8080 --room=1 --start-day=2020-03-01 --end-day=2020-03-31 --finalists-count=10 --final-time=19:00` in the `\CodingDojo\balancer\target`              
 - after that in the browser access [http://127.0.0.1:8081/codenjoy-balancer/resources/html/admin.html](http://127.0.0.1:8081/codenjoy-balancer/resources/html/admin.html) 
   * login as Admin 
     * `admin@codenjoyme.com`

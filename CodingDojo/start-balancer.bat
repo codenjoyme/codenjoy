@@ -11,6 +11,6 @@ java -jar %ROOT%\balancer\target\codenjoy-balancer.war ^
 		--start-day=2020-03-01 ^
 		--end-day=2020-03-31 ^
 		--finalists-count=10 ^
-		--finale-time=19:00	
+		--final-time=19:00
  
 pause >nul
