@@ -22,6 +22,8 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
+import static com.codenjoy.dojo.services.JarResourceHttpRequestHandler.*;
+import com.codenjoy.dojo.services.JarResourceHttpRequestHandler;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.transport.auth.AuthenticationService;
 import com.codenjoy.dojo.transport.control.ControlWebSocketServlet;
@@ -34,9 +36,12 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+
+import java.util.Properties;
 
 /**
  * @author Igor Petrov
@@ -53,6 +58,12 @@ public class MVCConf implements WebMvcConfigurer {
     @Value("${server.servlet.context-path}")
     private String servletContextRoot;
 
+    @Value("${plugins.resources}")
+    private String pluginsResources;
+
+    @Value("${plugins.static}")
+    private String pluginsStatic;
+
     @Autowired
     private TimerService timer;
 
@@ -68,12 +79,23 @@ public class MVCConf implements WebMvcConfigurer {
     @Autowired
     private AuthenticationService defaultAuthenticationService;
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry
-                .addResourceHandler(RESOURCES_URI)
-                    .addResourceLocations("/resources/", "classpath:/resources/")
-                    .setCachePeriod(cachePeriod);
+    @Bean
+    public ResourceHttpRequestHandler resourceHttpRequestHandler() {
+        return new JarResourceHttpRequestHandler(
+                "/resources/",
+                "classpath:/resources/",
+                "file:" + pluginsStatic,
+                PREFIX + pluginsResources);
+    }
+
+    @Bean
+    public SimpleUrlHandlerMapping sampleServletMapping(){
+        return new SimpleUrlHandlerMapping(){{
+            setOrder(Integer.MAX_VALUE - 2);
+            setMappings(new Properties(){{
+                put(RESOURCES_URI, "resourceHttpRequestHandler");
+            }});
+        }};
     }
 
     @Bean

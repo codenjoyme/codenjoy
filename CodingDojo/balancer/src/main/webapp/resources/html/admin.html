@@ -87,7 +87,7 @@
         </div>
         <div>
             <span>GameType</span>
-            <input id="gametype-result" value="">
+            <textarea rows="15" id="admin-settings-result" value=""></textarea>
         </div>
     </div>
 
@@ -112,6 +112,10 @@
         <div>
             <span>Email:</span>
             <input id="email" value="test@gmail.com"/>
+        </div>
+        <div>
+            <span>Phone:</span>
+            <input id="phone" value="+380501234567"/>
         </div>
         <div>
             <span>City:</span>
@@ -141,6 +145,58 @@
         <div>
             <span>Error:</span>
             <textarea rows="5" id="register-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Get confirmation code</h2>
+    <div class="table">
+        <div>
+            <span>Email:</span>
+            <input id="get-confirm-email" value="test@gmail.com"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="get-confirm">Get</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="get-confirm-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="get-confirm-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="get-confirm-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Confirm user by phone</h2>
+    <div class="table">
+        <div>
+            <span>Phone:</span>
+            <input id="confirm-phone" value="+380501234567"/>
+        </div>
+        <div>
+            <span>Confirm code:</span>
+            <input id="confirm-code" value=""/>
+        </div>
+        <div>
+            <span></span>
+            <button id="confirm">Confirm</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="confirm-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="confirm-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="confirm-error"></textarea>
         </div>
     </div>
 
@@ -204,7 +260,7 @@
         </div>
         <div>
             <span>Code:</span>
-            <input id="join-code" value="code"/>
+            <input id="join-code" value=""/>
         </div>
         <div>
             <span></span>

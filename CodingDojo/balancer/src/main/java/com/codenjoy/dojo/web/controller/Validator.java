@@ -131,6 +131,12 @@ public class Validator {
         }
     }
 
+    public void checkNull(String name, String input) {
+        if (!StringUtils.isEmpty(input)) {
+            throw new IllegalArgumentException(name + " string should be empty: " + input);
+        }
+    }
+
     public Player checkPlayerCode(String email, String code) {
         checkEmail(email, Validator.CANT_BE_NULL);
         checkCode(code, Validator.CANT_BE_NULL);

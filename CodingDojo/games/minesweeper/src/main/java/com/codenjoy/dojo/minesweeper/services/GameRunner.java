@@ -82,6 +82,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Class<? extends Solver> getAI() {
+        // TODO в динамической загрузке джарников не работает тут и валит всю игру
         return AISolver.class;
     }
 

@@ -7,16 +7,21 @@ mvc:
 
 log:
   debug: false
+
 admin:
-  login: admin
+  login: admin@codenjoyme.com
   password: admin
+
 email:
   hash: secureSoul
+
 score:
   update:
     time: 10000
+
 sender:
     pool.size: 100
+
 game:
   type: bomberman
   servers: localhost:8080
@@ -27,9 +32,14 @@ game:
   start-day: "2020-03-01"
   end-day: "2020-03-31"
   finalists-count: 10
-  finale-time: "19:00"
+  final-time: "19:00"
+
 sms:
   text:
     registration: "Vash kod pidtverdzennya reestratsui: %s.\nCodenjoy Team."
     reset-password: "Vash kod pidtverdzennya zminy parolu: %s.\nCodenjoy Team."
     new-password: "Vash parol zmineno.\nNovyi parol: %s.\nCodenjoy Team."
+  gateway:
+    send-endpoint: http://sms-fly.com/api/api.noai.php
+    user: 380989207390
+    password: 123456789

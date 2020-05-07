@@ -23,28 +23,23 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import static java.util.stream.Collectors.toList;
-
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
-import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import com.codenjoy.dojo.web.rest.pojo.PlayerId;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Controller
 @RequestMapping("/rest")
@@ -125,7 +120,7 @@ public class RestRegistrationController {
     @PostMapping("/player/create")
     @ResponseBody
     public synchronized String createPlayer(@RequestBody PlayerDetailInfo player) {
-        Registration.User user = player.getRegistration();
+        Registration.User user = player.getRegistration().build();
         registration.replace(user);
 
         boolean fromSave = player.getScore() == null;

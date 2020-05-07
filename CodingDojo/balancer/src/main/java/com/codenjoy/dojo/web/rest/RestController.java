@@ -67,7 +67,9 @@ public class RestController {
     public static final String CONTEST = "/contest";
     public static final String CACHE = "/cache";
     public static final String REMOVE = "/remove";
+    public static final String CONFIRM = "/confirm";
     public static final String UPDATE = "/update";
+    public static final String SCORE = "/score";
 
     private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
@@ -85,7 +87,7 @@ public class RestController {
     @Autowired private SmsService smsService;
 
     // TODO test me
-    @GetMapping("/score/day/{day}")
+    @GetMapping(SCORE + "/day/{day}")
     @ResponseBody
     public List<PlayerScore> dayScores(@PathVariable("day") String day) {
         validator.checkDay(day);
@@ -95,7 +97,7 @@ public class RestController {
 
     // TODO test me
     // TODO add to admin page
-    @GetMapping("/score/finalists")
+    @GetMapping(SCORE + "/finalists")
     @ResponseBody
     public List<PlayerScore> finalistsScores() {
         return dispatcher.getFinalists();
@@ -103,7 +105,7 @@ public class RestController {
 
     // TODO test me
     // TODO add to admin page
-    @PostMapping("/score/disqualify/{player}")
+    @PostMapping(SCORE + "/disqualify/{player}")
     @ResponseBody
     public boolean disqualify(@RequestBody List<String> players) {
         players.forEach(email -> validator.checkEmail(email, CANT_BE_NULL));
@@ -115,7 +117,7 @@ public class RestController {
 
     // TODO test me
     // TODO add to admin page
-    @GetMapping("/score/disqualified")
+    @GetMapping(SCORE + "/disqualified")
     @ResponseBody
     public List<String> disqualified() {
         return dispatcher.disqualified();
@@ -131,7 +133,7 @@ public class RestController {
                 () -> validator.checkPhoneNumber(player.getPhone(), CANT_BE_NULL),
                 () -> validator.checkString("FirstName", player.getFirstName()),
                 () -> validator.checkString("LastName", player.getLastName()),
-                () -> validator.checkMD5(player.getPassword(), CANT_BE_NULL),
+                () -> validator.checkString("Password", player.getPassword()),
                 () -> validator.checkString("City", player.getCity()),
                 () -> validator.checkString("Skills", player.getSkills())
         );
@@ -171,7 +173,7 @@ public class RestController {
                             player.getComment(),
                             player.getCode(),
                             player.getServer(),
-                            0,
+                            Player.NOT_APPROVED,
                             verificationCode,
                             RegistrationService.VerificationType.REGISTRATION.name()
                     ));
@@ -209,7 +211,7 @@ public class RestController {
 
     @GetMapping(PLAYER + "/{player}/active/{code}")
     @ResponseBody
-    public boolean login(@PathVariable("player") String email,
+    public boolean isJoinedToGameServer(@PathVariable("player") String email,
                          @PathVariable("code") String code)
     {
         Player player = validator.checkPlayerCode(email, code); // TODO test me
@@ -220,21 +222,29 @@ public class RestController {
 
     @GetMapping(PLAYER + "/{player}/join/{code}")
     @ResponseBody
-    public boolean joinToGameServer(@PathVariable("player") String email,
+    public ServerLocation joinToGameServer(@PathVariable("player") String email,
                                       @PathVariable("code") String code,
                                       HttpServletRequest request)
     {
-        Player player = validator.checkPlayerCode(email, code); // TODO test me
+        ServerLocation location = tryLogin(new Player(email, code), true, new OnLogin<ServerLocation>() {
+            @Override
+            public ServerLocation onSuccess(ServerLocation data) {
+                ServerLocation serverLocation = recreatePlayerIfNeeded(data, email, getIp(request));
+                return serverLocation;
+            }
 
-        // TODO test me when not exists - should remove from other servers and join
-        ServerLocation location = dispatcher.registerIfNotExists(
-                player.getServer(),
-                player.getEmail(),
-                player.getPhone(),
-                getFullName(player),
-                player.getPassword(),
-                getIp(request));
-        return location != null;
+            @Override
+            public ServerLocation onFailed(ServerLocation data) {
+                // TODO test me
+                throw new LoginException("User email or password/code is incorrect");
+            }
+        });
+
+        if (code.equals(location.getCode())) {
+            return null;
+        } else {
+            return location;
+        }
     }
 
     @GetMapping(PLAYER + "/{player}/exit/{code}")
@@ -253,7 +263,7 @@ public class RestController {
     @PostMapping(LOGIN)
     @ResponseBody
     public ServerLocation login(@RequestBody Player player, HttpServletRequest request) {
-        return tryLogin(player, new OnLogin<ServerLocation>(){
+        return tryLogin(player, false, new OnLogin<ServerLocation>(){
 
             @Override
             public ServerLocation onSuccess(ServerLocation data) {
@@ -265,16 +275,16 @@ public class RestController {
             @Override
             public ServerLocation onFailed(ServerLocation data) {
                 // TODO test me
-                throw new LoginException("User name or password/code is incorrect");
+                throw new LoginException("User email or password/code is incorrect");
             }
         });
     }
 
     // TODO test me
-//    @PostMapping(UPDATE)
+    @PostMapping(UPDATE)
     @ResponseBody
-    public ServerLocation changePassword(@RequestBody Player player, HttpServletRequest request) {
-        return tryLogin(player, new OnLogin<ServerLocation>(){
+    public ServerLocation update(@RequestBody Player player, HttpServletRequest request) {
+        return tryLogin(player, false, new OnLogin<ServerLocation>(){
 
             @Override
             public ServerLocation onSuccess(ServerLocation location) {
@@ -301,7 +311,7 @@ public class RestController {
 
             @Override
             public ServerLocation onFailed(ServerLocation data) {
-                throw new LoginException("User name or password/code is incorrect");
+                throw new LoginException("User email or password/code is incorrect");
             }
         });
     }
@@ -336,18 +346,17 @@ public class RestController {
         });
     }
 
-    private <T> T tryLogin(Player player, OnLogin<T> onLogin) {
+    private <T> T tryLogin(Player player, boolean ignorePass, OnLogin<T> onLogin) {
         String email = player.getEmail();
         String phone = player.getPhone();
         String password = player.getPassword();
         String code = player.getCode();
 
         validator.checkEmail(email, CANT_BE_NULL); // TODO test me
-        validator.checkMD5(password, CAN_BE_NULL); // TODO test me
         validator.checkCode(code, CAN_BE_NULL); // TODO test me
 
         Player exist = players.get(email);
-        if (!isValid(exist, password, code)) {
+        if (!isValid(exist, password, code, ignorePass)) {
             return onLogin.onFailed(new ServerLocation(email, phone, null, null, null));
         }
 
@@ -362,13 +371,22 @@ public class RestController {
                 ));
     }
 
-    private boolean isValid(Player exist, String password, String code) {
-        if (exist == null || exist.getApproved() == 0) {
+    private boolean isValid(Player exist, String password, String code, boolean ignorePass) {
+        if (exist == null || exist.getApproved() == Player.NOT_APPROVED) {
             return false;
         }
 
-        return passwordEncoder.matches(password, exist.getPassword())
-                || exist.getCode().equals(code);
+        if (ignorePass) { // TODO test me
+            validator.checkNull("Password", password);
+        } else {
+            validator.checkString("Password", password);
+
+            if (passwordEncoder.matches(password, exist.getPassword())) {
+                return true;
+            }
+        }
+
+        return exist.getCode().equals(code);
     }
 
     private <T> T doIt(DoItOnServers<T> action) {
@@ -453,7 +471,7 @@ public class RestController {
     public boolean saveSettings(@RequestBody ConfigProperties config) {
 
         this.config.updateFrom(config);
-        gameServers.update(config.getServers());
+        gameServers.update(config.getGame().getServers());
 
         return true;
     }
@@ -515,12 +533,17 @@ public class RestController {
         return true;
     }
 
-
     @PostMapping(REGISTER + "/confirm")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ServerLocation> confirmRegistration(@RequestBody PhoneCodeDTO phoneCodeDTO) {
+    public ResponseEntity<ServerLocation> confirmRegistration(@RequestBody PhoneCodeDTO input) {
         return ResponseEntity.ok(registrationService.
-                confirmRegistration(phoneValidateNormalize(phoneCodeDTO.getPhone()), phoneCodeDTO.getCode()));
+                confirmRegistration(phoneValidateNormalize(input.getPhone()), input.getCode()));
+    }
+
+    @GetMapping(CONFIRM + "/{player}/code")
+    @ResponseBody
+    public String getVerificationCode(@PathVariable("player") String email) {
+        return players.get(email).getVerificationCode();
     }
 
     @PostMapping(REGISTER + "/resend")

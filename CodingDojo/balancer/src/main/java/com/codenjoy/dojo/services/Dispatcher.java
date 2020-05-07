@@ -113,7 +113,7 @@ public class Dispatcher {
                 .collect(LinkedList::new, List::addAll, List::addAll);
 
         players.stream()
-                .forEach(p -> p.setName(config.getEmail(p.getName())));
+                .forEach(p -> p.setId(config.getEmail(p.getId())));
 
         long time = now();
         scores.saveScores(time, players);
@@ -166,10 +166,10 @@ public class Dispatcher {
 
     private List<PlayerScore> loadFinalists() {
         return this.scores.getFinalists(
-                config.getDayStart(),
-                config.getDayEnd(),
+                config.getGame().getStartDay(),
+                config.getGame().getEndDay(),
                 lastTime,
-                config.getDayFinalistCount(),
+                config.getGame().getFinalistsCount(),
                 disqualified
         );
     }

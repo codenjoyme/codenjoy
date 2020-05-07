@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services.properties;
+package com.codenjoy.dojo.services.classloader;
 
 /*-
  * #%L
@@ -25,34 +25,14 @@ package com.codenjoy.dojo.services.properties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 @Getter
 @Setter
-@Configuration
 @RequiredArgsConstructor
-@ConfigurationProperties("sms")
-public class SmsProperties {
+public class GameLocator {
 
-    private SmsTextProperties text;
-    private GatewayProperties gateway;
-
-    @Getter
-    @Setter
-    @ConfigurationProperties("text")
-    public static class SmsTextProperties {
-        private String registration;
-        private String resetPassword;
-        private String newPassword;
-    }
-    @Getter
-    @Setter
-    @ConfigurationProperties("gateway")
-    public static class GatewayProperties {
-        private String sendEndpoint;
-        private String user;
-        private String password;
-    }
+    public final String name;
+    public final String jarPath;
+    public Class clazz;
 
 }

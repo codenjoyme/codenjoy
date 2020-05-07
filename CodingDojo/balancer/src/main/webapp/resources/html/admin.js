@@ -30,8 +30,8 @@ var result = function(partOfId, data) {
     $('#' + partOfId + '-error').val('');
 }
 
-var getGameType = function() {
-    return JSON.parse($('#gametype-result').val()).gameType;
+var settings = function() {
+    return JSON.parse($('#admin-settings-result').val());
 }
 
 var server = function(name) {
@@ -91,7 +91,7 @@ var autoIncrement = function() {
     }
 }
 
-var registerUser = function(email, firstName,
+var registerUser = function(email, phone, firstName,
                             lastName, password, code,
                             city, skills, comment, whatToDo)
 {
@@ -100,6 +100,7 @@ var registerUser = function(email, firstName,
         url: server('balancer') + '/' + whatToDo,
         contentType: 'application/json; charset=utf-8',
         data: '{"email": "' + email + '", ' +
+            '"phone" : "' + phone + '", ' +
             '"firstName" : "' + firstName + '", ' +
             '"lastName" : "' + lastName + '", ' +
             '"password" : "' + password + '", ' +
@@ -108,13 +109,17 @@ var registerUser = function(email, firstName,
             '"skills" : "' + skills + '", ' +
             '"comment" : "' + comment + '"}',
         after: function(data){
-            $('#join-code').val(data.code);
-            $('#code').val(data.code);
+            updateCode(data.code);
 
             autoIncrement();
         }
     });
 };
+
+var updateCode = function(code) {
+    $('#join-code').val(code);
+    $('#code').val(code);
+}
 
 var loginUser = function(email, password) {
     _ajax('login', {
@@ -124,11 +129,32 @@ var loginUser = function(email, password) {
         data: '{"email": "' + email + '", ' +
             '"password" : "' + password + '"}',
         after: function(data){
-            $('#join-code').val(data.code);
-            $('#code').val(data.code);
+            updateCode(data.code);
 
             autoIncrement();
         }
+    });
+};
+
+var getConfirmCode = function(email) {
+    _ajax('get-confirm', {
+        type: 'GET',
+        url: server('balancer') + '/confirm/' + email + '/code',
+        after: function(data){
+            if (data.statusText != 'OK') {
+                $('#confirm-code').val(data);
+            }
+        }
+    });
+};
+
+var confirmUser = function(phone, code) {
+    _ajax('confirm', {
+        type: 'POST',
+        url: server('balancer') + '/register/confirm',
+        contentType: 'application/json; charset=utf-8',
+        data: '{"phone": "' + phone + '", ' +
+            '"code" : "' + code + '"}'
     });
 };
 
@@ -136,6 +162,11 @@ var joinExitStatusUser = function(email, code, whatToDo) {
     _ajax('join', {
         type: 'GET',
         url: server('balancer') + '/player/' + email + '/' + whatToDo + '/' + code,
+        after: function(data){
+            if (!!data.code) {
+                updateCode(data.code);
+            }
+        }
     });
 };
 
@@ -153,10 +184,20 @@ var removeUser = function(email) {
     });
 };
 
+var auth = function() {
+    var login = settings().adminLogin;
+    var password = settings().adminPassword;
+    var auth = btoa(login + ":" + password);
+    return auth;
+}
+
 var getUsersOnGameServer = function() {
     _ajax('users-game', {
         type: 'GET',
-        url: server('game') + '/game/' + getGameType() + '/players'
+        url: server('game') + '/game/' + settings().game.type + '/players',
+        headers: {
+            "Authorization": "Basic " + auth()
+        },
     });
 };
 
@@ -249,21 +290,18 @@ $(document).ready(function() {
 
     $('#scores-day').val(new Date().toISOString().split('T')[0]);
 
-    getSettings('gametype');
+    getSettings('admin-settings');
 
     var registerOrUpdate = function(action) {
         $('#' + action).click(function() {
             var preffix = $('#preffix').val();
 
-            var password = $('#password').val();
-            if (!!password) {
-                password = $.md5(preffix + password);
-            }
             registerUser(
                 preffix + $('#email').val(),
+                $('#phone').val(),
                 preffix + $('#first-name').val(),
                 preffix + $('#last-name').val(),
-                password,
+                preffix + $('#password').val(),
                 $('#code').val(),
                 preffix + $('#city').val(),
                 preffix + $('#skills').val(),
@@ -276,11 +314,50 @@ $(document).ready(function() {
     registerOrUpdate('register');
     registerOrUpdate('update');
 
+    var sync = function(ids) {
+        for (var index in ids) {
+            var id = ids[index];
+
+            syncChange(id, ids);
+        }
+    }
+
+    var syncChange = function(id, ids) {
+        $(id).change(function() {
+            for (var index2 in ids) {
+                var id2 = ids[index2];
+                if (id == id2) continue;
+
+                $(id2).val($(id).val());
+            }
+        });
+    }
+
+    sync(['#phone', '#confirm-phone']);
+    sync(['#email', '#get-confirm-email', '#login-email', '#remove-email', '#join-email']);
+    sync(['#password', '#login-password']);
+    sync(['#code', '#join-code']);
+
     $('#login').click(function() {
         var preffix = $('#preffix').val();
         loginUser(
             preffix + $('#login-email').val(),
-            $.md5(preffix + $('#login-password').val())
+            preffix + $('#login-password').val()
+        );
+    });
+
+    $('#get-confirm').click(function() {
+        var preffix = $('#preffix').val();
+        getConfirmCode(
+            preffix + $('#get-confirm-email').val()
+        );
+    });
+
+    $('#confirm').click(function() {
+        var preffix = $('#preffix').val();
+        confirmUser(
+            $('#confirm-phone').val(),
+            $('#confirm-code').val()
         );
     });
 

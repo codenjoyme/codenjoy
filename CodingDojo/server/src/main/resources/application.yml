@@ -3,6 +3,15 @@ server:
   ip: 127.0.0.1
   port: 8080
 
+plugins:
+  enable: false
+  game:
+    exclude: chess, sokoban
+    package: com.codenjoy.dojo
+  path: ./external/
+  static: ./external/static/
+  resources: ./external/*.jar!/resources/
+
 rest-sender:
   pool-size: 100
 

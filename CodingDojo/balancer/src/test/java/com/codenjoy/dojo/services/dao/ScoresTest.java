@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.ContextPathGetter;
+import com.codenjoy.dojo.services.GameProperties;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.testng.annotations.*;
@@ -50,8 +51,10 @@ public class ScoresTest {
         {{
             this.config = new ConfigProperties(){
                 @Override
-                public String getGameFinalTime() {
-                    return "19:00";
+                public GameProperties getGame() {
+                    GameProperties game = new GameProperties();
+                    game.setFinalTime("19:00");
+                    return game;
                 }
             };
         }};
