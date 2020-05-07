@@ -47,10 +47,10 @@ public interface GameServerClient {
     @RequestLine("GET /codenjoy-contest/rest/player/{email}/exists")
     Boolean checkPlayerExists(@Param("email") String email);
 
-    @RequestLine("GET /codenjoy-contest/rest/scores/clear")
+    @RequestLine("GET /codenjoy-contest/rest/admin/scores/clear")
     void clearScores();
 
-    @RequestLine("GET /codenjoy-contest/rest/game/enabled/{enabled}")
+    @RequestLine("GET /codenjoy-contest/rest/admin/game/enabled/{enabled}")
     Boolean checkGameEnabled(@Param("enabled") Boolean enabled);
 
     @RequestLine("GET /codenjoy-contest/rest/player/{id}/remove/{code}")
