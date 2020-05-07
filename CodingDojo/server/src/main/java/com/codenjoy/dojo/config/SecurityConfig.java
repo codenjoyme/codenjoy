@@ -78,6 +78,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String ADMIN_LOGIN_PROCESSING_URI = "/process_admin_login";
     private static final String LOGOUT_PROCESSING_URI = "/process_logout";
 
+    public static final String[] UNAUTHORIZED_URIS_PATTERNS = {
+            "^\\/board\\/player\\/[\\w]+\\?only=true$"
+    };
+
     public static final String[] UNAUTHORIZED_URIS = {
             LoginController.ADMIN_URI,
             RegistrationController.URI + "*",
@@ -89,7 +93,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             // all players board
             BoardController.URI + "/game/**",
-            "/board/player/**",
             "/rest/player/*/*/wantsToPlay/**",
             "/screen-ws/**",
     };
@@ -156,6 +159,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             securityHeaders(http)
                         .authorizeRequests()
                             .antMatchers(UNAUTHORIZED_URIS)
+                                .permitAll()
+                            .regexMatchers(UNAUTHORIZED_URIS_PATTERNS)
                                 .permitAll()
                             .anyRequest()
                                 .hasRole("USER") 
