@@ -89,8 +89,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
             // all players board
             BoardController.URI + "/game/**",
-            // http://127.0.0.1:8080/codenjoy-contest/board/player/**?code=**&only=true
-            "/rest/player/null/null/wantsToPlay/**", // TODO а тут точно null/null
+            "/board/player/**",
+            "/rest/player/*/*/wantsToPlay/**",
             "/screen-ws/**",
     };
 
