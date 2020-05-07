@@ -64,13 +64,13 @@ public class PerksSettingsWrapper {
     }
 
     /**
-     * In total we 100 chance of drop.
+     * In total were are 100 chances.
      * Here we have 2 perks with total perk drop chance = 20.
      * For each perk we have a range of successful drop = 20 / 2 = 10.
-     * So we have 2 intervals and what to put them on equal distance of each other = 100 / 2 = 50.
+     * So we have 2 intervals and want to put them on equal distance of each other = 100 / 2 = 50.
      * In result we get 2 ranges of numbers that will return us perk:
      * 0 >= perk1 < 0 + 10  and  0 + 10 + 50 (60) >= perk2 < (70) 0 + 10 + 50 + 10
-     * All other ranges will give us Elements.NONE.
+     * All other ranges will give us Elements.DESTROYED_WALL.
      * <p>
      * The more perks we have, the more number of ranges, the more narrow each range.
      * E.g. for 4 perks range will be 20/4 = 5,

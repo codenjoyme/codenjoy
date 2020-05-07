@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,17 +26,12 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.bomberman.model.perks.HeroPerks;
 import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
-import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
 
@@ -73,7 +68,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         } while ((isBusy(x, y) || isOutOfBoard(x, y)) && count++ < 1000);
 
         if (count >= 1000) {
-            throw new  RuntimeException("Dead loop at MyBomberman.init(Board)!");
+            throw new RuntimeException("Dead loop at MyBomberman.init(Board)!");
         }
     }
 
@@ -156,7 +151,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     private void setBomb(int bombX, int bombY) {
-        if (field.getBombs(this).size() < level.bombsCount()) {
+        Perk bombCount = perks.getPerk(BOMB_COUNT_INCREASE);
+
+        if (field.getBombs(this).size() < level.bombsCount() + (bombCount != null ? bombCount.getValue() : 0)) {
             Perk bombBlastInc = perks.getPerk(BOMB_BLAST_RADIUS_INCREASE);
             int boost = bombBlastInc != null ? bombBlastInc.getValue() : 0;
 
@@ -217,8 +214,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public List<Perk> getPerks() {
         return perks.getPerksList();
     }
-    // Extremely hard to test without it ...
-    // TODO: check if it is an exposure & vulnerability for AI clients
+
     public void addPerk(Perk perk) {
         perks.add(perk);
     }

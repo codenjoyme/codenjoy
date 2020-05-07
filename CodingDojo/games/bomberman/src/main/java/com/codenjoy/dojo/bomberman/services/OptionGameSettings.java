@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
 public class OptionGameSettings implements GameSettings {
-
+    private final Dice dice;
     private final Parameter<Integer> bombPower;
     private final Parameter<Integer> bombsCount;
     private final Parameter<Integer> destroyWallCount;
@@ -41,7 +41,8 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> perkBombBlastRadiusInc;
     private final Parameter<Integer> timeoutBombBlastRadiusInc;
 
-    private final Dice dice;
+    private final Parameter<Integer> perkBombCountInc;
+    private final Parameter<Integer> timeoutBombCountInc;
 
     public OptionGameSettings(Settings settings, Dice dice) {
         bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(1);
@@ -53,8 +54,12 @@ public class OptionGameSettings implements GameSettings {
 
         // perks. Set value to 0 = perk is disabled.
         perkDropRatio = settings.addEditBox("Perks drop ratio in %").type(Integer.class).def(20); // 20%
+        //Bomb blast radius increase
         perkBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase").type(Integer.class).def(2);
         timeoutBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase effect timeout").type(Integer.class).def(10);
+        // Bomb count increase
+        perkBombCountInc = settings.addEditBox("Bomb count increase").type(Integer.class).def(3);
+        timeoutBombCountInc = settings.addEditBox("Bomb count effect timeout").type(Integer.class).def(10);
     }
 
     @Override
@@ -93,6 +98,9 @@ public class OptionGameSettings implements GameSettings {
 
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE,
                 perkBombBlastRadiusInc.getValue(), timeoutBombBlastRadiusInc.getValue());
+
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_COUNT_INCREASE,
+                perkBombCountInc.getValue(), timeoutBombCountInc.getValue());
 
         return new Hero(level, dice);
     }

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.bomberman.model.perks.BombBlastRadiusIncrease;
+import com.codenjoy.dojo.bomberman.model.perks.BombCountIncrease;
 import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.bomberman.services.Events;
@@ -2124,6 +2125,60 @@ public class BombermanTest {
                 "#҉# ##\n" +
                 "HѠ҉҉҉H\n" +
                 "#H####\n");
+    }
+
+    @Test
+    public void shouldBombCountIncrease_whenBCIperk() {
+
+        hero.act();
+        // obe bomb by default on lel 1
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☻    \n");
+
+        hero.right();
+        field.tick();
+        hero.act();
+        // no more bombs :(
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "4☺   \n");
+
+        // add perk that gives 1+3 = 4 player's bombs in total on the board
+        player.getHero().addPerk(new BombCountIncrease(3,3));
+        hero.act();
+        hero.right();
+        field.tick();
+        hero.act();
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "34☻  \n");
+
+        hero.right();
+        field.tick();
+        hero.act();
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "234☻ \n");
+
+        hero.right();
+        field.tick();
+        hero.act();
+        // 4 bombs and no more
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "1234☺\n");
+
     }
 
     static class DestroyWallAt extends WallsDecorator {
