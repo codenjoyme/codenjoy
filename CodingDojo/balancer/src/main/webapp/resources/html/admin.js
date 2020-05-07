@@ -177,6 +177,13 @@ var getScores = function(day) {
     });
 };
 
+var getFinalists = function() {
+    _ajax('finalists', {
+        type: 'GET',
+        url: server('balancer') + '/score/finalists'
+    });
+};
+
 var removeUser = function(email) {
     _ajax('remove', {
         type: 'GET',
@@ -391,6 +398,12 @@ $(document).ready(function() {
     $('#scores').click(function() {
         getScores(
             $('#scores-day').val()
+        );
+    });
+
+    $('#finalists').click(function() {
+        getFinalists(
+            $('#finalists-day').val()
         );
     });
 

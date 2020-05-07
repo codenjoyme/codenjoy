@@ -96,7 +96,6 @@ public class RestController {
     }
 
     // TODO test me
-    // TODO add to admin page
     @GetMapping(SCORE + "/finalists")
     @ResponseBody
     public List<PlayerScore> finalistsScores() {
