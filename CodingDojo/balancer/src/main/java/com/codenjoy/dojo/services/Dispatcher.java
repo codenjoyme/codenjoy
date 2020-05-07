@@ -37,7 +37,7 @@ import org.springframework.web.client.RestClientException;
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -59,7 +59,7 @@ public class Dispatcher {
     private Map<String, List<PlayerScore>> currentScores = new ConcurrentHashMap();
     private volatile List<PlayerScore> currentFinalists = new LinkedList<>();
 
-    private List<String> disqualified = new CopyOnWriteArrayList<>();
+    private Set<String> disqualified = new CopyOnWriteArraySet<>();
 
     @PostConstruct
     public void postConstruct() {
@@ -262,7 +262,7 @@ public class Dispatcher {
     }
 
 
-    public List<String> disqualified() {
+    public Collection<String> disqualified() {
         return disqualified;
     }
 }

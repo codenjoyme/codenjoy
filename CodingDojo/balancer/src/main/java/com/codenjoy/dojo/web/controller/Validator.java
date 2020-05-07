@@ -79,7 +79,7 @@ public class Validator {
         if (!(empty && canBeNull ||
                 !empty && email.matcher(input).matches()))
         {
-            throw new IllegalArgumentException("Player name is invalid: " + input);
+            throw new IllegalArgumentException("Player email is invalid: " + input);
         }
     }
 

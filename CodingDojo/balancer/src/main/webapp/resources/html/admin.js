@@ -184,6 +184,27 @@ var getFinalists = function() {
     });
 };
 
+var disqualify = function(emails) {
+    var players = emails.split(',')
+                        .map(function(s) {
+                            return '"' + s + '"';
+                        });
+    _ajax('disqualify', {
+        type: 'POST',
+        url: server('balancer') + '/score/disqualify',
+        contentType: 'application/json; charset=utf-8',
+        data: '{"players": [' + players + ']}'
+    });
+};
+
+
+var getDisqualified = function() {
+    _ajax('disqualified', {
+        type: 'GET',
+        url: server('balancer') + '/score/disqualified'
+    });
+};
+
 var removeUser = function(email) {
     _ajax('remove', {
         type: 'GET',
@@ -399,6 +420,16 @@ $(document).ready(function() {
         getScores(
             $('#scores-day').val()
         );
+    });
+
+    $('#disqualify').click(function() {
+        disqualify(
+            $('#disqualify-emails').val()
+        );
+    });
+
+    $('#disqualified').click(function() {
+        getDisqualified();
     });
 
     $('#finalists').click(function() {

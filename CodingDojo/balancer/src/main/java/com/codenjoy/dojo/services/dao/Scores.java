@@ -39,10 +39,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -142,7 +139,7 @@ public class Scores {
 //    }
 
     public List<PlayerScore> getFinalists(String from, String to, long time,
-                                          int finalistsCount, List<String> exclude)
+                                          int finalistsCount, Collection<String> exclude)
     {
         List<String> finalists = new LinkedList<>();
         return getDaysBetween(from, to).stream()

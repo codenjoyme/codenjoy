@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.web.rest.dto.PhoneCodeDTO;
 import com.codenjoy.dojo.web.rest.dto.PhoneDTO;
+import com.codenjoy.dojo.web.rest.dto.PlayersDTO;
 import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
 import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import com.codenjoy.dojo.web.controller.LoginException;
@@ -47,6 +48,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -103,10 +105,10 @@ public class RestController {
     }
 
     // TODO test me
-    // TODO add to admin page
-    @PostMapping(SCORE + "/disqualify/{player}")
+    @PostMapping(SCORE + "/disqualify")
     @ResponseBody
-    public boolean disqualify(@RequestBody List<String> players) {
+    public boolean disqualify(@RequestBody PlayersDTO input) {
+        List<String> players = input.getPlayers();
         players.forEach(email -> validator.checkEmail(email, CANT_BE_NULL));
 
         dispatcher.disqualify(players);
@@ -115,10 +117,9 @@ public class RestController {
     }
 
     // TODO test me
-    // TODO add to admin page
     @GetMapping(SCORE + "/disqualified")
     @ResponseBody
-    public List<String> disqualified() {
+    public Collection<String> disqualified() {
         return dispatcher.disqualified();
     }
 
@@ -545,23 +546,26 @@ public class RestController {
         return players.get(email).getVerificationCode();
     }
 
+    // TODO to add on admin page
     @PostMapping(REGISTER + "/resend")
     @ResponseStatus(HttpStatus.OK)
-    public void resendRegistrationCode(@RequestBody PhoneDTO phoneDTO) {
-        registrationService.resendConfirmRegistrationCode(phoneValidateNormalize(phoneDTO.getPhone()));
+    public void resendRegistrationCode(@RequestBody PhoneDTO input) {
+        registrationService.resendConfirmRegistrationCode(phoneValidateNormalize(input.getPhone()));
     }
 
+    // TODO to add on admin page
     @PostMapping(REGISTER + "/reset")
     @ResponseStatus(HttpStatus.OK)
-    public void sendResetPasswordCode(@RequestBody PhoneDTO phoneDTO) {
-        registrationService.resendResetPasswordCode(phoneValidateNormalize(phoneDTO.getPhone()));
+    public void sendResetPasswordCode(@RequestBody PhoneDTO input) {
+        registrationService.resendResetPasswordCode(phoneValidateNormalize(input.getPhone()));
     }
 
+    // TODO to add on admin page
     @PostMapping(REGISTER + "/validate-reset")
-    public ResponseEntity<String> validateResetPasswordCode(@RequestBody PhoneCodeDTO phoneCodeDTO) {
-        String phone = phoneValidateNormalize(phoneCodeDTO.getPhone());
+    public ResponseEntity<String> validateResetPasswordCode(@RequestBody PhoneCodeDTO input) {
+        String phone = phoneValidateNormalize(input.getPhone());
         boolean isResetAllowed = registrationService
-                .validateCodeResetPassword(phone, phoneCodeDTO.getCode());
+                .validateCodeResetPassword(phone, input.getCode());
         if(isResetAllowed) {
             Player player = players.getByPhone(phone).orElseThrow(() -> new IllegalArgumentException("User not found"));
             if (game.existsOnServer(player.getServer(), player.getEmail())) {
