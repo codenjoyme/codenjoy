@@ -90,7 +90,7 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                                 RestController.URI + RestController.LOGIN)
                             .permitAll()
                         .antMatchers(
-                                RestController.URI + RestController.UPDATE,
+//                                RestController.URI + RestController.UPDATE,
                                 RestController.URI + RestController.SCORE + "/day/**",
                                 RestController.URI + RestController.PLAYER + "/**")
                             .hasRole("USER")

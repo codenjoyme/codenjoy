@@ -281,9 +281,9 @@ public class RestController {
     }
 
     // TODO test me
-//    @PostMapping(UPDATE)
+    @PostMapping(UPDATE)
     @ResponseBody
-    public ServerLocation changePassword(@RequestBody Player player, HttpServletRequest request) {
+    public ServerLocation update(@RequestBody Player player, HttpServletRequest request) {
         return tryLogin(player, false, new OnLogin<ServerLocation>(){
 
             @Override
