@@ -39,10 +39,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -89,7 +86,7 @@ public class Scores {
                     pool.fillStatement(stmt,
                             formatter.format(date),
                             JDBCTimeUtils.toString(date),
-                            info.getName(),
+                            info.getId(),
                             Integer.valueOf(info.getScore()));
                     return true;
                 });
@@ -142,7 +139,7 @@ public class Scores {
 //    }
 
     public List<PlayerScore> getFinalists(String from, String to, long time,
-                                          int finalistsCount, List<String> exclude)
+                                          int finalistsCount, Collection<String> exclude)
     {
         List<String> finalists = new LinkedList<>();
         return getDaysBetween(from, to).stream()
@@ -222,7 +219,7 @@ public class Scores {
 
     public long getLastTimeOfPast(String day) {
         return pool.select("SELECT time FROM scores WHERE day = ? AND time LIKE ? ORDER BY time ASC LIMIT 1;",
-                new Object[]{day, day + "T" + config.getGameFinalTime() + "%"},
+                new Object[]{day, day + "T" + config.getGame().getFinalTime() + "%"},
                 rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
     }
 

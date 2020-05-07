@@ -51,8 +51,10 @@ public class SmsService {
             log.debug(String.format("SMS to %s:\n%s", phone, smsContent));
         }
 
-        SmsSendRequest smsSendRequest = new SmsSendRequest(phone, smsContent);
-        gatewayClient.sendSms(smsSendRequest);
+        if(smsProperties.isEnabled()) {
+            SmsSendRequest smsSendRequest = new SmsSendRequest(phone, smsContent);
+            gatewayClient.sendSms(smsSendRequest);
+        }
     }
 
     private String buildMessage(String value, SmsType smsType) {

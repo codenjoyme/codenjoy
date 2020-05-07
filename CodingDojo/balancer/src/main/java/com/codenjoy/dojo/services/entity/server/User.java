@@ -22,10 +22,18 @@ package com.codenjoy.dojo.services.entity.server;
  * #L%
  */
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.Collection;
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
+
+    public static final int APPROVED = 1;
 
     private String id;
     private String email;
@@ -35,21 +43,7 @@ public class User {
     private String password;
     private String code;
     private String data;
-
-    public User() {
-        // do nothing
-    }
-
-    public User(String id, String email, String phone, String readableName, int approved, String password, String code, String data) {
-        this.id = id;
-        this.email = email;
-        this.phone = phone;
-        this.readableName = readableName;
-        this.approved = approved;
-        this.password = password;
-        this.code = code;
-        this.data = data;
-    }
+    private Collection<String> roles;
 
     @Override
     public String toString() {
@@ -62,6 +56,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", code='" + code + '\'' +
                 ", data='" + data + '\'' +
+                ", roles='" + roles + '\'' +
                 '}';
     }
 }

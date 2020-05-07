@@ -42,13 +42,13 @@ public class GameServers {
 
     @PostConstruct
     public void postConstruct() {
-        update(config.getServers());
+        update(config.getGame().getServers());
     }
 
     // несколько потоков могут параллельно регаться, и этот инкремент по кругу
     // должeн быть многопоточнобезопасным
     public synchronized String getNextServer() {
-        if (countRegistered++ % config.getGameRoom() == 0) {
+        if (countRegistered++ % config.getGame().getRoom() == 0) {
             currentServer++;
             if (currentServer >= servers.size()) {
                 currentServer = 0;

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.classloader;
 
 /*-
  * #%L
@@ -22,29 +22,17 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import java.util.List;
-
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties("game")
-public class GameProperties {
-  
-  private String type;
-  private int room;
-  private String startDay;
-  private String endDay;
-  private int finalistsCount;
-  private String finalTime;
-  
-  @Value("#{'${game.servers}'.split(',')}")
-  private List<String> servers;
-  
-  private String schema;
-  private String basicAuthUser;
-  private String basicAuthPassword;
+@RequiredArgsConstructor
+public class GameLocator {
+
+    public final String name;
+    public final String jarPath;
+    public Class clazz;
+
 }

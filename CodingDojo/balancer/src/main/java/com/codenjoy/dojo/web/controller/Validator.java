@@ -79,7 +79,7 @@ public class Validator {
         if (!(empty && canBeNull ||
                 !empty && email.matcher(input).matches()))
         {
-            throw new IllegalArgumentException("Player name is invalid: " + input);
+            throw new IllegalArgumentException("Player email is invalid: " + input);
         }
     }
 
@@ -128,6 +128,12 @@ public class Validator {
     public void checkString(String name, String input) {
         if (StringUtils.isEmpty(input)) {
             throw new IllegalArgumentException(name + " string is empty: " + input);
+        }
+    }
+
+    public void checkNull(String name, String input) {
+        if (!StringUtils.isEmpty(input)) {
+            throw new IllegalArgumentException(name + " string should be empty: " + input);
         }
     }
 

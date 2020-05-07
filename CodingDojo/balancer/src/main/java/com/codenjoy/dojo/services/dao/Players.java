@@ -177,7 +177,7 @@ public class Players {
 
     public void approveByPhone(String phone) {
         pool.update("UPDATE players SET approved = ? WHERE phone = ?;",
-                1, phone);
+                Player.APPROVED, phone);
     }
 
     public void updateVerificationCode(String phone, String verificationCode, String verificationType) {

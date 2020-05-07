@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.conf;
 
 /*-
  * #%L
@@ -22,29 +22,23 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import java.util.List;
+import org.springframework.security.core.GrantedAuthority;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
-@Getter
-@Setter
-@ConfigurationProperties("game")
-public class GameProperties {
-  
-  private String type;
-  private int room;
-  private String startDay;
-  private String endDay;
-  private int finalistsCount;
-  private String finalTime;
-  
-  @Value("#{'${game.servers}'.split(',')}")
-  private List<String> servers;
-  
-  private String schema;
-  private String basicAuthUser;
-  private String basicAuthPassword;
+public enum Authority {
+
+    ROLE_ADMIN, ROLE_USER;
+
+    public GrantedAuthority authority() {
+        return (GrantedAuthority) () -> Authority.this.name();
+    }
+
+    public static Collection<GrantedAuthority> get(Authority... roles) {
+        return Arrays.stream(roles)
+                .map(Authority::authority)
+                .collect(Collectors.toList());
+    }
 }

@@ -34,6 +34,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import static com.codenjoy.dojo.services.entity.Player.APPROVED;
+import static com.codenjoy.dojo.services.entity.Player.NOT_APPROVED;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -55,7 +58,7 @@ public class RegistrationService {
     public ServerLocation confirmRegistration(String phone, String code) {
         Player player = getByPhone(phone);
 
-        if (player.getApproved() == 1) {
+        if (player.getApproved() == APPROVED) {
             throw new IllegalArgumentException("User already confirmed");
         }
 
@@ -71,7 +74,7 @@ public class RegistrationService {
 
     public void resendConfirmRegistrationCode(String phone) {
         Player player = getByPhone(phone);
-        if (player.getApproved() == 1) {
+        if (player.getApproved() == APPROVED) {
             throw new IllegalArgumentException("User already confirmed");
         }
         String verificationCode = generateVerificationCode();
@@ -83,7 +86,7 @@ public class RegistrationService {
         Player player = playersRepo.getByPhone(phone)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        if (player.getApproved() == 0) {
+        if (player.getApproved() == NOT_APPROVED) {
             throw new IllegalArgumentException("User is not active");
         }
 
@@ -95,7 +98,7 @@ public class RegistrationService {
     public boolean validateCodeResetPassword(String phone, String code) {
         Player player = getByPhone(phone);
 
-        if (player.getApproved() == 0) {
+        if (player.getApproved() == NOT_APPROVED) {
             throw new IllegalArgumentException("User is not active");
         }
 

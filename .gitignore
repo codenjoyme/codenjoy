@@ -4,6 +4,8 @@
 **/bin
 **/obj
 **/Gemfile.lock
+/CodingDojo/external
+/CodingDojo/**/external
 /CodingDojo/repo
 /CodingDojo/repo/**
 /CodingDojo/**/*.log

@@ -35,6 +35,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("sms")
 public class SmsProperties {
 
+    private boolean enabled;
     private SmsTextProperties text;
     private GatewayProperties gateway;
 

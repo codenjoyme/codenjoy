@@ -37,7 +37,7 @@ import org.springframework.web.client.RestClientException;
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
@@ -59,7 +59,7 @@ public class Dispatcher {
     private Map<String, List<PlayerScore>> currentScores = new ConcurrentHashMap();
     private volatile List<PlayerScore> currentFinalists = new LinkedList<>();
 
-    private List<String> disqualified = new CopyOnWriteArrayList<>();
+    private Set<String> disqualified = new CopyOnWriteArraySet<>();
 
     @PostConstruct
     public void postConstruct() {
@@ -113,7 +113,7 @@ public class Dispatcher {
                 .collect(LinkedList::new, List::addAll, List::addAll);
 
         players.stream()
-                .forEach(p -> p.setName(config.getEmail(p.getName())));
+                .forEach(p -> p.setId(config.getEmail(p.getId())));
 
         long time = now();
         scores.saveScores(time, players);
@@ -166,10 +166,10 @@ public class Dispatcher {
 
     private List<PlayerScore> loadFinalists() {
         return this.scores.getFinalists(
-                config.getDayStart(),
-                config.getDayEnd(),
+                config.getGame().getStartDay(),
+                config.getGame().getEndDay(),
                 lastTime,
-                config.getDayFinalistCount(),
+                config.getGame().getFinalistsCount(),
                 disqualified
         );
     }
@@ -262,7 +262,7 @@ public class Dispatcher {
     }
 
 
-    public List<String> disqualified() {
+    public Collection<String> disqualified() {
         return disqualified;
     }
 }

@@ -22,8 +22,8 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.conf.Authority;
 import com.codenjoy.dojo.services.dao.Players;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,8 +31,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static com.codenjoy.dojo.conf.Authority.ROLE_USER;
 
 public class UserService implements UserDetailsService {
 
@@ -44,22 +44,21 @@ public class UserService implements UserDetailsService {
         this.players = players;
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User predefinedUser = predefinedUsers.get(username);
         if (predefinedUser == null) {
             return Optional.ofNullable(players.get(username))
-                    .map(player -> buildUserDetails(player.getEmail(), player.getPassword(), "ROLE_USER"))
+                    .map(player -> buildUserDetails(player.getEmail(), player.getPassword(), ROLE_USER))
                     .orElse(null);
         }
         return new User(predefinedUser.getUsername(), predefinedUser.getPassword(), predefinedUser.getAuthorities());
     }
 
-    public static User buildUserDetails(String username, String password, String... roles) {
+    public static User buildUserDetails(String username, String password, Authority... roles) {
         return new User(
                 username,
                 password,
-                Stream.of(roles).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+                Authority.get(roles));
     }
 }

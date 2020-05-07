@@ -22,36 +22,25 @@ package com.codenjoy.dojo.services.entity.server;
  * #L%
  */
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PlayerDetailInfo {
 
     private String id;
     private String readableName;
     private String callbackUrl;
     private String gameType;
+    private String roomName;
     private String score;
     private String save;
     private User registration;
-
-    public PlayerDetailInfo() {
-        // do nothing
-    }
-
-    public PlayerDetailInfo(String id, String readableName, String callbackUrl, String gameType,
-                            String score, String save, User registration)
-    {
-        this.id = id;
-        this.readableName = readableName;
-        this.callbackUrl = callbackUrl;
-        this.gameType = gameType;
-        this.score = score;
-        this.save = save;
-        this.registration = registration;
-    }
 
     @Override
     public String toString() {

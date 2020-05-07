@@ -28,6 +28,9 @@ import org.apache.commons.lang3.StringUtils;
 @Getter
 public class Player {
 
+    public static final int APPROVED = 1;
+    public static final int NOT_APPROVED = 0;
+
     private String email;
     private String phone;
     private String firstName;
@@ -50,6 +53,11 @@ public class Player {
         this.email = email;
         this.phone = phone;
         this.password = password;
+    }
+
+    public Player(String email, String code) {
+        this.email = email;
+        this.code = code;
     }
 
     public Player(String email, String phone, String code, String server) {

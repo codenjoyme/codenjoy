@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Random;
@@ -134,7 +135,7 @@ public class RegistrationTest {
     @Test
     public void shouldSuccessLogin() {
         // given
-        Registration.User user = service.register("id", "email", "name", "pass", "data");
+        Registration.User user = service.register("id", "email", "name", "pass", "data", Arrays.asList());
         service.approve(user.getCode());
 
         // when
@@ -147,7 +148,7 @@ public class RegistrationTest {
     @Test
     public void shouldUnSuccessLogin_whenNoApproveEmail() {
         // given
-        service.register("id", "email", "name", "pass", "data");
+        service.register("id", "email", "name", "pass", "data", Arrays.asList());
 
         // when
         String code = service.login("id", "pass");
@@ -159,7 +160,7 @@ public class RegistrationTest {
     @Test
     public void shouldUnSuccessLogin_whenBadPassword() {
         // given
-        Registration.User user = service.register("id", "email", "name", "pass", "data");
+        Registration.User user = service.register("id", "email", "name", "pass", "data", Arrays.asList());
         service.approve(user.getCode());
 
         // when
@@ -172,7 +173,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetCodeById() {
         // given
-        service.register("id", "email", "name", "pass", "data");
+        service.register("id", "email", "name", "pass", "data", Arrays.asList());
 
         // when
         String code = service.getCodeById("id");
@@ -184,7 +185,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetCodeById_ifNotFound() {
         // given
-        service.register("id", "email", "name", "pass", "data");
+        service.register("id", "email", "name", "pass", "data", Arrays.asList());
 
         // when
         String code = service.getCodeById("bad_id");
@@ -196,7 +197,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetIdByCode() {
         // given
-        String code = service.register("id", "email", "name", "pass", "data").getCode();
+        String code = service.register("id", "email", "name", "pass", "data", Arrays.asList()).getCode();
 
         // when
         String id = service.getIdByCode(code);
@@ -208,7 +209,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetNameById() {
         // given
-        service.register("id", "email", "name", "pass", "data");
+        service.register("id", "email", "name", "pass", "data", Arrays.asList());
 
         // when
         String name = service.getNameById("id");
@@ -220,7 +221,7 @@ public class RegistrationTest {
     @Test
     public void shouldGetIdByCode_ifNotFound() {
         // given
-        service.register("id", "email", "name", "pass", "data");
+        service.register("id", "email", "name", "pass", "data", Arrays.asList());
 
         // when
         String email = service.getIdByCode("bad_code");
@@ -305,8 +306,8 @@ public class RegistrationTest {
     @Test
     public void shouldReplaceExistingUser() {
         // given
-        String code1 = service.register("id1", "email1", "name1", "pass1", "someData1").getCode();
-        String code2 = service.register("id2", "email2", "name2", "pass2", "someData2").getCode();
+        String code1 = service.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList()).getCode();
+        String code2 = service.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList()).getCode();
 
 
         Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
@@ -327,8 +328,8 @@ public class RegistrationTest {
     @Test
     public void shouldReplaceExistingUser_withoutCode() {
         // given
-        String code1 = service.register("id1", "email1", "name1", "pass1", "someData1").getCode();
-        String code2 = service.register("id2", "email2", "name2", "pass2", "someData2").getCode();
+        String code1 = service.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList()).getCode();
+        String code2 = service.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList()).getCode();
 
         Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
         Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
@@ -349,8 +350,8 @@ public class RegistrationTest {
     @Test
     public void shouldReplaceNonExistingUser() {
         // given
-        String code1 = service.register("id1", "email1", "name1", "pass1", "someData1").getCode();
-        String code2 = service.register("id2", "email2", "name2", "pass2", "someData2").getCode();
+        String code1 = service.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList()).getCode();
+        String code2 = service.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList()).getCode();
 
         Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
         Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
@@ -371,8 +372,8 @@ public class RegistrationTest {
     @Test
     public void shouldRemoveUser() {
         // given
-        String code1 = service.register("id1", "email1", "name1", "pass1", "someData1").getCode();
-        String code2 = service.register("id2", "email2", "name2", "pass2", "someData2").getCode();
+        String code1 = service.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList()).getCode();
+        String code2 = service.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList()).getCode();
 
         Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
         Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
@@ -390,8 +391,8 @@ public class RegistrationTest {
     @Test
     public void shouldRemoveAllUsers() {
         // given
-        String code1 = service.register("id1", "email1", "name1", "pass1", "someData1").getCode();
-        String code2 = service.register("id2", "email2", "name2", "pass2", "someData2").getCode();
+        String code1 = service.register("id1", "email1", "name1", "pass1", "someData1", Arrays.asList()).getCode();
+        String code2 = service.register("id2", "email2", "name2", "pass2", "someData2", Arrays.asList()).getCode();
 
         Registration.User user1 = new Registration.User("id1", "email1", "name1", 0, "pass1", code1, "someData1", USER.roles());
         Registration.User user2 = new Registration.User("id2", "email2", "name2", 0, "pass2", code2, "someData2", USER.roles());
@@ -429,7 +430,7 @@ public class RegistrationTest {
     public void shouldCheckUser_whenOnlyEmails() {
         // given
         String email = "user@email.com";
-        String code = service.register(email, "email", "name", "pass", "someData").getCode();
+        String code = service.register(email, "email", "name", "pass", "someData", Arrays.asList()).getCode();
 
         // when then
         assertEquals(email, service.checkUser(email, code));
@@ -441,7 +442,7 @@ public class RegistrationTest {
         String email = "user@email.com";
         String id = Hash.getId(email, HASH);
         
-        String code = service.register(id, "email", "name", "pass", "someData").getCode();
+        String code = service.register(id, "email", "name", "pass", "someData", Arrays.asList()).getCode();
 
         // when then
         assertEquals(null, service.checkUser(email, code));
@@ -454,7 +455,7 @@ public class RegistrationTest {
         String email = "user@email.com";
         String id = Hash.getId(email, HASH);
         
-        String code = service.register(email, "email", "name", "pass", "someData").getCode();
+        String code = service.register(email, "email", "name", "pass", "someData", Arrays.asList()).getCode();
 
         // when then
         assertEquals(null, service.checkUser(id, code));
@@ -467,7 +468,7 @@ public class RegistrationTest {
         String email = "user@email.com";
         String id = Hash.getId(email, HASH);
         
-        String code = service.register(id, "email", "name", "pass", "someData").getCode();
+        String code = service.register(id, "email", "name", "pass", "someData", Arrays.asList()).getCode();
 
         // when then
         assertEquals(id, service.checkUser(id, code));
