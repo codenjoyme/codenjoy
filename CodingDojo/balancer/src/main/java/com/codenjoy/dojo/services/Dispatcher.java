@@ -166,10 +166,10 @@ public class Dispatcher {
 
     private List<PlayerScore> loadFinalists() {
         return this.scores.getFinalists(
-                config.getDayStart(),
-                config.getDayEnd(),
+                config.getGame().getStartDay(),
+                config.getGame().getEndDay(),
                 lastTime,
-                config.getDayFinalistCount(),
+                config.getGame().getFinalistsCount(),
                 disqualified
         );
     }

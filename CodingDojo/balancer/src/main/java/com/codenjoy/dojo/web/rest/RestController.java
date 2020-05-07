@@ -471,7 +471,7 @@ public class RestController {
     public boolean saveSettings(@RequestBody ConfigProperties config) {
 
         this.config.updateFrom(config);
-        gameServers.update(config.getServers());
+        gameServers.update(config.getGame().getServers());
 
         return true;
     }

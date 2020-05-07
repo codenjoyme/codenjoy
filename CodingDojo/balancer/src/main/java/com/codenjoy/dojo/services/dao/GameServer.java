@@ -49,7 +49,7 @@ public class GameServer {
     @Autowired GameClientResolver gameClientResolver;
 
     public List<PlayerInfo> getPlayersInfos(String server) {
-        return gameClientResolver.resolveClient(server).getPlayerInfos(config.getGameType());
+        return gameClientResolver.resolveClient(server).getPlayerInfos(config.getGame().getType());
     }
 
     public String createNewPlayer(String server, String email, String phone, String name,
@@ -69,8 +69,8 @@ public class GameServer {
                 id,
                 name,
                 callbackUrl,
-                config.getGameType(),
-                config.getGameType(),
+                config.getGame().getType(),
+                config.getGame().getType(),
                 score,
                 save,
                 new User(

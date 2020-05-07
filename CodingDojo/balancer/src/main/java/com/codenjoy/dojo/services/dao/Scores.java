@@ -222,7 +222,7 @@ public class Scores {
 
     public long getLastTimeOfPast(String day) {
         return pool.select("SELECT time FROM scores WHERE day = ? AND time LIKE ? ORDER BY time ASC LIMIT 1;",
-                new Object[]{day, day + "T" + config.getGameFinalTime() + "%"},
+                new Object[]{day, day + "T" + config.getGame().getFinalTime() + "%"},
                 rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
     }
 

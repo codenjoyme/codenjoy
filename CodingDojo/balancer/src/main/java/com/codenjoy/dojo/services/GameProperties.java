@@ -24,9 +24,13 @@ package com.codenjoy.dojo.services;
 
 import java.util.List;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+@Getter
+@Setter
 @ConfigurationProperties("game")
 public class GameProperties {
   
@@ -35,7 +39,7 @@ public class GameProperties {
   private String startDay;
   private String endDay;
   private int finalistsCount;
-  private String finaleTime;
+  private String finalTime;
   
   @Value("#{'${game.servers}'.split(',')}")
   private List<String> servers;
@@ -43,84 +47,4 @@ public class GameProperties {
   private String schema;
   private String basicAuthUser;
   private String basicAuthPassword;
-
-  public String getType() {
-    return type;
-  }
-
-  public void setType(String type) {
-    this.type = type;
-  }
-  
-  public List<String> getServers() {
-    return servers;
-  }
-
-  public void setServers(List<String> servers) {
-    this.servers = servers;
-  }
-
-  public int getRoom() {
-    return room;
-  }
-
-  public void setRoom(int room) {
-    this.room = room;
-  }
-
-  public String getStartDay() {
-    return startDay;
-  }
-
-  public void setStartDay(String startDay) {
-    this.startDay = startDay;
-  }
-
-  public String getEndDay() {
-    return endDay;
-  }
-
-  public void setEndDay(String endDay) {
-    this.endDay = endDay;
-  }
-
-  public int getFinalistsCount() {
-    return finalistsCount;
-  }
-
-  public void setFinalistsCount(int finalistsCount) {
-    this.finalistsCount = finalistsCount;
-  }
-
-  public String getFinaleTime() {
-    return finaleTime;
-  }
-
-  public void setFinaleTime(String finaleTime) {
-    this.finaleTime = finaleTime;
-  }
-
-  public String getSchema() {
-    return schema;
-  }
-
-  public void setSchema(String schema) {
-    this.schema = schema;
-  }
-
-  public String getBasicAuthUser() {
-    return basicAuthUser;
-  }
-
-  public void setBasicAuthUser(String basicAuthUser) {
-    this.basicAuthUser = basicAuthUser;
-  }
-
-  public String getBasicAuthPassword() {
-    return basicAuthPassword;
-  }
-
-  public void setBasicAuthPassword(String basicAuthPassword) {
-    this.basicAuthPassword = basicAuthPassword;
-  }
 }
