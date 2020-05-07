@@ -142,16 +142,27 @@ var getConfirmCode = function(email) {
         url: server('balancer') + '/confirm/' + email + '/code',
         after: function(data){
             if (data.statusText != 'OK') {
-                $('#confirm-code').val(data);
+                $('#confirm-code').val(data.code);
+                $('#confirm-type').val(data.type);
             }
         }
     });
 };
 
-var confirmUser = function(phone, code) {
+var confirmUserRegistration = function(phone, code) {
     _ajax('confirm', {
         type: 'POST',
         url: server('balancer') + '/register/confirm',
+        contentType: 'application/json; charset=utf-8',
+        data: '{"phone": "' + phone + '", ' +
+            '"code" : "' + code + '"}'
+    });
+};
+
+var confirmChangePassword = function(phone, code) {
+    _ajax('confirm', {
+        type: 'POST',
+        url: server('balancer') + '/register/validate-reset',
         contentType: 'application/json; charset=utf-8',
         data: '{"phone": "' + phone + '", ' +
             '"code" : "' + code + '"}'
@@ -399,9 +410,17 @@ $(document).ready(function() {
         );
     });
 
-    $('#confirm').click(function() {
+    $('#confirm-registration').click(function() {
         var preffix = $('#preffix').val();
-        confirmUser(
+        confirmUserRegistration(
+            $('#confirm-phone').val(),
+            $('#confirm-code').val()
+        );
+    });
+
+    $('#confirm-change-password').click(function() {
+        var preffix = $('#preffix').val();
+        confirmChangePassword(
             $('#confirm-phone').val(),
             $('#confirm-code').val()
         );

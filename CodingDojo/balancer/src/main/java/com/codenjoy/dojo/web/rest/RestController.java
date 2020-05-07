@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.web.rest.dto.PhoneCodeDTO;
 import com.codenjoy.dojo.web.rest.dto.PhoneDTO;
 import com.codenjoy.dojo.web.rest.dto.PlayersDTO;
+import com.codenjoy.dojo.web.rest.dto.VerificationDTO;
 import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
 import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import com.codenjoy.dojo.web.controller.LoginException;
@@ -542,8 +543,8 @@ public class RestController {
 
     @GetMapping(CONFIRM + "/{player}/code")
     @ResponseBody
-    public String getVerificationCode(@PathVariable("player") String email) {
-        return players.get(email).getVerificationCode();
+    public VerificationDTO getVerificationCode(@PathVariable("player") String email) {
+        return new VerificationDTO(players.get(email));
     }
 
     @PostMapping(REGISTER + "/resend")
@@ -560,7 +561,6 @@ public class RestController {
         registrationService.resendResetPasswordCode(phone);
     }
 
-    // TODO to add on admin page
     @PostMapping(REGISTER + "/validate-reset")
     public ResponseEntity<String> validateResetPasswordCode(@RequestBody PhoneCodeDTO input) {
         String phone = phoneValidateNormalize(input.getPhone());
