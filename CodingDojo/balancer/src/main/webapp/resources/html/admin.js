@@ -184,15 +184,19 @@ var removeUser = function(email) {
     });
 };
 
+var auth = function() {
+    var login = settings().adminLogin;
+    var password = settings().adminPassword;
+    var auth = btoa(login + ":" + password);
+    return auth;
+}
+
 var getUsersOnGameServer = function() {
     _ajax('users-game', {
         type: 'GET',
         url: server('game') + '/game/' + settings().game.type + '/players',
-        beforeSend: function (xhr) {
-            var login = settings().adminLogin;
-            var password = settings().adminPassword;
-
-            xhr.setRequestHeader ("Authorization", "Basic " + btoa(login + ":" + password));
+        headers: {
+            "Authorization": "Basic " + auth()
         },
     });
 };
