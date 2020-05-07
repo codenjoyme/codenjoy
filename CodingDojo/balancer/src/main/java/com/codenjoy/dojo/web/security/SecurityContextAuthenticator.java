@@ -67,7 +67,12 @@ public class SecurityContextAuthenticator {
             return false;
         }
 
-        User user = (User) context.getAuthentication().getPrincipal();
+        Object principal = context.getAuthentication().getPrincipal();
+        if (!(principal instanceof User)) {
+            return false;
+        }
+
+        User user = (User) principal;
         if (user == null) {
             return false;
         }
