@@ -142,19 +142,48 @@ var getConfirmCode = function(email) {
         url: server('balancer') + '/confirm/' + email + '/code',
         after: function(data){
             if (data.statusText != 'OK') {
-                $('#confirm-code').val(data);
+                $('#confirm-code').val(data.code);
+                $('#confirm-type').val(data.type);
             }
         }
     });
 };
 
-var confirmUser = function(phone, code) {
+var confirmUserRegistration = function(phone, code) {
     _ajax('confirm', {
         type: 'POST',
         url: server('balancer') + '/register/confirm',
         contentType: 'application/json; charset=utf-8',
         data: '{"phone": "' + phone + '", ' +
             '"code" : "' + code + '"}'
+    });
+};
+
+var confirmChangePassword = function(phone, code) {
+    _ajax('confirm', {
+        type: 'POST',
+        url: server('balancer') + '/register/validate-reset',
+        contentType: 'application/json; charset=utf-8',
+        data: '{"phone": "' + phone + '", ' +
+            '"code" : "' + code + '"}'
+    });
+};
+
+var resendPassword = function(phone) {
+    _ajax('resend', {
+        type: 'POST',
+        url: server('balancer') + '/register/reset',
+        contentType: 'application/json; charset=utf-8',
+        data: '{"phone": "' + phone + '"}'
+    });
+};
+
+var resendConfirmation = function(phone) {
+    _ajax('resend', {
+        type: 'POST',
+        url: server('balancer') + '/register/resend',
+        contentType: 'application/json; charset=utf-8',
+        data: '{"phone": "' + phone + '"}'
     });
 };
 
@@ -174,6 +203,34 @@ var getScores = function(day) {
     _ajax('scores', {
         type: 'GET',
         url: server('balancer') + '/score/day/' + day
+    });
+};
+
+var getFinalists = function() {
+    _ajax('finalists', {
+        type: 'GET',
+        url: server('balancer') + '/score/finalists'
+    });
+};
+
+var disqualify = function(emails) {
+    var players = emails.split(',')
+                        .map(function(s) {
+                            return '"' + s + '"';
+                        });
+    _ajax('disqualify', {
+        type: 'POST',
+        url: server('balancer') + '/score/disqualify',
+        contentType: 'application/json; charset=utf-8',
+        data: '{"players": [' + players + ']}'
+    });
+};
+
+
+var getDisqualified = function() {
+    _ajax('disqualified', {
+        type: 'GET',
+        url: server('balancer') + '/score/disqualified'
     });
 };
 
@@ -353,11 +410,31 @@ $(document).ready(function() {
         );
     });
 
-    $('#confirm').click(function() {
+    $('#confirm-registration').click(function() {
         var preffix = $('#preffix').val();
-        confirmUser(
+        confirmUserRegistration(
             $('#confirm-phone').val(),
             $('#confirm-code').val()
+        );
+    });
+
+    $('#confirm-change-password').click(function() {
+        var preffix = $('#preffix').val();
+        confirmChangePassword(
+            $('#confirm-phone').val(),
+            $('#confirm-code').val()
+        );
+    });
+
+    $('#resend-confirmation').click(function() {
+        resendConfirmation(
+            $('#resend-phone').val()
+        );
+    });
+
+    $('#resend-password').click(function() {
+        resendPassword(
+            $('#resend-phone').val()
         );
     });
 
@@ -391,6 +468,22 @@ $(document).ready(function() {
     $('#scores').click(function() {
         getScores(
             $('#scores-day').val()
+        );
+    });
+
+    $('#disqualify').click(function() {
+        disqualify(
+            $('#disqualify-emails').val()
+        );
+    });
+
+    $('#disqualified').click(function() {
+        getDisqualified();
+    });
+
+    $('#finalists').click(function() {
+        getFinalists(
+            $('#finalists-day').val()
         );
     });
 

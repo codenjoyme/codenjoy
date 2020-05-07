@@ -86,7 +86,7 @@
             <input type="checkbox" id="auto-increment"/>
         </div>
         <div>
-            <span>GameType</span>
+            <span>Settings:</span>
             <textarea rows="15" id="admin-settings-result" value=""></textarea>
         </div>
     </div>
@@ -172,7 +172,7 @@
         </div>
     </div>
 
-    <h2>Confirm user by phone</h2>
+    <h2>Confirm user registration / change password by phone</h2>
     <div class="table">
         <div>
             <span>Phone:</span>
@@ -183,8 +183,13 @@
             <input id="confirm-code" value=""/>
         </div>
         <div>
+            <span>Confirm type:</span>
+            <input id="confirm-type" value=""/>
+        </div>
+        <div>
             <span></span>
-            <button id="confirm">Confirm</button>
+            <button id="confirm-registration">Confirm registration</button>
+            <button id="confirm-change-password">Confirm change password</button>
         </div>
         <div>
             <span>Request:</span>
@@ -197,6 +202,31 @@
         <div>
             <span>Error:</span>
             <textarea rows="5" id="confirm-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Resend password / confirmation by phone</h2>
+    <div class="table">
+        <div>
+            <span>Phone:</span>
+            <input id="resend-phone" value="+380501234567"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="resend-password">Password</button>
+            <button id="resend-confirmation">Confirmation</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="resend-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="2" id="resend-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="5" id="resend-error"></textarea>
         </div>
     </div>
 
@@ -303,6 +333,70 @@
         <div>
             <span>Error:</span>
             <textarea rows="2" id="scores-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Disqualify</h2>
+    <div class="table">
+        <div>
+            <span>Emails (CSV):</span>
+            <input id="disqualify-emails"/>
+        </div>
+        <div>
+            <span></span>
+            <button id="disqualify">Disqualify</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="disqualify-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="8" id="disqualify-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="2" id="disqualify-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Disqualified</h2>
+    <div class="table">
+        <div>
+            <span></span>
+            <button id="disqualified">Get</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="disqualified-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="8" id="disqualified-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="2" id="disqualified-error"></textarea>
+        </div>
+    </div>
+
+    <h2>Finalists</h2>
+    <div class="table">
+        <div>
+            <span></span>
+            <button id="finalists">Finalists</button>
+        </div>
+        <div>
+            <span>Request:</span>
+            <textarea rows="2" id="finalists-request"></textarea>
+        </div>
+        <div>
+            <span>Response:</span>
+            <textarea rows="8" id="finalists-result"></textarea>
+        </div>
+        <div>
+            <span>Error:</span>
+            <textarea rows="2" id="finalists-error"></textarea>
         </div>
     </div>
 
