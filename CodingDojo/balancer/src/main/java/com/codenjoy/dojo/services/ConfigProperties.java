@@ -45,6 +45,9 @@ import java.util.List;
 @Component
 public class ConfigProperties {
 
+    @Value("${admin.login}")
+    private String adminLogin;
+
     @Value("${admin.password}")
     private String adminPassword;
 

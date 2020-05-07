@@ -30,8 +30,8 @@ var result = function(partOfId, data) {
     $('#' + partOfId + '-error').val('');
 }
 
-var getGameType = function() {
-    return JSON.parse($('#gametype-result').val()).gameType;
+var settings = function() {
+    return JSON.parse($('#admin-settings-result').val());
 }
 
 var server = function(name) {
@@ -187,7 +187,13 @@ var removeUser = function(email) {
 var getUsersOnGameServer = function() {
     _ajax('users-game', {
         type: 'GET',
-        url: server('game') + '/game/' + getGameType() + '/players'
+        url: server('game') + '/game/' + settings().game.type + '/players',
+        beforeSend: function (xhr) {
+            var login = settings().adminLogin;
+            var password = settings().adminPassword;
+
+            xhr.setRequestHeader ("Authorization", "Basic " + btoa(login + ":" + password));
+        },
     });
 };
 
@@ -280,7 +286,7 @@ $(document).ready(function() {
 
     $('#scores-day').val(new Date().toISOString().split('T')[0]);
 
-    getSettings('gametype');
+    getSettings('admin-settings');
 
     var registerOrUpdate = function(action) {
         $('#' + action).click(function() {
