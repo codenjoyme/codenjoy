@@ -546,18 +546,18 @@ public class RestController {
         return players.get(email).getVerificationCode();
     }
 
-    // TODO to add on admin page
     @PostMapping(REGISTER + "/resend")
     @ResponseStatus(HttpStatus.OK)
     public void resendRegistrationCode(@RequestBody PhoneDTO input) {
-        registrationService.resendConfirmRegistrationCode(phoneValidateNormalize(input.getPhone()));
+        String phone = phoneValidateNormalize(input.getPhone());
+        registrationService.resendConfirmRegistrationCode(phone);
     }
 
-    // TODO to add on admin page
     @PostMapping(REGISTER + "/reset")
     @ResponseStatus(HttpStatus.OK)
     public void sendResetPasswordCode(@RequestBody PhoneDTO input) {
-        registrationService.resendResetPasswordCode(phoneValidateNormalize(input.getPhone()));
+        String phone = phoneValidateNormalize(input.getPhone());
+        registrationService.resendResetPasswordCode(phone);
     }
 
     // TODO to add on admin page

@@ -158,6 +158,24 @@ var confirmUser = function(phone, code) {
     });
 };
 
+var resendPassword = function(phone) {
+    _ajax('resend', {
+        type: 'POST',
+        url: server('balancer') + '/register/reset',
+        contentType: 'application/json; charset=utf-8',
+        data: '{"phone": "' + phone + '"}'
+    });
+};
+
+var resendConfirmation = function(phone) {
+    _ajax('resend', {
+        type: 'POST',
+        url: server('balancer') + '/register/resend',
+        contentType: 'application/json; charset=utf-8',
+        data: '{"phone": "' + phone + '"}'
+    });
+};
+
 var joinExitStatusUser = function(email, code, whatToDo) {
     _ajax('join', {
         type: 'GET',
@@ -386,6 +404,18 @@ $(document).ready(function() {
         confirmUser(
             $('#confirm-phone').val(),
             $('#confirm-code').val()
+        );
+    });
+
+    $('#resend-confirmation').click(function() {
+        resendConfirmation(
+            $('#resend-phone').val()
+        );
+    });
+
+    $('#resend-password').click(function() {
+        resendPassword(
+            $('#resend-phone').val()
         );
     });
 
