@@ -7,7 +7,7 @@ export const getIFrameLink = (server, id) =>
     `${protocol}://${server}/codenjoy-contest/board/player/${id}?only=true`;
 
 export const getJsClient = server =>
-    `${protocol}://${server}/codenjoy-contest/resources/user/snakebattle-servers-js.zip`;
+    `${protocol}://${server}/codenjoy-contest/resources/user/bomberman-servers.zip`;
 
 export const getJavaClient = server =>
-    `${protocol}://${server}/codenjoy-contest/resources/user/snakebattle-servers-java.zip`;
+    `${protocol}://${server}/codenjoy-contest/resources/user/bomberman-servers.zip`;

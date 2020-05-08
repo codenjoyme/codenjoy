@@ -48,7 +48,7 @@ const HomeContainer = () => (
                     </div>
                     <div className={ Styles.stepTitle }>СТВОРИ</div>
                     <div className={ Styles.stepDescription }>
-                        Створи свого Бота на Java або JavaScript
+                        Створи свого Бота
                     </div>
                 </div>
                 <div className={ Styles.guideStep }>
@@ -71,9 +71,9 @@ const HomeContainer = () => (
                             Посідай одне з трьох призових місць і отримай:
                         </div>
                         <br />
-                        <div>1 місце - PlayStation 4 Slim 1tb</div>
-                        <div>2 місце - PlayStation Classic</div>
-                        <div>3 місце - Джойстик DualShock</div>
+                        <div>1 місце - ігрова консоль PlayStation 4 Pro 1TB</div>
+                        <div>2 місце - ігрова консоль Sega Mega Drive Mini</div>
+                        <div>3 місце - настільна Hobby World Fallout</div>
                     </div>
                 </div>
             </div>
@@ -81,8 +81,8 @@ const HomeContainer = () => (
             <p>
                 Завантаж проект гри, створи логіку для переміщення свого Бота,
                 отримуй найбільшу кількість балів, щоб увійти до числа
-                Фіналістів з 28 січня до 13 лютого включно (кожного дня
-                визначаються 10 Фіналістів). Бери участь у Фіналі 14 лютого,
+                фіналістів з 9.00 години 18.05.2020 до 19.00 години 29.05.2020 року (кожного дня
+                визначаються 10 Фіналістів). Бери участь у Фіналі 29.05.2020,
                 займай одне з трьох призових місць і отримай драйвовий
                 подарунок!
             </p>
