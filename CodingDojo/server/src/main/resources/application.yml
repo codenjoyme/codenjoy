@@ -2,6 +2,7 @@ server:
   servlet.context-path: ${context:/codenjoy-contest}
   ip: 127.0.0.1
   port: 8080
+  xFrameAllowedHosts: example.com,localhost:3000
 
 plugins:
   enable: false
