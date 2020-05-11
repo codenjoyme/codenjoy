@@ -4,14 +4,13 @@
     background-image: url(./../../styles/images/layout/dark.jpg);
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     flex: 1 1 auto;
     color: white;
-    font-family: 'Museo Sans Cyrl';
+    font-family: "Museo Sans Cyrl";
 }
 
 .homeTitle .mainText {
@@ -29,7 +28,7 @@
 }
 
 .acceptButton {
-    font-family: 'Museo Sans Cyrl';
+    font-family: "Museo Sans Cyrl";
     font-size: 20px;
     font-weight: 300;
     text-align: center;
@@ -65,7 +64,7 @@
 }
 
 .stepTitle {
-    font-family: 'Museo Sans Cyrl';
+    font-family: "Museo Sans Cyrl";
     font-size: 48px;
     font-weight: 900;
     line-height: 0.71;
@@ -74,7 +73,7 @@
 }
 
 .stepDescription {
-    font-family: 'Museo Sans Cyrl';
+    font-family: "Museo Sans Cyrl";
     font-size: 20px;
     line-height: 1.3;
     letter-spacing: normal;
