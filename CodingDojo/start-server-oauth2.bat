@@ -6,13 +6,13 @@ java -jar %ROOT%\server\target\codenjoy-contest.war ^
         --context=/codenjoy-contest ^
         --server.port=8080 ^
         --allGames ^
-		--OAUTH2_AUTH_SERVER_URL=https://login-staging.telescopeai.com/core ^
-        --OAUTH2_AUTH_URI=/connect/authorize ^
+        --OAUTH2_AUTH_SERVER_URL=http://localhost:3000/api/v1/auth  ^
+        --OAUTH2_AUTH_URI=/protocol/openid-connect/auth ^
         --OAUTH2_RESOURCE_SERVER_LOCATION=http://localhost:8080/codenjoy-contest ^
         --OAUTH2_CLIENT_ID=dojo ^
         --OAUTH2_CLIENT_SECRET=secret ^
-        --OAUTH2_TOKEN_URI=/connect/token ^
-        --OAUTH2_USERINFO_URI=/connect/userinfo ^
+        --OAUTH2_TOKEN_URI=/protocol/openid-connect/token ^
+        --OAUTH2_USERINFO_URI=/protocol/openid-connect/userinfo ^
         --CLIENT_NAME=dojo
  
 pause >nul
