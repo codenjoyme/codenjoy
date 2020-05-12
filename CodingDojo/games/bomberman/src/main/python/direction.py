@@ -32,6 +32,7 @@ _DIRECTIONS = dict(
     NULL = (-1,  0,  0)
 )
 
+
 class Direction:
 
     def __init__(self, direction):
