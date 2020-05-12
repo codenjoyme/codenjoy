@@ -28,6 +28,8 @@ from element import Element
 
 
 class Board:
+    BLAST_RANGE = 3
+
     """ Class describes the Board field for Bomberman game."""
     def __init__(self, board_string):
         self._string = board_string.replace('\n', '')
@@ -41,7 +43,7 @@ class Board:
         _a_char = element.get_char()
         for i, c in enumerate(self._string):
             if c == _a_char:
-                 _points.append(self._strpos2pt(i))
+                _points.append(self._strpos2pt(i))
         return _points
 
     def get_at(self, x, y):
@@ -119,13 +121,17 @@ class Board:
         _points = set()
         for _bomb in _bombs:
             _bx, _by = _bomb.get_x(), _bomb.get_y()
-            _points.update(_bomb)
-            _points.update([Point(x, y) for x, y in ((_bx + 1, _by),
-                                                     (_bx - 1, _by),
-                                                     (_bx, _by + 1),
-                                                     (_bx, _by - 1))])
-        return ([_pt for _pt in _points if not (_pt.is_bad(self._size) or
-                                                _pt in self.get_walls())])
+            _points.add(_bomb)
+            _points.update(self._search_blasts(_bomb))
+        return [_points]
+
+    def get_perks(self):
+        """ Returns the list of points with Perks."""
+        points = set()
+        points.update(self._find_all(Element('BOMB_BLAST_RADIUS_INCREASE')))
+        points.update(self._find_all(Element('BOMB_COUNT_INCREASE')))
+        points.update(self._find_all(Element('BOMB_IMMUNE')))
+        return list(points)
 
     def is_near(self, x, y, elem):
         _is_near = False
@@ -137,7 +143,7 @@ class Board:
         return _is_near
 
     def count_near(self, x, y, elem):
-        """ Counts the number of occurencies of elem nearby """
+        """ Counts the number of occurrences of elem nearby """
         _near_count = 0
         if not Point(x, y).is_bad(self._size):
             for _x, _y in ((x + 1, y), (x - 1, y), (x, 1 + y), (x, 1 - y)):
@@ -161,7 +167,7 @@ class Board:
 
     def _line_by_line(self):
         return '\n'.join([self._string[i:i + self._size]
-                              for i in range(0, self._len, self._size)])
+                          for i in range(0, self._len, self._size)])
 
     def _strpos2pt(self, strpos):
         return Point(*self._strpos2xy(strpos))
@@ -171,6 +177,24 @@ class Board:
 
     def _xy2strpos(self, x, y):
         return self._size * y + x
+
+    def _search_blasts(self, bomb_point):
+        points = set()
+        walls = self.get_walls()
+
+        for search_range, is_x in ((range(bomb_point.get_x(), bomb_point.get_x() + self.BLAST_RANGE), True),
+                                   (range(bomb_point.get_x(), bomb_point.get_x() - self.BLAST_RANGE), True),
+                                   (range(bomb_point.get_y(), bomb_point.get_y() + self.BLAST_RANGE), False),
+                                   (range(bomb_point.get_y(), bomb_point.get_y() - self.BLAST_RANGE), False)):
+            for i in search_range:
+                current_point = Point(i, bomb_point.get_y()) if is_x else Point(bomb_point.get_x(), i)
+                if (current_point.is_bad(self._size) or
+                        current_point in walls):
+                    break
+                else:
+                    points.add(current_point)
+
+        return points
 
 
 if __name__ == '__main__':
