@@ -25,8 +25,8 @@ package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.bomberman.model.*;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -75,5 +75,15 @@ public class DefaultGameSettings implements GameSettings {
     @Override
     public Parameter<Integer> getBoardSize() {
         return v(BOARD_SIZE);
+    }
+
+    @Override
+    public Parameter<Boolean> isMultiple() {
+        return new SimpleParameter<>(true);
+    }
+
+    @Override
+    public Parameter<Integer> getPlayersPerRoom() {
+        return v(Integer.MAX_VALUE);
     }
 }

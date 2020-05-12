@@ -82,7 +82,14 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.MULTIPLE;
+        if (gameSettings.isMultiple().getValue()) {
+            return MultiplayerType.MULTIPLE;
+        } else {
+            return MultiplayerType.TEAM.apply(
+                    gameSettings.getPlayersPerRoom().getValue(),
+                    MultiplayerType.DISPOSABLE
+            );
+        }
     }
 
     @Override

@@ -24,14 +24,18 @@ package com.codenjoy.dojo.bomberman.services;
 
 
 import com.codenjoy.dojo.bomberman.model.*;
-import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
 public class OptionGameSettings implements GameSettings {
+
     private final Dice dice;
+
+    private final Parameter<Boolean> isMultiple;
+    private final Parameter<Integer> playersPerRoom;
+
     private final Parameter<Integer> bombPower;
     private final Parameter<Integer> bombsCount;
     private final Parameter<Integer> destroyWallCount;
@@ -49,6 +53,9 @@ public class OptionGameSettings implements GameSettings {
 
     public OptionGameSettings(Settings settings, Dice dice) {
         this.dice = dice;
+
+        isMultiple = settings.addCheckBox("Is multiple or disposable").type(Boolean.class).def(false);
+        playersPerRoom = settings.addEditBox("Players per room for disposable").type(Integer.class).def(15);
 
         bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(1);
         bombPower = settings.addEditBox("Bomb power").type(Integer.class).def(DefaultGameSettings.BOMB_POWER);
@@ -124,5 +131,14 @@ public class OptionGameSettings implements GameSettings {
         return boardSize;
     }
 
+    @Override
+    public Parameter<Boolean> isMultiple() {
+        return isMultiple;
+    }
+
+    @Override
+    public Parameter<Integer> getPlayersPerRoom() {
+        return playersPerRoom;
+    }
 
 }

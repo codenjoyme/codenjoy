@@ -23,10 +23,10 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.perks.PerkSettings;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 public interface GameSettings {
+
     Level getLevel();
 
     Walls getWalls(Bomberman board);
@@ -35,4 +35,7 @@ public interface GameSettings {
 
     Parameter<Integer> getBoardSize();
 
+    Parameter<Boolean> isMultiple();
+
+    Parameter<Integer> getPlayersPerRoom();
 }
