@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.model.perks.PerkSettings;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 public interface GameSettings {
@@ -33,4 +34,5 @@ public interface GameSettings {
     Hero getBomberman(Level level);
 
     Parameter<Integer> getBoardSize();
+
 }

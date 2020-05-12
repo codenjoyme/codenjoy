@@ -38,3 +38,5 @@
 /CodingDojo/games/bomberman/src/main/dotNet/Bomberman/packages/**
 **/node_modules/
 **/package-lock.json
+
+.DS_Store

@@ -60,4 +60,8 @@ public class Player extends GamePlayer<Hero, Field> {
         hero = settings.getBomberman(settings.getLevel());
         hero.init(board);
     }
+
+    public GameSettings getSettings() {
+        return settings;
+    }
 }

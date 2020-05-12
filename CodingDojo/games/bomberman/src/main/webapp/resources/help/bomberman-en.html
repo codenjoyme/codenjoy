@@ -193,6 +193,18 @@
                                 // you'd better kill this piece of ... meat, you'll get score points for it
     DEAD_MEAT_CHOPPER('x'),     // this is chopper corpse
 
+    /// perks
+    /// Values, time-outs, drop rate of perks can be adjusted by game administrator.
+    /// Here we provide default values.
+    /// If not stated explicitly in a description, Perk is deactivated on time-out (10 ticks).
+
+    BOMB_BLAST_RADIUS_INCREASE('+'), // Increase bomb blast radius (power  +2 to current one).
+                                     // Applicable only to newly created bombs.
+
+    BOMB_COUNT_INCREASE('c'), // Increase available bombs number (+3 to current level by default).
+
+    BOMB_IMMUNE('i'), // Gives an immunity to bomb blasts.
+
     /// a void
     NONE(' ');                 // this is the only place where you can move your Bomberman</pre>
                         <p>The game is turn-based, every second the server sends to your client
