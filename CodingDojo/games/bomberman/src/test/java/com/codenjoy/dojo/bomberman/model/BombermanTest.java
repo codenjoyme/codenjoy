@@ -23,10 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.perks.BombBlastRadiusIncrease;
-import com.codenjoy.dojo.bomberman.model.perks.BombCountIncrease;
-import com.codenjoy.dojo.bomberman.model.perks.Perk;
-import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
+import com.codenjoy.dojo.bomberman.model.perks.*;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.EventListener;
@@ -2023,6 +2020,11 @@ public class BombermanTest {
 
     }
 
+    // под разрущающейся стенкой может быть приз - это специальная стенка
+    // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
+    // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
+    // чертики тоже могут ставить бомбы
+
     // Perks related test here
     @Test
     public void shouldPerkBeDropped_whenWallIsDestroyed() {
@@ -2101,11 +2103,19 @@ public class BombermanTest {
 
     }
 
+    @Test
+    public void shouldPerkBeDeactivated_whenTimeout() {
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        PerksSettingsWrapper.setDropRatio(20);
+        player.getHero().addPerk(new BombBlastRadiusIncrease(4,3));
+        assertEquals("Hero had to acquire new perk", 1, player.getHero().getPerks().size());
 
-    // под разрущающейся стенкой может быть приз - это специальная стенка
-    // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
-    // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
-    // чертики тоже могут ставить бомбы
+        field.tick();
+        field.tick();
+        field.tick();
+
+        assertEquals("Hero had to loose perk", 0, player.getHero().getPerks().size());
+    }
 
     @Test
     public void shouldBombBlastRadiusIncrease_whenBBRIperk() {
@@ -2129,7 +2139,7 @@ public class BombermanTest {
 
     @Test
     public void shouldBombCountIncrease_whenBCIperk() {
-
+        // Bomb Count Increase perk
         hero.act();
         // obe bomb by default on lel 1
         asrtBrd("     \n" +
@@ -2179,6 +2189,57 @@ public class BombermanTest {
                 "     \n" +
                 "1234☺\n");
 
+    }
+
+    @Test
+    public void shouldHeroKeepAlive_whenBIperk() {
+        // Bomb Immune perk
+        hero.act();
+        hero.right();
+        field.tick();
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "4☺   \n");
+
+        player.getHero().addPerk(new BombImmune(6));
+
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "҉    \n" +
+                "҉☺   \n");
+
+        hero.act();
+        field.tick();
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ☻   \n");
+
+        field.tick();
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+//                " 3☺  \n");
+                " ☻   \n");
+
+        field.tick();
+        field.tick();
+        field.tick();
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "҉Ѡ҉  \n");
     }
 
     static class DestroyWallAt extends WallsDecorator {

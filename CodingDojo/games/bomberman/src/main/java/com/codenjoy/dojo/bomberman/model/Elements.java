@@ -64,7 +64,9 @@ public enum Elements implements CharElements {
 
     BOMB_COUNT_INCREASE('c'), // Increase available bombs count. Number of extra bombs can be set in settings. The perk is temporary.
 
-    BOMB_IMMUNE('i'), // Do not die after bomb blast. Temporary.
+//    BOMB_REMOTE_CONTROL('r'), // Bomb blast not by timer but by second act.
+
+    BOMB_IMMUNE('i'), // Do not die after bomb blast (own bombs and others as well). Temporary.
     /// a void
     NONE(' ');                 // this is the only place where you can move your Bomberman
 

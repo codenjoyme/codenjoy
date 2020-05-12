@@ -24,6 +24,7 @@ package com.codenjoy.dojo.bomberman.services;
 
 
 import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -43,23 +44,30 @@ public class OptionGameSettings implements GameSettings {
 
     private final Parameter<Integer> perkBombCountInc;
     private final Parameter<Integer> timeoutBombCountInc;
+    private final Parameter<Integer> timeoutBombImmune;
+//    private final Parameter<Integer> timeoutBombRemoteControl;
 
     public OptionGameSettings(Settings settings, Dice dice) {
+        this.dice = dice;
+
         bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(1);
         bombPower = settings.addEditBox("Bomb power").type(Integer.class).def(DefaultGameSettings.BOMB_POWER);
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(DefaultGameSettings.BOARD_SIZE);
         destroyWallCount = settings.addEditBox("Destroy wall count").type(Integer.class).def(boardSize.getValue() * boardSize.getValue() / 10);
         meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(DefaultGameSettings.MEAT_CHOPPERS_COUNT);
-        this.dice = dice;
 
         // perks. Set value to 0 = perk is disabled.
         perkDropRatio = settings.addEditBox("Perks drop ratio in %").type(Integer.class).def(20); // 20%
-        //Bomb blast radius increase
+        //Bomb blast radius increase (BBRI)
         perkBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase").type(Integer.class).def(2);
         timeoutBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase effect timeout").type(Integer.class).def(10);
-        // Bomb count increase
+        // Bomb count increase (BCI)
         perkBombCountInc = settings.addEditBox("Bomb count increase").type(Integer.class).def(3);
         timeoutBombCountInc = settings.addEditBox("Bomb count effect timeout").type(Integer.class).def(10);
+        // Bomb immune (BI)
+        timeoutBombImmune = settings.addEditBox("Bomb immune effect timeout").type(Integer.class).def(10);
+        // Bomb remote control (BRC)
+//        timeoutBombRemoteControl = settings.addEditBox("Bomb remote controll effect timeout").type(Integer.class).def(10);
     }
 
     @Override
@@ -101,6 +109,12 @@ public class OptionGameSettings implements GameSettings {
 
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_COUNT_INCREASE,
                 perkBombCountInc.getValue(), timeoutBombCountInc.getValue());
+
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_IMMUNE,
+                0, timeoutBombImmune.getValue());
+
+       /* PerksSettingsWrapper.setPerkSettings(Elements.BOMB_REMOTE_CONTROL,
+                0, timeoutBombImmune.getValue());*/
 
         return new Hero(level, dice);
     }

@@ -29,11 +29,6 @@ public class BombBlastRadiusIncrease extends Perk {
         super(Elements.BOMB_BLAST_RADIUS_INCREASE, value, timeout);
     }
 
-    @Override
-    public void tick() {
-        setTimer(getTimer() - 1);
-    }
-
     /**
      * In case player grabs another such a perk while current one is active still,
      * timer will be reset to initial time-out value.

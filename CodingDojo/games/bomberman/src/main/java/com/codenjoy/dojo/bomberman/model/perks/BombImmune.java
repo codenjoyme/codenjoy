@@ -2,10 +2,11 @@ package com.codenjoy.dojo.bomberman.model.perks;
 
 import com.codenjoy.dojo.bomberman.model.Elements;
 
-public class BombCountIncrease extends Perk {
-    public BombCountIncrease(int value, int timeout) {
-        super(Elements.BOMB_COUNT_INCREASE, value, timeout);
+public class BombImmune extends Perk {
+    public BombImmune(int timeout) {
+        super(Elements.BOMB_IMMUNE, 0, timeout);
     }
+
 
     /**
      * In case player grabs another such a perk while current one is active still,
@@ -13,6 +14,6 @@ public class BombCountIncrease extends Perk {
      */
     @Override
     public Perk combine(Perk perk) {
-        return new BombCountIncrease(getValue(), getTimeout());
+        return new BombImmune(getTimeout());
     }
 }

@@ -23,10 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.perks.BombBlastRadiusIncrease;
-import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
-import com.codenjoy.dojo.bomberman.model.perks.PerkSettings;
-import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
+import com.codenjoy.dojo.bomberman.model.perks.*;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
@@ -65,8 +62,14 @@ public class Bomberman implements Field {
         return new ArrayList<PerkOnBoard>(perks.values());
     }
 
-    public PerkOnBoard getPerkAtPoint(int x, int y) {
-        return perks.get(PointImpl.pt(x, y));
+    public PerkOnBoard pickPerkAtPoint(int x, int y) {
+        PerkOnBoard perk = perks.get(PointImpl.pt(x, y));
+
+        if (perk != null) {
+            perks.remove(PointImpl.pt(x, y));
+        }
+
+        return perk;
     }
 
     @Override
@@ -83,12 +86,19 @@ public class Bomberman implements Field {
         meatChopperEatBombermans();
         tactAllBombs();
         tactAllPerks();
+        tactAllHeroes();
     }
 
     private void tactAllPerks() {
         List<Blast> blastsWithoutPerks = blasts.stream().filter(blast -> !perks.containsKey(blast)).collect(Collectors.toList());
         blasts.clear();
         blasts.addAll(blastsWithoutPerks);
+    }
+
+    private void tactAllHeroes() {
+        for (Player p : players) {
+            p.getHero().tick();
+        }
     }
 
     private void tactAllBombermans() {
@@ -200,7 +210,11 @@ public class Bomberman implements Field {
         for (Blast blast : blasts) {
             for (Player dead : players) {
                 if (dead.getHero().itsMe(blast)) {
-                    dead.event(Events.KILL_BOMBERMAN);
+                    Perk bombImmunePerk = dead.getHero().getPerk(Elements.BOMB_IMMUNE);
+
+                    if (bombImmunePerk == null) {
+                        dead.event(Events.KILL_BOMBERMAN);
+                    }
 
                     for (Player bombOwner : players) {
                         if (dead != bombOwner && blast.itsMine(bombOwner.getHero())) {

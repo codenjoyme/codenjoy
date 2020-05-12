@@ -137,7 +137,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
         if (!field.isBarrier(newX, newY, WITHOUT_MEAT_CHOPPER)) {
             move(newX, newY);
-            PerkOnBoard perk = ((Bomberman) field).getPerkAtPoint(newX, newY);
+            PerkOnBoard perk = ((Bomberman) field).pickPerkAtPoint(newX, newY);
             if (perk != null) {
                 addPerk(perk.getPerk());
             }
@@ -217,6 +217,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void addPerk(Perk perk) {
         perks.add(perk);
+    }
+
+    public Perk getPerk(Elements element) {
+        return perks.getPerk(element);
     }
 }
 

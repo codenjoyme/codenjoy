@@ -64,6 +64,11 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
         return isActive() ? this.element : Elements.NONE;
     }
 
+    @Override
+    public void tick() {
+        this.timer = this.timer -1;
+    }
+
     /**
      * Perk implementation must resolve the situation when player already has this kind of perk.
      * E.g. strategy can be to reset timer or increase effect power etc.
