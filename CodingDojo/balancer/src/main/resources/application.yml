@@ -35,7 +35,7 @@ game:
   final-time: "19:00"
 
 sms:
-  enabled: false
+  enabled: true
   text:
     registration: "Vash kod pidtverdzennya reestratsui: %s.\nCodenjoy Team."
     reset-password: "Vash kod pidtverdzennya zminy parolu: %s.\nCodenjoy Team."
