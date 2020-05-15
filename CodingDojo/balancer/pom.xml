@@ -340,7 +340,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <executable>true</executable>
+                    <!-- true - eсли хочу запускать так же и 'sh codenjoy-balancer.war'
+                         false - если только как 'java -jar codenjoy-balancer.war' -->
+                    <executable>false</executable>
                 </configuration>
             </plugin>
             <plugin>

@@ -853,7 +853,9 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <executable>true</executable>
+                    <!-- true - eсли хочу запускать так же и 'sh codenjoy-contest.war'
+                         false - если только как 'java -jar codenjoy-contest.war' -->
+                    <executable>false</executable>
                 </configuration>
             </plugin>
             <plugin>
