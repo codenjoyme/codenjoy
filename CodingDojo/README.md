@@ -71,6 +71,11 @@ To run a project with your game, do the following:
     * `spring.profiles.active`
       * `sqlite` for the lightweight database (<50 participants)
       * `postgres` for the postgres database (>50 participants)
+        * `database.host` database server host, `localhost` by default
+        * `database.port` database server port, `5432` by default
+        * `database.name` database name, `codenjoy` by default
+        * `database.user` username to connect, `codenjoy` by default
+        * `database.password` password to connect, `securePostgresDBPassword` by default
       * `trace` for enable log.debug
       * `debug` if you want to debug js files (otherwise it will compress and obfuscate)
       * `yourgame` if you added your custom configuration to the game inside `CodingDojo\games\yourgame\src\main\resources\application-yourgame.yml`
@@ -105,6 +110,11 @@ To run a project with your game, do the following:
       * `spring.profiles.active`
         * `sqlite` for the lightweight database (<50 participants)
         * `postgres` for the postgres database (>50 participants)
+          * `database.host` database server host, `localhost` by default
+          * `database.port` database server port, `5432` by default
+          * `database.name` database name, `codenjoy` by default
+          * `database.user` username to connect, `codenjoy` by default
+          * `database.password` password to connect, `securePostgresDBPassword` by default
         * `trace` for enable log.debug
         * `debug` if you want to debug js files (otherwise it will compress and obfuscate)
       * `server.port` application port, use 8081 because 8080 is busy by Codenjoy server 
