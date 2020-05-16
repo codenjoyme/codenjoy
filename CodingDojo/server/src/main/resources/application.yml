@@ -74,3 +74,4 @@ logging:
     org:
       eclipse.jetty: info
       springframework.mvc: info
+      reflections: error
