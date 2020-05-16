@@ -28,6 +28,7 @@
         <maven-license.version>1.16</maven-license.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
 
         <user.resources>src/main/webapp/resources/user</user.resources>
         <engine.libs>${user.resources}/engine-libs.zip</engine.libs>
@@ -178,6 +179,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
                 <configuration>
                     <excludes>
                         <exclude>**/logback.xml</exclude>
