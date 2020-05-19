@@ -238,6 +238,15 @@ public class Bomberman implements Field {
                     perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), bbri));
                     result = true;
                     break;
+                case BOMB_COUNT_INCREASE:
+                    BombCountIncrease bci = new BombCountIncrease(ps.getValue(), ps.getTimeout());
+                    perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), bci));
+                    result = true;
+                    break;
+                case BOMB_IMMUNE:
+                    BombImmune bi = new BombImmune(ps.getTimeout());
+                    perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), bi));
+                    result = true;
                 default:
             }
         }
