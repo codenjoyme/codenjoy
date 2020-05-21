@@ -213,6 +213,13 @@ var getFinalists = function() {
     });
 };
 
+var markWinners = function() {
+    _ajax('winners', {
+        type: 'GET',
+        url: server('balancer') + '/score/winners'
+    });
+};
+
 var disqualify = function(emails) {
     var players = emails.split(',')
                         .map(function(s) {
@@ -485,6 +492,10 @@ $(document).ready(function() {
         getFinalists(
             $('#finalists-day').val()
         );
+    });
+
+    $('#winners').click(function() {
+        markWinners();
     });
 
     $('#remove').click(function() {

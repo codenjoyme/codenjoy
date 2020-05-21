@@ -37,6 +37,7 @@ public class PlayerInfo {
     private String readableName;
     private String score;
     private String code;
+    private boolean winner;
 
     public PlayerInfo(String id, String score) {
         this.id = id;
