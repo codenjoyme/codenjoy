@@ -165,7 +165,7 @@ public class Dispatcher {
     }
 
     public List<PlayerScore> markWinners() {
-        List<PlayerScore> finalists = getFinalists();
+        List<PlayerScore> finalists = loadFinalists();
 
         if (!finalists.isEmpty()) {
             scores.cleanWinnerFlags();
