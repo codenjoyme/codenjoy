@@ -167,6 +167,10 @@ public class Dispatcher {
     public List<PlayerScore> markWinners() {
         List<PlayerScore> finalists = getFinalists();
 
+        if (!finalists.isEmpty()) {
+            scores.cleanWinnerFlags();
+        }
+
         finalists.forEach(finalist -> {
             scores.setWinnerFlag(finalist, true);
             finalist.setWinner(true);
