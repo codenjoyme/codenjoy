@@ -58,14 +58,15 @@ public class Scores {
                         "day varchar(10), " +
                         "time varchar(30), " +
                         "email varchar(255), " +
-                        "score int);");
+                        "score int," +
+                        "winner int);");
     }
 
     void removeDatabase() {
         pool.removeDatabase();
     }
 
-    public void saveScore(long time, String email, int score) {
+    public void saveScore(long time, String email, int score, boolean winner) {
         Date date = new Date(time);
         pool.update("INSERT INTO scores " +
                         "(day, time, email, score) " +
@@ -73,21 +74,23 @@ public class Scores {
                 formatter.format(date),
                 JDBCTimeUtils.toString(date),
                 email,
-                score);
+                score,
+                winner ? 1 : 0);
     }
 
     public void saveScores(long time, List<PlayerInfo> playersInfos) {
         Date date = new Date(time);
         pool.batchUpdate("INSERT INTO scores " +
-                        "(day, time, email, score) " +
-                        "VALUES (?,?,?,?);",
+                        "(day, time, email, score, winner) " +
+                        "VALUES (?,?,?,?,?);",
                 playersInfos,
                 (PreparedStatement stmt, PlayerInfo info) -> {
                     pool.fillStatement(stmt,
                             formatter.format(date),
                             JDBCTimeUtils.toString(date),
                             info.getId(),
-                            Integer.valueOf(info.getScore()));
+                            Integer.valueOf(info.getScore()),
+                            info.isWinner() ? 1 : 0);
                     return true;
                 });
     }
@@ -159,6 +162,17 @@ public class Scores {
             .collect(Collectors.toList());
     }
 
+    public void setWinnerFlag(PlayerScore playerScore, boolean isWinner) {
+        pool.update("update scores set winner = ? where" +
+                        " day = ? and time = ? and email = ? and score = ?",
+                isWinner ? 1 : 0,
+                playerScore.getDay(),
+                playerScore.getTime(),
+                playerScore.getId(),
+                playerScore.getScore()
+        );
+    }
+
     private List<LocalDate> getDaysBetween(String from, String to) {
         LocalDate start = LocalDate.parse(from, YYYY_MM_DD2);
         LocalDate end = LocalDate.parse(to, YYYY_MM_DD2);
@@ -182,7 +196,9 @@ public class Scores {
             while (rs.next()) {
                 add(new PlayerScore(
                         rs.getString("email"),
-                        rs.getInt("score")));
+                        rs.getInt("score"),
+                        rs.getString("time"),
+                        rs.getInt("winner") == 1));
             }
         }};
     }

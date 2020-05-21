@@ -164,6 +164,17 @@ public class Dispatcher {
         return result;
     }
 
+    public List<PlayerScore> markWinners() {
+        List<PlayerScore> finalists = getFinalists();
+
+        finalists.forEach(finalist -> {
+            scores.setWinnerFlag(finalist, true);
+            finalist.setWinner(true);
+        });
+
+        return finalists;
+    }
+
     private List<PlayerScore> loadFinalists() {
         return this.scores.getFinalists(
                 config.getGame().getStartDay(),

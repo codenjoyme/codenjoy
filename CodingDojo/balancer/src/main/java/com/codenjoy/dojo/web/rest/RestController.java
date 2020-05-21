@@ -105,6 +105,12 @@ public class RestController {
         return dispatcher.getFinalists();
     }
 
+    @GetMapping(SCORE + "/winners")
+    @ResponseBody
+    public List<PlayerScore> markWinners() {
+        return dispatcher.markWinners();
+    }
+
     // TODO test me
     @PostMapping(SCORE + "/disqualify")
     @ResponseBody

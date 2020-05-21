@@ -22,37 +22,30 @@ package com.codenjoy.dojo.services.entity;
  * #L%
  */
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class PlayerScore {
 
     private String id;
     private String name;
     private int score;
     private String day;
+    private String time;
     private String server;
+    private boolean winner;
 
     public PlayerScore() {
         // do nothing
     }
 
-    public PlayerScore(String id, int score) {
+    public PlayerScore(String id, int score, String time, boolean isWinner) {
         this.id = id;
         this.score = score;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public String getServer() {
-        return server;
+        this.time = time;
+        this.winner = isWinner;
     }
 
     @Override
@@ -60,29 +53,11 @@ public class PlayerScore {
         return "PlayerScore{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ((day != null) ? (", day='" + day + '\'') : "") +
-                ", score='" + score + '\'' +
+                ", score=" + score +
+                ", day='" + day + '\'' +
+                ", time='" + time + '\'' +
                 ", server='" + server + '\'' +
+                ", winner=" + winner +
                 '}';
-    }
-
-    public void setServer(String server) {
-        this.server = server;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
     }
 }
