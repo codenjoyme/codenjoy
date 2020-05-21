@@ -165,7 +165,9 @@ public class Dispatcher {
     }
 
     public List<PlayerScore> markWinners() {
-        List<PlayerScore> finalists = getFinalists();
+        List<PlayerScore> finalists = loadFinalists();
+
+        scores.cleanWinnerFlags();
 
         finalists.forEach(finalist -> {
             scores.setWinnerFlag(finalist, true);

@@ -173,6 +173,10 @@ public class Scores {
         );
     }
 
+    public void cleanWinnerFlags() {
+        pool.update("update scores set winner = 0 where winner <> 0");
+    }
+
     private List<LocalDate> getDaysBetween(String from, String to) {
         LocalDate start = LocalDate.parse(from, YYYY_MM_DD2);
         LocalDate end = LocalDate.parse(to, YYYY_MM_DD2);
