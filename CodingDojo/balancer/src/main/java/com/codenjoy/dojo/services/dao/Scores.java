@@ -66,11 +66,12 @@ public class Scores {
         pool.removeDatabase();
     }
 
+    // TODO исправить тесты
     public void saveScore(long time, String email, int score, boolean winner) {
         Date date = new Date(time);
         pool.update("INSERT INTO scores " +
-                        "(day, time, email, score) " +
-                        "VALUES (?,?,?,?);",
+                        "(day, time, email, score, winner) " +
+                        "VALUES (?,?,?,?,?);",
                 formatter.format(date),
                 JDBCTimeUtils.toString(date),
                 email,

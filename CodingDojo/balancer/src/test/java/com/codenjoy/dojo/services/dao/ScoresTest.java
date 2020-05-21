@@ -78,9 +78,9 @@ public class ScoresTest {
 
         long time = day(day).plus(Calendar.SECOND, 10).get();
 
-        service.saveScore(time, "stiven.pupkin@gmail.com", 1000);
-        service.saveScore(time, "eva.pupkina@gmail.com", 2000);
-        service.saveScore(time, "bob.marley@gmail.com", 3000);
+        service.saveScore(time, "stiven.pupkin@gmail.com", 1000, false);
+        service.saveScore(time, "eva.pupkina@gmail.com", 2000, false);
+        service.saveScore(time, "bob.marley@gmail.com", 3000, false);
 
         // when then
         assertEquals(service.getDays().toString(), "[2019-01-27]");
@@ -101,18 +101,18 @@ public class ScoresTest {
         String day = "2019-01-27";
 
         long time1 = day(day).plus(Calendar.SECOND, 10).get();
-        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000);
-        service.saveScore(time1, "eva.pupkina@gmail.com", 2000);
+        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000, false);
+        service.saveScore(time1, "eva.pupkina@gmail.com", 2000, false);
 
         long time2 = day(day).plus(Calendar.SECOND, 11).get();
-        service.saveScore(time2, "stiven.pupkin@gmail.com", 1001);
-        service.saveScore(time2, "eva.pupkina@gmail.com", 2001);
-        service.saveScore(time2, "bob.marley@gmail.com", 3001);
+        service.saveScore(time2, "stiven.pupkin@gmail.com", 1001, false);
+        service.saveScore(time2, "eva.pupkina@gmail.com", 2001, false);
+        service.saveScore(time2, "bob.marley@gmail.com", 3001, false);
 
         long time3 = day(day).plus(Calendar.SECOND, 12).get();
-        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002);
-        service.saveScore(time3, "eva.pupkina@gmail.com", 2002);
-        service.saveScore(time3, "bob.marley@gmail.com", 3002);
+        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002, false);
+        service.saveScore(time3, "eva.pupkina@gmail.com", 2002, false);
+        service.saveScore(time3, "bob.marley@gmail.com", 3002, false);
 
         // when then
         assertEquals(service.getDays().toString(), "[2019-01-27]");
@@ -178,32 +178,32 @@ public class ScoresTest {
         String day1 = "2019-01-27";
 
         long time1 = day(day1).plus(Calendar.SECOND, 10).get();
-        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000);
-        service.saveScore(time1, "eva.pupkina@gmail.com", 2000);
-        service.saveScore(time1, "bob.marley@gmail.com", 3000);
+        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000, false);
+        service.saveScore(time1, "eva.pupkina@gmail.com", 2000, false);
+        service.saveScore(time1, "bob.marley@gmail.com", 3000, false);
 
         // это время финального свистка, показывается из будущего в этот день
         long time19 = day(day1).plus(Calendar.HOUR, 19).get();
-        service.saveScore(time19, "stiven.pupkin@gmail.com", 1111);
-        service.saveScore(time19, "eva.pupkina@gmail.com", 2222);
+        service.saveScore(time19, "stiven.pupkin@gmail.com", 1111, false);
+        service.saveScore(time19, "eva.pupkina@gmail.com", 2222, false);
 
         // а это время уже после 19:00
         long time2 = day(day1).plus(Calendar.HOUR, 20).get();
-        service.saveScore(time2, "stiven.pupkin@gmail.com", 1222);
-        service.saveScore(time2, "eva.pupkina@gmail.com", 2333);
-        service.saveScore(time2, "bob.marley@gmail.com", 3444);
+        service.saveScore(time2, "stiven.pupkin@gmail.com", 1222, false);
+        service.saveScore(time2, "eva.pupkina@gmail.com", 2333, false);
+        service.saveScore(time2, "bob.marley@gmail.com", 3444, false);
 
         String day2 = "2019-01-28";
 
         long time3 = day(day2).plus(Calendar.SECOND, 10).get();
-        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002);
-        service.saveScore(time3, "eva.pupkina@gmail.com", 2002);
-        service.saveScore(time3, "bob.marley@gmail.com", 3002);
+        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002, false);
+        service.saveScore(time3, "eva.pupkina@gmail.com", 2002, false);
+        service.saveScore(time3, "bob.marley@gmail.com", 3002, false);
 
         long time4 = day(day2).plus(Calendar.SECOND, 11).get();
-        service.saveScore(time4, "stiven.pupkin@gmail.com", 1003);
-        service.saveScore(time4, "eva.pupkina@gmail.com", 2003);
-        service.saveScore(time4, "bob.marley@gmail.com", 3003);
+        service.saveScore(time4, "stiven.pupkin@gmail.com", 1003, false);
+        service.saveScore(time4, "eva.pupkina@gmail.com", 2003, false);
+        service.saveScore(time4, "bob.marley@gmail.com", 3003, false);
 
         // when then
         assertEquals(service.getDays().toString(), "[2019-01-27, 2019-01-28]");
@@ -253,26 +253,26 @@ public class ScoresTest {
         String day1 = "2019-01-27";
 
         long time1 = day(day1).plus(Calendar.SECOND, 10).get();
-        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000);
-        service.saveScore(time1, "eva.pupkina@gmail.com", 2000);
-        service.saveScore(time1, "bob.marley@gmail.com", 3000);
+        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000, false);
+        service.saveScore(time1, "eva.pupkina@gmail.com", 2000, false);
+        service.saveScore(time1, "bob.marley@gmail.com", 3000, false);
 
         long time2 = day(day1).plus(Calendar.SECOND, 11).get();
-        service.saveScore(time2, "stiven.pupkin@gmail.com", 1001);
-        service.saveScore(time2, "eva.pupkina@gmail.com", 2001);
-        service.saveScore(time2, "bob.marley@gmail.com", 3001);
+        service.saveScore(time2, "stiven.pupkin@gmail.com", 1001, false);
+        service.saveScore(time2, "eva.pupkina@gmail.com", 2001, false);
+        service.saveScore(time2, "bob.marley@gmail.com", 3001, false);
 
         String day2 = "2019-01-28";
 
         long time3 = day(day2).plus(Calendar.SECOND, 10).get();
-        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002);
-        service.saveScore(time3, "eva.pupkina@gmail.com", 2002);
-        service.saveScore(time3, "bob.marley@gmail.com", 3002);
+        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002, false);
+        service.saveScore(time3, "eva.pupkina@gmail.com", 2002, false);
+        service.saveScore(time3, "bob.marley@gmail.com", 3002, false);
 
         long time4 = day(day2).plus(Calendar.SECOND, 11).get();
-        service.saveScore(time4, "stiven.pupkin@gmail.com", 1003);
-        service.saveScore(time4, "eva.pupkina@gmail.com", 2003);
-        service.saveScore(time4, "bob.marley@gmail.com", 3003);
+        service.saveScore(time4, "stiven.pupkin@gmail.com", 1003, false);
+        service.saveScore(time4, "eva.pupkina@gmail.com", 2003, false);
+        service.saveScore(time4, "bob.marley@gmail.com", 3003, false);
 
         assertEquals(service.getDays().toString(), "[2019-01-27, 2019-01-28]");
 
@@ -289,26 +289,26 @@ public class ScoresTest {
         String day1 = "2019-01-27";
 
         long time1 = day(day1).plus(Calendar.SECOND, 10).get();
-        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000);
-        service.saveScore(time1, "eva.pupkina@gmail.com", 2000);
-        service.saveScore(time1, "bob.marley@gmail.com", 3000);
+        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000, false);
+        service.saveScore(time1, "eva.pupkina@gmail.com", 2000, false);
+        service.saveScore(time1, "bob.marley@gmail.com", 3000, false);
 
         long time2 = day(day1).plus(Calendar.SECOND, 11).get();
-        service.saveScore(time2, "stiven.pupkin@gmail.com", 1001);
-        service.saveScore(time2, "eva.pupkina@gmail.com", 2001);
-        service.saveScore(time2, "bob.marley@gmail.com", 3001);
+        service.saveScore(time2, "stiven.pupkin@gmail.com", 1001, false);
+        service.saveScore(time2, "eva.pupkina@gmail.com", 2001, false);
+        service.saveScore(time2, "bob.marley@gmail.com", 3001, false);
 
         String day2 = "2019-01-28";
 
         long time3 = day(day2).plus(Calendar.SECOND, 10).get();
-        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002);
-        service.saveScore(time3, "eva.pupkina@gmail.com", 2002);
-        service.saveScore(time3, "bob.marley@gmail.com", 3002);
+        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002, false);
+        service.saveScore(time3, "eva.pupkina@gmail.com", 2002, false);
+        service.saveScore(time3, "bob.marley@gmail.com", 3002, false);
 
         long time4 = day(day2).plus(Calendar.SECOND, 11).get();
-        service.saveScore(time4, "stiven.pupkin@gmail.com", 1003);
-        service.saveScore(time4, "eva.pupkina@gmail.com", 2003);
-        service.saveScore(time4, "bob.marley@gmail.com", 3003);
+        service.saveScore(time4, "stiven.pupkin@gmail.com", 1003, false);
+        service.saveScore(time4, "eva.pupkina@gmail.com", 2003, false);
+        service.saveScore(time4, "bob.marley@gmail.com", 3003, false);
 
         assertEquals(service.getDays().toString(), "[2019-01-27, 2019-01-28]");
 
@@ -368,9 +368,9 @@ public class ScoresTest {
 
         long time = day(day).plus(Calendar.SECOND, 10).get();
 
-        service.saveScore(time, "stiven.pupkin@gmail.com", 1000);
-        service.saveScore(time, "eva.pupkina@gmail.com", 2000);
-        service.saveScore(time, "bob.marley@gmail.com", 3000);
+        service.saveScore(time, "stiven.pupkin@gmail.com", 1000, false);
+        service.saveScore(time, "eva.pupkina@gmail.com", 2000, false);
+        service.saveScore(time, "bob.marley@gmail.com", 3000, false);
 
         // when then
         service.getScores("bla-bla", time);
@@ -382,18 +382,18 @@ public class ScoresTest {
         String day = "2019-01-27";
 
         long time1 = day(day).plus(Calendar.SECOND, 10).get();
-        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000);
-        service.saveScore(time1, "eva.pupkina@gmail.com", 2000);
+        service.saveScore(time1, "stiven.pupkin@gmail.com", 1000, false);
+        service.saveScore(time1, "eva.pupkina@gmail.com", 2000, false);
 
         long time2 = day(day).plus(Calendar.SECOND, 11).get();
-        service.saveScore(time2, "stiven.pupkin@gmail.com", 1001);
-        service.saveScore(time2, "eva.pupkina@gmail.com", 2001);
-        service.saveScore(time2, "bob.marley@gmail.com", 3001);
+        service.saveScore(time2, "stiven.pupkin@gmail.com", 1001, false);
+        service.saveScore(time2, "eva.pupkina@gmail.com", 2001, false);
+        service.saveScore(time2, "bob.marley@gmail.com", 3001, false);
 
         long time3 = day(day).plus(Calendar.SECOND, 12).get();
-        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002);
-        service.saveScore(time3, "eva.pupkina@gmail.com", 2002);
-        service.saveScore(time3, "bob.marley@gmail.com", 3002);
+        service.saveScore(time3, "stiven.pupkin@gmail.com", 1002, false);
+        service.saveScore(time3, "eva.pupkina@gmail.com", 2002, false);
+        service.saveScore(time3, "bob.marley@gmail.com", 3002, false);
 
         // when
         long last = service.getLastTime(time1);
