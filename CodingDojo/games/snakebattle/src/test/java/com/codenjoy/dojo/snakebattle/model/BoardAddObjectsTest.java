@@ -25,8 +25,8 @@ package com.codenjoy.dojo.snakebattle.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
+import com.codenjoy.dojo.snakebattle.model.board.round.Round;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
-import com.codenjoy.dojo.snakebattle.model.board.Timer;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
@@ -60,15 +60,22 @@ public class BoardAddObjectsTest {
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
 
-        game = new SnakeBoard(level, mock(Dice.class),
-                new Timer(new SimpleParameter<>(0)),
-                new Timer(new SimpleParameter<>(300)),
-                new Timer(new SimpleParameter<>(1)),
+        Round round = new Round(
                 new SimpleParameter<>(5),
+                new SimpleParameter<>(2),
+                new SimpleParameter<>(0),
+                new SimpleParameter<>(300),
+                new SimpleParameter<>(1)
+        );
+
+        game = new SnakeBoard(
+                level,
+                mock(Dice.class),
+                round,
                 new SimpleParameter<>(10),
                 new SimpleParameter<>(10),
-                new SimpleParameter<>(3),
-                new SimpleParameter<>(2));
+                new SimpleParameter<>(3)
+        );
 
         Hero hero = level.getHero(game);
 

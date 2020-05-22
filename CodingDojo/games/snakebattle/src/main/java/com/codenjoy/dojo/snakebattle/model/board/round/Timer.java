@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snakebattle.model.board;
+package com.codenjoy.dojo.snakebattle.model.board.round;
 
 /*-
  * #%L
