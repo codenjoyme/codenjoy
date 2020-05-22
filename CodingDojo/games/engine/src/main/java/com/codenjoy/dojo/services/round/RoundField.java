@@ -53,6 +53,8 @@ public abstract class RoundField<P extends RoundGamePlayer<? extends RoundPlayer
 
     protected abstract void cleanStuff();
 
+    protected abstract void setNewObjects();
+
     @Override
     public void tick() {
         cleanStuff();
@@ -63,6 +65,8 @@ public abstract class RoundField<P extends RoundGamePlayer<? extends RoundPlayer
         }
 
         tickField();
+
+        rewardTheWinnerIfNeeded(this::setNewObjects);
     }
 
     @Override

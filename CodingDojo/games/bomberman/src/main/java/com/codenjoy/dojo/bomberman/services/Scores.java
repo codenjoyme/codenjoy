@@ -23,25 +23,19 @@ package com.codenjoy.dojo.bomberman.services;
  */
 
 
+import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> killWallScore;
-    private final Parameter<Integer> killMeatChopperScore;
-    private final Parameter<Integer> killOtherBombermanScore;
-    private final Parameter<Integer> killBomermanPenalty;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-        killWallScore = settings.addEditBox("Kill wall score").type(Integer.class).def(10);
-        killMeatChopperScore = settings.addEditBox("Kill meat chopper score").type(Integer.class).def(100);
-        killOtherBombermanScore = settings.addEditBox("Kill other bomberman score").type(Integer.class).def(1000);
-        killBomermanPenalty = settings.addEditBox("Kill your bomberman penalty").type(Integer.class).def(50);
+        this.settings = settings;
     }
 
     @Override
@@ -57,13 +51,15 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.KILL_BOMBERMAN)) {
-            score -= killBomermanPenalty.getValue();
+            score -= settings.killBomermanPenalty().getValue();
         } else if (event.equals(Events.KILL_OTHER_BOMBERMAN)) {
-            score += killOtherBombermanScore.getValue();
+            score += settings.killOtherBombermanScore().getValue();
         } else if (event.equals(Events.KILL_MEAT_CHOPPER)) {
-            score += killMeatChopperScore.getValue();
+            score += settings.killMeatChopperScore().getValue();
         } else if (event.equals(Events.KILL_DESTROY_WALL)) {
-            score += killWallScore.getValue();
+            score += settings.killWallScore().getValue();
+        } else if (event.equals(Events.WIN_ROUND)) {
+            score += settings.winRoundScore().getValue();
         }
         score = Math.max(0, score);
     }

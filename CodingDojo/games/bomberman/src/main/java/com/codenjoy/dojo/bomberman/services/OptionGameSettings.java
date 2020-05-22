@@ -45,6 +45,12 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> boardSize;
     private final Parameter<Integer> meatChoppersCount;
 
+    private final Parameter<Integer> killWallScore;
+    private final Parameter<Integer> killMeatChopperScore;
+    private final Parameter<Integer> killOtherBombermanScore;
+    private final Parameter<Integer> killBomermanPenalty;
+    private final Parameter<Integer> winRoundScore;
+
     private final Parameter<Integer> perkDropRatio;
     private final Parameter<Integer> perkBombBlastRadiusInc;
     private final Parameter<Integer> timeoutBombBlastRadiusInc;
@@ -59,6 +65,12 @@ public class OptionGameSettings implements GameSettings {
 
         isMultiple = settings.addCheckBox("Is multiple or disposable").type(Boolean.class).def(true);
         playersPerRoom = settings.addEditBox("Players per room for disposable").type(Integer.class).def(5);
+
+        killWallScore = settings.addEditBox("Kill wall score").type(Integer.class).def(10);
+        killMeatChopperScore = settings.addEditBox("Kill meat chopper score").type(Integer.class).def(100);
+        killOtherBombermanScore = settings.addEditBox("Kill other bomberman score").type(Integer.class).def(200);
+        killBomermanPenalty = settings.addEditBox("Kill your bomberman penalty").type(Integer.class).def(50);
+        winRoundScore = settings.addEditBox("[Round] Win round score").type(Integer.class).def(1000);
 
         bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(1);
         bombPower = settings.addEditBox("Bomb power").type(Integer.class).def(1);
@@ -157,6 +169,30 @@ public class OptionGameSettings implements GameSettings {
         return roundSettings;
     }
 
+    @Override
+    public Parameter<Integer> killBomermanPenalty() {
+        return killBomermanPenalty;
+    }
+
+    @Override
+    public Parameter<Integer> killOtherBombermanScore() {
+        return killOtherBombermanScore;
+    }
+
+    @Override
+    public Parameter<Integer> killMeatChopperScore() {
+        return killMeatChopperScore;
+    }
+
+    @Override
+    public Parameter<Integer> killWallScore() {
+        return killWallScore;
+    }
+
+    @Override
+    public Parameter<Integer> winRoundScore() {
+        return winRoundScore;
+    }
 
 
 }

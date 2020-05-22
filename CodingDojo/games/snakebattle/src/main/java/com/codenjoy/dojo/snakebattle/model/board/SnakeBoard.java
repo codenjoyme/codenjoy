@@ -105,7 +105,6 @@ public class SnakeBoard extends RoundField<Player> implements Field {
         snakesFight();
 
         setNewObjects();
-        rewardTheWinnerIfNeeded(this::setNewObjects);
     }
 
     private void snakesClear() {
@@ -114,7 +113,8 @@ public class SnakeBoard extends RoundField<Player> implements Field {
                 .forEach(p -> p.getHero().clear());
     }
 
-    private void setNewObjects() {
+    @Override
+    public void setNewObjects() {
         int max = (players.size() / 2) + 1;
         int i = dice.next(50);
         if (i == 42 && furyPills.size() < max)

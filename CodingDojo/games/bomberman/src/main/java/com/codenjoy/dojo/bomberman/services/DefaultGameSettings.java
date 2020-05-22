@@ -33,6 +33,12 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class DefaultGameSettings implements GameSettings {
 
+    public static int WIN_ROUND = 1000;
+    public static int KILL_BOMERMAN_PENALTY = 50;
+    public static int KILL_OTHER_BOMBERMAN_SCORE = 200;
+    public static int KILL_MEAT_CHOPPER_SCORE = 100;
+    public static int KILL_WALL_SCORE = 10;
+
     public static int MEAT_CHOPPERS_COUNT = 10;
     public static int BOMB_POWER = 3;
     public static int BOMBS_COUNT = 1;
@@ -96,5 +102,30 @@ public class DefaultGameSettings implements GameSettings {
                 return new SimpleParameter<>(false);
             }
         };
+    }
+
+    @Override
+    public Parameter<Integer> killBomermanPenalty() {
+        return v(KILL_BOMERMAN_PENALTY);
+    }
+
+    @Override
+    public Parameter<Integer> killOtherBombermanScore() {
+        return v(KILL_OTHER_BOMBERMAN_SCORE);
+    }
+
+    @Override
+    public Parameter<Integer> killMeatChopperScore() {
+        return v(KILL_MEAT_CHOPPER_SCORE);
+    }
+
+    @Override
+    public Parameter<Integer> killWallScore() {
+        return v(KILL_WALL_SCORE);
+    }
+
+    @Override
+    public Parameter<Integer> winRoundScore() {
+        return v(WIN_ROUND);
     }
 }

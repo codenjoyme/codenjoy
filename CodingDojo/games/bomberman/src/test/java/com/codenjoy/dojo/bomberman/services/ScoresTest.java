@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.services;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -30,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 /**
  * User: sanja
@@ -39,11 +41,7 @@ import static org.junit.Assert.assertEquals;
 public class ScoresTest {
     private PlayerScores scores;
 
-    private Settings settings;
-    private Integer killWall;
-    private Integer killMeatChopper;
-    private Integer killOtherBomnerman;
-    private Integer killBomnerman;
+    private OptionGameSettings settings;
 
     public void bombermanKillWall() {
         scores.event(Events.KILL_DESTROY_WALL);
@@ -61,14 +59,14 @@ public class ScoresTest {
         scores.event(Events.KILL_OTHER_BOMBERMAN);
     }
 
+    public void winRound() {
+        scores.event(Events.WIN_ROUND);
+    }
+
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new OptionGameSettings(new SettingsImpl(), mock(Dice.class));
         scores = new Scores(0, settings);
-        killWall = settings.getParameter("Kill wall score").type(Integer.class).getValue();
-        killMeatChopper = settings.getParameter("Kill meat chopper score").type(Integer.class).getValue();
-        killOtherBomnerman = settings.getParameter("Kill other bomberman score").type(Integer.class).getValue();
-        killBomnerman = settings.getParameter("Kill your bomberman penalty").type(Integer.class).getValue();
     }
 
     @Test
@@ -84,9 +82,16 @@ public class ScoresTest {
 
         bombermanKillMeatChopper();  //100
 
-        bombermanKillOtherBomberman();    //1000
+        bombermanKillOtherBomberman(); //200
 
-        assertEquals(140 + 4*killWall - killBomnerman + killOtherBomnerman + killMeatChopper, scores.getScore());
+        winRound(); //1000
+
+        assertEquals(140
+                + 4*settings.killWallScore().getValue()
+                - settings.killBomermanPenalty().getValue()
+                + settings.killOtherBombermanScore().getValue()
+                + settings.killMeatChopperScore().getValue()
+                + settings.winRoundScore().getValue(), scores.getScore());
     }
 
     @Test

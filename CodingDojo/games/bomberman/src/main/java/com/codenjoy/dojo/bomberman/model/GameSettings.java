@@ -41,4 +41,14 @@ public interface GameSettings {
     Parameter<Integer> getPlayersPerRoom();
 
     RoundSettingsWrapper getRoundSettings();
+
+    Parameter<Integer> killBomermanPenalty();
+
+    Parameter<Integer> killOtherBombermanScore();
+
+    Parameter<Integer> killMeatChopperScore();
+
+    Parameter<Integer> killWallScore();
+
+    Parameter<Integer> winRoundScore();
 }
