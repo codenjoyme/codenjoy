@@ -15,6 +15,10 @@ import stepCreateHeader from '../../styles/images/layout/create.png';
 // own
 import Styles from './styles.module.css';
 
+const startDate = process.env.REACT_APP_EVENT_START_DATE;
+const endDate = process.env.REACT_APP_EVENT_END_DATE;
+const registerEndDate = process.env.REACT_APP_EVENT_REGISTER_END_DATE;
+
 const HomeContainer = () => (
     <div className='container'>
         <div className={ Styles.homeTitle }>
@@ -80,8 +84,8 @@ const HomeContainer = () => (
             <p>
                 Завантаж проект гри, створи логіку для переміщення свого Бота,
                 отримуй найбільшу кількість балів, щоб увійти до числа
-                фіналістів з 9.00 години 25.05.2020  до 19.00 години 05.06.2020 року (кожного дня
-                визначаються 10 Фіналістів). Бери участь у Суперфіналі 05.06.2020,
+                фіналістів з 9.00 години { startDate }  до 19.00 години { registerEndDate } року (кожного дня
+                визначаються 10 Фіналістів). Бери участь у Суперфіналі { endDate },
                 займай одне з трьох призових місць і отримай драйвовий
                 подарунок!
             </p>
