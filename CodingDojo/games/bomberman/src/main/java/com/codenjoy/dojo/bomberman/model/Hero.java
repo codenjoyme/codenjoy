@@ -87,35 +87,35 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public void right() {
-        if (!isAlive()) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.RIGHT;
     }
 
     @Override
     public void down() {
-        if (!isAlive()) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
-        if (!isAlive()) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.UP;
     }
 
     @Override
     public void left() {
-        if (!isAlive()) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.LEFT;
     }
 
     @Override
     public void act(int... p) {
-        if (!isAlive()) return;
+        if (!isActiveAndAlive()) return;
 
         if (direction != null) {
             bomb = true;
@@ -125,7 +125,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     public void apply() {
-        if (!isAlive()) return;
+        if (!isActiveAndAlive()) return;
 
         if (direction == null) {
             return;
