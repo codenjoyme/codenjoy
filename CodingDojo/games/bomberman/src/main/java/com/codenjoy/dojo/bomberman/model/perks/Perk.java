@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model.perks;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -37,6 +37,7 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
     private final int value;
     private final int timeout; // maximum timer value
     private int timer; // countdown with every tick. When timer becomes = 0, then perk should be disabled.
+    private int pickTimeout; // after timeout disapears from the board if wasn't picked up.
 
     public Perk(Elements element, int value, int timeout) {
         this.element = element;
@@ -46,6 +47,14 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
         this.timer = timeout;
     }
 
+    public Perk(String name, Elements element, int value, int timeout, int pickTimeout) {
+        this.name = name;
+        this.element = element;
+        this.value = value;
+        this.timeout = timeout;
+        this.pickTimeout = pickTimeout;
+    }
+
     /**
      * This is for trigger like perks, e.g. nuke button.
      *
@@ -53,6 +62,14 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
      */
     public Perk(Elements element, int timeout) {
         this(element, 0, timeout);
+    }
+
+    public int getPickTimeout() {
+        return pickTimeout;
+    }
+
+    public void setPickTimeout(int pickTimeout) {
+        this.pickTimeout = pickTimeout;
     }
 
     public boolean isActive() {
@@ -66,7 +83,8 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
 
     @Override
     public void tick() {
-        this.timer = this.timer -1;
+        this.timer = this.timer - 1;
+        this.pickTimeout -= 1;
     }
 
     /**
@@ -74,7 +92,7 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
      * E.g. strategy can be to reset timer or increase effect power etc.
      * Though, one can implement more complex situations, like combo: time + power etc.
      *
-     * @param  perk to combine with.
+     * @param perk to combine with.
      * @return resulting perk.
      */
     public abstract Perk combine(Perk perk);
@@ -102,7 +120,6 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
     protected void setTimer(int timer) {
         this.timer = timer;
     }
-
 
 
     @Override

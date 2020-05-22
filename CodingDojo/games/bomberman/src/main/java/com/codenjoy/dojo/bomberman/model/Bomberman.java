@@ -46,7 +46,7 @@ public class Bomberman implements Field {
     private final GameSettings settings;
     private final List<Point> destroyedWalls = new LinkedList<>();
     private final List<Bomb> destroyedBombs = new LinkedList<>();
-    private final Map<Point, PerkOnBoard> perks = new HashMap<>();
+    private Map<Point, PerkOnBoard> perks = new HashMap<>();
 
     public Bomberman(GameSettings settings) {
         this.settings = settings;
@@ -93,6 +93,16 @@ public class Bomberman implements Field {
         List<Blast> blastsWithoutPerks = blasts.stream().filter(blast -> !perks.containsKey(blast)).collect(Collectors.toList());
         blasts.clear();
         blasts.addAll(blastsWithoutPerks);
+
+        Map<Point, PerkOnBoard> alivePerks = new HashMap<>();
+
+        perks.forEach((point, perkOnBoard) -> {
+            if (perkOnBoard.getPerk().getPickTimeout() > 0) {
+                alivePerks.put(point, perkOnBoard);
+            }
+        });
+
+        this.perks = alivePerks;
     }
 
     private void tactAllHeroes() {
@@ -226,6 +236,8 @@ public class Bomberman implements Field {
         }
     }
 
+    // need to refactor this method ... it became too dirty
+    @Deprecated
     private boolean dropPerk(Blast blast) {
         Player bombOwner = getBombOwner(blast);
         boolean result = false;
@@ -235,16 +247,19 @@ public class Bomberman implements Field {
             switch (perkElement) {
                 case BOMB_BLAST_RADIUS_INCREASE:
                     BombBlastRadiusIncrease bbri = new BombBlastRadiusIncrease(ps.getValue(), ps.getTimeout());
+                    bbri.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
                     perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), bbri));
                     result = true;
                     break;
                 case BOMB_COUNT_INCREASE:
                     BombCountIncrease bci = new BombCountIncrease(ps.getValue(), ps.getTimeout());
+                    bci.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
                     perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), bci));
                     result = true;
                     break;
                 case BOMB_IMMUNE:
                     BombImmune bi = new BombImmune(ps.getTimeout());
+                    bi.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
                     perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), bi));
                     result = true;
                 default:

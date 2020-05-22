@@ -34,7 +34,8 @@ import java.util.Map;
 
 public class PerksSettingsWrapper {
     private static final Map<Elements, PerkSettings> settings = new EnumMap<>(Elements.class);
-    private static int dropRatio = 20;
+    private static int dropRatio = 10;
+    private static int pickTimeout = 5;
 
     private PerksSettingsWrapper() {
     }
@@ -61,6 +62,14 @@ public class PerksSettingsWrapper {
 
     public static void setDropRatio(int dropRatio) {
         PerksSettingsWrapper.dropRatio = dropRatio;
+    }
+
+    public static int getPickTimeout() {
+        return pickTimeout;
+    }
+
+    public static void setPickTimeout(int pickTimeout) {
+        PerksSettingsWrapper.pickTimeout = pickTimeout;
     }
 
     /**

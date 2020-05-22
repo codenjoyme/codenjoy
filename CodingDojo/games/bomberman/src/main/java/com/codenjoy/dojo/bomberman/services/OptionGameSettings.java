@@ -24,6 +24,7 @@ package com.codenjoy.dojo.bomberman.services;
 
 
 import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -43,9 +44,9 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> meatChoppersCount;
 
     private final Parameter<Integer> perkDropRatio;
+    private Parameter<Integer> perkPickTimeout;
     private final Parameter<Integer> perkBombBlastRadiusInc;
     private final Parameter<Integer> timeoutBombBlastRadiusInc;
-
     private final Parameter<Integer> perkBombCountInc;
     private final Parameter<Integer> timeoutBombCountInc;
     private final Parameter<Integer> timeoutBombImmune;
@@ -64,7 +65,9 @@ public class OptionGameSettings implements GameSettings {
         meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(DefaultGameSettings.MEAT_CHOPPERS_COUNT);
 
         // perks. Set value to 0 = perk is disabled.
-        perkDropRatio = settings.addEditBox("Perks drop ratio in %").type(Integer.class).def(20); // 20%
+        perkDropRatio = settings.addEditBox("Perks drop ratio in %").type(Integer.class).def(10);
+        // perk disappears from board after timeout if wasn't picked yet
+        perkPickTimeout = settings.addEditBox("Perks pick timeout").type(Integer.class).def(5);
         //Bomb blast radius increase (BBRI)
         perkBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase").type(Integer.class).def(2);
         timeoutBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase effect timeout").type(Integer.class).def(10);
@@ -110,6 +113,7 @@ public class OptionGameSettings implements GameSettings {
     public Hero getBomberman(Level level) {
         PerksSettingsWrapper.clear();
         PerksSettingsWrapper.setDropRatio(perkDropRatio.getValue());
+        PerksSettingsWrapper.setPickTimeout(perkPickTimeout.getValue());
 
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE,
                 perkBombBlastRadiusInc.getValue(), timeoutBombBlastRadiusInc.getValue());
