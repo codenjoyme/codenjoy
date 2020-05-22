@@ -122,6 +122,13 @@ public abstract class RoundField<P extends RoundGamePlayer<? extends RoundPlayer
     }
 
     @Override
+    public void newGame(P player) {
+        if (inactive.contains(player)) {
+            inactive.remove(player);
+        }
+    }
+
+    @Override
     public void clearScore() {
         round.clear();
         inactive.clear();
