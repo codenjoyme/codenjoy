@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.bomberman.model;
+package com.codenjoy.dojo.services.round;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,31 +22,30 @@ package com.codenjoy.dojo.bomberman.model;
  * #L%
  */
 
+public class NullRound implements Round {
 
-import com.codenjoy.dojo.services.round.RoundGameField;
+    @Override
+    public void init(RoundGameField field, Object winEvent) {
+        // do nothing
+    }
 
-import java.util.List;
+    @Override
+    public boolean tick() {
+        return false;
+    }
 
-public interface Field extends RoundGameField<Player> {  // TODO применить тут ISP (все ли методы должны быть паблик?)
-    int size();
+    @Override
+    public boolean isMatchOver() {
+        return false;
+    }
 
-    List<Hero> getBombermans();
+    @Override
+    public void clear() {
+        // do nothing
+    }
 
-    List<Bomb> getBombs();
-
-    List<Bomb> getBombs(Hero bomberman);
-
-    Walls getWalls();
-
-    boolean isBarrier(int x, int y, boolean isWithMeatChopper);
-
-    void remove(Player player);
-
-    List<Blast> getBlasts();
-
-    void drop(Bomb bomb);
-
-    void removeBomb(Bomb bomb);
-
-    GameSettings getSettings();
+    @Override
+    public void rewardTheWinner() {
+        // do nothing
+    }
 }

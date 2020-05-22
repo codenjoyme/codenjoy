@@ -23,19 +23,26 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.perks.*;
+import com.codenjoy.dojo.bomberman.model.perks.BombBlastRadiusIncrease;
+import com.codenjoy.dojo.bomberman.model.perks.BombCountIncrease;
+import com.codenjoy.dojo.bomberman.model.perks.BombImmune;
+import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
+import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
@@ -64,7 +71,7 @@ public class BombermanTest {
     private final PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         meatChppperDice = mock(Dice.class);
         bombermanDice = mock(Dice.class);
 
@@ -78,6 +85,8 @@ public class BombermanTest {
 
         when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
         when(settings.getLevel()).thenReturn(level);
+        when(settings.getRoundSettings()).thenReturn(getRoundSettings());
+
         initBomberman();
         givenBoard(SIZE);
         PerksSettingsWrapper.clear();
@@ -90,15 +99,23 @@ public class BombermanTest {
         this.hero = hero;
     }
 
+    public static RoundSettingsWrapper getRoundSettings() {
+        return new DefaultGameSettings(mock(Dice.class)).getRoundSettings();
+    }
+
     private void givenBoard(int size) {
         when(settings.getBoardSize()).thenReturn(v(size));
         field = new Bomberman(settings);
-        player = new Player(listener);
+        player = new Player(listener, getRoundSettings().roundsEnabled());
         game = new Single(player, printer);
         game.on(field);
         dice(bombermanDice, 0, 0);
         game.newGame();
         hero = game.getJoystick();
+    }
+
+    private SimpleParameter<Boolean> getRoundsEnabled() {
+        return new SimpleParameter<>(false);
     }
 
     @Test

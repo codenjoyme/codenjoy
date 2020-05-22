@@ -27,10 +27,11 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.round.Round;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.client.Board;
 import com.codenjoy.dojo.snakebattle.model.Player;
-import com.codenjoy.dojo.services.round.Round;
+import com.codenjoy.dojo.services.round.RoundImpl;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
@@ -68,7 +69,7 @@ public class AISolverTest {
         // можно смело убирать, если мешает
         LevelImpl level = new LevelImpl(board);
 
-        Round round = new Round(
+        Round round = new RoundImpl(
                 new SimpleParameter<>(5),
                 new SimpleParameter<>(2),
                 new SimpleParameter<>(0),
@@ -85,9 +86,11 @@ public class AISolverTest {
                 new SimpleParameter<>(3)
         );
 
+        SimpleParameter<Boolean> roundsEnabled = new SimpleParameter<>(true);
+
         Hero hero = level.getHero(game);
         EventListener listener = mock(EventListener.class);
-        Player player = new Player(listener);
+        Player player = new Player(listener, roundsEnabled);
 
         game.newGame(player);
         if (hero != null) {

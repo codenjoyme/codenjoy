@@ -24,8 +24,9 @@ package com.codenjoy.dojo.snakebattle.model;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.services.round.Round;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
+import com.codenjoy.dojo.services.round.RoundImpl;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
@@ -60,7 +61,7 @@ public class BoardAddObjectsTest {
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
 
-        Round round = new Round(
+        Round round = new RoundImpl(
                 new SimpleParameter<>(5),
                 new SimpleParameter<>(2),
                 new SimpleParameter<>(0),
@@ -77,10 +78,12 @@ public class BoardAddObjectsTest {
                 new SimpleParameter<>(3)
         );
 
+        SimpleParameter<Boolean> roundsEnabled = new SimpleParameter<>(true);
+
         Hero hero = level.getHero(game);
 
         EventListener listener = mock(EventListener.class);
-        Player player = new Player(listener);
+        Player player = new Player(listener, roundsEnabled);
         game.newGame(player);
         if (hero != null) {
             player.setHero(hero);

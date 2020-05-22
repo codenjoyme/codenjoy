@@ -30,10 +30,10 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.round.RoundFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.client.Board;
 import com.codenjoy.dojo.snakebattle.client.ai.AISolver;
-import com.codenjoy.dojo.services.round.Round;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
@@ -98,15 +98,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     public GameField createGame(int levelNumber) {
-        Round round = new Round(
-                roundSettings.roundsPerMatch(),
-                roundSettings.minTicksForWin(),
-                roundSettings.timeBeforeStart(),
-                roundSettings.timePerRound(),
-                roundSettings.timeForWinner());
-
         return new SnakeBoard(level, getDice(),
-                round,
+                RoundFactory.get(roundSettings),
                 flyingCount,
                 furyCount,
                 stoneReducedValue);
@@ -149,6 +142,6 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
+        return new Player(listener, roundSettings.roundsEnabled());
     }
 }

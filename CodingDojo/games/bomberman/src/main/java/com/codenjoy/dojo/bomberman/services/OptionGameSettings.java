@@ -26,6 +26,7 @@ package com.codenjoy.dojo.bomberman.services;
 import com.codenjoy.dojo.bomberman.model.*;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
@@ -35,6 +36,8 @@ public class OptionGameSettings implements GameSettings {
 
     private final Parameter<Boolean> isMultiple;
     private final Parameter<Integer> playersPerRoom;
+
+    private final RoundSettingsWrapper roundSettings;
 
     private final Parameter<Integer> bombPower;
     private final Parameter<Integer> bombsCount;
@@ -62,6 +65,8 @@ public class OptionGameSettings implements GameSettings {
         boardSize = settings.addEditBox("Board size").type(Integer.class).def(DefaultGameSettings.BOARD_SIZE);
         destroyWallCount = settings.addEditBox("Destroy wall count").type(Integer.class).def(boardSize.getValue() * boardSize.getValue() / 10);
         meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(DefaultGameSettings.MEAT_CHOPPERS_COUNT);
+
+        roundSettings = new RoundSettingsWrapper(settings);
 
         // perks. Set value to 0 = perk is disabled.
         perkDropRatio = settings.addEditBox("Perks drop ratio in %").type(Integer.class).def(20); // 20%
@@ -140,5 +145,12 @@ public class OptionGameSettings implements GameSettings {
     public Parameter<Integer> getPlayersPerRoom() {
         return playersPerRoom;
     }
+
+    @Override
+    public RoundSettingsWrapper getRoundSettings() {
+        return roundSettings;
+    }
+
+
 
 }

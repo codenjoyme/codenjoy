@@ -29,28 +29,25 @@ import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
     private static final boolean WITHOUT_MEAT_CHOPPER = false;
     private Level level;
     private Dice dice;
-    private boolean alive;
     private boolean bomb;
     private Direction direction;
 
     private HeroPerks perks = new HeroPerks();
 
     public Hero(Level level, Dice dice) {
-        super(-1, -1);
         this.level = level;
         this.dice = dice;
-        alive = true;
         direction = null;
     }
 
@@ -88,35 +85,35 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void right() {
-        if (!alive) return;
+        if (!isAlive()) return;
 
         direction = Direction.RIGHT;
     }
 
     @Override
     public void down() {
-        if (!alive) return;
+        if (!isAlive()) return;
 
         direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
-        if (!alive) return;
+        if (!isAlive()) return;
 
         direction = Direction.UP;
     }
 
     @Override
     public void left() {
-        if (!alive) return;
+        if (!isAlive()) return;
 
         direction = Direction.LEFT;
     }
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
+        if (!isAlive()) return;
 
         if (direction != null) {
             bomb = true;
@@ -126,7 +123,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void apply() {
-        if (!alive) return;
+        if (!isAlive()) return;
 
         if (direction == null) {
             return;
@@ -159,14 +156,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
             field.drop(new Bomb(this, bombX, bombY, level.bombsPower() + boost, field));
         }
-    }
-
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void kill() {
-        alive = false;
     }
 
     @Override
@@ -221,6 +210,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public Perk getPerk(Elements element) {
         return perks.getPerk(element);
+    }
+
+    public int scores() {
+        return 0; // TODO ROUNDS implement me
     }
 }
 

@@ -24,66 +24,29 @@ package com.codenjoy.dojo.snakebattle.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.round.RoundGamePlayer;
+import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
-import com.codenjoy.dojo.snakebattle.services.Events;
 
-public class Player extends GamePlayer<Hero, Field> {
+public class Player extends RoundGamePlayer<Hero, Field> {
 
-    private Hero hero;
-    private boolean shouldLeave;
-
-    public Player(EventListener listener) {
-        super(listener);
-        shouldLeave = false;
-    }
-
-    public void start(int round) {
-        event(Events.START);
-        printMessage("Round " + round);
-        hero.setActive(true);
+    public Player(EventListener listener, Parameter<Boolean> roundsEnabled) {
+        super(listener, roundsEnabled);
     }
 
     public Hero getHero() {
-        return hero;
+        return (Hero)hero;
     }
 
     public void setHero(Hero hero) {
         this.hero = hero;
-        this.hero.setPlayer(this);
+        hero.setPlayer(this);
     }
 
     public void newHero(Field field) {
         hero = new Hero(field.getFreeStart());
         hero.setPlayer(this);
         hero.init(field);
-    }
-
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
-
-    public boolean isActive() {
-        return hero != null && hero.isActive();
-    }
-
-    @Override
-    public boolean shouldLeave() {
-        return shouldLeave;
-    }
-
-    public void leaveBoard() {
-        shouldLeave = true;
-    }
-
-    @Override
-    public boolean wantToStay() {
-        return true;
-    }
-
-    public void die(boolean lastRound) {
-        event(Events.DIE);
-        shouldLeave = lastRound;
     }
 }

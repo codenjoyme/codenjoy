@@ -25,6 +25,7 @@ package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.bomberman.model.*;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 
@@ -85,5 +86,15 @@ public class DefaultGameSettings implements GameSettings {
     @Override
     public Parameter<Integer> getPlayersPerRoom() {
         return v(Integer.MAX_VALUE);
+    }
+
+    @Override
+    public RoundSettingsWrapper getRoundSettings() {
+        return new RoundSettingsWrapper(){
+            @Override
+            public Parameter<Boolean> roundsEnabled() {
+                return new SimpleParameter<>(false);
+            }
+        };
     }
 }

@@ -23,18 +23,21 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 
-import static com.codenjoy.dojo.bomberman.model.BombermanTest.DestroyWallAt;
-import static com.codenjoy.dojo.bomberman.model.BombermanTest.MeatChopperAt;
+import static com.codenjoy.dojo.bomberman.model.BombermanTest.*;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -76,15 +79,17 @@ public class SingleTest {
         when(settings.getLevel()).thenReturn(level);
         when(settings.getBoardSize()).thenReturn(v(SIZE));
         when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
+        RoundSettingsWrapper roundSettings = getRoundSettings();
+        when(settings.getRoundSettings()).thenReturn(roundSettings);
 
         board = new Bomberman(settings);
 
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);
 
-        game1 = new Single(new Player(listener1), printerFactory);
+        game1 = new Single(new Player(listener1, roundSettings.roundsEnabled()), printerFactory);
         game1.on(board);
-        game2 = new Single(new Player(listener2), printerFactory);
+        game2 = new Single(new Player(listener2, roundSettings.roundsEnabled()), printerFactory);
         game2.on(board);
 
         game1.newGame();

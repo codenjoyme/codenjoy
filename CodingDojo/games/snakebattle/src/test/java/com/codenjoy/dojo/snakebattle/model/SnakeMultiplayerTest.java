@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
-import com.codenjoy.dojo.services.round.Round;
+import com.codenjoy.dojo.services.round.RoundImpl;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
@@ -74,7 +74,7 @@ public class SnakeMultiplayerTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board.replaceAll("\n", ""));
-        Round round = new Round(
+        RoundImpl round = new RoundImpl(
                 roundsPerMatch,
                 minTicksForWin,
                 timer,
@@ -91,10 +91,12 @@ public class SnakeMultiplayerTest {
                 new SimpleParameter<>(3)
         );
 
+        SimpleParameter<Boolean> roundsEnabled = new SimpleParameter<>(true);
+
         Hero hero = level.getHero(game);
         hero.setActive(true);
         heroEvents = mock(EventListener.class);
-        heroPlayer = new Player(heroEvents);
+        heroPlayer = new Player(heroEvents, roundsEnabled);
         game.newGame(heroPlayer);
         heroPlayer.setHero(hero);
         hero.init(game);
@@ -103,7 +105,7 @@ public class SnakeMultiplayerTest {
         Hero enemy = level.getEnemy(game);
         enemy.setActive(true);
         enemyEvents = mock(EventListener.class);
-        enemyPlayer = new Player(enemyEvents);
+        enemyPlayer = new Player(enemyEvents, roundsEnabled);
         game.newGame(enemyPlayer);
         enemyPlayer.setHero(enemy);
         enemy.init(game);

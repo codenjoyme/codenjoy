@@ -23,5 +23,14 @@ package com.codenjoy.dojo.bomberman.services;
  */
 
 public enum Events {
-    KILL_DESTROY_WALL, KILL_MEAT_CHOPPER, KILL_BOMBERMAN, KILL_OTHER_BOMBERMAN, DROP_PERK;
+
+    KILL_DESTROY_WALL,
+    KILL_MEAT_CHOPPER,
+    KILL_BOMBERMAN,
+    KILL_OTHER_BOMBERMAN,
+    DROP_PERK,
+
+    START_ROUND,
+    WIN_ROUND
+
 }

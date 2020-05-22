@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.bomberman.model;
+package com.codenjoy.dojo.services.round;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,31 +22,21 @@ package com.codenjoy.dojo.bomberman.model;
  * #L%
  */
 
-
-import com.codenjoy.dojo.services.round.RoundGameField;
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.List;
 
-public interface Field extends RoundGameField<Player> {  // TODO применить тут ISP (все ли методы должны быть паблик?)
-    int size();
+public interface RoundGameField<P extends RoundGamePlayer> extends GameField<P> {
 
-    List<Hero> getBombermans();
+    List<P> aliveActive();
 
-    List<Bomb> getBombs();
+    void reset(P player);
 
-    List<Bomb> getBombs(Hero bomberman);
+    void start(int round);
 
-    Walls getWalls();
+    void print(String message);
 
-    boolean isBarrier(int x, int y, boolean isWithMeatChopper);
+    int score(P player);
 
-    void remove(Player player);
-
-    List<Blast> getBlasts();
-
-    void drop(Bomb bomb);
-
-    void removeBomb(Bomb bomb);
-
-    GameSettings getSettings();
+    void oneMoreDead(P player);
 }

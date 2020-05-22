@@ -25,10 +25,16 @@ package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.client.ai.AISolver;
-import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.bomberman.model.Bomberman;
+import com.codenjoy.dojo.bomberman.model.Elements;
+import com.codenjoy.dojo.bomberman.model.GameSettings;
+import com.codenjoy.dojo.bomberman.model.Player;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -94,7 +100,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener);
+        return new Player(listener, gameSettings.getRoundSettings().roundsEnabled());
     }
 
     protected GameSettings getGameSettings() {

@@ -25,6 +25,8 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Test;
 
 import static org.mockito.Mockito.mock;
@@ -41,7 +43,8 @@ public class PlayerTest {
         GameSettings settings = mock(GameSettings.class);
         EventListener listener = mock(EventListener.class);
 
-        Player player = new Player(listener);
+        Parameter<Boolean> roundsEnabled = new SimpleParameter<>(false);
+        Player player = new Player(listener, roundsEnabled);
 
         player.event(Events.KILL_DESTROY_WALL);
 
@@ -52,7 +55,8 @@ public class PlayerTest {
     public void shouldNotProcessEventWhenListenerNotNull() {
         GameSettings settings = mock(GameSettings.class);
 
-        Player player = new Player(null);
+        Parameter<Boolean> roundsEnabled = new SimpleParameter<>(false);
+        Player player = new Player(null, roundsEnabled);
 
         player.event(Events.KILL_DESTROY_WALL);
     }

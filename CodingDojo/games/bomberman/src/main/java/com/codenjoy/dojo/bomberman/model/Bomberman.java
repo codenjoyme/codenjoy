@@ -28,6 +28,8 @@ import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.round.RoundFactory;
+import com.codenjoy.dojo.services.round.RoundField;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public class Bomberman implements Field {
+public class Bomberman extends RoundField<Player> implements Field {
 
     private final List<Player> players = new LinkedList<>();
 
@@ -49,9 +51,18 @@ public class Bomberman implements Field {
     private final Map<Point, PerkOnBoard> perks = new HashMap<>();
 
     public Bomberman(GameSettings settings) {
+        super(RoundFactory.get(settings.getRoundSettings()),
+                Events.START_ROUND, Events.WIN_ROUND, Events.KILL_BOMBERMAN);
+
         this.settings = settings;
+
         size = settings.getBoardSize();
         walls = settings.getWalls(this);  // TODO как-то красивее сделать
+    }
+
+    @Override
+    protected List<Player> players() {
+        return players;
     }
 
     public GameSettings getSettings() {
@@ -78,8 +89,12 @@ public class Bomberman implements Field {
     }
 
     @Override
-    public void tick() {
+    public void cleanStuff() {
         removeBlasts();
+    }
+
+    @Override
+    public void tickField() {
         tactAllBombermans();
         meatChopperEatBombermans();
         walls.tick();
@@ -134,7 +149,7 @@ public class Bomberman implements Field {
             for (Player player : players) {
                 Hero bomberman = player.getHero();
                 if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
-                    player.event(Events.KILL_BOMBERMAN);
+                    player.getHero().die();
                 }
             }
         }
@@ -213,7 +228,7 @@ public class Bomberman implements Field {
                     Perk bombImmunePerk = dead.getHero().getPerk(Elements.BOMB_IMMUNE);
 
                     if (bombImmunePerk == null) {
-                        dead.event(Events.KILL_BOMBERMAN);
+                        dead.getHero().die();
                     }
 
                     for (Player bombOwner : players) {
@@ -298,11 +313,6 @@ public class Bomberman implements Field {
             result.add(player.getHero());
         }
         return result;
-    }
-
-    @Override
-    public void remove(Player player) {
-        players.remove(player);
     }
 
     public void newGame(Player player) {

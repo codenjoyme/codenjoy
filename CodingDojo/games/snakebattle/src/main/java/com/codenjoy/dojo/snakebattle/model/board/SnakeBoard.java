@@ -23,13 +23,17 @@ package com.codenjoy.dojo.snakebattle.model.board;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.BoardUtils;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.round.Round;
+import com.codenjoy.dojo.services.round.RoundImpl;
+import com.codenjoy.dojo.services.round.RoundField;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.model.Player;
-import com.codenjoy.dojo.services.round.Round;
-import com.codenjoy.dojo.services.round.RoundField;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
@@ -44,9 +48,8 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.snakebattle.model.hero.Hero.NEXT_TICK;
 import static java.util.stream.Collectors.toList;
 
-public class SnakeBoard implements Field, RoundField {
+public class SnakeBoard extends RoundField<Player> implements Field {
 
-    private Round round;
     private List<Wall> walls;
     private List<StartFloor> starts;
     private List<Apple> apples;
@@ -56,7 +59,6 @@ public class SnakeBoard implements Field, RoundField {
     private List<Gold> gold;
 
     private List<Player> players;
-    private List<Player> theWalkingDead;
 
     private Parameter<Integer> flyingCount;
     private Parameter<Integer> furyCount;
@@ -70,11 +72,11 @@ public class SnakeBoard implements Field, RoundField {
                       Parameter<Integer> furyCount,
                       Parameter<Integer> stoneReduced)
     {
+        super(round, Events.START, Events.WIN, Events.DIE);
+
         this.flyingCount = flyingCount;
         this.furyCount = furyCount;
         this.stoneReduced = stoneReduced;
-        this.round = round;
-        this.round.init(this, Events.WIN);
         this.dice = dice;
 
         walls = level.getWalls();
@@ -86,18 +88,15 @@ public class SnakeBoard implements Field, RoundField {
         gold = level.getGold();
         size = level.getSize();
         players = new LinkedList<>();
-        theWalkingDead = new LinkedList<>();
     }
 
     @Override
-    public void tick() {
+    protected void cleanStuff() {
         snakesClear();
+    }
 
-        boolean skip = round.tick();
-        if (skip) {
-            return;
-        }
-
+    @Override
+    public void tickField() {
         snakesMove();
         snakesFight();
         snakesEat();
@@ -109,28 +108,10 @@ public class SnakeBoard implements Field, RoundField {
         rewardTheWinnerIfNeeded(this::setNewObjects);
     }
 
-    private void rewardTheWinnerIfNeeded(Runnable runnable) {
-        if (theWalkingDead.isEmpty()) {
-            return;
-        }
-
-        theWalkingDead.clear();
-        round.rewardTheWinner();
-        runnable.run();
-    }
-
-
     private void snakesClear() {
         players.stream()
                 .filter(p -> p.isActive() && !p.isAlive())
                 .forEach(p -> p.getHero().clear());
-    }
-
-    @Override
-    public void clearScore() {
-        round.clear();
-
-        players.forEach(p -> newGame(p));
     }
 
     private void setNewObjects() {
@@ -154,10 +135,8 @@ public class SnakeBoard implements Field, RoundField {
     }
 
     @Override
-    public List<GamePlayer<Hero, Field>> aliveActive() {
-        return players.stream()
-                .filter(p -> p.isAlive() && p.isActive())
-                .collect(toList());
+    protected List<Player> players() {
+        return players;
     }
 
     private void snakesMove() {
@@ -290,33 +269,6 @@ public class SnakeBoard implements Field, RoundField {
                 .filter(h -> !h.isFlying());
     }
 
-    @Override
-    public void reset(GamePlayer input) {
-        Player player = (Player)input;
-
-        if (round.isMatchOver()) {
-            player.getHero().setAlive(false);
-            player.leaveBoard();
-        } else {
-            newGame(player);
-        }
-    }
-
-    @Override
-    public void start(int round) {
-        players.forEach(p -> p.start(round));
-    }
-
-    @Override
-    public void print(String message) {
-        players.forEach(player -> player.printMessage(message));
-    }
-
-    @Override
-    public int score(GamePlayer player) {
-        return ((Player)player).getHero().size();
-    }
-
     public int size() {
         return size;
     }
@@ -409,12 +361,6 @@ public class SnakeBoard implements Field, RoundField {
     }
 
     @Override
-    public void oneMoreDead(Player player) {
-        player.die(round.isMatchOver());
-        theWalkingDead.add(player);
-    }
-
-    @Override
     public Parameter<Integer> flyingCount() {
         return flyingCount;
     }
@@ -499,16 +445,6 @@ public class SnakeBoard implements Field, RoundField {
             players.add(player);
         }
         player.newHero(this);
-    }
-
-    public void remove(Player player) {
-        if (players.contains(player)) {
-            // кто уходит из игры не лишает коллег очков за победу
-            player.getHero().die();
-            players.remove(player);
-
-            rewardTheWinnerIfNeeded(() -> {});
-        }
     }
 
     public List<Wall> getWalls() {

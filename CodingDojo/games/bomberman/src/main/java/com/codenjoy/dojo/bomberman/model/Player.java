@@ -23,41 +23,27 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.round.RoundGamePlayer;
+import com.codenjoy.dojo.services.settings.Parameter;
 
-public class Player extends GamePlayer<Hero, Field> {
+public class Player extends RoundGamePlayer<Hero, Field> {
 
-    private Hero hero;
     private GameSettings settings;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, Parameter<Boolean> roundsEnabled) {
+        super(listener, roundsEnabled);
     }
 
     @Override
     public Hero getHero() {
-        return hero;
+        return (Hero)hero;
     }
-
-    @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
-
-    public void event(Events event) {
-        if (event == Events.KILL_BOMBERMAN) {
-            hero.kill();
-        }
-
-        super.event(event);
-    }
-
 
     public void newHero(Field board) {
         settings = board.getSettings();
         hero = settings.getBomberman(settings.getLevel());
+        hero.setPlayer(this);
         hero.init(board);
     }
 
