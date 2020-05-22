@@ -33,6 +33,9 @@ public class RoundImpl implements Round {
 
     private Parameter<Integer> roundsPerMatch;
     private Parameter<Integer> minTicksForWin;
+    private Parameter<Integer> timeBeforeStart;
+    private Parameter<Integer> timePerRound;
+    private Parameter<Integer> timeForWinner;
 
     private Timer startTimer;
     private Timer roundTimer;
@@ -48,16 +51,11 @@ public class RoundImpl implements Round {
     {
         this.roundsPerMatch = roundsPerMatch;
         this.minTicksForWin = minTicksForWin;
+        this.timeBeforeStart = timeBeforeStart;
+        this.timePerRound = timePerRound;
+        this.timeForWinner = timeForWinner;
 
-        round = 0;
-
-        startTimer = new Timer(timeBeforeStart);
-        roundTimer = new Timer(timePerRound);
-        winnerTimer = new Timer(timeForWinner);
-
-        startTimer = startTimer.start();
-        roundTimer = roundTimer.stop();
-        winnerTimer = winnerTimer.stop();
+        clear();
     }
 
     public RoundImpl(RoundSettingsWrapper settings) {
@@ -94,7 +92,6 @@ public class RoundImpl implements Round {
             startTimer.start();
             return true;
         }
-
 
         if (isNoOneOnBoard() || winnerTimer.justFinished()) {
             if (isLastOnBoard()) {
@@ -168,6 +165,14 @@ public class RoundImpl implements Round {
     @Override
     public void clear() {
         round = 0;
+
+        startTimer = new Timer(timeBeforeStart);
+        roundTimer = new Timer(timePerRound);
+        winnerTimer = new Timer(timeForWinner);
+
+        startTimer = startTimer.start();
+        roundTimer = roundTimer.stop();
+        winnerTimer = winnerTimer.stop();
     }
 
 }
