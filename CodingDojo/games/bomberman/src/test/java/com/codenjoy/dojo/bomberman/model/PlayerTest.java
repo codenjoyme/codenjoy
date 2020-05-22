@@ -25,6 +25,7 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Before;
@@ -51,6 +52,12 @@ public class PlayerTest {
         when(settings.killWallScore()).thenReturn(v(10));
         when(settings.getLevel()).thenReturn(mock(Level.class));
         when(settings.getBomberman(any(Level.class))).thenReturn(mock(Hero.class));
+        when(settings.getRoundSettings()).thenReturn(new RoundSettingsWrapper() {
+            @Override
+            public Parameter<Boolean> roundsEnabled() {
+                return new SimpleParameter<>(false);
+            }
+        });
 
         field = mock(Field.class);
         when(field.getSettings()).thenReturn(settings);

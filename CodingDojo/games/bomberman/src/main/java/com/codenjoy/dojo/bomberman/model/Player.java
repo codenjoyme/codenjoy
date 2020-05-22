@@ -46,6 +46,11 @@ public class Player extends RoundGamePlayer<Hero, Field> {
         hero = settings.getBomberman(settings.getLevel());
         hero.setPlayer(this);
         hero.init(board);
+
+        // TODO test me
+        if (!settings.getRoundSettings().roundsEnabled().getValue()) {
+            hero.setActive(true);
+        }
     }
 
     @Override
