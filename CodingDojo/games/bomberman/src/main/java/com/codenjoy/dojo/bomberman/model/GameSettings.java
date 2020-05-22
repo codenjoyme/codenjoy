@@ -51,4 +51,8 @@ public interface GameSettings {
     Parameter<Integer> killWallScore();
 
     Parameter<Integer> winRoundScore();
+
+    Parameter<Integer> getDestroyWallCount();
+
+    Parameter<Integer> getMeatChoppersCount();
 }

@@ -194,5 +194,15 @@ public class OptionGameSettings implements GameSettings {
         return winRoundScore;
     }
 
+    @Override
+    public Parameter<Integer> getDestroyWallCount() {
+        return destroyWallCount;
+    }
+
+    @Override
+    public Parameter<Integer> getMeatChoppersCount() {
+        return meatChoppersCount;
+    }
+
 
 }

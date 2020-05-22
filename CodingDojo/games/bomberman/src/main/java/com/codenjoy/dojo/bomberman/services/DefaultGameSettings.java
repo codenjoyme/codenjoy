@@ -128,4 +128,14 @@ public class DefaultGameSettings implements GameSettings {
     public Parameter<Integer> winRoundScore() {
         return v(WIN_ROUND);
     }
+
+    @Override
+    public Parameter<Integer> getDestroyWallCount() {
+        return v(DESTROY_WALL_COUNT);
+    }
+
+    @Override
+    public Parameter<Integer> getMeatChoppersCount() {
+        return v(MEAT_CHOPPERS_COUNT);
+    }
 }
