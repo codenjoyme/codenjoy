@@ -38,13 +38,20 @@ public class RoundSettingsWrapper {
         // do nothing, for testing only
     }
 
-    public RoundSettingsWrapper(Settings settings) {
-        roundsEnabled = settings.addCheckBox("[Rounds] Enabled").type(Boolean.class).def(true);
-        timePerRound = settings.addEditBox("[Rounds] Time per Round").type(Integer.class).def(300);
-        timeForWinner = settings.addEditBox("[Rounds] Time for Winner").type(Integer.class).def(1);
-        timeBeforeStart = settings.addEditBox("[Rounds] Time before start Round").type(Integer.class).def(5);
-        roundsPerMatch = settings.addEditBox("[Rounds] Rounds per Match").type(Integer.class).def(1);
-        minTicksForWin = settings.addEditBox("[Rounds] Min length for win").type(Integer.class).def(40);
+    public RoundSettingsWrapper(Settings settings,
+                                boolean defaultRoundsEnabled,
+                                int defaultTimePerRound,
+                                int defaultTimeForWinner,
+                                int defaultTimeBeforeStart,
+                                int defaultRoundsPerMatch,
+                                int defaultMinTicksForWin)
+    {
+        roundsEnabled = settings.addCheckBox("[Rounds] Enabled").type(Boolean.class).def(defaultRoundsEnabled);
+        timePerRound = settings.addEditBox("[Rounds] Time per Round").type(Integer.class).def(defaultTimePerRound);
+        timeForWinner = settings.addEditBox("[Rounds] Time for Winner").type(Integer.class).def(defaultTimeForWinner);
+        timeBeforeStart = settings.addEditBox("[Rounds] Time before start Round").type(Integer.class).def(defaultTimeBeforeStart);
+        roundsPerMatch = settings.addEditBox("[Rounds] Rounds per Match").type(Integer.class).def(defaultRoundsPerMatch);
+        minTicksForWin = settings.addEditBox("[Rounds] Min ticks for win").type(Integer.class).def(defaultMinTicksForWin);
     }
 
     public Parameter<Integer> timeBeforeStart() {

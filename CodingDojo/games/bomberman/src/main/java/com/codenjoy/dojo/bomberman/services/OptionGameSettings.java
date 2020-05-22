@@ -57,16 +57,22 @@ public class OptionGameSettings implements GameSettings {
     public OptionGameSettings(Settings settings, Dice dice) {
         this.dice = dice;
 
-        isMultiple = settings.addCheckBox("Is multiple or disposable").type(Boolean.class).def(false);
-        playersPerRoom = settings.addEditBox("Players per room for disposable").type(Integer.class).def(15);
+        isMultiple = settings.addCheckBox("Is multiple or disposable").type(Boolean.class).def(true);
+        playersPerRoom = settings.addEditBox("Players per room for disposable").type(Integer.class).def(5);
 
         bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(1);
-        bombPower = settings.addEditBox("Bomb power").type(Integer.class).def(DefaultGameSettings.BOMB_POWER);
-        boardSize = settings.addEditBox("Board size").type(Integer.class).def(DefaultGameSettings.BOARD_SIZE);
+        bombPower = settings.addEditBox("Bomb power").type(Integer.class).def(1);
+        boardSize = settings.addEditBox("Board size").type(Integer.class).def(23);
         destroyWallCount = settings.addEditBox("Destroy wall count").type(Integer.class).def(boardSize.getValue() * boardSize.getValue() / 10);
-        meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(DefaultGameSettings.MEAT_CHOPPERS_COUNT);
+        meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(5);
 
-        roundSettings = new RoundSettingsWrapper(settings);
+        roundSettings = new RoundSettingsWrapper(settings,
+                true,  // roundsEnabled
+                300,   // timePerRound
+                1,     // timeForWinner   // TODO а это что?
+                5,     // timeBeforeStart
+                3,     // roundsPerMatch
+                40);    // minTicksForWin  // TODO а это что?
 
         // perks. Set value to 0 = perk is disabled.
         perkDropRatio = settings.addEditBox("Perks drop ratio in %").type(Integer.class).def(20); // 20%

@@ -55,7 +55,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     public GameRunner() {
         new Scores(0, settings);
 
-        roundSettings = new RoundSettingsWrapper(settings);
+        roundSettings = new RoundSettingsWrapper(settings,
+                true,  // roundsEnabled
+                300,   // timePerRound
+                1,     // timeForWinner
+                5,     // timeBeforeStart
+                3,     // roundsPerMatch
+                40);    // minTicksForWin
 
         playersPerRoom = settings.addEditBox("Players per Room").type(Integer.class).def(5);
         flyingCount = settings.addEditBox("Flying count").type(Integer.class).def(10);
