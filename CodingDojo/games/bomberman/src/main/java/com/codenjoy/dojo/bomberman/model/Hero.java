@@ -162,6 +162,14 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        if (!isActive()) { // TODO test me
+            if (this == player.getHero()) {
+                return DEAD_BOMBERMAN;
+            } else {
+                return OTHER_DEAD_BOMBERMAN;
+            }
+        }
+
         Bomb bomb = null;
 
         if (alsoAtPoint[1] != null) {
