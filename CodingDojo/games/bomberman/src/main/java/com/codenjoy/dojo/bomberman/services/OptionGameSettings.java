@@ -63,20 +63,20 @@ public class OptionGameSettings implements GameSettings {
     public OptionGameSettings(Settings settings, Dice dice) {
         this.dice = dice;
 
-        isMultiple = settings.addCheckBox("Is multiple or disposable").type(Boolean.class).def(true);
+        isMultiple = settings.addCheckBox("Is multiple or disposable").type(Boolean.class).def(false);
         playersPerRoom = settings.addEditBox("Players per room for disposable").type(Integer.class).def(5);
 
-        killWallScore = settings.addEditBox("Kill wall score").type(Integer.class).def(10);
-        killMeatChopperScore = settings.addEditBox("Kill meat chopper score").type(Integer.class).def(100);
-        killOtherBombermanScore = settings.addEditBox("Kill other bomberman score").type(Integer.class).def(200);
-        killBomermanPenalty = settings.addEditBox("Kill your bomberman penalty").type(Integer.class).def(50);
-        winRoundScore = settings.addEditBox("[Round] Win round score").type(Integer.class).def(1000);
+        killWallScore = settings.addEditBox("[Score] Kill wall score").type(Integer.class).def(10);
+        killMeatChopperScore = settings.addEditBox("[Score] Kill meat chopper score").type(Integer.class).def(100);
+        killOtherBombermanScore = settings.addEditBox("[Score] Kill other bomberman score").type(Integer.class).def(200);
+        killBomermanPenalty = settings.addEditBox("[Score] Kill your bomberman penalty").type(Integer.class).def(50);
+        winRoundScore = settings.addEditBox("[Score][Rounds] Win round score").type(Integer.class).def(1000);
 
-        bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(1);
-        bombPower = settings.addEditBox("Bomb power").type(Integer.class).def(1);
-        boardSize = settings.addEditBox("Board size").type(Integer.class).def(23);
-        destroyWallCount = settings.addEditBox("Destroy wall count").type(Integer.class).def(boardSize.getValue() * boardSize.getValue() / 10);
-        meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(5);
+        bombsCount = settings.addEditBox("[Level] Bombs count").type(Integer.class).def(1);
+        bombPower = settings.addEditBox("[Level] Bomb power").type(Integer.class).def(3);
+        boardSize = settings.addEditBox("[Level] Board size").type(Integer.class).def(23);
+        destroyWallCount = settings.addEditBox("[Level] Destroy wall count").type(Integer.class).def(boardSize.getValue() * boardSize.getValue() / 10);
+        meatChoppersCount = settings.addEditBox("[Level]Meat choppers count").type(Integer.class).def(5);
 
         roundSettings = new RoundSettingsWrapper(settings,
                 true,  // roundsEnabled
@@ -87,17 +87,17 @@ public class OptionGameSettings implements GameSettings {
                 40);    // minTicksForWin  // TODO а это что?
 
         // perks. Set value to 0 = perk is disabled.
-        perkDropRatio = settings.addEditBox("Perks drop ratio in %").type(Integer.class).def(20); // 20%
+        perkDropRatio = settings.addEditBox("[Perks] Perks drop ratio in %").type(Integer.class).def(20); // 20%
         //Bomb blast radius increase (BBRI)
-        perkBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase").type(Integer.class).def(2);
-        timeoutBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase effect timeout").type(Integer.class).def(10);
+        perkBombBlastRadiusInc = settings.addEditBox("[Perks] Bomb blast radius increase").type(Integer.class).def(2);
+        timeoutBombBlastRadiusInc = settings.addEditBox("[Perks] Bomb blast radius increase effect timeout").type(Integer.class).def(10);
         // Bomb count increase (BCI)
-        perkBombCountInc = settings.addEditBox("Bomb count increase").type(Integer.class).def(3);
-        timeoutBombCountInc = settings.addEditBox("Bomb count effect timeout").type(Integer.class).def(10);
+        perkBombCountInc = settings.addEditBox("[Perks] Bomb count increase").type(Integer.class).def(3);
+        timeoutBombCountInc = settings.addEditBox("[Perks] Bomb count effect timeout").type(Integer.class).def(10);
         // Bomb immune (BI)
-        timeoutBombImmune = settings.addEditBox("Bomb immune effect timeout").type(Integer.class).def(10);
+        timeoutBombImmune = settings.addEditBox("[Perks] Bomb immune effect timeout").type(Integer.class).def(10);
         // Bomb remote control (BRC)
-//        timeoutBombRemoteControl = settings.addEditBox("Bomb remote controll effect timeout").type(Integer.class).def(10);
+//        timeoutBombRemoteControl = settings.addEditBox("[Perks] Bomb remote controll effect timeout").type(Integer.class).def(10);
     }
 
     @Override
