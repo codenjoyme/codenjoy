@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.snakebattle.model.board.round;
+package com.codenjoy.dojo.services.round;
 
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;

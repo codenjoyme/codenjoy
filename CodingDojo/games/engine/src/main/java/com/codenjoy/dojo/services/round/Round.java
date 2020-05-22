@@ -1,6 +1,5 @@
-package com.codenjoy.dojo.snakebattle.model.board.round;
+package com.codenjoy.dojo.services.round;
 
-import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
@@ -8,7 +7,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
-import java.util.List;
 
 public class Round {
 
