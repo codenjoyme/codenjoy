@@ -124,6 +124,7 @@ public abstract class RoundField<P extends RoundGamePlayer<? extends RoundPlayer
     @Override
     public void clearScore() {
         round.clear();
+        inactive.clear();
 
         players().forEach(p -> newGame(p));
     }
