@@ -46,7 +46,7 @@ public class RoundSettingsWrapper {
                                 int defaultRoundsPerMatch,
                                 int defaultMinTicksForWin)
     {
-        roundsEnabled = settings.addCheckBox("[Rounds] Enabled").type(Boolean.class).def(defaultRoundsEnabled);
+        roundsEnabled = settings.addCheckBox("[Game][Rounds] Enabled").type(Boolean.class).def(defaultRoundsEnabled);
         timePerRound = settings.addEditBox("[Rounds] Time per Round").type(Integer.class).def(defaultTimePerRound);
         timeForWinner = settings.addEditBox("[Rounds] Time for Winner").type(Integer.class).def(defaultTimeForWinner);
         timeBeforeStart = settings.addEditBox("[Rounds] Time before start Round").type(Integer.class).def(defaultTimeBeforeStart);

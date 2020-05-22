@@ -63,8 +63,8 @@ public class OptionGameSettings implements GameSettings {
     public OptionGameSettings(Settings settings, Dice dice) {
         this.dice = dice;
 
-        isMultiple = settings.addCheckBox("Is multiple or disposable").type(Boolean.class).def(false);
-        playersPerRoom = settings.addEditBox("Players per room for disposable").type(Integer.class).def(5);
+        isMultiple = settings.addCheckBox("[Game] Is multiple or disposable").type(Boolean.class).def(false);
+        playersPerRoom = settings.addEditBox("[Game] Players per room for disposable").type(Integer.class).def(5);
 
         killWallScore = settings.addEditBox("[Score] Kill wall score").type(Integer.class).def(10);
         killMeatChopperScore = settings.addEditBox("[Score] Kill meat chopper score").type(Integer.class).def(100);
@@ -76,7 +76,7 @@ public class OptionGameSettings implements GameSettings {
         bombPower = settings.addEditBox("[Level] Bomb power").type(Integer.class).def(3);
         boardSize = settings.addEditBox("[Level] Board size").type(Integer.class).def(23);
         destroyWallCount = settings.addEditBox("[Level] Destroy wall count").type(Integer.class).def(boardSize.getValue() * boardSize.getValue() / 10);
-        meatChoppersCount = settings.addEditBox("[Level]Meat choppers count").type(Integer.class).def(5);
+        meatChoppersCount = settings.addEditBox("[Level] Meat choppers count").type(Integer.class).def(5);
 
         roundSettings = new RoundSettingsWrapper(settings,
                 true,  // roundsEnabled
