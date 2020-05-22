@@ -86,6 +86,9 @@ public class BombermanTest {
         when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
         when(settings.getLevel()).thenReturn(level);
         when(settings.getRoundSettings()).thenReturn(getRoundSettings());
+        when(settings.killOtherBombermanScore()).thenReturn(v(200));
+        when(settings.killMeatChopperScore()).thenReturn(v(100));
+        when(settings.killWallScore()).thenReturn(v(10));
 
         initBomberman();
         givenBoard(SIZE);

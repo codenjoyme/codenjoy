@@ -23,13 +23,14 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.round.RoundGamePlayer;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 public class Player extends RoundGamePlayer<Hero, Field> {
 
-    private GameSettings settings;
+    protected GameSettings settings;
 
     public Player(EventListener listener, Parameter<Boolean> roundsEnabled) {
         super(listener, roundsEnabled);
@@ -45,6 +46,28 @@ public class Player extends RoundGamePlayer<Hero, Field> {
         hero = settings.getBomberman(settings.getLevel());
         hero.setPlayer(this);
         hero.init(board);
+    }
+
+    @Override
+    public void event(Object event) {
+        getHero().addScore(getScoreFor(event));
+        super.event(event);
+    }
+
+    private int getScoreFor(Object event) {
+        if (event == Events.KILL_DESTROY_WALL) {
+            return settings.killWallScore().getValue();
+        }
+
+        if (event == Events.KILL_MEAT_CHOPPER) {
+            return settings.killMeatChopperScore().getValue();
+        }
+
+        if (event == Events.KILL_BOMBERMAN) {
+            return settings.killOtherBombermanScore().getValue();
+        }
+
+        return 0;
     }
 
     public GameSettings getSettings() {

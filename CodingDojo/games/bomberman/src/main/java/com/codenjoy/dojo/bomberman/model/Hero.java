@@ -42,12 +42,14 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     private Dice dice;
     private boolean bomb;
     private Direction direction;
+    private int score;
 
     private HeroPerks perks = new HeroPerks();
 
     public Hero(Level level, Dice dice) {
         this.level = level;
         this.dice = dice;
+        score = 0;
         direction = null;
     }
 
@@ -213,7 +215,11 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     public int scores() {
-        return 0; // TODO ROUNDS implement me
+        return score;
+    }
+
+    public void addScore(int score) {
+        this.score += score;
     }
 }
 

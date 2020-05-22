@@ -27,10 +27,12 @@ import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 /**
  * User: sanja
@@ -38,13 +40,29 @@ import static org.mockito.Mockito.verify;
  * Time: 13:32
  */
 public class PlayerTest {
+
+    private EventListener listener;
+    private Field field;
+    private GameSettings settings;
+
+    @Before
+    public void setup() {
+        settings = mock(GameSettings.class);
+        when(settings.killWallScore()).thenReturn(v(10));
+        when(settings.getLevel()).thenReturn(mock(Level.class));
+        when(settings.getBomberman(any(Level.class))).thenReturn(mock(Hero.class));
+
+        field = mock(Field.class);
+        when(field.getSettings()).thenReturn(settings);
+
+        listener = mock(EventListener.class);
+    }
+
     @Test
     public void shouldProcessEventWhenListenerIsNotNull() {
-        GameSettings settings = mock(GameSettings.class);
-        EventListener listener = mock(EventListener.class);
-
         Parameter<Boolean> roundsEnabled = new SimpleParameter<>(false);
         Player player = new Player(listener, roundsEnabled);
+        player.newHero(field);
 
         player.event(Events.KILL_DESTROY_WALL);
 
@@ -53,11 +71,12 @@ public class PlayerTest {
 
     @Test
     public void shouldNotProcessEventWhenListenerNotNull() {
-        GameSettings settings = mock(GameSettings.class);
-
         Parameter<Boolean> roundsEnabled = new SimpleParameter<>(false);
         Player player = new Player(null, roundsEnabled);
+        player.newHero(field);
 
         player.event(Events.KILL_DESTROY_WALL);
+
+        verify(listener, never()).event(Events.KILL_DESTROY_WALL);
     }
 }

@@ -81,6 +81,9 @@ public class SingleTest {
         when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
         RoundSettingsWrapper roundSettings = getRoundSettings();
         when(settings.getRoundSettings()).thenReturn(roundSettings);
+        when(settings.killOtherBombermanScore()).thenReturn(v(200));
+        when(settings.killMeatChopperScore()).thenReturn(v(100));
+        when(settings.killWallScore()).thenReturn(v(10));
 
         board = new Bomberman(settings);
 
