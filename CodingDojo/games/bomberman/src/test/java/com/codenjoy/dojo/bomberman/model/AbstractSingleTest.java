@@ -26,12 +26,13 @@ public abstract class AbstractSingleTest {
 
     public static final int SIZE = 5;
     protected Walls walls = emptyWalls();
-    private List<Hero> heroes = new LinkedList<>();
+    protected List<Hero> heroes = new LinkedList<>();
     private List<Game> games = new LinkedList<>();
     private List<EventListener> listeners = new LinkedList<>();
+    private List<Player> players = new LinkedList<>();
     protected GameSettings settings;
     protected Level level;
-    private Bomberman board;
+    protected Bomberman board;
     protected int bombsCount = 1;
     protected Parameter<Integer> playersPerRoom = v(Integer.MAX_VALUE);
     protected Dice meatDice = mock(Dice.class);
@@ -45,15 +46,12 @@ public abstract class AbstractSingleTest {
         when(level.bombsCount()).thenReturn(bombsCount);
         when(level.bombsPower()).thenReturn(1);
 
-        for (int i = 0; i < count; i++) {
-            dice(heroDice,  0, 0);
-            heroes.add(new Hero(level, heroDice));
-        }
-
-        OngoingStubbing<Hero> when = when(settings.getBomberman(any(Level.class)));
-        for (Hero h : heroes) {
-            when = when.thenReturn(h);
-        }
+        dice(heroDice,  0, 0);
+        when(settings.getBomberman(any(Level.class))).thenAnswer(inv -> {
+            Hero hero = new Hero(level, heroDice);
+            heroes.add(hero);
+            return hero;
+        });
 
         when(settings.getLevel()).thenReturn(level);
         when(settings.getBoardSize()).thenReturn(v(SIZE));
@@ -68,7 +66,8 @@ public abstract class AbstractSingleTest {
 
         for (int i = 0; i < count; i++) {
             listeners.add(mock(EventListener.class));
-            games.add(new Single(new Player(listener(i), getRoundSettings().roundsEnabled()), printerFactory));
+            players.add(new Player(listener(i), getRoundSettings().roundsEnabled()));
+            games.add(new Single(player(i), printerFactory));
         }
 
         games.forEach(g -> {
@@ -117,6 +116,10 @@ public abstract class AbstractSingleTest {
         return games.get(index);
     }
 
+    protected Player player(int index) {
+        return players.get(index);
+    }
+
     protected EventListener listener(int index) {
         return listeners.get(index);
     }
@@ -128,6 +131,7 @@ public abstract class AbstractSingleTest {
     protected abstract RoundSettingsWrapper getRoundSettings();
 
     protected void dice(Dice dice, int... values) {
+        reset(dice);
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int value : values) {
             when = when.thenReturn(value);
@@ -140,4 +144,8 @@ public abstract class AbstractSingleTest {
         return walls;
     }
 
+    protected void newGame(int index) {
+        board.newGame(player(index));
+        heroes.set(index, heroes.remove(heroes.size() - 1));
+    }
 }

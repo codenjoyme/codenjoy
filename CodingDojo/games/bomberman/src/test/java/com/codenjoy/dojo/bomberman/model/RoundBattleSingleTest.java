@@ -6,6 +6,7 @@ import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static org.junit.Assert.assertEquals;
 
 public class RoundBattleSingleTest extends AbstractSingleTest {
 
@@ -78,6 +79,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "♣♣   \n", game(2));
     }
 
+    // после старта идет отсчет обратного времени
     @Test
     public void shouldCountdownBeforeRound_whenTicksOnStart() {
         shouldAllPlayersOnBoardIsInactive_whenStart();
@@ -111,6 +113,8 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         verifyEvents(listener(2), "[[.1.]]");
     }
 
+    // пока идет отсчет я не могу ничего предпринимать, а герои отображаются на карте как трупики
+    // но после объявления раунда я могу начать играть
     @Test
     public void shouldActiveAndCanMove_afterCountdown() {
         shouldCountdownBeforeRound_whenTicksOnStart();
@@ -189,6 +193,99 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 " ☺   \n" +
                 "♥    \n" +
                 "  ♥  \n", game(2));
+    }
+
+    // если один игрок вынесет другого но на поле есть едще игроки,
+    // то тот, которого вынесли появится в новом месте в виде трупика
+    @Test
+    public void shouldMoveToInactive_whenKillSomeone() {
+        playersPerRoom.update(3);
+        timeBeforeStart = 1; // TODO а что будет если тут 0 игра хоть начнется?
+
+        givenBoard(3);
+
+        tick();
+
+        verifyEvents(listener(0), "[START_ROUND, [Round 1]]");
+        verifyEvents(listener(1), "[START_ROUND, [Round 1]]");
+        verifyEvents(listener(2), "[START_ROUND, [Round 1]]");
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ♥   \n" +
+                "☺♥   \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ♥   \n" +
+                "♥☺   \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺   \n" +
+                "♥♥   \n", game(2));
+
+        // когда я выношу одного игрока
+        hero(2).act();
+        tick();
+
+        hero(2).right();
+        tick();
+
+        hero(2).up();
+        tick();
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "  ☺  \n" +
+                " 1   \n" +
+                "♥♥   \n", game(2));
+
+        // игрок активный и живой
+        assertEquals(true, hero(1).isActive());
+        assertEquals(true, hero(1).isAlive());
+        assertEquals(true, player(1).wantToStay());
+        assertEquals(false, player(1).shouldLeave());
+
+        tick();
+
+        // игрок активный но неживой (cервер ему сделает newGame)
+        assertEquals(true, hero(1).isActive());
+        assertEquals(false, hero(1).isAlive());
+        // тут без изменений
+        assertEquals(true, player(1).wantToStay());
+        assertEquals(false, player(1).shouldLeave());
+
+
+        asrtBrd("     \n" +
+                "     \n" +
+                " ҉☺  \n" +
+                "҉҉҉  \n" +
+                "♥♣   \n", game(2));
+
+        tick();
+
+        dice(heroDice, 3, 4); // новые координаты для героя
+        newGame(1); // это сделоает сервер в ответ на isAlive = false
+
+        // игрок уже живой но неактивный до начала следующего раунда
+        assertEquals(false, hero(1).isActive());
+        assertEquals(true, hero(1).isAlive());
+        // тут без изменений
+        assertEquals(true, player(1).wantToStay());
+        assertEquals(false, player(1).shouldLeave());
+
+        asrtBrd("   ♣ \n" +
+                "     \n" +
+                "  ☺  \n" +
+                "     \n" +
+                "♥    \n", game(2));
+
     }
 
 }

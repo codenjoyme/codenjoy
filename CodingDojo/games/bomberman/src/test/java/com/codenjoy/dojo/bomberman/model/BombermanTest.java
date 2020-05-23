@@ -540,7 +540,7 @@ public class BombermanTest {
     }
 
     private void assertBombermanDie() {
-        assertTrue("Expected model over", game.isGameOver());
+        assertEquals("Expected game over", true, game.isGameOver());
     }
 
     // после смерти ходить больше нельзя
