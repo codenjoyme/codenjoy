@@ -142,6 +142,15 @@ public abstract class AbstractSingleTest {
         board.tick();
     }
 
+    protected void newGameForAllDied() {
+        players.forEach(player -> {
+            if (!player.isAlive()) {
+                dice(heroDice, 0, 0);
+                newGame(players.indexOf(player));
+            }
+        });
+    }
+
     protected abstract RoundSettingsWrapper getRoundSettings();
 
     protected void dice(Dice dice, int... values) {

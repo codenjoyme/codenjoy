@@ -647,11 +647,12 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         // вот он последний тик раунда, тут все и случится
         dice(heroDice, 0, 0); // размещаем всех возле левого нижнего угла
         tick();
+        newGameForAllDied(); // это сделает сервер (вообще он это сделал намного раньше, но для наглядности тут)
 
-        asrtBrd("   ♣ \n" +
+        asrtBrd("     \n" +
                 "     \n" +
-                "     \n" +
-                "♣♣   \n" +
+                "  ♣  \n" +
+                " ♣♣  \n" +
                 "Ѡ♣   \n", game(0));
 
         verifyAllEvents(
@@ -836,11 +837,12 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         // вот он последний тик раунда, тут все и случится
         dice(heroDice, 0, 0); // размещаем всех возле левого нижнего угла
         tick();
+        newGameForAllDied(); // это сделает сервер (вообще он это сделал намного раньше, но для наглядности тут)
 
-        asrtBrd("   ♣ \n" +
-                "    ♣\n" +
+        asrtBrd("     \n" +
                 "     \n" +
-                "♣♣   \n" +
+                "  ♣♣ \n" +
+                " ♣♣  \n" +
                 "Ѡ♣   \n", game(0));
 
         verifyAllEvents(
