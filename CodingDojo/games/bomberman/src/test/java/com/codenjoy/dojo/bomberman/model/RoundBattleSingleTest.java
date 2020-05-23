@@ -289,7 +289,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
 
     // если один игрок вынесет обоих, то должен получить за это очки
     @Test
-    public void shouldCollectScores_whenKillAllEnemies() {
+    public void shouldGetWinRoundScores_whenKillAllEnemies() {
         playersPerRoom.update(3);
         timeBeforeStart = 1;
 
@@ -365,6 +365,116 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         verifyEvents(listener(0), "[KILL_OTHER_HERO, KILL_OTHER_HERO, WIN_ROUND]");
         verifyEvents(listener(1), "[DIED]");
         verifyEvents(listener(2), "[DIED]");
+    }
+
+    // если на поле трое, и один игрок имеет преимущество по очкам за вынос другого игрока
+    // то по истечении таймаута раунда он получит очки за победу в раунде
+    @Test
+    public void shouldGetWinRoundScores_whenKillOneEnemyAdvantage_whenRoundTimeout() {
+        playersPerRoom.update(3);
+        timeBeforeStart = 1;
+
+        dice(heroDice,
+                1, 1, // первый игрок
+                0, 2, // второй - его не накроет волной
+                1, 0); // третий - его накроет волной
+
+        givenBoard(3);
+
+        tick();
+
+        verifyEvents(listener(0), "[START_ROUND, [Round 1]]");
+        verifyEvents(listener(1), "[START_ROUND, [Round 1]]");
+        verifyEvents(listener(2), "[START_ROUND, [Round 1]]");
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "♥    \n" +
+                " ☺   \n" +
+                " ♥   \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺    \n" +
+                " ♥   \n" +
+                " ♥   \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "♥    \n" +
+                " ♥   \n" +
+                " ☺   \n", game(2));
+
+        // когда я выношу одного игрока
+        hero(0).act();
+        tick();
+
+        hero(0).right();
+        tick();
+
+        hero(0).up();
+        tick();
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "♥ ☺  \n" +
+                " 1   \n" +
+                " ♥   \n", game(0));
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "♥҉☺  \n" +
+                "҉҉҉  \n" +
+                " ♣   \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺҉♥  \n" +
+                "҉҉҉  \n" +
+                " ♣   \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "♥҉♥  \n" +
+                "҉҉҉  \n" +
+                " Ѡ   \n", game(2));
+
+        verifyEvents(listener(0), "[KILL_OTHER_HERO]");
+        verifyEvents(listener(1), "[]");
+        verifyEvents(listener(2), "[DIED]");
+
+        // затем пройдет еще некоторое количество тиков, до общего числа = timePerRound
+        tick();
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "♥ ☺  \n" +
+                "     \n" +
+                " ♣   \n", game(0));
+
+        verifyEvents(listener(0), "[]");
+        verifyEvents(listener(1), "[]");
+        verifyEvents(listener(2), "[]");
+
+        // вот он последний тик раунда, тут все и случится
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ♣   \n" +
+                "Ѡ♣   \n", game(0));
+
+        verifyEvents(listener(0), "[WIN_ROUND]");
+        verifyEvents(listener(1), "[]");
+        verifyEvents(listener(2), "[]");
     }
 
 }

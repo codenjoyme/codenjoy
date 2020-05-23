@@ -67,8 +67,8 @@ public class Player extends RoundGamePlayer<Hero, Field> {
             return settings.killMeatChopperScore().getValue();
         }
 
-        if (event == Events.KILL_BOMBERMAN) {
-            return settings.killOtherBombermanScore().getValue();
+        if (event == Events.KILL_OTHER_HERO) {
+            return settings.killOtherHeroScore().getValue();
         }
 
         return 0;
