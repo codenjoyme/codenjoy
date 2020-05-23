@@ -60,7 +60,7 @@ public class PlayerTest {
         });
 
         field = mock(Field.class);
-        when(field.getSettings()).thenReturn(settings);
+        when(field.settings()).thenReturn(settings);
 
         listener = mock(EventListener.class);
     }

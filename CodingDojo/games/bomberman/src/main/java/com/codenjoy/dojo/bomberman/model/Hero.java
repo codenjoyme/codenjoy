@@ -78,7 +78,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
             }
         }
 
-        return field.getWalls().itsMe(x, y);
+        return field.walls().itsMe(x, y);
     }
 
     private boolean isOutOfBoard(int x, int y) {
@@ -152,7 +152,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     private void setBomb(int bombX, int bombY) {
         Perk bombCount = perks.getPerk(BOMB_COUNT_INCREASE);
 
-        if (field.getBombs(this).size() < level.bombsCount() + (bombCount != null ? bombCount.getValue() : 0)) {
+        if (field.bombs(this).size() < level.bombsCount() + (bombCount != null ? bombCount.getValue() : 0)) {
             Perk bombBlastInc = perks.getPerk(BOMB_BLAST_RADIUS_INCREASE);
             int boost = bombBlastInc != null ? bombBlastInc.getValue() : 0;
 

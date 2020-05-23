@@ -65,12 +65,12 @@ public class Bomberman extends RoundField<Player> implements Field {
         return players;
     }
 
-    public GameSettings getSettings() {
+    public GameSettings settings() {
         return settings;
     }
 
-    public List<PerkOnBoard> getPerks() {
-        return new ArrayList<PerkOnBoard>(perks.values());
+    public List<PerkOnBoard> perks() {
+        return new ArrayList<>(perks.values());
     }
 
     public PerkOnBoard pickPerkAtPoint(int x, int y) {
@@ -176,15 +176,15 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     @Override
-    public List<Bomb> getBombs() {
+    public List<Bomb> bombs() {
         return bombs;
     }
 
     @Override
-    public List<Bomb> getBombs(Hero bomberman) {
+    public List<Bomb> bombs(Hero hero) {
         List<Bomb> result = new LinkedList<>();
         for (Bomb bomb : bombs) {
-            if (bomb.itsMine(bomberman)) {
+            if (bomb.itsMine(hero)) {
                 result.add(bomb);
             }
         }
@@ -192,7 +192,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     @Override
-    public List<Blast> getBlasts() {
+    public List<Blast> blasts() {
         return blasts;
     }
 
@@ -284,7 +284,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     @Override
-    public Walls getWalls() {
+    public Walls walls() {
         return new WallsImpl(walls);
     }
 
@@ -339,10 +339,10 @@ public class Bomberman extends RoundField<Player> implements Field {
                 List<Point> elements = new LinkedList<>();
 
                 elements.addAll(Bomberman.this.heroes());
-                Bomberman.this.getWalls().forEach(elements::add);
-                elements.addAll(Bomberman.this.getBombs());
-                elements.addAll(Bomberman.this.getBlasts());
-                elements.addAll(Bomberman.this.getPerks());
+                Bomberman.this.walls().forEach(elements::add);
+                elements.addAll(Bomberman.this.bombs());
+                elements.addAll(Bomberman.this.blasts());
+                elements.addAll(Bomberman.this.perks());
 
                 return elements;
             }

@@ -419,7 +419,7 @@ public class BombermanTest {
                 "     \n" +
                 "☻    \n");
 
-        assertEquals(1, field.getBombs().size());
+        assertEquals(1, field.bombs().size());
 
         hero.right();
         field.tick();
@@ -1226,9 +1226,9 @@ public class BombermanTest {
         hero.right();
         field.tick();
 
-        List<Bomb> bombs1 = field.getBombs();
-        List<Bomb> bombs2 = field.getBombs();
-        List<Bomb> bombs3 = field.getBombs();
+        List<Bomb> bombs1 = field.bombs();
+        List<Bomb> bombs2 = field.bombs();
+        List<Bomb> bombs3 = field.bombs();
         assertSame(bombs1, bombs2);
         assertSame(bombs2, bombs3);
         assertSame(bombs3, bombs1);
@@ -1277,7 +1277,7 @@ public class BombermanTest {
         hero.right();
         field.tick();
 
-        List<Bomb> bombs1 = field.getBombs();
+        List<Bomb> bombs1 = field.bombs();
         assertEquals(1, bombs1.size());
 
         field.tick();
@@ -1285,7 +1285,7 @@ public class BombermanTest {
         field.tick();
         field.tick();
 
-        List<Bomb> bombs2 = field.getBombs();
+        List<Bomb> bombs2 = field.bombs();
         assertEquals(0, bombs2.size());
         assertEquals(0, bombs1.size());
         assertSame(bombs1, bombs2);
@@ -1302,9 +1302,9 @@ public class BombermanTest {
         field.tick();
         field.tick();
 
-        List<Blast> blasts1 = field.getBlasts();
-        List<Blast> blasts2 = field.getBlasts();
-        List<Blast> blasts3 = field.getBlasts();
+        List<Blast> blasts1 = field.blasts();
+        List<Blast> blasts2 = field.blasts();
+        List<Blast> blasts3 = field.blasts();
         assertSame(blasts1, blasts2);
         assertSame(blasts2, blasts3);
         assertSame(blasts3, blasts1);
@@ -1328,9 +1328,9 @@ public class BombermanTest {
     public void shouldNoChangeWall_whenUseBoardApi() {
         givenBoardWithWalls();
 
-        Walls walls1 = field.getWalls();
-        Walls walls2 = field.getWalls();
-        Walls walls3 = field.getWalls();
+        Walls walls1 = field.walls();
+        Walls walls2 = field.walls();
+        Walls walls3 = field.walls();
         assertNotSame(walls1, walls2);
         assertNotSame(walls2, walls3);
         assertNotSame(walls3, walls1);

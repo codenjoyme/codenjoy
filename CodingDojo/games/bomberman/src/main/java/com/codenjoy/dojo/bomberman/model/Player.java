@@ -42,7 +42,7 @@ public class Player extends RoundGamePlayer<Hero, Field> {
     }
 
     public void newHero(Field board) {
-        settings = board.getSettings();
+        settings = board.settings();
         hero = settings.getBomberman(settings.getLevel());
         hero.setPlayer(this);
         hero.init(board);
