@@ -31,12 +31,12 @@ public class WallsImpl implements Walls {
     private List<Wall> walls;
 
     public WallsImpl() {
-        walls = new LinkedList<Wall>();
+        walls = new LinkedList<>();
     }
 
-    public WallsImpl(Walls sourceWalls) {
+    public WallsImpl(Walls input) {
         this();
-        for (Wall wall : sourceWalls) {
+        for (Wall wall : input) {
             walls.add(wall.copy());
         }
     }

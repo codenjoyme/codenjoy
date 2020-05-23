@@ -14,6 +14,7 @@ import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.*;
 public abstract class AbstractSingleTest {
 
     public static final int SIZE = 5;
-    protected Walls walls = emptyWalls();
+    protected Walls walls;
     protected List<Hero> heroes = new LinkedList<>();
     protected List<Game> games = new LinkedList<>();
     private List<EventListener> listeners = new LinkedList<>();
@@ -42,6 +43,10 @@ public abstract class AbstractSingleTest {
     protected Dice meatDice = mock(Dice.class);
     protected Dice heroDice = mock(Dice.class);
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
+
+    {
+        givenWalls();
+    }
 
     public void givenBoard(int count) {
         settings = mock(GameSettings.class);
@@ -147,10 +152,9 @@ public abstract class AbstractSingleTest {
         }
     }
 
-    private Walls emptyWalls() {
-        Walls walls = mock(WallsImpl.class);
-        when(walls.iterator()).thenReturn(new LinkedList<Wall>().iterator());
-        return walls;
+    protected void givenWalls(Wall... input) {
+        walls = new WallsImpl();
+        Arrays.asList(input).forEach(walls::add);
     }
 
     protected void newGame(int index) {

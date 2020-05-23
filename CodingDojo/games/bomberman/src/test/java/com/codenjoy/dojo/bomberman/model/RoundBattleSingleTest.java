@@ -662,4 +662,194 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "listener(4) => []\n");
     }
 
+    // если на поле группа игроков, два из них активны и расставляют бомбы
+    // и даже уничтожили одинаковое количество игроков
+    // так вот после окончания таймаута раунда тот из них победит,
+    // кто большее очков заработал во время своего экшна (в данном случае коробку)
+    @Test
+    public void shouldGetWinRoundScores_whenKillsAdvantagePlusOneBox_whenRoundTimeout() {
+        int count = 6;
+
+        playersPerRoom.update(count);
+        timeBeforeStart = 1;
+
+        dice(heroDice,
+                1, 1, // первый активный игрок - будет проигравшим
+                3, 3, // второй активный игрок - будет победителем, потому как снесет еще корбку
+                1, 0, // жертва первого
+                0, 1, // жертва первого
+                3, 4, // жертва второго
+                4, 3); // жертва второго
+
+        givenWalls(new DestroyWall(3, 2));
+        givenBoard(count);
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n" +
+                "listener(3) => [START_ROUND, [Round 1]]\n" +
+                "listener(4) => [START_ROUND, [Round 1]]\n" +
+                "listener(5) => [START_ROUND, [Round 1]]\n");
+
+        assertBoards(
+                "game(0)\n" +
+                "   ♥ \n" +
+                "   ♥♥\n" +
+                "   # \n" +
+                "♥☺   \n" +
+                " ♥   \n" +
+                "\n" +
+                "game(1)\n" +
+                "   ♥ \n" +
+                "   ☺♥\n" +
+                "   # \n" +
+                "♥♥   \n" +
+                " ♥   \n" +
+                "\n" +
+                "game(2)\n" +
+                "   ♥ \n" +
+                "   ♥♥\n" +
+                "   # \n" +
+                "♥♥   \n" +
+                " ☺   \n" +
+                "\n" +
+                "game(3)\n" +
+                "   ♥ \n" +
+                "   ♥♥\n" +
+                "   # \n" +
+                "☺♥   \n" +
+                " ♥   \n" +
+                "\n" +
+                "game(4)\n" +
+                "   ☺ \n" +
+                "   ♥♥\n" +
+                "   # \n" +
+                "♥♥   \n" +
+                " ♥   \n" +
+                "\n" +
+                "game(5)\n" +
+                "   ♥ \n" +
+                "   ♥☺\n" +
+                "   # \n" +
+                "♥♥   \n" +
+                " ♥   \n" +
+                "\n");
+
+        // пошла движуха
+        hero(0).act();
+        hero(1).act();
+        tick();
+
+        hero(0).right();
+        hero(1).left();
+        tick();
+
+        hero(0).right();
+        hero(1).left();
+        tick();
+
+        tick();
+
+        asrtBrd("   ♥ \n" +
+                " ♥ 1♥\n" +
+                "   # \n" +
+                "♥1 ☺ \n" +
+                " ♥   \n", game(0));
+
+        tick();
+
+        assertBoards(
+                "game(0)\n" +
+                "   ♣ \n" +
+                " ♥҉҉♣\n" +
+                " ҉ H \n" +
+                "♣҉҉☺ \n" +
+                " ♣   \n" +
+                "\n" +
+                "game(1)\n" +
+                "   ♣ \n" +
+                " ☺҉҉♣\n" +
+                " ҉ H \n" +
+                "♣҉҉♥ \n" +
+                " ♣   \n" +
+                "\n" +
+                "game(2)\n" +
+                "   ♣ \n" +
+                " ♥҉҉♣\n" +
+                " ҉ H \n" +
+                "♣҉҉♥ \n" +
+                " Ѡ   \n" +
+                "\n" +
+                "game(3)\n" +
+                "   ♣ \n" +
+                " ♥҉҉♣\n" +
+                " ҉ H \n" +
+                "Ѡ҉҉♥ \n" +
+                " ♣   \n" +
+                "\n" +
+                "game(4)\n" +
+                "   Ѡ \n" +
+                " ♥҉҉♣\n" +
+                " ҉ H \n" +
+                "♣҉҉♥ \n" +
+                " ♣   \n" +
+                "\n" +
+                "game(5)\n" +
+                "   ♣ \n" +
+                " ♥҉҉Ѡ\n" +
+                " ҉ H \n" +
+                "♣҉҉♥ \n" +
+                " ♣   \n" +
+                "\n");
+
+        verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO, KILL_OTHER_HERO]\n" +
+                "listener(1) => [KILL_DESTROY_WALL, KILL_OTHER_HERO, KILL_OTHER_HERO]\n" +
+                "listener(2) => [DIED]\n" +
+                "listener(3) => [DIED]\n" +
+                "listener(4) => [DIED]\n" +
+                "listener(5) => [DIED]\n");
+
+        // затем пройдет еще некоторое количество тиков, до общего числа = timePerRound
+        tick();
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("   ♣ \n" +
+                " ♥  ♣\n" +
+                "     \n" +
+                "♣  ☺ \n" +
+                " ♣   \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n");
+
+        // вот он последний тик раунда, тут все и случится
+        dice(heroDice, 0, 0); // размещаем всех возле левого нижнего угла
+        tick();
+
+        asrtBrd("   ♣ \n" +
+                "    ♣\n" +
+                "     \n" +
+                "♣♣   \n" +
+                "Ѡ♣   \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => [[Time is over]]\n" +
+                "listener(1) => [WIN_ROUND]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n" +
+                "listener(5) => []\n");
+    }
+
 }
