@@ -10,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 
 public class RoundBattleSingleTest extends AbstractSingleTest {
 
+    public static final int DEFAULT_COUNT = 3;
     private int minTicksForWin = 1;
     private int timePerRound = 10;
     private int timeForWinner = 2;
@@ -56,9 +57,9 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     // все игроки неактивны (видно их трупики)
     @Test
     public void shouldAllPlayersOnBoardIsInactive_whenStart() {
-        playersPerRoom.update(3);
+        playersPerRoom.update(DEFAULT_COUNT);
 
-        givenBoard(3);
+        givenBoard(DEFAULT_COUNT);
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -84,36 +85,41 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     public void shouldCountdownBeforeRound_whenTicksOnStart() {
         shouldAllPlayersOnBoardIsInactive_whenStart();
 
-        verifyEvents(listener(0), "[]");
-        verifyEvents(listener(1), "[]");
-        verifyEvents(listener(2), "[]");
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n");
 
         tick();
 
-        verifyEvents(listener(0), "[[....4....]]");
-        verifyEvents(listener(1), "[[....4....]]");
-        verifyEvents(listener(2), "[[....4....]]");
+        verifyAllEvents(
+                "listener(0) => [[....4....]]\n" +
+                "listener(1) => [[....4....]]\n" +
+                "listener(2) => [[....4....]]\n");
 
         tick();
 
-        verifyEvents(listener(0), "[[...3...]]");
-        verifyEvents(listener(1), "[[...3...]]");
-        verifyEvents(listener(2), "[[...3...]]");
+        verifyAllEvents(
+                "listener(0) => [[...3...]]\n" +
+                "listener(1) => [[...3...]]\n" +
+                "listener(2) => [[...3...]]\n");
 
         tick();
 
-        verifyEvents(listener(0), "[[..2..]]");
-        verifyEvents(listener(1), "[[..2..]]");
-        verifyEvents(listener(2), "[[..2..]]");
+        verifyAllEvents(
+                "listener(0) => [[..2..]]\n" +
+                "listener(1) => [[..2..]]\n" +
+                "listener(2) => [[..2..]]\n");
 
         tick();
 
-        verifyEvents(listener(0), "[[.1.]]");
-        verifyEvents(listener(1), "[[.1.]]");
-        verifyEvents(listener(2), "[[.1.]]");
+        verifyAllEvents(
+                "listener(0) => [[.1.]]\n" +
+                "listener(1) => [[.1.]]\n" +
+                "listener(2) => [[.1.]]\n");
     }
 
-    // пока идет отсчет я не могу ничего предпринимать, а герои отображаются на карте как трупики
+    // пока идет обратный отсчет я не могу ничего предпринимать, а герои отображаются на карте как трупики
     // но после объявления раунда я могу начать играть
     @Test
     public void shouldActiveAndCanMove_afterCountdown() {
@@ -146,9 +152,10 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         tick();
 
         // после сообщения что раунд начался
-        verifyEvents(listener(0), "[START_ROUND, [Round 1]]");
-        verifyEvents(listener(1), "[START_ROUND, [Round 1]]");
-        verifyEvents(listener(2), "[START_ROUND, [Round 1]]");
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n");
 
         // можно играть - игроки видны как активные
         asrtBrd("     \n" +
@@ -199,16 +206,17 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     // то тот, которого вынесли появится в новом месте в виде трупика
     @Test
     public void shouldMoveToInactive_whenKillSomeone() {
-        playersPerRoom.update(3);
+        playersPerRoom.update(DEFAULT_COUNT);
         timeBeforeStart = 1; // TODO а что будет если тут 0 игра хоть начнется?
 
-        givenBoard(3);
+        givenBoard(DEFAULT_COUNT);
 
         tick();
 
-        verifyEvents(listener(0), "[START_ROUND, [Round 1]]");
-        verifyEvents(listener(1), "[START_ROUND, [Round 1]]");
-        verifyEvents(listener(2), "[START_ROUND, [Round 1]]");
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n");
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -290,7 +298,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     // если один игрок вынесет обоих, то должен получить за это очки
     @Test
     public void shouldGetWinRoundScores_whenKillAllEnemies() {
-        playersPerRoom.update(3);
+        playersPerRoom.update(DEFAULT_COUNT);
         timeBeforeStart = 1;
 
         dice(heroDice,
@@ -298,13 +306,14 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 0, 1, // второй
                 1, 0); // третий
 
-        givenBoard(3);
+        givenBoard(DEFAULT_COUNT);
 
         tick();
 
-        verifyEvents(listener(0), "[START_ROUND, [Round 1]]");
-        verifyEvents(listener(1), "[START_ROUND, [Round 1]]");
-        verifyEvents(listener(2), "[START_ROUND, [Round 1]]");
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n");
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -362,16 +371,19 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "♣҉҉  \n" +
                 " Ѡ   \n", game(2));
 
-        verifyEvents(listener(0), "[KILL_OTHER_HERO, KILL_OTHER_HERO, WIN_ROUND]");
-        verifyEvents(listener(1), "[DIED]");
-        verifyEvents(listener(2), "[DIED]");
+        verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO, KILL_OTHER_HERO, WIN_ROUND]\n" +
+                "listener(1) => [DIED]\n" +
+                "listener(2) => [DIED]\n");
     }
 
     // если на поле трое, и один игрок имеет преимущество по очкам за вынос другого игрока
     // то по истечении таймаута раунда он получит очки за победу в раунде
     @Test
     public void shouldGetWinRoundScores_whenKillOneEnemyAdvantage_whenRoundTimeout() {
-        playersPerRoom.update(3);
+        int count = 3;
+
+        playersPerRoom.update(count);
         timeBeforeStart = 1;
 
         dice(heroDice,
@@ -379,13 +391,14 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 0, 2, // второй - его не накроет волной
                 1, 0); // третий - его накроет волной
 
-        givenBoard(3);
+        givenBoard(count);
 
         tick();
 
-        verifyEvents(listener(0), "[START_ROUND, [Round 1]]");
-        verifyEvents(listener(1), "[START_ROUND, [Round 1]]");
-        verifyEvents(listener(2), "[START_ROUND, [Round 1]]");
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n");
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -443,9 +456,10 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "҉҉҉  \n" +
                 " Ѡ   \n", game(2));
 
-        verifyEvents(listener(0), "[KILL_OTHER_HERO]");
-        verifyEvents(listener(1), "[]");
-        verifyEvents(listener(2), "[DIED]");
+        verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => [DIED]\n");
 
         // затем пройдет еще некоторое количество тиков, до общего числа = timePerRound
         tick();
@@ -459,9 +473,10 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "     \n" +
                 " ♣   \n", game(0));
 
-        verifyEvents(listener(0), "[]");
-        verifyEvents(listener(1), "[]");
-        verifyEvents(listener(2), "[]");
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n");
 
         // вот он последний тик раунда, тут все и случится
         tick();
@@ -472,9 +487,179 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 " ♣   \n" +
                 "Ѡ♣   \n", game(0));
 
-        verifyEvents(listener(0), "[WIN_ROUND]");
-        verifyEvents(listener(1), "[]");
-        verifyEvents(listener(2), "[]");
+        verifyAllEvents(
+                "listener(0) => [WIN_ROUND]\n" +
+                "listener(1) => [[Time is over]]\n" +
+                "listener(2) => []\n");
+    }
+
+    // если на поле группа игроков, два из них активны и расставляют бомбы
+    // так вот после окончания таймаута раунда тот из них победит,
+    // кто большее количество игроков вынес
+    @Test
+    public void shouldGetWinRoundScores_whenKillsAdvantage_whenRoundTimeout() {
+        int count = 5;
+
+        playersPerRoom.update(count);
+        timeBeforeStart = 1;
+
+        dice(heroDice,
+                1, 1, // первый активный игрок - будет победителем
+                3, 3, // второй активный игрок - будет проигравшим
+                1, 0, // жертва первого
+                0, 1, // жертва первого
+                3, 4); // единственная жертва второго, потому он проиграет по очкам
+
+        givenBoard(count);
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n" +
+                "listener(3) => [START_ROUND, [Round 1]]\n" +
+                "listener(4) => [START_ROUND, [Round 1]]\n");
+
+        assertBoards(
+                "game(0)\n" +
+                "   ♥ \n" +
+                "   ♥ \n" +
+                "     \n" +
+                "♥☺   \n" +
+                " ♥   \n" +
+                "\n" +
+                "game(1)\n" +
+                "   ♥ \n" +
+                "   ☺ \n" +
+                "     \n" +
+                "♥♥   \n" +
+                " ♥   \n" +
+                "\n" +
+                "game(2)\n" +
+                "   ♥ \n" +
+                "   ♥ \n" +
+                "     \n" +
+                "♥♥   \n" +
+                " ☺   \n" +
+                "\n" +
+                "game(3)\n" +
+                "   ♥ \n" +
+                "   ♥ \n" +
+                "     \n" +
+                "☺♥   \n" +
+                " ♥   \n" +
+                "\n" +
+                "game(4)\n" +
+                "   ☺ \n" +
+                "   ♥ \n" +
+                "     \n" +
+                "♥♥   \n" +
+                " ♥   \n" +
+                "\n");
+
+        // пошла движуха
+        hero(0).act();
+        hero(1).act();
+        tick();
+
+        hero(0).right();
+        hero(1).left();
+        tick();
+
+        hero(0).right();
+        hero(1).left();
+        tick();
+
+        tick();
+
+        asrtBrd("   ♥ \n" +
+                " ♥ 1 \n" +
+                "     \n" +
+                "♥1 ☺ \n" +
+                " ♥   \n", game(0));
+
+        tick();
+
+        assertBoards(
+                "game(0)\n" +
+                "   ♣ \n" +
+                " ♥҉҉҉\n" +
+                " ҉ ҉ \n" +
+                "♣҉҉☺ \n" +
+                " ♣   \n" +
+                "\n" +
+                "game(1)\n" +
+                "   ♣ \n" +
+                " ☺҉҉҉\n" +
+                " ҉ ҉ \n" +
+                "♣҉҉♥ \n" +
+                " ♣   \n" +
+                "\n" +
+                "game(2)\n" +
+                "   ♣ \n" +
+                " ♥҉҉҉\n" +
+                " ҉ ҉ \n" +
+                "♣҉҉♥ \n" +
+                " Ѡ   \n" +
+                "\n" +
+                "game(3)\n" +
+                "   ♣ \n" +
+                " ♥҉҉҉\n" +
+                " ҉ ҉ \n" +
+                "Ѡ҉҉♥ \n" +
+                " ♣   \n" +
+                "\n" +
+                "game(4)\n" +
+                "   Ѡ \n" +
+                " ♥҉҉҉\n" +
+                " ҉ ҉ \n" +
+                "♣҉҉♥ \n" +
+                " ♣   \n" +
+                "\n");
+
+        verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO, KILL_OTHER_HERO]\n" +
+                "listener(1) => [KILL_OTHER_HERO]\n" +
+                "listener(2) => [DIED]\n" +
+                "listener(3) => [DIED]\n" +
+                "listener(4) => [DIED]\n");
+
+        // затем пройдет еще некоторое количество тиков, до общего числа = timePerRound
+        tick();
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("   ♣ \n" +
+                " ♥   \n" +
+                "     \n" +
+                "♣  ☺ \n" +
+                " ♣   \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n");
+
+        // вот он последний тик раунда, тут все и случится
+        dice(heroDice, 0, 0); // размещаем всех возле левого нижнего угла
+        tick();
+
+        asrtBrd("   ♣ \n" +
+                "     \n" +
+                "     \n" +
+                "♣♣   \n" +
+                "Ѡ♣   \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => [WIN_ROUND]\n" +
+                "listener(1) => [[Time is over]]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n" +
+                "listener(4) => []\n");
     }
 
 }

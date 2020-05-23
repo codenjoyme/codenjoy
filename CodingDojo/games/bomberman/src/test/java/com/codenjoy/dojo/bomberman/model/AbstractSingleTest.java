@@ -11,12 +11,16 @@ import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.mockito.ArgumentCaptor;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
+import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -27,7 +31,7 @@ public abstract class AbstractSingleTest {
     public static final int SIZE = 5;
     protected Walls walls = emptyWalls();
     protected List<Hero> heroes = new LinkedList<>();
-    private List<Game> games = new LinkedList<>();
+    protected List<Game> games = new LinkedList<>();
     private List<EventListener> listeners = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
     protected GameSettings settings;
@@ -102,9 +106,15 @@ public abstract class AbstractSingleTest {
     }
 
     protected String getEvents(EventListener events) {
-        ArgumentCaptor<Events> captor = ArgumentCaptor.forClass(Events.class);
-        verify(events, atLeast(1)).event(captor.capture());
-        return captor.getAllValues().toString();
+        try {
+            ArgumentCaptor<Events> captor = ArgumentCaptor.forClass(Events.class);
+            verify(events, atLeast(1)).event(captor.capture());
+            return captor.getAllValues().toString();
+        } catch (WantedButNotInvoked e) {
+            return "[]";
+        } finally {
+            reset(events);
+        }
     }
 
     protected Hero hero(int index) {
@@ -146,5 +156,41 @@ public abstract class AbstractSingleTest {
     protected void newGame(int index) {
         board.newGame(player(index));
         heroes.set(index, heroes.remove(heroes.size() - 1));
+    }
+
+    protected void assertBoards(String expected, Integer... indexes) {
+        assertAll(expected, indexes, index -> {
+            Object actual = game(index).getBoardAsString();
+            return String.format("game(%s)\n%s\n", index, actual);
+        });
+    }
+
+    private void assertAll(String expected, Integer[] indexes,
+                           Function<Integer, String> function)
+    {
+        indexes = range(indexes);
+
+        String actual = "";
+        for (int i = 0; i < indexes.length; i++) {
+            actual += function.apply(indexes[i]);
+        }
+
+        assertEquals(expected, actual);
+    }
+
+    private Integer[] range(Integer[] indexes) {
+        if (indexes.length == 0) {
+            indexes = IntStream.range(0, games.size())
+                    .boxed()
+                    .collect(toList()).toArray(new Integer[0]);
+        }
+        return indexes;
+    }
+
+    protected void verifyAllEvents(String expected, Integer... indexes) {
+        assertAll(expected, indexes, index -> {
+            Object actual = getEvents(listener(index));
+            return String.format("listener(%s) => %s\n", index, actual);
+        });
     }
 }
