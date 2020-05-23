@@ -25,15 +25,8 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
-
-import java.util.LinkedList;
-import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.BombermanTest.*;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -41,76 +34,7 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class SingleTest {
-
-    public static final int SIZE = 5;
-    private Walls walls = emptyWalls();
-    private List<Hero> heroes = new LinkedList<>();
-    private List<Game> games = new LinkedList<>();
-    private List<EventListener> listeners = new LinkedList<>();
-    private GameSettings settings;
-    private Level level;
-    private Bomberman board;
-    private int bombsCount = 1;
-    private Dice meatChopperDice;
-    private Dice bombermanDice;
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
-
-    public void givenBoard() {
-        settings = mock(GameSettings.class);
-
-        level = mock(Level.class);
-        when(level.bombsCount()).thenReturn(bombsCount);
-        when(level.bombsPower()).thenReturn(1);
-
-        bombermanDice = mock(Dice.class);
-
-        dice(bombermanDice,  0, 0);
-        heroes.add(new Hero(level, bombermanDice));
-        
-        dice(bombermanDice,  0, 0);
-        heroes.add(new Hero(level, bombermanDice));
-
-        OngoingStubbing<Hero> when = when(settings.getBomberman(any(Level.class)));
-        for (Hero h : heroes) {
-            when = when.thenReturn(h);
-        }
-
-        when(settings.getLevel()).thenReturn(level);
-        when(settings.getBoardSize()).thenReturn(v(SIZE));
-        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
-        RoundSettingsWrapper roundSettings = getRoundSettings();
-        when(settings.getRoundSettings()).thenReturn(roundSettings);
-        when(settings.killOtherBombermanScore()).thenReturn(v(200));
-        when(settings.killMeatChopperScore()).thenReturn(v(100));
-        when(settings.killWallScore()).thenReturn(v(10));
-
-        board = new Bomberman(settings);
-
-        listeners.add(mock(EventListener.class));
-        listeners.add(mock(EventListener.class));
-
-        games.add(new Single(new Player(listener(0), roundSettings.roundsEnabled()), printerFactory));
-        games.add(new Single(new Player(listener(1), roundSettings.roundsEnabled()), printerFactory));
-
-        games.forEach(g -> {
-            g.on(board);
-            g.newGame();
-        });
-    }
-
-    private void dice(Dice dice, int... values) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int value : values) {
-            when = when.thenReturn(value);
-        }
-    }
-
-    private Walls emptyWalls() {
-        Walls walls = mock(WallsImpl.class);
-        when(walls.iterator()).thenReturn(new LinkedList<Wall>().iterator());
-        return walls;
-    }
+public class SingleTest extends AbstractSingleTest {
 
     @Test
     public void shouldGameReturnsRealJoystick() {
@@ -137,14 +61,6 @@ public class SingleTest {
         // then
         assertNotSame(joystick1, game(0).getJoystick());
         assertNotSame(joystick2, game(0).getJoystick());
-    }
-
-    private Hero hero(int index) {
-        return heroes.get(index);
-    }
-
-    private Game game(int index) {
-        return games.get(index);
     }
 
     @Test
@@ -191,14 +107,6 @@ public class SingleTest {
 
         verify(listener(0), only()).event(Events.KILL_OTHER_BOMBERMAN);
         verify(listener(1), only()).event(Events.KILL_BOMBERMAN);
-    }
-
-    private EventListener listener(int index) {
-        return listeners.get(index);
-    }
-
-    private void tick() {
-        board.tick();
     }
 
     @Test
@@ -288,7 +196,7 @@ public class SingleTest {
                 "     \n" +
                 "☺♥&  \n", game(0));
 
-        dice(meatChopperDice, Direction.LEFT.value());
+        dice(meatDice, Direction.LEFT.value());
         tick();
 
         assertBoard(
@@ -322,7 +230,7 @@ public class SingleTest {
                 "     \n" +
                 "☺♥&  \n", game(0));
 
-        dice(meatChopperDice, Direction.LEFT.value());
+        dice(meatDice, Direction.LEFT.value());
         hero(1).right();
         tick();
 
@@ -345,11 +253,11 @@ public class SingleTest {
     }
 
     private void meatChopperAt(int x, int y) {
-        meatChopperDice = mock(Dice.class);
-        dice(meatChopperDice, x, y);
+        meatDice = mock(Dice.class);
+        dice(meatDice, x, y);
         Field temp = mock(Field.class);
         when(temp.size()).thenReturn(SIZE);
-        MeatChoppers meatchoppers = new MeatChoppers(new WallsImpl(), temp, v(1), meatChopperDice);
+        MeatChoppers meatchoppers = new MeatChoppers(new WallsImpl(), temp, v(1), meatDice);
         meatchoppers.regenerate();
         walls = meatchoppers;
     }
@@ -409,7 +317,7 @@ public class SingleTest {
     @Test
     public void shouldNewGamesWhenKillAll() {
         shouldBombKillAllBomberman();
-        when(settings.getBomberman(any(Level.class))).thenReturn(new Hero(level, bombermanDice), new Hero(level, bombermanDice));
+        when(settings.getBomberman(any(Level.class))).thenReturn(new Hero(level, heroDice), new Hero(level, heroDice));
 
         game(0).newGame();
         game(1).newGame();
@@ -655,5 +563,10 @@ public class SingleTest {
 
         verify(listener(0), only()).event(Events.KILL_MEAT_CHOPPER);
         verify(listener(1), only()).event(Events.KILL_MEAT_CHOPPER);
+    }
+
+    @Override
+    protected RoundSettingsWrapper getRoundSettings() {
+        return BombermanTest.getRoundSettings();
     }
 }
