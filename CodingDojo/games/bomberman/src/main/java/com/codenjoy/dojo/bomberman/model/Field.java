@@ -30,7 +30,7 @@ import java.util.List;
 public interface Field extends RoundGameField<Player> {  // TODO применить тут ISP (все ли методы должны быть паблик?)
     int size();
 
-    List<Hero> getBombermans();
+    List<Hero> heroes();
 
     List<Bomb> getBombs();
 

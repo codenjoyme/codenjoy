@@ -72,7 +72,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     private boolean isBusy(int x, int y) {
-        for (Hero hero : field.getBombermans()) {
+        for (Hero hero : field.heroes()) {
             if (hero != null && hero.itsMe(this) && hero != this) {
                 return true;
             }
@@ -162,18 +162,17 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (isActiveAndAlive()) {
-
-            Bomb bomb = null;
-            Hero hero = null;
-            if (alsoAtPoint[1] != null) {
-                if (alsoAtPoint[1] instanceof Bomb) {
-                    bomb = (Bomb) alsoAtPoint[1];
-                } else if (alsoAtPoint[1] instanceof Hero) {
-                    hero = (Hero) alsoAtPoint[1];
-                }
+        Bomb bomb = null;
+        Hero hero = null;
+        if (alsoAtPoint[1] != null) {
+            if (alsoAtPoint[1] instanceof Bomb) {
+                bomb = (Bomb) alsoAtPoint[1];
+            } else if (alsoAtPoint[1] instanceof Hero) {
+                hero = (Hero) alsoAtPoint[1];
             }
+        }
 
+        if (isActiveAndAlive()) {
             // есть другой герой в этой же клетке
             if (hero != null) {
                 // player наблюдатель содержится в той же клетке что и другой герой

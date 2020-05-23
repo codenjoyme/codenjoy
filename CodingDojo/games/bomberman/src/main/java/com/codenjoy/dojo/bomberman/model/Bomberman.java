@@ -33,9 +33,9 @@ import com.codenjoy.dojo.services.round.RoundField;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static java.util.stream.Collectors.toList;
 
 public class Bomberman extends RoundField<Player> implements Field {
 
@@ -110,7 +110,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private void tactAllPerks() {
-        List<Blast> blastsWithoutPerks = blasts.stream().filter(blast -> !perks.containsKey(blast)).collect(Collectors.toList());
+        List<Blast> blastsWithoutPerks = blasts.stream().filter(blast -> !perks.containsKey(blast)).collect(toList());
         blasts.clear();
         blasts.addAll(blastsWithoutPerks);
     }
@@ -210,7 +210,7 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     private List<Blast> makeBlast(Bomb bomb) {
         List barriers = walls.subList(Wall.class);
-        barriers.addAll(getBombermans());
+        barriers.addAll(heroes());
 
         return new BoomEngineOriginal(bomb.getOwner()).boom(barriers, size.getValue(), bomb, bomb.getPower());   // TODO move bomb inside BoomEngine
     }
@@ -228,7 +228,7 @@ public class Bomberman extends RoundField<Player> implements Field {
             }
         }
         for (Blast blast : blasts) {
-            for (Player dead : players) {
+            for (Player dead : aliveActive()) {
                 if (dead.getHero().itsMe(blast)) {
                     Perk bombImmunePerk = dead.getHero().getPerk(Elements.BOMB_IMMUNE);
 
@@ -290,8 +290,8 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     @Override
     public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
-        for (Hero hero : getBombermans()) {
-            if (hero.itsMe(pt(x, y)) && hero.isActiveAndAlive()) {
+        for (Player player : aliveActive()) {
+            if (player.getHero().itsMe(pt(x, y))) {
                 return true;
             }
         }
@@ -312,12 +312,10 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     @Override
-    public List<Hero> getBombermans() {
-        List<Hero> result = new LinkedList<>();
-        for (Player player : players) {
-            result.add(player.getHero());
-        }
-        return result;
+    public List<Hero> heroes() {
+        return players.stream()
+                .map(Player::getHero)
+                .collect(toList());
     }
 
     public void newGame(Player player) {
@@ -340,7 +338,7 @@ public class Bomberman extends RoundField<Player> implements Field {
             public Iterable<? extends Point> elements() {
                 List<Point> elements = new LinkedList<>();
 
-                elements.addAll(Bomberman.this.getBombermans());
+                elements.addAll(Bomberman.this.heroes());
                 Bomberman.this.getWalls().forEach(elements::add);
                 elements.addAll(Bomberman.this.getBombs());
                 elements.addAll(Bomberman.this.getBlasts());

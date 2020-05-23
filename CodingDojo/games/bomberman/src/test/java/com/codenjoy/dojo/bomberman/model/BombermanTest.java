@@ -1558,7 +1558,7 @@ public class BombermanTest {
         MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChppperDice);
         bombermans = mock(List.class);
         when(bombermans.contains(anyObject())).thenReturn(false);
-        when(temp.getBombermans()).thenReturn(bombermans);
+        when(temp.heroes()).thenReturn(bombermans);
         withWalls(walls);
         walls.regenerate();
         givenBoard(size);

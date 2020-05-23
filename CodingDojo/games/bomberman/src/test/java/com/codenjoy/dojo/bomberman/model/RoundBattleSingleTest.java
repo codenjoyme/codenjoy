@@ -861,8 +861,44 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     // 3) сторонний наблюдатель видит живого соперника
     @Test
     public void shouldPlaceOfDeath_isNotABarrierForOtherHero() {
+        givenCaseWhenPlaceOfDeathOnMyWay();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺♣♥  \n", game(0));
+
+        // а вот и попытка пойти на место трупика
+        hero(0).right();
+        tick();
+
+        // от имени того кто стоит на месте смерти другого героя он видет себя
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺♥  \n", game(0));
+
+        // от имени того кого вынесли он видит свой трупик
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " Ѡ♥  \n", game(1));
+
+        // от имени стороннего наблюдателя - он видит живую угрозу
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ♥☺  \n", game(2));
+    }
+
+    private void givenCaseWhenPlaceOfDeathOnMyWay() {
         playersPerRoom.update(DEFAULT_COUNT);
         timeBeforeStart = 1;
+        timePerRound = 20;
 
         dice(heroDice,
                 0, 0, // первый игрок
@@ -949,31 +985,59 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "     \n" +
                 "     \n" +
                 "☺♣♥  \n", game(0));
+    }
 
-        // а вот и попытка пойти на место трупика
-        hero(0).right();
+    // я не могу подрывать уже убитого бомбера
+    // а в отрисовке, на месте трупика я не вижу взрывной волны, там всегда будет трупик
+    @Test
+    public void shouldCantDestroyHeroPlaceOfDeath() {
+        givenCaseWhenPlaceOfDeathOnMyWay();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺♣♥  \n", game(0));
+
+        hero(0).act();
         tick();
 
-        // от имени того кто стоит на месте смерти другого героя он видет себя
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                " ☺♥  \n", game(0));
+        hero(0).up();
+        tick();
 
-        // от имени того кого вынесли он видит свой трупик
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                " Ѡ♥  \n", game(1));
+        hero(0).up();
+        tick();
 
-        // от имени стороннего наблюдателя - он видит живую угрозу
+        tick();
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n");
+
+        // на месте героя которого вынесли я как сторонний наблюдатель
+        // вижу его останки, а не взрывную волну
         asrtBrd("     \n" +
                 "     \n" +
+                "☺    \n" +
+                "҉    \n" +
+                "҉♣♥  \n", game(0));
+
+        // я как тот которого вынесли, на месте взрыва вижу себя
+        asrtBrd("     \n" +
                 "     \n" +
+                "♥    \n" +
+                "҉    \n" +
+                "҉Ѡ♥  \n", game(1));
+
+        // на месте героя которого вынесли я как сторонний наблюдатель
+        // вижу его останки, а не взрывную волну
+        asrtBrd("     \n" +
                 "     \n" +
-                " ♥☺  \n", game(2));
+                "♥    \n" +
+                "҉    \n" +
+                "҉♣☺  \n", game(2));
     }
 
 }
