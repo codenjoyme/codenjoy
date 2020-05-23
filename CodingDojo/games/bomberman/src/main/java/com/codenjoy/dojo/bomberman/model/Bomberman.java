@@ -182,13 +182,9 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     @Override
     public List<Bomb> bombs(Hero hero) {
-        List<Bomb> result = new LinkedList<>();
-        for (Bomb bomb : bombs) {
-            if (bomb.itsMine(hero)) {
-                result.add(bomb);
-            }
-        }
-        return result;
+        return bombs.stream()
+            .filter(bomb -> bomb.itsMine(hero))
+            .collect(toList());
     }
 
     @Override
