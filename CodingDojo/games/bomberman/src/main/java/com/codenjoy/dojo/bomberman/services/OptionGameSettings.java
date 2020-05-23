@@ -79,12 +79,12 @@ public class OptionGameSettings implements GameSettings {
         meatChoppersCount = settings.addEditBox("[Level] Meat choppers count").type(Integer.class).def(5);
 
         roundSettings = new RoundSettingsWrapper(settings,
-                true,  // roundsEnabled
-                300,   // timePerRound
-                1,     // timeForWinner   // TODO а это что?
-                5,     // timeBeforeStart
-                3,     // roundsPerMatch
-                40);    // minTicksForWin  // TODO а это что?
+                true,  // roundsEnabled   - включен ли режим раундов
+                300,   // timePerRound    - сколько тиков на 1 раунд
+                1,     // timeForWinner   - сколько тиков победитель будет сам оставаться после всех побежденных
+                5,     // timeBeforeStart - обратный отсчет перед началом раунда
+                3,     // roundsPerMatch  - сколько раундов (с тем же составом героев) на 1 матч
+                1);    // minTicksForWin  - сколько тиков должно пройти от начала раунда, чтобы засчитать победу
 
         // perks. Set value to 0 = perk is disabled.
         perkDropRatio = settings.addEditBox("[Perks] Perks drop ratio in %").type(Integer.class).def(20); // 20%
