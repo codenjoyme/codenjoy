@@ -1,20 +1,11 @@
 package com.codenjoy.dojo.bomberman.model;
 
-import com.codenjoy.dojo.bomberman.services.Events;
-import com.codenjoy.dojo.services.CustomMessage;
-import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.exceptions.verification.NeverWantedButInvoked;
-
-import java.util.Arrays;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
 
 public class RoundBattleSingleTest extends AbstractSingleTest {
 
@@ -143,6 +134,11 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 " Ѡ   \n" +
                 "♣♣   \n", game(2));
 
+        // и я не могу ничего поделать с ними
+        hero(0).up();
+        hero(1).right();
+        hero(2).up();
+
         tick();
 
         // после сообщения что раунд начался
@@ -150,7 +146,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         verifyEvents(listener(1), "[START_ROUND, [Round 1]]");
         verifyEvents(listener(2), "[START_ROUND, [Round 1]]");
 
-        // можно играть
+        // можно играть - игроки видны как активные
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -169,7 +165,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 " ☺   \n" +
                 "♥♥   \n", game(2));
 
-        // и когда я муваю героев, они ходят
+        // ... и когда я муваю героев, они откликаются
         hero(0).up();
         hero(1).right();
         hero(2).up();
