@@ -377,6 +377,136 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "listener(2) => [DIED]\n");
     }
 
+    // если на карте один вынес другого, а последний противник покинул игру
+    // - очки победителю положено вручить
+    @Test
+    public void shouldGetWinRoundScores_whenKillOneAndAnotherLeaveTheGame() {
+        playersPerRoom.update(DEFAULT_COUNT);
+        timeBeforeStart = 1;
+
+        dice(heroDice,
+                1, 1, // первый игрок, кто побежит
+                0, 1, // второй, жертва
+                4, 4); // третий, тот кто покинет комнату
+
+        givenBoard(DEFAULT_COUNT);
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                    "listener(1) => [START_ROUND, [Round 1]]\n" +
+                    "listener(2) => [START_ROUND, [Round 1]]\n");
+
+        asrtBrd("    ♥\n" +
+                "     \n" +
+                "     \n" +
+                "♥☺   \n" +
+                "     \n", game(0));
+
+        asrtBrd("    ♥\n" +
+                "     \n" +
+                "     \n" +
+                "☺♥   \n" +
+                "     \n", game(1));
+
+        asrtBrd("    ☺\n" +
+                "     \n" +
+                "     \n" +
+                "♥♥   \n" +
+                "     \n", game(2));
+
+        // когда я выношу одного игрока
+        hero(0).act();
+        tick();
+
+        hero(0).right();
+        tick();
+
+        hero(0).up();
+        tick();
+
+        tick();
+
+        asrtBrd("    ♥\n" +
+                "     \n" +
+                "  ☺  \n" +
+                "♥1   \n" +
+                "     \n", game(0));
+
+        tick();
+
+        asrtBrd("    ♥\n" +
+                "     \n" +
+                " ҉☺  \n" +
+                "♣҉҉  \n" +
+                " ҉   \n", game(0));
+
+        asrtBrd("    ♥\n" +
+                "     \n" +
+                " ҉♥  \n" +
+                "Ѡ҉҉  \n" +
+                " ҉   \n", game(1));
+
+        asrtBrd("    ☺\n" +
+                "     \n" +
+                " ҉♥  \n" +
+                "♣҉҉  \n" +
+                " ҉   \n", game(2));
+
+        verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO]\n" +
+                "listener(1) => [DIED]\n" +
+                "listener(2) => []\n");
+
+        // а теперь самое интересное - выходим из комнаты оставшимся игроком
+        board.remove(player(2));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                " ҉☺  \n" +
+                "♣҉҉  \n" +
+                " ҉   \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                " ҉♥  \n" +
+                "Ѡ҉҉  \n" +
+                " ҉   \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                " ҉♥  \n" +
+                "♣҉҉  \n" +
+                " ҉   \n", game(2));
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "  ☺  \n" +
+                "♣    \n" +
+                "     \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "  ♥  \n" +
+                "Ѡ    \n" +
+                "     \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "  ♥  \n" +
+                "♣    \n" +
+                "     \n", game(2));
+
+        verifyAllEvents(
+                "listener(0) => [WIN_ROUND]\n" + // заслуженная победа
+                "listener(1) => []\n" +
+                "listener(2) => [DIED]\n"); // за то что он трус )
+
+    }
+
     // если на поле трое, и один игрок имеет преимущество по очкам за вынос другого игрока
     // то по истечении таймаута раунда он получит очки за победу в раунде
     @Test
