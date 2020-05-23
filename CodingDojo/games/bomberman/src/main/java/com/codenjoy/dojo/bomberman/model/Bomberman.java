@@ -291,7 +291,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     @Override
     public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
         for (Hero hero : getBombermans()) {
-            if (hero.itsMe(pt(x, y)) && hero.isActive()) { // TODO test me !isActive
+            if (hero.itsMe(pt(x, y)) && hero.isActiveAndAlive()) {
                 return true;
             }
         }

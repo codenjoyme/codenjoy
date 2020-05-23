@@ -162,23 +162,35 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (!isActive()) {
-            if (this == player.getHero()) {
-                return DEAD_BOMBERMAN;
-            } else {
-                return OTHER_DEAD_BOMBERMAN;
+        if (isActiveAndAlive()) {
+
+            Bomb bomb = null;
+            Hero hero = null;
+            if (alsoAtPoint[1] != null) {
+                if (alsoAtPoint[1] instanceof Bomb) {
+                    bomb = (Bomb) alsoAtPoint[1];
+                } else if (alsoAtPoint[1] instanceof Hero) {
+                    hero = (Hero) alsoAtPoint[1];
+                }
             }
-        }
 
-        Bomb bomb = null;
-
-        if (alsoAtPoint[1] != null) {
-            if (alsoAtPoint[1] instanceof Bomb) {
-                bomb = (Bomb)alsoAtPoint[1];
+            // есть другой герой в этой же клетке
+            if (hero != null) {
+                // player наблюдатель содержится в той же клетке что и другой герой
+                if (player.getHero().itsMe(this)) {
+                    // и они не равны
+                    if (this != player.getHero()) {
+                        // и тот герой неактивен или его уже вынесли
+                        if (!hero.isActiveAndAlive()) {
+                            return DEAD_BOMBERMAN;
+                        }
+                    }
+                // другой герой наблюдает за клеткой в которой один жив, другой мертв
+                } else {
+                    return OTHER_BOMBERMAN;
+                }
             }
-        }
 
-        if (isAlive()) {
             if (this == player.getHero()) {
                 if (bomb != null) {
                     return BOMB_BOMBERMAN;
