@@ -52,7 +52,7 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     public Bomberman(GameSettings settings) {
         super(RoundFactory.get(settings.getRoundSettings()),
-                Events.START_ROUND, Events.WIN_ROUND, Events.KILL_BOMBERMAN);
+                Events.START_ROUND, Events.WIN_ROUND, Events.DIED);
 
         this.settings = settings;
 
@@ -238,7 +238,7 @@ public class Bomberman extends RoundField<Player> implements Field {
 
                     for (Player bombOwner : players) {
                         if (dead != bombOwner && blast.itsMine(bombOwner.getHero())) {
-                            bombOwner.event(Events.KILL_OTHER_BOMBERMAN);
+                            bombOwner.event(Events.KILL_OTHER_HERO);
                         }
                     }
                 }

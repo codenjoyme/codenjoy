@@ -25,8 +25,6 @@ package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 public class Scores implements PlayerScores {
 
@@ -50,10 +48,10 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object event) {
-        if (event.equals(Events.KILL_BOMBERMAN)) {
-            score -= settings.killBomermanPenalty().getValue();
-        } else if (event.equals(Events.KILL_OTHER_BOMBERMAN)) {
-            score += settings.killOtherBombermanScore().getValue();
+        if (event.equals(Events.DIED)) {
+            score -= settings.diePenalty().getValue();
+        } else if (event.equals(Events.KILL_OTHER_HERO)) {
+            score += settings.killOtherHeroScore().getValue();
         } else if (event.equals(Events.KILL_MEAT_CHOPPER)) {
             score += settings.killMeatChopperScore().getValue();
         } else if (event.equals(Events.KILL_DESTROY_WALL)) {

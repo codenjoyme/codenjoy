@@ -47,8 +47,8 @@ public class OptionGameSettings implements GameSettings {
 
     private final Parameter<Integer> killWallScore;
     private final Parameter<Integer> killMeatChopperScore;
-    private final Parameter<Integer> killOtherBombermanScore;
-    private final Parameter<Integer> killBomermanPenalty;
+    private final Parameter<Integer> killOtherHeroScore;
+    private final Parameter<Integer> diePenalty;
     private final Parameter<Integer> winRoundScore;
 
     private final Parameter<Integer> perkDropRatio;
@@ -68,8 +68,8 @@ public class OptionGameSettings implements GameSettings {
 
         killWallScore = settings.addEditBox("[Score] Kill wall score").type(Integer.class).def(10);
         killMeatChopperScore = settings.addEditBox("[Score] Kill meat chopper score").type(Integer.class).def(100);
-        killOtherBombermanScore = settings.addEditBox("[Score] Kill other bomberman score").type(Integer.class).def(200);
-        killBomermanPenalty = settings.addEditBox("[Score] Kill your bomberman penalty").type(Integer.class).def(50);
+        killOtherHeroScore = settings.addEditBox("[Score] Kill other hero score").type(Integer.class).def(200);
+        diePenalty = settings.addEditBox("[Score] Your hero's death penalty").type(Integer.class).def(50);
         winRoundScore = settings.addEditBox("[Score][Rounds] Win round score").type(Integer.class).def(1000);
 
         bombsCount = settings.addEditBox("[Level] Bombs count").type(Integer.class).def(1);
@@ -170,13 +170,13 @@ public class OptionGameSettings implements GameSettings {
     }
 
     @Override
-    public Parameter<Integer> killBomermanPenalty() {
-        return killBomermanPenalty;
+    public Parameter<Integer> diePenalty() {
+        return diePenalty;
     }
 
     @Override
-    public Parameter<Integer> killOtherBombermanScore() {
-        return killOtherBombermanScore;
+    public Parameter<Integer> killOtherHeroScore() {
+        return killOtherHeroScore;
     }
 
     @Override

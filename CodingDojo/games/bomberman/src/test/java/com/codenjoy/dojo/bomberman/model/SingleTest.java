@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.bomberman.model.BombermanTest.*;
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -102,8 +101,8 @@ public class SingleTest extends AbstractSingleTest {
                 "҉    \n" +
                 "҉♣   \n", game(0));
 
-        verify(listener(0), only()).event(Events.KILL_OTHER_BOMBERMAN);
-        verify(listener(1), only()).event(Events.KILL_BOMBERMAN);
+        verify(listener(0), only()).event(Events.KILL_OTHER_HERO);
+        verify(listener(1), only()).event(Events.DIED);
     }
 
     @Test
@@ -167,7 +166,7 @@ public class SingleTest extends AbstractSingleTest {
                 "♥ Ѡ  \n", game(1));
 
         verifyNoMoreInteractions(listener(0));
-        verify(listener(1), only()).event(Events.KILL_BOMBERMAN);
+        verify(listener(1), only()).event(Events.DIED);
     }
 
     // если митчопер убил другого бомбермена, как это на моей доске отобразится? Хочу видеть трупик
@@ -198,7 +197,7 @@ public class SingleTest extends AbstractSingleTest {
                 "♥Ѡ   \n", game(1));
 
         verifyNoMoreInteractions(listener(0));
-        verify(listener(1), only()).event(Events.KILL_BOMBERMAN);
+        verify(listener(1), only()).event(Events.DIED);
     }
 
     // А что если бомбермен идет на митчопера а тот идет на встречу к нему - бомбермен проскочит или умрет? должен умереть!
@@ -230,7 +229,7 @@ public class SingleTest extends AbstractSingleTest {
                 "♥&Ѡ  \n", game(1));
 
         verifyNoMoreInteractions(listener(0));
-        verify(listener(1), only()).event(Events.KILL_BOMBERMAN);
+        verify(listener(1), only()).event(Events.DIED);
     }
 
     //  бомбермены не могут ходить по бомбам ни по своим ни по чужим

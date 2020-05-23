@@ -42,9 +42,9 @@ public interface GameSettings {
 
     RoundSettingsWrapper getRoundSettings();
 
-    Parameter<Integer> killBomermanPenalty();
+    Parameter<Integer> diePenalty();
 
-    Parameter<Integer> killOtherBombermanScore();
+    Parameter<Integer> killOtherHeroScore();
 
     Parameter<Integer> killMeatChopperScore();
 

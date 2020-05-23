@@ -285,7 +285,86 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "  ☺  \n" +
                 "     \n" +
                 "♥    \n", game(2));
+    }
 
+    // если один игрок вынесет обоих, то должен получить за это очки
+    @Test
+    public void shouldCollectScores_whenKillAllEnemies() {
+        playersPerRoom.update(3);
+        timeBeforeStart = 1;
+
+        dice(heroDice,
+                1, 1, // первый игрок
+                0, 1, // второй
+                1, 0); // третий
+
+        givenBoard(3);
+
+        tick();
+
+        verifyEvents(listener(0), "[START_ROUND, [Round 1]]");
+        verifyEvents(listener(1), "[START_ROUND, [Round 1]]");
+        verifyEvents(listener(2), "[START_ROUND, [Round 1]]");
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "♥☺   \n" +
+                " ♥   \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "☺♥   \n" +
+                " ♥   \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "♥♥   \n" +
+                " ☺   \n", game(2));
+
+        // когда я выношу одного игрока
+        hero(0).act();
+        tick();
+
+        hero(0).right();
+        tick();
+
+        hero(0).up();
+        tick();
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "  ☺  \n" +
+                "♥1   \n" +
+                " ♥   \n", game(0));
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                " ҉☺  \n" +
+                "♣҉҉  \n" +
+                " ♣   \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                " ҉♥  \n" +
+                "Ѡ҉҉  \n" +
+                " ♣   \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                " ҉♥  \n" +
+                "♣҉҉  \n" +
+                " Ѡ   \n", game(2));
+
+        verifyEvents(listener(0), "[KILL_OTHER_HERO, KILL_OTHER_HERO, WIN_ROUND]");
+        verifyEvents(listener(1), "[DIED]");
+        verifyEvents(listener(2), "[DIED]");
     }
 
 }

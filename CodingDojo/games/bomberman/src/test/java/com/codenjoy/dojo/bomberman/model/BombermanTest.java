@@ -86,7 +86,7 @@ public class BombermanTest {
         when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
         when(settings.getLevel()).thenReturn(level);
         when(settings.getRoundSettings()).thenReturn(getRoundSettings());
-        when(settings.killOtherBombermanScore()).thenReturn(v(200));
+        when(settings.killOtherHeroScore()).thenReturn(v(200));
         when(settings.killMeatChopperScore()).thenReturn(v(100));
         when(settings.killWallScore()).thenReturn(v(10));
 
@@ -1547,7 +1547,7 @@ public class BombermanTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         Assert.assertTrue(game.isGameOver());
-        verify(listener).event(Events.KILL_BOMBERMAN);
+        verify(listener).event(Events.DIED);
     }
 
     private void givenBoardWithMeatChopper(int size) {
@@ -1651,7 +1651,7 @@ public class BombermanTest {
     public void shouldFireEventWhenKillBomberman() {
         shouldKillBoomberman_whenBombExploded();
 
-        verify(listener).event(Events.KILL_BOMBERMAN);
+        verify(listener).event(Events.DIED);
     }
 
     @Test

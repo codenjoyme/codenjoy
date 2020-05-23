@@ -46,7 +46,6 @@ public abstract class AbstractSingleTest {
         when(level.bombsCount()).thenReturn(bombsCount);
         when(level.bombsPower()).thenReturn(1);
 
-        dice(heroDice,  0, 0);
         when(settings.getBomberman(any(Level.class))).thenAnswer(inv -> {
             Hero hero = new Hero(level, heroDice);
             heroes.add(hero);
@@ -58,7 +57,7 @@ public abstract class AbstractSingleTest {
         when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
         when(settings.getRoundSettings()).thenReturn(getRoundSettings());
         when(settings.getPlayersPerRoom()).thenReturn(playersPerRoom);
-        when(settings.killOtherBombermanScore()).thenReturn(v(200));
+        when(settings.killOtherHeroScore()).thenReturn(v(200));
         when(settings.killMeatChopperScore()).thenReturn(v(100));
         when(settings.killWallScore()).thenReturn(v(10));
 
