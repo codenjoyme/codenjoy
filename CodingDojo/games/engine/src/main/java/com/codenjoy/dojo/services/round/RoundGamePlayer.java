@@ -64,6 +64,10 @@ public abstract class RoundGamePlayer<H extends RoundPlayerHero, F extends GameF
 
     @Override
     public boolean wantToStay() {
+        return roundsEnabled();
+    }
+
+    public Boolean roundsEnabled() {
         return roundsEnabled.getValue();
     }
 

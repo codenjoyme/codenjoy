@@ -47,7 +47,7 @@ public class Player extends RoundGamePlayer<Hero, Field> {
         hero.setPlayer(this);
         hero.init(board);
 
-        if (!settings.getRoundSettings().roundsEnabled().getValue()) {
+        if (!roundsEnabled()) {
             hero.setActive(true);
         }
     }
