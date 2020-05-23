@@ -70,15 +70,13 @@ public class SingleTest extends AbstractSingleTest {
         assertSame(hero(0), game(0).getJoystick());
         assertSame(hero(1), game(1).getJoystick());
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
                 "☺♥   \n", game(0));
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
@@ -98,8 +96,7 @@ public class SingleTest extends AbstractSingleTest {
         tick();
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "☺    \n" +
                 "҉    \n" +
@@ -116,15 +113,13 @@ public class SingleTest extends AbstractSingleTest {
         hero(0).act();
         hero(0).up();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
                 "☻♥   \n", game(0));
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
@@ -138,26 +133,20 @@ public class SingleTest extends AbstractSingleTest {
         hero(0).right();
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
                 "☺♥   \n", game(0));
     }
-
-    private void assertBoard(String board, Game game) {
-        assertEquals(board, game.getBoardAsString());
-    }
-
+    
     // бомбермен может идти на митчопера, при этом он умирает
     @Test
     public void shouldKllOtherBombermanWhenBombermanGoToMeatChopper() {
         walls = new MeatChopperAt(2, 0, new WallsImpl());
         givenBoard();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
@@ -165,15 +154,13 @@ public class SingleTest extends AbstractSingleTest {
 
         hero(1).right();
         tick();
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
                 "☺ ♣  \n", game(0));
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
@@ -189,8 +176,7 @@ public class SingleTest extends AbstractSingleTest {
         meatChopperAt(2, 0);
         givenBoard();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
@@ -199,15 +185,13 @@ public class SingleTest extends AbstractSingleTest {
         dice(meatDice, Direction.LEFT.value());
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
                 "☺♣   \n", game(0));
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
@@ -223,8 +207,7 @@ public class SingleTest extends AbstractSingleTest {
         meatChopperAt(2, 0);
         givenBoard();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
@@ -234,15 +217,13 @@ public class SingleTest extends AbstractSingleTest {
         hero(1).right();
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
                 "☺&♣  \n", game(0));
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
@@ -250,16 +231,6 @@ public class SingleTest extends AbstractSingleTest {
 
         verifyNoMoreInteractions(listener(0));
         verify(listener(1), only()).event(Events.KILL_BOMBERMAN);
-    }
-
-    private void meatChopperAt(int x, int y) {
-        meatDice = mock(Dice.class);
-        dice(meatDice, x, y);
-        Field temp = mock(Field.class);
-        when(temp.size()).thenReturn(SIZE);
-        MeatChoppers meatchoppers = new MeatChoppers(new WallsImpl(), temp, v(1), meatDice);
-        meatchoppers.regenerate();
-        walls = meatchoppers;
     }
 
     //  бомбермены не могут ходить по бомбам ни по своим ни по чужим
@@ -274,8 +245,7 @@ public class SingleTest extends AbstractSingleTest {
         hero(0).right();
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
@@ -286,12 +256,15 @@ public class SingleTest extends AbstractSingleTest {
         hero(1).left();
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
                 "☺1♥  \n", game(0));
+    }
+
+    private void givenBoard() {
+        super.givenBoard(2);
     }
 
     @Test
@@ -299,15 +272,13 @@ public class SingleTest extends AbstractSingleTest {
         shouldBombermanCantGoToBombFromAnotherBomberman();
 
         tick();
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 " ҉   \n" +
                 "Ѡ҉♣  \n", game(0));
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 " ҉   \n" +
@@ -322,15 +293,13 @@ public class SingleTest extends AbstractSingleTest {
         game(0).newGame();
         game(1).newGame();
         tick();
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
                 "☺♥   \n", game(0));
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
@@ -352,8 +321,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "☺♥   \n" +
@@ -367,8 +335,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "☺♥   \n" +
                 "     \n" +
@@ -390,8 +357,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "☺♥   \n" +
@@ -405,8 +371,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "☺♥   \n" +
                 "44   \n" +
@@ -420,8 +385,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "☺♥   \n" +
                 "     \n" +
                 "33   \n" +
@@ -440,8 +404,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "☺    \n" +
@@ -452,8 +415,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "☺    \n" +
                 "4    \n" +
@@ -464,8 +426,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "☺    \n" +
                 "     \n" +
                 "3    \n" +
@@ -490,8 +451,7 @@ public class SingleTest extends AbstractSingleTest {
         tick();
         tick();
 
-        assertBoard(
-                " ♥   \n" +
+        asrtBrd(" ♥   \n" +
                 "     \n" +
                 "     \n" +
                 " ҉   \n" +
@@ -519,8 +479,7 @@ public class SingleTest extends AbstractSingleTest {
         tick();
         tick();
 
-        assertBoard(
-                " ♥   \n" +
+        asrtBrd(" ♥   \n" +
                 "     \n" +
                 "     \n" +
                 " ҉   \n" +
@@ -535,8 +494,7 @@ public class SingleTest extends AbstractSingleTest {
         walls = new DestroyWallAt(0, 0, new MeatChopperAt(1, 0, new MeatChopperAt(2, 0, new WallsImpl())));
         givenBoard();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 " ☺♥  \n" +
@@ -554,8 +512,7 @@ public class SingleTest extends AbstractSingleTest {
         tick();
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "☺҉҉♥ \n" +
                 "҉҉҉҉ \n" +
