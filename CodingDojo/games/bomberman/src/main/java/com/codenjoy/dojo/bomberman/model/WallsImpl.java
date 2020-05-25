@@ -29,6 +29,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class WallsImpl implements Walls {
     private List<Wall> walls;
 
@@ -57,23 +59,15 @@ public class WallsImpl implements Walls {
 
     @Override
     public boolean itsMe(Point pt) {
-        for (Wall wall : walls) {
-            if (wall.itsMe(pt)) {
-                return true;
-            }
-        }
-        return false;
+        return walls.stream()
+                .anyMatch(wall -> wall.itsMe(pt));
     }
 
     @Override
     public <T extends Wall> List<T> subList(Class<T> filter) {
-        List<Wall> result = new LinkedList<Wall>();
-        for (Wall input: walls) {
-            if (filter.isAssignableFrom(input.getClass())) {
-                result.add(input);
-            }
-        }
-        return (List<T>) result;
+        return (List)walls.stream()
+                .filter(wall -> filter.isAssignableFrom(wall.getClass()))
+                .collect(toList());
     }
 
     @Override
