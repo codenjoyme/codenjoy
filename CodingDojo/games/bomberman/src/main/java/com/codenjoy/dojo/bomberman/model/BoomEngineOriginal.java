@@ -84,7 +84,7 @@ public class BoomEngineOriginal implements BoomEngine {
     private boolean add(List<? extends Point> barriers, int boardSize, List<Blast> blasts, int x, int y) {
         Point pt = pt(x, y);
 
-        if (!isOnBoard(pt, boardSize)) {
+        if (pt.isOutOf(boardSize)) {
             return false;
         }
 
@@ -99,7 +99,4 @@ public class BoomEngineOriginal implements BoomEngine {
         return true;
     }
 
-    private boolean isOnBoard(Point pt, int boardSize) {
-        return pt.getX() >= 0 && pt.getY() >= 0 && pt.getX() < boardSize && pt.getY() < boardSize;
-    }
 }
