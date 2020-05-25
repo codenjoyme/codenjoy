@@ -1605,8 +1605,8 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
 
         verifyAllEvents(
                 "listener(0) => [START_ROUND, [Round 1]]\n" +
-                        "listener(1) => [START_ROUND, [Round 1]]\n" +
-                        "listener(2) => [START_ROUND, [Round 1]]\n");
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n");
 
 
         // выношу одного игрока мощным снарядом
@@ -1649,8 +1649,8 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
 
         verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO]\n" +
-                        "listener(1) => [DIED]\n" +
-                        "listener(2) => []\n");
+                "listener(1) => [DIED]\n" +
+                "listener(2) => []\n");
 
         hero(0).left();
         tick();
@@ -1705,8 +1705,8 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
 
         verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO, WIN_ROUND]\n" +
-                        "listener(1) => []\n" +
-                        "listener(2) => [DIED]\n");
+                "listener(1) => []\n" +
+                "listener(2) => [DIED]\n");
 
         // ну и напоследок вернемся на место
         hero(0).left();
@@ -1764,5 +1764,48 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "listener(0) => []\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n");
+    }
+
+    // в этом тесте я проверяю, что после победы героя на уровне
+    // в случае, если timeForWinner > 1 то герой повисит некоторое время на поле сам
+    // и в конечном счете начнется новый раунд
+    @Test
+    public void shouldWinScore_whenTimeoutBy_timeForWinner() {
+        timePerRound = 60;
+        timeForWinner = 15; // после победы я хочу еще чуть повисеть на уровне
+
+        shouldPlaceOfDeath_isNotABarrierForBlast();
+
+        // пройдет еще некоторое число тиков до общего числа timeForWinner
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n");
+
+        // и начнется новый раунд
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 2]]\n" +
+                "listener(1) => [START_ROUND, [Round 2]]\n" +
+                "listener(2) => [START_ROUND, [Round 2]]\n");
+
+        // а дальше все как обычно
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                        "listener(1) => []\n" +
+                        "listener(2) => []\n");
     }
 }
