@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyBoolean;
@@ -61,7 +62,7 @@ public class WallsTest {
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 int x = (Integer)invocation.getArguments()[0];
                 int y = (Integer)invocation.getArguments()[1];
-                return walls.itsMe(x, y);
+                return walls.itsMe(pt(x, y));
             }
         });
     }

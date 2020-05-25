@@ -23,20 +23,21 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
 import java.util.List;
 
 public interface Walls extends Iterable<Wall>, Tickable {
-    void add(int x, int y);
+    void add(Point pt);
 
-    boolean itsMe(int x, int y);
+    boolean itsMe(Point pt);
 
     <T extends Wall> List<T> subList(Class<T> filter);
 
     void add(Wall wall);
 
-    Wall destroy(int x, int y);
+    Wall destroy(Point pt);
 
-    Wall get(int x, int y);
+    Wall get(Point pt);
 }

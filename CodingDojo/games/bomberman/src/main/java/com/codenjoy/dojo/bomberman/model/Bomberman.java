@@ -130,7 +130,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     private void removeBlasts() {
         blasts.clear();
         for (Point pt : destroyedWalls) {
-            walls.destroy(pt.getX(), pt.getY());
+            walls.destroy(pt);
         }
         destroyedWalls.clear();
     }
@@ -213,13 +213,13 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     private void killAllNear(List<Blast> blasts) {
         for (Blast blast : blasts) {
-            if (walls.itsMe(blast.getX(), blast.getY())) {
+            if (walls.itsMe(blast)) {
                 if (dropPerk(blast)) {
-                    walls.destroy(blast.getX(), blast.getY());
+                    walls.destroy(blast);
                 } else {
                     destroyedWalls.add(blast);
                 }
-                Wall wall = walls.get(blast.getX(), blast.getY());
+                Wall wall = walls.get(blast);
                 wallDestroyed(wall, blast);
             }
         }

@@ -61,31 +61,27 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         int count = 0;
         do {
             move(dice.next(field.size()), dice.next(field.size()));
-            while (isBusy(x, y) && !isOutOfBoard(x, y)) {
+            while (isBusy(this) && !isOutOf(field.size())) {
                 x++;
-                if (isBusy(x, y)) {
+                if (isBusy(this)) {
                     y++;
                 }
             }
-        } while ((isBusy(x, y) || isOutOfBoard(x, y)) && count++ < 1000);
+        } while ((isBusy(this) || isOutOf(field.size())) && count++ < 1000);
 
         if (count >= 1000) {
             throw new RuntimeException("Dead loop at MyBomberman.init(Board)!");
         }
     }
 
-    private boolean isBusy(int x, int y) {
+    private boolean isBusy(Point pt) {
         for (Hero hero : field.heroes()) {
             if (hero != null && hero.itsMe(this) && hero != this) {
                 return true;
             }
         }
 
-        return field.walls().itsMe(x, y);
-    }
-
-    private boolean isOutOfBoard(int x, int y) {
-        return x >= field.size() || y >= field.size() || x < 0 || y < 0;
+        return field.walls().itsMe(pt);
     }
 
     @Override

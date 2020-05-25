@@ -23,6 +23,8 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Point;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,8 +44,8 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public void add(int x, int y) {
-        add(new Wall(x, y));
+    public void add(Point pt) {
+        add(new Wall(pt));
     }
 
     @Override
@@ -54,9 +56,9 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public boolean itsMe(int x, int y) {
+    public boolean itsMe(Point pt) {
         for (Wall wall : walls) {
-            if (wall.itsMe(x, y)) {
+            if (wall.itsMe(pt)) {
                 return true;
             }
         }
@@ -80,8 +82,8 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public Wall destroy(int x, int y) {
-        int index = walls.indexOf(new Wall(x, y));
+    public Wall destroy(Point pt) {
+        int index = walls.indexOf(new Wall(pt));
         if (index == -1) {
             return new Wall(-1, -1);
         }
@@ -89,8 +91,8 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public Wall get(int x, int y) {
-        int index = walls.indexOf(new Wall(x, y));
+    public Wall get(Point pt) {
+        int index = walls.indexOf(new Wall(pt));
         if (index == -1) {
             return new Wall(-1, -1);
         }

@@ -2270,8 +2270,8 @@ public class BombermanTest {
         }
 
         @Override
-        public Wall destroy(int x, int y) {   // неразрушаемая стенка
-            return walls.get(x, y);
+        public Wall destroy(Point pt) {   // неразрушаемая стенка
+            return walls.get(pt);
         }
 
     }
@@ -2284,8 +2284,8 @@ public class BombermanTest {
         }
 
         @Override
-        public Wall destroy(int x, int y) {   // неубиваемый монстрик
-            return walls.get(x, y);
+        public Wall destroy(Point pt) {   // неубиваемый монстрик
+            return walls.get(pt);
         }
 
     }

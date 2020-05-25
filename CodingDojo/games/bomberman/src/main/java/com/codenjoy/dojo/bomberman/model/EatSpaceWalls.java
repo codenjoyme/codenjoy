@@ -70,7 +70,7 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
         if (count > this.count.getValue()) { // TODO и удаление лишних
             for (int i = 0; i < (count - this.count.getValue()); i++) {
                 DestroyWall meatChopper = destroyWalls.remove(0);
-                walls.destroy(meatChopper.getX(), meatChopper.getY());
+                walls.destroy(meatChopper);
             }
             return;
         }

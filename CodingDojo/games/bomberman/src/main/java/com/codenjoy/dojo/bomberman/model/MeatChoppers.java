@@ -46,7 +46,6 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         this.count = count;
     }
 
-
     public void regenerate() {     // TODO потестить
         if (count.getValue() < 0) {
             count.update(0);
@@ -83,10 +82,9 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         for (MeatChopper meatChopper : meatChoppers) {
             Direction direction = meatChopper.getDirection();
             if (direction != null && dice.next(5) > 0) {
-                int x = direction.changeX(meatChopper.getX());
-                int y = direction.changeY(meatChopper.getY());
-                if (!walls.itsMe(x, y)) {
-                    meatChopper.move(x, y);
+                Point to = direction.change(meatChopper);
+                if (!walls.itsMe(to)) {
+                    meatChopper.move(to);
                     continue;
                 } else {
                     // do nothing
@@ -96,30 +94,22 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         }
     }
 
-    private Direction tryToMove(Point pt) {
+    private Direction tryToMove(Point from) {
         int count = 0;
-        int x = pt.getX();
-        int y = pt.getY();
-        Direction direction = null;
+        Point to;
+        Direction direction;
         do {
             int n = 4;
             int move = dice.next(n);
             direction = Direction.valueOf(move);
 
-            x = direction.changeX(pt.getX());
-            y = direction.changeY(pt.getY());
-
-        } while ((walls.itsMe(x, y) || isOutOfBorder(x, y)) && count++ < 10);
+            to = direction.change(from);
+        } while ((walls.itsMe(to) || to.isOutOf(board.size())) && count++ < 10);
 
         if (count < 10) {
-            pt.move(x, y);
+            from.move(to);
             return direction;
         }
         return null;
     }
-
-    private boolean isOutOfBorder(int x, int y) {
-        return x >= board.size() || y >= board.size() || x < 0 || y < 0;
-    }
-
 }
