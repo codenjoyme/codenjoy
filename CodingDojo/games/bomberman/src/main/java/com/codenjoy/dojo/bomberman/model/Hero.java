@@ -29,28 +29,27 @@ import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.State;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
 
-public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
     private static final boolean WITHOUT_MEAT_CHOPPER = false;
     private Level level;
     private Dice dice;
-    private boolean alive;
     private boolean bomb;
     private Direction direction;
+    private int score;
 
     private HeroPerks perks = new HeroPerks();
 
     public Hero(Level level, Dice dice) {
-        super(-1, -1);
         this.level = level;
         this.dice = dice;
-        alive = true;
+        score = 0;
         direction = null;
     }
 
@@ -73,13 +72,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     private boolean isBusy(int x, int y) {
-        for (Hero bomberman : field.getBombermans()) {
-            if (bomberman != null && bomberman.itsMe(this) && bomberman != this) {
+        for (Hero hero : field.heroes()) {
+            if (hero != null && hero.itsMe(this) && hero != this) {
                 return true;
             }
         }
 
-        return field.getWalls().itsMe(x, y);
+        return field.walls().itsMe(x, y);
     }
 
     private boolean isOutOfBoard(int x, int y) {
@@ -88,35 +87,35 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void right() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.RIGHT;
     }
 
     @Override
     public void down() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.UP;
     }
 
     @Override
     public void left() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         direction = Direction.LEFT;
     }
 
     @Override
     public void act(int... p) {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         if (direction != null) {
             bomb = true;
@@ -126,7 +125,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void apply() {
-        if (!alive) return;
+        if (!isActiveAndAlive()) return;
 
         if (direction == null) {
             return;
@@ -153,7 +152,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private void setBomb(int bombX, int bombY) {
         Perk bombCount = perks.getPerk(BOMB_COUNT_INCREASE);
 
-        if (field.getBombs(this).size() < level.bombsCount() + (bombCount != null ? bombCount.getValue() : 0)) {
+        if (field.bombs(this).size() < level.bombsCount() + (bombCount != null ? bombCount.getValue() : 0)) {
             Perk bombBlastInc = perks.getPerk(BOMB_BLAST_RADIUS_INCREASE);
             int boost = bombBlastInc != null ? bombBlastInc.getValue() : 0;
 
@@ -161,25 +160,36 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    public boolean isAlive() {
-        return alive;
-    }
-
-    public void kill() {
-        alive = false;
-    }
-
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         Bomb bomb = null;
-
+        Hero hero = null;
         if (alsoAtPoint[1] != null) {
             if (alsoAtPoint[1] instanceof Bomb) {
-                bomb = (Bomb)alsoAtPoint[1];
+                bomb = (Bomb) alsoAtPoint[1];
+            } else if (alsoAtPoint[1] instanceof Hero) {
+                hero = (Hero) alsoAtPoint[1];
             }
         }
 
-        if (isAlive()) {
+        if (isActiveAndAlive()) {
+            // есть другой герой в этой же клетке
+            if (hero != null) {
+                // player наблюдатель содержится в той же клетке что и другой герой
+                if (player.getHero().itsMe(this)) {
+                    // и они не равны
+                    if (this != player.getHero()) {
+                        // и тот герой неактивен или его уже вынесли
+                        if (!hero.isActiveAndAlive()) {
+                            return DEAD_BOMBERMAN;
+                        }
+                    }
+                // другой герой наблюдает за клеткой в которой один жив, другой мертв
+                } else {
+                    return OTHER_BOMBERMAN;
+                }
+            }
+
             if (this == player.getHero()) {
                 if (bomb != null) {
                     return BOMB_BOMBERMAN;
@@ -221,6 +231,14 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public Perk getPerk(Elements element) {
         return perks.getPerk(element);
+    }
+
+    public int scores() {
+        return score;
+    }
+
+    public void addScore(int score) {
+        this.score += score;
     }
 }
 

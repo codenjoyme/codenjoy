@@ -27,6 +27,7 @@ import com.codenjoy.dojo.bomberman.model.*;
 import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
@@ -37,16 +38,25 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Boolean> isMultiple;
     private final Parameter<Integer> playersPerRoom;
 
+    private final RoundSettingsWrapper roundSettings;
+
     private final Parameter<Integer> bombPower;
     private final Parameter<Integer> bombsCount;
     private final Parameter<Integer> destroyWallCount;
     private final Parameter<Integer> boardSize;
     private final Parameter<Integer> meatChoppersCount;
 
+    private final Parameter<Integer> killWallScore;
+    private final Parameter<Integer> killMeatChopperScore;
+    private final Parameter<Integer> killOtherHeroScore;
+    private final Parameter<Integer> diePenalty;
+    private final Parameter<Integer> winRoundScore;
+
     private final Parameter<Integer> perkDropRatio;
     private Parameter<Integer> perkPickTimeout;
     private final Parameter<Integer> perkBombBlastRadiusInc;
     private final Parameter<Integer> timeoutBombBlastRadiusInc;
+
     private final Parameter<Integer> perkBombCountInc;
     private final Parameter<Integer> timeoutBombCountInc;
     private final Parameter<Integer> timeoutBombImmune;
@@ -55,29 +65,41 @@ public class OptionGameSettings implements GameSettings {
     public OptionGameSettings(Settings settings, Dice dice) {
         this.dice = dice;
 
-        isMultiple = settings.addCheckBox("Is multiple or disposable").type(Boolean.class).def(false);
-        playersPerRoom = settings.addEditBox("Players per room for disposable").type(Integer.class).def(15);
+        isMultiple = settings.addCheckBox("[Game] Is multiple or disposable").type(Boolean.class).def(false);
+        playersPerRoom = settings.addEditBox("[Game] Players per room for disposable").type(Integer.class).def(5);
 
-        bombsCount = settings.addEditBox("Bombs count").type(Integer.class).def(1);
-        bombPower = settings.addEditBox("Bomb power").type(Integer.class).def(DefaultGameSettings.BOMB_POWER);
-        boardSize = settings.addEditBox("Board size").type(Integer.class).def(DefaultGameSettings.BOARD_SIZE);
-        destroyWallCount = settings.addEditBox("Destroy wall count").type(Integer.class).def(boardSize.getValue() * boardSize.getValue() / 10);
-        meatChoppersCount = settings.addEditBox("Meat choppers count").type(Integer.class).def(DefaultGameSettings.MEAT_CHOPPERS_COUNT);
+        killWallScore = settings.addEditBox("[Score] Kill wall score").type(Integer.class).def(10);
+        killMeatChopperScore = settings.addEditBox("[Score] Kill meat chopper score").type(Integer.class).def(100);
+        killOtherHeroScore = settings.addEditBox("[Score] Kill other hero score").type(Integer.class).def(200);
+        diePenalty = settings.addEditBox("[Score] Your hero's death penalty").type(Integer.class).def(50);
+        winRoundScore = settings.addEditBox("[Score][Rounds] Win round score").type(Integer.class).def(1000);
+
+        bombsCount = settings.addEditBox("[Level] Bombs count").type(Integer.class).def(1);
+        bombPower = settings.addEditBox("[Level] Bomb power").type(Integer.class).def(3);
+        boardSize = settings.addEditBox("[Level] Board size").type(Integer.class).def(23);
+        destroyWallCount = settings.addEditBox("[Level] Destroy wall count").type(Integer.class).def(boardSize.getValue() * boardSize.getValue() / 10);
+        meatChoppersCount = settings.addEditBox("[Level] Meat choppers count").type(Integer.class).def(5);
+
+        roundSettings = new RoundSettingsWrapper(settings,
+                true,  // roundsEnabled   - включен ли режим раундов
+                300,   // timePerRound    - сколько тиков на 1 раунд
+                1,     // timeForWinner   - сколько тиков победитель будет сам оставаться после всех побежденных
+                5,     // timeBeforeStart - обратный отсчет перед началом раунда
+                3,     // roundsPerMatch  - сколько раундов (с тем же составом героев) на 1 матч
+                1);    // minTicksForWin  - сколько тиков должно пройти от начала раунда, чтобы засчитать победу
 
         // perks. Set value to 0 = perk is disabled.
-        perkDropRatio = settings.addEditBox("Perks drop ratio in %").type(Integer.class).def(10);
-        // perk disappears from board after timeout if wasn't picked yet
-        perkPickTimeout = settings.addEditBox("Perks pick timeout").type(Integer.class).def(5);
+        perkDropRatio = settings.addEditBox("[Perks] Perks drop ratio in %").type(Integer.class).def(20); // 20%
         //Bomb blast radius increase (BBRI)
-        perkBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase").type(Integer.class).def(2);
-        timeoutBombBlastRadiusInc = settings.addEditBox("Bomb blast radius increase effect timeout").type(Integer.class).def(10);
+        perkBombBlastRadiusInc = settings.addEditBox("[Perks] Bomb blast radius increase").type(Integer.class).def(2);
+        timeoutBombBlastRadiusInc = settings.addEditBox("[Perks] Bomb blast radius increase effect timeout").type(Integer.class).def(10);
         // Bomb count increase (BCI)
-        perkBombCountInc = settings.addEditBox("Bomb count increase").type(Integer.class).def(3);
-        timeoutBombCountInc = settings.addEditBox("Bomb count effect timeout").type(Integer.class).def(10);
+        perkBombCountInc = settings.addEditBox("[Perks] Bomb count increase").type(Integer.class).def(3);
+        timeoutBombCountInc = settings.addEditBox("[Perks] Bomb count effect timeout").type(Integer.class).def(10);
         // Bomb immune (BI)
-        timeoutBombImmune = settings.addEditBox("Bomb immune effect timeout").type(Integer.class).def(10);
+        timeoutBombImmune = settings.addEditBox("[Perks] Bomb immune effect timeout").type(Integer.class).def(10);
         // Bomb remote control (BRC)
-//        timeoutBombRemoteControl = settings.addEditBox("Bomb remote controll effect timeout").type(Integer.class).def(10);
+//        timeoutBombRemoteControl = settings.addEditBox("[Perks] Bomb remote controll effect timeout").type(Integer.class).def(10);
     }
 
     @Override
@@ -144,5 +166,46 @@ public class OptionGameSettings implements GameSettings {
     public Parameter<Integer> getPlayersPerRoom() {
         return playersPerRoom;
     }
+
+    @Override
+    public RoundSettingsWrapper getRoundSettings() {
+        return roundSettings;
+    }
+
+    @Override
+    public Parameter<Integer> diePenalty() {
+        return diePenalty;
+    }
+
+    @Override
+    public Parameter<Integer> killOtherHeroScore() {
+        return killOtherHeroScore;
+    }
+
+    @Override
+    public Parameter<Integer> killMeatChopperScore() {
+        return killMeatChopperScore;
+    }
+
+    @Override
+    public Parameter<Integer> killWallScore() {
+        return killWallScore;
+    }
+
+    @Override
+    public Parameter<Integer> winRoundScore() {
+        return winRoundScore;
+    }
+
+    @Override
+    public Parameter<Integer> getDestroyWallCount() {
+        return destroyWallCount;
+    }
+
+    @Override
+    public Parameter<Integer> getMeatChoppersCount() {
+        return meatChoppersCount;
+    }
+
 
 }

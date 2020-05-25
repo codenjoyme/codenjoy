@@ -23,13 +23,14 @@ package com.codenjoy.dojo.bomberman.services;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 /**
  * User: sanja
@@ -39,66 +40,69 @@ import static org.junit.Assert.assertEquals;
 public class ScoresTest {
     private PlayerScores scores;
 
-    private Settings settings;
-    private Integer killWall;
-    private Integer killMeatChopper;
-    private Integer killOtherBomnerman;
-    private Integer killBomnerman;
+    private OptionGameSettings settings;
 
-    public void bombermanKillWall() {
+    public void killWall() {
         scores.event(Events.KILL_DESTROY_WALL);
     }
 
-    public void bombermanKillBomberman() {
-        scores.event(Events.KILL_BOMBERMAN);
+    public void killYourself() {
+        scores.event(Events.DIED);
     }
 
-    public void bombermanKillMeatChopper() {
+    public void killMeatChopper() {
         scores.event(Events.KILL_MEAT_CHOPPER);
     }
 
-    public void bombermanKillOtherBomberman() {
-        scores.event(Events.KILL_OTHER_BOMBERMAN);
+    public void killOtherHero() {
+        scores.event(Events.KILL_OTHER_HERO);
+    }
+
+    public void winRound() {
+        scores.event(Events.WIN_ROUND);
     }
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new OptionGameSettings(new SettingsImpl(), mock(Dice.class));
         scores = new Scores(0, settings);
-        killWall = settings.getParameter("Kill wall score").type(Integer.class).getValue();
-        killMeatChopper = settings.getParameter("Kill meat chopper score").type(Integer.class).getValue();
-        killOtherBomnerman = settings.getParameter("Kill other bomberman score").type(Integer.class).getValue();
-        killBomnerman = settings.getParameter("Kill your bomberman penalty").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        bombermanKillWall();  //+10
-        bombermanKillWall();  //+10
-        bombermanKillWall();  //+10
-        bombermanKillWall();  //+10
+        killWall();  //+10
+        killWall();  //+10
+        killWall();  //+10
+        killWall();  //+10
 
-        bombermanKillBomberman();  //-50
+        killYourself();  //-50
 
-        bombermanKillMeatChopper();  //100
+        killMeatChopper();  //100
 
-        bombermanKillOtherBomberman();    //1000
+        killOtherHero(); //200
 
-        assertEquals(140 + 4*killWall - killBomnerman + killOtherBomnerman + killMeatChopper, scores.getScore());
+        winRound(); //1000
+
+        assertEquals(140
+                + 4*settings.killWallScore().getValue()
+                - settings.diePenalty().getValue()
+                + settings.killOtherHeroScore().getValue()
+                + settings.killMeatChopperScore().getValue()
+                + settings.winRoundScore().getValue(), scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        bombermanKillBomberman();    //-50
+        killYourself();    //-50
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        bombermanKillWall();    // +10
+        killWall();    // +10
 
         scores.clear();
 

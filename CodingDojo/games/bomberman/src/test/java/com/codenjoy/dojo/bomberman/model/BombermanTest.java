@@ -23,19 +23,26 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.perks.*;
+import com.codenjoy.dojo.bomberman.model.perks.BombBlastRadiusIncrease;
+import com.codenjoy.dojo.bomberman.model.perks.BombCountIncrease;
+import com.codenjoy.dojo.bomberman.model.perks.BombImmune;
+import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
+import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
@@ -64,7 +71,7 @@ public class BombermanTest {
     private final PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         meatChppperDice = mock(Dice.class);
         bombermanDice = mock(Dice.class);
 
@@ -78,6 +85,11 @@ public class BombermanTest {
 
         when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
         when(settings.getLevel()).thenReturn(level);
+        when(settings.getRoundSettings()).thenReturn(getRoundSettings());
+        when(settings.killOtherHeroScore()).thenReturn(v(200));
+        when(settings.killMeatChopperScore()).thenReturn(v(100));
+        when(settings.killWallScore()).thenReturn(v(10));
+
         initBomberman();
         givenBoard(SIZE);
         PerksSettingsWrapper.clear();
@@ -90,15 +102,23 @@ public class BombermanTest {
         this.hero = hero;
     }
 
+    public static RoundSettingsWrapper getRoundSettings() {
+        return new DefaultGameSettings(mock(Dice.class)).getRoundSettings();
+    }
+
     private void givenBoard(int size) {
         when(settings.getBoardSize()).thenReturn(v(size));
         field = new Bomberman(settings);
-        player = new Player(listener);
+        player = new Player(listener, getRoundSettings().roundsEnabled());
         game = new Single(player, printer);
         game.on(field);
         dice(bombermanDice, 0, 0);
         game.newGame();
         hero = game.getJoystick();
+    }
+
+    private SimpleParameter<Boolean> getRoundsEnabled() {
+        return new SimpleParameter<>(false);
     }
 
     @Test
@@ -399,7 +419,7 @@ public class BombermanTest {
                 "     \n" +
                 "☻    \n");
 
-        assertEquals(1, field.getBombs().size());
+        assertEquals(1, field.bombs().size());
 
         hero.right();
         field.tick();
@@ -520,7 +540,7 @@ public class BombermanTest {
     }
 
     private void assertBombermanDie() {
-        assertTrue("Expected model over", game.isGameOver());
+        assertEquals("Expected game over", true, game.isGameOver());
     }
 
     // после смерти ходить больше нельзя
@@ -1206,9 +1226,9 @@ public class BombermanTest {
         hero.right();
         field.tick();
 
-        List<Bomb> bombs1 = field.getBombs();
-        List<Bomb> bombs2 = field.getBombs();
-        List<Bomb> bombs3 = field.getBombs();
+        List<Bomb> bombs1 = field.bombs();
+        List<Bomb> bombs2 = field.bombs();
+        List<Bomb> bombs3 = field.bombs();
         assertSame(bombs1, bombs2);
         assertSame(bombs2, bombs3);
         assertSame(bombs3, bombs1);
@@ -1257,7 +1277,7 @@ public class BombermanTest {
         hero.right();
         field.tick();
 
-        List<Bomb> bombs1 = field.getBombs();
+        List<Bomb> bombs1 = field.bombs();
         assertEquals(1, bombs1.size());
 
         field.tick();
@@ -1265,7 +1285,7 @@ public class BombermanTest {
         field.tick();
         field.tick();
 
-        List<Bomb> bombs2 = field.getBombs();
+        List<Bomb> bombs2 = field.bombs();
         assertEquals(0, bombs2.size());
         assertEquals(0, bombs1.size());
         assertSame(bombs1, bombs2);
@@ -1282,9 +1302,9 @@ public class BombermanTest {
         field.tick();
         field.tick();
 
-        List<Blast> blasts1 = field.getBlasts();
-        List<Blast> blasts2 = field.getBlasts();
-        List<Blast> blasts3 = field.getBlasts();
+        List<Blast> blasts1 = field.blasts();
+        List<Blast> blasts2 = field.blasts();
+        List<Blast> blasts3 = field.blasts();
         assertSame(blasts1, blasts2);
         assertSame(blasts2, blasts3);
         assertSame(blasts3, blasts1);
@@ -1308,9 +1328,9 @@ public class BombermanTest {
     public void shouldNoChangeWall_whenUseBoardApi() {
         givenBoardWithWalls();
 
-        Walls walls1 = field.getWalls();
-        Walls walls2 = field.getWalls();
-        Walls walls3 = field.getWalls();
+        Walls walls1 = field.walls();
+        Walls walls2 = field.walls();
+        Walls walls3 = field.walls();
         assertNotSame(walls1, walls2);
         assertNotSame(walls2, walls3);
         assertNotSame(walls3, walls1);
@@ -1527,7 +1547,7 @@ public class BombermanTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         Assert.assertTrue(game.isGameOver());
-        verify(listener).event(Events.KILL_BOMBERMAN);
+        verify(listener).event(Events.DIED);
     }
 
     private void givenBoardWithMeatChopper(int size) {
@@ -1538,7 +1558,7 @@ public class BombermanTest {
         MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChppperDice);
         bombermans = mock(List.class);
         when(bombermans.contains(anyObject())).thenReturn(false);
-        when(temp.getBombermans()).thenReturn(bombermans);
+        when(temp.heroes()).thenReturn(bombermans);
         withWalls(walls);
         walls.regenerate();
         givenBoard(size);
@@ -1631,7 +1651,7 @@ public class BombermanTest {
     public void shouldFireEventWhenKillBomberman() {
         shouldKillBoomberman_whenBombExploded();
 
-        verify(listener).event(Events.KILL_BOMBERMAN);
+        verify(listener).event(Events.DIED);
     }
 
     @Test

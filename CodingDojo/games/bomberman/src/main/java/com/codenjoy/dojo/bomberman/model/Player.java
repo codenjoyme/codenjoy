@@ -25,40 +25,53 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.round.RoundGamePlayer;
+import com.codenjoy.dojo.services.settings.Parameter;
 
-public class Player extends GamePlayer<Hero, Field> {
+public class Player extends RoundGamePlayer<Hero, Field> {
 
-    private Hero hero;
-    private GameSettings settings;
+    protected GameSettings settings;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, Parameter<Boolean> roundsEnabled) {
+        super(listener, roundsEnabled);
     }
 
     @Override
     public Hero getHero() {
-        return hero;
+        return (Hero)hero;
+    }
+
+    public void newHero(Field board) {
+        settings = board.settings();
+        hero = settings.getBomberman(settings.getLevel());
+        hero.setPlayer(this);
+        hero.init(board);
+
+        if (!roundsEnabled()) {
+            hero.setActive(true);
+        }
     }
 
     @Override
-    public boolean isAlive() {
-        return hero != null && hero.isAlive();
-    }
-
-    public void event(Events event) {
-        if (event == Events.KILL_BOMBERMAN) {
-            hero.kill();
-        }
-
+    public void event(Object event) {
+        getHero().addScore(getScoreFor(event));
         super.event(event);
     }
 
+    private int getScoreFor(Object event) {
+        if (event == Events.KILL_DESTROY_WALL) {
+            return settings.killWallScore().getValue();
+        }
 
-    public void newHero(Field board) {
-        settings = board.getSettings();
-        hero = settings.getBomberman(settings.getLevel());
-        hero.init(board);
+        if (event == Events.KILL_MEAT_CHOPPER) {
+            return settings.killMeatChopperScore().getValue();
+        }
+
+        if (event == Events.KILL_OTHER_HERO) {
+            return settings.killOtherHeroScore().getValue();
+        }
+
+        return 0;
     }
 
     public GameSettings getSettings() {

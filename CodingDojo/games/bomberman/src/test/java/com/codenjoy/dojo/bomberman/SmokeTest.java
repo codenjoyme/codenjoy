@@ -448,7 +448,7 @@ public class SmokeTest {
                         "1:Answer: ACT\n" +
                         "DICE:3\n" +
                         "DICE:0\n" +
-                        "Fire Event: KILL_BOMBERMAN\n" +
+                        "Fire Event: DIED\n" +
                         "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
@@ -481,7 +481,7 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "1:Answer: ACT\n" +
                         "DICE:3\n" +
-                        "Fire Event: KILL_BOMBERMAN\n" +
+                        "Fire Event: DIED\n" +
                         "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +

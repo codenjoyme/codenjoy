@@ -25,234 +25,148 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.LinkedList;
-
-import static com.codenjoy.dojo.bomberman.model.BombermanTest.DestroyWallAt;
-import static com.codenjoy.dojo.bomberman.model.BombermanTest.MeatChopperAt;
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static com.codenjoy.dojo.bomberman.model.BombermanTest.*;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class SingleTest {
-
-    public static final int SIZE = 5;
-    private Game game2;
-    private Walls walls = emptyWalls();
-    private Hero bomberman2;
-    private Hero bomberman1;
-    private GameSettings settings;
-    private Level level;
-    private Game game1;
-    private Bomberman board;
-    private EventListener listener1;
-    private EventListener listener2;
-    private int bombsCount = 1;
-    private Dice meatChopperDice;
-    private Dice bombermanDice;
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
-
-    public void givenBoard() {
-        settings = mock(GameSettings.class);
-
-        level = mock(Level.class);
-        when(level.bombsCount()).thenReturn(bombsCount);
-        when(level.bombsPower()).thenReturn(1);
-
-        bombermanDice = mock(Dice.class);
-
-        dice(bombermanDice,  0, 0);
-        bomberman1 = new Hero(level, bombermanDice);
-        dice(bombermanDice,  0, 0);
-        bomberman2 = new Hero(level, bombermanDice);
-        when(settings.getBomberman(any(Level.class))).thenReturn(bomberman1, bomberman2);
-
-        when(settings.getLevel()).thenReturn(level);
-        when(settings.getBoardSize()).thenReturn(v(SIZE));
-        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
-
-        board = new Bomberman(settings);
-
-        listener1 = mock(EventListener.class);
-        listener2 = mock(EventListener.class);
-
-        game1 = new Single(new Player(listener1), printerFactory);
-        game1.on(board);
-        game2 = new Single(new Player(listener2), printerFactory);
-        game2.on(board);
-
-        game1.newGame();
-        game2.newGame();
-    }
-
-    private void dice(Dice dice, int... values) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int value : values) {
-            when = when.thenReturn(value);
-        }
-    }
-
-    private Walls emptyWalls() {
-        Walls walls = mock(WallsImpl.class);
-        when(walls.iterator()).thenReturn(new LinkedList<Wall>().iterator());
-        return walls;
-    }
+public class SingleTest extends AbstractSingleTest {
 
     @Test
     public void shouldGameReturnsRealJoystick() {
         givenBoard();
-        bomberman1.act();
-        bomberman2.up();
+        hero(0).act();
+        hero(1).up();
         tick();
-        bomberman2.up();
+        hero(1).up();
         tick();
         tick();
         tick();
         tick();
 
-        assertFalse(bomberman1.isAlive());
-        assertTrue(bomberman2.isAlive());
+        assertFalse(hero(0).isAlive());
+        assertTrue(hero(1).isAlive());
 
-        Joystick joystick1 = game1.getJoystick();
-        Joystick joystick2 = game1.getJoystick();
+        Joystick joystick1 = game(0).getJoystick();
+        Joystick joystick2 = game(0).getJoystick();
 
         // when
-        game1.newGame();
-        game2.newGame();
+        game(0).newGame();
+        game(1).newGame();
 
         // then
-        assertNotSame(joystick1, game1.getJoystick());
-        assertNotSame(joystick2, game1.getJoystick());
+        assertNotSame(joystick1, game(0).getJoystick());
+        assertNotSame(joystick2, game(0).getJoystick());
     }
 
     @Test
     public void shouldGetTwoBombermansOnBoard() {
         givenBoard();
 
-        assertSame(bomberman1, game1.getJoystick());
-        assertSame(bomberman2, game2.getJoystick());
+        assertSame(hero(0), game(0).getJoystick());
+        assertSame(hero(1), game(1).getJoystick());
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "☺♥   \n", game1);
+                "☺♥   \n", game(0));
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "♥☺   \n", game2);
+                "♥☺   \n", game(1));
     }
 
     @Test
     public void shouldOnlyOneListenerWorksWhenOneBombermanKillAnother() {
         givenBoard();
 
-        bomberman1.act();
-        bomberman1.up();
+        hero(0).act();
+        hero(0).up();
         tick();
-        bomberman1.up();
+        hero(0).up();
         tick();
         tick();
         tick();
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "☺    \n" +
                 "҉    \n" +
-                "҉♣   \n", game1);
+                "҉♣   \n", game(0));
 
-        verify(listener1, only()).event(Events.KILL_OTHER_BOMBERMAN);
-        verify(listener2, only()).event(Events.KILL_BOMBERMAN);
-    }
-
-    private void tick() {
-        board.tick();
+        verify(listener(0), only()).event(Events.KILL_OTHER_HERO);
+        verify(listener(1), only()).event(Events.DIED);
     }
 
     @Test
     public void shouldPrintOtherBombBomberman() {
         givenBoard();
 
-        bomberman1.act();
-        bomberman1.up();
+        hero(0).act();
+        hero(0).up();
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "☻♥   \n", game1);
+                "☻♥   \n", game(0));
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "♠☺   \n", game2);
+                "♠☺   \n", game(1));
     }
 
     @Test
     public void shouldBombermanCantGoToAnotherBomberman() {
         givenBoard();
 
-        bomberman1.right();
+        hero(0).right();
         tick();
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "☺♥   \n", game1);
+                "☺♥   \n", game(0));
     }
-
-    private void assertBoard(String board, Game game) {
-        assertEquals(board, game.getBoardAsString());
-    }
-
+    
     // бомбермен может идти на митчопера, при этом он умирает
     @Test
     public void shouldKllOtherBombermanWhenBombermanGoToMeatChopper() {
         walls = new MeatChopperAt(2, 0, new WallsImpl());
         givenBoard();
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "☺♥&  \n", game1);
+                "☺♥&  \n", game(0));
 
-        bomberman2.right();
+        hero(1).right();
         tick();
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "☺ ♣  \n", game1);
+                "☺ ♣  \n", game(0));
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "♥ Ѡ  \n", game2);
+                "♥ Ѡ  \n", game(1));
 
-        verifyNoMoreInteractions(listener1);
-        verify(listener2, only()).event(Events.KILL_BOMBERMAN);
+        verifyNoMoreInteractions(listener(0));
+        verify(listener(1), only()).event(Events.DIED);
     }
 
     // если митчопер убил другого бомбермена, как это на моей доске отобразится? Хочу видеть трупик
@@ -261,32 +175,29 @@ public class SingleTest {
         meatChopperAt(2, 0);
         givenBoard();
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "☺♥&  \n", game1);
+                "☺♥&  \n", game(0));
 
-        dice(meatChopperDice, Direction.LEFT.value());
+        dice(meatDice, Direction.LEFT.value());
         tick();
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "☺♣   \n", game1);
+                "☺♣   \n", game(0));
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "♥Ѡ   \n", game2);
+                "♥Ѡ   \n", game(1));
 
-        verifyNoMoreInteractions(listener1);
-        verify(listener2, only()).event(Events.KILL_BOMBERMAN);
+        verifyNoMoreInteractions(listener(0));
+        verify(listener(1), only()).event(Events.DIED);
     }
 
     // А что если бомбермен идет на митчопера а тот идет на встречу к нему - бомбермен проскочит или умрет? должен умереть!
@@ -295,43 +206,30 @@ public class SingleTest {
         meatChopperAt(2, 0);
         givenBoard();
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "☺♥&  \n", game1);
+                "☺♥&  \n", game(0));
 
-        dice(meatChopperDice, Direction.LEFT.value());
-        bomberman2.right();
+        dice(meatDice, Direction.LEFT.value());
+        hero(1).right();
         tick();
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "☺&♣  \n", game1);
+                "☺&♣  \n", game(0));
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "♥&Ѡ  \n", game2);
+                "♥&Ѡ  \n", game(1));
 
-        verifyNoMoreInteractions(listener1);
-        verify(listener2, only()).event(Events.KILL_BOMBERMAN);
-    }
-
-    private void meatChopperAt(int x, int y) {
-        meatChopperDice = mock(Dice.class);
-        dice(meatChopperDice, x, y);
-        Field temp = mock(Field.class);
-        when(temp.size()).thenReturn(SIZE);
-        MeatChoppers meatchoppers = new MeatChoppers(new WallsImpl(), temp, v(1), meatChopperDice);
-        meatchoppers.regenerate();
-        walls = meatchoppers;
+        verifyNoMoreInteractions(listener(0));
+        verify(listener(1), only()).event(Events.DIED);
     }
 
     //  бомбермены не могут ходить по бомбам ни по своим ни по чужим
@@ -339,31 +237,33 @@ public class SingleTest {
     public void shouldBombermanCantGoToBombFromAnotherBomberman() {
         givenBoard();
 
-        bomberman2.act();
-        bomberman2.right();
+        hero(1).act();
+        hero(1).right();
         tick();
-        bomberman2.right();
-        bomberman1.right();
-        tick();
-
-        assertBoard(
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                "☺3 ♥ \n", game1);
-
-        bomberman2.left();
-        tick();
-        bomberman2.left();
+        hero(1).right();
+        hero(0).right();
         tick();
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
+                "☺3 ♥ \n", game(0));
+
+        hero(1).left();
+        tick();
+        hero(1).left();
+        tick();
+
+        asrtBrd("     \n" +
                 "     \n" +
-                "☺1♥  \n", game1);
+                "     \n" +
+                "     \n" +
+                "☺1♥  \n", game(0));
+    }
+
+    private void givenBoard() {
+        super.givenBoard(2);
     }
 
     @Test
@@ -371,42 +271,38 @@ public class SingleTest {
         shouldBombermanCantGoToBombFromAnotherBomberman();
 
         tick();
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 " ҉   \n" +
-                "Ѡ҉♣  \n", game1);
+                "Ѡ҉♣  \n", game(0));
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 " ҉   \n" +
-                "♣҉Ѡ  \n", game2);
+                "♣҉Ѡ  \n", game(1));
     }
 
     @Test
     public void shouldNewGamesWhenKillAll() {
         shouldBombKillAllBomberman();
-        when(settings.getBomberman(any(Level.class))).thenReturn(new Hero(level, bombermanDice), new Hero(level, bombermanDice));
+        when(settings.getBomberman(any(Level.class))).thenReturn(new Hero(level, heroDice), new Hero(level, heroDice));
 
-        game1.newGame();
-        game2.newGame();
+        game(0).newGame();
+        game(1).newGame();
         tick();
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "☺♥   \n", game1);
+                "☺♥   \n", game(0));
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "♥☺   \n", game2);
+                "♥☺   \n", game(1));
     }
 
     // на поле можно чтобы каждый поставил то количество бомб которое ему позволено и не более того
@@ -416,35 +312,33 @@ public class SingleTest {
 
         givenBoard();
 
-        bomberman1.act();
-        bomberman1.up();
+        hero(0).act();
+        hero(0).up();
 
-        bomberman2.act();
-        bomberman2.up();
-
-        tick();
-
-        assertBoard(
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                "☺♥   \n" +
-                "44   \n", game1);
-
-        bomberman1.act();
-        bomberman1.up();
-
-        bomberman2.act();
-        bomberman2.up();
+        hero(1).act();
+        hero(1).up();
 
         tick();
 
-        assertBoard(
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "☺♥   \n" +
+                "44   \n", game(0));
+
+        hero(0).act();
+        hero(0).up();
+
+        hero(1).act();
+        hero(1).up();
+
+        tick();
+
+        asrtBrd("     \n" +
                 "     \n" +
-                "33   \n", game1);
+                "☺♥   \n" +
+                "     \n" +
+                "33   \n", game(0));
 
     }
 
@@ -454,50 +348,47 @@ public class SingleTest {
 
         givenBoard();
 
-        bomberman1.act();
-        bomberman1.up();
+        hero(0).act();
+        hero(0).up();
 
-        bomberman2.act();
-        bomberman2.up();
+        hero(1).act();
+        hero(1).up();
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "☺♥   \n" +
-                "44   \n", game1);
+                "44   \n", game(0));
 
-        bomberman1.act();
-        bomberman1.up();
+        hero(0).act();
+        hero(0).up();
 
-        bomberman2.act();
-        bomberman2.up();
+        hero(1).act();
+        hero(1).up();
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "☺♥   \n" +
                 "44   \n" +
-                "33   \n", game1);
+                "33   \n", game(0));
 
-        bomberman1.act();
-        bomberman1.up();
+        hero(0).act();
+        hero(0).up();
 
-        bomberman2.act();
-        bomberman2.up();
+        hero(1).act();
+        hero(1).up();
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "☺♥   \n" +
                 "     \n" +
                 "33   \n" +
-                "22   \n", game1);
+                "22   \n", game(0));
 
     }
 
@@ -507,41 +398,38 @@ public class SingleTest {
 
         givenBoard();
 
-        bomberman1.act();
-        bomberman1.up();
+        hero(0).act();
+        hero(0).up();
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "☺    \n" +
-                "4♥   \n", game1);
+                "4♥   \n", game(0));
 
-        bomberman1.act();
-        bomberman1.up();
+        hero(0).act();
+        hero(0).up();
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "☺    \n" +
                 "4    \n" +
-                "3♥   \n", game1);
+                "3♥   \n", game(0));
 
-        bomberman1.act();
-        bomberman1.up();
+        hero(0).act();
+        hero(0).up();
 
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "☺    \n" +
                 "     \n" +
                 "3    \n" +
-                "2♥   \n", game1);
+                "2♥   \n", game(0));
     }
 
     @Test
@@ -549,28 +437,27 @@ public class SingleTest {
         walls = new DestroyWallAt(0, 0, new WallsImpl());
         givenBoard();
 
-        bomberman1.act();
-        bomberman1.right();
-        bomberman2.up();
+        hero(0).act();
+        hero(0).right();
+        hero(1).up();
         tick();
-        bomberman1.right();
-        bomberman2.up();
+        hero(0).right();
+        hero(1).up();
         tick();
-        bomberman1.right();
-        bomberman2.up();
+        hero(0).right();
+        hero(1).up();
         tick();
         tick();
         tick();
 
-        assertBoard(
-                " ♥   \n" +
+        asrtBrd(" ♥   \n" +
                 "     \n" +
                 "     \n" +
                 " ҉   \n" +
-                "H҉҉ ☺\n", game1);
+                "H҉҉ ☺\n", game(0));
 
-        verify(listener1).event(Events.KILL_DESTROY_WALL);
-        verifyNoMoreInteractions(listener2);
+        verify(listener(0)).event(Events.KILL_DESTROY_WALL);
+        verifyNoMoreInteractions(listener(1));
     }
 
     @Test
@@ -578,28 +465,27 @@ public class SingleTest {
         walls = new MeatChopperAt(0, 0, new WallsImpl());
         givenBoard();
 
-        bomberman1.act();
-        bomberman1.right();
-        bomberman2.up();
+        hero(0).act();
+        hero(0).right();
+        hero(1).up();
         tick();
-        bomberman1.right();
-        bomberman2.up();
+        hero(0).right();
+        hero(1).up();
         tick();
-        bomberman1.right();
-        bomberman2.up();
+        hero(0).right();
+        hero(1).up();
         tick();
         tick();
         tick();
 
-        assertBoard(
-                " ♥   \n" +
+        asrtBrd(" ♥   \n" +
                 "     \n" +
                 "     \n" +
                 " ҉   \n" +
-                "x҉҉ ☺\n", game1);
+                "x҉҉ ☺\n", game(0));
 
-        verify(listener1).event(Events.KILL_MEAT_CHOPPER);
-        verifyNoMoreInteractions(listener2);
+        verify(listener(0)).event(Events.KILL_MEAT_CHOPPER);
+        verifyNoMoreInteractions(listener(1));
     }
 
     @Test
@@ -607,33 +493,36 @@ public class SingleTest {
         walls = new DestroyWallAt(0, 0, new MeatChopperAt(1, 0, new MeatChopperAt(2, 0, new WallsImpl())));
         givenBoard();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 " ☺♥  \n" +
-                "#&&  \n", game1);
+                "#&&  \n", game(0));
 
-        bomberman1.act();
-        bomberman1.up();
-        bomberman2.act();
-        bomberman2.up();
+        hero(0).act();
+        hero(0).up();
+        hero(1).act();
+        hero(1).up();
         tick();
-        bomberman1.left();
-        bomberman2.right();
+        hero(0).left();
+        hero(1).right();
         tick();
         tick();
         tick();
         tick();
 
-        assertBoard(
-                "     \n" +
+        asrtBrd("     \n" +
                 "     \n" +
                 "☺҉҉♥ \n" +
                 "҉҉҉҉ \n" +
-                "#xx  \n", game1);
+                "#xx  \n", game(0));
 
-        verify(listener1, only()).event(Events.KILL_MEAT_CHOPPER);
-        verify(listener2, only()).event(Events.KILL_MEAT_CHOPPER);
+        verify(listener(0), only()).event(Events.KILL_MEAT_CHOPPER);
+        verify(listener(1), only()).event(Events.KILL_MEAT_CHOPPER);
+    }
+
+    @Override
+    protected RoundSettingsWrapper getRoundSettings() {
+        return BombermanTest.getRoundSettings();
     }
 }

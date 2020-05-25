@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.bomberman.services;
+package com.codenjoy.dojo.services.round;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,15 +22,21 @@ package com.codenjoy.dojo.bomberman.services;
  * #L%
  */
 
-public enum Events {
+import com.codenjoy.dojo.services.multiplayer.GameField;
 
-    KILL_DESTROY_WALL,
-    KILL_MEAT_CHOPPER,
-    KILL_OTHER_HERO,
-    
-    DROP_PERK,
-    DIED,
+import java.util.List;
 
-    START_ROUND,
-    WIN_ROUND
+public interface RoundGameField<P extends RoundGamePlayer> extends GameField<P> {
+
+    List<P> aliveActive();
+
+    void reset(P player);
+
+    void start(int round);
+
+    void print(String message);
+
+    int score(P player);
+
+    void oneMoreDead(P player);
 }
