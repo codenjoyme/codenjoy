@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -301,7 +301,8 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         tick();
 
         dice(heroDice, 3, 4); // новые координаты для героя
-        newGame(1); // это сделоает сервер в ответ на isAlive = false
+        board.newGame(player(1)); // это сделоает сервер в ответ на isAlive = false
+        resetHeroes();
 
         // игрок уже живой но неактивный до начала следующего раунда
         assertEquals(false, hero(1).isActive());
@@ -1261,4 +1262,99 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "listener(2) => [KILL_OTHER_HERO, WIN_ROUND]\n");
     }
 
+    // проверяем, что при clearScore обнуляется:
+    // - таймеры раунда
+    // - очки заработанные в этом раунде
+    // - и все игроки пересоздаются снова
+    @Test
+    public void shouldCleanEverything_whenCleanScores() {
+        int count = 3;
+
+        playersPerRoom.update(count);
+        timeBeforeStart = 1;
+        timePerRound = 60; // до конца раунда целая минута
+
+        dice(heroDice,
+                4, 4, // первый игрок
+                4, 3, // второй
+                3, 4, // третий
+                0, 0);  // для последующих начнем с левого нижнего угла
+
+        givenBoard(count);
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n");
+
+        asrtBrd("   ♥☺\n" +
+                "    ♥\n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game(0));
+
+        asrtBrd("   ♥♥\n" +
+                "    ☺\n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game(1));
+
+        asrtBrd("   ☺♥\n" +
+                "    ♥\n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game(2));
+
+        // бахнем бомбу
+        hero(2).act();
+        tick();
+
+        hero(2).left();
+        tick();
+
+        hero(2).left();
+        tick();
+
+        tick();
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [DIED]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => [KILL_OTHER_HERO]\n");
+
+        assertEquals(0, hero(0).scores());
+        assertEquals(0, hero(1).scores());
+        assertEquals(200, hero(2).scores()); // за победу
+
+        assertEquals(true, hero(0).isActive());
+        assertEquals(false, hero(0).isAlive()); // убит
+        assertEquals(true, hero(1).isActiveAndAlive());
+        assertEquals(true, hero(2).isActiveAndAlive());
+
+        // делаем очистку очков
+        board.clearScore();
+        resetHeroes();
+
+        // после этого тика будет сразу же новый раунд
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n");
+
+        // и очки обнулятся
+        assertEquals(0, hero(0).scores());
+        assertEquals(0, hero(1).scores());
+        assertEquals(0, hero(2).scores());
+
+        // и все игроки активны
+        assertEquals(true, hero(0).isActiveAndAlive());
+        assertEquals(true, hero(1).isActiveAndAlive());
+        assertEquals(true, hero(2).isActiveAndAlive());
+
+    }
 }

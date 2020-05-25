@@ -168,9 +168,10 @@ public abstract class AbstractSingleTest {
         players.forEach(player -> {
             if (!player.isAlive()) {
                 dice(heroDice, 0, 0);
-                newGame(players.indexOf(player));
+                board.newGame(player(players.indexOf(player)));
             }
         });
+        resetHeroes();
     }
 
     protected abstract RoundSettingsWrapper getRoundSettings();
@@ -188,9 +189,9 @@ public abstract class AbstractSingleTest {
         Arrays.asList(input).forEach(walls::add);
     }
 
-    protected void newGame(int index) {
-        board.newGame(player(index));
-        heroes.set(index, heroes.remove(heroes.size() - 1));
+    protected void resetHeroes() {
+        heroes.clear();
+        players.forEach(player -> heroes.add(player.getHero()));
     }
 
     protected void assertBoards(String expected, Integer... indexes) {
