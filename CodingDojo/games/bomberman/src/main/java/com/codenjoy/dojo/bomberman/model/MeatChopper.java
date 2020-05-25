@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.State;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.DEAD_MEAT_CHOPPER;
 import static com.codenjoy.dojo.bomberman.model.Elements.MEAT_CHOPPER;
+import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
 
 public class MeatChopper extends Wall implements State<Elements, Player> {
 
@@ -52,18 +53,11 @@ public class MeatChopper extends Wall implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Blast blast = null;
-
-        if (alsoAtPoint.length > 1 && alsoAtPoint[1] != null) {
-            if (alsoAtPoint[1] instanceof Blast) {
-                blast = (Blast)alsoAtPoint[1];
-            }
-        }
-
+        Blast blast = filterOne(alsoAtPoint, Blast.class);
         if (blast != null) {
             return DEAD_MEAT_CHOPPER;
-        } else {
-            return MEAT_CHOPPER;
         }
+
+        return MEAT_CHOPPER;
     }
 }

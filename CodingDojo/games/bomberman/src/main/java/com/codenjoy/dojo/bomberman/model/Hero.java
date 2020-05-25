@@ -32,11 +32,11 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
-import static java.util.stream.Collectors.toList;
+import static com.codenjoy.dojo.bomberman.model.StateUtils.filter;
+import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
 
 public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
@@ -165,7 +165,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        List<Bomb> bombs = filter(alsoAtPoint, Bomb.class);
+        Bomb bomb = filterOne(alsoAtPoint, Bomb.class);
         List<Hero> heroes = filter(alsoAtPoint, Hero.class);
 
         // player наблюдатель содержится в той же клетке которую прорисовываем
@@ -176,11 +176,13 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
             }
 
             // герой наблюдателя жив и активен
-            if (bombs.isEmpty()) {
-                return BOMBERMAN;
-            } else {
+
+            // под ним бомба
+            if (bomb != null) {
                 return BOMB_BOMBERMAN;
             }
+
+            return BOMBERMAN;
         }
 
         // player наблюдает за клеткой в которой не находится сам
@@ -191,19 +193,13 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         }
 
         // в клетке есть другие активные и живые герои
-        if (bombs.isEmpty()) {
-            return OTHER_BOMBERMAN;
-        } else {
+
+        // под ними бомба
+        if (bomb != null) {
             return OTHER_BOMB_BOMBERMAN;
         }
 
-    }
-
-    private <T extends Point> List<T> filter(Object[] array, Class<T> clazz) {
-        return (List)Arrays.stream(array)
-                .filter(it -> it != null)
-                .filter(it -> it.getClass().equals(clazz))
-                .collect(toList());
+        return OTHER_BOMBERMAN;
     }
 
     public Dice getDice() {
