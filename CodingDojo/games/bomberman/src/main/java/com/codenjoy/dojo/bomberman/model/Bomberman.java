@@ -143,7 +143,7 @@ public class Bomberman extends RoundField<Player> implements Field {
                 } else if (wall instanceof DestroyWall) {
                     player.event(Events.KILL_DESTROY_WALL);
                 } else if (wall instanceof PerkOnBoard) {
-                    player.event(Events.DROP_PERK);
+                    player.event(Events.DROP_PERK); // TODO test me
                 }
             }
         }

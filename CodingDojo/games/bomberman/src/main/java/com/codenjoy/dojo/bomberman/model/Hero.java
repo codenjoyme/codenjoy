@@ -191,6 +191,12 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
                 return meat.state(player, alsoAtPoint);
             }
 
+            // если митчопера нет, следующий по опасности - бобма
+            if (bomb != null) {
+                return bomb.state(player, alsoAtPoint);
+            }
+
+            // и если опасности нет, тогда уже рисуем останки
             return OTHER_DEAD_BOMBERMAN;
         }
 
