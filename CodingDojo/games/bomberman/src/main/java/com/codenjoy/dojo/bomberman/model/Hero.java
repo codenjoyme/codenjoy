@@ -168,43 +168,35 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         List<Bomb> bombs = filter(alsoAtPoint, Bomb.class);
         List<Hero> heroes = filter(alsoAtPoint, Hero.class);
 
-        if (isActiveAndAlive()) {
-            // есть другие герои в этой же клетке
-            if (heroes.size() > 1) {
-                // player наблюдатель содержится в той же клетке что и другие герои
-                if (heroes.contains(player.getHero())) {
-                    // герой наблюдателя активен и его еще не вынесли?
-                    if (player.getHero().isActiveAndAlive()) {
-                        return BOMBERMAN;
-                    } else {
-                        return DEAD_BOMBERMAN;
-                    }
-                    // player наблюдает за клеткой в которой один жив, другой мертв
-                } else {
-                    return OTHER_BOMBERMAN;
-                }
-            } else {
-                if (this == player.getHero()) {
-                    if (bombs.isEmpty()) {
-                        return BOMBERMAN;
-                    } else {
-                        return BOMB_BOMBERMAN;
-                    }
-                } else {
-                    if (bombs.isEmpty()) {
-                        return OTHER_BOMBERMAN;
-                    } else {
-                        return OTHER_BOMB_BOMBERMAN;
-                    }
-                }
-            }
-        } else {
-            if (heroes.contains(player.getHero())) {
+        // player наблюдатель содержится в той же клетке которую прорисовываем
+        if (heroes.contains(player.getHero())) {
+            // герой наблюдателя неактивен или его вынесли
+            if (!player.getHero().isActiveAndAlive()) {
                 return DEAD_BOMBERMAN;
+            }
+
+            // герой наблюдателя жив и активен
+            if (bombs.isEmpty()) {
+                return BOMBERMAN;
             } else {
-                return OTHER_DEAD_BOMBERMAN;
+                return BOMB_BOMBERMAN;
             }
         }
+
+        // player наблюдает за клеткой в которой не находится сам
+
+        // в клетке только трупики?
+        if (heroes.stream().noneMatch(Hero::isActiveAndAlive)) {
+            return OTHER_DEAD_BOMBERMAN;
+        }
+
+        // в клетке есть другие активные и живые герои
+        if (bombs.isEmpty()) {
+            return OTHER_BOMBERMAN;
+        } else {
+            return OTHER_BOMB_BOMBERMAN;
+        }
+
     }
 
     private <T extends Point> List<T> filter(Object[] array, Class<T> clazz) {
