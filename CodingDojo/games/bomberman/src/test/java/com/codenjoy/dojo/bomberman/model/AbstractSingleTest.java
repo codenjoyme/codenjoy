@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.stubbing.OngoingStubbing;
@@ -221,6 +222,10 @@ public abstract class AbstractSingleTest {
                     .collect(toList()).toArray(new Integer[0]);
         }
         return indexes;
+    }
+
+    protected void resetListeners() {
+        listeners.forEach(Mockito::reset);
     }
 
     protected void verifyAllEvents(String expected, Integer... indexes) {

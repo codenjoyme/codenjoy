@@ -1539,6 +1539,49 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "     \n" +
                 "     \n" +
                 "♥&☺  \n", game(2));
+    }
+
+    // просто любопытно как рванут два бомбера, вместе с митчопером и трупом под бомбой
+    @Test
+    public void shouldDestroyMeatChopper_withOtherHeroes_onDeathPlace() {
+        shouldDrawMeatChopper_onPlaceOfDeath_withBomb();
+
+        resetListeners();
+
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "Ѡx♣  \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "♣Ѡ♣  \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "♣xѠ  \n", game(2));
+
+        // победителей нет
+        verifyAllEvents(
+                "listener(0) => [KILL_MEAT_CHOPPER, KILL_OTHER_HERO, DIED]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => [DIED]\n");
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n");
 
     }
 }
