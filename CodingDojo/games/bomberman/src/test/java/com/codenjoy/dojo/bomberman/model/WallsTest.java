@@ -36,8 +36,7 @@ import org.mockito.stubbing.Answer;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -57,14 +56,9 @@ public class WallsTest {
     public void setup() {
         board = mock(Field.class);
         when(board.size()).thenReturn(SIZE);
-        when(board.isBarrier(anyInt(), anyInt(), anyBoolean())).thenAnswer(new Answer<Object>() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                int x = (Integer)invocation.getArguments()[0];
-                int y = (Integer)invocation.getArguments()[1];
-                return walls.itsMe(pt(x, y));
-            }
-        });
+        when(board.isBarrier(any(Point.class), anyBoolean())).thenAnswer(
+                invocation -> walls.itsMe((Point)invocation.getArguments()[0])
+        );
     }
 
     @Test

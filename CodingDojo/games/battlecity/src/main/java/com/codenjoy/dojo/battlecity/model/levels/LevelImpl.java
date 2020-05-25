@@ -83,7 +83,7 @@ public class LevelImpl implements Level {
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == Elements.AI_TANK_DOWN.ch) {
                 Point pt = xy.getXY(index);
-                result.add(new AITank(pt.getX(), pt.getY(), dice, Direction.DOWN));
+                result.add(new AITank(pt, dice, Direction.DOWN));
             }
         }
         return result;

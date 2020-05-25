@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.DESTROYABLE_WALL;
@@ -30,8 +31,13 @@ import static com.codenjoy.dojo.bomberman.model.Elements.DESTROYED_WALL;
 import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
 
 public class DestroyWall extends Wall implements State<Elements, Player> {
+
     public DestroyWall(int x, int y) {
         super(x, y);
+    }
+
+    public DestroyWall(Point pt) {
+        super(pt);
     }
 
     @Override

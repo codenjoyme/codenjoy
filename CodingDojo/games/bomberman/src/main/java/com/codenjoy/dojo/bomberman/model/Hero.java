@@ -42,6 +42,7 @@ import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
 public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
     private static final boolean WITHOUT_MEAT_CHOPPER = false;
+    public static final int MAX = 1000;
     private Level level;
     private Dice dice;
     private boolean bomb;
@@ -68,9 +69,9 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
                     y++;
                 }
             }
-        } while ((isBusy(this) || isOutOf(field.size())) && count++ < 1000);
+        } while ((isBusy(this) || isOutOf(field.size())) && count++ < MAX);
 
-        if (count >= 1000) {
+        if (count >= MAX) {
             throw new RuntimeException("Dead loop at MyBomberman.init(Board)!");
         }
     }
@@ -131,12 +132,11 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
             return;
         }
 
-        int newX = direction.changeX(x);
-        int newY = direction.changeY(y);
+        Point pt = direction.change(this);
 
-        if (!field.isBarrier(newX, newY, WITHOUT_MEAT_CHOPPER)) {
-            move(newX, newY);
-            PerkOnBoard perk = ((Bomberman) field).pickPerkAtPoint(newX, newY);
+        if (!field.isBarrier(pt, WITHOUT_MEAT_CHOPPER)) {
+            move(pt);
+            PerkOnBoard perk = field.pickPerk(pt);
             if (perk != null) {
                 addPerk(perk.getPerk());
             }

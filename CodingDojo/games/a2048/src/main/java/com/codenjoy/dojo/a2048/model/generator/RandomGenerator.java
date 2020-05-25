@@ -27,12 +27,14 @@ import com.codenjoy.dojo.a2048.model.*;
 import com.codenjoy.dojo.a2048.model.Number;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class RandomGenerator implements Generator {
 
     public static final Point NO_SPACE = pt(-1, -1);
+    public static final int MAX = 100;
 
     private int count;
     private Dice dice;
@@ -53,18 +55,18 @@ public class RandomGenerator implements Generator {
     }
 
     public Point getFreeRandom(Numbers numbers) {
-        int rndX = 0;
-        int rndY = 0;
+        Point pt;
         int c = 0;
         do {
-            rndX = dice.next(numbers.size());
-            rndY = dice.next(numbers.size());
-        } while (rndX != -1 && rndY != -1 && numbers.isBusy(rndX, rndY) && c++ < 100);
+            pt = PointImpl.random(dice, numbers.size());
+        } while (!pt.isOutOf(numbers.size())
+                && numbers.isBusy(pt.getX(), pt.getY())
+                && c++ < MAX);
 
-        if (c >= 100) {
+        if (c >= MAX) {
             return NO_SPACE;
         }
 
-        return pt(rndX, rndY);
+        return pt;
     }
 }

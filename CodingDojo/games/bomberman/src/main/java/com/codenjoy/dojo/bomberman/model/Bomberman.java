@@ -76,11 +76,11 @@ public class Bomberman extends RoundField<Player> implements Field {
         return new ArrayList<>(perks.values());
     }
 
-    public PerkOnBoard pickPerkAtPoint(int x, int y) {
-        PerkOnBoard perk = perks.get(PointImpl.pt(x, y));
+    public PerkOnBoard pickPerk(Point pt) {
+        PerkOnBoard perk = perks.get(pt);
 
         if (perk != null) {
-            perks.remove(PointImpl.pt(x, y));
+            perks.remove(pt);
         }
 
         return perk;
@@ -288,26 +288,26 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     @Override
-    public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
+    public boolean isBarrier(Point pt, boolean withMeatChopper) {
         for (Player player : aliveActive()) {
-            if (player.getHero().itsMe(pt(x, y))) {
+            if (player.getHero().itsMe(pt)) {
                 return true;
             }
         }
         for (Bomb bomb : bombs) {
-            if (bomb.itsMe(x, y)) {
+            if (bomb.itsMe(pt)) {
                 return true;
             }
         }
         for (Wall wall : walls) {
-            if (wall instanceof MeatChopper && !isWithMeatChopper) {
+            if (wall instanceof MeatChopper && !withMeatChopper) {
                 continue;
             }
-            if (wall.itsMe(x, y)) {
+            if (wall.itsMe(pt)) {
                 return true;
             }
         }
-        return x < 0 || y < 0 || x > size() - 1 || y > size() - 1;
+        return pt.isOutOf(size());
     }
 
     @Override

@@ -25,10 +25,6 @@ package com.codenjoy.dojo.sokoban.model.itemsImpl;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
-/**
- * Тут указана легенда всех возможных объектов на поле и их состояний.
- * Важно помнить, что для каждой енумной константы надо создать спрайт в папке \src\main\webapp\resources\sprite.
- */
 public enum Elements implements CharElements {
 
     NONE(' '),       // например это пустое место, куда можно перейти герою

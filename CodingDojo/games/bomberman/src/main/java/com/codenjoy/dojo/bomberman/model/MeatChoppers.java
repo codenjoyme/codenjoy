@@ -26,16 +26,17 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class MeatChoppers extends WallsDecorator implements Walls {
 
     private static final boolean WITH_MEATCHOPPERS = true;
+    public static final int MAX = 10;
     private Parameter<Integer> count;
     private Field board;
     private Dice dice;
@@ -57,12 +58,11 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         int c = 0;
         int maxc = 100;
         while (count < this.count.getValue() && c < maxc) {
-            int x = dice.next(board.size());
-            int y = dice.next(board.size());
+            Point pt = PointImpl.random(dice, board.size());
 
             // TODO это капец как долго выполняется, убрать нафиг митчомеров из Walls и сам Walls рассформировать!
-            if (!board.isBarrier(x, y, WITH_MEATCHOPPERS) && !board.heroes(ALL).contains(pt(x, y))) {
-                walls.add(new MeatChopper(x, y));
+            if (!board.isBarrier(pt, WITH_MEATCHOPPERS) && !board.heroes(ALL).contains(pt)) {
+                walls.add(new MeatChopper(pt));
                 count++;
             }
 
@@ -105,12 +105,13 @@ public class MeatChoppers extends WallsDecorator implements Walls {
             direction = Direction.valueOf(move);
 
             to = direction.change(from);
-        } while ((walls.itsMe(to) || to.isOutOf(board.size())) && count++ < 10);
+        } while ((walls.itsMe(to) || to.isOutOf(board.size())) && count++ < MAX);
 
-        if (count < 10) {
-            from.move(to);
-            return direction;
+        if (count >= MAX) {
+            return null;
         }
-        return null;
+
+        from.move(to);
+        return direction;
     }
 }

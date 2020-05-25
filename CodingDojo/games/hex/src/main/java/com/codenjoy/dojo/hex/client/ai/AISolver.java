@@ -34,6 +34,7 @@ import java.util.List;
 
 public class AISolver implements Solver<Board> {
 
+    public static final int MAX = 100;
     private Dice dice;
     private Board board;
 
@@ -63,8 +64,8 @@ public class AISolver implements Solver<Board> {
             if (jump) {
                 to = direction.change(to);
             }
-        } while (board.isBarrierAt(to.getX(), to.getY()) && count++ < 110);
-        if (count == 100) return "";
+        } while (board.isBarrierAt(to.getX(), to.getY()) && count++ < MAX);
+        if (count >= MAX) return "";
 
         return command(from.getX(), from.getY(),
                 direction, jump);
