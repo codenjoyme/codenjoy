@@ -50,7 +50,7 @@ public class PerksSettingsWrapperTest {
 
         Mockito.when(dice.next(percents)).thenReturn(0);
         Elements perk = PerksSettingsWrapper.nextPerkDrop(dice);
-        assertNotEquals("Range 0..9 = perk", NO_PERK, perk);
+        assertEquals("Range 0..9 = perk", Elements.BOMB_BLAST_RADIUS_INCREASE, perk);
 
         Mockito.when(dice.next(percents)).thenReturn(10);
         perk = PerksSettingsWrapper.nextPerkDrop(dice);
@@ -58,7 +58,7 @@ public class PerksSettingsWrapperTest {
 
         Mockito.when(dice.next(percents)).thenReturn(60);
         perk = PerksSettingsWrapper.nextPerkDrop(dice);
-        assertNotEquals("Range 60..70 = perk", NO_PERK, perk);
+        assertEquals("Range 60..70 = perk", Elements.BOMB_COUNT_INCREASE, perk);
 
         Mockito.when(dice.next(percents)).thenReturn(69);
         perk = PerksSettingsWrapper.nextPerkDrop(dice);

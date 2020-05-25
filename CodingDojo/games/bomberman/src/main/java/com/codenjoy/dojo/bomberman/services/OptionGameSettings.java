@@ -24,6 +24,7 @@ package com.codenjoy.dojo.bomberman.services;
 
 
 import com.codenjoy.dojo.bomberman.model.*;
+import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
@@ -52,6 +53,7 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> winRoundScore;
 
     private final Parameter<Integer> perkDropRatio;
+    private Parameter<Integer> perkPickTimeout;
     private final Parameter<Integer> perkBombBlastRadiusInc;
     private final Parameter<Integer> timeoutBombBlastRadiusInc;
 
@@ -88,6 +90,7 @@ public class OptionGameSettings implements GameSettings {
 
         // perks. Set value to 0 = perk is disabled.
         perkDropRatio = settings.addEditBox("[Perks] Perks drop ratio in %").type(Integer.class).def(20); // 20%
+        perkPickTimeout = settings.addEditBox("[Perks] Perks pick timeout").type(Integer.class).def(5);
         //Bomb blast radius increase (BBRI)
         perkBombBlastRadiusInc = settings.addEditBox("[Perks] Bomb blast radius increase").type(Integer.class).def(2);
         timeoutBombBlastRadiusInc = settings.addEditBox("[Perks] Bomb blast radius increase effect timeout").type(Integer.class).def(10);
@@ -133,6 +136,7 @@ public class OptionGameSettings implements GameSettings {
     public Hero getBomberman(Level level) {
         PerksSettingsWrapper.clear();
         PerksSettingsWrapper.setDropRatio(perkDropRatio.getValue());
+        PerksSettingsWrapper.setPickTimeout(perkPickTimeout.getValue());
 
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE,
                 perkBombBlastRadiusInc.getValue(), timeoutBombBlastRadiusInc.getValue());
