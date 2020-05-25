@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 
@@ -1355,6 +1356,92 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         assertEquals(true, hero(0).isActiveAndAlive());
         assertEquals(true, hero(1).isActiveAndAlive());
         assertEquals(true, hero(2).isActiveAndAlive());
+    }
+
+    // проверил как отрисуется митчопер если под ним будет трупик героя:
+    // - от имени наблюдателя я там вижу опасность - митчопера, мне не интересны останки игроков
+    // - от имени жертвы я вижу свой трупик, мне пофиг уже что на карте происходит, главное где поставить памятник герою
+    @Test
+    public void shouldDrawMeatChopper_onPlaceOfDeath() {
+        MeatChopper chopper = new MeatChopper(1, 1);
+        givenWalls(chopper);
+
+        playersPerRoom.update(DEFAULT_COUNT);
+        timeBeforeStart = 1;
+        timePerRound = 20;
+
+        dice(heroDice,
+                0, 0, // первый игрок
+                1, 0, // второй
+                2, 0); // третий
+
+        givenBoard(DEFAULT_COUNT);
+
+        tick();
+
+        // ставлю бомбу
+        hero(0).act();
+        tick();
+
+        // и тикать
+        hero(0).up();
+        tick();
+
+        hero(0).up();
+        tick();
+        tick();
+
+        // взрыв
+        tick();
+
+        // идем назад
+        hero(0).down();
+        tick();
+
+        hero(0).down();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " &   \n" +
+                "☺♣♥  \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " &   \n" +
+                "♥Ѡ♥  \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " &   \n" +
+                "♥♣☺  \n", game(2));
+
+        // попробуем митчопером сходить на место падшего героя
+        chopper.move(DOWN.change(chopper));
+
+        // от имени наблюдателя в клеточке с останками я вижу живого митчопера
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺&♥  \n", game(0));
+
+        // от имени пострадавшего в клеточке я вижу свои останки, митчопер хоть и есть там, я его не вижу
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "♥Ѡ♥  \n", game(1));
+
+        // от имени наблюдателя в клеточке с останками я вижу живого митчопера
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "♥&☺  \n", game(2));
 
     }
 }

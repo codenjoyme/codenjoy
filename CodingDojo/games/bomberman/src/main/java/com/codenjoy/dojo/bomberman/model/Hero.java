@@ -163,6 +163,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     public Elements state(Player player, Object... alsoAtPoint) {
         Bomb bomb = filterOne(alsoAtPoint, Bomb.class);
         List<Hero> heroes = filter(alsoAtPoint, Hero.class);
+        MeatChopper meat = filterOne(alsoAtPoint, MeatChopper.class);
 
         // player наблюдатель содержится в той же клетке которую прорисовываем
         if (heroes.contains(player.getHero())) {
@@ -185,6 +186,11 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
         // в клетке только трупики?
         if (heroes.stream().noneMatch(Hero::isActiveAndAlive)) {
+            // если в клеточке с героем митчопер, рисуем его
+            if (meat != null) {
+                return meat.state(player, alsoAtPoint);
+            }
+
             return OTHER_DEAD_BOMBERMAN;
         }
 
