@@ -28,12 +28,15 @@ import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static java.util.stream.Collectors.toList;
 
 public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
@@ -162,54 +165,53 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Bomb bomb = null;
-        Hero hero = null;
-        if (alsoAtPoint[1] != null) {
-            if (alsoAtPoint[1] instanceof Bomb) {
-                bomb = (Bomb) alsoAtPoint[1];
-            } else if (alsoAtPoint[1] instanceof Hero) {
-                hero = (Hero) alsoAtPoint[1];
-            }
-        }
+        List<Bomb> bombs = filter(alsoAtPoint, Bomb.class);
+        List<Hero> heroes = filter(alsoAtPoint, Hero.class);
 
         if (isActiveAndAlive()) {
-            // есть другой герой в этой же клетке
-            if (hero != null) {
-                // player наблюдатель содержится в той же клетке что и другой герой
-                if (player.getHero().itsMe(this)) {
-                    // и они не равны
-                    if (this != player.getHero()) {
-                        // и тот герой неактивен или его уже вынесли
-                        if (!hero.isActiveAndAlive()) {
-                            return DEAD_BOMBERMAN;
-                        }
+            // есть другие герои в этой же клетке
+            if (heroes.size() > 1) {
+                // player наблюдатель содержится в той же клетке что и другие герои
+                if (heroes.contains(player.getHero())) {
+                    // герой наблюдателя активен и его еще не вынесли?
+                    if (player.getHero().isActiveAndAlive()) {
+                        return BOMBERMAN;
+                    } else {
+                        return DEAD_BOMBERMAN;
                     }
-                // другой герой наблюдает за клеткой в которой один жив, другой мертв
+                    // player наблюдает за клеткой в которой один жив, другой мертв
                 } else {
                     return OTHER_BOMBERMAN;
-                }
-            }
-
-            if (this == player.getHero()) {
-                if (bomb != null) {
-                    return BOMB_BOMBERMAN;
-                } else {
-                    return BOMBERMAN;
                 }
             } else {
-                if (bomb != null) {
-                    return OTHER_BOMB_BOMBERMAN;
+                if (this == player.getHero()) {
+                    if (bombs.isEmpty()) {
+                        return BOMBERMAN;
+                    } else {
+                        return BOMB_BOMBERMAN;
+                    }
                 } else {
-                    return OTHER_BOMBERMAN;
+                    if (bombs.isEmpty()) {
+                        return OTHER_BOMBERMAN;
+                    } else {
+                        return OTHER_BOMB_BOMBERMAN;
+                    }
                 }
             }
         } else {
-            if (this == player.getHero()) {
+            if (heroes.contains(player.getHero())) {
                 return DEAD_BOMBERMAN;
             } else {
                 return OTHER_DEAD_BOMBERMAN;
             }
         }
+    }
+
+    private <T extends Point> List<T> filter(Object[] array, Class<T> clazz) {
+        return (List)Arrays.stream(array)
+                .filter(it -> it != null)
+                .filter(it -> it.getClass().equals(clazz))
+                .collect(toList());
     }
 
     public Dice getDice() {

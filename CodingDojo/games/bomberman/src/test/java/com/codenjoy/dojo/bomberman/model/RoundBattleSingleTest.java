@@ -1192,4 +1192,73 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "҉♣☺  \n", game(2));
     }
 
+    // люой герой может зайти на место трупика и там его можно прибить, так что
+    // будет у нас двап трупика в одной клетке
+    @Test
+    public void shouldDestroySecondHero_whenItOnDeathPlace() {
+        shouldPlaceOfDeath_isNotABarrierForOtherHero();
+
+        // вижу себя в клетке где еще трупик
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺♥  \n", game(0));
+
+        // вижу свой трупик, раз меня вынесли
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " Ѡ♥  \n", game(1));
+
+        // вижу своего соперника в клетке, где трупик
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ♥☺  \n", game(2));
+
+        // ставим бомбу и убегаем
+        hero(2).act();
+        tick();
+
+        hero(2).right();
+        tick();
+
+        hero(2).up();
+        tick();
+
+        tick();
+        tick();
+
+        // что в результате
+
+        // я вижу свой трупик в клетке, где есть еще один такой же
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "  ҉♥ \n" +
+                " Ѡ҉҉ \n", game(0));
+
+        // я вижу свой трупик в клетке, где есть еще один такой же
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "  ҉♥ \n" +
+                " Ѡ҉҉ \n", game(1));
+
+        // я вижу трупик одного из убитых там героев (их там двое)
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "  ҉☺ \n" +
+                " ♣҉҉ \n", game(2));
+
+        verifyAllEvents(
+                "listener(0) => [DIED]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => [KILL_OTHER_HERO, WIN_ROUND]\n");
+    }
+
 }
