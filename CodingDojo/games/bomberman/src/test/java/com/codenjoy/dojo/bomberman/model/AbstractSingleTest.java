@@ -62,6 +62,7 @@ public abstract class AbstractSingleTest {
     protected Level level;
     protected Bomberman board;
     protected int bombsCount = 1;
+    protected int bombsPower = 1;
     protected Parameter<Integer> playersPerRoom = v(Integer.MAX_VALUE);
     protected Dice meatDice = mock(Dice.class);
     protected Dice heroDice = mock(Dice.class);
@@ -76,7 +77,7 @@ public abstract class AbstractSingleTest {
 
         level = mock(Level.class);
         when(level.bombsCount()).thenReturn(bombsCount);
-        when(level.bombsPower()).thenReturn(1);
+        when(level.bombsPower()).thenReturn(bombsPower);
 
         when(settings.getBomberman(any(Level.class))).thenAnswer(inv -> {
             Hero hero = new Hero(level, heroDice);

@@ -34,6 +34,7 @@ import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
 import static com.codenjoy.dojo.bomberman.model.StateUtils.filter;
 import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
@@ -75,7 +76,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     private boolean isBusy(Point pt) {
-        for (Hero hero : field.heroes()) {
+        for (Hero hero : field.heroes(ALL)) {
             if (hero != null && hero.itsMe(this) && hero != this) {
                 return true;
             }

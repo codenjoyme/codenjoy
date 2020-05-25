@@ -39,6 +39,9 @@ import static java.util.stream.Collectors.toList;
 
 public class Bomberman extends RoundField<Player> implements Field {
 
+    public static final boolean ACTIVE_ALIVE = true;
+    public static final boolean ALL = !ACTIVE_ALIVE;
+
     private final List<Player> players = new LinkedList<>();
 
     private final Walls walls;
@@ -206,7 +209,7 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     private List<Blast> makeBlast(Bomb bomb) {
         List barriers = walls.subList(Wall.class);
-        barriers.addAll(heroes());
+        barriers.addAll(heroes(ACTIVE_ALIVE));
 
         return new BoomEngineOriginal(bomb.getOwner()).boom(barriers, size.getValue(), bomb, bomb.getPower());   // TODO move bomb inside BoomEngine
     }
@@ -308,9 +311,10 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     @Override
-    public List<Hero> heroes() {
+    public List<Hero> heroes(boolean activeAliveOnly) {
         return players.stream()
                 .map(Player::getHero)
+                .filter(hero -> !activeAliveOnly || hero.isActiveAndAlive())
                 .collect(toList());
     }
 
@@ -334,7 +338,7 @@ public class Bomberman extends RoundField<Player> implements Field {
             public Iterable<? extends Point> elements() {
                 List<Point> elements = new LinkedList<>();
 
-                elements.addAll(Bomberman.this.heroes());
+                elements.addAll(Bomberman.this.heroes(ALL));
                 Bomberman.this.walls().forEach(elements::add);
                 elements.addAll(Bomberman.this.bombs());
                 elements.addAll(Bomberman.this.blasts());

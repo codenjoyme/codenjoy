@@ -31,7 +31,7 @@ public interface Field extends RoundGameField<Player> {  // TODO примени�
 
     int size();
 
-    List<Hero> heroes();
+    List<Hero> heroes(boolean activeAliveOnly);
 
     List<Bomb> bombs();
 

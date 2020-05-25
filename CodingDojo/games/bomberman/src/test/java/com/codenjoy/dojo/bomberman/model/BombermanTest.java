@@ -44,6 +44,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -1558,7 +1559,7 @@ public class BombermanTest {
         MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChppperDice);
         bombermans = mock(List.class);
         when(bombermans.contains(anyObject())).thenReturn(false);
-        when(temp.heroes()).thenReturn(bombermans);
+        when(temp.heroes(ALL)).thenReturn(bombermans);
         withWalls(walls);
         walls.regenerate();
         givenBoard(size);

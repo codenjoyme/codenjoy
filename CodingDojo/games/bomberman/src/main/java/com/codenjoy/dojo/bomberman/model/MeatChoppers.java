@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class MeatChoppers extends WallsDecorator implements Walls {
@@ -60,7 +61,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
             int y = dice.next(board.size());
 
             // TODO это капец как долго выполняется, убрать нафиг митчомеров из Walls и сам Walls рассформировать!
-            if (!board.isBarrier(x, y, WITH_MEATCHOPPERS) && !board.heroes().contains(pt(x, y))) {
+            if (!board.isBarrier(x, y, WITH_MEATCHOPPERS) && !board.heroes(ALL).contains(pt(x, y))) {
                 walls.add(new MeatChopper(x, y));
                 count++;
             }
