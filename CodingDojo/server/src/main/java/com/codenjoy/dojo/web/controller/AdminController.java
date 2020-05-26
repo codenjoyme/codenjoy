@@ -181,7 +181,6 @@ public class AdminController {
 
     @GetMapping(params = "resetAll")
     public String resetAllPlayers(Model model, HttpServletRequest request) {
-        saveService.removeAllSaves();
         saveService.saveAll();
         playerService.removeAll();
         saveService.loadAll();
