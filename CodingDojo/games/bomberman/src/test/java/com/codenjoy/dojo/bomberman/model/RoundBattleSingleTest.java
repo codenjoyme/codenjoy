@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.Direction.DOWN;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 
@@ -301,7 +302,8 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         tick();
 
         dice(heroDice, 3, 4); // новые координаты для героя
-        newGame(1); // это сделоает сервер в ответ на isAlive = false
+        board.newGame(player(1)); // это сделоает сервер в ответ на isAlive = false
+        resetHeroes();
 
         // игрок уже живой но неактивный до начала следующего раунда
         assertEquals(false, hero(1).isActive());
@@ -1192,4 +1194,618 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "҉♣☺  \n", game(2));
     }
 
+    // люой герой может зайти на место трупика и там его можно прибить, так что
+    // будет у нас двап трупика в одной клетке
+    @Test
+    public void shouldDestroySecondHero_whenItOnDeathPlace() {
+        shouldPlaceOfDeath_isNotABarrierForOtherHero();
+
+        // вижу себя в клетке где еще трупик
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺♥  \n", game(0));
+
+        // вижу свой трупик, раз меня вынесли
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " Ѡ♥  \n", game(1));
+
+        // вижу своего соперника в клетке, где трупик
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ♥☺  \n", game(2));
+
+        // ставим бомбу и убегаем
+        hero(2).act();
+        tick();
+
+        hero(2).right();
+        tick();
+
+        hero(2).up();
+        tick();
+
+        tick();
+        tick();
+
+        // что в результате
+
+        // я вижу свой трупик в клетке, где есть еще один такой же
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "  ҉♥ \n" +
+                " Ѡ҉҉ \n", game(0));
+
+        // я вижу свой трупик в клетке, где есть еще один такой же
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "  ҉♥ \n" +
+                " Ѡ҉҉ \n", game(1));
+
+        // я вижу трупик одного из убитых там героев (их там двое)
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "  ҉☺ \n" +
+                " ♣҉҉ \n", game(2));
+
+        verifyAllEvents(
+                "listener(0) => [DIED]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => [KILL_OTHER_HERO, WIN_ROUND]\n");
+    }
+
+    // проверяем, что при clearScore обнуляется:
+    // - таймеры раунда
+    // - очки заработанные в этом раунде
+    // - и все игроки пересоздаются снова
+    @Test
+    public void shouldCleanEverything_whenCleanScores() {
+        int count = 3;
+
+        playersPerRoom.update(count);
+        timeBeforeStart = 1;
+        timePerRound = 60; // до конца раунда целая минута
+
+        dice(heroDice,
+                4, 4, // первый игрок
+                4, 3, // второй
+                3, 4, // третий
+                0, 0);  // для последующих начнем с левого нижнего угла
+
+        givenBoard(count);
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n");
+
+        asrtBrd("   ♥☺\n" +
+                "    ♥\n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game(0));
+
+        asrtBrd("   ♥♥\n" +
+                "    ☺\n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game(1));
+
+        asrtBrd("   ☺♥\n" +
+                "    ♥\n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game(2));
+
+        // бахнем бомбу
+        hero(2).act();
+        tick();
+
+        hero(2).left();
+        tick();
+
+        hero(2).left();
+        tick();
+
+        tick();
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [DIED]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => [KILL_OTHER_HERO]\n");
+
+        assertEquals(0, hero(0).scores());
+        assertEquals(0, hero(1).scores());
+        assertEquals(200, hero(2).scores()); // за победу
+
+        assertEquals(true, hero(0).isActive());
+        assertEquals(false, hero(0).isAlive()); // убит
+        assertEquals(true, hero(1).isActiveAndAlive());
+        assertEquals(true, hero(2).isActiveAndAlive());
+
+        // делаем очистку очков
+        board.clearScore();
+        resetHeroes();
+
+        // после этого тика будет сразу же новый раунд
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n");
+
+        // и очки обнулятся
+        assertEquals(0, hero(0).scores());
+        assertEquals(0, hero(1).scores());
+        assertEquals(0, hero(2).scores());
+
+        // и все игроки активны
+        assertEquals(true, hero(0).isActiveAndAlive());
+        assertEquals(true, hero(1).isActiveAndAlive());
+        assertEquals(true, hero(2).isActiveAndAlive());
+    }
+
+    // проверил как отрисуется митчопер если под ним будет трупик героя:
+    // - от имени наблюдателя я там вижу опасность - митчопера, мне не интересны останки игроков
+    // - от имени жертвы я вижу свой трупик, мне пофиг уже что на карте происходит, главное где поставить памятник герою
+    @Test
+    public void shouldDrawMeatChopper_onPlaceOfDeath() {
+        MeatChopper chopper = new MeatChopper(1, 1);
+        givenWalls(chopper);
+
+        playersPerRoom.update(DEFAULT_COUNT);
+        timeBeforeStart = 1;
+        timePerRound = 20;
+
+        dice(heroDice,
+                0, 0, // первый игрок
+                1, 0, // второй
+                2, 0); // третий
+
+        givenBoard(DEFAULT_COUNT);
+
+        tick();
+
+        // ставлю бомбу
+        hero(0).act();
+        tick();
+
+        // и тикать
+        hero(0).up();
+        tick();
+
+        hero(0).up();
+        tick();
+        tick();
+
+        // взрыв
+        tick();
+
+        // идем назад
+        hero(0).down();
+        tick();
+
+        hero(0).down();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " &   \n" +
+                "☺♣♥  \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " &   \n" +
+                "♥Ѡ♥  \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " &   \n" +
+                "♥♣☺  \n", game(2));
+
+        // попробуем митчопером сходить на место падшего героя
+        chopper.move(DOWN.change(chopper));
+
+        // от имени наблюдателя в клеточке с останками я вижу живого митчопера
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺&♥  \n", game(0));
+
+        // от имени пострадавшего в клеточке я вижу свои останки, митчопер хоть и есть там, я его не вижу
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "♥Ѡ♥  \n", game(1));
+
+        // от имени наблюдателя в клеточке с останками я вижу живого митчопера
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "♥&☺  \n", game(2));
+    }
+
+    // проверил как отрисуется митчопер если под ним будет не только трупик героя но и бобма:
+    // - от имени наблюдателя я там вижу опасность - митчопера, мне не интересны останки игроков
+    // - от имени жертвы я вижу свой трупик, мне пофиг уже что на карте происходит, главное где поставить памятник герою
+    // но если митчопера нет, и бомба с останками, то подобно описанному выше:
+    // - я от имени наблюдателя вижу тикающую бомбу
+    // - а от имени пострадавшего - свои останки
+    // приоритет прорисовки такой: 1) митчопер 2) бомба 3) останки
+    @Test
+    public void shouldDrawMeatChopper_onPlaceOfDeath_withBomb() {
+        MeatChopper chopper = new MeatChopper(1, 1);
+        givenWalls(chopper);
+
+        playersPerRoom.update(DEFAULT_COUNT);
+        timeBeforeStart = 1;
+        timePerRound = 20;
+
+        dice(heroDice,
+                0, 0, // первый игрок
+                1, 0, // второй
+                2, 0); // третий
+
+        givenBoard(DEFAULT_COUNT);
+
+        tick();
+
+        // ставлю бомбу
+        hero(0).act();
+        tick();
+
+        // и тикать
+        hero(0).up();
+        tick();
+
+        hero(0).up();
+        tick();
+        tick();
+
+        // взрыв
+        tick();
+
+        // идем назад
+        hero(0).down();
+        tick();
+
+        hero(0).down();
+        tick();
+
+        hero(0).right();
+        hero(0).act();
+        tick();
+
+        hero(0).left();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " &   \n" +
+                "☺3♥  \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " &   \n" +
+                "♥Ѡ♥  \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " &   \n" +
+                "♥3☺  \n", game(2));
+
+        // попробуем митчопером сходить на место падшего героя
+        chopper.move(DOWN.change(chopper));
+
+        // от имени наблюдателя в клеточке с останками я вижу живого митчопера, он по моему опаснее чем бомба
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺&♥  \n", game(0));
+
+        // от имени пострадавшего в клеточке я вижу свои останки, митчопер хоть и есть там, я его не вижу
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "♥Ѡ♥  \n", game(1));
+
+        // от имени наблюдателя в клеточке с останками я вижу живого митчопера, он по моему опаснее чем бомба
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "♥&☺  \n", game(2));
+    }
+
+    // просто любопытно как рванут два бомбера, вместе с митчопером и трупом под бомбой
+    @Test
+    public void shouldDestroyMeatChopper_withOtherHeroes_onDeathPlace() {
+        shouldDrawMeatChopper_onPlaceOfDeath_withBomb();
+
+        resetListeners();
+
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "Ѡx♣  \n", game(0));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "♣Ѡ♣  \n", game(1));
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "♣xѠ  \n", game(2));
+
+        // победителей нет
+        verifyAllEvents(
+                "listener(0) => [KILL_MEAT_CHOPPER, KILL_OTHER_HERO, DIED]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => [DIED]\n");
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n");
+    }
+
+    // в этом тесте проверяется что взрывная волна не проходит через живого героя,
+    // но его останки не являются препятствием
+    @Test
+    public void shouldPlaceOfDeath_isNotABarrierForBlast() {
+        bombsPower = 3; // бомба с большим радиусом, чем обычно
+        playersPerRoom.update(DEFAULT_COUNT);
+        timeBeforeStart = 1;
+        timePerRound = 60;
+        timeForWinner = 15; // после победы я хочу еще чуть повисеть на уровне
+
+        dice(heroDice,
+                0, 0, // первый игрок
+                1, 0, // второй
+                2, 0); // третий
+
+        givenBoard(DEFAULT_COUNT);
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 1]]\n" +
+                "listener(1) => [START_ROUND, [Round 1]]\n" +
+                "listener(2) => [START_ROUND, [Round 1]]\n");
+
+
+        // выношу одного игрока мощным снарядом
+        hero(0).act();
+        tick();
+
+        hero(0).up();
+        tick();
+
+        hero(0).right();
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺   \n" +
+                "1♥♥  \n", game(0));
+
+        tick();
+
+        // второй не погибает - его экранирует обычный герой
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉    \n" +
+                "҉☺   \n" +
+                "҉♣♥  \n", game(0));
+
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉    \n" +
+                "҉♥   \n" +
+                "҉Ѡ♥  \n", game(1));
+
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉    \n" +
+                "҉♥   \n" +
+                "҉♣☺  \n", game(2));
+
+        verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO]\n" +
+                "listener(1) => [DIED]\n" +
+                "listener(2) => []\n");
+
+        hero(0).left();
+        tick();
+
+        hero(0).down();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺♣♥  \n", game(0));
+
+        // а теперь пробую то же, но через останки только что
+        // поверженного соперника - они не должны мешать взрывной волне
+        hero(0).act();
+        tick();
+
+        hero(0).up();
+        tick();
+
+        hero(0).right();
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺   \n" +
+                "1♣♥  \n", game(0));
+
+        tick();
+
+        // второй так же падет
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉    \n" +
+                "҉☺   \n" +
+                "҉♣♣  \n", game(0));
+
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉    \n" +
+                "҉♥   \n" +
+                "҉Ѡ♣  \n", game(1));
+
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉    \n" +
+                "҉♥   \n" +
+                "҉♣Ѡ  \n", game(2));
+
+        verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO, WIN_ROUND]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => [DIED]\n");
+
+        // ну и напоследок вернемся на место
+        hero(0).left();
+        tick();
+
+        hero(0).down();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "☺♣♣  \n", game(0));
+
+        // а теперь посмотрим как взорвется бомба на двух трупиках
+        // они должны быть полностью прозрачна для взрывной волны
+        hero(0).act();
+        tick();
+
+        hero(0).up();
+        tick();
+
+        hero(0).right();
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺   \n" +
+                "1♣♣  \n", game(0));
+
+        tick();
+
+        // второй так же падет
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉    \n" +
+                "҉☺   \n" +
+                "҉♣♣҉ \n", game(0));
+
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉    \n" +
+                "҉♥   \n" +
+                "҉Ѡ♣҉ \n", game(1));
+
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉    \n" +
+                "҉♥   \n" +
+                "҉♣Ѡ҉ \n", game(2));
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n");
+    }
+
+    // в этом тесте я проверяю, что после победы героя на уровне
+    // в случае, если timeForWinner > 1 то герой повисит некоторое время на поле сам
+    // и в конечном счете начнется новый раунд
+    @Test
+    public void shouldWinScore_whenTimeoutBy_timeForWinner() {
+        timePerRound = 60;
+        timeForWinner = 15; // после победы я хочу еще чуть повисеть на уровне
+
+        shouldPlaceOfDeath_isNotABarrierForBlast();
+
+        // пройдет еще некоторое число тиков до общего числа timeForWinner
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n");
+
+        // и начнется новый раунд
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [START_ROUND, [Round 2]]\n" +
+                "listener(1) => [START_ROUND, [Round 2]]\n" +
+                "listener(2) => [START_ROUND, [Round 2]]\n");
+
+        // а дальше все как обычно
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                        "listener(1) => []\n" +
+                        "listener(2) => []\n");
+    }
 }

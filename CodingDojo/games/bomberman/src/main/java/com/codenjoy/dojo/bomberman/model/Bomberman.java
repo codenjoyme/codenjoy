@@ -39,6 +39,9 @@ import static java.util.stream.Collectors.toList;
 
 public class Bomberman extends RoundField<Player> implements Field {
 
+    public static final boolean ACTIVE_ALIVE = true;
+    public static final boolean ALL = !ACTIVE_ALIVE;
+
     private final List<Player> players = new LinkedList<>();
 
     private final Walls walls;
@@ -73,11 +76,11 @@ public class Bomberman extends RoundField<Player> implements Field {
         return new ArrayList<>(perks.values());
     }
 
-    public PerkOnBoard pickPerkAtPoint(int x, int y) {
-        PerkOnBoard perk = perks.get(PointImpl.pt(x, y));
+    public PerkOnBoard pickPerk(Point pt) {
+        PerkOnBoard perk = perks.get(pt);
 
         if (perk != null) {
-            perks.remove(PointImpl.pt(x, y));
+            perks.remove(pt);
         }
 
         return perk;
@@ -140,7 +143,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     private void removeBlasts() {
         blasts.clear();
         for (Point pt : destroyedWalls) {
-            walls.destroy(pt.getX(), pt.getY());
+            walls.destroy(pt);
         }
         destroyedWalls.clear();
     }
@@ -153,7 +156,7 @@ public class Bomberman extends RoundField<Player> implements Field {
                 } else if (wall instanceof DestroyWall) {
                     player.event(Events.KILL_DESTROY_WALL);
                 } else if (wall instanceof PerkOnBoard) {
-                    player.event(Events.DROP_PERK);
+                    player.event(Events.DROP_PERK); // TODO test me
                 }
             }
         }
@@ -216,20 +219,20 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     private List<Blast> makeBlast(Bomb bomb) {
         List barriers = walls.subList(Wall.class);
-        barriers.addAll(heroes());
+        barriers.addAll(heroes(ACTIVE_ALIVE));
 
         return new BoomEngineOriginal(bomb.getOwner()).boom(barriers, size.getValue(), bomb, bomb.getPower());   // TODO move bomb inside BoomEngine
     }
 
     private void killAllNear(List<Blast> blasts) {
         for (Blast blast : blasts) {
-            if (walls.itsMe(blast.getX(), blast.getY())) {
+            if (walls.itsMe(blast)) {
                 if (dropPerk(blast)) {
-                    walls.destroy(blast.getX(), blast.getY());
+                    walls.destroy(blast);
                 } else {
                     destroyedWalls.add(blast);
                 }
-                Wall wall = walls.get(blast.getX(), blast.getY());
+                Wall wall = walls.get(blast);
                 wallDestroyed(wall, blast);
             }
         }
@@ -316,32 +319,33 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     @Override
-    public boolean isBarrier(int x, int y, boolean isWithMeatChopper) {
+    public boolean isBarrier(Point pt, boolean withMeatChopper) {
         for (Player player : aliveActive()) {
-            if (player.getHero().itsMe(pt(x, y))) {
+            if (player.getHero().itsMe(pt)) {
                 return true;
             }
         }
         for (Bomb bomb : bombs) {
-            if (bomb.itsMe(x, y)) {
+            if (bomb.itsMe(pt)) {
                 return true;
             }
         }
         for (Wall wall : walls) {
-            if (wall instanceof MeatChopper && !isWithMeatChopper) {
+            if (wall instanceof MeatChopper && !withMeatChopper) {
                 continue;
             }
-            if (wall.itsMe(x, y)) {
+            if (wall.itsMe(pt)) {
                 return true;
             }
         }
-        return x < 0 || y < 0 || x > size() - 1 || y > size() - 1;
+        return pt.isOutOf(size());
     }
 
     @Override
-    public List<Hero> heroes() {
+    public List<Hero> heroes(boolean activeAliveOnly) {
         return players.stream()
                 .map(Player::getHero)
+                .filter(hero -> !activeAliveOnly || hero.isActiveAndAlive())
                 .collect(toList());
     }
 
@@ -365,7 +369,7 @@ public class Bomberman extends RoundField<Player> implements Field {
             public Iterable<? extends Point> elements() {
                 List<Point> elements = new LinkedList<>();
 
-                elements.addAll(Bomberman.this.heroes());
+                elements.addAll(Bomberman.this.heroes(ALL));
                 Bomberman.this.walls().forEach(elements::add);
                 elements.addAll(Bomberman.this.bombs());
                 elements.addAll(Bomberman.this.blasts());

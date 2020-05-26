@@ -52,10 +52,9 @@ public class Mark extends PointEnriched<Field> implements State<Elements, Player
     public void tick() {
 
         if (field != null) {
-            if (this.field.isBoxOnTheMark(x, y)) {
+            if (this.field.isBoxOnTheMark(this)) {
                 isFilled = true;
-            }
-            else  {
+            } else  {
                 isFilled = false;
             }
         }

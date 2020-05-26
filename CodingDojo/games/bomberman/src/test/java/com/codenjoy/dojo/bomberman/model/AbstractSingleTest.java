@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.stubbing.OngoingStubbing;
@@ -61,6 +62,7 @@ public abstract class AbstractSingleTest {
     protected Level level;
     protected Bomberman board;
     protected int bombsCount = 1;
+    protected int bombsPower = 1;
     protected Parameter<Integer> playersPerRoom = v(Integer.MAX_VALUE);
     protected Dice meatDice = mock(Dice.class);
     protected Dice heroDice = mock(Dice.class);
@@ -75,7 +77,7 @@ public abstract class AbstractSingleTest {
 
         level = mock(Level.class);
         when(level.bombsCount()).thenReturn(bombsCount);
-        when(level.bombsPower()).thenReturn(1);
+        when(level.bombsPower()).thenReturn(bombsPower);
 
         when(settings.getBomberman(any(Level.class))).thenAnswer(inv -> {
             Hero hero = new Hero(level, heroDice);
@@ -168,9 +170,10 @@ public abstract class AbstractSingleTest {
         players.forEach(player -> {
             if (!player.isAlive()) {
                 dice(heroDice, 0, 0);
-                newGame(players.indexOf(player));
+                board.newGame(player(players.indexOf(player)));
             }
         });
+        resetHeroes();
     }
 
     protected abstract RoundSettingsWrapper getRoundSettings();
@@ -188,9 +191,9 @@ public abstract class AbstractSingleTest {
         Arrays.asList(input).forEach(walls::add);
     }
 
-    protected void newGame(int index) {
-        board.newGame(player(index));
-        heroes.set(index, heroes.remove(heroes.size() - 1));
+    protected void resetHeroes() {
+        heroes.clear();
+        players.forEach(player -> heroes.add(player.getHero()));
     }
 
     protected void assertBoards(String expected, Integer... indexes) {
@@ -220,6 +223,10 @@ public abstract class AbstractSingleTest {
                     .collect(toList()).toArray(new Integer[0]);
         }
         return indexes;
+    }
+
+    protected void resetListeners() {
+        listeners.forEach(Mockito::reset);
     }
 
     protected void verifyAllEvents(String expected, Integer... indexes) {

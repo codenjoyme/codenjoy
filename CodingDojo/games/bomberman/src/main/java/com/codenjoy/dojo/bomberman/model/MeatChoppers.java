@@ -26,15 +26,17 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
 
 public class MeatChoppers extends WallsDecorator implements Walls {
 
     private static final boolean WITH_MEATCHOPPERS = true;
+    public static final int MAX = 10;
     private Parameter<Integer> count;
     private Field board;
     private Dice dice;
@@ -46,7 +48,6 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         this.count = count;
     }
 
-
     public void regenerate() {     // TODO потестить
         if (count.getValue() < 0) {
             count.update(0);
@@ -57,12 +58,11 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         int c = 0;
         int maxc = 100;
         while (count < this.count.getValue() && c < maxc) {
-            int x = dice.next(board.size());
-            int y = dice.next(board.size());
+            Point pt = PointImpl.random(dice, board.size());
 
             // TODO это капец как долго выполняется, убрать нафиг митчомеров из Walls и сам Walls рассформировать!
-            if (!board.isBarrier(x, y, WITH_MEATCHOPPERS) && !board.heroes().contains(pt(x, y))) {
-                walls.add(new MeatChopper(x, y));
+            if (!board.isBarrier(pt, WITH_MEATCHOPPERS) && !board.heroes(ALL).contains(pt)) {
+                walls.add(new MeatChopper(pt));
                 count++;
             }
 
@@ -83,10 +83,9 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         for (MeatChopper meatChopper : meatChoppers) {
             Direction direction = meatChopper.getDirection();
             if (direction != null && dice.next(5) > 0) {
-                int x = direction.changeX(meatChopper.getX());
-                int y = direction.changeY(meatChopper.getY());
-                if (!walls.itsMe(x, y)) {
-                    meatChopper.move(x, y);
+                Point to = direction.change(meatChopper);
+                if (!walls.itsMe(to)) {
+                    meatChopper.move(to);
                     continue;
                 } else {
                     // do nothing
@@ -96,30 +95,23 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         }
     }
 
-    private Direction tryToMove(Point pt) {
+    private Direction tryToMove(Point from) {
         int count = 0;
-        int x = pt.getX();
-        int y = pt.getY();
-        Direction direction = null;
+        Point to;
+        Direction direction;
         do {
             int n = 4;
             int move = dice.next(n);
             direction = Direction.valueOf(move);
 
-            x = direction.changeX(pt.getX());
-            y = direction.changeY(pt.getY());
+            to = direction.change(from);
+        } while ((walls.itsMe(to) || to.isOutOf(board.size())) && count++ < MAX);
 
-        } while ((walls.itsMe(x, y) || isOutOfBorder(x, y)) && count++ < 10);
-
-        if (count < 10) {
-            pt.move(x, y);
-            return direction;
+        if (count >= MAX) {
+            return null;
         }
-        return null;
-    }
 
-    private boolean isOutOfBorder(int x, int y) {
-        return x >= board.size() || y >= board.size() || x < 0 || y < 0;
+        from.move(to);
+        return direction;
     }
-
 }

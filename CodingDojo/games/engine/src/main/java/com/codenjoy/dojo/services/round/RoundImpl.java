@@ -122,6 +122,10 @@ public class RoundImpl implements Round {
     }
 
     private void rewardWinnersByTimeout() {
+        if (field.aliveActive().isEmpty()) {
+            return;
+        }
+
         Integer max = field.aliveActive().stream()
                 .map(p -> field.score(p))
                 .max(Comparator.comparingInt(i1 -> i1))

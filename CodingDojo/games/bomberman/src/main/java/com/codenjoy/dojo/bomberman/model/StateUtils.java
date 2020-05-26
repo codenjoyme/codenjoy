@@ -4,7 +4,7 @@ package com.codenjoy.dojo.bomberman.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,22 +22,27 @@ package com.codenjoy.dojo.bomberman.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.Tickable;
 
+import java.util.Arrays;
 import java.util.List;
 
-public interface Walls extends Iterable<Wall>, Tickable {
-    void add(Point pt);
+import static java.util.stream.Collectors.toList;
 
-    boolean itsMe(Point pt);
+public final class StateUtils {
 
-    <T extends Wall> List<T> subList(Class<T> filter);
+    public static <T extends Point> List<T> filter(Object[] array, Class<T> clazz) {
+        return (List) Arrays.stream(array)
+                .filter(it -> it != null)
+                .filter(it -> it.getClass().equals(clazz))
+                .collect(toList());
+    }
 
-    void add(Wall wall);
-
-    Wall destroy(Point pt);
-
-    Wall get(Point pt);
+    public static <T extends Point> T filterOne(Object[] array, Class<T> clazz) {
+        return (T)Arrays.stream(array)
+                .filter(it -> it != null)
+                .filter(it -> it.getClass().equals(clazz))
+                .findFirst()
+                .orElse(null);
+    }
 }

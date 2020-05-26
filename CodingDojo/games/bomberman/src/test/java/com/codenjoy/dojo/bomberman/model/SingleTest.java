@@ -153,12 +153,15 @@ public class SingleTest extends AbstractSingleTest {
 
         hero(1).right();
         tick();
+        // от имени наблюдателя вижу опасность - митчопера
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "☺ ♣  \n", game(0));
 
+                "☺ &  \n", game(0));
+
+        // от имени жертвы вижу свой трупик
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -184,12 +187,14 @@ public class SingleTest extends AbstractSingleTest {
         dice(meatDice, Direction.LEFT.value());
         tick();
 
+        // от имени наблюдателя я там вижу опасность - митчопера, мне не интересны останки игроков
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
                 "     \n" +
-                "☺♣   \n", game(0));
+                "☺&   \n", game(0));
 
+        // от имени жертвы я вижу свой трупик, мне пофиг уже что на карте происходит, главное где поставить памятник герою
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +

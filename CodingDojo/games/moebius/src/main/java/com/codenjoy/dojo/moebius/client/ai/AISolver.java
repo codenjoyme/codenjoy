@@ -26,6 +26,8 @@ package com.codenjoy.dojo.moebius.client.ai;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.moebius.client.Board;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 
 public class AISolver implements Solver<Board> {
 
@@ -38,9 +40,10 @@ public class AISolver implements Solver<Board> {
     @Override
     public String get(final Board board) {
         if (board.isGameOver()) return "";
-        return String.format("ACT(%s,%s)",
-                dice.next(board.size()),
-                dice.next(board.size()));
+
+        Point pt = PointImpl.random(dice, board.size());
+
+        return String.format("ACT(%s,%s)", pt.getX(), pt.getY());
     }
 
 }

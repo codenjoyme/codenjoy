@@ -29,22 +29,28 @@ import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.bomberman.model.StateUtils.filter;
+import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
 
 public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
     private static final boolean WITHOUT_MEAT_CHOPPER = false;
-    private final Level level;
-    private final Dice dice;
-    private final HeroPerks perks = new HeroPerks();
+    public static final int MAX = 1000;
+    private Level level;
+    private Dice dice;
     private boolean bomb;
     private Direction direction;
     private int score;
+
+    private HeroPerks perks = new HeroPerks();
 
     public Hero(Level level, Dice dice) {
         this.level = level;
@@ -58,31 +64,27 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         int count = 0;
         do {
             move(dice.next(field.size()), dice.next(field.size()));
-            while (isBusy(x, y) && !isOutOfBoard(x, y)) {
+            while (isBusy(this) && !isOutOf(field.size())) {
                 x++;
-                if (isBusy(x, y)) {
+                if (isBusy(this)) {
                     y++;
                 }
             }
-        } while ((isBusy(x, y) || isOutOfBoard(x, y)) && count++ < 1000);
+        } while ((isBusy(this) || isOutOf(field.size())) && count++ < MAX);
 
-        if (count >= 1000) {
+        if (count >= MAX) {
             throw new RuntimeException("Dead loop at MyBomberman.init(Board)!");
         }
     }
 
-    private boolean isBusy(int x, int y) {
-        for (Hero hero : field.heroes()) {
+    private boolean isBusy(Point pt) {
+        for (Hero hero : field.heroes(ALL)) {
             if (hero != null && hero.itsMe(this) && hero != this) {
                 return true;
             }
         }
 
-        return field.walls().itsMe(x, y);
-    }
-
-    private boolean isOutOfBoard(int x, int y) {
-        return x >= field.size() || y >= field.size() || x < 0 || y < 0;
+        return field.walls().itsMe(pt);
     }
 
     @Override
@@ -131,12 +133,11 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
             return;
         }
 
-        int newX = direction.changeX(x);
-        int newY = direction.changeY(y);
+        Point pt = direction.change(this);
 
-        if (!field.isBarrier(newX, newY, WITHOUT_MEAT_CHOPPER)) {
-            move(newX, newY);
-            PerkOnBoard perk = ((Bomberman) field).pickPerkAtPoint(newX, newY);
+        if (!field.isBarrier(pt, WITHOUT_MEAT_CHOPPER)) {
+            move(pt);
+            PerkOnBoard perk = field.pickPerk(pt);
             if (perk != null) {
                 addPerk(perk.getPerk());
             }
@@ -191,54 +192,53 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Bomb bomb = null;
-        Hero hero = null;
-        if (alsoAtPoint[1] != null) {
-            if (alsoAtPoint[1] instanceof Bomb) {
-                bomb = (Bomb) alsoAtPoint[1];
-            } else if (alsoAtPoint[1] instanceof Hero) {
-                hero = (Hero) alsoAtPoint[1];
-            }
-        }
+        Bomb bomb = filterOne(alsoAtPoint, Bomb.class);
+        List<Hero> heroes = filter(alsoAtPoint, Hero.class);
+        MeatChopper meat = filterOne(alsoAtPoint, MeatChopper.class);
 
-        if (isActiveAndAlive()) {
-            // есть другой герой в этой же клетке
-            if (hero != null) {
-                // player наблюдатель содержится в той же клетке что и другой герой
-                if (player.getHero().itsMe(this)) {
-                    // и они не равны
-                    if (this != player.getHero()) {
-                        // и тот герой неактивен или его уже вынесли
-                        if (!hero.isActiveAndAlive()) {
-                            return DEAD_BOMBERMAN;
-                        }
-                    }
-                    // другой герой наблюдает за клеткой в которой один жив, другой мертв
-                } else {
-                    return OTHER_BOMBERMAN;
-                }
-            }
-
-            if (this == player.getHero()) {
-                if (bomb != null) {
-                    return BOMB_BOMBERMAN;
-                } else {
-                    return BOMBERMAN;
-                }
-            } else {
-                if (bomb != null) {
-                    return OTHER_BOMB_BOMBERMAN;
-                } else {
-                    return OTHER_BOMBERMAN;
-                }
-            }
-        } else {
-            if (this == player.getHero()) {
+        // player наблюдатель содержится в той же клетке которую прорисовываем
+        if (heroes.contains(player.getHero())) {
+            // герой наблюдателя неактивен или его вынесли
+            if (!player.getHero().isActiveAndAlive()) {
                 return DEAD_BOMBERMAN;
-            } else {
-                return OTHER_DEAD_BOMBERMAN;
             }
+
+            // герой наблюдателя жив и активен
+
+            // под ним бомба
+            if (bomb != null) {
+                return BOMB_BOMBERMAN;
+            }
+
+            return BOMBERMAN;
         }
+
+        // player наблюдает за клеткой в которой не находится сам
+
+        // в клетке только трупики?
+        if (heroes.stream().noneMatch(Hero::isActiveAndAlive)) {
+            // если в клеточке с героем митчопер, рисуем его
+            if (meat != null) {
+                return meat.state(player, alsoAtPoint);
+            }
+
+            // если митчопера нет, следующий по опасности - бобма
+            if (bomb != null) {
+                return bomb.state(player, alsoAtPoint);
+            }
+
+            // и если опасности нет, тогда уже рисуем останки
+            return OTHER_DEAD_BOMBERMAN;
+        }
+
+        // в клетке есть другие активные и живые герои
+
+        // под ними бомба
+        if (bomb != null) {
+            return OTHER_BOMB_BOMBERMAN;
+        }
+
+        return OTHER_BOMBERMAN;
     }
 
     public Dice getDice() {

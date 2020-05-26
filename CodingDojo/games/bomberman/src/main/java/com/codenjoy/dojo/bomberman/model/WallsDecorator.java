@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
 import java.util.Iterator;
@@ -41,13 +42,13 @@ public class WallsDecorator implements Walls, Tickable {
     }
 
     @Override
-    public void add(int x, int y) {
-        walls.add(x, y);
+    public void add(Point pt) {
+        walls.add(pt);
     }
 
     @Override
-    public boolean itsMe(int x, int y) {
-        return walls.itsMe(x, y);
+    public boolean itsMe(Point pt) {
+        return walls.itsMe(pt);
     }
 
     @Override
@@ -61,13 +62,13 @@ public class WallsDecorator implements Walls, Tickable {
     }
 
     @Override
-    public Wall destroy(int x, int y) {
-        return walls.destroy(x, y);
+    public Wall destroy(Point pt) {
+        return walls.destroy(pt);
     }
 
     @Override
-    public Wall get(int x, int y) {
-        return walls.get(x, y);
+    public Wall get(Point pt) {
+        return walls.get(pt);
     }
 
     @Override
