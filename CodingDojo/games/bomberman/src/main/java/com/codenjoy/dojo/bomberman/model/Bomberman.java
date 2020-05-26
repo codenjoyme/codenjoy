@@ -278,6 +278,13 @@ public class Bomberman extends RoundField<Player> implements Field {
                     bi.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
                     perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), bi));
                     result = true;
+                    break;
+                case BOMB_REMOTE_CONTROL:
+                    BombRemoteControl brc = new BombRemoteControl(ps.getTimeout());
+                    brc.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
+                    perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), brc));
+                    result = true;
+                    break;
                 default:
             }
         }

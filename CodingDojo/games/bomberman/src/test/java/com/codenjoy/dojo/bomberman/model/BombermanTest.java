@@ -23,10 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.perks.BombBlastRadiusIncrease;
-import com.codenjoy.dojo.bomberman.model.perks.BombCountIncrease;
-import com.codenjoy.dojo.bomberman.model.perks.BombImmune;
-import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
+import com.codenjoy.dojo.bomberman.model.perks.*;
 import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
@@ -2260,6 +2257,72 @@ public class BombermanTest {
                 "     \n" +
                 " ҉   \n" +
                 "҉Ѡ҉  \n");
+    }
+
+    @Test
+    public void shouldBombBlastOnAction_whenBRCperk() {
+    // Bomb remote control (BRC)
+
+        when(level.bombsCount()).thenReturn(3);
+        player.getHero().addPerk(new BombRemoteControl(2));
+
+        hero.act();
+        hero.right();
+        field.tick();
+//        hero.act();
+//        field.tick();
+        hero.up();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺   \n" +
+                "5    \n");
+
+        hero.act();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "҉☻   \n" +
+                "҉҉   \n");
+
+        hero.up();
+        field.tick();
+        hero.left();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺    \n" +
+                " 5   \n" +
+                "     \n");
+
+        hero.act();
+        field.tick();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☻    \n" +
+                "     \n" +
+                "     \n");
+
+        hero.right();
+        field.tick();
+        hero.act();
+        field.tick();
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "33☺  \n" +
+                "     \n" +
+                "     \n");
+
     }
 
     static class DestroyWallAt extends WallsDecorator {

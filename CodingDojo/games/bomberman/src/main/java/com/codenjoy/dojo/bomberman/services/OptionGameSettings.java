@@ -28,6 +28,7 @@ import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
+import com.codenjoy.dojo.services.settings.EditBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
@@ -56,11 +57,10 @@ public class OptionGameSettings implements GameSettings {
     private Parameter<Integer> perkPickTimeout;
     private final Parameter<Integer> perkBombBlastRadiusInc;
     private final Parameter<Integer> timeoutBombBlastRadiusInc;
-
     private final Parameter<Integer> perkBombCountInc;
     private final Parameter<Integer> timeoutBombCountInc;
     private final Parameter<Integer> timeoutBombImmune;
-//    private final Parameter<Integer> timeoutBombRemoteControl;
+    private final Parameter<Integer> remoteControlCount;
 
     public OptionGameSettings(Settings settings, Dice dice) {
         this.dice = dice;
@@ -100,7 +100,7 @@ public class OptionGameSettings implements GameSettings {
         // Bomb immune (BI)
         timeoutBombImmune = settings.addEditBox("[Perks] Bomb immune effect timeout").type(Integer.class).def(10);
         // Bomb remote control (BRC)
-//        timeoutBombRemoteControl = settings.addEditBox("[Perks] Bomb remote controll effect timeout").type(Integer.class).def(10);
+        remoteControlCount = settings.addEditBox("[Perks] Number of Bomb remote controls (how many times player can use it)").type(Integer.class).def(3);
     }
 
     @Override
@@ -147,8 +147,8 @@ public class OptionGameSettings implements GameSettings {
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_IMMUNE,
                 0, timeoutBombImmune.getValue());
 
-       /* PerksSettingsWrapper.setPerkSettings(Elements.BOMB_REMOTE_CONTROL,
-                0, timeoutBombImmune.getValue());*/
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_REMOTE_CONTROL,
+                0, remoteControlCount.getValue());
 
         return new Hero(level, dice);
     }

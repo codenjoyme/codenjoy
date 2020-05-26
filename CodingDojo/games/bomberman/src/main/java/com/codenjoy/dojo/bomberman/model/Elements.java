@@ -64,7 +64,7 @@ public enum Elements implements CharElements {
 
     BOMB_COUNT_INCREASE('c'), // Increase available bombs count. Number of extra bombs can be set in settings. The perk is temporary.
 
-//    BOMB_REMOTE_CONTROL('r'), // Bomb blast not by timer but by second act.
+    BOMB_REMOTE_CONTROL('r'), // Bomb blast not by timer but by second act. Number of RC triggers is limited and can be set in settings.
 
     BOMB_IMMUNE('i'), // Do not die after bomb blast (own bombs and others as well). Temporary.
     /// a void

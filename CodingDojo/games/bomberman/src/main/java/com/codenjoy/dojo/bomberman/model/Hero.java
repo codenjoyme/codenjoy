@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.model.perks.BombRemoteControl;
 import com.codenjoy.dojo.bomberman.model.perks.HeroPerks;
 import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
@@ -38,13 +39,12 @@ import static com.codenjoy.dojo.bomberman.model.Elements.*;
 public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
     private static final boolean WITHOUT_MEAT_CHOPPER = false;
-    private Level level;
-    private Dice dice;
+    private final Level level;
+    private final Dice dice;
+    private final HeroPerks perks = new HeroPerks();
     private boolean bomb;
     private Direction direction;
     private int score;
-
-    private HeroPerks perks = new HeroPerks();
 
     public Hero(Level level, Dice dice) {
         this.level = level;
@@ -151,12 +151,41 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     private void setBomb(int bombX, int bombY) {
         Perk bombCount = perks.getPerk(BOMB_COUNT_INCREASE);
+        Perk bombRemoteControl = perks.getPerk(BOMB_REMOTE_CONTROL);
+        List<Bomb> bombs = field.bombs(this);
+
+        if (bombRemoteControl != null) {
+            // blast bombs that were set on remote control previously
+            boolean isRemoteControllEnabled = false;
+            for (Bomb b : bombs) {
+                if (b.isOnRemoteControl()) {
+                    b.activateRemoteControl();
+                    isRemoteControllEnabled = true;
+                }
+            }
+            if (isRemoteControllEnabled) {
+                perks.add(new BombRemoteControl(bombRemoteControl.getTimeout() - 1));
+            }
+        } else {
+            // reset bombs that were set on remote control previously after perk expiration
+            // to avoid "endless" bombs
+            for (Bomb b : bombs) {
+                if (b.isOnRemoteControl()) {
+                    b.deactivateRemoteControl();
+                }
+            }
+        }
 
         if (field.bombs(this).size() < level.bombsCount() + (bombCount != null ? bombCount.getValue() : 0)) {
             Perk bombBlastInc = perks.getPerk(BOMB_BLAST_RADIUS_INCREASE);
             int boost = bombBlastInc != null ? bombBlastInc.getValue() : 0;
+            Bomb bomb = new Bomb(this, bombX, bombY, level.bombsPower() + boost, field);
 
-            field.drop(new Bomb(this, bombX, bombY, level.bombsPower() + boost, field));
+            if (bombRemoteControl != null) {
+                bomb.putOnRemoteControl();
+            }
+
+            field.drop(bomb);
         }
     }
 
@@ -184,7 +213,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
                             return DEAD_BOMBERMAN;
                         }
                     }
-                // другой герой наблюдает за клеткой в которой один жив, другой мертв
+                    // другой герой наблюдает за клеткой в которой один жив, другой мертв
                 } else {
                     return OTHER_BOMBERMAN;
                 }
