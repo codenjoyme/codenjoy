@@ -128,8 +128,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 "font-src 'self';" +
                                 "style-src 'self' 'unsafe-inline';")
                     .and()
-// TODO хедеры перенесены в nginx и тут закомментированы потому
-//                        .addHeaderWriter(new XFrameOptionsHeaderWriter(allowFromHostsStrategy(allowedHosts)))
+                        .addHeaderWriter(new XFrameOptionsHeaderWriter(allowFromHostsStrategy(allowedHosts)))
                 .and()
                     .csrf().disable();
         // @formatter:on
