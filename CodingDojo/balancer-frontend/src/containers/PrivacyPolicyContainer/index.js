@@ -217,9 +217,8 @@ const PrivacyPolicyContainer = () => (
                 дата і час відвідування Сайту, поновлення та видалення або
                 знищення даних, відомості про дії на Сайті, файли «cookies»), в
                 т.ч. з використанням метричних програм (систем) Яндекс.Метрика,
-                Google Analytics, Google Tag Manager, Google reCAPTCHA, .NET
-                фреймворку, IS3 компонента, провайдерів авторизації LinkedIn,
-                Facebook, аккаунта Google, Twitter, Github та інших.
+                Google Analytics, Google Tag Manager, Google reCAPTCHA, J2SE/J2EE
+                фреймворків.
             </p>
             <div className='subTitle'>
                 §5 Порядок та умови обробки персональних даних
