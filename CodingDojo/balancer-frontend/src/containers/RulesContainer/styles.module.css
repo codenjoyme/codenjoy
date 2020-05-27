@@ -51,3 +51,8 @@
 .copyConnection {
     cursor: pointer;
 }
+
+ul {
+    list-style-type: circle;
+    margin-left: 40px;
+}
