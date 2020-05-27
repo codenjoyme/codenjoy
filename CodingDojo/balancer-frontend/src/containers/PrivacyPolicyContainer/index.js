@@ -1,5 +1,9 @@
 // vendor
 import React from 'react';
+import Icon from '../../styles/images/icons/rules.svg';
+
+const appUrl = process.env.REACT_APP_EVENT_LINK;
+const privacyPolicyUrl = appUrl + '/privacyPolicy';
 
 const PrivacyPolicyContainer = () => (
     <div className='container'>
@@ -13,8 +17,8 @@ const PrivacyPolicyContainer = () => (
                 та поштова адреса: Україна, г. Київ, вул. Фізкультури 28, 03150
                 (далі — «Компанія»), і діє у відношенні персональних даних, які
                 Компанія може отримати відносно Відвідувача сайту{ ' ' }
-                <a href={ process.env.REACT_APP_EVENT_LINK }>
-                    { process.env.REACT_APP_EVENT_LINK }
+                <a href={ appUrl }>
+                    { appUrl }  <img src={ Icon } />
                 </a>{ ' ' } (далі – «Сайт»), з будь-якого
                 пристрою і при комунікації з Компанією в будь-якій формі.
             </p>
@@ -660,8 +664,8 @@ const PrivacyPolicyContainer = () => (
             </p>
             <p>
                 8.3. Чинна редакція Політики постійно доступна на сторінці за
-                адресою: <a href={ process.env.REACT_APP_EVENT_LINK }>
-                    { process.env.REACT_APP_EVENT_LINK }
+                адресою: <a href={ privacyPolicyUrl }>
+                    { privacyPolicyUrl } <img src={ Icon } alt='Policy page' />
                 </a>{ ' ' }
             </p>
         </div>

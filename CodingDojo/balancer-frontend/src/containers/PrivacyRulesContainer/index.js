@@ -2,12 +2,18 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 // proj
-import Rules from '../../styles/images/icons/rules.svg';
+import Icon from '../../styles/images/icons/rules.svg';
 import { book } from '../../routes';
 
 const startDate = process.env.REACT_APP_EVENT_START_DATE;
 const endDate = process.env.REACT_APP_EVENT_END_DATE;
 const registerEndDate = process.env.REACT_APP_EVENT_REGISTER_END_DATE;
+const appUrl = process.env.REACT_APP_EVENT_LINK;
+const privacyPolicyUrl = appUrl + '/privacyPolicy';
+const downloadClientUrl = appUrl + '/rules#client';
+const gameRulesUrl = appUrl + '/rules';
+const boardUrl = appUrl + '/board';
+const joinSlackUrl = process.env.REACT_APP_JOIN_CHAT_LINK;
 
 const PrivacyPolicyContainer = () => (
     <div className='container'>
@@ -19,7 +25,7 @@ const PrivacyPolicyContainer = () => (
                 <br />
                 <div className='notation'>(тут і далі – Правила)</div>
             </div>
-            <div className='subTitle'>§1 Загальна інформація</div>
+            <div className='subTitle' id="details1">§1 Загальна інформація</div>
             <ol>
                 <li>
                     1. Ці правила конкурсу включають у себе правила та умови
@@ -41,8 +47,8 @@ const PrivacyPolicyContainer = () => (
                 <li>4. Конкурс проходитиме на території України.</li>
                 <li>
                     5. Конкурс буде проводитися в онлайн-форматі на веб-сайті{ ' ' }
-                    <a href={ process.env.REACT_APP_EVENT_LINK }>
-                        { process.env.REACT_APP_EVENT_LINK }
+                    <a href={ appUrl }>
+                        { appUrl } <img src={ Icon } />
                     </a>{ ' ' }
                     (тут і далі – Сайт Конкурсу).
                 </li>
@@ -57,7 +63,7 @@ const PrivacyPolicyContainer = () => (
                     бізнесу.
                 </li>
             </ol>
-            <div className='subTitle'>§2 Правила конкурсу</div>
+            <div className='subTitle' id="details2">§2 Правила конкурсу</div>
             <ol>
                 <li>
                     1. Конкурс відкритий для будь-якої фізичної особи з повною
@@ -135,8 +141,8 @@ const PrivacyPolicyContainer = () => (
                     WebSocket клиєнти (заготовки для ботів) для мов Java,
                     JavaScript, .Net/C#, Python, Go які можна завантажити з
                     Сайту Конкурсу{ ' ' }
-                    <a href={ process.env.REACT_APP_EVENT_LINK }>
-                        { process.env.REACT_APP_EVENT_LINK }
+                    <a href={ downloadClientUrl }>
+                        { downloadClientUrl } <img src={ Icon } alt='Rules page' />
                     </a>
                     .
                 </li>
@@ -173,12 +179,12 @@ const PrivacyPolicyContainer = () => (
                     право на отримання такого Призу.
                 </li>
             </ol>
-            <div className='subTitle'>
+            <div className='subTitle' id="details3">
                 §3 Проведення Конкурсу, призи та умови їх отримання
             </div>
             <ol>
                 <li>
-                    1.               Конкурс проводиться в онлайн-форматі з 9.00
+                    1. Конкурс проводиться в онлайн-форматі з 9.00
                     години { startDate } до 19.00 години { endDate } року.
                     Реєстрація на Конкурс розпочинається о 9.00 годині
                     { startDate } і закінчується о 19.00 годині { registerEndDate }.
@@ -210,7 +216,7 @@ const PrivacyPolicyContainer = () => (
                 </li>
                 <li>
                     6. Кожна Кімната на Сайті Конкурсу грає декілька Раундів.
-                    Один Раунд триватиме не закiнчиться час Раунду, але не довше
+                    Один Раунд триватиме доки не закiнчиться час Раунду, але не довше
                     тривалості Ігрового дня.
                 </li>
                 <li>
@@ -227,8 +233,8 @@ const PrivacyPolicyContainer = () => (
                     так і різноманітні ігрові Елементи (перешкоди, бонуси тощо).
                     За взаємодію з цими Елементами можуть нараховуватись як
                     бонусні, так і штрафні Бали (детальніше на Сайті Конкурсу{ ' ' }
-                    <a href={ process.env.REACT_APP_EVENT_LINK }>
-                        { process.env.REACT_APP_EVENT_LINK }
+                    <a href={ gameRulesUrl }>
+                        { gameRulesUrl } <img src={ Icon } alt='Rules page' />
                     </a>{ ' ' }
                     у розділі “Правила гри”).
                 </li>
@@ -297,8 +303,8 @@ const PrivacyPolicyContainer = () => (
                     21. Змагання буде візуалізоване - раунди між усіма Ботами
                     будуть транслюватися у форматі онлайн-стріму на Сайті
                     конкурсу{ ' ' }
-                    <a href={ process.env.REACT_APP_EVENT_LINK }>
-                        { process.env.REACT_APP_EVENT_LINK }
+                    <a href={ boardUrl } rel='noopener noreferrer' target='_blank'>
+                        { boardUrl } <img src={ Icon } alt='Leaderbaord page' />
                     </a>{ ' ' }
                     у розділі “Трансляція” де є можливість перейти до будь-якої
                     Кімнати, а також подивитися загальні результати по всіх
@@ -309,8 +315,8 @@ const PrivacyPolicyContainer = () => (
                     22. Окрім електронної адреси OrgBotChallengeUA@epam.com для
                     спілкування між Учасниками та Організатором буде створено
                     Канал у додатку Slack, приєднатися до якого можна за{ ' ' }
-                    <a href={ process.env.REACT_APP_JOIN_CHAT_LINK }>
-                        посиланням <img src={ Rules } alt='rules' />
+                    <a href={ joinSlackUrl } rel='noopener noreferrer' target='_blank'>
+                        посиланням <img src={ Icon } alt='Join Slack' />
                     </a>
                     .
                 </li>
@@ -353,7 +359,7 @@ const PrivacyPolicyContainer = () => (
                     остаточними та не підлягають оскарженню.
                 </li>
                 <li>
-                    25.  У разі, якщо два чи більше учасників посядуть перше,
+                    25. У разі, якщо два чи більше учасників посядуть перше,
                     друге або третє місце, перемога буде віддана тому Учаснику,
                     який здобув найбільшу кількість перемог протягом
                     попереднього періоду Конкурсу за всі Ігрові Дні до старту
@@ -373,7 +379,7 @@ const PrivacyPolicyContainer = () => (
                     Переможців Конкурсу.
                 </li>
                 <li>
-                    27.  Передача Призів Переможцям Конкурсу є обов’язком
+                    27. Передача Призів Переможцям Конкурсу є обов’язком
                     виключно Організатора Конкурсу. Призи будуть відправлені
                     поштою на території України за адресою, вказаною Переможцем.
                     Відправка здійснюється за рахунок Організатора. Для
@@ -390,7 +396,7 @@ const PrivacyPolicyContainer = () => (
                 </li>
 
                 <li>
-                    28.        Призи, що не будуть затребувані протягом 30 днів
+                    28. Призи, що не будуть затребувані протягом 30 днів
                     із дня закінчення Конкурсу, переходять у власність
                     Організатора Конкурсу, який має можливість скасувати приз, а
                     Учасник, який не отримав приз, не має права на подання
@@ -423,7 +429,7 @@ const PrivacyPolicyContainer = () => (
                     призу.
                 </li>
             </ol>
-            <div className='subTitle'>§4 Право на використання зображень</div>
+            <div className='subTitle' id="details4">§4 Право на використання зображень</div>
             <ol>
                 <li>
                     1. Організатор має право на вільне використання зображень
@@ -463,7 +469,7 @@ const PrivacyPolicyContainer = () => (
                     використання таких зображень Учасника пов’язаним особам.
                 </li>
             </ol>
-            <div className='subTitle'>§5 Передача авторського права</div>
+            <div className='subTitle' id="details5">§5 Передача авторського права</div>
             <ol>
                 <li>
                     1. Якщо у результаті Конкурсу буде створено проект, який є
@@ -491,7 +497,7 @@ const PrivacyPolicyContainer = () => (
                     об’єктом авторського права), у таких сферах:
                     <ol>
                         <li>
-                            1)   в області запису та відтворення - виготовлення
+                            1) в області запису та відтворення - виготовлення
                             та запис примірників твору з використанням будь-якої
                             техніки та у будь-який спосіб включаючи друк,
                             копіювально-розмножувальні роботи, магнітний запис і
@@ -511,7 +517,7 @@ const PrivacyPolicyContainer = () => (
                             або копій, позика або оренда оригіналів або копій;
                         </li>
                         <li>
-                            3)  розповсюдження твору способами, не зазначеними у
+                            3) розповсюдження твору способами, не зазначеними у
                             підпункті 2 пункту 4 розділу 6 цих Правил - публічне
                             виконання, показ, трансляція і ретрансляція, а також
                             публічний доступ таким чином, що кожен може мати
@@ -554,13 +560,13 @@ const PrivacyPolicyContainer = () => (
                     будь-яким іншим чином на розсуд Організатора.
                 </li>
             </ol>
-            <div className='subTitle'>§6 Заключні положення</div>
+            <div className='subTitle' id="details6">§6 Заключні положення</div>
             <ol>
                 <li>
                     1. Правила Конкурсу, Політика Конфіденційності та Згода на
                     обробку персональних даних розміщені на Сайті конкурсу{ ' ' }
-                    <a href={ process.env.REACT_APP_EVENT_LINK }>
-                        { process.env.REACT_APP_EVENT_LINK }
+                    <a href={ appUrl }>
+                        { appUrl } <img src={ Icon } />
                     </a>
                     .
                 </li>
