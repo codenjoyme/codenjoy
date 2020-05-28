@@ -3,7 +3,7 @@ import React from 'react';
 import Icon from '../../styles/images/icons/rules.svg';
 
 // own
-import Styles from '../styles.list.css';
+import StylesList from '../../styles/css/styles.list.css';
 
 const appUrl = process.env.REACT_APP_EVENT_LINK;
 const privacyPolicyUrl = appUrl + '/privacyPolicy';

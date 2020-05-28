@@ -6,7 +6,7 @@ import Icon from '../../styles/images/icons/rules.svg';
 import { book } from '../../routes';
 
 // own
-import Styles from '../styles.list.css';
+import StylesList from '../../styles/css/styles.list.css';
 
 const startDate = process.env.REACT_APP_EVENT_START_DATE;
 const endDate = process.env.REACT_APP_EVENT_END_DATE;
