@@ -34,7 +34,7 @@ const HomeContainer = () => (
                 <img className={ Styles.prizeImage } src={ Second } alt='SegaMegaDriveMini'
                      title='Iгрова консоль Sega Mega Drive Mini'/>
                 <img className={ Styles.prizeImage } src={ Third } alt='HobbyWorldFallout'
-                     title='Настільна Hobby World Fallout'/>
+                     title='Настільна гра Hobby World Fallout'/>
             </div>
             <Link to={ book.rules } className={ Styles.acceptButton }>
                 Виклик прийнято
@@ -90,7 +90,7 @@ const HomeContainer = () => (
                         <ol>
                             <li>місце - ігрова консоль PlayStation 4 Pro 1TB</li>
                             <li>місце - ігрова консоль Sega Mega Drive Mini</li>
-                            <li>місце - настільна Hobby World Fallout</li>
+                            <li>місце - настільна гра Hobby World Fallout</li>
                         </ol>
                     </div>
                 </div>
