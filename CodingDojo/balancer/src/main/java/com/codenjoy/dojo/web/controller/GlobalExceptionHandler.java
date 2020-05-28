@@ -26,15 +26,14 @@ package com.codenjoy.dojo.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Oleksandr_Baglai on 2018-06-26.
- */
+// TODO такой же как в Server - подумать как устранить дублирование
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -42,10 +41,10 @@ public class GlobalExceptionHandler {
     private ErrorTicketService ticket;
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<String> defaultErrorHandler(HttpServletRequest request, Exception e) {
-        ModelAndView message = ticket.get(request.getRequestURL().toString(), e);
+    public ResponseEntity<ModelMap> defaultErrorHandler(HttpServletRequest request, Exception e) {
+        ModelAndView model = ticket.get(request.getRequestURL().toString(), e);
 
-        return new ResponseEntity<>(message.getModelMap().get("message").toString(),
+        return new ResponseEntity<>(model.getModelMap(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

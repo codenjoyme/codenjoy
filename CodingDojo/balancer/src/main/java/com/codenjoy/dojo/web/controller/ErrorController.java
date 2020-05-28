@@ -25,6 +25,8 @@ package com.codenjoy.dojo.web.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Request;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.firewall.FirewalledRequest;
 import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
@@ -37,10 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * @author Igor Petrov
- * Created at 5/23/2019
- */
+// TODO почти такой же как в Server - подумать как устранить дублирование
 @Controller
 @RequestMapping(ErrorController.URI)
 public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
@@ -53,7 +52,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     private ErrorTicketService ticket;
 
     @RequestMapping()
-    public String error(HttpServletRequest req, ModelMap model) {
+    public ResponseEntity<ModelMap> error(HttpServletRequest req, ModelMap model) {
         Exception throwable = (Exception)req.getAttribute(JAVAX_SERVLET_ERROR_EXCEPTION);
         if (throwable != null) {
             return error(throwable, req, model);
@@ -68,12 +67,12 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     }
 
     @GetMapping(params = "message")
-    public String error(@RequestParam("message") String message, HttpServletRequest req, ModelMap model) {
+    public ResponseEntity<ModelMap> error(@RequestParam("message") String message, HttpServletRequest req, ModelMap model) {
         IllegalAccessException exception = new IllegalAccessException(message);
         return error(exception, req, model);
     }
 
-    private String error(Exception exception, HttpServletRequest req, ModelMap model) {
+    private ResponseEntity<ModelMap> error(Exception exception, HttpServletRequest req, ModelMap model) {
         String url = req.getRequestURL().toString();
 
         // для "not found" запросов вытаскиваем доп инфо
@@ -91,7 +90,8 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
         ModelAndView view = ticket.get(url, exception);
         model.mergeAttributes(view.getModel());
 
-        return view.getViewName();
+        return new ResponseEntity<>(model,
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
