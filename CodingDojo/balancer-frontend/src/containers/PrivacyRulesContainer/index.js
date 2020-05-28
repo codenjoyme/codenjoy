@@ -214,7 +214,7 @@ const PrivacyPolicyContainer = () => (
                     <ol>
                         <li>
                             Конкурс проводиться в онлайн-форматі з { dayTimeStart }&nbsp;
-                            години { startDate } до { dayTimeEnd } години { endDate } року.
+                            години { startDate } до { dayTimeEnd } години { endDate } в робочі дні.
                             Реєстрація на Конкурс розпочинається о { dayTimeStart } годині
                             &nbsp;{ startDate } і закінчується о { dayTimeEnd } годині { registerEndDate }.
                             Кожен Ігровий день розпочинається о { dayTimeStart } і закінчується о
@@ -322,7 +322,7 @@ const PrivacyPolicyContainer = () => (
                         </li>
                         <li>
                             Сервери Конкурсу працюватимуть з понеділка по п’ятницю в
-                            час з { dayTimeStart } до { dayTimeEnd }.
+                            час з { dayTimeStart } до { dayTimeEnd } в робочі дні.
                         </li>
                         <li>
                             Список переможців кожного ігрового дня буде доступний
