@@ -39,6 +39,7 @@
     color: var(--title-bg-color);
     padding-left: 15px;
     padding-top: 10px;
+    padding-right: 15px;
 }
 
 @media all and (max-width: 930px) {
