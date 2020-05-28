@@ -118,7 +118,6 @@
 .checkBoxLabel {
     color: var(--title-bg-color);
     font-size: 16px;
-    text-decoration: underline;
     font-weight: 300;
     cursor: pointer;
 }
@@ -142,6 +141,7 @@
 .forgotPasswordLink {
     display: flex;
     justify-content: flex-end;
+    text-decoration: underline;
     padding: 10px 25px 0;
 }
 
