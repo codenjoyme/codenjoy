@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 
 // proj
 import { book } from '../../routes';
-import PS4 from '../../styles/images/prizes/PS4.png';
-import PSClassic from '../../styles/images/prizes/PSclassic.png';
-import PSDualshock from '../../styles/images/prizes/PSdualshock.png';
-import Rules from '../../styles/images/icons/rules.svg';
+import First from '../../styles/images/prizes/first.png';
+import Second from '../../styles/images/prizes/second.png';
+import Third from '../../styles/images/prizes/third.png';
+import Icon from '../../styles/images/icons/rules.svg';
 import StepWinHeader from '../../styles/images/layout/presents.png';
 import stepBattleHeader from '../../styles/images/layout/battle.png';
 import stepCreateHeader from '../../styles/images/layout/create.png';
@@ -29,17 +29,12 @@ const HomeContainer = () => (
             <div className={ Styles.subText }>Змагайся з іншими учасниками</div>
             <div className={ Styles.subText }>Вигравай один із трьох призів</div>
             <div className={ Styles.prizeList }>
-                <img className={ Styles.prizeImage } src={ PS4 } alt='PS4' />
-                <img
-                    className={ Styles.prizeImage }
-                    src={ PSDualshock }
-                    alt='PSDualshock'
-                />
-                <img
-                    className={ Styles.prizeImage }
-                    src={ PSClassic }
-                    alt='PSClassic'
-                />
+                <img className={ Styles.prizeImage } src={ First } alt='PS4'
+                     title='Iгрова консоль PlayStation 4 Pro 1TB'/>
+                <img className={ Styles.prizeImage } src={ Second } alt='SegaMegaDriveMini'
+                     title='Iгрова консоль Sega Mega Drive Mini'/>
+                <img className={ Styles.prizeImage } src={ Third } alt='HobbyWorldFallout'
+                     title='Настільна Hobby World Fallout'/>
             </div>
             <Link to={ book.rules } className={ Styles.acceptButton }>
                 Виклик прийнято
