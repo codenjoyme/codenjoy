@@ -169,9 +169,8 @@ export class GameElements extends Component {
                         />
                         <div className={ Styles.elementDescriptionContainer }>
                             <div className={ Styles.elementTitle }>{ title }</div>
-                            <div className={ Styles.elementDescription }>
-                                { description }
-                            </div>
+                            <div className={ Styles.elementDescription }
+                                    dangerouslySetInnerHTML={{__html: description.replace('*', '<a href="#settings">*</a>') }}/>
                         </div>
                     </div>
                 )) }
