@@ -2,13 +2,13 @@
 import React, { Component } from 'react';
 
 // proj
-import bomb from '../../styles/images/game/sprite/bomb.png';
+// import bomb from '../../styles/images/game/sprite/bomb.png';
 import bomb_blast_radius_increase from '../../styles/images/game/sprite/bomb_blast_radius_increase.png';
 import bomb_bomberman from '../../styles/images/game/sprite/bomb_bomberman.png';
 import bomb_count_increase from '../../styles/images/game/sprite/bomb_count_increase.png';
 import bomb_immune from '../../styles/images/game/sprite/bomb_immune.png';
 import bomb_remote_control from '../../styles/images/game/sprite/bomb_remote_control.png';
-import bomb_timer_0 from '../../styles/images/game/sprite/bomb_timer_0.png';
+// import bomb_timer_0 from '../../styles/images/game/sprite/bomb_timer_0.png';
 import bomb_timer_1 from '../../styles/images/game/sprite/bomb_timer_1.png';
 import bomb_timer_2 from '../../styles/images/game/sprite/bomb_timer_2.png';
 import bomb_timer_3 from '../../styles/images/game/sprite/bomb_timer_3.png';

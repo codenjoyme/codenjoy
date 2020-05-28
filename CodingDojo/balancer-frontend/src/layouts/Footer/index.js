@@ -9,6 +9,9 @@ import { FacebookShareButton } from 'react-share';
 import { book } from '../../routes';
 import Styles from './styles.module.css';
 
+const orgEmail = process.env.REACT_APP_EVENT_ORG_EMAIL;
+const joinSlackUrl = process.env.REACT_APP_JOIN_CHAT_LINK;
+
 export class Footer extends PureComponent {
     render() {
         return (
@@ -27,7 +30,7 @@ export class Footer extends PureComponent {
                 </ul>
                 <ul className={ classnames(Styles.navigation) }>
                     <li>
-                        <a href='mailto:OrgBotChallengeUA@epam.com'>
+                        <a href={ 'mailto:' + orgEmail }>
                             Зв'язатися з нами
                             <FontAwesomeIcon
                                 className={ Styles.navigationIcon }
@@ -52,11 +55,7 @@ export class Footer extends PureComponent {
                         </div>
                     </li>
                     <li>
-                        <a
-                            href={ process.env.REACT_APP_JOIN_CHAT_LINK }
-                            rel='noopener noreferrer'
-                            target='_blank'
-                        >
+                        <a href={ joinSlackUrl } rel='noopener noreferrer' target='_blank'>
                             Долучайся до чату
                             <FontAwesomeIcon
                                 className={ Styles.navigationIcon }

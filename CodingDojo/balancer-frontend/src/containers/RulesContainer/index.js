@@ -107,7 +107,7 @@ class RulesContainer extends Component {
                         за іншого Бомбермена<a href='#settings'>*</a>. Бали сумуються.
                     </p>
 
-                    <div className='subTitle'>
+                    <div className='subTitle' id="client">
                         Завантажте Клієнт гри для створення Бота
                     </div>
                     <p>
@@ -189,7 +189,7 @@ class RulesContainer extends Component {
                     <p>
                         Перший символ рядка відповідає осередку розташованої в
                         лівому верхньому кутку і має координату [0,32]. У цьому
-                        прикладі – позиція Бомбермена (символ'☺') - [19, 25].
+                        прикладі – позиція Бомбермена (символ '☺') - [19, 25].
                         Лівий нижній кут має координату [0, 0].
                     </p>
 
@@ -197,7 +197,7 @@ class RulesContainer extends Component {
                         Розшифрування символів
                     </div>
                     <p>
-                        <img src={ BoardSample } />
+                        <img src={ BoardSample } alt='Ігрове поле'/>
                     </p>
                     <GameElements />
 
@@ -366,9 +366,9 @@ class RulesContainer extends Component {
                     </div>
                     <p>
                         Детальніше про це можно прочитати
-                        { ' ' }
+                        &nbsp;
                         <a href={ privacyRulesDetailsUrl }>
-                            на цій сторінці <img src={ Icon } alt='rules' />
+                            за посиланням<img src={ Icon } alt='Правила Конкурсу'/>
                         </a>
                     </p>
 
@@ -388,17 +388,18 @@ class RulesContainer extends Component {
                     <p>
                         Для спілкування між Участниками та Організатором
                         створено Канал у додатку Slack, приєднатися до якого
-                        можна за{ ' ' }
+                        можна
+                        &nbsp;
                         <a href={ joinSlackUrl } rel='noopener noreferrer' target='_blank'>
-                            посиланням <img src={ Icon } alt='rules' />
+                            за посиланням<img src={ Icon } alt='Долучитися до чату'/>
                         </a>
                     </p>
                     <p>
                         Із детальним описом Правил і Положень гри можна
-                        ознайомитися за
-                        { ' ' }
+                        ознайомитися
+                        &nbsp;
                         <a href={ privacyRulesUrl }>
-                            посиланням <img src={ Icon } alt='rules' />
+                            за посиланням<img src={ Icon } alt='Правила Конкурсу'/>
                         </a>
                     </p>
                 </div>
