@@ -52,7 +52,7 @@ public class PParameter {
         this.def = String.valueOf(p.getDefault());
         this.multiline = (p instanceof EditBox) && ((EditBox) p).isMultiline();
         this.options = (List)(p.getOptions()).stream()
-                .map(it -> it.toString())
+                .map(it -> (it == null) ? null : it.toString()) // TODO test null case
                 .collect(toList());
     }
 
