@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.httpclient;
  * #L%
  */
 
+import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import feign.Headers;
@@ -39,6 +40,13 @@ public interface GameServerClient {
 
     @RequestLine("GET /codenjoy-contest/rest/game/{game}/players")
     List<PlayerInfo> getPlayerInfos(@Param("game") String game);
+
+    @RequestLine("GET /codenjoy-contest/rest/admin/room/{game}/settings/{game}")
+    PParameters getGameSettings(@Param("game") String game);
+
+    @RequestLine("POST /codenjoy-contest/rest/admin/room/{game}/settings/{game}")
+    @Headers({"Content-Type: application/json"})
+    void setGameSettings(@Param("game") String game, PParameters parameters);
 
     @RequestLine("POST /codenjoy-contest/rest/player/create")
     @Headers({"Content-Type: application/json"})

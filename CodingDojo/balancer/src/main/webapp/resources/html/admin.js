@@ -34,6 +34,10 @@ var settings = function() {
     return JSON.parse($('#admin-settings-result').val());
 }
 
+var gameSettings = function() {
+    return JSON.parse($('#admin-game-settings-result').val());
+}
+
 var server = function(name) {
     return $('#' + name + '-server').val();
 }
@@ -288,6 +292,22 @@ var setSettings = function(settings) {
     });
 };
 
+var getGameSettings = function(gameType) {
+    _ajax('game-settings', {
+        type: 'GET',
+        url: server('balancer') + '/game/settings/get'
+    });
+};
+
+var setGameSettings = function(settings) {
+    _ajax('game-settings', {
+        type: 'POST',
+        url: server('balancer') + '/game/settings/set',
+        contentType: 'application/json; charset=utf-8',
+        data: settings
+    });
+};
+
 var clearCache = function() {
     _ajax('cache', {
         type: 'GET',
@@ -520,6 +540,16 @@ $(document).ready(function() {
     $('#set-settings').click(function() {
         setSettings(
             $('#settings-result').val()
+        );
+    });
+
+    $('#get-game-settings').click(function() {
+        getGameSettings();
+    });
+
+    $('#set-game-settings').click(function() {
+        setGameSettings(
+            $('#game-settings-post-request').val()
         );
     });
 

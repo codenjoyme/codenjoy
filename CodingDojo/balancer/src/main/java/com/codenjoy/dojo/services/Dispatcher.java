@@ -28,7 +28,9 @@ import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
+import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
+import com.codenjoy.dojo.web.rest.dto.GameSettings;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -274,8 +276,22 @@ public class Dispatcher {
         currentFinalists.clear();
     }
 
-
     public Collection<String> disqualified() {
         return disqualified;
+    }
+
+    public List<GameSettings> getGameSettings() {
+        return gameServers.stream()
+                .map(server -> new GameSettings(game.getGameSettings(server)))
+                .collect(toList());
+    }
+
+    public void updateGameSettings(GameSettings input) {
+        PParameters current = getGameSettings().iterator().next().parameters();
+
+        input.update(current.getParameters());
+
+        gameServers.stream()
+                .forEach(server -> game.setGameSettings(server, current));
     }
 }

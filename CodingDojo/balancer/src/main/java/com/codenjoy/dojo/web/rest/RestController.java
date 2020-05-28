@@ -30,10 +30,7 @@ import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
-import com.codenjoy.dojo.web.rest.dto.PhoneCodeDTO;
-import com.codenjoy.dojo.web.rest.dto.PhoneDTO;
-import com.codenjoy.dojo.web.rest.dto.PlayersDTO;
-import com.codenjoy.dojo.web.rest.dto.VerificationDTO;
+import com.codenjoy.dojo.web.rest.dto.*;
 import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
 import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
 import com.codenjoy.dojo.web.controller.LoginException;
@@ -73,6 +70,7 @@ public class RestController {
     public static final String CONFIRM = "/confirm";
     public static final String UPDATE = "/update";
     public static final String SCORE = "/score";
+    public static final String GAME_SETTINGS = "/game/settings";
 
     private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
@@ -488,6 +486,22 @@ public class RestController {
     @ResponseBody
     public ConfigProperties getSettings() {
         return config;
+    }
+
+    // TODO test me
+    @GetMapping(GAME_SETTINGS + "/get")
+    @ResponseBody
+    public List<GameSettings> getGameSettings() {
+        return dispatcher.getGameSettings();
+    }
+
+    // TODO test me
+    @PostMapping(GAME_SETTINGS + "/set")
+    @ResponseBody
+    public boolean saveGameSettings(@RequestBody GameSettings gameSettings) {
+        dispatcher.updateGameSettings(gameSettings);
+
+        return true;
     }
 
     // TODO test me

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.DLoggerFactory;
+import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.entity.server.User;
@@ -50,6 +51,14 @@ public class GameServer {
 
     public List<PlayerInfo> getPlayersInfos(String server) {
         return gameClientResolver.resolveClient(server).getPlayerInfos(config.getGame().getType());
+    }
+
+    public PParameters getGameSettings(String server) {
+        return gameClientResolver.resolveClient(server).getGameSettings(config.getGame().getType());
+    }
+
+    public void setGameSettings(String server, PParameters parameters) {
+        gameClientResolver.resolveClient(server).setGameSettings(config.getGame().getType(), parameters);
     }
 
     public String createNewPlayer(String server, String email, String phone, String name,
