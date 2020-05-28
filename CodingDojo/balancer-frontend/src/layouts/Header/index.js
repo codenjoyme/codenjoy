@@ -1,7 +1,7 @@
 // vendor
 import React, { PureComponent } from 'react';
 import { NavLink } from 'react-router-dom';
-import logo from './game-logo.jpg';
+import logo from './game-logo.png';
 import avaDefault from './icon_ava_default.svg';
 import classnames from 'classnames';
 
@@ -20,7 +20,6 @@ class HeaderComponent extends PureComponent {
                 <div className={ Styles.container }>
                     <NavLink className={ Styles.logoContainer } to={ book.home }>
                         <img className={ Styles.logo } src={ logo } alt='' />
-                        <span>BOT CHALLENGE</span>
                     </NavLink>
 
                     <ul>
