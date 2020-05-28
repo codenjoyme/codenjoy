@@ -8,6 +8,7 @@ import {  CopyToClipboard  } from 'react-copy-to-clipboard';
 // proj
 import {  GameElements  } from '../../components';
 import {  getGameConnectionString, getJavaClient  } from '../../utils';
+import { requestSettingsStart } from '../../redux/settings';
 import {  book  } from '../../routes';
 import Icon from '../../styles/images/icons/rules.svg';
 import BoardSample from '../../styles/images/game/field-sample.png';
@@ -53,8 +54,12 @@ const BOARD_EXAMPLE_2 =
 const {  boardExample, mask, highligte, highligteNotes  } = Styles;
 
 class RulesContainer extends Component {
+    componentDidMount() {
+        this.props.requestSettingsStart();
+    }
+
     render() {
-        const {  server, code, id  } = this.props;
+        const {  server, code, id, settings  } = this.props;
         const loggedIn = [ server, code, id ].every(Boolean);
         const connectionUrl = loggedIn
             ? getGameConnectionString(server, code, id)
@@ -107,7 +112,7 @@ class RulesContainer extends Component {
                         за іншого Бомбермена<a href='#settings'>*</a>. Бали сумуються.
                     </p>
 
-                    <div className='subTitle' id="client">
+                    <div className='subTitle' id='client'>
                         Завантажте Клієнт гри для створення Бота
                     </div>
                     <p>
@@ -375,7 +380,7 @@ class RulesContainer extends Component {
                     <div className='subTitle'>
                         Додаткова інформація
                     </div>
-                    <p id="settings">
+                    <p id='settings'>
                         * - Точні значення: балів за руйнування на полі та штрафних балів;
                         кількості Раундів в Матчі; сили ефекту, таймаутів, вірогідності
                         випадання Перків та інших змінних треба уточнити у організаторів
@@ -409,12 +414,14 @@ class RulesContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-    id:     state.auth.id,
-    server: state.auth.server,
-    code:   state.auth.code,
+    id:       state.auth.id,
+    server:   state.auth.server,
+    code:     state.auth.code,
+    settings: state.settings.settings,
 });
+const mapDispatchToProps = { requestSettingsStart };
 
 export default connect(
     mapStateToProps,
-    null,
+    mapDispatchToProps,
 )(RulesContainer);
