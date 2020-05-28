@@ -31,13 +31,13 @@ import com.codenjoy.dojo.services.entity.server.User;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.httpclient.GameClientResolver;
 import com.codenjoy.dojo.services.httpclient.GameServerClientException;
-import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
-
-import java.util.Arrays;
-import java.util.List;
+import com.codenjoy.dojo.web.controller.ErrorTicketService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.codenjoy.dojo.conf.Authority.ROLE_USER;
 
@@ -130,7 +130,7 @@ public class GameServer {
         } catch (GameServerClientException e) {
             logger.error("Error clearing scores on server: " + server, e);
 
-            return GlobalExceptionHandler.getPrintableMessage(e);
+            return ErrorTicketService.getPrintableMessage(e);
         }
     }
 
@@ -147,7 +147,7 @@ public class GameServer {
         } catch (GameServerClientException e) {
             logger.error("Error " + status + " game on server: " + server, e);
 
-            return GlobalExceptionHandler.getPrintableMessage(e);
+            return ErrorTicketService.getPrintableMessage(e);
         }
     }
 

@@ -25,16 +25,16 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.GameServer;
-import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
-import com.codenjoy.dojo.web.rest.dto.*;
-import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
-import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
+import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.web.controller.ErrorTicketService;
 import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.Validator;
+import com.codenjoy.dojo.web.rest.dto.*;
+import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -402,14 +402,14 @@ public class RestController {
             result = action.onGame();
         } catch (Exception e) {
             logger.error("Error at game server", e);
-            errors.add("At game server: " + GlobalExceptionHandler.getPrintableMessage(e));
+            errors.add("At game server: " + ErrorTicketService.getPrintableMessage(e));
         }
 
         try {
             result = action.onBalancer(result);
         } catch (Exception e) {
             logger.error("Error at balancer", e);
-            errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
+            errors.add("At balancer: " + ErrorTicketService.getPrintableMessage(e));
         }
 
         if (!errors.isEmpty()) {
@@ -459,14 +459,14 @@ public class RestController {
     // 400 for bad registration and validation error
     @ExceptionHandler({IllegalArgumentException.class, UsernameNotFoundException.class})
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
-        return new ResponseEntity<>(GlobalExceptionHandler.getPrintableMessage(e),
+        return new ResponseEntity<>(ErrorTicketService.getPrintableMessage(e),
                 HttpStatus.BAD_REQUEST);
     }
 
     // 401 for bad login
     @ExceptionHandler({LoginException.class})
     public ResponseEntity<String> handleFailedLoginException(LoginException e) {
-        return new ResponseEntity<>(GlobalExceptionHandler.getPrintableMessage(e),
+        return new ResponseEntity<>(ErrorTicketService.getPrintableMessage(e),
                 HttpStatus.UNAUTHORIZED);
     }
 

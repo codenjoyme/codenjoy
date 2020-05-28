@@ -23,17 +23,14 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
-import com.codenjoy.dojo.services.DebugService;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Calendar;
 
 /**
  * Created by Oleksandr_Baglai on 2018-06-26.
@@ -41,30 +38,16 @@ import java.util.Calendar;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static Logger logger = DLoggerFactory.getLogger(GlobalExceptionHandler.class);
-
     @Autowired
-    private DebugService debug;
+    private ErrorTicketService ticket;
 
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<String> defaultErrorHandler(HttpServletRequest request, Exception e) {
-        long ticket = Calendar.getInstance().getTimeInMillis();
+        ModelAndView message = ticket.get(request.getRequestURL().toString(), e);
 
-        logger.error("[TICKET] : {}", ticket);
-        logger.error("[URL] : {} {}", request.getRequestURL(), e, ticket);
-
-        System.err.println("[TICKET] : " + ticket);
-        e.printStackTrace();
-
-        String message = (debug.isWorking())
-                ? getPrintableMessage(e)
-                : ("Something wrong with your request. Ticket:" + ticket);
-
-        return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(message.getModelMap().get("message").toString(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    public static String getPrintableMessage(Exception e) {
-        return e.getClass().getSimpleName() + ": " + e.getMessage();
-    }
 
 }
