@@ -344,7 +344,8 @@ var Board = function(board){
             "Destroy walls at: %s\n" +
             "Bombs at: %s\n" +
             "Blasts: %s\n" +
-            "Expected blasts at: %s",
+            "Expected blasts at: %s\n" +
+            "Perks at: %s",
                 boardAsString(),
                 getBomberman(),
                 printArray(getOtherBombermans()),
@@ -352,7 +353,9 @@ var Board = function(board){
                 printArray(getDestroyWalls()),
                 printArray(getBombs()),
                 printArray(getBlasts()),
-                printArray(getFutureBlasts()));
+                printArray(getFutureBlasts()),
+                printArray(getPerks())
+                );
     };
 
     var getMeatChoppers = function() {
@@ -389,6 +392,15 @@ var Board = function(board){
        result = result.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));       
        return result;
    };
+
+   var getPerks = function() {
+        var result = [];
+        result = result.concat(findAll(Element.BOMB_BLAST_RADIUS_INCREASE));
+        result = result.concat(findAll(Element.BOMB_COUNT_INCREASE));
+        result = result.concat(findAll(Element.BOMB_REMOTE_CONTROL));
+        result = result.concat(findAll(Element.BOMB_IMMUNE));
+        return result;
+   }
 
    var getBlasts = function() {
        return findAll(Element.BOOM);
@@ -472,7 +484,8 @@ var Board = function(board){
         isNear : isNear,
         isBarrierAt : isBarrierAt,
         countNear : countNear,
-        getAt : getAt
+        getAt : getAt,
+        getPerks: getPerks
    };
 };
 
