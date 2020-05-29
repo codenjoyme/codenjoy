@@ -214,7 +214,7 @@ func (b *board) GetBombs() []Point {
 
 func (b *board) GetPerks() []Point {
 	points := []Point{}
-	perks := []rune{BOMB_BLAST_RADIUS_INCREASE, BOMB_COUNT_INCREASE, BOMB_IMMUNE}
+	perks := []rune{BOMB_BLAST_RADIUS_INCREASE, BOMB_COUNT_INCREASE, BOMB_IMMUNE, BOMB_REMOTE_CONTROL}
 
 	for _, perk := range perks {
 		for _, i := range findAll(b.boardContent, perk) {
