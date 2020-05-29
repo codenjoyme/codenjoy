@@ -131,6 +131,7 @@ class Board:
         points.update(self._find_all(Element('BOMB_BLAST_RADIUS_INCREASE')))
         points.update(self._find_all(Element('BOMB_COUNT_INCREASE')))
         points.update(self._find_all(Element('BOMB_IMMUNE')))
+        points.update(self._find_all(Element('BOMB_REMOTE_CONTROL')))
         return list(points)
 
     def is_near(self, x, y, elem):
