@@ -122,6 +122,26 @@ namespace Bomberman.Api
         /// <summary>
         /// Empty space on a map. This is the only place where you can move your Bomberman
         /// </summary>
-        Space = (short)' '                 
+        Space = (short)' ',
+
+        ///<summary>
+        /// Bomb blast radius increase. Applicable only to new bombs. The perk is temporary.
+        ///</summary>
+        BOMB_BLAST_RADIUS_INCREASE = (short)'+',
+
+        ///<summary>
+        /// Increase available bombs count. Number of extra bombs can be set in settings. Temporary.
+        ///</summary>
+        BOMB_COUNT_INCREASE = (short)'c',
+
+        ///<summary>
+        /// Bomb blast not by timer but by second act. Number of RC triggers is limited and can be set in settings.
+        ///</summary>
+        BOMB_REMOTE_CONTROL = (short)'r',
+
+        ///<summary>
+        /// Do not die after bomb blast (own bombs and others as well). Temporary.
+        ///</summary>
+        BOMB_IMMUNE = (short)'i'
     }
 }

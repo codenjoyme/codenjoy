@@ -23,17 +23,16 @@ package com.codenjoy.dojo.bomberman.client;
  */
 
 
-import com.codenjoy.dojo.bomberman.client.simple.Pattern;
 import com.codenjoy.dojo.bomberman.model.Elements;
-import static com.codenjoy.dojo.bomberman.model.Elements.*;
-import static com.codenjoy.dojo.services.PointImpl.pt;
-
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
 
@@ -124,6 +123,15 @@ public class Board extends AbstractBoard<Elements> {
         result.addAll(get(BOMB_TIMER_5));
         result.addAll(get(BOMB_BOMBERMAN));
         result.addAll(get(OTHER_BOMB_BOMBERMAN));
+        return result;
+    }
+
+    public Collection<Point> getPerks() {
+        List<Point> result = new LinkedList<>();
+        result.addAll(get(BOMB_COUNT_INCREASE));
+        result.addAll(get(BOMB_REMOTE_CONTROL));
+        result.addAll(get(BOMB_IMMUNE));
+        result.addAll(get(BOMB_BLAST_RADIUS_INCREASE));
         return result;
     }
 

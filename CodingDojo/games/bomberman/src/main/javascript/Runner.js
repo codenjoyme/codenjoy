@@ -126,6 +126,12 @@ var Element = {
                                  // you'd better kill this piece of ... meat, you'll get +100 point for it
     DEAD_MEAT_CHOPPER : 'x',     // this is chopper corpse
 
+    /// perks
+    BOMB_BLAST_RADIUS_INCREASE : '+', // Bomb blast radius increase. Applicable only to new bombs. The perk is temporary.
+    BOMB_COUNT_INCREASE : 'c',   // Increase available bombs count. Number of extra bombs can be set in settings. Temporary.
+    BOMB_REMOTE_CONTROL : 'r',   // Bomb blast not by timer but by second act. Number of RC triggers is limited and can be set in settings.
+    BOMB_IMMUNE : 'i',
+
     /// a void
     NONE : ' '                  // this is the only place where you can move your Bomberman
 };
@@ -338,7 +344,8 @@ var Board = function(board){
             "Destroy walls at: %s\n" +
             "Bombs at: %s\n" +
             "Blasts: %s\n" +
-            "Expected blasts at: %s",
+            "Expected blasts at: %s\n" +
+            "Perks at: %s",
                 boardAsString(),
                 getBomberman(),
                 printArray(getOtherBombermans()),
@@ -346,7 +353,9 @@ var Board = function(board){
                 printArray(getDestroyWalls()),
                 printArray(getBombs()),
                 printArray(getBlasts()),
-                printArray(getFutureBlasts()));
+                printArray(getFutureBlasts()),
+                printArray(getPerks())
+                );
     };
 
     var getMeatChoppers = function() {
@@ -383,6 +392,15 @@ var Board = function(board){
        result = result.concat(findAll(Element.OTHER_BOMB_BOMBERMAN));       
        return result;
    };
+
+   var getPerks = function() {
+        var result = [];
+        result = result.concat(findAll(Element.BOMB_BLAST_RADIUS_INCREASE));
+        result = result.concat(findAll(Element.BOMB_COUNT_INCREASE));
+        result = result.concat(findAll(Element.BOMB_REMOTE_CONTROL));
+        result = result.concat(findAll(Element.BOMB_IMMUNE));
+        return result;
+   }
 
    var getBlasts = function() {
        return findAll(Element.BOOM);
@@ -466,7 +484,8 @@ var Board = function(board){
         isNear : isNear,
         isBarrierAt : isBarrierAt,
         countNear : countNear,
-        getAt : getAt
+        getAt : getAt,
+        getPerks: getPerks
    };
 };
 

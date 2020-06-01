@@ -114,7 +114,8 @@ namespace Bomberman.Api
                     "Destroy walls at: {4}\n" +
                     "Bombs at: {5}\n" +
                     "Blasts: {6}\n" +
-                    "Expected blasts at: {7}",
+                    "Expected blasts at: {7}\n" +
+                    "Perks at: {8}",
                     BoardAsString(),
                     GetBomberman(),
                     ListToString(GetOtherBombermans()),
@@ -122,7 +123,8 @@ namespace Bomberman.Api
                     ListToString(GetDestroyableWalls()),
                     ListToString(GetBombs()),
                     ListToString(GetBlasts()),
-                    ListToString(GetFutureBlasts()));
+                    ListToString(GetFutureBlasts()),
+                    ListToString(GetPerks()));
         }
 
         private string ListToString(List<Point> list)
@@ -182,6 +184,15 @@ namespace Bomberman.Api
                 .Concat(Get(Element.BOMB_TIMER_5))
                 .Concat(Get(Element.BOMB_BOMBERMAN))
                 .Concat(Get(Element.OTHER_BOMB_BOMBERMAN))
+                .ToList();
+        }
+
+        public List<Point> GetPerks()
+        {
+            return Get(Element.BOMB_BLAST_RADIUS_INCREASE)
+                .Concat(Get(Element.BOMB_COUNT_INCREASE))
+                .Concat(Get(Element.BOMB_IMMUNE))
+                .Concat(Get(Element.BOMB_REMOTE_CONTROL))
                 .ToList();
         }
 

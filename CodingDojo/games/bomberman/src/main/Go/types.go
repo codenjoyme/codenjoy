@@ -63,6 +63,7 @@ const (
 	BOMB_BLAST_RADIUS_INCREASE = '+'
 	BOMB_COUNT_INCREASE        = 'c'
 	BOMB_IMMUNE                = 'i'
+	BOMB_REMOTE_CONTROL        = 'r'
 )
 
 type Action string
