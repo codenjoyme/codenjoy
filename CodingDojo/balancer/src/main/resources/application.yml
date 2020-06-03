@@ -35,7 +35,9 @@ game:
   final-time: "19:00"
 
 sms:
-  enabled: true
+  enabled: false
+  static-verification-code: 123456
+  static-password: 12345678
   text:
     registration: "Vash kod pidtverdzennya reestratsui: %s.\nCodenjoy Team."
     reset-password: "Vash kod pidtverdzennya zminy parolu: %s.\nCodenjoy Team."
