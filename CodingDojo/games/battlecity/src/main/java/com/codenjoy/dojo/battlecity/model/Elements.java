@@ -56,6 +56,7 @@ public enum Elements implements CharElements {
     CONSTRUCTION_DESTROYED_RIGHT_UP('┐', 1),
     CONSTRUCTION_DESTROYED_DOWN_LEFT('└', 1),
     CONSTRUCTION_DESTROYED_DOWN_RIGHT('┘', 1),
+    TREE('▒'),
 
     CONSTRUCTION_DESTROYED(' ', 0),
 

@@ -72,6 +72,27 @@ public class BattlecityTest {
         initPlayer(game, tank);
         this.hero = tank;
     }
+    private void givenGame(Tank tank,List<Construction> structures ,Tree... woods) {
+
+        List<Tree> trees = new LinkedList<>(Arrays.asList(woods));
+        List<Construction> constructions = new LinkedList<>(structures);
+
+        game = new Battlecity(size, mock(Dice.class), constructions,
+                 new DefaultBorders(size).get(), trees);
+        initPlayer(game, tank);
+        this.hero = tank;
+    }
+
+
+    private void givenGame(Tank tank, Tree... woods) {
+
+        List<Tree> trees = new LinkedList<>(Arrays.asList(woods));
+
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0])
+                , new DefaultBorders(size).get(), trees);
+        initPlayer(game, tank);
+        this.hero = tank;
+    }
 
     private void givenGameWithAI(Tank tank, Tank... aiTanks) {
         game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), aiTanks);
@@ -2861,5 +2882,336 @@ public class BattlecityTest {
 
 
     }
+        // 1. Кусты
+
+
+    @Test
+    public void shouldBeConstructionTree_whenGameCreated() {
+        givenGameWithTree(tank(1, 1, Direction.UP), 3, 3);
+        assertEquals(1, game.getTrees().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ▒  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldBeConstructionTwoTree_whenGameCreated() {
+
+        Tank tank = tank(1, 1, Direction.UP);
+        givenGame(tank, new Tree(3, 3), new Tree(5, 1));
+        assertEquals(2, game.getTrees().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ▒  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲   ▒☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+
+    private void givenGameWithTree(Tank tank, int x, int y) {
+        givenGame(tank, new Tree(x, y));
+    }
+
+
+    // 1.1) При выстреле пуля должна пролетать сквозь кусты
+
+
+    @Test
+    public void shouldBulletFlyOverTree_right() {
+        size = 11;
+        givenGameWithTree(tank(1, 1, Direction.RIGHT), 6, 1);
+        hero.act();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼►    ▒   ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼► •  ▒   ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼►   •▒   ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼►    ▒•  ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼►    ▒  •☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+                game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼►    ▒   ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+    }
+
+    @Test
+    public void shouldBulletDestroyWallOverTree_whenHittingTheWallUp_whenTwoWalls() {
+        size = 7;
+        List<Construction> constructions = new
+                LinkedList<>(Arrays.asList( new Construction(1, 5),new Construction(1, 4)));
+
+        givenGame(tank(1, 1, Direction.UP),constructions,new Tree(1, 2));
+
+        hero.act();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╬    ☼\n" +
+                "☼•    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╩    ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╩    ☼\n" +
+                "☼•    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╨    ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╨    ☼\n" +
+                "☼•    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╩    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+    }
+
+    @Test
+    public void shouldBulletFlyOverTwoTree_up() {//TODO implement next commit
+        size = 11;
+
+        Tank tank = tank(5, 1, Direction.UP);
+        givenGame(tank, new Tree(5, 5), new Tree(5, 6));
+        hero.act();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼    •    ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    •    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼    •    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+    }
+
+
+
+    //  1.2) кусты - когда игрок заходит под них, там видно кусты и больше никакого движения
+
+
+    //TODO    1.3) так же не видно врагов под кустами
+    //TODO    1.4) под кустами не видно так же и ботов белых
+    //TODO 2. Лёд
+    //TODO    2.1) когда на нем двигается герой, он проскальзывает команду на целых два тика
+    //TODO 3. Вода
+    //TODO    3.1) вода - через нее нельзя пройти. но можно стрелять
+    //TODO 4. Добовляем бота
+    //TODO    4.1) добавляем бота, который спаунится каждые N ходов (задается в сеттингах),
+    //TODO         который цветной и его убить можно только за M выстрелов (тоже сеттинги)
+    //TODO    4.2) во время смерти такого AI вываливается приз
+    //TODO 5. Добавляем приз
+    //TODO    5.1) добавляем приз неуязвимости, он работает L тиков (сеттинги) и теряется после
+    //TODO    5.2) если в тебя выстрелят во время действия этого приза - ты остаешься жить
+    //TODO 6. Ддобавляется приз пульки которые разбивают бетонную стену
+    //TODO 7. Рендомная борда (тут надо подглядеть как в icancode подобное устроено) и сделать так же
 
 }
