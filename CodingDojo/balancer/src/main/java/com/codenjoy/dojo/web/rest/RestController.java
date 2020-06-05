@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
+import com.codenjoy.dojo.services.entity.server.Disqualified;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.web.controller.ErrorTicketService;
 import com.codenjoy.dojo.web.controller.LoginException;
@@ -124,7 +125,7 @@ public class RestController {
     // TODO test me
     @GetMapping(SCORE + "/disqualified")
     @ResponseBody
-    public Collection<String> disqualified() {
+    public Collection<Disqualified> disqualified() {
         return dispatcher.disqualified();
     }
 

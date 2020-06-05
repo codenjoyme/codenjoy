@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
+import com.codenjoy.dojo.services.entity.server.Disqualified;
 import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.web.rest.dto.GameSettings;
@@ -61,7 +62,7 @@ public class Dispatcher {
     private Map<String, List<PlayerScore>> currentScores = new ConcurrentHashMap();
     private volatile List<PlayerScore> currentFinalists = new LinkedList<>();
 
-    private Set<String> disqualified = new CopyOnWriteArraySet<>();
+    private Set<Disqualified> disqualified = new CopyOnWriteArraySet<>();
 
     @PostConstruct
     public void postConstruct() {
@@ -148,8 +149,12 @@ public class Dispatcher {
         return Calendar.getInstance().getTimeInMillis();
     }
 
-    public void disqualify(List<String> players) {
-        disqualified.addAll(players);
+    public void disqualify(List<String> emails) {
+        List<Disqualified> ids = emails.stream()
+                .map(email -> new Disqualified(config.getId(email), email))
+                .collect(toList());
+
+        disqualified.addAll(ids);
     }
 
     public synchronized List<PlayerScore> getFinalists() {
@@ -158,35 +163,36 @@ public class Dispatcher {
             return cached;
         }
 
-        List<PlayerScore> scores = loadFinalists();
-
-        List<PlayerScore> result = prepareScoresForClient(scores);
+        List<PlayerScore> result = loadFinalists();
 
         currentFinalists = result;
         return result;
     }
 
     public List<PlayerScore> markWinners() {
-        List<PlayerScore> finalists = loadFinalists();
+        List<PlayerScore> result = loadFinalists();
 
         scores.cleanWinnerFlags();
 
-        finalists.forEach(finalist -> {
+        result.forEach(finalist -> {
             scores.setWinnerFlag(finalist, true);
             finalist.setWinner(true);
         });
 
-        return finalists;
+        return result;
     }
 
     private List<PlayerScore> loadFinalists() {
-        return this.scores.getFinalists(
+        List<PlayerScore> list = this.scores.getFinalists(
                 config.getGame().getStartDay(),
                 config.getGame().getEndDay(),
                 lastTime,
                 config.getGame().getFinalistsCount(),
-                disqualified
+                disqualifiedEmails()
         );
+
+        List<PlayerScore> result = prepareScoresForClient(list);
+        return result;
     }
 
     public synchronized List<PlayerScore> getScores(String day) {
@@ -197,26 +203,9 @@ public class Dispatcher {
 
         List<PlayerScore> scores = this.scores.getScores(day, lastTime);
         List<PlayerScore> result = prepareScoresForClient(scores);
-        // List<PlayerScore> result = prepareFinalistsInfo(updated);
 
         currentScores.put(day, result);
         return result;
-    }
-
-    private List<PlayerScore> prepareFinalistsInfo(List<PlayerScore> scores) {
-        Map<String, PlayerScore> finalists = loadFinalists().stream()
-                .collect(toMap(s -> s.getId(), s -> s));
-
-        return scores.stream()
-                .map(score -> {
-                    if (finalists.containsKey(score.getId())) {
-                        PlayerScore finalistScore = finalists.get(score.getId());
-                        String day = finalistScore.getDay();
-                        score.setDay(day);
-                    }
-                    return score;
-                })
-                .collect(toList());
     }
 
     private List<PlayerScore> prepareScoresForClient(List<PlayerScore> result) {
@@ -287,8 +276,14 @@ public class Dispatcher {
         }
     }
 
-    public Collection<String> disqualified() {
+    public Collection<Disqualified> disqualified() {
         return disqualified;
+    }
+
+    private List<String> disqualifiedEmails() {
+        return disqualified.stream()
+                .map(Disqualified::getEmail)
+                .collect(toList());
     }
 
     public List<GameSettings> getGameSettings() {
