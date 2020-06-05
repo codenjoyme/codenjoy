@@ -363,6 +363,13 @@ var setContest = function(enabled) {
     });
 };
 
+var enableSlide = function(element) {
+    $('.block-header').click(function() {
+        $(this).next().slideToggle('fast');
+    });
+    $('.block-header').next().hide();
+}
+
 $(document).ready(function() {
     var balancerHost = window.location.host;
     var gameHost = 'game1.' + window.location.host;
@@ -577,5 +584,7 @@ $(document).ready(function() {
             $('#cache-mask').val()
         );
     });
+
+    enableSlide();
 
 });
