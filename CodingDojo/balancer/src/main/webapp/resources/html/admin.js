@@ -98,6 +98,7 @@ var autoIncrementPhone = function() {
     var index = parseInt(old.match(/\d+/g)[0]);
     var aNew = old.replace('' + index, '' + (index + 1));
     $('#phone').val(aNew);
+    $('#phone').trigger('change');
 }
 
 var autoIncrement = function() {
