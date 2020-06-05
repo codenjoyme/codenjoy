@@ -367,7 +367,11 @@ var enableSlide = function(element) {
     $('.block-header').click(function() {
         $(this).next().slideToggle('fast');
     });
-    $('.block-header').next().hide();
+
+    $('#collapse-all').click(function() {
+       $('.block-header').next().slideToggle('fast');
+    });
+    $('#collapse-all').click();
 }
 
 $(document).ready(function() {
@@ -596,5 +600,6 @@ $(document).ready(function() {
     });
 
     enableSlide();
+
 
 });
