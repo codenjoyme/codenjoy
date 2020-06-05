@@ -86,12 +86,24 @@ var _ajax = function(name, ajaxObject) {
     $.ajax(ajaxObject);
 }
 
+var autoIncrementPrefix = function() {
+    var old = $('#preffix').val();
+    var index = parseInt(old.match(/\d+/g)[0]);
+    var aNew = old.replace('' + index, '' + (index + 1));
+    $('#preffix').val(aNew);
+}
+
+var autoIncrementPhone = function() {
+    var old = $('#phone').val();
+    var index = parseInt(old.match(/\d+/g)[0]);
+    var aNew = old.replace('' + index, '' + (index + 1));
+    $('#phone').val(aNew);
+}
+
 var autoIncrement = function() {
     if ($('#auto-increment').is(':checked')) {
-        var old = $('#preffix').val();
-        var index = parseInt(old.match(/\d+/g)[0]);
-        var aNew = old.replace('' + index, '' + (index + 1));
-        $('#preffix').val(aNew);
+        autoIncrementPrefix();
+        autoIncrementPhone();
     }
 }
 
