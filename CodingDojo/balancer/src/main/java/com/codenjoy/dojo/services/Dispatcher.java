@@ -149,12 +149,25 @@ public class Dispatcher {
         return Calendar.getInstance().getTimeInMillis();
     }
 
-    public void disqualify(List<String> emails) {
-        List<Disqualified> ids = emails.stream()
-                .map(email -> new Disqualified(config.getId(email), email))
+    public void disqualify(List<String> emailsOrIds) {
+        List<Disqualified> list = emailsOrIds.stream()
+                .map(emailOrId -> parse(emailOrId))
                 .collect(toList());
 
-        disqualified.addAll(ids);
+        disqualified.addAll(list);
+    }
+
+    private Disqualified parse(String emailOrId) {
+        String email = emailOrId;
+        String id = emailOrId;
+
+        if (emailOrId.contains("@")) {
+            id = config.getId(email);
+        } else {
+            email = config.getEmail(id);
+        }
+
+        return new Disqualified(id, email);
     }
 
     public synchronized List<PlayerScore> getFinalists() {

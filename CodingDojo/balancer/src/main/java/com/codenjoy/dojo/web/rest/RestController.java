@@ -115,7 +115,7 @@ public class RestController {
     @ResponseBody
     public boolean disqualify(@RequestBody PlayersDTO input) {
         List<String> players = input.getPlayers();
-        players.forEach(email -> validator.checkEmail(email, CANT_BE_NULL));
+        players.forEach(email -> validator.checkEmailOrId(email, CANT_BE_NULL));
 
         dispatcher.disqualify(players);
 
