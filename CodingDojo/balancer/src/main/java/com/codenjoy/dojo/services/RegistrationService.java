@@ -26,6 +26,7 @@ import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.properties.SmsProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -50,9 +51,13 @@ public class RegistrationService {
     private final Players playersRepo;
     private final ConfigProperties config;
     private final PasswordEncoder passwordEncoder;
+    private final SmsProperties smsProperties;
 
     public String generateVerificationCode() {
-        return RandomStringUtils.randomNumeric(CODE_LENGTH);
+        if (smsProperties.isEnabled()) {
+            return RandomStringUtils.randomNumeric(CODE_LENGTH);
+        }
+        return smsProperties.getStaticVerificationCode();
     }
 
     public ServerLocation confirmRegistration(String phone, String code) {
@@ -112,7 +117,7 @@ public class RegistrationService {
 
     public void resetPassword(String phone) {
         Player player = getByPhone(phone);
-        String newPassword = RandomStringUtils.randomAlphabetic(8);
+        String newPassword = generatePassword();
         String hashedPassword = DigestUtils.md5Hex(newPassword);
         String encodePassword = passwordEncoder.encode(hashedPassword);
         player.setPassword(encodePassword);
@@ -129,6 +134,14 @@ public class RegistrationService {
     private Player getByPhone(String phone) {
         return playersRepo.getByPhone(phone)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    private String generatePassword() {
+        if (smsProperties.isEnabled()) {
+            return RandomStringUtils.randomAlphabetic(8);
+        }
+
+        return smsProperties.getStaticPassword();
     }
 }
 
