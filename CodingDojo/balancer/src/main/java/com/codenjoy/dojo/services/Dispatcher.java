@@ -269,11 +269,22 @@ public class Dispatcher {
         return game.existsOnServer(player.getServer(), player.getEmail());
     }
 
-    public void clearCache() {
-        scoresFromGameServers.clear();
-        currentScores.clear();
-        disqualified.clear();
-        currentFinalists.clear();
+    public void clearCache(int whatToClean) {
+        if ((whatToClean & 0b0001) == 0b0001) {
+            scoresFromGameServers.clear();
+        }
+
+        if ((whatToClean & 0b0010) == 0b0010) {
+            currentScores.clear();
+        }
+
+        if ((whatToClean & 0b0100) == 0b0100) {
+            disqualified.clear();
+        }
+
+        if ((whatToClean & 0b1000) == 0b1000) {
+            currentFinalists.clear();
+        }
     }
 
     public Collection<String> disqualified() {

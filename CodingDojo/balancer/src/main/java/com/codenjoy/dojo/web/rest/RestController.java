@@ -547,10 +547,10 @@ public class RestController {
     }
 
     // TODO test me
-    @GetMapping(CACHE + "/clear")
+    @GetMapping(CACHE + "/clear/{mask}")
     @ResponseBody
-    public boolean invalidateCache() {
-        dispatcher.clearCache();
+    public boolean invalidateCache(@PathVariable("mask") int whatToClean) {
+        dispatcher.clearCache(whatToClean);
         return true;
     }
 

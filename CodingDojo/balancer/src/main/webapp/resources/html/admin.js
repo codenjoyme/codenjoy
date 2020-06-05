@@ -107,7 +107,7 @@ var registerUser = function(email, phone, firstName,
             '"phone" : "' + phone + '", ' +
             '"firstName" : "' + firstName + '", ' +
             '"lastName" : "' + lastName + '", ' +
-            '"password" : "' + password + '", ' +
+            '"password" : "' + password + '", ' + // TODO md5
             '"code" : "' + code + '", ' +
             '"city" : "' + city + '", ' +
             '"skills" : "' + skills + '", ' +
@@ -131,7 +131,7 @@ var loginUser = function(email, password) {
         url: server('balancer') + '/login',
         contentType: 'application/json; charset=utf-8',
         data: '{"email": "' + email + '", ' +
-            '"password" : "' + password + '"}',
+            '"password" : "' + password + '"}', // TODO md5
         after: function(data){
             updateCode(data.code);
 
@@ -308,10 +308,10 @@ var setGameSettings = function(settings) {
     });
 };
 
-var clearCache = function() {
+var clearCache = function(whatToClean) {
     _ajax('cache', {
         type: 'GET',
-        url: server('balancer') + '/cache/clear'
+        url: server('balancer') + '/cache/clear/' + whatToClean
     });
 };
 
@@ -573,7 +573,9 @@ $(document).ready(function() {
     });
 
     $('#cache').click(function() {
-        clearCache();
+        clearCache(
+            $('#cache-mask').val()
+        );
     });
 
 });
