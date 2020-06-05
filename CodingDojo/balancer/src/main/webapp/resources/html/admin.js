@@ -436,7 +436,7 @@ $(document).ready(function() {
         });
     }
 
-    sync(['#phone', '#confirm-phone']);
+    sync(['#phone', '#confirm-phone', '#resend-phone']);
     sync(['#email', '#get-confirm-email', '#login-email', '#remove-email', '#join-email']);
     sync(['#password', '#login-password']);
     sync(['#code', '#join-code']);
