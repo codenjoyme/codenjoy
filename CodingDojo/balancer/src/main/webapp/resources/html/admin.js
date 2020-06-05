@@ -308,8 +308,8 @@ var setGameSettings = function(settings) {
     });
 };
 
-var clearCache = function(whatToClean) {
-    _ajax('cache', {
+var clearCache = function(block, whatToClean) {
+    _ajax(block, {
         type: 'GET',
         url: server('balancer') + '/cache/clear/' + whatToClean
     });
@@ -579,10 +579,20 @@ $(document).ready(function() {
         );
     });
 
-    $('#cache').click(function() {
-        clearCache(
-            $('#cache-mask').val()
-        );
+    $('#clear-cache').click(function() {
+        clearCache('cache', $('#cache-mask').val());
+    });
+
+    $('#clear-scores').click(function() {
+        clearCache('scores', 2); // clean only currentScores
+    });
+
+    $('#clear-disqualified').click(function() {
+        clearCache('disqualified', 4); // clean only disqualified
+    });
+
+    $('#clear-finalists').click(function() {
+        clearCache('finalists', 8); // clean only finalists cache
     });
 
     enableSlide();

@@ -342,6 +342,7 @@
             <div>
                 <span></span>
                 <button id="scores">Score</button>
+                <button id="clear-scores">Clear cache</button>
             </div>
             <div>
                 <span>Request:</span>
@@ -390,6 +391,7 @@
             <div>
                 <span></span>
                 <button id="disqualified">Get</button>
+                <button id="clear-disqualified">Clear</button>
             </div>
             <div>
                 <span>Request:</span>
@@ -412,6 +414,7 @@
             <div>
                 <span></span>
                 <button id="finalists">Finalists</button>
+                <button id="clear-finalists">Clear cache</button>
             </div>
             <div>
                 <span>Request:</span>
@@ -589,11 +592,11 @@
         <div>
             <div>
                 <span></span>
-                <button id="cache">Clear</button>
+                <button id="clear-cache">Clear</button>
             </div>
             <div>
                 <span title="1 (0b0001) - scoresFromGameServers, 2 (0b0010) - currentScores, 4 (0b0100) - disqualified, 8 (0b1000) - currentFinalists">What to clean:</span>
-                <input id="cache-mask"/>
+                <input id="cache-mask" value="8"/>
             </div>
             <div>
                 <span>Request:</span>
