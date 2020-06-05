@@ -135,7 +135,7 @@ public class GameServer {
     }
 
     public String gameEnable(String server, boolean enable) {
-        String status = enable ? "start" : "stop";
+        String status = status(enable);
         try {
             if (logger.isDebugEnabled()) {
                 logger.debug("Set status {} of game on server {}",
@@ -143,12 +143,16 @@ public class GameServer {
             }
 
             Boolean enabled = gameClientResolver.resolveClient(server).checkGameEnabled(enable);
-            return "Successful; game: " + enabled;
+            return status(enabled);
         } catch (GameServerClientException e) {
             logger.error("Error " + status + " game on server: " + server, e);
 
             return ErrorTicketService.getPrintableMessage(e);
         }
+    }
+
+    private String status(boolean enable) {
+        return enable ? "start" : "stop";
     }
 
     public Boolean remove(String server, String email, String code) {

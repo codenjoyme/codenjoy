@@ -543,7 +543,7 @@ public class RestController {
     @GetMapping(CONTEST + "/enable/get")
     @ResponseBody
     public boolean getContestStarted() {
-        return timer.isPaused();
+        return !timer.isPaused();
     }
 
     // TODO test me

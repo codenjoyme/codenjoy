@@ -109,7 +109,7 @@ public class RestAdminController {
             timerService.pause();
         }
 
-        return timerService.isPaused(); // TODO вот это странно, на вход идет enabled, а на выход paused = !enabled
+        return !timerService.isPaused();
     }
 
     // TODO test me
