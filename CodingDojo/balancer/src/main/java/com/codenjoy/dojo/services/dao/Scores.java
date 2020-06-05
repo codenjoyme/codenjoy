@@ -169,7 +169,7 @@ public class Scores {
                 isWinner ? 1 : 0,
                 playerScore.getDay(),
                 playerScore.getTime(),
-                playerScore.getId(),
+                config.getEmail(playerScore.getId()),
                 playerScore.getScore()
         );
     }
