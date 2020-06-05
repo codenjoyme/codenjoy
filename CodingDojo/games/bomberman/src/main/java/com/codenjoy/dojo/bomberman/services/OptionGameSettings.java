@@ -85,7 +85,7 @@ public class OptionGameSettings implements GameSettings {
                 300,   // timePerRound    - сколько тиков на 1 раунд
                 1,     // timeForWinner   - сколько тиков победитель будет сам оставаться после всех побежденных
                 5,     // timeBeforeStart - обратный отсчет перед началом раунда
-                3,     // roundsPerMatch  - сколько раундов (с тем же составом героев) на 1 матч
+                1,     // roundsPerMatch  - сколько раундов (с тем же составом героев) на 1 матч
                 1);    // minTicksForWin  - сколько тиков должно пройти от начала раунда, чтобы засчитать победу
 
         // perks. Set value to 0 = perk is disabled.
