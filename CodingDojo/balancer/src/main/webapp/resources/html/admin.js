@@ -433,7 +433,7 @@ $(document).ready(function() {
         var preffix = $('#preffix').val();
         loginUser(
             preffix + $('#login-email').val(),
-            $.md5(preffix + $('#login-password').val())
+            preffix + $('#login-password').val()
         );
     });
 
