@@ -107,7 +107,7 @@ var registerUser = function(email, phone, firstName,
             '"phone" : "' + phone + '", ' +
             '"firstName" : "' + firstName + '", ' +
             '"lastName" : "' + lastName + '", ' +
-            '"password" : "' + password + '", ' + // TODO md5
+            '"password" : "' + password + '", ' +
             '"code" : "' + code + '", ' +
             '"city" : "' + city + '", ' +
             '"skills" : "' + skills + '", ' +
@@ -131,7 +131,7 @@ var loginUser = function(email, password) {
         url: server('balancer') + '/login',
         contentType: 'application/json; charset=utf-8',
         data: '{"email": "' + email + '", ' +
-            '"password" : "' + password + '"}', // TODO md5
+            '"password" : "' + password + '"}',
         after: function(data){
             updateCode(data.code);
 
@@ -392,7 +392,7 @@ $(document).ready(function() {
                 $('#phone').val(),
                 preffix + $('#first-name').val(),
                 preffix + $('#last-name').val(),
-                preffix + $('#password').val(),
+                $.md5(preffix + $('#password').val()),
                 $('#code').val(),
                 preffix + $('#city').val(),
                 preffix + $('#skills').val(),
@@ -433,7 +433,7 @@ $(document).ready(function() {
         var preffix = $('#preffix').val();
         loginUser(
             preffix + $('#login-email').val(),
-            preffix + $('#login-password').val()
+            $.md5(preffix + $('#login-password').val())
         );
     });
 
