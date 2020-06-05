@@ -368,9 +368,17 @@ var enableSlide = function(element) {
         $(this).next().slideToggle('fast');
     });
 
+    var visible = false;
     $('#collapse-all').click(function() {
-       $('.block-header').next().slideToggle('fast');
+        if (visible) {
+            $('.block-header').next().hide();
+        } else {
+            $('.block-header').next().show();
+        }
+        visible = !visible;
+        $('#collapse-all').text(visible ? '(collapse all)' : '(expand all)');
     });
+
     $('#collapse-all').click();
 }
 
@@ -600,6 +608,5 @@ $(document).ready(function() {
     });
 
     enableSlide();
-
 
 });
