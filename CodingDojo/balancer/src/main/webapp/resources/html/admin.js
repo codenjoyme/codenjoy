@@ -395,6 +395,10 @@ var enableSlide = function(element) {
     $('#collapse-all').click();
 }
 
+var encodePassword = function(raw) {
+    return $.md5(raw);
+}
+
 $(document).ready(function() {
     var balancerHost = window.location.host;
     var gameHost = 'game1.' + window.location.host;
@@ -417,7 +421,7 @@ $(document).ready(function() {
                 $('#phone').val(),
                 preffix + $('#first-name').val(),
                 preffix + $('#last-name').val(),
-                $.md5(preffix + $('#password').val()),
+                encodePassword(preffix + $('#password').val()),
                 $('#code').val(),
                 preffix + $('#city').val(),
                 preffix + $('#skills').val(),
@@ -458,7 +462,7 @@ $(document).ready(function() {
         var preffix = $('#preffix').val();
         loginUser(
             preffix + $('#login-email').val(),
-            preffix + $('#login-password').val()
+            encodePassword(preffix + $('#login-password').val())
         );
     });
 
