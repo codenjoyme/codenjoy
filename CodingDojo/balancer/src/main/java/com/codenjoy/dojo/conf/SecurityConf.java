@@ -87,13 +87,13 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 //                                RestController.URI + RestController.SCORE + "/day/**",
                                 "/logout",
                                 RestController.URI + RestController.REGISTER + "/**",
-                                RestController.URI + RestController.LOGIN)
+                                RestController.URI + RestController.LOGIN,
+                                RestController.URI + RestController.GAME_SETTINGS + "/get")
                             .permitAll()
                         .antMatchers(
 //                                RestController.URI + RestController.UPDATE,
                                 RestController.URI + RestController.SCORE + "/day/**",
-                                RestController.URI + RestController.PLAYER + "/**",
-                                RestController.URI + RestController.GAME_SETTINGS + "/*/get")
+                                RestController.URI + RestController.PLAYER + "/**")
                             .hasRole("USER")
                         .antMatchers(
                                 "/resources/html/**",

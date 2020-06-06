@@ -133,21 +133,21 @@ const ELEMENTS = [
         title:       `BOMB_BLAST_RADIUS_INCREASE ('+')`,
         description: `Збільшує радіус* вибуху бомби. Діє лише для нових бомб.`
     },
-        {
+    {
         image:       bomb_count_increase,
         title:       `BOMB_COUNT_INCREASE ('c')`,
-        description: `Збільшує кількість* доступних гравцю Бомбермен.`
+        description: `Збільшує кількість* доступних гравцю бомб.`
     },
-        {
+    {
         image:       bomb_immune,
         title:       `BOMB_IMMUNE ('i')`,
         description: `Дає імунітет до вибухів бомб (навіть чужих).`
     },
-        {
+    {
         image:       bomb_remote_control,
         title:       `BOMB_REMOTE_CONTROL ('r')`,
         description: `Дистанційне керування детонатором. Бомба вибухає
-при повторній дії ACT команди. В наявності декілька* детонаторів.`
+при повторній дії ACT команди. В наявності є декілька* детонаторів.`
     },
     {
         image:       none,
@@ -158,6 +158,8 @@ const ELEMENTS = [
 
 export class GameElements extends Component {
     render() {
+        const {  settings  } = this.props;
+
         return (
             <div className={ Styles.gameElements }>
                 { ELEMENTS.map(({ image, title, description }) => (

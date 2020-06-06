@@ -13,6 +13,10 @@
     background-repeat: no-repeat;
 }
 
+b {
+    font-weight: 400;
+}
+
 .highligteUnderNotes,
 .highligte {
     font-size: 16px;
