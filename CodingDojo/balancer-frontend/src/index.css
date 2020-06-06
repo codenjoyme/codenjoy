@@ -53,6 +53,16 @@ body {
     font-weight: 200;
 }
 
+.content ul ul {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.content ol ol {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .title {
     margin-bottom: 33px;
     font-size: 30px;
