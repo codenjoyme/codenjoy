@@ -50,6 +50,7 @@ b {
 .boardExample {
     font-family: monospace;
     letter-spacing: 5px;
+    white-space: pre-wrap;
 }
 
 .copyConnection {
