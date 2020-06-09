@@ -402,7 +402,9 @@ public class RestController {
                 scores.remove(player.getId());
                 players.remove(player.getId());
 
-                message = message + "removed ";
+                message = message + "removed {true} ";
+            } else {
+                message = message + "removed {} ";
             }
 
             boolean exists = players.getByEmail(id) != null;
@@ -420,6 +422,8 @@ public class RestController {
             if (remove) {
                 Map<String, Boolean> map = dispatcher.removeFromEveryGameServer(id);
                 message = message + "removed: " + map.toString() + " ";
+            } else {
+                message = message + "removed: {} ";
             }
 
             Map<String, Boolean> map = dispatcher.existsOnGameServers(id);

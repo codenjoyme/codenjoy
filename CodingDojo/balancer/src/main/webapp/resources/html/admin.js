@@ -127,6 +127,7 @@ var registerUser = function(email, phone, firstName,
             '"comment" : "' + comment + '"}',
         after: function(data){
             updateCode(data.code);
+            updateId(data.id);
 
             autoIncrement();
         }
@@ -136,6 +137,11 @@ var registerUser = function(email, phone, firstName,
 var updateCode = function(code) {
     $('#join-code').val(code);
     $('#code').val(code);
+}
+
+var updateId = function(id) {
+    $('#player-id').val(id);
+    $('#remove-id').val(id);
 }
 
 var loginUser = function(email, password) {
@@ -454,9 +460,10 @@ $(document).ready(function() {
     }
 
     sync(['#phone', '#confirm-phone', '#resend-phone']);
-    sync(['#email', '#get-confirm-email', '#login-email', '#remove-email', '#join-email']);
+    sync(['#email', '#get-confirm-email', '#login-email', '#join-email']);
     sync(['#password', '#login-password']);
     sync(['#code', '#join-code']);
+    sync(['#player-id', '#remove-id']);
 
     $('#login').click(function() {
         var preffix = $('#preffix').val();
@@ -557,7 +564,7 @@ $(document).ready(function() {
     $('#remove').click(function() {
         var preffix = $('#preffix').val();
         removeUser(
-            preffix + $('#remove-email').val(),
+            $('#remove-id').val(),
             $('#where-to-remove').val()
         );
     });
