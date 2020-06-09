@@ -68,11 +68,11 @@ public class OptionGameSettings implements GameSettings {
         isMultiple = settings.addCheckBox("[Game] Is multiple or disposable").type(Boolean.class).def(false);
         playersPerRoom = settings.addEditBox("[Game] Players per room for disposable").type(Integer.class).def(5);
 
-        killWallScore = settings.addEditBox("[Score] Kill wall score").type(Integer.class).def(10);
-        killMeatChopperScore = settings.addEditBox("[Score] Kill meat chopper score").type(Integer.class).def(100);
-        killOtherHeroScore = settings.addEditBox("[Score] Kill other hero score").type(Integer.class).def(200);
-        diePenalty = settings.addEditBox("[Score] Your hero's death penalty").type(Integer.class).def(50);
-        winRoundScore = settings.addEditBox("[Score][Rounds] Win round score").type(Integer.class).def(1000);
+        killWallScore = settings.addEditBox("[Score] Kill wall score").type(Integer.class).def(1);
+        killMeatChopperScore = settings.addEditBox("[Score] Kill meat chopper score").type(Integer.class).def(3);
+        killOtherHeroScore = settings.addEditBox("[Score] Kill other hero score").type(Integer.class).def(10);
+        diePenalty = settings.addEditBox("[Score] Your hero's death penalty").type(Integer.class).def(2);
+        winRoundScore = settings.addEditBox("[Score][Rounds] Win round score").type(Integer.class).def(15);
 
         bombsCount = settings.addEditBox("[Level] Bombs count").type(Integer.class).def(1);
         bombPower = settings.addEditBox("[Level] Bomb power").type(Integer.class).def(3);
