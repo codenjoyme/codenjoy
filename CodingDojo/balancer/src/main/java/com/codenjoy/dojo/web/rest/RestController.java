@@ -159,19 +159,16 @@ public class RestController {
         Player result = doIt(new DoItOnServers<Player>() {
             @Override
             public Player onGame() {
-                player.setId(registrationService.generateId());
-                player.setPassword(passwordEncoder.encode(md5Password));
-                // code = code(md5(bcrypt(password)))
-                player.setCode(Hash.getCode(player.getId(), player.getPassword()));
-
-                return dispatcher.registerNew(player);
+                // ничего не делаем, ведь надо дождаться верификации по смс в confirmRegistration
+                return player;
             }
 
             @Override
             public Player onBalancer(Player player) {
-                if (player == null) {
-                    return null;
-                }
+                player.setId(registrationService.generateId());
+                player.setPassword(passwordEncoder.encode(md5Password));
+                // code = code(md5(bcrypt(password)))
+                player.setCode(Hash.getCode(player.getId(), player.getPassword()));
 
                 String verificationCode = registrationService.generateVerificationCode();
                 player.setApproved(Player.NOT_APPROVED);
@@ -521,8 +518,11 @@ public class RestController {
     @PostMapping(REGISTER + "/confirm")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ServerLocation> confirmRegistration(@RequestBody PhoneCodeDTO input) {
-        return ResponseEntity.ok(registrationService.
-                confirmRegistration(phoneValidateNormalize(input.getPhone()), input.getCode()));
+        Player updatedOnBalancer = registrationService.confirmRegistration(phoneValidateNormalize(input.getPhone()), input.getCode());
+
+        Player createdOnGame = dispatcher.registerNew(updatedOnBalancer);
+
+        return ResponseEntity.ok(new ServerLocation(createdOnGame));
     }
 
     @GetMapping(CONFIRM + "/{player}/code")

@@ -63,20 +63,21 @@ public class RegistrationService {
         return Hash.getRandomId();
     }
 
-    public ServerLocation confirmRegistration(String phone, String code) {
+    public Player confirmRegistration(String phone, String code) {
         Player player = getByPhone(phone);
 
         if (player.getApproved() == APPROVED) {
             throw new IllegalArgumentException("User already confirmed");
         }
 
-        if (validateCode(code, VerificationType.REGISTRATION, player)) {
-            players.approveByPhone(phone);
-            players.updateVerificationCode(phone, null, null);
-            return new ServerLocation(player);
+        if (!validateCode(code, VerificationType.REGISTRATION, player)) {
+            throw new IllegalArgumentException("Invalid verification code");
         }
 
-        throw new IllegalArgumentException("Invalid verification code");
+        players.approveByPhone(phone);
+        players.updateVerificationCode(phone, null, null);
+
+        return player;
     }
 
     public void resendConfirmRegistrationCode(String phone) {
