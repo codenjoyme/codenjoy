@@ -237,9 +237,9 @@ public class Players {
                 });
     }
 
-    public void updateServer(String email, String server, String code) {
-        pool.update("UPDATE players SET server = ?, code = ? WHERE email = ?;",
-                server, code, email);
+    public void updateServer(String id, String server, String code) {
+        pool.update("UPDATE players SET server = ?, code = ? WHERE id = ?;",
+                server, code, id);
     }
 
     public void approveByPhone(String phone) {
