@@ -106,7 +106,11 @@ var autoIncrementPhone = function() {
     var old = $('#phone').val();
     var index = parseInt(old.match(/\d+/g)[0]);
     var aNew = old.replace('' + index, '' + (index + 1));
-    $('#phone').val(aNew);
+    changePhone(aNew);
+}
+
+var changePhone = function(phone) {
+    $('#phone').val(phone);
     $('#phone').trigger('change');
 }
 
@@ -643,6 +647,5 @@ $(document).ready(function() {
     enableSlide();
 
     var phone = '+380' + generate('0123456789', 9);
-    $('#phone').val(phone);
-
+    changePhone(phone);
 });
