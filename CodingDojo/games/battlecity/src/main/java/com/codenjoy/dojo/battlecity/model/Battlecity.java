@@ -47,6 +47,7 @@ public class Battlecity implements Field {
 
     public Battlecity(int size, Dice dice, List<Construction> constructions, Tank... aiTanks) {
         this(size, dice, constructions, new DefaultBorders(size).get(), aiTanks);
+        this.trees = new LinkedList<>();
     }
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
@@ -57,6 +58,7 @@ public class Battlecity implements Field {
         this.aiTanks = new LinkedList<>();
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
+        this.trees = new LinkedList<>();
 
         for (Tank tank : aiTanks) {
             addAI(tank);
