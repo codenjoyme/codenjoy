@@ -12,9 +12,6 @@ admin:
   login: admin@codenjoyme.com
   password: admin
 
-email:
-  hash: secureSoul
-
 score:
   update:
     time: 10000
