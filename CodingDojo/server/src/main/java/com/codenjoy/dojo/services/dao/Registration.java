@@ -58,7 +58,7 @@ public class Registration {
     public Registration(ConnectionThreadPoolFactory factory, String adminEmail, String adminPassword, PasswordEncoder passwordEncoder, ConfigProperties properties, boolean initAdminUser) {
         this.passwordEncoder = passwordEncoder;
         this.properties = properties;
-        adminPassword = passwordEncoder.encode(adminPassword);
+        adminPassword = passwordEncoder.encode(Hash.md5(adminPassword));
         List<String> initialScripts = new ArrayList<>();
         initialScripts.add("CREATE TABLE IF NOT EXISTS users (" +
                 "email varchar(255), " +
