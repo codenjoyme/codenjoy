@@ -138,11 +138,14 @@ public abstract class RoundField<P extends RoundGamePlayer<? extends RoundPlayer
 
     public void remove(P player) {
         if (players().contains(player)) {
-            // кто уходит из игры не лишает коллег очков за победу
-            player.getHero().die();
             players().remove(player);
 
-            rewardTheWinnerIfNeeded(() -> {});
+            // кто уходит из игры не лишает коллег очков за победу
+            // но только если он был жив к этому моменту
+            if (player.getHero().isActiveAndAlive()) {
+                player.getHero().die();
+                rewardTheWinnerIfNeeded(() -> {});
+            }
         }
     }
 
