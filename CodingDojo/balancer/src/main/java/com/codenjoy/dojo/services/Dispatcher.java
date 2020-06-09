@@ -41,6 +41,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -82,15 +83,28 @@ public class Dispatcher {
         }
 
         // TODO test me
-        // удалить с других серверов если там есть что
-        gameServers.stream()
-                .filter(s -> !s.equals(player.getServer()))
-                .filter(s -> game.existsOnServer(s, player.getId()))
-                .forEach(s -> game.remove(s, player.getId(), player.getCode()));
+        removeFromEveryGameServer(player);
 
         String score = null; // будет попытка загрузиться с сейва
         String save = null;
         return registerOnServer(player, score, save);
+    }
+
+    public Map<String, Boolean> removeFromEveryGameServer(Player player) {
+        // удалить с других серверов если там есть что
+        return gameServers.stream()
+                .filter(s -> game.existsOnServer(s, player.getId()))
+                .collect(Collectors.toMap(
+                            s -> s,
+                            s -> game.remove(s, player.getId(), player.getCode())));
+    }
+
+    public Map<String, Boolean> existsOnGameServers(Player player) {
+        // удалить с других серверов если там есть что
+        return gameServers.stream()
+                .collect(Collectors.toMap(
+                        s -> s,
+                        s -> game.existsOnServer(s, player.getId())));
     }
 
     public Player registerOnServer(Player player, String score, String save) {

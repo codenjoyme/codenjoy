@@ -51,6 +51,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
@@ -401,7 +402,7 @@ public class RestController {
     }
 
     private void tryRemoveFromBalancer(boolean remove, Player player, List<String> status) {
-        String message = "At game server: ";
+        String message = "At balancer server: ";
         try {
             if (remove) {
                 scores.remove(player.getId());
@@ -423,15 +424,12 @@ public class RestController {
         String message = "At game server: ";
         try {
             if (remove) {
-                Boolean result = game.remove(player.getServer(), player.getId(), player.getCode());
-                if (result != null && result) {
-                    message = message + "removed ";
-                }
+                Map<String, Boolean> map = dispatcher.removeFromEveryGameServer(player);
+                message = message + "removed: " + map.toString() + " ";
             }
 
-            boolean exists = game.existsOnServer(player.getServer(), player.getId());
-            message = message + "exists: " + exists;
-
+            Map<String, Boolean> map = dispatcher.existsOnGameServers(player);
+            message = message + "exists: " + map;
         } catch (Exception e) {
             message = message + ErrorTicketService.getPrintableMessage(e);
         }
