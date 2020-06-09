@@ -254,10 +254,12 @@ public class RestController {
     public ServerLocation login(@RequestBody Player player, HttpServletRequest request) {
         player.setCallback(getIp(request));
 
+        String md5Password = player.getPassword();
+
         return tryLogin(player, false, p -> {
             Player result = recreatePlayerIfNeeded(p);
 
-            authenticator.login(request, p.getEmail(), p.getPassword());
+            authenticator.login(request, p.getEmail(), md5Password);
 
             return result;
         });

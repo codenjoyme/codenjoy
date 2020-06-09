@@ -48,13 +48,13 @@ public class SecurityContextAuthenticator {
     private AuthenticationManager authenticationManager;
     private ConfigProperties config;
 
-    public void login(HttpServletRequest request, String user, String password) {
+    public void login(HttpServletRequest request, String email, String password) {
         SecurityContext context = SecurityContextHolder.getContext();
         if (isAdmin(context)) {
             return;
         }
 
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, password);
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
         Authentication auth = authenticationManager.authenticate(token);
 
         context.setAuthentication(auth);
