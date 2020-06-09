@@ -252,9 +252,9 @@ public class Players {
                 verificationCode, verificationType, phone);
     }
 
-    public void remove(String email) {
-        pool.update("DELETE FROM players WHERE email = ?;",
-                new Object[]{email});
+    public void remove(String id) {
+        pool.update("DELETE FROM players WHERE id = ?;",
+                new Object[]{id});
     }
 
     public void removeAll() {

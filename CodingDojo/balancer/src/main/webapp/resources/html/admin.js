@@ -258,10 +258,10 @@ var getDisqualified = function() {
     });
 };
 
-var removeUser = function(email) {
+var removeUser = function(email, withScore) {
     _ajax('remove', {
         type: 'GET',
-        url: server('balancer') + '/remove/' + email
+        url: server('balancer') + '/remove/' + email + '/withScore/' + withScore
     });
 };
 
@@ -557,7 +557,8 @@ $(document).ready(function() {
     $('#remove').click(function() {
         var preffix = $('#preffix').val();
         removeUser(
-            preffix + $('#remove-email').val()
+            preffix + $('#remove-email').val(),
+            $('#remove-scores').is(':checked')
         );
     });
 

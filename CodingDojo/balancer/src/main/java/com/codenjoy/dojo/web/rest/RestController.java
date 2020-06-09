@@ -26,6 +26,7 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.GameServer;
 import com.codenjoy.dojo.services.dao.Players;
+import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
@@ -76,6 +77,7 @@ public class RestController {
     private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
     @Autowired private Players players;
+    @Autowired private Scores scores;
     @Autowired private TimerService timer;
     @Autowired private Dispatcher dispatcher;
     @Autowired private Validator validator;
@@ -381,9 +383,9 @@ public class RestController {
         return result;
     }
 
-    @GetMapping(REMOVE + "/{player}")
+    @GetMapping(REMOVE + "/{player}/withScore/{withScore}")
     @ResponseBody
-    public boolean remove(@PathVariable("player") String email) {
+    public boolean remove(@PathVariable("player") String email, @PathVariable("withScore") boolean withScore) {
         Player player = players.getByEmail(email);
         if (player == null) {
             // TODO test me
@@ -394,18 +396,18 @@ public class RestController {
             @Override
             public Boolean onGame() {
                 Boolean result = game.remove(player.getServer(), player.getId(), player.getCode());
-                return result != null && result;
+
+                return game.existsOnServer(player.getServer(), player.getId());
             }
 
             @Override
-            public Boolean onBalancer(Boolean removed) {
-                if (removed != null && removed) {
-//                    scores.delete(email);
-                    players.remove(email);
-                } else {
-                    // TODO test me
+            public Boolean onBalancer(Boolean removedFromGame) {
+                if (withScore) {
+                    scores.remove(player.getId());
                 }
-                return removed;
+                players.remove(player.getId());
+
+                return true;
             }
         });
     }
