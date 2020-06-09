@@ -128,8 +128,6 @@ var registerUser = function(email, phone, firstName,
         after: function(data){
             updateCode(data.code);
             updateId(data.id);
-
-            autoIncrement();
         }
     });
 };
@@ -154,8 +152,6 @@ var loginUser = function(email, password) {
         after: function(data){
             updateCode(data.code);
             updateId(data.id);
-
-            autoIncrement();
         }
     });
 };
@@ -422,6 +418,7 @@ $(document).ready(function() {
 
     var registerOrUpdate = function(action) {
         $('#' + action).click(function() {
+            autoIncrement();
             var preffix = $('#preffix').val();
 
             registerUser(
