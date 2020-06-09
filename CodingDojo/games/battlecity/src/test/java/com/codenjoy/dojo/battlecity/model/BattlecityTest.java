@@ -52,6 +52,10 @@ public class BattlecityTest {
 
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
+    private List<Tank> tanks;
+	private List<Tree> trees;
+	private List<Construction> constructions;
+
     @Before
     public void setup() {
         size = 7;
@@ -73,21 +77,19 @@ public class BattlecityTest {
         this.hero = tank;
     }
 
-    private void givenGame(Tank tank, Tree... woods) {
-        givenGameWithTree(tank, Arrays.asList(new Construction[0]), woods);
+    private void givenGameWithTree(List<Tank> allTanks, List<Tree> woods) {
+        givenGameWithTree(allTanks, Arrays.asList(new Construction[0]), woods);
     }
 
-    private void givenGame(Tank tank, List<Construction> structures, Tree... woods) {
-        List<Construction> constructions = new LinkedList<>(structures);
-        givenGameWithTree(tank, constructions, woods);
-    }
-
-    private void givenGameWithTree(Tank tank, List<Construction> constructions, Tree[] woods) {
-        List<Tree> trees = new LinkedList<>(Arrays.asList(woods));
+    private void givenGameWithTree(List<Tank> allTanks, List<Construction> constructions, List<Tree> woods) {
+        List<Tree> trees = new LinkedList<>(woods);
+        List<Tank> tanks = new LinkedList<>(allTanks);
         game = new Battlecity(size, mock(Dice.class), constructions,
                 new DefaultBorders(size).get(), trees);
-        initPlayer(game, tank);
-        this.hero = tank;
+        for (Tank tank : tanks) {
+            initPlayer(game, tank);
+        }
+        this.hero = tanks.get(0);
     }
 
     private void givenGameWithAI(Tank tank, Tank... aiTanks) {
@@ -134,10 +136,6 @@ public class BattlecityTest {
 
     public void givenGameWithConstruction(Tank tank, int x, int y) {
         givenGame(tank, new Construction(x, y));
-    }
-
-    private void givenGameWithTree(Tank tank, int x, int y) {
-        givenGame(tank, new Tree(x, y));
     }
 
     public void givenGameWithTankAt(int x, int y) {
@@ -2883,7 +2881,11 @@ public class BattlecityTest {
     // 1. Кусты
     @Test
     public void shouldBeConstructionTree_whenGameCreated() {
-        givenGameWithTree(tank(1, 1, Direction.UP), 3, 3);
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(3, 3)));
+		
+		givenGameWithTree(tanks, trees);
+
         assertEquals(1, game.getTrees().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -2897,7 +2899,11 @@ public class BattlecityTest {
 
     @Test
     public void shouldBeConstructionTwoTree_whenGameCreated() {
-        givenGame(tank(1, 1, Direction.UP), new Tree(3, 3), new Tree(5, 1));
+
+		List<Tank> tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		List<Tree> trees = new LinkedList<>(Arrays.asList(new Tree(3, 3), new Tree(5, 1)));
+		givenGameWithTree(tanks, trees);
+
         assertEquals(2, game.getTrees().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -2913,8 +2919,12 @@ public class BattlecityTest {
     @Test
     public void shouldBulletFlyUnderTree_right() {
         size = 11;
-        givenGameWithTree(tank(1, 1, Direction.RIGHT), 6, 1);
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(6, 1)));
 
+		givenGameWithTree(tanks, trees);
+
+        hero.right();
         hero.act();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -2938,7 +2948,7 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
-                "☼► •  ▒   ☼\n" +
+                "☼ ►•  ▒   ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         game.tick();
@@ -2951,7 +2961,7 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
-                "☼►   •▒   ☼\n" +
+                "☼ ►  •▒   ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         game.tick();
@@ -2964,7 +2974,7 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
-                "☼►    ▒•  ☼\n" +
+                "☼ ►   ▒•  ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         game.tick();
@@ -2977,7 +2987,7 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
-                "☼►    ▒  •☼\n" +
+                "☼ ►   ▒  •☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         game.tick();
@@ -2990,16 +3000,18 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
-                "☼►    ▒   ☼\n" +
+                "☼ ►   ▒   ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
     @Test
     public void shouldBulletDestroyWallUnderTree_whenHittingTheWallUp_whenTwoWalls() {
         size = 7;
-        List<Construction> constructions =
-                new LinkedList<>(Arrays.asList(new Construction(1, 5), new Construction(1, 4)));
-        givenGame(tank(1, 1, Direction.UP), constructions, new Tree(1, 2));
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(1, 2)));
+		constructions = new LinkedList<>(Arrays.asList(new Construction(1, 5), new Construction(1, 4)));
+
+		givenGameWithTree(tanks, constructions, trees);
 
         hero.act();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -3090,7 +3102,10 @@ public class BattlecityTest {
     @Test
     public void shouldBulletFlyUnderTwoTree_up() {
         size = 11;
-        givenGame(tank(5, 1, Direction.UP), new Tree(5, 5), new Tree(5, 6));
+		tanks = new LinkedList<>(Arrays.asList(tank(5, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(5, 5), new Tree(5, 6)));
+
+		givenGameWithTree(tanks, trees);
 
         hero.act();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3175,7 +3190,10 @@ public class BattlecityTest {
     @Test
     public void shouldTankMove_underTree() {
         size = 7;
-        givenGame(tank(1, 1, Direction.UP), new Tree(1, 3), new Tree(1, 4));
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(1, 3), new Tree(1, 4)));
+
+		givenGameWithTree(tanks, trees);
 
         hero.up();
         game.tick();
@@ -3231,8 +3249,10 @@ public class BattlecityTest {
     @Test
     public void shouldBulletFlyUnderTree_jointly_shouldTankMoveUnderTree() {
         size = 11;
-        givenGame(tank(9, 1, Direction.UP),
-                new Tree(9, 5), new Tree(9, 6), new Tree(9, 3));
+		tanks = new LinkedList<>(Arrays.asList(tank(9, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(9, 5), new Tree(9, 6), new Tree(9, 3)));
+
+		givenGameWithTree(tanks, trees);
 
         hero.act();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3327,8 +3347,79 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    //TODO    1.3) так же не видно врагов под кустами
-    //TODO    1.4) под кустами не видно так же и ботов белых
+    //1.3) так же не видно врагов под кустами
+    @Test
+    public void shouldOtherTankMove_underTree() {
+		size = 11;
+		Tank tankHero = tank(1, 1, Direction.UP);
+		Tank otherTank = tank(1, 9, Direction.DOWN);
+
+		tanks = Arrays.asList(tankHero, otherTank);
+		trees = Arrays.asList(new Tree(1, 6), new Tree(1, 7));
+
+		givenGameWithTree(tanks, trees);
+
+		assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+				"☼˅        ☼\n" +
+				"☼         ☼\n" +
+				"☼▒        ☼\n" +
+				"☼▒        ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▲        ☼\n" +
+				"☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        otherTank.down();
+        game.tick();
+		assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+				"☼         ☼\n" +
+				"☼˅        ☼\n" +
+				"☼▒        ☼\n" +
+				"☼▒        ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▲        ☼\n" +
+				"☼☼☼☼☼☼☼☼☼☼☼\n");
+
+		otherTank.down();
+		game.tick();
+
+		otherTank.down();
+		game.tick();
+		assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▒        ☼\n" +
+				"☼▒        ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▲        ☼\n" +
+				"☼☼☼☼☼☼☼☼☼☼☼\n");
+
+		otherTank.down();
+		game.tick();
+		assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▒        ☼\n" +
+				"☼▒        ☼\n" +
+				"☼˅        ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▲        ☼\n" +
+				"☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    //1.4) под кустами не видно так же и ботов белых
+
+
     //TODO 2. Лёд
     //TODO    2.1) когда на нем двигается герой, он проскальзывает команду на целых два тика
     //TODO 3. Вода
