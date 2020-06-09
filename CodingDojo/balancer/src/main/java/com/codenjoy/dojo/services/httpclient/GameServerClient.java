@@ -61,6 +61,6 @@ public interface GameServerClient {
     @RequestLine("GET /codenjoy-contest/rest/admin/game/enabled/{enabled}")
     Boolean checkGameEnabled(@Param("enabled") Boolean enabled);
 
-    @RequestLine("GET /codenjoy-contest/rest/admin.player/{id}/remove")
+    @RequestLine("GET /codenjoy-contest/rest/admin/player/{id}/remove")
     Boolean removePlayer(@Param("id") String id);
 }
