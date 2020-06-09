@@ -358,8 +358,16 @@ public class Registration {
 
     public void replace(User user) {
         String code = user.getCode();
+
+        String password = user.getPassword();
+        // если пришло md5, а не bcrypt(md5)
+        if (!password.contains("$")) {
+            password = passwordEncoder.encode(password);
+        }
+
         if (StringUtils.isEmpty(code)) {
-            code = Hash.getCode(user.getEmail(), user.getPassword());
+            // code = code(bcrypt(md5))
+            code = Hash.getCode(user.getEmail(), password);
             user.setCode(code);
         }
 
@@ -367,7 +375,7 @@ public class Registration {
                 user.getReadableName(),
                 user.getEmail(),
                 APPROVED,
-                passwordEncoder.encode(user.getPassword()),
+                password,
                 code,
                 user.getData(),
                 GameAuthorities.toRoles(user.getAuthorities()),
