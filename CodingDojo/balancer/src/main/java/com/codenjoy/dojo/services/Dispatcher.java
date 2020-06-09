@@ -74,7 +74,9 @@ public class Dispatcher {
         String server = gameServers.getNextServer();
         player.setServer(server);
 
-        return registerOnServer(player, "0", "{}");
+        Player created = registerOnServer(player, "0", "{}");
+        players.updateServer(player.getId(), created.getServer(), created.getCode());
+        return created;
     }
 
     public Player registerIfNotExists(Player player) {
