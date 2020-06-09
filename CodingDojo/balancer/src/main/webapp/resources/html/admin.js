@@ -86,6 +86,15 @@ var _ajax = function(name, ajaxObject) {
     $.ajax(ajaxObject);
 }
 
+function generate(characters, length) {
+   var charactersLength = characters.length;
+   var result = '';
+   for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+}
+
 var autoIncrementPrefix = function() {
     var old = $('#preffix').val();
     var index = parseInt(old.match(/\d+/g)[0]);
@@ -632,5 +641,8 @@ $(document).ready(function() {
     });
 
     enableSlide();
+
+    var phone = '+380' + generate('0123456789', 9);
+    $('#phone').val(phone);
 
 });
