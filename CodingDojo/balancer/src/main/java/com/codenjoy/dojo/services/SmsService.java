@@ -28,32 +28,31 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class SmsService {
 
     private static final String SEND_SMS_OPERATION = "SENDSMS";
 
     public enum SmsType {REGISTRATION, PASSWORD_RESET, NEW_PASSWORD}
 
-    private final SmsProperties smsProperties;
-
-    private final SmsGatewayClient gatewayClient;
-
+    @Autowired private SmsProperties smsProperties;
+    @Autowired private SmsGatewayClient gateway;
 
     public void sendSmsTo(String phone, String code, SmsType smsType) {
         String smsContent = buildMessage(code, smsType);
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug(String.format("SMS to %s:\n%s", phone, smsContent));
         }
 
-        if(smsProperties.isEnabled()) {
+        if (smsProperties.isEnabled()) {
             SmsSendRequest smsSendRequest = new SmsSendRequest(phone, smsContent);
-            gatewayClient.sendSms(smsSendRequest);
+            gateway.sendSms(smsSendRequest);
         }
     }
 
@@ -75,6 +74,7 @@ public class SmsService {
     }
 
     @Getter
+    @ToString
     @JacksonXmlRootElement(localName = "request")
     public static class SmsSendRequest {
         @JacksonXmlProperty
@@ -89,6 +89,7 @@ public class SmsService {
     }
 
     @Getter
+    @ToString
     @RequiredArgsConstructor
     public static class Message {
         @JacksonXmlProperty(isAttribute = true)

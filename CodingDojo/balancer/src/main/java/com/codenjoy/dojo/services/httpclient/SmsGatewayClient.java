@@ -26,7 +26,7 @@ import com.codenjoy.dojo.services.SmsService;
 import com.codenjoy.dojo.services.properties.SmsProperties;
 import feign.RequestInterceptor;
 import feign.auth.BasicAuthRequestInterceptor;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
@@ -34,14 +34,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "sms-gateway", url = "${sms.gateway.send-endpoint}", configuration = SmsGatewayClient.SmsGatewayClientConfig.class)
+@FeignClient(name = "sms-gateway",
+        url = "${sms.gateway.send-endpoint}",
+        configuration = SmsGatewayClient.SmsGatewayClientConfig.class)
 public interface SmsGatewayClient {
+
     @PostMapping(value = "", consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
     ResponseEntity<String> sendSms(@RequestBody SmsService.SmsSendRequest smsSendRequest);
 
-    @RequiredArgsConstructor
     class SmsGatewayClientConfig {
-        private final SmsProperties smsProperties;
+
+        @Autowired private SmsProperties smsProperties;
 
         @Bean
         public RequestInterceptor basicAuthRequestInterceptor() {

@@ -31,7 +31,6 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @Configuration
-@RequiredArgsConstructor
 @ConfigurationProperties("sms")
 public class SmsProperties {
 
