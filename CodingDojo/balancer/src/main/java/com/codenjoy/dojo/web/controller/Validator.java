@@ -51,8 +51,8 @@ public class Validator {
     public static final String EMAIL = "^[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
     public static final String GAME = "^[A-Za-z0-9+_.-]{1,50}$";
     public static final String CODE = "^[0-9]{1,50}$";
-    public static final String MD5 = "^[A-Za-f0-9]{32}$";
-    public static final String ID = "^[a-f0-9]{1,200}$";
+    public static final String MD5 = "^[A-Fa-f0-9]{32}$";
+    public static final String ID = "^[a-z0-9]{1,200}$";
     public static final String DAY = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$";
     public static final String PHONE_NUMBER = "^(\\+38|38)?0([0-9]{2})([0-9]{7})$";
 
