@@ -31,6 +31,8 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
+
 public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     protected Dice dice;
@@ -156,6 +158,12 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        //дерево и танк в одной координате
+        if (tree != null) {
+            return Elements.TREE;
+        }
+
         if (isAlive()) {
             if (player.getHero() == this) {
                 switch (direction) {

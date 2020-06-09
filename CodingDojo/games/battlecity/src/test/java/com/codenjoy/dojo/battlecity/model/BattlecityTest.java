@@ -3171,7 +3171,162 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    //TODO    1.2) кусты - когда игрок заходит под них, там видно кусты и больше никакого движения
+    //1.2) кусты - когда игрок заходит под них, там видно кусты и больше никакого движения
+    @Test
+    public void shouldTankMove_underTree() {
+        size = 7;
+        givenGame(tank(1, 1, Direction.UP), new Tree(1, 3), new Tree(1, 4));
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▒►   ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▒ ►  ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldBulletFlyUnderTree_jointly_shouldTankMoveUnderTree() {
+        size = 11;
+        givenGame(tank(9, 1, Direction.UP),
+                new Tree(9, 5), new Tree(9, 6), new Tree(9, 3));
+
+        hero.act();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▲☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▲☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        •☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▲☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+
+        hero.up();
+        game.tick();
+
+        hero.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼       ◄▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+
+        hero.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼     ◄  ▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
     //TODO    1.3) так же не видно врагов под кустами
     //TODO    1.4) под кустами не видно так же и ботов белых
     //TODO 2. Лёд
