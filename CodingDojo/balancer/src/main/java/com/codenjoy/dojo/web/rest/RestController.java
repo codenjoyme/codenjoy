@@ -407,7 +407,7 @@ public class RestController {
                 message = message + "removed {} ";
             }
 
-            boolean exists = players.getByEmail(id) != null;
+            boolean exists = players.get(id) != null;
             message = message + "exists: " + exists;
 
         } catch (Exception e) {
