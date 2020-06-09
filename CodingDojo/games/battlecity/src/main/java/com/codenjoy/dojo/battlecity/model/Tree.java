@@ -22,22 +22,17 @@ package com.codenjoy.dojo.battlecity.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 public class Tree extends PointImpl implements State<Elements, Player> {
-    private Elements ch;
 
     public Tree(int x, int y) {
         super(x,y);
-
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return Elements.TREE;
     }
-
-
 }

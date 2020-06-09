@@ -63,15 +63,11 @@ public class Battlecity implements Field {
         }
     }
 
-    public  Battlecity(int size, Dice dice,
-                        List<Construction> constructions, List<Border> borders, List<Tree> trees, Tank... aiTanks ) {
+    public  Battlecity(int size, Dice dice, List<Construction> constructions,
+                       List<Border> borders, List<Tree> trees, Tank... aiTanks ) {
+        this(size, dice, constructions, borders, aiTanks);
         aiCount = aiTanks.length;
-        this.dice = dice;
-        this.size = size;
-        this.aiTanks = new LinkedList<>();
-        this.constructions = new LinkedList<>(constructions);
         this.trees = new LinkedList<>(trees);
-        this.borders = new LinkedList<>(borders);
 
         for (Tank tank : aiTanks) {
             addAI(tank);
@@ -344,7 +340,6 @@ public class Battlecity implements Field {
         }
         return result;
     }
-
 
     public List<Tree> getTrees() {
         return trees;
