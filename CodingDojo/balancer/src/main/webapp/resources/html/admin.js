@@ -153,6 +153,7 @@ var loginUser = function(email, password) {
             '"password" : "' + password + '"}',
         after: function(data){
             updateCode(data.code);
+            updateId(data.id);
 
             autoIncrement();
         }
@@ -217,6 +218,7 @@ var joinExitStatusUser = function(email, code, whatToDo) {
         after: function(data){
             if (!!data.code) {
                 updateCode(data.code);
+                updateId(data.id);
             }
         }
     });
