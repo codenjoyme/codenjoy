@@ -57,7 +57,7 @@ public class Scores {
                 "CREATE TABLE IF NOT EXISTS scores (" +
                         "day varchar(10), " +
                         "time varchar(30), " +
-                        "email varchar(255), " +
+                        "id varchar(255), " +
                         "score int," +
                         "winner int);");
     }
@@ -67,14 +67,14 @@ public class Scores {
     }
 
     // TODO исправить тесты
-    public void saveScore(long time, String email, int score, boolean winner) {
+    public void saveScore(long time, String id, int score, boolean winner) {
         Date date = new Date(time);
         pool.update("INSERT INTO scores " +
-                        "(day, time, email, score, winner) " +
+                        "(day, time, id, score, winner) " +
                         "VALUES (?,?,?,?,?);",
                 formatter.format(date),
                 JDBCTimeUtils.toString(date),
-                email,
+                id,
                 score,
                 winner ? 1 : 0);
     }
@@ -82,7 +82,7 @@ public class Scores {
     public void saveScores(long time, List<PlayerInfo> playersInfos) {
         Date date = new Date(time);
         pool.batchUpdate("INSERT INTO scores " +
-                        "(day, time, email, score, winner) " +
+                        "(day, time, id, score, winner) " +
                         "VALUES (?,?,?,?,?);",
                 playersInfos,
                 (PreparedStatement stmt, PlayerInfo info) -> {
@@ -95,52 +95,6 @@ public class Scores {
                     return true;
                 });
     }
-
-//    public List<PlayerScore> getLeaders() {
-//        String time = "19:00";
-//        String firstDay = "2019-01-28";
-//        int countWinners = 10;
-//        String lastDay = "2019-02-10";
-//
-//        return pool.select("WITH RECURSIVE day_scores AS (\n" +
-//                        "  SELECT * \n" +
-//                        "    FROM scores \n" +
-//                        "    INNER JOIN \n" +
-//                        "        (SELECT MAX(time) AS max_time \n" +
-//                        "            FROM (SELECT * FROM scores WHERE time LIKE '2019-%T?%') as test \n" +
-//                        "            GROUP BY day) test \n" +
-//                        "    ON time = max_time\n" +
-//                        "), \n" +
-//                        "\n" +
-//                        "top_scores(emails, day) AS (\n" +
-//                        "        (SELECT array_agg(row(email, day)) AS emails, '?' :: date AS day \n" +
-//                        "            FROM (SELECT email, day FROM day_scores WHERE day = '?' ORDER BY score DESC LIMIT ?) initial_query) \n" +
-//                        "    UNION ALL \n" +
-//                        "        (SELECT * \n" +
-//                        "            FROM \n" +
-//                        "                (SELECT array_agg(row(email, s_day)) AS emails, MAX(ts_day):: date AS day \n" +
-//                        "                    FROM \n" +
-//                        "                        (SELECT ROW_NUMBER () OVER (PARTITION BY s.day ORDER BY score DESC) AS index, \n" +
-//                        "                                time, score, ts.day AS ts_day, s.day AS s_day, email \n" +
-//                        "                            FROM day_scores s, \n" +
-//                        "                                (SELECT emails, top_scores.day + interval '1' day AS \"day\" \n" +
-//                        "                                    FROM top_scores ORDER BY day DESC LIMIT 1) ts \n" +
-//                        "                            WHERE ((NOT s.email IN (SELECT email FROM unnest(emails) AS (email text, day varchar))) \n" +
-//                        "                                    AND s.day :: date = ts.day :: date) \n" +
-//                        "                                OR (ts.day :: date != s.day :: date \n" +
-//                        "                                    AND (s.email, s.day) = ANY(ts.emails))\n" +
-//                        "                        ) indexed_top \n" +
-//                        "                    WHERE index <= ?\n" +
-//                        "                ) rec_exit \n" +
-//                        "            WHERE day < '?')\n" +
-//                        ") \n" +
-//                        "     \n" +
-//                        "SELECT DISTINCT nest_email AS name, nest_day AS day \n" +
-//                        "    FROM top_scores, unnest(emails) AS (nest_email text, nest_day varchar)\n" +
-//                        "    ORDER BY nest_day;\n",
-//                new Object[]{time, firstDay, firstDay, countWinners, countWinners, lastDay},
-//                rs -> buildScores(rs));
-//    }
 
     public List<PlayerScore> getFinalists(String from, String to, long time,
                                           int finalistsCount, Collection<String> exclude)
@@ -165,11 +119,11 @@ public class Scores {
 
     public void setWinnerFlag(PlayerScore playerScore, boolean isWinner) {
         pool.update("update scores set winner = ? where" +
-                        " day = ? and time = ? and email = ? and score = ?",
+                        " day = ? and time = ? and id = ? and score = ?",
                 isWinner ? 1 : 0,
                 playerScore.getDay(),
                 playerScore.getTime(),
-                config.getEmail(playerScore.getId()),
+                playerScore.getId(),
                 playerScore.getScore()
         );
     }
@@ -200,7 +154,7 @@ public class Scores {
         return new LinkedList<PlayerScore>(){{
             while (rs.next()) {
                 add(new PlayerScore(
-                        rs.getString("email"),
+                        rs.getString("id"),
                         rs.getInt("score"),
                         rs.getString("time"),
                         rs.getInt("winner") == 1));
@@ -208,9 +162,8 @@ public class Scores {
         }};
     }
 
-    public void removeByName(String email) {
-        pool.update("DELETE FROM scores WHERE email = ?;",
-                email);
+    public void remove(String id) {
+        pool.update("DELETE FROM scores WHERE id = ?;", id);
     }
 
     public List<String> getDays() {

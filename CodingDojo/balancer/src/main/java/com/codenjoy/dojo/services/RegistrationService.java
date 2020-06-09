@@ -31,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -40,24 +41,26 @@ import static com.codenjoy.dojo.services.entity.Player.NOT_APPROVED;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class RegistrationService {
 
     private final static int CODE_LENGTH = 6;
 
     public enum VerificationType {REGISTRATION, PASSWORD_RESET}
 
-    private final SmsService smsService;
-    private final Players playersRepo;
-    private final ConfigProperties config;
-    private final PasswordEncoder passwordEncoder;
-    private final SmsProperties smsProperties;
+    @Autowired private SmsService sms;
+    @Autowired private Players players;
+    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired private SmsProperties smsProperties;
 
     public String generateVerificationCode() {
         if (smsProperties.isEnabled()) {
             return RandomStringUtils.randomNumeric(CODE_LENGTH);
         }
         return smsProperties.getStaticVerificationCode();
+    }
+
+    public String generateId() {
+        return Hash.getRandomId();
     }
 
     public ServerLocation confirmRegistration(String phone, String code) {
@@ -68,10 +71,9 @@ public class RegistrationService {
         }
 
         if (validateCode(code, VerificationType.REGISTRATION, player)) {
-            playersRepo.approveByPhone(phone);
-            playersRepo.updateVerificationCode(phone, null, null);
-            return new ServerLocation(player.getEmail(), player.getPhone(), config.getId(player.getEmail()),
-                    player.getCode(), player.getServer());
+            players.approveByPhone(phone);
+            players.updateVerificationCode(phone, null, null);
+            return new ServerLocation(player);
         }
 
         throw new IllegalArgumentException("Invalid verification code");
@@ -83,12 +85,12 @@ public class RegistrationService {
             throw new IllegalArgumentException("User already confirmed");
         }
         String verificationCode = generateVerificationCode();
-        playersRepo.updateVerificationCode(phone, verificationCode, VerificationType.REGISTRATION.name());
-        smsService.sendSmsTo(phone, verificationCode, SmsService.SmsType.REGISTRATION);
+        players.updateVerificationCode(phone, verificationCode, VerificationType.REGISTRATION.name());
+        sms.sendSmsTo(phone, verificationCode, SmsService.SmsType.REGISTRATION);
     }
 
     public void resendResetPasswordCode(String phone) {
-        Player player = playersRepo.getByPhone(phone)
+        Player player = players.getByPhone(phone)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         if (player.getApproved() == NOT_APPROVED) {
@@ -96,8 +98,8 @@ public class RegistrationService {
         }
 
         String verificationCode = generateVerificationCode();
-        playersRepo.updateVerificationCode(phone, verificationCode, VerificationType.PASSWORD_RESET.name());
-        smsService.sendSmsTo(phone, verificationCode, SmsService.SmsType.PASSWORD_RESET);
+        players.updateVerificationCode(phone, verificationCode, VerificationType.PASSWORD_RESET.name());
+        sms.sendSmsTo(phone, verificationCode, SmsService.SmsType.PASSWORD_RESET);
     }
 
     public boolean validateCodeResetPassword(String phone, String code) {
@@ -108,7 +110,7 @@ public class RegistrationService {
         }
 
         if (validateCode(code, VerificationType.PASSWORD_RESET, player)) {
-            playersRepo.updateVerificationCode(phone, null, null);
+            players.updateVerificationCode(phone, null, null);
             return true;
         }
 
@@ -117,13 +119,19 @@ public class RegistrationService {
 
     public void resetPassword(String phone) {
         Player player = getByPhone(phone);
-        String newPassword = generatePassword();
-        String hashedPassword = DigestUtils.md5Hex(newPassword);
-        String encodePassword = passwordEncoder.encode(hashedPassword);
-        player.setPassword(encodePassword);
-        player.setCode(Hash.getCode(player.getEmail(), hashedPassword));
-        playersRepo.update(player);
-        smsService.sendSmsTo(phone, newPassword, SmsService.SmsType.NEW_PASSWORD);
+
+        String generated = generatePassword();
+        // это делает фронтенд, но у нас тут чистый пароль
+        String md5 = DigestUtils.md5Hex(generated);
+        // еще раз захешируем
+        String hashed = passwordEncoder.encode(md5);
+
+        player.setPassword(hashed);
+        // и подсчитаем code(md5(bcrypt(password)))
+        player.setCode(Hash.getCode(player.getId(), hashed));
+
+        players.update(player);
+        sms.sendSmsTo(phone, generated, SmsService.SmsType.NEW_PASSWORD);
     }
 
     private boolean validateCode(String smsCode, VerificationType codeType, Player player) {
@@ -132,7 +140,7 @@ public class RegistrationService {
     }
 
     private Player getByPhone(String phone) {
-        return playersRepo.getByPhone(phone)
+        return players.getByPhone(phone)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 

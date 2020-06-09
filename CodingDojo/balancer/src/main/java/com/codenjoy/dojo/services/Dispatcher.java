@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
-import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.services.entity.server.Disqualified;
 import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
@@ -35,6 +34,7 @@ import com.codenjoy.dojo.web.rest.dto.GameSettings;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 
 import javax.annotation.PostConstruct;
@@ -43,7 +43,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @Component
 public class Dispatcher {
@@ -70,53 +69,59 @@ public class Dispatcher {
         lastTime = scores.getLastTime(now());
     }
 
-    public ServerLocation registerNew(String email, String phone, String name, String password, String callbackUrl) {
+    public Player registerNew(Player player) {
         String server = gameServers.getNextServer();
+        player.setServer(server);
 
-        return registerOnServer(server, email, phone, name, password, callbackUrl, "0", "{}");
+        return registerOnServer(player, "0", "{}");
     }
 
-    public ServerLocation registerIfNotExists(String server, String email, String phone, String name, String code, String callbackUrl) {
-        if (game.existsOnServer(server, email)) {
+    public Player registerIfNotExists(Player player) {
+        if (game.existsOnServer(player.getServer(), player.getId())) {
             return null;
         }
 
         // TODO test me
         // удалить с других серверов если там есть что
         gameServers.stream()
-                .filter(s -> !s.equals(server))
-                .filter(s -> game.existsOnServer(s, email))
-                .forEach(s -> game.remove(s, email, code));
+                .filter(s -> !s.equals(player.getServer()))
+                .filter(s -> game.existsOnServer(s, player.getId()))
+                .forEach(s -> game.remove(s, player.getId(), player.getCode()));
 
-        Player player = players.get(email);
         String score = null; // будет попытка загрузиться с сейва
         String save = null;
-        return registerOnServer(server, email, phone, name, player.getPassword(), callbackUrl, score, save);
+        return registerOnServer(player, score, save);
     }
 
-    public ServerLocation registerOnServer(String server, String email, String phone, String name, String password, String callbackUrl, String score, String save) {
+    public Player registerOnServer(Player player, String score, String save) {
         if (logger.isDebugEnabled()) {
-            logger.debug("User {} go to {}", email, server);
+            logger.debug("User {} go to {}", player.getEmail(), player.getServer());
         }
 
-        String code = game.createNewPlayer(server, email, phone, name, password, callbackUrl, score, save);
-
-        return new ServerLocation(
-                email,
-                phone,
-                config.getId(email),
-                code,
-                server
+        String code = game.createNewPlayer(
+                player.getServer(),
+                player.getId(),
+                player.getCode(),
+                player.getEmail(),
+                player.getPhone(),
+                player.getFullName(),
+                player.getPassword(),
+                player.getCallback(),
+                score,
+                save
         );
+
+        if (!StringUtils.isEmpty(code) && !code.equals(player.getCode())) {
+            player.setCode(code); // TODO этого не должно случиться
+        }
+
+        return player;
     }
 
     public void updateScores() {
         List<PlayerInfo> players = gameServers.stream()
                 .map(s -> getPlayersInfosCached(s))
                 .collect(LinkedList::new, List::addAll, List::addAll);
-
-        players.stream()
-                .forEach(p -> p.setId(config.getEmail(p.getId())));
 
         long time = now();
         scores.saveScores(time, players);
@@ -152,6 +157,7 @@ public class Dispatcher {
     public void disqualify(List<String> emailsOrIds) {
         List<Disqualified> list = emailsOrIds.stream()
                 .map(emailOrId -> parse(emailOrId))
+                .filter(disqualified -> disqualified != null)
                 .collect(toList());
 
         disqualified.addAll(list);
@@ -162,9 +168,19 @@ public class Dispatcher {
         String id = emailOrId;
 
         if (emailOrId.contains("@")) {
-            id = config.getId(email);
+            Player player = players.getByEmail(email);
+            if (player == null) {
+                return null;
+            }
+
+            id = player.getId();
         } else {
-            email = config.getEmail(id);
+            Player player = players.get(id);
+            if (player == null) {
+                return null;
+            }
+
+            email = player.getEmail();
         }
 
         return new Disqualified(id, email);
@@ -196,12 +212,12 @@ public class Dispatcher {
     }
 
     private List<PlayerScore> loadFinalists() {
-        List<PlayerScore> list = this.scores.getFinalists(
+        List<PlayerScore> list = scores.getFinalists(
                 config.getGame().getStartDay(),
                 config.getGame().getEndDay(),
                 lastTime,
                 config.getGame().getFinalistsCount(),
-                disqualifiedEmails()
+                disqualifiedIds()
         );
 
         List<PlayerScore> result = prepareScoresForClient(list);
@@ -214,34 +230,21 @@ public class Dispatcher {
             return cached;
         }
 
-        List<PlayerScore> scores = this.scores.getScores(day, lastTime);
-        List<PlayerScore> result = prepareScoresForClient(scores);
+        List<PlayerScore> list = scores.getScores(day, lastTime);
+        List<PlayerScore> result = prepareScoresForClient(list);
 
         currentScores.put(day, result);
         return result;
     }
 
     private List<PlayerScore> prepareScoresForClient(List<PlayerScore> result) {
-        List<String> emails = result.stream()
+        List<String> ids = result.stream()
                 .map(score -> score.getId())
                 .collect(toList());
 
-        Map<String, Player> playerMap = players.getPlayers(emails).stream()
-                .collect(toMap(Player::getEmail, player -> player));
+        Map<String, Player> playerMap = players.getPlayersMap(ids);
 
-        result.forEach(score -> {
-            String email = score.getId();
-            Player player = playerMap.get(email);
-
-            score.setId(config.getId(email));
-            if (player != null) {
-                score.setServer(player.getServer());
-                score.setName(String.format("%s %s", player.getFirstName(), player.getLastName()));
-            } else {
-                score.setServer(null); // TODO убрать загрузку AI с турнира а так же фильтровать всех кто не попал в табличку
-                score.setName(null);
-            }
-        });
+        result.forEach(score -> score.updateFrom(playerMap.get(score.getId())));
 
         return result.stream()
                 .filter(score -> score.getServer() != null)
@@ -262,13 +265,8 @@ public class Dispatcher {
                 .collect(toList());
     }
 
-
-    public boolean exists(String email) {
-        Player player = players.get(email);
-        if (player == null) {
-            return false;
-        }
-        return game.existsOnServer(player.getServer(), player.getEmail());
+    public boolean exists(Player player) {
+        return game.existsOnServer(player.getServer(), player.getId());
     }
 
     public void clearCache(int whatToClean) {
@@ -293,9 +291,9 @@ public class Dispatcher {
         return disqualified;
     }
 
-    private List<String> disqualifiedEmails() {
+    private List<String> disqualifiedIds() {
         return disqualified.stream()
-                .map(Disqualified::getEmail)
+                .map(Disqualified::getId)
                 .collect(toList());
     }
 

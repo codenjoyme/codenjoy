@@ -60,4 +60,15 @@ public class PlayerScore {
                 ", winner=" + winner +
                 '}';
     }
+
+    public void updateFrom(Player player) {
+        if (player == null) {
+            server = null;
+            name = null;
+            return;
+        }
+
+        server = player.getServer();
+        name = player.getFullName();
+    }
 }

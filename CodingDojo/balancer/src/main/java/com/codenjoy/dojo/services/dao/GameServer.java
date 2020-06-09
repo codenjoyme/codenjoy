@@ -61,13 +61,11 @@ public class GameServer {
         gameClientResolver.resolveClient(server).setGameSettings(config.getGame().getType(), parameters);
     }
 
-    public String createNewPlayer(String server, String email, String phone, String name,
-                                  String password, String callbackUrl,
+    public String createNewPlayer(String server, String id, String code,
+                                  String email, String phone, String name,
+                                  String hashedPassword, String callbackUrl,
                                   String score, String save)
     {
-        String id = config.getId(email);
-        String code = Hash.getCode(email, password);
-
         try {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create new player {} ({}) for '{}' on server {} with save {} and score {}",
@@ -88,7 +86,7 @@ public class GameServer {
                     phone,
                     name,
                     User.APPROVED,
-                    password,
+                    hashedPassword,
                     code,
                     "{}",
                     Arrays.asList(ROLE_USER.name()))
@@ -102,14 +100,14 @@ public class GameServer {
         }
     }
 
-    public boolean existsOnServer(String server, String email) {
+    public boolean existsOnServer(String server, String id) {
         try {
             if (logger.isDebugEnabled()) {
                 logger.debug("Check is player {} exists on server {}",
-                        email, server);
+                        id, server);
             }
 
-            return gameClientResolver.resolveClient(server).checkPlayerExists(config.getId(email));
+            return gameClientResolver.resolveClient(server).checkPlayerExists(id);
         } catch (GameServerClientException e) {
             logger.error("Error check player exists on server: " + server, e);
             return false;
@@ -155,13 +153,13 @@ public class GameServer {
         return enable ? "start" : "stop";
     }
 
-    public Boolean remove(String server, String email, String code) {
+    public Boolean remove(String server, String id, String code) {
         try {
             if (logger.isDebugEnabled()) {
                 logger.debug("Remove player {} ({}) on server {}",
-                        email, code, server);
+                        id, code, server);
             }
-            Boolean removed = gameClientResolver.resolveClient(server).removePlayer(config.getId(email), code);
+            Boolean removed = gameClientResolver.resolveClient(server).removePlayer(id, code);
             return removed;
         } catch (GameServerClientException e) {
             String message = "Cant remove player. Status is: " + e.getMessage();

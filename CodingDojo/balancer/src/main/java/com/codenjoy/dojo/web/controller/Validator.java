@@ -153,7 +153,7 @@ public class Validator {
         checkEmail(email, Validator.CANT_BE_NULL);
         checkCode(code, Validator.CANT_BE_NULL);
 
-        Player player = players.get(email);
+        Player player = players.getByEmail(email);
         if (player == null || !code.equals(player.getCode())) {
             throw new IllegalArgumentException("Player code is invalid: " + code);
         }
@@ -194,8 +194,8 @@ public class Validator {
         }
     }
 
-    public String phoneNormalizer(String phone) {
-        if (phone.startsWith(PHONE_COUNTRY_CODE_PREFIX)) {
+    public String phoneNormalizer(String phone) {  // TODO работает только для UA
+         if (phone.startsWith(PHONE_COUNTRY_CODE_PREFIX)) {
             return PHONE_PLUS_PREFIX + phone;
         } else if(phone.startsWith("0")) {
             return PHONE_FULL_COUNTRY_CODE_PREFIX + phone;
