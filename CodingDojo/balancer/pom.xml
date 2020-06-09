@@ -31,7 +31,6 @@
         <spring-cloud.version>Greenwich.SR4</spring-cloud.version>
         <!-- end -->
 
-        <testng.version>6.14.3</testng.version>
         <cglib.version>3.2.10</cglib.version>
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -288,12 +287,6 @@
             <groupId>org.easytesting</groupId>
             <artifactId>fest-assert</artifactId>
             <version>${fest-assert.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
