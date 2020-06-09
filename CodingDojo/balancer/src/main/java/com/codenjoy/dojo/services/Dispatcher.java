@@ -83,28 +83,28 @@ public class Dispatcher {
         }
 
         // TODO test me
-        removeFromEveryGameServer(player);
+        removeFromEveryGameServer(player.getId());
 
         String score = null; // будет попытка загрузиться с сейва
         String save = null;
         return registerOnServer(player, score, save);
     }
 
-    public Map<String, Boolean> removeFromEveryGameServer(Player player) {
+    public Map<String, Boolean> removeFromEveryGameServer(String id) {
         // удалить с других серверов если там есть что
         return gameServers.stream()
-                .filter(s -> game.existsOnServer(s, player.getId()))
+                .filter(s -> game.existsOnServer(s, id))
                 .collect(Collectors.toMap(
                             s -> s,
-                            s -> game.remove(s, player.getId(), player.getCode())));
+                            s -> game.remove(s, id)));
     }
 
-    public Map<String, Boolean> existsOnGameServers(Player player) {
+    public Map<String, Boolean> existsOnGameServers(String id) {
         // удалить с других серверов если там есть что
         return gameServers.stream()
                 .collect(Collectors.toMap(
                         s -> s,
-                        s -> game.existsOnServer(s, player.getId())));
+                        s -> game.existsOnServer(s, id)));
     }
 
     public Player registerOnServer(Player player, String score, String save) {

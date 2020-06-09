@@ -65,26 +65,6 @@ public class RestRegistrationController {
     }
 
     // TODO test me
-    @GetMapping("/player/{player}/remove/{code}")
-    @ResponseBody
-    public synchronized boolean removeUser(@PathVariable("player") String id,
-                              @PathVariable("code") String code)
-    {
-        validator.checkPlayerCode(id, code);
-
-        // оставляем только актуальные на сейчас очки, мало ли захочет залогиниться назад
-        // TODO как-то тут не очень оставлять последние очки, иначе пользователь потеряет их, что тоже не ок
-        saveService.removeSave(id);
-        saveService.save(id);
-
-        // и удаляем игрока с игрового сервера
-        playerService.remove(id);
-        registration.remove(id);
-
-        return true;
-    }
-
-    // TODO test me
     @GetMapping("/game/{gameName}/players")
     @ResponseBody
     public List<PlayerInfo> getGamePlayers(@PathVariable("gameName") String gameName) {

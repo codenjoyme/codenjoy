@@ -261,4 +261,20 @@ public class RestAdminController {
         saveService.saveAll(roomName);
     }
 
+    // TODO test me
+    @GetMapping("/player/{player}/remove")
+    @ResponseBody
+    public synchronized boolean removeUser(@PathVariable("player") String id) {
+        validator.checkPlayerId(id);
+
+        // удаляем сейвы
+        saveService.removeSave(id);
+
+        // и удаляем игрока с игрового сервера c его регистрацией
+        playerService.remove(id);
+        registration.remove(id);
+
+        return true;
+    }
+
 }

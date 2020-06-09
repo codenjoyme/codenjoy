@@ -153,13 +153,13 @@ public class GameServer {
         return enable ? "start" : "stop";
     }
 
-    public Boolean remove(String server, String id, String code) {
+    public Boolean remove(String server, String id) {
         try {
             if (logger.isDebugEnabled()) {
-                logger.debug("Remove player {} ({}) on server {}",
-                        id, code, server);
+                logger.debug("Remove player {} on server {}",
+                        id, server);
             }
-            Boolean removed = gameClientResolver.resolveClient(server).removePlayer(id, code);
+            Boolean removed = gameClientResolver.resolveClient(server).removePlayer(id);
             return removed;
         } catch (GameServerClientException e) {
             String message = "Cant remove player. Status is: " + e.getMessage();

@@ -243,10 +243,7 @@ public class RestController {
     {
         Player player = validator.checkPlayerCode(email, code); // TODO test me
 
-        return game.remove(
-                player.getServer(),
-                player.getId(),
-                player.getCode());
+        return game.remove(player.getServer(), player.getId());
     }
 
     @PostMapping(LOGIN)
@@ -279,7 +276,7 @@ public class RestController {
                     && !player.getPassword().equals(current.getPassword()))
             {
                 if (game.existsOnServer(server, id)) {
-                    game.remove(server, id, current.getCode());
+                    game.remove(server, id);
                 }
 
                 // тут пароль в md5 виде приведенном в такое состояние фронтом
@@ -387,31 +384,28 @@ public class RestController {
     // TODO test me
     @GetMapping(REMOVE + "/{player}/on/{whereToRemove}")
     @ResponseBody
-    public List<String> remove(@PathVariable("player") String email, @PathVariable("whereToRemove") int whereToRemove) {
-        Player player = players.getByEmail(email);
-        if (player == null) {
-            throw new IllegalArgumentException("Attempt to delete non-existing user");
-        }
-
+    public List<String> remove(@PathVariable("player") String id, @PathVariable("whereToRemove") int whereToRemove) {
         List<String> status = new LinkedList<>();
 
-        tryRemoveFromGame((whereToRemove & 0b0001) == 0b0001, player, status);
-        tryRemoveFromBalancer((whereToRemove & 0b0010) == 0b0010, player, status);
+        tryRemoveFromGame((whereToRemove & 0b0001) == 0b0001, id, status);
+        tryRemoveFromBalancer((whereToRemove & 0b0010) == 0b0010, id, status);
 
         return status;
     }
 
-    private void tryRemoveFromBalancer(boolean remove, Player player, List<String> status) {
+    private void tryRemoveFromBalancer(boolean remove, String id, List<String> status) {
         String message = "At balancer server: ";
         try {
-            if (remove) {
+            Player player = players.get(id);
+
+            if (remove && player != null) {
                 scores.remove(player.getId());
                 players.remove(player.getId());
 
                 message = message + "removed ";
             }
 
-            boolean exists = players.get(player.getId()) != null;
+            boolean exists = players.getByEmail(id) != null;
             message = message + "exists: " + exists;
 
         } catch (Exception e) {
@@ -420,15 +414,15 @@ public class RestController {
         status.add(message);
     }
 
-    private void tryRemoveFromGame(boolean remove, Player player, List<String> status) {
+    private void tryRemoveFromGame(boolean remove, String id, List<String> status) {
         String message = "At game server: ";
         try {
             if (remove) {
-                Map<String, Boolean> map = dispatcher.removeFromEveryGameServer(player);
+                Map<String, Boolean> map = dispatcher.removeFromEveryGameServer(id);
                 message = message + "removed: " + map.toString() + " ";
             }
 
-            Map<String, Boolean> map = dispatcher.existsOnGameServers(player);
+            Map<String, Boolean> map = dispatcher.existsOnGameServers(id);
             message = message + "exists: " + map;
         } catch (Exception e) {
             message = message + ErrorTicketService.getPrintableMessage(e);
@@ -581,7 +575,7 @@ public class RestController {
         if (isResetAllowed) {
             Player player = players.getByPhone(phone).orElseThrow(() -> new IllegalArgumentException("User not found"));
             if (game.existsOnServer(player.getServer(), player.getId())) {
-                game.remove(player.getServer(), player.getId(), player.getCode());
+                game.remove(player.getServer(), player.getId());
             }
             registrationService.resetPassword(phone);
             return ResponseEntity.ok("success");
