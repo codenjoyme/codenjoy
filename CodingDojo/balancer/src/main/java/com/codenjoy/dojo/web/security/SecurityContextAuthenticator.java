@@ -23,7 +23,8 @@ package com.codenjoy.dojo.web.security;
  */
 
 
-import lombok.RequiredArgsConstructor;
+import com.codenjoy.dojo.services.ConfigProperties;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,30 +36,29 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import java.util.Collection;
 
 import static com.codenjoy.dojo.conf.Authority.ROLE_ADMIN;
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Component
 public class SecurityContextAuthenticator {
 
-    private final AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
+    private ConfigProperties config;
 
-    public void login(HttpServletRequest req, String user, String pass) {
+    public void login(HttpServletRequest request, String user, String password) {
         SecurityContext context = SecurityContextHolder.getContext();
         if (isAdmin(context)) {
             return;
         }
 
-        UsernamePasswordAuthenticationToken authReq
-                = new UsernamePasswordAuthenticationToken(user, pass);
-        Authentication auth = authenticationManager.authenticate(authReq);
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user, password);
+        Authentication auth = authenticationManager.authenticate(token);
 
         context.setAuthentication(auth);
-        HttpSession session = req.getSession(true);
+        HttpSession session = request.getSession(true);
         session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, context);
     }
 
@@ -67,7 +67,18 @@ public class SecurityContextAuthenticator {
             return false;
         }
 
-        Object principal = context.getAuthentication().getPrincipal();
+        Authentication authentication = context.getAuthentication();
+
+        if (authentication instanceof UsernamePasswordAuthenticationToken) {
+            UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) authentication;
+            if (token.getPrincipal() instanceof String) {
+                return token.getPrincipal().equals(config.getAdminLogin()) &&
+                        token.getCredentials().equals(config.getAdminPassword());
+            }
+        }
+
+        Object principal = authentication.getPrincipal();
+
         if (!(principal instanceof User)) {
             return false;
         }
