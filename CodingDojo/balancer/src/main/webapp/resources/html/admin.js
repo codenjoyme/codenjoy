@@ -284,7 +284,7 @@ var removeUser = function(email, whereToRemove) {
 
 var auth = function() {
     var login = settings().adminLogin;
-    var password = settings().adminPassword;
+    var password = encodePassword(settings().adminPassword);
     var auth = btoa(login + ":" + password);
     return auth;
 }
