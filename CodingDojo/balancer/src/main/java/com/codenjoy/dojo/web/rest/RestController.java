@@ -383,33 +383,59 @@ public class RestController {
         return result;
     }
 
-    @GetMapping(REMOVE + "/{player}/withScore/{withScore}")
+    // TODO test me
+    @GetMapping(REMOVE + "/{player}/on/{whereToRemove}")
     @ResponseBody
-    public boolean remove(@PathVariable("player") String email, @PathVariable("withScore") boolean withScore) {
+    public List<String> remove(@PathVariable("player") String email, @PathVariable("whereToRemove") int whereToRemove) {
         Player player = players.getByEmail(email);
         if (player == null) {
-            // TODO test me
             throw new IllegalArgumentException("Attempt to delete non-existing user");
         }
 
-        return doIt(new DoItOnServers<Boolean>() {
-            @Override
-            public Boolean onGame() {
-                Boolean result = game.remove(player.getServer(), player.getId(), player.getCode());
+        List<String> status = new LinkedList<>();
 
-                return game.existsOnServer(player.getServer(), player.getId());
-            }
+        tryRemoveFromGame((whereToRemove & 0b0001) == 0b0001, player, status);
+        tryRemoveFromBalancer((whereToRemove & 0b0010) == 0b0010, player, status);
 
-            @Override
-            public Boolean onBalancer(Boolean removedFromGame) {
-                if (withScore) {
-                    scores.remove(player.getId());
-                }
+        return status;
+    }
+
+    private void tryRemoveFromBalancer(boolean remove, Player player, List<String> status) {
+        String message = "At game server: ";
+        try {
+            if (remove) {
+                scores.remove(player.getId());
                 players.remove(player.getId());
 
-                return true;
+                message = message + "removed ";
             }
-        });
+
+            boolean exists = players.get(player.getId()) != null;
+            message = message + "exists: " + exists;
+
+        } catch (Exception e) {
+            message = message + ErrorTicketService.getPrintableMessage(e);
+        }
+        status.add(message);
+    }
+
+    private void tryRemoveFromGame(boolean remove, Player player, List<String> status) {
+        String message = "At game server: ";
+        try {
+            if (remove) {
+                Boolean result = game.remove(player.getServer(), player.getId(), player.getCode());
+                if (result != null && result) {
+                    message = message + "removed ";
+                }
+            }
+
+            boolean exists = game.existsOnServer(player.getServer(), player.getId());
+            message = message + "exists: " + exists;
+
+        } catch (Exception e) {
+            message = message + ErrorTicketService.getPrintableMessage(e);
+        }
+        status.add(message);
     }
 
     // TODO test me

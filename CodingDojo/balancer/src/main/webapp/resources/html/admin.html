@@ -285,7 +285,10 @@
             <div>
                 <span>Email:</span>
                 <input id="remove-email" value="test@gmail.com"/>
-                <input type="checkbox" id="remove-scores" value="true"/>
+            </div>
+            <div>
+                <span title="1 (0b0001) - onGameServer, 2 (0b0010) - onBalancer">Where to remove:</span>
+                <input id="where-to-remove" value="3" />
             </div>
             <div>
                 <span></span>
@@ -601,7 +604,7 @@
                 <button id="clear-cache">Clear</button>
             </div>
             <div>
-                <span title="1 (0b0001) -  , 2 (0b0010) - currentScores, 4 (0b0100) - disqualified, 8 (0b1000) - currentFinalists">What to clean:</span>
+                <span title="1 (0b0001) - scoresFromGameServers, 2 (0b0010) - currentScores, 4 (0b0100) - disqualified, 8 (0b1000) - currentFinalists">What to clean:</span>
                 <input id="cache-mask" value="8"/>
             </div>
             <div>
