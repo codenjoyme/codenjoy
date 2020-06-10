@@ -16,6 +16,7 @@ import {
     setId,
     removeId,
 } from '../../utils';
+import { getError } from 'helpers';
 
 /**
  * Constants
@@ -151,19 +152,6 @@ export function* loginFormSaga() {
             }));
         }
     }
-}
-
-function getError(err) {
-  if (!err) { return 'Щось пішло не так'; }
-  if (typeof err === 'string') {
-    return err;
-  } else if (err && err.responseText) {
-    return err.responseText;
-  } else if (err.message) {
-    return err.message;
-  }
-
-  return err;
 }
 
 export function* authenticateSaga() {
