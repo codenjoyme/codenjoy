@@ -70,7 +70,8 @@ public class RestAdminController {
     public String version() {
         List<String> list = games.getGameNames();
         list.add(0, "engine");
-        return VersionReader.getCurrentVersions(list).toString();
+        list.add(1, "server");
+        return VersionReader.version(list).toString();
     }
 
     // TODO test me и вообще где это надо?

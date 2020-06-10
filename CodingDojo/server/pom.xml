@@ -37,7 +37,10 @@
         <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
         <maven-compiler-plugin.target>1.8</maven-compiler-plugin.target>
         <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
-        <minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
+        <maven-minify-plugin.version>1.7.6</maven-minify-plugin.version>
+        <maven-buildnumber-plugin.version>1.4</maven-buildnumber-plugin.version>
+        <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
+
         <failOnMissingWebXml>false</failOnMissingWebXml>
 
         <spring.security.oauth2.version>2.3.6.RELEASE</spring.security.oauth2.version>
@@ -829,12 +832,12 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
-                    <include>*</include>
+                    <include>**/*</include>
                 </includes>
             </resource>
             <resource>
                 <directory>src/main/webapp</directory>
-                <!--это не сработает потому что war союирается из WEB-INF из src-->
+                <!--это не сработает потому что war собирается из WEB-INF из src-->
                 <!--<filtering>true</filtering>-->
                 <includes>
                     <include>**/*</include>
@@ -846,8 +849,44 @@
                     <include>license/**</include>
                 </includes>
             </resource>
-        </resources>
+            </resources>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>${maven-buildnumber-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <providerImplementations>
+                        <git>jgit</git>
+                    </providerImplementations>
+                    <scmConnectionUrl>scm:git:</scmConnectionUrl>
+                    <scmDirectory>${project.basedir}/../../</scmDirectory>
+                    <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+                    <shortRevisionLength>8</shortRevisionLength>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-api</artifactId>
+                        <version>${maven-scm-jgit.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-jgit</artifactId>
+                        <version>${maven-scm-jgit.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
             <plugin>
                 <!-- make war runnable with main class -->
                 <groupId>org.springframework.boot</groupId>
@@ -861,7 +900,7 @@
             <plugin>
                 <groupId>com.samaxes.maven</groupId>
                 <artifactId>minify-maven-plugin</artifactId>
-                <version>${minify-maven-plugin.version}</version>
+                <version>${maven-minify-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>css-minify</id>

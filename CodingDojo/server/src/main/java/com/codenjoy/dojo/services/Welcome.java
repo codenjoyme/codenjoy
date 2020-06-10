@@ -32,7 +32,7 @@ public class Welcome {
 
     @PostConstruct
     public void helloWorld() {
-        String version = VersionReader.getCurrentVersion("engine");
+        String version = VersionReader.versionReadable("engine");
 
         log.info("\n" +
                 "     /\\  ______          _              _               _   \n" +

@@ -92,7 +92,7 @@ public class RestController {
     @GetMapping(VERSION)
     @ResponseBody
     public String version() {
-        return VersionReader.getCurrentVersions(Arrays.asList("engine")).toString();
+        return VersionReader.version(Arrays.asList("engine", "balancer")).toString();
     }
 
     @GetMapping(SCORE + "/day/{day}")

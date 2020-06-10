@@ -34,25 +34,63 @@ import java.util.Properties;
 public class VersionReader {
 
     public static final String NO_VERSION = "no version";
+    public static final String KEY_VERSION = "version";
+    public static final String KEY_TIME = "time";
+    public static final String KEY_REVISION = "revision";
+    public static final String KEY_BRANCH = "branch";
 
-    public static JSONObject getCurrentVersions(List<String> gameNames) {
+    public static JSONObject version(List<String> components) {
         return new JSONObject(){{
-            gameNames.forEach(name -> put(name, VersionReader.getCurrentVersion(name)));
+            components.forEach(name -> put(name, VersionReader.version(name)));
         }};
     }
 
-    public static String getCurrentVersion(String gameName) {
+    public static String versionReadable(String component) {
+        JSONObject json = version(component);
+        return String.format("%s_%s_%s",
+                json.getString(KEY_VERSION),
+                json.getString(KEY_TIME),
+                json.getString(KEY_REVISION));
+    }
+
+    public static JSONObject version(String component) {
         try {
             Properties properties = new Properties();
-            InputStream stream = VersionReader.class.getClassLoader().getResourceAsStream(gameName + "/version.properties");
+
+            InputStream stream = VersionReader.class.getClassLoader().getResourceAsStream(component + "/version.properties");
             if (stream == null) {
-                return NO_VERSION;
+                return noVersion();
             }
             properties.load(stream);
-            return (String) properties.get("version");
+
+            return new JSONObject(){
+                {
+                    putIfExists(KEY_VERSION);
+                    putIfExists(KEY_TIME);
+                    putIfExists(KEY_REVISION);
+                    putIfExists(KEY_BRANCH);
+                }
+
+                private void putIfExists(String name) {
+                    String data = properties.getProperty(name);
+                    if (data == null) {
+                        return;
+                    }
+                    if (KEY_REVISION.equals(name)) {
+                        data = data.substring(0, 8);
+                    }
+                    put(name, data);
+                }
+            };
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return NO_VERSION;
+        return noVersion();
+    }
+
+    private static JSONObject noVersion() {
+        return new JSONObject(){{
+            put("version", NO_VERSION);
+        }};
     }
 }
