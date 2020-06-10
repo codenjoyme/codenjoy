@@ -744,7 +744,7 @@ public class IntegrationTest {
                 "true");
 
         // then
-        verify(game).remove("localhost:8080", "test@gmail.com", "12345678901234567890");
+        verify(game).remove("localhost:8080", "test@gmail.com");
     }
 
     @Test
@@ -785,7 +785,7 @@ public class IntegrationTest {
         assertGet("/rest/remove/test@gmail.com/", "true");
 
         // then
-        verify(game).remove("localhost:8080", "test@gmail.com", "12345678901234567890");
+        verify(game).remove("localhost:8080", "test@gmail.com");
         verify(players).remove("test@gmail.com");
     }
 
@@ -815,7 +815,7 @@ public class IntegrationTest {
     }
 
     private void shouldExitFromGame(boolean exited) {
-        doReturn(exited).when(game).remove(anyString(), anyString(), anyString());
+        doReturn(exited).when(game).remove(anyString(), anyString());
     }
 
     private void assertPost(String url, String json, String expected) {
