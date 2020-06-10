@@ -26,7 +26,6 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.bomberman.model.perks.*;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundFactory;
 import com.codenjoy.dojo.services.round.RoundField;
@@ -34,7 +33,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
 public class Bomberman extends RoundField<Player> implements Field {

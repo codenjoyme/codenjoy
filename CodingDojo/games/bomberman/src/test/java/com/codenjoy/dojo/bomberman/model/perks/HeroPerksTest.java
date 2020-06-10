@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
 public class HeroPerksTest {
 
     @Test
-    public void should_reset_timer_when_add_Bomb_Blast_Increase_Twice() {
+    public void shouldIncreaseTimer_whenAddBombBlastIncreaseTwice() {
         HeroPerks hp = new HeroPerks();
         BombBlastRadiusIncrease bip = new BombBlastRadiusIncrease(2, 5);
         Elements e = Elements.BOMB_BLAST_RADIUS_INCREASE;
@@ -47,12 +47,11 @@ public class HeroPerksTest {
 
         hp.add(bip);
         Perk newBip = hp.getPerk(e);
-        assertEquals("Perk timer is expected to be reset", 5, newBip.getTimer());
-
+        assertEquals("Perk timer is expected to be increased", 6, newBip.getTimer());
     }
 
     @Test
-    public void should_remove_Perk_on_expiration() {
+    public void shouldRemovePerk_whenExpiration() {
         HeroPerks hp = new HeroPerks();
         BombBlastRadiusIncrease bip = new BombBlastRadiusIncrease(2, 2);
         hp.add(bip);
@@ -67,7 +66,7 @@ public class HeroPerksTest {
     }
 
     @Test
-    public void should_not_modify_Perks_after_clone() {
+    public void shouldNotModifyPerks_afterClone() {
         HeroPerks hp = new HeroPerks();
         BombBlastRadiusIncrease bip = new BombBlastRadiusIncrease(2, 2);
         hp.add(bip);

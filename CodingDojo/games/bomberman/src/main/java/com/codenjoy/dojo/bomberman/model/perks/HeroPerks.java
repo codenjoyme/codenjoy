@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 public class HeroPerks implements Tickable {
+
     private Map<String, Perk> perks = new HashMap<>();
 
     public void add(Perk perk) {

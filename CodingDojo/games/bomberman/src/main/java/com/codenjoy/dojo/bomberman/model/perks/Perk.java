@@ -31,13 +31,26 @@ import com.codenjoy.dojo.services.Tickable;
 import java.util.Objects;
 
 public abstract class Perk extends PointImpl implements Tickable, State<Elements, Player> {
-    private final String name;
 
+    private final String name;
     private final Elements element;
     private final int value;
-    private final int timeout; // maximum timer value
-    private int timer; // countdown with every tick. When timer becomes = 0, then perk should be disabled.
-    private int pickTimeout; // after timeout disapears from the board if wasn't picked up.
+
+    /**
+     * Maximum timer value
+     * */
+    private final int timeout;
+
+    /**
+     * Countdown with every tick.
+     * When timer becomes = 0, then perk should be disabled
+     * */
+    private int timer;
+
+    /**
+     * After timeout disappears from the board if wasn't picked up.
+     * */
+    private int pickTimeout;
 
     public Perk(Elements element, int value, int timeout) {
         this.element = element;
@@ -73,7 +86,7 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
     }
 
     public boolean isActive() {
-        return this.timer > 0;
+        return timer > 0;
     }
 
     @Override
@@ -83,8 +96,8 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
 
     @Override
     public void tick() {
-        this.timer = this.timer - 1;
-        this.pickTimeout -= 1;
+        timer--;
+        pickTimeout--;
     }
 
     /**
@@ -121,7 +134,6 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
         this.timer = timer;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -134,5 +146,11 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), getName());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{%s('%s') value=%s, timeout=%s, timer=%s, pick=%s}",
+                name, element, value, timeout, timer, pickTimeout);
     }
 }

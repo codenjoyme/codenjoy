@@ -25,16 +25,19 @@ package com.codenjoy.dojo.bomberman.model.perks;
 import com.codenjoy.dojo.bomberman.model.Elements;
 
 public class BombBlastRadiusIncrease extends Perk {
+
     public BombBlastRadiusIncrease(int value, int timeout) {
         super(Elements.BOMB_BLAST_RADIUS_INCREASE, value, timeout);
     }
 
     /**
      * In case player grabs another such a perk while current one is active still,
-     * timer will be reset to initial time-out value.
+     * timer will be increased and power value too.
      */
     @Override
     public Perk combine(Perk perk) {
-        return new BombBlastRadiusIncrease(getValue(), getTimeout());
+        return new BombBlastRadiusIncrease(
+                this.getValue() + perk.getValue(),
+                this.getTimer() + perk.getTimer());
     }
 }

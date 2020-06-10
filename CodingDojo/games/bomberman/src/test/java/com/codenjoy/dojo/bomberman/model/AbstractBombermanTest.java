@@ -26,7 +26,7 @@ public class AbstractBombermanTest {
 
     public int SIZE = 5;
     protected Game game;
-    protected Joystick hero;
+    protected Hero hero;
     protected Level level;
     private WallsImpl walls;
     protected GameSettings settings;
@@ -82,7 +82,7 @@ public class AbstractBombermanTest {
         game.on(field);
         dice(bombermanDice, 0, 0);
         game.newGame();
-        hero = game.getJoystick();
+        hero = (Hero)game.getJoystick();
     }
 
     protected SimpleParameter<Boolean> getRoundsEnabled() {
