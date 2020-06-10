@@ -23,15 +23,23 @@ package com.codenjoy.dojo.services;
  */
 
 import lombok.experimental.UtilityClass;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 @UtilityClass
 public class VersionReader {
 
     public static final String NO_VERSION = "no version";
+
+    public static JSONObject getCurrentVersions(List<String> gameNames) {
+        return new JSONObject(){{
+            gameNames.forEach(name -> put(name, VersionReader.getCurrentVersion(name)));
+        }};
+    }
 
     public static String getCurrentVersion(String gameName) {
         try {

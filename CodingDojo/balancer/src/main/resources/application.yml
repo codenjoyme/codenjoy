@@ -12,9 +12,6 @@ admin:
   login: admin@codenjoyme.com
   password: admin
 
-email:
-  hash: secureSoul
-
 score:
   update:
     time: 10000
@@ -36,6 +33,8 @@ game:
 
 sms:
   enabled: false
+  static-verification-code: 123456
+  static-password: 12345678
   text:
     registration: "Vash kod pidtverdzennya reestratsui: %s.\nCodenjoy Team."
     reset-password: "Vash kod pidtverdzennya zminy parolu: %s.\nCodenjoy Team."

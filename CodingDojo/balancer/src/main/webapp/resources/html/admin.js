@@ -34,6 +34,10 @@ var settings = function() {
     return JSON.parse($('#admin-settings-result').val());
 }
 
+var gameSettings = function() {
+    return JSON.parse($('#admin-game-settings-result').val());
+}
+
 var server = function(name) {
     return $('#' + name + '-server').val();
 }
@@ -71,7 +75,9 @@ var _ajax = function(name, ajaxObject) {
         }
     }
 
-    ajaxObject.dataType = 'json';
+    if (!ajaxObject.dataType) {
+        ajaxObject.dataType = 'json';
+    }
     ajaxObject.async = false;
 
     $('#' + name + '-request').val(
@@ -82,12 +88,38 @@ var _ajax = function(name, ajaxObject) {
     $.ajax(ajaxObject);
 }
 
+function generate(characters, length) {
+   var charactersLength = characters.length;
+   var result = '';
+   for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+   }
+   return result;
+}
+
+var autoIncrementPrefix = function() {
+    var old = $('#preffix').val();
+    var index = parseInt(old.match(/\d+/g)[0]);
+    var aNew = old.replace('' + index, '' + (index + 1));
+    $('#preffix').val(aNew);
+}
+
+var autoIncrementPhone = function() {
+    var old = $('#phone').val();
+    var index = parseInt(old.match(/\d+/g)[0]);
+    var aNew = old.replace('' + index, '' + (index + 1));
+    changePhone(aNew);
+}
+
+var changePhone = function(phone) {
+    $('#phone').val(phone);
+    $('#phone').trigger('change');
+}
+
 var autoIncrement = function() {
     if ($('#auto-increment').is(':checked')) {
-        var old = $('#preffix').val();
-        var index = parseInt(old.match(/\d+/g)[0]);
-        var aNew = old.replace('' + index, '' + (index + 1));
-        $('#preffix').val(aNew);
+        autoIncrementPrefix();
+        autoIncrementPhone();
     }
 }
 
@@ -110,8 +142,7 @@ var registerUser = function(email, phone, firstName,
             '"comment" : "' + comment + '"}',
         after: function(data){
             updateCode(data.code);
-
-            autoIncrement();
+            updateId(data.id);
         }
     });
 };
@@ -119,6 +150,11 @@ var registerUser = function(email, phone, firstName,
 var updateCode = function(code) {
     $('#join-code').val(code);
     $('#code').val(code);
+}
+
+var updateId = function(id) {
+    $('#player-id').val(id);
+    $('#remove-id').val(id);
 }
 
 var loginUser = function(email, password) {
@@ -130,8 +166,7 @@ var loginUser = function(email, password) {
             '"password" : "' + password + '"}',
         after: function(data){
             updateCode(data.code);
-
-            autoIncrement();
+            updateId(data.id);
         }
     });
 };
@@ -194,6 +229,7 @@ var joinExitStatusUser = function(email, code, whatToDo) {
         after: function(data){
             if (!!data.code) {
                 updateCode(data.code);
+                updateId(data.id);
             }
         }
     });
@@ -210,6 +246,13 @@ var getFinalists = function() {
     _ajax('finalists', {
         type: 'GET',
         url: server('balancer') + '/score/finalists'
+    });
+};
+
+var markWinners = function() {
+    _ajax('winners', {
+        type: 'GET',
+        url: server('balancer') + '/score/winners'
     });
 };
 
@@ -234,16 +277,16 @@ var getDisqualified = function() {
     });
 };
 
-var removeUser = function(email) {
+var removeUser = function(email, whereToRemove) {
     _ajax('remove', {
         type: 'GET',
-        url: server('balancer') + '/remove/' + email
+        url: server('balancer') + '/remove/' + email + '/on/' + whereToRemove
     });
 };
 
 var auth = function() {
     var login = settings().adminLogin;
-    var password = settings().adminPassword;
+    var password = encodePassword(settings().adminPassword);
     var auth = btoa(login + ":" + password);
     return auth;
 }
@@ -265,10 +308,26 @@ var getUsersOnBalancerServer = function() {
     });
 };
 
-var getSettings = function(gameType) {
+var getSettings = function(gameType, onSuccess) {
     _ajax(gameType || 'settings', {
         type: 'GET',
-        url: server('balancer') + '/settings'
+        url: server('balancer') + '/settings',
+        after: onSuccess
+    });
+};
+
+var getVersions = function(name) {
+    _ajax('balancer-server-version', {
+        type: 'GET',
+        url: server('balancer') + '/version'
+    });
+
+    _ajax('game-server-version', {
+        type: 'GET',
+        url: server('game') + '/admin/version',
+        headers: {
+            "Authorization": "Basic " + auth()
+        },
     });
 };
 
@@ -281,10 +340,26 @@ var setSettings = function(settings) {
     });
 };
 
-var clearCache = function() {
-    _ajax('cache', {
+var getGameSettings = function(gameType) {
+    _ajax('game-settings', {
         type: 'GET',
-        url: server('balancer') + '/cache/clear'
+        url: server('balancer') + '/game/settings/get'
+    });
+};
+
+var setGameSettings = function(settings) {
+    _ajax('game-settings', {
+        type: 'POST',
+        url: server('balancer') + '/game/settings/set',
+        contentType: 'application/json; charset=utf-8',
+        data: settings
+    });
+};
+
+var clearCache = function(block, whatToClean) {
+    _ajax(block, {
+        type: 'GET',
+        url: server('balancer') + '/cache/clear/' + whatToClean
     });
 };
 
@@ -336,21 +411,51 @@ var setContest = function(enabled) {
     });
 };
 
-$(document).ready(function() {
-    var balancerHost = window.location.host;
-    var gameHost = 'game1.' + window.location.host;
-    if (window.location.hostname == '127.0.0.1') {
-        gameHost = '127.0.0.1:8080';
-    }
-    $('#balancer-server').val(window.location.protocol + '//' + balancerHost + $('#balancer-server').val());
-    $('#game-server').val(window.location.protocol + '//' + gameHost + $('#game-server').val());
+var enableSlide = function(element) {
+    $('.block-header').click(function() {
+        $(this).next().slideToggle('fast');
+    });
 
+    var visible = false;
+    $('#collapse-all').click(function() {
+        if (visible) {
+            $('.block-header').next().hide();
+        } else {
+            $('.block-header').next().show();
+        }
+        visible = !visible;
+        $('#collapse-all').text(visible ? '(collapse all)' : '(expand all)');
+    });
+
+    $('#collapse-all').click();
+}
+
+var encodePassword = function(raw) {
+    return $.md5(raw);
+}
+
+$(document).ready(function() {
     $('#scores-day').val(new Date().toISOString().split('T')[0]);
 
-    getSettings('admin-settings');
+    $('#balancer-server').val(
+        window.location.protocol + '//'
+        + window.location.host
+        + '/codenjoy-balancer/rest'
+    );
+
+    getSettings('admin-settings', function(data) {
+        $('#game-server').val(
+            data.game.schema + '://'
+            + data.game.servers[0].replace('localhost', '127.0.0.1')
+            + '/codenjoy-contest/rest'
+        );
+
+        getVersions();
+    });
 
     var registerOrUpdate = function(action) {
         $('#' + action).click(function() {
+            autoIncrement();
             var preffix = $('#preffix').val();
 
             registerUser(
@@ -358,7 +463,7 @@ $(document).ready(function() {
                 $('#phone').val(),
                 preffix + $('#first-name').val(),
                 preffix + $('#last-name').val(),
-                preffix + $('#password').val(),
+                encodePassword(preffix + $('#password').val()),
                 $('#code').val(),
                 preffix + $('#city').val(),
                 preffix + $('#skills').val(),
@@ -390,16 +495,17 @@ $(document).ready(function() {
         });
     }
 
-    sync(['#phone', '#confirm-phone']);
-    sync(['#email', '#get-confirm-email', '#login-email', '#remove-email', '#join-email']);
+    sync(['#phone', '#confirm-phone', '#resend-phone']);
+    sync(['#email', '#get-confirm-email', '#login-email', '#join-email']);
     sync(['#password', '#login-password']);
     sync(['#code', '#join-code']);
+    sync(['#player-id', '#remove-id']);
 
     $('#login').click(function() {
         var preffix = $('#preffix').val();
         loginUser(
             preffix + $('#login-email').val(),
-            preffix + $('#login-password').val()
+            encodePassword(preffix + $('#login-password').val())
         );
     });
 
@@ -487,10 +593,15 @@ $(document).ready(function() {
         );
     });
 
+    $('#winners').click(function() {
+        markWinners();
+    });
+
     $('#remove').click(function() {
         var preffix = $('#preffix').val();
         removeUser(
-            preffix + $('#remove-email').val()
+            $('#remove-id').val(),
+            $('#where-to-remove').val()
         );
     });
 
@@ -509,6 +620,16 @@ $(document).ready(function() {
     $('#set-settings').click(function() {
         setSettings(
             $('#settings-result').val()
+        );
+    });
+
+    $('#get-game-settings').click(function() {
+        getGameSettings();
+    });
+
+    $('#set-game-settings').click(function() {
+        setGameSettings(
+            $('#game-settings-post-request').val()
         );
     });
 
@@ -531,8 +652,24 @@ $(document).ready(function() {
         );
     });
 
-    $('#cache').click(function() {
-        clearCache();
+    $('#clear-cache').click(function() {
+        clearCache('cache', $('#cache-mask').val());
     });
 
+    $('#clear-scores').click(function() {
+        clearCache('scores', 2); // clean only currentScores
+    });
+
+    $('#clear-disqualified').click(function() {
+        clearCache('disqualified', 4); // clean only disqualified
+    });
+
+    $('#clear-finalists').click(function() {
+        clearCache('finalists', 8); // clean only finalists cache
+    });
+
+    enableSlide();
+
+    var phone = '+380' + generate('0123456789', 9);
+    changePhone(phone);
 });

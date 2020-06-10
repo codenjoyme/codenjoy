@@ -84,14 +84,13 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                         .antMatchers(
                                 "/login",
-//                                RestController.URI + RestController.SCORE + "/day/**",
                                 "/logout",
+                                RestController.URI + RestController.SCORE + "/day/**",
                                 RestController.URI + RestController.REGISTER + "/**",
-                                RestController.URI + RestController.LOGIN)
+                                RestController.URI + RestController.LOGIN,
+                                RestController.URI + RestController.GAME_SETTINGS + "/get")
                             .permitAll()
                         .antMatchers(
-//                                RestController.URI + RestController.UPDATE,
-                                RestController.URI + RestController.SCORE + "/day/**",
                                 RestController.URI + RestController.PLAYER + "/**")
                             .hasRole("USER")
                         .antMatchers(

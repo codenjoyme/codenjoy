@@ -51,22 +51,11 @@ public class ConfigProperties {
     @Value("${admin.password}")
     private String adminPassword;
 
-    @Value("${email.hash}")
-    private String emailHash;
-
     @Autowired
     private GameProperties game;
 
     public void updateFrom(ConfigProperties config) {
         BeanUtils.copyProperties(config, this);
-    }
-
-    public String getEmail(String id) {
-        return Hash.getEmail(id, emailHash);
-    }
-
-    public String getId(String email) {
-        return Hash.getId(email, emailHash);
     }
 
 }

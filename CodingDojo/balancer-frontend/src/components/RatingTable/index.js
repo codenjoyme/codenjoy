@@ -118,8 +118,8 @@ class RatingTableHandler extends Component {
                                 flexGrow={ 0 }
                                 flexShrink={ 0 }
                                 width={ 40 }
-                                cellRenderer={ ({ rowIndex }) => (
-                                    <StarIndex rowIndex={ rowIndex } />
+                                cellRenderer={ ({ rowIndex, rowData }) => (
+                                    <StarIndex rowIndex={ rowIndex } winner={ rowData.winner } />
                                 ) }
                             />
                             <Column

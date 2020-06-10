@@ -25,6 +25,7 @@ body {
     justify-content: center;
     flex: 1 1 auto;
     font-family: 'Museo Sans Cyrl';
+    text-align: justify;
 }
 
 .content {
@@ -50,6 +51,16 @@ body {
     line-height: 1.5;
     margin-bottom: 30px;
     font-weight: 200;
+}
+
+.content ul ul {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.content ol ol {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .title {

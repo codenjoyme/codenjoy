@@ -23,30 +23,35 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.round.RoundGameField;
 
 import java.util.List;
 
-public interface Field extends GameField<Player> {  // TODO применить тут ISP (все ли методы должны быть паблик?)
+public interface Field extends RoundGameField<Player> {  // TODO применить тут ISP (все ли методы должны быть паблик?)
+
     int size();
 
-    List<Hero> getBombermans();
+    List<Hero> heroes(boolean activeAliveOnly);
 
-    List<Bomb> getBombs();
+    List<Bomb> bombs();
 
-    List<Bomb> getBombs(Hero bomberman);
+    List<Bomb> bombs(Hero hero);
 
-    Walls getWalls();
+    Walls walls();
 
-    boolean isBarrier(int x, int y, boolean isWithMeatChopper);
+    boolean isBarrier(Point pt, boolean withMeatChopper);
 
     void remove(Player player);
 
-    List<Blast> getBlasts();
+    List<Blast> blasts();
 
     void drop(Bomb bomb);
 
     void removeBomb(Bomb bomb);
 
-    GameSettings getSettings();
+    GameSettings settings();
+
+    PerkOnBoard pickPerk(Point pt);
 }

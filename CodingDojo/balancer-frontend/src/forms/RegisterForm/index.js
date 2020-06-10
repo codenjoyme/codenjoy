@@ -215,7 +215,10 @@ class LoginForm extends Component {
                                             setVisiblePrivacyModal(true)
                                         }
                                     >
-                                        Погоджуюсь с політикою конфіденційності*
+                                        Погоджуюсь с політикою конфіденційності
+                                        <div style={{ textDecoration: 'underline' }}>
+                                            (будь ласка, клікніть на посилання для подробиць)
+                                        </div>
                                     </div>
                                 }
                                 type='checkbox'

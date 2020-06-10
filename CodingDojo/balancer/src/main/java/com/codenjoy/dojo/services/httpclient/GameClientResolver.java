@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.httpclient;
  */
 
 import com.codenjoy.dojo.services.GameProperties;
+import com.codenjoy.dojo.services.hash.Hash;
 import feign.Feign;
 import feign.Logger.Level;
 import feign.Response;
@@ -73,7 +74,8 @@ public class GameClientResolver {
                 .errorDecoder(new ClientErrorDecoder())
                 .logger(new Slf4jLogger(GameServerClient.class))
                 .logLevel(Level.BASIC)
-                .requestInterceptor(new BasicAuthRequestInterceptor(gameProperties.getBasicAuthUser(), gameProperties.getBasicAuthPassword()))
+                .requestInterceptor(new BasicAuthRequestInterceptor(gameProperties.getBasicAuthUser(),
+                        Hash.md5(gameProperties.getBasicAuthPassword())))
                 .target(GameServerClient.class, gameProperties.getSchema() + "://" + server);
     }
 

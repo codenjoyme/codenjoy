@@ -162,4 +162,8 @@ public class PointImpl implements Point, Comparable<Point> {
     public Point relative(Point offset) {
         return pt(x - offset.getX(), y - offset.getY());
     }
+
+    public static Point random(Dice dice, int size) {
+        return pt(dice.next(size), dice.next(size));
+    }
 }

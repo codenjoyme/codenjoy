@@ -57,7 +57,6 @@ email:
   verification: false
   password: ''
   name: info@codenjoy.com
-  hash: secureSoul
 
 donate.code:
 
@@ -84,3 +83,4 @@ logging:
     org:
       eclipse.jetty: info
       springframework.mvc: info
+      reflections: error

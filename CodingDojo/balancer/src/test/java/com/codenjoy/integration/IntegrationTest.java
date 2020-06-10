@@ -25,54 +25,71 @@ package com.codenjoy.integration;
 
 import com.codenjoy.dojo.BalancerApplication;
 import com.codenjoy.dojo.conf.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.GameServers;
-import com.codenjoy.dojo.services.TimerService;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.GameServer;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
-import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.httpclient.SmsGatewayClient;
+import com.codenjoy.dojo.services.properties.SmsProperties;
 import com.codenjoy.dojo.utils.JsonUtils;
+import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.HttpStatusCodeException;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import java.lang.reflect.Method;
-import java.util.Arrays;
+import javax.servlet.http.HttpServletRequest;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.testng.Assert.assertEquals;
+import static org.mockito.Mockito.doReturn;
 
+@SpringBootTest(classes = BalancerApplication.class,
+        properties = "spring.main.allow-bean-definition-overriding=true")
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = BalancerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(SQLiteProfile.NAME)
+@WebAppConfiguration
 public class IntegrationTest {
+
+    private MockMvc mvc;
+
+    @Autowired
+    private WebApplicationContext context;
 
     @Autowired
     private TimerService timer;
 
-    @Autowired
+    @SpyBean
     private ConfigProperties config;
+
+    @Autowired
+    private SmsProperties smsProperties;
 
     @SpyBean
     private Players players;
@@ -80,362 +97,716 @@ public class IntegrationTest {
     @SpyBean
     private Scores scores;
 
-    @MockBean
+    @SpyBean
     private GameServers gameServers;
+
+    @SpyBean
+    private RegistrationService registration;
+
+    @SpyBean
+    private SmsService sms;
+
+    @MockBean
+    private SmsGatewayClient gateway;
+
+    @SpyBean
+    private PasswordEncoder passwordEncoder;
+
+    @SpyBean
+    private DebugService debug;
 
     @SpyBean
     private GameServer game;
 
-    @Value("${server.servlet.context-path}")
-    private String context;
+    @SpyBean
+    private SecurityContextAuthenticator authenticator;
 
-    @LocalServerPort
-    private int port;
+    private String verificationCode;
 
-    private TestRestTemplate rest = new TestRestTemplate();
-
-    private String adminPassword;
-
-    @BeforeTest
-    public void setupJetty() throws Exception {
-        rest = new TestRestTemplate();
-        System.out.println(context);
+    @Before
+    public void setup() {
         timer.resume();
 
-        adminPassword = Hash.md5(config.getAdminPassword());
+        debug.setDebugEnable(false);
+
+        smsProperties.setEnabled(false);
+        verificationCode = "123456";
+
+        mvc = MockMvcBuilders.webAppContextSetup(context).build();
+        SecurityContextHolder.getContext()
+                .setAuthentication(new UsernamePasswordAuthenticationToken(
+                        config.getAdminLogin(),
+                        config.getAdminPassword()
+                ));
     }
 
-    @Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
-    @Target(java.lang.annotation.ElementType.METHOD)
-    public @interface Clean {}
-
-    @BeforeMethod
-    public void before(Method method) {
-        if (Arrays.stream(method.getDeclaredAnnotations())
-                .anyMatch(a -> a.annotationType().equals(Clean.class))) {
-            players.removeAll();
-            scores.removeAll();
-            resetMocks();
-        }
+    public void clean() {
+        players.removeAll();
+        scores.removeAll();
+        resetMocks();
     }
 
-    @AfterMethod
+    @After
     public void after() {
         resetMocks();
     }
 
-    @Clean
+    @SneakyThrows
+    protected String mapToJson(Object obj) {
+        return new ObjectMapper().writeValueAsString(obj);
+    }
+
+    @SneakyThrows
+    protected <T> T mapFromJson(String json, Class<T> clazz) {
+        return new ObjectMapper().readValue(json, clazz);
+    }
+
+    @SneakyThrows
+    private String get(String uri) {
+        return process(200, MockMvcRequestBuilders.get(uri));
+    }
+
+    @SneakyThrows
+    private String get(int status, String uri) {
+        return process(status, MockMvcRequestBuilders.get(uri));
+    }
+
+    @SneakyThrows
+    private String post(int status, String uri) {
+        return process(status, MockMvcRequestBuilders.post(uri));
+    }
+
+    @SneakyThrows
+    private String post(String uri) {
+        return process(200, MockMvcRequestBuilders.post(uri));
+    }
+
+    @SneakyThrows
+    private String post(int status, String uri, String data) {
+        return process(status, MockMvcRequestBuilders.post(uri, data)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(data));
+    }
+
+    private String process(int status, MockHttpServletRequestBuilder post) throws Exception {
+        MvcResult mvcResult = mvc.perform(post
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        String result = mvcResult.getResponse().getContentAsString();
+        assertEquals(result, status, mvcResult.getResponse().getStatus());
+        return result;
+    }
+
+    private void assertException(String expected, Runnable supplier) {
+        try {
+            supplier.run();
+            fail("expected exception");
+        } catch (Exception e) {
+            assertEquals(expected, e.getMessage());
+        }
+    }
+
+    private void assertError(String message, String source) {
+        JSONObject error = tryParseAsJson(source);
+        assertEquals(message, error.getString("message"));
+    }
+
+    private JSONObject tryParseAsJson(String source) {
+        try {
+            return new JSONObject(source);
+        } catch (JSONException e) {
+            return new JSONObject(){{
+                put("message", source);
+            }};
+        }
+    }
+
+    @Test
+    public void shouldSendSms_whenRegister() {
+        // given
+        smsProperties.setEnabled(true);
+
+        // TODO#2 почему-то не срабатывает
+        doReturn("123457").when(registration).generateVerificationCode();
+        verificationCode = null; // TODO#2 жвачка в него потом запишется реальное сгенерированное значение
+
+        // when
+        shouldRegister_whenNotPresent();
+
+        // then
+        verify(sms).sendSmsTo("+380501234567", verificationCode, SmsService.SmsType.REGISTRATION);
+
+        ArgumentCaptor<SmsService.SmsSendRequest> captor = ArgumentCaptor.forClass(SmsService.SmsSendRequest.class);
+        verify(gateway).sendSms(captor.capture());
+        assertEquals("SmsService.SmsSendRequest(operation=SENDSMS, " +
+                "message=SmsService.Message(lifetime=4, recipient=+380501234567, " +
+                "body=Vash kod pidtverdzennya reestratsui: " + verificationCode + ".\n" +
+                "Codenjoy Team.))", captor.getValue().toString());
+    }
+
     @Test
     public void shouldRegister_whenNotPresent() {
-        shouldCreateNewPlayerOnGame("12345678901234567890");
+        // given
+        clean();
 
+        shouldCreateNewPlayerOnGame("generated-id", "12345678901234567890");
+        passwordEncoded("password", "$2a$10$Enc0dEd2");
+
+        // when
         assertPost("/rest/register",
 
-                "{" +
-                "  'email':'test@gmail.com'," +
-                "  'firstName':'Stiven'," +
-                "  'lastName':'Pupkin'," +
-                "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
-                "  'city':'city'," +
-                "  'skills':'Si Senior'," +
-                "  'comment':'no comment'" +
-                "}",
+                validPlayer(),
 
                 "{\n" +
                 "  'code':'12345678901234567890',\n" +
                 "  'email':'test@gmail.com',\n" +
-                "  'id':'nrnbnrmikfkiksoejwbf4ze',\n" +
+                "  'id':'generated-id',\n" +
+                // номер нормализировался
+                "  'phone':'+380501234567',\n" +
                 "  'server':'localhost:8080'\n" +
                 "}");
 
+        // then
         verify(game).createNewPlayer(
                 "localhost:8080",
+                "generated-id",
+                "12345678901234567890",
                 "test@gmail.com",
-                "+380955674523",
+                "+380501234567",
                 "Stiven Pupkin",
-                "13cf481db24b78c69ed39ab8663408c0",
+                // raw password идет на game сервер, там он захешируется
+                "password",
                 "127.0.0.1",
                 "0", // create new
-                "{}"
-        );
+                "{}");
 
         verify(players, times(1)).create(any(Player.class));
 
-        assertEquals(players.get("test@gmail.com").toString(),
-                "Player{email='test@gmail.com', " +
-                        "firstName='Stiven', " +
-                        "lastName='Pupkin', " +
-                        "password='13cf481db24b78c69ed39ab8663408c0', " +
-                        "city='city', " +
-                        "skills='Si Senior', " +
-                        "comment='no comment', " +
-                        "code='12345678901234567890', " +
-                        "server='localhost:8080'}");
+        assertPlayer();
+
+        verifyLogin("test@gmail.com", "password");
     }
 
-    @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
-    public void shouldSameRegisterFailed_whenPresent() {
-        shouldCreateNewPlayerOnGame("12345678901234567890");
+    private void passwordEncoded(String encoded, String decoded) {
+        doReturn(decoded).when(passwordEncoder).encode(anyString());
+        doReturn(true).when(passwordEncoder).matches(encoded, decoded);
+    }
 
-        assertPost("/rest/register",
+    @Test
+    public void shouldSameRegisterFailed_whenPresent_byEmail() {
+        // given
+        shouldRegister_whenNotPresent();
+        resetMocks();
+
+        shouldCreateNewPlayerOnGame("generated-id", "12345678901234567890");
+
+        // when
+        assertPost(400, "/rest/register",
 
                 "{" +
+                // email тот же
                 "  'email':'test@gmail.com'," +
                 "  'firstName':'Stiven'," +
                 "  'lastName':'Pupkin'," +
-                "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
+                // а телефон другой
+                "  'phone':'0500000000'," +
+                "  'password':'password'," +
                 "  'city':'city'," +
                 "  'skills':'Si Senior'," +
                 "  'comment':'no comment'" +
                 "}",
 
-                "IllegalArgumentException: User already registered");
+                "IllegalArgumentException: User with this email is already registered");
 
+        // then
         verify(players, never()).create(any(Player.class));
 
-        assertEquals(players.get("test@gmail.com").toString(),
-                "Player{email='test@gmail.com', " +
+        // тут без изменений
+        assertPlayer();
+    }
+
+    @Test
+    public void shouldSameRegisterFailed_whenPresent_byPhone() {
+        // given
+        shouldRegister_whenNotPresent();
+        resetMocks();
+
+        shouldCreateNewPlayerOnGame("generated-id", "12345678901234567890");
+
+        // when
+        assertPost(400, "/rest/register",
+
+                "{" +
+                        // email другой
+                        "  'email':'other-email@gmail.com'," +
+                        "  'firstName':'Stiven'," +
+                        "  'lastName':'Pupkin'," +
+                        // но телефон тот же
+                        "  'phone':'0501234567'," +
+                        "  'password':'password'," +
+                        "  'city':'city'," +
+                        "  'skills':'Si Senior'," +
+                        "  'comment':'no comment'" +
+                        "}",
+
+                "IllegalArgumentException: User with this phone number is already registered");
+
+        // then
+        verify(players, never()).create(any(Player.class));
+
+        // тут без изменений
+        assertPlayer();
+    }
+
+    private void assertPlayer() {
+        Player player = players.get("generated-id");
+        if (verificationCode == null) { // TODO#2 немного жвачки
+            verificationCode = player.getVerificationCode();
+        }
+        assertEquals("Player{" +
+                        "id='generated-id', " +
+                        "email='test@gmail.com', " +
+                        "phone='+380501234567', " +
                         "firstName='Stiven', " +
                         "lastName='Pupkin', " +
-                        "password='13cf481db24b78c69ed39ab8663408c0', " +
+                        "password='$2a$10$Enc0dEd2', " +
                         "city='city', " +
                         "skills='Si Senior', " +
                         "comment='no comment', " +
                         "code='12345678901234567890', " +
-                        "server='localhost:8080'}");
+                        "server='localhost:8080', " +
+                        "approved=0, " +
+                        "verificationCode='" + verificationCode + "', " +
+                        "verificationType='REGISTRATION'}",
+                player.toString());
     }
 
-    @Clean
     @Test
     public void shouldRegisterError_whenGameServerIsNotResponding() {
+        // given
+        clean();
+        debug.setDebugEnable(true);
+
+        shouldCreateNewPlayerOnGame("generated-id", "12345678901234567890");
         shouldThrowWhenCreateNewPlayerOnGame(new RuntimeException("Shit happens"));
 
-        assertPost("/rest/register",
+        // when
+        assertPostError(500, "/rest/register",
 
-                "{" +
-                "  'email':'test@gmail.com'," +
-                "  'firstName':'Stiven'," +
-                "  'lastName':'Pupkin'," +
-                "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
-                "  'city':'city'," +
-                "  'skills':'Si Senior'," +
-                "  'comment':'no comment'" +
-                "}",
+                validPlayer(),
 
-                "RuntimeException: [At game server: RuntimeException: Shit happens]");
+                "java.lang.RuntimeException: [At game server: RuntimeException: Shit happens]");
 
+        // then
         verify(game).createNewPlayer(
                 "localhost:8080",
+                "generated-id",
+                "12345678901234567890",
                 "test@gmail.com",
-                "+380955674523",
+                "+380501234567",
                 "Stiven Pupkin",
-                "13cf481db24b78c69ed39ab8663408c0",
+                "password",
                 "127.0.0.1",
-                "0", // create new
-                "{}"
-        );
+                "0",
+                "{}");
 
+        verifyDoNothingOnPlayers();
+    }
+
+    private void verifyDoNothingOnPlayers() {
         verify(players, never()).create(any(Player.class));
 
-        assertEquals(players.get("test@gmail.com"),
+        assertEquals(players.get("generated-id"),
                 null);
     }
 
-    @Clean
+    private String validPlayer() {
+        return "{" +
+                "  'email':'test@gmail.com'," +
+                "  'firstName':'Stiven'," +
+                "  'lastName':'Pupkin'," +
+                "  'phone':'0501234567'," +
+                // пароль должен быть в чистом виде, потому что мы
+                // авторизируемся так же в spring security
+                "  'password':'password'," +
+                "  'city':'city'," +
+                "  'skills':'Si Senior'," +
+                "  'comment':'no comment'" +
+                "}";
+            }
+
     @Test
     public void shouldRegisterValidationError_whenBadEmail() {
-        assertPost("/rest/register",
+        // given
+        clean();
+
+        // when
+        assertPost(400, "/rest/register",
 
                 "{" +
                 "  'email':'NOT_EMAIL'," +    // there is an error
                 "  'firstName':'Stiven'," +
                 "  'lastName':'Pupkin'," +
-                "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
+                "  'phone':'0501234567'," +
+                "  'password':'password'," +
                 "  'city':'city'," +
                 "  'skills':'Si Senior'," +
                 "  'comment':'no comment'" +
                 "}",
 
-                "IllegalArgumentException: Player name is invalid: NOT_EMAIL");
+                "IllegalArgumentException: Player email is invalid: NOT_EMAIL");
 
-        doNothingOnRegistration();
+        // then
+        verifyDoNothingOnRegistration();
     }
 
-    @Clean
     @Test
     public void shouldRegisterValidationError_whenEmailIsNull() {
-        assertPost("/rest/register",
+        // given
+        clean();
+
+        // when
+        assertPost(400, "/rest/register",
 
                 "{" +
-                        "  'email':null," +    // there is an error
-                        "  'firstName':'Stiven'," +
-                        "  'lastName':'Pupkin'," +
-                        "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
-                        "  'city':'city'," +
-                        "  'skills':'Si Senior'," +
-                        "  'comment':'no comment'" +
-                        "}",
+                "  'email':null," +    // there is an error
+                "  'firstName':'Stiven'," +
+                "  'lastName':'Pupkin'," +
+                "  'phone':'0501234567'," +
+                "  'password':'password'," +
+                "  'city':'city'," +
+                "  'skills':'Si Senior'," +
+                "  'comment':'no comment'" +
+                "}",
 
-                "IllegalArgumentException: Player name is invalid: null");
+                "IllegalArgumentException: Player email is invalid: null");
 
-        doNothingOnRegistration();
+        // then
+        verifyDoNothingOnRegistration();
     }
 
-    @Clean
-    @Test
-    public void shouldRegisterValidationError_whenPasswordIsNotMd5() {
-        assertPost("/rest/register",
-
-                "{" +
-                        "  'email':'test@gmail.com'," +
-                        "  'firstName':'Stiven'," +
-                        "  'lastName':'Pupkin'," +
-                        "  'password':'NOT_MD5'," +     // there is an error
-                        "  'city':'city'," +
-                        "  'skills':'Si Senior'," +
-                        "  'comment':'no comment'" +
-                        "}",
-
-                "IllegalArgumentException: Password is invalid: NOT_MD5");
-
-        doNothingOnRegistration();
-    }
-
-    @Clean
     @Test
     public void shouldRegisterValidationError_whenPasswordIsNull() {
-        assertPost("/rest/register",
+        // given
+        clean();
+
+        // when
+        assertPost(400, "/rest/register",
 
                 "{" +
-                        "  'email':'test@gmail.com'," +
-                        "  'firstName':'Stiven'," +
-                        "  'lastName':'Pupkin'," +
-                        "  'password':null," +     // there is an error
-                        "  'city':'city'," +
-                        "  'skills':'Si Senior'," +
-                        "  'comment':'no comment'" +
-                        "}",
+                "  'email':'test@gmail.com'," +
+                "  'firstName':'Stiven'," +
+                "  'lastName':'Pupkin'," +
+                "  'phone':'0501234567'," +
+                "  'password':null," +     // there is an error
+                "  'city':'city'," +
+                "  'skills':'Si Senior'," +
+                "  'comment':'no comment'" +
+                "}",
 
-                "IllegalArgumentException: Password is invalid: null");
+                "IllegalArgumentException: Password string is empty: null");
 
-        doNothingOnRegistration();
+        // then
+        verifyDoNothingOnRegistration();
     }
 
-    @Clean
     @Test
     public void shouldRegisterValidationError_whenOtherStringsIsNull() {
-        assertPost("/rest/register",
+        // given
+        clean();
+
+        // when
+        assertPost(400, "/rest/register",
 
                 "{" +
                 "  'email':'test@gmail.com'," +
                 "  'firstName':null," +        // there is an error
                 "  'lastName':null," +         // there is an error
-                "  'password':'13cf481db24b78c69ed39ab8663408c0'," +
+                "  'phone':'123'," +           // there is an error
+                "  'password':'password'," +
                 "  'city':null," +             // there is an error
                 "  'skills':null," +           // there is an error
                 "  'comment':null" +           // it's ok
                 "}",
 
                 "IllegalArgumentException: Something wrong with parameters on this request: " +
-                        "[FirstName string is empty: null, " +
+                        "[Invalid phone number: 123, " +
+                        "FirstName string is empty: null, " +
                         "LastName string is empty: null, " +
                         "City string is empty: null, " +
                         "Skills string is empty: null]");
 
-        doNothingOnRegistration();
+        // then
+        verifyDoNothingOnRegistration();
     }
 
-    private void doNothingOnRegistration() {
+    private void verifyDoNothingOnRegistration() {
         verifyNoMoreInteractions(game);
-        verify(players, never()).create(any(Player.class));
-        assertEquals(players.get("test@gmail.com"),
-                null);
+
+        verifyDoNothingOnPlayers();
+
+        verifyNoMoreInteractions(authenticator);
     }
 
-    @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
-    public void shouldSuccessfulLogin_whenRegistered() {
+    @Test
+    public void shouldUnSuccessfulLogin_whenNotVerified() {
+        // given
+        shouldRegister_whenNotPresent();
+        resetMocks();
+
         shouldCheckIfExistsOnGame(true);
 
+        assertPlayerApproved(0);
+
+        // when
+        assertPostError(401, "/rest/login",
+
+                "{" +
+                "  'email':'test@gmail.com'," +
+                "  'password':'password'" +
+                "}",
+
+                "LoginException: User is not verified");
+
+        // then
+        verifyNoMoreInteractions(game);
+        verifyNoMoreInteractions(authenticator);
+    }
+
+    @Test
+    public void shouldUnSuccessfulLogin_whenNotEmailFound() {
+        // given
+        shouldRegister_whenNotPresent();
+        resetMocks();
+
+        shouldCheckIfExistsOnGame(true);
+
+        assertPlayerApproved(0);
+
+        // when
+        assertPostError(401, "/rest/login",
+
+                "{" +
+                "  'email':'bad-email@gmail.com'," +  // не тот имейл
+                "  'password':'password'" +
+                "}",
+
+                "LoginException: User with this email not found");
+
+        // then
+        verifyNoMoreInteractions(game);
+        verifyNoMoreInteractions(authenticator);
+    }
+
+    @Test
+    public void shouldUnSuccessfulLogin_whenBadPassword() {
+        // given
+        shouldRegister_whenNotPresent();
+        resetMocks();
+
+        shouldCheckIfExistsOnGame(true);
+
+        confirmRegistration();
+
+        // when
+        assertPostError(401, "/rest/login",
+
+                "{" +
+                "  'email':'test@gmail.com'," +
+                "  'password':'BAD-password'" +  // не тот пароль
+                "}",
+
+                "LoginException: Wrong password/code for this email");
+
+        // then
+        verifyNoMoreInteractions(game);
+        verifyNoMoreInteractions(authenticator);
+    }
+
+    @Test
+    public void shouldSuccessfulLogin_whenCodeInsteadOfPassword() {
+        // given
+        shouldRegister_whenNotPresent();
+        resetMocks();
+
+        shouldCheckIfExistsOnGame(true);
+
+        confirmRegistration();
+
+        // when
         assertPost("/rest/login",
 
                 "{" +
                 "  'email':'test@gmail.com'," +
-                "  'password':'13cf481db24b78c69ed39ab8663408c0'" +
+                "  'code':'12345678901234567890'," +  // по коду можно залогиниться
+                "  'password':'BAD-password'" +       // но пароль надо хоть какой-то указать, пусть не верный
                 "}",
 
                 "{\n" +
                 "  'code':'12345678901234567890',\n" +
                 "  'email':'test@gmail.com',\n" +
-                "  'id':'nrnbnrmikfkiksoejwbf4ze',\n" +
+                "  'id':'generated-id',\n" +
+                "  'phone':'+380501234567',\n" +
                 "  'server':'localhost:8080'\n" +
                 "}");
 
-        verify(game).existsOnServer("localhost:8080", "test@gmail.com");
+        // then
+        verifyLogin("test@gmail.com", "password");
     }
 
-    @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
+    private void assertPlayerApproved(int expected) {
+        assertEquals(expected, players.get("generated-id").getApproved());
+    }
+
+    @Test
+    public void shouldSuccessfulLogin_afterVerification() {
+        // given
+        shouldRegister_whenNotPresent();
+        resetMocks();
+
+        shouldCheckIfExistsOnGame(true);
+        passwordEncoded("password", "$2a$10$Enc0dEd2");
+        confirmRegistration();
+
+        // when
+        assertPost("/rest/login",
+
+                "{" +
+                "  'email':'test@gmail.com'," +
+                // пароль не должен быть хешированный
+                "  'password':'password'" +
+                "}",
+
+                "{\n" +
+                "  'code':'12345678901234567890',\n" +
+                "  'email':'test@gmail.com',\n" +
+                "  'id':'generated-id',\n" +
+                "  'phone':'+380501234567',\n" +
+                "  'server':'localhost:8080'\n" +
+                "}");
+
+        // then
+        verify(game).existsOnServer("localhost:8080", "test@gmail.com");
+        verifyLogin("test@gmail.com", "password");
+    }
+
+    private void confirmRegistration() {
+        // given
+        assertPlayerApproved(0);
+
+        // when
+        assertPost("/rest/register/confirm",
+
+                "{" +
+                "  'phone':'+380501234567'," +
+                "  'code':'123456'" +
+                "}",
+
+                "{\n" +
+                "  'code':'12345678901234567890',\n" +
+                "  'email':'test@gmail.com',\n" +
+                "  'id':'generated-id',\n" +
+                "  'phone':'+380501234567',\n" +
+                "  'server':'localhost:8080'\n" +
+                "}");
+
+        // then
+        assertPlayerApproved(1);
+    }
+
+    private void verifyLogin(String email, String password) {
+        verify(authenticator).login(any(HttpServletRequest.class), eq(email), eq(password));
+    }
+
+    @Test
     public void shouldExistOnGameServer_whenRegistered() {
+        // given
+        shouldRegister_whenNotPresent();
+
         shouldCheckIfExistsOnGame(true);
 
+        // when
         assertGet("/rest/player/test@gmail.com/active/12345678901234567890",
                 "true");
 
+        // then
         verify(game).existsOnServer("localhost:8080", "test@gmail.com");
     }
 
-    @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
+    @Test
     public void shouldExitFromGameServer_whenRegistered() {
+        // given
+        shouldRegister_whenNotPresent();
+
         shouldExitFromGame(true);
 
+        // when
         assertGet("/rest/player/test@gmail.com/exit/12345678901234567890",
                 "true");
 
-        verify(game).remove("localhost:8080", "test@gmail.com", "12345678901234567890");
+        // then
+        verify(game).remove("localhost:8080", "test@gmail.com");
     }
 
-    @Test(dependsOnMethods = "shouldRegister_whenNotPresent")
+    @Test
     public void shouldJoinToGameServer_whenRegistered() {
+        // given
+        shouldSuccessfulLogin_afterVerification();
+
         shouldCheckIfExistsOnGame(false);
 
+        // when
         assertGet("/rest/player/test@gmail.com/join/12345678901234567890",
                 "true");
 
+        // then
         verify(game).existsOnServer("localhost:8080", "test@gmail.com");
         verify(game).createNewPlayer(
                 "localhost:8080",
+                "generated-id",
+                "12345678901234567890",
                 "test@gmail.com",
-                "+380955674523",
+                "+380501234567",
                 "Stiven Pupkin",
-                "13cf481db24b78c69ed39ab8663408c0",
+                "password",
                 "127.0.0.1",
                 null, // try load from save
                 null
         );
     }
 
-    @Test(dependsOnMethods = "shouldJoinToGameServer_whenRegistered")
+    @Test
     public void shouldRemoveFromServer_whenRegistered() {
+        // given
+        shouldJoinToGameServer_whenRegistered();
+
         shouldExitFromGame(true);
 
-        assertGet("/rest/remove/test@gmail.com/" + adminPassword,
-                "true");
+        // when
+        assertGet("/rest/remove/test@gmail.com/", "true");
 
-        verify(game).remove("localhost:8080", "test@gmail.com", "12345678901234567890");
+        // then
+        verify(game).remove("localhost:8080", "test@gmail.com");
         verify(players).remove("test@gmail.com");
     }
 
     private void resetMocks() {
-        verifyNoMoreInteractions(game);
-        reset(game, players, scores, config, gameServers);
+        verifyNoMoreInteractions(game, authenticator);
+
+        reset(game, sms, players, scores, config,
+                gameServers, registration,
+                gateway, debug,
+                passwordEncoder, authenticator);
     }
 
-    private void shouldCreateNewPlayerOnGame(String code) {
-        doReturn(code).when(game).createNewPlayer(anyString(), anyString(), anyString(),
+    private void shouldCreateNewPlayerOnGame(String id, String code) {
+        doReturn(id).when(registration).generateId();
+
+        doReturn(code).when(game).createNewPlayer(anyString(), anyString(), anyString(), anyString(), anyString(),
                 anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
     private void shouldThrowWhenCreateNewPlayerOnGame(Exception exception) {
-        doThrow(exception).when(game).createNewPlayer(anyString(), anyString(), anyString(),
+        doThrow(exception).when(game).createNewPlayer(anyString(), anyString(), anyString(), anyString(), anyString(),
                 anyString(), anyString(), anyString(), anyString(), anyString());
     }
 
@@ -444,43 +815,32 @@ public class IntegrationTest {
     }
 
     private void shouldExitFromGame(boolean exited) {
-        doReturn(exited).when(game).remove(anyString(), anyString(), anyString());
+        doReturn(exited).when(game).remove(anyString(), anyString());
     }
 
-    private void assertPost(String url, String json, String answer) {
-        try {
-            String result = rest.postForObject(
-                    context + url,
-                    jsonRequest(json),
-                    String.class);
-            assertJson(result, answer);
-        } catch (HttpStatusCodeException e) {
-            assertEquals(answer, e.getResponseBodyAsString());
-        }
+    private void assertPost(String url, String json, String expected) {
+        assertPost(200, url, json, expected);
     }
 
-    private void assertGet(String url, String answer) {
-        try {
-            String result = rest.getForObject(
-                    context + url,
-                    String.class);
-
-            assertJson(result, answer);
-        } catch (HttpStatusCodeException e) {
-            assertEquals(answer, e.getResponseBodyAsString());
-        }
+    private void assertPost(int status, String url, String json, String expected) {
+        String result = post(status, url, fix(json));
+        assertJson(expected, result);
     }
 
-    private void assertJson(String actual, String expected) {
+    private void assertPostError(int status, String url, String json, String expectedMessage) {
+        String result = post(status, url, fix(json));
+        assertError(expectedMessage, result);
+    }
+
+    private void assertGet(String url, String expected) {
+        String result = get(url);
+        assertJson(expected, result);
+    }
+
+    private void assertJson(String expected, String actual) {
         boolean isJson = actual.startsWith("{");
-        assertEquals(isJson ? fix2(JsonUtils.prettyPrint(actual)) : actual,
-                expected);
-    }
-
-    private HttpEntity jsonRequest(String json) {
-        return new HttpEntity(fix(json), new HttpHeaders(){{
-                setContentType(MediaType.APPLICATION_JSON);
-            }});
+        assertEquals(expected,
+                isJson ? fix2(JsonUtils.prettyPrint(actual)) : actual);
     }
 
     private String fix(String json) {

@@ -35,7 +35,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class GameProperties {
   
   private String type;
-  private int room;
+  private int room; // по сколько участников зарегается на каждый сервер, до его переключения на следующий
   private String startDay;
   private String endDay;
   private int finalistsCount;

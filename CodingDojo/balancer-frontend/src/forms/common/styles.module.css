@@ -29,7 +29,7 @@
 
 .inputWrap {
     position: relative;
-    margin-bottom: 47px;
+    margin-bottom: 27px;
 }
 
 .input {
@@ -37,7 +37,7 @@
     width: calc(100% - 30px);
     line-height: 16px;
     border: 1px solid var(--primary-color);
-    font-size: 12px;
+    font-size: 16px;
     padding: 15px;
     background: var(--main-bg-color);
     color: var(--title-bg-color);
@@ -69,7 +69,7 @@
 .submit {
     display: inline-block;
     width: 100%;
-    font-size: 15px;
+    font-size: 16px;
     text-transform: uppercase;
     padding: 23px 20px;
     background: #255465;
@@ -106,7 +106,7 @@
 }
 
 .checkBoxWrap {
-    padding: 21px 25px;
+    padding: 9px 25px;
     display: flex;
     align-items: flex-start;
 }
@@ -117,8 +117,7 @@
 
 .checkBoxLabel {
     color: var(--title-bg-color);
-    font-size: 12px;
-    text-decoration: underline;
+    font-size: 16px;
     font-weight: 300;
     cursor: pointer;
 }
@@ -142,6 +141,7 @@
 .forgotPasswordLink {
     display: flex;
     justify-content: flex-end;
+    text-decoration: underline;
     padding: 10px 25px 0;
 }
 

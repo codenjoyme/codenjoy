@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,24 +23,27 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.model.perks.*;
+import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -49,58 +52,7 @@ import static org.mockito.Mockito.*;
  * Date: 3/7/13
  * Time: 9:07 AM
  */
-public class BombermanTest {
-
-    public int SIZE = 5;
-    private Game game;
-    private Joystick hero;
-    private Level level;
-    private WallsImpl walls;
-    private GameSettings settings;
-    private EventListener listener;
-    private Dice meatChppperDice;
-    private Dice bombermanDice;
-    private Player player;
-    private List bombermans;
-    private Bomberman field;
-    private PrinterFactory printer = new PrinterFactoryImpl();
-
-    @Before
-    public void setUp() throws Exception {
-        meatChppperDice = mock(Dice.class);
-        bombermanDice = mock(Dice.class);
-
-        level = mock(Level.class);
-        canDropBombs(1);
-        bombsPower(1);
-        walls = mock(WallsImpl.class);
-        when(walls.iterator()).thenReturn(new LinkedList<Wall>().iterator());
-        settings = mock(GameSettings.class);
-        listener = mock(EventListener.class);
-
-        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
-        when(settings.getLevel()).thenReturn(level);
-        initBomberman();
-        givenBoard(SIZE);
-    }
-
-    private void initBomberman() {
-        dice(bombermanDice, 0, 0);
-        Hero hero = new Hero(level, bombermanDice);
-        when(settings.getBomberman(level)).thenReturn(hero);
-        this.hero = hero;
-    }
-
-    private void givenBoard(int size) {
-        when(settings.getBoardSize()).thenReturn(v(size));
-        field = new Bomberman(settings);
-        player = new Player(listener);
-        game = new Single(player, printer);
-        game.on(field);
-        dice(bombermanDice, 0, 0);
-        game.newGame();
-        hero = game.getJoystick();
-    }
+public class BombermanTest extends AbstractBombermanTest {
 
     @Test
     public void shouldBoard_whenStartGame() {
@@ -194,11 +146,6 @@ public class BombermanTest {
                 "☺    \n");
     }
 
-    private void assertBombermanAt(int x, int y) {
-        assertEquals(x, player.getHero().getX());
-        assertEquals(y, player.getHero().getY());
-    }
-
     @Test
     public void shouldBombermanWalkLeft() {
         hero.right();
@@ -249,13 +196,6 @@ public class BombermanTest {
                 "     \n" +
                 "     \n" +
                 "     \n");
-    }
-
-    private void gotoMaxUp() {
-        for (int y = 0; y <= SIZE + 1; y++) {
-            hero.up();
-            field.tick();
-        }
     }
 
     @Test
@@ -336,11 +276,6 @@ public class BombermanTest {
                 "     \n");
     }
 
-    private void canDropBombs(int countBombs) {
-        reset(level);
-        when(level.bombsCount()).thenReturn(countBombs);
-    }
-
     // проверить, что бомбермен не может бомб дропать больше, чем у него в level прописано
     @Test
     public void shouldOnlyTwoBombs_whenLevelApproveIt() {
@@ -400,7 +335,7 @@ public class BombermanTest {
                 "     \n" +
                 "☻    \n");
 
-        assertEquals(1, field.getBombs().size());
+        assertEquals(1, field.bombs().size());
 
         hero.right();
         field.tick();
@@ -518,10 +453,6 @@ public class BombermanTest {
                 "     \n" +
                 " Ѡ   \n");
         assertBombermanDie();
-    }
-
-    private void assertBombermanDie() {
-        assertTrue("Expected model over", game.isGameOver());
     }
 
     // после смерти ходить больше нельзя
@@ -723,10 +654,6 @@ public class BombermanTest {
         assertBombermanDie();
     }
 
-    private void assertBombermanAlive() {
-        assertFalse(game.isGameOver());
-    }
-
     @Test
     public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromDown() {
         hero.down();
@@ -869,20 +796,6 @@ public class BombermanTest {
         assertBombermanDie();
     }
 
-    private void gotoBoardCenter() {
-        for (int y = 0; y < SIZE / 2; y++) {
-            hero.up();
-            field.tick();
-            hero.right();
-            field.tick();
-        }
-    }
-
-    private void asrtBrd(String expected) {
-        assertEquals(expected, printer.getPrinter(
-                field.reader(), player).print());
-    }
-
     // появляются стенки, которые конфигурятся извне
     @Test
     public void shouldBombermanNotAtWall() {
@@ -962,37 +875,6 @@ public class BombermanTest {
             hero.right();
             field.tick();
         }
-    }
-
-    private void givenBoardWithWalls() {
-        givenBoardWithWalls(SIZE);
-    }
-
-    private void givenBoardWithWalls(int size) {
-        withWalls(new OriginalWalls(v(size)));
-        givenBoard(size);
-    }
-
-    private void givenBoardWithDestroyWalls() {
-        givenBoardWithDestroyWalls(SIZE);
-    }
-
-    private void givenBoardWithDestroyWalls(int size) {
-        withWalls(new DestroyWalls(new OriginalWalls(v(size))));
-        givenBoard(size);
-    }
-
-    private void withWalls(Walls walls) {
-        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
-    }
-
-    private void givenBoardWithOriginalWalls() {
-        givenBoardWithOriginalWalls(SIZE);
-    }
-
-    private void givenBoardWithOriginalWalls(int size) {
-        withWalls(new OriginalWalls(v(size)));
-        givenBoard(size);
     }
 
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
@@ -1126,10 +1008,6 @@ public class BombermanTest {
         assertBombermanAlive();
     }
 
-    private void bombsPower(int power) {
-        when(level.bombsPower()).thenReturn(power);
-    }
-
     // проверить, что разрыв бомбы длинной указанной в level
     @Test
     public void shouldChangeBombPower_to2() {
@@ -1173,28 +1051,6 @@ public class BombermanTest {
                 "☼☼☼☼☼☼☼☼☼\n");
     }
 
-    private void assertBombPower(int power, String expected) {
-        givenBoardWithOriginalWalls(9);
-        bombsPower(power);
-
-        hero.act();
-        goOut();
-        field.tick();
-
-        asrtBrd(expected);
-    }
-
-    private void goOut() {
-        hero.right();
-        field.tick();
-        hero.right();
-        field.tick();
-        hero.up();
-        field.tick();
-        hero.up();
-        field.tick();
-    }
-
     // я немогу модифицировать список бомб на доске, меняя getBombs
     // но список бомб, что у меня на руках обязательно синхронизирован с теми, что на поле
     @Test
@@ -1207,9 +1063,9 @@ public class BombermanTest {
         hero.right();
         field.tick();
 
-        List<Bomb> bombs1 = field.getBombs();
-        List<Bomb> bombs2 = field.getBombs();
-        List<Bomb> bombs3 = field.getBombs();
+        List<Bomb> bombs1 = field.bombs();
+        List<Bomb> bombs2 = field.bombs();
+        List<Bomb> bombs3 = field.bombs();
         assertSame(bombs1, bombs2);
         assertSame(bombs2, bombs3);
         assertSame(bombs3, bombs1);
@@ -1258,7 +1114,7 @@ public class BombermanTest {
         hero.right();
         field.tick();
 
-        List<Bomb> bombs1 = field.getBombs();
+        List<Bomb> bombs1 = field.bombs();
         assertEquals(1, bombs1.size());
 
         field.tick();
@@ -1266,7 +1122,7 @@ public class BombermanTest {
         field.tick();
         field.tick();
 
-        List<Bomb> bombs2 = field.getBombs();
+        List<Bomb> bombs2 = field.bombs();
         assertEquals(0, bombs2.size());
         assertEquals(0, bombs1.size());
         assertSame(bombs1, bombs2);
@@ -1283,9 +1139,9 @@ public class BombermanTest {
         field.tick();
         field.tick();
 
-        List<Blast> blasts1 = field.getBlasts();
-        List<Blast> blasts2 = field.getBlasts();
-        List<Blast> blasts3 = field.getBlasts();
+        List<Blast> blasts1 = field.blasts();
+        List<Blast> blasts2 = field.blasts();
+        List<Blast> blasts3 = field.blasts();
         assertSame(blasts1, blasts2);
         assertSame(blasts2, blasts3);
         assertSame(blasts3, blasts1);
@@ -1309,9 +1165,9 @@ public class BombermanTest {
     public void shouldNoChangeWall_whenUseBoardApi() {
         givenBoardWithWalls();
 
-        Walls walls1 = field.getWalls();
-        Walls walls2 = field.getWalls();
-        Walls walls3 = field.getWalls();
+        Walls walls1 = field.walls();
+        Walls walls2 = field.walls();
+        Walls walls3 = field.walls();
         assertNotSame(walls1, walls2);
         assertNotSame(walls2, walls3);
         assertNotSame(walls3, walls1);
@@ -1368,13 +1224,6 @@ public class BombermanTest {
                 "#҉# #\n" +
                 "H҉҉ #\n" +
                 "#H###\n");
-    }
-
-    private void dice(Dice dice, int... values) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int value : values) {
-            when = when.thenReturn(value);
-        }
     }
 
     // появляются чертики, их несоклько за игру
@@ -1528,24 +1377,9 @@ public class BombermanTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         Assert.assertTrue(game.isGameOver());
-        verify(listener).event(Events.KILL_BOMBERMAN);
+        verify(listener).event(Events.DIED);
     }
 
-    private void givenBoardWithMeatChopper(int size) {
-        dice(meatChppperDice, size - 2, size - 2);
-
-        Field temp = mock(Field.class);
-        when(temp.size()).thenReturn(size);
-        MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChppperDice);
-        bombermans = mock(List.class);
-        when(bombermans.contains(anyObject())).thenReturn(false);
-        when(temp.getBombermans()).thenReturn(bombermans);
-        withWalls(walls);
-        walls.regenerate();
-        givenBoard(size);
-
-        dice(meatChppperDice, 1, Direction.UP.value());  // Чертик будет упираться в стенку и стоять на месте
-    }
 
     // чертик умирает, если попадает под взывающуюся бомбу
     @Test
@@ -1632,7 +1466,7 @@ public class BombermanTest {
     public void shouldFireEventWhenKillBomberman() {
         shouldKillBoomberman_whenBombExploded();
 
-        verify(listener).event(Events.KILL_BOMBERMAN);
+        verify(listener).event(Events.DIED);
     }
 
     @Test
@@ -1674,25 +1508,6 @@ public class BombermanTest {
         verify(listener).event(Events.KILL_DESTROY_WALL);
     }
 
-    static class DestroyWallAt extends WallsDecorator {
-
-        public DestroyWallAt(int x, int y, Walls walls) {
-            super(walls);
-            walls.add(new DestroyWall(x, y));
-        }
-
-        @Override
-        public Wall destroy(int x, int y) {   // неразрушаемая стенка
-            return walls.get(x, y);
-        }
-
-    }
-
-    private void givenBoardWithDestroyWallsAt(int x, int y) {
-        withWalls(new DestroyWallAt(x, y, new WallsImpl()));
-        givenBoard(SIZE);
-    }
-
     @Test
     public void shouldFireEventWhenKillMeatChopper() {
         givenBoardWithMeatChopperAt(0, 0);
@@ -1714,26 +1529,6 @@ public class BombermanTest {
                 "x҉҉ ☺\n");
 
         verify(listener).event(Events.KILL_MEAT_CHOPPER);
-    }
-
-
-    static class MeatChopperAt extends WallsDecorator {
-
-        public MeatChopperAt(int x, int y, Walls walls) {
-            super(walls);
-            walls.add(new MeatChopper(x, y));
-        }
-
-        @Override
-        public Wall destroy(int x, int y) {   // неубиваемый монстрик
-            return walls.get(x, y);
-        }
-
-    }
-
-    private void givenBoardWithMeatChopperAt(int x, int y) {
-        withWalls(new MeatChopperAt(x, y, new WallsImpl()));
-        givenBoard(SIZE);
     }
 
     @Test
@@ -1909,6 +1704,7 @@ public class BombermanTest {
         bombsPower(5);
         withWalls(new DestroyWallAt(3, 0, new WallsImpl()));
         givenBoard(7);
+        when(bombermanDice.next(anyInt())).thenReturn(101); // don't drop perk by accident
 
         hero.act();
         hero.up();
@@ -2048,11 +1844,5 @@ public class BombermanTest {
                 "☼☼☼☼☼\n");
 
     }
-
-
-    // под разрущающейся стенкой может быть приз - это специальная стенка
-    // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
-    // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
-    // чертики тоже могут ставить бомбы
 
 }

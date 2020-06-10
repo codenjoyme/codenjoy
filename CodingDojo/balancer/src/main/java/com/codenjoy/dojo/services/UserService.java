@@ -45,19 +45,19 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User predefinedUser = predefinedUsers.get(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User predefinedUser = predefinedUsers.get(email);
         if (predefinedUser == null) {
-            return Optional.ofNullable(players.get(username))
+            return Optional.ofNullable(players.getByEmail(email))
                     .map(player -> buildUserDetails(player.getEmail(), player.getPassword(), ROLE_USER))
                     .orElse(null);
         }
         return new User(predefinedUser.getUsername(), predefinedUser.getPassword(), predefinedUser.getAuthorities());
     }
 
-    public static User buildUserDetails(String username, String password, Authority... roles) {
+    public static User buildUserDetails(String email, String password, Authority... roles) {
         return new User(
-                username,
+                email,
                 password,
                 Authority.get(roles));
     }

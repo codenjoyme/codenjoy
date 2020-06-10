@@ -47,6 +47,11 @@ _ELEMENTS = dict(
     # Meatchoopers
     MEAT_CHOPPER = '&',
     DEAD_MEAT_CHOPPER = 'x',
+    #Perks
+    BOMB_BLAST_RADIUS_INCREASE = '+',
+    BOMB_COUNT_INCREASE = 'c',
+    BOMB_IMMUNE = 'i',
+    BOMB_REMOTE_CONTROL = 'r',
     # Space
     NONE = ' '
 )
@@ -80,6 +85,7 @@ class Element:
     def __eq__(self, otherElement):
         return (self._name == otherElement._name and
                 self._char == otherElement._char)
+
 
 if __name__ == '__main__':
     raise RuntimeError("This module is not intended to be ran from CLI")

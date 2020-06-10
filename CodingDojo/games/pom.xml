@@ -31,6 +31,7 @@
         <maven-antrun.version>1.8</maven-antrun.version>
         <maven-license.version>2.0.0</maven-license.version>
         <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
 
         <user.resources>src/main/webapp/resources/user</user.resources>
         <client.sources>${user.resources}/${module.name}-servers.zip</client.sources>
@@ -214,6 +215,16 @@
                                 <followSymlinks>false</followSymlinks>
                             </fileset>
                         </filesets>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                    <configuration>
+                        <excludes>
+                            <exclude>**/logback.xml</exclude>
+                        </excludes>
                     </configuration>
                 </plugin>
                 <plugin>

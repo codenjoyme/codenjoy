@@ -11,7 +11,7 @@ const customSelectStyles = {
         borderRadius: 0,
         border:       0,
         padding:      '5px 0px',
-        fontSize:     '12px',
+        fontSize:     '16px',
         background:   'var(--main-bg-color)',
 
         '&:hover': {
@@ -23,7 +23,7 @@ const customSelectStyles = {
         ...provided,
         borderRadius: 0,
         border:       '1px solid var(--primary-color)',
-        fontSize:     '12px',
+        fontSize:     '16px',
         background:   'var(--main-bg-color)',
     }),
     option: provided => ({

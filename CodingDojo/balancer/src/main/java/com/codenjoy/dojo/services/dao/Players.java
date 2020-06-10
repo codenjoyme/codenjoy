@@ -32,7 +32,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toMap;
 
 public class Players {
 
@@ -41,6 +44,7 @@ public class Players {
     public Players(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS players (" +
+                        "id varchar(255), " +
                         "email varchar(255), " +
                         "phone varchar(255), " +
                         "first_name varchar(255), " +
@@ -78,6 +82,7 @@ public class Players {
 
     private Player getPlayer(ResultSet rs) throws SQLException {
         return new Player(
+                rs.getString("id"),
                 rs.getString("email"),
                 rs.getString("phone"),
                 rs.getString("first_name"),
@@ -94,10 +99,10 @@ public class Players {
         );
     }
 
-    public List<Player> getPlayers(List<String> emails) {
+    public List<Player> getPlayers(List<String> ids) {
         return selectPlayers(String.format(
-                "SELECT * FROM players WHERE email IN ('%s');",
-                String.join("','", emails)
+                "SELECT * FROM players WHERE id IN ('%s');",
+                String.join("','", ids)
         ));
     }
 
@@ -110,7 +115,7 @@ public class Players {
                             new ServerLocation(
                                 rs.getString("email"),
                                 rs.getString("phone"),
-                                null, // TODO установить это поле в сервисе
+                                rs.getString("id"),
                                 rs.getString("code"),
                                 rs.getString("server")));
                     }
@@ -119,7 +124,14 @@ public class Players {
         );
     }
 
-    public Player get(String email) {
+    public Player get(String id) {
+        return pool.select("SELECT * FROM players WHERE id = ?;",
+                new Object[]{id},
+                rs -> rs.next() ? getPlayer(rs) : null
+        );
+    }
+
+    public Player getByEmail(String email) {
         return pool.select("SELECT * FROM players WHERE email = ?;",
                 new Object[]{email},
                 rs -> rs.next() ? getPlayer(rs) : null
@@ -157,22 +169,77 @@ public class Players {
 
 
     public void create(Player player) {
-        pool.update("INSERT INTO players (first_name, last_name, password, " +
-                        "city, skills, comment, code, server, phone, email, approved, verification_code, verification_type) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);",
-                getObjects(player));
+        pool.update("INSERT INTO players (" +
+                            "id, " +
+                            "first_name, " +
+                            "last_name, " +
+                            "password, " +
+                            "city, " +
+                            "skills, " +
+                            "comment, " +
+                            "code, " +
+                            "server, " +
+                            "phone, " +
+                            "email, " +
+                            "approved, " +
+                            "verification_code, " +
+                            "verification_type) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
+                new Object[]{
+                        player.getId(),
+                        player.getFirstName(),
+                        player.getLastName(),
+                        player.getPassword(),
+                        player.getCity(),
+                        player.getSkills(),
+                        player.getComment(),
+                        player.getCode(),
+                        player.getServer(),
+                        player.getPhone(),
+                        player.getEmail(),
+                        player.getApproved(),
+                        player.getVerificationCode(),
+                        player.getVerificationType(),
+                });
     }
 
     public void update(Player player) {
-        pool.update("UPDATE players SET first_name = ?, last_name = ?, " +
-                        "password = ?, city = ?, skills = ?, comment = ?, " +
-                        "code = ?, server = ?, phone = ? WHERE email = ?;",
-                getObjectsForUpdate(player));
+        pool.update("UPDATE players SET " +
+                        "first_name = ?, " +
+                        "last_name = ?, " +
+                        "password = ?, " +
+                        "city = ?, " +
+                        "skills = ?, " +
+                        "comment = ?, " +
+                        "code = ?, " +
+                        "server = ?, " +
+                        "phone = ?, " +
+                        "email = ?, " +
+                        "approved = ?, " +
+                        "verification_code = ?, " +
+                        "verification_type = ? " +
+                        "WHERE id = ?;",
+                new Object[]{
+                        player.getFirstName(),
+                        player.getLastName(),
+                        player.getPassword(),
+                        player.getCity(),
+                        player.getSkills(),
+                        player.getComment(),
+                        player.getCode(),
+                        player.getServer(),
+                        player.getPhone(),
+                        player.getEmail(),
+                        player.getApproved(),
+                        player.getVerificationCode(),
+                        player.getVerificationType(),
+                        player.getId(),
+                });
     }
 
-    public void updateServer(String email, String server, String code) {
-        pool.update("UPDATE players SET server = ?, code = ? WHERE email = ?;",
-                server, code, email);
+    public void updateServer(String id, String server, String code) {
+        pool.update("UPDATE players SET server = ?, code = ? WHERE id = ?;",
+                server, code, id);
     }
 
     public void approveByPhone(String phone) {
@@ -185,45 +252,17 @@ public class Players {
                 verificationCode, verificationType, phone);
     }
 
-    private Object[] getObjects(Player player) {
-        return new Object[]{
-                player.getFirstName(),
-                player.getLastName(),
-                player.getPassword(),
-                player.getCity(),
-                player.getSkills(),
-                player.getComment(),
-                player.getCode(),
-                player.getServer(),
-                player.getPhone(),
-                player.getEmail(),
-                player.getApproved(),
-                player.getVerificationCode(),
-                player.getVerificationType(),
-        };
-    }
-
-    private Object[] getObjectsForUpdate(Player player) {
-        return new Object[]{
-                player.getFirstName(),
-                player.getLastName(),
-                player.getPassword(),
-                player.getCity(),
-                player.getSkills(),
-                player.getComment(),
-                player.getCode(),
-                player.getServer(),
-                player.getPhone(),
-                player.getEmail(),
-        };
-    }
-
-    public void remove(String email) {
-        pool.update("DELETE FROM players WHERE email = ?;",
-                new Object[]{email});
+    public void remove(String id) {
+        pool.update("DELETE FROM players WHERE id = ?;",
+                new Object[]{id});
     }
 
     public void removeAll() {
         pool.update("DELETE FROM players;");
+    }
+
+    public Map<String, Player> getPlayersMap(List<String> ids) {
+        return getPlayers(ids).stream()
+                .collect(toMap(Player::getId, player -> player));
     }
 }

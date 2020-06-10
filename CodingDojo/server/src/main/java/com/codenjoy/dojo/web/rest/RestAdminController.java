@@ -63,6 +63,15 @@ public class RestAdminController {
     private Registration registration;
     private PlayerGames playerGames;
     private SemifinalSettings semifinalSettings;
+    private GameService games;
+
+    @GetMapping("version")
+    @ResponseBody
+    public String version() {
+        List<String> list = games.getGameNames();
+        list.add(0, "engine");
+        return VersionReader.getCurrentVersions(list).toString();
+    }
 
     // TODO test me и вообще где это надо?
     @GetMapping("/player/all/groups")
@@ -109,7 +118,7 @@ public class RestAdminController {
             timerService.pause();
         }
 
-        return timerService.isPaused(); // TODO вот это странно, на вход идет enabled, а на выход paused = !enabled
+        return !timerService.isPaused();
     }
 
     // TODO test me
@@ -259,6 +268,22 @@ public class RestAdminController {
         validator.checkRoomName(roomName, CANT_BE_NULL);
 
         saveService.saveAll(roomName);
+    }
+
+    // TODO test me
+    @GetMapping("/player/{player}/remove")
+    @ResponseBody
+    public synchronized boolean removeUser(@PathVariable("player") String id) {
+        validator.checkPlayerId(id);
+
+        // удаляем сейвы
+        saveService.removeSave(id);
+
+        // и удаляем игрока с игрового сервера c его регистрацией
+        playerService.remove(id);
+        registration.remove(id);
+
+        return true;
     }
 
 }

@@ -93,13 +93,16 @@ function initCanvasesGame(contextPath, players, allPlayersScreen,
         playersList.forEach(function (player) {
             var id = player.id;
             var name = player.readableName;
-            var visible = (allPlayersScreen || !enablePlayerInfoLevel) ? 'none' : 'block';
-            templateData.push({name : name, id : id, visible : visible })
+            var levelVisible = (allPlayersScreen || !enablePlayerInfoLevel) ? 'none' : 'block';
+            var playerVisible  = (!enablePlayerInfo) ? 'none' : 'block';
+            templateData.push({
+                name : name,
+                id : id,
+                levelVisible : levelVisible,
+                playerVisible : playerVisible
+            });
         });
         $('#players_container script').tmpl(templateData).appendTo('#players_container');
-        if (!enablePlayerInfo) {
-            $(".player_info").hide();
-        }
     }
 
     function removeCanvases(playersList) {

@@ -8,8 +8,8 @@
 .elementContainer {
     display: flex;
     flex-direction: row;
-    width: 270px;
-    margin: 15px 0px;
+    width: 327px;
+    margin: 7px 0px;
 }
 
 .elementDescriptionContainer {
@@ -26,21 +26,20 @@
 .elementTitle {
     padding: 7px 10px;
     background-color: var(--block-bg-color);
-    font-family: 'Museo Sans Cyrl';
-    font-size: 13px;
-    font-weight: 300;
+    font-size: 15px;
+    font-weight: 330;
     color: var(--primary-color);
 }
 
 .elementDescription {
-    font-family: 'Museo Sans Cyrl';
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 200;
     line-height: 1.43;
     letter-spacing: normal;
     color: var(--title-bg-color);
     padding-left: 15px;
     padding-top: 10px;
+    padding-right: 15px;
 }
 
 @media all and (max-width: 930px) {

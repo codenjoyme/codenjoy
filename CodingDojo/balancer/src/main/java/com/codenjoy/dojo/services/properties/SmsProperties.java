@@ -31,11 +31,12 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @Configuration
-@RequiredArgsConstructor
 @ConfigurationProperties("sms")
 public class SmsProperties {
 
     private boolean enabled;
+    private String staticVerificationCode;
+    private String staticPassword;
     private SmsTextProperties text;
     private GatewayProperties gateway;
 

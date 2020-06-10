@@ -11,7 +11,10 @@
     background-image: url(./../../styles/images/layout/dark.jpg);
     background-size: cover;
     background-repeat: no-repeat;
-    background-position: center center;
+}
+
+b {
+    font-weight: 400;
 }
 
 .highligteUnderNotes,
@@ -47,8 +50,14 @@
 .boardExample {
     font-family: monospace;
     letter-spacing: 5px;
+    white-space: pre-wrap;
 }
 
 .copyConnection {
     cursor: pointer;
+}
+
+ul {
+    list-style-type: circle;
+    margin-left: 40px;
 }

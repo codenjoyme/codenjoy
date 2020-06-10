@@ -25,6 +25,7 @@ package com.codenjoy.dojo.snakebattle.model.hero;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
 
@@ -36,7 +37,7 @@ import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.snakebattle.model.DirectionUtils.getPointAt;
 import static java.util.stream.Collectors.toList;
 
-public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, Player> {
+public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tail>, Player> {
 
     private static final int MINIMUM_LENGTH = 2;
 
@@ -44,15 +45,12 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
     public static final boolean NEXT_TICK = !NOW;
 
     private LinkedList<Tail> elements;
-    private boolean alive;
     private Direction direction;
     private Direction newDirection;
     private int growBy;
-    private boolean active;
     private int stonesCount;
     private int flyingCount;
     private int furyCount;
-    private Player player;
     private boolean leaveApples;
     private Point lastTailPosition;
 
@@ -68,8 +66,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         leaveApples = false;
         this.direction = direction;
         newDirection = null;
-        alive = true;
-        active = false;
         stonesCount = 0;
         flyingCount = 0;
         furyCount = 0;
@@ -184,10 +180,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
                 stonesCount--;
             }
         }
-    }
-
-    private boolean isActiveAndAlive() {
-        return active && alive;
     }
 
     Direction getDirection() {
@@ -329,10 +321,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         elements.removeFirst();
     }
 
-    public boolean isAlive() {
-        return alive;
-    }
-
     public boolean isHeadIntersect(Hero enemy) {
         return enemy.head().equals(head()) ||
                 enemy.neck().equals(head()) ||
@@ -418,19 +406,6 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         growBy = 0;
     }
 
-    public void die() {
-        alive = false;
-        field.oneMoreDead(player);
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public int getStonesCount() {
         return stonesCount;
     }
@@ -479,25 +454,17 @@ public class Hero extends PlayerHero<Field> implements State<LinkedList<Tail>, P
         return elements.indexOf(pt);
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public void event(Object event) {
-        player.event(event);
-    }
-
     @Override
     public String toString() {
         return String.format("[%s,%s]", head().getX(), head().getY());
-    }
-
-    public void setAlive(boolean alive) {
-        this.alive = alive;
     }
 
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
 
+    @Override
+    public int scores() {
+        return size();
+    }
 }

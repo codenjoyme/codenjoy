@@ -23,9 +23,11 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 public interface GameSettings {
+
     Level getLevel();
 
     Walls getWalls(Bomberman board);
@@ -33,4 +35,24 @@ public interface GameSettings {
     Hero getBomberman(Level level);
 
     Parameter<Integer> getBoardSize();
+
+    Parameter<Boolean> isMultiple();
+
+    Parameter<Integer> getPlayersPerRoom();
+
+    RoundSettingsWrapper getRoundSettings();
+
+    Parameter<Integer> diePenalty();
+
+    Parameter<Integer> killOtherHeroScore();
+
+    Parameter<Integer> killMeatChopperScore();
+
+    Parameter<Integer> killWallScore();
+
+    Parameter<Integer> winRoundScore();
+
+    Parameter<Integer> getDestroyWallCount();
+
+    Parameter<Integer> getMeatChoppersCount();
 }

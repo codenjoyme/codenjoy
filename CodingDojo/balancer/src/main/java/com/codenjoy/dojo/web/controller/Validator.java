@@ -51,7 +51,8 @@ public class Validator {
     public static final String EMAIL = "^[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
     public static final String GAME = "^[A-Za-z0-9+_.-]{1,50}$";
     public static final String CODE = "^[0-9]{1,50}$";
-    public static final String MD5 = "^[A-Za-f0-9]{32}$";
+    public static final String MD5 = "^[A-Fa-f0-9]{32}$";
+    public static final String ID = "^[a-z0-9]{1,200}$";
     public static final String DAY = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$";
     public static final String PHONE_NUMBER = "^(\\+38|38)?0([0-9]{2})([0-9]{7})$";
 
@@ -59,6 +60,7 @@ public class Validator {
     @Autowired private ConfigProperties properties;
 
     private final Pattern email;
+    private final Pattern id;
     private final Pattern gameName;
     private final Pattern code;
     private final Pattern md5;
@@ -67,11 +69,21 @@ public class Validator {
 
     public Validator() {
         email = Pattern.compile(EMAIL);
+        id = Pattern.compile(ID);
         gameName = Pattern.compile(GAME);
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
         day = Pattern.compile(DAY);
         phoneNumber = Pattern.compile(PHONE_NUMBER);
+    }
+
+    public void checkId(String input, boolean canBeNull) {
+        boolean empty = StringUtils.isEmpty(input);
+        if (!(empty && canBeNull ||
+                !empty && id.matcher(input).matches()))
+        {
+            throw new IllegalArgumentException("Player id is invalid: " + input);
+        }
     }
 
     public void checkEmail(String input, boolean canBeNull) {
@@ -141,7 +153,7 @@ public class Validator {
         checkEmail(email, Validator.CANT_BE_NULL);
         checkCode(code, Validator.CANT_BE_NULL);
 
-        Player player = players.get(email);
+        Player player = players.getByEmail(email);
         if (player == null || !code.equals(player.getCode())) {
             throw new IllegalArgumentException("Player code is invalid: " + code);
         }
@@ -182,13 +194,21 @@ public class Validator {
         }
     }
 
-    public String phoneNormalizer(String phone) {
-        if (phone.startsWith(PHONE_COUNTRY_CODE_PREFIX)) {
+    public String phoneNormalizer(String phone) {  // TODO работает только для UA
+         if (phone.startsWith(PHONE_COUNTRY_CODE_PREFIX)) {
             return PHONE_PLUS_PREFIX + phone;
         } else if(phone.startsWith("0")) {
             return PHONE_FULL_COUNTRY_CODE_PREFIX + phone;
         } else {
             return phone;
+        }
+    }
+
+    public void checkEmailOrId(String email, boolean canBeNull) {
+        try {
+            checkEmail(email, canBeNull);
+        } catch (IllegalArgumentException e) {
+            checkId(email, canBeNull);
         }
     }
 }

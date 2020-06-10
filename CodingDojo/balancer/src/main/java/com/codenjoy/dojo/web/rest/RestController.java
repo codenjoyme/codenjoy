@@ -25,19 +25,18 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.GameServer;
-import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.dao.Players;
+import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
 import com.codenjoy.dojo.services.entity.ServerLocation;
-import com.codenjoy.dojo.web.rest.dto.PhoneCodeDTO;
-import com.codenjoy.dojo.web.rest.dto.PhoneDTO;
-import com.codenjoy.dojo.web.rest.dto.PlayersDTO;
-import com.codenjoy.dojo.web.rest.dto.VerificationDTO;
-import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
-import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
+import com.codenjoy.dojo.services.entity.server.Disqualified;
+import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.web.controller.ErrorTicketService;
 import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.Validator;
+import com.codenjoy.dojo.web.rest.dto.*;
+import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +48,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
@@ -73,10 +70,13 @@ public class RestController {
     public static final String CONFIRM = "/confirm";
     public static final String UPDATE = "/update";
     public static final String SCORE = "/score";
+    public static final String GAME_SETTINGS = "/game/settings";
+    public static final String VERSION = "/version";
 
     private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
     @Autowired private Players players;
+    @Autowired private Scores scores;
     @Autowired private TimerService timer;
     @Autowired private Dispatcher dispatcher;
     @Autowired private Validator validator;
@@ -85,11 +85,16 @@ public class RestController {
     @Autowired private GameServers gameServers;
     @Autowired private ConfigProperties config;
     @Autowired private PasswordEncoder passwordEncoder;
-    @Autowired private SecurityContextAuthenticator securityContextAuthenticator;
+    @Autowired private SecurityContextAuthenticator authenticator;
     @Autowired private RegistrationService registrationService;
-    @Autowired private SmsService smsService;
+    @Autowired private SmsService sms;
 
-    // TODO test me
+    @GetMapping(VERSION)
+    @ResponseBody
+    public String version() {
+        return VersionReader.getCurrentVersions(Arrays.asList("engine")).toString();
+    }
+
     @GetMapping(SCORE + "/day/{day}")
     @ResponseBody
     public List<PlayerScore> dayScores(@PathVariable("day") String day) {
@@ -105,12 +110,18 @@ public class RestController {
         return dispatcher.getFinalists();
     }
 
+    @GetMapping(SCORE + "/winners")
+    @ResponseBody
+    public List<PlayerScore> markWinners() {
+        return dispatcher.markWinners();
+    }
+
     // TODO test me
     @PostMapping(SCORE + "/disqualify")
     @ResponseBody
     public boolean disqualify(@RequestBody PlayersDTO input) {
         List<String> players = input.getPlayers();
-        players.forEach(email -> validator.checkEmail(email, CANT_BE_NULL));
+        players.forEach(email -> validator.checkEmailOrId(email, CANT_BE_NULL));
 
         dispatcher.disqualify(players);
 
@@ -120,17 +131,17 @@ public class RestController {
     // TODO test me
     @GetMapping(SCORE + "/disqualified")
     @ResponseBody
-    public Collection<String> disqualified() {
+    public Collection<Disqualified> disqualified() {
         return dispatcher.disqualified();
     }
 
     @PostMapping(REGISTER)
     @ResponseBody
     public ServerLocation register(@RequestBody Player player, HttpServletRequest request) {
-        String email = player.getEmail();
+        player.setCallback(getIp(request));
 
         validator.all(
-                () -> validator.checkEmail(email, CANT_BE_NULL),
+                () -> validator.checkEmail(player.getEmail(), CANT_BE_NULL),
                 () -> validator.checkPhoneNumber(player.getPhone(), CANT_BE_NULL),
                 () -> validator.checkString("FirstName", player.getFirstName()),
                 () -> validator.checkString("LastName", player.getLastName()),
@@ -139,55 +150,48 @@ public class RestController {
                 () -> validator.checkString("Skills", player.getSkills())
         );
 
-        String phone = validator.phoneNormalizer(player.getPhone());
+        player.setPhone(validator.phoneNormalizer(player.getPhone()));
 
-        if (players.getCode(email) != null || players.getByPhone(phone).isPresent()) {
-            throw new IllegalArgumentException("User already registered");
+        if (players.getCode(player.getEmail()) != null) {
+            throw new IllegalArgumentException("User with this email is already registered");
         }
 
-        return doIt(new DoItOnServers<ServerLocation>() {
+        if (players.getByPhone(player.getPhone()).isPresent()) {
+            throw new IllegalArgumentException("User with this phone number is already registered");
+        }
+
+        String md5Password = player.getPassword();
+
+        Player result = doIt(new DoItOnServers<Player>() {
             @Override
-            public ServerLocation onGame() {
-                return dispatcher.registerNew(
-                        player.getEmail(),
-                        phone,
-                        getFullName(player),
-                        player.getPassword(),
-                        getIp(request)
-                );
+            public Player onGame() {
+                // ничего не делаем, ведь надо дождаться верификации по смс в confirmRegistration
+                return player;
             }
 
             @Override
-            public ServerLocation onBalancer(ServerLocation location) {
-                if (location != null) {
-                    player.setCode(location.getCode());
-                    player.setServer(location.getServer());
-                    String verificationCode = registrationService.generateVerificationCode();
-                    players.create(new Player(
-                            player.getEmail(),
-                            phone,
-                            player.getFirstName(),
-                            player.getLastName(),
-                            passwordEncoder.encode(player.getPassword()),
-                            player.getCity(),
-                            player.getSkills(),
-                            player.getComment(),
-                            player.getCode(),
-                            player.getServer(),
-                            Player.NOT_APPROVED,
-                            verificationCode,
-                            RegistrationService.VerificationType.REGISTRATION.name()
-                    ));
-                    smsService.sendSmsTo(player.getPhone(), verificationCode, SmsService.SmsType.REGISTRATION);
-                }
-                securityContextAuthenticator.login(request, player.getEmail(), player.getPassword());
-                return location;
+            public Player onBalancer(Player player) {
+                player.setId(registrationService.generateId());
+                player.setPassword(passwordEncoder.encode(md5Password));
+                // code = code(md5(bcrypt(password)))
+                player.setCode(Hash.getCode(player.getId(), player.getPassword()));
+
+                String verificationCode = registrationService.generateVerificationCode();
+                player.setApproved(Player.NOT_APPROVED);
+                player.setVerificationCode(verificationCode);
+                player.setVerificationType(RegistrationService.VerificationType.REGISTRATION.name());
+
+                players.create(player);
+
+                sms.sendSmsTo(player.getPhone(), verificationCode, SmsService.SmsType.REGISTRATION);
+
+                authenticator.login(request, player.getEmail(), md5Password);
+
+                return player;
             }
         });
-    }
 
-    private String getFullName(Player player) {
-        return player.getFirstName() + " " + player.getLastName();
+        return new ServerLocation(result);
     }
 
     private String getIp(HttpServletRequest request) {
@@ -198,10 +202,8 @@ public class RestController {
         return result;
     }
 
-    interface OnLogin<T> {
-        T onSuccess(ServerLocation data);
-
-        T onFailed(ServerLocation data);
+    interface OnLogin {
+        Player onSuccess(Player player);
     }
 
     interface DoItOnServers<T> {
@@ -218,28 +220,17 @@ public class RestController {
         Player player = validator.checkPlayerCode(email, code); // TODO test me
 
         // TODO test me when not found on balancer
-        return dispatcher.exists(player.getEmail());
+        return dispatcher.exists(player);
     }
 
     @GetMapping(PLAYER + "/{player}/join/{code}")
     @ResponseBody
-    public ServerLocation joinToGameServer(@PathVariable("player") String email,
+    public ServerLocation joinToGameServer(@PathVariable("player") String id,
                                       @PathVariable("code") String code,
                                       HttpServletRequest request)
     {
-        ServerLocation location = tryLogin(new Player(email, code), true, new OnLogin<ServerLocation>() {
-            @Override
-            public ServerLocation onSuccess(ServerLocation data) {
-                ServerLocation serverLocation = recreatePlayerIfNeeded(data, email, getIp(request));
-                return serverLocation;
-            }
-
-            @Override
-            public ServerLocation onFailed(ServerLocation data) {
-                // TODO test me
-                throw new LoginException("User email or password/code is incorrect");
-            }
-        });
+        ServerLocation location = tryLogin(new Player(id, code, getIp(request)), true,
+                current -> recreatePlayerIfNeeded(current));
 
         if (code.equals(location.getCode())) {
             return null;
@@ -255,29 +246,22 @@ public class RestController {
     {
         Player player = validator.checkPlayerCode(email, code); // TODO test me
 
-        return game.remove(
-                player.getServer(),
-                player.getEmail(),
-                player.getCode());
+        return game.remove(player.getServer(), player.getId());
     }
 
     @PostMapping(LOGIN)
     @ResponseBody
     public ServerLocation login(@RequestBody Player player, HttpServletRequest request) {
-        return tryLogin(player, false, new OnLogin<ServerLocation>(){
+        player.setCallback(getIp(request));
 
-            @Override
-            public ServerLocation onSuccess(ServerLocation data) {
-                ServerLocation serverLocation = recreatePlayerIfNeeded(data, player.getEmail(), getIp(request));
-                securityContextAuthenticator.login(request, player.getEmail(), player.getPassword());
-                return serverLocation;
-            }
+        String md5Password = player.getPassword();
 
-            @Override
-            public ServerLocation onFailed(ServerLocation data) {
-                // TODO test me
-                throw new LoginException("User email or password/code is incorrect");
-            }
+        return tryLogin(player, false, p -> {
+            Player result = recreatePlayerIfNeeded(p);
+
+            authenticator.login(request, p.getEmail(), md5Password);
+
+            return result;
         });
     }
 
@@ -285,98 +269,83 @@ public class RestController {
     @PostMapping(UPDATE)
     @ResponseBody
     public ServerLocation update(@RequestBody Player player, HttpServletRequest request) {
-        return tryLogin(player, false, new OnLogin<ServerLocation>(){
+        player.setCallback(getIp(request));
 
-            @Override
-            public ServerLocation onSuccess(ServerLocation location) {
-                String server = location.getServer();
-                String email = location.getEmail();
-                Player old = players.get(email);
+        return tryLogin(player, false, current -> {
+            String server = current.getServer();
+            String id = current.getId();
 
-                if (StringUtils.isNotEmpty(player.getPassword())
-                        && !player.getPassword().equals(old.getPassword()))
-                {
-                    if (game.existsOnServer(server, email)) {
-                        game.remove(server, email, location.getCode());
-                    }
-
-                    String newPassword = player.getPassword();
-                    player.setCode(Hash.getCode(email, newPassword));
+            if (StringUtils.isNotEmpty(player.getPassword())
+                    && !player.getPassword().equals(current.getPassword()))
+            {
+                if (game.existsOnServer(server, id)) {
+                    game.remove(server, id);
                 }
 
-                player.resetNullFields(old);
-                players.update(player);
-
-                return recreatePlayerIfNeeded(location, email, getIp(request));
+                // тут пароль в md5 виде приведенном в такое состояние фронтом
+                String md5 = player.getPassword();
+                // мы его еще разочек захешируем
+                String hashed = passwordEncoder.encode(md5);
+                // и подсчитаем code(md5(bcrypt(password)))
+                player.setCode(Hash.getCode(id, hashed));
             }
 
-            @Override
-            public ServerLocation onFailed(ServerLocation data) {
-                throw new LoginException("User email or password/code is incorrect");
-            }
+            player.resetNullFields(current);
+            players.update(player);
+
+            return recreatePlayerIfNeeded(current);
         });
     }
 
-    private ServerLocation recreatePlayerIfNeeded(ServerLocation current, String email, String callback) {
-        return doIt(new DoItOnServers<ServerLocation>() {
+    private Player recreatePlayerIfNeeded(Player current) {
+        return doIt(new DoItOnServers<Player>() {
             @Override
-            public ServerLocation onGame() {
+            public Player onGame() {
                 // TODO test not exists - remove from other and create
-                return dispatcher.registerIfNotExists(
-                        current.getServer(),
-                        current.getEmail(),
-                        current.getPhone(),
-                        getFullName(players.get(current.getEmail())),
-                        current.getCode(),
-                        callback);
+                return dispatcher.registerIfNotExists(current);
             }
 
             @Override
-            public ServerLocation onBalancer(ServerLocation updated) {
+            public Player onBalancer(Player updated) {
                 if (updated == null) {
                     // TODO test me
                     return current;
-                } else {
-                    // TODO test me
                 }
 
-                players.updateServer(email, updated.getServer(), updated.getCode());
-
+                // TODO test me
+                players.updateServer(current.getId(), updated.getServer(), updated.getCode());
                 return updated;
             }
         });
     }
 
-    private <T> T tryLogin(Player player, boolean ignorePass, OnLogin<T> onLogin) {
+    private ServerLocation tryLogin(Player player, boolean ignorePass, OnLogin onLogin) {
         String email = player.getEmail();
-        String phone = player.getPhone();
         String password = player.getPassword();
         String code = player.getCode();
 
         validator.checkEmail(email, CANT_BE_NULL); // TODO test me
         validator.checkCode(code, CAN_BE_NULL); // TODO test me
 
-        Player exist = players.get(email);
-        if (!isValid(exist, password, code, ignorePass)) {
-            return onLogin.onFailed(new ServerLocation(email, phone, null, null, null));
+        Player exist = players.getByEmail(email);
+
+        if (exist == null) {
+            throw new LoginException("User with this email not found");
         }
 
-        String server = players.getServerByEmail(email);
+        if (exist.getApproved() == Player.NOT_APPROVED) {
+            throw new LoginException("User is not verified");
+        }
 
-        return onLogin.onSuccess(
-                new ServerLocation(email,
-                        phone,
-                        Hash.getId(email, config.getEmailHash()),
-                        exist.getCode(),
-                        server
-                ));
+        if (!isAuthorized(exist, password, code, ignorePass)) {
+            throw new LoginException("Wrong password/code for this email");
+        }
+
+        Player result = onLogin.onSuccess(exist);
+        return new ServerLocation(result);
     }
 
-    private boolean isValid(Player exist, String password, String code, boolean ignorePass) {
-        if (exist == null || exist.getApproved() == Player.NOT_APPROVED) {
-            return false;
-        }
-
+    private boolean isAuthorized(Player exist, String password, String code, boolean ignorePass) {
         if (ignorePass) { // TODO test me
             validator.checkNull("Password", password);
         } else {
@@ -398,14 +367,14 @@ public class RestController {
             result = action.onGame();
         } catch (Exception e) {
             logger.error("Error at game server", e);
-            errors.add("At game server: " + GlobalExceptionHandler.getPrintableMessage(e));
+            errors.add("At game server: " + ErrorTicketService.getPrintableMessage(e));
         }
 
         try {
             result = action.onBalancer(result);
         } catch (Exception e) {
             logger.error("Error at balancer", e);
-            errors.add("At balancer: " + GlobalExceptionHandler.getPrintableMessage(e));
+            errors.add("At balancer: " + ErrorTicketService.getPrintableMessage(e));
         }
 
         if (!errors.isEmpty()) {
@@ -415,34 +384,57 @@ public class RestController {
         return result;
     }
 
-    @GetMapping(REMOVE + "/{player}")
+    // TODO test me
+    @GetMapping(REMOVE + "/{player}/on/{whereToRemove}")
     @ResponseBody
-    public boolean remove(@PathVariable("player") String email) {
+    public List<String> remove(@PathVariable("player") String id, @PathVariable("whereToRemove") int whereToRemove) {
+        List<String> status = new LinkedList<>();
 
-        Player player = players.get(email);
-        if (player == null) {
-            // TODO test me
-            throw new IllegalArgumentException("Attempt to delete non-existing user");
+        tryRemoveFromGame((whereToRemove & 0b0001) == 0b0001, id, status);
+        tryRemoveFromBalancer((whereToRemove & 0b0010) == 0b0010, id, status);
+
+        return status;
+    }
+
+    private void tryRemoveFromBalancer(boolean remove, String id, List<String> status) {
+        String message = "At balancer server: ";
+        try {
+            Player player = players.get(id);
+
+            if (remove && player != null) {
+                scores.remove(player.getId());
+                players.remove(player.getId());
+
+                message = message + "removed {true} ";
+            } else {
+                message = message + "removed {} ";
+            }
+
+            boolean exists = players.get(id) != null;
+            message = message + "exists: " + exists;
+
+        } catch (Exception e) {
+            message = message + ErrorTicketService.getPrintableMessage(e);
         }
+        status.add(message);
+    }
 
-        return doIt(new DoItOnServers<Boolean>() {
-            @Override
-            public Boolean onGame() {
-                Boolean result = game.remove(player.getServer(), player.getEmail(), player.getCode());
-                return result != null && result;
+    private void tryRemoveFromGame(boolean remove, String id, List<String> status) {
+        String message = "At game server: ";
+        try {
+            if (remove) {
+                Map<String, Boolean> map = dispatcher.removeFromEveryGameServer(id);
+                message = message + "removed: " + map.toString() + " ";
+            } else {
+                message = message + "removed: {} ";
             }
 
-            @Override
-            public Boolean onBalancer(Boolean removed) {
-                if (removed != null && removed) {
-//                    scores.delete(email);
-                    players.remove(email);
-                } else {
-                    // TODO test me
-                }
-                return removed;
-            }
-        });
+            Map<String, Boolean> map = dispatcher.existsOnGameServers(id);
+            message = message + "exists: " + map;
+        } catch (Exception e) {
+            message = message + ErrorTicketService.getPrintableMessage(e);
+        }
+        status.add(message);
     }
 
     // TODO test me
@@ -455,14 +447,14 @@ public class RestController {
     // 400 for bad registration and validation error
     @ExceptionHandler({IllegalArgumentException.class, UsernameNotFoundException.class})
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
-        return new ResponseEntity<>(GlobalExceptionHandler.getPrintableMessage(e),
+        return new ResponseEntity<>(ErrorTicketService.getPrintableMessage(e),
                 HttpStatus.BAD_REQUEST);
     }
 
     // 401 for bad login
     @ExceptionHandler({LoginException.class})
     public ResponseEntity<String> handleFailedLoginException(LoginException e) {
-        return new ResponseEntity<>(GlobalExceptionHandler.getPrintableMessage(e),
+        return new ResponseEntity<>(ErrorTicketService.getPrintableMessage(e),
                 HttpStatus.UNAUTHORIZED);
     }
 
@@ -482,6 +474,22 @@ public class RestController {
     @ResponseBody
     public ConfigProperties getSettings() {
         return config;
+    }
+
+    // TODO test me
+    @GetMapping(GAME_SETTINGS + "/get")
+    @ResponseBody
+    public List<GameSettings> getGameSettings() {
+        return dispatcher.getGameSettings();
+    }
+
+    // TODO test me
+    @PostMapping(GAME_SETTINGS + "/set")
+    @ResponseBody
+    public boolean saveGameSettings(@RequestBody GameSettings gameSettings) {
+        dispatcher.updateGameSettings(gameSettings);
+
+        return true;
     }
 
     // TODO test me
@@ -523,28 +531,31 @@ public class RestController {
     @GetMapping(CONTEST + "/enable/get")
     @ResponseBody
     public boolean getContestStarted() {
-        return timer.isPaused();
+        return !timer.isPaused();
     }
 
     // TODO test me
-    @GetMapping(CACHE + "/clear")
+    @GetMapping(CACHE + "/clear/{mask}")
     @ResponseBody
-    public boolean invalidateCache() {
-        dispatcher.clearCache();
+    public boolean invalidateCache(@PathVariable("mask") int whatToClean) {
+        dispatcher.clearCache(whatToClean);
         return true;
     }
 
     @PostMapping(REGISTER + "/confirm")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ServerLocation> confirmRegistration(@RequestBody PhoneCodeDTO input) {
-        return ResponseEntity.ok(registrationService.
-                confirmRegistration(phoneValidateNormalize(input.getPhone()), input.getCode()));
+        Player updatedOnBalancer = registrationService.confirmRegistration(phoneValidateNormalize(input.getPhone()), input.getCode());
+
+        Player createdOnGame = dispatcher.registerNew(updatedOnBalancer);
+
+        return ResponseEntity.ok(new ServerLocation(createdOnGame));
     }
 
     @GetMapping(CONFIRM + "/{player}/code")
     @ResponseBody
     public VerificationDTO getVerificationCode(@PathVariable("player") String email) {
-        return new VerificationDTO(players.get(email));
+        return new VerificationDTO(players.getByEmail(email));
     }
 
     @PostMapping(REGISTER + "/resend")
@@ -564,12 +575,14 @@ public class RestController {
     @PostMapping(REGISTER + "/validate-reset")
     public ResponseEntity<String> validateResetPasswordCode(@RequestBody PhoneCodeDTO input) {
         String phone = phoneValidateNormalize(input.getPhone());
+
         boolean isResetAllowed = registrationService
                 .validateCodeResetPassword(phone, input.getCode());
-        if(isResetAllowed) {
+
+        if (isResetAllowed) {
             Player player = players.getByPhone(phone).orElseThrow(() -> new IllegalArgumentException("User not found"));
-            if (game.existsOnServer(player.getServer(), player.getEmail())) {
-                game.remove(player.getServer(), player.getEmail(), player.getCode());
+            if (game.existsOnServer(player.getServer(), player.getId())) {
+                game.remove(player.getServer(), player.getId());
             }
             registrationService.resetPassword(phone);
             return ResponseEntity.ok("success");

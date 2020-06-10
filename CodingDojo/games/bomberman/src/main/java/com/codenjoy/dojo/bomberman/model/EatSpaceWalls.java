@@ -24,9 +24,13 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
+
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO протестить класс
 
@@ -70,7 +74,7 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
         if (count > this.count.getValue()) { // TODO и удаление лишних
             for (int i = 0; i < (count - this.count.getValue()); i++) {
                 DestroyWall meatChopper = destroyWalls.remove(0);
-                walls.destroy(meatChopper.getX(), meatChopper.getY());
+                walls.destroy(meatChopper);
             }
             return;
         }
@@ -78,11 +82,10 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
         int c = 0;
         int maxc = 10000;
         while (count < this.count.getValue() && c < maxc) {  // TODO и это
-            int x = dice.next(board.size());
-            int y = dice.next(board.size());
+            Point pt = PointImpl.random(dice, board.size());
 
-            if (!board.isBarrier(x, y, WITH_MEAT_CHOPPERS)) {
-                walls.add(new DestroyWall(x, y));
+            if (!board.isBarrier(pt, WITH_MEAT_CHOPPERS)) {
+                walls.add(new DestroyWall(pt));
                 count++;
             }
 

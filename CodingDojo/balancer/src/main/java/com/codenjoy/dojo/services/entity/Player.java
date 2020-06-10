@@ -23,14 +23,17 @@ package com.codenjoy.dojo.services.entity;
  */
 
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 @Getter
+@Setter
 public class Player {
 
     public static final int APPROVED = 1;
     public static final int NOT_APPROVED = 0;
 
+    private String id;
     private String email;
     private String phone;
     private String firstName;
@@ -41,6 +44,7 @@ public class Player {
     private String comment;
     private String code;
     private String server;
+    private String callback;
     private int approved;
     private String verificationCode;
     private String verificationType;
@@ -49,28 +53,22 @@ public class Player {
         // do nothing
     }
 
-    public Player(String email, String phone, String password) {
+    public Player(String email, String phone) {
         this.email = email;
         this.phone = phone;
-        this.password = password;
     }
 
-    public Player(String email, String code) {
+    public Player(String email, String code, String callback) {
         this.email = email;
         this.code = code;
+        this.callback = callback;
     }
 
-    public Player(String email, String phone, String code, String server) {
-        this.email = email;
-        this.phone = phone;
-        this.code = code;
-        this.server = server;
-    }
-
-    public Player(String email, String phone, String firstName, String lastName,
+    public Player(String id, String email, String phone, String firstName, String lastName,
                   String password, String city, String skills,
                   String comment, String code, String server,
                   int approved, String verificationCode, String verificationType) {
+        this.id = id;
         this.email = email;
         this.phone = phone;
         this.firstName = firstName;
@@ -89,7 +87,8 @@ public class Player {
     @Override
     public String toString() {
         return "Player{" +
-                "email='" + email + '\'' +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -105,19 +104,8 @@ public class Player {
                 '}';
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setServer(String server) {
-        this.server = server;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public void resetNullFields(Player player) {
+        id = StringUtils.isEmpty(id) ? player.id : id;
         email = StringUtils.isEmpty(email) ? player.email : email;
         phone = StringUtils.isEmpty(phone) ? player.phone : phone;
         firstName = StringUtils.isEmpty(firstName) ? player.firstName : firstName;
@@ -131,5 +119,9 @@ public class Player {
 
         verificationCode = StringUtils.isEmpty(verificationCode) ? player.verificationCode : verificationCode;
         verificationType = StringUtils.isEmpty(verificationType) ? player.verificationType : verificationType;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 }

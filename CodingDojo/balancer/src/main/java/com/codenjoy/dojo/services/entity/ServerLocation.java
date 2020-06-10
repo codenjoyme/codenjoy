@@ -28,13 +28,21 @@ import lombok.Getter;
 public class ServerLocation {
 
     private String email;
-    private String phone;
+    private String phone; // TODO я не уверен, что это сейчас надо тут - глянуть на фронт
     private String id;
     private String code;
     private String server;
 
     public ServerLocation() {
         // do nothing
+    }
+
+    public ServerLocation(Player player) {
+        this(player.getEmail(),
+                player.getPhone(),
+                player.getId(),
+                player.getCode(),
+                player.getServer());
     }
 
     public ServerLocation(String email, String phone, String id, String code, String server) {

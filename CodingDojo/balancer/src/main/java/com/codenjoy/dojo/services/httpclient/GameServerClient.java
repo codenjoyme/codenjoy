@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.httpclient;
  * #L%
  */
 
+import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import feign.Headers;
@@ -40,12 +41,19 @@ public interface GameServerClient {
     @RequestLine("GET /codenjoy-contest/rest/game/{game}/players")
     List<PlayerInfo> getPlayerInfos(@Param("game") String game);
 
+    @RequestLine("GET /codenjoy-contest/rest/admin/room/{game}/settings/{game}")
+    PParameters getGameSettings(@Param("game") String game);
+
+    @RequestLine("POST /codenjoy-contest/rest/admin/room/{game}/settings/{game}")
+    @Headers({"Content-Type: application/json"})
+    void setGameSettings(@Param("game") String game, PParameters parameters);
+
     @RequestLine("POST /codenjoy-contest/rest/player/create")
     @Headers({"Content-Type: application/json"})
     String registerPlayer(PlayerDetailInfo player);
 
-    @RequestLine("GET /codenjoy-contest/rest/player/{email}/exists")
-    Boolean checkPlayerExists(@Param("email") String email);
+    @RequestLine("GET /codenjoy-contest/rest/player/{id}/exists")
+    Boolean checkPlayerExists(@Param("id") String id);
 
     @RequestLine("GET /codenjoy-contest/rest/admin/scores/clear")
     void clearScores();
@@ -53,6 +61,6 @@ public interface GameServerClient {
     @RequestLine("GET /codenjoy-contest/rest/admin/game/enabled/{enabled}")
     Boolean checkGameEnabled(@Param("enabled") Boolean enabled);
 
-    @RequestLine("GET /codenjoy-contest/rest/player/{id}/remove/{code}")
-    Boolean removePlayer(@Param("id") String id, @Param("code") String code);
+    @RequestLine("GET /codenjoy-contest/rest/admin/player/{id}/remove")
+    Boolean removePlayer(@Param("id") String id);
 }

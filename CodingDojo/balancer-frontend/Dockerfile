@@ -3,6 +3,7 @@ FROM mhart/alpine-node:10.10.0 as builder
 WORKDIR /app
 COPY package.json /app
 COPY package-lock.json /app
+COPY static-pages /app
 RUN npm install
 COPY . /app
 RUN npm run build
