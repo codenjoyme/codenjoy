@@ -31,16 +31,13 @@ class ForgotPasswordForm extends Component {
             }
             resetPasswordStart(e);
         }
-
+        const errorMsg = _.get(error, 'errorMsg');
         return (
             <div className={ formWrap }>
                 <h1 className={ title }>Увійти</h1>
-                { _.get(error, 'system') && (
+                { errorMsg&& (
                     <div className={ systemError }>
-                        Через непередбачуваний політ діда Мороза антени було
-                        пошкоджено. <br />
-                        Як тільки пошкодження будуть усунені, сервіс буде
-                        доступним.
+                        {errorMsg}
                     </div>
                 ) }
                 <Formik
@@ -55,7 +52,7 @@ class ForgotPasswordForm extends Component {
                                     name='email'
                                     placeholder='Електронна пошта'
                                     type='email'
-                                    errors={ _.get(error, 'credentials') }
+                                    errors={ errorMsg }
                                     component={ CustomInputComponent }
                                     disabled={ isResetValidate }
                                 />
@@ -66,7 +63,7 @@ class ForgotPasswordForm extends Component {
                                             name='phone'
                                             placeholder='Телефон'
                                             type='phone'
-                                            errors={ _.get(error, 'credentials') }
+                                            errors={ errorMsg }
                                             component={ CustomInputComponent }
                                             disabled={ isResetValidate }
                                         />

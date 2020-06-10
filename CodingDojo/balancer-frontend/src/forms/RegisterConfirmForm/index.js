@@ -30,17 +30,14 @@ class RegisterConfirmForm extends Component {
     }
     render() {
         const { registerConfirmStart, registerErrors, isLoading } = this.props;
-
+        const errorMsg = _.get(registerErrors, 'errorMsg');
         return (
             <div className={ formWrap }>
                 <h1 className={ title }>Новий Гравець</h1>
-                { _.get(registerErrors, 'system') && (
+                { errorMsg && (
                     <div className={ systemError }>
                         <img src={ errorImg } alt='' />
-                        Через непередбачуваний політ діда Мороза антени було
-                        пошкоджено. <br />
-                        Як тільки пошкодження будуть усунені, сервіс буде
-                        доступним.
+                        {errorMsg}
                     </div>
                 ) }
                 <Formik
@@ -56,7 +53,7 @@ class RegisterConfirmForm extends Component {
                                     component={ CustomInputComponent }
                                     errors={ _.get(
                                         registerErrors,
-                                        'credentials',
+                                        'errorMsg',
                                     ) }
                                 />
                             </div>

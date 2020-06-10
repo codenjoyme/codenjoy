@@ -30,17 +30,14 @@ const LoginSchema = Yup.object().shape({
 class LoginForm extends Component {
     render() {
         const { login, loginErrors, isLoading } = this.props;
-
+        const error = _.get(loginErrors, 'errorMsg');
         return (
             <div className={ formWrap }>
                 <h1 className={ title }>Увійти</h1>
-                { _.get(loginErrors, 'system') && (
+                { error && (
                     <div className={ systemError }>
                         <img src={ errorImg } alt='' />
-                        Через непередбачуваний політ діда Мороза антени було
-                        пошкоджено. <br />
-                        Як тільки пошкодження будуть усунені, сервіс буде
-                        доступним.
+                        { error }
                     </div>
                 ) }
                 <Formik
@@ -55,14 +52,14 @@ class LoginForm extends Component {
                                     name='email'
                                     placeholder='Електронна пошта'
                                     type='email'
-                                    errors={ _.get(loginErrors, 'credentials') }
+                                    errors={ error }
                                     component={ CustomInputComponent }
                                 />
                                 <Field
                                     name='password'
                                     placeholder='Пароль'
                                     type='password'
-                                    errors={ _.get(loginErrors, 'credentials') }
+                                    errors={ error }
                                     component={ CustomInputComponent }
                                 />
                                 <button
