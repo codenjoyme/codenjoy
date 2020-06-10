@@ -447,15 +447,13 @@ public class RestController {
     // 400 for bad registration and validation error
     @ExceptionHandler({IllegalArgumentException.class, UsernameNotFoundException.class})
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
-        return new ResponseEntity<>(ErrorTicketService.getPrintableMessage(e),
-                HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     // 401 for bad login
     @ExceptionHandler({LoginException.class})
     public ResponseEntity<String> handleFailedLoginException(LoginException e) {
-        return new ResponseEntity<>(ErrorTicketService.getPrintableMessage(e),
-                HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 
     // TODO test me
