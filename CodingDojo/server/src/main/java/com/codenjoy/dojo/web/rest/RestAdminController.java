@@ -63,6 +63,15 @@ public class RestAdminController {
     private Registration registration;
     private PlayerGames playerGames;
     private SemifinalSettings semifinalSettings;
+    private GameService games;
+
+    @GetMapping("version")
+    @ResponseBody
+    public String version() {
+        List<String> gameNames = games.getGameNames();
+        gameNames.add(0, "engine");
+        return VersionReader.getCurrentVersion(gameNames.toArray(new String[0])).toString();
+    }
 
     // TODO test me и вообще где это надо?
     @GetMapping("/player/all/groups")

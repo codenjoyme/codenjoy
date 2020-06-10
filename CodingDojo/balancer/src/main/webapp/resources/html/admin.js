@@ -313,6 +313,21 @@ var getSettings = function(gameType) {
     });
 };
 
+var getVersions = function(name) {
+    _ajax('balancer-server-version', {
+        type: 'GET',
+        url: server('balancer') + '/version'
+    });
+
+    _ajax('game-server-version', {
+        type: 'GET',
+        url: server('game') + '/admin/version',
+        headers: {
+            "Authorization": "Basic " + auth()
+        },
+    });
+};
+
 var setSettings = function(settings) {
     _ajax('settings', {
         type: 'POST',
@@ -648,4 +663,6 @@ $(document).ready(function() {
 
     var phone = '+380' + generate('0123456789', 9);
     changePhone(phone);
+
+    getVersions();
 });

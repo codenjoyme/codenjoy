@@ -596,4 +596,9 @@ public class RestAdminControllerTest {
                         "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[true],\"type\":\"checkbox\",\"value\":\"true\"}]}",
                 settings2.toString());
     }
+
+    @Test // TODO закончить после того как пойму, почему не запускаются эти тесты
+    public void shouldGetVersion() {
+        assertEquals("{}", get("/rest/admin/version"));
+    }
 }

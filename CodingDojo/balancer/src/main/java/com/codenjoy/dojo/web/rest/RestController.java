@@ -74,6 +74,7 @@ public class RestController {
     public static final String UPDATE = "/update";
     public static final String SCORE = "/score";
     public static final String GAME_SETTINGS = "/game/settings";
+    public static final String VERSION = "/version";
 
     private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
@@ -91,7 +92,13 @@ public class RestController {
     @Autowired private RegistrationService registrationService;
     @Autowired private SmsService sms;
 
-    // TODO test me
+    @GetMapping(VERSION)
+    @ResponseBody
+    public String version() {
+        return VersionReader.getCurrentVersion("engine",
+                config.getGame().getType()).toString();
+    }
+
     @GetMapping(SCORE + "/day/{day}")
     @ResponseBody
     public List<PlayerScore> dayScores(@PathVariable("day") String day) {
