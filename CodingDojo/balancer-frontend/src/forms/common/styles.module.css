@@ -125,9 +125,9 @@
 .systemError {
     padding: 24px 24px 0;
     background: var(--block-bg-color);
-    font-size: 16px;
-    font-weight: 200;
-    color: var(--primary-color);
+    font-size: 18px;
+    font-weight: 400;
+    color: #d35d47;
 }
 
 .systemError img {
