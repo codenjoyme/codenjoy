@@ -52,72 +52,7 @@ import static org.mockito.Mockito.*;
  * Date: 3/7/13
  * Time: 9:07 AM
  */
-public class BombermanTest {
-
-    public int SIZE = 5;
-    private Game game;
-    private Joystick hero;
-    private Level level;
-    private WallsImpl walls;
-    private GameSettings settings;
-    private EventListener listener;
-    private Dice meatChppperDice;
-    private Dice bombermanDice;
-    private Player player;
-    private List bombermans;
-    private Bomberman field;
-    private final PrinterFactory printer = new PrinterFactoryImpl();
-
-    @Before
-    public void setUp() {
-        meatChppperDice = mock(Dice.class);
-        bombermanDice = mock(Dice.class);
-
-        level = mock(Level.class);
-        canDropBombs(1);
-        bombsPower(1);
-        walls = mock(WallsImpl.class);
-        when(walls.iterator()).thenReturn(Collections.emptyIterator());
-        settings = mock(GameSettings.class);
-        listener = mock(EventListener.class);
-
-        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
-        when(settings.getLevel()).thenReturn(level);
-        when(settings.getRoundSettings()).thenReturn(getRoundSettings());
-        when(settings.killOtherHeroScore()).thenReturn(v(200));
-        when(settings.killMeatChopperScore()).thenReturn(v(100));
-        when(settings.killWallScore()).thenReturn(v(10));
-
-        initBomberman();
-        givenBoard(SIZE);
-        PerksSettingsWrapper.clear();
-    }
-
-    private void initBomberman() {
-        dice(bombermanDice, 0, 0);
-        Hero hero = new Hero(level, bombermanDice);
-        when(settings.getBomberman(level)).thenReturn(hero);
-        this.hero = hero;
-    }
-
-    public static RoundSettingsWrapper getRoundSettings() {
-        return new DefaultGameSettings(mock(Dice.class)).getRoundSettings();
-    }
-
-    private void givenBoard(int size) {
-        when(settings.getBoardSize()).thenReturn(v(size));
-        field = new Bomberman(settings);
-        player = new Player(listener, getRoundSettings().roundsEnabled());
-        game = new Single(player, printer);
-        game.on(field);
-        dice(bombermanDice, 0, 0);
-        game.newGame();
-        hero = game.getJoystick();
-    }
-
-    private SimpleParameter<Boolean> getRoundsEnabled() {
-        return new SimpleParameter<>(false);
-    }
+public class BombermanTest extends AbstractBombermanTest {
 
     @Test
     public void shouldBoard_whenStartGame() {
@@ -211,11 +146,6 @@ public class BombermanTest {
                 "☺    \n");
     }
 
-    private void assertBombermanAt(int x, int y) {
-        assertEquals(x, player.getHero().getX());
-        assertEquals(y, player.getHero().getY());
-    }
-
     @Test
     public void shouldBombermanWalkLeft() {
         hero.right();
@@ -266,13 +196,6 @@ public class BombermanTest {
                 "     \n" +
                 "     \n" +
                 "     \n");
-    }
-
-    private void gotoMaxUp() {
-        for (int y = 0; y <= SIZE + 1; y++) {
-            hero.up();
-            field.tick();
-        }
     }
 
     @Test
@@ -351,11 +274,6 @@ public class BombermanTest {
                 "     \n" +
                 "2☻   \n" +
                 "     \n");
-    }
-
-    private void canDropBombs(int countBombs) {
-        reset(level);
-        when(level.bombsCount()).thenReturn(countBombs);
     }
 
     // проверить, что бомбермен не может бомб дропать больше, чем у него в level прописано
@@ -535,10 +453,6 @@ public class BombermanTest {
                 "     \n" +
                 " Ѡ   \n");
         assertBombermanDie();
-    }
-
-    private void assertBombermanDie() {
-        assertEquals("Expected game over", true, game.isGameOver());
     }
 
     // после смерти ходить больше нельзя
@@ -740,10 +654,6 @@ public class BombermanTest {
         assertBombermanDie();
     }
 
-    private void assertBombermanAlive() {
-        assertFalse(game.isGameOver());
-    }
-
     @Test
     public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromDown() {
         hero.down();
@@ -886,20 +796,6 @@ public class BombermanTest {
         assertBombermanDie();
     }
 
-    private void gotoBoardCenter() {
-        for (int y = 0; y < SIZE / 2; y++) {
-            hero.up();
-            field.tick();
-            hero.right();
-            field.tick();
-        }
-    }
-
-    private void asrtBrd(String expected) {
-        assertEquals(expected, printer.getPrinter(
-                field.reader(), player).print());
-    }
-
     // появляются стенки, которые конфигурятся извне
     @Test
     public void shouldBombermanNotAtWall() {
@@ -979,37 +875,6 @@ public class BombermanTest {
             hero.right();
             field.tick();
         }
-    }
-
-    private void givenBoardWithWalls() {
-        givenBoardWithWalls(SIZE);
-    }
-
-    private void givenBoardWithWalls(int size) {
-        withWalls(new OriginalWalls(v(size)));
-        givenBoard(size);
-    }
-
-    private void givenBoardWithDestroyWalls() {
-        givenBoardWithDestroyWalls(SIZE);
-    }
-
-    private void givenBoardWithDestroyWalls(int size) {
-        withWalls(new DestroyWalls(new OriginalWalls(v(size))));
-        givenBoard(size);
-    }
-
-    private void withWalls(Walls walls) {
-        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
-    }
-
-    private void givenBoardWithOriginalWalls() {
-        givenBoardWithOriginalWalls(SIZE);
-    }
-
-    private void givenBoardWithOriginalWalls(int size) {
-        withWalls(new OriginalWalls(v(size)));
-        givenBoard(size);
     }
 
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
@@ -1131,20 +996,16 @@ public class BombermanTest {
     public void shouldWallProtectsBomberman2() {
         assertBombPower(5,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                        "☼       ☼\n" +
-                        "☼҉☼ ☼ ☼ ☼\n" +
-                        "☼҉      ☼\n" +
-                        "☼҉☼ ☼ ☼ ☼\n" +
-                        "☼҉ ☺    ☼\n" +
-                        "☼҉☼ ☼ ☼ ☼\n" +
-                        "☼҉҉҉҉҉҉ ☼\n" +
-                        "☼☼☼☼☼☼☼☼☼\n");
+                "☼       ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉      ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉ ☺    ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉҉҉҉҉҉ ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
         assertBombermanAlive();
-    }
-
-    private void bombsPower(int power) {
-        when(level.bombsPower()).thenReturn(power);
     }
 
     // проверить, что разрыв бомбы длинной указанной в level
@@ -1152,64 +1013,42 @@ public class BombermanTest {
     public void shouldChangeBombPower_to2() {
         assertBombPower(2,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                        "☼       ☼\n" +
-                        "☼ ☼ ☼ ☼ ☼\n" +
-                        "☼       ☼\n" +
-                        "☼ ☼ ☼ ☼ ☼\n" +
-                        "☼҉ ☺    ☼\n" +
-                        "☼҉☼ ☼ ☼ ☼\n" +
-                        "☼҉҉҉    ☼\n" +
-                        "☼☼☼☼☼☼☼☼☼\n");
+                "☼       ☼\n" +
+                "☼ ☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼ ☼ ☼ ☼ ☼\n" +
+                "☼҉ ☺    ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉҉҉    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
     }
 
     @Test
     public void shouldChangeBombPower_to3() {
         assertBombPower(3,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                        "☼       ☼\n" +
-                        "☼ ☼ ☼ ☼ ☼\n" +
-                        "☼       ☼\n" +
-                        "☼҉☼ ☼ ☼ ☼\n" +
-                        "☼҉ ☺    ☼\n" +
-                        "☼҉☼ ☼ ☼ ☼\n" +
-                        "☼҉҉҉҉   ☼\n" +
-                        "☼☼☼☼☼☼☼☼☼\n");
+                "☼       ☼\n" +
+                "☼ ☼ ☼ ☼ ☼\n" +
+                "☼       ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉ ☺    ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉҉҉҉   ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
     }
 
     @Test
     public void shouldChangeBombPower_to6() {
         assertBombPower(6,
                 "☼☼☼☼☼☼☼☼☼\n" +
-                        "☼҉      ☼\n" +
-                        "☼҉☼ ☼ ☼ ☼\n" +
-                        "☼҉      ☼\n" +
-                        "☼҉☼ ☼ ☼ ☼\n" +
-                        "☼҉ ☺    ☼\n" +
-                        "☼҉☼ ☼ ☼ ☼\n" +
-                        "☼҉҉҉҉҉҉҉☼\n" +
-                        "☼☼☼☼☼☼☼☼☼\n");
-    }
-
-    private void assertBombPower(int power, String expected) {
-        givenBoardWithOriginalWalls(9);
-        bombsPower(power);
-
-        hero.act();
-        goOut();
-        field.tick();
-
-        asrtBrd(expected);
-    }
-
-    private void goOut() {
-        hero.right();
-        field.tick();
-        hero.right();
-        field.tick();
-        hero.up();
-        field.tick();
-        hero.up();
-        field.tick();
+                "☼҉      ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉      ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉ ☺    ☼\n" +
+                "☼҉☼ ☼ ☼ ☼\n" +
+                "☼҉҉҉҉҉҉҉☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
     }
 
     // я немогу модифицировать список бомб на доске, меняя getBombs
@@ -1387,13 +1226,6 @@ public class BombermanTest {
                 "#H###\n");
     }
 
-    private void dice(Dice dice, int... values) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int value : values) {
-            when = when.thenReturn(value);
-        }
-    }
-
     // появляются чертики, их несоклько за игру
     // каждый такт чертики куда-то рендомно муваются
     // если бомбермен и чертик попали в одну клетку - бомбермен умирает
@@ -1548,21 +1380,6 @@ public class BombermanTest {
         verify(listener).event(Events.DIED);
     }
 
-    private void givenBoardWithMeatChopper(int size) {
-        dice(meatChppperDice, size - 2, size - 2);
-
-        Field temp = mock(Field.class);
-        when(temp.size()).thenReturn(size);
-        MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChppperDice);
-        bombermans = mock(List.class);
-        when(bombermans.contains(anyObject())).thenReturn(false);
-        when(temp.heroes(ALL)).thenReturn(bombermans);
-        withWalls(walls);
-        walls.regenerate();
-        givenBoard(size);
-
-        dice(meatChppperDice, 1, Direction.UP.value());  // Чертик будет упираться в стенку и стоять на месте
-    }
 
     // чертик умирает, если попадает под взывающуюся бомбу
     @Test
@@ -1691,11 +1508,6 @@ public class BombermanTest {
         verify(listener).event(Events.KILL_DESTROY_WALL);
     }
 
-    private void givenBoardWithDestroyWallsAt(int x, int y) {
-        withWalls(new DestroyWallAt(x, y, new WallsImpl()));
-        givenBoard(SIZE);
-    }
-
     @Test
     public void shouldFireEventWhenKillMeatChopper() {
         givenBoardWithMeatChopperAt(0, 0);
@@ -1717,11 +1529,6 @@ public class BombermanTest {
                 "x҉҉ ☺\n");
 
         verify(listener).event(Events.KILL_MEAT_CHOPPER);
-    }
-
-    private void givenBoardWithMeatChopperAt(int x, int y) {
-        withWalls(new MeatChopperAt(x, y, new WallsImpl()));
-        givenBoard(SIZE);
     }
 
     @Test
@@ -2037,322 +1844,5 @@ public class BombermanTest {
                 "☼☼☼☼☼\n");
 
     }
-
-    // под разрущающейся стенкой может быть приз - это специальная стенка
-    // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
-    // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
-    // чертики тоже могут ставить бомбы
-
-    // Perks related test here
-    @Test
-    public void shouldPerkBeDropped_whenWallIsDestroyed() {
-        givenBoardWithDestroyWalls(6);
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 3);
-        PerksSettingsWrapper.setDropRatio(20); // 20%
-        when(bombermanDice.next(anyInt())).thenReturn(10, 30); // must drop 1 perk
-
-        hero.act();
-        field.tick();
-        hero.up();
-        field.tick();
-        hero.up();
-        field.tick();
-        hero.right();
-        field.tick();
-        field.tick();
-
-        asrtBrd("######\n" +
-                "# # ##\n" +
-                "# ☺  #\n" +
-                "#҉# ##\n" +
-                "+҉҉  #\n" +
-                "#H####\n");
-    }
-
-    @Test
-    public void shouldBombermanAcquirePerk_whenMoveToFieldWithPerk() {
-        // BBRI = Bomb Blast Radius Increase perk
-
-        givenBoardWithDestroyWalls(6);
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
-        PerksSettingsWrapper.setDropRatio(20); // 20%
-        when(bombermanDice.next(anyInt())).thenReturn(10); // must drop 2 perks
-        hero.act();
-        field.tick();
-        hero.right();
-        field.tick();
-        hero.right();
-        field.tick();
-        field.tick();
-        field.tick();
-
-        asrtBrd("######\n" +
-                "# # ##\n" +
-                "#    #\n" +
-                "#҉# ##\n" +
-                "+҉҉☺ #\n" +
-                "#+####\n");
-
-        field.tick();
-
-        asrtBrd("######\n" +
-                "# # ##\n" +
-                "#    #\n" +
-                "# # ##\n" +
-                "+  ☺ #\n" +
-                "#+####\n");
-
-        // go for perk
-        hero.left();
-        field.tick();
-        hero.left();
-        field.tick();
-        hero.left();
-        field.tick();
-
-        asrtBrd("######\n" +
-                "# # ##\n" +
-                "#    #\n" +
-                "# # ##\n" +
-                "☺    #\n" +
-                "#+####\n");
-
-        assertEquals("Hero had to acquire new perk", 1, player.getHero().getPerks().size());
-
-    }
-
-    @Test
-    public void shouldPerkBeDeactivated_whenTimeout() {
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
-        PerksSettingsWrapper.setDropRatio(20);
-        player.getHero().addPerk(new BombBlastRadiusIncrease(4,3));
-        assertEquals("Hero had to acquire new perk", 1, player.getHero().getPerks().size());
-
-        field.tick();
-        field.tick();
-        field.tick();
-
-        assertEquals("Hero had to loose perk", 0, player.getHero().getPerks().size());
-    }
-
-    @Test
-    public void shouldBombBlastRadiusIncrease_whenBBRIperk() {
-        givenBoardWithDestroyWalls(6);
-        player.getHero().addPerk(new BombBlastRadiusIncrease(4,3));
-
-        hero.act();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-
-        asrtBrd("#H####\n" +
-                "#҉# ##\n" +
-                "#҉   #\n" +
-                "#҉# ##\n" +
-                "HѠ҉҉҉H\n" +
-                "#H####\n");
-    }
-
-    @Test
-    public void shouldBombCountIncrease_whenBCIperk() {
-        // Bomb Count Increase perk
-        hero.act();
-        // obe bomb by default on lel 1
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                "☻    \n");
-
-        hero.right();
-        field.tick();
-        hero.act();
-        // no more bombs :(
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                "4☺   \n");
-
-        // add perk that gives 1+3 = 4 player's bombs in total on the board
-        player.getHero().addPerk(new BombCountIncrease(3,3));
-        hero.act();
-        hero.right();
-        field.tick();
-        hero.act();
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                "34☻  \n");
-
-        hero.right();
-        field.tick();
-        hero.act();
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                "234☻ \n");
-
-        hero.right();
-        field.tick();
-        hero.act();
-        // 4 bombs and no more
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                "1234☺\n");
-
-    }
-
-    @Test
-    public void shouldHeroKeepAlive_whenBIperk() {
-        // Bomb Immune perk
-        hero.act();
-        hero.right();
-        field.tick();
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                "4☺   \n");
-
-        player.getHero().addPerk(new BombImmune(6));
-
-        field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "҉    \n" +
-                "҉☺   \n");
-
-        hero.act();
-        field.tick();
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-                " ☻   \n");
-
-        field.tick();
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "     \n" +
-//                " 3☺  \n");
-                " ☻   \n");
-
-        field.tick();
-        field.tick();
-        field.tick();
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                " ҉   \n" +
-                "҉Ѡ҉  \n");
-    }
-
-    @Test
-    public void shouldBombBlastOnAction_whenBRCperk() {
-    // Bomb remote control (BRC)
-
-        when(level.bombsCount()).thenReturn(3);
-        player.getHero().addPerk(new BombRemoteControl(2));
-
-        hero.act();
-        hero.right();
-        field.tick();
-//        hero.act();
-//        field.tick();
-        hero.up();
-        field.tick();
-
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                " ☺   \n" +
-                "5    \n");
-
-        hero.act();
-        field.tick();
-
-        asrtBrd("     \n" +
-                "     \n" +
-                "     \n" +
-                "҉☻   \n" +
-                "҉҉   \n");
-
-        hero.up();
-        field.tick();
-        hero.left();
-        field.tick();
-
-        asrtBrd("     \n" +
-                "     \n" +
-                "☺    \n" +
-                " 5   \n" +
-                "     \n");
-
-        hero.act();
-        field.tick();
-        field.tick();
-
-        asrtBrd("     \n" +
-                "     \n" +
-                "☻    \n" +
-                "     \n" +
-                "     \n");
-
-        hero.right();
-        field.tick();
-        hero.act();
-        field.tick();
-        hero.right();
-        field.tick();
-
-        asrtBrd("     \n" +
-                "     \n" +
-                "33☺  \n" +
-                "     \n" +
-                "     \n");
-
-    }
-
-    static class DestroyWallAt extends WallsDecorator {
-
-        public DestroyWallAt(int x, int y, Walls walls) {
-            super(walls);
-            walls.add(new DestroyWall(x, y));
-        }
-
-        @Override
-        public Wall destroy(Point pt) {   // неразрушаемая стенка
-            return walls.get(pt);
-        }
-
-    }
-
-    static class MeatChopperAt extends WallsDecorator {
-
-        public MeatChopperAt(int x, int y, Walls walls) {
-            super(walls);
-            walls.add(new MeatChopper(x, y));
-        }
-
-        @Override
-        public Wall destroy(Point pt) {   // неубиваемый монстрик
-            return walls.get(pt);
-        }
-
-    }
-
 
 }
