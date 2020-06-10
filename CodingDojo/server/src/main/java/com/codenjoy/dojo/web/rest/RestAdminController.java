@@ -68,9 +68,9 @@ public class RestAdminController {
     @GetMapping("version")
     @ResponseBody
     public String version() {
-        List<String> gameNames = games.getGameNames();
-        gameNames.add(0, "engine");
-        return VersionReader.getCurrentVersion(gameNames.toArray(new String[0])).toString();
+        List<String> list = games.getGameNames();
+        list.add(0, "engine");
+        return VersionReader.getCurrentVersions(list).toString();
     }
 
     // TODO test me и вообще где это надо?

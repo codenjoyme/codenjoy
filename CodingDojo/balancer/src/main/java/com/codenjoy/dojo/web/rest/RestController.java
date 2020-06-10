@@ -95,8 +95,7 @@ public class RestController {
     @GetMapping(VERSION)
     @ResponseBody
     public String version() {
-        return VersionReader.getCurrentVersion("engine",
-                config.getGame().getType()).toString();
+        return VersionReader.getCurrentVersion("engine");
     }
 
     @GetMapping(SCORE + "/day/{day}")

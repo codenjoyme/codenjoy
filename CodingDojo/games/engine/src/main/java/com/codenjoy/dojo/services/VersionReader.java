@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 @UtilityClass
@@ -35,10 +35,9 @@ public class VersionReader {
 
     public static final String NO_VERSION = "no version";
 
-    public static JSONObject getCurrentVersion(String... gameNames) {
+    public static JSONObject getCurrentVersions(List<String> gameNames) {
         return new JSONObject(){{
-            Arrays.stream(gameNames).forEach(
-                    name -> put(name, VersionReader.getCurrentVersion(name)));
+            gameNames.forEach(name -> put(name, VersionReader.getCurrentVersion(name)));
         }};
     }
 
