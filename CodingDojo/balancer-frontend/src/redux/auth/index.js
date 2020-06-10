@@ -137,20 +137,33 @@ export function* loginFormSaga() {
                 credentials,
             );
 
+
             if (!response.code || !response.email || !response.server) {
-                yield put(loginFail({ system: true }));
+                yield put(loginFail({ errorMsg: getError(response) }));
             } else {
                 yield put(authenticate(response));
                 yield put(loginSuccess());
                 yield call(history.replace, book.board);
             }
         } catch (err) {
-            const failParams =
-                err.status === 401 ? { credentials: true } : { system: true };
-
-            yield put(loginFail(failParams));
+            yield put(loginFail({
+              errorMsg: getError(err),
+            }));
         }
     }
+}
+
+function getError(err) {
+  if (!err) { return 'Щось пішло не так'; }
+  if (typeof err === 'string') {
+    return err;
+  } else if (err && err.responseText) {
+    return err.responseText;
+  } else if (err.message) {
+    return err.message;
+  }
+
+  return err;
 }
 
 export function* authenticateSaga() {
