@@ -16,7 +16,7 @@ import {
     setId,
     removeId,
 } from '../../utils';
-import { getError } from 'helpers';
+import { getErrorObject } from 'helpers';
 
 /**
  * Constants
@@ -140,16 +140,14 @@ export function* loginFormSaga() {
 
 
             if (!response.code || !response.email || !response.server) {
-                yield put(loginFail({ errorMsg: getError(response) }));
+                yield put(loginFail(yield getErrorObject(response)));
             } else {
                 yield put(authenticate(response));
                 yield put(loginSuccess());
                 yield call(history.replace, book.board);
             }
         } catch (err) {
-            yield put(loginFail({
-              errorMsg: getError(err),
-            }));
+            yield put(loginFail(yield getErrorObject(err)));
         }
     }
 }

@@ -15,6 +15,7 @@ import {
     RESET_VALIDATE_SUCCESS,
     RESET_VALIDATE_FAIL,
 } from './index';
+import { getErrorObject } from 'helpers';
 
 
 export const resetPasswordStart = payload => ({
@@ -45,12 +46,6 @@ export const resetPasswordValidateFail = errors => ({
     payload: errors,
 });
 
-const generalErrorNotification = () => {
-    toast.error('Щось пішло не так, спробуйте ще раз!', {
-        position: toast.POSITION.TOP_RIGHT,
-    })
-};
-
 /**
  * Saga
  **/
@@ -73,10 +68,7 @@ export function* resetPasswordSaga({payload}) {
         yield put(resetPasswordSuccess());
 
     } catch (err) {
-        const failParams =
-            err.status === 400 ? { credentials: true } : { system: true };
-        yield call(generalErrorNotification);
-        yield put(resetPasswordFail(failParams));
+        yield put(resetPasswordFail(yield getErrorObject(err)));
     }
 }
 
@@ -97,10 +89,7 @@ export function* resetPasswordValidateSaga({payload}) {
         yield put(resetPasswordValidateSuccess());
         yield call(history.replace, book.login);
     } catch (err) {
-        const failParams =
-            err.status === 400 ? { credentials: true } : { system: true };
-        yield call(generalErrorNotification);
-        yield put(resetPasswordValidateFail(failParams));
+        yield put(resetPasswordValidateFail(yield getErrorObject(err)));
     }
 }
 

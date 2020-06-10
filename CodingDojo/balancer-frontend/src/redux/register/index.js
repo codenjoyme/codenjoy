@@ -8,6 +8,7 @@ import { book } from '../../routes';
 import { fetchAPI } from '../../utils';
 import { authenticate } from '../auth';
 import {watchReset, watchResetValidate} from './reset-password';
+import { getErrorObject } from 'helpers';
 /**
  * Constants
  **/
@@ -143,12 +144,6 @@ export const registerResendFail = errors => ({
 
 const getPhone = state => state.register.submittedPhone;
 
-const generalErrorNotification = () => {
-    toast.error('Щось пішло не так, спробуйте ще раз!', {
-        position: toast.POSITION.TOP_RIGHT,
-    })
-};
-
 /**
  * Saga
  **/
@@ -165,16 +160,12 @@ export function* registerFormSaga({payload}) {
             body,
         );
         if (!response.code) {
-            yield call(generalErrorNotification);
-            yield put(registerFail({ credentials: true }));
+            yield put(registerFail(yield getErrorObject(response)));
         } else {
             yield put(registerSuccess());
         }
     } catch (err) {
-        const failParams =
-            err.status === 400 ? { credentials: true } : { system: true };
-        yield call(generalErrorNotification);
-        yield put(registerFail(failParams));
+        yield put(registerFail(yield getErrorObject(err)));
     }
 }
 
@@ -189,17 +180,14 @@ export function* registerConfirmTask({payload}) {
             {...payload, phone},
         );
         if (!response.code) {
-            yield put(registerConfirmFail({ credentials: true }));
+            yield put(registerConfirmFail(yield getErrorObject(response)));
         } else {
             yield put(authenticate(response));
             yield put(registerConfirmSuccess());
             yield call(history.replace, book.board);
         }
     } catch (err) {
-        const failParams =
-            err.status === 400 ? { credentials: true } : { system: true };
-        yield call(generalErrorNotification);
-        yield put(registerConfirmFail(failParams));
+        yield put(registerConfirmFail(yield getErrorObject(err)));
     }
 }
 
@@ -221,10 +209,7 @@ export function* registerResendTask() {
         });
         yield put(registerResendSuccess());
     } catch (err) {
-        const failParams =
-            err.status === 400 ? { credentials: true } : { system: true };
-        yield call(generalErrorNotification);
-        yield put(registerResendFail(failParams));
+        yield put(registerResendFail(yield getErrorObject(err)));
     }
 }
 
