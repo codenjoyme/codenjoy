@@ -399,6 +399,7 @@ class RulesContainer extends Component {
                             <ul>
                                 <li>
                                     BOMB_BLAST_RADIUS_INCREASE певна кількість{ this._gets('perksBombBlastRadiusIncreaseEffectTimeout') } тіків (секунд).
+                                    Але якщо було взято декілька перків підряд - загальний час роботи сумується.
                                 </li>
                                 <li>
                                     BOMB_COUNT_INCREASE певна кількість{ this._gets('perksBombCountEffectTimeout') } тіків (секунд).
