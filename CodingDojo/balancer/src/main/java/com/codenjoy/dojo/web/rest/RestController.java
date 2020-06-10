@@ -48,10 +48,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
@@ -95,7 +92,7 @@ public class RestController {
     @GetMapping(VERSION)
     @ResponseBody
     public String version() {
-        return VersionReader.getCurrentVersion("engine");
+        return VersionReader.getCurrentVersions(Arrays.asList("engine")).toString();
     }
 
     @GetMapping(SCORE + "/day/{day}")

@@ -75,7 +75,9 @@ var _ajax = function(name, ajaxObject) {
         }
     }
 
-    ajaxObject.dataType = 'json';
+    if (!ajaxObject.dataType) {
+        ajaxObject.dataType = 'json';
+    }
     ajaxObject.async = false;
 
     $('#' + name + '-request').val(
@@ -306,10 +308,11 @@ var getUsersOnBalancerServer = function() {
     });
 };
 
-var getSettings = function(gameType) {
+var getSettings = function(gameType, onSuccess) {
     _ajax(gameType || 'settings', {
         type: 'GET',
-        url: server('balancer') + '/settings'
+        url: server('balancer') + '/settings',
+        after: onSuccess
     });
 };
 
@@ -432,17 +435,23 @@ var encodePassword = function(raw) {
 }
 
 $(document).ready(function() {
-    var balancerHost = window.location.host;
-    var gameHost = 'game1.' + window.location.host;
-    if (window.location.hostname == '127.0.0.1') {
-        gameHost = '127.0.0.1:8080';
-    }
-    $('#balancer-server').val(window.location.protocol + '//' + balancerHost + $('#balancer-server').val());
-    $('#game-server').val(window.location.protocol + '//' + gameHost + $('#game-server').val());
-
     $('#scores-day').val(new Date().toISOString().split('T')[0]);
 
-    getSettings('admin-settings');
+    $('#balancer-server').val(
+        window.location.protocol + '//'
+        + window.location.host
+        + '/codenjoy-balancer/rest'
+    );
+
+    getSettings('admin-settings', function(data) {
+        $('#game-server').val(
+            data.game.schema + '://'
+            + data.game.servers[0].replace('localhost', '127.0.0.1')
+            + '/codenjoy-contest/rest'
+        );
+
+        getVersions();
+    });
 
     var registerOrUpdate = function(action) {
         $('#' + action).click(function() {
@@ -663,6 +672,4 @@ $(document).ready(function() {
 
     var phone = '+380' + generate('0123456789', 9);
     changePhone(phone);
-
-    getVersions();
 });
