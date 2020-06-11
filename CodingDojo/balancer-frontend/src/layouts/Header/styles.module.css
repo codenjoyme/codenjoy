@@ -95,6 +95,9 @@
 }
 
 @media all and (max-width: 1020px) {
+    .container .logo {
+      margin-right: 0;
+    }
     .container li {
         width: 100%;
     }

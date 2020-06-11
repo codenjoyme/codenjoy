@@ -4,10 +4,6 @@
     padding: 0px 50px 20px;
 }
 
-.privacyModalContainer li {
-  word-break: break-all;
-}
-
 .privacyFooter {
     display: flex;
     flex-direction: row;

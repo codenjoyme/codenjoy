@@ -110,6 +110,10 @@ body {
       word-break: break-word;
       text-align: justify !important;
     }
+
+    li {
+      word-break: break-all;
+    }
 }
 
 @media all and (max-width: 820px) {
