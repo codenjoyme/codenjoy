@@ -89,10 +89,26 @@ body {
     line-height: 2;
 }
 
+.responsive-img {
+  width: 100%;
+  height: auto;
+}
+
+.game-field-img-container {
+  /* img width */
+  max-width: 444px;
+}
+
 @media all and (max-width: 1030px) {
     .content {
         padding: 45px 0px;
         width: calc(100% - 40px);
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      text-align: justify !important;
     }
 }
 

@@ -120,6 +120,7 @@
     }
     .container ul {
         flex-direction: column;
+        margin-left: 0px;
     }
     .container {
         flex-direction: column;
