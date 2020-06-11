@@ -210,8 +210,8 @@ class RulesContainer extends Component {
                     <div className='subTitle'>
                         Розшифрування символів
                     </div>
-                    <p>
-                        <img src={ BoardSample } alt='Ігрове поле'/>
+                    <p className="game-field-img-container">
+                        <img className="responsive-img" src={ BoardSample } alt='Ігрове поле'/>
                     </p>
                     <GameElements
                         settings={ settings }
@@ -398,7 +398,7 @@ class RulesContainer extends Component {
                             Дія перку зникає через деякий час:
                             <ul>
                                 <li>
-                                    BOMB_BLAST_RADIUS_INCREASE певна кількість{ this._gets('perksBombBlastRadiusIncreaseEffectTimeout') } тіків (секунд).
+                                    BOMB_<wbr/>BLAST_<wbr/>RADIUS_<wbr/>INCREASE певна кількість{ this._gets('perksBombBlastRadiusIncreaseEffectTimeout') } тіків (секунд).
                                     Але якщо було взято декілька перків підряд - загальний час роботи сумується.
                                 </li>
                                 <li>
@@ -417,7 +417,7 @@ class RulesContainer extends Component {
                             після через деякий{ this._gets('perksPickTimeout') } час.
                         </li>
                         <li>
-                            Перк BOMB_BLAST_RADIUS_INCREASE:
+                            Перк BOMB_<wbr/>BLAST_<wbr/>RADIUS_<wbr/>INCREASE:
                             <ul>
                                 <li>
                                     Збільшує радіус вибуху бомби на певну
