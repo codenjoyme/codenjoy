@@ -389,6 +389,7 @@
                     <td class="header">RoomName</td>
                     <td class="header">Score</td>
                     <td class="header">IP</td>
+                    <td class="header">Joystick</td>
                     <td class="header">GameName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>
                         <a href="${ctx}/admin?saveAll&gameName=${gameName}">SaveAll</a>&nbsp;&nbsp;
@@ -430,6 +431,20 @@
                                 <td><form:input class="input-room" path="players[${status.index}].roomName"/></td>
                                 <td><form:input class="input-score" path="players[${status.index}].score"/></td>
                                 <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
+                                <c:choose>
+                                    <c:when test="${player.code != null}">
+                                        <td>
+                                            <a href="${ctx}/joystick?command=up&player=${player.id}&code=${player.code}">U</a>
+                                            <a href="${ctx}/joystick?command=down&player=${player.id}&code=${player.code}">D</a>
+                                            <a href="${ctx}/joystick?command=left&player=${player.id}&code=${player.code}">L</a>
+                                            <a href="${ctx}/joystick?command=right&player=${player.id}&code=${player.code}">R</a>
+                                            <a href="${ctx}/joystick?command=act&player=${player.id}&code=${player.code}">A</a>
+                                        </td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>UDLRA</td>
+                                    </c:otherwise>
+                                </c:choose>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
                                 <td><a href="${ctx}/admin?save=${player.id}&gameName=${gameName}">Save</a></td>
                                 <c:choose>
@@ -490,6 +505,7 @@
                                 <td><input type="text" readonly="true" class="input-room" value="${player.roomName}"/></td>
                                 <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
                                 <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
+                                <td>UDLRA</td>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
                                 <td>Save</td>
                                 <c:choose>
