@@ -406,10 +406,11 @@
                         <a href="${ctx}/admin?gameOverAll&gameName=${gameName}">GameOverAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/board/game/${gameName}">ViewPlayerGame</a>&nbsp;&nbsp;
+                        <a href="${ctx}/board/game/${gameName}">ViewGameAll</a>&nbsp;&nbsp;
                     </td>
+                    <td class="header">PlayerLog</td>
                     <td>
-                        <a href="${ctx}/admin?reloadAllAI&gameName=${gameName}">LoadAllAI</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin?reloadAllAI&gameName=${gameName}">LoadAIAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header">Save data&nbsp;&nbsp;</td>
                 </tr>
@@ -457,6 +458,7 @@
                                 </c:choose>
                                 <td><a href="${ctx}/admin?gameOver=${player.id}&gameName=${gameName}">GameOver</a></td>
                                 <td><a href="${ctx}/board/player/${player.id}?code=${player.code}">ViewGame</a></td>
+                                <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}">PlayerLog</a></td>
                                 <c:choose>
                                     <c:when test="${player.aiPlayer}">
                                         <td>Loaded</td>
@@ -508,8 +510,9 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <td>GameOver</td>
-                                <td></td>
-                                <td></td>
+                                <td>ViewGame</td>
+                                <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}">PlayerLog</a></td>
+                                <td>LoadAI</td>
                                 <c:choose>
                                     <c:when test="${player.data == null}">
                                         <td></td>
