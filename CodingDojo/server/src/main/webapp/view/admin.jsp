@@ -389,7 +389,7 @@
                     <td class="header">RoomName</td>
                     <td class="header">Score</td>
                     <td class="header">IP</td>
-                    <td class="header">GameName</td>
+                    <td class="header">GameName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>
                         <a href="${ctx}/admin?saveAll&gameName=${gameName}">SaveAll</a>&nbsp;&nbsp;
                     </td>
@@ -408,7 +408,7 @@
                     <td>
                         <a href="${ctx}/board/game/${gameName}">ViewGameAll</a>&nbsp;&nbsp;
                     </td>
-                    <td class="header">PlayerLog</td>
+                    <td class="header">PlayerLogAll</td>
                     <td>
                         <a href="${ctx}/admin?reloadAllAI&gameName=${gameName}">LoadAIAll</a>&nbsp;&nbsp;
                     </td>
@@ -458,7 +458,14 @@
                                 </c:choose>
                                 <td><a href="${ctx}/admin?gameOver=${player.id}&gameName=${gameName}">GameOver</a></td>
                                 <td><a href="${ctx}/board/player/${player.id}?code=${player.code}">ViewGame</a></td>
-                                <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}">PlayerLog</a></td>
+                                <c:choose>
+                                    <c:when test="${player.code != null}">
+                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}">PlayerLog</a></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>PlayerLog</td>
+                                    </c:otherwise>
+                                </c:choose>
                                 <c:choose>
                                     <c:when test="${player.aiPlayer}">
                                         <td>Loaded</td>
@@ -511,7 +518,14 @@
                                 </c:choose>
                                 <td>GameOver</td>
                                 <td>ViewGame</td>
-                                <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}">PlayerLog</a></td>
+                                <c:choose>
+                                    <c:when test="${player.code != null}">
+                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}">PlayerLog</a></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td>PlayerLog</td>
+                                    </c:otherwise>
+                                </c:choose>
                                 <td>LoadAI</td>
                                 <c:choose>
                                     <c:when test="${player.data == null}">
