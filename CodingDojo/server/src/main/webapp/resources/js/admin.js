@@ -159,9 +159,17 @@ pages.admin = function() {
         });
     }
 
+    var setupSpanHref = function() {
+        $('span.a').click(function() {
+            var url = $(this).attr('href');
+            $.get(url);
+        });
+    }
+
     // ------------------------ init ----------------------
     validatePlayerRegistration("#adminSettings");
     initHotkeys();
     loadRegSettings();
     setupSaveUserDetails();
+    setupSpanHref();
 }

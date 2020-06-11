@@ -433,12 +433,12 @@
                                 <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td>
-                                            <a href="${ctx}/joystick?command=up&player=${player.id}&code=${player.code}">U</a>
-                                            <a href="${ctx}/joystick?command=down&player=${player.id}&code=${player.code}">D</a>
-                                            <a href="${ctx}/joystick?command=left&player=${player.id}&code=${player.code}">L</a>
-                                            <a href="${ctx}/joystick?command=right&player=${player.id}&code=${player.code}">R</a>
-                                            <a href="${ctx}/joystick?command=act&player=${player.id}&code=${player.code}">A</a>
+                                        <td class="joystick">
+                                            <span class="a" href="${ctx}/joystick?command=up&player=${player.id}&code=${player.code}">U</span>
+                                            <span class="a" href="${ctx}/joystick?command=down&player=${player.id}&code=${player.code}">D</span>
+                                            <span class="a" href="${ctx}/joystick?command=left&player=${player.id}&code=${player.code}">L</span>
+                                            <span class="a" href="${ctx}/joystick?command=right&player=${player.id}&code=${player.code}">R</span>
+                                            <span class="a" href="${ctx}/joystick?command=act&player=${player.id}&code=${player.code}">A</span>
                                         </td>
                                     </c:when>
                                     <c:otherwise>
