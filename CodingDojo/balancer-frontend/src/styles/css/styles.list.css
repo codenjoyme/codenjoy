@@ -15,6 +15,7 @@ ol > li:before {
   content: counters(item, ".") ". ";
   display: table-cell;
   padding-right: 0.6em;
+  word-break: initial;
 }
 
 li ol > li {
@@ -23,4 +24,5 @@ li ol > li {
 
 li ol > li:before {
   content: counters(item, ".") ". ";
+  word-break: initial;
 }
