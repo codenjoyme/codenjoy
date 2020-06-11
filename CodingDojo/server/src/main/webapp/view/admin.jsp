@@ -460,7 +460,7 @@
                                 <td><a href="${ctx}/board/player/${player.id}?code=${player.code}">ViewGame</a></td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}">PlayerLog</a></td>
+                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&gameName=${gameName}">PlayerLog</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>PlayerLog</td>
