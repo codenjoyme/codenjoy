@@ -15,7 +15,7 @@ import { CustomInputComponent } from '../common/customInput';
 import { CustomCheckboxComponent } from '../common/customCheckbox';
 import { CustomSelectComponent } from '../common/customSelect';
 import errorImg from '../common/Bomb_server_Error.jpg';
-
+import { PhoneInput } from 'forms/common/phoneInput';
 // own
 import styles from '../common/styles.module.css';
 
@@ -123,7 +123,7 @@ class LoginForm extends Component {
                         skills:          '',
                         others:          '',
                         terms:           false,
-                        updates:         true,
+                        updates:         false,
                     } }
                     validationSchema={ RegisterSchema }
                     onSubmit={ payload => {
@@ -159,16 +159,16 @@ class LoginForm extends Component {
                                     placeholder='Електронна пошта*'
                                     component={ CustomInputComponent }
                                 />
-                                <Field
-                                    type='phone'
-                                    name='phone'
-                                    placeholder='Номер телефону*'
-                                    component={ CustomInputComponent }
-                                    errors={ _.get(
-                                        registerErrors,
-                                        'errorMsg',
-                                    ) }
-                                />
+                                  <Field
+                                      type='phone'
+                                      name='phone'
+                                      placeholder='Номер телефону*'
+                                      component={ PhoneInput }
+                                      errors={ _.get(
+                                          registerErrors,
+                                          'errorMsg',
+                                      ) }
+                                  />
                                 <Field
                                     type='password'
                                     name='password'

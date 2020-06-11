@@ -53,6 +53,7 @@ export class CustomSelectComponent extends Component {
                     }) }
                     styles={ customSelectStyles }
                     options={ options }
+                    isSearchable={ false }
                     multi={ false }
                     onChange={ option =>
                         form.setFieldValue(field.name, option.value)
