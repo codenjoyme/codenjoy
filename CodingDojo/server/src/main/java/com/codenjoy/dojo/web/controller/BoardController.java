@@ -23,10 +23,7 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.Player;
-import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
@@ -41,6 +38,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Optional;
 
 import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_KEY;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
@@ -145,19 +143,22 @@ public class BoardController {
         model.addAttribute("allPlayersScreen", false);
     }
 
-    @GetMapping(URI + "/log/player/{player}")
-    public String boardPlayerLog(ModelMap model, @PathVariable("player") String id) {
+    @GetMapping(value = URI + "/log/player/{player}", params = "gameName")
+    public String boardPlayerLog(ModelMap model, @PathVariable("player") String id,
+                                 @RequestParam("gameName") String gameName)
+    {
         validator.checkPlayerId(id, CANT_BE_NULL);
+        validator.checkGameName(gameName, CANT_BE_NULL);
 
-        Player player = playerService.get(id);
-        if (player == NullPlayer.INSTANCE) {
+        Optional<Registration.User> user = registration.getUserById(id);
+        if (!user.isPresent()) {
             return "redirect:/register?id=" + id;
         }
 
-        model.addAttribute(GAME_NAME_KEY, player.getGameName());
-        model.addAttribute("gameNameOnly", player.getGameNameOnly());
-        model.addAttribute("playerId", player.getId());
-        model.addAttribute("readableName", player.getReadableName());
+        model.addAttribute(GAME_NAME_KEY, gameName);
+        model.addAttribute("gameNameOnly", GameServiceImpl.removeNumbers(gameName));
+        model.addAttribute("playerId", user.get().getId());
+        model.addAttribute("readableName", user.get().getReadableName());
 
         return "board-log";
     }
