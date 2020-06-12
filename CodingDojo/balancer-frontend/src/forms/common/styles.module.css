@@ -84,6 +84,16 @@
     color: var(--title-bg-color);
 }
 
+.phoneInputWrap {
+  display: flex;
+  align-items: center;
+}
+
+.phonePrefix {
+  margin-right: 10px;
+  color: var(--title-bg-color);
+}
+
 .select {
     border: 1px solid var(--primary-color);
 }
