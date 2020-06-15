@@ -277,8 +277,8 @@ public class RestAdminController {
     public synchronized boolean removeUser(@PathVariable("player") String id) {
         validator.checkPlayerId(id);
 
-        // удаляем сейвы
-        saveService.removeSave(id);
+        // не удаляем сейвы, а то повторное подключение не загрузит очки
+        // saveService.removeSave(id);
 
         // и удаляем игрока с игрового сервера c его регистрацией
         playerService.remove(id);
