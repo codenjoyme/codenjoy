@@ -240,14 +240,14 @@ public class Players {
                 server, code, id);
     }
 
-    public void approveByPhone(String phone) {
-        pool.update("UPDATE players SET approved = ? WHERE phone = ?;",
-                Player.APPROVED, phone);
+    public void approve(String id) {
+        pool.update("UPDATE players SET approved = ? WHERE id = ?;",
+                Player.APPROVED, id);
     }
 
-    public void updateVerificationCode(String phone, String verificationCode, String verificationType) {
-        pool.update("UPDATE players SET verification_code = ?, verification_type = ? WHERE phone = ?;",
-                verificationCode, verificationType, phone);
+    public void updateVerificationCode(String id, String verificationCode, String verificationType) {
+        pool.update("UPDATE players SET verification_code = ?, verification_type = ? WHERE id = ?;",
+                verificationCode, verificationType, id);
     }
 
     public void remove(String id) {
