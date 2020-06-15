@@ -188,7 +188,12 @@ public class RestController {
     }
 
     private String getIp(HttpServletRequest request) {
-        String result = request.getHeader("X-Real-IP");
+        String result = request.getHeader("X-Forwarded-For");
+        if (!StringUtils.isEmpty(result)) {
+            return result;
+        }
+
+        result = request.getHeader("X-Real-IP");
         if (!StringUtils.isEmpty(result)) {
             return result;
         }
