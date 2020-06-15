@@ -47,7 +47,7 @@ const PrivacyPolicyContainer = () => (
                 сервісів Сайту.
             </p>
             <ol>
-                <li className='subTitle'>
+                <li className='subTitle' id='details1'>
                     Загальні положення
                     <ol>
                         <li>
@@ -87,7 +87,7 @@ const PrivacyPolicyContainer = () => (
                         </li>
                     </ol>
                 </li>
-                <li className='subTitle'>
+                <li className='subTitle' id='details2'>
                     Цілі збору та обробки персональних даних Відвідувача Сайту
                     <ol>
                         <li>
@@ -163,7 +163,7 @@ const PrivacyPolicyContainer = () => (
                         </li>
                     </ol>
                 </li>
-                <li className='subTitle'>
+                <li className='subTitle' id='details3'>
                     Правові підстави обробки персональних даних
                     <ol>
                         <li>
@@ -192,7 +192,7 @@ const PrivacyPolicyContainer = () => (
                         </li>
                     </ol>
                 </li>
-                <li className='subTitle'>
+                <li className='subTitle' id='details4'>
                     Обсяг і категорії оброблюваних персональних даних, категорії
                     суб'єктів персональних даних
                     <ol>
@@ -243,7 +243,7 @@ const PrivacyPolicyContainer = () => (
                         </li>
                     </ol>
                 </li>
-                <li className='subTitle'>
+                <li className='subTitle' id='details5'>
                     Порядок та умови обробки персональних даних
                     <ol>
                         <li>
@@ -419,7 +419,7 @@ const PrivacyPolicyContainer = () => (
                         </li>
                     </ol>
                 </li>
-                <li className='subTitle'>
+                <li className='subTitle' id='details6'>
                     Файли «cookies»
                     <ol>
                         <li>
@@ -635,7 +635,7 @@ const PrivacyPolicyContainer = () => (
                         </li>
                     </ol>
                 </li>
-                <li className='subTitle'>
+                <li className='subTitle' id='details7'>
                     Зміна, видалення та знищення персональних даних, порядок
                     доступу до персональних даних, відкликання згоди на обробку
                     персональних даних
@@ -714,7 +714,7 @@ const PrivacyPolicyContainer = () => (
                         </li>
                     </ol>
                 </li>
-                <li className='subTitle'>
+                <li className='subTitle' id='details8'>
                     Прикінцеві положення
                     <ol>
                         <li>

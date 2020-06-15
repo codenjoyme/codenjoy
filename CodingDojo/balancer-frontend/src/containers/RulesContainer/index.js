@@ -186,7 +186,7 @@ class RulesContainer extends Component {
                         За допомогою цього regexp можна отримати рядок дошки.
                     </p>
 
-                    <div className='subTitle'>
+                    <div className='subTitle' id='board'>
                         Приклад рядка від сервера
                     </div>
                     <div className={ highligte }>
@@ -207,7 +207,7 @@ class RulesContainer extends Component {
                         Лівий нижній кут має координату [0, 0].
                     </p>
 
-                    <div className='subTitle'>
+                    <div className='subTitle' id='elements'>
                         Розшифрування символів
                     </div>
                     <p className="game-field-img-container">
@@ -217,7 +217,7 @@ class RulesContainer extends Component {
                         settings={ settings }
                     />
 
-                    <div className='subTitle'>
+                    <div className='subTitle' id='commands'>
                         Керування ботом
                     </div>
                     <p>
@@ -245,7 +245,7 @@ class RulesContainer extends Component {
                         найбільшу кількість балів в поточному Iгровому дні.
                     </p>
 
-                    <div className='subTitle'>
+                    <div className='subTitle' id='match'>
                         Раунди/матчі
                     </div>
                     <ul>
@@ -305,7 +305,7 @@ class RulesContainer extends Component {
                         </li>
                     </ul>
 
-                    <div className='subTitle'>
+                    <div className='subTitle' id='exceptions'>
                         Особливі випадки
                     </div>
                     <ul>
@@ -386,7 +386,7 @@ class RulesContainer extends Component {
                         </li>
                     </ul>
 
-                    <div className='subTitle'>
+                    <div className='subTitle' id='perks'>
                         Модифікатори (Перки)
                     </div>
                     <ul>
@@ -499,7 +499,7 @@ class RulesContainer extends Component {
                         </li>
                     </ul>
 
-                    <div className='subTitle' id='first-step'>
+                    <div className='subTitle' id='starting'>
                         Підказки
                     </div>
                     <p>
@@ -534,7 +534,7 @@ class RulesContainer extends Component {
                         </li>
                     </ul>
 
-                    <div className='subTitle'>
+                    <div className='subTitle' id='winners'>
                         Як визначатимуться переможці?
                     </div>
                     <p>
@@ -545,7 +545,7 @@ class RulesContainer extends Component {
                         </a>
                     </p>
 
-                    <div className='subTitle'>
+                    <div className='subTitle' id='additional'>
                         Додаткова інформація
                     </div>
                     <p>
