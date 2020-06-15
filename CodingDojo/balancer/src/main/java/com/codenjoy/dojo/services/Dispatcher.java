@@ -224,6 +224,9 @@ public class Dispatcher {
             finalist.setWinner(true);
         });
 
+        currentScores.clear();
+        currentFinalists.clear();
+
         return result;
     }
 
