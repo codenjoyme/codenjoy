@@ -55,8 +55,9 @@ public class BattlecityTest {
     private List<Tank> tanks;
 	private List<Tree> trees;
 	private List<Construction> constructions;
+	private List<Ice> ice;
 
-    @Before
+	@Before
     public void setup() {
         size = 7;
         ticksPerBullets = 1;
@@ -92,7 +93,25 @@ public class BattlecityTest {
         this.hero = tanks.get(0);
     }
 
-    private void givenGameWithAI(Tank tank, Tank... aiTanks) {
+	private void givenGameWithIce(List<Tank> allTanks, List<Ice> freeze) {
+		this.trees = new LinkedList<>();
+		givenGameWithIce(allTanks, Arrays.asList(new Construction[0]),trees, freeze);
+	}
+
+	private void givenGameWithIce(List<Tank> allTanks, List<Construction> constructions, List<Tree> woods, List<Ice> freeze) {
+		List<Tree> trees = new LinkedList<>(woods);
+		List<Tank> tanks = new LinkedList<>(allTanks);
+		List<Ice> ice = new LinkedList<>(freeze);
+
+		game = new Battlecity(size, mock(Dice.class), constructions,
+				new DefaultBorders(size).get(), trees, ice);
+		for (Tank tank : tanks) {
+			initPlayer(game, tank);
+		}
+		this.hero = tanks.get(0);
+	}
+
+	private void givenGameWithAI(Tank tank, Tank... aiTanks) {
         game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), aiTanks);
         initPlayer(game, tank);
         this.hero = tank;
@@ -3417,13 +3436,34 @@ public class BattlecityTest {
 				"☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    //1.4) под кустами не видно так же и ботов белых
+	//1.4) под кустами не видно так же и ботов белых
 
+	//2. Лёд
+    @Test
+    public void shouldBeConstructioIce_whenGameCreated() {
+        tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+        ice = new LinkedList<>(Arrays.asList(new Ice(3, 3)));
 
-    //TODO 2. Лёд
+        givenGameWithIce(tanks, ice);
+
+        assertEquals(1, game.getIce().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  █  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
     //TODO    2.1) когда на нем двигается герой, он проскальзывает команду на целых два тика
+	//TODO	  2.2) также когда на нем двигается враг он проскальзывает команду на два тика
+	//TODO	  2.3) также когда на нем двигается бот он проскальзывает команду на два тика
     //TODO 3. Вода
-    //TODO    3.1) вода - через нее нельзя пройти. но можно стрелять
+    //TODO    3.1) вода - через нее герою нельзя пройти. но можно стрелять
+    //TODO    3.2) вода - через нее врагу нельзя пройти. но можно стрелять
+    //TODO    3.3) вода - через нее боту нельзя пройти. но можно стрелять
     //TODO 4. Добовляем бота
     //TODO    4.1) добавляем бота, который спаунится каждые N ходов (задается в сеттингах),
     //TODO         который цветной и его убить можно только за M выстрелов (тоже сеттинги)

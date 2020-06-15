@@ -42,12 +42,14 @@ public class Battlecity implements Field {
     private List<Construction> constructions;
     private List<Border> borders;
     private  List<Tree> trees;
+    private  List<Ice> ice;
 
     private List<Player> players = new LinkedList<Player>();
 
     public Battlecity(int size, Dice dice, List<Construction> constructions, Tank... aiTanks) {
         this(size, dice, constructions, new DefaultBorders(size).get(), aiTanks);
         this.trees = new LinkedList<>();
+        this.ice = new LinkedList<>();
     }
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
@@ -59,6 +61,7 @@ public class Battlecity implements Field {
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
         this.trees = new LinkedList<>();
+        this.ice = new LinkedList<>();
 
         for (Tank tank : aiTanks) {
             addAI(tank);
@@ -70,6 +73,18 @@ public class Battlecity implements Field {
         this(size, dice, constructions, borders, aiTanks);
         aiCount = aiTanks.length;
         this.trees = new LinkedList<>(trees);
+
+        for (Tank tank : aiTanks) {
+            addAI(tank);
+        }
+    }
+
+    public  Battlecity(int size, Dice dice, List<Construction> constructions,
+                       List<Border> borders, List<Tree> trees, List<Ice> ice, Tank... aiTanks) {
+        this(size, dice, constructions, borders, aiTanks);
+        aiCount = aiTanks.length;
+        this.trees = new LinkedList<>(trees);
+        this.ice = new LinkedList<>(ice);
 
         for (Tank tank : aiTanks) {
             addAI(tank);
@@ -327,6 +342,7 @@ public class Battlecity implements Field {
                     addAll(Battlecity.this.getConstructions());
                     addAll(Battlecity.this.getBullets());
                     addAll(Battlecity.this.getTrees());
+                    addAll(Battlecity.this.getIce());
                 }};
             }
         };
@@ -345,6 +361,10 @@ public class Battlecity implements Field {
 
     public List<Tree> getTrees() {
         return trees;
+    }
+
+    public List<Ice> getIce() {
+        return ice;
     }
 
     @Override
