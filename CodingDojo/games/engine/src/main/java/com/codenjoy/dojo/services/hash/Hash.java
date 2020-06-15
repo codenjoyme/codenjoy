@@ -33,6 +33,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @UtilityClass
 public class Hash {
 
+    public static final int ID_LENGTH = 20;
+
     public static String md5(String string) {
         return DigestUtils.md5Hex(string.getBytes());
     }
@@ -82,7 +84,7 @@ public class Hash {
     }
 
     public static String getRandomId() {
-        return RandomStringUtils.random(20, "abcdefghijklmnopqrstuvwxyz1234567890");
+        return RandomStringUtils.random(ID_LENGTH, "abcdefghijklmnopqrstuvwxyz1234567890");
     }
 
 }

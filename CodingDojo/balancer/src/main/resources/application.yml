@@ -35,11 +35,36 @@ sms:
   enabled: false
   static-verification-code: 123456
   static-password: 12345678
+  password-length: 8
+  code-length: 6
   text:
-    registration: "Vash kod pidtverdzennya reestratsui: %s.\nCodenjoy Team."
+    registration: "Vash kod pidtverdzennya reestratsii: %s.\nCodenjoy Team."
     reset-password: "Vash kod pidtverdzennya zminy parolu: %s.\nCodenjoy Team."
     new-password: "Vash parol zmineno.\nNovyi parol: %s.\nCodenjoy Team."
   gateway:
     send-endpoint: http://sms-fly.com/api/api.noai.php
     user: 380989207390
     password: 123456789
+
+messages:
+  invalid-player-id: "Невірний формат playerId: '%s'"
+  invalid-player-email: "Невірний формат email: '%s'"
+  invalid-player-code: "Невірний формат code: '%s'"
+  invalid-game-name: "Невірний формат gameName: '%s'"
+  invalid-password: "Невірний password: '%s'"
+  invalid-email-login-data: "Невірний email та/або password"
+  invalid-code-login-data: "Невірний email та/або code"
+  invalid-phone-login-data: "Невірний email та/або номер телефону"
+  invalid-day: "Невірний формат дати (очікується YYYY-MM-DD): '%s'"
+  invalid-string: "Очікується не порожній рядок %s: '%s'"
+  should-be-empty: "Очікується порожній рядок %s: '%s'"
+  invalid-phone-number: "Невірний формат номеру телефона (очікується +380XXYYYZZAA): '%s'"
+  invalid-parameters: "Наявні помилки: %s"
+  already-registered-email: "Користувач із заданим email вже зареєстрований: '%s'"
+  already-registered-phone: "Користувач із заданим номером телефону вже зареєстрований: '%s'"
+  not-approved: "Користувач не підтверджений"
+  already-approved: "Користувач вже підтверджений"
+  not-found-email: "Користувача із заданим email не знайдено: '%s'"
+  not-found-phone: "Користувача із заданим номером телефону не знайдено: '%s'"
+  invalid-verification-code: "Невірний код підтведження: '%s'"
+  something-wrong: "Йойкс! Щось пішло не так. Збережи номер тікету і зв'яжись із організатором"

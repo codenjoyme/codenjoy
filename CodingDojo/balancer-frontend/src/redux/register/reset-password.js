@@ -51,7 +51,7 @@ export const resetPasswordValidateFail = errors => ({
  **/
 
 export function* resetPasswordSaga({payload}) {
-    const body = {phone: payload.phone};
+    const body = {phone: payload.phone, email: payload.email};
     try {
         yield call(
             fetchAPI,

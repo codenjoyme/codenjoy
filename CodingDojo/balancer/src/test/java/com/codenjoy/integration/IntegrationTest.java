@@ -101,7 +101,7 @@ public class IntegrationTest {
     private GameServers gameServers;
 
     @SpyBean
-    private RegistrationService registration;
+    private Generator generator;
 
     @SpyBean
     private SmsService sms;
@@ -226,7 +226,7 @@ public class IntegrationTest {
         smsProperties.setEnabled(true);
 
         // TODO#2 почему-то не срабатывает
-        doReturn("123457").when(registration).generateVerificationCode();
+        doReturn("123457").when(generator).verificationCode();
         verificationCode = null; // TODO#2 жвачка в него потом запишется реальное сгенерированное значение
 
         // when
@@ -793,13 +793,13 @@ public class IntegrationTest {
         verifyNoMoreInteractions(game, authenticator);
 
         reset(game, sms, players, scores, config,
-                gameServers, registration,
+                gameServers,
                 gateway, debug,
                 passwordEncoder, authenticator);
     }
 
     private void shouldCreateNewPlayerOnGame(String id, String code) {
-        doReturn(id).when(registration).generateId();
+        doReturn(id).when(generator).id();
 
         doReturn(code).when(game).createNewPlayer(anyString(), anyString(), anyString(), anyString(), anyString(),
                 anyString(), anyString(), anyString(), anyString(), anyString());

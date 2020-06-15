@@ -204,12 +204,12 @@ var confirmChangePassword = function(phone, code) {
     });
 };
 
-var resendPassword = function(phone) {
+var resendPassword = function(email, phone) {
     _ajax('resend', {
         type: 'POST',
         url: server('balancer') + '/register/reset',
         contentType: 'application/json; charset=utf-8',
-        data: '{"phone": "' + phone + '"}'
+        data: '{"phone": "' + phone + '", "email": "' + email + '"}'
     });
 };
 
@@ -496,7 +496,7 @@ $(document).ready(function() {
     }
 
     sync(['#phone', '#confirm-phone', '#resend-phone']);
-    sync(['#email', '#get-confirm-email', '#login-email', '#join-email']);
+    sync(['#email', '#get-confirm-email', '#login-email', '#join-email', '#resend-email']);
     sync(['#password', '#login-password']);
     sync(['#code', '#join-code']);
     sync(['#player-id', '#remove-id']);
@@ -539,7 +539,9 @@ $(document).ready(function() {
     });
 
     $('#resend-password').click(function() {
+        var preffix = $('#preffix').val();
         resendPassword(
+            preffix + $('#resend-email').val(),
             $('#resend-phone').val()
         );
     });

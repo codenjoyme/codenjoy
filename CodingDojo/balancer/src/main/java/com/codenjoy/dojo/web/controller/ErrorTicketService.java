@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.properties.Messages;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class ErrorTicketService {
     @Autowired
     private DebugService debug;
 
+    @Autowired
+    private Messages messages;
+
     private boolean printStackTrace = true;
 
     public ModelAndView get(String url, Exception exception) {
@@ -60,8 +64,7 @@ public class ErrorTicketService {
         ModelAndView result = new ModelAndView();
         result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         result.addObject("ticketNumber", ticket);
-        result.addObject("message", "Something wrong with your request. " +
-                "Please save you ticker number and ask site administrator.");
+        result.addObject("message", messages.getSomethingWrong());
 
         if (!debug.isWorking()) {
             if (url.contains("/rest/")) {

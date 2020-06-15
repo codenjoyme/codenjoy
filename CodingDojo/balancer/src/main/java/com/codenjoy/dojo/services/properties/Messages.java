@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services.properties;
  */
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -31,33 +30,28 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties("sms")
-public class SmsProperties {
+@ConfigurationProperties("messages")
+public class Messages {
 
-    private boolean enabled;
-    private String staticVerificationCode;
-    private String staticPassword;
-    private int passwordLength;
-    private int codeLength;
-    private SmsTextProperties text;
-    private GatewayProperties gateway;
-
-    @Getter
-    @Setter
-    @ConfigurationProperties("text")
-    public static class SmsTextProperties {
-        private String registration;
-        private String resetPassword;
-        private String newPassword;
-    }
-
-    @Getter
-    @Setter
-    @ConfigurationProperties("gateway")
-    public static class GatewayProperties {
-        private String sendEndpoint;
-        private String user;
-        private String password;
-    }
-
+    private String invalidPlayerId;
+    private String invalidPlayerEmail;
+    private String invalidPlayerCode;
+    private String invalidGameName;
+    private String invalidPassword;
+    private String invalidEmailLoginData;
+    private String invalidCodeLoginData;
+    private String invalidPhoneLoginData;
+    private String invalidDay;
+    private String invalidString;
+    private String shouldBeEmpty;
+    private String invalidPhoneNumber;
+    private String invalidParameters;
+    private String alreadyRegisteredEmail;
+    private String alreadyRegisteredPhone;
+    private String notFoundEmail;
+    private String notFoundPhone;
+    private String notApproved;
+    private String alreadyApproved;
+    private String invalidVerificationCode;
+    private String somethingWrong;
 }

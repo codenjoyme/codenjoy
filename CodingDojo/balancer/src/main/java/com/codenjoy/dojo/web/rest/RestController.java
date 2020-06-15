@@ -34,9 +34,10 @@ import com.codenjoy.dojo.services.entity.server.Disqualified;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.web.controller.ErrorTicketService;
 import com.codenjoy.dojo.web.controller.LoginException;
-import com.codenjoy.dojo.web.controller.Validator;
+import com.codenjoy.dojo.web.controller.BalancerValidator;
 import com.codenjoy.dojo.web.rest.dto.*;
 import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,8 +51,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
-import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
-import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
+import static com.codenjoy.dojo.web.controller.BalancerValidator.CANT_BE_NULL;
 
 @Controller
 @RequestMapping(value = RestController.URI)
@@ -79,15 +79,15 @@ public class RestController {
     @Autowired private Scores scores;
     @Autowired private TimerService timer;
     @Autowired private Dispatcher dispatcher;
-    @Autowired private Validator validator;
+    @Autowired private BalancerValidator validator;
     @Autowired private DebugService debug;
     @Autowired private GameServer game;
     @Autowired private GameServers gameServers;
     @Autowired private ConfigProperties config;
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private SecurityContextAuthenticator authenticator;
-    @Autowired private RegistrationService registrationService;
     @Autowired private SmsService sms;
+    @Autowired private Generator generator;
 
     @GetMapping(VERSION)
     @ResponseBody
@@ -118,14 +118,12 @@ public class RestController {
 
     // TODO test me
     @PostMapping(SCORE + "/disqualify")
-    @ResponseBody
-    public boolean disqualify(@RequestBody PlayersDTO input) {
+    @ResponseStatus(HttpStatus.OK)
+    public void disqualify(@RequestBody PlayersDTO input) {
         List<String> players = input.getPlayers();
         players.forEach(email -> validator.checkEmailOrId(email, CANT_BE_NULL));
 
         dispatcher.disqualify(players);
-
-        return true;
     }
 
     // TODO test me
@@ -142,23 +140,18 @@ public class RestController {
 
         validator.all(
                 () -> validator.checkEmail(player.getEmail(), CANT_BE_NULL),
-                () -> validator.checkPhoneNumber(player.getPhone(), CANT_BE_NULL),
-                () -> validator.checkString("FirstName", player.getFirstName()),
-                () -> validator.checkString("LastName", player.getLastName()),
-                () -> validator.checkString("Password", player.getPassword()),
-                () -> validator.checkString("City", player.getCity()),
-                () -> validator.checkString("Skills", player.getSkills())
+                () -> validator.checkPhoneNumber(player.getPhone()),
+                () -> validator.checkString("firstName", player.getFirstName()),
+                () -> validator.checkString("lastName", player.getLastName()),
+                () -> validator.checkMD5(player.getPassword(), CANT_BE_NULL),
+                () -> validator.checkString("city", player.getCity()),
+                () -> validator.checkString("skills", player.getSkills())
         );
 
-        player.setPhone(validator.phoneNormalizer(player.getPhone()));
+        player.setPhone(validator.phoneNormalize(player.getPhone()));
 
-        if (players.getCode(player.getEmail()) != null) {
-            throw new IllegalArgumentException("User with this email is already registered");
-        }
-
-        if (players.getByPhone(player.getPhone()).isPresent()) {
-            throw new IllegalArgumentException("User with this phone number is already registered");
-        }
+        validator.checkNotRegisteredEmail(player.getEmail());
+        validator.checkNotRegisteredPhone(player.getPhone());
 
         String md5Password = player.getPassword();
 
@@ -171,15 +164,15 @@ public class RestController {
 
             @Override
             public Player onBalancer(Player player) {
-                player.setId(registrationService.generateId());
+                player.setId(generator.id());
                 player.setPassword(passwordEncoder.encode(md5Password));
                 // code = code(md5(bcrypt(password)))
                 player.setCode(Hash.getCode(player.getId(), player.getPassword()));
 
-                String verificationCode = registrationService.generateVerificationCode();
+                String verificationCode = generator.verificationCode();
                 player.setApproved(Player.NOT_APPROVED);
                 player.setVerificationCode(verificationCode);
-                player.setVerificationType(RegistrationService.VerificationType.REGISTRATION.name());
+                player.setVerificationType(VerificationType.REGISTRATION.name());
 
                 players.create(player);
 
@@ -195,9 +188,14 @@ public class RestController {
     }
 
     private String getIp(HttpServletRequest request) {
-        String result = request.getRemoteAddr();
+        String result = request.getHeader("X-Real-IP");
+        if (!StringUtils.isEmpty(result)) {
+            return result;
+        }
+
+        result = request.getRemoteAddr();
         if (result.equals("0:0:0:0:0:0:0:1")) {
-            result = "127.0.0.1";
+            return "127.0.0.1";
         }
         return result;
     }
@@ -284,6 +282,7 @@ public class RestController {
 
                 // тут пароль в md5 виде приведенном в такое состояние фронтом
                 String md5 = player.getPassword();
+                validator.checkMD5(md5, CANT_BE_NULL);
                 // мы его еще разочек захешируем
                 String hashed = passwordEncoder.encode(md5);
                 // и подсчитаем code(md5(bcrypt(password)))
@@ -293,7 +292,7 @@ public class RestController {
             player.resetNullFields(current);
             players.update(player);
 
-            return recreatePlayerIfNeeded(current);
+            return recreatePlayerIfNeeded(player); // TODO проверить как обновляется code при смене пароля
         });
     }
 
@@ -324,39 +323,10 @@ public class RestController {
         String password = player.getPassword();
         String code = player.getCode();
 
-        validator.checkEmail(email, CANT_BE_NULL); // TODO test me
-        validator.checkCode(code, CAN_BE_NULL); // TODO test me
-
-        Player exist = players.getByEmail(email);
-
-        if (exist == null) {
-            throw new LoginException("User with this email not found");
-        }
-
-        if (exist.getApproved() == Player.NOT_APPROVED) {
-            throw new LoginException("User is not verified");
-        }
-
-        if (!isAuthorized(exist, password, code, ignorePass)) {
-            throw new LoginException("Wrong password/code for this email");
-        }
+        Player exist = validator.checkPlayerLogin(email, code, password, ignorePass);
 
         Player result = onLogin.onSuccess(exist);
         return new ServerLocation(result);
-    }
-
-    private boolean isAuthorized(Player exist, String password, String code, boolean ignorePass) {
-        if (ignorePass) { // TODO test me
-            validator.checkNull("Password", password);
-        } else {
-            validator.checkString("Password", password);
-
-            if (passwordEncoder.matches(password, exist.getPassword())) {
-                return true;
-            }
-        }
-
-        return exist.getCode().equals(code);
     }
 
     private <T> T doIt(DoItOnServers<T> action) {
@@ -388,7 +358,7 @@ public class RestController {
     @GetMapping(REMOVE + "/{player}/on/{whereToRemove}")
     @ResponseBody
     public List<String> remove(@PathVariable("player") String id, @PathVariable("whereToRemove") int whereToRemove) {
-        List<String> status = new LinkedList<>();
+        List<String> status = new LinkedList<>(); validator.checkId(id, CANT_BE_NULL);
 
         tryRemoveFromGame((whereToRemove & 0b0001) == 0b0001, id, status);
         tryRemoveFromBalancer((whereToRemove & 0b0010) == 0b0010, id, status);
@@ -458,13 +428,11 @@ public class RestController {
 
     // TODO test me
     @PostMapping(SETTINGS)
-    @ResponseBody
-    public boolean saveSettings(@RequestBody ConfigProperties config) {
+    @ResponseStatus(HttpStatus.OK)
+    public void saveSettings(@RequestBody ConfigProperties input) {
+        config.updateFrom(input);
 
-        this.config.updateFrom(config);
-        gameServers.update(config.getGame().getServers());
-
-        return true;
+        gameServers.update(input.getGame().getServers());
     }
 
     // TODO test me
@@ -483,11 +451,9 @@ public class RestController {
 
     // TODO test me
     @PostMapping(GAME_SETTINGS + "/set")
-    @ResponseBody
-    public boolean saveGameSettings(@RequestBody GameSettings gameSettings) {
+    @ResponseStatus(HttpStatus.OK)
+    public void saveGameSettings(@RequestBody GameSettings gameSettings) {
         dispatcher.updateGameSettings(gameSettings);
-
-        return true;
     }
 
     // TODO test me
@@ -509,7 +475,6 @@ public class RestController {
     @GetMapping(CONTEST + "/enable/set/{enabled}")
     @ResponseBody
     public List<String> startContestStarted(@PathVariable("enabled") boolean enabled) {
-
         List<String> status = new LinkedList<>();
         if (enabled) {
             status.addAll(dispatcher.clearScores());
@@ -534,63 +499,90 @@ public class RestController {
 
     // TODO test me
     @GetMapping(CACHE + "/clear/{mask}")
-    @ResponseBody
-    public boolean invalidateCache(@PathVariable("mask") int whatToClean) {
+    @ResponseStatus(HttpStatus.OK)
+    public void invalidateCache(@PathVariable("mask") int whatToClean) {
         dispatcher.clearCache(whatToClean);
-        return true;
     }
 
     @PostMapping(REGISTER + "/confirm")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ServerLocation> confirmRegistration(@RequestBody PhoneCodeDTO input) {
-        Player updatedOnBalancer = registrationService.confirmRegistration(phoneValidateNormalize(input.getPhone()), input.getCode());
+    @ResponseBody
+    public ServerLocation confirmRegistration(@RequestBody PhoneCodeDTO input) {
+        String phone = input.getPhone();
+        Player player = validator.checkPlayerByPhone(phone);
+        validator.checkNotApproved(player);
+        validator.checkVerificationCode(player, VerificationType.REGISTRATION, input.getCode());
 
-        Player createdOnGame = dispatcher.registerNew(updatedOnBalancer);
+        players.approveByPhone(phone);
+        players.updateVerificationCode(phone, null, null);
 
-        return ResponseEntity.ok(new ServerLocation(createdOnGame));
+        Player createdOnGame = dispatcher.registerNew(player);
+
+        return new ServerLocation(createdOnGame);
     }
 
     @GetMapping(CONFIRM + "/{player}/code")
     @ResponseBody
     public VerificationDTO getVerificationCode(@PathVariable("player") String email) {
-        return new VerificationDTO(players.getByEmail(email));
+        Player player = validator.checkPlayerByEmail(email, false);
+
+        return new VerificationDTO(player);
     }
 
     @PostMapping(REGISTER + "/resend")
     @ResponseStatus(HttpStatus.OK)
     public void resendRegistrationCode(@RequestBody PhoneDTO input) {
-        String phone = phoneValidateNormalize(input.getPhone());
-        registrationService.resendConfirmRegistrationCode(phone);
+        String phone = input.getPhone();
+        Player player = validator.checkPlayerByPhone(phone);
+        validator.checkNotApproved(player);
+
+        String code = generator.verificationCode();
+        players.updateVerificationCode(phone, code, VerificationType.REGISTRATION.name());
+        sms.sendSmsTo(phone, code, SmsService.SmsType.REGISTRATION);
     }
 
     @PostMapping(REGISTER + "/reset")
     @ResponseStatus(HttpStatus.OK)
-    public void sendResetPasswordCode(@RequestBody PhoneDTO input) {
-        String phone = phoneValidateNormalize(input.getPhone());
-        registrationService.resendResetPasswordCode(phone);
+    public void sendResetPasswordCode(@RequestBody PhoneEmailDTO input) {
+        String email = input.getEmail();
+        String phone = input.getPhone();
+        Player player = validator.checkPlayerByEmailAndPhone(email, phone);
+        validator.checkApproved(player);
+
+        String code = generator.verificationCode();
+        players.updateVerificationCode(phone, code, VerificationType.PASSWORD_RESET.name());
+        sms.sendSmsTo(phone, code, SmsService.SmsType.PASSWORD_RESET);
     }
 
     @PostMapping(REGISTER + "/validate-reset")
-    public ResponseEntity<String> validateResetPasswordCode(@RequestBody PhoneCodeDTO input) {
-        String phone = phoneValidateNormalize(input.getPhone());
+    @ResponseStatus(HttpStatus.OK)
+    public void validateResetPasswordCode(@RequestBody PhoneCodeDTO input) {
+        String phone = input.getPhone();
+        String code = input.getCode();
+        Player player = validator.checkPlayerByPhone(phone);
+        validator.checkApproved(player);
+        validator.checkVerificationCode(player, VerificationType.PASSWORD_RESET, code);
 
-        boolean isResetAllowed = registrationService
-                .validateCodeResetPassword(phone, input.getCode());
+        players.updateVerificationCode(phone, null, null);
 
-        if (isResetAllowed) {
-            Player player = players.getByPhone(phone).orElseThrow(() -> new IllegalArgumentException("User not found"));
-            if (game.existsOnServer(player.getServer(), player.getId())) {
-                game.remove(player.getServer(), player.getId());
-            }
-            registrationService.resetPassword(phone);
-            return ResponseEntity.ok("success");
-        } else {
-            return ResponseEntity.badRequest().body("Invalid verification code");
+        if (game.existsOnServer(player.getServer(), player.getId())) {
+            game.remove(player.getServer(), player.getId());
         }
+
+        regeneratePlayerPassword(player);
     }
 
-    private String phoneValidateNormalize(String phone) {
-         validator.checkPhoneNumber(phone, CANT_BE_NULL);
-         return validator.phoneNormalizer(phone);
+    private void regeneratePlayerPassword(Player player) {
+        String generated = generator.password();
+        // это делает фронтенд, но у нас тут чистый пароль
+        String md5 = DigestUtils.md5Hex(generated);
+        // еще раз захешируем
+        String hashed = passwordEncoder.encode(md5);
+
+        player.setPassword(hashed);
+        // и подсчитаем code(md5(bcrypt(password)))
+        player.setCode(Hash.getCode(player.getId(), hashed));
+
+        players.update(player);
+        sms.sendSmsTo(player.getPhone(), generated, SmsService.SmsType.NEW_PASSWORD);
     }
 }

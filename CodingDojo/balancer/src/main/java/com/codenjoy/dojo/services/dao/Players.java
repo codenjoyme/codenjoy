@@ -138,10 +138,10 @@ public class Players {
         );
     }
 
-    public Optional<Player> getByPhone(String phone) {
+    public Player getByPhone(String phone) {
         return pool.select("SELECT * FROM players WHERE phone = ?;",
                 new Object[]{phone},
-                rs -> rs.next() ? Optional.of(getPlayer(rs)) : Optional.empty()
+                rs -> rs.next() ? getPlayer(rs) : null
         );
     }
 
@@ -151,7 +151,6 @@ public class Players {
                 rs -> rs.next() ? rs.getString("code") : null
         );
     }
-
 
     public String getServerByEmail(String email) {
         return pool.select("SELECT server FROM players WHERE email = ?;",
@@ -166,7 +165,6 @@ public class Players {
                 rs -> rs.next() ? rs.getString("server") : null
         );
     }
-
 
     public void create(Player player) {
         pool.update("INSERT INTO players (" +
