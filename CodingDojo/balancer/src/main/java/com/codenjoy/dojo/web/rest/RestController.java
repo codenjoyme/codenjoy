@@ -512,13 +512,13 @@ public class RestController {
     @PostMapping(REGISTER + "/confirm")
     @ResponseBody
     public ServerLocation confirmRegistration(@RequestBody PhoneCodeDTO input) {
-        String phone = input.getPhone();
-        Player player = validator.checkPlayerByPhone(phone);
+        Player player = validator.checkPlayerByPhone(input.getPhone());
         validator.checkNotApproved(player);
         validator.checkVerificationCode(player, VerificationType.REGISTRATION, input.getCode());
 
-        players.approveByPhone(phone);
-        players.updateVerificationCode(phone, null, null);
+        players.approveByPhone(player.getPhone());
+        players.updateVerificationCode(player.getPhone(), null, null);
+
 
         Player createdOnGame = dispatcher.registerNew(player);
 
@@ -536,38 +536,33 @@ public class RestController {
     @PostMapping(REGISTER + "/resend")
     @ResponseStatus(HttpStatus.OK)
     public void resendRegistrationCode(@RequestBody PhoneDTO input) {
-        String phone = input.getPhone();
-        Player player = validator.checkPlayerByPhone(phone);
+        Player player = validator.checkPlayerByPhone(input.getPhone());
         validator.checkNotApproved(player);
 
         String code = generator.verificationCode();
-        players.updateVerificationCode(phone, code, VerificationType.REGISTRATION.name());
-        sms.sendSmsTo(phone, code, SmsService.SmsType.REGISTRATION);
+        players.updateVerificationCode(player.getPhone(), code, VerificationType.REGISTRATION.name());
+        sms.sendSmsTo(player.getPhone(), code, SmsService.SmsType.REGISTRATION);
     }
 
     @PostMapping(REGISTER + "/reset")
     @ResponseStatus(HttpStatus.OK)
     public void sendResetPasswordCode(@RequestBody PhoneEmailDTO input) {
-        String email = input.getEmail();
-        String phone = input.getPhone();
-        Player player = validator.checkPlayerByEmailAndPhone(email, phone);
+        Player player = validator.checkPlayerByEmailAndPhone(input.getEmail(), input.getPhone());
         validator.checkApproved(player);
 
         String code = generator.verificationCode();
-        players.updateVerificationCode(phone, code, VerificationType.PASSWORD_RESET.name());
-        sms.sendSmsTo(phone, code, SmsService.SmsType.PASSWORD_RESET);
+        players.updateVerificationCode(player.getPhone(), code, VerificationType.PASSWORD_RESET.name());
+        sms.sendSmsTo(player.getPhone(), code, SmsService.SmsType.PASSWORD_RESET);
     }
 
     @PostMapping(REGISTER + "/validate-reset")
     @ResponseStatus(HttpStatus.OK)
     public void validateResetPasswordCode(@RequestBody PhoneCodeDTO input) {
-        String phone = input.getPhone();
-        String code = input.getCode();
-        Player player = validator.checkPlayerByPhone(phone);
+        Player player = validator.checkPlayerByPhone(input.getPhone());
         validator.checkApproved(player);
-        validator.checkVerificationCode(player, VerificationType.PASSWORD_RESET, code);
+        validator.checkVerificationCode(player, VerificationType.PASSWORD_RESET, input.getCode());
 
-        players.updateVerificationCode(phone, null, null);
+        players.updateVerificationCode(player.getPhone(), null, null);
 
         if (game.existsOnServer(player.getServer(), player.getId())) {
             game.remove(player.getServer(), player.getId());
