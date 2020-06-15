@@ -116,6 +116,7 @@ public class Player {
         comment = StringUtils.isEmpty(comment) ? player.comment : comment;
         code = StringUtils.isEmpty(code) ? player.code : code;
         server = StringUtils.isEmpty(server) ? player.server : server;
+        approved = player.approved;
 
         verificationCode = StringUtils.isEmpty(verificationCode) ? player.verificationCode : verificationCode;
         verificationType = StringUtils.isEmpty(verificationType) ? player.verificationType : verificationType;
