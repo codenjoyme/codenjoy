@@ -20,14 +20,17 @@
  * #L%
  */
 
-// TODO test me
-
 var util = require('util');
 var WSocket = require('ws');
 
+var printBoardOnTextArea = (typeof printBoardOnTextArea !== 'undefined'
+                            && printBoardOnTextArea !== null)
+                                   ? printBoardOnTextArea
+                                   : false;
+
 var log = function(string) {
     console.log(string);
-    if (!!printBoardOnTextArea) {
+    if (printBoardOnTextArea !== undef && !!printBoardOnTextArea) {
         printLogOnTextArea(string);
     }
 };
