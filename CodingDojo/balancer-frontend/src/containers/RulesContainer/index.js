@@ -144,7 +144,7 @@ class RulesContainer extends Component {
                         Далі необхідно приєднатися з коду Клієнта до сервера.
                     </p>
 
-                    <div className='subTitle'>
+                    <div className='subTitle' id="client-url">
                         Адреса для підключення до гри на сервері
                     </div>
 
