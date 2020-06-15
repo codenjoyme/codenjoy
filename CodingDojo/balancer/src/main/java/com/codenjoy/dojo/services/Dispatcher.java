@@ -234,7 +234,6 @@ public class Dispatcher {
         List<PlayerScore> list = scores.getFinalists(
                 config.getGame().getStartDay(),
                 config.getGame().getEndDay(),
-                lastTime,
                 config.getGame().getFinalistsCount(),
                 disqualifiedIds()
         );

@@ -46,11 +46,11 @@ import java.util.stream.Stream;
 public class Scores {
 
     private CrudConnectionThreadPool pool;
-     @Autowired protected ConfigProperties config;
+    @Autowired protected ConfigProperties config;
 
-    public static final String YYYY_MM_DD = "yyyy-MM-dd";
-    public static final DateTimeFormatter YYYY_MM_DD2 = DateTimeFormatter.ofPattern(YYYY_MM_DD);
-    private SimpleDateFormat formatter = new SimpleDateFormat(YYYY_MM_DD);
+    private static final String DAY_FORMAT = "yyyy-MM-dd";
+    private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern(DAY_FORMAT);
+    private static final SimpleDateFormat DAY_FORMATTER2 = new SimpleDateFormat(DAY_FORMAT);
 
     public Scores(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
@@ -72,7 +72,7 @@ public class Scores {
         pool.update("INSERT INTO scores " +
                         "(day, time, id, score, winner) " +
                         "VALUES (?,?,?,?,?);",
-                formatter.format(date),
+                DAY_FORMATTER2.format(date),
                 JDBCTimeUtils.toString(date),
                 id,
                 score,
@@ -87,7 +87,7 @@ public class Scores {
                 playersInfos,
                 (PreparedStatement stmt, PlayerInfo info) -> {
                     pool.fillStatement(stmt,
-                            formatter.format(date),
+                            DAY_FORMATTER2.format(date),
                             JDBCTimeUtils.toString(date),
                             info.getId(),
                             Integer.valueOf(info.getScore()),
@@ -96,12 +96,16 @@ public class Scores {
                 });
     }
 
-    public List<PlayerScore> getFinalists(String from, String to, long time,
-                                          int finalistsCount, Collection<String> exclude)
+    public List<PlayerScore> getFinalists(String from, String to,
+                                          int finalistsCount,
+                                          Collection<String> exclude)
     {
+        to = plusDay(to);
+        long time = parse(to);
+
         List<String> finalists = new LinkedList<>();
         return getDaysBetween(from, to).stream()
-                .map(day -> day.format(YYYY_MM_DD2))
+                .map(day -> day.format(Scores.DAY_FORMATTER))
                 .filter(day -> isPast(day, time))
                 .flatMap(day -> getScores(day, time).stream()
                     .sorted(Comparator.comparingInt(PlayerScore::getScore).reversed())
@@ -115,6 +119,16 @@ public class Scores {
                     })
             )
             .collect(Collectors.toList());
+    }
+
+    private String plusDay(String day) {
+        return LocalDate.parse(day, Scores.DAY_FORMATTER).plusDays(1).format(Scores.DAY_FORMATTER);
+    }
+
+    private long parse(String to) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(getDate(to));
+        return calendar.getTimeInMillis();
     }
 
     public void setWinnerFlag(PlayerScore playerScore, boolean isWinner) {
@@ -133,8 +147,8 @@ public class Scores {
     }
 
     private List<LocalDate> getDaysBetween(String from, String to) {
-        LocalDate start = LocalDate.parse(from, YYYY_MM_DD2);
-        LocalDate end = LocalDate.parse(to, YYYY_MM_DD2);
+        LocalDate start = LocalDate.parse(from, DAY_FORMATTER);
+        LocalDate end = LocalDate.parse(to, DAY_FORMATTER);
         return Stream.iterate(start, date -> date.plusDays(1))
                 .limit(ChronoUnit.DAYS.between(start, end))
                 .collect(Collectors.toList());
@@ -188,7 +202,7 @@ public class Scores {
 
     public String getDay(long time) {
         Date date = new Date(time);
-        return formatter.format(date);
+        return DAY_FORMATTER2.format(date);
     }
 
     public long getLastTimeOfPast(String day) {
@@ -211,9 +225,9 @@ public class Scores {
 
     public Date getDate(String day) {
         try {
-            return formatter.parse(day);
+            return DAY_FORMATTER2.parse(day);
         } catch (ParseException e) {
-            throw new RuntimeException("Unexpected day format, should be: " + YYYY_MM_DD, e);
+            throw new RuntimeException("Unexpected day format, should be: " + DAY_FORMAT, e);
         }
     }
 

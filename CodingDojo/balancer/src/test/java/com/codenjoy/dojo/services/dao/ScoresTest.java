@@ -453,16 +453,73 @@ public class ScoresTest {
             add(new PlayerInfo("nunafig.id", "6004"));          // -  первое место, был вчера
         }});
 
+        // все эти не будут включены так как не достигли 19:00 - день не закончился
+        long time5 = day("2019-01-31").plus(Calendar.HOUR, 18).get();
+        service.saveScores(time5, new LinkedList<PlayerInfo>() {{
+            add(new PlayerInfo("stiven.pupkin.id", "1005"));     // был победителем в прошлом
+            add(new PlayerInfo("eva.pupkina.id", "2005"));       // был победителем в прошлом
+            add(new PlayerInfo("bob.marley.id", "3005"));        // был победителем в прошлом
+            add(new PlayerInfo("apofig.id", "4005"));            // дисквалицифирован
+            add(new PlayerInfo("zanefig.id", "5005"));           // был победителем в прошлом
+            add(new PlayerInfo("nunafig.id", "6005"));           // был победителем в прошлом
+            add(new PlayerInfo("kukufig.id", "7005"));           // этот бы вошел, но не судьба
+        }});
+
         // when then
-        long now = day("2019-01-31").plus(Calendar.HOUR, 19).get();
+        String expected = "PlayerScore{id='zanefig.id', name='null', score=5002, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='bob.marley.id', name='null', score=3002, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='nunafig.id', name='null', score=6003, day='2019-01-29', time='2019-01-29T19:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='eva.pupkina.id', name='null', score=2003, day='2019-01-29', time='2019-01-29T19:00:00.000+0200', server='null', winner=false}, " +
+                "PlayerScore{id='stiven.pupkin.id', name='null', score=1004, day='2019-01-30', time='2019-01-30T19:00:00.000+0200', server='null', winner=false}";
+
         List<String> exclude = Arrays.asList("apofig.id");
         int finalistsCount = 2;
-        assertEquals(service.getFinalists("2019-01-28", "2019-01-31", now, finalistsCount, exclude).toString(),
-            "[PlayerScore{id='zanefig.id', name='null', score=5002, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}, " +
-            "PlayerScore{id='bob.marley.id', name='null', score=3002, day='2019-01-28', time='2019-01-28T19:00:00.000+0200', server='null', winner=false}, " +
-            "PlayerScore{id='nunafig.id', name='null', score=6003, day='2019-01-29', time='2019-01-29T19:00:00.000+0200', server='null', winner=false}, " +
-            "PlayerScore{id='eva.pupkina.id', name='null', score=2003, day='2019-01-29', time='2019-01-29T19:00:00.000+0200', server='null', winner=false}, " +
-            "PlayerScore{id='stiven.pupkin.id', name='null', score=1004, day='2019-01-30', time='2019-01-30T19:00:00.000+0200', server='null', winner=false}]");
+        assertEquals("[" + expected + "]",
+            service.getFinalists("2019-01-28", "2019-01-31", finalistsCount, exclude).toString());
+
+        // when then
+        // даже если возьмем на день позже то все равно не получим те что в 18:00
+        assertEquals("[" + expected +  "]",
+        service.getFinalists("2019-01-28", "2019-02-01", finalistsCount, exclude).toString());
+
+        // when then
+        // а вот если ребята доиграют до 19:00 то все чик-чик
+        long time5_2 = day("2019-01-31").plus(Calendar.HOUR, 19).get();
+        service.saveScores(time5_2, new LinkedList<PlayerInfo>() {{
+            add(new PlayerInfo("stiven.pupkin.id", "1006"));     // был победителем в прошлом
+            add(new PlayerInfo("eva.pupkina.id", "2006"));       // был победителем в прошлом
+            add(new PlayerInfo("bob.marley.id", "3006"));        // был победителем в прошлом
+            add(new PlayerInfo("apofig.id", "4006"));            // дисквалицифирован
+            add(new PlayerInfo("zanefig.id", "5006"));           // был победителем в прошлом
+            add(new PlayerInfo("nunafig.id", "6006"));           // был победителем в прошлом
+            add(new PlayerInfo("kukufig.id", "7006"));           // этот бы вошел, но не судьба
+        }});
+
+        expected += ", PlayerScore{id='kukufig.id', name='null', score=7006, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}";
+        assertEquals("[" + expected + "]",
+                service.getFinalists("2019-01-28", "2019-01-31", finalistsCount, exclude).toString());
+
+        // when then
+        // причем если они переиграют после 19, то это уже не будет влиять ни на что
+        long time5_3 = day("2019-01-31").plus(Calendar.HOUR, 20).get();
+        service.saveScores(time5_3, new LinkedList<PlayerInfo>() {{
+            add(new PlayerInfo("stiven.pupkin.id", "1007"));     // был победителем в прошлом
+            add(new PlayerInfo("eva.pupkina.id", "2007"));       // был победителем в прошлом
+            add(new PlayerInfo("bob.marley.id", "3007"));        // был победителем в прошлом
+            add(new PlayerInfo("apofig.id", "4007"));            // дисквалицифирован
+            add(new PlayerInfo("zanefig.id", "5007"));           // был победителем в прошлом
+            add(new PlayerInfo("nunafig.id", "6007"));           // был победителем в прошлом
+            add(new PlayerInfo("kukufig.id", "7007"));           // этот бы вошел, но не судьба
+        }});
+
+        assertEquals("[" + expected + "]",
+                service.getFinalists("2019-01-28", "2019-01-31", finalistsCount, exclude).toString());
+
+        // when then
+        // даже если будем брать следующий день в диапазоне
+        assertEquals("[" + expected + "]",
+                service.getFinalists("2019-01-28", "2019-02-01", finalistsCount, exclude).toString());
+
     }
 
 }
