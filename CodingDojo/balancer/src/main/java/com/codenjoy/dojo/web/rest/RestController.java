@@ -141,10 +141,10 @@ public class RestController {
         validator.all(
                 () -> validator.checkEmail(player.getEmail(), CANT_BE_NULL),
                 () -> validator.checkPhoneNumber(player.getPhone()),
-                () -> validator.checkString("firstName", player.getFirstName()),
-                () -> validator.checkString("lastName", player.getLastName()),
+                () -> validator.checkName("firstName", player.getFirstName()),
+                () -> validator.checkName("lastName", player.getLastName()),
                 () -> validator.checkMD5(player.getPassword(), CANT_BE_NULL),
-                () -> validator.checkString("city", player.getCity()),
+                () -> validator.checkName("city", player.getCity()),
                 () -> validator.checkString("skills", player.getSkills())
         );
 

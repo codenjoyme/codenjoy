@@ -57,6 +57,7 @@ messages:
   invalid-phone-login-data: "Невірний email та/або номер телефону"
   invalid-day: "Невірний формат дати (очікується YYYY-MM-DD): '%s'"
   invalid-string: "Очікується не порожній рядок %s: '%s'"
+  invalid-string-format: "Використано неприпустимі символи у %s (допустимі '%s') та/або перевищення максимальної довжини в %s символв: '%s'"
   should-be-empty: "Очікується порожній рядок %s: '%s'"
   invalid-phone-number: "Невірний формат номеру телефона (очікується +380XXYYYZZAA): '%s'"
   invalid-parameters: "Наявні помилки: %s"

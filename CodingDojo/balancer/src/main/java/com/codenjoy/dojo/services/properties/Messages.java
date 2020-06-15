@@ -43,6 +43,7 @@ public class Messages {
     private String invalidPhoneLoginData;
     private String invalidDay;
     private String invalidString;
+    private String invalidStringFormat;
     private String shouldBeEmpty;
     private String invalidPhoneNumber;
     private String invalidParameters;

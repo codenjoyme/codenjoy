@@ -57,6 +57,9 @@ public class BalancerValidator {
 
     public static final String EMAIL = "^[A-Za-z0-9+_.-]+@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$";
     public static final String GAME = "^[A-Za-z0-9+_.-]{1,50}$";
+    public static final String USER_NAME_CHARS = "[a-zA-Zа-яА-Я'іІєЄґҐїЇ]";
+    public static final String USER_NAME_LENGTH = "50";
+    public static final String USER_NAME = "^" + USER_NAME_CHARS + "{1," + USER_NAME_LENGTH + "}$";
     public static final String CODE = "^[0-9]{1,50}$";
     public static final String MD5 = "^[A-Fa-f0-9]{32}$";
     public static final String ID = "^[a-z0-9]{" + Hash.ID_LENGTH + "}$";
@@ -71,6 +74,7 @@ public class BalancerValidator {
     private final Pattern email;
     private final Pattern id;
     private final Pattern gameName;
+    private final Pattern userName;
     private final Pattern code;
     private final Pattern md5;
     private final Pattern day;
@@ -80,6 +84,7 @@ public class BalancerValidator {
         email = Pattern.compile(EMAIL);
         id = Pattern.compile(ID);
         gameName = Pattern.compile(GAME);
+        userName = Pattern.compile(USER_NAME);
         code = Pattern.compile(CODE);
         md5 = Pattern.compile(MD5);
         day = Pattern.compile(DAY);
@@ -144,6 +149,15 @@ public class BalancerValidator {
                 !day.matcher(input).matches())
         {
             throwError(messages.getInvalidDay(), input);
+        }
+    }
+
+    public void checkName(String name, String input) {
+        checkString(name, input);
+
+        if (userName.matcher(input).matches()) {
+            throwError(messages.getInvalidStringFormat(),
+                    name, USER_NAME_CHARS, USER_NAME_LENGTH, input);
         }
     }
 
@@ -318,4 +332,5 @@ public class BalancerValidator {
 
         return player;
     }
+
 }
