@@ -23,7 +23,6 @@ package com.codenjoy.dojo.transport.ws;
  */
 
 
-import java.io.IOException;
 import java.util.function.Function;
 
 public interface PlayerTransport {
@@ -31,17 +30,15 @@ public interface PlayerTransport {
     /**
      * Send game state to the all players
      * @param state state
-     * @throws IOException
      */
-    void sendStateToAll(Object state) throws IOException;
+    void sendStateToAll(Object state);
 
     /**
      * Send game state to the player by given player id.
      * @param id registered player id
      * @param state state
-     * @throws IOException
      */
-    boolean sendState(String id, Object state) throws IOException;
+    boolean sendState(String id, Object state);
 
     /**
      * Случается, когда игрок зарегистрировался в игре на страничке регистрации

@@ -25,7 +25,7 @@ package com.codenjoy.dojo.transport.ws;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
+import java.nio.channels.ClosedChannelException;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
@@ -39,7 +39,7 @@ public class PlayerTransportImpl implements PlayerTransport {
     private Function<Object, Object> defaultFilter;
 
     @Override
-    public void sendStateToAll(Object state) throws IOException {
+    public void sendStateToAll(Object state) {
         lock.readLock().lock();
         try {
             int requested = 0;
@@ -53,14 +53,13 @@ public class PlayerTransportImpl implements PlayerTransport {
                     requested++;
                     pair.sendMessage(state);
                 } catch (Exception e) {
-                    log.error("Error during send state to: " + pair.getId(), e);
-                    messages.add(e.getMessage());
+                    processError(pair, e);
+                    messages.add(e.getClass().getSimpleName() + ": " + e.getMessage());
                 }
             }
             if (!messages.isEmpty()) {
-                throw new IOException("Error during send state to all players: " +
+                log.warn("Error during send state to all players: " +
                         messages.toString());
-                // TODO Может не надо тут прокидывать это исключение а просто логгировать факт каждой проблемы отдельно
             }
             log.debug("tick().sendScreenUpdates().sendStateToAll() {} endpoints", requested);
         } finally {
@@ -68,10 +67,20 @@ public class PlayerTransportImpl implements PlayerTransport {
         }
     }
 
+    private void processError(SocketsHandlerPair pair, Exception e) {
+        boolean isWarning = !(e instanceof ClosedChannelException);
+        String id = (pair != null) ? pair.getId() : "null";
+        if (isWarning) {
+            log.warn("ClosedChannelException with: " + id);
+        } else {
+            log.error("Error during send state to: " + id, e);
+        }
+    }
+
     @Override
-    public boolean sendState(String id, Object state) throws IOException {
+    public boolean sendState(String id, Object state) {
         lock.readLock().lock();
-        SocketsHandlerPair pair;
+        SocketsHandlerPair pair = null;
         try {
             pair = endpoints.get(id);
             if (pair == null || pair.noSockets()) {
@@ -79,6 +88,9 @@ public class PlayerTransportImpl implements PlayerTransport {
             }
             pair.sendMessage(state);
             return true;
+        } catch (Exception e) {
+            processError(pair, e);
+            return false;
         } finally {
             lock.readLock().unlock();
         }
