@@ -232,7 +232,9 @@ public class RestController {
                                       @PathVariable("code") String code,
                                       HttpServletRequest request)
     {
-        ServerLocation location = tryLogin(new Player(id, code, getIp(request)), true,
+        Player player = new Player(id, code, getIp(request));
+
+        ServerLocation location = tryLogin(player, true,
                 current -> recreatePlayerIfNeeded(current));
 
         if (code.equals(location.getCode())) {
