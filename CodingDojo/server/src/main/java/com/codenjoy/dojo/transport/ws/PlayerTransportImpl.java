@@ -68,7 +68,7 @@ public class PlayerTransportImpl implements PlayerTransport {
     }
 
     private void processError(SocketsHandlerPair pair, Exception e) {
-        boolean isWarning = !(e instanceof ClosedChannelException);
+        boolean isWarning = (e instanceof ClosedChannelException);
         String id = (pair != null) ? pair.getId() : "null";
         if (isWarning) {
             log.warn("ClosedChannelException with: " + id);
