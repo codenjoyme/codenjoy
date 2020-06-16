@@ -66,10 +66,10 @@ public class BalancerValidator {
     public static final String DAY = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$";
     public static final String PHONE_NUMBER = "^(\\+38|38)?0([0-9]{2})([0-9]{7})$";
 
-    @Autowired private Players players;
-    @Autowired private ConfigProperties properties;
-    @Autowired private Messages messages;
-    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired protected Players players;
+    @Autowired protected ConfigProperties properties;
+    @Autowired protected Messages messages;
+    @Autowired protected PasswordEncoder passwordEncoder;
 
     private final Pattern email;
     private final Pattern id;
@@ -155,7 +155,7 @@ public class BalancerValidator {
     public void checkName(String name, String input) {
         checkString(name, input);
 
-        if (userName.matcher(input).matches()) {
+        if (!userName.matcher(input).matches()) {
             throwError(messages.getInvalidStringFormat(),
                     name, USER_NAME_CHARS, USER_NAME_LENGTH, input);
         }
