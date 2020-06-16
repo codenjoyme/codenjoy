@@ -519,8 +519,7 @@ public class RestController {
         validator.checkVerificationCode(player, VerificationType.REGISTRATION, input.getCode());
 
         players.approve(player.getId());
-        players.updateVerificationCode(player.getId(), null, null);
-
+        players.updateVerificationCode(player, null, null);
 
         Player createdOnGame = dispatcher.registerNew(player);
 
@@ -542,7 +541,7 @@ public class RestController {
         validator.checkNotApproved(player);
 
         String code = generator.verificationCode();
-        players.updateVerificationCode(player.getId(), code, VerificationType.REGISTRATION.name());
+        players.updateVerificationCode(player, code, VerificationType.REGISTRATION.name());
         sms.sendSmsTo(player.getPhone(), code, SmsService.SmsType.REGISTRATION);
     }
 
@@ -553,7 +552,7 @@ public class RestController {
         validator.checkApproved(player);
 
         String code = generator.verificationCode();
-        players.updateVerificationCode(player.getId(), code, VerificationType.PASSWORD_RESET.name());
+        players.updateVerificationCode(player, code, VerificationType.PASSWORD_RESET.name());
         sms.sendSmsTo(player.getPhone(), code, SmsService.SmsType.PASSWORD_RESET);
     }
 
@@ -564,7 +563,7 @@ public class RestController {
         validator.checkApproved(player);
         validator.checkVerificationCode(player, VerificationType.PASSWORD_RESET, input.getCode());
 
-        players.updateVerificationCode(player.getId(), null, null);
+        players.updateVerificationCode(player, null, null);
 
         if (game.existsOnServer(player.getServer(), player.getId())) {
             game.remove(player.getServer(), player.getId());

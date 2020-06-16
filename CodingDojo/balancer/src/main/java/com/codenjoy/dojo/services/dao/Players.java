@@ -245,9 +245,12 @@ public class Players {
                 Player.APPROVED, id);
     }
 
-    public void updateVerificationCode(String id, String verificationCode, String verificationType) {
+    public void updateVerificationCode(Player player, String verificationCode, String verificationType) {
+        player.setVerificationType(verificationType);
+        player.setVerificationCode(verificationCode);
+
         pool.update("UPDATE players SET verification_code = ?, verification_type = ? WHERE id = ?;",
-                verificationCode, verificationType, id);
+                verificationCode, verificationType, player.getId());
     }
 
     public void remove(String id) {
