@@ -102,8 +102,9 @@ const HomeContainer = () => (
                 Фіналістів.
             </p>
             <p>
-                Конкурс триватиме з { dayTimeStart } години { startDate }&nbsp;
-                до { dayTimeEnd } години { registerEndDate } (за виключенням вихідних).
+                Конкурс триватиме кожного дня з { startDate } до { registerEndDate }&nbsp;
+                за виключенням вихідних, починаться з { dayTimeStart } години
+                i закінчується { dayTimeEnd } годиною.
                 Кожного дня визначаються { finalistsCount } Фіналістів.
             </p>
             <p>
