@@ -40,9 +40,8 @@ import static com.codenjoy.dojo.client.WebSocketRunner.BOARD_FORMAT2;
 
 public class LocalWSGameRunner {
 
+    private Object wait = new Object();
     private String action;
-    private Object waitAction = new Object();
-    private Object waitBoard = new Object();
     private String board;
 
     public static void run(GameType gameType, String host, int port) {
@@ -56,11 +55,11 @@ public class LocalWSGameRunner {
             LocalWSGameRunner.this.board = ((AbstractBoard) board).boardAsString().replaceAll("\n", "");
 
             // проинформировали что у нас на руках есть board
-            synchronized (waitBoard) {
-                waitBoard.notify();
+            synchronized (wait) {
+                wait.notify();
 
                 try {
-                    waitBoard.wait();
+                    wait.wait();
                 } catch (InterruptedException e) {
                     // случится, если что-то прервет Thread
                 }
@@ -99,11 +98,11 @@ public class LocalWSGameRunner {
                 LocalWSGameRunner.this.action = action;
 
                 // проинформировали что у нас на руках есть action
-                synchronized (waitBoard) {
-                    waitBoard.notify();
+                synchronized (wait) {
+                    wait.notify();
 
                     try {
-                        waitBoard.wait();
+                        wait.wait();
                     } catch (InterruptedException e) {
                         // случится, если что-то прервет Thread
                     }
