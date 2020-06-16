@@ -57,7 +57,7 @@ public class ErrorTicketService {
         log.error("[TICKET:URL] {}:{} {}", ticket, url, message);
         System.err.printf("[TICKET:URL] %s:%s %s%n", ticket, url, message);
 
-        if (printStackTrace) {
+        if (printStackTrace && !skip(message)) {
             exception.printStackTrace();
         }
 
@@ -95,6 +95,10 @@ public class ErrorTicketService {
 
         shouldErrorPage(result);
         return result;
+    }
+
+    private boolean skip(String message) {
+        return message.contains("java.lang.IllegalAccessException: Unauthorized");
     }
 
     private String prepareJsonStackTrace(Exception exception) {

@@ -41,6 +41,7 @@ import static java.util.stream.Collectors.toList;
 @AllArgsConstructor
 public class PlayerSocketCreator implements WebSocketCreator {
 
+    public static final String UNAUTHORIZED_ACCESS = "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.";
     private PlayerTransport transport;
     private AuthenticationService authenticationService;
     private boolean waitForClient;
@@ -53,7 +54,7 @@ public class PlayerSocketCreator implements WebSocketCreator {
         if (authId == null) {
             log.warn("Unauthorized access [{}] from {}", getParameters(request), request.getRemoteAddr());
             try {
-                response.sendError(401, "Unauthorized access. Please register user and/or write valid EMAIL/CODE in the client.");
+                response.sendError(401, UNAUTHORIZED_ACCESS);
             } catch (IOException e) {
                 log.warn("Error sending status {}", e.getMessage());
             }

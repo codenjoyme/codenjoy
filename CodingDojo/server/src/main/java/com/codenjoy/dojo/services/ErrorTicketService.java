@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class ErrorTicketService {
         log.error("[TICKET:URL] {}:{} {}", ticket, url, message);
         System.err.printf("[TICKET:URL] %s:%s %s%n", ticket, url, message);
 
-        if (printStackTrace) {
+        if (printStackTrace && !skip(message)) {
             exception.printStackTrace();
         }
 
@@ -91,6 +92,10 @@ public class ErrorTicketService {
 
         shouldErrorPage(result);
         return result;
+    }
+
+    private boolean skip(String message) {
+        return message.contains(PlayerSocketCreator.UNAUTHORIZED_ACCESS);
     }
 
     private String prepareJsonStackTrace(Exception exception) {
