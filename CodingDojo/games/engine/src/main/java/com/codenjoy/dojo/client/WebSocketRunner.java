@@ -47,6 +47,7 @@ public class WebSocketRunner implements Closeable {
     private static final String LOCALHOST = "127.0.0.1";
     public static final String WS_URI_PATTERN = "%s://%s/%s/ws?user=%s&code=%s";
     public static final String BOARD_FORMAT = "^board=(.*)$";
+    public static final String BOARD_FORMAT2 = "board=%s";
     public static final Pattern BOARD_PATTERN = Pattern.compile(BOARD_FORMAT);
     public static String BOT_ID_SUFFIX = "-super-ai";
 
@@ -157,6 +158,11 @@ public class WebSocketRunner implements Closeable {
 
         @OnWebSocketConnect
         public void onConnect(Session session) {
+            // актуально только для LocalWSGameRunner
+            if (WebSocketRunner.this.session == null) {
+                WebSocketRunner.this.session = session;
+            }
+
             print("Opened connection " + session.toString());
         }
 

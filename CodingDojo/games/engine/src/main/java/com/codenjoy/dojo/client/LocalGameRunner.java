@@ -52,15 +52,15 @@ public class LocalGameRunner {
     private List<Solver> solvers;
     private List<ClientBoard> boards;
 
-    public static void run(GameType gameType, Solver solver, ClientBoard board) {
-        run(gameType, Arrays.asList(solver), Arrays.asList(board));
+    public static LocalGameRunner run(GameType gameType, Solver solver, ClientBoard board) {
+        return run(gameType, Arrays.asList(solver), Arrays.asList(board));
     }
 
-    public static void run(GameType gameType,
+    public static LocalGameRunner run(GameType gameType,
                            List<Solver> solvers,
                            List<ClientBoard> boards)
     {
-        new LocalGameRunner(gameType, solvers, boards).run();
+        return new LocalGameRunner(gameType, solvers, boards).run();
     }
 
     private LocalGameRunner(GameType gameType,
@@ -78,7 +78,7 @@ public class LocalGameRunner {
                 .collect(toList());
     }
 
-    public void run() {
+    public LocalGameRunner run() {
         Integer count = countIterations;
         while (count == null || count-- > 0) {
 
@@ -114,6 +114,7 @@ public class LocalGameRunner {
 
             out.accept("------------------------------------------");
         }
+        return this;
     }
 
     private String askAnswer(int index) {
