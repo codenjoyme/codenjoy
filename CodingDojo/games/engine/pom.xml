@@ -17,6 +17,7 @@
         <commons-collections.version>4.3</commons-collections.version>
         <json.version>20180813</json.version>
         <jsonio.version>4.10.1</jsonio.version>
+        <java-web-socket.version>1.5.1</java-web-socket.version>
 
         <reflections.version>0.9.11</reflections.version>
         <fest-reflect.version>1.4.1</fest-reflect.version>
@@ -57,6 +58,11 @@
     </dependencyManagement>
 
     <dependencies>
+        <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>${java-web-socket.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-server</artifactId>
