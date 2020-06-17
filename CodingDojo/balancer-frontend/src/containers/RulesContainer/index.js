@@ -1,4 +1,4 @@
-﻿// vendor
+// vendor
 import React, {  Component  } from 'react';
 import {  connect  } from 'react-redux';
 // import classnames from 'classnames';
@@ -161,10 +161,10 @@ class RulesContainer extends Component {
                                     />
                                 </CopyToClipboard>
                             </div>
-                            <div className={ highligteNotes }>
+                            <p>
                                 Тут 'user' - id гравця, a 'code' - ваш security token,
                                 його ви зможете отримати тут після реєстрації/логіна.
-                            </div>
+                            </p>
                         </>
                     ) : (
                         <div className={ highligte }>
@@ -173,15 +173,26 @@ class RulesContainer extends Component {
                             </Link>
                         </div>
                     ) }
-
-                    <p>
-                        <b>[Опціонально]</b> Якщо є бажання підключитись до гри, коли сервер недоступний (вихідні, свята або не робочий час) -
-                        можно <a className='content' style={{ display:'initial' }} href='https://drive.google.com/uc?export=download&id=1IOBr-CwjPfaX-W11lTTS996D6aVt9nEl'>завантажити сервер</a> і
-                        запустити його командою <a className='content' style={{ display:'initial' }}>java -jar bomberman-engine.jar</a> (попередньо на ваш комп'ютер потрібно встановити java додаток).
-                        Після цього можно використати лінк для підключення <a className='content' style={{ display:'initial' }} href={ localhostConnectionUrl }>{ localhostConnectionUrl }</a>&nbsp;
-                        <br/>
+                    <p style={{ marginLeft:'50px' }}>
+                        <p>
+                            <b>[Опціонально]</b> Якщо є бажання підключитись до гри, коли сервер недоступний (вихідні, свята або не робочий час) -
+                            можно <a className='content' style={{ display:'initial' }} href='https://drive.google.com/uc?export=download&id=1JmXlF8ZSaSZ1nR4u-_3kgbDN3WSsQqpG'>завантажити сервер</a> і
+                            запустити його командою (попередньо на ваш комп'ютер потрібно встановити java додаток).
+                        </p>
+                        <div className={ highligte } style={{whiteSpace:"pre"}} >
+                            { "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -Dsettings={'boardSize':11,'bombPower':7}" }
+                        </div>
+                        <p>
+                            Як бачиш - є можливicть змінювати хост/порт, кількість мілісекунд на один тік та
+                            налаштування<b><a href='#settings'>*</a></b> гри (у вигляді json).
+                            Після цього можно використати лінк для підключення
+                            <br/>
+                            <a className='content' style={{ display:'initial' }} href={ localhostConnectionUrl }>{ localhostConnectionUrl }</a>
+                            <br/>
+                            Також є можливість підключатись декількома клiєнтами - вси бомбери зберуться на одному полі.
+                        </p>
                         <b style={{ color:'#ffffff' }}>Увага!</b> Локальний сервер буде вдосконалюватись - слідкуйте за поновленнями на цій сторінці.
-                        Наразі наявна версія <a className='content' style={{ display:'initial' }}>'Кульбаба' (v1)</a>.
+                        Наразі наявна версія <a className='content' style={{ display:'initial' }}>'Хризантема' (v2)</a>.
                     </p>
                     <p>
                         Після підключення клієнт буде регулярно (кожну секунду)
