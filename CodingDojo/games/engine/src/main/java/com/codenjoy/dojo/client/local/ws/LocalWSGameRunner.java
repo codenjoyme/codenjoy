@@ -55,20 +55,24 @@ public class LocalWSGameRunner {
             LocalWSGameRunner.this.board = ((AbstractBoard) board).boardAsString().replaceAll("\n", "");
 
             // проинформировали что у нас на руках есть board
-            synchronized (wait) {
-                wait.notify();
-
-                try {
-                    wait.wait();
-                } catch (InterruptedException e) {
-                    // случится, если что-то прервет Thread
-                }
-            }
+            waitNotify();
 
             return action;
         };
 
         runGame(gameType, solver, timeout);
+    }
+
+    private void waitNotify() {
+        synchronized (wait) {
+            wait.notify();
+
+            try {
+                wait.wait();
+            } catch (InterruptedException e) {
+                // случится, если что-то прервет Thread
+            }
+        }
     }
 
     @SneakyThrows
@@ -98,15 +102,7 @@ public class LocalWSGameRunner {
                 LocalWSGameRunner.this.action = action;
 
                 // проинформировали что у нас на руках есть action
-                synchronized (wait) {
-                    wait.notify();
-
-                    try {
-                        wait.wait();
-                    } catch (InterruptedException e) {
-                        // случится, если что-то прервет Thread
-                    }
-                }
+                waitNotify();
 
                 this.broadcast(String.format(BOARD_FORMAT2, board));
             }
