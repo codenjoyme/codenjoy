@@ -82,6 +82,32 @@
         <module>excitebike</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>jar</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <finalName>${project.artifactId}</finalName>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>false</addClasspath>
+                                    <mainClass>com.codenjoy.dojo.Main</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptors>
+                                <descriptor>../jar-with-deps-with-exclude.xml</descriptor>
+                            </descriptors>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
