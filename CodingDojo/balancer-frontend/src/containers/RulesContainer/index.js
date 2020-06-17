@@ -1,4 +1,4 @@
-// vendor
+﻿// vendor
 import React, {  Component  } from 'react';
 import {  connect  } from 'react-redux';
 // import classnames from 'classnames';
@@ -75,6 +75,7 @@ class RulesContainer extends Component {
             : void 0;
         const localhostConnectionUrl = getGameConnectionString('127.0.0.1:8080', '12345678901234567890', 'anyidyouwant');
         const privacyRulesUrl = process.env.REACT_APP_EVENT_LINK + '/privacyRules';
+        const settingsLink = process.env.REACT_APP_API_SERVER + '/codenjoy-balancer/rest/game/settings/get';
         const privacyRulesDetailsUrl = privacyRulesUrl + '#details3';
         const joinSlackUrl = process.env.REACT_APP_JOIN_CHAT_LINK;
         const clientLink = loggedIn
@@ -573,7 +574,11 @@ class RulesContainer extends Component {
                         <b>(<a name='settings'>*</a>)</b> - Точні значення: балів за руйнування на полі та штрафних балів;
                         кількості Раундів в Матчі; сили ефекту, таймаутів, вірогідності
                         випадання Перків та інших змінних треба уточнити у організаторів
-                        на початку Ігрового Дня в Slack чаті або тут, на цій сторінці, після авторизації.
+                        на початку Ігрового Дня в Slack чаті або тут, на цій сторінці, після авторизації,
+                        або&nbsp;
+                        <a href={ settingsLink } rel='noopener noreferrer' target='_blank'>
+                            за посиланням<img src={ Icon } alt='Долучитися до чату'/>
+                        </a>.
                     </p>
                     <p>
                         Будьте уважні - ці значення відрізнятимуться для різних
