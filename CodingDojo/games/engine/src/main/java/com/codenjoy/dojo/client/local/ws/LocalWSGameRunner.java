@@ -44,11 +44,11 @@ public class LocalWSGameRunner {
     private String action;
     private String board;
 
-    public static void run(GameType gameType, String host, int port) {
-        new LocalWSGameRunner().start(gameType, host, port);
+    public static void run(GameType gameType, String host, int port, int timeout) {
+        new LocalWSGameRunner().start(gameType, host, port, timeout);
     }
 
-    public void start(GameType gameType, String host, int port) {
+    public void start(GameType gameType, String host, int port, int timeout) {
         CompletableFuture.runAsync(() -> startWsServer(host, port));
 
         Solver solver = board -> {
@@ -68,12 +68,12 @@ public class LocalWSGameRunner {
             return action;
         };
 
-        runGame(gameType, solver);
+        runGame(gameType, solver, timeout);
     }
 
     @SneakyThrows
-    private LocalGameRunner runGame(GameType gameType, Solver solver) {
-        LocalGameRunner.timeout = 1000;
+    private LocalGameRunner runGame(GameType gameType, Solver solver, int timeout) {
+        LocalGameRunner.timeout = timeout;
 
         return LocalGameRunner.run(gameType,
                 Arrays.asList(solver),

@@ -37,6 +37,7 @@ public class Main {
     public static void main(String[] args) {
         String host = System.getProperty("host", "127.0.0.1");
         int port = Integer.valueOf(System.getProperty("port", "8080"));
+        int timeout = Integer.valueOf(System.getProperty("timeout", "1000"));
         String settingsJson = System.getProperty("settings", "{}");
         String game = "bomberman";
 
@@ -67,9 +68,9 @@ public class Main {
         System.out.printf("Run local WS server for %s on %s:%s with settings:\n" +
                         "%s\n" +
                         "If you want to change something, please use command:\n" +
-                        "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dsettings={'boardSize':11,'bombPower':7}\n\n",
+                        "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -Dsettings={'boardSize':11,'bombPower':7}\n\n",
                 game, host, port, JsonUtils.prettyPrint(gameSettings.asJson()));
 
-        LocalWSGameRunner.run(gameType, host, port);
+        LocalWSGameRunner.run(gameType, host, port, timeout);
     }
 }
