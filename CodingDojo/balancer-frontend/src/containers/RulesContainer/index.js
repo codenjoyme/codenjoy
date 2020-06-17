@@ -177,11 +177,13 @@ class RulesContainer extends Component {
                     ) }
 
                     <p>
-                        Якщо є бажання підключитись до гри, коли сервер недоступний (вихідні, свята або не робочий час) -
+                        [Опціонально] Якщо є бажання підключитись до гри, коли сервер недоступний (вихідні, свята або не робочий час) -
                         можно <a className='content' style={{ display:'initial' }} href='https://drive.google.com/uc?export=download&id=1IOBr-CwjPfaX-W11lTTS996D6aVt9nEl'>завантажити сервер</a> і
                         запустити його командою <a className='content' style={{ display:'initial' }}>java -jar bomberman-engine.jar</a> (попередньо на ваш комп'ютер потрібно встановити java додаток).
                         Після цього можно використати вказаний вище лінк для підключення, замінивши в ньому адресу сервера
-                        на <a className='content' style={{ display:'initial' }} href={ localhostConnectionUrl }>"127.0.0.1:8080"</a>.
+                        на <a className='content' style={{ display:'initial' }} href={ localhostConnectionUrl }>127.0.0.1:8080</a>.&nbsp;
+                        <b style={{ color:'#ffffff' }}>Увага!</b> Локальний сервер буде вдосконалюватись - слідкуйте за поновленнями на цій сторінці.
+                        Наразі наявна версія <a className='content' style={{ display:'initial' }}>'Кульбаба' (v1)</a>.
                     </p>
                     <p>
                         Після підключення клієнт буде регулярно (кожну секунду)
