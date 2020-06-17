@@ -73,6 +73,9 @@ class RulesContainer extends Component {
         const connectionUrl = loggedIn
             ? getGameConnectionString(server, code, id)
             : void 0;
+        const localhostConnectionUrl = loggedIn
+            ? getGameConnectionString('127.0.0.1:8080', code, id)
+            : void 0;
         const privacyRulesUrl = process.env.REACT_APP_EVENT_LINK + '/privacyRules';
         const privacyRulesDetailsUrl = privacyRulesUrl + '#details3';
         const joinSlackUrl = process.env.REACT_APP_JOIN_CHAT_LINK;
@@ -173,6 +176,13 @@ class RulesContainer extends Component {
                         </div>
                     ) }
 
+                    <p>
+                        Якщо є бажання підключитись до гри, коли сервер недоступний (вихідні, свята або не робочий час) -
+                        можно <a className='content' style={{ display:'initial' }} href='https://drive.google.com/uc?export=download&id=1IOBr-CwjPfaX-W11lTTS996D6aVt9nEl'>завантажити сервер</a> і
+                        запустити його командою <a className='content' style={{ display:'initial' }}>java -jar bomberman-engine.jar</a> (попередньо на ваш комп'ютер потрібно встановити java додаток).
+                        Після цього можно використати вказаний вище лінк для підключення, замінивши в ньому адресу сервера
+                        на <a className='content' style={{ display:'initial' }} href={ localhostConnectionUrl }>"127.0.0.1:8080"</a>.
+                    </p>
                     <p>
                         Після підключення клієнт буде регулярно (кожну секунду)
                         отримувати рядок символів із закодованим станом поля.
