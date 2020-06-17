@@ -64,7 +64,10 @@ public class Main {
                 "  },\n" +
                 "}"));
 
-        System.out.printf("Run local WS server for %s on %s:%s with settings:\n%s\n\n",
+        System.out.printf("Run local WS server for %s on %s:%s with settings:\n" +
+                        "%s\n" +
+                        "If you want to change something, please use command:\n" +
+                        "java -jar -Dhost=127.0.0.1 -Dport:8080 -Dsettings={'boardSize':11,'bombPower':7}\n\n",
                 game, host, port, JsonUtils.prettyPrint(gameSettings.asJson()));
 
         LocalWSGameRunner.run(gameType, host, port);
