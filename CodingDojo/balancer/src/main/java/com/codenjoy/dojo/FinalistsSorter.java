@@ -37,10 +37,9 @@ import static java.util.Comparator.comparing;
 public class FinalistsSorter {
 
     public static void main(String[] args) {
-        String day = "day2";
+        String day = "day3";
         JSONArray finalists = load(day + "/finalists.txt");
         JSONArray users = load(day + "/users.txt");
-        JSONArray todayScores = load(day + "/todayScores.txt");
 
         // --------
 
@@ -51,13 +50,6 @@ public class FinalistsSorter {
         }
 
         // --------
-
-        String today = todayScores.getJSONObject(0).getString("time").split("T")[0];
-
-
-
-
-        // ----------
 
         List<JSONObject> list = new ArrayList<>();
         for (int i = 0; i < finalists.length(); i++) {
