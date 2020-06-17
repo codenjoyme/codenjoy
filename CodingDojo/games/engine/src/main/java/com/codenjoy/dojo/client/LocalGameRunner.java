@@ -60,59 +60,62 @@ public class LocalGameRunner {
                            List<Solver> solvers,
                            List<ClientBoard> boards)
     {
-        return new LocalGameRunner(gameType, solvers, boards).run();
+        LocalGameRunner runner = new LocalGameRunner(gameType);
+
+        for (int i = 0; i < solvers.size(); i++) {
+            runner.add(solvers.get(i), boards.get(i));
+        }
+
+        return runner.run();
     }
 
-    private LocalGameRunner(GameType gameType,
-                           List<Solver> solvers,
-                           List<ClientBoard> boards)
-    {
-        this.solvers = solvers;
-        this.boards = boards;
+    public LocalGameRunner(GameType gameType) {
         this.gameType = gameType;
 
-        field = gameType.createGame(0);
+        solvers = new LinkedList<>();
+        boards = new LinkedList<>();
+        games = new LinkedList<>();
 
-        games = solvers.stream()
-                .map(slv -> createGame())
-                .collect(toList());
+        field = gameType.createGame(0);
     }
 
     public LocalGameRunner run() {
         Integer count = countIterations;
         while (count == null || count-- > 0) {
+            synchronized (this) {
+                List<String> answers = new LinkedList<>();
 
-            List<String> answers = new LinkedList<>();
+                for (Game game : games) {
+                    answers.add(askAnswer(games.indexOf(game)));
+                }
 
-            for (Game game : games) {
-                answers.add(askAnswer(games.indexOf(game)));
-            }
+                for (Game game : games) {
+                    int index = games.indexOf(game);
+                    String answer = answers.get(index);
 
-            for (Game game : games) {
-                int index = games.indexOf(game);
-                String answer = answers.get(index);
+                    new PlayerCommand(game.getJoystick(), answer).execute();
 
-                new PlayerCommand(game.getJoystick(), answer).execute();
-
-                if (timeout > 0) {
-                    try {
-                        Thread.sleep(timeout);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    if (timeout > 0) {
+                        try {
+                            Thread.sleep(timeout);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
 
-            field.tick();
-            for (int index = 0; index < games.size(); index++) {
-                Game single = games.get(index);
-                if (single.isGameOver()) {
-                    out.accept(player(index, "PLAYER_GAME_OVER -> START_NEW_GAME"));
-                    single.newGame();
+                field.tick();
+                for (int index = 0; index < games.size(); index++) {
+                    Game single = games.get(index);
+                    if (single.isGameOver()) {
+                        out.accept(player(index, "PLAYER_GAME_OVER -> START_NEW_GAME"));
+                        single.newGame();
+                    }
                 }
-            };
+                ;
 
-            out.accept("------------------------------------------");
+                out.accept("------------------------------------------");
+            }
         }
         return this;
     }
@@ -137,6 +140,20 @@ public class LocalGameRunner {
 
     private ClientBoard board(int index) {
         return boards.get(index);
+    }
+
+    public synchronized void add(Solver solver, ClientBoard board) {
+        solvers.add(solver);
+        boards.add(board);
+        games.add(createGame());
+    }
+
+    public synchronized void remove(Solver solver) {
+        int index = solvers.indexOf(solver);
+        solvers.remove(index);
+        boards.remove(index);
+        Game game = games.remove(index);
+        field.remove(game.getPlayer());
     }
 
     private Game game(int index) {
