@@ -42,6 +42,8 @@ import static java.util.stream.Collectors.toList;
 
 public class LocalGameRunner {
 
+    public static final String SEP = "------------------------------------------";
+
     public static int timeout = 10;
     public static Consumer<String> out = System.out::println;
     public static Integer countIterations = null;
@@ -90,7 +92,7 @@ public class LocalGameRunner {
                 }
             }
 
-            synchronized (this) {
+//            synchronized (this) {
                 List<String> answers = new LinkedList<>();
                 for (Game game : games) {
                     answers.add(askAnswer(games.indexOf(game)));
@@ -112,8 +114,8 @@ public class LocalGameRunner {
                     }
                 }
 
-                out.accept("------------------------------------------");
-            }
+                out.accept(SEP);
+//            }
         }
         return this;
     }

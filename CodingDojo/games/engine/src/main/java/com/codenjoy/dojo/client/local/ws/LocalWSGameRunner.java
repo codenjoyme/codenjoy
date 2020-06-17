@@ -37,6 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import static com.codenjoy.dojo.client.LocalGameRunner.SEP;
 import static com.codenjoy.dojo.client.WebSocketRunner.BOARD_FORMAT2;
 
 public class LocalWSGameRunner {
@@ -63,7 +64,7 @@ public class LocalWSGameRunner {
         return statuses.stream()
                 .filter(status -> status.getSocket() == socket)
                 .findFirst()
-                .get();
+                .orElseGet(null);
     }
 
     private String getAnswer(ConnectionStatus status, ClientBoard clientBoard) {
@@ -76,10 +77,10 @@ public class LocalWSGameRunner {
     private void startWsServer(String host, int port) {
         WebSocketServer server = new WebSocketServer(new InetSocketAddress(host, port)) {
             @Override
-            public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-                System.out.println("==============================\nOpen connection");
+            public void onOpen(WebSocket socket, ClientHandshake clientHandshake) {
+                System.out.println(SEP + "\nOpen connection\n" + SEP);
 
-                ConnectionStatus status = new ConnectionStatus(webSocket);
+                ConnectionStatus status = new ConnectionStatus(socket);
                 statuses.add(status);
 
                 status.setSolver(board -> getAnswer(status, board));
@@ -90,12 +91,17 @@ public class LocalWSGameRunner {
                     throw new RuntimeException(e);
                 }
 
-                this.broadcast(String.format(BOARD_FORMAT2, status.getBoard()));
+                socket.send(String.format(BOARD_FORMAT2, status.getBoard()));
             }
 
             @Override
-            public void onClose(WebSocket webSocket, int i, String s, boolean b) {
-                System.out.println("\"==============================\\nClose connection\"");
+            public void onClose(WebSocket socket, int i, String s, boolean b) {
+                System.out.println(SEP + "\nClosed connection\n" + SEP);
+                ConnectionStatus status = status(socket);
+
+                if (status != null) {
+                    exit(status);
+                }
             }
 
             @Override
@@ -103,12 +109,17 @@ public class LocalWSGameRunner {
                 ConnectionStatus status = status(socket);
 
                 status.setAction(action);
-                broadcast(String.format(BOARD_FORMAT2, status.getBoard()));
+                socket.send(String.format(BOARD_FORMAT2, status.getBoard()));
             }
 
             @Override
-            public void onError(WebSocket webSocket, Exception e) {
-                System.out.println("\"==============================\\nError connection\"");
+            public void onError(WebSocket socket, Exception e) {
+                System.out.println(SEP + "\nError connection: " + e.toString() + "\n" + SEP);
+                ConnectionStatus status = status(socket);
+
+                if (status != null) {
+                    exit(status);
+                }
             }
 
             @Override
@@ -117,6 +128,12 @@ public class LocalWSGameRunner {
             }
         };
         server.run();
+    }
+
+    private void exit(ConnectionStatus status) {
+        statuses.remove(status);
+        status.release();
+        runner.remove(status.getSolver());
     }
 
 
