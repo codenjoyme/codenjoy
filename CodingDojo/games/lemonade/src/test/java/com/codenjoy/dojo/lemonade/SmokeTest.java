@@ -49,6 +49,7 @@ public class SmokeTest {
         LocalGameRunner.timeout = 0;
         LocalGameRunner.out = (e) -> messages.add(e);
         LocalGameRunner.countIterations = 10;
+        LocalGameRunner.printScores = false;
 
         Dice dice = LocalGameRunner.getDice( // "random numbers"
                 1);

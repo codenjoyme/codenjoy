@@ -94,10 +94,11 @@ public class SmokeTest {
                         "1: =  ==   \n" +
                         "1:#########\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: UP\n" +
                         "DICE:0\n" +
                         "DICE:2\n" +
-                        "Fire Event: STILL_ALIVE\n" +
+                        "1:Fire Event: STILL_ALIVE\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:#########\n" +
@@ -110,8 +111,9 @@ public class SmokeTest {
                         "1:=  ==   =\n" +
                         "1:#########\n" +
                         "1:\n" +
+                        "1:Scores: 30\n" +
                         "1:Answer: UP\n" +
-                        "Fire Event: STILL_ALIVE\n" +
+                        "1:Fire Event: STILL_ALIVE\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:#########\n" +
@@ -124,11 +126,12 @@ public class SmokeTest {
                         "1:  ==   ==\n" +
                         "1:#########\n" +
                         "1:\n" +
+                        "1:Scores: 60\n" +
                         "1:Answer: UP\n" +
                         "DICE:4\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
-                        "Fire Event: STILL_ALIVE\n" +
+                        "1:Fire Event: STILL_ALIVE\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:#########\n" +
@@ -141,10 +144,11 @@ public class SmokeTest {
                         "1: ==   == \n" +
                         "1:#########\n" +
                         "1:\n" +
+                        "1:Scores: 90\n" +
                         "1:Answer: UP\n" +
                         "DICE:0\n" +
                         "DICE:3\n" +
-                        "Fire Event: STILL_ALIVE\n" +
+                        "1:Fire Event: STILL_ALIVE\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:#########\n" +
@@ -157,8 +161,9 @@ public class SmokeTest {
                         "1:==   == =\n" +
                         "1:#########\n" +
                         "1:\n" +
+                        "1:Scores: 120\n" +
                         "1:Answer: UP\n" +
-                        "Fire Event: STILL_ALIVE\n" +
+                        "1:Fire Event: STILL_ALIVE\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:#########\n" +
@@ -171,8 +176,9 @@ public class SmokeTest {
                         "1:=   == ==\n" +
                         "1:#########\n" +
                         "1:\n" +
+                        "1:Scores: 150\n" +
                         "1:Answer: UP\n" +
-                        "Fire Event: STILL_ALIVE\n" +
+                        "1:Fire Event: STILL_ALIVE\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:#########\n" +
@@ -185,11 +191,12 @@ public class SmokeTest {
                         "1:   == ===\n" +
                         "1:#########\n" +
                         "1:\n" +
+                        "1:Scores: 180\n" +
                         "1:Answer: UP\n" +
                         "DICE:5\n" +
                         "DICE:6\n" +
                         "DICE:6\n" +
-                        "Fire Event: STILL_ALIVE\n" +
+                        "1:Fire Event: STILL_ALIVE\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:#########\n" +
@@ -202,11 +209,12 @@ public class SmokeTest {
                         "1:  == === \n" +
                         "1:#########\n" +
                         "1:\n" +
+                        "1:Scores: 210\n" +
                         "1:Answer: UP\n" +
                         "DICE:0\n" +
                         "DICE:4\n" +
                         "DICE_CORRECTED < 4 :0\n" +
-                        "Fire Event: STILL_ALIVE\n" +
+                        "1:Fire Event: STILL_ALIVE\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:#########\n" +
@@ -219,11 +227,12 @@ public class SmokeTest {
                         "1: == ===  \n" +
                         "1:#########\n" +
                         "1:\n" +
+                        "1:Scores: 240\n" +
                         "1:Answer: UP\n" +
                         "DICE:6\n" +
                         "DICE_CORRECTED < 6 :0\n" +
                         "DICE:1\n" +
-                        "Fire Event: STILL_ALIVE\n" +
+                        "1:Fire Event: STILL_ALIVE\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:#########\n" +
@@ -236,11 +245,12 @@ public class SmokeTest {
                         "1:== ===  =\n" +
                         "1:#########\n" +
                         "1:\n" +
+                        "1:Scores: 270\n" +
                         "1:Answer: UP\n" +
                         "DICE:3\n" +
                         "DICE:0\n" +
                         "DICE:4\n" +
-                        "Fire Event: STILL_ALIVE\n" +
+                        "1:Fire Event: STILL_ALIVE\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
 

@@ -97,6 +97,7 @@ public class SmokeTest {
                         "1:    \n" +
                         "1:\n" +
                         "DICE:0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(0,2)\n" +
                         "2:Board:\n" +
                         "2:    \n" +
@@ -104,8 +105,9 @@ public class SmokeTest {
                         "2: O+ \n" +
                         "2:    \n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: \n" +
-                        "Fire Event: FLIP:1\n" +
+                        "1:Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:    \n" +
@@ -113,6 +115,7 @@ public class SmokeTest {
                         "1: .X \n" +
                         "1:    \n" +
                         "1:\n" +
+                        "1:Scores: 1\n" +
                         "1:Answer: \n" +
                         "2:Board:\n" +
                         "2:    \n" +
@@ -121,8 +124,9 @@ public class SmokeTest {
                         "2:    \n" +
                         "2:\n" +
                         "DICE:2\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: ACT(2,3)\n" +
-                        "Fire Event: FLIP:1\n" +
+                        "2:Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  x \n" +
@@ -131,6 +135,7 @@ public class SmokeTest {
                         "1:    \n" +
                         "1:\n" +
                         "DICE:3\n" +
+                        "1:Scores: 1\n" +
                         "1:Answer: ACT(3,3)\n" +
                         "2:Board:\n" +
                         "2:  + \n" +
@@ -138,8 +143,9 @@ public class SmokeTest {
                         "2: O+ \n" +
                         "2:    \n" +
                         "2:\n" +
+                        "2:Scores: 1\n" +
                         "2:Answer: \n" +
-                        "Fire Event: FLIP:1\n" +
+                        "1:Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  X.\n" +
@@ -147,6 +153,7 @@ public class SmokeTest {
                         "1: .X \n" +
                         "1:    \n" +
                         "1:\n" +
+                        "1:Scores: 2\n" +
                         "1:Answer: \n" +
                         "2:Board:\n" +
                         "2:  Xo\n" +
@@ -155,8 +162,9 @@ public class SmokeTest {
                         "2:    \n" +
                         "2:\n" +
                         "DICE:1\n" +
+                        "2:Scores: 1\n" +
                         "2:Answer: ACT(0,1)\n" +
-                        "Fire Event: FLIP:2\n" +
+                        "2:Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  xO\n" +
@@ -165,6 +173,7 @@ public class SmokeTest {
                         "1:    \n" +
                         "1:\n" +
                         "DICE:3\n" +
+                        "1:Scores: 2\n" +
                         "1:Answer: ACT(2,0)\n" +
                         "2:Board:\n" +
                         "2:  +O\n" +
@@ -172,8 +181,9 @@ public class SmokeTest {
                         "2:+++ \n" +
                         "2:    \n" +
                         "2:\n" +
+                        "2:Scores: 3\n" +
                         "2:Answer: \n" +
-                        "Fire Event: FLIP:2\n" +
+                        "1:Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  X.\n" +
@@ -181,6 +191,7 @@ public class SmokeTest {
                         "1:X.. \n" +
                         "1:  . \n" +
                         "1:\n" +
+                        "1:Scores: 4\n" +
                         "1:Answer: \n" +
                         "2:Board:\n" +
                         "2:  Xo\n" +
@@ -189,8 +200,9 @@ public class SmokeTest {
                         "2:  o \n" +
                         "2:\n" +
                         "DICE:3\n" +
+                        "2:Scores: 3\n" +
                         "2:Answer: ACT(3,1)\n" +
-                        "Fire Event: FLIP:2\n" +
+                        "2:Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  xO\n" +
@@ -199,6 +211,7 @@ public class SmokeTest {
                         "1:  O \n" +
                         "1:\n" +
                         "DICE:0\n" +
+                        "1:Scores: 4\n" +
                         "1:Answer: ACT(0,0)\n" +
                         "2:Board:\n" +
                         "2:  +O\n" +
@@ -206,8 +219,9 @@ public class SmokeTest {
                         "2:++++\n" +
                         "2:  O \n" +
                         "2:\n" +
+                        "2:Scores: 5\n" +
                         "2:Answer: \n" +
-                        "Fire Event: FLIP:2\n" +
+                        "1:Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  X.\n" +
@@ -215,6 +229,7 @@ public class SmokeTest {
                         "1:..XX\n" +
                         "1:. . \n" +
                         "1:\n" +
+                        "1:Scores: 6\n" +
                         "1:Answer: \n" +
                         "2:Board:\n" +
                         "2:  Xo\n" +
@@ -223,8 +238,9 @@ public class SmokeTest {
                         "2:o o \n" +
                         "2:\n" +
                         "DICE:2\n" +
+                        "2:Scores: 5\n" +
                         "2:Answer: ACT(3,2)\n" +
-                        "Fire Event: FLIP:1\n" +
+                        "2:Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  xO\n" +
@@ -233,6 +249,7 @@ public class SmokeTest {
                         "1:O O \n" +
                         "1:\n" +
                         "DICE:2\n" +
+                        "1:Scores: 6\n" +
                         "1:Answer: ACT(3,0)\n" +
                         "2:Board:\n" +
                         "2:  +O\n" +
@@ -240,8 +257,9 @@ public class SmokeTest {
                         "2:OO++\n" +
                         "2:O O \n" +
                         "2:\n" +
+                        "2:Scores: 6\n" +
                         "2:Answer: \n" +
-                        "Fire Event: FLIP:2\n" +
+                        "1:Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  X.\n" +
@@ -249,6 +267,7 @@ public class SmokeTest {
                         "1:..X.\n" +
                         "1:. ..\n" +
                         "1:\n" +
+                        "1:Scores: 8\n" +
                         "1:Answer: \n" +
                         "2:Board:\n" +
                         "2:  Xo\n" +
@@ -258,8 +277,9 @@ public class SmokeTest {
                         "2:\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 1 :0\n" +
+                        "2:Scores: 6\n" +
                         "2:Answer: ACT(1,0)\n" +
-                        "Fire Event: FLIP:1\n" +
+                        "2:Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:  xO\n" +
@@ -268,6 +288,7 @@ public class SmokeTest {
                         "1:OxOO\n" +
                         "1:\n" +
                         "DICE:1\n" +
+                        "1:Scores: 8\n" +
                         "1:Answer: ACT(0,3)\n" +
                         "2:Board:\n" +
                         "2:  +O\n" +
@@ -275,8 +296,9 @@ public class SmokeTest {
                         "2:O++O\n" +
                         "2:O+OO\n" +
                         "2:\n" +
+                        "2:Scores: 7\n" +
                         "2:Answer: \n" +
-                        "Fire Event: FLIP:2\n" +
+                        "1:Fire Event: FLIP:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:. X.\n" +
@@ -284,6 +306,7 @@ public class SmokeTest {
                         "1:.X..\n" +
                         "1:.X..\n" +
                         "1:\n" +
+                        "1:Scores: 10\n" +
                         "1:Answer: \n" +
                         "2:Board:\n" +
                         "2:o Xo\n" +
@@ -292,10 +315,11 @@ public class SmokeTest {
                         "2:oXoo\n" +
                         "2:\n" +
                         "DICE:0\n" +
+                        "2:Scores: 7\n" +
                         "2:Answer: ACT(1,3)\n" +
-                        "Fire Event: FLIP:1\n" +
-                        "Fire Event: WIN:1\n" +
-                        "Fire Event: LOOSE:1\n" +
+                        "2:Fire Event: FLIP:1\n" +
+                        "1:Fire Event: WIN:1\n" +
+                        "2:Fire Event: LOOSE:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:OxxO\n" +
@@ -303,6 +327,7 @@ public class SmokeTest {
                         "1:OxOO\n" +
                         "1:OxOO\n" +
                         "1:\n" +
+                        "1:Scores: 110\n" +
                         "1:Answer: \n" +
                         "2:Board:\n" +
                         "2:O++O\n" +
@@ -310,6 +335,7 @@ public class SmokeTest {
                         "2:O+OO\n" +
                         "2:O+OO\n" +
                         "2:\n" +
+                        "2:Scores: 8\n" +
                         "2:Answer: \n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -319,6 +345,7 @@ public class SmokeTest {
                         "1:    \n" +
                         "1:\n" +
                         "DICE:1\n" +
+                        "1:Scores: 110\n" +
                         "1:Answer: ACT(1,3)\n" +
                         "2:Board:\n" +
                         "2:    \n" +
@@ -326,8 +353,9 @@ public class SmokeTest {
                         "2: O+ \n" +
                         "2:    \n" +
                         "2:\n" +
+                        "2:Scores: 8\n" +
                         "2:Answer: \n" +
-                        "Fire Event: FLIP:1\n" +
+                        "1:Fire Event: FLIP:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1: .  \n" +
@@ -335,6 +363,7 @@ public class SmokeTest {
                         "1: .X \n" +
                         "1:    \n" +
                         "1:\n" +
+                        "1:Scores: 111\n" +
                         "1:Answer: \n" +
                         "2:Board:\n" +
                         "2: o  \n" +
@@ -344,8 +373,9 @@ public class SmokeTest {
                         "2:\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "2:Scores: 8\n" +
                         "2:Answer: ACT(0,1)\n" +
-                        "Fire Event: FLIP:1\n" +
+                        "2:Fire Event: FLIP:1\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
 

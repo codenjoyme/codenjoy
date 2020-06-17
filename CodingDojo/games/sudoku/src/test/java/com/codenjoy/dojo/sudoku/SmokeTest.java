@@ -250,8 +250,9 @@ public class SmokeTest {
                         "1:☼3 5☼28 ☼1  ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(3,4,9)\n" +
-                        "Fire Event: SUCCESS\n" +
+                        "1:Fire Event: SUCCESS\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼  4☼6 8☼ 1 ☼\n" +
@@ -267,8 +268,9 @@ public class SmokeTest {
                         "1:☼3 5☼28 ☼1  ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 10\n" +
                         "1:Answer: ACT(2,5,2)\n" +
-                        "Fire Event: SUCCESS\n" +
+                        "1:Fire Event: SUCCESS\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼  4☼6 8☼ 1 ☼\n" +
@@ -284,8 +286,9 @@ public class SmokeTest {
                         "1:☼3 5☼28 ☼1  ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 20\n" +
                         "1:Answer: ACT(3,5,6)\n" +
-                        "Fire Event: SUCCESS\n" +
+                        "1:Fire Event: SUCCESS\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼  4☼6 8☼ 1 ☼\n" +
@@ -301,8 +304,9 @@ public class SmokeTest {
                         "1:☼3 5☼28 ☼1  ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 30\n" +
                         "1:Answer: ACT(3,7,1)\n" +
-                        "Fire Event: SUCCESS\n" +
+                        "1:Fire Event: SUCCESS\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼  4☼6 8☼ 1 ☼\n" +
@@ -318,8 +322,9 @@ public class SmokeTest {
                         "1:☼3 5☼28 ☼1  ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 40\n" +
                         "1:Answer: ACT(4,6,9)\n" +
-                        "Fire Event: SUCCESS\n" +
+                        "1:Fire Event: SUCCESS\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼  4☼6 8☼ 1 ☼\n" +
@@ -335,8 +340,9 @@ public class SmokeTest {
                         "1:☼3 5☼28 ☼1  ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 50\n" +
                         "1:Answer: ACT(5,1,7)\n" +
-                        "Fire Event: SUCCESS\n" +
+                        "1:Fire Event: SUCCESS\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼  4☼678☼ 1 ☼\n" +
@@ -352,8 +358,9 @@ public class SmokeTest {
                         "1:☼3 5☼28 ☼1  ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 60\n" +
                         "1:Answer: ACT(5,6,2)\n" +
-                        "Fire Event: SUCCESS\n" +
+                        "1:Fire Event: SUCCESS\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼  4☼678☼ 1 ☼\n" +
@@ -369,8 +376,9 @@ public class SmokeTest {
                         "1:☼3 5☼28 ☼1  ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 70\n" +
                         "1:Answer: ACT(6,2,5)\n" +
-                        "Fire Event: SUCCESS\n" +
+                        "1:Fire Event: SUCCESS\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼  4☼678☼ 1 ☼\n" +
@@ -386,8 +394,9 @@ public class SmokeTest {
                         "1:☼3 5☼28 ☼1  ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 80\n" +
                         "1:Answer: ACT(1,2,6)\n" +
-                        "Fire Event: SUCCESS\n" +
+                        "1:Fire Event: SUCCESS\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼  4☼678☼ 1 ☼\n" +
@@ -403,8 +412,9 @@ public class SmokeTest {
                         "1:☼3 5☼28 ☼1  ☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 90\n" +
                         "1:Answer: ACT(2,2,7)\n" +
-                        "Fire Event: SUCCESS\n" +
+                        "1:Fire Event: SUCCESS\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
 

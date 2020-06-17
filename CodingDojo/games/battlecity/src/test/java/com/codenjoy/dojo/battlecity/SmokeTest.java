@@ -38,7 +38,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 public class SmokeTest {
     @Test
@@ -144,6 +143,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [3,2], [3,13], [5,13], [9,13], [11,13], [13,13]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼¿ ¿ ¿   ¿ ¿ ¿☼\n" +
@@ -165,6 +165,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,2], [1,13], [3,13], [5,13], [9,13], [11,13], [13,13]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -187,6 +188,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,12], [3,3], [3,12], [5,12], [9,12], [11,12], [13,12]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: RIGHT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -208,6 +210,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,1], [1,12], [3,12], [5,12], [9,12], [11,12], [13,12]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -230,6 +233,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,11], [3,4], [3,11], [5,11], [9,11], [11,11], [13,11]]\n" +
                         "1:Bullets at: [[1,10], [3,10], [5,10], [9,10], [11,10], [13,10]]\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: RIGHT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -251,6 +255,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,11], [2,1], [3,11], [5,11], [9,11], [11,11], [13,11]]\n" +
                         "2:Bullets at: [[1,10], [3,10], [5,10], [9,10], [11,10], [13,10]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -273,6 +278,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,10], [3,5], [3,10], [5,10], [9,10], [11,10], [13,10]]\n" +
                         "1:Bullets at: [[1,8], [3,8], [5,8], [9,8], [11,8], [13,8]]\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -294,8 +300,9 @@ public class SmokeTest {
                         "2:Enemies at: [[1,10], [3,1], [3,10], [5,10], [9,10], [11,10], [13,10]]\n" +
                         "2:Bullets at: [[1,8], [3,8], [5,8], [9,8], [11,8], [13,8]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
-                        "Fire Event: KILL_YOUR_TANK\n" +
+                        "2:Fire Event: KILL_YOUR_TANK\n" +
                         "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:0\n" +
                         "DICE:3\n" +
@@ -322,6 +329,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,9], [2,1], [3,9], [5,9], [9,9], [11,9], [13,9]]\n" +
                         "1:Bullets at: [[1,6], [5,6], [9,6], [11,6], [13,6]]\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -343,6 +351,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,9], [3,2], [3,9], [5,9], [9,9], [11,9], [13,9]]\n" +
                         "2:Bullets at: [[1,6], [5,6], [9,6], [11,6], [13,6]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -365,6 +374,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,8], [2,1], [3,8], [5,8], [9,8], [11,8], [13,8]]\n" +
                         "1:Bullets at: [[1,4], [5,4], [9,4], [11,4], [13,4]]\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -386,6 +396,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,8], [3,1], [3,8], [5,8], [9,8], [11,8], [13,8]]\n" +
                         "2:Bullets at: [[1,4], [5,4], [9,4], [11,4], [13,4]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -408,6 +419,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,7], [2,1], [3,7], [5,7], [9,7], [11,7], [13,7]]\n" +
                         "1:Bullets at: [[1,2], [5,2], [9,2], [11,2], [13,2]]\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -429,6 +441,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,7], [3,1], [3,7], [5,7], [9,7], [11,7], [13,7]]\n" +
                         "2:Bullets at: [[1,2], [5,2], [9,2], [11,2], [13,2]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -451,6 +464,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,6], [2,1], [3,6], [5,6], [9,6], [11,6], [13,6]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -472,6 +486,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,6], [3,1], [3,6], [5,6], [9,6], [11,6], [13,6]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -494,6 +509,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,5], [2,1], [3,5], [5,5], [9,5], [11,5], [13,5]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -515,9 +531,10 @@ public class SmokeTest {
                         "2:Enemies at: [[1,5], [3,1], [3,5], [5,5], [9,5], [11,5], [13,5]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
-                        "Fire Event: KILL_OTHER_HERO_TANK[1]\n" +
-                        "Fire Event: KILL_YOUR_TANK\n" +
+                        "1:Fire Event: KILL_OTHER_HERO_TANK[1]\n" +
+                        "2:Fire Event: KILL_YOUR_TANK\n" +
                         "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:2\n" +
                         "DICE:3\n" +
@@ -544,6 +561,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,4], [2,1], [3,4], [5,4], [9,4], [11,4], [13,4]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 50\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -565,6 +583,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,4], [3,1], [3,4], [5,4], [9,4], [11,4], [13,4]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -587,6 +606,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,3], [2,1], [3,3], [5,3], [9,3], [11,3], [13,3]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 50\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -608,6 +628,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,3], [3,1], [3,3], [5,3], [9,3], [11,3], [13,3]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -630,6 +651,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,2], [2,1], [3,2], [5,2], [9,2], [11,2], [13,2]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 50\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -651,9 +673,10 @@ public class SmokeTest {
                         "2:Enemies at: [[1,2], [3,1], [3,2], [5,2], [9,2], [11,2], [13,2]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:2\n" +
-                        "Fire Event: KILL_YOUR_TANK\n" +
+                        "1:Fire Event: KILL_YOUR_TANK\n" +
                         "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
@@ -678,6 +701,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,1], [2,1], [3,3], [5,1], [9,1], [11,1], [13,1]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 50\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -699,6 +723,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,1], [3,1], [3,3], [5,1], [9,1], [11,1], [13,1]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
@@ -706,8 +731,8 @@ public class SmokeTest {
                         "DICE:1\n" +
                         "DICE:2\n" +
                         "DICE:0\n" +
-                        "Fire Event: KILL_OTHER_HERO_TANK[1]\n" +
-                        "Fire Event: KILL_YOUR_TANK\n" +
+                        "1:Fire Event: KILL_OTHER_HERO_TANK[1]\n" +
+                        "2:Fire Event: KILL_YOUR_TANK\n" +
                         "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
@@ -732,6 +757,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,2], [3,2], [3,4], [5,2], [10,1], [11,2], [12,1]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 100\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -753,6 +779,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,2], [3,1], [3,4], [5,2], [10,1], [11,2], [12,1]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
@@ -780,6 +807,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,3], [3,3], [3,5], [5,3], [11,1], [11,3], [13,1]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 100\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -801,6 +829,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,3], [3,1], [3,5], [5,3], [11,1], [11,3], [13,1]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:0\n" +
                         "DICE:3\n" +
@@ -828,6 +857,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,4], [3,4], [3,6], [5,4], [11,4], [12,1], [13,2]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 100\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -849,6 +879,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,4], [3,2], [3,6], [5,4], [11,4], [12,1], [13,2]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -871,6 +902,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,5], [3,5], [3,7], [5,5], [11,5], [13,1], [13,3]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 100\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -892,6 +924,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,5], [3,3], [3,7], [5,5], [11,5], [13,1], [13,3]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
@@ -916,6 +949,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,6], [3,6], [3,8], [5,6], [11,6], [13,2], [13,4]]\n" +
                         "1:Bullets at: [[3,5]]\n" +
                         "1:\n" +
+                        "1:Scores: 100\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -937,9 +971,10 @@ public class SmokeTest {
                         "2:Enemies at: [[1,6], [3,4], [3,8], [5,6], [11,6], [13,2], [13,4]]\n" +
                         "2:Bullets at: [[3,5]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
-                        "Fire Event: KILL_OTHER_HERO_TANK[2]\n" +
-                        "Fire Event: KILL_YOUR_TANK\n" +
+                        "1:Fire Event: KILL_OTHER_HERO_TANK[2]\n" +
+                        "2:Fire Event: KILL_YOUR_TANK\n" +
                         "2:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
@@ -964,6 +999,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,2], [1,7], [3,9], [5,7], [11,7], [13,3], [13,5]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 200\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -985,6 +1021,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,7], [3,3], [3,9], [5,7], [11,7], [13,3], [13,5]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1007,6 +1044,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,3], [1,8], [3,10], [5,8], [11,8], [13,4], [13,6]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 200\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -1028,6 +1066,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,8], [3,2], [3,10], [5,8], [11,8], [13,4], [13,6]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1050,6 +1089,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,4], [1,9], [3,11], [5,9], [11,9], [13,5], [13,7]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 200\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -1071,6 +1111,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,9], [3,1], [3,11], [5,9], [11,9], [13,5], [13,7]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1093,6 +1134,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,5], [1,10], [3,12], [5,10], [11,10], [13,6], [13,8]]\n" +
                         "1:Bullets at: [[1,1]]\n" +
                         "1:\n" +
+                        "1:Scores: 200\n" +
                         "1:Answer: RIGHT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -1114,6 +1156,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,10], [2,1], [3,12], [5,10], [11,10], [13,6], [13,8]]\n" +
                         "2:Bullets at: [[1,1]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1136,6 +1179,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,6], [1,11], [3,13], [5,11], [11,11], [13,7], [13,9]]\n" +
                         "1:Bullets at: [[1,12], [5,12], [11,12]]\n" +
                         "1:\n" +
+                        "1:Scores: 200\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼  ?          ☼\n" +
@@ -1157,6 +1201,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,11], [3,1], [3,13], [5,11], [11,11], [13,7], [13,9]]\n" +
                         "2:Bullets at: [[1,12], [5,12], [11,12]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
@@ -1180,6 +1225,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,7], [1,12], [3,12], [5,12], [11,12], [13,8], [13,10]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 200\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼             ☼\n" +
@@ -1201,6 +1247,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,12], [3,2], [3,12], [5,12], [11,12], [13,8], [13,10]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1223,6 +1270,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,8], [1,13], [3,11], [5,13], [11,13], [13,9], [13,11]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 200\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼?   ?     ?  ☼\n" +
@@ -1244,6 +1292,7 @@ public class SmokeTest {
                         "2:Enemies at: [[1,13], [3,3], [3,11], [5,13], [11,13], [13,9], [13,11]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:4\n" +
                         "DICE_CORRECTED < 4 :0\n" +
@@ -1272,6 +1321,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,9], [2,13], [3,10], [4,13], [10,13], [13,10], [13,12]]\n" +
                         "1:Bullets at: [[3,5]]\n" +
                         "1:\n" +
+                        "1:Scores: 200\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼ » «     «   ☼\n" +
@@ -1293,6 +1343,7 @@ public class SmokeTest {
                         "2:Enemies at: [[2,13], [3,4], [3,10], [4,13], [10,13], [13,10], [13,12]]\n" +
                         "2:Bullets at: [[3,5]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
@@ -1317,6 +1368,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,10], [3,9], [3,13], [5,13], [9,13], [13,11], [13,13]]\n" +
                         "1:Bullets at: [[3,7]]\n" +
                         "1:\n" +
+                        "1:Scores: 200\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼  » »   «   ?☼\n" +
@@ -1338,10 +1390,11 @@ public class SmokeTest {
                         "2:Enemies at: [[3,3], [3,9], [3,13], [5,13], [9,13], [13,11], [13,13]]\n" +
                         "2:Bullets at: [[3,7]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:2\n" +
                         "DICE:0\n" +
-                        "Fire Event: KILL_OTHER_AI_TANK\n" +
+                        "1:Fire Event: KILL_OTHER_AI_TANK\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼   » » «   « ☼\n" +
@@ -1363,6 +1416,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,11], [4,13], [6,13], [8,13], [12,13], [13,12]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 225\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼   » » «   « ☼\n" +
@@ -1384,6 +1438,7 @@ public class SmokeTest {
                         "2:Enemies at: [[3,4], [4,13], [6,13], [8,13], [12,13], [13,12]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
@@ -1408,6 +1463,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,12], [3,12], [5,13], [7,13], [9,13], [11,13], [13,13]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 225\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼    » » » « ?☼\n" +
@@ -1429,6 +1485,7 @@ public class SmokeTest {
                         "2:Enemies at: [[3,5], [3,12], [5,13], [7,13], [9,13], [11,13], [13,13]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
@@ -1456,6 +1513,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [3,11], [6,13], [8,13], [10,13], [11,12], [13,12]]\n" +
                         "1:Bullets at: [[3,7], [3,10]]\n" +
                         "1:\n" +
+                        "1:Scores: 225\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼▲    » » »   ☼\n" +
@@ -1477,6 +1535,7 @@ public class SmokeTest {
                         "2:Enemies at: [[3,6], [3,11], [6,13], [8,13], [10,13], [11,12], [13,12]]\n" +
                         "2:Bullets at: [[3,7], [3,10]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1499,6 +1558,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [3,10], [7,13], [9,13], [11,11], [11,13], [13,11]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 225\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼▲     » » »  ☼\n" +
@@ -1520,6 +1580,7 @@ public class SmokeTest {
                         "2:Enemies at: [[2,6], [3,10], [7,13], [9,13], [11,11], [11,13], [13,11]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1542,6 +1603,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [3,9], [8,13], [10,13], [11,10], [12,13], [13,10]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 225\n" +
                         "1:Answer: UP, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼▲      » » » ☼\n" +
@@ -1563,6 +1625,7 @@ public class SmokeTest {
                         "2:Enemies at: [[2,7], [3,9], [8,13], [10,13], [11,10], [12,13], [13,10]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1585,6 +1648,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [3,8], [9,13], [11,9], [11,13], [13,9], [13,13]]\n" +
                         "1:Bullets at: [[11,8], [13,8]]\n" +
                         "1:\n" +
+                        "1:Scores: 225\n" +
                         "1:Answer: RIGHT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼▲       »Ѡ» »☼\n" +
@@ -1606,6 +1670,7 @@ public class SmokeTest {
                         "2:Enemies at: [[2,8], [3,8], [9,13], [11,9], [11,13], [13,9], [13,13]]\n" +
                         "2:Bullets at: [[11,8], [13,8]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
@@ -1636,6 +1701,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [3,7], [10,13], [11,8], [12,13], [13,8], [13,12]]\n" +
                         "1:Bullets at: [[4,8], [11,6], [13,6]]\n" +
                         "1:\n" +
+                        "1:Scores: 225\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼▲        » » ☼\n" +
@@ -1657,6 +1723,7 @@ public class SmokeTest {
                         "2:Enemies at: [[3,7], [3,8], [10,13], [11,8], [12,13], [13,8], [13,12]]\n" +
                         "2:Bullets at: [[4,8], [11,6], [13,6]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1679,6 +1746,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [3,6], [11,7], [11,13], [13,7], [13,11], [13,13]]\n" +
                         "1:Bullets at: [[11,4], [13,4]]\n" +
                         "1:\n" +
+                        "1:Scores: 225\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼▲         » »☼\n" +
@@ -1700,6 +1768,7 @@ public class SmokeTest {
                         "2:Enemies at: [[3,6], [3,7], [11,7], [11,13], [13,7], [13,11], [13,13]]\n" +
                         "2:Bullets at: [[11,4], [13,4]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
@@ -1726,6 +1795,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [3,5], [11,6], [12,13], [13,6], [13,10], [13,12]]\n" +
                         "1:Bullets at: [[11,2], [13,2]]\n" +
                         "1:\n" +
+                        "1:Scores: 225\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼▲          » ☼\n" +
@@ -1747,6 +1817,7 @@ public class SmokeTest {
                         "2:Enemies at: [[3,5], [3,6], [11,6], [12,13], [13,6], [13,10], [13,12]]\n" +
                         "2:Bullets at: [[11,2], [13,2]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1769,6 +1840,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [3,4], [11,5], [13,5], [13,9], [13,11], [13,13]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 225\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼▲           »☼\n" +
@@ -1790,12 +1862,13 @@ public class SmokeTest {
                         "2:Enemies at: [[3,4], [3,5], [11,5], [13,5], [13,9], [13,11], [13,13]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
                         "DICE:2\n" +
                         "DICE:3\n" +
-                        "Fire Event: KILL_OTHER_AI_TANK\n" +
+                        "1:Fire Event: KILL_OTHER_AI_TANK\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼˄            ☼\n" +
@@ -1817,6 +1890,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [11,4], [13,4], [13,8], [13,10], [13,12]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 250\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼▲            ☼\n" +
@@ -1838,6 +1912,7 @@ public class SmokeTest {
                         "2:Enemies at: [[3,4], [11,4], [13,4], [13,8], [13,10], [13,12]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
@@ -1861,6 +1936,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [3,12], [11,3], [13,3], [13,7], [13,9], [13,11]]\n" +
                         "1:Bullets at: []\n" +
                         "1:\n" +
+                        "1:Scores: 250\n" +
                         "1:Answer: RIGHT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼▲            ☼\n" +
@@ -1882,6 +1958,7 @@ public class SmokeTest {
                         "2:Enemies at: [[3,3], [3,12], [11,3], [13,3], [13,7], [13,9], [13,11]]\n" +
                         "2:Bullets at: []\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1904,6 +1981,7 @@ public class SmokeTest {
                         "1:Enemies at: [[1,13], [3,11], [11,2], [13,2], [13,6], [13,8], [13,10]]\n" +
                         "1:Bullets at: [[3,10]]\n" +
                         "1:\n" +
+                        "1:Scores: 250\n" +
                         "1:Answer: RIGHT, ACT\n" +
                         "2:☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "2:☼▲            ☼\n" +
@@ -1925,6 +2003,7 @@ public class SmokeTest {
                         "2:Enemies at: [[3,11], [4,3], [11,2], [13,2], [13,6], [13,8], [13,10]]\n" +
                         "2:Bullets at: [[3,10]]\n" +
                         "2:\n" +
+                        "2:Scores: 0\n" +
                         "2:Answer: UP\n" +
                         "------------------------------------------",
                 String.join("\n", messages));

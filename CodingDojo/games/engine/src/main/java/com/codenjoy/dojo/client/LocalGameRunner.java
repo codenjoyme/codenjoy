@@ -23,10 +23,7 @@ package com.codenjoy.dojo.client;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.PlayerCommand;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -38,13 +35,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static java.util.stream.Collectors.toList;
-
 public class LocalGameRunner {
 
     public static final String SEP = "------------------------------------------";
 
     public static int timeout = 10;
+    public static boolean printScores = true;
+    public static boolean printBoardOnly = false;
     public static Consumer<String> out = System.out::println;
     public static Integer countIterations = null;
 
@@ -53,6 +50,7 @@ public class LocalGameRunner {
     private GameType gameType;
     private List<Solver> solvers;
     private List<ClientBoard> boards;
+    private List<PlayerScores> scores;
 
     public static LocalGameRunner run(GameType gameType, Solver solver, ClientBoard board) {
         return run(gameType, Arrays.asList(solver), Arrays.asList(board));
@@ -77,6 +75,7 @@ public class LocalGameRunner {
         solvers = new LinkedList<>();
         boards = new LinkedList<>();
         games = new LinkedList<>();
+        scores = new LinkedList<>();
 
         field = gameType.createGame(0);
     }
@@ -130,9 +129,17 @@ public class LocalGameRunner {
         Object data = game(index).getBoardAsString();
         board.forString(data.toString());
 
-        out.accept(player(index, board.toString()));
+        if (printBoardOnly) {
+            out.accept(player(index, ((AbstractBoard) board).boardAsString()));
+        } else {
+            out.accept(player(index, board.toString()));
+        }
 
         String answer = solver(index).get(board);
+
+        if (printScores) {
+            out.accept(player(index, "Scores: " + scores.get(index).getScore()));
+        }
 
         out.accept(player(index, "Answer: " + answer));
         return answer;
@@ -156,6 +163,7 @@ public class LocalGameRunner {
         int index = solvers.indexOf(solver);
         solvers.remove(index);
         boards.remove(index);
+        scores.remove(index);
         Game game = games.remove(index);
         field.remove(game.getPlayer());
     }
@@ -186,8 +194,15 @@ public class LocalGameRunner {
     }
 
     private Game createGame() {
+        PlayerScores score = gameType.getPlayerScores(0);
+        scores.add(score);
+        int index = scores.indexOf(score);
+
         GamePlayer gamePlayer = gameType.createPlayer(
-                event -> out.accept("Fire Event: " + event.toString()),
+                event -> {
+                    out.accept(player(index, "Fire Event: " + event.toString()));
+                    score.event(event);
+                },
                 Hash.getRandomId());
 
         PrinterFactory factory = gameType.getPrinterFactory();

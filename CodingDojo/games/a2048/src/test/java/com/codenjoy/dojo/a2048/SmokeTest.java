@@ -66,8 +66,9 @@ public class SmokeTest {
                         "1:     \n" +
                         "1:     \n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: RIGHT\n" +
-                        "Fire Event: SUM(8)\n" +
+                        "1:Fire Event: SUM(8)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   2\n" +
@@ -76,8 +77,9 @@ public class SmokeTest {
                         "1:     \n" +
                         "1:2   2\n" +
                         "1:\n" +
+                        "1:Scores: 8\n" +
                         "1:Answer: RIGHT\n" +
-                        "Fire Event: SUM(12)\n" +
+                        "1:Fire Event: SUM(12)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   4\n" +
@@ -86,8 +88,9 @@ public class SmokeTest {
                         "1:     \n" +
                         "1:2   4\n" +
                         "1:\n" +
+                        "1:Scores: 12\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: SUM(16)\n" +
+                        "1:Fire Event: SUM(16)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   2\n" +
@@ -96,8 +99,9 @@ public class SmokeTest {
                         "1:     \n" +
                         "1:4   8\n" +
                         "1:\n" +
+                        "1:Scores: 16\n" +
                         "1:Answer: RIGHT\n" +
-                        "Fire Event: SUM(20)\n" +
+                        "1:Fire Event: SUM(20)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   4\n" +
@@ -106,8 +110,9 @@ public class SmokeTest {
                         "1:     \n" +
                         "1:2  48\n" +
                         "1:\n" +
+                        "1:Scores: 20\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: SUM(24)\n" +
+                        "1:Fire Event: SUM(24)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   2\n" +
@@ -116,8 +121,9 @@ public class SmokeTest {
                         "1:    4\n" +
                         "1:4  48\n" +
                         "1:\n" +
+                        "1:Scores: 24\n" +
                         "1:Answer: RIGHT\n" +
-                        "Fire Event: SUM(28)\n" +
+                        "1:Fire Event: SUM(28)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   4\n" +
@@ -126,8 +132,9 @@ public class SmokeTest {
                         "1:    4\n" +
                         "1:2  88\n" +
                         "1:\n" +
+                        "1:Scores: 28\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: SUM(32)\n" +
+                        "1:Fire Event: SUM(32)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   2\n" +
@@ -136,8 +143,9 @@ public class SmokeTest {
                         "1:    8\n" +
                         "1:4  88\n" +
                         "1:\n" +
+                        "1:Scores: 32\n" +
                         "1:Answer: RIGHT\n" +
-                        "Fire Event: SUM(36)\n" +
+                        "1:Fire Event: SUM(36)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   4\n" +
@@ -146,8 +154,9 @@ public class SmokeTest {
                         "1:    8\n" +
                         "1:2  4A\n" +
                         "1:\n" +
+                        "1:Scores: 36\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: SUM(40)\n" +
+                        "1:Fire Event: SUM(40)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   2\n" +
@@ -156,8 +165,9 @@ public class SmokeTest {
                         "1:    8\n" +
                         "1:4  4A\n" +
                         "1:\n" +
+                        "1:Scores: 40\n" +
                         "1:Answer: LEFT\n" +
-                        "Fire Event: SUM(44)\n" +
+                        "1:Fire Event: SUM(44)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:4   2\n" +
@@ -166,8 +176,9 @@ public class SmokeTest {
                         "1:8    \n" +
                         "1:8A  2\n" +
                         "1:\n" +
+                        "1:Scores: 44\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: SUM(48)\n" +
+                        "1:Fire Event: SUM(48)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   2\n" +
@@ -176,8 +187,9 @@ public class SmokeTest {
                         "1:8    \n" +
                         "1:AA  4\n" +
                         "1:\n" +
+                        "1:Scores: 48\n" +
                         "1:Answer: RIGHT\n" +
-                        "Fire Event: SUM(52)\n" +
+                        "1:Fire Event: SUM(52)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   4\n" +
@@ -186,8 +198,9 @@ public class SmokeTest {
                         "1:    8\n" +
                         "1:2  B4\n" +
                         "1:\n" +
+                        "1:Scores: 52\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: SUM(56)\n" +
+                        "1:Fire Event: SUM(56)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   2\n" +
@@ -196,8 +209,9 @@ public class SmokeTest {
                         "1:    8\n" +
                         "1:4  B4\n" +
                         "1:\n" +
+                        "1:Scores: 56\n" +
                         "1:Answer: RIGHT\n" +
-                        "Fire Event: SUM(60)\n" +
+                        "1:Fire Event: SUM(60)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:2   4\n" +
@@ -206,8 +220,9 @@ public class SmokeTest {
                         "1:    8\n" +
                         "1:2 4B4\n" +
                         "1:\n" +
+                        "1:Scores: 60\n" +
                         "1:Answer: UP\n" +
-                        "Fire Event: SUM(64)\n" +
+                        "1:Fire Event: SUM(64)\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
 

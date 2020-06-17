@@ -25,9 +25,7 @@ package com.codenjoy.dojo.sample;
 import com.codenjoy.dojo.client.KeyboardSolver;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.sample.client.Board;
-import com.codenjoy.dojo.sample.client.ai.AISolver;
 import com.codenjoy.dojo.sample.services.GameRunner;
-import com.codenjoy.dojo.services.RandomDice;
 
 /**
  * Created by Oleksandr_Baglai on 2019-07-12.

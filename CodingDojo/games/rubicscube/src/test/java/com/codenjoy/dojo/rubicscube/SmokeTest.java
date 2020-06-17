@@ -81,6 +81,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(2, -1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -95,6 +96,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:3\n" +
                         "DICE:0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   GGG      \n" +
@@ -109,6 +111,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(2, -1)\n" +
                         "------------------------------------------\n" +
                         "1:   GGG      \n" +
@@ -123,6 +126,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:3\n" +
                         "DICE:0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   YYY      \n" +
@@ -137,6 +141,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(2, -1)\n" +
                         "------------------------------------------\n" +
                         "1:   YYY      \n" +
@@ -151,6 +156,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:3\n" +
                         "DICE:0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   BBB      \n" +
@@ -165,6 +171,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(2, -1)\n" +
                         "------------------------------------------\n" +
                         "1:   BBB      \n" +
@@ -179,8 +186,9 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:3\n" +
                         "DICE:0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(4, 1)\n" +
-                        "Fire Event: SUCCESS\n" +
+                        "1:Fire Event: SUCCESS\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
                         "1:   WWW      \n" +
@@ -194,6 +202,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(2, -1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -209,6 +218,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -224,6 +234,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -239,6 +250,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -254,6 +266,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -269,6 +282,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -284,6 +298,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -299,6 +314,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -314,6 +330,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -329,6 +346,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -344,6 +362,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------\n" +
                         "1:   WWW      \n" +
@@ -359,6 +378,7 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE_CORRECTED < 3 :0\n" +
+                        "1:Scores: 1000\n" +
                         "1:Answer: ACT(4, 1)\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
