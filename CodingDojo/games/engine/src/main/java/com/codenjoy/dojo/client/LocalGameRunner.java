@@ -82,9 +82,16 @@ public class LocalGameRunner {
     public LocalGameRunner run() {
         Integer count = countIterations;
         while (count == null || count-- > 0) {
+            if (timeout > 0) {
+                try {
+                    Thread.sleep(timeout);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
             synchronized (this) {
                 List<String> answers = new LinkedList<>();
-
                 for (Game game : games) {
                     answers.add(askAnswer(games.indexOf(game)));
                 }
@@ -94,14 +101,6 @@ public class LocalGameRunner {
                     String answer = answers.get(index);
 
                     new PlayerCommand(game.getJoystick(), answer).execute();
-
-                    if (timeout > 0) {
-                        try {
-                            Thread.sleep(timeout);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
                 }
 
                 field.tick();
@@ -112,7 +111,6 @@ public class LocalGameRunner {
                         single.newGame();
                     }
                 }
-                ;
 
                 out.accept("------------------------------------------");
             }

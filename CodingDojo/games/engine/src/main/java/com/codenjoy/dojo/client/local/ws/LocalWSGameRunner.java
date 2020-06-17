@@ -24,97 +24,96 @@ package com.codenjoy.dojo.client.local.ws;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
+import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.GameType;
-import lombok.SneakyThrows;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 
 import java.net.InetSocketAddress;
-import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.codenjoy.dojo.client.WebSocketRunner.BOARD_FORMAT2;
 
 public class LocalWSGameRunner {
 
-    private Object wait = new Object();
-    private String action;
-    private String board;
+    private List<ConnectionStatus> statuses = new LinkedList<>();
+    private LocalGameRunner runner;
+    private GameType gameType;
 
     public static void run(GameType gameType, String host, int port, int timeout) {
         new LocalWSGameRunner().start(gameType, host, port, timeout);
     }
 
     public void start(GameType gameType, String host, int port, int timeout) {
+        this.gameType = gameType;
+        LocalGameRunner.timeout = timeout;
+        runner = new LocalGameRunner(gameType);
+
         CompletableFuture.runAsync(() -> startWsServer(host, port));
 
-        Solver solver = board -> {
-            LocalWSGameRunner.this.board = ((AbstractBoard) board).boardAsString().replaceAll("\n", "");
-
-            // проинформировали что у нас на руках есть board
-            waitNotify();
-
-            return action;
-        };
-
-        runGame(gameType, solver, timeout);
+        runner.run();
     }
 
-    private void waitNotify() {
-        synchronized (wait) {
-            wait.notify();
-
-            try {
-                wait.wait();
-            } catch (InterruptedException e) {
-                // случится, если что-то прервет Thread
-            }
-        }
+    private ConnectionStatus status(WebSocket socket) {
+        return statuses.stream()
+                .filter(status -> status.getSocket() == socket)
+                .findFirst()
+                .get();
     }
 
-    @SneakyThrows
-    private LocalGameRunner runGame(GameType gameType, Solver solver, int timeout) {
-        LocalGameRunner.timeout = timeout;
+    private String getAnswer(ConnectionStatus status, ClientBoard clientBoard) {
+        String board = ((AbstractBoard)clientBoard).boardAsString().replaceAll("\n", "");
 
-        return LocalGameRunner.run(gameType,
-                Arrays.asList(solver),
-                Arrays.asList(gameType.getBoard().newInstance()));
+        status.setBoard(board);
+        return status.getAction();
     }
 
     private void startWsServer(String host, int port) {
         WebSocketServer server = new WebSocketServer(new InetSocketAddress(host, port)) {
             @Override
             public void onOpen(WebSocket webSocket, ClientHandshake clientHandshake) {
-                System.out.println("open");
-                this.broadcast(String.format(BOARD_FORMAT2, board));
+                System.out.println("==============================\nOpen connection");
+
+                ConnectionStatus status = new ConnectionStatus(webSocket);
+                statuses.add(status);
+
+                status.setSolver(board -> getAnswer(status, board));
+
+                try {
+                    runner.add(status.getSolver(), gameType.getBoard().newInstance());
+                } catch (InstantiationException | IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+
+                this.broadcast(String.format(BOARD_FORMAT2, status.getBoard()));
             }
 
             @Override
             public void onClose(WebSocket webSocket, int i, String s, boolean b) {
-                System.out.println("close");
+                System.out.println("\"==============================\\nClose connection\"");
             }
 
             @Override
-            public void onMessage(WebSocket webSocket, String action) {
-                LocalWSGameRunner.this.action = action;
+            public void onMessage(WebSocket socket, String action) {
+                ConnectionStatus status = status(socket);
 
-                // проинформировали что у нас на руках есть action
-                waitNotify();
-
-                this.broadcast(String.format(BOARD_FORMAT2, board));
+                status.setAction(action);
+                broadcast(String.format(BOARD_FORMAT2, status.getBoard()));
             }
 
             @Override
             public void onError(WebSocket webSocket, Exception e) {
-                System.out.println("error");
+                System.out.println("\"==============================\\nError connection\"");
             }
 
             @Override
             public void onStart() {
-                System.out.println("start");
+                System.out.println("Started server");
             }
         };
         server.run();
