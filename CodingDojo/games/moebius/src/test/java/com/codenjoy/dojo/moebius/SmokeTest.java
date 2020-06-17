@@ -427,19 +427,17 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "1:Fire Event: GAME_OVER\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:╔═══╗\n" +
-                        "1:║   ║\n" +
-                        "1:║   ║\n" +
-                        "1:║   ║\n" +
-                        "1:╚═══╝\n" +
+                        "1:║╝╬╗║\n" +
+                        "1:║╗═╗║\n" +
+                        "1:║╔╗╚║\n" +
+                        "1:╔═══╝\n" +
                         "1:\n" +
-                        "DICE:3\n" +
-                        "DICE:3\n" +
                         "1:Scores: 0\n" +
-                        "1:Answer: ACT(3,3)\n" +
+                        "1:Answer: \n" +
+                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +

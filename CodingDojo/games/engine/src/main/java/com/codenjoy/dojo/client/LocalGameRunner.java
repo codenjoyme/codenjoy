@@ -106,7 +106,6 @@ public class LocalGameRunner {
                     }
                 }
 
-                field.tick();
                 for (int index = 0; index < games.size(); index++) {
                     Game single = games.get(index);
                     if (single.isGameOver()) {
@@ -114,6 +113,8 @@ public class LocalGameRunner {
                         single.newGame();
                     }
                 }
+
+                field.tick();
 
                 out.accept(SEP);
             }

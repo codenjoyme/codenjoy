@@ -80,8 +80,9 @@ public class SmokeTest {
                         "1:  'history':[],\n" +
                         "1:  'nextQuestion':'question1'\n" +
                         "1:}\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: message('answer1')\n" +
-                        "Fire Event: WIN\n" +
+                        "1:Fire Event: WIN\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'history':[\n" +
@@ -93,8 +94,9 @@ public class SmokeTest {
                         "1:  ],\n" +
                         "1:  'nextQuestion':'question2'\n" +
                         "1:}\n" +
+                        "1:Scores: 30\n" +
                         "1:Answer: message('answer2')\n" +
-                        "Fire Event: WIN\n" +
+                        "1:Fire Event: WIN\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'history':[\n" +
@@ -111,8 +113,9 @@ public class SmokeTest {
                         "1:  ],\n" +
                         "1:  'nextQuestion':'question3'\n" +
                         "1:}\n" +
+                        "1:Scores: 60\n" +
                         "1:Answer: message('answer3')\n" +
-                        "Fire Event: WIN\n" +
+                        "1:Fire Event: WIN\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'history':[\n" +
@@ -134,8 +137,9 @@ public class SmokeTest {
                         "1:  ],\n" +
                         "1:  'nextQuestion':'question4'\n" +
                         "1:}\n" +
+                        "1:Scores: 90\n" +
                         "1:Answer: message('answer4')\n" +
-                        "Fire Event: WIN\n" +
+                        "1:Fire Event: WIN\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'history':[\n" +
@@ -162,8 +166,9 @@ public class SmokeTest {
                         "1:  ],\n" +
                         "1:  'nextQuestion':'question5'\n" +
                         "1:}\n" +
+                        "1:Scores: 120\n" +
                         "1:Answer: message('answer5')\n" +
-                        "Fire Event: WIN\n" +
+                        "1:Fire Event: WIN\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'history':[\n" +
@@ -195,8 +200,9 @@ public class SmokeTest {
                         "1:  ],\n" +
                         "1:  'nextQuestion':'question6'\n" +
                         "1:}\n" +
+                        "1:Scores: 150\n" +
                         "1:Answer: message('answer6')\n" +
-                        "Fire Event: WIN\n" +
+                        "1:Fire Event: WIN\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'history':[\n" +
@@ -233,8 +239,9 @@ public class SmokeTest {
                         "1:  ],\n" +
                         "1:  'nextQuestion':'question7'\n" +
                         "1:}\n" +
+                        "1:Scores: 180\n" +
                         "1:Answer: message('answer7')\n" +
-                        "Fire Event: WIN\n" +
+                        "1:Fire Event: WIN\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'history':[\n" +
@@ -276,8 +283,9 @@ public class SmokeTest {
                         "1:  ],\n" +
                         "1:  'nextQuestion':'question8'\n" +
                         "1:}\n" +
+                        "1:Scores: 210\n" +
                         "1:Answer: message('answer8')\n" +
-                        "Fire Event: WIN\n" +
+                        "1:Fire Event: WIN\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'history':[\n" +
@@ -324,8 +332,9 @@ public class SmokeTest {
                         "1:  ],\n" +
                         "1:  'nextQuestion':'question9'\n" +
                         "1:}\n" +
+                        "1:Scores: 240\n" +
                         "1:Answer: message('answer9')\n" +
-                        "Fire Event: WIN\n" +
+                        "1:Fire Event: WIN\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
                         "1:  'history':[\n" +
@@ -377,8 +386,9 @@ public class SmokeTest {
                         "1:  ],\n" +
                         "1:  'nextQuestion':'question10'\n" +
                         "1:}\n" +
+                        "1:Scores: 270\n" +
                         "1:Answer: message('answer10')\n" +
-                        "Fire Event: WIN\n" +
+                        "1:Fire Event: WIN\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
 

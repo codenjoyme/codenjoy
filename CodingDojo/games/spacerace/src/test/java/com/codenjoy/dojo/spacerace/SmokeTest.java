@@ -306,9 +306,6 @@ public class SmokeTest {
                         "2:Scores: 0\n" +
                         "2:Answer: RIGHT\n" +
                         "1:Fire Event: LOOSE\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:4\n" +
-                        "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼  7    ☼\n" +
@@ -318,7 +315,7 @@ public class SmokeTest {
                         "1:☼xxx0   ☼\n" +
                         "1:☼xxx    ☼\n" +
                         "1:☼       ☼\n" +
-                        "1:☼   ☺   ☼\n" +
+                        "1:☼       ☼\n" +
                         "1:☼    ☻  ☼\n" +
                         "1:\n" +
                         "1:Scores: 0\n" +
@@ -331,11 +328,14 @@ public class SmokeTest {
                         "2:☼xxx0   ☼\n" +
                         "2:☼xxx    ☼\n" +
                         "2:☼       ☼\n" +
-                        "2:☼   ☻   ☼\n" +
+                        "2:☼       ☼\n" +
                         "2:☼    ☺  ☼\n" +
                         "2:\n" +
                         "2:Scores: 0\n" +
                         "2:Answer: LEFT\n" +
+                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "DICE:4\n" +
+                        "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼  7    ☼\n" +
@@ -393,9 +393,6 @@ public class SmokeTest {
                         "2:Scores: 0\n" +
                         "2:Answer: LEFT\n" +
                         "1:Fire Event: LOOSE\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:3\n" +
-                        "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼  7    ☼\n" +
@@ -404,12 +401,12 @@ public class SmokeTest {
                         "1:☼       ☼\n" +
                         "1:☼0♣     ☼\n" +
                         "1:☼       ☼\n" +
-                        "1:☼  ☺    ☼\n" +
                         "1:☼       ☼\n" +
+                        "1:☼   +   ☼\n" +
                         "1:☼   ☻   ☼\n" +
                         "1:\n" +
                         "1:Scores: 0\n" +
-                        "1:Answer: STOP\n" +
+                        "1:Answer: \n" +
                         "2:Board:\n" +
                         "2:☼  7    ☼\n" +
                         "2:☼ ♣0    ☼\n" +
@@ -417,16 +414,16 @@ public class SmokeTest {
                         "2:☼       ☼\n" +
                         "2:☼0♣     ☼\n" +
                         "2:☼       ☼\n" +
-                        "2:☼  ☻    ☼\n" +
                         "2:☼       ☼\n" +
+                        "2:☼   +   ☼\n" +
                         "2:☼   ☺   ☼\n" +
                         "2:\n" +
                         "2:Scores: 0\n" +
                         "2:Answer: RIGHT\n" +
-                        "1:Fire Event: LOOSE\n" +
                         "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:4\n" +
-                        "DICE:1\n" +
+                        "DICE:3\n" +
+                        "DICE:2\n" +
+                        "1:Fire Event: LOOSE\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼  7    ☼\n" +
@@ -436,7 +433,7 @@ public class SmokeTest {
                         "1:☼xxx    ☼\n" +
                         "1:☼xxx    ☼\n" +
                         "1:☼xxx    ☼\n" +
-                        "1:☼   ☺   ☼\n" +
+                        "1:☼       ☼\n" +
                         "1:☼    ☻  ☼\n" +
                         "1:\n" +
                         "1:Scores: 0\n" +
@@ -449,11 +446,14 @@ public class SmokeTest {
                         "2:☼xxx    ☼\n" +
                         "2:☼xxx    ☼\n" +
                         "2:☼xxx    ☼\n" +
-                        "2:☼   ☻   ☼\n" +
+                        "2:☼       ☼\n" +
                         "2:☼    ☺  ☼\n" +
                         "2:\n" +
                         "2:Scores: 0\n" +
                         "2:Answer: LEFTACT\n" +
+                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "DICE:4\n" +
+                        "DICE:1\n" +
                         "DICE:1\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +

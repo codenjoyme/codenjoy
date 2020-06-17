@@ -145,7 +145,7 @@ public class SmokeTest {
             expected.append("1:  'weatherForecast':'" + data[day * dataSize + 4].replace(' ', '_') + "'\n");
             expected.append("1:}\n");
             expected.append("1:Answer: message('go " + moveStr + "')\n");
-            expected.append("Fire Event: WIN (" + profitStr + ", " + data[(day + 1) * dataSize] + ")\n");
+            expected.append("1:Fire Event: WIN (" + profitStr + ", " + data[(day + 1) * dataSize] + ")\n");
             expected.append("------------------------------------------");
 
             history.add("1:    {\n" +

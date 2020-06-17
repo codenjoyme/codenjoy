@@ -100,6 +100,7 @@ public class SmokeTest {
                         "1:Head at: [3,3]\n" +
                         "1:Snake at: [[3,3], [2,3]]\n" +
                         "1:Current direction: RIGHT\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -116,8 +117,9 @@ public class SmokeTest {
                         "1:Head at: [3,4]\n" +
                         "1:Snake at: [[3,4], [3,3]]\n" +
                         "1:Current direction: UP\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: UP\n" +
-                        "Fire Event: EAT_APPLE\n" +
+                        "1:Fire Event: EAT_APPLE\n" +
                         "DICE:6\n" +
                         "DICE:6\n" +
                         "DICE:0\n" +
@@ -152,6 +154,7 @@ public class SmokeTest {
                         "1:Head at: [3,5]\n" +
                         "1:Snake at: [[3,5], [3,3], [3,4]]\n" +
                         "1:Current direction: UP\n" +
+                        "1:Scores: 3\n" +
                         "1:Answer: LEFT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -168,6 +171,7 @@ public class SmokeTest {
                         "1:Head at: [2,5]\n" +
                         "1:Snake at: [[2,5], [3,4], [3,5]]\n" +
                         "1:Current direction: LEFT\n" +
+                        "1:Scores: 3\n" +
                         "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -184,6 +188,7 @@ public class SmokeTest {
                         "1:Head at: [2,4]\n" +
                         "1:Snake at: [[2,4], [2,5], [3,5]]\n" +
                         "1:Current direction: DOWN\n" +
+                        "1:Scores: 3\n" +
                         "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -200,6 +205,7 @@ public class SmokeTest {
                         "1:Head at: [2,3]\n" +
                         "1:Snake at: [[2,3], [2,4], [2,5]]\n" +
                         "1:Current direction: DOWN\n" +
+                        "1:Scores: 3\n" +
                         "1:Answer: DOWN\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -216,8 +222,9 @@ public class SmokeTest {
                         "1:Head at: [2,2]\n" +
                         "1:Snake at: [[2,2], [2,3], [2,4]]\n" +
                         "1:Current direction: DOWN\n" +
+                        "1:Scores: 3\n" +
                         "1:Answer: RIGHT\n" +
-                        "Fire Event: EAT_APPLE\n" +
+                        "1:Fire Event: EAT_APPLE\n" +
                         "DICE:1\n" +
                         "DICE:4\n" +
                         "------------------------------------------\n" +
@@ -235,6 +242,7 @@ public class SmokeTest {
                         "1:Head at: [3,2]\n" +
                         "1:Snake at: [[3,2], [2,2], [2,3], [2,4]]\n" +
                         "1:Current direction: RIGHT\n" +
+                        "1:Scores: 7\n" +
                         "1:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -251,6 +259,7 @@ public class SmokeTest {
                         "1:Head at: [3,3]\n" +
                         "1:Snake at: [[3,3], [2,2], [2,3], [3,2]]\n" +
                         "1:Current direction: UP\n" +
+                        "1:Scores: 7\n" +
                         "1:Answer: UP\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -267,6 +276,7 @@ public class SmokeTest {
                         "1:Head at: [3,4]\n" +
                         "1:Snake at: [[3,4], [2,2], [3,2], [3,3]]\n" +
                         "1:Current direction: UP\n" +
+                        "1:Scores: 7\n" +
                         "1:Answer: LEFT\n" +
                         "------------------------------------------",
                 String.join("\n", messages));

@@ -226,24 +226,24 @@ public class SmokeTest {
                         "1:Scores: 1\n" +
                         "1:Answer: RIGHT\n" +
                         "1:Fire Event: KILL_HERO\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
-                        "DICE:6\n" +
-                        "DICE:6\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:☼ $ ~~~  ☼\n" +
                         "1:☼H##   # ☼\n" +
-                        "1:☼H~~~ [ $☼\n" +
+                        "1:☼H~~~   $☼\n" +
                         "1:☼H   $   ☼\n" +
                         "1:☼H   ~~~~☼\n" +
                         "1:☼###H    ☼\n" +
-                        "1:☼   Q   $☼\n" +
+                        "1:☼   Ѡ   $☼\n" +
                         "1:☼########☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "1:Scores: 1\n" +
-                        "1:Answer: DOWN\n" +
+                        "1:Answer: \n" +
+                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "DICE:6\n" +
+                        "DICE:6\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼\n" +
