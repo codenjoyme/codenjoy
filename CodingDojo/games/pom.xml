@@ -98,7 +98,7 @@
                                 </manifest>
                             </archive>
                             <descriptors>
-                                <descriptor>../jar-with-deps-with-exclude.xml</descriptor>
+                                <descriptor>../local-ws-game-server-jar.xml</descriptor>
                             </descriptors>
                             <appendAssemblyId>false</appendAssemblyId>
                         </configuration>
