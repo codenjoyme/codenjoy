@@ -204,7 +204,7 @@ public class LocalGameRunner {
                     out.accept(player(index, "Fire Event: " + event.toString()));
                     score.event(event);
                 },
-                Hash.getRandomId());
+                getPlayerId());
 
         PrinterFactory factory = gameType.getPrinterFactory();
 
@@ -212,6 +212,10 @@ public class LocalGameRunner {
         game.on(field);
         game.newGame();
         return game;
+    }
+
+    private String getPlayerId() {
+        return String.valueOf(Math.abs(gameType.getDice().next(Integer.MAX_VALUE)));
     }
 
 }
