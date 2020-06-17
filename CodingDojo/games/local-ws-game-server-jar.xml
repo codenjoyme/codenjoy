@@ -50,8 +50,6 @@
                 <exclude>org.eclipse.jetty:jetty-security</exclude>
                 <exclude>org.eclipse.jetty:jetty-server</exclude>
                 <exclude>javax.servlet:javax.servlet-api</exclude>
-                <exclude>com.cedarsoftware</exclude>
-                <exclude>org.reflections</exclude>
                 <exclude>com.google.guava:guava</exclude>
                 <exclude>org.javassist:javassist</exclude>
                 <exclude>org.apache.commons:commons-collections4</exclude>
@@ -63,10 +61,13 @@
     </dependencySets>
     <fileSets>
         <fileSet>
-            <outputDirectory>/</outputDirectory>
             <directory>${project.build.outputDirectory}</directory>
+            <outputDirectory>/</outputDirectory>
             <excludes>
                 <exclude>resources/**/*</exclude>
+                <exclude>com/codenjoy/dojo/*/client/ai/*.*</exclude>
+                <exclude>com/codenjoy/dojo/services/hash/*.*</exclude>
+                <exclude>com/codenjoy/dojo/services/algs/*.*</exclude>
             </excludes>
         </fileSet>
     </fileSets>
