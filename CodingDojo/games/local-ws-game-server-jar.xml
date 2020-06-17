@@ -54,7 +54,6 @@
                 <exclude>org.javassist:javassist</exclude>
                 <exclude>org.apache.commons:commons-collections4</exclude>
                 <exclude>commons-codec:commons-codec</exclude>
-                <exclude>com.cedarsoftware:json-io</exclude>
                 <exclude>org.reflections:reflections</exclude>
             </excludes>
         </dependencySet>
