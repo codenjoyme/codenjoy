@@ -1,13 +1,8 @@
 package com.codenjoy.dojo.client.local.ws;
 
 import com.codenjoy.dojo.client.Solver;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.java_websocket.WebSocket;
 
-@Getter
-@Setter
 public class ConnectionStatus {
 
     private Object wait = new Object();
@@ -16,45 +11,52 @@ public class ConnectionStatus {
     private WebSocket socket;
     private Solver solver;
     private String action;
-    private String board;
 
     public ConnectionStatus(WebSocket socket) {
         working = true;
         this.socket = socket;
     }
 
-    public void waitNotify(String name) {
+    public void waitNotify() {
         if (!working) {
-            System.out.println("Skip, not working: " + name + socket.hashCode());
             return;
         }
-        System.out.println("Entering into sync: " + name + socket.hashCode());
         synchronized (wait) {
-            System.out.println("Socket notify:   " + name + socket.hashCode());
-            wait.notify();
-            System.out.println("Socket notified: " + name + socket.hashCode());
-
-            try {
-                System.out.println("Socket waiting:  " + name + socket.hashCode());
-                wait.wait();
-                System.out.println("Socket released: " + name + socket.hashCode());
-            } catch (InterruptedException e) {
-                // случится, если что-то прервет Thread
+            if (action == null) {
+                try {
+                    wait.wait();
+                } catch (InterruptedException e) {
+                    // случится, если что-то прервет Thread
+                }
             }
         }
-        System.out.println("Exited from sync: " + name + socket.hashCode());
     }
 
-    public String getAction() {
-        waitNotify("getAction");
+    public String pullAction() {
+        waitNotify();
 
-        return action;
+        String result = action;
+        action = null;
+        return result;
     }
 
-    public String getBoard() {
-        waitNotify("getBoard");
+    public void setAction(String action) {
+        synchronized (wait) {
+            this.action = action;
+            wait.notify();
+        }
+    }
 
-        return board;
+    public WebSocket getSocket() {
+        return socket;
+    }
+
+    public void setSolver(Solver solver) {
+        this.solver = solver;
+    }
+
+    public Solver getSolver() {
+        return solver;
     }
 
     public void release() {

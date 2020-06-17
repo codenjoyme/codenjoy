@@ -68,7 +68,7 @@ public class LocalGameRunner {
             runner.add(solvers.get(i), boards.get(i));
         }
 
-        return runner.run();
+        return runner.run(() -> {});
     }
 
     public LocalGameRunner(GameType gameType) {
@@ -81,7 +81,7 @@ public class LocalGameRunner {
         field = gameType.createGame(0);
     }
 
-    public LocalGameRunner run() {
+    public LocalGameRunner run(Runnable tick) {
         Integer count = countIterations;
         while (count == null || count-- > 0) {
             if (timeout > 0) {
@@ -92,7 +92,7 @@ public class LocalGameRunner {
                 }
             }
 
-//            synchronized (this) {
+            synchronized (this) {
                 List<String> answers = new LinkedList<>();
                 for (Game game : games) {
                     answers.add(askAnswer(games.indexOf(game)));
@@ -102,7 +102,9 @@ public class LocalGameRunner {
                     int index = games.indexOf(game);
                     String answer = answers.get(index);
 
-                    new PlayerCommand(game.getJoystick(), answer).execute();
+                    if (answer != null) {
+                        new PlayerCommand(game.getJoystick(), answer).execute();
+                    }
                 }
 
                 field.tick();
@@ -115,7 +117,9 @@ public class LocalGameRunner {
                 }
 
                 out.accept(SEP);
-//            }
+            }
+
+            tick.run();
         }
         return this;
     }
