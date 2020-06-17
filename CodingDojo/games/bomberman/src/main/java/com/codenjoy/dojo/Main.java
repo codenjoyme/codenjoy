@@ -28,15 +28,22 @@ import com.codenjoy.dojo.bomberman.services.OptionGameSettings;
 import com.codenjoy.dojo.client.local.ws.LocalWSGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
-import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
-import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
+import com.codenjoy.dojo.utils.JsonUtils;
+import org.json.JSONObject;
 
 public class Main {
 
     public static void main(String[] args) {
+        String host = System.getProperty("host", "127.0.0.1");
+        int port = Integer.valueOf(System.getProperty("port", "8080"));
+        String settingsJson = System.getProperty("settings", "{}");
+        String game = "bomberman";
+
         Dice dice = new RandomDice();
+
+        OptionGameSettings gameSettings = new OptionGameSettings(new SettingsImpl(), dice)
+                .update(new JSONObject(settingsJson));
 
         GameRunner gameType = new GameRunner() {
             @Override
@@ -46,27 +53,20 @@ public class Main {
 
             @Override
             protected GameSettings getGameSettings() {
-                return new OptionGameSettings(new SettingsImpl(), dice){
-                    @Override
-                    public Parameter<Boolean> isMultiple() {
-                        return new SimpleParameter<>(true);
-                    }
-
-                    @Override
-                    public RoundSettingsWrapper getRoundSettings() {
-                        return new RoundSettingsWrapper(){
-                            @Override
-                            public Parameter<Boolean> roundsEnabled() {
-                                return new SimpleParameter<>(false);
-                            }
-                        };
-                    }
-
-                    // pres Ctrl-O here and override any setting property
-                };
+                return gameSettings;
             }
         };
 
-        LocalWSGameRunner.run(gameType, "127.0.0.1", 8080);
+        gameSettings.update(new JSONObject("{\n" +
+                "  'isMultiple':true,\n" +
+                "  'roundSettings':{\n" +
+                "    'roundsEnabled':false,\n" +
+                "  },\n" +
+                "}"));
+
+        System.out.printf("Run local WS server for %s on %s:%s with settings:\n%s\n\n",
+                game, host, port, JsonUtils.prettyPrint(gameSettings.asJson()));
+
+        LocalWSGameRunner.run(gameType, host, port);
     }
 }

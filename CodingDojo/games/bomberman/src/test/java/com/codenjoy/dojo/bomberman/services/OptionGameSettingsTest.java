@@ -27,12 +27,18 @@ import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.bomberman.model.perks.PerkSettings;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.utils.JsonUtils;
+import org.json.JSONObject;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OptionGameSettingsTest {
@@ -70,5 +76,123 @@ public class OptionGameSettingsTest {
         } else {
             throw  new AssertionError(message);
         }
+    }
+
+    @Test
+    public void testUpdate() {
+        // given
+        OptionGameSettings settings = new OptionGameSettings(new SettingsImpl(), new RandomDice());
+
+        assertEquals("{\n" +
+                "  'boardSize':23,\n" +
+                "  'bombPower':3,\n" +
+                "  'bombsCount':1,\n" +
+                "  'destroyWallCount':52,\n" +
+                "  'diePenalty':2,\n" +
+                "  'isMultiple':false,\n" +
+                "  'killMeatChopperScore':3,\n" +
+                "  'killOtherHeroScore':10,\n" +
+                "  'killWallScore':1,\n" +
+                "  'meatChoppersCount':5,\n" +
+                "  'perkBombBlastRadiusInc':2,\n" +
+                "  'perkBombCountInc':3,\n" +
+                "  'perkDropRatio':20,\n" +
+                "  'perkPickTimeout':5,\n" +
+                "  'playersPerRoom':5,\n" +
+                "  'remoteControlCount':3,\n" +
+                "  'roundSettings':{\n" +
+                "    'minTicksForWin':1,\n" +
+                "    'roundsEnabled':true,\n" +
+                "    'roundsPerMatch':1,\n" +
+                "    'timeBeforeStart':5,\n" +
+                "    'timeForWinner':1,\n" +
+                "    'timePerRound':300\n" +
+                "  },\n" +
+                "  'timeoutBombBlastRadiusInc':10,\n" +
+                "  'timeoutBombCountInc':10,\n" +
+                "  'timeoutBombImmune':10,\n" +
+                "  'winRoundScore':15\n" +
+                "}", JsonUtils.prettyPrint(settings.asJson()));
+
+        // when
+        settings.update(new JSONObject("{\n" +
+                "  'diePenalty':12,\n" +
+                "  'isMultiple':true,\n" +
+                "  'perkBombBlastRadiusInc':4,\n" +
+                "  'perkDropRatio':23,\n" +
+                "  'roundSettings':{\n" +
+                "    'roundsEnabled':false,\n" +
+                "    'timeBeforeStart':10,\n" +
+                "  },\n" +
+                "  'timeoutBombCountInc':12,\n" +
+                "}"));
+
+        // then
+        assertEquals("{\n" +
+                "  'boardSize':23,\n" +
+                "  'bombPower':3,\n" +
+                "  'bombsCount':1,\n" +
+                "  'destroyWallCount':52,\n" +
+                "  'diePenalty':12,\n" +
+                "  'isMultiple':true,\n" +
+                "  'killMeatChopperScore':3,\n" +
+                "  'killOtherHeroScore':10,\n" +
+                "  'killWallScore':1,\n" +
+                "  'meatChoppersCount':5,\n" +
+                "  'perkBombBlastRadiusInc':4,\n" +
+                "  'perkBombCountInc':3,\n" +
+                "  'perkDropRatio':23,\n" +
+                "  'perkPickTimeout':5,\n" +
+                "  'playersPerRoom':5,\n" +
+                "  'remoteControlCount':3,\n" +
+                "  'roundSettings':{\n" +
+                "    'minTicksForWin':1,\n" +
+                "    'roundsEnabled':false,\n" +
+                "    'roundsPerMatch':1,\n" +
+                "    'timeBeforeStart':10,\n" +
+                "    'timeForWinner':1,\n" +
+                "    'timePerRound':300\n" +
+                "  },\n" +
+                "  'timeoutBombBlastRadiusInc':10,\n" +
+                "  'timeoutBombCountInc':12,\n" +
+                "  'timeoutBombImmune':10,\n" +
+                "  'winRoundScore':15\n" +
+                "}", JsonUtils.prettyPrint(settings.asJson()));
+
+        // when
+        settings.update(new JSONObject("{}"));
+
+        // then
+        assertEquals("{\n" +
+                "  'boardSize':23,\n" +
+                "  'bombPower':3,\n" +
+                "  'bombsCount':1,\n" +
+                "  'destroyWallCount':52,\n" +
+                "  'diePenalty':12,\n" +
+                "  'isMultiple':true,\n" +
+                "  'killMeatChopperScore':3,\n" +
+                "  'killOtherHeroScore':10,\n" +
+                "  'killWallScore':1,\n" +
+                "  'meatChoppersCount':5,\n" +
+                "  'perkBombBlastRadiusInc':4,\n" +
+                "  'perkBombCountInc':3,\n" +
+                "  'perkDropRatio':23,\n" +
+                "  'perkPickTimeout':5,\n" +
+                "  'playersPerRoom':5,\n" +
+                "  'remoteControlCount':3,\n" +
+                "  'roundSettings':{\n" +
+                "    'minTicksForWin':1,\n" +
+                "    'roundsEnabled':false,\n" +
+                "    'roundsPerMatch':1,\n" +
+                "    'timeBeforeStart':10,\n" +
+                "    'timeForWinner':1,\n" +
+                "    'timePerRound':300\n" +
+                "  },\n" +
+                "  'timeoutBombBlastRadiusInc':10,\n" +
+                "  'timeoutBombCountInc':12,\n" +
+                "  'timeoutBombImmune':10,\n" +
+                "  'winRoundScore':15\n" +
+                "}", JsonUtils.prettyPrint(settings.asJson()));
+
     }
 }

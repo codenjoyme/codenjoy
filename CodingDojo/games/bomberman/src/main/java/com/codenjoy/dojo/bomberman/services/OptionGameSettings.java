@@ -24,13 +24,12 @@ package com.codenjoy.dojo.bomberman.services;
 
 
 import com.codenjoy.dojo.bomberman.model.*;
-import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
-import com.codenjoy.dojo.services.settings.EditBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import org.json.JSONObject;
 
 public class OptionGameSettings implements GameSettings {
 
@@ -54,7 +53,7 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> winRoundScore;
 
     private final Parameter<Integer> perkDropRatio;
-    private Parameter<Integer> perkPickTimeout;
+    private final Parameter<Integer> perkPickTimeout;
     private final Parameter<Integer> perkBombBlastRadiusInc;
     private final Parameter<Integer> timeoutBombBlastRadiusInc;
     private final Parameter<Integer> perkBombCountInc;
@@ -208,5 +207,21 @@ public class OptionGameSettings implements GameSettings {
         return meatChoppersCount;
     }
 
+    public OptionGameSettings update(JSONObject json) {
+        String name = "roundSettings";
+        if (json.has(name)) {
+            SettingsUtils.save(json.getJSONObject(name), roundSettings);
+        }
+        SettingsUtils.save(json, this);
+        return this;
+    }
 
+    public JSONObject asJson() {
+        JSONObject result = new JSONObject();
+        JSONObject round = new JSONObject();
+        result.put("roundSettings", round);
+        SettingsUtils.load(round, roundSettings);
+        SettingsUtils.load(result, this);
+        return result;
+    }
 }
