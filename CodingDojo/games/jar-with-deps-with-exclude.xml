@@ -36,11 +36,28 @@
             <unpack>true</unpack>
             <scope>runtime</scope>
             <excludes>
-                <exclude>junit:junit</exclude>
-                <exclude>org.mockito:mockito-core</exclude>
-                <exclude>org.easytesting:fest-assert</exclude>
-                <exclude>org.easytesting:fest-reflect</exclude>
-                <exclude>org.easytesting:fest-reflect</exclude>
+                <exclude>org.eclipse.jetty.websocket:websocket-server</exclude>
+                <exclude>org.eclipse.jetty.websocket:websocket-client</exclude>
+                <exclude>org.eclipse.jetty.websocket:websocket-common</exclude>
+                <exclude>org.eclipse.jetty.websocket:websocket-api</exclude>
+                <exclude>org.eclipse.jetty.websocket:websocket-servlet</exclude>
+                <exclude>org.eclipse.jetty:jetty-util</exclude>
+                <exclude>org.eclipse.jetty:jetty-io</exclude>
+                <exclude>org.eclipse.jetty:jetty-client</exclude>
+                <exclude>org.eclipse.jetty:jetty-http</exclude>
+                <exclude>org.eclipse.jetty:jetty-xml</exclude>
+                <exclude>org.eclipse.jetty:jetty-servlet</exclude>
+                <exclude>org.eclipse.jetty:jetty-security</exclude>
+                <exclude>org.eclipse.jetty:jetty-server</exclude>
+                <exclude>javax.servlet:javax.servlet-api</exclude>
+                <exclude>com.cedarsoftware</exclude>
+                <exclude>org.reflections</exclude>
+                <exclude>com.google.guava:guava</exclude>
+                <exclude>org.javassist:javassist</exclude>
+                <exclude>org.apache.commons:commons-collections4</exclude>
+                <exclude>commons-codec:commons-codec</exclude>
+                <exclude>com.cedarsoftware:json-io</exclude>
+                <exclude>org.reflections:reflections</exclude>
             </excludes>
         </dependencySet>
     </dependencySets>
@@ -49,7 +66,7 @@
             <outputDirectory>/</outputDirectory>
             <directory>${project.build.outputDirectory}</directory>
             <excludes>
-                <exclude>src/main/resources/**</exclude>
+                <exclude>resources/**/*</exclude>
             </excludes>
         </fileSet>
     </fileSets>
