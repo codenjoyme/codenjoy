@@ -20,6 +20,9 @@
  * #L%
  */
 var printBoardOnTextArea = function(data) {
+    if (!!onBoardData) {
+        onBoardData(data);
+    }
     var textarea = document.getElementById("board");
     if (!textarea) return;
     var size = data.split('\n')[0].length;

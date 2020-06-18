@@ -19,80 +19,32 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var currentBoardSize = null;
+function onBoardData(data) {
+    $('body').trigger('board-updated', data);
+}
 
-function initCanvases(contextPath, players, allPlayersScreen,
-                multiplayerType, boardSize, gameName,
-                enablePlayerInfo, enablePlayerInfoLevel,
-                sprites, alphabet, spriteElements,
-                drawBoard)
-{
-    var canvases = {};
-    var infoPools = {};
-    currentBoardSize = boardSize;
+function initCanvas() {
+    var canvas = null;
     var plots = {};
     var plotsUrls = {};
     var plotSize = 0;
     var canvasSize = 0;
     var images = {};
-    loadCanvasesData(alphabet, spriteElements);
-    var reloading = false;
-    var readableNames = {};
+    var boardSize = 23;
+    var isDrawByOrder = true;
 
-    function toName(id) {
-        return readableNames[id];
-    }
+    var elements = Element;
+    var spriteElements = ["bomberman", "bomb_bomberman", "dead_bomberman", "other_bomberman", "other_bomb_bomberman", "other_dead_bomberman", "bomb_timer_5", "bomb_timer_4", "bomb_timer_3", "bomb_timer_2", "bomb_timer_1", "boom", "wall", "destroyable_wall", "destroyed_wall", "meat_chopper", "dead_meat_chopper", "bomb_blast_radius_increase", "bomb_count_increase", "bomb_remote_control", "bomb_immune", "none"];
+    var alphabet = '☺☻Ѡ♥♠♣54321҉☼#H&x+cri ';
 
-    function goToHomePage() {
-        window.location.href = contextPath;
-    }
-
-    function reloadCanvasesData() {
-        reloading = true;
-        loadPlayers(rebuildCanvasesForPlayers);
-    }
-
-    function notIn(playersWhere, playersWhat) {
-        var result = [];
-        var ids = getNames(playersWhere);
-        playersWhat.forEach(function (player) {
-            if ($.inArray(player.id, ids) == -1) {
-                result.push(player);
-            }
-        });
-        return result;
-    }
-
-    function rebuildCanvasesForPlayers(newPlayers) {
-        var create = notIn(players, newPlayers);
-        var remove = notIn(newPlayers, players);
-
-        players = newPlayers;
-
-        removeHtml(remove);
-        removeCanvases(remove);
-
-        buildHtml(create);
-        buildCanvases(create);
-
-        if (players.length == 0) {
-            goToHomePage();
-        }
-        reloading = false;
-    }
-
-    function justGame(gameRoom) {
-        var ROOMS_SEPARATOR = '-';
-        return gameRoom.split(ROOMS_SEPARATOR).shift();
-    }
+    loadCanvasData(alphabet, spriteElements);
 
     function loadSpriteImages(elements, alphabet, onImageLoad) {
         for (var index in elements) {
             var ch = alphabet[index];
             var color = elements[index];
             plots[ch] = color;
-            var subFolder = (!!sprites) ? sprites + '/' : '';
-            plotsUrls[color] = contextPath + '/resources/sprite/' + justGame(gameName) + '/' + subFolder + color + '.png';
+            plotsUrls[color] = 'sprites/' + color + '.png';
 
             var image = new Image();
             image.onload = function() {
@@ -109,56 +61,14 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
     }
 
-    function loadCanvasesData(alphabet, elements) {
+    function loadCanvasData(alphabet, elements) {
         loadSpriteImages(elements, alphabet, function() {
-            buildHtml(players);
-            buildCanvases(players);
+            var canvas = createCanvas('board-canvas');
 
             $('body').on('board-updated', function(events, data) {
-                if (!reloading) {
-                    drawUsersCanvas(data);
-                }
+                canvas.boardSize = data.split('\n')[0].length;
+                drawBoard(getBoardDrawer(canvas, data.split('\n').join('')));
             });
-        });
-    }
-
-    function removeHtml(playersList) {
-        playersList.forEach(function (player) {
-            $('#div_' + player.id).remove();
-        });
-    }
-
-    function buildHtml(playersList) {
-        var templateData = [];
-        playersList.forEach(function (player) {
-            var id = player.id;
-            var name = player.readableName;
-            var levelVisible = (allPlayersScreen || !enablePlayerInfoLevel) ? 'none' : 'block';
-            var playerVisible  = (!enablePlayerInfo) ? 'none' : 'block';
-            templateData.push({
-                name : name,
-                id : id,
-                levelVisible : levelVisible,
-                playerVisible : playerVisible
-            });
-        });
-        $('#players_container script').tmpl(templateData).appendTo('#players_container');
-        if (!!game.canvasCursor) {
-            $('#players_container canvas').css('cursor', game.canvasCursor);
-        }
-    }
-
-    function removeCanvases(playersList) {
-        playersList.forEach(function (player) {
-            delete canvases[player.id];
-            delete infoPools[player.id];
-        });
-    }
-
-    function buildCanvases(playersList) {
-        playersList.forEach(function (player) {
-            canvases[player.id] = createCanvas(player.id);
-            infoPools[player.id] = [];
         });
     }
 
@@ -175,17 +85,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
         return false;
     }
 
-    var getBoardDrawer = function(canvas, playerId, playerData, allPlayersScreen) {
-        var getBoard = function() {
-            return playerData.board;
-        }
-        var getHeroesData = function() {
-            return playerData.heroesData.coordinates;
-        }
-
+    var getBoardDrawer = function(canvas, boardData) {
         var drawAllLayers = function(layers, onDrawItem){
-            var isDrawByOrder = game.isDrawByOrder;
-
             var drawChar = function(plotIndex) {
                 var x = 0;
                 var y = boardSize - 1;
@@ -238,73 +139,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
 
         var drawLayers = function(onDrawItem) {
-            var board = getBoard();
-            var toDraw = (!board.layers) ? [board] : board.layers;
+            var toDraw = (!boardData.layers) ? [boardData] : boardData.layers;
             try {
                 drawAllLayers(toDraw, onDrawItem);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-
-        var drawPlayerNames = function(font, beforeDraw) {
-            try {
-                var drawName = function(id, point, font, heroData) {
-                    var name = toName(id);
-                    var data = {
-                        'name':name,
-                        'point':point,
-                        'font':font,
-                        'heroData':heroData
-                    }
-                    if (!!beforeDraw) data = beforeDraw(data);
-                    canvas.drawText(data.name, data.point, data.font);
-                }
-
-                var board = getBoard();
-                if (typeof board.showName == 'undefined' || board.showName) {
-                    var currentPoint = null;
-                    var currentHeroData = null;
-                    var heroesData = getHeroesData();
-                    var currentIsDrawName = true;
-                    for (var id in heroesData) {
-                        var heroData = heroesData[id];
-                        var point = heroData.coordinate;
-                        if (!point) return; // TODO why this can happen?
-                        if (point.x == -1 || point.y == -1) {
-                            if (playerId == id) {
-                                currentIsDrawName = false;
-                            }
-                            continue;
-                        }
-                        if (!!board.offset) {
-                            point.x -= board.offset.x;
-                            point.y -= board.offset.y;
-                        }
-
-                        // TODO это тоже относится к TRAINING типу игры
-                        var isPlayerOnSingleBoard = function(board) {
-                            var progress = board.levelProgress;
-                            if (!progress) {
-                                return false;
-                            }
-                            return progress.current < progress.total;
-                        }
-                        var isDrawName = !!heroData.multiplayer && !isPlayerOnSingleBoard(board);
-                        if (playerId == id) {
-                            currentPoint = point;
-                            currentHeroData = heroData;
-                            currentIsDrawName = isDrawName;
-                            continue;
-                        }
-                        if (isDrawName) {
-                            drawName(id, point, font, heroData);
-                        }
-                    }
-                    if (currentIsDrawName) {
-                        drawName(playerId, currentPoint, font, currentHeroData);
-                    }
-                }
             } catch (err) {
                 console.log(err);
             }
@@ -314,77 +151,17 @@ function initCanvases(contextPath, players, allPlayersScreen,
             clear : clear,
             drawBack : drawBack,
             drawLayers : drawLayers,
-            drawPlayerNames : drawPlayerNames,
             drawFog : drawFog,
             canvas : canvas,
-            playerId : playerId,
-            playerData : playerData,
-            allPlayersScreen : allPlayersScreen
+            boardData : boardData
         };
     };
 
-    function defaultDrawBoard(drawer) {
+    var drawBoard = function defaultDrawBoard(drawer) {
         drawer.clear();
         drawer.drawBack();
         drawer.drawLayers();
-        drawer.drawPlayerNames();
         drawer.drawFog();
-    }
-
-    drawBoard = (!!drawBoard) ? drawBoard : defaultDrawBoard;
-
-    function calculateTextSize(text) {
-        var div = $("#width_calculator_container");
-        div.html(text);
-        div.css('display', 'block');
-        return div[0];
-    }
-
-    function showScoreInformation(playerId, information) {
-        var infoPool = infoPools[playerId];
-
-        // TODO это костыль, а возникает оно в момент переходов с поле на поле для игры http://127.0.0.1:8080/codenjoy-contest/board/game/snakebattle
-        if (typeof infoPool == 'undefined') {
-            infoPools[playerId] = [];
-            infoPool = infoPools[playerId];
-        }
-
-        if (information != '') {
-            var arr = information.split(', ');
-            for (var i in arr) {
-                if (arr[i] == '0') {
-                    continue;
-                }
-                infoPool.push(arr[i]);
-            }
-        }
-        if (infoPool.length == 0) return;
-
-        var score = $("#score_info_" + playerId);
-        if (score.is(':visible')) {
-            return;
-        }
-
-        var text = '<center>' + infoPool.join('<br>') + '</center>';
-        infoPool.splice(0, infoPool.length);
-
-        var canvas = $("#" + playerId);
-        var size = calculateTextSize(text);
-        score.css({
-                position: "absolute",
-                marginLeft: 0,
-                marginTop: 0,
-                left: canvas.position().left + canvas.width()/2 - size.clientWidth/2,
-                top: canvas.position().top + canvas.height()/2 - size.clientHeight/2
-            });
-
-        score.html(text);
-
-        score.show().delay(700).fadeOut(200, function() {
-            score.hide();
-
-            showScoreInformation(playerId, '');
-        });
     }
 
     function createCanvas(canvasName) {
@@ -409,45 +186,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
             );
         };
 
-        var drawText = function(text, pt, font) {
-            if (pt.x == -1 || pt.y == -1) return;
-
-            var ctx = canvas[0].getContext("2d");
-            if (!font) {
-                font = {
-                    font: "15px 'Verdana, sans-serif'",
-                    fillStyle: "#0FF",
-                    textAlign: "left",
-                    shadowColor: "#000",
-                    shadowOffsetX: 0,
-                    shadowOffsetY: 0,
-                    shadowBlur: 7
-                }
-            }
-            ctx.font = font.font;
-            ctx.fillStyle =  font.fillStyle;
-            ctx.textAlign = font.textAlign;
-            ctx.shadowColor = font.shadowColor;
-            ctx.shadowOffsetX = font.shadowOffsetX;
-            ctx.shadowOffsetY = font.shadowOffsetY;
-            ctx.shadowBlur = font.shadowBlur;
-
-            var x = (pt.x + 1) * plotSize;
-            var y = (boardSize - pt.y - 1) * plotSize - 5;
-            if (!!font.dx) {
-                x += font.dx;
-            }
-            if (!!font.dy) {
-                y += font.dy;
-            }
-            for (var i = 0; i < 10; i++) {
-                ctx.fillText(text, x, y);
-            }
-            ctx.shadowBlur = 0;
-        }
-
         var clear = function() {
-            canvas.clearCanvas();
+            // canvas.clearCanvas();
         }
 
         var getCanvasSize = function() {
@@ -461,124 +201,11 @@ function initCanvases(contextPath, players, allPlayersScreen,
         return {
             drawImage : drawImage,
             drawPlot : drawPlot,
-            drawText: drawText,
             clear : clear,
             getCanvasSize : getCanvasSize,
             getPlotSize : getPlotSize
         };
     }
-
-    function isPlayerListEmpty(data) {
-        return Object.keys(data).length == 0;
-    }
-
-    function getNames(playerList) {
-        var result = [];
-        playerList.forEach(function (player) {
-            result.push(player.id);
-        });
-        return result;
-    }
-
-    function getPlayers(data) {
-        return Object.keys(data);
-    }
-
-    function getAllPlayersFromGroups(data) {
-        var result = [];
-        var keys = getPlayers(data);
-        for (var player in keys) {
-            result = result.concat(data[keys[player]].heroesData.group);
-        }
-        return result;
-    }
-
-    function isPlayersInGroups(data) {
-        var playersOnTop = getPlayers(data);
-        var playersInGroups = getAllPlayersFromGroups(data);
-        return playersOnTop != playersInGroups;
-    }
-
-    function isPlayersListChanged(data) {
-        var newPlayers = getPlayers(data);
-        var oldPlayers = getNames(players);
-
-        if (newPlayers.length != oldPlayers.length) {
-            return true;
-        }
-
-        var hasNew = false;
-        newPlayers.forEach(function (newPlayer) {
-            if ($.inArray(newPlayer, oldPlayers) == -1) {
-                hasNew = true;
-            }
-        });
-
-        return hasNew;
-    }
-
-    function drawUsersCanvas(data) {
-        if (data == null) {
-            $("#showdata").text("There is NO data for player available!");
-            return;
-        }
-        $("#showdata").text('');
-
-        if (isPlayerListEmpty(data)) {
-            goToHomePage();
-            return;
-        }
-
-        if (allPlayersScreen && isPlayersInGroups(data)) {
-            var playersOnTop = [];
-            var ids = getPlayers(data);
-            for (var index in ids) {
-                var id = ids[index];
-                playersOnTop.push({
-                    'id':id,
-                    'readableName':data[id].heroesData.readableNames[id]
-                });
-            }
-
-            reloading = true;
-            rebuildCanvasesForPlayers(playersOnTop);
-        }
-
-        if (allPlayersScreen && isPlayersListChanged(data)) {
-            reloadCanvasesData();
-            return;
-        }
-
-        if (allPlayersScreen) {
-            for (var player in data) {
-                drawUserCanvas(player, data[player], true);
-            }
-        } else {
-            for (var i in players) {
-                var player = players[i].id;
-                drawUserCanvas(player, data[player], false);
-            }
-        }
-    }
-
-    function drawUserCanvas(playerId, data, allPlayersScreen) {
-        if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер борды а не всем сразу?
-            reloadCanvasesData();
-        }
-
-        var canvas = canvases[playerId];
-        canvas.boardSize = boardSize;
-        readableNames = data.heroesData.readableNames;
-
-        drawBoard(getBoardDrawer(canvas, playerId, data, allPlayersScreen));
-
-        $("#score_" + playerId).text(data.score);
-
-        showScoreInformation(playerId, data.info);
-
-        if (!allPlayersScreen) {
-            $("#level_" + playerId).text(data.heroesData.coordinates[playerId].level + 1);
-        }
-    }
-
 }
+
+initCanvas();
