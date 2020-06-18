@@ -24,15 +24,58 @@
         <meta charset="utf8">
         <script src="jquery-3.1.0.js"></script>
         <script src="browser-node-stub.js"></script>
-        <script src="canvases.js"></script>
         <script src="runner.js"></script>
+        <script src="canvases.js"></script>
+        <script language="javascript">
+            var checkVisibility = function(checkbox, component) {
+                $(checkbox).change(function() {
+                    if ($(this).is(":checked")) {
+                        $(component).css('visibility', 'visible');
+                    } else {
+                        $(component).css('visibility', 'hidden');
+                    }
+                });
+            }
+            $(document).ready(function() {
+                checkVisibility('#show-graphic', '#board-canvas');
+                checkVisibility('#show-text', '#board');
+            });
+        </script>
+        <style>
+            #board {
+                overflow: hidden;
+                line-height: 0.564em;
+                vertical-align: top;
+                font-size: 43.6px;
+                left: 6px;
+                background: transparent;
+                margin: 0px;
+                width: 581px;
+                height: 557px;
+                top: 0px;
+                border: none;
+                position: absolute;
+                mix-blend-mode: overlay;
+                font-family: monospace;
+            }
+
+            #log-area {
+                line-height: 16px;
+                font-size: 20px;
+            }
+        </style>
     </head>
     <body>
-        <canvas id="board-canvas">
-            Your browser does not support the canvas element.
-        </canvas>
-        <textarea id="board" style="line-height: 8px; vertical-align:top;"></textarea>        
-        <textarea id="log-area" rows="60" cols="120" style="line-height: 10px;"></textarea>        
+        <div>
+            <canvas id="board-canvas">
+                Your browser does not support the canvas element.
+            </canvas>
+            <textarea id="board"></textarea>
+        </div>
         <input type="checkbox" id="add-to-end">Add to end</input>
+        <input type="checkbox" checked="true" id="show-graphic">Graphic</input>
+        <input type="checkbox" checked="true" id="show-text">Text</input>
+        <br>
+        <textarea id="log-area" rows="60" cols="120"></textarea>
     </body>
 </html>
