@@ -101,7 +101,7 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     @Override
     public void tickField() {
-        tactAllBombermans();
+        applyAllHeroes();
         meatChopperEatBombermans();
         walls.tick();
         meatChopperEatBombermans();
@@ -132,7 +132,7 @@ public class Bomberman extends RoundField<Player> implements Field {
         }
     }
 
-    private void tactAllBombermans() {
+    private void applyAllHeroes() {
         for (Player player : players) {
             player.getHero().apply();
         }
