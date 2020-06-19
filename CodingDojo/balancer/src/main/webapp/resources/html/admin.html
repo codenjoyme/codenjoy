@@ -36,10 +36,13 @@
         div {
             display: table-row;
         }
-        span:not(.commandBar > span) {
+        span {
             display: table-cell;
             text-align: end;
             vertical-align: middle;
+        }
+        .jsonpanel span {
+            display: unset;
         }
         button {
             float: right;
@@ -48,6 +51,10 @@
         }
         input, textarea {
             width: 600px;
+            background-color: #fff3e4;
+            border: 0px;
+            margin: 1px;
+            font-size: 12px;
         }
         input[type='checkbox'] {
             width: 40px;
@@ -73,7 +80,7 @@
         }
         .jsonpanel {
             line-height: 0.9;
-            font-size: 13px;
+            font-size: 12px;
         }
         .jsonpanel div {
             background-color: #fff3e4;
