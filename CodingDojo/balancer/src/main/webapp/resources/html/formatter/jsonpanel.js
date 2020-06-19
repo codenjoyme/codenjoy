@@ -48,7 +48,7 @@
 
   SimplePair.prototype.getValInnerMarkup = function(){
     var valStr = Pair.prototype.getValInnerMarkup.call(this);
-    return Autolinker.link(valStr, {stripPrefix: false, truncate: 100});
+    return valStr;
   };
 
 
