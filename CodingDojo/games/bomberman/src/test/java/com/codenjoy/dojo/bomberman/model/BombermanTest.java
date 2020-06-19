@@ -23,25 +23,14 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.perks.*;
-import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -1244,7 +1233,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.DOWN.value());
+        dice(meatChopperDice, 1, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1259,7 +1248,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1);
+        dice(meatChopperDice, 1);
         field.tick();
         field.tick();
         field.tick();
@@ -1278,7 +1267,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 0, Direction.LEFT.value());
+        dice(meatChopperDice, 0, Direction.LEFT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1313,7 +1302,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.RIGHT.value());
+        dice(meatChopperDice, 1, Direction.RIGHT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1328,11 +1317,11 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 0, Direction.LEFT.value());
+        dice(meatChopperDice, 0, Direction.LEFT.value());
         field.tick();
         field.tick();
 
-        dice(meatChppperDice, Direction.LEFT.value());
+        dice(meatChopperDice, Direction.LEFT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1347,7 +1336,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, Direction.DOWN.value());
+        dice(meatChopperDice, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1399,7 +1388,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.DOWN.value());
+        dice(meatChopperDice, 1, Direction.DOWN.value());
         field.tick();
         field.tick();
         field.tick();
@@ -1409,7 +1398,7 @@ public class BombermanTest extends AbstractBombermanTest {
         field.tick();
         field.tick();
 
-        dice(meatChppperDice, 1, Direction.LEFT.value());
+        dice(meatChopperDice, 1, Direction.LEFT.value());
         field.tick();
         field.tick();
         hero.act();
@@ -1446,7 +1435,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼҉x       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, SIZE - 2, SIZE - 2, Direction.DOWN.value());
+        dice(meatChopperDice, SIZE - 2, SIZE - 2, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1689,7 +1678,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.LEFT.value());
+        dice(meatChopperDice, 1, Direction.LEFT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼\n" +
@@ -1704,7 +1693,7 @@ public class BombermanTest extends AbstractBombermanTest {
         bombsPower(5);
         withWalls(new DestroyWallAt(3, 0, new WallsImpl()));
         givenBoard(7);
-        when(bombermanDice.next(anyInt())).thenReturn(101); // don't drop perk by accident
+        when(heroDice.next(anyInt())).thenReturn(101); // don't drop perk by accident
 
         hero.act();
         hero.up();
@@ -1753,8 +1742,8 @@ public class BombermanTest extends AbstractBombermanTest {
     @Test
     public void shouldMeatChopperAppearAfterKill() {
         bombsPower(3);
-        dice(meatChppperDice, 3, 0, Direction.DOWN.value());
-        withWalls(new MeatChoppers(new WallsImpl(), field, v(1), meatChppperDice));
+        dice(meatChopperDice, 3, 0, Direction.DOWN.value());
+        withWalls(new MeatChoppers(new WallsImpl(), field, v(1), meatChopperDice));
         givenBoard(SIZE);
 
         hero.act();
@@ -1772,7 +1761,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "҉☺   \n" +
                 "҉҉҉x \n");
 
-        dice(meatChppperDice, 2, 2, Direction.DOWN.value());
+        dice(meatChopperDice, 2, 2, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("     \n" +
@@ -1785,8 +1774,8 @@ public class BombermanTest extends AbstractBombermanTest {
     @Test
     public void shouldMeatChopperNotAppearWhenDestroyWall() {
         bombsPower(3);
-        dice(meatChppperDice, 4, 4, Direction.RIGHT.value());
-        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), field, v(1), meatChppperDice));
+        dice(meatChopperDice, 4, 4, Direction.RIGHT.value());
+        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), field, v(1), meatChopperDice));
         givenBoard(SIZE);
 
         hero.act();
@@ -1804,7 +1793,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "҉☺   \n" +
                 "҉҉҉H \n");
 
-        dice(meatChppperDice, Direction.DOWN.value());
+        dice(meatChopperDice, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("     \n" +
@@ -1827,8 +1816,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, 2, Direction.DOWN.value());
-        when(bombermans.contains(anyObject())).thenReturn(true);
+        dice(meatChopperDice, 1, 2, Direction.DOWN.value());
+        when(heroes.contains(anyObject())).thenReturn(true);
 
         try {
             field.tick();

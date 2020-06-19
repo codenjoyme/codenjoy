@@ -37,7 +37,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         givenBoardWithDestroyWalls(6);
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 3);
         PerksSettingsWrapper.setDropRatio(20); // 20%
-        when(bombermanDice.next(anyInt())).thenReturn(10, 30); // must drop 1 perk
+        when(heroDice.next(anyInt())).thenReturn(10, 30); // must drop 1 perk
 
         hero.act();
         field.tick();

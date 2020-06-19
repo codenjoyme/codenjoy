@@ -30,15 +30,15 @@ import static com.codenjoy.dojo.bomberman.model.Elements.BOOM;
 
 public class Blast extends PointImpl implements State<Elements, Player> {
 
-    private Hero bomberman;
+    private Hero hero;
 
-    public Blast(int x, int y, Hero bomberman) {
+    public Blast(int x, int y, Hero hero) {
         super(x, y);
-        this.bomberman = bomberman;
+        this.hero = hero;
     }
 
-    public boolean itsMine(Hero bomberman) {
-        return this.bomberman == bomberman;
+    public boolean itsMine(Hero hero) {
+        return this.hero == hero;
     }
 
     @Override

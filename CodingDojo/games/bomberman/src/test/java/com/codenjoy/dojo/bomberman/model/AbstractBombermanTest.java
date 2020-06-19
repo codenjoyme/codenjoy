@@ -53,17 +53,17 @@ public class AbstractBombermanTest {
     private WallsImpl walls;
     protected GameSettings settings;
     protected EventListener listener;
-    protected Dice meatChppperDice;
-    protected Dice bombermanDice;
+    protected Dice meatChopperDice;
+    protected Dice heroDice;
     protected Player player;
-    protected List bombermans;
+    protected List heroes;
     protected Bomberman field;
     private final PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
     public void setUp() {
-        meatChppperDice = mock(Dice.class);
-        bombermanDice = mock(Dice.class);
+        meatChopperDice = mock(Dice.class);
+        heroDice = mock(Dice.class);
 
         level = mock(Level.class);
         canDropBombs(1);
@@ -86,8 +86,8 @@ public class AbstractBombermanTest {
     }
 
     protected void initBomberman() {
-        dice(bombermanDice, 0, 0);
-        Hero hero = new Hero(level, bombermanDice);
+        dice(heroDice, 0, 0);
+        Hero hero = new Hero(level, heroDice);
         when(settings.getBomberman(level)).thenReturn(hero);
         this.hero = hero;
     }
@@ -102,7 +102,7 @@ public class AbstractBombermanTest {
         player = new Player(listener, getRoundSettings().roundsEnabled());
         game = new Single(player, printer);
         game.on(field);
-        dice(bombermanDice, 0, 0);
+        dice(heroDice, 0, 0);
         game.newGame();
         hero = (Hero)game.getJoystick();
     }
@@ -217,19 +217,19 @@ public class AbstractBombermanTest {
     }
 
     protected void givenBoardWithMeatChopper(int size) {
-        dice(meatChppperDice, size - 2, size - 2);
+        dice(meatChopperDice, size - 2, size - 2);
 
         Field temp = mock(Field.class);
         when(temp.size()).thenReturn(size);
-        MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChppperDice);
-        bombermans = mock(List.class);
-        when(bombermans.contains(anyObject())).thenReturn(false);
-        when(temp.heroes(ALL)).thenReturn(bombermans);
+        MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChopperDice);
+        heroes = mock(List.class);
+        when(heroes.contains(anyObject())).thenReturn(false);
+        when(temp.heroes(ALL)).thenReturn(heroes);
         withWalls(walls);
         walls.regenerate();
         givenBoard(size);
 
-        dice(meatChppperDice, 1, Direction.UP.value());  // Чертик будет упираться в стенку и стоять на месте
+        dice(meatChopperDice, 1, Direction.UP.value());  // Чертик будет упираться в стенку и стоять на месте
     }
 
     protected void givenBoardWithDestroyWallsAt(int x, int y) {

@@ -102,9 +102,9 @@ public class Bomberman extends RoundField<Player> implements Field {
     @Override
     public void tickField() {
         applyAllHeroes();
-        meatChopperEatBombermans();
+        meatChopperEatHeroes();
         walls.tick();
-        meatChopperEatBombermans();
+        meatChopperEatHeroes();
         tactAllBombs();
         tactAllPerks();
         tactAllHeroes();
@@ -160,11 +160,11 @@ public class Bomberman extends RoundField<Player> implements Field {
         }
     }
 
-    private void meatChopperEatBombermans() {
+    private void meatChopperEatHeroes() {
         for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
             for (Player player : players) {
-                Hero bomberman = player.getHero();
-                if (bomberman.isAlive() && chopper.itsMe(bomberman)) {
+                Hero hero = player.getHero();
+                if (hero.isAlive() && chopper.itsMe(hero)) {
                     player.getHero().die();
                 }
             }
@@ -243,9 +243,9 @@ public class Bomberman extends RoundField<Player> implements Field {
                         dead.getHero().die();
                     }
 
-                    for (Player bombOwner : players) {
-                        if (dead != bombOwner && blast.itsMine(bombOwner.getHero())) {
-                            bombOwner.event(Events.KILL_OTHER_HERO);
+                    for (Player owner : players) {
+                        if (dead != owner && blast.itsMine(owner.getHero())) {
+                            owner.event(Events.KILL_OTHER_HERO);
                         }
                     }
                 }
@@ -294,9 +294,9 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private Player getBombOwner(Blast blast) {
-        for (Player bombOwner : players) {
-            if (blast.itsMine(bombOwner.getHero())) {
-                return bombOwner;
+        for (Player owner : players) {
+            if (blast.itsMine(owner.getHero())) {
+                return owner;
             }
         }
         return null;
