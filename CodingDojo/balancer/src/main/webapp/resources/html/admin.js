@@ -39,6 +39,7 @@ var result = function(partOfId, data) {
     var element = $('#' + partOfId + '-result');
     var text = JSON.stringify(data);
     if (element.hasClass('jsonpanel')) {
+        element.empty();
         element.jsonpanel({data: data});
         element[0].val = function() {
             return text;
@@ -359,10 +360,11 @@ var setSettings = function(settings) {
     });
 };
 
-var getGameSettings = function(gameType) {
+var getGameSettings = function(onSuccess) {
     _ajax('game-settings', {
         type: 'GET',
-        url: server('balancer') + '/game/settings/get'
+        url: server('balancer') + '/game/settings/get',
+        after: onSuccess
     });
 };
 
@@ -640,17 +642,19 @@ $(document).ready(function() {
 
     $('#set-settings').click(function() {
         setSettings(
-            $('#settings-result').val()
+            $('#settings-result').getValue()
         );
     });
 
     $('#get-game-settings').click(function() {
-        getGameSettings();
+        getGameSettings(function(data) {
+            $('#game-settings-post-request').val(JSON.stringify(data[0]));
+        });
     });
 
     $('#set-game-settings').click(function() {
         setGameSettings(
-            $('#game-settings-result').val()
+            $('#game-settings-post-request').val()
         );
     });
 
