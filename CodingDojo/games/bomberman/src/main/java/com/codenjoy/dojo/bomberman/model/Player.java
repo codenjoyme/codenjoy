@@ -74,6 +74,10 @@ public class Player extends RoundGamePlayer<Hero, Field> {
             return settings.killOtherHeroScore().getValue();
         }
 
+        if (event == Events.CATCH_PERK) {
+            return settings.catchPerkScore().getValue();
+        }
+
         return 0;
     }
 

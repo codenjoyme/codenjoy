@@ -56,6 +56,8 @@ public class Scores implements PlayerScores {
             score += settings.killMeatChopperScore().getValue();
         } else if (event.equals(Events.KILL_DESTROY_WALL)) {
             score += settings.killWallScore().getValue();
+        } else if (event.equals(Events.CATCH_PERK)) {
+            score += settings.catchPerkScore().getValue();
         } else if (event.equals(Events.WIN_ROUND)) {
             score += settings.winRoundScore().getValue();
         }

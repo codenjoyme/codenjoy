@@ -87,6 +87,7 @@ public class OptionGameSettingsTest {
                 "  'boardSize':23,\n" +
                 "  'bombPower':3,\n" +
                 "  'bombsCount':1,\n" +
+                "  'catchPerkScore':5,\n" +
                 "  'destroyWallCount':52,\n" +
                 "  'diePenalty':30,\n" +
                 "  'isMultiple':false,\n" +
@@ -132,6 +133,7 @@ public class OptionGameSettingsTest {
                 "  'boardSize':23,\n" +
                 "  'bombPower':3,\n" +
                 "  'bombsCount':1,\n" +
+                "  'catchPerkScore':5,\n" +
                 "  'destroyWallCount':52,\n" +
                 "  'diePenalty':12,\n" +
                 "  'isMultiple':true,\n" +
@@ -167,6 +169,7 @@ public class OptionGameSettingsTest {
                 "  'boardSize':23,\n" +
                 "  'bombPower':3,\n" +
                 "  'bombsCount':1,\n" +
+                "  'catchPerkScore':5,\n" +
                 "  'destroyWallCount':52,\n" +
                 "  'diePenalty':12,\n" +
                 "  'isMultiple':true,\n" +

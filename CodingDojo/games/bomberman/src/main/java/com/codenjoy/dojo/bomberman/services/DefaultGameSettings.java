@@ -38,6 +38,7 @@ public class DefaultGameSettings implements GameSettings {
     public static int KILL_OTHER_HERO_SCORE = 200;
     public static int KILL_MEAT_CHOPPER_SCORE = 100;
     public static int KILL_WALL_SCORE = 10;
+    public static int CATCH_PERK_SCORE = 5;
 
     public static int MEAT_CHOPPERS_COUNT = 10;
     public static int BOMB_POWER = 3;
@@ -137,5 +138,10 @@ public class DefaultGameSettings implements GameSettings {
     @Override
     public Parameter<Integer> getMeatChoppersCount() {
         return v(MEAT_CHOPPERS_COUNT);
+    }
+
+    @Override
+    public Parameter<Integer> catchPerkScore() {
+        return v(CATCH_PERK_SCORE);
     }
 }

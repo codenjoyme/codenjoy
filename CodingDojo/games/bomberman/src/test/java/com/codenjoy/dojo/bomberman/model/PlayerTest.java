@@ -50,6 +50,7 @@ public class PlayerTest {
     public void setup() {
         settings = mock(GameSettings.class);
         when(settings.killWallScore()).thenReturn(v(10));
+        when(settings.catchPerkScore()).thenReturn(v(5));
         when(settings.getLevel()).thenReturn(mock(Level.class));
         when(settings.getBomberman(any(Level.class))).thenReturn(mock(Hero.class));
         when(settings.getRoundSettings()).thenReturn(new RoundSettingsWrapper() {

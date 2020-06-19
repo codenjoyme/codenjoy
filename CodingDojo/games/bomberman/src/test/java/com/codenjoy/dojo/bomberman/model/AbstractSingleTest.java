@@ -93,6 +93,7 @@ public abstract class AbstractSingleTest {
         when(settings.killOtherHeroScore()).thenReturn(v(200));
         when(settings.killMeatChopperScore()).thenReturn(v(100));
         when(settings.killWallScore()).thenReturn(v(10));
+        when(settings.catchPerkScore()).thenReturn(v(5));
 
         board = new Bomberman(settings);
 

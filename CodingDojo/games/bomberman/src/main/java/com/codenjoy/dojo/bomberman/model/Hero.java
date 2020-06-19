@@ -27,6 +27,7 @@ import com.codenjoy.dojo.bomberman.model.perks.BombRemoteControl;
 import com.codenjoy.dojo.bomberman.model.perks.HeroPerks;
 import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
+import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -140,6 +141,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
             PerkOnBoard perk = field.pickPerk(pt);
             if (perk != null) {
                 addPerk(perk.getPerk());
+                event(Events.CATCH_PERK);
             }
         }
         direction = null;

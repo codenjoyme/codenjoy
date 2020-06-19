@@ -27,7 +27,8 @@ public enum Events {
     KILL_DESTROY_WALL,
     KILL_MEAT_CHOPPER,
     KILL_OTHER_HERO,
-    
+
+    CATCH_PERK,
     DROP_PERK,
     DIED,
 

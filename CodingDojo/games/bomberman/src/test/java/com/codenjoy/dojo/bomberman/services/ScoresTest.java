@@ -58,6 +58,10 @@ public class ScoresTest {
         scores.event(Events.KILL_OTHER_HERO);
     }
 
+    public void dropPerk() {
+        scores.event(Events.CATCH_PERK);
+    }
+
     public void winRound() {
         scores.event(Events.WIN_ROUND);
     }
@@ -83,11 +87,14 @@ public class ScoresTest {
 
         killOtherHero(); //200
 
+        dropPerk(); //5
+
         winRound(); //1000
 
         assertEquals(140
                 + 4*settings.killWallScore().getValue()
                 - settings.diePenalty().getValue()
+                + settings.catchPerkScore().getValue()
                 + settings.killOtherHeroScore().getValue()
                 + settings.killMeatChopperScore().getValue()
                 + settings.winRoundScore().getValue(), scores.getScore());

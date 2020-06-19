@@ -23,11 +23,13 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 import com.codenjoy.dojo.bomberman.model.perks.*;
+import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
+import com.codenjoy.dojo.bomberman.services.Events;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class PerksBombermanTest extends AbstractBombermanTest {
 
@@ -75,7 +77,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
         PerksSettingsWrapper.setDropRatio(20); // 20%
 
-        when(bombermanDice.next(anyInt())).thenReturn(10); // must drop 2 perks
+        when(heroDice.next(anyInt())).thenReturn(10); // must drop 2 perks
 
         hero.act();
         field.tick();
@@ -110,14 +112,16 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "+  ☺ #\n" +
                 "#+####\n");
 
+        hero.left();
+        field.tick();
+
+        hero.left();
+        field.tick();
+
+        assertEquals(0, hero.scores());
+
         // when
         // go for perk
-        hero.left();
-        field.tick();
-
-        hero.left();
-        field.tick();
-
         hero.left();
         field.tick();
 
@@ -129,6 +133,8 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "☺    #\n" +
                 "#+####\n");
 
+        verify(listener).event(Events.CATCH_PERK);
+        assertEquals(DefaultGameSettings.CATCH_PERK_SCORE, hero.scores());
         assertEquals("Hero had to acquire new perk", 1, player.getHero().getPerks().size());
     }
 

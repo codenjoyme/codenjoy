@@ -25,7 +25,6 @@ package com.codenjoy.dojo.web.rest.dto;
 import com.codenjoy.dojo.services.entity.server.PParameter;
 import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.SimpleNamedParameter;
-import com.codenjoy.dojo.services.settings.EditBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
@@ -38,7 +37,8 @@ public class GameSettings {
     public static final String SCORE_KILL_WALL_SCORE = "[Score] Kill wall score";
     public static final String SCORE_KILL_MEAT_CHOPPER_SCORE = "[Score] Kill meat chopper score";
     public static final String SCORE_KILL_OTHER_HERO_SCORE = "[Score] Kill other hero score";
-    public static final String SCORE_YOUR_HERO_S_DEATH_PENALTY = "[Score] Your hero's death penalty";
+    public static final String SCORE_CATCH_PERK_SCORE = "[Score] Catch perk score";
+    public static final String SCORE_YOUR_HEROES_DEATH_PENALTY = "[Score] Your hero's death penalty";
     public static final String SCORE_ROUNDS_WIN_ROUND_SCORE = "[Score][Rounds] Win round score";
     public static final String LEVEL_BOMBS_COUNT = "[Level] Bombs count";
     public static final String LEVEL_BOMB_POWER = "[Level] Bomb power";
@@ -96,8 +96,12 @@ public class GameSettings {
         return getInteger(SCORE_KILL_OTHER_HERO_SCORE);
     }
 
+    public Integer getCatchPerkScore() {
+        return getInteger(SCORE_CATCH_PERK_SCORE);
+    }
+
     public Integer getYourHeroesDeathPenalty() {
-        return getInteger(SCORE_YOUR_HERO_S_DEATH_PENALTY);
+        return getInteger(SCORE_YOUR_HEROES_DEATH_PENALTY);
     }
 
     public Integer getWinRoundScore() {
@@ -224,8 +228,12 @@ public class GameSettings {
         add(SCORE_KILL_OTHER_HERO_SCORE, input);
     }
 
+    public void setCatchPerkScore(Integer input) {
+        add(SCORE_CATCH_PERK_SCORE, input);
+    }
+
     public void setYourHeroesDeathPenalty(Integer input) {
-        add(SCORE_YOUR_HERO_S_DEATH_PENALTY, input);
+        add(SCORE_YOUR_HEROES_DEATH_PENALTY, input);
     }
 
     public void setWinRoundScore(Integer input) {
@@ -354,7 +362,8 @@ public class GameSettings {
         update(parameters, SCORE_KILL_WALL_SCORE);
         update(parameters, SCORE_KILL_MEAT_CHOPPER_SCORE);
         update(parameters, SCORE_KILL_OTHER_HERO_SCORE);
-        update(parameters, SCORE_YOUR_HERO_S_DEATH_PENALTY);
+        update(parameters, SCORE_CATCH_PERK_SCORE);
+        update(parameters, SCORE_YOUR_HEROES_DEATH_PENALTY);
         update(parameters, SCORE_ROUNDS_WIN_ROUND_SCORE);
         update(parameters, LEVEL_BOMBS_COUNT);
         update(parameters, LEVEL_BOMB_POWER);

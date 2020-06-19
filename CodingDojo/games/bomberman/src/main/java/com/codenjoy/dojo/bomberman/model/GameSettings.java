@@ -55,4 +55,6 @@ public interface GameSettings {
     Parameter<Integer> getDestroyWallCount();
 
     Parameter<Integer> getMeatChoppersCount();
+
+    Parameter<Integer> catchPerkScore();
 }

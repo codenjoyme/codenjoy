@@ -50,6 +50,7 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> killMeatChopperScore;
     private final Parameter<Integer> killOtherHeroScore;
     private final Parameter<Integer> diePenalty;
+    private final Parameter<Integer> catchPerkScore;
     private final Parameter<Integer> winRoundScore;
 
     private final Parameter<Integer> perkDropRatio;
@@ -70,6 +71,7 @@ public class OptionGameSettings implements GameSettings {
         killWallScore = settings.addEditBox("[Score] Kill wall score").type(Integer.class).def(1);
         killMeatChopperScore = settings.addEditBox("[Score] Kill meat chopper score").type(Integer.class).def(10);
         killOtherHeroScore = settings.addEditBox("[Score] Kill other hero score").type(Integer.class).def(20);
+        catchPerkScore = settings.addEditBox("[Score] Catch perk score").type(Integer.class).def(5);
         diePenalty = settings.addEditBox("[Score] Your hero's death penalty").type(Integer.class).def(30);
         winRoundScore = settings.addEditBox("[Score][Rounds] Win round score").type(Integer.class).def(30);
 
@@ -191,6 +193,11 @@ public class OptionGameSettings implements GameSettings {
     @Override
     public Parameter<Integer> killWallScore() {
         return killWallScore;
+    }
+
+    @Override
+    public Parameter<Integer> catchPerkScore() {
+        return catchPerkScore;
     }
 
     @Override
