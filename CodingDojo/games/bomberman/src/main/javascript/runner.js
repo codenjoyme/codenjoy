@@ -30,7 +30,7 @@ var printBoardOnTextArea = (typeof printBoardOnTextArea !== 'undefined'
 
 var log = function(string) {
     console.log(string);
-    if (printBoardOnTextArea !== undef && !!printBoardOnTextArea) {
+    if (printBoardOnTextArea !== undefined && !!printBoardOnTextArea) {
         printLogOnTextArea(string);
     }
 };

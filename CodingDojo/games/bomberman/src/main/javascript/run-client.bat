@@ -1,1 +1,1 @@
-node runner.js
+npm start

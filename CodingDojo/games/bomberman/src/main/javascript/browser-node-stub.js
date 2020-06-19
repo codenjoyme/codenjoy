@@ -33,8 +33,6 @@ var printBoardOnTextArea = function(data) {
 
 var cache = [];
 
-var undef = null;
-
 var printLogOnTextArea = function(data) {
     var textarea = document.getElementById("log-area");
     var addToEnd = document.getElementById("add-to-end");
