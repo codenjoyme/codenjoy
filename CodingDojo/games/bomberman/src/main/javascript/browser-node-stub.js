@@ -27,7 +27,7 @@ var printBoardOnTextArea = function(data) {
     if (!textarea) return;
     var size = data.split('\n')[0].length;
     textarea.cols = size;
-    textarea.rows = size + 1;
+    textarea.rows = size;
     textarea.value = data;
 }
 
