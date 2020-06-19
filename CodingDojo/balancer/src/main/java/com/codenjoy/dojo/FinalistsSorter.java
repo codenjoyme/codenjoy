@@ -73,7 +73,7 @@ public class FinalistsSorter {
     }
 
     @SneakyThrows
-    private static JSONArray load(String fileName) {
+    public static JSONArray load(String fileName) {
         File file = new File("battle/" + fileName);
         StringBuilder result = new StringBuilder();
         try (Stream linesStream = Files.lines(file.toPath())) {
