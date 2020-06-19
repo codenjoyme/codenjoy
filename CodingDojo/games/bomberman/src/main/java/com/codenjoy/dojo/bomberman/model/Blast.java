@@ -41,6 +41,10 @@ public class Blast extends PointImpl implements State<Elements, Player> {
         return this.hero == hero;
     }
 
+    public Hero owner() {
+        return hero;
+    }
+
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return BOOM;

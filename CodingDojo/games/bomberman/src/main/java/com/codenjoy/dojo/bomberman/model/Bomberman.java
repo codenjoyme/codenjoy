@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.bomberman.services.Events.DROP_PERK;
 import static java.util.stream.Collectors.toList;
 
 public class Bomberman extends RoundField<Player> implements Field {
@@ -49,7 +50,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     private final GameSettings settings;
     private final List<Point> destroyedWalls = new LinkedList<>();
     private final List<Bomb> destroyedBombs = new LinkedList<>();
-    private Map<Point, PerkOnBoard> perks = new HashMap<>();
+    private Map<Point, PerkOnBoard> perks = new HashMap<>(); // TODO не надо тут мапы, достаточно collection.contains(pt)
 
     public Bomberman(GameSettings settings) {
         super(RoundFactory.get(settings.getRoundSettings()),
@@ -147,14 +148,12 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private void wallDestroyed(Wall wall, Blast blast) {
-        for (Player player : players) {
+        for (Player player : players) { // TODO использовать balst.owner() так быстрее
             if (blast.itsMine(player.getHero())) {
-                if (wall instanceof MeatChopper) {
+                if (wall instanceof MeatChopper) { // TODO давать бонусы только если бомбер жив еще
                     player.event(Events.KILL_MEAT_CHOPPER);
                 } else if (wall instanceof DestroyWall) {
                     player.event(Events.KILL_DESTROY_WALL);
-                } else if (wall instanceof PerkOnBoard) {
-                    player.event(Events.DROP_PERK); // TODO test me
                 }
             }
         }
@@ -223,6 +222,15 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private void killAllNear(List<Blast> blasts) {
+        // убиваем все перки которые уже есть в радиусе
+        for (Blast blast : blasts) {
+            if (perks.containsKey(blast)) {
+                PerkOnBoard perk = perks.get(blast);
+                pickPerk(perk);
+                blast.owner().event(DROP_PERK);
+            }
+        }
+        // фигачим стены, если надо выпадают перки
         for (Blast blast : blasts) {
             if (walls.itsMe(blast)) {
                 if (dropPerk(blast)) {
@@ -234,6 +242,7 @@ public class Bomberman extends RoundField<Player> implements Field {
                 wallDestroyed(wall, blast);
             }
         }
+        // беремся за бомберов, если у них только нет иммунитета
         for (Blast blast : blasts) {
             for (Player dead : aliveActive()) {
                 if (dead.getHero().itsMe(blast)) {

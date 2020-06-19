@@ -27,6 +27,7 @@ import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.Events;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.bomberman.services.Events.DROP_PERK;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -136,6 +137,71 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         verify(listener).event(Events.CATCH_PERK);
         assertEquals(DefaultGameSettings.CATCH_PERK_SCORE, hero.scores());
         assertEquals("Hero had to acquire new perk", 1, player.getHero().getPerks().size());
+    }
+
+    // проверяем, что уничтожение перка порождает митчопера :)
+    @Test
+    public void shouldDropPerk_generateNewMeatChopper() {
+        shouldBombermanAcquirePerk_whenMoveToFieldWithPerk();
+        reset(listener);
+
+        hero.right();
+        field.tick();
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                " ☺   #\n" +
+                "#+####\n");
+
+        hero.act();
+        field.tick();
+
+        hero.right();
+        field.tick();
+
+        hero.right();
+        field.tick();
+
+        hero.up();
+        field.tick();
+
+        // перед взрывом
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# #☺##\n" +
+                " 1   #\n" +
+                "#+####\n");
+
+        // все тихо
+        verifyNoMoreInteractions(listener);
+
+        // when
+        field.tick();
+
+        // перк разрушен
+        asrtBrd("#+####\n" +
+                "#҉# ##\n" +
+                "#҉   #\n" +
+                "#҉#☺##\n" +
+                "҉҉҉҉҉+\n" +
+                "#҉####\n");
+
+        // пошел сигнал об этом
+        verify(listener).event(DROP_PERK);
+
+        // и на следующую секунду перка там нет
+        field.tick();
+
+        asrtBrd("#+####\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# #☺##\n" +
+                "     +\n" +
+                "# ####\n");
     }
 
     // проверяем, что перк пропадает после таймаута
