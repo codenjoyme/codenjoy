@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -215,7 +216,7 @@ public class LocalGameRunner {
     }
 
     private String getPlayerId() {
-        return String.valueOf(Math.abs(gameType.getDice().next(Integer.MAX_VALUE)));
+        return RandomStringUtils.randomAlphanumeric(10);
     }
 
 }
