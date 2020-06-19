@@ -68,10 +68,10 @@ public class OptionGameSettings implements GameSettings {
         playersPerRoom = settings.addEditBox("[Game] Players per room for disposable").type(Integer.class).def(5);
 
         killWallScore = settings.addEditBox("[Score] Kill wall score").type(Integer.class).def(1);
-        killMeatChopperScore = settings.addEditBox("[Score] Kill meat chopper score").type(Integer.class).def(3);
-        killOtherHeroScore = settings.addEditBox("[Score] Kill other hero score").type(Integer.class).def(10);
-        diePenalty = settings.addEditBox("[Score] Your hero's death penalty").type(Integer.class).def(2);
-        winRoundScore = settings.addEditBox("[Score][Rounds] Win round score").type(Integer.class).def(15);
+        killMeatChopperScore = settings.addEditBox("[Score] Kill meat chopper score").type(Integer.class).def(10);
+        killOtherHeroScore = settings.addEditBox("[Score] Kill other hero score").type(Integer.class).def(20);
+        diePenalty = settings.addEditBox("[Score] Your hero's death penalty").type(Integer.class).def(30);
+        winRoundScore = settings.addEditBox("[Score][Rounds] Win round score").type(Integer.class).def(30);
 
         bombsCount = settings.addEditBox("[Level] Bombs count").type(Integer.class).def(1);
         bombPower = settings.addEditBox("[Level] Bomb power").type(Integer.class).def(3);
@@ -81,23 +81,24 @@ public class OptionGameSettings implements GameSettings {
 
         roundSettings = new RoundSettingsWrapper(settings,
                 true,  // roundsEnabled   - включен ли режим раундов
-                300,   // timePerRound    - сколько тиков на 1 раунд
+                200,   // timePerRound    - сколько тиков на 1 раунд
                 1,     // timeForWinner   - сколько тиков победитель будет сам оставаться после всех побежденных
                 5,     // timeBeforeStart - обратный отсчет перед началом раунда
                 1,     // roundsPerMatch  - сколько раундов (с тем же составом героев) на 1 матч
                 1);    // minTicksForWin  - сколько тиков должно пройти от начала раунда, чтобы засчитать победу
 
+        int perksTimeout = 30;
         // perks. Set value to 0 = perk is disabled.
         perkDropRatio = settings.addEditBox("[Perks] Perks drop ratio in %").type(Integer.class).def(20); // 20%
         perkPickTimeout = settings.addEditBox("[Perks] Perks pick timeout").type(Integer.class).def(5);
         //Bomb blast radius increase (BBRI)
         perkBombBlastRadiusInc = settings.addEditBox("[Perks] Bomb blast radius increase").type(Integer.class).def(2);
-        timeoutBombBlastRadiusInc = settings.addEditBox("[Perks] Bomb blast radius increase effect timeout").type(Integer.class).def(10);
+        timeoutBombBlastRadiusInc = settings.addEditBox("[Perks] Bomb blast radius increase effect timeout").type(Integer.class).def(perksTimeout);
         // Bomb count increase (BCI)
-        perkBombCountInc = settings.addEditBox("[Perks] Bomb count increase").type(Integer.class).def(3);
-        timeoutBombCountInc = settings.addEditBox("[Perks] Bomb count effect timeout").type(Integer.class).def(10);
+        perkBombCountInc = settings.addEditBox("[Perks] Bomb count increase").type(Integer.class).def(4);
+        timeoutBombCountInc = settings.addEditBox("[Perks] Bomb count effect timeout").type(Integer.class).def(perksTimeout);
         // Bomb immune (BI)
-        timeoutBombImmune = settings.addEditBox("[Perks] Bomb immune effect timeout").type(Integer.class).def(10);
+        timeoutBombImmune = settings.addEditBox("[Perks] Bomb immune effect timeout").type(Integer.class).def(perksTimeout);
         // Bomb remote control (BRC)
         remoteControlCount = settings.addEditBox("[Perks] Number of Bomb remote controls (how many times player can use it)").type(Integer.class).def(3);
     }

@@ -88,14 +88,14 @@ public class OptionGameSettingsTest {
                 "  'bombPower':3,\n" +
                 "  'bombsCount':1,\n" +
                 "  'destroyWallCount':52,\n" +
-                "  'diePenalty':2,\n" +
+                "  'diePenalty':30,\n" +
                 "  'isMultiple':false,\n" +
-                "  'killMeatChopperScore':3,\n" +
-                "  'killOtherHeroScore':10,\n" +
+                "  'killMeatChopperScore':10,\n" +
+                "  'killOtherHeroScore':20,\n" +
                 "  'killWallScore':1,\n" +
                 "  'meatChoppersCount':5,\n" +
                 "  'perkBombBlastRadiusInc':2,\n" +
-                "  'perkBombCountInc':3,\n" +
+                "  'perkBombCountInc':4,\n" +
                 "  'perkDropRatio':20,\n" +
                 "  'perkPickTimeout':5,\n" +
                 "  'playersPerRoom':5,\n" +
@@ -106,12 +106,12 @@ public class OptionGameSettingsTest {
                 "    'roundsPerMatch':1,\n" +
                 "    'timeBeforeStart':5,\n" +
                 "    'timeForWinner':1,\n" +
-                "    'timePerRound':300\n" +
+                "    'timePerRound':200\n" +
                 "  },\n" +
-                "  'timeoutBombBlastRadiusInc':10,\n" +
-                "  'timeoutBombCountInc':10,\n" +
-                "  'timeoutBombImmune':10,\n" +
-                "  'winRoundScore':15\n" +
+                "  'timeoutBombBlastRadiusInc':30,\n" +
+                "  'timeoutBombCountInc':30,\n" +
+                "  'timeoutBombImmune':30,\n" +
+                "  'winRoundScore':30\n" +
                 "}", JsonUtils.prettyPrint(settings.asJson()));
 
         // when
@@ -135,12 +135,12 @@ public class OptionGameSettingsTest {
                 "  'destroyWallCount':52,\n" +
                 "  'diePenalty':12,\n" +
                 "  'isMultiple':true,\n" +
-                "  'killMeatChopperScore':3,\n" +
-                "  'killOtherHeroScore':10,\n" +
+                "  'killMeatChopperScore':10,\n" +
+                "  'killOtherHeroScore':20,\n" +
                 "  'killWallScore':1,\n" +
                 "  'meatChoppersCount':5,\n" +
                 "  'perkBombBlastRadiusInc':4,\n" +
-                "  'perkBombCountInc':3,\n" +
+                "  'perkBombCountInc':4,\n" +
                 "  'perkDropRatio':23,\n" +
                 "  'perkPickTimeout':5,\n" +
                 "  'playersPerRoom':5,\n" +
@@ -151,12 +151,12 @@ public class OptionGameSettingsTest {
                 "    'roundsPerMatch':1,\n" +
                 "    'timeBeforeStart':10,\n" +
                 "    'timeForWinner':1,\n" +
-                "    'timePerRound':300\n" +
+                "    'timePerRound':200\n" +
                 "  },\n" +
-                "  'timeoutBombBlastRadiusInc':10,\n" +
+                "  'timeoutBombBlastRadiusInc':30,\n" +
                 "  'timeoutBombCountInc':12,\n" +
-                "  'timeoutBombImmune':10,\n" +
-                "  'winRoundScore':15\n" +
+                "  'timeoutBombImmune':30,\n" +
+                "  'winRoundScore':30\n" +
                 "}", JsonUtils.prettyPrint(settings.asJson()));
 
         // when
@@ -170,12 +170,12 @@ public class OptionGameSettingsTest {
                 "  'destroyWallCount':52,\n" +
                 "  'diePenalty':12,\n" +
                 "  'isMultiple':true,\n" +
-                "  'killMeatChopperScore':3,\n" +
-                "  'killOtherHeroScore':10,\n" +
+                "  'killMeatChopperScore':10,\n" +
+                "  'killOtherHeroScore':20,\n" +
                 "  'killWallScore':1,\n" +
                 "  'meatChoppersCount':5,\n" +
                 "  'perkBombBlastRadiusInc':4,\n" +
-                "  'perkBombCountInc':3,\n" +
+                "  'perkBombCountInc':4,\n" +
                 "  'perkDropRatio':23,\n" +
                 "  'perkPickTimeout':5,\n" +
                 "  'playersPerRoom':5,\n" +
@@ -186,12 +186,12 @@ public class OptionGameSettingsTest {
                 "    'roundsPerMatch':1,\n" +
                 "    'timeBeforeStart':10,\n" +
                 "    'timeForWinner':1,\n" +
-                "    'timePerRound':300\n" +
+                "    'timePerRound':200\n" +
                 "  },\n" +
-                "  'timeoutBombBlastRadiusInc':10,\n" +
+                "  'timeoutBombBlastRadiusInc':30,\n" +
                 "  'timeoutBombCountInc':12,\n" +
-                "  'timeoutBombImmune':10,\n" +
-                "  'winRoundScore':15\n" +
+                "  'timeoutBombImmune':30,\n" +
+                "  'winRoundScore':30\n" +
                 "}", JsonUtils.prettyPrint(settings.asJson()));
 
     }
