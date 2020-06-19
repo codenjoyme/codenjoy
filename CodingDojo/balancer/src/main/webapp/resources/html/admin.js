@@ -20,18 +20,37 @@
  * #L%
  */
 
+(function( $ ){
+    $.fn.getValue = function() {
+        if (this.hasClass('jsonpanel')) {
+            return this[0].val();
+        } else {
+            return this.val();
+        }
+    };
+})( jQuery );
+
 var error = function(partOfId, data) {
     $('#' + partOfId + '-result').val('');
     $('#' + partOfId + '-error').val(data.status + ' ' + (data.responseText || data.statusText));
 }
 
 var result = function(partOfId, data) {
-    $('#' + partOfId + '-result').val(JSON.stringify(data));
+    var element = $('#' + partOfId + '-result');
+    var text = JSON.stringify(data);
+    if (element.hasClass('jsonpanel')) {
+        element.jsonpanel({data: data});
+        element[0].val = function() {
+            return text;
+        }
+    } else {
+        element.val(text);
+    }
     $('#' + partOfId + '-error').val('');
 }
 
 var settings = function() {
-    return JSON.parse($('#admin-settings-result').val());
+    return JSON.parse($('#admin-settings-result').getValue());
 }
 
 var gameSettings = function() {

@@ -23,6 +23,10 @@
 <head>
     <script src="jquery.min.js"></script>
     <script src="jquery.md5.js"></script>
+    <script src="formatter/Autolinker.js"></script>
+    <script src="formatter/jsonpanel.js"></script>
+    <link href="formatter/jsonpanel.css" rel="stylesheet">
+    <link href="formatter/demo.css" rel="stylesheet">
     <script src="admin.js"></script>
     <style>
         .table {
@@ -32,7 +36,7 @@
         div {
             display: table-row;
         }
-        span {
+        span:not(.commandBar > span) {
             display: table-cell;
             text-align: end;
             vertical-align: middle;
@@ -43,7 +47,7 @@
             height: 30px;
         }
         input, textarea {
-            width: 700px;
+            width: 600px;
         }
         input[type='checkbox'] {
             width: 40px;
@@ -52,9 +56,8 @@
         }
         .basic {
             position: fixed;
-            left: calc(100% - 500px);
+            left: calc(100% - 600px);
             top: 10px;
-
         }
         body div {
             padding: 10px;
@@ -62,11 +65,19 @@
             background-color: bisque;
         }
         .basic input, .basic textarea {
-            width: 300px;
+            width: 400px;
         }
         .block-header {
             font-size: 1.5em;
             font-weight: bold;
+        }
+        .jsonpanel {
+            line-height: 0.9;
+            font-size: 13px;
+        }
+        .jsonpanel div {
+            background-color: #fff3e4;
+            border: 0px solid white;
         }
     </style>
 </head>
@@ -76,7 +87,7 @@
         <div class="block">
             <div>
                 <span>Balancer version:</span>
-                <textarea rows="3" id="balancer-server-version-result" value="v0.0.1"></textarea>
+                <div class="jsonpanel" id="balancer-server-version-result"></div>
             </div>
             <div>
                 <span>Balancer server:</span>
@@ -84,7 +95,7 @@
             </div>
             <div>
                 <span>Codenjoy version:</span>
-                <textarea rows="3" id="game-server-version-result" value="v0.0.1"></textarea>
+                <div class="jsonpanel" id="game-server-version-result"></div>
             </div>
             <div>
                 <span>Game server:</span>
@@ -101,7 +112,7 @@
             </div>
             <div>
                 <span>Settings:</span>
-                <textarea rows="15" id="admin-settings-result" value=""></textarea>
+                <div class="jsonpanel" id="admin-settings-result"></div>
             </div>
         </div>
     </div>
