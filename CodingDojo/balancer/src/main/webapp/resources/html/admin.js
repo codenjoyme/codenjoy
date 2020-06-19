@@ -54,7 +54,7 @@ var settings = function() {
 }
 
 var gameSettings = function() {
-    return JSON.parse($('#admin-game-settings-result').val());
+    return JSON.parse($('#admin-game-settings-result').getValue());
 }
 
 var server = function(name) {
@@ -650,7 +650,7 @@ $(document).ready(function() {
 
     $('#set-game-settings').click(function() {
         setGameSettings(
-            $('#game-settings-post-request').val()
+            $('#game-settings-result').val()
         );
     });
 

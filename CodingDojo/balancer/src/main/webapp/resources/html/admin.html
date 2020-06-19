@@ -181,7 +181,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="2" id="register-result"></textarea>
+                <div class="jsonpanel" id="register-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -207,7 +207,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="2" id="get-confirm-result"></textarea>
+                <div class="jsonpanel" id="get-confirm-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -242,7 +242,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="2" id="confirm-result"></textarea>
+                <div class="jsonpanel" id="confirm-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -273,7 +273,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="2" id="resend-result"></textarea>
+                <div class="jsonpanel" id="resend-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -303,7 +303,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="2" id="login-result"></textarea>
+                <div class="jsonpanel" id="login-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -362,7 +362,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="8" id="scores-result"></textarea>
+                <div class="jsonpanel" id="scores-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -388,7 +388,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="8" id="disqualify-result"></textarea>
+                <textarea rows="1" id="disqualify-result"></textarea>
             </div>
             <div>
                 <span>Error:</span>
@@ -411,7 +411,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="8" id="disqualified-result"></textarea>
+                <div class="jsonpanel" id="disqualified-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -434,7 +434,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="8" id="finalists-result"></textarea>
+                <div class="jsonpanel" id="finalists-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -456,7 +456,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="8" id="winners-result"></textarea>
+                <div class="jsonpanel" id="winners-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -473,7 +473,7 @@
                 <input id="remove-id" value="id"/>
             </div>
             <div>
-                <span title="1 (0b0001) - onGameServer, 2 (0b0010) - onBalancer">Where to remove:</span>
+                <span title="1 (0b0001) - onGameServer, 2 (0b0010) - onBalancer">Where:</span>
                 <input id="where-to-remove" value="3" />
             </div>
             <div>
@@ -486,7 +486,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="2" id="remove-result"></textarea>
+                <div class="jsonpanel" id="remove-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -508,7 +508,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="15" id="users-balancer-result"></textarea>
+                <div class="jsonpanel" id="users-balancer-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -530,7 +530,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="15" id="users-game-result"></textarea>
+                <div class="jsonpanel" id="users-game-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -553,7 +553,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="8" id="settings-result"></textarea>
+                <div class="jsonpanel" id="settings-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -575,12 +575,8 @@
                 <textarea rows="2" id="game-settings-request"></textarea>
             </div>
             <div>
-                <span>Request:</span>
-                <textarea rows="8" id="game-settings-post-request"></textarea>
-            </div>
-            <div>
                 <span>Response:</span>
-                <textarea rows="8" id="game-settings-result"></textarea>
+                <div class="jsonpanel" id="game-settings-result"></div>
             </div>
             <div>
                 <span>Error:</span>
@@ -620,7 +616,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="5" id="contest-result-data"></textarea>
+                <textarea rows="1" id="contest-result-data"></textarea>
             </div>
             <div>
                 <span>Error:</span>
@@ -637,7 +633,7 @@
                 <button id="clear-cache">Clear</button>
             </div>
             <div>
-                <span title="1 (0b0001) - scoresFromGameServers, 2 (0b0010) - currentScores, 4 (0b0100) - disqualified, 8 (0b1000) - currentFinalists">What to clean:</span>
+                <span title="1 (0b0001) - scoresFromGameServers, 2 (0b0010) - currentScores, 4 (0b0100) - disqualified, 8 (0b1000) - currentFinalists">Where:</span>
                 <input id="cache-mask" value="8"/>
             </div>
             <div>
@@ -646,7 +642,7 @@
             </div>
             <div>
                 <span>Response:</span>
-                <textarea rows="2" id="cache-result"></textarea>
+                <textarea rows="1" id="cache-result"></textarea>
             </div>
             <div>
                 <span>Error:</span>
