@@ -34,6 +34,7 @@ import java.util.Map;
 
 public class PerksSettingsWrapper {
     private static final Map<Elements, PerkSettings> settings = new EnumMap<>(Elements.class);
+    public static int PERCENTAGE = 100;
     private static int dropRatio = 10;
     private static int pickTimeout = 5;
 
@@ -94,8 +95,8 @@ public class PerksSettingsWrapper {
 
         if (perksTotal != 0) {
             int chanceRange = dropRatio / perksTotal;
-            int step = 100 / perksTotal;
-            int rnd = dice.next(100);
+            int step = PERCENTAGE / perksTotal;
+            int rnd = dice.next(PERCENTAGE);
             int lowerBoundary = 0;
             int upperBoundary = lowerBoundary + chanceRange;
 

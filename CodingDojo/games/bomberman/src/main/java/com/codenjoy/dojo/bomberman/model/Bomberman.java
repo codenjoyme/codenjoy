@@ -227,7 +227,10 @@ public class Bomberman extends RoundField<Player> implements Field {
             if (perks.containsKey(blast)) {
                 PerkOnBoard perk = perks.get(blast);
                 pickPerk(perk);
-                blast.owner().event(DROP_PERK);
+                Hero owner = blast.owner();
+                if (owner.isActiveAndAlive()) { // TODO test me
+                    owner.event(DROP_PERK);
+                }
             }
         }
         // фигачим стены, если надо выпадают перки

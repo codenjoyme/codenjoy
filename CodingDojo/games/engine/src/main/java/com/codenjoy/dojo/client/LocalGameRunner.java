@@ -178,6 +178,7 @@ public class LocalGameRunner {
         int[] index = {0};
         return (n) -> {
             int next = numbers[index[0]];
+            System.out.println("DICE[" + index[0] + "]:" + next);
             out.accept("DICE:" + next);
             if (next >= n) {
                 next = next % n;

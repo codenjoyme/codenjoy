@@ -25,15 +25,20 @@ package com.codenjoy.dojo.bomberman;
 
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.client.ai.AISolver;
+import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.bomberman.model.GameSettings;
+import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.GameRunner;
 import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -46,41 +51,22 @@ public class SmokeTest {
 
         LocalGameRunner.timeout = 0;
         LocalGameRunner.out = (e) -> messages.add(e);
-        LocalGameRunner.countIterations = 20;
+        LocalGameRunner.countIterations = 100;
 
-        Dice dice = LocalGameRunner.getDice(
-                1, 2, 3, 0, 3, 2, 2, 0,
-                0, 3, 2, 1, 3, 1, 3, 3,
-                0, 3, 2, 1, 3, 2, 3, 0,
-                1, 1, 2, 1, 3, 2, 1, 2,
-                0, 2, 1, 2, 1, 3, 3, 1,
-                2, 3, 2, 1, 3, 3, 2, 2,
-                1, 2, 3, 1, 1, 2, 1, 2,
-                2, 3, 1, 1, 3, 3, 2, 2,
-                1, 3, 2, 1, 1, 3, 1, 2,
-                3, 2, 3, 2, 3, 1, 3, 1,
-                2, 2, 0, 2, 1, 3, 3, 1,
-                1, 3, 1, 1, 3, 3, 1, 2,
-                3, 2, 3, 2, 1, 1, 3, 1,
-                1, 3, 2, 1, 3, 3, 1, 2,
-                0, 3, 1, 1, 1, 2, 3, 0,
-                3, 2, 3, 2, 3, 1, 3, 1,
-                1, 0, 2, 1, 3, 2, 1, 2,
-                1, 3, 1, 1, 3, 2, 3, 0,
-                3, 1, 3, 1, 3, 1, 3, 1,
-                1, 1, 1, 1, 1, 3, 3, 1,
-                1, 3, 1, 1, 3, 2, 3, 0,
-                1, 0, 2, 1, 3, 2, 1, 2,
-                0, 2, 1, 2, 1, 3, 3, 1,
-                3, 3, 2, 1, 2, 3, 2, 1,
-                2, 3, 2, 1, 2, 3, 1, 2,
-                3, 1, 2, 3, 1, 1, 2, 0);
+
+        Dice dice = LocalGameRunner.getDice(generate(4000, 8));
 
         DefaultGameSettings.BOARD_SIZE = 7;
         DefaultGameSettings.BOMB_POWER = 3;
         DefaultGameSettings.BOMBS_COUNT = 1;
-        DefaultGameSettings.DESTROY_WALL_COUNT = 3;
+        DefaultGameSettings.DESTROY_WALL_COUNT = 6;
         DefaultGameSettings.MEAT_CHOPPERS_COUNT = 1;
+        PerksSettingsWrapper.PERCENTAGE = 4;
+        PerksSettingsWrapper.setDropRatio(20); // 20%
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 3);
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_REMOTE_CONTROL, 5, 3);
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_IMMUNE, 5, 3);
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_COUNT_INCREASE, 5, 3);
 
         GameRunner gameType = new GameRunner() {
             @Override
@@ -658,5 +644,12 @@ public class SmokeTest {
                         "------------------------------------------",
                 String.join("\n", messages));
 
+    }
+
+    private int[] generate(int count, int max) {
+        int[] result = IntStream.generate(() -> new Random().nextInt(max)).limit(count).toArray();
+        System.out.printf("Dice dice = LocalGameRunner.getDice(%s);\n",
+                Arrays.toString(result).replaceAll("[\\[\\]]", ""));
+        return result;
     }
 }

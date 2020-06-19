@@ -52,10 +52,10 @@ public class OptionGameSettingsTest {
     public void shouldBombermanContainPerksSettings_whenCreated() {
         PerkSettings perkSettings = PerksSettingsWrapper.getPerkSettings(Elements.BOMB_IMMUNE);
 
-        assertPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, perkSettings,2, 10);
-        assertPerkSettings(Elements.BOMB_COUNT_INCREASE, perkSettings,3, 10);
-        assertPerkSettings(Elements.BOMB_IMMUNE, perkSettings,0, 10);
-        assertPerkSettings(Elements.BOMB_REMOTE_CONTROL, perkSettings,0, 3);
+        assertPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, perkSettings, 2, 10);
+        assertPerkSettings(Elements.BOMB_COUNT_INCREASE, perkSettings, 3, 10);
+        assertPerkSettings(Elements.BOMB_IMMUNE, perkSettings, 0, 10);
+        assertPerkSettings(Elements.BOMB_REMOTE_CONTROL, perkSettings, 0, 3);
     }
 
     private boolean assertPerkSettings(Elements perk, PerkSettings perkSettings, int value, int timeout) {
