@@ -28,6 +28,18 @@
             return this.val();
         }
     };
+
+    $.fn.setValue = function(value) {
+        if (this.hasClass('jsonpanel')) {
+            this.empty();
+            this.jsonpanel({data: JSON.parse(value)});
+            this[0].val = function() {
+                return value;
+            }
+        } else {
+            this.val(value);
+        }
+    };
 })( jQuery );
 
 var error = function(partOfId, data) {
@@ -38,15 +50,7 @@ var error = function(partOfId, data) {
 var result = function(partOfId, data) {
     var element = $('#' + partOfId + '-result');
     var text = JSON.stringify(data);
-    if (element.hasClass('jsonpanel')) {
-        element.empty();
-        element.jsonpanel({data: data});
-        element[0].val = function() {
-            return text;
-        }
-    } else {
-        element.val(text);
-    }
+    element.setValue(text);
     $('#' + partOfId + '-error').val('');
 }
 
@@ -697,4 +701,25 @@ $(document).ready(function() {
 
     var phone = '+380' + generate('0123456789', 9);
     changePhone(phone);
+
+    var onTextareaDblclick = function() {
+        var data = $(this).getValue();
+        var id = $(this).attr('id');
+        $(this).replaceWith('<div id="' + id + '"></div>');
+        var element = $('#' + id);
+        element.addClass('jsonpanel');
+        element.setValue(data);
+        element.dblclick(onJsonpanelDblcick);
+    }
+
+    var onJsonpanelDblcick = function() {
+        var data = $(this).getValue();
+        var id = $(this).attr('id');
+        $(this).replaceWith('<textarea rows="4" id="' + id + '"></textarea>');
+        var element = $('#' + id);
+        element.setValue(data);
+        element.dblclick(onTextareaDblclick);
+    }
+
+    $('.jsonpanel').dblclick(onJsonpanelDblcick);
 });
