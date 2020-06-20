@@ -53,6 +53,11 @@ public class DefaultGameSettings implements GameSettings {
     }
 
     @Override
+    public Dice getDice() {
+        return dice;
+    }
+
+    @Override
     public Level getLevel() {
         return new Level() {
             @Override

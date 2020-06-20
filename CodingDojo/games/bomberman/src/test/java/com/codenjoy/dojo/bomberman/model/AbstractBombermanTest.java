@@ -90,6 +90,7 @@ public class AbstractBombermanTest {
         dice(heroDice, 0, 0);
         Hero hero = new Hero(level, heroDice);
         when(settings.getBomberman(level)).thenReturn(hero);
+        when(settings.getDice()).thenReturn(heroDice);
         this.hero = hero;
     }
 

@@ -68,6 +68,10 @@ public abstract class RoundPlayerHero<F extends RoundGameField> extends PlayerHe
     }
 
     public void event(Object event) {
+        if (player == null) {
+            return;
+        }
+
         player.event(event);
     }
 

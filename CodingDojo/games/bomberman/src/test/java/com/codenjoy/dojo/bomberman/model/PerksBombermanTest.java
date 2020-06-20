@@ -119,7 +119,8 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         hero.left();
         field.tick();
 
-        assertEquals(0, hero.scores());
+        int before = hero.scores();
+        assertEquals(2*DefaultGameSettings.KILL_WALL_SCORE, before);
 
         // when
         // go for perk
@@ -135,7 +136,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "#+####\n");
 
         verify(listener).event(Events.CATCH_PERK);
-        assertEquals(DefaultGameSettings.CATCH_PERK_SCORE, hero.scores());
+        assertEquals(before + DefaultGameSettings.CATCH_PERK_SCORE, hero.scores());
         assertEquals("Hero had to acquire new perk", 1, player.getHero().getPerks().size());
     }
 

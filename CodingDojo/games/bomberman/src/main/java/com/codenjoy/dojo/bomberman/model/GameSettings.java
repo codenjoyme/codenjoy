@@ -23,10 +23,13 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 public interface GameSettings {
+
+    Dice getDice();
 
     Level getLevel();
 

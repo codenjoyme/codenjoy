@@ -25,15 +25,17 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.model.perks.*;
 import com.codenjoy.dojo.bomberman.services.Events;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.RoundFactory;
 import com.codenjoy.dojo.services.round.RoundField;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.bomberman.services.Events.DROP_PERK;
 import static java.util.stream.Collectors.toList;
 
 public class Bomberman extends RoundField<Player> implements Field {
@@ -50,6 +52,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     private final GameSettings settings;
     private final List<Point> destroyedWalls = new LinkedList<>();
     private final List<Bomb> destroyedBombs = new LinkedList<>();
+    private final Dice dice;
     private List<PerkOnBoard> perks = new LinkedList<>();
 
     public Bomberman(GameSettings settings) {
@@ -58,6 +61,7 @@ public class Bomberman extends RoundField<Player> implements Field {
 
         this.settings = settings;
 
+        dice = settings.getDice();
         size = settings.getBoardSize();
         walls = settings.getWalls(this);  // TODO как-то красивее сделать
     }
@@ -139,19 +143,6 @@ public class Bomberman extends RoundField<Player> implements Field {
         destroyedWalls.clear();
     }
 
-    private void wallDestroyed(Wall wall, Blast blast) {
-        Hero hero = blast.owner();
-        if (!hero.isActiveAndAlive()) {  // TODO test me герой не получает очки если он погиб
-            return;
-        }
-
-        if (wall instanceof MeatChopper) {
-            hero.event(Events.KILL_MEAT_CHOPPER);
-        } else if (wall instanceof DestroyWall) {
-            hero.event(Events.KILL_DESTROY_WALL);
-        }
-    }
-
     private void meatChopperEatHeroes() {
         for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
             for (Player player : players) {
@@ -168,13 +159,17 @@ public class Bomberman extends RoundField<Player> implements Field {
             bomb.tick();
         }
 
+        // вначале все взрываем, чтобы было пекло
         for (Bomb bomb : destroyedBombs) {
             bombs.remove(bomb);
 
             List<Blast> blast = makeBlast(bomb);
-            killAllNear(blast);
             blasts.addAll(blast);
         }
+
+        // потому уже считаем скоры за разрушения
+        killAllNear(blasts);
+
         destroyedBombs.clear();
     }
 
@@ -215,96 +210,147 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private void killAllNear(List<Blast> blasts) {
-        // беремся за бомберов, если у них только нет иммунитета
+        killHeroes(blasts);
+        killPerks(blasts);
+        killWalls(blasts);
+    }
+
+    private void killWalls(List<Blast> blasts) {
+        // собираем все разрушаемые стенки которые уже есть в радиусе
+        // надо определить кто кого чем кикнул (ызрывные волны могут пересекаться)
+        List<Wall> all = walls.subList(Wall.class);
+        Multimap<Hero, Wall> deathMatch = HashMultimap.create();
         for (Blast blast : blasts) {
-            for (Player dead : aliveActive()) {
-                if (dead.getHero().itsMe(blast)) {
-                    Perk bombImmunePerk = dead.getHero().getPerk(Elements.BOMB_IMMUNE);
-
-                    if (bombImmunePerk == null) {
-                        dead.getHero().die();
-                    }
-
-                    for (Player owner : players) {
-                        if (dead != owner && blast.itsMine(owner.getHero())) {
-                            owner.event(Events.KILL_OTHER_HERO);
-                        }
-                    }
-                }
+            Hero hunter = blast.owner();
+            int index = all.indexOf(blast);
+            if (index != -1) {
+                Wall wall = all.get(index);
+                deathMatch.put(hunter, wall);
             }
         }
-        // убиваем все перки которые уже есть в радиусе
+
+        // у нас есть два списка, прибитые стенки
+        // и те, благодаря кому они разрушены
+        Set<Wall> preys = new HashSet<>(deathMatch.values());
+        Set<Hero> hunters = new HashSet<>(deathMatch.keys());
+
+        // вначале прибиваем стенки
+        preys.forEach(wall -> {
+            if (dropPerk(wall, dice)) {
+                walls.destroy(wall);
+            } else {
+                destroyedWalls.add(wall);
+            }
+        });
+
+        // а потом все виновники получают свои ачивки
+        hunters.forEach(hunter -> {
+            deathMatch.get(hunter).forEach(wall -> {
+                if (wall instanceof MeatChopper) {
+                    hunter.event(Events.KILL_MEAT_CHOPPER);
+                } else if (wall instanceof DestroyWall) {
+                    hunter.event(Events.KILL_DESTROY_WALL);
+                }
+            });
+        });
+    }
+
+    private void killPerks(List<Blast> blasts) {
+        // собираем все перки которые уже есть в радиусе
+        // надо определить кто кого чем кикнул (ызрывные волны могут пересекаться)
+        Multimap<Hero, PerkOnBoard> deathMatch = HashMultimap.create();
         for (Blast blast : blasts) {
+            Hero hunter = blast.owner();
             int index = perks.indexOf(blast);
             if (index != -1) {
                 PerkOnBoard perk = perks.get(index);
-                pickPerk(perk);
-                Hero owner = blast.owner();
-                if (owner.isActiveAndAlive()) { // TODO test me
-                    owner.event(DROP_PERK);
-                }
+                deathMatch.put(hunter, perk);
             }
         }
-        // фигачим стены, если надо выпадают перки
+
+        // у нас есть два списка, прибитые перки
+        // и те, благодаря кому
+        Set<PerkOnBoard> preys = new HashSet<>(deathMatch.values());
+        Set<Hero> hunters = new HashSet<>(deathMatch.keys());
+
+        // вначале прибиваем перки
+        preys.forEach(perk -> pickPerk(perk));
+
+        // а потом все виновники получают свои результаты )
+        hunters.forEach(hunter -> {
+            deathMatch.get(hunter).forEach(perk -> {
+                hunter.event(Events.DROP_PERK);
+                // TODO вот тут надо посылать охотника за ним
+            });
+        });
+    }
+
+    private void killHeroes(List<Blast> blasts) {
+        // беремся за бомберов, если у них только нет иммунитета
+        // надо определить кто кого чем кикнул (ызрывные волны могут пересекаться)
+        Multimap<Hero, Hero> deathMatch = HashMultimap.create();
         for (Blast blast : blasts) {
-            if (walls.itsMe(blast)) {
-                if (dropPerk(blast)) {
-                    walls.destroy(blast);
-                } else {
-                    destroyedWalls.add(blast);
+            Hero hunter = blast.owner();
+            for (Player player : aliveActive()) {
+                Hero prey = player.getHero();
+                if (prey.itsMe(blast)) {
+                    Perk immune = prey.getPerk(Elements.BOMB_IMMUNE);
+                    if (immune == null) {
+                        deathMatch.put(hunter, prey);
+                    }
                 }
-                Wall wall = walls.get(blast);
-                wallDestroyed(wall, blast);
             }
+        }
+
+        // у нас есть два списка, те кого прибили
+        // и те, благодаря кому
+        Set<Hero> preys = new HashSet<>(deathMatch.values());
+        Set<Hero> hunters = new HashSet<>(deathMatch.keys());
+
+        // вначале прибиваем жертв
+        preys.forEach(hero -> hero.die());
+
+        // а потом все, кто выжил получают за это очки за всех тех, кого зацепили взрывной волной
+        // не стоит беспокоиться что они погибли сами - за это есть регулируемые штрафные очки
+        hunters.forEach(hunter -> {
+            deathMatch.get(hunter).forEach(prey -> {
+                    if (hunter != prey) {
+                        hunter.event(Events.KILL_OTHER_HERO);
+                    }
+                }
+            );
+        });
+    }
+
+    private boolean dropPerk(Point pt, Dice dice) {
+        Elements element = PerksSettingsWrapper.nextPerkDrop(dice);
+        PerkSettings settings = PerksSettingsWrapper.getPerkSettings(element);
+
+        switch (element) {
+            case BOMB_BLAST_RADIUS_INCREASE:
+                setup(pt, new BombBlastRadiusIncrease(settings.value(), settings.timeout()));
+                return true;
+
+            case BOMB_COUNT_INCREASE:
+                setup(pt, new BombCountIncrease(settings.value(), settings.timeout()));
+                return true;
+
+            case BOMB_IMMUNE:
+                setup(pt, new BombImmune(settings.timeout()));
+                return true;
+
+            case BOMB_REMOTE_CONTROL:
+                setup(pt, new BombRemoteControl(settings.timeout()));
+                return true;
+
+            default:
+                return false;
         }
     }
 
-    // need to refactor this method ... it became too dirty
-    @Deprecated
-    private boolean dropPerk(Blast blast) {
-        Player bombOwner = getBombOwner(blast);
-        boolean result = false;
-        if (bombOwner != null) {
-            Elements perkElement = PerksSettingsWrapper.nextPerkDrop(bombOwner.getHero().getDice());
-            PerkSettings ps = PerksSettingsWrapper.getPerkSettings(perkElement);
-            switch (perkElement) {
-                case BOMB_BLAST_RADIUS_INCREASE:
-                    BombBlastRadiusIncrease bbri = new BombBlastRadiusIncrease(ps.getValue(), ps.getTimeout());
-                    bbri.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
-                    perks.add(new PerkOnBoard(blast, bbri));
-                    result = true;
-                    break;
-                case BOMB_COUNT_INCREASE:
-                    BombCountIncrease bci = new BombCountIncrease(ps.getValue(), ps.getTimeout());
-                    bci.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
-                    perks.add(new PerkOnBoard(blast, bci));
-                    result = true;
-                    break;
-                case BOMB_IMMUNE:
-                    BombImmune bi = new BombImmune(ps.getTimeout());
-                    bi.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
-                    perks.add(new PerkOnBoard(blast, bi));
-                    result = true;
-                    break;
-                case BOMB_REMOTE_CONTROL:
-                    BombRemoteControl brc = new BombRemoteControl(ps.getTimeout());
-                    brc.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
-                    perks.add(new PerkOnBoard(blast, brc));
-                    result = true;
-                    break;
-                default:
-            }
-        }
-        return result;
-    }
-
-    private Player getBombOwner(Blast blast) {
-        for (Player owner : players) {
-            if (blast.itsMine(owner.getHero())) {
-                return owner;
-            }
-        }
-        return null;
+    private void setup(Point pt, Perk perk) {
+        perk.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
+        perks.add(new PerkOnBoard(pt, perk));
     }
 
     private boolean existAtPlace(int x, int y) {

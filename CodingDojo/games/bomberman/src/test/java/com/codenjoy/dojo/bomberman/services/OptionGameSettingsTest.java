@@ -23,7 +23,6 @@ package com.codenjoy.dojo.bomberman.services;
  */
 
 import com.codenjoy.dojo.bomberman.model.Elements;
-import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.bomberman.model.perks.PerkSettings;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
@@ -63,12 +62,12 @@ public class OptionGameSettingsTest {
         String defaultValueErrorPattern = "%s expected default value = %d, but found it = %d \n";
         String defaultTimeoutErrorPattern = "%s expected default timeout = %d, but found it = %d \n";
 
-        if(perkSettings.getValue() != value) {
-            message += String.format(defaultValueErrorPattern, perk.name(), value, perkSettings.getValue());
+        if(perkSettings.value() != value) {
+            message += String.format(defaultValueErrorPattern, perk.name(), value, perkSettings.value());
         }
 
-        if(perkSettings.getTimeout() != timeout) {
-            message += String.format(defaultTimeoutErrorPattern, perk.name(), timeout, perkSettings.getTimeout());
+        if(perkSettings.timeout() != timeout) {
+            message += String.format(defaultTimeoutErrorPattern, perk.name(), timeout, perkSettings.timeout());
         }
 
         if(message.isEmpty()) {

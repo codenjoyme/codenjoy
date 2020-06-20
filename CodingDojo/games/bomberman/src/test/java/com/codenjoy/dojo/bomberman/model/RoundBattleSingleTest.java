@@ -982,7 +982,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
 
         verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO, KILL_OTHER_HERO]\n" +
-                "listener(1) => [KILL_OTHER_HERO, KILL_OTHER_HERO]\n" +
+                "listener(1) => [KILL_OTHER_HERO, KILL_OTHER_HERO, KILL_DESTROY_WALL]\n" +
                 "listener(2) => [DIED]\n" +
                 "listener(3) => [DIED]\n" +
                 "listener(4) => [DIED]\n" +
@@ -1592,7 +1592,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
 
         // победителей нет
         verifyAllEvents(
-                "listener(0) => [KILL_OTHER_HERO, DIED]\n" +
+                "listener(0) => [DIED, KILL_OTHER_HERO, KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => []\n" +
                 "listener(2) => [DIED]\n");
 

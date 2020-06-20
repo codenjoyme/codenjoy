@@ -25,6 +25,7 @@ package com.codenjoy.dojo.bomberman.model.perks;
 import java.util.Objects;
 
 public class PerkSettings {
+
     private final int value;
     private final int timeout;
 
@@ -33,11 +34,11 @@ public class PerkSettings {
         this.timeout = timeout;
     }
 
-    public int getValue() {
+    public int value() {
         return value;
     }
 
-    public int getTimeout() {
+    public int timeout() {
         return timeout;
     }
 
