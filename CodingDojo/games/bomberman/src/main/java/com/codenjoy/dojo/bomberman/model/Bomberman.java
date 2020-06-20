@@ -245,6 +245,10 @@ public class Bomberman extends RoundField<Player> implements Field {
 
         // а потом все виновники получают свои ачивки
         hunters.forEach(hunter -> {
+            if (!hunter.hasPlayer()) {
+                return;
+            }
+
             deathMatch.get(hunter).forEach(wall -> {
                 if (wall instanceof MeatChopper) {
                     hunter.event(Events.KILL_MEAT_CHOPPER);
@@ -278,6 +282,10 @@ public class Bomberman extends RoundField<Player> implements Field {
 
         // а потом все виновники получают свои результаты )
         hunters.forEach(hunter -> {
+            if (!hunter.hasPlayer()) {
+                return;
+            }
+
             deathMatch.get(hunter).forEach(perk -> {
                 hunter.event(Events.DROP_PERK);
                 // TODO вот тут надо посылать охотника за ним
@@ -308,11 +316,21 @@ public class Bomberman extends RoundField<Player> implements Field {
         Set<Hero> hunters = new HashSet<>(deathMatch.keys());
 
         // вначале прибиваем жертв
-        preys.forEach(hero -> hero.die());
+        preys.forEach(hero -> {
+            if (!hero.hasPlayer()) {
+                return;
+            }
+
+            hero.die();
+        });
 
         // а потом все, кто выжил получают за это очки за всех тех, кого зацепили взрывной волной
         // не стоит беспокоиться что они погибли сами - за это есть регулируемые штрафные очки
         hunters.forEach(hunter -> {
+            if (!hunter.hasPlayer()) {
+                return;
+            }
+
             deathMatch.get(hunter).forEach(prey -> {
                     if (hunter != prey) {
                         hunter.event(Events.KILL_OTHER_HERO);
