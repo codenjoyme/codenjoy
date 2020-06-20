@@ -30,10 +30,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
@@ -48,15 +45,15 @@ import static org.mockito.Mockito.when;
 public class WallsTest {
 
     private final static int SIZE = 9;
-    private Field board;
+    private Field field;
     private Walls walls;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     @Before
     public void setup() {
-        board = mock(Field.class);
-        when(board.size()).thenReturn(SIZE);
-        when(board.isBarrier(any(Point.class), anyBoolean())).thenAnswer(
+        field = mock(Field.class);
+        when(field.size()).thenReturn(SIZE);
+        when(field.isBarrier(any(Point.class), anyBoolean())).thenAnswer(
                 invocation -> walls.itsMe((Point)invocation.getArguments()[0])
         );
     }
@@ -127,7 +124,8 @@ public class WallsTest {
 
     @Test
     public void checkPrintMeatChoppers() {
-        walls = new MeatChoppers(new OriginalWalls(v(SIZE)), board, v(10), new RandomDice());
+        walls = new MeatChoppers(new OriginalWalls(v(SIZE)), v(10), new RandomDice());
+        walls.init(field);
         walls.tick();
         String actual = print(walls);
 
@@ -147,7 +145,8 @@ public class WallsTest {
     }
 
     private String getBoardWithDestroyWalls() {
-        walls = new EatSpaceWalls(new OriginalWalls(v(SIZE)), board, v(SIZE * SIZE / 10), new RandomDice());
+        walls = new EatSpaceWalls(new OriginalWalls(v(SIZE)), v(SIZE * SIZE / 10), new RandomDice());
+        walls.init(field);
         walls.tick();
         return print(walls);
     }

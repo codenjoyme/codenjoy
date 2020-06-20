@@ -60,7 +60,7 @@ public abstract class AbstractSingleTest {
     private List<Player> players = new LinkedList<>();
     protected GameSettings settings;
     protected Level level;
-    protected Bomberman board;
+    protected Bomberman field;
     protected int bombsCount = 1;
     protected int bombsPower = 1;
     protected Parameter<Integer> playersPerRoom = v(Integer.MAX_VALUE);
@@ -79,7 +79,7 @@ public abstract class AbstractSingleTest {
         when(level.bombsCount()).thenReturn(bombsCount);
         when(level.bombsPower()).thenReturn(bombsPower);
 
-        when(settings.getBomberman(any(Level.class))).thenAnswer(inv -> {
+        when(settings.getHero(any(Level.class))).thenAnswer(inv -> {
             Hero hero = new Hero(level, heroDice);
             heroes.add(hero);
             return hero;
@@ -87,7 +87,7 @@ public abstract class AbstractSingleTest {
 
         when(settings.getLevel()).thenReturn(level);
         when(settings.getBoardSize()).thenReturn(v(SIZE));
-        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
+        when(settings.getWalls()).thenReturn(walls);
         when(settings.getRoundSettings()).thenReturn(getRoundSettings());
         when(settings.getPlayersPerRoom()).thenReturn(playersPerRoom);
         when(settings.killOtherHeroScore()).thenReturn(v(200));
@@ -95,7 +95,7 @@ public abstract class AbstractSingleTest {
         when(settings.killWallScore()).thenReturn(v(10));
         when(settings.catchPerkScore()).thenReturn(v(5));
 
-        board = new Bomberman(settings);
+        field = new Bomberman(settings);
 
         for (int i = 0; i < count; i++) {
             listeners.add(mock(EventListener.class));
@@ -104,18 +104,21 @@ public abstract class AbstractSingleTest {
         }
 
         games.forEach(g -> {
-            g.on(board);
+            g.on(field);
             g.newGame();
         });
     }
 
     protected void meatChopperAt(int x, int y) {
         dice(meatDice, x, y);
-        Field temp = mock(Field.class);
-        when(temp.size()).thenReturn(SIZE);
-        MeatChoppers meatchoppers = new MeatChoppers(new WallsImpl(), temp, v(1), meatDice);
-        meatchoppers.regenerate();
-        walls = meatchoppers;
+
+        MeatChoppers choppers = new MeatChoppers(new WallsImpl(), v(1), meatDice);
+        Field mock = mock(Field.class);
+        when(mock.size()).thenReturn(SIZE); // TODO ну очень тут как-то топорно
+        choppers.init(mock);
+        choppers.regenerate();
+
+        walls = choppers;
     }
 
     protected void asrtBrd(String board, Game game) {
@@ -164,14 +167,13 @@ public abstract class AbstractSingleTest {
     }
 
     protected void tick() {
-        board.tick();
+        field.tick();
     }
 
     protected void newGameForAllDied() {
         players.forEach(player -> {
             if (!player.isAlive()) {
-                dice(heroDice, 0, 0);
-                board.newGame(player(players.indexOf(player)));
+                field.newGame(player(players.indexOf(player)));
             }
         });
         resetHeroes();

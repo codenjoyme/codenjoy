@@ -63,7 +63,10 @@ public class SingleTest extends AbstractSingleTest {
     }
 
     @Test
-    public void shouldGetTwoBombermansOnBoard() {
+    public void shouldGetTwoHeroesOnBoard() {
+        dice(heroDice,
+                0, 0,
+                1, 0);
         givenBoard();
 
         assertSame(hero(0), game(0).getJoystick());
@@ -83,7 +86,10 @@ public class SingleTest extends AbstractSingleTest {
     }
 
     @Test
-    public void shouldOnlyOneListenerWorksWhenOneBombermanKillAnother() {
+    public void shouldOnlyOneListenerWorksWhenOneHeroKillAnother() {
+        dice(heroDice,
+                0, 0,
+                1, 0);
         givenBoard();
 
         hero(0).act();
@@ -106,7 +112,10 @@ public class SingleTest extends AbstractSingleTest {
     }
 
     @Test
-    public void shouldPrintOtherBombBomberman() {
+    public void shouldPrintOtherBombHero() {
+        dice(heroDice,
+                0, 0,
+                1, 0);
         givenBoard();
 
         hero(0).act();
@@ -126,7 +135,10 @@ public class SingleTest extends AbstractSingleTest {
     }
 
     @Test
-    public void shouldBombermanCantGoToAnotherBomberman() {
+    public void shouldHeroCantGoToAnotherHero() {
+        dice(heroDice,
+                0, 0,
+                1, 0);
         givenBoard();
 
         hero(0).right();
@@ -141,8 +153,11 @@ public class SingleTest extends AbstractSingleTest {
     
     // бомбермен может идти на митчопера, при этом он умирает
     @Test
-    public void shouldKllOtherBombermanWhenBombermanGoToMeatChopper() {
+    public void shouldKllOtherHeroWhenHeroGoToMeatChopper() {
         walls = new MeatChopperAt(2, 0, new WallsImpl());
+        dice(heroDice,
+                0, 0,
+                1, 0);
         givenBoard();
 
         asrtBrd("     \n" +
@@ -174,8 +189,11 @@ public class SingleTest extends AbstractSingleTest {
 
     // если митчопер убил другого бомбермена, как это на моей доске отобразится? Хочу видеть трупик
     @Test
-    public void shouldKllOtherBombermanWhenMeatChopperGoToIt() {
+    public void shouldKllOtherHeroWhenMeatChopperGoToIt() {
         meatChopperAt(2, 0);
+        dice(heroDice,
+                0, 0,
+                1, 0);
         givenBoard();
 
         asrtBrd("     \n" +
@@ -207,8 +225,11 @@ public class SingleTest extends AbstractSingleTest {
 
     // А что если бомбермен идет на митчопера а тот идет на встречу к нему - бомбермен проскочит или умрет? должен умереть!
     @Test
-    public void shouldKllOtherBombermanWhenMeatChopperAndBombermanMoves() {
+    public void shouldKllOtherHeroWhenMeatChopperAndHeroMoves() {
         meatChopperAt(2, 0);
+        dice(heroDice,
+                0, 0,
+                1, 0);
         givenBoard();
 
         asrtBrd("     \n" +
@@ -239,7 +260,10 @@ public class SingleTest extends AbstractSingleTest {
 
     //  бомбермены не могут ходить по бомбам ни по своим ни по чужим
     @Test
-    public void shouldBombermanCantGoToBombFromAnotherBomberman() {
+    public void shouldHeroCantGoToBombFromAnotherHero() {
+        dice(heroDice,
+                0, 0,
+                1, 0);
         givenBoard();
 
         hero(1).act();
@@ -272,8 +296,8 @@ public class SingleTest extends AbstractSingleTest {
     }
 
     @Test
-    public void shouldBombKillAllBomberman() {
-        shouldBombermanCantGoToBombFromAnotherBomberman();
+    public void shouldBombKillAllHero() {
+        shouldHeroCantGoToBombFromAnotherHero();
 
         tick();
         asrtBrd("     \n" +
@@ -291,9 +315,11 @@ public class SingleTest extends AbstractSingleTest {
 
     @Test
     public void shouldNewGamesWhenKillAll() {
-        shouldBombKillAllBomberman();
-        when(settings.getBomberman(any(Level.class))).thenReturn(new Hero(level, heroDice), new Hero(level, heroDice));
-
+        shouldBombKillAllHero();
+        when(settings.getHero(any(Level.class))).thenReturn(new Hero(level, heroDice), new Hero(level, heroDice));
+        dice(heroDice,
+                0, 0,
+                1, 0);
         game(0).newGame();
         game(1).newGame();
         tick();
@@ -314,7 +340,9 @@ public class SingleTest extends AbstractSingleTest {
     @Test
     public void shouldTwoBombsOnBoard() {
         bombsCount = 1;
-
+        dice(heroDice,
+                0, 0,
+                1, 0);
         givenBoard();
 
         hero(0).act();
@@ -351,6 +379,9 @@ public class SingleTest extends AbstractSingleTest {
     public void shouldFourBombsOnBoard() {
         bombsCount = 2;
 
+        dice(heroDice,
+                0, 0,
+                1, 0);
         givenBoard();
 
         hero(0).act();
@@ -398,9 +429,12 @@ public class SingleTest extends AbstractSingleTest {
     }
 
     @Test
-    public void shouldFourBombsOnBoard_checkTwoBombsPerBomberman() {
+    public void shouldFourBombsOnBoard_checkTwoBombsPerHero() {
         bombsCount = 2;
 
+        dice(heroDice,
+                0, 0,
+                1, 0);
         givenBoard();
 
         hero(0).act();
@@ -438,8 +472,11 @@ public class SingleTest extends AbstractSingleTest {
     }
 
     @Test
-    public void shouldFireEventWhenKillWallOnlyForOneBomberman() {
+    public void shouldFireEventWhenKillWallOnlyForOneHero() {
         walls = new DestroyWallAt(0, 0, new WallsImpl());
+        dice(heroDice,
+                1, 0,
+                1, 1);
         givenBoard();
 
         hero(0).act();
@@ -468,6 +505,9 @@ public class SingleTest extends AbstractSingleTest {
     @Test
     public void shouldFireEventWhenKillMeatChopper() {
         walls = new MeatChopperAt(0, 0, new WallsImpl());
+        dice(heroDice,
+                1, 0,
+                1, 1);
         givenBoard();
 
         hero(0).act();
@@ -496,6 +536,9 @@ public class SingleTest extends AbstractSingleTest {
     @Test
     public void bug() {
         walls = new DestroyWallAt(0, 0, new MeatChopperAt(1, 0, new MeatChopperAt(2, 0, new WallsImpl())));
+        dice(heroDice,
+                1, 1,
+                2, 1);
         givenBoard();
 
         asrtBrd("     \n" +

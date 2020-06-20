@@ -82,6 +82,10 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     public void shouldAllPlayersOnBoardIsInactive_whenStart() {
         playersPerRoom.update(DEFAULT_COUNT);
 
+        dice(heroDice,
+                0, 0,
+                1, 0,
+                1, 1);
         givenBoard(DEFAULT_COUNT);
 
         asrtBrd("     \n" +
@@ -232,6 +236,10 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         playersPerRoom.update(DEFAULT_COUNT);
         timeBeforeStart = 1; // TODO а что будет если тут 0 игра хоть начнется?
 
+        dice(heroDice,
+                0, 0,
+                1, 0,
+                1, 1);
         givenBoard(DEFAULT_COUNT);
 
         tick();
@@ -302,7 +310,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         tick();
 
         dice(heroDice, 3, 4); // новые координаты для героя
-        board.newGame(player(1)); // это сделоает сервер в ответ на isAlive = false
+        field.newGame(player(1)); // это сделоает сервер в ответ на isAlive = false
         resetHeroes();
 
         // игрок уже живой но неактивный до начала следующего раунда
@@ -484,7 +492,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "listener(2) => []\n");
 
         // а теперь самое интересное - выходим из комнаты оставшимся игроком
-        board.remove(player(2));
+        field.remove(player(2));
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -541,7 +549,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         shouldGetWinRoundScores_whenKillOneAndAnotherLeaveTheGame();
 
         // а теперь самое интересное - выходим из комнаты оставшимся игроком
-        board.remove(player(1));
+        field.remove(player(1));
 
         // никто больше не должен ничего получить
         verifyAllEvents(
@@ -653,6 +661,10 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "listener(2) => []\n");
 
         // вот он последний тик раунда, тут все и случится
+        dice(heroDice,
+                0, 0,
+                1, 0,
+                1, 1);
         tick();
 
         asrtBrd("     \n" +
@@ -819,15 +831,20 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "listener(4) => []\n");
 
         // вот он последний тик раунда, тут все и случится
-        dice(heroDice, 0, 0); // размещаем всех возле левого нижнего угла
+        dice(heroDice,
+                0, 2,  // размещаем всех в свободные места
+                1, 2,
+                2, 2,
+                3, 2,
+                4, 2);
         tick();
         newGameForAllDied(); // это сделает сервер (вообще он это сделал намного раньше, но для наглядности тут)
 
         asrtBrd("     \n" +
                 "     \n" +
-                "  ♣  \n" +
-                " ♣♣  \n" +
-                "Ѡ♣   \n", game(0));
+                "Ѡ♣♣♣♣\n" +
+                "     \n" +
+                "     \n", game(0));
 
         verifyAllEvents(
                 "listener(0) => [WIN_ROUND]\n" +
@@ -841,6 +858,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     // и даже уничтожили одинаковое количество игроков
     // так вот после окончания таймаута раунда тот из них победит,
     // кто большее очков заработал во время своего экшна (в данном случае коробку)
+    // еще проверяем, что спаунится на месте трупиков нельзя (пусть даже они тоже ждут спауна)
     @Test
     public void shouldGetWinRoundScores_whenKillsAdvantagePlusOneBox_whenRoundTimeout() {
         int count = 6;
@@ -1009,15 +1027,23 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 "listener(5) => []\n");
 
         // вот он последний тик раунда, тут все и случится
-        dice(heroDice, 0, 0); // размещаем всех возле левого нижнего угла
+        dice(heroDice,
+                0, 1,  // на трупики нельзя!
+                1, 0,  // на трупики нельзя!
+                0, 2,  // теперь размещаем всех в свободные места
+                1, 2,
+                2, 2,
+                3, 2,
+                4, 2,
+                4, 1);
         tick();
         newGameForAllDied(); // это сделает сервер (вообще он это сделал намного раньше, но для наглядности тут)
 
         asrtBrd("     \n" +
                 "     \n" +
-                "  ♣♣ \n" +
-                " ♣♣  \n" +
-                "Ѡ♣   \n", game(0));
+                "Ѡ♣♣♣♣\n" +
+                "    ♣\n" +
+                "     \n", game(0));
 
         verifyAllEvents(
                 "listener(0) => [[Time is over]]\n" +
@@ -1356,7 +1382,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         assertEquals(true, hero(2).isActiveAndAlive());
 
         // делаем очистку очков
-        board.clearScore();
+        field.clearScore();
         resetHeroes();
 
         // после этого тика будет сразу же новый раунд

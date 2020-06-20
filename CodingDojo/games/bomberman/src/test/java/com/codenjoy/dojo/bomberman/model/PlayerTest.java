@@ -52,7 +52,7 @@ public class PlayerTest {
         when(settings.killWallScore()).thenReturn(v(10));
         when(settings.catchPerkScore()).thenReturn(v(5));
         when(settings.getLevel()).thenReturn(mock(Level.class));
-        when(settings.getBomberman(any(Level.class))).thenReturn(mock(Hero.class));
+        when(settings.getHero(any(Level.class))).thenReturn(mock(Hero.class));
         when(settings.getRoundSettings()).thenReturn(new RoundSettingsWrapper() {
             @Override
             public Parameter<Boolean> roundsEnabled() {

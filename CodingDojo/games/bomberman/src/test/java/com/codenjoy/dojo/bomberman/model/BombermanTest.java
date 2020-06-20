@@ -31,6 +31,7 @@ import org.junit.Test;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -58,7 +59,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanOnBoardAtInitPos_whenGameStart() {
+    public void shouldHeroOnBoardAtInitPos_whenGameStart() {
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -67,7 +68,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanOnBoardOneRightStep_whenCallRightCommand() {
+    public void shouldHeroOnBoardOneRightStep_whenCallRightCommand() {
         hero.right();
         field.tick();
 
@@ -79,7 +80,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanOnBoardTwoRightSteps_whenCallRightCommandTwice() {
+    public void shouldHeroOnBoardTwoRightSteps_whenCallRightCommandTwice() {
         hero.right();
         field.tick();
 
@@ -94,7 +95,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanOnBoardOneUpStep_whenCallDownCommand() {
+    public void shouldHeroOnBoardOneUpStep_whenCallDownCommand() {
         hero.up();
         field.tick();
 
@@ -106,7 +107,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanWalkUp() {
+    public void shouldHeroWalkUp() {
         hero.up();
         field.tick();
 
@@ -124,7 +125,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenGoToWallDown() {
+    public void shouldHeroStop_whenGoToWallDown() {
         hero.down();
         field.tick();
 
@@ -136,7 +137,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanWalkLeft() {
+    public void shouldHeroWalkLeft() {
         hero.right();
         field.tick();
 
@@ -154,7 +155,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenGoToWallLeft() {
+    public void shouldHeroStop_whenGoToWallLeft() {
         hero.left();
         field.tick();
 
@@ -166,7 +167,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenGoToWallRight() {
+    public void shouldHeroStop_whenGoToWallRight() {
         gotoMaxRight();
 
         asrtBrd("     \n" +
@@ -177,7 +178,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenGoToWallUp() {
+    public void shouldHeroStop_whenGoToWallUp() {
         gotoMaxUp();
 
         asrtBrd("☺    \n" +
@@ -188,7 +189,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanMovedOncePerTact() {
+    public void shouldHeroMovedOncePerTact() {
         hero.down();
         hero.up();
         hero.left();
@@ -215,7 +216,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombDropped_whenBombermanDropBomb() {
+    public void shouldBombDropped_whenHeroDropBomb() {
         hero.act();
         field.tick();
 
@@ -227,7 +228,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombDropped_whenBombermanDropBombAtAnotherPlace() {
+    public void shouldBombDropped_whenHeroDropBombAtAnotherPlace() {
         hero.up();
         field.tick();
 
@@ -245,7 +246,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombsDropped_whenBombermanDropThreeBomb() {
+    public void shouldBombsDropped_whenHeroDropThreeBomb() {
         canDropBombs(3);
 
         hero.up();
@@ -409,7 +410,7 @@ public class BombermanTest extends AbstractBombermanTest {
 
     // если бомбермен стоит на бомбе то он умирает после ее взрыва
     @Test
-    public void shouldKillBoomberman_whenBombExploded() {
+    public void shouldKillHero_whenBombExploded() {
         hero.act();
         hero.right();
         field.tick();
@@ -418,7 +419,7 @@ public class BombermanTest extends AbstractBombermanTest {
 
         field.tick();
 
-        assertBombermanAlive();
+        assertHeroAlive();
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -432,7 +433,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "҉    \n" +
                 "҉Ѡ   \n");
-        assertBombermanDie();
+        assertHeroDie();
 
         field.tick();
 
@@ -441,7 +442,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n" +
                 " Ѡ   \n");
-        assertBombermanDie();
+        assertHeroDie();
     }
 
     // после смерти ходить больше нельзя
@@ -535,7 +536,7 @@ public class BombermanTest extends AbstractBombermanTest {
 
     // если бомбермен стоит под действием ударной волны, он умирает
     @Test
-    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromLeft() {
+    public void shouldKillHero_whenBombExploded_blastWaveAffect_fromLeft() {
         hero.act();
         field.tick();
         hero.right();
@@ -549,7 +550,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n" +
                 "1☺   \n");
-        assertBombermanAlive();
+        assertHeroAlive();
 
         field.tick();
 
@@ -558,7 +559,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "҉    \n" +
                 "҉Ѡ   \n");
-        assertBombermanDie();
+        assertHeroDie();
 
         field.tick();
 
@@ -567,11 +568,11 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n" +
                 " Ѡ   \n");
-        assertBombermanDie();
+        assertHeroDie();
     }
 
     @Test
-    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromRight() {
+    public void shouldKillHero_whenBombExploded_blastWaveAffect_fromRight() {
         hero.right();
         field.tick();
         hero.act();
@@ -586,7 +587,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n" +
                 "☺1   \n");
-        assertBombermanAlive();
+        assertHeroAlive();
 
         field.tick();
 
@@ -595,7 +596,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 " ҉   \n" +
                 "Ѡ҉҉  \n");
-        assertBombermanDie();
+        assertHeroDie();
 
         field.tick();
 
@@ -604,11 +605,11 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n" +
                 "Ѡ    \n");
-        assertBombermanDie();
+        assertHeroDie();
     }
 
     @Test
-    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromUp() {
+    public void shouldKillHero_whenBombExploded_blastWaveAffect_fromUp() {
         hero.up();
         hero.act();
         field.tick();
@@ -622,7 +623,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "1    \n" +
                 "☺    \n");
-        assertBombermanAlive();
+        assertHeroAlive();
 
         field.tick();
 
@@ -631,7 +632,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "҉    \n" +
                 "҉҉   \n" +
                 "Ѡ    \n");
-        assertBombermanDie();
+        assertHeroDie();
 
         field.tick();
 
@@ -640,11 +641,11 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n" +
                 "Ѡ    \n");
-        assertBombermanDie();
+        assertHeroDie();
     }
 
     @Test
-    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromDown() {
+    public void shouldKillHero_whenBombExploded_blastWaveAffect_fromDown() {
         hero.down();
         field.tick();
         hero.act();
@@ -659,7 +660,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "☺    \n" +
                 "1    \n");
-        assertBombermanAlive();
+        assertHeroAlive();
 
         field.tick();
 
@@ -668,7 +669,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "Ѡ    \n" +
                 "҉҉   \n");
-        assertBombermanDie();
+        assertHeroDie();
 
         field.tick();
 
@@ -677,11 +678,11 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "Ѡ    \n" +
                 "     \n");
-        assertBombermanDie();
+        assertHeroDie();
     }
 
     @Test
-    public void shouldNoKillBoomberman_whenBombExploded_blastWaveAffect_fromDownRight() {
+    public void shouldNoKillHero_whenBombExploded_blastWaveAffect_fromDownRight() {
         hero.down();
         field.tick();
         hero.right();
@@ -695,7 +696,7 @@ public class BombermanTest extends AbstractBombermanTest {
 
         field.tick();
 
-        assertBombermanAlive();
+        assertHeroAlive();
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -704,7 +705,7 @@ public class BombermanTest extends AbstractBombermanTest {
 
         field.tick();
 
-        assertBombermanAlive();
+        assertHeroAlive();
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -713,7 +714,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldSameBoomberman_whenNetFromBoard() {
+    public void shouldSameHero_whenNetFromBoard() {
         assertSame(hero, game.getJoystick());
     }
 
@@ -757,7 +758,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBlastAfter_whenBombExposed_bombermanDie() {
+    public void shouldBlastAfter_whenBombExposed_HeroDie() {
         gotoBoardCenter();
         hero.act();
         field.tick();
@@ -773,7 +774,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "  Ѡ  \n" +
                 "     \n");
 
-        assertBombermanDie();
+        assertHeroDie();
 
         field.tick();
         asrtBrd("     \n" +
@@ -782,12 +783,12 @@ public class BombermanTest extends AbstractBombermanTest {
                 "  Ѡ  \n" +
                 "     \n");
 
-        assertBombermanDie();
+        assertHeroDie();
     }
 
     // появляются стенки, которые конфигурятся извне
     @Test
-    public void shouldBombermanNotAtWall() {
+    public void shouldHeroNotAtWall() {
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -806,7 +807,7 @@ public class BombermanTest extends AbstractBombermanTest {
 
     // бомбермен не может пойти вперед на стенку
     @Test
-    public void shouldBombermanStop_whenUpWall() {
+    public void shouldHeroStop_whenUpWall() {
         givenBoardWithWalls();
 
         hero.down();
@@ -820,7 +821,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenLeftWall() {
+    public void shouldHeroStop_whenLeftWall() {
         givenBoardWithWalls();
 
         hero.left();
@@ -834,7 +835,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenRightWall() {
+    public void shouldHeroStop_whenRightWall() {
         givenBoardWithWalls();
 
         gotoMaxRight();
@@ -847,7 +848,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenDownWall() {
+    public void shouldHeroStop_whenDownWall() {
         givenBoardWithWalls();
 
         gotoMaxUp();
@@ -868,7 +869,7 @@ public class BombermanTest extends AbstractBombermanTest {
 
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
     @Test
-    public void shouldBombermanStop_whenGotoBomb() {
+    public void shouldHeroStop_whenGotoBomb() {
         hero.act();
         field.tick();
         hero.right();
@@ -886,7 +887,7 @@ public class BombermanTest extends AbstractBombermanTest {
 
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
     @Test
-    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_bombFirstly() {
+    public void shouldHeroWalkAndDropBombsTogetherInOneTact_bombFirstly() {
         hero.act();
         hero.right();
         field.tick();
@@ -899,7 +900,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_moveFirstly() {
+    public void shouldHeroWalkAndDropBombsTogetherInOneTact_moveFirstly() {
         hero.right();
         hero.act();
         field.tick();
@@ -921,7 +922,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_bombThanMove() {
+    public void shouldHeroWalkAndDropBombsTogetherInOneTact_bombThanMove() {
         hero.act();
         field.tick();
         hero.right();
@@ -935,7 +936,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_moveThanBomb() {
+    public void shouldHeroWalkAndDropBombsTogetherInOneTact_moveThanBomb() {
         hero.right();
         field.tick();
         hero.act();
@@ -958,7 +959,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldWallProtectsBomberman() {
+    public void shouldWallProtectsHero() {
         givenBoardWithOriginalWalls();
 
         hero.act();
@@ -978,11 +979,11 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼҉҉ ☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertBombermanAlive();
+        assertHeroAlive();
     }
 
     @Test
-    public void shouldWallProtectsBomberman2() {
+    public void shouldWallProtectsHero2() {
         assertBombPower(5,
                 "☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -994,7 +995,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼҉҉҉҉҉҉ ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        assertBombermanAlive();
+        assertHeroAlive();
     }
 
     // проверить, что разрыв бомбы длинной указанной в level
@@ -1233,7 +1234,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChopperDice, 1, Direction.DOWN.value());
+        dice(chopperDice, 1, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1248,7 +1249,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChopperDice, 1);
+        dice(chopperDice, 1);
         field.tick();
         field.tick();
         field.tick();
@@ -1267,7 +1268,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChopperDice, 0, Direction.LEFT.value());
+        dice(chopperDice, 0, Direction.LEFT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1302,7 +1303,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChopperDice, 1, Direction.RIGHT.value());
+        dice(chopperDice, 1, Direction.RIGHT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1317,11 +1318,11 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChopperDice, 0, Direction.LEFT.value());
+        dice(chopperDice, 0, Direction.LEFT.value());
         field.tick();
         field.tick();
 
-        dice(meatChopperDice, Direction.LEFT.value());
+        dice(chopperDice, Direction.LEFT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1336,7 +1337,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChopperDice, Direction.DOWN.value());
+        dice(chopperDice, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1388,7 +1389,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChopperDice, 1, Direction.DOWN.value());
+        dice(chopperDice, 1, Direction.DOWN.value());
         field.tick();
         field.tick();
         field.tick();
@@ -1398,7 +1399,7 @@ public class BombermanTest extends AbstractBombermanTest {
         field.tick();
         field.tick();
 
-        dice(meatChopperDice, 1, Direction.LEFT.value());
+        dice(chopperDice, 1, Direction.LEFT.value());
         field.tick();
         field.tick();
         hero.act();
@@ -1435,7 +1436,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼҉x       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChopperDice, SIZE - 2, SIZE - 2, Direction.DOWN.value());
+        dice(chopperDice, SIZE - 2, SIZE - 2, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1452,14 +1453,14 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldFireEventWhenKillBomberman() {
-        shouldKillBoomberman_whenBombExploded();
+    public void shouldFireEventWhenKillHero() {
+        shouldKillHero_whenBombExploded();
 
         verify(listener).event(Events.DIED);
     }
 
     @Test
-    public void shouldNoEventsWhenBombermanNotMove() {
+    public void shouldNoEventsWhenHeroNotMove() {
         field.tick();
         field.tick();
         field.tick();
@@ -1470,7 +1471,9 @@ public class BombermanTest extends AbstractBombermanTest {
 
     @Test
     public void shouldFireEventWhenKillWall() {
-        givenBoardWithDestroyWallsAt(0, 0);
+        givenBoardWithDestroyWallsAt(
+                pt(0, 0),
+                pt(1, 0));
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1499,7 +1502,9 @@ public class BombermanTest extends AbstractBombermanTest {
 
     @Test
     public void shouldFireEventWhenKillMeatChopper() {
-        givenBoardWithMeatChopperAt(0, 0);
+        givenBoardWithMeatChopperAt(
+                pt(0, 0),  // митчопер
+                pt(1, 0)); // герой
 
         hero.act();
         hero.right();
@@ -1523,6 +1528,7 @@ public class BombermanTest extends AbstractBombermanTest {
     @Test
     public void shouldCalculateMeatChoppersAndWallKills() {
         withWalls(new MeatChopperAt(0, 0, new DestroyWallAt(0, 1, new MeatChopperAt(0, 2, new DestroyWallAt(0, 3, new WallsImpl())))));
+        dice(heroDice, 1, 0);
         givenBoard(SIZE);
         canDropBombs(4);
         bombsPower(1);
@@ -1603,10 +1609,11 @@ public class BombermanTest extends AbstractBombermanTest {
                 "#    \n" +
                 "&    \n");
 
-        assertBombermanDie();
+        assertHeroDie();
 
-        initBomberman();
+        initHero();
         field.tick();
+        dice(heroDice, 1, 0);
         game.newGame();
         asrtBrd("     \n" +
                 "#    \n" +
@@ -1678,7 +1685,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        dice(meatChopperDice, 1, Direction.LEFT.value());
+        dice(chopperDice, 1, Direction.LEFT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼\n" +
@@ -1689,7 +1696,7 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldStopBlastWhenBombermanOrDestroyWalls() {
+    public void shouldStopBlastWhenHeroOrDestroyWalls() {
         bombsPower(5);
         withWalls(new DestroyWallAt(3, 0, new WallsImpl()));
         givenBoard(7);
@@ -1742,8 +1749,10 @@ public class BombermanTest extends AbstractBombermanTest {
     @Test
     public void shouldMeatChopperAppearAfterKill() {
         bombsPower(3);
-        dice(meatChopperDice, 3, 0, Direction.DOWN.value());
-        withWalls(new MeatChoppers(new WallsImpl(), field, v(1), meatChopperDice));
+        dice(chopperDice, 3, 0, Direction.DOWN.value());
+        MeatChoppers walls = new MeatChoppers(new WallsImpl(), v(1), chopperDice);
+        walls.init(field);
+        withWalls(walls);
         givenBoard(SIZE);
 
         hero.act();
@@ -1761,7 +1770,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "҉☺   \n" +
                 "҉҉҉x \n");
 
-        dice(meatChopperDice, 2, 2, Direction.DOWN.value());
+        dice(chopperDice, 2, 2, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("     \n" +
@@ -1774,8 +1783,10 @@ public class BombermanTest extends AbstractBombermanTest {
     @Test
     public void shouldMeatChopperNotAppearWhenDestroyWall() {
         bombsPower(3);
-        dice(meatChopperDice, 4, 4, Direction.RIGHT.value());
-        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), field, v(1), meatChopperDice));
+        dice(chopperDice, 4, 4, Direction.RIGHT.value());
+        MeatChoppers walls = new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), v(1), chopperDice);
+        walls.init(field);
+        withWalls(walls);
         givenBoard(SIZE);
 
         hero.act();
@@ -1793,7 +1804,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "҉☺   \n" +
                 "҉҉҉H \n");
 
-        dice(meatChopperDice, Direction.DOWN.value());
+        dice(chopperDice, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("     \n" +
@@ -1805,7 +1816,7 @@ public class BombermanTest extends AbstractBombermanTest {
 
     // Чертик не может появится на бомбере!
     @Test
-    public void shouldMeatChopperNotAppearOnBommber() {
+    public void shouldMeatChopperNotAppearOnHero() {
         shouldMonsterCanMoveOnBomb();
         hero.down();
         field.tick();
@@ -1816,21 +1827,75 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼☺  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        dice(meatChopperDice, 1, 2, Direction.DOWN.value());
-        when(heroes.contains(anyObject())).thenReturn(true);
+        dice(chopperDice,
+                0, 0, // на неразрушаемой стене нельзя
+                hero.getX(), hero.getY(), // попытка поселиться на бобмере
+                3, 3, // попытка - клетка свободна
+                Direction.DOWN.value()); // а это куда он сразу же отправится
 
-        try {
-            field.tick();
-//            fail(); // TODO надо с этим разобраться
-        } catch (IllegalStateException e) {
-            assertEquals("java.lang.IllegalStateException: Dead loop at MeatChoppers.regenerate!", e.toString());
-        }
+        // when пришла пора регенериться чоперу
+        field.tick();
+
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☼&☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldWallNotAppearOnHero() {
+        int size = 5;
+        dice(wallDice, 2, 1);
+        dice(heroDice, 1, 1);  // hero в левом нижнем углу
+
+        EatSpaceWalls walls = new EatSpaceWalls(new OriginalWalls(v(size)), v(1), wallDice);
+        withWalls(walls);
+
+        givenBoard(size);
+
+        walls.init(field);
+        walls.regenerate();
 
         asrtBrd("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼ ☼ ☼\n" +
-                "☼☺  ☼\n" +
+                "☼☺# ☼\n" +
+                "☼☼☼☼☼\n");
+
+        hero.act();
+        field.tick();
+
+        hero.up();
+        field.tick();
+
+        hero.up();
+        field.tick();
+
+        hero.right();
+        field.tick();
+
+        field.tick();
+
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼҉☼ ☼\n" +
+                "☼҉H ☼\n" +
+                "☼☼☼☼☼\n");
+        // when
+        field.tick();
+        dice(wallDice,
+                0, 0,                     // на неразрушаемоей стене нельзя
+                hero.getX(), hero.getY(), // на месте бомбера не должен появиться
+                1, 1);                    // а вот тут свободно
+
+        // then
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼#  ☼\n" +
                 "☼☼☼☼☼\n");
     }
+
 
 }

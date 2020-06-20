@@ -29,14 +29,11 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Collections;
-import java.util.List;
 
-import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -53,16 +50,17 @@ public class AbstractBombermanTest {
     private WallsImpl walls;
     protected GameSettings settings;
     protected EventListener listener;
-    protected Dice meatChopperDice;
+    protected Dice chopperDice;
+    protected Dice wallDice;
     protected Dice heroDice;
     protected Player player;
-    protected List heroes;
     protected Bomberman field;
     private final PrinterFactory printer = new PrinterFactoryImpl();
 
     @Before
     public void setUp() {
-        meatChopperDice = mock(Dice.class);
+        chopperDice = mock(Dice.class);
+        wallDice = mock(Dice.class);
         heroDice = mock(Dice.class);
 
         level = mock(Level.class);
@@ -73,7 +71,7 @@ public class AbstractBombermanTest {
         settings = mock(GameSettings.class);
         listener = mock(EventListener.class);
 
-        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
+        withWalls(walls);
         when(settings.getLevel()).thenReturn(level);
         when(settings.getRoundSettings()).thenReturn(getRoundSettings());
         when(settings.killOtherHeroScore()).thenReturn(v(200));
@@ -81,15 +79,15 @@ public class AbstractBombermanTest {
         when(settings.killWallScore()).thenReturn(v(10));
         when(settings.catchPerkScore()).thenReturn(v(5));
 
-        initBomberman();
+        initHero();
         givenBoard(SIZE);
         PerksSettingsWrapper.clear();
     }
 
-    protected void initBomberman() {
+    protected void initHero() {
         dice(heroDice, 0, 0);
         Hero hero = new Hero(level, heroDice);
-        when(settings.getBomberman(level)).thenReturn(hero);
+        when(settings.getHero(level)).thenReturn(hero);
         when(settings.getDice()).thenReturn(heroDice);
         this.hero = hero;
     }
@@ -104,18 +102,8 @@ public class AbstractBombermanTest {
         player = new Player(listener, getRoundSettings().roundsEnabled());
         game = new Single(player, printer);
         game.on(field);
-        dice(heroDice, 0, 0);
         game.newGame();
         hero = (Hero)game.getJoystick();
-    }
-
-    protected SimpleParameter<Boolean> getRoundsEnabled() {
-        return new SimpleParameter<>(false);
-    }
-
-    protected void assertBombermanAt(int x, int y) {
-        assertEquals(x, player.getHero().getX());
-        assertEquals(y, player.getHero().getY());
     }
 
     protected void gotoMaxUp() {
@@ -125,16 +113,24 @@ public class AbstractBombermanTest {
         }
     }
 
+    protected void newGameForDied() {
+        if (!player.isAlive()) {
+            field.newGame(player);
+        }
+        hero = player.getHero();
+        hero.setAlive(true);
+    }
+
     protected void canDropBombs(int countBombs) {
         reset(level);
         when(level.bombsCount()).thenReturn(countBombs);
     }
 
-    protected void assertBombermanDie() {
+    protected void assertHeroDie() {
         assertEquals("Expected game over", true, game.isGameOver());
     }
 
-    protected void assertBombermanAlive() {
+    protected void assertHeroAlive() {
         assertFalse(game.isGameOver());
     }
 
@@ -159,6 +155,7 @@ public class AbstractBombermanTest {
 
     protected void givenBoardWithWalls(int size) {
         withWalls(new OriginalWalls(v(size)));
+        dice(heroDice, 1, 1);  // hero в левом нижнем углу
         givenBoard(size);
     }
 
@@ -168,11 +165,12 @@ public class AbstractBombermanTest {
 
     protected void givenBoardWithDestroyWalls(int size) {
         withWalls(new DestroyWalls(new OriginalWalls(v(size))));
+        dice(heroDice, 1, 1);  // hero в левом нижнем углу
         givenBoard(size);
     }
 
     protected void withWalls(Walls walls) {
-        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
+        when(settings.getWalls()).thenReturn(walls);
     }
 
     protected void givenBoardWithOriginalWalls() {
@@ -181,13 +179,13 @@ public class AbstractBombermanTest {
 
     protected void givenBoardWithOriginalWalls(int size) {
         withWalls(new OriginalWalls(v(size)));
+        dice(heroDice, 1, 1);  // hero в левом нижнем углу
         givenBoard(size);
     }
 
     protected void bombsPower(int power) {
         when(level.bombsPower()).thenReturn(power);
     }
-
 
     protected void assertBombPower(int power, String expected) {
         givenBoardWithOriginalWalls(9);
@@ -219,32 +217,32 @@ public class AbstractBombermanTest {
     }
 
     protected void givenBoardWithMeatChopper(int size) {
-        dice(meatChopperDice, size - 2, size - 2);
+        dice(chopperDice, size - 2, size - 2);
 
-        Field temp = mock(Field.class);
-        when(temp.size()).thenReturn(size);
-        MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChopperDice);
-        heroes = mock(List.class);
-        when(heroes.contains(anyObject())).thenReturn(false);
-        when(temp.heroes(ALL)).thenReturn(heroes);
+        SIZE = size;
+        MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), v(1), chopperDice);
         withWalls(walls);
-        walls.regenerate();
+
+        dice(heroDice, 1, 1);  // hero в левом нижнем углу
         givenBoard(size);
 
-        dice(meatChopperDice, 1, Direction.UP.value());  // Чертик будет упираться в стенку и стоять на месте
+        walls.init(field);
+        walls.regenerate();
+
+        dice(chopperDice, 1, Direction.UP.value());  // Чертик будет упираться в стенку и стоять на месте
     }
 
-    protected void givenBoardWithDestroyWallsAt(int x, int y) {
-        withWalls(new AbstractBombermanTest.DestroyWallAt(x, y, new WallsImpl()));
+    protected void givenBoardWithDestroyWallsAt(Point wall, Point hero) {
+        withWalls(new AbstractBombermanTest.DestroyWallAt(wall.getX(), wall.getY(), new WallsImpl()));
+        dice(heroDice, hero.getX(), hero.getY());
         givenBoard(SIZE);
     }
 
-
-    protected void givenBoardWithMeatChopperAt(int x, int y) {
-        withWalls(new AbstractBombermanTest.MeatChopperAt(x, y, new WallsImpl()));
+    protected void givenBoardWithMeatChopperAt(Point chopper, Point hero) {
+        withWalls(new AbstractBombermanTest.MeatChopperAt(chopper.getX(), chopper.getY(), new WallsImpl()));
+        dice(heroDice, hero.getX(), hero.getY());
         givenBoard(SIZE);
     }
-
 
     static class DestroyWallAt extends WallsDecorator {
 

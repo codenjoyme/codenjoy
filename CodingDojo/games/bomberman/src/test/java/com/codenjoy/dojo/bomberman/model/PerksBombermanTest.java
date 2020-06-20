@@ -66,12 +66,62 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "#H####\n");
     }
 
+    // новый бобмер не может появиться на перке
+    @Test
+    public void shouldHeroCantSpawnOnPerk() {
+        // given
+        givenBoardWithDestroyWalls(6);
+
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        PerksSettingsWrapper.setDropRatio(20); // 20%
+
+        when(heroDice.next(anyInt())).thenReturn(10); // must drop 2 perks
+
+        hero.act();
+        field.tick();
+
+        hero.right();
+        field.tick();
+
+        field.tick();
+
+        field.tick();
+
+        // when
+        field.tick();
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "#҉# ##\n" +
+                "+҉Ѡ  #\n" +
+                "#+####\n");
+
+        // when
+        // вот он последний тик перед взрывом, тут все и случится
+        dice(heroDice,
+                0, 1,   // пробуем разместить героя поверх перка1
+                1, 0,   // пробуем разместить героя поверх перка2
+                3, 3);  // а потом в свободное место
+        field.tick();
+        newGameForDied(); // это сделает сервер
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#  ☺ #\n" +
+                "# # ##\n" +
+                "+    #\n" +
+                "#+####\n");
+    }
+
     // BBRI = Bomb Blast Radius Increase perk
     // проверяем, что перков может появиться два
     // проверяем, что перки не пропадают на следующий тик
     // проверяем, что перк можно подобрать
     @Test
-    public void shouldBombermanAcquirePerk_whenMoveToFieldWithPerk() {
+    public void shouldHeroAcquirePerk_whenMoveToFieldWithPerk() {
         // given
         givenBoardWithDestroyWalls(6);
 
@@ -143,7 +193,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
     // проверяем, что уничтожение перка порождает митчопера :)
     @Test
     public void shouldDropPerk_generateNewMeatChopper() {
-        shouldBombermanAcquirePerk_whenMoveToFieldWithPerk();
+        shouldHeroAcquirePerk_whenMoveToFieldWithPerk();
         reset(listener);
 
         hero.right();
