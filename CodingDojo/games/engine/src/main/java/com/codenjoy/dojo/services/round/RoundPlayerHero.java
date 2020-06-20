@@ -68,7 +68,7 @@ public abstract class RoundPlayerHero<F extends RoundGameField> extends PlayerHe
     }
 
     public void event(Object event) {
-        if (player == null) {
+        if (!hasPlayer()) {
             return;
         }
 
@@ -76,4 +76,8 @@ public abstract class RoundPlayerHero<F extends RoundGameField> extends PlayerHe
     }
 
     public abstract int scores();
+
+    public boolean hasPlayer() {
+        return player != null;
+    }
 }
