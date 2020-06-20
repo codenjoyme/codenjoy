@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 public class LocalGameRunner {
 
@@ -45,6 +46,8 @@ public class LocalGameRunner {
     public static boolean printBoardOnly = false;
     public static Consumer<String> out = System.out::println;
     public static Integer countIterations = null;
+    public static boolean printConversions = true;
+    public static boolean printDice = true;
 
     private GameField field;
     private List<Game> games;
@@ -178,17 +181,34 @@ public class LocalGameRunner {
         int[] index = {0};
         return (n) -> {
             int next = numbers[index[0]];
-            System.out.println("DICE[" + index[0] + "]:" + next);
-            out.accept("DICE:" + next);
+            if (printDice) {
+                out.accept("DICE:" + next);
+            }
             if (next >= n) {
                 next = next % n;
-                out.accept("DICE_CORRECTED < " + n + " :" + next);
+                if (printConversions) {
+                    out.accept("DICE_CORRECTED < " + n + " :" + next);
+                }
             }
             if (++index[0] == numbers.length) {
                 index[0]--; // повторять последнее число если мы в конце массива
             }
             return next;
         };
+    }
+
+    public static int[] generateXorShift(String soul, long max, long count) {
+        long[] current = new long[] { soul.hashCode() };
+        System.out.println("Soul = " + soul);
+        int[] result = IntStream.generate(() -> {
+            long a0 = current[0] % soul.length();
+            int a1 = soul.charAt((int)Math.abs(a0));
+            long a2 = (current[0] << (a1 % 5)) ^ current[0];
+            long a3 = (current[0] >>> (a1 % 6)) ^ (current[0] << (a1 % 2));
+            current[0] = a2 ^ a3;
+            return (int) Math.abs(current[0] % max);
+        }).limit(count).toArray();
+        return result;
     }
 
     private String player(int index, String message) {

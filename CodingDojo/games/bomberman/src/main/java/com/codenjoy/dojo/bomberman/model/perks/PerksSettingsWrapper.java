@@ -34,7 +34,7 @@ import java.util.Map;
 
 public class PerksSettingsWrapper {
     private static final Map<Elements, PerkSettings> settings = new EnumMap<>(Elements.class);
-    public static int PERCENTAGE = 100;
+    private static int PERCENTAGE = 100;
     private static int dropRatio = 10;
     private static int pickTimeout = 5;
 
