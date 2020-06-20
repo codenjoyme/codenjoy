@@ -181,7 +181,7 @@ class RulesContainer extends Component {
                             запустити його командою (попередньо на ваш комп'ютер потрібно встановити java додаток).
                         </p>
                         <div className={ highligte } style={{whiteSpace:"pre"}} >
-                            { "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -Dlog=\"output.txt\" -Dsettings=\"{'boardSize':11,'bombPower':7}\"" }
+                            { "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -Dlog=\"output.txt\" -DlogTime=true -Dsettings=\"{'boardSize':11,'bombPower':7}\"" }
                         </div>
                         <p>
                             Як бачиш - є можливicть змінювати хост/порт, кількість мілісекунд на один тік та

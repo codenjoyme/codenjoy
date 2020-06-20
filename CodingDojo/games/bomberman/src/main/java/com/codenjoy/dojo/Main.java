@@ -38,19 +38,29 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class Main {
+
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private static Calendar calendar = Calendar.getInstance();
 
     public static void main(String[] args) {
         String host = System.getProperty("host", "127.0.0.1");
         int port = Integer.valueOf(System.getProperty("port", "8080"));
         int timeout = Integer.valueOf(System.getProperty("timeout", "1000"));
         String log = System.getProperty("log", "output.txt");
+        boolean logTime = Boolean.valueOf(System.getProperty("logTime", "true"));
         String settingsString = System.getProperty("settings", "{}");
         String game = "bomberman";
 
-        LocalGameRunner.out = setupOutput(setupLog(log));
+        File file = setupLog(log);
+        LocalGameRunner.out = setupOutput(file, logTime);
+        LocalGameRunner.out.accept("Log file is here: " + file.getAbsolutePath());
 
         Dice dice = new RandomDice();
 
@@ -81,24 +91,33 @@ public class Main {
             gameSettings.update(new JSONObject(json));
         }
 
-
         LocalGameRunner.out.accept(String.format(
                 "Run local WS server for %s on %s:%s with settings:\n%s",
                 game, host, port, JsonUtils.prettyPrint(gameSettings.asJson())));
 
         LocalGameRunner.out.accept("If you want to change something, please use command:\n" +
-                        "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dlog=\"output.txt\" " +
+                        "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dlog=\"output.txt\" -DlogTime=true " +
                 "-Dtimeout=1000 -Dsettings=\"{'boardSize':11, 'bombPower':7}\"\n");
 
         LocalWSGameRunner.run(gameType, host, port, timeout);
     }
 
-    private static Consumer<String> setupOutput(File file) {
+    private static Consumer<String> setupOutput(File file, boolean logTime) {
         return message -> {
-            System.out.println(message);
+            String time = Main.format.format(calendar.getTime());
+
+            if (logTime) {
+                message = Arrays.stream(message.split("\n"))
+                        .map(line -> time + ":\t" + line)
+                        .collect(Collectors.joining("\n"));
+            }
+
+            message += "\n";
+
+            System.out.print(message);
             try {
                 Files.write(file.toPath(),
-                        (message + "\n").getBytes(Charset.forName("UTF8")),
+                        message.getBytes(Charset.forName("UTF8")),
                         StandardOpenOption.APPEND);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -108,8 +127,6 @@ public class Main {
 
     private static File setupLog(String log) {
         File file = new File(log);
-
-        System.out.println("Log file is here: " + file.getAbsolutePath());
 
         if (!file.exists()) {
             try {
