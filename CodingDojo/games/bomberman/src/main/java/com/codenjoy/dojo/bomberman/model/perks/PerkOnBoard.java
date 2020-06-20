@@ -25,20 +25,21 @@ package com.codenjoy.dojo.bomberman.model.perks;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.bomberman.model.Player;
 import com.codenjoy.dojo.bomberman.model.Wall;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 
 public class PerkOnBoard extends Wall implements State<Elements, Player> {
 
     private final Perk perk;
 
-    public PerkOnBoard(int x, int y, Perk perk) {
-        super(x, y);
+    public PerkOnBoard(Point pt, Perk perk) {
+        super(pt);
         this.perk = perk;
     }
 
     @Override
     public Wall copy() {
-        return new PerkOnBoard(this.x, this.y, perk);
+        return new PerkOnBoard(this, perk);
     }
 
     @Override

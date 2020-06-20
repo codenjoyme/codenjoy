@@ -50,7 +50,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     private final GameSettings settings;
     private final List<Point> destroyedWalls = new LinkedList<>();
     private final List<Bomb> destroyedBombs = new LinkedList<>();
-    private Map<Point, PerkOnBoard> perks = new HashMap<>(); // TODO не надо тут мапы, достаточно collection.contains(pt)
+    private List<PerkOnBoard> perks = new LinkedList<>();
 
     public Bomberman(GameSettings settings) {
         super(RoundFactory.get(settings.getRoundSettings()),
@@ -72,17 +72,15 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     public List<PerkOnBoard> perks() {
-        return new ArrayList<>(perks.values());
+        return perks;
     }
 
     public PerkOnBoard pickPerk(Point pt) {
-        PerkOnBoard perk = perks.get(pt);
-
-        if (perk != null) {
-            perks.remove(pt);
+        int index = perks.indexOf(pt);
+        if (index == -1) {
+            return null;
         }
-
-        return perk;
+        return perks.remove(index);
     }
 
     @Override
@@ -112,20 +110,14 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private void tactAllPerks() {
-        List<Blast> blastsWithoutPerks = blasts.stream().filter(blast -> !perks.containsKey(blast)).collect(toList());
+        List<Blast> blastsWithoutPerks = blasts.stream().filter(blast -> !perks.contains(blast)).collect(toList());
         blasts.clear();
         blasts.addAll(blastsWithoutPerks);
 
-        Map<Point, PerkOnBoard> alivePerks = new HashMap<>();
-
-        perks.forEach((point, perkOnBoard) -> {
-            if (perkOnBoard.getPerk().getPickTimeout() > 0) {
-                alivePerks.put(point, perkOnBoard);
-            }
-        });
-
-        this.perks = alivePerks;
-    }
+        perks = perks.stream()
+            .filter(perk -> perk.getPerk().getPickTimeout() > 0)
+            .collect(toList());
+        }
 
     private void tactAllHeroes() {
         for (Player p : players) {
@@ -224,8 +216,9 @@ public class Bomberman extends RoundField<Player> implements Field {
     private void killAllNear(List<Blast> blasts) {
         // убиваем все перки которые уже есть в радиусе
         for (Blast blast : blasts) {
-            if (perks.containsKey(blast)) {
-                PerkOnBoard perk = perks.get(blast);
+            int index = perks.indexOf(blast);
+            if (index != -1) {
+                PerkOnBoard perk = perks.get(index);
                 pickPerk(perk);
                 Hero owner = blast.owner();
                 if (owner.isActiveAndAlive()) { // TODO test me
@@ -277,31 +270,30 @@ public class Bomberman extends RoundField<Player> implements Field {
                 case BOMB_BLAST_RADIUS_INCREASE:
                     BombBlastRadiusIncrease bbri = new BombBlastRadiusIncrease(ps.getValue(), ps.getTimeout());
                     bbri.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
-                    perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), bbri));
+                    perks.add(new PerkOnBoard(blast, bbri));
                     result = true;
                     break;
                 case BOMB_COUNT_INCREASE:
                     BombCountIncrease bci = new BombCountIncrease(ps.getValue(), ps.getTimeout());
                     bci.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
-                    perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), bci));
+                    perks.add(new PerkOnBoard(blast, bci));
                     result = true;
                     break;
                 case BOMB_IMMUNE:
                     BombImmune bi = new BombImmune(ps.getTimeout());
                     bi.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
-                    perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), bi));
+                    perks.add(new PerkOnBoard(blast, bi));
                     result = true;
                     break;
                 case BOMB_REMOTE_CONTROL:
                     BombRemoteControl brc = new BombRemoteControl(ps.getTimeout());
                     brc.setPickTimeout(PerksSettingsWrapper.getPickTimeout());
-                    perks.put(blast, new PerkOnBoard(blast.getX(), blast.getY(), brc));
+                    perks.add(new PerkOnBoard(blast, brc));
                     result = true;
                     break;
                 default:
             }
         }
-
         return result;
     }
 
