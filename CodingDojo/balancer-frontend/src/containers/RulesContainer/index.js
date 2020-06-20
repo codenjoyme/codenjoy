@@ -174,7 +174,7 @@ class RulesContainer extends Component {
                             </Link>
                         </div>
                     ) }
-                    <p style={{ marginLeft:'50px' }}>
+                    <div style={{ marginLeft:'50px' }}>
                         <p>
                             <b>[Опціонально]</b> Якщо є бажання підключитись до гри, коли
                             сервер недоступний (вихідні, свята або не робочий час) -
@@ -185,21 +185,22 @@ class RulesContainer extends Component {
                         <div className={ highligte } style={{whiteSpace:"pre"}} >
                             { "java -jar -Dhost=127.0.0.1 -Dport=8080\ -Dtimeout=1000\n" +
                               "          -Dlog=\"output.txt\" -DlogTime=true -DshowPlayers=\"2,3\"\n" +
-                              "          -Dsettings=\"{'boardSize':11,'bombPower':7}\""
-                            }
+                              "          -Dsettings=\"{'boardSize':11,'bombPower':7}\"" }
                         </div>
                         <p>
-                            Як бачиш - є можливicть змінювати хост/порт, кількість мілісекунд на один тік та
-                            налаштування<b><a href='#settings'>*</a></b> гри (у вигляді json).
-                            Після цього можно використати лінк для підключення
+                            Як бачиш - є можливicть змінювати хост/порт, кількість мілісекунд на один тік,
+                            налаштування<b><a href='#settings'>*</a></b> гри (у вигляді json) та налаштування
+                            логування. Після цього можно використати лінк для підключення
                             <br/>
                             <a className='content' style={{ display:'initial' }} href={ localhostConnectionUrl }>{ localhostConnectionUrl }</a>
                             <br/>
                             Також є можливість підключатись декількома клiєнтами - вси бомбери зберуться на одному полі.
                         </p>
-                        <b style={{ color:'#ffffff' }}>Увага!</b> Локальний сервер буде вдосконалюватись - слідкуйте за поновленнями на цій сторінці.
-                        Наразі наявна версія <a className='content' style={{ display:'initial' }}>'Жоржина' (v3)</a>.
-                    </p>
+                        <p>
+                            <b style={{ color:'#ffffff' }}>Увага!</b> Локальний сервер буде вдосконалюватись - слідкуйте за поновленнями на цій сторінці.
+                            Наразі наявна версія <a className='content' style={{ display:'initial' }}>'Жоржина' (v3)</a>.
+                        </p>
+                    </div>
                     <p>
                         Після підключення клієнт буде регулярно (кожну секунду)
                         отримувати рядок символів із закодованим станом поля.
