@@ -176,12 +176,17 @@ class RulesContainer extends Component {
                     ) }
                     <p style={{ marginLeft:'50px' }}>
                         <p>
-                            <b>[Опціонально]</b> Якщо є бажання підключитись до гри, коли сервер недоступний (вихідні, свята або не робочий час) -
-                            можно <a className='content' style={{ display:'initial' }} href='https://drive.google.com/uc?export=download&id=1JmXlF8ZSaSZ1nR4u-_3kgbDN3WSsQqpG'>завантажити сервер</a> і
+                            <b>[Опціонально]</b> Якщо є бажання підключитись до гри, коли
+                            сервер недоступний (вихідні, свята або не робочий час) -
+                            можно <a className='content' style={{ display:'initial' }}
+                            href='https://drive.google.com/uc?export=download&id=174aZrssLxql1_bGsKyAIENUXUv4Qjw9K'>завантажити сервер</a> і
                             запустити його командою (попередньо на ваш комп'ютер потрібно встановити java додаток).
                         </p>
                         <div className={ highligte } style={{whiteSpace:"pre"}} >
-                            { "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -Dlog=\"output.txt\" -DlogTime=true -DshowPlayers=\"2,3\" -Dsettings=\"{'boardSize':11,'bombPower':7}\"" }
+                            { "java -jar -Dhost=127.0.0.1 -Dport=8080\ -Dtimeout=1000\n" +
+                              "          -Dlog=\"output.txt\" -DlogTime=true -DshowPlayers=\"2,3\"\n" +
+                              "          -Dsettings=\"{'boardSize':11,'bombPower':7}\""
+                            }
                         </div>
                         <p>
                             Як бачиш - є можливicть змінювати хост/порт, кількість мілісекунд на один тік та
@@ -464,7 +469,7 @@ class RulesContainer extends Component {
                             Перк BOMB_COUNT_INCREASE:
                             <ul>
                                 <li>
-                                    Збільшує кількість доступних гравцю бомб на певну
+                                    Тимчасово збільшує кількість доступних гравцю бомб на певну
                                     кількість{ this._gets('perksBombCountIncrease') } додатково
                                     до наявних за замовчуванням бомб{ this._gets('bombsCount') } Бомбермена.
                                 </li>
@@ -476,8 +481,10 @@ class RulesContainer extends Component {
                                     деякий{ this._gets('perksBombCountEffectTimeout') } час.
                                 </li>
                                 <li>
-                                    При отриманні декількох перків цього типу одночасно, кількість
-                                    бомб збільшується пропорційно до кількості отриманних перків.
+                                    Перки не сумуються. При отриманні декількох перків цього типу одночасно, кількість
+                                    бомб повертається до значення{ this._gets('perksBombCountIncrease') }&nbsp
+                                    додатково до наявних за замовчуванням{ this._gets('bombsCount') }. Таймер
+                                    при цьому встановлюється в початкове положення{ this._gets('perksBombCountEffectTimeout') }.
                                 </li>
                             </ul>
                         </li>
@@ -492,8 +499,8 @@ class RulesContainer extends Component {
                                     деякий{ this._gets('perksBombImmuneEffectTimeout') } час.
                                 </li>
                                 <li>
-                                    При отриманні декількох перків цього типу одночасно,
-                                    загальний час їх дії сумується.
+                                    Перки не сумуються. При отриманні декількох перків цього типу одночасно,
+                                    таймер дії встановлюється в початкове положення.
                                 </li>
                             </ul>
                         </li>
@@ -504,7 +511,9 @@ class RulesContainer extends Component {
                                     Дає можливість дистанційного керування детонатором.
                                 </li>
                                 <li>
-                                    Бомба вибухає при повторній дії ACT команди.
+                                    Бомба встановлюється на полі перщою командою ACT, а вибухає
+                                    при повторній дії ACT команди. При цьому використовується як бомба
+                                    так детонатор (окремо).
                                 </li>
                                 <li>
                                     В наявності є певна
@@ -514,10 +523,17 @@ class RulesContainer extends Component {
                                     Дія перку не закінчується по таймауту.
                                 </li>
                                 <li>
-                                    При отриманні декількох перків цього типу одночасно,
-                                    загальна кількість бомб, що дистанційно керуються, сумується.
+                                    Перки не сумуються. При отриманні декількох перків цього типу одночасно,
+                                    загальна кількість детонаторів поновлюється до зазначенного вище.
                                 </li>
                             </ul>
+                        </li>
+                        <li>
+                            Перки не впливають одне на одного, тільки доповнюють.
+                        </li>
+                        <li>
+                            Кожен перк має свої власні: таймер та/або лічильник
+                            кількостей (залежить від типу).
                         </li>
                     </ul>
 
