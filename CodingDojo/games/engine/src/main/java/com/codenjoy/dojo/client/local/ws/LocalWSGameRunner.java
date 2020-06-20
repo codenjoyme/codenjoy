@@ -69,8 +69,12 @@ public class LocalWSGameRunner {
     private String getAnswer(ConnectionStatus status, ClientBoard clientBoard) {
         String board = ((AbstractBoard)clientBoard).boardAsString().replaceAll("\n", "");
 
-        status.getSocket().send(String.format(BOARD_FORMAT2, board));
+        if (!status.getSocket().isOpen()) {
+            exit(status);
+            return "";
+        }
 
+        status.getSocket().send(String.format(BOARD_FORMAT2, board));
         return status.pullAction();
     }
 
