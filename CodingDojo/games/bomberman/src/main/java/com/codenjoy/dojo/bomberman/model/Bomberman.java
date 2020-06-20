@@ -115,12 +115,6 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private void tactAllPerks() {
-        // TODO а это я не знаю зачем тут
-        List<Blast> blastsOnPerks = blasts.stream()
-                .filter(blast -> perks.contains(blast))
-                .collect(toList());
-        blasts.removeAll(blastsOnPerks);
-
         // тикаем счетчик перка на поле и если просрочка, удаляем
         perks.forEach(perk -> perk.tick());
         perks = perks.stream()
@@ -174,6 +168,12 @@ public class Bomberman extends RoundField<Player> implements Field {
 
         // потому уже считаем скоры за разрушения
         killAllNear(blasts);
+
+        // убираем взрывную волну над обнаженными перками, тут взрыв сделал свое дело
+        List<Blast> blastsOnPerks = blasts.stream()
+                .filter(blast -> perks.contains(blast))
+                .collect(toList());
+        blasts.removeAll(blastsOnPerks);
 
         destroyedBombs.clear();
     }
