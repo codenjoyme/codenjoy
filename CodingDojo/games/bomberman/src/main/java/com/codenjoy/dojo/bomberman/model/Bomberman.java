@@ -215,6 +215,24 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private void killAllNear(List<Blast> blasts) {
+        // беремся за бомберов, если у них только нет иммунитета
+        for (Blast blast : blasts) {
+            for (Player dead : aliveActive()) {
+                if (dead.getHero().itsMe(blast)) {
+                    Perk bombImmunePerk = dead.getHero().getPerk(Elements.BOMB_IMMUNE);
+
+                    if (bombImmunePerk == null) {
+                        dead.getHero().die();
+                    }
+
+                    for (Player owner : players) {
+                        if (dead != owner && blast.itsMine(owner.getHero())) {
+                            owner.event(Events.KILL_OTHER_HERO);
+                        }
+                    }
+                }
+            }
+        }
         // убиваем все перки которые уже есть в радиусе
         for (Blast blast : blasts) {
             int index = perks.indexOf(blast);
@@ -237,24 +255,6 @@ public class Bomberman extends RoundField<Player> implements Field {
                 }
                 Wall wall = walls.get(blast);
                 wallDestroyed(wall, blast);
-            }
-        }
-        // беремся за бомберов, если у них только нет иммунитета
-        for (Blast blast : blasts) {
-            for (Player dead : aliveActive()) {
-                if (dead.getHero().itsMe(blast)) {
-                    Perk bombImmunePerk = dead.getHero().getPerk(Elements.BOMB_IMMUNE);
-
-                    if (bombImmunePerk == null) {
-                        dead.getHero().die();
-                    }
-
-                    for (Player owner : players) {
-                        if (dead != owner && blast.itsMine(owner.getHero())) {
-                            owner.event(Events.KILL_OTHER_HERO);
-                        }
-                    }
-                }
             }
         }
     }
