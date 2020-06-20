@@ -97,7 +97,7 @@ public class OptionGameSettingsTest {
                 "  'perkBombBlastRadiusInc':2,\n" +
                 "  'perkBombCountInc':4,\n" +
                 "  'perkDropRatio':20,\n" +
-                "  'perkPickTimeout':5,\n" +
+                "  'perkPickTimeout':30,\n" +
                 "  'playersPerRoom':5,\n" +
                 "  'remoteControlCount':3,\n" +
                 "  'roundSettings':{\n" +
@@ -143,7 +143,7 @@ public class OptionGameSettingsTest {
                 "  'perkBombBlastRadiusInc':4,\n" +
                 "  'perkBombCountInc':4,\n" +
                 "  'perkDropRatio':23,\n" +
-                "  'perkPickTimeout':5,\n" +
+                "  'perkPickTimeout':30,\n" +
                 "  'playersPerRoom':5,\n" +
                 "  'remoteControlCount':3,\n" +
                 "  'roundSettings':{\n" +
@@ -179,7 +179,7 @@ public class OptionGameSettingsTest {
                 "  'perkBombBlastRadiusInc':4,\n" +
                 "  'perkBombCountInc':4,\n" +
                 "  'perkDropRatio':23,\n" +
-                "  'perkPickTimeout':5,\n" +
+                "  'perkPickTimeout':30,\n" +
                 "  'playersPerRoom':5,\n" +
                 "  'remoteControlCount':3,\n" +
                 "  'roundSettings':{\n" +

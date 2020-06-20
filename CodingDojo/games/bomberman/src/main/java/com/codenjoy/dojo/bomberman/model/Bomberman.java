@@ -105,24 +105,28 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     @Override
     public void tickField() {
-        applyAllHeroes();
-        meatChopperEatHeroes();
-        walls.tick();
-        meatChopperEatHeroes();
-        tactAllBombs();
-        tactAllPerks();
-        tactAllHeroes();
+        applyAllHeroes(); // герои ходят
+        meatChopperEatHeroes(); // омномном
+        walls.tick();     // разрушенные стены появляются, а митчоперы водят свой холровод
+        meatChopperEatHeroes(); // омномном
+        tactAllBombs();   // все что касается бомб и взрывов
+        tactAllPerks();   // тикаем перки на поле
+        tactAllHeroes();  // в том числе и перки
     }
 
     private void tactAllPerks() {
-        List<Blast> blastsWithoutPerks = blasts.stream().filter(blast -> !perks.contains(blast)).collect(toList());
-        blasts.clear();
-        blasts.addAll(blastsWithoutPerks);
+        // TODO а это я не знаю зачем тут
+        List<Blast> blastsOnPerks = blasts.stream()
+                .filter(blast -> perks.contains(blast))
+                .collect(toList());
+        blasts.removeAll(blastsOnPerks);
 
+        // тикаем счетчик перка на поле и если просрочка, удаляем
+        perks.forEach(perk -> perk.tick());
         perks = perks.stream()
             .filter(perk -> perk.getPerk().getPickTimeout() > 0)
             .collect(toList());
-        }
+    }
 
     private void tactAllHeroes() {
         for (Player p : players) {

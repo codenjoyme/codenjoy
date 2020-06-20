@@ -27,8 +27,9 @@ import com.codenjoy.dojo.bomberman.model.Player;
 import com.codenjoy.dojo.bomberman.model.Wall;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.Tickable;
 
-public class PerkOnBoard extends Wall implements State<Elements, Player> {
+public class PerkOnBoard extends Wall implements State<Elements, Player>, Tickable {
 
     private final Perk perk;
 
@@ -49,5 +50,16 @@ public class PerkOnBoard extends Wall implements State<Elements, Player> {
 
     public Perk getPerk() {
         return perk;
+    }
+
+    @Override
+    public void tick() {
+        perk.tickPick();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{PerkOnBoard %s at %s}",
+                perk, super.toString());
     }
 }

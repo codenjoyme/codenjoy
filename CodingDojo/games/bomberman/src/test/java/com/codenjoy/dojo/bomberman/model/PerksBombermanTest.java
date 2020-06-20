@@ -127,6 +127,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
 
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
         PerksSettingsWrapper.setDropRatio(20); // 20%
+        PerksSettingsWrapper.setPickTimeout(50);
 
         when(heroDice.next(anyInt())).thenReturn(10); // must drop 2 perks
 
@@ -188,6 +189,74 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         verify(listener).event(Events.CATCH_PERK);
         assertEquals(before + DefaultGameSettings.CATCH_PERK_SCORE, hero.scores());
         assertEquals("Hero had to acquire new perk", 1, player.getHero().getPerks().size());
+    }
+
+    // проверяем, что перк удалится с поля через N тиков если его никто не возьмет
+    @Test
+    public void shouldRemovePerk_whenPickTimeout() {
+        // given
+        givenBoardWithDestroyWalls(6);
+
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        PerksSettingsWrapper.setDropRatio(20); // 20%
+        PerksSettingsWrapper.setPickTimeout(5);
+
+        when(heroDice.next(anyInt())).thenReturn(10); // must drop 2 perks
+
+        hero.act();
+        field.tick();
+
+        hero.right();
+        field.tick();
+
+        hero.right();
+        field.tick();
+
+        field.tick();
+
+        // when
+        field.tick();
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "#҉# ##\n" +
+                "+҉҉☺ #\n" +
+                "#+####\n");
+
+        assertEquals("[{PerkOnBoard {BOMB_BLAST_RADIUS_INCREASE('+') value=4, timeout=3, timer=3, pick=4} at [0,1]}, " +
+                "{PerkOnBoard {BOMB_BLAST_RADIUS_INCREASE('+') value=4, timeout=3, timer=3, pick=4} at [1,0]}]", field.perks().toString());
+
+        // when
+        field.tick();
+        field.tick();
+        field.tick();
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                "+  ☺ #\n" +
+                "#+####\n");
+
+        assertEquals("[{PerkOnBoard {BOMB_BLAST_RADIUS_INCREASE('+') value=4, timeout=3, timer=3, pick=1} at [0,1]}, " +
+                "{PerkOnBoard {BOMB_BLAST_RADIUS_INCREASE('+') value=4, timeout=3, timer=3, pick=1} at [1,0]}]", field.perks().toString());
+
+        // when
+        field.tick();
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                "   ☺ #\n" +
+                "# ####\n");
+
+        assertEquals("[]", field.perks().toString());
+
     }
 
     // проверяем, что уничтожение перка порождает митчопера :)
@@ -377,7 +446,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         field.tick();
 
         assertEquals("[{BOMB_BLAST_RADIUS_INCREASE('+') " +
-                        "value=4, timeout=5, timer=1, pick=-4}]" ,
+                        "value=4, timeout=5, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // второй перк взятый в самый последний момент перед взрывом
@@ -438,7 +507,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "# #H########\n");
 
         assertEquals("[{BOMB_BLAST_RADIUS_INCREASE('+') " +
-                        "value=7, timeout=8, timer=2, pick=-6}]" ,
+                        "value=7, timeout=8, timer=2, pick=0}]" ,
                 hero.getPerks().toString());
 
         // when
@@ -446,7 +515,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
 
         // последний шанс воспользоваться, но мы не будем
         assertEquals("[{BOMB_BLAST_RADIUS_INCREASE('+') " +
-                        "value=7, timeout=8, timer=1, pick=-7}]" ,
+                        "value=7, timeout=8, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         field.tick();
