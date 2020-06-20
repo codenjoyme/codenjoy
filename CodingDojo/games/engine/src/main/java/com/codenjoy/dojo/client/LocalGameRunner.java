@@ -74,7 +74,7 @@ public class LocalGameRunner {
             runner.add(solvers.get(i), boards.get(i));
         }
 
-        return runner.run(() -> {});
+        return runner.run(tick -> {});
     }
 
     public LocalGameRunner(GameType gameType) {
@@ -88,7 +88,7 @@ public class LocalGameRunner {
         field = gameType.createGame(0);
     }
 
-    public LocalGameRunner run(Runnable onTick) {
+    public LocalGameRunner run(Consumer<Integer> onTick) {
         tick = 0;
         while (!exit && (countIterations == null || this.tick++ < countIterations)) {
             if (timeout > 0) {
@@ -128,7 +128,7 @@ public class LocalGameRunner {
             }
 
             if (onTick != null) {
-                onTick.run();
+                onTick.accept(tick);
             }
         }
         return this;

@@ -56,7 +56,7 @@ public class LocalWSGameRunner {
 
         CompletableFuture.runAsync(() -> startWsServer(host, port));
 
-        runner.run(() -> {});
+        runner.run(tick -> {});
     }
 
     private ConnectionStatus status(WebSocket socket) {
