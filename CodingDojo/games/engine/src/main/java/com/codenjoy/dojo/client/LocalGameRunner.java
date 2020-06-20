@@ -50,6 +50,7 @@ public class LocalGameRunner {
     public static boolean printConversions = true;
     public static boolean printDice = true;
     public static String showPlayers = null;
+    public static boolean exit = false;
 
     private GameField field;
     private List<Game> games;
@@ -88,7 +89,7 @@ public class LocalGameRunner {
 
     public LocalGameRunner run(Runnable tick) {
         Integer count = countIterations;
-        while (count == null || count-- > 0) {
+        while (!exit && (count == null || count-- > 0)) {
             if (timeout > 0) {
                 try {
                     Thread.sleep(timeout);

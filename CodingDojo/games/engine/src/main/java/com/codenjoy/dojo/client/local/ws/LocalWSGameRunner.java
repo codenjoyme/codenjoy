@@ -128,7 +128,12 @@ public class LocalWSGameRunner {
                 System.out.println(">>> Started server");
             }
         };
-        server.run();
+        try {
+            server.run();
+        } catch (Exception e) {
+            System.out.println(">>> Staring server error: " + e.toString());
+            LocalGameRunner.exit = true;
+        }
     }
 
     private void exit(ConnectionStatus status) {
