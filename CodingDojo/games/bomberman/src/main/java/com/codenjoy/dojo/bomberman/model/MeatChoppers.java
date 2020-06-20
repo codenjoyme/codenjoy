@@ -31,19 +31,17 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
 import static com.codenjoy.dojo.bomberman.model.Field.FOR_HERO;
 
 public class MeatChoppers extends WallsDecorator implements Walls {
 
-    public static final int MAX = 10;
+    public static final int MAX = 1000;
+
     private Parameter<Integer> count;
-    private Field board;
     private Dice dice;
 
-    public MeatChoppers(Walls walls, Field board, Parameter<Integer> count, Dice dice) {
+    public MeatChoppers(Walls walls, Parameter<Integer> count, Dice dice) {
         super(walls);
-        this.board = board;
         this.dice = dice;
         this.count = count;
     }
@@ -55,22 +53,21 @@ public class MeatChoppers extends WallsDecorator implements Walls {
 
         int count = walls.subList(MeatChopper.class).size();
 
-        int c = 0;
-        int maxc = 100;
-        while (count < this.count.getValue() && c < maxc) {
-            Point pt = PointImpl.random(dice, board.size());
+        int iteration = 0;
+        while (count < this.count.getValue() && iteration++ < MAX) {
+            Point pt = PointImpl.random(dice, field.size());
 
             // TODO это капец как долго выполняется, убрать нафиг митчомеров из Walls и сам Walls рассформировать!
-            if (!board.isBarrier(pt, !FOR_HERO) && !board.heroes(ALL).contains(pt)) {
-                walls.add(new MeatChopper(pt));
-                count++;
+            if (field.isBarrier(pt, !FOR_HERO)) {
+                continue;
             }
 
-            c++;
+            walls.add(new MeatChopper(pt));
+            count++;
         }
 
-        if (c == maxc) {
-//            throw new IllegalStateException("Dead loop at MeatChoppers.regenerate!"); // TODO тут часто вылетает :(
+        if (iteration >= MAX) {
+            System.out.println("Dead loop at MeatChopper.regenerate!"); // TODO тут часто вылетает :(
         }
     }
 
@@ -79,24 +76,24 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         super.tick(); // TODO протестить эту строчку + сделать через Template Method
         regenerate();
 
-        List<MeatChopper> meatChoppers = walls.subList(MeatChopper.class);
-        for (MeatChopper meatChopper : meatChoppers) {
-            Direction direction = meatChopper.getDirection();
+        List<MeatChopper> choppers = walls.subList(MeatChopper.class);
+        for (MeatChopper chopper : choppers) {
+            Direction direction = chopper.getDirection();
             if (direction != null && dice.next(5) > 0) {
-                Point to = direction.change(meatChopper);
+                Point to = direction.change(chopper);
                 if (!walls.itsMe(to)) {
-                    meatChopper.move(to);
+                    chopper.move(to);
                     continue;
                 } else {
                     // do nothing
                 }
             }
-            meatChopper.setDirection(tryToMove(meatChopper));
+            chopper.setDirection(tryToMove(chopper));
         }
     }
 
     private Direction tryToMove(Point from) {
-        int count = 0;
+        int iteration = 0;
         Point to;
         Direction direction;
         do {
@@ -105,9 +102,9 @@ public class MeatChoppers extends WallsDecorator implements Walls {
             direction = Direction.valueOf(move);
 
             to = direction.change(from);
-        } while ((walls.itsMe(to) || to.isOutOf(board.size())) && count++ < MAX);
+        } while ((walls.itsMe(to) || to.isOutOf(field.size())) && iteration++ < MAX);
 
-        if (count >= MAX) {
+        if (iteration >= MAX) {
             return null;
         }
 

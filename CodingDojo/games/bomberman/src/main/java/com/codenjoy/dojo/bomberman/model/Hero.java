@@ -28,15 +28,11 @@ import com.codenjoy.dojo.bomberman.model.perks.HeroPerks;
 import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
 import com.codenjoy.dojo.bomberman.services.Events;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
 import static com.codenjoy.dojo.bomberman.model.Field.FOR_HERO;
 import static com.codenjoy.dojo.bomberman.model.StateUtils.filter;
@@ -45,6 +41,7 @@ import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
 public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
     public static final int MAX = 1000;
+
     private Level level;
     private Dice dice;
     private boolean bomb;
@@ -62,30 +59,22 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
     public void init(Field field) {
         super.init(field);
-        int count = 0;
-        do {
-            move(dice.next(field.size()), dice.next(field.size()));
-            while (isBusy(this) && !isOutOf(field.size())) {
-                x++;
-                if (isBusy(this)) {
-                    y++;
-                }
-            }
-        } while ((isBusy(this) || isOutOf(field.size())) && count++ < MAX);
 
-        if (count >= MAX) {
-            throw new RuntimeException("Dead loop at MyBomberman.init(Board)!");
-        }
-    }
+        int iteration = 0;
+        while (iteration++ < MAX) {
+            Point pt = PointImpl.random(dice, field.size());
 
-    private boolean isBusy(Point pt) {
-        for (Hero hero : field.heroes(ALL)) {
-            if (hero != null && hero.itsMe(this) && hero != this) {
-                return true;
+            if (field.isBarrier(pt, !FOR_HERO)) {
+                continue;
             }
+
+            move(pt);
+            break;
         }
 
-        return field.walls().itsMe(pt);
+        if (iteration >= MAX) {
+            System.out.println("Dead loop at Hero.init(Board)!");
+        }
     }
 
     @Override
