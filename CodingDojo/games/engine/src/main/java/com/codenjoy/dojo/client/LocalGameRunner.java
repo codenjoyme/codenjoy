@@ -206,7 +206,7 @@ public class LocalGameRunner {
                 }
             }
             if (++index[0] == numbers.length) {
-                index[0]--; // повторять последнее число если мы в конце массива
+                index[0] = 0; // начинать с начала, если мы дошли до конца
             }
             return next;
         };
