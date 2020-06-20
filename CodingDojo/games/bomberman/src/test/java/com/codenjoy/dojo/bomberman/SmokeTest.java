@@ -57,8 +57,11 @@ public class SmokeTest {
         List<String> messages = new LinkedList<>();
 
         LocalGameRunner.timeout = 0;
-        LocalGameRunner.out = (e) -> messages.add(e);
-        LocalGameRunner.countIterations = 200;
+        LocalGameRunner.out = message -> {
+            // System.out.println(message);
+            messages.add(message);
+        };
+        LocalGameRunner.countIterations = 1000;
         LocalGameRunner.printConversions = false;
         LocalGameRunner.printBoardOnly = true;
         LocalGameRunner.printDice = false;
@@ -66,7 +69,7 @@ public class SmokeTest {
 
         String soul = RandomStringUtils.randomNumeric(30);
         soul = "365720020591617326050020278665";
-        Dice dice = LocalGameRunner.getDice(LocalGameRunner.generateXorShift(soul, 100, 20000));
+        Dice dice = LocalGameRunner.getDice(LocalGameRunner.generateXorShift(soul, 100, 200));
 
         DefaultGameSettings.BOARD_SIZE = 11;
         DefaultGameSettings.BOMB_POWER = 3;
