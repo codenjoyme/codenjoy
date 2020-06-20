@@ -32,10 +32,10 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
+import static com.codenjoy.dojo.bomberman.model.Field.FOR_HERO;
 
 public class MeatChoppers extends WallsDecorator implements Walls {
 
-    private static final boolean WITH_MEATCHOPPERS = true;
     public static final int MAX = 10;
     private Parameter<Integer> count;
     private Field board;
@@ -61,7 +61,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
             Point pt = PointImpl.random(dice, board.size());
 
             // TODO это капец как долго выполняется, убрать нафиг митчомеров из Walls и сам Walls рассформировать!
-            if (!board.isBarrier(pt, WITH_MEATCHOPPERS) && !board.heroes(ALL).contains(pt)) {
+            if (!board.isBarrier(pt, !FOR_HERO) && !board.heroes(ALL).contains(pt)) {
                 walls.add(new MeatChopper(pt));
                 count++;
             }

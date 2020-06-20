@@ -38,12 +38,12 @@ import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Bomberman.ALL;
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.bomberman.model.Field.FOR_HERO;
 import static com.codenjoy.dojo.bomberman.model.StateUtils.filter;
 import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
 
 public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
-    private static final boolean WITHOUT_MEAT_CHOPPER = false;
     public static final int MAX = 1000;
     private Level level;
     private Dice dice;
@@ -136,7 +136,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
 
         Point pt = direction.change(this);
 
-        if (!field.isBarrier(pt, WITHOUT_MEAT_CHOPPER)) {
+        if (!field.isBarrier(pt, FOR_HERO)) {
             move(pt);
             PerkOnBoard perk = field.pickPerk(pt);
             if (perk != null) {

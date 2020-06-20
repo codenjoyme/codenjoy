@@ -140,14 +140,15 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private void wallDestroyed(Wall wall, Blast blast) {
-        for (Player player : players) { // TODO использовать balst.owner() так быстрее
-            if (blast.itsMine(player.getHero())) {
-                if (wall instanceof MeatChopper) { // TODO давать бонусы только если бомбер жив еще
-                    player.event(Events.KILL_MEAT_CHOPPER);
-                } else if (wall instanceof DestroyWall) {
-                    player.event(Events.KILL_DESTROY_WALL);
-                }
-            }
+        Hero hero = blast.owner();
+        if (!hero.isActiveAndAlive()) {  // TODO test me герой не получает очки если он погиб
+            return;
+        }
+
+        if (wall instanceof MeatChopper) {
+            hero.event(Events.KILL_MEAT_CHOPPER);
+        } else if (wall instanceof DestroyWall) {
+            hero.event(Events.KILL_DESTROY_WALL);
         }
     }
 
@@ -320,8 +321,10 @@ public class Bomberman extends RoundField<Player> implements Field {
         return new WallsImpl(walls);
     }
 
+    // препятствие это все, чем может быть занята клеточка
+    // но если мы для героя смотрим - он может пойти к чоперу и на перк
     @Override
-    public boolean isBarrier(Point pt, boolean withMeatChopper) {
+    public boolean isBarrier(Point pt, boolean isForHero) {
         for (Player player : aliveActive()) {
             if (player.getHero().itsMe(pt)) {
                 return true;
@@ -332,13 +335,23 @@ public class Bomberman extends RoundField<Player> implements Field {
                 return true;
             }
         }
-        for (Wall wall : walls) {
-            if (wall instanceof MeatChopper && !withMeatChopper) {
-                continue;
-            }
-            if (wall.itsMe(pt)) {
+        if (!isForHero) {     // TODO test me митчопер или стена не могут появиться на перке
+            if (perks.contains(pt)) {
                 return true;
             }
+        }
+
+        for (Wall wall : walls) {
+            if (!wall.itsMe(pt)) {
+                continue;
+            }
+
+            // TODO test me стенка или другой чопер не могут появиться на чопере
+            // TODO но герой может пойти к нему на встречу
+            if (isForHero && wall instanceof MeatChopper) {
+                return false;
+            }
+            return true;
         }
         return pt.isOutOf(size());
     }

@@ -1805,7 +1805,7 @@ public class BombermanTest extends AbstractBombermanTest {
 
     // Чертик не может появится на бомбере!
     @Test
-    public void shouldMeatChopperNotApperOnBommber() {
+    public void shouldMeatChopperNotAppearOnBommber() {
         shouldMonsterCanMoveOnBomb();
         hero.down();
         field.tick();
@@ -1831,7 +1831,6 @@ public class BombermanTest extends AbstractBombermanTest {
                 "☼ ☼ ☼\n" +
                 "☼☺  ☼\n" +
                 "☼☼☼☼☼\n");
-
     }
 
 }

@@ -30,11 +30,9 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.bomberman.model.Field.FOR_HERO;
 
 public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO протестить класс
-
-    private static final boolean WITH_MEAT_CHOPPERS = true;
 
     private Field board;
     private Parameter<Integer> count;
@@ -80,11 +78,11 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
         }
 
         int c = 0;
-        int maxc = 10000;
+        int maxc = 1000;
         while (count < this.count.getValue() && c < maxc) {  // TODO и это
             Point pt = PointImpl.random(dice, board.size());
 
-            if (!board.isBarrier(pt, WITH_MEAT_CHOPPERS)) {
+            if (!board.isBarrier(pt, !FOR_HERO)) {
                 walls.add(new DestroyWall(pt));
                 count++;
             }
@@ -93,7 +91,7 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
         }
 
         if (c == maxc) {
-            throw new  RuntimeException("Dead loop at EatSpaceWalls.generate!");
+            throw new RuntimeException("Dead loop at EatSpaceWalls.generate!");
         }
     }
 }

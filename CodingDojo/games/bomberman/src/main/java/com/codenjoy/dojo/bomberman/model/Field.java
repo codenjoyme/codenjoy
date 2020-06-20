@@ -31,6 +31,8 @@ import java.util.List;
 
 public interface Field extends RoundGameField<Player> {  // TODO применить тут ISP (все ли методы должны быть паблик?)
 
+    boolean FOR_HERO = true;
+
     int size();
 
     List<Hero> heroes(boolean activeAliveOnly);
@@ -41,7 +43,7 @@ public interface Field extends RoundGameField<Player> {  // TODO примени�
 
     Walls walls();
 
-    boolean isBarrier(Point pt, boolean withMeatChopper);
+    boolean isBarrier(Point pt, boolean isForHero);
 
     void remove(Player player);
 
