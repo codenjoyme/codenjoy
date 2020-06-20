@@ -38,13 +38,14 @@ public class Main {
         String host = System.getProperty("host", "127.0.0.1");
         int port = Integer.valueOf(System.getProperty("port", "8080"));
         int timeout = Integer.valueOf(System.getProperty("timeout", "1000"));
-        String settingsJson = System.getProperty("settings", "{}");
+        String settingsString = System.getProperty("settings", "{}");
         String game = "bomberman";
 
         Dice dice = new RandomDice();
 
+        JSONObject settings = new JSONObject(settingsString);
         OptionGameSettings gameSettings = new OptionGameSettings(new SettingsImpl(), dice)
-                .update(new JSONObject(settingsJson));
+                .update(settings);
 
         GameRunner gameType = new GameRunner() {
             @Override
@@ -58,17 +59,21 @@ public class Main {
             }
         };
 
-        gameSettings.update(new JSONObject("{\n" +
-                "  'isMultiple':true,\n" +
-                "  'roundSettings':{\n" +
-                "    'roundsEnabled':false,\n" +
-                "  },\n" +
-                "}"));
+        if (!settings.has("isMultiple") && !settings.has("roundSettings")) {
+            String json = "{\n" +
+                    "  'isMultiple':true,\n" +
+                    "  'roundSettings':{\n" +
+                    "    'roundsEnabled':false,\n" +
+                    "  },\n" +
+                    "}";
+            System.out.println("Simple mode! Hardcoded: \n" + json);
+            gameSettings.update(new JSONObject(json));
+        }
 
         System.out.printf("Run local WS server for %s on %s:%s with settings:\n" +
                         "%s\n" +
                         "If you want to change something, please use command:\n" +
-                        "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -Dsettings={'boardSize':11,'bombPower':7}\n\n",
+                        "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -Dsettings=\"{'boardSize':11, 'bombPower':7}\"\n\n",
                 game, host, port, JsonUtils.prettyPrint(gameSettings.asJson()));
 
         LocalWSGameRunner.run(gameType, host, port, timeout);

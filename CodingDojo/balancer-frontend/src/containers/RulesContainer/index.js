@@ -181,7 +181,7 @@ class RulesContainer extends Component {
                             запустити його командою (попередньо на ваш комп'ютер потрібно встановити java додаток).
                         </p>
                         <div className={ highligte } style={{whiteSpace:"pre"}} >
-                            { "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -Dsettings={'boardSize':11,'bombPower':7}" }
+                            { "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -Dsettings=\"{'boardSize':11,'bombPower':7}\"" }
                         </div>
                         <p>
                             Як бачиш - є можливicть змінювати хост/порт, кількість мілісекунд на один тік та
@@ -193,7 +193,7 @@ class RulesContainer extends Component {
                             Також є можливість підключатись декількома клiєнтами - вси бомбери зберуться на одному полі.
                         </p>
                         <b style={{ color:'#ffffff' }}>Увага!</b> Локальний сервер буде вдосконалюватись - слідкуйте за поновленнями на цій сторінці.
-                        Наразі наявна версія <a className='content' style={{ display:'initial' }}>'Хризантема' (v2)</a>.
+                        Наразі наявна версія <a className='content' style={{ display:'initial' }}>'Жоржина' (v3)</a>.
                     </p>
                     <p>
                         Після підключення клієнт буде регулярно (кожну секунду)
