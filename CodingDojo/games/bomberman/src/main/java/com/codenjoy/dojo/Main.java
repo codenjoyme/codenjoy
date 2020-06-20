@@ -47,7 +47,6 @@ import java.util.stream.Collectors;
 public class Main {
 
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-    private static Calendar calendar = Calendar.getInstance();
 
     public static void main(String[] args) {
         String host = System.getProperty("host", "127.0.0.1");
@@ -104,7 +103,7 @@ public class Main {
 
     private static Consumer<String> setupOutput(File file, boolean logTime) {
         return message -> {
-            String time = Main.format.format(calendar.getTime());
+            String time = Main.format.format(Calendar.getInstance().getTime());
 
             if (logTime) {
                 message = Arrays.stream(message.split("\n"))
