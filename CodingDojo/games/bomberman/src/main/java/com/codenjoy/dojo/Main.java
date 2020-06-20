@@ -53,6 +53,7 @@ public class Main {
         int port = Integer.valueOf(System.getProperty("port", "8080"));
         int timeout = Integer.valueOf(System.getProperty("timeout", "1000"));
         String log = System.getProperty("log", "output.txt");
+        String showPlayers = System.getProperty("showPlayers", null);
         boolean logTime = Boolean.valueOf(System.getProperty("logTime", "true"));
         String settingsString = System.getProperty("settings", "{}");
         String game = "bomberman";
@@ -95,9 +96,11 @@ public class Main {
                 game, host, port, JsonUtils.prettyPrint(gameSettings.asJson())));
 
         LocalGameRunner.out.accept("If you want to change something, please use command:\n" +
-                        "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dlog=\"output.txt\" -DlogTime=true " +
-                "-Dtimeout=1000 -Dsettings=\"{'boardSize':11, 'bombPower':7}\"\n");
+                        "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 " +
+                        "-Dlog=\"output.txt\" -DlogTime=true -DshowPlayers=\"2,3\" " +
+                        "-Dsettings=\"{'boardSize':11, 'bombPower':7}\"\n");
 
+        LocalGameRunner.showPlayers = showPlayers;
         LocalWSGameRunner.run(gameType, host, port, timeout);
     }
 

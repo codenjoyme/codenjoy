@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -48,6 +49,7 @@ public class LocalGameRunner {
     public static Integer countIterations = null;
     public static boolean printConversions = true;
     public static boolean printDice = true;
+    public static String showPlayers = null;
 
     private GameField field;
     private List<Game> games;
@@ -113,7 +115,7 @@ public class LocalGameRunner {
                 for (int index = 0; index < games.size(); index++) {
                     Game single = games.get(index);
                     if (single.isGameOver()) {
-                        out.accept(player(index, "PLAYER_GAME_OVER -> START_NEW_GAME"));
+                        print(index, "PLAYER_GAME_OVER -> START_NEW_GAME");
                         single.newGame();
                     }
                 }
@@ -135,19 +137,28 @@ public class LocalGameRunner {
         board.forString(data.toString());
 
         if (printBoardOnly) {
-            out.accept(player(index, ((AbstractBoard) board).boardAsString()));
+            print(index, ((AbstractBoard) board).boardAsString());
         } else {
-            out.accept(player(index, board.toString()));
+            print(index, board.toString());
         }
 
         String answer = solver(index).get(board);
 
         if (printScores) {
-            out.accept(player(index, "Scores: " + scores.get(index).getScore()));
+            print(index, "Scores: " + scores.get(index).getScore());
         }
 
-        out.accept(player(index, "Answer: " + answer));
+        print(index, "Answer: " + answer);
         return answer;
+    }
+
+    private void print(int index, String message) {
+        if (StringUtils.isEmpty(showPlayers)
+                || Arrays.asList(showPlayers.split(","))
+                        .contains(String.valueOf(index + 1)))
+        {
+            out.accept(player(index, message));
+        }
     }
 
     private Solver solver(int index) {
@@ -223,7 +234,7 @@ public class LocalGameRunner {
 
         GamePlayer gamePlayer = gameType.createPlayer(
                 event -> {
-                    out.accept(player(index, "Fire Event: " + event.toString()));
+                    print(index, "Fire Event: " + event.toString());
                     score.event(event);
                 },
                 getPlayerId());
