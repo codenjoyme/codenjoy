@@ -24,7 +24,6 @@ package com.codenjoy.dojo.client;
 
 
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
@@ -49,6 +48,7 @@ public class LocalGameRunner {
     public static Integer countIterations = null;
     public static boolean printConversions = true;
     public static boolean printDice = true;
+    public static boolean printTick = false;
     public static String showPlayers = null;
     public static boolean exit = false;
 
@@ -58,6 +58,7 @@ public class LocalGameRunner {
     private List<Solver> solvers;
     private List<ClientBoard> boards;
     private List<PlayerScores> scores;
+    private Integer tick;
 
     public static LocalGameRunner run(GameType gameType, Solver solver, ClientBoard board) {
         return run(gameType, Arrays.asList(solver), Arrays.asList(board));
@@ -87,9 +88,9 @@ public class LocalGameRunner {
         field = gameType.createGame(0);
     }
 
-    public LocalGameRunner run(Runnable tick) {
-        Integer count = countIterations;
-        while (!exit && (count == null || count-- > 0)) {
+    public LocalGameRunner run(Runnable onTick) {
+        tick = 0;
+        while (!exit && (countIterations == null || this.tick++ < countIterations)) {
             if (timeout > 0) {
                 try {
                     Thread.sleep(timeout);
@@ -126,7 +127,9 @@ public class LocalGameRunner {
                 out.accept(SEP);
             }
 
-            tick.run();
+            if (onTick != null) {
+                onTick.run();
+            }
         }
         return this;
     }
@@ -225,6 +228,9 @@ public class LocalGameRunner {
 
     private String player(int index, String message) {
         String preffix = (index + 1) + ":";
+        if (printTick) {
+            preffix = tick + ": " + preffix;
+        }
         return preffix + message.replaceAll("\\n", "\n" + preffix);
     }
 

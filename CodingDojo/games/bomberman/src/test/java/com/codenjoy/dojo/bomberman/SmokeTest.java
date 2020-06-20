@@ -62,6 +62,7 @@ public class SmokeTest {
         LocalGameRunner.printConversions = false;
         LocalGameRunner.printBoardOnly = true;
         LocalGameRunner.printDice = false;
+        LocalGameRunner.printTick = true;
 
         String soul = RandomStringUtils.randomNumeric(30);
         soul = "365720020591617326050020278665";
