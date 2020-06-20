@@ -131,16 +131,15 @@ public class OptionGameSettings implements GameSettings {
     }
 
     @Override
-    public Walls getWalls(Bomberman board) {
+    public Walls getWalls() {
         OriginalWalls originalWalls = new OriginalWalls(boardSize);
-        MeatChoppers meatChoppers = new MeatChoppers(originalWalls, board, meatChoppersCount, dice);
+        MeatChoppers meatChoppers = new MeatChoppers(originalWalls, meatChoppersCount, dice);
 
-        EatSpaceWalls eatWalls = new EatSpaceWalls(meatChoppers, board, destroyWallCount, dice);
-        return eatWalls;
+        return new EatSpaceWalls(meatChoppers, destroyWallCount, dice);
     }
 
     @Override
-    public Hero getBomberman(Level level) {
+    public Hero getHero(Level level) {
         PerksSettingsWrapper.clear();
         PerksSettingsWrapper.setDropRatio(perkDropRatio.getValue());
         PerksSettingsWrapper.setPickTimeout(perkPickTimeout.getValue());

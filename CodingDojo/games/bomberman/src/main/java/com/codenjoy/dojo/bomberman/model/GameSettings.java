@@ -33,9 +33,9 @@ public interface GameSettings {
 
     Level getLevel();
 
-    Walls getWalls(Bomberman board);
+    Walls getWalls();
 
-    Hero getBomberman(Level level);
+    Hero getHero(Level level);
 
     Parameter<Integer> getBoardSize();
 

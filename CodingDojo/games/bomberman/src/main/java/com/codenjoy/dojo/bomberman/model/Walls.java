@@ -29,7 +29,10 @@ import com.codenjoy.dojo.services.Tickable;
 import java.util.List;
 
 public interface Walls extends Iterable<Wall>, Tickable {
+
     void add(Point pt);
+
+    void init(Field field);
 
     boolean itsMe(Point pt);
 

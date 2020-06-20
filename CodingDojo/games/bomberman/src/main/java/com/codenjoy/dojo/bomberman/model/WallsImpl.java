@@ -32,6 +32,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 public class WallsImpl implements Walls {
+
     private List<Wall> walls;
 
     public WallsImpl() {
@@ -48,6 +49,11 @@ public class WallsImpl implements Walls {
     @Override
     public void add(Point pt) {
         add(new Wall(pt));
+    }
+
+    @Override
+    public void init(Field field) {
+        // do nothing
     }
 
     @Override

@@ -46,7 +46,7 @@ public class Player extends RoundGamePlayer<Hero, Field> {
         if (hero != null) {
             hero.setPlayer(null);
         }
-        hero = settings.getBomberman(settings.getLevel());
+        hero = settings.getHero(settings.getLevel());
         hero.setPlayer(this);
         hero.init(board);
 

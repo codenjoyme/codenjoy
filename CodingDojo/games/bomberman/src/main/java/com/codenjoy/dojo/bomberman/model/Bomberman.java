@@ -63,7 +63,8 @@ public class Bomberman extends RoundField<Player> implements Field {
 
         dice = settings.getDice();
         size = settings.getBoardSize();
-        walls = settings.getWalls(this);  // TODO как-то красивее сделать
+        walls = settings.getWalls();
+        walls.init(this);
     }
 
     @Override
@@ -389,16 +390,19 @@ public class Bomberman extends RoundField<Player> implements Field {
     // но если мы для героя смотрим - он может пойти к чоперу и на перк
     @Override
     public boolean isBarrier(Point pt, boolean isForHero) {
-        for (Player player : aliveActive()) {
+        List<Player> players = isForHero ? aliveActive() : players();
+        for (Player player : players) {
             if (player.getHero().itsMe(pt)) {
                 return true;
             }
         }
+
         for (Bomb bomb : bombs) {
             if (bomb.itsMe(pt)) {
                 return true;
             }
         }
+
         if (!isForHero) {     // TODO test me митчопер или стена не могут появиться на перке
             if (perks.contains(pt)) {
                 return true;

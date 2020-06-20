@@ -30,6 +30,7 @@ import java.util.List;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class OriginalWalls extends WallsImpl implements Iterable<Wall> {
+
     private int currentSize;
     private Parameter<Integer> size;
 

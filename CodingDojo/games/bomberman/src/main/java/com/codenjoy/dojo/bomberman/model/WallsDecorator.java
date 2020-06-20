@@ -30,7 +30,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class WallsDecorator implements Walls, Tickable {
+
     protected Walls walls;
+    protected Field field;
 
     public WallsDecorator(Walls walls) {
         this.walls = walls;
@@ -44,6 +46,12 @@ public class WallsDecorator implements Walls, Tickable {
     @Override
     public void add(Point pt) {
         walls.add(pt);
+    }
+
+    @Override
+    public void init(Field field) {
+        this.field = field;
+        walls.init(field);
     }
 
     @Override
