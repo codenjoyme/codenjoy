@@ -94,13 +94,13 @@ public class WallsImpl implements Walls {
     public Wall get(Point pt) {
         int index = walls.indexOf(new Wall(pt));
         if (index == -1) {
-            return new Wall(-1, -1);
+            return new NotAWall(-1, -1);
         }
         return walls.get(index);
     }
 
     @Override
     public void tick() {
-        // do nothing
+        new LinkedList<>(walls).forEach(Wall::tick);
     }
 }

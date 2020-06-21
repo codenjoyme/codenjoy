@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.Tickable;
 import java.util.Iterator;
 import java.util.List;
 
-public class WallsDecorator implements Walls, Tickable {
+public abstract class WallsDecorator implements Walls, Tickable {
 
     protected Walls walls;
     protected Field field;
@@ -81,6 +81,9 @@ public class WallsDecorator implements Walls, Tickable {
 
     @Override
     public void tick() {
+        tact();
         walls.tick();
     }
+
+    protected abstract void tact();
 }
