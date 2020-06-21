@@ -23,15 +23,16 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.bomberman.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.bomberman.model.BombermanTest.*;
+import static com.codenjoy.dojo.bomberman.model.BombermanTest.DestroyWallAt;
+import static com.codenjoy.dojo.bomberman.model.BombermanTest.MeatChopperAt;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 public class SingleTest extends AbstractSingleTest {
 
@@ -107,8 +108,9 @@ public class SingleTest extends AbstractSingleTest {
                 "҉    \n" +
                 "҉♣   \n", game(0));
 
-        verify(listener(0), only()).event(Events.KILL_OTHER_HERO);
-        verify(listener(1), only()).event(Events.DIED);
+        verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO]\n" +
+                "listener(1) => [DIED]\n");
     }
 
     @Test
@@ -183,8 +185,9 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n" +
                 "♥ Ѡ  \n", game(1));
 
-        verifyNoMoreInteractions(listener(0));
-        verify(listener(1), only()).event(Events.DIED);
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => [DIED]\n");
     }
 
     // если митчопер убил другого бомбермена, как это на моей доске отобразится? Хочу видеть трупик
@@ -219,8 +222,9 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n" +
                 "♥Ѡ   \n", game(1));
 
-        verifyNoMoreInteractions(listener(0));
-        verify(listener(1), only()).event(Events.DIED);
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => [DIED]\n");
     }
 
     // А что если бомбермен идет на митчопера а тот идет на встречу к нему - бомбермен проскочит или умрет? должен умереть!
@@ -254,8 +258,9 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n" +
                 "♥&Ѡ  \n", game(1));
 
-        verifyNoMoreInteractions(listener(0));
-        verify(listener(1), only()).event(Events.DIED);
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => [DIED]\n");
     }
 
     //  бомбермены не могут ходить по бомбам ни по своим ни по чужим
@@ -498,8 +503,9 @@ public class SingleTest extends AbstractSingleTest {
                 " ҉   \n" +
                 "H҉҉ ☺\n", game(0));
 
-        verify(listener(0)).event(Events.KILL_DESTROY_WALL);
-        verifyNoMoreInteractions(listener(1));
+        verifyAllEvents(
+                "listener(0) => [KILL_DESTROY_WALL]\n" +
+                "listener(1) => []\n");
     }
 
     @Test
@@ -529,8 +535,9 @@ public class SingleTest extends AbstractSingleTest {
                 " ҉   \n" +
                 "x҉҉ ☺\n", game(0));
 
-        verify(listener(0)).event(Events.KILL_MEAT_CHOPPER);
-        verifyNoMoreInteractions(listener(1));
+        verifyAllEvents(
+                "listener(0) => [KILL_MEAT_CHOPPER]\n" +
+                "listener(1) => []\n");
     }
 
     @Test
@@ -565,12 +572,284 @@ public class SingleTest extends AbstractSingleTest {
                 "҉҉҉҉ \n" +
                 "#xx  \n", game(0));
 
-        verify(listener(0), only()).event(Events.KILL_MEAT_CHOPPER);
-        verify(listener(1), only()).event(Events.KILL_MEAT_CHOPPER);
+        verifyAllEvents(
+                "listener(0) => [KILL_MEAT_CHOPPER]\n" +
+                "listener(1) => [KILL_MEAT_CHOPPER]\n");
     }
 
     @Override
     protected RoundSettingsWrapper getRoundSettings() {
         return BombermanTest.getRoundSettings();
+    }
+
+    @Test
+    public void shouldCrossBlasts_checkingScores_whenDestroyWall_caseDied() {
+        walls = new DestroyWallAt(1, 0, new WallsImpl());
+        dice(heroDice,
+                0, 0,
+                2, 0);
+        givenBoard();
+
+        hero(0).act();
+        hero(0).up();
+        hero(1).act();
+        hero(1).up();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "Ѡ ♣  \n" +
+                "҉H҉҉ \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => [DIED, KILL_DESTROY_WALL]\n" +
+                "listener(1) => [DIED, KILL_DESTROY_WALL]\n");
+    }
+
+    @Test
+    public void shouldCrossBlasts_checkingScores_whenDestroyWall_caseAlive() {
+        walls = new DestroyWallAt(1, 0, new WallsImpl());
+        dice(heroDice,
+                0, 0,
+                2, 0);
+        givenBoard();
+
+        hero(0).act();
+        hero(0).up();
+        hero(1).act();
+        hero(1).up();
+        tick();
+
+        hero(0).up();
+        hero(1).up();
+        tick();
+
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺ ♥  \n" +
+                "҉ ҉  \n" +
+                "҉H҉҉ \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => [KILL_DESTROY_WALL]\n" +
+                "listener(1) => [KILL_DESTROY_WALL]\n");
+    }
+
+    @Test
+    public void shouldCrossBlasts_checkingScores_whenTwoDestroyWalls_caseDied() {
+        walls = new DestroyWallAt(2, 0,
+                    new DestroyWallAt(1, 0,
+                            new WallsImpl()));
+
+        bombsPower = 2;
+
+        dice(heroDice,
+                0, 0,
+                3, 0);
+        givenBoard();
+
+        hero(0).act();
+        hero(0).up();
+        hero(1).act();
+        hero(1).up();
+        tick();
+
+        tick();
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "Ѡ  ♣ \n" +
+                "҉HH҉҉\n", game(0));
+
+        // по 1 ачивке за стенку, потому что взрывная волна не проходит через стенку
+        verifyAllEvents(
+                "listener(0) => [DIED, KILL_DESTROY_WALL]\n" +
+                "listener(1) => [DIED, KILL_DESTROY_WALL]\n");
+    }
+
+    @Test
+    public void shouldCrossBlasts_checkingScores_whenFourDestroyWalls_caseDied() {
+        walls = new DestroyWallAt(2, 2, new WallsImpl());
+
+        dice(heroDice,
+                1, 2,
+                2, 1,
+                3, 2,
+                2, 3);
+        givenBoard(4);
+
+        hero(0).act();
+        hero(1).act();
+        hero(2).act();
+        hero(3).act();
+        tick();
+
+        tick();
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("  ҉  \n" +
+                " ҉♣҉ \n" +
+                "҉ѠH♣҉\n" +
+                " ҉♣҉ \n" +
+                "  ҉  \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => [DIED, KILL_DESTROY_WALL]\n" +
+                "listener(1) => [DIED, KILL_DESTROY_WALL]\n" +
+                "listener(2) => [DIED, KILL_DESTROY_WALL]\n" +
+                "listener(3) => [DIED, KILL_DESTROY_WALL]\n");
+    }
+
+    @Test
+    public void shouldCrossBlasts_checkingScores_whenTwoDestroyWalls_caseAlive() {
+        walls = new DestroyWallAt(2, 0,
+                new DestroyWallAt(1, 0,
+                        new WallsImpl()));
+        bombsPower = 2;
+
+        dice(heroDice,
+                0, 0,
+                3, 0);
+        givenBoard();
+
+        hero(0).act();
+        hero(0).up();
+        hero(1).act();
+        hero(1).up();
+        tick();
+
+        hero(0).up();
+        hero(1).up();
+        tick();
+
+        hero(0).up();
+        hero(1).up();
+        tick();
+
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "☺  ♥ \n" +
+                "҉  ҉ \n" +
+                "҉  ҉ \n" +
+                "҉HH҉҉\n", game(0));
+
+        // по 1 ачивке за стенку, потому что взрывная волна не проходит через стенку
+        verifyAllEvents(
+                "listener(0) => [KILL_DESTROY_WALL]\n" +
+                "listener(1) => [KILL_DESTROY_WALL]\n");
+    }
+
+    @Test
+    public void shouldCrossBlasts_checkingScores_whenMeatChopper_caseDied() {
+        walls = new MeatChopperAt(1, 0, new WallsImpl());
+        dice(heroDice,
+                0, 0,
+                2, 0);
+        givenBoard();
+
+        hero(0).act();
+        hero(0).up();
+        hero(1).act();
+        hero(1).up();
+        tick();
+        tick();
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "Ѡ ♣  \n" +
+                "҉x҉҉ \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => [DIED, KILL_MEAT_CHOPPER]\n" +
+                "listener(1) => [DIED, KILL_MEAT_CHOPPER]\n");
+    }
+
+    @Test
+    public void shouldCrossBlasts_checkingScores_whenMeatChopper_caseAlive() {
+        walls = new MeatChopperAt(1, 0, new WallsImpl());
+        dice(heroDice,
+                0, 0,
+                2, 0);
+        givenBoard();
+
+        hero(0).act();
+        hero(0).up();
+        hero(1).act();
+        hero(1).up();
+        tick();
+
+        hero(0).up();
+        hero(1).up();
+        tick();
+
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺ ♥  \n" +
+                "҉ ҉  \n" +
+                "҉x҉҉ \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => [KILL_MEAT_CHOPPER]\n" +
+                "listener(1) => [KILL_MEAT_CHOPPER]\n");
+    }
+
+    @Test
+    public void shouldCrossBlasts_checkingScores_whenFourMeatChoppers_caseDied() {
+        walls = new MeatChopperAt(2, 2, new WallsImpl());
+
+        dice(heroDice,
+                1, 2,
+                2, 1,
+                3, 2,
+                2, 3);
+        givenBoard(4);
+
+        hero(0).act();
+        hero(1).act();
+        hero(2).act();
+        hero(3).act();
+        tick();
+
+        tick();
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("  ҉  \n" +
+                " ҉♣҉ \n" +
+                "҉Ѡx♣҉\n" +
+                " ҉♣҉ \n" +
+                "  ҉  \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => [DIED, KILL_MEAT_CHOPPER]\n" +
+                "listener(1) => [DIED, KILL_MEAT_CHOPPER]\n" +
+                "listener(2) => [DIED, KILL_MEAT_CHOPPER]\n" +
+                "listener(3) => [DIED, KILL_MEAT_CHOPPER]\n");
     }
 }

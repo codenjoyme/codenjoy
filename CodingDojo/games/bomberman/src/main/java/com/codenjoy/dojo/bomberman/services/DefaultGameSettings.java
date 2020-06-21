@@ -141,6 +141,16 @@ public class DefaultGameSettings implements GameSettings {
     }
 
     @Override
+    public Parameter<Integer> getBombPower() {
+        return v(BOMB_POWER);
+    }
+
+    @Override
+    public Parameter<Integer> getBombsCount() {
+        return v(BOMBS_COUNT);
+    }
+
+    @Override
     public Parameter<Integer> getMeatChoppersCount() {
         return v(MEAT_CHOPPERS_COUNT);
     }

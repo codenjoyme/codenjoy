@@ -215,6 +215,16 @@ public class OptionGameSettings implements GameSettings {
     }
 
     @Override
+    public Parameter<Integer> getBombPower() {
+        return bombPower;
+    }
+
+    @Override
+    public Parameter<Integer> getBombsCount() {
+        return bombsCount;
+    }
+
+    @Override
     public Parameter<Integer> getMeatChoppersCount() {
         return meatChoppersCount;
     }

@@ -69,12 +69,11 @@ public abstract class AbstractSingleTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     {
+        settings = mock(GameSettings.class);
         givenWalls();
     }
 
     public void givenBoard(int count) {
-        settings = mock(GameSettings.class);
-
         level = mock(Level.class);
         when(level.bombsCount()).thenReturn(bombsCount);
         when(level.bombsPower()).thenReturn(bombsPower);
