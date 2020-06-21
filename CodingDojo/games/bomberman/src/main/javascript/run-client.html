@@ -26,21 +26,7 @@
         <script src="browser-node-stub.js"></script>
         <script src="runner.js"></script>
         <script src="canvases.js"></script>
-        <script language="javascript">
-            var checkVisibility = function(checkbox, component) {
-                $(checkbox).change(function() {
-                    if ($(this).is(":checked")) {
-                        $(component).css('visibility', 'visible');
-                    } else {
-                        $(component).css('visibility', 'hidden');
-                    }
-                });
-            }
-            $(document).ready(function() {
-                checkVisibility('#show-graphic', '#board-canvas');
-                checkVisibility('#show-text', '#board');
-            });
-        </script>
+        <script src="main.js"></script>
         <style>
             #board {
                 overflow: hidden;
@@ -105,6 +91,7 @@
                     <input type="checkbox" id="add-to-end">Add to end</input>
                     <input type="checkbox" checked="true" id="show-graphic">Graphic</input>
                     <input type="checkbox" checked="true" id="show-text">Text</input>
+                    <input type="checkbox" checked="true" id="client-connect">Connected</input>
                     <br>
                     <textarea id="log-area"></textarea>
                 </td>

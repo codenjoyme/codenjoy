@@ -19,11 +19,13 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+var browser = true;
+
 var printBoardOnTextArea = function(data) {
     if (!!onBoardData) {
         onBoardData(data);
     }
-    var textarea = document.getElementById("board");
+    var textarea = document.getElementById('board');
     if (!textarea) return;
     var size = data.split('\n')[0].length;
     textarea.cols = size;
@@ -34,8 +36,8 @@ var printBoardOnTextArea = function(data) {
 var cache = [];
 
 var printLogOnTextArea = function(data) {
-    var textarea = document.getElementById("log-area");
-    var addToEnd = document.getElementById("add-to-end");
+    var textarea = document.getElementById('log-area');
+    var addToEnd = document.getElementById('add-to-end');
     if (!textarea) return;
     if (addToEnd.checked) {
         cache.push(data);
@@ -52,7 +54,7 @@ var printLogOnTextArea = function(data) {
     var all = '';
     for (var i in cache) {
         var data = cache[i];
-        all = all + "\n" + data;
+        all = all + '\n' + data;
     }
     textarea.value = all;
 }
@@ -61,7 +63,7 @@ var require = function(string) {
     if (string == 'util') {
         return {
             // thanks to http://stackoverflow.com/a/4673436
-            "format":function(format) {
+            'format': function(format) {
                 var args = Array.prototype.slice.call(arguments, 1);
                 var number = -1;
                 return format.replace(/%s/g, function(match) {
@@ -77,21 +79,24 @@ var require = function(string) {
         return function(uri) {
             var socket = new WebSocket(uri);
             return {
-                "on" : function(name, callback) {
-                    if (name == "open") {
+                'on' : function(name, callback) {
+                    if (name == 'open') {
                         socket.onopen = callback;
-                    } else if (name == "close") {
+                    } else if (name == 'close') {
                         socket.onclose = callback;
-                    } else if (name == "error") {
+                    } else if (name == 'error') {
                         socket.onerror = callback;
-                    } if (name == "message") {
+                    } if (name == 'message') {
                         socket.onmessage = function(message) {
                             callback(message.data);
                         }
                     }
                 }, 
-                "send" : function(message) {
+                'send' : function(message) {
                     socket.send(message);
+                },
+                'close' : function(message) {
+                    socket.close();
                 }
             }
         }

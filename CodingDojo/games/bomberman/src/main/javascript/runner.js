@@ -23,14 +23,11 @@
 var util = require('util');
 var WSocket = require('ws');
 
-var printBoardOnTextArea = (typeof printBoardOnTextArea !== 'undefined'
-                            && printBoardOnTextArea !== null)
-                                   ? printBoardOnTextArea
-                                   : false;
+var browser = (browser !== undefined);
 
 var log = function(string) {
     console.log(string);
-    if (printBoardOnTextArea !== undefined && !!printBoardOnTextArea) {
+    if (browser) {
         printLogOnTextArea(string);
     }
 };
@@ -46,7 +43,7 @@ var printArray = function (array) {
 
 var processBoard = function(boardString) {
     var board = new Board(boardString);
-        if (!!printBoardOnTextArea) {
+    if (browser) {
         printBoardOnTextArea(board.boardAsString());
     }
 
@@ -67,34 +64,38 @@ url = url.replace("http", "ws");
 url = url.replace("board/player/", "ws?user=");
 url = url.replace("?code=", "&code=");
 
-var ws;
-
 function connect() {
-    ws = new WSocket(url);
+    var socket = new WSocket(url);
     log('Opening...');
 
-    ws.on('open', function() {
+    socket.on('open', function() {
         log('Web socket client opened ' + url);
     });
 
-    ws.on('close', function() {
+    socket.on('close', function() {
         log('Web socket client closed');
 
-        setTimeout(function() {
-            connect();
-        }, 5000);
+        if (!browser) {
+            setTimeout(function() {
+                connect();
+            }, 5000);
+        }
     });
 
-    ws.on('message', function(message) {
+    socket.on('message', function(message) {
         var pattern = new RegExp(/^board=(.*)$/);
         var parameters = message.match(pattern);
         var boardString = parameters[1];
         var answer = processBoard(boardString);
-        ws.send(answer);
+        socket.send(answer);
     });
+
+    return socket;
 }
 
-connect();
+if (!browser) {
+    connect();
+}
 
 var Element = {
     /// This is your Bomberman
