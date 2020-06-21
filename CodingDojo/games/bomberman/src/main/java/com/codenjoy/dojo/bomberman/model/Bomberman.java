@@ -50,7 +50,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     private final List<Bomb> bombs = new LinkedList<>();
     private final List<Blast> blasts = new LinkedList<>();
     private final GameSettings settings;
-    private final List<Point> destroyedWalls = new LinkedList<>();
+    private final List<Wall> destroyedWalls = new LinkedList<>();
     private final List<Bomb> destroyedBombs = new LinkedList<>();
     private final Dice dice;
     private List<PerkOnBoard> perks = new LinkedList<>();
@@ -136,9 +136,14 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     private void removeBlasts() {
         blasts.clear();
-        for (Point pt : destroyedWalls) {
-            walls.destroy(pt);
+
+        for (Wall wall : destroyedWalls) {
+            if (wall instanceof DestroyWall) {
+                dropPerk(wall, dice);
+            }
+            walls.destroy(wall);
         }
+
         destroyedWalls.clear();
     }
 
@@ -217,10 +222,10 @@ public class Bomberman extends RoundField<Player> implements Field {
     private void killAllNear(List<Blast> blasts) {
         killHeroes(blasts);
         killPerks(blasts);
-        killWalls(blasts);
+        killWallsAndChoppers(blasts);
     }
 
-    private void killWalls(List<Blast> blasts) {
+    private void killWallsAndChoppers(List<Blast> blasts) {
         // собираем все разрушаемые стенки которые уже есть в радиусе
         // надо определить кто кого чем кикнул (ызрывные волны могут пересекаться)
         List<Wall> all = walls.subList(Wall.class);
@@ -241,11 +246,7 @@ public class Bomberman extends RoundField<Player> implements Field {
 
         // вначале прибиваем стенки
         preys.forEach(wall -> {
-            if (dropPerk(wall, dice)) {
-                walls.destroy(wall);
-            } else {
-                destroyedWalls.add(wall);
-            }
+            destroyedWalls.add(wall);
         });
 
         // а потом все виновники получают свои ачивки
@@ -293,7 +294,10 @@ public class Bomberman extends RoundField<Player> implements Field {
 
             deathMatch.get(hunter).forEach(perk -> {
                 hunter.event(Events.DROP_PERK);
-                // TODO вот тут надо посылать охотника за ним
+
+                // TODO может это делать на этапе, когда balsts развиднеется в removeBlasts
+                blasts.remove(perk);
+                walls.add(new MeatChopperHunter(perk, hunter));
             });
         });
     }

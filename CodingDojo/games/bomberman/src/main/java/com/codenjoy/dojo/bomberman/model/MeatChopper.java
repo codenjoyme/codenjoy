@@ -23,24 +23,35 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.*;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.DEAD_MEAT_CHOPPER;
-import static com.codenjoy.dojo.bomberman.model.Elements.MEAT_CHOPPER;
+import java.util.HashSet;
+import java.util.Set;
+
+import static com.codenjoy.dojo.bomberman.model.Elements.*;
 import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
 
-public class MeatChopper extends Wall implements State<Elements, Player> {
+public class MeatChopper extends Wall implements State<Elements, Player>, Tickable {
 
-    private Direction direction;
+    public static final int MAX = 100;
 
-    public MeatChopper(Point pt) {
+    protected Dice dice;
+    protected Field field;
+    protected Direction direction;
+    protected boolean stop = false;
+
+    public MeatChopper(Point pt, Field field, Dice dice) {
         super(pt);
+        this.field = field;
+        this.dice = dice;
     }
 
     public MeatChopper(int x, int y) {
         super(x, y);
+    }
+
+    public void stop() {
+        this.stop = true;
     }
 
     @Override
@@ -53,6 +64,7 @@ public class MeatChopper extends Wall implements State<Elements, Player> {
     }
 
     public void setDirection(Direction direction) {
+        stop = false;
         this.direction = direction;
     }
 
@@ -61,6 +73,11 @@ public class MeatChopper extends Wall implements State<Elements, Player> {
         Blast blast = filterOne(alsoAtPoint, Blast.class);
         if (blast != null) {
             return DEAD_MEAT_CHOPPER;
+        }
+
+        DestroyWall wall = filterOne(alsoAtPoint, DestroyWall.class);
+        if (wall != null) {
+            return DESTROYED_WALL;
         }
 
         return MEAT_CHOPPER;

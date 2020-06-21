@@ -27,6 +27,7 @@ import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.Events;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.bomberman.services.Events.DIED;
 import static com.codenjoy.dojo.bomberman.services.Events.DROP_PERK;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -62,8 +63,19 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "# # ##\n" +
                 "# ☺  #\n" +
                 "#҉# ##\n" +
-                "+҉҉  #\n" +
+                "H҉҉  #\n" +
                 "#H####\n");
+
+        // when
+        field.tick();
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "# ☺  #\n" +
+                "# # ##\n" +
+                "+    #\n" +
+                "# ####\n");
     }
 
     // новый бобмер не может появиться на перке
@@ -95,7 +107,18 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "# # ##\n" +
                 "#    #\n" +
                 "#҉# ##\n" +
-                "+҉Ѡ  #\n" +
+                "H҉Ѡ  #\n" +
+                "#H####\n");
+
+        // when
+        field.tick();
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                "+ Ѡ  #\n" +
                 "#+####\n");
 
         // when
@@ -150,7 +173,20 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "# # ##\n" +
                 "#    #\n" +
                 "#҉# ##\n" +
-                "+҉҉☺ #\n" +
+                "H҉҉☺ #\n" +
+                "#H####\n");
+
+        assertEquals("[]", field.perks().toString());
+
+        // when
+        field.tick();
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                "+  ☺ #\n" +
                 "#+####\n");
 
         // when
@@ -222,7 +258,21 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "# # ##\n" +
                 "#    #\n" +
                 "#҉# ##\n" +
-                "+҉҉☺ #\n" +
+                "H҉҉☺ #\n" +
+                "#H####\n");
+
+        assertEquals("[]", field.perks().toString());
+
+
+        // when
+        field.tick();
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                "+  ☺ #\n" +
                 "#+####\n");
 
         assertEquals("[{PerkOnBoard {BOMB_BLAST_RADIUS_INCREASE('+') value=4, timeout=3, timer=3, pick=4} at [0,1]}, " +
@@ -303,25 +353,104 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         field.tick();
 
         // перк разрушен
-        asrtBrd("#+####\n" +
+        // а вместо него злой митчопер
+        asrtBrd("#H####\n" +
                 "#҉# ##\n" +
                 "#҉   #\n" +
                 "#҉#☺##\n" +
-                "҉҉҉҉҉+\n" +
-                "#҉####\n");
+                "҉҉҉҉҉H\n" +
+                "#&####\n");
 
         // пошел сигнал об этом
         verify(listener).event(DROP_PERK);
 
-        // и на следующую секунду перка там нет
+        // такой себе хак, мы в домике
+        hero.move(3, 4);
+        field.walls().add(new DestroyWall(1, 2));
+        field.walls().add(new DestroyWall(1, 3));
+        field.walls().add(new Wall(1, 4));
+
+        // when
+        field.tick();
+
+        // митчопер начал свое движение
+        asrtBrd("#+####\n" +
+                "#☼#☺##\n" +
+                "##   #\n" +
+                "### ##\n" +
+                " &   +\n" +
+                "# ####\n");
+
         field.tick();
 
         asrtBrd("#+####\n" +
-                "# # ##\n" +
-                "#    #\n" +
-                "# #☺##\n" +
+                "#☼#☺##\n" +
+                "##   #\n" +
+                "#H# ##\n" +
                 "     +\n" +
                 "# ####\n");
+
+        field.tick();
+
+        asrtBrd("#+####\n" +
+                "#☼#☺##\n" +
+                "#H   #\n" +
+                "# # ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        field.tick();
+
+        asrtBrd("#+####\n" +
+                "#☼#☺##\n" +
+                "# &  #\n" +
+                "# # ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        field.tick();
+
+        asrtBrd("#+####\n" +
+                "#☼H☺##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        field.tick();
+
+        asrtBrd("#+####\n" +
+                "#☼ Ѡ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        verify(listener).event(DIED);
+
+        field.tick();
+
+        asrtBrd("#+####\n" +
+                "#☼ Ѡ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        dice(heroDice,
+                1, 1);
+        field.tick();
+        newGameForDied(); // это сделает сервер
+
+        field.tick();
+
+        asrtBrd("#+####\n" +
+                "#☼  ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                " ☺   +\n" +
+                "# ####\n");
+
     }
 
     // проверяем, что перк пропадает после таймаута

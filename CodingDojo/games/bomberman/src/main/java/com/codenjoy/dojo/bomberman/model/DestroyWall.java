@@ -26,8 +26,7 @@ package com.codenjoy.dojo.bomberman.model;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.DESTROYABLE_WALL;
-import static com.codenjoy.dojo.bomberman.model.Elements.DESTROYED_WALL;
+import static com.codenjoy.dojo.bomberman.model.Elements.*;
 import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
 
 public class DestroyWall extends Wall implements State<Elements, Player> {
@@ -50,6 +49,11 @@ public class DestroyWall extends Wall implements State<Elements, Player> {
         Blast blast = filterOne(alsoAtPoint, Blast.class);
         if (blast != null) {
             return DESTROYED_WALL;
+        }
+
+        MeatChopperHunter chopper = filterOne(alsoAtPoint, MeatChopperHunter.class);
+        if (chopper != null) {
+            return chopper.state(player, alsoAtPoint);
         }
 
         return DESTROYABLE_WALL;
