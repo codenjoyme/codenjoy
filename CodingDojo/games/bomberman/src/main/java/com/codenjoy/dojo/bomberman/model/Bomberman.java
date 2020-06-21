@@ -89,6 +89,11 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     @Override
+    public Dice dice() {
+        return dice;
+    }
+
+    @Override
     public int size() {
         return size.getValue();
     }
@@ -391,7 +396,7 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     @Override
     public Walls walls() {
-        return new WallsImpl(walls);
+        return walls;
     }
 
     // препятствие это все, чем может быть занята клеточка

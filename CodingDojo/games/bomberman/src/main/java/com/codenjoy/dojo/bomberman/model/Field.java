@@ -24,6 +24,7 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.round.RoundGameField;
 
@@ -32,6 +33,8 @@ import java.util.List;
 public interface Field extends RoundGameField<Player> {  // TODO применить тут ISP (все ли методы должны быть паблик?)
 
     boolean FOR_HERO = true;
+
+    Dice dice();
 
     int size();
 
