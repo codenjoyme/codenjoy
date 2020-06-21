@@ -8,8 +8,8 @@
     });
 }
 
-var connectDisconnect = function() {
-    if ($('#client-connect').prop('checked')) {
+var apply = function(isConnect) {
+    if (isConnect) {
          ws = connect();
 
          ws.on('open', function() {
@@ -27,14 +27,57 @@ var connectDisconnect = function() {
     }
 }
 
+var joystickSolver = function(board){
+     return {
+         get : function() {
+             return Direction.LEFT;
+         }
+     };
+};
+
+var applyCheck = function(isConnect) {
+    $('#client-connect').prop('checked', isConnect);
+    apply(isConnect);
+}
+
+var _connect = function() {
+    applyCheck(true);
+}
+
+var _disconnect = function() {
+    applyCheck(false);
+}
+
+var oldSolver = null;
+
+var joystickEnableDisable = function() {
+    if ($('#client-connect').prop('checked')) {
+        _disconnect();
+    }
+
+    if ($('#joystick').prop('checked')) {
+        oldSolver = DirectionSolver;
+        DirectionSolver = joystickSolver;
+
+        _connect();
+    } else {
+        DirectionSolver = oldSolver;
+        oldSolver = null;
+    }
+}
+
 var ws = null;
 
 $(document).ready(function() {
     checkVisibility('#show-graphic', '#board-canvas');
     checkVisibility('#show-text', '#board');
 
-    $('#client-connect').change(connectDisconnect);
-    $('#client-connect').prop('checked', true);
-    connectDisconnect();
+    $('#client-connect').change(function() {
+        apply(this.checked);
+    });
+    _connect();
+
+    $('#joystick').prop('checked', false);
+    $('#joystick').change(joystickEnableDisable);
 });
 
