@@ -47,7 +47,7 @@ var parseCommand = function(event) {
     if (keyCode == 0) {
         keyCode = event.charCode;
     }
-    var actPre = event.ctrlKey ? "act," : "";
+    var actPre = (event.shiftKey | event.ctrlKey) ? "act," : "";
     var actPost = event.altKey ? ",act" : "";
     switch (keyCode) {
         case 38 : return actPre + "up" + actPost;
