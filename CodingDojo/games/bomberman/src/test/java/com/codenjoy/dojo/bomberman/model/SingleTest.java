@@ -716,6 +716,44 @@ public class SingleTest extends AbstractSingleTest {
     }
 
     @Test
+    public void shouldCrossBlasts_checkingScores_whenFourDestroyWalls_caseDied_caseNotEqualPosition() {
+        walls = new DestroyWallAt(1, 1,
+                    new DestroyWallAt(2, 2,
+                        new DestroyWallAt(0, 2,
+                            new WallsImpl())));
+
+        dice(heroDice,
+                1, 2,
+                2, 1,
+                3, 2,
+                2, 3);
+        givenBoard(4);
+
+        hero(0).act();
+        hero(1).act();
+        hero(2).act();
+        hero(3).act();
+        tick();
+
+        tick();
+        tick();
+        tick();
+        tick();
+
+        asrtBrd("  ҉  \n" +
+                " ҉♣҉ \n" +
+                "HѠH♣҉\n" +  // первую стенку подбил монополист, центральную все
+                " H♣҉ \n" +  // эту стенку подбили только лвое
+                "  ҉  \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => [DIED, KILL_DESTROY_WALL, KILL_DESTROY_WALL, KILL_DESTROY_WALL]\n" +
+                "listener(1) => [DIED, KILL_DESTROY_WALL, KILL_DESTROY_WALL]\n" +
+                "listener(2) => [DIED, KILL_DESTROY_WALL]\n" +
+                "listener(3) => [DIED, KILL_DESTROY_WALL]\n");
+    }
+
+    @Test
     public void shouldCrossBlasts_checkingScores_whenTwoDestroyWalls_caseAlive() {
         walls = new DestroyWallAt(2, 0,
                 new DestroyWallAt(1, 0,
