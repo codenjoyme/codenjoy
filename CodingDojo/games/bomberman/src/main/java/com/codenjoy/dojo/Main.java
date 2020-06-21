@@ -55,11 +55,12 @@ public class Main {
         String log = System.getProperty("log", "output.txt");
         String showPlayers = System.getProperty("showPlayers", null);
         boolean logTime = Boolean.valueOf(System.getProperty("logTime", "true"));
+        boolean logDisable = Boolean.valueOf(System.getProperty("logDisable", "false"));
         String settingsString = System.getProperty("settings", "{}");
         String game = "bomberman";
 
         File file = setupLog(log);
-        LocalGameRunner.out = setupOutput(file, logTime);
+        LocalGameRunner.out = setupOutput(file, logTime, logDisable);
         LocalGameRunner.out.accept("Log file is here: " + file.getAbsolutePath());
 
         Dice dice = new RandomDice();
@@ -97,14 +98,18 @@ public class Main {
 
         LocalGameRunner.out.accept("If you want to change something, please use command:\n" +
                         "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 " +
-                        "-Dlog=\"output.txt\" -DlogTime=true -DshowPlayers=\"2,3\" " +
+                        "-DlogDisable=false -Dlog=\"output.txt\" -DlogTime=true -DshowPlayers=\"2,3\" " +
                         "-Dsettings=\"{'boardSize':11, 'bombPower':7}\"\n");
 
         LocalGameRunner.showPlayers = showPlayers;
         LocalWSGameRunner.run(gameType, host, port, timeout);
     }
 
-    private static Consumer<String> setupOutput(File file, boolean logTime) {
+    private static Consumer<String> setupOutput(File file, boolean logTime, boolean logDisable) {
+        if (logDisable) {
+            return message -> {};
+        }
+
         return message -> {
             String time = Main.format.format(Calendar.getInstance().getTime());
 
