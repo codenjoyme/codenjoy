@@ -95,7 +95,7 @@ var onKeyDown = function(event) {
         return;
     }
 
-    if (hasData) {
+    if (!!boardData) {
         sendSockets = true;
         ws.send(command);
         sendSockets = false;
@@ -118,7 +118,7 @@ var joystickEnableDisable = function() {
     } else {
         sendSockets = true;
         if (isServerConnected()) {
-            ws.send('');
+            ws.send(processBoard(boardData));
         }
     }
 }
