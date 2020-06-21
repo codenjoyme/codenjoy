@@ -144,7 +144,7 @@ public class Board extends AbstractBoard<Elements> {
         Collection<Point> result = new LinkedList<>();
         for (Point bomb : bombs) {
             result.add(bomb);
-            // TODO remove duplicate (check same logic inside parrent isNear for example)
+            // TODO remove duplicate (check same logic inside parent isNear for example)
             result.add(pt(bomb.getX() - 1, bomb.getY()));
             result.add(pt(bomb.getX() + 1, bomb.getY()));
             result.add(pt(bomb.getX(), bomb.getY() - 1));
