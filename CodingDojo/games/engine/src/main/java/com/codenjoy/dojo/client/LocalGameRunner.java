@@ -91,44 +91,48 @@ public class LocalGameRunner {
     public LocalGameRunner run(Consumer<Integer> onTick) {
         tick = 0;
         while (!exit && (countIterations == null || this.tick++ < countIterations)) {
-            if (timeout > 0) {
-                try {
-                    Thread.sleep(timeout);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            synchronized (this) {
-                List<String> answers = new LinkedList<>();
-                for (Game game : games) {
-                    answers.add(askAnswer(games.indexOf(game)));
-                }
-
-                for (Game game : games) {
-                    int index = games.indexOf(game);
-                    String answer = answers.get(index);
-
-                    if (answer != null) {
-                        new PlayerCommand(game.getJoystick(), answer).execute();
+            try {
+                if (timeout > 0) {
+                    try {
+                        Thread.sleep(timeout);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
                 }
 
-                for (int index = 0; index < games.size(); index++) {
-                    Game single = games.get(index);
-                    if (single.isGameOver()) {
-                        print(index, "PLAYER_GAME_OVER -> START_NEW_GAME");
-                        single.newGame();
+                synchronized (this) {
+                    List<String> answers = new LinkedList<>();
+                    for (Game game : games) {
+                        answers.add(askAnswer(games.indexOf(game)));
                     }
+
+                    for (Game game : games) {
+                        int index = games.indexOf(game);
+                        String answer = answers.get(index);
+
+                        if (answer != null) {
+                            new PlayerCommand(game.getJoystick(), answer).execute();
+                        }
+                    }
+
+                    for (int index = 0; index < games.size(); index++) {
+                        Game single = games.get(index);
+                        if (single.isGameOver()) {
+                            print(index, "PLAYER_GAME_OVER -> START_NEW_GAME");
+                            single.newGame();
+                        }
+                    }
+
+                    field.tick();
+
+                    out.accept(SEP);
                 }
 
-                field.tick();
-
-                out.accept(SEP);
-            }
-
-            if (onTick != null) {
-                onTick.accept(tick);
+                if (onTick != null) {
+                    onTick.accept(tick);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return this;
