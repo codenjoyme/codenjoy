@@ -87,7 +87,7 @@ var parseCommand = function(event) {
 }
 
 var onKeyDown = function(event) {
-    if (!isJoystickEnabled) {
+    if (!isServerConnected() || !isJoystickEnabled) {
         return;
     }
     var command = parseCommand(event);
@@ -126,8 +126,12 @@ var isJoystickEnabled = function() {
     return $('#joystick').prop('checked');
 }
 
+var isServerConnected = function() {
+    return $('#client-connect').prop('checked');
+}
+
 var joystickEnableDisable = function() {
-    if ($('#client-connect').prop('checked')) {
+    if (isServerConnected()) {
         _disconnect();
     }
 
