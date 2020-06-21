@@ -81,6 +81,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     @Test
     public void shouldAllPlayersOnBoardIsInactive_whenStart() {
         playersPerRoom.update(DEFAULT_COUNT);
+        setup();
 
         dice(heroDice,
                 0, 0,
@@ -235,6 +236,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     public void shouldMoveToInactive_whenKillSomeone() {
         playersPerRoom.update(DEFAULT_COUNT);
         timeBeforeStart = 1; // TODO а что будет если тут 0 игра хоть начнется?
+        setup();
 
         dice(heroDice,
                 0, 0,
@@ -332,6 +334,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     public void shouldGetWinRoundScores_whenKillAllEnemies() {
         playersPerRoom.update(DEFAULT_COUNT);
         timeBeforeStart = 1;
+        setup();
 
         dice(heroDice,
                 1, 1, // первый игрок
@@ -415,6 +418,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     public void shouldGetWinRoundScores_whenKillOneAndAnotherLeaveTheGame() {
         playersPerRoom.update(DEFAULT_COUNT);
         timeBeforeStart = 1;
+        setup();
 
         dice(heroDice,
                 1, 1, // первый игрок, кто побежит
@@ -567,6 +571,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
 
         playersPerRoom.update(count);
         timeBeforeStart = 1;
+        setup();
 
         dice(heroDice,
                 1, 1, // первый игрок
@@ -688,6 +693,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
 
         playersPerRoom.update(count);
         timeBeforeStart = 1;
+        setup();
 
         dice(heroDice,
                 1, 1, // первый активный игрок - будет победителем
@@ -865,6 +871,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
 
         playersPerRoom.update(count);
         timeBeforeStart = 1;
+        setup();
 
         dice(heroDice,
                 1, 1, // первый активный игрок - будет проигравшим
@@ -874,7 +881,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
                 3, 4, // жертва второго
                 4, 3); // жертва второго
 
-        givenWalls(new DestroyWall(3, 2));
+        destroyWallAt(3, 2);
         givenBoard(count);
 
         tick();
@@ -1099,6 +1106,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         playersPerRoom.update(DEFAULT_COUNT);
         timeBeforeStart = 1;
         timePerRound = 20;
+        setup();
 
         dice(heroDice,
                 0, 0, // первый игрок
@@ -1320,6 +1328,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         playersPerRoom.update(count);
         timeBeforeStart = 1;
         timePerRound = 60; // до конца раунда целая минута
+        setup();
 
         dice(heroDice,
                 4, 4, // первый игрок
@@ -1409,12 +1418,12 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     // - от имени жертвы я вижу свой трупик, мне пофиг уже что на карте происходит, главное где поставить памятник герою
     @Test
     public void shouldDrawMeatChopper_onPlaceOfDeath() {
-        MeatChopper chopper = new MeatChopper(1, 1);
-        givenWalls(chopper);
-
         playersPerRoom.update(DEFAULT_COUNT);
         timeBeforeStart = 1;
         timePerRound = 20;
+        setup();
+
+        MeatChopper chopper = meatChopperAt(1, 1);
 
         dice(heroDice,
                 0, 0, // первый игрок
@@ -1499,12 +1508,12 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
     // приоритет прорисовки такой: 1) митчопер 2) бомба 3) останки
     @Test
     public void shouldDrawMeatChopper_onPlaceOfDeath_withBomb() {
-        MeatChopper chopper = new MeatChopper(1, 1);
-        givenWalls(chopper);
-
         playersPerRoom.update(DEFAULT_COUNT);
         timeBeforeStart = 1;
         timePerRound = 20;
+        setup();
+
+        MeatChopper chopper = meatChopperAt(1, 1);
 
         dice(heroDice,
                 0, 0, // первый игрок
@@ -1639,6 +1648,7 @@ public class RoundBattleSingleTest extends AbstractSingleTest {
         timeBeforeStart = 1;
         timePerRound = 60;
         timeForWinner = 15; // после победы я хочу еще чуть повисеть на уровне
+        setup();
 
         dice(heroDice,
                 0, 0, // первый игрок

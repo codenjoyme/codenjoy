@@ -23,27 +23,35 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
+import org.junit.Before;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.bomberman.model.BombermanTest.DestroyWallAt;
-import static com.codenjoy.dojo.bomberman.model.BombermanTest.MeatChopperAt;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class SingleTest extends AbstractSingleTest {
 
+    @Before
+    public void setup() {
+        super.setup();
+    }
+
     @Test
     public void shouldGameReturnsRealJoystick() {
         givenBoard();
+
         hero(0).act();
         hero(1).up();
         tick();
+
         hero(1).up();
         tick();
+
         tick();
         tick();
         tick();
@@ -96,8 +104,10 @@ public class SingleTest extends AbstractSingleTest {
         hero(0).act();
         hero(0).up();
         tick();
+
         hero(0).up();
         tick();
+
         tick();
         tick();
         tick();
@@ -156,7 +166,8 @@ public class SingleTest extends AbstractSingleTest {
     // бомбермен может идти на митчопера, при этом он умирает
     @Test
     public void shouldKllOtherHeroWhenHeroGoToMeatChopper() {
-        walls = new MeatChopperAt(2, 0, new WallsImpl());
+        meatChopperAt(2, 0);
+
         dice(heroDice,
                 0, 0,
                 1, 0);
@@ -193,7 +204,8 @@ public class SingleTest extends AbstractSingleTest {
     // если митчопер убил другого бомбермена, как это на моей доске отобразится? Хочу видеть трупик
     @Test
     public void shouldKllOtherHeroWhenMeatChopperGoToIt() {
-        meatChopperAt(2, 0);
+        MeatChopper chopper = meatChopperAt(2, 0);
+
         dice(heroDice,
                 0, 0,
                 1, 0);
@@ -205,7 +217,7 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n" +
                 "☺♥&  \n", game(0));
 
-        dice(meatDice, Direction.LEFT.value());
+        chopper.setDirection(Direction.LEFT);
         tick();
 
         // от имени наблюдателя я там вижу опасность - митчопера, мне не интересны останки игроков
@@ -230,7 +242,8 @@ public class SingleTest extends AbstractSingleTest {
     // А что если бомбермен идет на митчопера а тот идет на встречу к нему - бомбермен проскочит или умрет? должен умереть!
     @Test
     public void shouldKllOtherHeroWhenMeatChopperAndHeroMoves() {
-        meatChopperAt(2, 0);
+        MeatChopper chopper = meatChopperAt(2, 0);
+
         dice(heroDice,
                 0, 0,
                 1, 0);
@@ -242,7 +255,7 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n" +
                 "☺♥&  \n", game(0));
 
-        dice(meatDice, Direction.LEFT.value());
+        chopper.setDirection(Direction.LEFT);
         hero(1).right();
         tick();
 
@@ -274,6 +287,7 @@ public class SingleTest extends AbstractSingleTest {
         hero(1).act();
         hero(1).right();
         tick();
+
         hero(1).right();
         hero(0).right();
         tick();
@@ -286,6 +300,7 @@ public class SingleTest extends AbstractSingleTest {
 
         hero(1).left();
         tick();
+
         hero(1).left();
         tick();
 
@@ -305,6 +320,7 @@ public class SingleTest extends AbstractSingleTest {
         shouldHeroCantGoToBombFromAnotherHero();
 
         tick();
+
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -321,13 +337,17 @@ public class SingleTest extends AbstractSingleTest {
     @Test
     public void shouldNewGamesWhenKillAll() {
         shouldBombKillAllHero();
+
         when(settings.getHero(any(Level.class))).thenReturn(new Hero(level, heroDice), new Hero(level, heroDice));
+
         dice(heroDice,
                 0, 0,
                 1, 0);
         game(0).newGame();
         game(1).newGame();
+
         tick();
+
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -345,6 +365,7 @@ public class SingleTest extends AbstractSingleTest {
     @Test
     public void shouldTwoBombsOnBoard() {
         bombsCount = 1;
+
         dice(heroDice,
                 0, 0,
                 1, 0);
@@ -430,7 +451,6 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n" +
                 "33   \n" +
                 "22   \n", game(0));
-
     }
 
     @Test
@@ -478,7 +498,8 @@ public class SingleTest extends AbstractSingleTest {
 
     @Test
     public void shouldFireEventWhenKillWallOnlyForOneHero() {
-        walls = new DestroyWallAt(0, 0, new WallsImpl());
+        destroyWallAt(0, 0);
+
         dice(heroDice,
                 1, 0,
                 1, 1);
@@ -506,11 +527,20 @@ public class SingleTest extends AbstractSingleTest {
         verifyAllEvents(
                 "listener(0) => [KILL_DESTROY_WALL]\n" +
                 "listener(1) => []\n");
+
+        tick();
+
+        asrtBrd(" ♥   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "    ☺\n", game(0));
     }
 
     @Test
     public void shouldFireEventWhenKillMeatChopper() {
-        walls = new MeatChopperAt(0, 0, new WallsImpl());
+        meatChopperAt(0, 0);
+
         dice(heroDice,
                 1, 0,
                 1, 1);
@@ -538,11 +568,22 @@ public class SingleTest extends AbstractSingleTest {
         verifyAllEvents(
                 "listener(0) => [KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => []\n");
+
+        tick();
+
+        asrtBrd(" ♥   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "    ☺\n", game(0));
     }
 
     @Test
     public void bug() {
-        walls = new DestroyWallAt(0, 0, new MeatChopperAt(1, 0, new MeatChopperAt(2, 0, new WallsImpl())));
+        destroyWallAt(0, 0);
+        meatChopperAt(1, 0);
+        meatChopperAt(2, 0);
+
         dice(heroDice,
                 1, 1,
                 2, 1);
@@ -559,9 +600,11 @@ public class SingleTest extends AbstractSingleTest {
         hero(1).act();
         hero(1).up();
         tick();
+
         hero(0).left();
         hero(1).right();
         tick();
+
         tick();
         tick();
         tick();
@@ -575,6 +618,14 @@ public class SingleTest extends AbstractSingleTest {
         verifyAllEvents(
                 "listener(0) => [KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => [KILL_MEAT_CHOPPER]\n");
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺  ♥ \n" +
+                "     \n" +
+                "#    \n", game(0));
     }
 
     @Override
@@ -584,7 +635,8 @@ public class SingleTest extends AbstractSingleTest {
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenDestroyWall_caseDied() {
-        walls = new DestroyWallAt(1, 0, new WallsImpl());
+        destroyWallAt(1, 0);
+
         dice(heroDice,
                 0, 0,
                 2, 0);
@@ -609,11 +661,20 @@ public class SingleTest extends AbstractSingleTest {
         verifyAllEvents(
                 "listener(0) => [DIED, KILL_DESTROY_WALL]\n" +
                 "listener(1) => [DIED, KILL_DESTROY_WALL]\n");
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "Ѡ ♣  \n" +
+                "     \n", game(0));
     }
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenDestroyWall_caseAlive() {
-        walls = new DestroyWallAt(1, 0, new WallsImpl());
+        destroyWallAt(1, 0);
+
         dice(heroDice,
                 0, 0,
                 2, 0);
@@ -642,13 +703,20 @@ public class SingleTest extends AbstractSingleTest {
         verifyAllEvents(
                 "listener(0) => [KILL_DESTROY_WALL]\n" +
                 "listener(1) => [KILL_DESTROY_WALL]\n");
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺ ♥  \n" +
+                "     \n" +
+                "     \n", game(0));
     }
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenTwoDestroyWalls_caseDied() {
-        walls = new DestroyWallAt(2, 0,
-                    new DestroyWallAt(1, 0,
-                            new WallsImpl()));
+        destroyWallAt(2, 0);
+        destroyWallAt(1, 0);
 
         bombsPower = 2;
 
@@ -678,11 +746,19 @@ public class SingleTest extends AbstractSingleTest {
         verifyAllEvents(
                 "listener(0) => [DIED, KILL_DESTROY_WALL]\n" +
                 "listener(1) => [DIED, KILL_DESTROY_WALL]\n");
+
+         tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "Ѡ  ♣ \n" +
+                "     \n", game(0));
     }
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenFourDestroyWalls_caseDied() {
-        walls = new DestroyWallAt(2, 2, new WallsImpl());
+        destroyWallAt(2, 2);
 
         dice(heroDice,
                 1, 2,
@@ -713,14 +789,21 @@ public class SingleTest extends AbstractSingleTest {
                 "listener(1) => [DIED, KILL_DESTROY_WALL]\n" +
                 "listener(2) => [DIED, KILL_DESTROY_WALL]\n" +
                 "listener(3) => [DIED, KILL_DESTROY_WALL]\n");
+
+        tick();
+
+        asrtBrd("     \n" +
+                "  ♣  \n" +
+                " Ѡ ♣ \n" +
+                "  ♣  \n" +
+                "     \n", game(0));
     }
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenFourDestroyWalls_caseDied_caseNotEqualPosition() {
-        walls = new DestroyWallAt(1, 1,
-                    new DestroyWallAt(2, 2,
-                        new DestroyWallAt(0, 2,
-                            new WallsImpl())));
+        destroyWallAt(1, 1);
+        destroyWallAt(2, 2);
+        destroyWallAt(0, 2);
 
         dice(heroDice,
                 1, 2,
@@ -751,13 +834,21 @@ public class SingleTest extends AbstractSingleTest {
                 "listener(1) => [DIED, KILL_DESTROY_WALL, KILL_DESTROY_WALL]\n" +
                 "listener(2) => [DIED, KILL_DESTROY_WALL]\n" +
                 "listener(3) => [DIED, KILL_DESTROY_WALL]\n");
+
+        tick();
+
+        asrtBrd("     \n" +
+                "  ♣  \n" +
+                " Ѡ ♣ \n" +
+                "  ♣  \n" +
+                "     \n", game(0));
     }
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenTwoDestroyWalls_caseAlive() {
-        walls = new DestroyWallAt(2, 0,
-                new DestroyWallAt(1, 0,
-                        new WallsImpl()));
+        destroyWallAt(2, 0);
+        destroyWallAt(1, 0);
+
         bombsPower = 2;
 
         dice(heroDice,
@@ -792,11 +883,20 @@ public class SingleTest extends AbstractSingleTest {
         verifyAllEvents(
                 "listener(0) => [KILL_DESTROY_WALL]\n" +
                 "listener(1) => [KILL_DESTROY_WALL]\n");
+
+        tick();
+
+        asrtBrd("     \n" +
+                "☺  ♥ \n" +
+                "     \n" +
+                "     \n" +
+                "     \n", game(0));
     }
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenMeatChopper_caseDied() {
-        walls = new MeatChopperAt(1, 0, new WallsImpl());
+        meatChopperAt(1, 0);
+
         dice(heroDice,
                 0, 0,
                 2, 0);
@@ -821,11 +921,20 @@ public class SingleTest extends AbstractSingleTest {
         verifyAllEvents(
                 "listener(0) => [DIED, KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => [DIED, KILL_MEAT_CHOPPER]\n");
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "Ѡ ♣  \n" +
+                "     \n", game(0));
     }
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenMeatChopper_caseAlive() {
-        walls = new MeatChopperAt(1, 0, new WallsImpl());
+        meatChopperAt(1, 0);
+
         dice(heroDice,
                 0, 0,
                 2, 0);
@@ -854,11 +963,19 @@ public class SingleTest extends AbstractSingleTest {
         verifyAllEvents(
                 "listener(0) => [KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => [KILL_MEAT_CHOPPER]\n");
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺ ♥  \n" +
+                "     \n" +
+                "     \n", game(0));
     }
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenFourMeatChoppers_caseDied() {
-        walls = new MeatChopperAt(2, 2, new WallsImpl());
+        meatChopperAt(2, 2);
 
         dice(heroDice,
                 1, 2,
@@ -889,5 +1006,55 @@ public class SingleTest extends AbstractSingleTest {
                 "listener(1) => [DIED, KILL_MEAT_CHOPPER]\n" +
                 "listener(2) => [DIED, KILL_MEAT_CHOPPER]\n" +
                 "listener(3) => [DIED, KILL_MEAT_CHOPPER]\n");
+
+        tick();
+
+        asrtBrd("     \n" +
+                "  ♣  \n" +
+                " Ѡ ♣ \n" +
+                "  ♣  \n" +
+                "     \n", game(0));
+    }
+
+    @Test
+    public void shouldPerkCantSpawnFromMeetChopper() {
+        meatChopperAt(1, 0);
+
+        dice(heroDice,
+                0, 0);
+        givenBoard(1);
+
+        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        PerksSettingsWrapper.setDropRatio(20); // 20%
+        PerksSettingsWrapper.setPickTimeout(50);
+
+        hero(0).act();
+        tick();
+        tick();
+
+        hero(0).up();
+        tick();
+
+        hero(0).up();
+        tick();
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺    \n" +
+                "҉    \n" +
+                "҉x   \n", game(0));
+
+        verifyAllEvents(
+                "listener(0) => [KILL_MEAT_CHOPPER]\n");
+
+        tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺    \n" +
+                "     \n" +
+                "     \n", game(0));
     }
 }

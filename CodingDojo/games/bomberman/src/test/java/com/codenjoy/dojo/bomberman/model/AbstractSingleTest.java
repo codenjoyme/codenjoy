@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
@@ -53,30 +54,27 @@ import static org.mockito.Mockito.*;
 public abstract class AbstractSingleTest {
 
     public static final int SIZE = 5;
-    protected Walls walls;
+    protected final Walls walls = new WallsImpl();
     protected List<Hero> heroes = new LinkedList<>();
     protected List<Game> games = new LinkedList<>();
     private List<EventListener> listeners = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
-    protected GameSettings settings;
+    protected GameSettings settings = mock(GameSettings.class);
     protected Level level;
     protected Bomberman field;
     protected int bombsCount = 1;
     protected int bombsPower = 1;
     protected Parameter<Integer> playersPerRoom = v(Integer.MAX_VALUE);
-    protected Dice meatDice = mock(Dice.class);
     protected Dice heroDice = mock(Dice.class);
+    protected Dice chopperDice = mock(Dice.class);
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
-    {
-        settings = mock(GameSettings.class);
+    public void setup() {
         givenWalls();
-    }
 
-    public void givenBoard(int count) {
         level = mock(Level.class);
-        when(level.bombsCount()).thenReturn(bombsCount);
-        when(level.bombsPower()).thenReturn(bombsPower);
+        when(level.bombsCount()).thenAnswer(inv -> bombsCount);
+        when(level.bombsPower()).thenAnswer(inv -> bombsPower);
 
         when(settings.getHero(any(Level.class))).thenAnswer(inv -> {
             Hero hero = new Hero(level, heroDice);
@@ -85,17 +83,20 @@ public abstract class AbstractSingleTest {
         });
 
         when(settings.getLevel()).thenReturn(level);
+        when(settings.getDice()).thenReturn(heroDice);
         when(settings.getBoardSize()).thenReturn(v(SIZE));
         when(settings.getWalls()).thenReturn(walls);
         when(settings.getRoundSettings()).thenReturn(getRoundSettings());
-        when(settings.getPlayersPerRoom()).thenReturn(playersPerRoom);
+        when(settings.getPlayersPerRoom()).thenAnswer(inv -> playersPerRoom);
         when(settings.killOtherHeroScore()).thenReturn(v(200));
         when(settings.killMeatChopperScore()).thenReturn(v(100));
         when(settings.killWallScore()).thenReturn(v(10));
         when(settings.catchPerkScore()).thenReturn(v(5));
 
         field = new Bomberman(settings);
+    }
 
+    public void givenBoard(int count) {
         for (int i = 0; i < count; i++) {
             listeners.add(mock(EventListener.class));
             players.add(new Player(listener(i), getRoundSettings().roundsEnabled()));
@@ -108,16 +109,17 @@ public abstract class AbstractSingleTest {
         });
     }
 
-    protected void meatChopperAt(int x, int y) {
-        dice(meatDice, x, y);
+    protected DestroyWall destroyWallAt(int x, int y) {
+        DestroyWall wall = new DestroyWall(x, y);
+        walls.add(wall);
+        return wall;
+    }
 
-        MeatChoppers choppers = new MeatChoppers(new WallsImpl(), v(1), meatDice);
-        Field mock = mock(Field.class);
-        when(mock.size()).thenReturn(SIZE); // TODO ну очень тут как-то топорно
-        choppers.init(mock);
-        choppers.regenerate();
-
-        walls = choppers;
+    protected MeatChopper meatChopperAt(int x, int y) {
+        MeatChopper chopper = new MeatChopper(pt(x, y), field, chopperDice);
+        chopper.stop();
+        walls.add(chopper);
+        return chopper;
     }
 
     protected void asrtBrd(String board, Game game) {
@@ -188,8 +190,7 @@ public abstract class AbstractSingleTest {
         }
     }
 
-    protected void givenWalls(Wall... input) {
-        walls = new WallsImpl();
+    private void givenWalls(Wall... input) {
         Arrays.asList(input).forEach(walls::add);
     }
 

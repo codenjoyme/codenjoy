@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
@@ -47,15 +48,16 @@ public class WallsTest {
     private final static int SIZE = 9;
     private Field field;
     private Walls walls;
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private PrinterFactory factory = new PrinterFactoryImpl();
+    private Dice dice = LocalGameRunner.getDice(LocalGameRunner.generateXorShift("kgyhfksdfksf", SIZE, 1000));
 
     @Before
     public void setup() {
         field = mock(Field.class);
         when(field.size()).thenReturn(SIZE);
-        when(field.isBarrier(any(Point.class), anyBoolean())).thenAnswer(
-                invocation -> walls.itsMe((Point)invocation.getArguments()[0])
-        );
+        when(field.walls()).thenAnswer(invocation -> walls);
+        when(field.isBarrier(any(Point.class), anyBoolean()))
+                .thenAnswer(inv -> walls.itsMe(inv.getArgument(0, Point.class)));
     }
 
     @Test
@@ -74,7 +76,7 @@ public class WallsTest {
     }
 
     private String print(final Walls walls) {
-        Printer<String> printer = printerFactory.getPrinter(new BoardReader() {
+        Printer<String> printer = factory.getPrinter(new BoardReader() {
             @Override
             public int size() {
                 return SIZE;
@@ -105,47 +107,45 @@ public class WallsTest {
 
     @Test
     public void checkPrintDestroyWalls() {
-        String actual = getBoardWithDestroyWalls();
-
-        int countBlocks = actual.length() - actual.replace("#", "").length();
-        assertEquals(SIZE * SIZE / 10, countBlocks);
+        String actual = getBoardWithDestroyWalls(20);
 
         assertEquals(
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼       ☼\n" +
-                "☼ ☼ ☼ ☼ ☼\n" +
-                "☼       ☼\n" +
-                "☼ ☼ ☼ ☼ ☼\n" +
-                "☼       ☼\n" +
-                "☼ ☼ ☼ ☼ ☼\n" +
-                "☼       ☼\n" +
-                "☼☼☼☼☼☼☼☼☼\n", actual.replace('#', ' '));
+                "☼# # #  ☼\n" +
+                "☼ ☼#☼ ☼#☼\n" +
+                "☼## ## #☼\n" +
+                "☼#☼ ☼ ☼#☼\n" +
+                "☼  ##   ☼\n" +
+                "☼ ☼#☼#☼#☼\n" +
+                "☼#  ##  ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n", actual);
     }
 
     @Test
     public void checkPrintMeatChoppers() {
-        walls = new MeatChoppers(new OriginalWalls(v(SIZE)), v(10), new RandomDice());
-        walls.init(field);
-        walls.tick();
-        String actual = print(walls);
-
-        int countBlocks = actual.length() - actual.replace("&", "").length();
-        assertEquals(10, countBlocks);
+        String actual = givenBoardWithMeatChoppers(10);
 
         assertEquals(
                 "☼☼☼☼☼☼☼☼☼\n" +
-                "☼       ☼\n" +
+                "☼   &  &☼\n" +
+                "☼&☼ ☼&☼ ☼\n" +
+                "☼ &  &  ☼\n" +
                 "☼ ☼ ☼ ☼ ☼\n" +
-                "☼       ☼\n" +
+                "☼  &   &☼\n" +
                 "☼ ☼ ☼ ☼ ☼\n" +
-                "☼       ☼\n" +
-                "☼ ☼ ☼ ☼ ☼\n" +
-                "☼       ☼\n" +
-                "☼☼☼☼☼☼☼☼☼\n", actual.replace('&', ' '));
+                "☼  & &  ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n", actual);
     }
 
-    private String getBoardWithDestroyWalls() {
-        walls = new EatSpaceWalls(new OriginalWalls(v(SIZE)), v(SIZE * SIZE / 10), new RandomDice());
+    private String givenBoardWithMeatChoppers(int count) {
+        walls = new MeatChoppers(new OriginalWalls(v(SIZE)), v(count), dice);
+        walls.init(field);
+        walls.tick();
+        return print(walls);
+    }
+
+    private String getBoardWithDestroyWalls(int count) {
+        walls = new EatSpaceWalls(new OriginalWalls(v(SIZE)), v(count), dice);
         walls.init(field);
         walls.tick();
         return print(walls);
