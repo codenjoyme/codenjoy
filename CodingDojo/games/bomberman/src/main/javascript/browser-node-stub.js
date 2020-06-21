@@ -59,6 +59,8 @@ var printLogOnTextArea = function(data) {
     textarea.value = all;
 }
 
+var sendSockets = true;
+
 var require = function(string) {
     if (string == 'util') {
         return {
@@ -78,6 +80,7 @@ var require = function(string) {
     } else if (string == 'ws') {
         return function(uri) {
             var socket = new WebSocket(uri);
+            var isSend = true;
             return {
                 'on' : function(name, callback) {
                     if (name == 'open') {
@@ -91,9 +94,11 @@ var require = function(string) {
                             callback(message.data);
                         }
                     }
-                }, 
+                },
                 'send' : function(message) {
-                    socket.send(message);
+                    if (sendSockets) {
+                        socket.send(message);
+                    }
                 },
                 'close' : function(message) {
                     socket.close();

@@ -27,6 +27,8 @@ var apply = function(isConnect) {
     }
 }
 
+var command = null;
+
 var joystickSolver = function(board){
      return {
          get : function() {
@@ -59,10 +61,13 @@ var joystickEnableDisable = function() {
         oldSolver = DirectionSolver;
         DirectionSolver = joystickSolver;
 
+        sendSockets = false;
+
         _connect();
     } else {
         DirectionSolver = oldSolver;
         oldSolver = null;
+        sendSockets = true;
     }
 }
 
