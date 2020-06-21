@@ -87,7 +87,7 @@ var parseCommand = function(event) {
 }
 
 var onKeyDown = function(event) {
-    if (!isServerConnected() || !isJoystickEnabled) {
+    if (!isServerConnected() || !isJoystickEnabled()) {
         return;
     }
     var command = parseCommand(event);
@@ -113,16 +113,13 @@ var isServerConnected = function() {
 }
 
 var joystickEnableDisable = function() {
-    if (isServerConnected()) {
-        _disconnect();
-    }
-
     if (isJoystickEnabled()) {
         sendSockets = false;
-
-        _connect();
     } else {
         sendSockets = true;
+        if (isServerConnected()) {
+            ws.send('');
+        }
     }
 }
 
