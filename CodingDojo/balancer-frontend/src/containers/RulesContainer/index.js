@@ -390,7 +390,7 @@ class RulesContainer extends Component {
                             <ul>
                                 <li>
                                     На полі звичайно знаходиться певна
-                                    кількість{ this._gets('destoryWallCount') } стін що руйнуються.
+                                    кількість{ this._gets('destroyWallCount') } стін що руйнуються.
                                 </li>
                                 <li>
                                     Бомбермен, бомба якого підірвала стінку що руйнується
@@ -443,6 +443,10 @@ class RulesContainer extends Component {
                         <li>
                             Якщо перк ніхто не підібрав, він зникає з поля
                             після через деякий{ this._gets('perksPickTimeout') } час.
+                        </li>
+                        <li>
+                            Якщо ж участник підібрав перк, він отримує бонусні
+                            бали{ this._gets('catchPerkScore') }.
                         </li>
                         <li>
                             Перк BOMB_<wbr/>BLAST_<wbr/>RADIUS_<wbr/>INCREASE:

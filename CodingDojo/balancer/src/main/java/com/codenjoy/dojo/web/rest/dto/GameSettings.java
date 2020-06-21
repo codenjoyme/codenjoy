@@ -120,7 +120,7 @@ public class GameSettings {
         return getInteger(LEVEL_BOARD_SIZE);
     }
 
-    public Integer getDestoryWallCount() {
+    public Integer getDestroyWallCount() {
         return getInteger(LEVEL_DESTROY_WALL_COUNT);
     }
 
@@ -252,7 +252,7 @@ public class GameSettings {
         add(LEVEL_BOARD_SIZE, input);
     }
 
-    public void setDestoryWallCount(Integer input) {
+    public void setDestroyWallCount(Integer input) {
         add(LEVEL_DESTROY_WALL_COUNT, input);
     }
 
