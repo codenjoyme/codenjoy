@@ -11,6 +11,14 @@
 var connectDisconnect = function() {
     if ($('#client-connect').prop('checked')) {
          ws = connect();
+
+         ws.on('open', function() {
+            $('#client-connect').prop('checked', true);
+         });
+
+         ws.on('close', function() {
+            $('#client-connect').prop('checked', false);
+         });
     } else {
          if (!!ws) {
             ws.close();
