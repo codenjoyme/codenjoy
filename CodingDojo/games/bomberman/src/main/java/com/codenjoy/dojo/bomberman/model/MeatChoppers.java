@@ -24,12 +24,9 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
-
-import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Field.FOR_HERO;
 
@@ -62,7 +59,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
                 continue;
             }
 
-            walls.add(new MeatChopper(pt));
+            walls.add(new MeatChopper(pt, field, dice));
             count++;
         }
 
@@ -72,43 +69,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
     }
 
     @Override
-    public void tick() {
-        super.tick(); // TODO протестить эту строчку + сделать через Template Method
+    public void tact() {
         regenerate();
-
-        List<MeatChopper> choppers = walls.subList(MeatChopper.class);
-        for (MeatChopper chopper : choppers) {
-            Direction direction = chopper.getDirection();
-            if (direction != null && dice.next(5) > 0) {
-                Point to = direction.change(chopper);
-                if (!walls.itsMe(to)) {
-                    chopper.move(to);
-                    continue;
-                } else {
-                    // do nothing
-                }
-            }
-            chopper.setDirection(tryToMove(chopper));
-        }
-    }
-
-    private Direction tryToMove(Point from) {
-        int iteration = 0;
-        Point to;
-        Direction direction;
-        do {
-            int n = 4;
-            int move = dice.next(n);
-            direction = Direction.valueOf(move);
-
-            to = direction.change(from);
-        } while ((walls.itsMe(to) || to.isOutOf(field.size())) && iteration++ < MAX);
-
-        if (iteration >= MAX) {
-            return null;
-        }
-
-        from.move(to);
-        return direction;
     }
 }

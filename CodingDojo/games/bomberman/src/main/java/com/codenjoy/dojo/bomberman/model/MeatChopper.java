@@ -82,4 +82,49 @@ public class MeatChopper extends Wall implements State<Elements, Player>, Tickab
 
         return MEAT_CHOPPER;
     }
+
+    @Override
+    public void tick() {
+        // неугомонные чоперы в тестах только так останавливаются
+        if (stop) {
+            return;
+        }
+
+        Point from = this;
+        if (direction == null
+            || dice.next(5) == 0
+            || field.walls().itsMe(direction.change(from)))
+        {
+            direction = selectNew(from);
+        }
+
+        if (direction != null) {
+            move(direction.change(from));
+        }
+    }
+
+    private Direction selectNew(Point from) {
+        int iteration = 0;
+        Point to;
+        Direction direction;
+        Set<Direction> all = new HashSet<>();
+        do {
+            int n = 4;
+            int move = dice.next(n);
+            direction = Direction.valueOf(move);
+            all.add(direction);
+
+            to = direction.change(from);
+        } while (barrier(to) && iteration++ < MAX && all.size() < 4);
+
+        if (iteration >= MAX) {
+            return null;
+        }
+
+        return direction;
+    }
+
+    private boolean barrier(Point to) {
+        return field.walls().itsMe(to) || to.isOutOf(field.size());
+    }
 }
