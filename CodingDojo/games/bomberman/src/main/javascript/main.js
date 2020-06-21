@@ -104,24 +104,6 @@ var onKeyDown = function(event) {
     event.preventDefault();
 };
 
-var onKeyPress = function(event) {
-    if (!isJoystickEnabled) {
-        return;
-    }
-    var command = parseCommand(event);
-    if (!command) {
-        return;
-    }
-
-    if (hasData) {
-        sendSockets = true;
-        ws.send(command);
-        sendSockets = false;
-    }
-
-    event.preventDefault();
-};
-
 var isJoystickEnabled = function() {
     return $('#joystick').prop('checked');
 }
@@ -156,7 +138,6 @@ $(document).ready(function() {
     $('#joystick').prop('checked', false);
     $('#joystick').change(joystickEnableDisable);
 
-    $("body").keypress(onKeyPress);
     $("body").keydown(onKeyDown);
 });
 
