@@ -60,6 +60,7 @@ var printLogOnTextArea = function(data) {
 }
 
 var sendSockets = true;
+var hasData = false;
 
 var require = function(string) {
     if (string == 'util') {
@@ -91,12 +92,14 @@ var require = function(string) {
                         socket.onerror = callback;
                     } if (name == 'message') {
                         socket.onmessage = function(message) {
+                            hasData = true;
                             callback(message.data);
                         }
                     }
                 },
                 'send' : function(message) {
                     if (sendSockets) {
+                        hasData = false;
                         socket.send(message);
                     }
                 },
