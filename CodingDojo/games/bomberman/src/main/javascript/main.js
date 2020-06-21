@@ -47,11 +47,13 @@ var parseCommand = function(event) {
     if (keyCode == 0) {
         keyCode = event.charCode;
     }
+    var actPre = event.ctrlKey ? "act," : "";
+    var actPost = event.altKey ? ",act" : "";
     switch (keyCode) {
-        case 38 : return "up";
-        case 37 : return "left";
-        case 39 : return "right";
-        case 40 : return "down";
+        case 38 : return actPre + "up" + actPost;
+        case 37 : return actPre + "left" + actPost;
+        case 39 : return actPre + "right" + actPost;
+        case 40 : return actPre + "down" + actPost;
         case 32 : return "act";
         default : {
             if (keyCode >= 48 && keyCode <= 57) {
@@ -63,8 +65,6 @@ var parseCommand = function(event) {
     }
 }
 
-var currentCommand = null;
-
 var onKeyDown = function(event) {
     if (!isJoystickEnabled) {
         return;
@@ -74,17 +74,27 @@ var onKeyDown = function(event) {
         return;
     }
 
-    if (!!currentCommand) {
-        if (command == 'act' && currentCommand != 'act' ||
-            command != 'act' && currentCommand == 'act')
-        {
-            command = currentCommand + "," + command;
-        }
-    }
-    currentCommand = command;
     if (hasData) {
         sendSockets = true;
-        ws.send(currentCommand);
+        ws.send(command);
+        sendSockets = false;
+    }
+
+    event.preventDefault();
+};
+
+var onKeyPress = function(event) {
+    if (!isJoystickEnabled) {
+        return;
+    }
+    var command = parseCommand(event);
+    if (!command) {
+        return;
+    }
+
+    if (hasData) {
+        sendSockets = true;
+        ws.send(command);
         sendSockets = false;
     }
 
@@ -121,6 +131,7 @@ $(document).ready(function() {
     $('#joystick').prop('checked', false);
     $('#joystick').change(joystickEnableDisable);
 
+    $("body").keypress(onKeyPress);
     $("body").keydown(onKeyDown);
 });
 
