@@ -51,9 +51,7 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
     }
 
     @Override
-    public void tick() {
-        super.tick();    // TODO протестить эту строчку
-
+    public void tact() {
         regenerate();
     }
 
