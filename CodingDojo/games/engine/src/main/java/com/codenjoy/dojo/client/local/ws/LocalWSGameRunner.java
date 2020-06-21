@@ -63,7 +63,7 @@ public class LocalWSGameRunner {
         return statuses.stream()
                 .filter(status -> status.getSocket() == socket)
                 .findFirst()
-                .orElseGet(null);
+                .orElse(null);
     }
 
     private String getAnswer(ConnectionStatus status, ClientBoard clientBoard) {
