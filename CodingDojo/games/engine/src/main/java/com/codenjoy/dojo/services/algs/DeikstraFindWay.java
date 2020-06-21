@@ -38,7 +38,7 @@ public class DeikstraFindWay {
     private int size;
     private Possible possible;
 
-    public static interface Possible {
+    public interface Possible {
         boolean possible(Point from, Direction direction);
         boolean possible(Point atWay);
     }
@@ -51,7 +51,7 @@ public class DeikstraFindWay {
         this.possible = possible;
         setupPossibleWays();
 
-        List<List<Direction>> paths = new LinkedList<List<Direction>>();
+        List<List<Direction>> paths = new LinkedList<>();
         for (Point to : goals) {
             List<Direction> path = getPath(from).get(to);
             if (path == null || path.isEmpty()) continue;
@@ -76,13 +76,13 @@ public class DeikstraFindWay {
     }
 
     private Map<Point, List<Direction>> getPath(Point from) {
-        Map<Point, List<Direction>> path = new HashMap<Point, List<Direction>>();
+        Map<Point, List<Direction>> path = new HashMap<>();
         for (Point point : possibleWays.keySet()) {
-            path.put(point, new LinkedList<Direction>());
+            path.put(point, new LinkedList<>());
         }
 
         boolean[][] processed = new boolean[size][size];
-        LinkedList<Point> toProcess = new LinkedList<Point>();
+        LinkedList<Point> toProcess = new LinkedList<>();
 
         Point current = from;
         do {
