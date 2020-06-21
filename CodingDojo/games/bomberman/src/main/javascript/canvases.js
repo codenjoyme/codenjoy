@@ -19,18 +19,26 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+var setup = false;
 function onBoardData(data) {
+    if (!setup) {
+        initCanvas(size(data));
+    }
     $('body').trigger('board-updated', data);
 }
 
-function initCanvas() {
+function size(data) {
+    return data.split('\n')[0].length;
+}
+
+function initCanvas(boardSize) {
+    setup = true;
     var canvas = null;
     var plots = {};
     var plotsUrls = {};
     var plotSize = 0;
     var canvasSize = 0;
     var images = {};
-    var boardSize = 23;
     var isDrawByOrder = true;
 
     var elements = Element;
@@ -66,7 +74,7 @@ function initCanvas() {
             var canvas = createCanvas('board-canvas');
 
             $('body').on('board-updated', function(events, data) {
-                canvas.boardSize = data.split('\n')[0].length;
+                canvas.boardSize = size(data);
                 drawBoard(getBoardDrawer(canvas, data.split('\n').join('')));
             });
         });
@@ -207,5 +215,3 @@ function initCanvas() {
         };
     }
 }
-
-initCanvas();
