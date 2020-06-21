@@ -75,6 +75,8 @@ var parseCommand = function(event) {
         case 37 : return actPre + "left" + actPost;
         case 39 : return actPre + "right" + actPost;
         case 40 : return actPre + "down" + actPost;
+        case 8  : return "stop";
+        case 13 : return "stop";
         case 32 : return "act";
         default : {
             if (keyCode >= 48 && keyCode <= 57) {
