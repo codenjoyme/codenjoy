@@ -57,6 +57,13 @@ var processBoard = function(boardString) {
     return answer;
 };
 
+var parseBoard = function(message) {
+    var pattern = new RegExp(/^board=(.*)$/);
+    var parameters = message.match(pattern);
+    var board = parameters[1];
+    return board;
+}
+
 // you can get this code after registration on the server with your email
 var url = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890";
 
@@ -83,10 +90,8 @@ function connect() {
     });
 
     socket.on('message', function(message) {
-        var pattern = new RegExp(/^board=(.*)$/);
-        var parameters = message.match(pattern);
-        var boardString = parameters[1];
-        var answer = processBoard(boardString);
+        var board = parseBoard(message);
+        var answer = processBoard(board);
         socket.send(answer);
     });
 
