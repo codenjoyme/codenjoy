@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.bomberman.model.Elements.*;
 import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
 
 public class MeatChopperHunter extends MeatChopper {
@@ -100,7 +101,17 @@ public class MeatChopperHunter extends MeatChopper {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         if (alive) {
-            return super.state(player, alsoAtPoint);
+            DestroyWall wall = filterOne(alsoAtPoint, DestroyWall.class);
+            if (wall != null) {
+                return DESTROYED_WALL;
+            }
+
+            Blast blast = filterOne(alsoAtPoint, Blast.class);
+            if (blast != null) {
+                return MEAT_CHOPPER;
+            }
+
+            return DEAD_MEAT_CHOPPER;
         }
 
         // если поднизом бомба, видеть ее важнее, чем трупик митчопера TODO test me
@@ -109,6 +120,6 @@ public class MeatChopperHunter extends MeatChopper {
             return bomb.state(player, alsoAtPoint);
         }
 
-        return Elements.DEAD_MEAT_CHOPPER;
+        return Elements.MEAT_CHOPPER;
     }
 }

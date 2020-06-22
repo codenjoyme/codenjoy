@@ -75,11 +75,6 @@ public class MeatChopper extends Wall implements State<Elements, Player>, Tickab
             return DEAD_MEAT_CHOPPER;
         }
 
-        DestroyWall wall = filterOne(alsoAtPoint, DestroyWall.class);
-        if (wall != null) {
-            return DESTROYED_WALL;
-        }
-
         return MEAT_CHOPPER;
     }
 

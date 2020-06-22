@@ -362,7 +362,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "#҉   #\n" +
                 "#҉#☺##\n" +
                 "҉҉҉҉҉H\n" +
-                "#&####\n");
+                "#x####\n");
 
         // пошел сигнал об этом
         verifyAllEvents("[DROP_PERK, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
@@ -381,7 +381,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "#☼#☺##\n" +
                 "##   #\n" +
                 "### ##\n" +
-                " &   +\n" +
+                " x   +\n" +
                 "# ####\n");
 
         field.tick();
@@ -406,7 +406,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
 
         asrtBrd("#+####\n" +
                 "#☼#☺##\n" +
-                "# &  #\n" +
+                "# x  #\n" +
                 "# # ##\n" +
                 "     +\n" +
                 "# ####\n");
@@ -505,7 +505,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "#҉   #\n" +
                 "#҉#☺##\n" +
                 "҉҉҉҉҉H\n" +
-                "#&####\n");
+                "#x####\n");
 
         // пошел сигнал об этом
         verifyAllEvents("[DROP_PERK, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
@@ -517,7 +517,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         asrtBrd("#+####\n" +
                 "# # ##\n" +
                 "#    #\n" +
-                "#&#☺##\n" +
+                "#x#☺##\n" +
                 "     +\n" +
                 "# ####\n");
 
@@ -528,7 +528,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         asrtBrd("#+####\n" +
                 "# # ##\n" +
                 "#    #\n" +
-                "#x#Ѡ##\n" +
+                "#&#Ѡ##\n" +
                 "     +\n" +
                 "# ####\n");
 
