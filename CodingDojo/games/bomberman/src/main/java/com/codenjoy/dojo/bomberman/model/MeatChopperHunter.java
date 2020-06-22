@@ -78,15 +78,14 @@ public class MeatChopperHunter extends MeatChopper {
         // если нарушитель уже того, выпиливаемся тоже
         if (!prey.isActiveAndAlive()) {
             // митчопер умрет от праведного (ничейного) огня! мы увидим его трупик 1 тик
-            alive = false;
-            field.remove(this);
+            die();
             return;
         }
 
         List<Direction> directions = getDirections(this, Arrays.asList(prey));
         if (directions.isEmpty()) {
             // если не видим куда идти - выпиливаемся
-            field.walls().destroy(this);
+            die();
         } else {
             // если видим - идем
             direction = directions.get(0);
@@ -96,6 +95,11 @@ public class MeatChopperHunter extends MeatChopper {
             // попутно сносим стенки на пути прожженные
             field.walls().destroy(from);
         }
+    }
+
+    private void die() {
+        alive = false;
+        field.remove(this);
     }
 
     @Override

@@ -30,6 +30,7 @@ import org.junit.Test;
 import static com.codenjoy.dojo.bomberman.model.AbstractSingleTest.getEvents;
 import static com.codenjoy.dojo.bomberman.services.Events.DIED;
 import static com.codenjoy.dojo.bomberman.services.Events.DROP_PERK;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -453,6 +454,210 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "# # ##\n" +
                 " ☺   +\n" +
                 "# ####\n");
+    }
+
+    @Test
+    public void shouldDropPerk_generateNewMeatChopper_thenKillIt() {
+        when(level.bombsCount()).thenReturn(2);
+
+        shouldHeroAcquirePerk_whenMoveToFieldWithPerk();
+        reset(listener);
+
+        hero.right();
+        field.tick();
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                " ☺   #\n" +
+                "#+####\n");
+
+        hero.act();
+        hero.up();
+        field.tick();
+
+        field.tick();
+
+        hero.act();
+        hero.up();
+        field.tick();
+
+        hero.right();
+        field.tick();
+
+        // перед взрывом
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "# ☺  #\n" +
+                "#3# ##\n" +
+                " 1   #\n" +
+                "#+####\n");
+
+        // все тихо
+        verifyAllEvents("[]");
+
+        // when
+        field.tick();
+
+        // перк разрушен
+        // а вместо него злой митчопер
+        asrtBrd("#H####\n" +
+                "#҉# ##\n" +
+                "#҉☺  #\n" +
+                "#2# ##\n" +
+                "҉҉҉҉҉H\n" +
+                "#x####\n");
+
+        // пошел сигнал об этом
+        verifyAllEvents("[DROP_PERK, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
+
+        // when
+        field.tick();
+
+        // митчопер начал свое движение
+        asrtBrd("#+####\n" +
+                "# # ##\n" +
+                "# ☺  #\n" +
+                "#1# ##\n" +
+                " x   +\n" +
+                "# ####\n");
+
+        // when
+        field.tick();
+
+        // митчопер нарвался
+        asrtBrd("#+####\n" +
+                "# # ##\n" +
+                "#҉☺  #\n" +
+                "H&H ##\n" +
+                " ҉   +\n" +
+                "# ####\n");
+
+        // пошел сигнал об этом
+        verifyAllEvents("[KILL_MEAT_CHOPPER, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
+
+        // when
+        field.tick();
+
+        // митчопер нарвался
+        asrtBrd("#+####\n" +
+                "# # ##\n" +
+                "# ☺  #\n" +
+                "+ + ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        verifyAllEvents("[]");
+    }
+
+    // генерим два митчопера и смотрим как они бегут за мной
+    @Test
+    public void shouldDropPerk_generateTwoMeatChoppers() {
+        shouldDropPerk_generateNewMeatChopper_thenKillIt();
+
+        // бамбанули между двух перков
+        hero.move(1, 2);
+        hero.act();
+
+        // строим оборону
+        field.walls().destroy(pt(5, 5));
+        field.walls().destroy(pt(4, 4));
+        field.walls().add(new Wall(4, 4));
+        field.walls().destroy(new Wall(4, 5));
+        field.walls().add(new Wall(4, 5));
+        field.walls().destroy(pt(5, 4));
+        hero.move(5, 5);
+        field.tick();
+
+        asrtBrd("#+##☼☺\n" +
+                "# # ☼ \n" +
+                "#    #\n" +
+                "+4+ ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        field.tick();
+        field.tick();
+        field.tick();
+
+        asrtBrd("#+##☼☺\n" +
+                "# # ☼ \n" +
+                "#    #\n" +
+                "+1+ ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        // породили два чудовища
+        field.tick();
+
+        asrtBrd("#+##☼☺\n" +
+                "# # ☼ \n" +
+                "#҉   #\n" +
+                "x҉x ##\n" +
+                " ҉   +\n" +
+                "# ####\n");
+
+        // и они пошли за нами
+        field.tick();
+
+        asrtBrd("#+##☼☺\n" +
+                "# # ☼ \n" +
+                "H x  #\n" +
+                "    ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        field.tick();
+
+        asrtBrd("#+##☼☺\n" +
+                "# # ☼ \n" +
+                " x x #\n" +
+                "    ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        field.tick();
+
+        asrtBrd("#+##☼☺\n" +
+                "# # ☼ \n" +
+                "  x x#\n" +
+                "    ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        verifyAllEvents("[]");
+    }
+
+    // если анти-митчоперы не могут найти к тебе короткий путь - они выпиливаются
+    @Test
+    public void shouldDropPerk_generateTwoMeatChoppers_noWayNoPain() {
+        shouldDropPerk_generateTwoMeatChoppers();
+
+        // но стоит забарикадироваться
+        field.walls().add(new Wall(5, 4));
+        field.tick();
+
+        // как митчоперы нормальнеют
+        asrtBrd("#+##☼☺\n" +
+                "# # ☼☼\n" +
+                "  & &#\n" +
+                "    ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        // и после выпиливаются
+        field.tick();
+
+        asrtBrd("#+##☼☺\n" +
+                "# # ☼☼\n" +
+                "     #\n" +
+                "    ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        verifyAllEvents("[]");
     }
 
     // если мы вызвали потустороннюю нечисть, то наш суицид ее успокоит, отправив обратно
