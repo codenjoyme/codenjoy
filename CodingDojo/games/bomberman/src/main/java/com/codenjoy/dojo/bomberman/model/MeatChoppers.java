@@ -28,6 +28,9 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static com.codenjoy.dojo.bomberman.model.Field.FOR_HERO;
 
 public class MeatChoppers extends WallsDecorator implements Walls {
@@ -51,11 +54,12 @@ public class MeatChoppers extends WallsDecorator implements Walls {
         int count = walls.subList(MeatChopper.class).size();
 
         int iteration = 0;
+        Set<Point> checked = new HashSet<>();
         while (count < this.count.getValue() && iteration++ < MAX) {
             Point pt = PointImpl.random(dice, field.size());
 
-            // TODO это капец как долго выполняется, убрать нафиг митчомеров из Walls и сам Walls рассформировать!
-            if (field.isBarrier(pt, !FOR_HERO)) {
+            if (checked.contains(pt) || field.isBarrier(pt, !FOR_HERO)) {
+                checked.add(pt);
                 continue;
             }
 

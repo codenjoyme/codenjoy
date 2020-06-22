@@ -28,7 +28,9 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.codenjoy.dojo.bomberman.model.Field.FOR_HERO;
 
@@ -75,10 +77,12 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
         }
 
         int iteration = 0;
+        Set<Point> checked = new HashSet<>();
         while (count < this.count.getValue() && iteration++ < MAX) {  // TODO и это
             Point pt = PointImpl.random(dice, field.size());
 
-            if (field.isBarrier(pt, !FOR_HERO)) {
+            if (checked.contains(pt) || field.isBarrier(pt, !FOR_HERO)) {
+                checked.add(pt);
                 continue;
             }
 
