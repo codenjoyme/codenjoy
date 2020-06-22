@@ -589,6 +589,8 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "     +\n" +
                 "# ####\n");
 
+        verifyAllEvents("[]");
+
         // породили два чудовища
         field.tick();
 
@@ -598,6 +600,8 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "x҉x ##\n" +
                 " ҉   +\n" +
                 "# ####\n");
+
+        verifyAllEvents("[DROP_PERK, DROP_PERK]");
 
         // и они пошли за нами
         field.tick();
