@@ -1889,7 +1889,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "    &\n" +
                 "     \n" +
                 " ☺   \n" +
-                "   # \n");
+                "     \n");
     }
 
     // Чертик не может появится на бомбере!
