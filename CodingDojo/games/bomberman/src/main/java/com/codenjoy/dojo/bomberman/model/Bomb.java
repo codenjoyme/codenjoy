@@ -84,11 +84,11 @@ public class Bomb extends PointImpl implements Tickable, State<Elements, Player>
         this.isOnRemoteControl = false;
     }
 
-    public void activateRemoteControl() {
+    public void activateRemote() {
         this.timer = 0;
     }
 
-    public boolean isOnRemoteControl() {
+    public boolean isOnRemote() {
         return isOnRemoteControl;
     }
 

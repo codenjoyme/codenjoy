@@ -786,16 +786,31 @@ public class PerksBombermanTest extends AbstractBombermanTest {
 
     // BRC - Bomb remote control perk
     @Test
-    public void shouldBombBlastOnAction_whenBRCperk() {
+    public void shouldBombBlastOnAction_whenBRCperk_caseTwoBombs() {
 
-        when(level.bombsCount()).thenReturn(3);
+        when(level.bombsCount()).thenReturn(2);
         player.getHero().addPerk(new BombRemoteControl(2));
 
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // поставили первую радиоуправляемую бомбу
         hero.act();
         hero.right();
         field.tick();
-//        hero.act();
-//        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "5☺   \n");
+
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // видим, что она стоит и ждет
         hero.up();
         field.tick();
 
@@ -805,18 +820,62 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 " ☺   \n" +
                 "5    \n");
 
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // взорвали ее
         hero.act();
         field.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
-                "҉☻   \n" +
+                "҉☺   \n" +
                 "҉҉   \n");
 
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // ставим еще одну
+        hero.act();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ☻   \n" +
+                "     \n");
+
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // отошли, смотрим
         hero.up();
         field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                " ☺   \n" +
+                " 5   \n" +
+                "     \n");
+
         hero.left();
+        field.tick();
+
+        // долго потикали, ничего не меняется, таймаутов нет
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
         field.tick();
 
         asrtBrd("     \n" +
@@ -825,8 +884,25 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 " 5   \n" +
                 "     \n");
 
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // взорвали ее
         hero.act();
         field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺҉   \n" +
+                "҉҉҉  \n" +
+                " ҉   \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // ставим новую
+        hero.act();
         field.tick();
 
         asrtBrd("     \n" +
@@ -835,18 +911,248 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n");
 
-        hero.right();
-        field.tick();
-        hero.act();
-        field.tick();
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // если отойдем, то увидим, что это обычная
         hero.right();
         field.tick();
 
         asrtBrd("     \n" +
                 "     \n" +
-                "33☺  \n" +
+                "3☺   \n" +
                 "     \n" +
                 "     \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // еще одну, у нас ведь их две
+        hero.act();
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "24☺  \n" +
+                "     \n" +
+                "     \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // больше не могу
+        hero.act();
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "13 ☺ \n" +
+                "     \n" +
+                "     \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // а теперь могу
+        hero.act();
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉2 4☺\n" +  // взрывная волна кстати не перекрывает бомбу
+                "҉    \n" +
+                "     \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+    }
+
+    @Test
+    public void shouldBombBlastOnAction_whenBRCperk_caseOneBomb() {
+
+        when(level.bombsCount()).thenReturn(1);
+        player.getHero().addPerk(new BombRemoteControl(2));
+
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // поставили первую радиоуправляемую бомбу
+        hero.act();
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "5☺   \n");
+
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // видим, что она стоит и ждет
+        hero.up();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺   \n" +
+                "5    \n");
+
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // взорвали ее
+        hero.act();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "҉☺   \n" +
+                "҉҉   \n");
+
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // ставим еще одну
+        hero.act();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ☻   \n" +
+                "     \n");
+
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // отошли, смотрим
+        hero.up();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                " ☺   \n" +
+                " 5   \n" +
+                "     \n");
+
+        hero.left();
+        field.tick();
+
+        // долго потикали, ничего не меняется, таймаутов нет
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺    \n" +
+                " 5   \n" +
+                "     \n");
+
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                hero.getPerks().toString());
+
+        // взорвали ее
+        hero.act();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☺҉   \n" +
+                "҉҉҉  \n" +
+                " ҉   \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // ставим новую
+        hero.act();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "☻    \n" +
+                "     \n" +
+                "     \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // если отойдем, то увидим, что это обычная
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "3☺   \n" +
+                "     \n" +
+                "     \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // больше не могу - у меня одна
+        hero.act();
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "2 ☺  \n" +
+                "     \n" +
+                "     \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // больше не могу
+        hero.act();
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "1  ☺ \n" +
+                "     \n" +
+                "     \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // а теперь могу
+        hero.act();
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "҉    \n" +
+                "҉҉ 4☺\n" +
+                "҉    \n" +
+                "     \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
     }
 
     // чертики тоже могут ставить бомбы
