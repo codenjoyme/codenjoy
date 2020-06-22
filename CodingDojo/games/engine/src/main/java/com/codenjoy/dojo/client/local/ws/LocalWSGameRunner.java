@@ -121,6 +121,7 @@ public class LocalWSGameRunner {
                 if (status != null) {
                     exit(status);
                 }
+                LocalGameRunner.exit = true;
             }
 
             @Override
