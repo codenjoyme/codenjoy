@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
+
 public class MeatChopperHunter extends MeatChopper {
 
     private Hero prey;
@@ -97,10 +99,16 @@ public class MeatChopperHunter extends MeatChopper {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (!alive) {
-            return Elements.DEAD_MEAT_CHOPPER;
+        if (alive) {
+            return super.state(player, alsoAtPoint);
         }
 
-        return super.state(player, alsoAtPoint);
+        // если поднизом бомба, видеть ее важнее, чем трупик митчопера TODO test me
+        Bomb bomb = filterOne(alsoAtPoint, Bomb.class);
+        if (bomb != null) {
+            return bomb.state(player, alsoAtPoint);
+        }
+
+        return Elements.DEAD_MEAT_CHOPPER;
     }
 }
