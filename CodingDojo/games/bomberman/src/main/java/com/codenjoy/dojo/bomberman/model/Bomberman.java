@@ -226,8 +226,13 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     @Override
-    public void removeBomb(Bomb bomb) {
+    public void remove(Bomb bomb) {
         destroyedBombs.add(bomb);
+    }
+
+    @Override
+    public void remove(Wall wall) {
+        destroyedWalls.add(wall);
     }
 
     private List<Blast> makeBlast(Bomb bomb) {

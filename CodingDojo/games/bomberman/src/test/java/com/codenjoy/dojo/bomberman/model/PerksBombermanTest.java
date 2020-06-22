@@ -179,6 +179,8 @@ public class PerksBombermanTest extends AbstractBombermanTest {
 
         assertEquals("[]", field.perks().toString());
 
+        verifyAllEvents("[KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
+
         // when
         field.tick();
 
@@ -223,7 +225,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "☺    #\n" +
                 "#+####\n");
 
-        verify(listener).event(Events.CATCH_PERK);
+        verifyAllEvents("[CATCH_PERK]");
         assertEquals(before + DefaultGameSettings.CATCH_PERK_SCORE, hero.scores());
         assertEquals("Hero had to acquire new perk", 1, player.getHero().getPerks().size());
     }
@@ -348,7 +350,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "#+####\n");
 
         // все тихо
-        verifyNoMoreInteractions(listener);
+        verifyAllEvents("[]");
 
         // when
         field.tick();
@@ -363,7 +365,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "#&####\n");
 
         // пошел сигнал об этом
-        verify(listener).event(DROP_PERK);
+        verifyAllEvents("[DROP_PERK, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
 
         // такой себе хак, мы в домике
         hero.move(3, 4);
@@ -427,7 +429,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "     +\n" +
                 "# ####\n");
 
-        verify(listener).event(DIED);
+        verifyAllEvents("[DIED]");
 
         field.tick();
 
@@ -451,6 +453,86 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "# # ##\n" +
                 " ☺   +\n" +
                 "# ####\n");
+    }
+
+    // если мы вызвали потустороннюю нечисть, то наш суицид ее успокоит, отправив обратно
+    @Test
+    public void shouldDropPerk_generateNewMeatChopper_thenSuicide_willKillChopperAlso() {
+        shouldHeroAcquirePerk_whenMoveToFieldWithPerk();
+        reset(listener);
+
+        hero.right();
+        field.tick();
+
+        // then
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# # ##\n" +
+                " ☺   #\n" +
+                "#+####\n");
+
+        hero.act();
+        field.tick();
+
+        hero.right();
+        field.tick();
+
+        hero.right();
+        field.tick();
+
+        hero.up();
+        field.tick();
+
+        // перед взрывом
+        asrtBrd("######\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "# #☺##\n" +
+                " 1   #\n" +
+                "#+####\n");
+
+        // все тихо
+        verifyAllEvents("[]");
+
+        // when
+        field.tick();
+
+        // перк разрушен
+        // а вместо него злой митчопер
+        asrtBrd("#H####\n" +
+                "#҉# ##\n" +
+                "#҉   #\n" +
+                "#҉#☺##\n" +
+                "҉҉҉҉҉H\n" +
+                "#&####\n");
+
+        // пошел сигнал об этом
+        verifyAllEvents("[DROP_PERK, KILL_DESTROY_WALL, KILL_DESTROY_WALL]");
+
+        // охотник идет
+        field.tick();
+        field.tick();
+
+        asrtBrd("#+####\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "#&#☺##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        // мувнули героя и кикнули его
+        hero.die();
+        field.tick();
+
+        asrtBrd("#+####\n" +
+                "# # ##\n" +
+                "#    #\n" +
+                "#x#Ѡ##\n" +
+                "     +\n" +
+                "# ####\n");
+
+        verifyAllEvents("[DIED]");
 
     }
 
@@ -1234,7 +1316,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "H    \n" +
                 "҉҉҉Ѡ \n");
 
-        assertEquals("[DIED, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]", getEvents(listener));
+        verifyAllEvents("[DIED, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]");
 
         // только сейчас перк забрался
         assertEquals("[]",
@@ -1248,7 +1330,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "   Ѡ \n");
 
-        assertEquals("[]", getEvents(listener));
+        verifyAllEvents("[]");
 
         assertEquals("[]",
                 hero.getPerks().toString());

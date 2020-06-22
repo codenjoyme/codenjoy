@@ -54,7 +54,9 @@ public interface Field extends RoundGameField<Player> {  // TODO примени�
 
     void drop(Bomb bomb);
 
-    void removeBomb(Bomb bomb);
+    void remove(Bomb bomb);
+
+    void remove(Wall wall);
 
     GameSettings settings();
 

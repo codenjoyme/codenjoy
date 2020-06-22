@@ -33,6 +33,7 @@ public class MeatChopperHunter extends MeatChopper {
 
     private Hero prey;
     private DeikstraFindWay way;
+    private boolean alive = true;
 
     public MeatChopperHunter(Point pt, Hero prey) {
         super(pt, prey.field(), prey.getDice());
@@ -73,7 +74,9 @@ public class MeatChopperHunter extends MeatChopper {
     public void tick() {
         // если нарушитель уже того, выпиливаемся тоже
         if (!prey.isActiveAndAlive()) {
-            field.walls().destroy(this);
+            // митчопер умрет от праведного (ничейного) огня! мы увидим его трупик 1 тик
+            alive = false;
+            field.remove(this);
             return;
         }
 
@@ -90,5 +93,14 @@ public class MeatChopperHunter extends MeatChopper {
             // попутно сносим стенки на пути прожженные
             field.walls().destroy(from);
         }
+    }
+
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        if (!alive) {
+            return Elements.DEAD_MEAT_CHOPPER;
+        }
+
+        return super.state(player, alsoAtPoint);
     }
 }
