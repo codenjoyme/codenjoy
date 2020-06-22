@@ -139,7 +139,7 @@ public abstract class AbstractSingleTest {
         reset(events);
     }
 
-    protected String getEvents(EventListener events) {
+    public static String getEvents(EventListener events) {
         try {
             ArgumentCaptor<Events> captor = ArgumentCaptor.forClass(Events.class);
             verify(events, atLeast(1)).event(captor.capture());

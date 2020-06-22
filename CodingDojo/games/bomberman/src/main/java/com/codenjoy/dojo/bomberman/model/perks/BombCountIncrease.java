@@ -25,6 +25,7 @@ package com.codenjoy.dojo.bomberman.model.perks;
 import com.codenjoy.dojo.bomberman.model.Elements;
 
 public class BombCountIncrease extends Perk {
+
     public BombCountIncrease(int value, int timeout) {
         super(Elements.BOMB_COUNT_INCREASE, value, timeout);
     }

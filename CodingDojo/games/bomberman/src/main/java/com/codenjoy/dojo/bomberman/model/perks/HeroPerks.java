@@ -53,14 +53,14 @@ public class HeroPerks implements Tickable {
 
     @Override
     public void tick() {
-        Map<String, Perk> activePerks = new HashMap<>();
+        Map<String, Perk> active = new HashMap<>();
         perks.forEach((name, perk) -> {
             perk.tick();
             if (perk.isActive()) {
-                activePerks.put(name, perk);
+                active.put(name, perk);
             }
         });
 
-        perks = activePerks;
+        perks = active;
     }
 }

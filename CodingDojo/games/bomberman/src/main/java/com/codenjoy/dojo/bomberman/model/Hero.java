@@ -23,7 +23,6 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.perks.BombRemoteControl;
 import com.codenjoy.dojo.bomberman.model.perks.HeroPerks;
 import com.codenjoy.dojo.bomberman.model.perks.Perk;
 import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
@@ -148,16 +147,8 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
         if (remotePerk != null) {
             // activate bombs that were set on remote control previously
             if (tryActivateRemote(bombs)) {
-                perks.add(new BombRemoteControl(remotePerk.getTimeout() - 1));
+                remotePerk.decrease();
                 return;
-            }
-        } else {
-            // reset bombs that were set on remote control previously after perk expiration
-            // to avoid "endless" bombs
-            for (Bomb b : bombs) {
-                if (b.isOnRemote()) {
-                    b.deactivateRemoteControl();
-                }
             }
         }
 
@@ -189,10 +180,8 @@ public class Hero extends RoundPlayerHero<Field> implements State<Elements, Play
     }
 
     private boolean сanDrop(Perk countPerk, List<Bomb> bombs) {
-        // не считаем почти взорвавшиеся, они уже в этом тике бабахнут
-        int placed = (int) bombs.stream()
-                .filter(bomb -> bomb.getTimer() > 1)
-                .count();
+        // сколько бомб уже оставили?
+        int placed = bombs.size();
         // дополнение от перка, если он есть
         int boost = (countPerk == null) ? 0 : countPerk.getValue();
 

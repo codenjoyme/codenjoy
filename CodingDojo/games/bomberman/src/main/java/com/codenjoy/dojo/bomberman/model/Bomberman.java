@@ -110,13 +110,26 @@ public class Bomberman extends RoundField<Player> implements Field {
 
     @Override
     public void tickField() {
-        applyAllHeroes(); // герои ходят
+        applyAllHeroes();       // герои ходят
         meatChopperEatHeroes(); // омномном
-        walls.tick();     // разрушенные стены появляются, а митчоперы водят свой холровод
+        walls.tick();           // разрушенные стены появляются, а митчоперы водят свой холровод
         meatChopperEatHeroes(); // омномном
-        tactAllBombs();   // все что касается бомб и взрывов
-        tactAllPerks();   // тикаем перки на поле
-        tactAllHeroes();  // в том числе и перки
+        disableBombRemote();    // если остались remote бомбы без хозяев, взрываем
+        tactAllBombs();         // все что касается бомб и взрывов
+        tactAllPerks();         // тикаем перки на поле
+        tactAllHeroes();        // в том числе и перки
+    }
+
+    private void disableBombRemote() {
+        for (Bomb bomb : bombs) {
+            Hero owner = bomb.getOwner();
+            if (!owner.isActiveAndAlive()) {
+                if (bomb.isOnRemote()) {
+                    bomb.activateRemote();
+                    owner.getPerk(Elements.BOMB_REMOTE_CONTROL).decrease();
+                }
+            }
+        }
     }
 
     private void tactAllPerks() {
@@ -372,7 +385,7 @@ public class Bomberman extends RoundField<Player> implements Field {
                 return true;
 
             case BOMB_REMOTE_CONTROL:
-                setup(pt, new BombRemoteControl(settings.timeout()));
+                setup(pt, new BombRemoteControl(settings.value(), settings.timeout()));
                 return true;
 
             default:

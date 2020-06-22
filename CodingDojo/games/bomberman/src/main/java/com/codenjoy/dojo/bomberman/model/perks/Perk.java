@@ -34,12 +34,12 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
 
     private final String name;
     private final Elements element;
-    private final int value;
+    private int value;
 
     /**
      * Maximum timer value
      * */
-    private final int timeout;
+    private int timeout;
 
     /**
      * Countdown with every tick.
@@ -155,5 +155,13 @@ public abstract class Perk extends PointImpl implements Tickable, State<Elements
 
     public void tickPick() {
         pickTimeout--;
+    }
+
+    public void decrease() {
+        value--;
+        if (value <= 0) {
+            timer = 0;
+            timeout = 0;
+        }
     }
 }

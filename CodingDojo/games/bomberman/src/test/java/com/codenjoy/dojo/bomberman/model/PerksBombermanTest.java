@@ -27,6 +27,7 @@ import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.Events;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.bomberman.model.AbstractSingleTest.getEvents;
 import static com.codenjoy.dojo.bomberman.services.Events.DIED;
 import static com.codenjoy.dojo.bomberman.services.Events.DROP_PERK;
 import static org.junit.Assert.assertEquals;
@@ -789,10 +790,10 @@ public class PerksBombermanTest extends AbstractBombermanTest {
     public void shouldBombBlastOnAction_whenBRCperk_caseTwoBombs() {
 
         when(level.bombsCount()).thenReturn(2);
-        player.getHero().addPerk(new BombRemoteControl(2));
+        player.getHero().addPerk(new BombRemoteControl(2, 1));
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                        "value=2, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // поставили первую радиоуправляемую бомбу
@@ -807,7 +808,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "5☺   \n");
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                        "value=2, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // видим, что она стоит и ждет
@@ -821,7 +822,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "5    \n");
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                        "value=2, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // взорвали ее
@@ -835,7 +836,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "҉҉   \n");
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                        "value=1, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // ставим еще одну
@@ -849,7 +850,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "     \n");
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                        "value=1, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // отошли, смотрим
@@ -885,7 +886,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "     \n");
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                        "value=1, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // взорвали ее
@@ -955,15 +956,28 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         assertEquals("[]" ,
                 hero.getPerks().toString());
 
-        // а теперь могу
-        hero.act();
+        // еще не могу
         hero.right();
+        hero.act();
         field.tick();
 
         asrtBrd("     \n" +
                 "҉    \n" +
-                "҉2 4☺\n" +  // взрывная волна кстати не перекрывает бомбу
+                "҉2  ☺\n" +  // взрывная волна кстати не перекрывает бомбу
                 "҉    \n" +
+                "     \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // и только когда ударная волна уйдет, тогда смогу
+        hero.act();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                " 1  ☻\n" +  // взрывная волна кстати не перекрывает бомбу
+                "     \n" +
                 "     \n");
 
         assertEquals("[]" ,
@@ -974,10 +988,10 @@ public class PerksBombermanTest extends AbstractBombermanTest {
     public void shouldBombBlastOnAction_whenBRCperk_caseOneBomb() {
 
         when(level.bombsCount()).thenReturn(1);
-        player.getHero().addPerk(new BombRemoteControl(2));
+        player.getHero().addPerk(new BombRemoteControl(2, 1));
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                        "value=2, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // поставили первую радиоуправляемую бомбу
@@ -992,7 +1006,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "5☺   \n");
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                        "value=2, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // видим, что она стоит и ждет
@@ -1006,7 +1020,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "5    \n");
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=2, timer=2, pick=0}]" ,
+                        "value=2, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // взорвали ее
@@ -1020,7 +1034,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "҉҉   \n");
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                        "value=1, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // ставим еще одну
@@ -1034,7 +1048,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "     \n");
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                        "value=1, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // отошли, смотрим
@@ -1070,7 +1084,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
                 "     \n");
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
-                        "value=0, timeout=1, timer=1, pick=0}]" ,
+                        "value=1, timeout=1, timer=1, pick=0}]" ,
                 hero.getPerks().toString());
 
         // взорвали ее
@@ -1140,18 +1154,103 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         assertEquals("[]" ,
                 hero.getPerks().toString());
 
-        // а теперь могу
+        // и теперь не могу - есть еще взрывная волна
         hero.act();
         hero.right();
         field.tick();
 
         asrtBrd("     \n" +
                 "҉    \n" +
-                "҉҉ 4☺\n" +
+                "҉҉  ☺\n" +
                 "҉    \n" +
                 "     \n");
 
         assertEquals("[]" ,
+                hero.getPerks().toString());
+
+        // а теперь пожалуйста
+        hero.act();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "    ☻\n" +
+                "     \n" +
+                "     \n");
+
+        assertEquals("[]" ,
+                hero.getPerks().toString());
+    }
+
+    @Test
+    public void shouldSuicide_whenBRCperk_shouldRemoveAfterDeath_andCollectScores() {
+        destroyWallAt(0, 1);
+        meatChopperAt(3, 0);
+
+        when(level.bombsCount()).thenReturn(1);
+        when(level.bombsPower()).thenReturn(3);
+        player.getHero().addPerk(new BombRemoteControl(1, 1));
+
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=1, timeout=1, timer=1, pick=0}]",
+                hero.getPerks().toString());
+
+        // поставили радиоуправляемую бомбу
+        hero.act();
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "#    \n" +
+                "5☺ & \n");
+
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=1, timeout=1, timer=1, pick=0}]",
+                hero.getPerks().toString());
+
+        // идем к митчоперу на верную смерть
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "#    \n" +
+                "5 ☺& \n");
+
+        assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
+                        "value=1, timeout=1, timer=1, pick=0}]",
+                hero.getPerks().toString());
+
+        // самоубился и всех выпилил )
+        hero.right();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "H    \n" +
+                "҉҉҉Ѡ \n");
+
+        assertEquals("[DIED, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]", getEvents(listener));
+
+        // только сейчас перк забрался
+        assertEquals("[]",
+                hero.getPerks().toString());
+
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "   Ѡ \n");
+
+        assertEquals("[]", getEvents(listener));
+
+        assertEquals("[]",
                 hero.getPerks().toString());
     }
 

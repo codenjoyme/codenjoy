@@ -154,7 +154,7 @@ public class OptionGameSettings implements GameSettings {
                 0, timeoutBombImmune.getValue());
 
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_REMOTE_CONTROL,
-                0, remoteControlCount.getValue());
+                remoteControlCount.getValue(), 1); // 1 потому что он никогда не декризится
 
         return new Hero(level, dice);
     }

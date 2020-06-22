@@ -25,18 +25,19 @@ package com.codenjoy.dojo.bomberman.model.perks;
 import com.codenjoy.dojo.bomberman.model.Elements;
 
 public class BombRemoteControl extends Perk {
-    public BombRemoteControl(int timeout) {
-        super(Elements.BOMB_REMOTE_CONTROL, timeout);
+
+    public BombRemoteControl(int value, int timeout) {
+        super(Elements.BOMB_REMOTE_CONTROL, value, timeout);
     }
 
     @Override
     public Perk combine(Perk perk) {
-        return new BombRemoteControl(getTimeout());
+        return new BombRemoteControl(getValue(), getTimeout());
     }
 
-    @Override
     // We don't countdown by time, only by usage
+    @Override
     public void tick() {
-        setTimer(getTimeout());
+        // do nothing
     }
 }

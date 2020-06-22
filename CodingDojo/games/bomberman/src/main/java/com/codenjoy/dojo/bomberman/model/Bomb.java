@@ -33,7 +33,7 @@ public class Bomb extends PointImpl implements Tickable, State<Elements, Player>
     protected int power;
     private final Hero owner;
     private final Field field;
-    private boolean isOnRemoteControl = false;
+    private boolean onRemote = false;
 
     public Bomb(Hero owner, int x, int y, int power, Field field) {
         super(x, y);
@@ -43,7 +43,7 @@ public class Bomb extends PointImpl implements Tickable, State<Elements, Player>
     }
 
     public void tick() {
-        if (!isOnRemoteControl) {
+        if (!onRemote) {
             timer--;
         }
 
@@ -68,8 +68,8 @@ public class Bomb extends PointImpl implements Tickable, State<Elements, Player>
         return timer == 0;
     }
 
-    public boolean itsMine(Hero bomberman) {
-        return this.owner == bomberman;
+    public boolean itsMine(Hero hero) {
+        return this.owner == hero;
     }
 
     public Hero getOwner() {
@@ -77,11 +77,11 @@ public class Bomb extends PointImpl implements Tickable, State<Elements, Player>
     }
 
     public void putOnRemoteControl() {
-        this.isOnRemoteControl = true;
+        this.onRemote = true;
     }
 
-    public void deactivateRemoteControl() {
-        this.isOnRemoteControl = false;
+    public void deactivateRemote() {
+        this.onRemote = false;
     }
 
     public void activateRemote() {
@@ -89,7 +89,7 @@ public class Bomb extends PointImpl implements Tickable, State<Elements, Player>
     }
 
     public boolean isOnRemote() {
-        return isOnRemoteControl;
+        return onRemote;
     }
 
     @Override
