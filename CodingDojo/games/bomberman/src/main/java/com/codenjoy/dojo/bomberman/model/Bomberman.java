@@ -76,6 +76,7 @@ public class Bomberman extends RoundField<Player> implements Field {
         return settings;
     }
 
+    @Override
     public List<PerkOnBoard> perks() {
         return perks;
     }
@@ -269,7 +270,11 @@ public class Bomberman extends RoundField<Player> implements Field {
 
         // вначале прибиваем стенки
         preys.forEach(wall -> {
-            destroyedWalls.add(wall);
+            if (wall instanceof MeatChopperHunter) {
+                ((MeatChopperHunter)wall).die();
+            } else {
+                destroyedWalls.add(wall);
+            }
         });
 
         // а потом все виновники получают свои ачивки

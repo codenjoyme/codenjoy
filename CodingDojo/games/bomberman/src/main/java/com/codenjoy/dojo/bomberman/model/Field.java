@@ -60,5 +60,7 @@ public interface Field extends RoundGameField<Player> {  // TODO примени�
 
     GameSettings settings();
 
+    List<PerkOnBoard> perks();
+
     PerkOnBoard pickPerk(Point pt);
 }

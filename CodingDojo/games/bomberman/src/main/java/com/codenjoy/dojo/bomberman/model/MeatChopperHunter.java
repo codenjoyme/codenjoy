@@ -22,6 +22,7 @@ package com.codenjoy.dojo.bomberman.model;
  * #L%
  */
 
+import com.codenjoy.dojo.bomberman.model.perks.PerkOnBoard;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
@@ -36,11 +37,13 @@ public class MeatChopperHunter extends MeatChopper {
 
     private Hero prey;
     private DeikstraFindWay way;
+    private PerkOnBoard perk;
     private boolean alive = true;
 
-    public MeatChopperHunter(Point pt, Hero prey) {
-        super(pt, prey.field(), prey.getDice());
+    public MeatChopperHunter(PerkOnBoard perk, Hero prey) {
+        super(perk.copy(), prey.field(), prey.getDice());
         this.prey = prey;
+        this.perk = perk;
         this.way = new DeikstraFindWay();
     }
 
@@ -92,14 +95,18 @@ public class MeatChopperHunter extends MeatChopper {
             Point from = this.copy();
             this.move(direction.change(from));
 
-            // попутно сносим стенки на пути прожженные
-            field.walls().destroy(from);
+            // попутно сносим стенки на пути прожженные (если есть)
+            field.walls().destroyExact(new DestroyWall(from));
         }
     }
 
-    private void die() {
+    public void die() {
         alive = false;
         field.remove(this);
+        // ларчик просто открывался, перки надо не убивать
+        // а собирать, иначе они за тобой будут гнаться
+        perk.move(this);
+        field.perks().add(perk);
     }
 
     @Override

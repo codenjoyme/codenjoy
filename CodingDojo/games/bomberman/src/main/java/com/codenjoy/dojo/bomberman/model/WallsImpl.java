@@ -91,6 +91,21 @@ public class WallsImpl implements Walls {
     }
 
     @Override
+    public Wall destroyExact(Wall wall) {
+        for (int index = 0; index < walls.size(); index++) {
+            Wall item = walls.get(index);
+            // если тот же элемент, или тип тот же и координаты идентичны
+            if (item == wall
+                    || ( item.getClass().equals(wall.getClass())
+                        && item.equals(wall)))
+            {
+                return walls.remove(index);
+            }
+        }
+        return new Wall(-1, -1);
+    }
+
+    @Override
     public Wall get(Point pt) {
         int index = walls.indexOf(new Wall(pt));
         if (index == -1) {

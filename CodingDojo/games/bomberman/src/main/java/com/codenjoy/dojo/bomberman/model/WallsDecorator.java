@@ -75,6 +75,11 @@ public abstract class WallsDecorator implements Walls, Tickable {
     }
 
     @Override
+    public Wall destroyExact(Wall wall) {
+        return walls.destroyExact(wall);
+    }
+
+    @Override
     public Wall get(Point pt) {
         return walls.get(pt);
     }

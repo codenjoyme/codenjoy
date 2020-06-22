@@ -42,5 +42,7 @@ public interface Walls extends Iterable<Wall>, Tickable {
 
     Wall destroy(Point pt);
 
+    Wall destroyExact(Wall wall);
+
     Wall get(Point pt);
 }

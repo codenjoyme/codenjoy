@@ -313,7 +313,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
 
     }
 
-    // проверяем, что уничтожение перка порождает митчопера :)
+    // проверяем, что уничтожение перка порождает злого-анти-митчопера :)
     @Test
     public void shouldDropPerk_generateNewMeatChopper() {
         shouldHeroAcquirePerk_whenMoveToFieldWithPerk();
@@ -449,13 +449,14 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         field.tick();
 
         asrtBrd("#+####\n" +
-                "#☼  ##\n" +
+                "#☼ +##\n" +  // антимитчопер превратился обратно в перк
                 "#    #\n" +
                 "# # ##\n" +
                 " ☺   +\n" +
                 "# ####\n");
     }
 
+    // а теперь пробуем убить анти-митчопера
     @Test
     public void shouldDropPerk_generateNewMeatChopper_thenKillIt() {
         when(level.bombsCount()).thenReturn(2);
@@ -545,19 +546,20 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         asrtBrd("#+####\n" +
                 "# # ##\n" +
                 "# ☺  #\n" +
-                "+ + ##\n" +
+                "+++ ##\n" +
                 "     +\n" +
                 "# ####\n");
 
         verifyAllEvents("[]");
     }
 
-    // генерим два митчопера и смотрим как они бегут за мной
+
+    // генерим три митчопера и смотрим как они бегут за мной
     @Test
-    public void shouldDropPerk_generateTwoMeatChoppers() {
+    public void shouldDropPerk_generateThreeMeatChoppers() {
         shouldDropPerk_generateNewMeatChopper_thenKillIt();
 
-        // бамбанули между двух перков
+        // бамбанули между двух перков, хак (перк при этом не взяли)
         hero.move(1, 2);
         hero.act();
 
@@ -591,24 +593,24 @@ public class PerksBombermanTest extends AbstractBombermanTest {
 
         verifyAllEvents("[]");
 
-        // породили два чудовища
+        // породили три чудовища
         field.tick();
 
         asrtBrd("#+##☼☺\n" +
                 "# # ☼ \n" +
                 "#҉   #\n" +
-                "x҉x ##\n" +
+                "xxx ##\n" +
                 " ҉   +\n" +
                 "# ####\n");
 
-        verifyAllEvents("[DROP_PERK, DROP_PERK]");
+        verifyAllEvents("[DROP_PERK, DROP_PERK, DROP_PERK]");
 
         // и они пошли за нами
         field.tick();
 
         asrtBrd("#+##☼☺\n" +
                 "# # ☼ \n" +
-                "H x  #\n" +
+                "Hxx  #\n" +
                 "    ##\n" +
                 "     +\n" +
                 "# ####\n");
@@ -617,7 +619,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
 
         asrtBrd("#+##☼☺\n" +
                 "# # ☼ \n" +
-                " x x #\n" +
+                " xxx #\n" +
                 "    ##\n" +
                 "     +\n" +
                 "# ####\n");
@@ -626,7 +628,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
 
         asrtBrd("#+##☼☺\n" +
                 "# # ☼ \n" +
-                "  x x#\n" +
+                "  xxx#\n" +
                 "    ##\n" +
                 "     +\n" +
                 "# ####\n");
@@ -635,9 +637,10 @@ public class PerksBombermanTest extends AbstractBombermanTest {
     }
 
     // если анти-митчоперы не могут найти к тебе короткий путь - они выпиливаются
+    // вместо них будут перки
     @Test
     public void shouldDropPerk_generateTwoMeatChoppers_noWayNoPain() {
-        shouldDropPerk_generateTwoMeatChoppers();
+        shouldDropPerk_generateThreeMeatChoppers();
 
         // но стоит забарикадироваться
         field.walls().add(new Wall(5, 4));
@@ -646,7 +649,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
         // как митчоперы нормальнеют
         asrtBrd("#+##☼☺\n" +
                 "# # ☼☼\n" +
-                "  & &#\n" +
+                "  &&&#\n" +
                 "    ##\n" +
                 "     +\n" +
                 "# ####\n");
@@ -656,7 +659,7 @@ public class PerksBombermanTest extends AbstractBombermanTest {
 
         asrtBrd("#+##☼☺\n" +
                 "# # ☼☼\n" +
-                "     #\n" +
+                "  +++#\n" +  // антимитчоперы превратились обратно в перки
                 "    ##\n" +
                 "     +\n" +
                 "# ####\n");
