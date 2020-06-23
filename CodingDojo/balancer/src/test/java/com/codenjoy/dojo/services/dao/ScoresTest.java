@@ -492,10 +492,13 @@ public class ScoresTest {
             add(new PlayerInfo("apofig.id", "4006"));            // дисквалицифирован
             add(new PlayerInfo("zanefig.id", "5006"));           // был победителем в прошлом
             add(new PlayerInfo("nunafig.id", "6006"));           // был победителем в прошлом
-            add(new PlayerInfo("kukufig.id", "7006"));           // этот бы вошел, но не судьба
+            add(new PlayerInfo("kukufig.id", "7006"));           // этот вошел
+            add(new PlayerInfo("rerere.id", "1"));               // войдет потому что 1 у него
+            add(new PlayerInfo("rerere2.id", "0"));              // не войдет потому что 0 у него
         }});
 
-        expected += ", PlayerScore{id='kukufig.id', name='null', score=7006, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}";
+        expected += ", PlayerScore{id='kukufig.id', name='null', score=7006, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}" +
+                    ", PlayerScore{id='rerere.id', name='null', score=1, day='2019-01-31', time='2019-01-31T19:00:00.000+0200', server='null', winner=false}";
         assertEquals("[" + expected + "]",
                 service.getFinalists("2019-01-28", "2019-01-31", finalistsCount, exclude).toString());
 

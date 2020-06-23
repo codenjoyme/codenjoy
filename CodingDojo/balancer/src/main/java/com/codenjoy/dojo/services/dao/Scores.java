@@ -108,6 +108,7 @@ public class Scores {
                 .map(day -> day.format(Scores.DAY_FORMATTER))
                 .filter(day -> isPast(day, time))
                 .flatMap(day -> getScores(day, time).stream()
+                    .filter(score -> score.getScore() > 0)
                     .sorted(Comparator.comparingInt(PlayerScore::getScore).reversed())
                     .filter(score -> !exclude.contains(score.getId()))
                     .filter(score -> !finalists.contains(score.getId()))
