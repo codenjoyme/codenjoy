@@ -33,6 +33,7 @@ import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,6 +57,7 @@ public class RestAdminController {
 
     private Validator validator;
     private PlayerService playerService;
+    private ErrorTicketService ticket;
     private SaveService saveService;
     private PlayerGamesView playerGamesView;
     private TimerService timerService;
@@ -72,6 +74,22 @@ public class RestAdminController {
         list.add(0, "engine");
         list.add(1, "server");
         return VersionReader.version(list).toString();
+    }
+
+    @GetMapping("/errors")
+    @ResponseBody
+    public Map<String, Map<String, Object>> getTickets(
+            @RequestParam(value = "ticket", required = false) String ticketId)
+    {
+        final Map<String, Map<String, Object>> tickets = ticket.getErrors();
+
+        if (StringUtils.isEmpty(ticketId)) {
+            return tickets;
+        } else {
+            return new HashMap<String, Map<String, Object>>(){{
+                put(ticketId, tickets.get(ticketId));
+            }};
+        }
     }
 
     // TODO test me и вообще где это надо?

@@ -34,21 +34,28 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 @Slf4j
 public class ErrorTicketService {
+
+    private static final String ERROR_MESSAGE = "Something wrong with your request. " +
+            "Please save you ticker number and ask site administrator.";
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
     @Autowired
     private DebugService debug;
 
     private boolean printStackTrace = true;
 
+    private Map<String, Map<String, Object>> tickets = new ConcurrentHashMap<>();
+
     public ModelAndView get(String url, Exception exception) {
         String ticket = ticket();
 
-        // TODO очень было бы здорово, если бы мы хранили все исключения и отдавали бы их на админке
         String message = printStackTrace ? exception.toString() : exception.toString();
         log.error("[TICKET:URL] {}:{} {}", ticket, url, message);
         System.err.printf("[TICKET:URL] %s:%s %s%n", ticket, url, message);
@@ -57,13 +64,17 @@ public class ErrorTicketService {
             exception.printStackTrace();
         }
 
+        Map<String, Object> info = getDetails(ticket, url, exception);
+        tickets.put(ticket, info);
+
         ModelAndView result = new ModelAndView();
         result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        result.addObject("ticketNumber", ticket);
-        result.addObject("message", "Something wrong with your request. " +
-                "Please save you ticker number and ask site administrator.");
+
+        copy("ticketNumber", info, result);
 
         if (!debug.isWorking()) {
+            result.addObject("message", ERROR_MESSAGE);
+
             if (url.contains("/rest/")) {
                 shouldJsonResult(result);
             } else {
@@ -72,34 +83,57 @@ public class ErrorTicketService {
             return result;
         }
 
-        result.addObject("message", exception.getClass().getName() + ": " + exception.getMessage());
-        result.addObject("url", url);
-        if (!printStackTrace) {
-            exception.setStackTrace(new StackTraceElement[0]);
-        }
-        result.addObject("exception", exception);
+
+        copy("message", info, result);
+        copy("url", info, result);
+        copy("exception", info, result);
 
         if (url.contains("/rest/")) {
-            result.addObject("stackTrace", prepareJsonStackTrace(exception));
+            copy("stackTrace", info, result);
+
             result.setView(new MappingJackson2JsonView(){{
                 setPrettyPrint(true);
             }});
             return result;
         }
 
-        String text = prepareStackTrace(exception);
-        result.addObject("stacktrace", text);
+        result.addObject("stackTrace", prepareStackTrace(exception));
 
         shouldErrorPage(result);
         return result;
+    }
+
+    private void copy(String name, Map<String, Object> info, ModelAndView model) {
+        model.addObject(name, info.get(name));
+    }
+
+    public Map<String, Object> getDetails(String ticket, String url, Exception exception) {
+        return new HashMap<String, Object>(){{
+            put("ticketNumber", ticket);
+            put("time", format.format(Calendar.getInstance().getTime()));
+            put("message", exception.getClass().getName() + ": " + exception.getMessage());
+            put("url", url);
+            if (!printStackTrace) {
+                exception.setStackTrace(new StackTraceElement[0]);
+            }
+            put("exception", exception);
+            put("stackTrace", prepareJsonStackTrace(exception));
+        }};
     }
 
     private boolean skip(String message) {
         return message.contains(PlayerSocketCreator.UNAUTHORIZED_ACCESS);
     }
 
-    private String prepareJsonStackTrace(Exception exception) {
-        return printStackTrace ? ExceptionUtils.getStackTrace(exception) : "";
+    private List<String> prepareJsonStackTrace(Exception exception) {
+        if (printStackTrace) {
+            return Arrays.asList(
+                    ExceptionUtils.getStackTrace(exception)
+                            .replaceAll("[\r\t]", "")
+                            .split("\n"));
+        } else {
+           return Arrays.asList();
+        }
     }
 
     private String prepareStackTrace(Exception exception) {
@@ -131,5 +165,9 @@ public class ErrorTicketService {
 
     public void setPrintStackTrace(boolean printStackTrace) {
         this.printStackTrace = printStackTrace;
+    }
+
+    public Map<String, Map<String, Object>> getErrors() {
+        return tickets;
     }
 }
