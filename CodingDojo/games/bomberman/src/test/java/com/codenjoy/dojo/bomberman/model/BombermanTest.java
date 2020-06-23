@@ -25,6 +25,7 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -434,6 +435,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "҉    \n" +
                 "҉Ѡ   \n");
+
+        verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -443,6 +446,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n" +
                 " Ѡ   \n");
+
+        verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -564,6 +569,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "҉    \n" +
                 "҉Ѡ   \n");
+
+        verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -573,6 +580,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n" +
                 " Ѡ   \n");
+
+        verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -604,6 +613,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 " ҉   \n" +
                 "Ѡ҉҉  \n");
+
+        verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -613,6 +624,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n" +
                 "Ѡ    \n");
+
+        verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -642,6 +655,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "҉    \n" +
                 "҉҉   \n" +
                 "Ѡ    \n");
+
+        verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -651,6 +666,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n" +
                 "Ѡ    \n");
+
+        verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -682,6 +699,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "Ѡ    \n" +
                 "҉҉   \n");
+
+        verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -691,6 +710,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "Ѡ    \n" +
                 "     \n");
+
+        verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -800,6 +821,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "  Ѡ  \n" +
                 "     \n");
 
+        verifyAllEvents("[DIED]");
         assertHeroDie();
 
         field.tick();
@@ -809,6 +831,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "  Ѡ  \n" +
                 "     \n");
 
+        verifyAllEvents("[]");
         assertHeroDie();
     }
 
@@ -1486,13 +1509,6 @@ public class BombermanTest extends AbstractBombermanTest {
     }
 
     @Test
-    public void shouldFireEventWhenKillHero() {
-        shouldKillHero_whenBombExploded();
-
-        verify(listener).event(Events.DIED);
-    }
-
-    @Test
     public void shouldNoEventsWhenHeroNotMove() {
         field.tick();
         field.tick();
@@ -1611,6 +1627,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "#1   \n" +
                 "x҉҉  \n");
 
+        verifyAllEvents("[KILL_MEAT_CHOPPER]");
+
         field.tick();
 
         asrtBrd("  ☺  \n" +
@@ -1618,6 +1636,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 "&1   \n" +
                 "H҉҉  \n" +
                 " ҉   \n");
+
+        verifyAllEvents("[KILL_DESTROY_WALL]");
 
         field.tick();
 
@@ -1627,6 +1647,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 " ҉   \n" +
                 "     \n");
 
+        verifyAllEvents("[KILL_MEAT_CHOPPER]");
+
         field.tick();
 
         asrtBrd(" ҉☺  \n" +
@@ -1634,6 +1656,8 @@ public class BombermanTest extends AbstractBombermanTest {
                 " ҉   \n" +
                 "     \n" +
                 "     \n");
+
+        verifyAllEvents("[KILL_DESTROY_WALL]");
 
         hero.left();
         field.tick();
@@ -1659,6 +1683,7 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 "     \n");
 
+        verifyAllEvents("[DIED]");
         assertHeroDie();
 
         initHero();
@@ -1688,6 +1713,71 @@ public class BombermanTest extends AbstractBombermanTest {
                 "     \n" +
                 " ҉   \n" +
                 "҉҉҉☺ \n");
+    }
+
+    @Test
+    public void shouldCalculateMeatChoppersAndWallKills_caseBigBadaboom() {
+        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(true));
+
+        meatChopperAt(0, 0);
+        destroyWallAt(0, 1);
+        meatChopperAt(0, 2);
+        destroyWallAt(0, 3);
+
+        dice(heroDice, 1, 0);
+        givenBoard(SIZE);
+
+        canDropBombs(4);
+        bombsPower(1);
+
+        asrtBrd("     \n" +
+                "#    \n" +
+                "&    \n" +
+                "#    \n" +
+                "&☺   \n");
+
+        hero.act();
+        hero.up();
+        field.tick();
+
+        hero.act();
+        hero.up();
+        field.tick();
+
+        hero.act();
+        hero.up();
+        field.tick();
+
+        hero.act();
+        hero.up();
+        field.tick();
+
+        asrtBrd(" ☺   \n" +
+                "#4   \n" +
+                "&3   \n" +
+                "#2   \n" +
+                "&1   \n");
+
+        verifyAllEvents("[]");
+
+        hero.right();
+        field.tick();
+
+        asrtBrd(" ҉☺  \n" +
+                "H҉҉  \n" +
+                "x҉҉  \n" +
+                "H҉҉  \n" +
+                "x҉҉  \n");
+
+        field.tick();
+
+        asrtBrd("  ☺  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
+
+        verifyAllEvents("[KILL_MEAT_CHOPPER, KILL_DESTROY_WALL, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]");
     }
 
     // если я двинулся за пределы стены и тут же поставил бомбу, то бомба упадет на моем текущем месте

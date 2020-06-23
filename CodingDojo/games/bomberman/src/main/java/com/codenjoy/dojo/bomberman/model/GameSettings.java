@@ -41,6 +41,8 @@ public interface GameSettings {
 
     Parameter<Boolean> isMultiple();
 
+    Parameter<Boolean> isBigBadaboom();
+
     Parameter<Integer> getPlayersPerRoom();
 
     RoundSettingsWrapper getRoundSettings();

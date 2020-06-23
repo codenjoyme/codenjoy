@@ -41,6 +41,7 @@ public class GameSettings {
     public static final String SCORE_YOUR_HEROES_DEATH_PENALTY = "[Score] Your hero's death penalty";
     public static final String SCORE_ROUNDS_WIN_ROUND_SCORE = "[Score][Rounds] Win round score";
     public static final String LEVEL_BOMBS_COUNT = "[Level] Bombs count";
+    public static final String LEVEL_BIG_BADABOOM = "[Level] Blast activate bomb";
     public static final String LEVEL_BOMB_POWER = "[Level] Bomb power";
     public static final String LEVEL_BOARD_SIZE = "[Level] Board size";
     public static final String LEVEL_DESTROY_WALL_COUNT = "[Level] Destroy wall count";
@@ -78,6 +79,10 @@ public class GameSettings {
 
     public Boolean isMultiple() {
         return getBoolean(GAME_IS_MULTIPLE_OR_DISPOSABLE);
+    }
+
+    public Boolean isBigBadaboom() {
+        return getBoolean(LEVEL_BIG_BADABOOM);
     }
 
     public Integer getPlayersPerRoom() {
@@ -210,6 +215,10 @@ public class GameSettings {
     
     public void setMultiple(Boolean input) {
         add(GAME_IS_MULTIPLE_OR_DISPOSABLE, input);
+    }
+
+    public void setBigBadaboom(Boolean input) {
+        add(LEVEL_BIG_BADABOOM, input);
     }
 
     public void setPlayersPerRoom(Integer input) {
@@ -358,6 +367,7 @@ public class GameSettings {
 
     public void update(List<PParameter> parameters) {
         update(parameters, GAME_IS_MULTIPLE_OR_DISPOSABLE);
+        update(parameters, LEVEL_BIG_BADABOOM);
         update(parameters, GAME_PLAYERS_PER_ROOM_FOR_DISPOSABLE);
         update(parameters, SCORE_KILL_WALL_SCORE);
         update(parameters, SCORE_KILL_MEAT_CHOPPER_SCORE);

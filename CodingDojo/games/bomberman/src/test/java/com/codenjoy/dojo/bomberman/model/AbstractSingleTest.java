@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
@@ -83,6 +84,7 @@ public abstract class AbstractSingleTest {
         });
 
         when(settings.getLevel()).thenReturn(level);
+        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(false));
         when(settings.getDice()).thenReturn(heroDice);
         when(settings.getBoardSize()).thenReturn(v(SIZE));
         when(settings.getWalls()).thenReturn(walls);

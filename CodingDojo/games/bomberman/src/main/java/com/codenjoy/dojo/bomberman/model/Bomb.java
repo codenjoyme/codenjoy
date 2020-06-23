@@ -52,7 +52,7 @@ public class Bomb extends PointImpl implements Tickable, State<Elements, Player>
         }
     }
 
-    private void boom() {
+    public void boom() {
         field.remove(this);
     }
 

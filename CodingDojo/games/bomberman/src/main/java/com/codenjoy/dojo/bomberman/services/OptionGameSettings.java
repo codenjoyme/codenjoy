@@ -40,6 +40,7 @@ public class OptionGameSettings implements GameSettings {
 
     private final RoundSettingsWrapper roundSettings;
 
+    private final Parameter<Boolean> isBigBadaboom;
     private final Parameter<Integer> bombPower;
     private final Parameter<Integer> bombsCount;
     private final Parameter<Integer> destroyWallCount;
@@ -75,6 +76,7 @@ public class OptionGameSettings implements GameSettings {
         diePenalty = settings.addEditBox("[Score] Your hero's death penalty").type(Integer.class).def(30);
         winRoundScore = settings.addEditBox("[Score][Rounds] Win round score").type(Integer.class).def(30);
 
+        isBigBadaboom = settings.addCheckBox("[Level] Blast activate bomb").type(Boolean.class).def(false);
         bombsCount = settings.addEditBox("[Level] Bombs count").type(Integer.class).def(1);
         bombPower = settings.addEditBox("[Level] Bomb power").type(Integer.class).def(3);
         boardSize = settings.addEditBox("[Level] Board size").type(Integer.class).def(23);
@@ -167,6 +169,11 @@ public class OptionGameSettings implements GameSettings {
     @Override
     public Parameter<Boolean> isMultiple() {
         return isMultiple;
+    }
+
+    @Override
+    public Parameter<Boolean> isBigBadaboom() {
+        return isBigBadaboom;
     }
 
     @Override

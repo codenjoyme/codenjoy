@@ -182,13 +182,21 @@ public class Bomberman extends RoundField<Player> implements Field {
             bomb.tick();
         }
 
-        // вначале все взрываем, чтобы было пекло
-        for (Bomb bomb : destroyedBombs) {
-            bombs.remove(bomb);
+        do {
+            makeBlastsFromDestoryedBombs();
 
-            List<Blast> blast = makeBlast(bomb);
-            blasts.addAll(blast);
-        }
+            if (settings.isBigBadaboom().getValue()) {
+
+                // если бомбу зацепила взрывная волна и ее тоже подрываем
+                for (Bomb bomb : bombs) {
+                    if (blasts.contains(bomb)) {
+                        bomb.boom();
+                    }
+                }
+            }
+
+            // и повторяем все, пока были взорванные бомбы
+        } while(!destroyedBombs.isEmpty());
 
         // потому уже считаем скоры за разрушения
         killAllNear(blasts);
@@ -199,6 +207,16 @@ public class Bomberman extends RoundField<Player> implements Field {
                 .collect(toList());
         blasts.removeAll(blastsOnPerks);
 
+    }
+
+    private void makeBlastsFromDestoryedBombs() {
+        // все взрываем, чтобы было пекло
+        for (Bomb bomb : destroyedBombs) {
+            bombs.remove(bomb);
+
+            List<Blast> blast = makeBlast(bomb);
+            blasts.addAll(blast);
+        }
         destroyedBombs.clear();
     }
 

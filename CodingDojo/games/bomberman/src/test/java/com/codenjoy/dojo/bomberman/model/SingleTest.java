@@ -27,6 +27,7 @@ import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -786,9 +787,9 @@ public class SingleTest extends AbstractSingleTest {
 
         verifyAllEvents(
                 "listener(0) => [DIED, KILL_DESTROY_WALL]\n" +
-                "listener(1) => [DIED, KILL_DESTROY_WALL]\n" +
-                "listener(2) => [DIED, KILL_DESTROY_WALL]\n" +
-                "listener(3) => [DIED, KILL_DESTROY_WALL]\n");
+                        "listener(1) => [DIED, KILL_DESTROY_WALL]\n" +
+                        "listener(2) => [DIED, KILL_DESTROY_WALL]\n" +
+                        "listener(3) => [DIED, KILL_DESTROY_WALL]\n");
 
         tick();
 
@@ -1055,6 +1056,360 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n" +
                 "☺    \n" +
                 "     \n" +
+                "     \n", game(0));
+    }
+
+    @Test
+    public void shouldCrossBlasts_checkingScores_whenBigBadaboom() {
+        bombsCount = 2;
+        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(true));
+        PerksSettingsWrapper.setDropRatio(0);
+
+        destroyWallAt(2, 2);
+        meatChopperAt(0, 1);
+        meatChopperAt(0, 3);
+        meatChopperAt(4, 1);
+        meatChopperAt(4, 3);
+
+        dice(heroDice,
+                0, 0,
+                1, 0,
+                2, 0,
+                3, 0);
+        givenBoard(4);
+
+        // бомба, которой все пордорвем
+        hero(0).move(1, 2);
+        hero(0).act();
+        tick();
+
+        hero(0).move(1, 3);
+        hero(0).act();
+        hero(0).move(0, 0);
+
+        hero(1).move(2, 1);
+        hero(1).act();
+        hero(1).move(1, 1);
+        hero(1).act();
+        hero(1).move(1, 0);
+        tick();
+
+        hero(2).move(3, 2);
+        hero(2).act();
+        hero(2).move(3, 1);
+        hero(2).act();
+        hero(2).move(2, 0);
+        tick();
+
+        hero(3).move(2, 3);
+        hero(3).act();
+        hero(3).move(3, 3);
+        hero(3).act();
+        hero(3).move(3, 0);
+
+        tick();
+
+        asrtBrd("     \n" +
+                "&244&\n" +
+                " 1#3 \n" +
+                "&223&\n" +
+                "☺♥♥♥ \n",
+                game(0));
+
+        hero(0).move(0, 0);
+        hero(1).move(1, 1);
+        hero(2).move(3, 1);
+        hero(3).move(3, 3);
+
+        asrtBrd("     \n" +
+                "&24♠&\n" +
+                " 1#3 \n" +
+                "&♠2♠&\n" +
+                "☺    \n",
+                game(0));
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n");
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO, KILL_DESTROY_WALL, KILL_MEAT_CHOPPER]\n" +
+                "listener(1) => [DIED, KILL_OTHER_HERO, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]\n" +
+                "listener(2) => [DIED, KILL_OTHER_HERO, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]\n" +
+                "listener(3) => [DIED, KILL_DESTROY_WALL, KILL_MEAT_CHOPPER]\n");
+
+        asrtBrd(" ҉҉҉ \n" +
+                "x҉҉♣x\n" +
+                "҉҉H҉҉\n" +
+                "x♣҉♣x\n" +
+                "☺҉҉҉ \n", game(0));
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n");
+
+        asrtBrd("     \n" +
+                "   ♣ \n" +
+                "     \n" +
+                " ♣ ♣ \n" +
+                "☺    \n", game(0));
+    }
+
+    @Test
+    public void shouldCrossBlasts_checkingScores_whenBigBadaboom_caseKillAll() {
+        bombsCount = 2;
+        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(true));
+        PerksSettingsWrapper.setDropRatio(0);
+
+        destroyWallAt(2, 2);
+        meatChopperAt(0, 1);
+        meatChopperAt(0, 3);
+        meatChopperAt(4, 1);
+        meatChopperAt(4, 3);
+
+        dice(heroDice,
+                0, 0,
+                1, 0,
+                2, 0,
+                3, 0);
+        givenBoard(4);
+
+        // бомба, которой все пордорвем
+        hero(0).move(1, 2);
+        hero(0).act();
+        tick();
+
+        hero(0).move(1, 3);
+        hero(0).act();
+        hero(0).move(0, 0);
+
+        hero(1).move(2, 1);
+        hero(1).act();
+        hero(1).move(1, 1);
+        hero(1).act();
+        hero(1).move(1, 0);
+        tick();
+
+        hero(2).move(3, 2);
+        hero(2).act();
+        hero(2).move(3, 1);
+        hero(2).act();
+        hero(2).move(2, 0);
+        tick();
+
+        hero(3).move(2, 3);
+        hero(3).act();
+        hero(3).move(3, 3);
+        hero(3).act();
+        hero(3).move(3, 0);
+
+        tick();
+
+        asrtBrd("     \n" +
+                "&244&\n" +
+                " 1#3 \n" +
+                "&223&\n" +
+                "☺♥♥♥ \n",
+                game(0));
+
+        hero(0).move(1, 3);
+        hero(1).move(1, 1);
+        hero(2).move(3, 1);
+        hero(3).move(3, 3);
+
+        asrtBrd("     \n" +
+                "&☻4♠&\n" +
+                " 1#3 \n" +
+                "&♠2♠&\n" +
+                "     \n",
+                game(0));
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n");
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [DIED, KILL_OTHER_HERO, KILL_DESTROY_WALL, KILL_MEAT_CHOPPER]\n" +
+                "listener(1) => [DIED, KILL_OTHER_HERO, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]\n" +
+                "listener(2) => [DIED, KILL_OTHER_HERO, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]\n" +
+                "listener(3) => [DIED, KILL_OTHER_HERO, KILL_DESTROY_WALL, KILL_MEAT_CHOPPER]\n");
+
+        asrtBrd(" ҉҉҉ \n" +
+                "xѠ҉♣x\n" +
+                "҉҉H҉҉\n" +
+                "x♣҉♣x\n" +
+                " ҉҉҉ \n", game(0));
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n");
+
+        asrtBrd("     \n" +
+                " Ѡ ♣ \n" +
+                "     \n" +
+                " ♣ ♣ \n" +
+                "     \n", game(0));
+    }
+
+    @Test
+    public void shouldCrossBlasts_checkingScores_whenNotBigBadaboom_caseKillAll() {
+        bombsCount = 2;
+        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(false));
+        PerksSettingsWrapper.setDropRatio(0);
+
+        destroyWallAt(2, 2);
+        meatChopperAt(0, 1);
+        meatChopperAt(0, 3);
+        meatChopperAt(4, 1);
+        meatChopperAt(4, 3);
+
+        dice(heroDice,
+                0, 0,
+                1, 0,
+                2, 0,
+                3, 0);
+        givenBoard(4);
+
+        // бомба, которой все пордорвем
+        hero(0).move(1, 2);
+        hero(0).act();
+        tick();
+
+        hero(0).move(1, 3);
+        hero(0).act();
+        hero(0).move(0, 0);
+
+        hero(1).move(2, 1);
+        hero(1).act();
+        hero(1).move(1, 1);
+        hero(1).act();
+        hero(1).move(1, 0);
+        tick();
+
+        hero(2).move(3, 2);
+        hero(2).act();
+        hero(2).move(3, 1);
+        hero(2).act();
+        hero(2).move(2, 0);
+        tick();
+
+        hero(3).move(2, 3);
+        hero(3).act();
+        hero(3).move(3, 3);
+        hero(3).act();
+        hero(3).move(3, 0);
+
+        tick();
+
+        asrtBrd("     \n" +
+                "&244&\n" +
+                " 1#3 \n" +
+                "&223&\n" +
+                "☺♥♥♥ \n",
+                game(0));
+
+        hero(0).move(1, 3);
+        hero(1).move(1, 1);
+        hero(2).move(3, 1);
+        hero(3).move(3, 3);
+
+        asrtBrd("     \n" +
+                "&☻4♠&\n" +
+                " 1#3 \n" +
+                "&♠2♠&\n" +
+                "     \n",
+                game(0));
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n");
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [DIED, KILL_OTHER_HERO, KILL_DESTROY_WALL]\n" +
+                "listener(1) => [DIED]\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n");
+
+        asrtBrd("     \n" +
+                "&Ѡ3♠&\n" +
+                "҉҉H2 \n" +
+                "&11♠&\n" +
+                "     \n", game(0));
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => [KILL_MEAT_CHOPPER]\n" +
+                "listener(1) => [KILL_OTHER_HERO, KILL_MEAT_CHOPPER]\n" +
+                "listener(2) => [DIED]\n" +
+                "listener(3) => []\n");
+
+        asrtBrd(" ҉   \n" +
+                "xѠ2♠&\n" +
+                " ҉҉1 \n" +
+                "x♣҉1&\n" +
+                " ҉҉  \n", game(0));
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => [KILL_OTHER_HERO, KILL_MEAT_CHOPPER]\n" +
+                "listener(3) => [DIED]\n");
+
+        asrtBrd("     \n" +
+                " Ѡ11&\n" +
+                "  ҉҉҉\n" +
+                " ♣҉♣x\n" +
+                "   ҉ \n", game(0));
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => [KILL_MEAT_CHOPPER]\n");
+
+        asrtBrd("  ҉҉ \n" +
+                " Ѡ҉♣x\n" +
+                "  ҉҉ \n" +
+                " ♣ ♣ \n" +
+                "     \n", game(0));
+
+        tick();
+
+        verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n" +
+                "listener(2) => []\n" +
+                "listener(3) => []\n");
+
+        asrtBrd("     \n" +
+                " Ѡ ♣ \n" +
+                "     \n" +
+                " ♣ ♣ \n" +
                 "     \n", game(0));
     }
 }

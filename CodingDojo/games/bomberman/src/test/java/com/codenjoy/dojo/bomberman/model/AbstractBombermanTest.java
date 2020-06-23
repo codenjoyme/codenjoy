@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -76,6 +77,7 @@ public class AbstractBombermanTest {
         withWalls(walls);
         when(settings.getLevel()).thenReturn(level);
         when(settings.getRoundSettings()).thenReturn(getRoundSettings());
+        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(false));
         when(settings.killOtherHeroScore()).thenReturn(v(200));
         when(settings.killMeatChopperScore()).thenReturn(v(100));
         when(settings.killWallScore()).thenReturn(v(10));

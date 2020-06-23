@@ -44,6 +44,7 @@ public class DefaultGameSettings implements GameSettings {
     public static int BOMB_POWER = 3;
     public static int BOMBS_COUNT = 1;
     public static int BOARD_SIZE = 33;
+    public static boolean BIG_BADABOOM = false;
     public static int DESTROY_WALL_COUNT = BOARD_SIZE * BOARD_SIZE / 10;
     
     private final Dice dice;
@@ -93,6 +94,11 @@ public class DefaultGameSettings implements GameSettings {
     @Override
     public Parameter<Boolean> isMultiple() {
         return new SimpleParameter<>(true);
+    }
+
+    @Override
+    public Parameter<Boolean> isBigBadaboom() {
+        return new SimpleParameter<>(BIG_BADABOOM);
     }
 
     @Override

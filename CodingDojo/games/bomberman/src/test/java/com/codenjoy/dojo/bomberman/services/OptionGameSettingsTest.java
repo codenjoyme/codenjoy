@@ -89,6 +89,7 @@ public class OptionGameSettingsTest {
                 "  'catchPerkScore':5,\n" +
                 "  'destroyWallCount':52,\n" +
                 "  'diePenalty':30,\n" +
+                "  'isBigBadaboom':false,\n" +
                 "  'isMultiple':false,\n" +
                 "  'killMeatChopperScore':10,\n" +
                 "  'killOtherHeroScore':20,\n" +
@@ -135,6 +136,7 @@ public class OptionGameSettingsTest {
                 "  'catchPerkScore':5,\n" +
                 "  'destroyWallCount':52,\n" +
                 "  'diePenalty':12,\n" +
+                "  'isBigBadaboom':false,\n" +
                 "  'isMultiple':true,\n" +
                 "  'killMeatChopperScore':10,\n" +
                 "  'killOtherHeroScore':20,\n" +
@@ -171,6 +173,7 @@ public class OptionGameSettingsTest {
                 "  'catchPerkScore':5,\n" +
                 "  'destroyWallCount':52,\n" +
                 "  'diePenalty':12,\n" +
+                "  'isBigBadaboom':false,\n" +
                 "  'isMultiple':true,\n" +
                 "  'killMeatChopperScore':10,\n" +
                 "  'killOtherHeroScore':20,\n" +
