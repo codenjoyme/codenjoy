@@ -183,9 +183,15 @@ class RulesContainer extends Component {
                             запустити його командою (попередньо на ваш комп'ютер потрібно встановити java додаток).
                         </p>
                         <div className={ highligte } style={{whiteSpace:"pre"}} >
-                            { "java -jar -Dhost=127.0.0.1 -Dport=8080\ -Dtimeout=1000\n" +
+                            { "# windows\n" +
+                              "java -jar -Dhost=127.0.0.1 -Dport=8080\ -Dtimeout=1000\n" +
                               "          -Dlog=\"output.txt\" -DlogTime=true -DshowPlayers=\"2,3\"\n" +
-                              "          -Dsettings=\"{'boardSize':11,'bombPower':7}\"" }
+                              "          -Dsettings=\"{'boardSize':11,'bombPower':7}\"\n" +
+                              "\n" +
+                              "# linux\n" +
+                              "java -jar --host=127.0.0.1 --port=8080\ --timeout=1000\n" +
+                              "          --log=\"output.txt\" --logTime=true --showPlayers=\"2,3\"\n" +
+                              "          --settings=\"{'boardSize':11,'bombPower':7}\"" }
                         </div>
                         <p>
                             Як бачиш - є можливicть змінювати хост/порт, кількість мілісекунд на один тік,

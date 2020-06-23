@@ -97,9 +97,14 @@ public class Main {
                 game, host, port, JsonUtils.prettyPrint(gameSettings.asJson())));
 
         LocalGameRunner.out.accept("If you want to change something, please use command:\n" +
+                        "# windows\n" +
                         "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 " +
                         "-DlogDisable=false -Dlog=\"output.txt\" -DlogTime=true -DshowPlayers=\"2,3\" " +
-                        "-Dsettings=\"{'boardSize':11, 'bombPower':7}\"\n");
+                        "-Dsettings=\"{'boardSize':11, 'bombPower':7}\"\n" +
+                        "# linux\n" +
+                        "java -jar --host=127.0.0.1 --port=8080 --timeout=1000 " +
+                        "--logDisable=false --log=\"output.txt\" --logTime=true --showPlayers=\"2,3\" " +
+                        "--settings=\"{'boardSize':11, 'bombPower':7}\"\n");
 
         LocalGameRunner.showPlayers = showPlayers;
         LocalWSGameRunner.run(gameType, host, port, timeout);
