@@ -23,7 +23,7 @@ package com.codenjoy.dojo.quake2d;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.quake2d.client.Board;
 import com.codenjoy.dojo.quake2d.client.ai.AISolver;
 import com.codenjoy.dojo.quake2d.services.GameRunner;

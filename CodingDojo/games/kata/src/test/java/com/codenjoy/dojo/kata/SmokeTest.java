@@ -23,7 +23,7 @@ package com.codenjoy.dojo.kata;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.kata.client.Board;
 import com.codenjoy.dojo.kata.client.ai.AISolver;
 import com.codenjoy.dojo.kata.services.GameRunner;

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.football;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.football.client.Board;
 import com.codenjoy.dojo.football.client.ai.AISolver;
 import com.codenjoy.dojo.football.services.GameRunner;

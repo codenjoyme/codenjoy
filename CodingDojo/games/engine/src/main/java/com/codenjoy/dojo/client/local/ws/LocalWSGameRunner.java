@@ -25,7 +25,7 @@ package com.codenjoy.dojo.client.local.ws;
 
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.client.ClientBoard;
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.GameType;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;

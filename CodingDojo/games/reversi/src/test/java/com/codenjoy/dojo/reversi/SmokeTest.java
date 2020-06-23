@@ -24,7 +24,7 @@ package com.codenjoy.dojo.reversi;
 
 
 import com.codenjoy.dojo.client.ClientBoard;
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.reversi.client.Board;
 import com.codenjoy.dojo.reversi.client.ai.AISolver;

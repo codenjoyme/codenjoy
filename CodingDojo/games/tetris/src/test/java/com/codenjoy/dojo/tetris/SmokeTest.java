@@ -23,12 +23,11 @@ package com.codenjoy.dojo.tetris;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.client.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.levels.level.AllFigureLevels;
-import com.codenjoy.dojo.tetris.model.levels.level.ProbabilityLevels;
 import com.codenjoy.dojo.tetris.services.GameRunner;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
@@ -37,7 +36,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {

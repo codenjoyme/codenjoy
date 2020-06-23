@@ -23,7 +23,7 @@ package com.codenjoy.dojo.hex;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.hex.client.Board;
 import com.codenjoy.dojo.hex.client.ai.AISolver;
 import com.codenjoy.dojo.hex.services.GameRunner;

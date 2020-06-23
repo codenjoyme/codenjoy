@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sudoku;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.sudoku.client.Board;
 import com.codenjoy.dojo.sudoku.client.ai.AISolver;

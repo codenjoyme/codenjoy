@@ -23,7 +23,7 @@ package com.codenjoy.dojo.lemonade;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.lemonade.client.Board;
 import com.codenjoy.dojo.lemonade.client.ai.AISolver;
 import com.codenjoy.dojo.lemonade.services.GameRunner;

@@ -26,7 +26,7 @@ package com.codenjoy.dojo.a2048;
 import com.codenjoy.dojo.a2048.client.Board;
 import com.codenjoy.dojo.a2048.client.ai.AISolver;
 import com.codenjoy.dojo.a2048.services.GameRunner;
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 

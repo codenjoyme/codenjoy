@@ -23,7 +23,7 @@ package com.codenjoy.dojo.rubicscube;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.rubicscube.client.Board;
 import com.codenjoy.dojo.rubicscube.client.ai.AISolver;
 import com.codenjoy.dojo.rubicscube.services.GameRunner;

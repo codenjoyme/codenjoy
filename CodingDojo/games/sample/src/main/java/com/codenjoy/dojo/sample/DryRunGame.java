@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sample;
  */
 
 import com.codenjoy.dojo.client.KeyboardSolver;
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.sample.client.Board;
 import com.codenjoy.dojo.sample.services.GameRunner;
 

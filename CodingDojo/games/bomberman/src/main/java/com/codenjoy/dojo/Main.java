@@ -25,7 +25,7 @@ package com.codenjoy.dojo;
 import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.bomberman.services.GameRunner;
 import com.codenjoy.dojo.bomberman.services.OptionGameSettings;
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.client.local.ws.LocalWSGameServer;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;

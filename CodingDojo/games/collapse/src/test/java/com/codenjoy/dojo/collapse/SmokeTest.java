@@ -25,7 +25,7 @@ package com.codenjoy.dojo.collapse;
 
 import com.codenjoy.dojo.collapse.client.Board;
 import com.codenjoy.dojo.collapse.client.ai.AISolver;
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.collapse.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.multiplayer.GameField;

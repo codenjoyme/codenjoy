@@ -23,7 +23,7 @@ package com.codenjoy.dojo.minesweeper;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.minesweeper.client.Board;
 import com.codenjoy.dojo.minesweeper.client.ai.AISolver;
 import com.codenjoy.dojo.minesweeper.services.GameRunner;

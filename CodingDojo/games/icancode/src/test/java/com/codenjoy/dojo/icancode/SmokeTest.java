@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.Dice;
