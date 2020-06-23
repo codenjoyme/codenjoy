@@ -702,24 +702,32 @@ $(document).ready(function() {
     var phone = '+380' + generate('0123456789', 9);
     changePhone(phone);
 
-    var onTextareaDblclick = function() {
+    var onTextareaClick = function(event) {
+        if (!event.ctrlKey) {
+            return;
+        }
         var data = $(this).getValue();
         var id = $(this).attr('id');
         $(this).replaceWith('<div id="' + id + '"></div>');
         var element = $('#' + id);
         element.addClass('jsonpanel');
         element.setValue(data);
-        element.dblclick(onJsonpanelDblcick);
+        element.click(onJsonpanelCick);
     }
 
-    var onJsonpanelDblcick = function() {
+    var onJsonpanelCick = function(event) {
+        if (!event.ctrlKey) {
+            return;
+        }
         var data = $(this).getValue();
         var id = $(this).attr('id');
-        $(this).replaceWith('<textarea rows="4" id="' + id + '"></textarea>');
+        var rows = $(this).height() / 9;
+        rows = (rows < 4) ? 4 : rows;
+        $(this).replaceWith('<textarea rows="' + rows + '" id="' + id + '"></textarea>');
         var element = $('#' + id);
         element.setValue(data);
-        element.dblclick(onTextareaDblclick);
+        element.click(onTextareaClick);
     }
 
-    $('.jsonpanel').dblclick(onJsonpanelDblcick);
+    $('.jsonpanel').click(onJsonpanelCick);
 });
