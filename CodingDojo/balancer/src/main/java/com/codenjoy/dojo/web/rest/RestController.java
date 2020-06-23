@@ -176,7 +176,8 @@ public class RestController {
 
                 players.create(player);
 
-                sms.sendSmsTo(player.getPhone(), verificationCode, SmsService.SmsType.REGISTRATION);
+                sms.sendSmsTo(player.getPhone(), verificationCode,
+                        SmsService.SmsType.REGISTRATION);
 
                 authenticator.login(request, player.getEmail(), md5Password);
 
@@ -299,7 +300,8 @@ public class RestController {
             player.resetNullFields(current);
             players.update(player);
 
-            return recreatePlayerIfNeeded(player); // TODO проверить как обновляется code при смене пароля
+            // TODO проверить как обновляется code при смене пароля
+            return recreatePlayerIfNeeded(player);
         });
     }
 
@@ -319,7 +321,8 @@ public class RestController {
                 }
 
                 // TODO test me
-                players.updateServer(current.getId(), updated.getServer(), updated.getCode());
+                players.updateServer(current.getId(),
+                        updated.getServer(), updated.getCode());
                 return updated;
             }
         });
@@ -364,7 +367,9 @@ public class RestController {
     // TODO test me
     @GetMapping(REMOVE + "/{player}/on/{whereToRemove}")
     @ResponseBody
-    public List<String> remove(@PathVariable("player") String id, @PathVariable("whereToRemove") int whereToRemove) {
+    public List<String> remove(@PathVariable("player") String id,
+                               @PathVariable("whereToRemove") int whereToRemove)
+    {
         List<String> status = new LinkedList<>(); validator.checkId(id, CANT_BE_NULL);
 
         tryRemoveFromGame((whereToRemove & 0b0001) == 0b0001, id, status);
@@ -546,7 +551,8 @@ public class RestController {
     public ServerLocation confirmRegistration(@RequestBody PhoneCodeDTO input) {
         Player player = validator.checkPlayerByPhone(input.getPhone());
         validator.checkNotApproved(player);
-        validator.checkVerificationCode(player, VerificationType.REGISTRATION, input.getCode());
+        validator.checkVerificationCode(player,
+                VerificationType.REGISTRATION, input.getCode());
 
         players.approve(player.getId());
         players.updateVerificationCode(player, null, null);
@@ -561,7 +567,8 @@ public class RestController {
     public void validateResetPasswordCode(@RequestBody PhoneCodeDTO input) {
         Player player = validator.checkPlayerByPhone(input.getPhone());
         validator.checkApproved(player);
-        validator.checkVerificationCode(player, VerificationType.PASSWORD_RESET, input.getCode());
+        validator.checkVerificationCode(player,
+                VerificationType.PASSWORD_RESET, input.getCode());
 
         players.updateVerificationCode(player, null, null);
 
@@ -584,6 +591,7 @@ public class RestController {
         player.setCode(Hash.getCode(player.getId(), hashed));
 
         players.update(player);
-        sms.sendSmsTo(player.getPhone(), generated, SmsService.SmsType.NEW_PASSWORD);
+        sms.sendSmsTo(player.getPhone(), generated,
+                SmsService.SmsType.NEW_PASSWORD);
     }
 }
