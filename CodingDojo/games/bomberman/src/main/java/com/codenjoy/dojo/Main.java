@@ -26,48 +26,39 @@ import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.bomberman.services.GameRunner;
 import com.codenjoy.dojo.bomberman.services.OptionGameSettings;
 import com.codenjoy.dojo.client.LocalGameRunner;
-import com.codenjoy.dojo.client.local.ws.LocalWSGameRunner;
+import com.codenjoy.dojo.client.local.ws.LocalWSGameServer;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
 public class Main {
 
-    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
     public static void main(String[] args) {
-        String host = System.getProperty("host", "127.0.0.1");
-        int port = Integer.valueOf(System.getProperty("port", "8080"));
-        int timeout = Integer.valueOf(System.getProperty("timeout", "1000"));
-        String log = System.getProperty("log", "output.txt");
-        String showPlayers = System.getProperty("showPlayers", null);
-        boolean logTime = Boolean.valueOf(System.getProperty("logTime", "true"));
-        boolean logDisable = Boolean.valueOf(System.getProperty("logDisable", "false"));
-        String settingsString = System.getProperty("settings", "{}");
         String game = "bomberman";
-
-        File file = setupLog(log);
-        LocalGameRunner.out = setupOutput(file, logTime, logDisable);
-        LocalGameRunner.out.accept("Log file is here: " + file.getAbsolutePath());
+        String settingsString = System.getProperty("settings", "{}");
 
         Dice dice = new RandomDice();
 
         JSONObject settings = new JSONObject(settingsString);
+
         OptionGameSettings gameSettings = new OptionGameSettings(new SettingsImpl(), dice)
                 .update(settings);
+
+        if (!settings.has("isMultiple") && !settings.has("roundSettings")) {
+            String json = "{\n" +
+                    "  'isMultiple':true,\n" +
+                    "  'roundSettings':{\n" +
+                    "    'roundsEnabled':false,\n" +
+                    "  },\n" +
+                    "}";
+            LocalGameRunner.out.accept("Simple mode! Hardcoded: \n" + json);
+            gameSettings.update(new JSONObject(json));
+        }
+
+        LocalGameRunner.out.accept("Current settings:\n" +
+                JsonUtils.prettyPrint(gameSettings.asJson()));
 
         GameRunner gameType = new GameRunner() {
             @Override
@@ -81,72 +72,7 @@ public class Main {
             }
         };
 
-        if (!settings.has("isMultiple") && !settings.has("roundSettings")) {
-            String json = "{\n" +
-                    "  'isMultiple':true,\n" +
-                    "  'roundSettings':{\n" +
-                    "    'roundsEnabled':false,\n" +
-                    "  },\n" +
-                    "}";
-            LocalGameRunner.out.accept("Simple mode! Hardcoded: \n" + json);
-            gameSettings.update(new JSONObject(json));
-        }
-
-        LocalGameRunner.out.accept(String.format(
-                "Run local WS server for %s on %s:%s with settings:\n%s",
-                game, host, port, JsonUtils.prettyPrint(gameSettings.asJson())));
-
-        LocalGameRunner.out.accept("If you want to change something, please use command:\n" +
-                        "\twindows\n" +
-                        "\t\tjava -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 " +
-                        "-DlogDisable=false -Dlog=\"output.txt\" -DlogTime=true -DshowPlayers=\"2,3\" " +
-                        "-Dsettings=\"{'boardSize':11, 'bombPower':7}\"\n" +
-                        "\tlinux\n" +
-                        "\t\tjava -jar --host=127.0.0.1 --port=8080 --timeout=1000 " +
-                        "--logDisable=false --log=\"output.txt\" --logTime=true --showPlayers=\"2,3\" " +
-                        "--settings=\"{'boardSize':11, 'bombPower':7}\"\n");
-
-        LocalGameRunner.showPlayers = showPlayers;
-        LocalWSGameRunner.run(gameType, host, port, timeout);
+        LocalWSGameServer.startGame(game, gameType);
     }
 
-    private static Consumer<String> setupOutput(File file, boolean logTime, boolean logDisable) {
-        if (logDisable) {
-            return message -> {};
-        }
-
-        return message -> {
-            String time = Main.format.format(Calendar.getInstance().getTime());
-
-            if (logTime) {
-                message = Arrays.stream(message.split("\n"))
-                        .map(line -> time + ":\t" + line)
-                        .collect(Collectors.joining("\n"));
-            }
-
-            message += "\n";
-
-            System.out.print(message);
-            try {
-                Files.write(file.toPath(),
-                        message.getBytes(Charset.forName("UTF8")),
-                        StandardOpenOption.APPEND);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        };
-    }
-
-    private static File setupLog(String log) {
-        File file = new File(log);
-
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return file;
-    }
 }
