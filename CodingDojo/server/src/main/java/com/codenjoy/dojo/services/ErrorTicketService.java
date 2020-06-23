@@ -37,6 +37,7 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 @Component
 @Slf4j
@@ -52,7 +53,7 @@ public class ErrorTicketService {
     private boolean printStackTrace = true;
 
     private Map<String, Map<String, Object>> tickets = new ConcurrentHashMap<>();
-    private Map<String, String> info = new ConcurrentHashMap<>();
+    private Map<String, String> info = new ConcurrentSkipListMap<>();
 
     public ModelAndView get(String url, Exception exception) {
         String ticket = ticket();

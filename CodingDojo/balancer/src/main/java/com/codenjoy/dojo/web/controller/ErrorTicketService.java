@@ -39,6 +39,7 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 // TODO такой же как в Server - подумать как устранить дублирование
 @Component
@@ -56,7 +57,7 @@ public class ErrorTicketService {
     private Messages messages;
 
     private Map<String, Map<String, Object>> tickets = new ConcurrentHashMap<>();
-    private Map<String, String> info = new ConcurrentHashMap<>();
+    private Map<String, String> info = new ConcurrentSkipListMap<>();
 
     private boolean printStackTrace = true;
 
