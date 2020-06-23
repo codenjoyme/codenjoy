@@ -99,8 +99,8 @@ public class RestController {
 
     @GetMapping(LOGS + "/info")
     @ResponseBody
-    public String getInfoLogs() {
-        return "";
+    public Map<String, String> getInfoLogs() {
+        return ticket.getInfo();
     }
 
     @GetMapping(LOGS + "/error")
@@ -202,6 +202,9 @@ public class RestController {
 
                 sms.sendSmsTo(player.getPhone(), verificationCode,
                         SmsService.SmsType.REGISTRATION);
+
+                ticket.logInfo(String.format("Send registration verification code '%s' for %s",
+                        verificationCode, new ServerLocation(player)));
 
                 authenticator.login(request, player.getEmail(), md5Password);
 
@@ -556,7 +559,11 @@ public class RestController {
 
         String code = generator.verificationCode();
         players.updateVerificationCode(player, code, VerificationType.REGISTRATION);
+
         sms.sendSmsTo(player.getPhone(), code, SmsService.SmsType.REGISTRATION);
+
+        ticket.logInfo(String.format("Resend registration code '%s' for %s",
+                code, new ServerLocation(player)));
     }
 
     @PostMapping(REGISTER + "/reset")
@@ -567,7 +574,11 @@ public class RestController {
 
         String code = generator.verificationCode();
         players.updateVerificationCode(player, code, VerificationType.PASSWORD_RESET);
+
         sms.sendSmsTo(player.getPhone(), code, SmsService.SmsType.PASSWORD_RESET);
+
+        ticket.logInfo(String.format("Send password reset verification code '%s' for %s",
+                code, new ServerLocation(player)));
     }
 
     @PostMapping(REGISTER + "/confirm")
@@ -615,7 +626,11 @@ public class RestController {
         player.setCode(Hash.getCode(player.getId(), hashed));
 
         players.update(player);
+
         sms.sendSmsTo(player.getPhone(), generated,
                 SmsService.SmsType.NEW_PASSWORD);
+
+        ticket.logInfo(String.format("Updated password '%s' for %s",
+                generated, new ServerLocation(player)));
     }
 }

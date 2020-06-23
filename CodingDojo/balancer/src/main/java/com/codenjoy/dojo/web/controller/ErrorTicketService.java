@@ -56,6 +56,7 @@ public class ErrorTicketService {
     private Messages messages;
 
     private Map<String, Map<String, Object>> tickets = new ConcurrentHashMap<>();
+    private Map<String, String> info = new ConcurrentHashMap<>();
 
     private boolean printStackTrace = true;
 
@@ -124,7 +125,7 @@ public class ErrorTicketService {
     public Map<String, Object> getDetails(String ticket, String url, Exception exception) {
         return new HashMap<String, Object>(){{
             put("ticketNumber", ticket);
-            put("time", format.format(Calendar.getInstance().getTime()));
+            put("time", now());
             put("message", exception.getClass().getName() + ": " + exception.getMessage());
             put("url", url);
             if (!printStackTrace) {
@@ -133,6 +134,10 @@ public class ErrorTicketService {
             put("exception", exception);
             put("stackTrace", prepareJsonStackTrace(exception));
         }};
+    }
+
+    private String now() {
+        return format.format(Calendar.getInstance().getTime());
     }
 
     private boolean skip(String message) {
@@ -187,5 +192,13 @@ public class ErrorTicketService {
 
     public Map<String, Map<String, Object>> getErrors() {
         return tickets;
+    }
+
+    public void logInfo(String message) {
+        info.put(now(), message);
+    }
+
+    public Map<String, String> getInfo() {
+        return info;
     }
 }

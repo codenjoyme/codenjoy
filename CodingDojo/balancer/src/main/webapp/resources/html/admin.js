@@ -207,6 +207,13 @@ var getTicket = function(ticket) {
     });
 };
 
+var getInfo = function(ticket) {
+    _ajax('ticket', {
+        type: 'GET',
+        url: server('balancer') + '/logs/info'
+    });
+};
+
 var getConfirmCode = function(email) {
     _ajax('get-confirm', {
         type: 'GET',
@@ -555,6 +562,12 @@ $(document).ready(function() {
 
     $('#get-ticket').click(function() {
         getTicket(
+            $('#ticket').val()
+        );
+    });
+
+    $('#get-info').click(function() {
+        getInfo(
             $('#ticket').val()
         );
     });

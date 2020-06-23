@@ -76,6 +76,12 @@ public class RestAdminController {
         return VersionReader.version(list).toString();
     }
 
+    @GetMapping("/info")
+    @ResponseBody
+    public Map<String, String> getInfoLogs() {
+        return ticket.getInfo();
+    }
+
     @GetMapping("/errors")
     @ResponseBody
     public Map<String, Map<String, Object>> getTickets(
