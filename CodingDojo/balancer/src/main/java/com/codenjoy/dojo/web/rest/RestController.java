@@ -511,21 +511,6 @@ public class RestController {
         dispatcher.clearCache(whatToClean);
     }
 
-    @PostMapping(REGISTER + "/confirm")
-    @ResponseBody
-    public ServerLocation confirmRegistration(@RequestBody PhoneCodeDTO input) {
-        Player player = validator.checkPlayerByPhone(input.getPhone());
-        validator.checkNotApproved(player);
-        validator.checkVerificationCode(player, VerificationType.REGISTRATION, input.getCode());
-
-        players.approve(player.getId());
-        players.updateVerificationCode(player, null, null);
-
-        Player createdOnGame = dispatcher.registerNew(player);
-
-        return new ServerLocation(createdOnGame);
-    }
-
     @GetMapping(CONFIRM + "/{player}/code")
     @ResponseBody
     public VerificationDTO getVerificationCode(@PathVariable("player") String email) {
@@ -541,7 +526,7 @@ public class RestController {
         validator.checkNotApproved(player);
 
         String code = generator.verificationCode();
-        players.updateVerificationCode(player, code, VerificationType.REGISTRATION.name());
+        players.updateVerificationCode(player, code, VerificationType.REGISTRATION);
         sms.sendSmsTo(player.getPhone(), code, SmsService.SmsType.REGISTRATION);
     }
 
@@ -552,8 +537,23 @@ public class RestController {
         validator.checkApproved(player);
 
         String code = generator.verificationCode();
-        players.updateVerificationCode(player, code, VerificationType.PASSWORD_RESET.name());
+        players.updateVerificationCode(player, code, VerificationType.PASSWORD_RESET);
         sms.sendSmsTo(player.getPhone(), code, SmsService.SmsType.PASSWORD_RESET);
+    }
+
+    @PostMapping(REGISTER + "/confirm")
+    @ResponseBody
+    public ServerLocation confirmRegistration(@RequestBody PhoneCodeDTO input) {
+        Player player = validator.checkPlayerByPhone(input.getPhone());
+        validator.checkNotApproved(player);
+        validator.checkVerificationCode(player, VerificationType.REGISTRATION, input.getCode());
+
+        players.approve(player.getId());
+        players.updateVerificationCode(player, null, null);
+
+        Player createdOnGame = dispatcher.registerNew(player);
+
+        return new ServerLocation(createdOnGame);
     }
 
     @PostMapping(REGISTER + "/validate-reset")

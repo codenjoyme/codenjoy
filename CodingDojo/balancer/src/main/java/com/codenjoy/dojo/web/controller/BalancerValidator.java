@@ -312,11 +312,11 @@ public class BalancerValidator {
         }
     }
 
-    public void checkVerificationCode(Player player, VerificationType codeType, String code) {
+    public void checkVerificationCode(Player player, VerificationType type, String code) {
         if (StringUtils.isEmpty(code)
-                || codeType == null
+                || type == null
                 || !code.equals(player.getVerificationCode())
-                || !codeType.name().equals(player.getVerificationType()))
+                || !type.name().equals(player.getVerificationType()))
         {
             throwError(messages.getInvalidVerificationCode(), code);
         }

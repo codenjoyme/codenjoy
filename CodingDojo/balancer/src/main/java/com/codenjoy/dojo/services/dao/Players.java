@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.dao;
  */
 
 
+import com.codenjoy.dojo.services.VerificationType;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.ServerLocation;
 import com.codenjoy.dojo.services.jdbc.ConnectionThreadPoolFactory;
@@ -245,7 +246,8 @@ public class Players {
                 Player.APPROVED, id);
     }
 
-    public void updateVerificationCode(Player player, String verificationCode, String verificationType) {
+    public void updateVerificationCode(Player player, String verificationCode, VerificationType type) {
+        String verificationType = (type == null) ? null : type.name();
         player.setVerificationType(verificationType);
         player.setVerificationCode(verificationCode);
 
