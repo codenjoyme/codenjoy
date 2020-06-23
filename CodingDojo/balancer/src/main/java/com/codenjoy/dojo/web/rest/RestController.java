@@ -72,12 +72,14 @@ public class RestController {
     public static final String SCORE = "/score";
     public static final String GAME_SETTINGS = "/game/settings";
     public static final String VERSION = "/version";
+    public static final String LOGS = "/logs";
 
     private static Logger logger = DLoggerFactory.getLogger(RestController.class);
 
     @Autowired private Players players;
     @Autowired private Scores scores;
     @Autowired private TimerService timer;
+    @Autowired private ErrorTicketService ticket;
     @Autowired private Dispatcher dispatcher;
     @Autowired private BalancerValidator validator;
     @Autowired private DebugService debug;
@@ -93,6 +95,28 @@ public class RestController {
     @ResponseBody
     public String version() {
         return VersionReader.version(Arrays.asList("engine", "balancer")).toString();
+    }
+
+    @GetMapping(LOGS + "/info")
+    @ResponseBody
+    public String getInfoLogs() {
+        return "";
+    }
+
+    @GetMapping(LOGS + "/error")
+    @ResponseBody
+    public Map<String, Map<String, Object>> getTickets(
+            @RequestParam(value = "ticket", required = false) String ticketId)
+    {
+        final Map<String, Map<String, Object>> tickets = ticket.getErrors();
+
+        if (StringUtils.isEmpty(ticketId)) {
+            return tickets;
+        } else {
+            return new HashMap<String, Map<String, Object>>(){{
+                put(ticketId, tickets.get(ticketId));
+            }};
+        }
     }
 
     @GetMapping(SCORE + "/day/{day}")

@@ -200,6 +200,13 @@ var loginUser = function(email, password) {
     });
 };
 
+var getTicket = function(ticket) {
+    _ajax('ticket', {
+        type: 'GET',
+        url: server('balancer') + '/logs/error?ticket=' + ticket
+    });
+};
+
 var getConfirmCode = function(email) {
     _ajax('get-confirm', {
         type: 'GET',
@@ -543,6 +550,12 @@ $(document).ready(function() {
         var preffix = $('#preffix').val();
         getConfirmCode(
             preffix + $('#get-confirm-email').val()
+        );
+    });
+
+    $('#get-ticket').click(function() {
+        getTicket(
+            $('#ticket').val()
         );
     });
 
