@@ -121,11 +121,16 @@ function generate(characters, length) {
    return result;
 }
 
+function randomStr(length, array) {
+    var result = '';
+    for (var i = length; i > 0; i--) {
+        result += array[Math.floor(Math.random() * array.length)];
+    }
+    return result;
+}
+
 var autoIncrementPrefix = function() {
-    var old = $('#preffix').val();
-    var index = parseInt(old.match(/\d+/g)[0]);
-    var aNew = old.replace('' + index, '' + (index + 1));
-    $('#preffix').val(aNew);
+    $('#preffix').val(randomStr(5, 'abcdefghijklmnopqrstuvwxyz'));
 }
 
 var autoIncrementPhone = function() {
@@ -701,6 +706,8 @@ $(document).ready(function() {
 
     var phone = '+380' + generate('0123456789', 9);
     changePhone(phone);
+
+    autoIncrementPrefix();
 
     var onTextareaClick = function(event) {
         if (!event.ctrlKey) {
