@@ -25,7 +25,9 @@ package com.codenjoy.dojo.bomberman.model.perks;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.services.Dice;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -76,41 +78,24 @@ public class PerksSettingsWrapper {
     }
 
     /**
-     * In total were are 100 chances.
-     * Here we have 2 perks with total perk drop chance = 20.
-     * For each perk we have a range of successful drop = 20 / 2 = 10.
-     * So we have 2 intervals and want to put them on equal distance of each other = 100 / 2 = 50.
-     * In result we get 2 ranges of numbers that will return us perk:
-     * 0 >= perk1 < 0 + 10  and  0 + 10 + 50 (60) >= perk2 < (70) 0 + 10 + 50 + 10
-     * All other ranges will give us Elements.DESTROYED_WALL.
-     * <p>
-     * The more perks we have, the more number of ranges, the more narrow each range.
-     * E.g. for 4 perks range will be 20/4 = 5,
-     * step for next range = 100 / 4 = 25,
-     * ranges for perks are: 0..5, 30..35, 60..65, 90..95
-     *
-     * @deprecated TODO Need to switch to the more optimal algorithm in next releases
-     * Theory is here https://www.keithschwarz.com/darts-dice-coins/
+     * Всего у нас 100 шансов. Кидаем кубик, если он выпадает больше заявленнго dropRatio=20%
+     * то рисуется стена. Иначе мы определяем какой индекс перка выпал
      */
     public static Elements nextPerkDrop(Dice dice) {
-        int perksTotal = settings.size();
-
-        if (perksTotal != 0) {
-            int chanceRange = dropRatio / perksTotal;
-            int step = percentage / perksTotal;
-            int rnd = dice.next(percentage);
-            int lowerBoundary = 0;
-            int upperBoundary = lowerBoundary + chanceRange;
-
-            for (Elements perk : settings.keySet()) {
-                if (rnd >= lowerBoundary && rnd < upperBoundary) {
-                    return perk;
-                }
-
-                lowerBoundary = upperBoundary + step;
-                upperBoundary = lowerBoundary + chanceRange;
-            }
+        // нет перков - стенка
+        int total = settings.size();
+        if (total == 0) {
+            return Elements.DESTROYED_WALL;
         }
-        return Elements.DESTROYED_WALL;
+
+        // dropRatio - вероятность выпадения любого перка
+        int random = dice.next(percentage);
+        if (random >= dropRatio) {
+            return Elements.DESTROYED_WALL;
+        }
+
+        // считаем какой перк победил
+        int index = (int)Math.floor(1D * total * random / dropRatio);
+        return new ArrayList<>(settings.keySet()).get(index);
     }
 }
