@@ -65,7 +65,7 @@ public class SmokeTest {
         LocalGameRunner.printTick = true;
 
         String soul = RandomStringUtils.randomNumeric(30);
-        soul = "365720020591617326050020278665";
+        soul = "435874345435874365843564398";
         Dice dice = LocalGameRunner.getDice(LocalGameRunner.generateXorShift(soul, 100, 200));
 
         DefaultGameSettings.BOARD_SIZE = 11;
