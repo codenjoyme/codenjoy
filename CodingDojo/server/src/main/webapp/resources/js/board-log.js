@@ -67,9 +67,17 @@ function initBoardLogComponents(game) {
     }
 }
 
+var loading = false;
+
 function loadLogs(playerId, time, onLoad) {
+    if (loading) {
+        return;
+    }
+
+    loading = true;
     loadData('/rest/player/' + playerId + '/log/' + time, function(gameData) {
         onLoad(gameData);
+        loading = false;
     });
 }
 
