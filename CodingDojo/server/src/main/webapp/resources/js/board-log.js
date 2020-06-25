@@ -58,13 +58,14 @@ function initBoardLogComponents(game) {
         game.gameName, game.enablePlayerInfo,
         game.enablePlayerInfoLevel,
         game.sprites, game.alphabet, game.spriteElements,
-        game.drawBoard);
+        game.drawBoard,
+        function() {
+            initLogs(game.gameName, game.boardSize, game.alphabet, game.playerId);
 
-    initLogs(game.gameName, game.boardSize, game.alphabet, game.playerId);
-
-    if (game.showBody) {
-        $(document.body).show();
-    }
+            if (game.showBody) {
+                $(document.body).show();
+            }
+        });
 }
 
 var loading = false;
@@ -144,6 +145,10 @@ function initLogs(gameName, boardSize, alphabet, playerId) {
                     lastTick = time;
                 }
             }
+            if (time == 0) {
+                return;
+            }
+
             if (!!onLoad) {
                 onLoad(time);
             }

@@ -25,7 +25,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 multiplayerType, boardSize, gameName,
                 enablePlayerInfo, enablePlayerInfoLevel,
                 sprites, alphabet, spriteElements,
-                drawBoard)
+                drawBoard, onLoad)
 {
     var canvases = {};
     var infoPools = {};
@@ -35,7 +35,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
     var plotSize = 0;
     var canvasSize = 0;
     var images = {};
-    loadCanvasesData(alphabet, spriteElements);
+    loadCanvasesData(alphabet, spriteElements, onLoad);
     var reloading = false;
     var readableNames = {};
 
@@ -109,10 +109,13 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
     }
 
-    function loadCanvasesData(alphabet, elements) {
+    function loadCanvasesData(alphabet, elements, onLoadSprites) {
         loadSpriteImages(elements, alphabet, function() {
             buildHtml(players);
             buildCanvases(players);
+            if (!!onLoadSprites) {
+                onLoadSprites();
+            }
 
             $('body').on('board-updated', function(events, data) {
                 if (!reloading) {
