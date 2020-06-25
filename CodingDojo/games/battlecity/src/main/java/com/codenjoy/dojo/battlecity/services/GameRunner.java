@@ -38,6 +38,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -46,7 +47,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     private LevelImpl level;
 
     public GameRunner() {
-        new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
+        new Scores(0, settings);// TODO сеттринги разделены по разным классам, продумать архитектуру
 
         level = new LevelImpl(getMap(), getDice());
     }
@@ -58,11 +59,15 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
+        int ticksCountAITankWithPresent = (int) settings.getParameter("count ticks for AI Tank with present").getValue();
+
         return new Battlecity(level.size(),
                 getDice(),
                 level.getConstructions(),
                 level.getBorders(),
-                level.getTanks().toArray(new Tank[0]));
+                ticksCountAITankWithPresent,
+                level.getTanks().toArray(new Tank[0])
+        );
     }
 
     @Override
