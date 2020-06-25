@@ -36,6 +36,9 @@
             width: unset!important;
             cursor: unset!important;
         }
+        .player_info {
+            color: white!important;
+        }
     </style>
 
     <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>

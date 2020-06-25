@@ -26,7 +26,7 @@ pages.boardLog = function() {
     game.enableDonate = false;
     game.enableJoystick = false;
     game.enableAlways = false;
-    game.enablePlayerInfo = false;
+    game.enablePlayerInfo = true;
     game.enablePlayerInfoLevel = false;
     game.enableLeadersTable = false;
     game.enableForkMe = false;
@@ -94,7 +94,9 @@ function initLogs(gameName, boardSize, alphabet, playerId) {
 
         var data = {};
         var info = data[playerId] = {};
+        info.readableName = ''; // TODO хорошо бы загрузить имя пользователя
         info.score = tick.score;
+        info.tickTime = time;
         info.gameName = tick.gameType;
         info.scores = {};
         info.scores[playerId] = tick.score;
