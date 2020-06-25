@@ -32,6 +32,7 @@ public class Scores implements PlayerScores {
     private final Parameter<Integer> killYourTankPenalty;
     private final Parameter<Integer> killOtherHeroTankScore;
     private final Parameter<Integer> killOtherAITankScore;
+    private final Parameter<Integer> ticksCountAITankWithPresent;
 
     private volatile int score;
 
@@ -41,6 +42,7 @@ public class Scores implements PlayerScores {
         killYourTankPenalty = settings.addEditBox("Kill your tank penalty").type(Integer.class).def(0);
         killOtherHeroTankScore = settings.addEditBox("Kill other hero tank score").type(Integer.class).def(50);
         killOtherAITankScore = settings.addEditBox("Kill other AI tank score").type(Integer.class).def(25);
+        ticksCountAITankWithPresent = settings.addEditBox("count ticks for AI Tank with present").type(Integer.class).def(5);
     }
 
     @Override
