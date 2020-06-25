@@ -37,6 +37,8 @@ public class Battlecity implements Field {
     private Dice dice;
     private LinkedList<Tank> aiTanks;
     private int aiCount;
+    private int ticksCountAITankWithPresent;
+    private int tickCount = 0;
 
     private int size;
     private List<Construction> constructions;
@@ -44,18 +46,19 @@ public class Battlecity implements Field {
 
     private List<Player> players = new LinkedList<Player>();
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions, Tank... aiTanks) {
-        this(size, dice, constructions, new DefaultBorders(size).get(), aiTanks);
+    public Battlecity(int size, Dice dice, List<Construction> constructions, int ticksCountAITankWithPresent, Tank... aiTanks) {
+        this(size, dice, constructions, new DefaultBorders(size).get(), ticksCountAITankWithPresent, aiTanks);
     }
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      List<Border> borders, Tank... aiTanks) {
+                      List<Border> borders, int ticksCountAITankWithPresent, Tank... aiTanks) {
         aiCount = aiTanks.length;
         this.dice = dice;
         this.size = size;
         this.aiTanks = new LinkedList<>();
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
+        this.ticksCountAITankWithPresent = ticksCountAITankWithPresent;
 
         for (Tank tank : aiTanks) {
             addAI(tank);
@@ -71,6 +74,7 @@ public class Battlecity implements Field {
 
     @Override
     public void tick() {
+        tickCounter();
         removeDeadTanks();
 
         newAI();
@@ -114,11 +118,29 @@ public class Battlecity implements Field {
                 construction.tick();
             }
         }
+        respawnAITankWithPresent();
     }
 
     private void newAI() {
         for (int count = aiTanks.size(); count < aiCount; count++) {
             int y = size - 2;
+            int x;
+            int c = 0;
+            do {
+                x = dice.next(size);
+            } while (isBarrier(x, y) && c++ < size);
+
+            if (!isBarrier(x, y)) {
+                addAI(new AITank(x, y, dice, Direction.DOWN));
+            }
+        }
+    }
+
+    // то же самое, что newAI(), только спаунится в рандомном месте на карте
+    // TODO дублирование кода
+    private void newAIWithPresent() {
+        for (int count = aiTanks.size(); count < aiCount; count++) {
+            int y = dice.next(size);
             int x;
             int c = 0;
             do {
@@ -336,5 +358,21 @@ public class Battlecity implements Field {
     public void setDice(Dice dice) {
         this.dice = dice;
     }
+
+    public int tickCounter() {
+        return this.tickCount++;
+    }
+
+    public void respawnAITankWithPresent() {
+        if (tickCount == ticksCountAITankWithPresent) {
+            aiCount += 1;
+            newAIWithPresent();
+            tickCount = 0;
+        } else {
+            //do nothing
+        }
+    }
+
+
 
 }
