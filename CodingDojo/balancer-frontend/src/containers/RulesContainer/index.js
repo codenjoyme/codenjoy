@@ -184,19 +184,23 @@ class RulesContainer extends Component {
                         </p>
                         <div className={ highligte } style={{whiteSpace:"pre"}} >
                             { "# windows\n" +
-                              "java -jar -Dhost=127.0.0.1 -Dport=8080\ -Dtimeout=1000\n" +
+                              "java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000\n" +
                               "          -Dlog=\"output.txt\" -DlogTime=true -DshowPlayers=\"2,3\"\n" +
+                              "          -Drandom=\"random-soul-string\" -DwaitFor=2\n" +
                               "          -Dsettings=\"{'boardSize':11,'bombPower':7}\"\n" +
                               "\n" +
                               "# linux\n" +
-                              "java -jar --host=127.0.0.1 --port=8080\ --timeout=1000\n" +
+                              "java -jar --host=127.0.0.1 --port=8080 --timeout=1000\n" +
                               "          --log=\"output.txt\" --logTime=true --showPlayers=\"2,3\"\n" +
+                              "          --random=\"random-soul-string\" --waitFor=2\n" +
                               "          --settings=\"{'boardSize':11,'bombPower':7}\"" }
                         </div>
                         <p>
-                            Як бачиш - є можливicть змінювати хост/порт, кількість мілісекунд на один тік,
-                            налаштування<b><a href='#settings'>*</a></b> гри (у вигляді json) та налаштування
-                            логування. Після цього можно використати лінк для підключення
+                            Як бачиш - є можливicть змінювати хост/порт, кількість мілісекунд на один тік (timeout),
+                            налаштування<b><a href='#settings'>*</a></b> гри (у вигляді json), налаштування
+                            логування (log, logTime, showPlayers), конфiгурацiю псевдо-генератора випадкових
+                            чисел (random) та кiлькостi участникiв (waitFor), що мають пiдключитися за для старту сервера.
+                            Після цього можно використати лінк для підключення
                             <br/>
                             <a className='content' style={{ display:'initial' }} href={ localhostConnectionUrl }>{ localhostConnectionUrl }</a>
                             <br/>
