@@ -45,6 +45,7 @@ public class BattlecityTest {
 
     public int ticksPerBullets;
     public int size;
+    public int ticksCountAITankWithPresent;
 
     private Battlecity game;
     private Joystick hero;
@@ -56,10 +57,11 @@ public class BattlecityTest {
     public void setup() {
         size = 7;
         ticksPerBullets = 1;
+        ticksCountAITankWithPresent = 4;
     }
 
     private void givenGame(Tank tank, Construction... constructions) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(constructions));
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(constructions), ticksCountAITankWithPresent);
         initPlayer(game, tank);
         this.hero = tank;
     }
@@ -68,13 +70,19 @@ public class BattlecityTest {
         List<Border> borders = new DefaultBorders(size).get();
         borders.addAll(Arrays.asList(walls));
 
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), borders);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), borders, ticksCountAITankWithPresent);
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private void givenGameWithAI(Tank tank, Tank... aiTanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), aiTanks);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), ticksCountAITankWithPresent, aiTanks);
+        initPlayer(game, tank);
+        this.hero = tank;
+    }
+
+    private void givenGameWithAIaddAIWithPresent(Tank tank, Tank... aiTanks) {
+        game = new Battlecity(size, getDice(9, 9), Arrays.asList(new Construction[0]), ticksCountAITankWithPresent, aiTanks);
         initPlayer(game, tank);
         this.hero = tank;
     }
@@ -89,7 +97,7 @@ public class BattlecityTest {
     }
 
     private void givenGameWithTanks(Tank... tanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[]{}));
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[]{}), ticksCountAITankWithPresent);
         for (Tank tank : tanks) {
             initPlayer(game, tank);
         }
@@ -103,6 +111,16 @@ public class BattlecityTest {
 
     public Tank tank(int x, int y, Direction direction) {
         return tank(x, y, direction, ticksPerBullets);
+    }
+
+    public static Tank aiTank(int x, int y, Direction direction, int ticksPerBullets ) {
+        Dice dice = getDice(x, y);
+        return new AITank(x, y, dice, direction);
+    }
+
+    public Tank aiTank(int x, int y, Direction direction) {
+        ticksPerBullets = 0;
+        return aiTank(x, y, direction, ticksPerBullets);
     }
 
     private static Dice getDice(int x, int y) {
@@ -2862,4 +2880,102 @@ public class BattlecityTest {
 
     }
 
+    @Test
+    public void shouldRespawnAITankWithPresent() {
+        size = 11;
+        givenGameWithAIaddAIWithPresent(tank(1, 1, Direction.UP), aiTank(9, 9, Direction.DOWN));
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ¿☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ¿☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲       ¿☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        •☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldRespawnTwoAITankWithPresent() {
+        size = 11;
+        givenGameWithAIaddAIWithPresent(tank(1, 1, Direction.UP), aiTank(9, 9, Direction.DOWN));
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ¿☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ¿☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        ¿☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        •☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼        ¿☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        ¿☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        •☼\n" +
+                "☼▲       ¿☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
 }
+
+//TODO    4.1) добавляем бота, который спаунится каждые N ходов (задается в сеттингах),
+
+
+//TODO         который цветной и его убить можно только за M выстрелов (тоже сеттинги)
+//TODO    4.2) во время смерти такого AI вываливается приз
+
