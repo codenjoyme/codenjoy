@@ -50,7 +50,7 @@ public class Scores {
 
     private static final String DAY_FORMAT = "yyyy-MM-dd";
     private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern(DAY_FORMAT);
-    private static final SimpleDateFormat DAY_FORMATTER2 = new SimpleDateFormat(DAY_FORMAT);
+    public static final SimpleDateFormat DAY_FORMATTER2 = new SimpleDateFormat(DAY_FORMAT);
 
     public Scores(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
