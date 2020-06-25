@@ -80,6 +80,11 @@ public class Dispatcher {
     }
 
     public Player registerIfNotExists(Player player) {
+        if (isFinalDay() && !isFinalist(player)) {
+            removeFromEveryGameServer(player.getId());
+            return null;
+        }
+
         if (game.existsOnServer(player.getServer(), player.getId())) {
             return null;
         }
@@ -90,6 +95,16 @@ public class Dispatcher {
         String score = null; // будет попытка загрузиться с сейва
         String save = null;
         return registerOnServer(player, score, save);
+    }
+
+    private boolean isFinalDay() {
+        String today = scores.getDay(Calendar.getInstance().getTimeInMillis());
+        return config.getGame().getEndDay().equals(today);
+    }
+
+    private boolean isFinalist(Player player) {
+        return getFinalists().stream()
+                .anyMatch(finalist -> player.getId().equals(finalist.getId()));
     }
 
     public Map<String, Boolean> removeFromEveryGameServer(String id) {
