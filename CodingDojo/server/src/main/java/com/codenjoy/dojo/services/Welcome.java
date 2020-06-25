@@ -32,19 +32,7 @@ public class Welcome {
 
     @PostConstruct
     public void helloWorld() {
-        String version = VersionReader.versionReadable("engine");
-
-        log.info("\n" +
-                "     /\\  ______          _              _               _   \n" +
-                "    //\\\\/ _____)        | |            (_)            _| |_ \n" +
-                "   (____)/       ___  _ | | ____ ____   _  ___  _   _(  ___)\n" +
-                "       | |      / _ \\/ || |/ _  )  _ \\ | |/ _ \\| | | |___  )\n" +
-                "       | \\_____( (_) )(_| | (/ /| | | || | (_) ) |_| |_   _)\n" +
-                "        \\______)\\___/\\____|\\____)_| |_|| |\\___/ \\__  | |_|  \n" +
-                "                                      _| |      __/ /\n" +
-                "   ==================================(__/======(___/========\n" +
-                "      :: Codenjoy ::  (Version " + version + ")\n" +
-                "    :: Fork me on https://github.com/codenjoyme/codenjoy :: \n" +
-                "   ---------------------------------------------------------");
+        log.info(VersionReader.getWelcomeMessage());
     }
+
 }

@@ -64,6 +64,10 @@ public class LocalGameRunner {
     private List<PlayerScores> scores;
     private Integer tick;
 
+    {
+        out.accept(VersionReader.getWelcomeMessage());
+    }
+
     public static LocalGameRunner run(GameType gameType, Solver solver, ClientBoard board) {
         return run(gameType, Arrays.asList(solver), Arrays.asList(board));
     }
