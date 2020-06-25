@@ -44,6 +44,7 @@ public class LocalWSGameServer {
         String host = System.getProperty("host", "127.0.0.1");
         int port = Integer.valueOf(System.getProperty("port", "8080"));
         int timeout = Integer.valueOf(System.getProperty("timeout", "1000"));
+        int waitForPlayers = Integer.valueOf(System.getProperty("waitFor", "0"));
         String log = System.getProperty("log", "output.txt");
         String showPlayers = System.getProperty("showPlayers", null);
         boolean logTime = Boolean.valueOf(System.getProperty("logTime", "true"));
@@ -67,6 +68,7 @@ public class LocalWSGameServer {
                 "--logDisable=false --log=\"output.txt\" --logTime=true --showPlayers=\"2,3\" " +
                 "--settings=\"{'boardSize':11, 'bombPower':7}\"\n");
 
+        LocalGameRunner.waitForPlayers = waitForPlayers;
         LocalGameRunner.showPlayers = showPlayers;
         LocalWSGameRunner.run(gameType, host, port, timeout);
     }

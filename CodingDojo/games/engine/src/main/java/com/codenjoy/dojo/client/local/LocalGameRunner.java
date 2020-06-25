@@ -54,6 +54,7 @@ public class LocalGameRunner {
     public static boolean printTick = false;
     public static String showPlayers = null;
     public static boolean exit = false;
+    public static int waitForPlayers = 1;
 
     private GameField field;
     private List<Game> games;
@@ -101,6 +102,11 @@ public class LocalGameRunner {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                }
+
+                if (games.size() < waitForPlayers) {
+                    tick = 0;
+                    continue;
                 }
 
                 synchronized (this) {

@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 public class Main {
@@ -38,8 +39,9 @@ public class Main {
     public static void main(String[] args) {
         String game = "bomberman";
         String settingsString = System.getProperty("settings", "{}");
+        String randomSoul = System.getProperty("random", null);
 
-        Dice dice = new RandomDice();
+        Dice dice = getDice(randomSoul);
 
         JSONObject settings = new JSONObject(settingsString);
 
@@ -73,6 +75,16 @@ public class Main {
         };
 
         LocalWSGameServer.startGame(game, gameType);
+    }
+
+    private static Dice getDice(String randomSoul) {
+        if (StringUtils.isEmpty(randomSoul)) {
+            return new RandomDice();
+        } else {
+            LocalGameRunner.printDice = false;
+            LocalGameRunner.printConversions = false;
+            return LocalGameRunner.getDice(LocalGameRunner.generateXorShift(randomSoul, 100, 10000));
+        }
     }
 
 }
