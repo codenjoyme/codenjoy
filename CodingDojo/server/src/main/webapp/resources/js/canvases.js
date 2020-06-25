@@ -561,6 +561,23 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
     }
 
+    Number.prototype.padLeft = function(base,chr){
+        var  len = (String(base || 10).length - String(this).length)+1;
+        return len > 0? new Array(len).join(chr || '0')+this : this;
+    }
+
+    var getTickTime = function(time) {
+        var date = new Date(parseInt(time));
+        return [date.getFullYear(),
+                date.getDate().padLeft(),
+                (date.getMonth()+1).padLeft()].join('-') + 'T' +
+                [date.getHours().padLeft(),
+                date.getMinutes().padLeft(),
+                date.getSeconds().padLeft()].join(':') + '.' +
+                date.getMilliseconds() + ' ' +
+                '(' + time + ')';
+    }
+
     function drawUserCanvas(playerId, data, allPlayersScreen) {
         if (currentBoardSize != data.boardSize) {    // TODO так себе решение... Почему у разных юзеров передается размер борды а не всем сразу?
             reloadCanvasesData();
@@ -572,7 +589,11 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         drawBoard(getBoardDrawer(canvas, playerId, data, allPlayersScreen));
 
-        $("#score_" + playerId).text(data.score);
+        if (!!data.tickTime) {
+            $("#score_" + playerId).text(getTickTime(data.tickTime));
+        } else {
+            $("#score_" + playerId).text(data.score);
+        }
 
         showScoreInformation(playerId, data.info);
 
