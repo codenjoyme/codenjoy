@@ -89,9 +89,26 @@ var lastTick = null;
 
 function initLogs(gameName, boardSize, alphabet, playerId) {
 
+    function getTickFromUrl(){
+        let url = new URL(window.location.href);
+        if (url.searchParams.has('tick')) {
+            return url.searchParams.get('tick');
+        } else {
+            return 0;
+        }
+    }
+
+    function updateUrl(key, value) {
+        let url = new URL(window.location.href);
+        url.searchParams.set(key, value);
+        window.history.pushState('data', 'Title', url.href);
+    }
+
     function loadTick(time) {
         currentTick = time;
         var tick = logTicks[time];
+
+        updateUrl("tick", time);
 
         var data = {};
         var info = data[playerId] = {};
@@ -216,7 +233,7 @@ function initLogs(gameName, boardSize, alphabet, playerId) {
         }
     });
 
-    loadNewLogs(0, function(time) {
+    loadNewLogs(getTickFromUrl(), function(time) {
         loadTick(time);
     });
 }
