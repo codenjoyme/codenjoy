@@ -55,6 +55,7 @@ public class Dispatcher {
     @Autowired ConfigProperties config;
     @Autowired GameServers gameServers;
     @Autowired GameServer game;
+    @Autowired TimerService timer;
 
     private volatile long lastTime;
 
@@ -263,11 +264,19 @@ public class Dispatcher {
             return cached;
         }
 
-        List<PlayerScore> list = scores.getScores(day, lastTime);
+        List<PlayerScore> list = scores.getScores(day, getNow());
         List<PlayerScore> result = prepareScoresForClient(list);
 
         currentScores.put(day, result);
         return result;
+    }
+
+    // иначе (если юзать только lastTime) в момент, когда берем сегодня утром getScores
+    // вчерашнего дня, а сервер был на паузе все время со вчерашнего вечера до утра сегодня,
+    // то там будут невалидные данные - последние за вчера (когда стопнули серве),
+    // но не около 19:00 как было бы если сервер не тушили и lastTime согла обновиться в now()
+    private long getNow() {
+        return (timer.isPaused()) ? now() : lastTime;
     }
 
     private List<PlayerScore> prepareScoresForClient(List<PlayerScore> result) {
