@@ -30,9 +30,8 @@ import com.codenjoy.dojo.client.WebSocketRunner;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
+import java.util.Collection;
 import java.util.List;
-
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class AIPerksHunterSolver implements Solver<Board> {
 
@@ -47,30 +46,22 @@ public class AIPerksHunterSolver implements Solver<Board> {
         this.way = new DeikstraFindWay();
     }
 
-    public DeikstraFindWay.Possible possible(final Board board) {
+    public static DeikstraFindWay.Possible possible(Board board) {
+        Collection<Point> futureBlasts = board.getFutureBlasts();
+        Collection<Point> meatChoppers = board.getMeatChoppers();
+
         return new DeikstraFindWay.Possible() {
             @Override
             public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
-                if (board.isBarrierAt(x, y)) return false;
-
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
-
-                if (board.isOutOfField(nx, ny)) return false;
-
-                if (board.isBarrierAt(nx, ny)) return false;
-                if (board.getFutureBlasts().contains(newPt)) return false;
-                if (board.getMeatChoppers().contains(newPt)) return false;
-
+                Point to = where.change(from);
+                if (futureBlasts.contains(to)) return false;
+                if (meatChoppers.contains(to)) return false;
                 return true;
             }
 
             @Override
-            public boolean possible(Point atWay) {
-                return true;
+            public boolean possible(Point point) {
+                return !board.isBarrierAt(point);
             }
         };
     }
@@ -93,5 +84,13 @@ public class AIPerksHunterSolver implements Solver<Board> {
         List<Direction> result = getDirections(board);
         if (result.isEmpty()) return Direction.ACT.toString();
         return result.get(0).toString();
+    }
+
+    public static void main(String[] args) {
+        WebSocketRunner.runClient(
+                // paste here board page url from browser after registration
+                "http://127.0.0.1:8080/codenjoy-contest/board/player/anyidyouwant?code=12345678901234567890",
+                new AISolver(new RandomDice()),
+                new Board());
     }
 }

@@ -167,7 +167,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private void meatChopperEatHeroes() {
-        for (MeatChopper chopper : walls.subList(MeatChopper.class)) {
+        for (MeatChopper chopper : walls.listSubtypes(MeatChopper.class)) {
             for (Player player : players) {
                 Hero hero = player.getHero();
                 if (hero.isAlive() && chopper.itsMe(hero)) {
@@ -255,7 +255,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     }
 
     private List<Blast> makeBlast(Bomb bomb) {
-        List barriers = walls.subList(Wall.class);
+        List barriers = walls.listSubtypes(Wall.class);
         barriers.addAll(heroes(ACTIVE_ALIVE));
 
         return new BoomEngineOriginal(bomb.getOwner()).boom(barriers, size.getValue(), bomb, bomb.getPower());   // TODO move bomb inside BoomEngine
@@ -270,7 +270,7 @@ public class Bomberman extends RoundField<Player> implements Field {
     private void killWallsAndChoppers(List<Blast> blasts) {
         // собираем все разрушаемые стенки которые уже есть в радиусе
         // надо определить кто кого чем кикнул (ызрывные волны могут пересекаться)
-        List<Wall> all = walls.subList(Wall.class);
+        List<Wall> all = walls.listSubtypes(Wall.class);
         Multimap<Hero, Wall> deathMatch = HashMultimap.create();
         for (Blast blast : blasts) {
             Hero hunter = blast.owner();

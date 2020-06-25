@@ -25,7 +25,6 @@ package com.codenjoy.dojo.services.algs;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 
 import java.util.*;
 
@@ -34,22 +33,28 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 public class DeikstraFindWay {
 
     private static final List<Direction> DIRECTIONS = Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
-    private Map<Point, List<Direction>> possibleWays;
+    private Map<Point, List<Direction>> ways;
     private int size;
-    private Possible possible;
+    private Possible checker;
 
     public interface Possible {
-        boolean possible(Point from, Direction direction);
-        boolean possible(Point atWay);
-    }
 
-    public DeikstraFindWay() {
+        default boolean possible(Point from, Direction direction) {
+            return true;
+        }
+
+        default boolean possible(Point point) {
+            return true;
+        }
     }
 
     public List<Direction> getShortestWay(int size, Point from, List<Point> goals, Possible possible) {
         this.size = size;
-        this.possible = possible;
-        setupPossibleWays();
+        this.checker = possible;
+        if (possible == null) {
+            throw new RuntimeException("Please setup Possible object before run getShortestWay");
+        }
+        setupWays();
 
         List<List<Direction>> paths = new LinkedList<>();
         for (Point to : goals) {
@@ -77,7 +82,7 @@ public class DeikstraFindWay {
 
     private Map<Point, List<Direction>> getPath(Point from) {
         Map<Point, List<Direction>> path = new HashMap<>();
-        for (Point point : possibleWays.keySet()) {
+        for (Point point : ways.keySet()) {
             path.put(point, new LinkedList<>());
         }
 
@@ -93,11 +98,9 @@ public class DeikstraFindWay {
                 current = toProcess.remove();
             }
             List<Direction> before = path.get(current);
-            for (Direction direction : possibleWays.get(current)) {
+            for (Direction direction : ways.get(current)) {
                 Point to = direction.change(current);
-                if (possible != null) {
-                    if (!possible.possible(to)) continue;
-                }
+                if (!checker.possible(to)) continue;
                 if (processed[to.getX()][to.getY()]) continue;
 
                 List<Direction> directions = path.get(to);
@@ -117,24 +120,37 @@ public class DeikstraFindWay {
         return path;
     }
 
-    private void setupPossibleWays() {
-        possibleWays = new TreeMap<>();
+    boolean check(Point from, Direction direction) {
+        if (!checker.possible(from)) return false;
+
+        Point to = direction.change(from);
+        if (to.isOutOf(size)) return false;
+
+        if (!checker.possible(to)) return false;
+
+        if (!checker.possible(from, direction)) return false;
+
+        return true;
+    }
+
+    private void setupWays() {
+        ways = new TreeMap<>();
 
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 Point from = pt(x, y);
                 List<Direction> directions = new LinkedList<>();
                 for (Direction direction : DIRECTIONS) {
-                    if (possible.possible(from, direction)) {
+                    if (check(from, direction)) {
                         directions.add(direction);
                     }
                 }
-                possibleWays.put(from, directions);
+                ways.put(from, directions);
             }
         }
     }
 
     public Map<Point, List<Direction>> getPossibleWays() {
-        return possibleWays;
+        return ways;
     }
 }

@@ -51,7 +51,7 @@ public class MeatChoppers extends WallsDecorator implements Walls {
             count.update(0);
         }
 
-        int count = walls.subList(MeatChopper.class).size();
+        int count = walls.listSubtypes(MeatChopper.class).size();
 
         int iteration = 0;
         Set<Point> checked = new HashSet<>();

@@ -36,7 +36,9 @@ public interface Walls extends Iterable<Wall>, Tickable {
 
     boolean itsMe(Point pt);
 
-    <T extends Wall> List<T> subList(Class<T> filter);
+    <T extends Wall> List<T> listSubtypes(Class<T> filter);
+
+    <T extends Wall> List<T> listEquals(Class<T> filter);
 
     void add(Wall wall);
 

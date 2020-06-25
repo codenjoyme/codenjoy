@@ -74,7 +74,7 @@ public class OriginalWalls extends WallsImpl implements Iterable<Wall> {
 
         if (currentSize != size.getValue()) {
             currentSize = size.getValue();
-            List<Wall> walls = subList(Wall.class);
+            List<Wall> walls = this.listSubtypes(Wall.class);
             for (Wall wall : walls.toArray(new Wall[0])) {
                 destroy(wall);
             }

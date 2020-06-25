@@ -49,7 +49,7 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
 
     private int freeSpaces() {
         return  (field.size()* field.size() - 1) // TODO -1 это один бомбер, а если их несколько?
-                - walls.subList(Wall.class).size();
+                - walls.listSubtypes(Wall.class).size();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO п�
             count.update(0);
         }
 
-        List<DestroyWall> destroy = walls.subList(DestroyWall.class);
+        List<DestroyWall> destroy = walls.listSubtypes(DestroyWall.class);
         int need = this.count.getValue() - destroy.size();
         if (need > freeSpaces()) {  // TODO и это потестить
             count.update(count.getValue() - (need - freeSpaces()) - 50); // 50 это место под бомберов

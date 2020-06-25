@@ -48,27 +48,14 @@ public class MeatChopperHunter extends MeatChopper {
     }
 
     public DeikstraFindWay.Possible possible(Field field) {
+        List<Wall> walls = field.walls().listEquals(Wall.class);
+
         return new DeikstraFindWay.Possible() {
             @Override
-            public boolean possible(Point from, Direction where) {
-                if (isWall(from)) return false;
-                Point to = where.change(from);
-                if (to.isOutOf(field.size())) return false;
-                if (isWall(to)) return false;
-                return true;
-            }
-
-            @Override
-            public boolean possible(Point atWay) {
-                return true;
+            public boolean possible(Point point) {
+                return !walls.contains(point);
             }
         };
-    }
-
-    private boolean isWall(Point pt) {
-        Wall wall = field.walls().get(pt);
-        return wall != null
-                && wall.getClass().equals(Wall.class);
     }
 
     public List<Direction> getDirections(Point from, List<Point> to) {

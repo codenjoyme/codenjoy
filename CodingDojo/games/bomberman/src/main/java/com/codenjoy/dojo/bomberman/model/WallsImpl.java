@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Point;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toList;
 
@@ -70,9 +71,18 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public <T extends Wall> List<T> subList(Class<T> filter) {
+    public <T extends Wall> List<T> listSubtypes(Class<T> filter) {
+        return list(wall -> filter.isAssignableFrom(wall.getClass()));
+    }
+
+    @Override
+    public <T extends Wall> List<T> listEquals(Class<T> filter) {
+        return list(wall -> filter.equals(wall.getClass()));
+    }
+
+    private List list(Predicate<Wall> predicate) {
         return (List)walls.stream()
-                .filter(wall -> filter.isAssignableFrom(wall.getClass()))
+                .filter(predicate)
                 .collect(toList());
     }
 

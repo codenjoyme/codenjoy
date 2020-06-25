@@ -60,8 +60,13 @@ public abstract class WallsDecorator implements Walls, Tickable {
     }
 
     @Override
-    public <T extends Wall> List<T> subList(Class<T> filter) {
-        return walls.subList(filter);
+    public <T extends Wall> List<T> listSubtypes(Class<T> filter) {
+        return walls.listSubtypes(filter);
+    }
+
+    @Override
+    public <T extends Wall> List<T> listEquals(Class<T> filter) {
+        return walls.listEquals(filter);
     }
 
     @Override

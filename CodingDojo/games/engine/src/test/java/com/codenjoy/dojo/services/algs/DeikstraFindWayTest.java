@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.algs;
 
 
 import com.codenjoy.dojo.client.AbstractBoard;
+import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.Point;
@@ -31,6 +32,7 @@ import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.function.Function;
 
 import static org.junit.Assert.*;
 
@@ -38,83 +40,83 @@ public class DeikstraFindWayTest {
 
     @Test
     public void testFindShortestWay() {
-        asrtWay("XXXXXXX" +
-                "XS    X" +
-                "X*    X" +
-                "X*    X" +
-                "X*    X" +
-                "X****FX" +
-                "XXXXXXX");
+        asrtWay("XXXXXXX\n" +
+                "XS    X\n" +
+                "X*    X\n" +
+                "X*    X\n" +
+                "X*    X\n" +
+                "X****FX\n" +
+                "XXXXXXX\n");
     }
 
     @Test
     public void testFindShortestWayWhenBrickOnWay() {
-        asrtWay("XXXXXXX" +
-                "XS    X" +
-                "X**   X" +
-                "XO*   X" +
-                "X *   X" +
-                "X ***FX" +
-                "XXXXXXX");
+        asrtWay("XXXXXXX\n" +
+                "XS    X\n" +
+                "X**   X\n" +
+                "XO*   X\n" +
+                "X *   X\n" +
+                "X ***FX\n" +
+                "XXXXXXX\n");
 
-        asrtWay("XXXXXXX" +
-                "XS    X" +
-                "X**   X" +
-                "XO**  X" +
-                "X O*  X" +
-                "X  **FX" +
-                "XXXXXXX");
+        asrtWay("XXXXXXX\n" +
+                "XS    X\n" +
+                "X**   X\n" +
+                "XO**  X\n" +
+                "X O*  X\n" +
+                "X  **FX\n" +
+                "XXXXXXX\n");
 
-        asrtWay("XXXXXXX" +
-                "XS    X" +
-                "X**   X" +
-                "XO**  X" +
-                "X O***X" +
-                "X   OFX" +
-                "XXXXXXX");
+        asrtWay("XXXXXXX\n" +
+                "XS    X\n" +
+                "X**   X\n" +
+                "XO**  X\n" +
+                "X O***X\n" +
+                "X   OFX\n" +
+                "XXXXXXX\n");
 
-        asrtWay("XXXXXXX" +
-                "XS    X" +
-                "X**** X" +
-                "XO O* X" +
-                "X O **X" +
-                "X   OFX" +
-                "XXXXXXX");
+        asrtWay("XXXXXXX\n" +
+                "XS    X\n" +
+                "X**** X\n" +
+                "XO O* X\n" +
+                "X O **X\n" +
+                "X   OFX\n" +
+                "XXXXXXX\n");
     }
 
     @Test
     public void testFindShortestWayWhenNoWay() {
-        asrtWay("XXXXXXX" +
-                "XSX   X" +
-                "XXX   X" +
-                "X     X" +
-                "X     X" +
-                "X    FX" +
-                "XXXXXXX");
+        asrtWay("XXXXXXX\n" +
+                "XSX   X\n" +
+                "XXX   X\n" +
+                "X     X\n" +
+                "X     X\n" +
+                "X    FX\n" +
+                "XXXXXXX\n");
 
-        asrtWay("XXXXXXX" +
-                "XSO   X" +
-                "XOO   X" +
-                "X     X" +
-                "X     X" +
-                "X    FX" +
-                "XXXXXXX");
+        asrtWay("XXXXXXX\n" +
+                "XSO   X\n" +
+                "XOO   X\n" +
+                "X     X\n" +
+                "X     X\n" +
+                "X    FX\n" +
+                "XXXXXXX\n");
 
-        asrtWay("XXXXXXX" +
-                "XS O  X" +
-                "X  O  X" +
-                "XOOO  X" +
-                "X     X" +
-                "X    FX" +
-                "XXXXXXX");
+        asrtWay("XXXXXXX\n" +
+                "XS O  X\n" +
+                "X  O  X\n" +
+                "XOOO  X\n" +
+                "X     X\n" +
+                "X    FX\n" +
+                "XXXXXXX\n");
 
-        asrtWay("XXXXXXX" +
-                "XS X  X" +
-                "X  X  X" +
-                "XXXX  X" +
-                "X     X" +
-                "X    FX" +
-                "XXXXXXX");
+        asrtWay("XXXXXXX\n" +
+                "XS X  X\n" +
+                "X  X  X\n" +
+                "XXXX  X\n" +
+                "X     X\n" +
+                "X    FX\n" +
+                "XXXXXXX\n");
     }
 
     enum Elements implements CharElements {
@@ -154,68 +156,52 @@ public class DeikstraFindWayTest {
     }
 
     private void asrtWay(String expected) {
-        final AbstractBoard board = (AbstractBoard)new AbstractBoard<Elements>() {
+        AbstractBoard board = new AbstractBoard() {
             @Override
             public Elements valueOf(char ch) {
                 return Elements.valueOf(ch);
             }
-        }.forString(expected.replace(Elements.WAY.ch(), Elements.NONE.ch()));
+        };
 
-        List<Point> starts = board.get(Elements.START);
-        Point start = starts.get(0);
-        List<Point> goals = board.get(Elements.FINISH);
-        List<Direction> way = new DeikstraFindWay().getShortestWay(board.size(),
-                start, goals,
-                new DeikstraFindWay.Possible() {
-                    @Override
-                    public boolean possible(Point from, Direction where) {
-                        int x = from.getX();
-                        int y = from.getY();
-                        if (board.isAt(x, y, Elements.WALL, Elements.FINISH)) return false;
-
-                        Point newPt = where.change(from);
-                        int nx = newPt.getX();
-                        int ny = newPt.getY();
-
-                        if (board.isOutOfField(nx, ny)) return false;
-
-                        if (board.isAt(nx, ny, Elements.WALL, Elements.START)) return false;
-
-                        // TODO test me
-                        if (board.isAt(x, y, Elements.ONLY_UP, Elements.ONLY_DOWN, Elements.ONLY_LEFT, Elements.ONLY_RIGHT)) {
-                            if (where == Direction.UP && !board.isAt(x, y, Elements.ONLY_UP)) return false;
-                            if (where == Direction.DOWN && !board.isAt(x, y, Elements.ONLY_DOWN)) return false;
-                            if (where == Direction.LEFT && !board.isAt(x, y, Elements.ONLY_LEFT)) return false;
-                            if (where == Direction.RIGHT && !board.isAt(x, y, Elements.ONLY_RIGHT)) return false;
-                        }
-                        return true;
-                    }
-
-                    @Override
-                    public boolean possible(Point atWay) {
-                        return !board.isAt(atWay.getX(), atWay.getY(), Elements.BRICK);
-                    }
-                });
-
-        Point current = start;
-        for (int index = 0; index < way.size(); index++) {
-            Direction direction = way.get(index);
-            current = direction.change(current);
-
-            Elements element = getElement(way, index);
-            board.set(current.getX(), current.getY(), element.ch());
-        }
-
-        String actual = board.boardAsString();
-
-        assertEquals(TestUtils.injectN(expected), actual);
+        assertEquals(expected,
+                TestUtils.printWay(expected,
+                        Elements.START, Elements.FINISH,
+                        Elements.NONE, Elements.WAY,
+                        board,
+                        b -> getPossible(b)));
     }
 
-    private Elements getElement(List<Direction> way, int index) {
-        if (index == way.size() - 1) {
-            return Elements.FINISH;
-        }
-        return Elements.WAY;
+    private <T extends AbstractBoard> DeikstraFindWay.Possible getPossible(T board) {
+        return new DeikstraFindWay.Possible() {
+            @Override
+            public boolean possible(Point from, Direction where) {
+                int x = from.getX();
+                int y = from.getY();
+                if (board.isAt(x, y, Elements.WALL, Elements.FINISH)) return false;
+
+                Point newPt = where.change(from);
+                int nx = newPt.getX();
+                int ny = newPt.getY();
+
+                if (board.isOutOfField(nx, ny)) return false;
+
+                if (board.isAt(nx, ny, Elements.WALL, Elements.START)) return false;
+
+                // TODO test me
+                if (board.isAt(x, y, Elements.ONLY_UP, Elements.ONLY_DOWN, Elements.ONLY_LEFT, Elements.ONLY_RIGHT)) {
+                    if (where == Direction.UP && !board.isAt(x, y, Elements.ONLY_UP)) return false;
+                    if (where == Direction.DOWN && !board.isAt(x, y, Elements.ONLY_DOWN)) return false;
+                    if (where == Direction.LEFT && !board.isAt(x, y, Elements.ONLY_LEFT)) return false;
+                    if (where == Direction.RIGHT && !board.isAt(x, y, Elements.ONLY_RIGHT)) return false;
+                }
+                return true;
+            }
+
+            @Override
+            public boolean possible(Point point) {
+                return !board.isAt(point.getX(), point.getY(), Elements.BRICK);
+            }
+        };
     }
 
 }

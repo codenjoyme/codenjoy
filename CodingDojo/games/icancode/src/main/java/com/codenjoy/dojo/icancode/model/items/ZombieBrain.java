@@ -43,47 +43,31 @@ public class ZombieBrain {
         if (shortestWay.isEmpty()) {
             return null;
         }
-        Direction nextStep = shortestWay.get(0);
-        return nextStep;
+        Direction result = shortestWay.get(0);
+        return result;
     }
 
     List<Direction> getShortestWay(Field field, Point from, List<Point> to) {
         DeikstraFindWay.Possible map = possible(field);
         DeikstraFindWay findWay = new DeikstraFindWay();
-        List<Direction> shortestWay = findWay.getShortestWay(field.size(), from, to, map);
-        return shortestWay;
+        List<Direction> result = findWay.getShortestWay(field.size(), from, to, map);
+        return result;
     }
 
     private DeikstraFindWay.Possible possible(Field field) {
-        return new DeikstraFindWay.Possible() {
+        return new DeikstraFindWay.Possible() { // TODO test me
             @Override
-            public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
+            public boolean possible(Point point) {
+                int x = point.getX();
+                int y = point.getY();
 
-                if (isNotFree(x, y, field)) return false;
+                if (field.isBarrier(x, y)) return false;
+                if (field.isAt(x, y, Hole.class)) return false;
+                if (field.isAt(x, y, Box.class)) return false;
 
-                Point to = where.change(from);
-                int nx = to.getX();
-                int ny = to.getY();
-
-                if (to.isOutOf(field.size())) return false;
-
-                if (isNotFree(nx, ny, field)) return false;
-
-                return true;
-            }
-
-            @Override
-            public boolean possible(Point atWay) {
                 return true;
             }
         };
     }
 
-    boolean isNotFree(int x, int y, Field field) {
-        return field.isBarrier(x, y)
-                || field.isAt(x, y, Hole.class)
-                || field.isAt(x, y, Box.class);
-    }
 }
