@@ -137,7 +137,7 @@ function initLogs(gameName, boardSize, alphabet, playerId) {
     }
 
     function loadNewLogs(time, onLoad) {
-        if (firstTick == time || lastTick == time) {
+        if (firstTick == time /*|| lastTick == time*/) {
             if (!!onLoad) {
                 onLoad(time);
             }
@@ -159,9 +159,9 @@ function initLogs(gameName, boardSize, alphabet, playerId) {
                 if (!firstTick && !findSmaller(time)) {
                     firstTick = time;
                 }
-                if (!lastTick && !findLarger(time)) {
-                    lastTick = time;
-                }
+                // if (!lastTick && !findLarger(time)) {
+                //     lastTick = time;
+                // }
             }
             if (time == 0) {
                 return;
