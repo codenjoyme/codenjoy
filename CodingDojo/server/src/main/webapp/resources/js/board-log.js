@@ -210,7 +210,7 @@ function initLogs(gameName, boardSize, alphabet, playerId) {
             loadTick(time);
         } else {
             loadNewLogs(currentTick, function(time) {
-                loadTick(time);
+                loadTick(findSmaller(time));
             });
         }
     }
@@ -221,7 +221,7 @@ function initLogs(gameName, boardSize, alphabet, playerId) {
             loadTick(time);
         } else {
             loadNewLogs(currentTick, function(time) {
-                loadTick(time);
+                loadTick(findLarger(time));
             });
         }
     }
