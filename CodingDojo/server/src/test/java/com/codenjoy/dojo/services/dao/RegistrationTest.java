@@ -61,7 +61,7 @@ public class RegistrationTest {
         String dbFile = "target/users.db" + new Random().nextInt();
         properties = mock(ConfigProperties.class);
         service = new Registration(
-                new SqliteConnectionThreadPoolFactory(dbFile,
+                new SqliteConnectionThreadPoolFactory(false, dbFile,
                         new ContextPathGetter() {
                             @Override
                             public String getContext() {

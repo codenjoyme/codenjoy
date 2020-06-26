@@ -56,7 +56,7 @@ public class ActionLoggerTest {
     public void setup() {
         String dbFile = "target/logs.db" + new Random().nextInt();
         logger = new ActionLogger(
-                    new SqliteConnectionThreadPoolFactory(dbFile,
+                    new SqliteConnectionThreadPoolFactory(false, dbFile,
                             new ContextPathGetter() {
                                 @Override
                                 public String getContext() {

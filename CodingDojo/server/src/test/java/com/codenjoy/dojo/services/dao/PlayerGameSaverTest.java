@@ -46,7 +46,7 @@ public class PlayerGameSaverTest {
     public void removeAll() {
         String dbFile = "target/saves.db" + new Random().nextInt();
         saver = new PlayerGameSaver(
-                new SqliteConnectionThreadPoolFactory(dbFile,
+                new SqliteConnectionThreadPoolFactory(false, dbFile,
                         new ContextPathGetter() {
                             @Override
                             public String getContext() {
