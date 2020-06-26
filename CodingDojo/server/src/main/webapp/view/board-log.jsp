@@ -42,7 +42,7 @@
             line-height: 11px;
             margin: 0px;
         }
-        .player_info h2:nth-child(2) {
+        .label-value {
             font-size: 14px;
             font-weight: 100;
         }
