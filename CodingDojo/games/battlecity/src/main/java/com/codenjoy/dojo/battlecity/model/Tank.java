@@ -107,7 +107,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void moving(int newX, int newY) {
-        if (field.isBarrier(newX, newY)) {
+        if (field.isBarrier(newX, newY) || field.isRiver(newX, newY)) {
             // do nothing
         } else {
             move(newX, newY);

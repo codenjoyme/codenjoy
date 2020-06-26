@@ -35,4 +35,6 @@ public interface Field extends GameField<Player>, Level {
     boolean outOfField(int x, int y);
 
     void affect(Bullet bullet);
+
+    boolean isRiver(int x, int y);
 }

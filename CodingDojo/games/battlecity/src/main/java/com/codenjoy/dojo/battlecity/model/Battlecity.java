@@ -303,6 +303,21 @@ public class Battlecity implements Field {
     }
 
     @Override
+    public boolean isRiver(int x, int y) {
+        for (River river : rivers) {
+            if (river.itsMe(x, y)) {
+                return true;
+            }
+        }
+        for (Point river : rivers) {
+            if (river.itsMe(x, y)) {
+                return true;
+            }
+        }
+        return outOfField(x, y);
+    }
+
+    @Override
     public boolean outOfField(int x, int y) { // TODO заменить все есть в point
         return x < 0 || y < 0 || y > size - 1 || x > size - 1;
     }

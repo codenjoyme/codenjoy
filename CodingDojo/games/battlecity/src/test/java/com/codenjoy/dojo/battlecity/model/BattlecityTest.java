@@ -3506,7 +3506,119 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    //TODO    3.1) река - через нее герою нельзя пройти. но можно стрелять
+	//3.1) река - через нее герою нельзя пройти. но можно стрелять
+	@Test
+	public void shouldTankCantGoIfRiverAtWay() {
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
+
+		givenGameWithRiver(tanks, rivers);
+
+		hero.up();
+		game.tick();
+		hero.up();
+		game.tick();
+		assertD("☼☼☼☼☼☼☼\n" +
+				"☼     ☼\n" +
+				"☼     ☼\n" +
+				"☼     ☼\n" +
+				"☼▓    ☼\n" +
+				"☼▲    ☼\n" +
+				"☼☼☼☼☼☼☼\n");
+	}
+
+	@Test
+	public void shouldBulletCantGoIfRiverAtWay() {
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
+
+		givenGameWithRiver(tanks, rivers);
+
+		hero.up();
+		game.tick();
+		hero.act();
+		game.tick();
+		assertD("☼☼☼☼☼☼☼\n" +
+				"☼     ☼\n" +
+				"☼     ☼\n" +
+				"☼•    ☼\n" +
+				"☼▓    ☼\n" +
+				"☼▲    ☼\n" +
+				"☼☼☼☼☼☼☼\n");
+
+		hero.right();
+		hero.act();
+		game.tick();
+		assertD("☼☼☼☼☼☼☼\n" +
+				"☼•    ☼\n" +
+				"☼     ☼\n" +
+				"☼     ☼\n" +
+				"☼▓    ☼\n" +
+				"☼ ►•  ☼\n" +
+				"☼☼☼☼☼☼☼\n");
+
+		game.tick();
+		assertD("☼☼☼☼☼☼☼\n" +
+				"☼     ☼\n" +
+				"☼     ☼\n" +
+				"☼     ☼\n" +
+				"☼▓    ☼\n" +
+				"☼ ►  •☼\n" +
+				"☼☼☼☼☼☼☼\n");
+	}
+
+    @Test
+    public void shouldDoNotMove_whenRiverToWay_goDownOrLeft() {
+        tanks = new LinkedList<>(Arrays.asList(tank(3, 3, Direction.UP)));
+        rivers = new LinkedList<>(Arrays.asList(
+                new River(2, 3),
+                new River(4, 3),
+                new River(3, 2),
+                new River(3, 4)));
+
+        givenGameWithRiver(tanks, rivers);
+
+        hero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓►▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓▲▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓◄▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+		hero.down();
+		game.tick();
+		assertD("☼☼☼☼☼☼☼\n" +
+				"☼     ☼\n" +
+				"☼  ▓  ☼\n" +
+				"☼ ▓▼▓ ☼\n" +
+				"☼  ▓  ☼\n" +
+				"☼     ☼\n" +
+				"☼☼☼☼☼☼☼\n");
+    }
+
     //TODO    3.2) река - через нее врагу нельзя пройти. но можно стрелять
     //TODO    3.3) река - через нее боту нельзя пройти. но можно стрелять
     //TODO 4. Добовляем бота
