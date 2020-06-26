@@ -75,8 +75,8 @@ public class ActionLogger extends Suspendable {
     public void saveToDB() {
         pool.run(connection -> {
             String sql = "INSERT INTO player_boards " +
-                    "(time, player_id, game_type, score, command, board) " +
-                    "VALUES (?,?,?,?,?,?);";
+                    "(time, player_id, game_type, score, command, message, board) " +
+                    "VALUES (?,?,?,?,?,?,?);";
 
             BoardLog data;
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -92,7 +92,8 @@ public class ActionLogger extends Suspendable {
                     stmt.setString(3, data.getGameType());
                     stmt.setString(4, data.getScore().toString());
                     stmt.setString(5, data.getCommand());
-                    stmt.setString(6, data.getBoard());
+                    stmt.setString(6, data.getMessage());
+                    stmt.setString(7, data.getBoard());
                     stmt.addBatch();
                 }
                 stmt.executeBatch();
