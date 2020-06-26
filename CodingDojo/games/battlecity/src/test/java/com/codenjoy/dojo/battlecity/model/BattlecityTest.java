@@ -56,6 +56,7 @@ public class BattlecityTest {
 	private List<Tree> trees;
 	private List<Construction> constructions;
 	private List<Ice> ice;
+	private List<River> rivers;
 
 	@Before
     public void setup() {
@@ -110,6 +111,31 @@ public class BattlecityTest {
 		}
 		this.hero = tanks.get(0);
 	}
+
+    private void givenGameWithRiver(List<Tank> allTanks, List<River> water) {
+        this.trees = new LinkedList<>();
+        this.ice = new LinkedList<>();
+        givenGameWithRiver(allTanks, Arrays.asList(new Construction[0]), trees, ice, water);
+    }
+
+    private void givenGameWithRiver(List<Tank> allTanks,
+                                    List<Construction> constructions,
+                                    List<Tree> woods,
+                                    List<Ice> freeze,
+                                    List<River> water) {
+
+        List<Tree> trees = new LinkedList<>(woods);
+        List<Tank> tanks = new LinkedList<>(allTanks);
+        List<Ice> ice = new LinkedList<>(freeze);
+        List<River> rivers = new LinkedList<>(water);
+
+        game = new Battlecity(size, mock(Dice.class), constructions,
+                new DefaultBorders(size).get(), trees, ice, rivers);
+        for (Tank tank : tanks) {
+            initPlayer(game, tank);
+        }
+        this.hero = tanks.get(0);
+    }
 
 	private void givenGameWithAI(Tank tank, Tank... aiTanks) {
         game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), aiTanks);
@@ -3440,7 +3466,7 @@ public class BattlecityTest {
 
 	//2. Лёд
     @Test
-    public void shouldBeConstructioIce_whenGameCreated() {
+    public void shouldBeConstructionIce_whenGameCreated() {
         tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
         ice = new LinkedList<>(Arrays.asList(new Ice(3, 3)));
 
@@ -3457,13 +3483,32 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    //TODO    2.1) когда на нем двигается герой, он проскальзывает команду на целых два тика
-	//TODO	  2.2) также когда на нем двигается враг он проскальзывает команду на два тика
-	//TODO	  2.3) также когда на нем двигается бот он проскальзывает команду на два тика
-    //TODO 3. Вода
-    //TODO    3.1) вода - через нее герою нельзя пройти. но можно стрелять
-    //TODO    3.2) вода - через нее врагу нельзя пройти. но можно стрелять
-    //TODO    3.3) вода - через нее боту нельзя пройти. но можно стрелять
+    //2.1) когда на нем двигается герой, он проскальзывает команду на целых два тика
+    //2.2) также когда на нем двигается враг он проскальзывает команду на два тика
+    //2.3) также когда на нем двигается бот он проскальзывает команду на два тика
+
+    //3. Река
+    @Test
+    public void shouldBeConstructionWater_whenGameCreated() {
+        tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+        rivers = new LinkedList<>(Arrays.asList(new River(3, 3)));
+
+        givenGameWithRiver(tanks, rivers);
+
+        assertEquals(1, game.getRivers().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    //TODO    3.1) река - через нее герою нельзя пройти. но можно стрелять
+    //TODO    3.2) река - через нее врагу нельзя пройти. но можно стрелять
+    //TODO    3.3) река - через нее боту нельзя пройти. но можно стрелять
     //TODO 4. Добовляем бота
     //TODO    4.1) добавляем бота, который спаунится каждые N ходов (задается в сеттингах),
     //TODO         который цветной и его убить можно только за M выстрелов (тоже сеттинги)

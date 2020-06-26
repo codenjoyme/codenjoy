@@ -39,6 +39,7 @@ public enum Elements implements CharElements {
 
 	ICE('█'),
 	TREE('▒'),
+	RIVER('▓'),
 
 	CONSTRUCTION('╬', 3),
 
