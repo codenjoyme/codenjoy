@@ -54,14 +54,7 @@ public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
         config.setOpenMode(SQLiteOpenMode.CREATE);
         config.setOpenMode(SQLiteOpenMode.NOMUTEX);
 
-        createDirs(database);
         return DriverManager.getConnection("jdbc:sqlite:" + database, config.toProperties());
-    }
-
-    private static void createDirs(String file) {
-        if (!file.contains("?mode=memory")) {
-            new File(file).getParentFile().mkdirs();
-        }
     }
 
     private void createDB(String sql) {
