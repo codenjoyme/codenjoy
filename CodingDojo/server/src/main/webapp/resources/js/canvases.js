@@ -577,8 +577,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 [date.getHours().padLeft(),
                 date.getMinutes().padLeft(),
                 date.getSeconds().padLeft()].join(':') + '.' +
-                date.getMilliseconds() + ' ' +
-                '(' + time + ')';
+                date.getMilliseconds();
     }
 
     function drawUserCanvas(playerId, data, allPlayersScreen) {
@@ -593,7 +592,13 @@ function initCanvases(contextPath, players, allPlayersScreen,
         drawBoard(getBoardDrawer(canvas, playerId, data, allPlayersScreen));
 
         if (!!data.tickTime) {
-            $("#score_" + playerId).text(getTickTime(data.tickTime));
+            $("#score_" + playerId).html(
+                data.score + '<br>' +
+                'Time : ' + getTickTime(data.tickTime) +  '<br>' +
+                'Mills : ' + data.tickTime +
+                '<br>' +
+                'Answer : ' + data.command + '<br>'
+            );
         } else {
             $("#score_" + playerId).text(data.score);
         }

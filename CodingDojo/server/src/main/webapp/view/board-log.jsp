@@ -32,12 +32,22 @@
 
     <style>
         canvas {
-            height: 100vh!important;
             width: unset!important;
             cursor: unset!important;
         }
         .player_info {
             color: white!important;
+        }
+        .player_info h2 {
+            line-height: 11px;
+            margin: 0px;
+        }
+        .player_info h2:nth-child(2) {
+            font-size: 14px;
+            font-weight: 100;
+        }
+        .player-canvas {
+            margin: 15px;
         }
     </style>
 
