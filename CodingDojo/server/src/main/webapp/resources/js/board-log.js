@@ -116,6 +116,7 @@ function initLogs(gameName, boardSize, alphabet, playerId) {
         info.score = tick.score;
         info.tickTime = time;
         info.command = tick.command;
+        info.message = tick.message;
         info.gameName = tick.gameType;
         info.scores = {};
         info.scores[playerId] = tick.score;

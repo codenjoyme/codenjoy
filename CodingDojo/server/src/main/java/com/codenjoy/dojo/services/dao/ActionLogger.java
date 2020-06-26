@@ -58,6 +58,7 @@ public class ActionLogger extends Suspendable {
                     "game_type varchar(255), " +
                     "score varchar(255), " +
                     "command varchar(255), " +
+                    "message varchar(255), " +
                     "board varchar(10000));");
         active = false;
         count = 0;
@@ -114,6 +115,7 @@ public class ActionLogger extends Suspendable {
                     player.getGameName(),
                     player.getScore(),
                     playerGame.getGame().getBoardAsString().toString(),
+                    player.getEventListener().popLastMessages(),
                     playerGame.popLastCommand()));
         }
 

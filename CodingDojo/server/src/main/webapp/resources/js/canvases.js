@@ -594,6 +594,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         if (!!data.tickTime) {
             $("#score_" + playerId).html(
                 data.score + '<br>' +
+                'Message : ' + data.message + '<br>' +
                 'Time : ' + getTickTime(data.tickTime) +  '<br>' +
                 'Mills : ' + data.tickTime +
                 '<br>' +

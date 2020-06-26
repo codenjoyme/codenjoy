@@ -41,6 +41,7 @@ public class BoardLog {
     private String gameType;
     private Object score;
     private String board;
+    private String message;
     private String command;
 
     public BoardLog(ResultSet resultSet) {
@@ -50,6 +51,7 @@ public class BoardLog {
             gameType = resultSet.getString("game_type");
             score = resultSet.getInt("score");
             board = resultSet.getString("board");
+            message = resultSet.getString("message");
             command = resultSet.getString("command");
         } catch (SQLException e) {
             e.printStackTrace();
