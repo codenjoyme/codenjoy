@@ -33,8 +33,8 @@
                         <td>
                             <div class="player_info">
                                 <h2>
-                                    <span id="player_name" class="label label-primary label-value">{%= name %}</span> :
-                                    <span class="label label-primary" id="score_{%= id %}"></span>
+                                    <span id="player_name" class="label label-primary">{%= name %}</span> :
+                                    <span class="label label-primary label-value" id="score_{%= id %}"></span>
                                 </h2>
                             </div>
                         </td>
