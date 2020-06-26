@@ -2,7 +2,7 @@ package main.groovy.com.codenjoy.dojo.logs
 
 import org.json.JSONObject
 
-def base = 'D:\\Work\\2019-07-09\\EPAM\\Парсил логи LearningWeek чтобы достать юзеров\\nginx';
+def base = '';
 
 // get all files
 def files = []
