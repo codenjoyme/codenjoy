@@ -3619,7 +3619,105 @@ public class BattlecityTest {
 				"☼☼☼☼☼☼☼\n");
     }
 
-    //TODO    3.2) река - через нее врагу нельзя пройти. но можно стрелять
+    //3.2) река - через нее врагу нельзя пройти. но можно стрелять
+    @Test
+    public void shouldOtherTankBullet_CantGoIfRiverAtWay() {
+        Tank tankHero = tank(3, 2, Direction.UP);
+        Tank otherTank = tank(1, 1, Direction.UP);
+
+        tanks = Arrays.asList(tankHero, otherTank);
+        rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
+
+        givenGameWithRiver(tanks, rivers);
+
+        otherTank.up();
+        game.tick();
+        otherTank.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼˄    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        otherTank.right();
+        otherTank.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼ ˃•  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼ ˃  •☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldOtherTankDoNotMove_whenRiverToWay_goDownOrLeft() {
+        Tank tankHero = tank(5, 1, Direction.UP);
+        Tank otherTank = tank(3, 3, Direction.UP);
+
+        tanks = Arrays.asList(tankHero, otherTank);
+        rivers = new LinkedList<>(Arrays.asList(
+                new River(2, 3),
+                new River(4, 3),
+                new River(3, 2),
+                new River(3, 4)));
+
+        givenGameWithRiver(tanks, rivers);
+
+        otherTank.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓˃▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        otherTank.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓˄▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        otherTank.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓˂▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        otherTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓˅▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+    
     //TODO    3.3) река - через нее боту нельзя пройти. но можно стрелять
     //TODO 4. Добовляем бота
     //TODO    4.1) добавляем бота, который спаунится каждые N ходов (задается в сеттингах),
