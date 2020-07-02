@@ -38,6 +38,7 @@ public class Battlecity implements Field {
     private LinkedList<Tank> aiTanks;
     private int aiCount;
     private int ticksCountAITankWithPresent;
+    private int bulletsForKill;
     private int tickCount = 0;
 
     private int size;
@@ -46,12 +47,15 @@ public class Battlecity implements Field {
 
     private List<Player> players = new LinkedList<Player>();
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions, int ticksCountAITankWithPresent, Tank... aiTanks) {
-        this(size, dice, constructions, new DefaultBorders(size).get(), ticksCountAITankWithPresent, aiTanks);
+    public Battlecity(int size, Dice dice, List<Construction> constructions, int ticksCountAITankWithPresent,
+                      int bulletsForKill, Tank... aiTanks) {
+        this(size, dice, constructions, new DefaultBorders(size).get(), ticksCountAITankWithPresent,
+                bulletsForKill, aiTanks);
     }
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      List<Border> borders, int ticksCountAITankWithPresent, Tank... aiTanks) {
+                      List<Border> borders, int ticksCountAITankWithPresent,
+                      int bulletsForKill, Tank... aiTanks) {
         aiCount = aiTanks.length;
         this.dice = dice;
         this.size = size;
@@ -59,6 +63,7 @@ public class Battlecity implements Field {
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
         this.ticksCountAITankWithPresent = ticksCountAITankWithPresent;
+        this.bulletsForKill = bulletsForKill;
 
         for (Tank tank : aiTanks) {
             addAI(tank);
@@ -148,7 +153,7 @@ public class Battlecity implements Field {
             } while (isBarrier(x, y) && c++ < size);
 
             if (!isBarrier(x, y)) {
-                addAI(new AITank(x, y, dice, Direction.DOWN));
+                addAI(new AITankWithPresent(x, y, dice, Direction.DOWN, bulletsForKill));
             }
         }
     }

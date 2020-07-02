@@ -60,12 +60,14 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public GameField createGame(int levelNumber) {
         int ticksCountAITankWithPresent = (int) settings.getParameter("count ticks for AI Tank with present").getValue();
+        int bulletsForKill = (int) settings.getParameter("bullets for kill AI Tank with present").getValue();
 
         return new Battlecity(level.size(),
                 getDice(),
                 level.getConstructions(),
                 level.getBorders(),
                 ticksCountAITankWithPresent,
+                bulletsForKill,
                 level.getTanks().toArray(new Tank[0])
         );
     }
