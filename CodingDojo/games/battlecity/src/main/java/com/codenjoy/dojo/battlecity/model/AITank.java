@@ -26,6 +26,8 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
+
 public class AITank extends Tank {
 
     private int act;
@@ -69,6 +71,10 @@ public class AITank extends Tank {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        if (tree != null) {
+            return Elements.TREE;
+        }
         if (isAlive()) {
             switch (direction) {
                 case LEFT:  return Elements.AI_TANK_LEFT;

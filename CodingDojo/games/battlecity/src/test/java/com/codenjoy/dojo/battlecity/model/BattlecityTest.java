@@ -3471,7 +3471,75 @@ public class BattlecityTest {
 				"☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-	//1.4) под кустами не видно так же и ботов белых
+    //1.4) под кустами не видно так же и ботов белых
+    @Test
+    public void shouldAITankMove_underTree() {
+        size = 11;
+        Tank tankHero = tank(1, 1, Direction.UP);
+        Tank aiTank = setAITank(1, 9, Direction.DOWN);
+
+        tanks = Arrays.asList(tankHero, aiTank);
+        trees = Arrays.asList(new Tree(1, 6), new Tree(1, 7));
+
+        givenGameWithTree(tanks, trees);
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼¿        ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        aiTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼¿        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        aiTank.down();
+        game.tick();
+
+        aiTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        aiTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼¿        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
 
 	//2. Лёд
     @Test
