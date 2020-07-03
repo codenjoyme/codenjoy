@@ -56,7 +56,7 @@ public class TanksEventsTest {
     public void setup() {
         enemy = tank(1, 5, Direction.DOWN, 1);
 
-        game = new Battlecity(7, mock(Dice.class), Arrays.asList(new Construction[0]), 4, enemy);
+        game = new Battlecity(7, mock(Dice.class), Arrays.asList(new Construction[0]), 4,3, enemy);
 
         events = mock(EventListener.class);
         player = player(1, 1, 2, 2, events);
