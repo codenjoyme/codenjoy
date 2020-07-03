@@ -169,6 +169,15 @@ public class BattlecityTest {
         return tank(x, y, direction, ticksPerBullets);
     }
 
+    public Tank setAITank(int x, int y, Direction direction) {
+        return setAITank(x, y, direction, ticksPerBullets);
+    }
+
+    public static Tank setAITank(int x, int y, Direction direction, int ticksPerBullets) {
+        Dice dice = getDice(x, y);
+        return new AITank(x, y, dice, direction,ticksPerBullets, false);
+    }
+
     private static Dice getDice(int x, int y) {
         Dice dice = mock(Dice.class);
         when(dice.next(anyInt())).thenReturn(x, y);
@@ -3717,8 +3726,156 @@ public class BattlecityTest {
                 "☼    ▲☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
-    
-    //TODO    3.3) река - через нее боту нельзя пройти. но можно стрелять
+
+    //3.3) река - через нее боту нельзя пройти. но можно стрелять
+    @Test
+    public void shouldAITank() {
+        Tank aiTank = setAITank(3, 3, Direction.DOWN);
+        givenGameWithAI(tank(5, 1, Direction.UP), aiTank);
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ¿  ☼\n" +
+                "☼     ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ?  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.right();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  »  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼   » ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldAITankBullet_CantGoIfRiverAtWay() {
+        Tank tankHero = tank(3, 2, Direction.UP);
+        Tank aiTank = setAITank(1, 1, Direction.UP);
+
+        tanks = Arrays.asList(tankHero, aiTank);
+        rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
+
+        givenGameWithRiver(tanks, rivers);
+
+        aiTank.up();
+        game.tick();
+        aiTank.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼?    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.right();
+        aiTank.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼ »•  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼  » •☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼   » ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldAITankDoNotMove_whenRiverToWay_goDownOrLeft() {
+        Tank tankHero = tank(5, 1, Direction.UP);
+        Tank aiTank = setAITank(3, 3, Direction.DOWN);
+
+        tanks = Arrays.asList(tankHero, aiTank);
+        rivers = new LinkedList<>(Arrays.asList(
+                new River(2, 3),
+                new River(4, 3),
+                new River(3, 2),
+                new River(3, 4)));
+
+        givenGameWithRiver(tanks, rivers);
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓¿▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓?▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓«▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓¿▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
     //TODO 4. Добовляем бота
     //TODO    4.1) добавляем бота, который спаунится каждые N ходов (задается в сеттингах),
     //TODO         который цветной и его убить можно только за M выстрелов (тоже сеттинги)

@@ -29,15 +29,25 @@ import com.codenjoy.dojo.services.Direction;
 public class AITank extends Tank {
 
     private int act;
+    private boolean noBulletFly = true;
 
     public AITank(int x, int y, Dice dice, Direction direction) {
         super(x, y, direction, dice, 1);
     }
 
+    public AITank(int x, int y,  Dice dice, Direction direction, int ticksPerBullets, boolean noBulletFly) {
+        super(x, y, direction, dice, ticksPerBullets);
+        this.noBulletFly = noBulletFly;
+    }
+
     @Override
     public void move() {
-        if (act++ % 10 == 0) {
-            act();
+        if (noBulletFly) {
+            if (act++ % 10 == 0) {
+                act();
+            }
+        } else {
+            //do nothing
         }
 
         int c = 0;
