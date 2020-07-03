@@ -38,19 +38,17 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class BattlecityTest {
-
-    public int ticksPerBullets;
-    public int size;
-    public int ticksCountAITankWithPresent;
+    private int ticksPerBullets;
+    private int size;
+    private int ticksCountAITankWithPresent;
+    private int bulletsForKill;
 
     private Battlecity game;
     private Joystick hero;
     private List<Player> players = new LinkedList<>();
-
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     @Before
@@ -58,10 +56,11 @@ public class BattlecityTest {
         size = 7;
         ticksPerBullets = 1;
         ticksCountAITankWithPresent = 4;
+        bulletsForKill = 3;
     }
 
     private void givenGame(Tank tank, Construction... constructions) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(constructions), ticksCountAITankWithPresent);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(constructions), ticksCountAITankWithPresent, bulletsForKill);
         initPlayer(game, tank);
         this.hero = tank;
     }
@@ -70,22 +69,24 @@ public class BattlecityTest {
         List<Border> borders = new DefaultBorders(size).get();
         borders.addAll(Arrays.asList(walls));
 
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), borders, ticksCountAITankWithPresent);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), borders, ticksCountAITankWithPresent, bulletsForKill);
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private void givenGameWithAI(Tank tank, Tank... aiTanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), ticksCountAITankWithPresent, aiTanks);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), ticksCountAITankWithPresent, bulletsForKill, aiTanks);
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private void givenGameWithAIaddAIWithPresent(Tank tank, Tank... aiTanks) {
-        game = new Battlecity(size, getDice(9, 9), Arrays.asList(new Construction[0]), ticksCountAITankWithPresent, aiTanks);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), ticksCountAITankWithPresent, bulletsForKill, aiTanks);
         initPlayer(game, tank);
         this.hero = tank;
     }
+
+
 
     private Player initPlayer(Battlecity game, Tank tank) {
         Player player = mock(Player.class);
@@ -97,7 +98,7 @@ public class BattlecityTest {
     }
 
     private void givenGameWithTanks(Tank... tanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[]{}), ticksCountAITankWithPresent);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[]{}), ticksCountAITankWithPresent, bulletsForKill);
         for (Tank tank : tanks) {
             initPlayer(game, tank);
         }
@@ -121,6 +122,11 @@ public class BattlecityTest {
     public Tank aiTank(int x, int y, Direction direction) {
         ticksPerBullets = 0;
         return aiTank(x, y, direction, ticksPerBullets);
+    }
+
+    public static Tank aiTankWithPresent(int x, int y, Direction direction, int bulletsForKill) {
+        Dice dice = getDice(x, y);
+        return new AITankWithPresent(x, y, dice, direction,  bulletsForKill);
     }
 
     private static Dice getDice(int x, int y) {
@@ -2883,7 +2889,8 @@ public class BattlecityTest {
     @Test
     public void shouldRespawnAITankWithPresent() {
         size = 11;
-        givenGameWithAIaddAIWithPresent(tank(1, 1, Direction.UP), aiTank(9, 9, Direction.DOWN));
+        givenGameWithAIaddAIWithPresent(tank(1, 1, Direction.UP), aiTankWithPresent(9, 9, Direction.DOWN, bulletsForKill));
+        game.setDice(getDice(9, 9));
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        ¿☼\n" +
@@ -2905,6 +2912,7 @@ public class BattlecityTest {
         game.tick();
         hero.up();
         game.tick();
+
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        ¿☼\n" +
@@ -2922,7 +2930,8 @@ public class BattlecityTest {
     @Test
     public void shouldRespawnTwoAITankWithPresent() {
         size = 11;
-        givenGameWithAIaddAIWithPresent(tank(1, 1, Direction.UP), aiTank(9, 9, Direction.DOWN));
+        givenGameWithAIaddAIWithPresent(tank(1, 1, Direction.UP), aiTankWithPresent(9, 9, Direction.DOWN, bulletsForKill));
+        game.setDice(getDice(9, 9));
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        ¿☼\n" +
@@ -2971,6 +2980,117 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
+    @Test
+    public void killAITankWithPresent() {
+        size = 11;
+        Tank enemy = aiTankWithPresent(1, 9, Direction.DOWN, bulletsForKill);
+        givenGameWithAIaddAIWithPresent(tank(1, 1, Direction.UP), enemy);
+        game.setDice(getDice(9, 9));
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼¿        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼¿        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        enemy.up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼?        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        enemy.down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼¿        ☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        enemy.up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼?       ¿☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        enemy.down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼¿       ¿☼\n" +
+                "☼•        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        enemy.up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼Ѡ        ☼\n" +
+                "☼         ☼\n" +
+                "☼        ¿☼\n" +
+                "☼        •☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
 }
 
 //TODO    4.1) добавляем бота, который спаунится каждые N ходов (задается в сеттингах),
