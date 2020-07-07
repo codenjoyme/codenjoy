@@ -3541,6 +3541,131 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
+    @Test
+    public void shouldEnemyCanKillTankUnderTree() {
+        size = 11;
+        Tank tankHero = tank(1, 3, Direction.UP);
+        Tank enemyTank = tank(1, 9, Direction.DOWN);
+
+        tanks = Arrays.asList(tankHero, enemyTank);
+        trees = Arrays.asList(new Tree(1, 4), new Tree(1, 5), new Tree(1, 6));
+
+        givenGameWithTree(tanks, trees);
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼˅        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▲        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();//герой запрятался в кустах
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼˅        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        enemyTank.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼˅        ☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertTrue(tankHero.isAlive());
+        game.tick();//герой должен погибнуть
+        assertFalse(tankHero.isAlive());
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼˅        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldTwoTankCanPassThroughEachOtherUnderTree() {
+        Tank tankHero = tank(1, 1, Direction.UP);
+        Tank enemyTank = tank(1, 4, Direction.DOWN);
+
+        tanks = Arrays.asList(tankHero, enemyTank);
+        trees = Arrays.asList(new Tree(1, 2), new Tree(1, 3));
+
+        givenGameWithTree(tanks, trees);
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼˅    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        enemyTank.down();
+        tankHero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        enemyTank.down();
+        tankHero.up();
+        game.tick();
+
+        enemyTank.down();
+        game.tick();
+        tankHero.up();
+        //Два танка не могут проехать через друг друга
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        enemyTank.right();
+        tankHero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▒˃   ☼\n" +
+                "☼▒►   ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
 	//2. Лёд
     @Test
     public void shouldBeConstructionIce_whenGameCreated() {
