@@ -74,7 +74,12 @@ public enum Elements implements CharElements {
     AI_TANK_UP('?'),
     AI_TANK_RIGHT('»'),
     AI_TANK_DOWN('¿'),
-    AI_TANK_LEFT('«');
+    AI_TANK_LEFT('«'),
+
+    AI_TANK_PRIZE_UP('◘'),
+    AI_TANK_PRIZE_RIGHT('◘'),
+    AI_TANK_PRIZE_DOWN('◘'),
+    AI_TANK_PRIZE_LEFT('◘');
 
     public final char ch;
     int power;

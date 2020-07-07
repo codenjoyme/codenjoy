@@ -92,7 +92,11 @@ public class Board extends AbstractBoard<Elements> {
                 Elements.OTHER_TANK_UP,
                 Elements.OTHER_TANK_DOWN,
                 Elements.OTHER_TANK_LEFT,
-                Elements.OTHER_TANK_RIGHT);
+                Elements.OTHER_TANK_RIGHT,
+                Elements.AI_TANK_PRIZE_UP,
+                Elements.AI_TANK_PRIZE_DOWN,
+                Elements.AI_TANK_PRIZE_LEFT,
+                Elements.AI_TANK_PRIZE_RIGHT);
     }
 
     public List<Point> getBullets() {
