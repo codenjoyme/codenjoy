@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.Direction;
 public class AITank extends Tank {
 
     private int act;
+    private boolean isTankWithPrize;
 
     public AITank(int x, int y, Dice dice, Direction direction) {
         super(x, y, direction, dice, 1);
@@ -70,5 +71,10 @@ public class AITank extends Tank {
         } else {
             return Elements.BANG;
         }
+    }
+
+    public boolean isTankWithPrize() {
+        isTankWithPrize = false;
+        return isTankWithPrize;
     }
 }
