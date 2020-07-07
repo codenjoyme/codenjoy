@@ -37,9 +37,9 @@ public class Battlecity implements Field {
     private Dice dice;
     private LinkedList<Tank> aiTanks;
     private int aiCount;
-    private int ticksCountAITankWithPresent;
-    private int bulletsForKill;
-    private int tickCount = 0;
+    private int countRespawnAiWithPrize;
+    private int bulletsForKillAIWithPrize;
+    private int aiTanksCount = 0;
 
     private int size;
     private List<Construction> constructions;
@@ -47,27 +47,28 @@ public class Battlecity implements Field {
 
     private List<Player> players = new LinkedList<Player>();
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions, int ticksCountAITankWithPresent,
-                      int bulletsForKill, Tank... aiTanks) {
-        this(size, dice, constructions, new DefaultBorders(size).get(), ticksCountAITankWithPresent,
-                bulletsForKill, aiTanks);
+    public Battlecity(int size, Dice dice, List<Construction> constructions, int countRespawnAiWithPrize,
+                      int bulletsForKillAIWithPrize, Tank... aiTanks) {
+        this(size, dice, constructions, new DefaultBorders(size).get(), countRespawnAiWithPrize,
+                bulletsForKillAIWithPrize, aiTanks);
     }
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      List<Border> borders, int ticksCountAITankWithPresent,
-                      int bulletsForKill, Tank... aiTanks) {
+                      List<Border> borders, int countRespawnAiWithPrize,
+                      int bulletsForKillAIWithPrize, Tank... aiTanks) {
         aiCount = aiTanks.length;
         this.dice = dice;
         this.size = size;
         this.aiTanks = new LinkedList<>();
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
-        this.ticksCountAITankWithPresent = ticksCountAITankWithPresent;
-        this.bulletsForKill = bulletsForKill;
+        this.countRespawnAiWithPrize = countRespawnAiWithPrize;
+        this.bulletsForKillAIWithPrize = bulletsForKillAIWithPrize;
 
         for (Tank tank : aiTanks) {
             addAI(tank);
         }
+
     }
 
     @Override
@@ -79,7 +80,7 @@ public class Battlecity implements Field {
 
     @Override
     public void tick() {
-        tickCounter();
+
         removeDeadTanks();
 
         newAI();
@@ -123,7 +124,6 @@ public class Battlecity implements Field {
                 construction.tick();
             }
         }
-        respawnAITankWithPresent();
     }
 
     private void newAI() {
@@ -137,23 +137,6 @@ public class Battlecity implements Field {
 
             if (!isBarrier(x, y)) {
                 addAI(new AITank(x, y, dice, Direction.DOWN));
-            }
-        }
-    }
-
-    // то же самое, что newAI(), только спаунится в рандомном месте на карте
-    // TODO дублирование кода
-    private void newAIWithPresent() {
-        for (int count = aiTanks.size(); count < aiCount; count++) {
-            int y = dice.next(size);
-            int x;
-            int c = 0;
-            do {
-                x = dice.next(size);
-            } while (isBarrier(x, y) && c++ < size);
-
-            if (!isBarrier(x, y)) {
-                addAI(new AITankWithPresent(x, y, dice, Direction.DOWN, bulletsForKill));
             }
         }
     }
@@ -172,8 +155,10 @@ public class Battlecity implements Field {
     }
 
     void addAI(Tank tank) {
-        tank.init(this);
-        aiTanks.add(tank);
+        Tank resultAiTank = replaceAIonAIWithPrize(tank);
+        resultAiTank.init(this);
+        aiTanks.add(resultAiTank);
+        this.aiTanksCount++;
     }
 
     @Override
@@ -364,20 +349,18 @@ public class Battlecity implements Field {
         this.dice = dice;
     }
 
-    public int tickCounter() {
-        return this.tickCount++;
-    }
-
-    public void respawnAITankWithPresent() {
-        if (tickCount == ticksCountAITankWithPresent) {
-            aiCount += 1;
-            newAIWithPresent();
-            tickCount = 0;
-        } else {
-            //do nothing
+    private Tank replaceAIonAIWithPrize(Tank tank) {
+        if(aiTanksCount == countRespawnAiWithPrize) {
+            this.aiTanksCount = 0;
         }
+
+        if (countRespawnAiWithPrize > 1) {
+            int indexAiWithPrize = countRespawnAiWithPrize - 2;
+            if (this.aiTanksCount == indexAiWithPrize) {
+                Tank aiTankWithPrize = new AITankWithPrize(tank.getX(), tank.getY(), dice, tank.getDirection(), bulletsForKillAIWithPrize);
+                tank = aiTankWithPrize;
+            }
+        }
+        return tank;
     }
-
-
-
 }
