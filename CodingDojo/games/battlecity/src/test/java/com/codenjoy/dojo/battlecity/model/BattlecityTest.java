@@ -81,14 +81,6 @@ public class BattlecityTest {
         this.hero = tank;
     }
 
-    private void givenGameWithAIaddAIWithPresent(Tank tank, Tank... aiTanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), countRespawnAiWithPrize, bulletsForKillAIWithPrize, aiTanks);
-        initPlayer(game, tank);
-        this.hero = tank;
-    }
-
-
-
     private Player initPlayer(Battlecity game, Tank tank) {
         Player player = mock(Player.class);
         when(player.getHero()).thenReturn(tank);
@@ -125,9 +117,9 @@ public class BattlecityTest {
         return aiTank(x, y, direction, ticksPerBullets);
     }
 
-    public static Tank aiTankWithPresent(int x, int y, Direction direction, int bulletsForKill) {
+    public static Tank aiTankWithPrize(int x, int y, Direction direction, int bulletsForKill) {
         Dice dice = getDice(x, y);
-        return new AITankWithPresent(x, y, dice, direction,  bulletsForKill);
+        return new AITankWithPrize(x, y, dice, direction,  bulletsForKill);
     }
 
     private static Dice getDice(int x, int y) {
@@ -2888,217 +2880,138 @@ public class BattlecityTest {
     }
 
     @Test
-    @Ignore
-    public void shouldRespawnAITankWithPresent() {
-        size = 11;
-        givenGameWithAIaddAIWithPresent(tank(1, 1, Direction.UP), aiTankWithPresent(9, 9, Direction.DOWN, bulletsForKillAIWithPrize));
-        game.setDice(getDice(9, 9));
+    public void shouldCreatedAIWithPrize() {
+        //создаем АИтанк с призами.
+        size = 9;
+        countRespawnAiWithPrize = 0;
+        bulletsForKillAIWithPrize = 3;
+        Tank tank = tank(1, 1, Direction.UP);
+        Tank aiTank = aiTankWithPrize(7, 7, Direction.DOWN, bulletsForKillAIWithPrize);
+        givenGameWithAI(tank, aiTank);
 
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼        ¿☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼▲        ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ¿☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
-        hero.up();
-        game.tick();
-        hero.up();
-        game.tick();
-        hero.up();
-        game.tick();
-        hero.up();
+        aiTank.down();
         game.tick();
 
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼      ¿☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼        ¿☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼▲       ¿☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼        •☼\n" +
-                "☼         ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
+        List<Tank> tanks = game.getTanks();
+        assertEquals(2, tanks.size());
+        assertEquals(true, tanks.get(0).isTankWithPrize());
+        assertEquals(false, tanks.get(1).isTankWithPrize());//hero
     }
 
     @Test
-    @Ignore
-    public void shouldRespawnTwoAITankWithPresent() {
-        size = 11;
-        givenGameWithAIaddAIWithPresent(tank(1, 1, Direction.UP), aiTankWithPresent(9, 9, Direction.DOWN, bulletsForKillAIWithPrize));
-        game.setDice(getDice(9, 9));
+    public void shouldSwapElementAfterFourTicks() {
+        //АИтанк с призами, после 4-го хода должен смениться Element.
+        size = 9;
+        countRespawnAiWithPrize = 0;
+        bulletsForKillAIWithPrize = 3;
+        Tank tank = tank(1, 1, Direction.UP);
+        Tank aiTank = aiTankWithPrize(7, 7, Direction.DOWN, bulletsForKillAIWithPrize);
+        givenGameWithAI(tank, aiTank);
 
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼        ¿☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼▲        ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼      ¿☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
-        game.tick();
-        game.tick();
-        game.tick();
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼        ¿☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼        ¿☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼        •☼\n" +
-                "☼▲        ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
-
-        game.tick();
-        game.tick();
-        game.tick();
+        aiTank.down();
         game.tick();
 
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼        ¿☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼        ¿☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼        •☼\n" +
-                "☼▲       ¿☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
-    }
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼      ¿☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
-    @Test
-    @Ignore
-    public void killAITankWithPresent() {
-        size = 11;
-        Tank enemy = aiTankWithPresent(1, 9, Direction.DOWN, bulletsForKillAIWithPrize);
-        givenGameWithAIaddAIWithPresent(tank(1, 1, Direction.UP), enemy);
-        game.setDice(getDice(9, 9));
-
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼¿        ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼▲        ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
-
-        hero.act();
+        aiTank.left();
         game.tick();
 
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼         ☼\n" +
-                "☼¿        ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼•        ☼\n" +
-                "☼         ☼\n" +
-                "☼▲        ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼    •« ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
-        hero.act();
-        enemy.up();
+        aiTank.up();
         game.tick();
 
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼?        ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼•        ☼\n" +
-                "☼         ☼\n" +
-                "☼•        ☼\n" +
-                "☼         ☼\n" +
-                "☼▲        ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼     ? ☼\n" +
+                "☼  •    ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
-        hero.act();
-        enemy.down();
+        aiTank.right();
         game.tick();
 
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼         ☼\n" +
-                "☼¿        ☼\n" +
-                "☼•        ☼\n" +
-                "☼         ☼\n" +
-                "☼•        ☼\n" +
-                "☼         ☼\n" +
-                "☼•        ☼\n" +
-                "☼         ☼\n" +
-                "☼▲        ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼      »☼\n" +
+                "☼•      ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
-        enemy.up();
+        aiTank.down();
         game.tick();
 
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼?       ¿☼\n" +
-                "☼         ☼\n" +
-                "☼•        ☼\n" +
-                "☼         ☼\n" +
-                "☼•        ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼▲        ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼      ◘☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
 
-        enemy.down();
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼         ☼\n" +
-                "☼¿       ¿☼\n" +
-                "☼•        ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼▲        ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
-
-        enemy.up();
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼Ѡ        ☼\n" +
-                "☼         ☼\n" +
-                "☼        ¿☼\n" +
-                "☼        •☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼▲        ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
+        List<Tank> tanks = game.getTanks();
+        assertEquals(2, tanks.size());
+        assertEquals(true, tanks.get(0).isTankWithPrize());
+        assertEquals(false, tanks.get(1).isTankWithPrize());//hero
     }
 
     @Test
     public void shouldNotRespawnAIWithPrizeWhenCountRespMoreCountAI() {
-        //если countRespawnAiWithPrize > к-ва АИтанков, то танк с призами не спаунится.
+        //если countRespawnAiWithPrize > к-ва АИтанков, то танк с призами спаунится.
         size = 9;
         countRespawnAiWithPrize = 3;
         Tank tank = tank(1, 1, Direction.UP);
@@ -3116,10 +3029,12 @@ public class BattlecityTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
+        game.tick();
+
         List<Tank> tanks = game.getTanks();
         assertEquals(3, tanks.size());
         assertEquals(false, tanks.get(0).isTankWithPrize());
-        assertEquals(false, tanks.get(1).isTankWithPrize());
+        assertEquals(true, tanks.get(1).isTankWithPrize());
         assertEquals(false, tanks.get(2).isTankWithPrize()); //hero
     }
 
@@ -3143,6 +3058,8 @@ public class BattlecityTest {
                 "☼       ☼\n" +
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
 
         List<Tank> tanks = game.getTanks();
         assertEquals(4, tanks.size());
@@ -3176,6 +3093,8 @@ public class BattlecityTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
+        game.tick();
+
         List<Tank> tanks = game.getTanks();
         assertEquals(7, tanks.size());
         assertEquals(false, tanks.get(0).isTankWithPrize());
@@ -3185,6 +3104,77 @@ public class BattlecityTest {
         assertEquals(true, tanks.get(4).isTankWithPrize());
         assertEquals(false, tanks.get(5).isTankWithPrize());
         assertEquals(false, tanks.get(6).isTankWithPrize()); //hero
+    }
+
+    @Test
+    public void shouldRespawnAIWithPrizeWhenAddNewAI() {
+        //если добавлять АИтанки по одному, то танк с призами должен быть countRespawnAiWithPrize - 1.
+        size = 9;
+        countRespawnAiWithPrize = 3;
+        Tank tank = tank(1, 1, Direction.UP);
+        Tank aiTank1 = aiTank(2, 7, Direction.DOWN);
+        Tank aiTank2 = aiTank(5, 7, Direction.DOWN);
+        Tank aiTank3 = aiTank(6, 7, Direction.DOWN);
+        givenGameWithAI(tank);
+
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.addAI(aiTank1);
+        aiTank1.down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼ ¿     ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.addAI(aiTank2);
+        aiTank2.down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼    ¿  ☼\n" +
+                "☼ ¿     ☼\n" +
+                "☼ •     ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.addAI(aiTank3);
+        aiTank3.down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼     ¿ ☼\n" +
+                "☼    ¿  ☼\n" +
+                "☼ ¿  •  ☼\n" +
+                "☼       ☼\n" +
+                "☼ •     ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        List<Tank> tanks = game.getTanks();
+        assertEquals(4, tanks.size());
+        assertEquals(false, tanks.get(0).isTankWithPrize());
+        assertEquals(true, tanks.get(1).isTankWithPrize());
+        assertEquals(false, tanks.get(2).isTankWithPrize());
+        assertEquals(false, tanks.get(3).isTankWithPrize());//hero
     }
 }
 
