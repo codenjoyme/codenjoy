@@ -44,15 +44,21 @@ public class DBConfig {
     public static class SQLiteConf {
 
         @Bean
-        public ConnectionThreadPoolFactory scoresPoolFactory(@Value("${database.scores}") String scoresFile,
-                                                             ContextPathGetter contextPathGetter) {
-            return new SqliteConnectionThreadPoolFactory(scoresFile, contextPathGetter);
+        public ConnectionThreadPoolFactory scoresPoolFactory(
+                @Value("${database.memory}") boolean isMemory,
+                @Value("${database.scores}") String scoresFile,
+                ContextPathGetter contextPathGetter)
+        {
+            return new SqliteConnectionThreadPoolFactory(isMemory, scoresFile, contextPathGetter);
         }
 
         @Bean
-        public ConnectionThreadPoolFactory playersPoolFactory(@Value("${database.players}") String playersFile,
-                                                              ContextPathGetter contextPathGetter) {
-            return new SqliteConnectionThreadPoolFactory(playersFile, contextPathGetter);
+        public ConnectionThreadPoolFactory playersPoolFactory(
+                @Value("${database.memory}") boolean isMemory,
+                @Value("${database.players}") String playersFile,
+                ContextPathGetter contextPathGetter)
+        {
+            return new SqliteConnectionThreadPoolFactory(isMemory, playersFile, contextPathGetter);
         }
     }
 

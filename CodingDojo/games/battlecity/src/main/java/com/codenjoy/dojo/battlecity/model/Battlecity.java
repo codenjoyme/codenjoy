@@ -32,6 +32,8 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class Battlecity implements Field {
 
     private Dice dice;
@@ -128,15 +130,14 @@ public class Battlecity implements Field {
 
     private void newAI() {
         for (int count = aiTanks.size(); count < aiCount; count++) {
-            int y = size - 2;
-            int x;
+            Point pt = pt(0, size - 2);
             int c = 0;
             do {
-                x = dice.next(size);
-            } while (isBarrier(x, y) && c++ < size);
+                pt.setX(dice.next(size));
+            } while (isBarrier(pt) && c++ < size);
 
-            if (!isBarrier(x, y)) {
-                addAI(new AITank(x, y, dice, Direction.DOWN));
+            if (!isBarrier(pt)) {
+                addAI(new AITank(pt, dice, Direction.DOWN));
             }
         }
     }
@@ -244,28 +245,23 @@ public class Battlecity implements Field {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
+    public boolean isBarrier(Point pt) {
         for (Construction construction : constructions) {
-            if (construction.itsMe(x, y) && !construction.destroyed()) {
+            if (construction.itsMe(pt) && !construction.destroyed()) {
                 return true;
             }
         }
         for (Point border : borders) {
-            if (border.itsMe(x, y)) {
+            if (border.itsMe(pt)) {
                 return true;
             }
         }
         for (Tank tank : getTanks()) {   //  TODO проверить как один танк не может проходить мимо другого танка игрока (не AI)
-            if (tank.itsMe(x, y)) {
+            if (tank.itsMe(pt)) {
                 return true;
             }
         }
-        return outOfField(x, y);
-    }
-
-    @Override
-    public boolean outOfField(int x, int y) { // TODO заменить все есть в point
-        return x < 0 || y < 0 || y > size - 1 || x > size - 1;
+        return pt.isOutOf(size);
     }
 
     private List<Bullet> getBullets() {

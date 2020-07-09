@@ -1,0 +1,11 @@
+{
+  "name": "codenjoy-bomberman-client",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "ws": "~7.3.0"
+  },
+  "scripts": {
+    "start": "npm install && node runner.js"
+  }
+}

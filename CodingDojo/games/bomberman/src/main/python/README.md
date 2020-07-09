@@ -11,5 +11,5 @@ To connect to the game server:
 2. Click on your name on the right hand side panel
 3. Copy the whole link from the browser, go to main.py and paste it to the main() method, now you're good to go!
 
-The bomberman actions logic should be extended by modifying the find_direction method in dds.py
-or by calling your own method from get() in the same dds.py
+The bomberman actions logic should be implemented in dds.py file. DirectionSolver get() method should return the action
+for your bomberman to perform. You can use generic Board API methods in your DirectionSolver. 

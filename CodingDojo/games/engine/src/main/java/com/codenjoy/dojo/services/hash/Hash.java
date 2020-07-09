@@ -33,6 +33,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @UtilityClass
 public class Hash {
 
+    public static final int ID_LENGTH = 20;
+
     public static String md5(String string) {
         return DigestUtils.md5Hex(string.getBytes());
     }
@@ -81,29 +83,8 @@ public class Hash {
         ));
     }
 
-    public static void main(String[] args) {
-        String soul = "soul";
-
-        String email = "apofig@gmail.com";
-        String password = "apofig@gmail.com";
-        String passwordHash = md5(password);
-        String id = getId(email, soul);
-        String code = getCode(email, passwordHash);
-
-        System.out.println("email: " + email);
-        System.out.println("id: " + id);
-        System.out.println("password: " + password);
-        System.out.println("password md5: " + passwordHash);
-        System.out.println("code: " + code);
-
-        System.out.println("---");
-        System.out.printf("UPDATE players " +
-                "SET password = '%s', code = '%s' " +
-                "WHERE email = '%s';%n", passwordHash, code, email);
-    }
-
     public static String getRandomId() {
-        return RandomStringUtils.random(20, "abcdefghijklmnopqrstuvwxyz1234567890");
+        return RandomStringUtils.random(ID_LENGTH, "abcdefghijklmnopqrstuvwxyz1234567890");
     }
 
 }

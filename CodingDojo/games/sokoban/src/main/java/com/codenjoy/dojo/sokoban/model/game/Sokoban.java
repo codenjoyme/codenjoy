@@ -33,6 +33,7 @@ import com.codenjoy.dojo.sokoban.services.Player;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
@@ -43,6 +44,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class Sokoban implements Field {
 
+    public static final int MAX = 100;
     private List<BoxOnTheMark> boxesOnTheMarks;
     private List<Wall> walls;
     private List<Gold> gold;
@@ -128,51 +130,42 @@ public class Sokoban implements Field {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        Point pt = pt(x, y);
-        return x > size - 1
-                || x < 0
-                || y < 0
-                || y > size - 1
+    public boolean isBarrier(Point pt) {
+        return pt.isOutOf(size)
                 || walls.contains(pt)
                 || boxes.contains(pt)
                 || boxesOnTheMarks.contains(pt)
                 || getHeroes().contains(pt);
     }
 
-    public boolean isWall(int x, int y) {
-        Point pt = pt(x, y);
+    public boolean isWall(Point pt) {
         return walls.contains(pt);
     }
 
-    public boolean isAdjacentToWall(int x, int y) {
-        return isBarrier(x - 1, y)
-                || isWall(x + 1, y)
-                || isWall(x, y - 1)
-                || isWall(x, y + 1);
+    public boolean isAdjacentToWall(Point pt) {
+        return isBarrier(LEFT.change(pt))
+                || isWall(RIGHT.change(pt))
+                || isWall(DOWN.change(pt))
+                || isWall(UP.change(pt));
     }
 
     @Override
     public Point getFreeRandom() {
-        int x;
-        int y;
         int c = 0;
+        Point pt;
         do {
-            x = dice.next(size);
-            y = dice.next(size);
-        } while (!isFree(x, y) && c++ < 100);
+            pt = PointImpl.random(dice, size);
+        } while (!isFree(pt) && c++ < MAX);
 
-        if (c >= 100) {
+        if (c >= MAX) {
             return pt(0, 0);
         }
 
-        return pt(x, y);
+        return pt;
     }
 
     @Override
-    public boolean isFree(int x, int y) {
-        Point pt = pt(x, y);
-
+    public boolean isFree(Point pt) {
         return !(gold.contains(pt)
                 || bombs.contains(pt)
                 || walls.contains(pt)
@@ -181,71 +174,68 @@ public class Sokoban implements Field {
     }
 
     @Override
-    public boolean isBomb(int x, int y) {
-        return bombs.contains(pt(x, y));
+    public boolean isBomb(Point pt) {
+        return bombs.contains(pt);
     }
 
     @Override
-    public boolean isBox(int x, int y) {
-        return boxes.contains(pt(x, y));
+    public boolean isBox(Point pt) {
+        return boxes.contains(pt);
     }
 
     @Override
-    public boolean isBoxOnTheMark(int x, int y) {
-        return boxesOnTheMarks.contains(pt(x, y));
+    public boolean isBoxOnTheMark(Point pt) {
+        return boxesOnTheMarks.contains(pt);
     }
 
-    public void moveBox(int x, int y, int xNew, int yNew) {
-        boxes.remove(pt(x, y));
-        boxes.add(new Box(pt(xNew, yNew)));
+    public void moveBox(Point pt, Point newPt) {
+        boxes.remove(pt);
+        boxes.add(new Box(newPt));
     }
 
-    public void setBox(int x, int y) {
-        boxes.add(new Box(pt(x, y)));
-    }
-
-    @Override
-    public boolean isMark(int x, int y) {
-        return marks.contains(pt(x, y));
+    public void setBox(Point pt) {
+        boxes.add(new Box(pt));
     }
 
     @Override
-    public void setBomb(int x, int y) {
-        Point pt = pt(x, y);
+    public boolean isMark(Point pt) {
+        return marks.contains(pt);
+    }
+
+    @Override
+    public void setBomb(Point pt) {
         if (!bombs.contains(pt)) {
-            bombs.add(new Bomb(x, y));
+            bombs.add(new Bomb(pt));
         }
     }
 
     @Override
-    public void setMark(int x, int y) {
-        Point pt = pt(x, y);
+    public void setMark(Point pt) {
         if (!marks.contains(pt)) {
-            marks.add(new Mark(x, y));
+            marks.add(new Mark(pt));
         }
     }
 
     @Override
-    public void removeBomb(int x, int y) {
-        bombs.remove(pt(x, y));
+    public void removeBomb(Point pt) {
+        bombs.remove(pt);
     }
 
     @Override
-    public void setBoxOnTheMark(int x, int y) {
-        Point pt = pt(x, y);
+    public void setBoxOnTheMark(Point pt) {
         if (!boxesOnTheMarks.contains(pt)) {
-            boxesOnTheMarks.add(new BoxOnTheMark(x, y));
+            boxesOnTheMarks.add(new BoxOnTheMark(pt));
         }
     }
 
     @Override
-    public void removeBoxOnTheMark(int x, int y) {
-        boxesOnTheMarks.remove(pt(x, y));
+    public void removeBoxOnTheMark(Point pt) {
+        boxesOnTheMarks.remove(pt);
     }
 
     @Override
-    public void removeBox(int x, int y) {
-        boxes.remove(pt(x, y));
+    public void removeBox(Point pt) {
+        boxes.remove(pt);
     }
 
     public List<Gold> getGold() {

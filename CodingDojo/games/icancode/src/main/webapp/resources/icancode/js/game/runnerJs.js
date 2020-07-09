@@ -157,6 +157,9 @@ function initRunnerJs(game, libs, getLevelInfo, storage) {
         },
         runProgram : function(robot) {
             runProgram(functionToRun, robot);
+        },
+        levelUpdate: function(level, multiple, lastPassed) {
+            // do nothing
         }
     };
 }

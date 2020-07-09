@@ -31,8 +31,8 @@
         <spring-cloud.version>Greenwich.SR4</spring-cloud.version>
         <!-- end -->
 
-        <testng.version>6.14.3</testng.version>
         <cglib.version>3.2.10</cglib.version>
+        <jackson-xml.version>2.9.8</jackson-xml.version>
 
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
@@ -40,7 +40,10 @@
         <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
         <maven-compiler-plugin.target>1.8</maven-compiler-plugin.target>
         <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
-        <minify-maven-plugin.version>1.7.6</minify-maven-plugin.version>
+        <maven-minify-plugin.version>1.7.6</maven-minify-plugin.version>
+        <maven-buildnumber-plugin.version>1.4</maven-buildnumber-plugin.version>
+        <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
+
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
 
@@ -81,6 +84,12 @@
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>${jackson-xml.version}</version>
         </dependency>
 
         <dependency>
@@ -284,12 +293,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
@@ -309,12 +312,12 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
-                    <include>*</include>
-                </includes>                
+                    <include>**/*</include>
+                </includes>
             </resource>
             <resource>
                 <directory>src/main/webapp</directory>
-                <!--это не сработает потому что war союирается из WEB-INF из src-->
+                <!--это не сработает потому что war собирается из WEB-INF из src-->
                 <!--<filtering>true</filtering>-->
                 <includes>
                     <include>**/*</include>
@@ -329,11 +332,49 @@
         </resources>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>${maven-buildnumber-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <providerImplementations>
+                        <git>jgit</git>
+                    </providerImplementations>
+                    <scmConnectionUrl>scm:git:</scmConnectionUrl>
+                    <scmDirectory>${project.basedir}/../../</scmDirectory>
+                    <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+                    <shortRevisionLength>8</shortRevisionLength>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-api</artifactId>
+                        <version>${maven-scm-jgit.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-jgit</artifactId>
+                        <version>${maven-scm-jgit.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
                 <!-- make war runnable with main class -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <executable>true</executable>
+                    <!-- true - eсли хочу запускать так же и 'sh codenjoy-balancer.war'
+                         false - если только как 'java -jar codenjoy-balancer.war' -->
+                    <executable>false</executable>
                 </configuration>
             </plugin>
             <plugin>

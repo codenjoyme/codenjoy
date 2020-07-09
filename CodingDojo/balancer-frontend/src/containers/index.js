@@ -6,6 +6,8 @@ import HomeContainer from './HomeContainer';
 import PrivacyPolicyContainer from './PrivacyPolicyContainer';
 import PrivacyRulesContainer from './PrivacyRulesContainer';
 import UnavailableContainer from './UnavailableContainer';
+import ForgotPasswordContainer from './ForgotPasswordContainer';
+import RegisterConfirmContainer from './RegisterConfirmContainer';
 
 export {
     BoardContainer,
@@ -16,4 +18,6 @@ export {
     PrivacyPolicyContainer,
     PrivacyRulesContainer,
     UnavailableContainer,
+    ForgotPasswordContainer,
+    RegisterConfirmContainer,
 };

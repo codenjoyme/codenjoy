@@ -363,25 +363,8 @@ public class Board extends AbstractBoard<Elements> {
     private DeikstraFindWay.Possible possible() {
         return new DeikstraFindWay.Possible() {
             @Override
-            public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
-                if (isBarrierAt(x, y)) return false;
-
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
-
-                if (isOutOfField(nx, ny)) return false;
-
-                if (isBarrierAt(nx, ny)) return false;
-
-                return true;
-            }
-
-            @Override
-            public boolean possible(Point atWay) {
-                return true;
+            public boolean possible(Point point) {
+                return !isBarrierAt(point.getX(), point.getY());
             }
         };
     }

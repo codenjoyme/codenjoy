@@ -49,7 +49,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     private Parameter<Integer> bulletsForKillAIWithPrize;
 
     public GameRunner() {
-        new Scores(0, settings);// TODO сеттринги разделены по разным классам, продумать архитектуру
+        new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
 
         level = new LevelImpl(getMap(), getDice());
     }
@@ -63,6 +63,8 @@ public class GameRunner extends AbstractGameType implements GameType {
     public GameField createGame(int levelNumber) {
         countRespawnAiWithPrize = settings.addEditBox("count respawn for AI Tank with prize").type(Integer.class).def(4);
         bulletsForKillAIWithPrize = settings.addEditBox("bullets for kill AI Tank with prize").type(Integer.class).def(3);
+
+        Parameter<Object> parameter = settings.getParameter("name");
 
         return new Battlecity(level.size(),
                 getDice(),
@@ -105,7 +107,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerId) {
         return new Player(listener, getDice());
     }
 

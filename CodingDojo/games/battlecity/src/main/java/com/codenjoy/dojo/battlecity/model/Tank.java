@@ -23,9 +23,7 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.LinkedList;
@@ -33,6 +31,7 @@ import java.util.List;
 
 public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
+    public static final int MAX = 100;
     protected Dice dice;
     private List<Bullet> bullets;
     private boolean alive;
@@ -44,8 +43,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     private boolean fire;
     private boolean isTankWithPrize;
 
-    public Tank(int x, int y, Direction direction, Dice dice, int ticksPerBullets) {
-        super(x, y);
+    public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
+        super(pt);
         this.direction = direction;
         this.dice = dice;
         gun = new Gun(ticksPerBullets);
@@ -99,17 +98,15 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
                 return;
             }
 
-            int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
-            moving(newX, newY);
+            moving(direction.change(this));
         }
     }
 
-    public void moving(int newX, int newY) {
-        if (field.isBarrier(newX, newY)) {
+    public void moving(Point pt) {
+        if (field.isBarrier(pt)) {
             // do nothing
         } else {
-            move(newX, newY);
+            move(pt);
         }
         moving = false;
     }
@@ -122,19 +119,22 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public Iterable<Bullet> getBullets() {
-        return new LinkedList<Bullet>(bullets);
+        return new LinkedList<>(bullets);
     }
 
     public void init(Field field) {
         super.init(field);
 
-        int xx = x;
-        int yy = y;
-        while (field.isBarrier(xx, yy)) {
-            xx = dice.next(field.size());
-            yy = dice.next(field.size());
+        int c = 0;
+        Point pt = this;
+        while (field.isBarrier(pt) && c++ < MAX) {
+            pt = PointImpl.random(dice, field.size());
         }
-        move(xx, yy);
+        if (c >= MAX) {
+            alive = false;
+            return;
+        }
+        move(pt);
         alive = true;
     }
 

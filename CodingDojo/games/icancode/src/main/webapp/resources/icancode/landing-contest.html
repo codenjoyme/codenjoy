@@ -112,7 +112,7 @@
         <div class="container">
         <header class="header row">
           <div class="logo-container col-md-6 col-xs-12">
-            <div class="logo-dojo inline" href="#" title="DOJO"><img id="logo" src="img/dojo_logo.png"><span class="logo-title"><span class="text-uppercase after-line">Coding DOJO</span>iCanCode</span></div>
+            <div class="logo-dojo inline" href="#" title="DOJO"><img id="logo" src="img/dojo-logo.png"><span class="logo-title"><span class="text-uppercase after-line">Coding DOJO</span>iCanCode</span></div>
           </div>
           <h1 class="nav col-md-6 col-xs-12 text-right rules-title">
             <div class="dropdown navbar-right" id="nav">
@@ -431,7 +431,7 @@ Send program to Robot by running the YourSolver class as Main Application.
 <pre>if (board.isAt(4, 8, Elements.HOLE)) {
     // some statement here
 }</pre>
-          <p>Coordinate {x:0, y:0} in the left-top corner of board.</p>
+          <p>Coordinate {x:0, y:0} in the left-bottom corner of board.</p>
           <p>Try this code for check Robot position.</p>
 <pre>Point me = board.getMe();
 System.out.println(me);</pre>
@@ -490,6 +490,8 @@ assert Direction.LEFT.changeX(1) == 0;</pre>
             <pre>assert Direction.DOWN.changeY(1) == 2;
 assert Direction.UP.changeY(1) == 0;</pre>
 
+        <p>Please check Direction class for more details.</p>
+
         <!-------------------------------------------------------Core Point methods--------------------------------------------- -->
           <a id="point"></a>
         <h2 class="subtitle text-uppercase">Point methods</h2>
@@ -499,7 +501,7 @@ assert Direction.UP.changeY(1) == 0;</pre>
 Point pt2 = pt(1, 2); // To use import static com.codenjoy.dojo.services.PointImpl.pt;
 assert pt1.equals(pt2);</pre>
 
-            <p>Please check com.codenjoy.dojo.services.Point for more details.</p>
+        <p>Please check Point class for more details.</p>
 
 <!-- -----------------------------------------------------Core Board methods--------------------------------------------- -->
           <a id="core"></a>

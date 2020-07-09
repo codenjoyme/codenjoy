@@ -37,7 +37,6 @@ export async function fetchAPI(
         request.body = JSON.stringify(body || {});
     }
 
-    // async function response() {
     const response = await fetch.apply(null, [
         `${url || apiC}${handler}${queryString ? `?${queryString}` : ""}`,
         request,
@@ -45,16 +44,11 @@ export async function fetchAPI(
     ]);
 
     const { status } = response;
-
     switch (true) {
         case status >= 200 && status < 300:
             return rawResponse ? await response : await response.json();
 
         default:
-            const err = new Error("httpError");
-            err.status = status;
-            err.response = await response;
-
-            throw err;
+            throw response;
     }
 }

@@ -85,6 +85,7 @@ public class LevelsLoader {
         return classes;
     }
 
+    /// TODO убрать эту рефлексию отсюда - захардкодить уровни и все
     private static Collection<? extends Class<? extends Level>> findInPackage(String packageName) {
         return new Reflections(packageName).getSubTypesOf(Level.class);
     }

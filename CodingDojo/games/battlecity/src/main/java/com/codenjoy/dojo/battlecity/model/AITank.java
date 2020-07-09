@@ -25,14 +25,16 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 
 public class AITank extends Tank {
 
+    public static final int MAX = 10;
     private int act;
     private boolean isTankWithPrize;
 
-    public AITank(int x, int y, Dice dice, Direction direction) {
-        super(x, y, direction, dice, 1);
+    public AITank(Point pt, Dice dice, Direction direction) {
+        super(pt, direction, dice, 1);
     }
 
     @Override
@@ -42,16 +44,14 @@ public class AITank extends Tank {
         }
 
         int c = 0;
-        int x = 0;
-        int y = 0;
+        Point pt;
         do {
-            x = direction.changeX(getX());
-            y = direction.changeY(getY());
+            pt = direction.change(this);
 
-            if (field.isBarrier(x, y)) {
+            if (field.isBarrier(pt)) {
                 direction = Direction.random(dice);
             }
-        } while (field.isBarrier(x, y) && c++ < 10);
+        } while (field.isBarrier(pt) && c++ < MAX);
 
         moving = true;
 

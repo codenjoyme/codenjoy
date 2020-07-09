@@ -24,7 +24,10 @@ package com.codenjoy.dojo.web.controller;
 
 import com.codenjoy.dojo.services.ErrorTicketService;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.server.Request;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.firewall.FirewalledRequest;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -72,6 +76,18 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
 
     private String error(Exception exception, HttpServletRequest req, ModelMap model) {
         String url = req.getRequestURL().toString();
+
+        // для "not found" запросов вытаскиваем доп инфо
+        if (req instanceof SecurityContextHolderAwareRequestWrapper) {
+            ServletRequest request = ((SecurityContextHolderAwareRequestWrapper) req).getRequest();
+            if (request instanceof FirewalledRequest) {
+                ServletRequest request2 = ((FirewalledRequest) request).getRequest();
+                if (request2 instanceof Request) {
+                    url = String.format("%s [%s]",
+                            url, ((Request)request2).getOriginalURI());
+                }
+            }
+        }
 
         ModelAndView view = ticket.get(url, exception);
         model.mergeAttributes(view.getModel());

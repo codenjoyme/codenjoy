@@ -23,6 +23,7 @@ package com.codenjoy.dojo.client;
  */
 
 
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.Point;

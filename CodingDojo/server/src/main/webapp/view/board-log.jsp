@@ -32,9 +32,22 @@
 
     <style>
         canvas {
-            height: 100vh!important;
             width: unset!important;
             cursor: unset!important;
+        }
+        .player_info {
+            color: white!important;
+        }
+        .player_info h2 {
+            line-height: 11px;
+            margin: 0px;
+        }
+        .label-value {
+            font-size: 14px;
+            font-weight: 100;
+        }
+        .player-canvas {
+            margin: 15px;
         }
     </style>
 
@@ -42,7 +55,7 @@
     <script src="${ctx}/resources/js/all.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" page="boardLog" contextPath="${ctx}" gameName="${gameName}" playerName="${playerName}" readableName="${readableName}"></div>
+    <div id="settings" page="boardLog" contextPath="${ctx}" gameName="${gameName}" playerId="${playerId}" readableName="${readableName}"></div>
 
     <div id="board_page">
         <%@include file="canvases.jsp"%>

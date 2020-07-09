@@ -23,17 +23,16 @@ package com.codenjoy.dojo.bomberman.client;
  */
 
 
-import com.codenjoy.dojo.bomberman.client.simple.Pattern;
 import com.codenjoy.dojo.bomberman.model.Elements;
-import static com.codenjoy.dojo.bomberman.model.Elements.*;
-import static com.codenjoy.dojo.services.PointImpl.pt;
-
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.bomberman.model.Elements.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
 
@@ -127,6 +126,15 @@ public class Board extends AbstractBoard<Elements> {
         return result;
     }
 
+    public Collection<Point> getPerks() {
+        List<Point> result = new LinkedList<>();
+        result.addAll(get(BOMB_COUNT_INCREASE));
+        result.addAll(get(BOMB_REMOTE_CONTROL));
+        result.addAll(get(BOMB_IMMUNE));
+        result.addAll(get(BOMB_BLAST_RADIUS_INCREASE));
+        return result;
+    }
+
     public Collection<Point> getBlasts() {
         return get(BOOM);
     }
@@ -136,7 +144,7 @@ public class Board extends AbstractBoard<Elements> {
         Collection<Point> result = new LinkedList<>();
         for (Point bomb : bombs) {
             result.add(bomb);
-            // TODO remove duplicate (check same logic inside parrent isNear for example)
+            // TODO remove duplicate (check same logic inside parent isNear for example)
             result.add(pt(bomb.getX() - 1, bomb.getY()));
             result.add(pt(bomb.getX() + 1, bomb.getY()));
             result.add(pt(bomb.getX(), bomb.getY() - 1));

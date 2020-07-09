@@ -4,7 +4,7 @@ package com.codenjoy.dojo.expansion.model.replay;
  * #%L
  * expansion - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2017 EPAM
+ * Copyright (C) 2016 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -136,10 +136,10 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         String hero2 = hero(PLAYER2).lg.id();
 
         assertEquals(("Game started\n" +
-                        "New player P@6c3f5566 registered with hero H@12405818 with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6c3f5566'}\"\n" +
-                        "New player P@314c508a registered with hero H@10b48321 with base at '{\"x\":2,\"y\":3}' and color '1' for user 'demo2@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@314c508a'}\"\n" +
+                        "New player P@6c3f5566 registered with hero H@12405818 with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6c3f5566'}\"\n" +
+                        "New player P@314c508a registered with hero H@10b48321 with base at '{\"x\":2,\"y\":3}' and color '1' for user 'demo2'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@314c508a'}\"\n" +
                         "Hero H@12405818 of player P@6c3f5566 received command:'{}'\n" +
                         "Hero H@10b48321 of player P@314c508a received command:'{}'\n" +
                         "Board:'{\"layers\":[\"╔═══┐║.2.│║1..│║..E│└───┘\",\"-------♦---♥-------------\",\"-=#-=#-=#-=#-=#-=#-=#00A-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#\"],\"mapSize\":5,\"offset\":{\"x\":0,\"y\":0},\"viewSize\":5}'\n" +
@@ -239,10 +239,10 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         String hero2 = hero(PLAYER2).lg.id();
 
         assertEquals(("Game started\n" +
-                        "New player P@6c3f5566 registered with hero H@12405818 with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6c3f5566'}\"\n" +
-                        "New player P@314c508a registered with hero H@10b48321 with base at '{\"x\":3,\"y\":2}' and color '1' for user 'demo2@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@314c508a'}\"\n" +
+                        "New player P@6c3f5566 registered with hero H@12405818 with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6c3f5566'}\"\n" +
+                        "New player P@314c508a registered with hero H@10b48321 with base at '{\"x\":3,\"y\":2}' and color '1' for user 'demo2'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@314c508a'}\"\n" +
                         "Hero H@12405818 of player P@6c3f5566 received command:'{}'\n" +
                         "Hero H@10b48321 of player P@314c508a received command:'{}'\n" +
                         "Board:'{\"layers\":[\"╔═══┐║...│║1.2│║.E.│└───┘\",\"-----------♥-♦-----------\",\"-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#\"],\"mapSize\":5,\"offset\":{\"x\":0,\"y\":0},\"viewSize\":5}'\n" +
@@ -363,10 +363,10 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         String hero2 = hero(PLAYER2).lg.id();
 
         assertEquals(("Game started\n" +
-                        "New player P@6c3f5566 registered with hero H@12405818 with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6c3f5566'}\"\n" +
-                        "New player P@314c508a registered with hero H@10b48321 with base at '{\"x\":3,\"y\":2}' and color '1' for user 'demo2@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@314c508a'}\"\n" +
+                        "New player P@6c3f5566 registered with hero H@12405818 with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6c3f5566'}\"\n" +
+                        "New player P@314c508a registered with hero H@10b48321 with base at '{\"x\":3,\"y\":2}' and color '1' for user 'demo2'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@314c508a'}\"\n" +
                         "Hero H@12405818 of player P@6c3f5566 received command:'{}'\n" +
                         "Hero H@10b48321 of player P@314c508a received command:'{}'\n" +
                         "Board:'{\"layers\":[\"╔═══┐║...│║1.2│║...│└───┘\",\"-----------♥-♦-----------\",\"-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#\"],\"mapSize\":5,\"offset\":{\"x\":0,\"y\":0},\"viewSize\":5}'\n" +
@@ -392,10 +392,10 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
 
         // TODO иногда этот ассерт валится, но редко, почему?
         assertEquals(("Game started\n" +
-                        "New player P@7e07db1f registered with hero H@1189dd52 with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@35cabb2a-2','playerName':'P@7e07db1f'}\"\n" +
-                        "New player P@36bc55de registered with hero H@564fabc8 with base at '{\"x\":3,\"y\":2}' and color '1' for user 'demo2@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@35cabb2a-2','playerName':'P@36bc55de'}\"\n" +
+                        "New player P@7e07db1f registered with hero H@1189dd52 with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@35cabb2a-2','playerName':'P@7e07db1f'}\"\n" +
+                        "New player P@36bc55de registered with hero H@564fabc8 with base at '{\"x\":3,\"y\":2}' and color '1' for user 'demo2'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@35cabb2a-2','playerName':'P@36bc55de'}\"\n" +
                         "Hero H@1189dd52 of player P@7e07db1f received command:'{}'\n" +
                         "Hero H@564fabc8 of player P@36bc55de received command:'{}'\n" +
                         "Board:'{\"layers\":[\"╔═══┐║...│║1.2│║...│└───┘\",\"-----------♥-♦-----------\",\"-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#00A-=#00A-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#-=#\"],\"mapSize\":5,\"offset\":{\"x\":0,\"y\":0},\"viewSize\":5}'\n" +
@@ -516,12 +516,12 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         String hero3 = hero(PLAYER3).lg.id();
 
         assertEquals(("Game started\n" +
-                        "New player P@6c3f5566 registered with hero H@12405818 with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6c3f5566'}\"\n" +
-                        "New player P@314c508a registered with hero H@10b48321 with base at '{\"x\":3,\"y\":2}' and color '1' for user 'demo2@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@314c508a'}\"\n" +
-                        "New player P@6b67034 registered with hero H@16267862 with base at '{\"x\":2,\"y\":1}' and color '2' for user 'demo3@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo3@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6b67034'}\"\n" +
+                        "New player P@6c3f5566 registered with hero H@12405818 with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6c3f5566'}\"\n" +
+                        "New player P@314c508a registered with hero H@10b48321 with base at '{\"x\":3,\"y\":2}' and color '1' for user 'demo2'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@314c508a'}\"\n" +
+                        "New player P@6b67034 registered with hero H@16267862 with base at '{\"x\":2,\"y\":1}' and color '2' for user 'demo3'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo3&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@6a396c1e-1','playerName':'P@6b67034'}\"\n" +
                         "Hero H@12405818 of player P@6c3f5566 received command:'{}'\n" +
                         "Hero H@10b48321 of player P@314c508a received command:'{}'\n" +
                         "Hero H@16267862 of player P@6b67034 received command:'{}'\n" +
@@ -734,14 +734,14 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         String hero4 = hero(PLAYER4).lg.id();
 
         assertEquals(("Game started\n" +
-                        "New player P@1a942c18 registered with hero H@55a147cc with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@1a6d8329-1','playerName':'P@1a942c18'}\"\n" +
-                        "New player P@71ba6d4e registered with hero H@738dc9b with base at '{\"x\":2,\"y\":2}' and color '1' for user 'demo2@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@1a6d8329-1','playerName':'P@71ba6d4e'}\"\n" +
-                        "New player P@3c77d488 registered with hero H@63376bed with base at '{\"x\":1,\"y\":1}' and color '2' for user 'demo3@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo3@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@1a6d8329-1','playerName':'P@3c77d488'}\"\n" +
-                        "New player P@4145bad8 registered with hero H@d86a6f with base at '{\"x\":2,\"y\":1}' and color '3' for user 'demo4@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo4@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@1a6d8329-1','playerName':'P@4145bad8'}\"\n" +
+                        "New player P@1a942c18 registered with hero H@55a147cc with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@1a6d8329-1','playerName':'P@1a942c18'}\"\n" +
+                        "New player P@71ba6d4e registered with hero H@738dc9b with base at '{\"x\":2,\"y\":2}' and color '1' for user 'demo2'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@1a6d8329-1','playerName':'P@71ba6d4e'}\"\n" +
+                        "New player P@3c77d488 registered with hero H@63376bed with base at '{\"x\":1,\"y\":1}' and color '2' for user 'demo3'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo3&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@1a6d8329-1','playerName':'P@3c77d488'}\"\n" +
+                        "New player P@4145bad8 registered with hero H@d86a6f with base at '{\"x\":2,\"y\":1}' and color '3' for user 'demo4'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo4&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@1a6d8329-1','playerName':'P@4145bad8'}\"\n" +
                         "Hero H@55a147cc of player P@1a942c18 received command:'{}'\n" +
                         "Hero H@738dc9b of player P@71ba6d4e received command:'{}'\n" +
                         "Hero H@63376bed of player P@3c77d488 received command:'{}'\n" +
@@ -778,14 +778,14 @@ public class GameLoggerTest extends AbstractSinglePlayersTest {
         String result2 = loadFromFile(file2);
 
         assertEquals(("Game started\n" +
-                        "New player P@1e0b4072 registered with hero H@791f145a with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@4686afc2-2','playerName':'P@1e0b4072'}\"\n" +
-                        "New player P@38cee291 registered with hero H@4b45a2f5 with base at '{\"x\":2,\"y\":2}' and color '1' for user 'demo2@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@4686afc2-2','playerName':'P@38cee291'}\"\n" +
-                        "New player P@e350b40 registered with hero H@41a0aa7d with base at '{\"x\":1,\"y\":1}' and color '2' for user 'demo3@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo3@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@4686afc2-2','playerName':'P@e350b40'}\"\n" +
-                        "New player P@2794eab6 registered with hero H@6340e5f0 with base at '{\"x\":2,\"y\":1}' and color '3' for user 'demo4@codenjoy.com'\n" +
-                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo4@codenjoy.com&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@4686afc2-2','playerName':'P@2794eab6'}\"\n" +
+                        "New player P@1e0b4072 registered with hero H@791f145a with base at '{\"x\":1,\"y\":2}' and color '0' for user 'demo1'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo1&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@4686afc2-2','playerName':'P@1e0b4072'}\"\n" +
+                        "New player P@38cee291 registered with hero H@4b45a2f5 with base at '{\"x\":2,\"y\":2}' and color '1' for user 'demo2'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo2&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@4686afc2-2','playerName':'P@38cee291'}\"\n" +
+                        "New player P@e350b40 registered with hero H@41a0aa7d with base at '{\"x\":1,\"y\":1}' and color '2' for user 'demo3'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo3&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@4686afc2-2','playerName':'P@e350b40'}\"\n" +
+                        "New player P@2794eab6 registered with hero H@6340e5f0 with base at '{\"x\":2,\"y\":1}' and color '3' for user 'demo4'\n" +
+                        "// Please run \"http://127.0.0.1:8080/codenjoy-contest/admin31415?player=demo4&gameName=expansion&data={'startFromTick':0,'replayName':'game-E@4686afc2-2','playerName':'P@2794eab6'}\"\n" +
                         "Hero H@791f145a of player P@1e0b4072 received command:'{}'\n" +
                         "Hero H@4b45a2f5 of player P@38cee291 received command:'{}'\n" +
                         "Hero H@41a0aa7d of player P@e350b40 received command:'{}'\n" +

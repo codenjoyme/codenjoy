@@ -7,6 +7,7 @@ import storage from 'redux-persist/lib/storage';
 // proj
 import authReducer, { moduleName as authModule } from '../redux/auth';
 import boardReducer, { moduleName as boardModule } from '../redux/board';
+import settingsReducer, {moduleName as settingsModule} from '../redux/settings';
 import registerReducer, {
     moduleName as registerModule,
 } from '../redux/register';
@@ -24,6 +25,7 @@ const persistedState = {
 const appState = {
     [ boardModule ]:    boardReducer,
     [ registerModule ]: registerReducer,
+    [ settingsModule ]: settingsReducer,
 };
 
 const rootReducer = persistReducer(

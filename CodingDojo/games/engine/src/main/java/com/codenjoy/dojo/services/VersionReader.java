@@ -23,28 +23,90 @@ package com.codenjoy.dojo.services;
  */
 
 import lombok.experimental.UtilityClass;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 @UtilityClass
 public class VersionReader {
 
     public static final String NO_VERSION = "no version";
+    public static final String KEY_VERSION = "version";
+    public static final String KEY_TIME = "time";
+    public static final String KEY_REVISION = "revision";
+    public static final String KEY_BRANCH = "branch";
 
-    public static String getCurrentVersion(String gameName) {
+    public static JSONObject version(List<String> components) {
+        return new JSONObject(){{
+            components.forEach(name -> put(name, VersionReader.version(name)));
+        }};
+    }
+
+    public static String versionReadable(String component) {
+        JSONObject json = version(component);
+        return String.format("%s_%s_%s",
+                json.getString(KEY_VERSION),
+                json.getString(KEY_TIME),
+                json.getString(KEY_REVISION));
+    }
+
+    public static String getWelcomeMessage() {
+        String version = versionReadable("engine");
+        return  "\n" +
+                "     /\\  ______          _              _               _   \n" +
+                "    //\\\\/ _____)        | |            (_)            _| |_ \n" +
+                "   (____)/       ___  _ | | ____ ____   _  ___  _   _(  ___)\n" +
+                "       | |      / _ \\/ || |/ _  )  _ \\ | |/ _ \\| | | |___  )\n" +
+                "       | \\_____( (_) )(_| | (/ /| | | || | (_) ) |_| |_   _)\n" +
+                "        \\______)\\___/\\____|\\____)_| |_|| |\\___/ \\__  | |_|  \n" +
+                "                                      _| |      __/ /\n" +
+                " ====================================(__/======(___/===========\n" +
+                "  :: Codenjoy :: (Version " + version + ")\n" +
+                "    :: Fork me on https://github.com/codenjoyme/codenjoy :: \n" +
+                "   --------------------------------------------------------- \n";
+    }
+
+    public static JSONObject version(String component) {
         try {
             Properties properties = new Properties();
-            InputStream stream = VersionReader.class.getClassLoader().getResourceAsStream(gameName + "/version.properties");
+
+            InputStream stream = VersionReader.class.getClassLoader().getResourceAsStream(component + "/version.properties");
             if (stream == null) {
-                return NO_VERSION;
+                return noVersion();
             }
             properties.load(stream);
-            return (String) properties.get("version");
+
+            return new JSONObject(){
+                {
+                    putIfExists(KEY_VERSION);
+                    putIfExists(KEY_TIME);
+                    putIfExists(KEY_REVISION);
+                    putIfExists(KEY_BRANCH);
+                }
+
+                private void putIfExists(String name) {
+                    String data = properties.getProperty(name);
+                    if (data == null) {
+                        return;
+                    }
+                    if (KEY_REVISION.equals(name)) {
+                        data = data.substring(0, 8);
+                    }
+                    put(name, data);
+                }
+            };
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return NO_VERSION;
+        return noVersion();
+    }
+
+    private static JSONObject noVersion() {
+        return new JSONObject(){{
+            put("version", NO_VERSION);
+        }};
     }
 }

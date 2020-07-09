@@ -50,20 +50,11 @@ public class AISolver implements Solver<Board> {
 
     public DeikstraFindWay.Possible possible(final Board board) {
         return new DeikstraFindWay.Possible() {
-            @Override
+            @Override // TODO test me
             public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
-                if (isBarrierAt(x, y)) return false;
+                Point to = where.change(from);
 
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
-
-                if (board.isOutOfField(nx, ny)) return false;
-
-                if (isBarrierAt(nx, ny)) return false;
-                if (board.isAt(nx, ny,
+                if (board.isAt(to.getX(), to.getY(),
                         Elements.HEAD_DOWN, Elements.HEAD_LEFT,
                         Elements.HEAD_UP, Elements.HEAD_RIGHT)) return false;
 
@@ -71,8 +62,8 @@ public class AISolver implements Solver<Board> {
             }
 
             @Override
-            public boolean possible(Point atWay) {
-                return true;
+            public boolean possible(Point point) {
+                return !isBarrierAt(point.getX(), point.getY());
             }
         };
     }

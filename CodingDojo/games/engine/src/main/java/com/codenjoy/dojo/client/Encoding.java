@@ -28,5 +28,18 @@ import lombok.experimental.UtilityClass;
 public class Encoding {
     
     public static final String UTF8 = "UTF-8";
-    
+
+    public static String replaceN(String value) {
+        return value.replace("\\n", "\n")
+                .replace("\\r", "\r")
+                .replace("\r\n", "\n")
+                .replace("\n\r", "\n")
+                .replace("\r", "\n");
+    }
+
+    public static String removeN(String value) {
+        return value.replaceAll("\n|\r", "");
+    }
+
+
 }

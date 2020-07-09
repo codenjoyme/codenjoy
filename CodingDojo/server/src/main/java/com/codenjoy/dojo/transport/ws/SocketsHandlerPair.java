@@ -80,6 +80,10 @@ public class SocketsHandlerPair {
         }
     }
 
+    public String getId() {
+        return id;
+    }
+
     public List<PlayerSocket> getSockets() {
         return sockets;
     }

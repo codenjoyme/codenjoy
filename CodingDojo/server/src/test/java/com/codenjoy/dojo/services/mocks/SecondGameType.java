@@ -29,47 +29,42 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 public class SecondGameType extends AbstractGameType {
+
+    private final SettingsImpl result;
+
+    public SecondGameType() {
+        result = new SettingsImpl();
+        result.addEditBox("Parameter 3").type(Integer.class).def(43);
+        result.addCheckBox("Parameter 4").type(Boolean.class).def(false).update(true);
+    }
+
     @Override
     public PlayerScores getPlayerScores(Object score) {
-
-        return new PlayerScores() {
-            @Override
-            public Object getScore() {
-                return 43;
-            }
-
-            @Override
-            public int clear() {
-                return 0;
-            }
-
-            @Override
-            public void update(Object score) {
-
-            }
-
-            @Override
-            public void event(Object event) {
-
-            }
-        };
+        return new FakePlayerScores(score);
     }
 
     @Override
     public GameField createGame(int levelNumber) {
-        return null;
+        GameField field = mock(GameField.class);
+        BoardReader reader = mock(BoardReader.class);
+        when(field.reader()).thenReturn(reader);
+        return field;
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return new SimpleParameter<Integer>(56);
+        return new SimpleParameter<>(56);
     }
 
     @Override
@@ -109,9 +104,6 @@ public class SecondGameType extends AbstractGameType {
 
     @Override
     public Settings getSettings() {
-        SettingsImpl result = new SettingsImpl();
-        result.addEditBox("Parameter 3").type(Integer.class).def(43);
-        result.addCheckBox("Parameter 4").type(Boolean.class).def(false).update(true);
         return result;
     }
 
@@ -131,8 +123,8 @@ public class SecondGameType extends AbstractGameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerName) {
-        return null;
+    public GamePlayer createPlayer(EventListener listener, String playerId) {
+        return mock(GamePlayer.class);
     }
     
     @Override

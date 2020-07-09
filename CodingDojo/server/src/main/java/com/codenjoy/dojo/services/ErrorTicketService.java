@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,29 +34,49 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 @Component
 @Slf4j
 public class ErrorTicketService {
 
+    private static final String ERROR_MESSAGE = "Something wrong with your request. " +
+            "Please save you ticker number and ask site administrator.";
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+
     @Autowired
     private DebugService debug;
+
+    private boolean printStackTrace = true;
+
+    private Map<String, Map<String, Object>> tickets = new ConcurrentHashMap<>();
+    private Map<String, String> info = new ConcurrentSkipListMap<>();
 
     public ModelAndView get(String url, Exception exception) {
         String ticket = ticket();
 
-        log.error("[TICKET:URL] {}:{} {}", ticket, url, exception);
-        System.err.printf("[TICKET:URL] %s:%s%n", ticket, url);
-        exception.printStackTrace();
+        String message = printStackTrace ? exception.toString() : exception.toString();
+        log.error("[TICKET:URL] {}:{} {}", ticket, url, message);
+        System.err.printf("[TICKET:URL] %s:%s %s%n", ticket, url, message);
+
+        if (printStackTrace && !skip(message)) {
+            exception.printStackTrace();
+        }
+
+        Map<String, Object> info = getDetails(ticket, url, exception);
+        tickets.put(ticket, info);
 
         ModelAndView result = new ModelAndView();
         result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        result.addObject("ticketNumber", ticket);
-        result.addObject("message", "Something wrong with your request. " +
-                "Please save you ticker number and ask site administrator.");
+
+        copy("ticketNumber", info, result);
 
         if (!debug.isWorking()) {
+            result.addObject("message", ERROR_MESSAGE);
+
             if (url.contains("/rest/")) {
                 shouldJsonResult(result);
             } else {
@@ -64,28 +85,73 @@ public class ErrorTicketService {
             return result;
         }
 
-        result.addObject("message", exception.getClass().getName() + ": " + exception.getMessage());
-        result.addObject("url", url);
-        result.addObject("exception", exception);
+
+        copy("message", info, result);
+        copy("url", info, result);
+        copy("exception", info, result);
 
         if (url.contains("/rest/")) {
-            result.addObject("stackTrace", ExceptionUtils.getStackTrace(exception));
+            copy("stackTrace", info, result);
+
             result.setView(new MappingJackson2JsonView(){{
                 setPrettyPrint(true);
             }});
             return result;
         }
 
-        StringWriter writer = new StringWriter();
-        exception.printStackTrace(new PrintWriter(writer));
-        String text = writer.toString()
-                .replaceAll("\\n\\r", "\n")
-                .replaceAll("\\n\\n", "\n")
-                .replaceAll("\\n", "<br>");
-        result.addObject("stacktrace", text);
+        result.addObject("stackTrace", prepareStackTrace(exception));
 
         shouldErrorPage(result);
         return result;
+    }
+
+    private void copy(String name, Map<String, Object> info, ModelAndView model) {
+        model.addObject(name, info.get(name));
+    }
+
+    public Map<String, Object> getDetails(String ticket, String url, Exception exception) {
+        return new HashMap<String, Object>(){{
+            put("ticketNumber", ticket);
+            put("time", now());
+            put("message", exception.getClass().getName() + ": " + exception.getMessage());
+            put("url", url);
+            if (!printStackTrace) {
+                exception.setStackTrace(new StackTraceElement[0]);
+            }
+            put("exception", exception);
+            put("stackTrace", prepareJsonStackTrace(exception));
+        }};
+    }
+
+    private String now() {
+        return format.format(Calendar.getInstance().getTime());
+    }
+
+    private boolean skip(String message) {
+        return message.contains(PlayerSocketCreator.UNAUTHORIZED_ACCESS);
+    }
+
+    private List<String> prepareJsonStackTrace(Exception exception) {
+        if (printStackTrace) {
+            return Arrays.asList(
+                    ExceptionUtils.getStackTrace(exception)
+                            .replaceAll("[\r\t]", "")
+                            .split("\n"));
+        } else {
+           return Arrays.asList();
+        }
+    }
+
+    private String prepareStackTrace(Exception exception) {
+        if (printStackTrace) {
+            StringWriter writer = new StringWriter();
+            exception.printStackTrace(new PrintWriter(writer));
+            return writer.toString()
+                    .replaceAll("\\n\\r", "\n")
+                    .replaceAll("\\n\\n", "\n")
+                    .replaceAll("\\n", "<br>");
+        }
+        return "";
     }
 
     private void shouldJsonResult(ModelAndView result) {
@@ -101,5 +167,21 @@ public class ErrorTicketService {
     private String ticket() {
         return Hash.md5("anotherSoul" + Hash.md5("someSoul" +
                 Calendar.getInstance().getTimeInMillis()));
+    }
+
+    public void setPrintStackTrace(boolean printStackTrace) {
+        this.printStackTrace = printStackTrace;
+    }
+
+    public Map<String, Map<String, Object>> getErrors() {
+        return tickets;
+    }
+
+    public void logInfo(String message) {
+        info.put(now(), message);
+    }
+
+    public Map<String, String> getInfo() {
+        return info;
     }
 }

@@ -21,12 +21,12 @@
  */
 var currentCommand = null;
 
-function initJoystick(playerName, registered, code, contextPath) {
+function initJoystick(playerId, registered, code, contextPath) {
     if (!registered) {
         return;
     }
 
-    var container = "#div_" + playerName.replace(/[@.]/gi, "_");
+    var container = "#div_" + playerId;
     var actParams = $("#act_params");
 
     function ok() {
@@ -36,7 +36,7 @@ function initJoystick(playerName, registered, code, contextPath) {
         if (!game.enableJoystick) return;
 
         $.ajax({ url:contextPath + "/joystick",
-                data:'command=' + command + '&playerName=' + playerName + "&code=" + code,
+                data:'command=' + command + '&player=' + playerId + "&code=" + code,
                 dataType:"json",
                 cache:false,
                 complete:ok,

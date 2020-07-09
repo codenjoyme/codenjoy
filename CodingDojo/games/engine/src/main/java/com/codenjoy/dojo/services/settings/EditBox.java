@@ -25,14 +25,23 @@ package com.codenjoy.dojo.services.settings;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
+    public static final String TYPE = "editbox";
+
     private String name;
     private T def;
+    private boolean multiline;
 
     public EditBox(String name) {
         this.name = name;
+        multiline = false;
+    }
+
+    public boolean isMultiline() {
+        return multiline;
     }
 
     @Override
@@ -42,7 +51,7 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
 
     @Override
     public String getType() {
-        return "editbox";
+        return TYPE;
     }
 
     @Override
@@ -51,7 +60,7 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     }
 
     @Override
-    public void update(T value) {
+    public EditBox<T> update(T value) {
         if (value instanceof String) {
             if (Integer.class.equals(type)) {
                 set((T) Integer.valueOf((String) value));
@@ -67,17 +76,33 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
         } else {
             set(value);
         }
-    }
-
-    @Override
-    public Parameter<T> def(T value) {
-        def = value;
         return this;
     }
 
     @Override
-    public boolean itsMe(String name) {
-        return this.name.equals(name);
+    public <V> EditBox<V> type(Class<V> type) {
+        return (EditBox<V>) super.type(type);
+    }
+
+    @Override
+    public EditBox<T> parser(Function<String, T> parser) {
+        return (EditBox<T>) super.parser(parser);
+    }
+
+    @Override
+    public EditBox<T> def(T value) {
+        def = value;
+        return this;
+    }
+
+    public EditBox<T> multiline(boolean multiline) {
+        this.multiline = multiline;
+        return this;
+    }
+
+    public EditBox<T> multiline() {
+        multiline = true;
+        return this;
     }
 
     @Override
@@ -89,18 +114,25 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     public List<T> getOptions() {
         return new LinkedList<T>(){{
             add(def);
-            if (EditBox.this.get() != null) {
-                add(EditBox.this.get());
+            T value = EditBox.this.get();
+            if (value != null && !this.contains(value)) {
+                add(value);
             }
         }};
     }
 
     @Override
-    public String toString() { // TODO test me and add this method to all classes
-        return String.format("%s:%s = def[%s] val[%s]",
+    public String toString() {
+        return String.format("[%s:%s = multiline[%s] def[%s] val[%s]]",
                 name,
                 type.getSimpleName(),
+                multiline,
                 def,
                 get());
+    }
+
+    @Override
+    public T getDefault() {
+        return def;
     }
 }

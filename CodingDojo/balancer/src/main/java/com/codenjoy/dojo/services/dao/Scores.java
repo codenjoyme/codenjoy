@@ -39,116 +39,76 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Scores {
 
     private CrudConnectionThreadPool pool;
-     @Autowired protected ConfigProperties config;
+    @Autowired protected ConfigProperties config;
 
-    public static final String YYYY_MM_DD = "yyyy-MM-dd";
-    public static final DateTimeFormatter YYYY_MM_DD2 = DateTimeFormatter.ofPattern(YYYY_MM_DD);
-    private SimpleDateFormat formatter = new SimpleDateFormat(YYYY_MM_DD);
+    private static final String DAY_FORMAT = "yyyy-MM-dd";
+    private static final DateTimeFormatter DAY_FORMATTER = DateTimeFormatter.ofPattern(DAY_FORMAT);
+    public static final SimpleDateFormat DAY_FORMATTER2 = new SimpleDateFormat(DAY_FORMAT);
 
     public Scores(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS scores (" +
                         "day varchar(10), " +
                         "time varchar(30), " +
-                        "email varchar(255), " +
-                        "score int);");
+                        "id varchar(255), " +
+                        "score int," +
+                        "winner int);");
     }
 
     void removeDatabase() {
         pool.removeDatabase();
     }
 
-    public void saveScore(long time, String email, int score) {
+    // TODO исправить тесты
+    public void saveScore(long time, String id, int score, boolean winner) {
         Date date = new Date(time);
         pool.update("INSERT INTO scores " +
-                        "(day, time, email, score) " +
-                        "VALUES (?,?,?,?);",
-                formatter.format(date),
+                        "(day, time, id, score, winner) " +
+                        "VALUES (?,?,?,?,?);",
+                DAY_FORMATTER2.format(date),
                 JDBCTimeUtils.toString(date),
-                email,
-                score);
+                id,
+                score,
+                winner ? 1 : 0);
     }
 
     public void saveScores(long time, List<PlayerInfo> playersInfos) {
         Date date = new Date(time);
         pool.batchUpdate("INSERT INTO scores " +
-                        "(day, time, email, score) " +
-                        "VALUES (?,?,?,?);",
+                        "(day, time, id, score, winner) " +
+                        "VALUES (?,?,?,?,?);",
                 playersInfos,
                 (PreparedStatement stmt, PlayerInfo info) -> {
                     pool.fillStatement(stmt,
-                            formatter.format(date),
+                            DAY_FORMATTER2.format(date),
                             JDBCTimeUtils.toString(date),
-                            info.getName(),
-                            Integer.valueOf(info.getScore()));
+                            info.getId(),
+                            Integer.valueOf(info.getScore()),
+                            info.isWinner() ? 1 : 0);
                     return true;
                 });
     }
 
-//    public List<PlayerScore> getLeaders() {
-//        String time = "19:00";
-//        String firstDay = "2019-01-28";
-//        int countWinners = 10;
-//        String lastDay = "2019-02-10";
-//
-//        return pool.select("WITH RECURSIVE day_scores AS (\n" +
-//                        "  SELECT * \n" +
-//                        "    FROM scores \n" +
-//                        "    INNER JOIN \n" +
-//                        "        (SELECT MAX(time) AS max_time \n" +
-//                        "            FROM (SELECT * FROM scores WHERE time LIKE '2019-%T?%') as test \n" +
-//                        "            GROUP BY day) test \n" +
-//                        "    ON time = max_time\n" +
-//                        "), \n" +
-//                        "\n" +
-//                        "top_scores(emails, day) AS (\n" +
-//                        "        (SELECT array_agg(row(email, day)) AS emails, '?' :: date AS day \n" +
-//                        "            FROM (SELECT email, day FROM day_scores WHERE day = '?' ORDER BY score DESC LIMIT ?) initial_query) \n" +
-//                        "    UNION ALL \n" +
-//                        "        (SELECT * \n" +
-//                        "            FROM \n" +
-//                        "                (SELECT array_agg(row(email, s_day)) AS emails, MAX(ts_day):: date AS day \n" +
-//                        "                    FROM \n" +
-//                        "                        (SELECT ROW_NUMBER () OVER (PARTITION BY s.day ORDER BY score DESC) AS index, \n" +
-//                        "                                time, score, ts.day AS ts_day, s.day AS s_day, email \n" +
-//                        "                            FROM day_scores s, \n" +
-//                        "                                (SELECT emails, top_scores.day + interval '1' day AS \"day\" \n" +
-//                        "                                    FROM top_scores ORDER BY day DESC LIMIT 1) ts \n" +
-//                        "                            WHERE ((NOT s.email IN (SELECT email FROM unnest(emails) AS (email text, day varchar))) \n" +
-//                        "                                    AND s.day :: date = ts.day :: date) \n" +
-//                        "                                OR (ts.day :: date != s.day :: date \n" +
-//                        "                                    AND (s.email, s.day) = ANY(ts.emails))\n" +
-//                        "                        ) indexed_top \n" +
-//                        "                    WHERE index <= ?\n" +
-//                        "                ) rec_exit \n" +
-//                        "            WHERE day < '?')\n" +
-//                        ") \n" +
-//                        "     \n" +
-//                        "SELECT DISTINCT nest_email AS name, nest_day AS day \n" +
-//                        "    FROM top_scores, unnest(emails) AS (nest_email text, nest_day varchar)\n" +
-//                        "    ORDER BY nest_day;\n",
-//                new Object[]{time, firstDay, firstDay, countWinners, countWinners, lastDay},
-//                rs -> buildScores(rs));
-//    }
-
-    public List<PlayerScore> getFinalists(String from, String to, long time,
-                                          int finalistsCount, List<String> exclude)
+    public List<PlayerScore> getFinalists(String from, String to,
+                                          int finalistsCount,
+                                          Collection<String> exclude)
     {
+        to = plusDay(to);
+        long time = parse(to);
+
         List<String> finalists = new LinkedList<>();
         return getDaysBetween(from, to).stream()
-                .map(day -> day.format(YYYY_MM_DD2))
+                .map(day -> day.format(Scores.DAY_FORMATTER))
                 .filter(day -> isPast(day, time))
                 .flatMap(day -> getScores(day, time).stream()
+                    .filter(score -> score.getScore() > 0)
                     .sorted(Comparator.comparingInt(PlayerScore::getScore).reversed())
                     .filter(score -> !exclude.contains(score.getId()))
                     .filter(score -> !finalists.contains(score.getId()))
@@ -162,9 +122,34 @@ public class Scores {
             .collect(Collectors.toList());
     }
 
+    private String plusDay(String day) {
+        return LocalDate.parse(day, Scores.DAY_FORMATTER).plusDays(1).format(Scores.DAY_FORMATTER);
+    }
+
+    private long parse(String to) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(getDate(to));
+        return calendar.getTimeInMillis();
+    }
+
+    public void setWinnerFlag(PlayerScore playerScore, boolean isWinner) {
+        pool.update("update scores set winner = ? where" +
+                        " day = ? and time = ? and id = ? and score = ?",
+                isWinner ? 1 : 0,
+                playerScore.getDay(),
+                playerScore.getTime(),
+                playerScore.getId(),
+                playerScore.getScore()
+        );
+    }
+
+    public void cleanWinnerFlags() {
+        pool.update("update scores set winner = 0 where winner <> 0");
+    }
+
     private List<LocalDate> getDaysBetween(String from, String to) {
-        LocalDate start = LocalDate.parse(from, YYYY_MM_DD2);
-        LocalDate end = LocalDate.parse(to, YYYY_MM_DD2);
+        LocalDate start = LocalDate.parse(from, DAY_FORMATTER);
+        LocalDate end = LocalDate.parse(to, DAY_FORMATTER);
         return Stream.iterate(start, date -> date.plusDays(1))
                 .limit(ChronoUnit.DAYS.between(start, end))
                 .collect(Collectors.toList());
@@ -184,15 +169,16 @@ public class Scores {
         return new LinkedList<PlayerScore>(){{
             while (rs.next()) {
                 add(new PlayerScore(
-                        rs.getString("email"),
-                        rs.getInt("score")));
+                        rs.getString("id"),
+                        rs.getInt("score"),
+                        rs.getString("time"),
+                        rs.getInt("winner") == 1));
             }
         }};
     }
 
-    public void removeByName(String email) {
-        pool.update("DELETE FROM scores WHERE email = ?;",
-                email);
+    public void remove(String id) {
+        pool.update("DELETE FROM scores WHERE id = ?;", id);
     }
 
     public List<String> getDays() {
@@ -217,12 +203,12 @@ public class Scores {
 
     public String getDay(long time) {
         Date date = new Date(time);
-        return formatter.format(date);
+        return DAY_FORMATTER2.format(date);
     }
 
     public long getLastTimeOfPast(String day) {
         return pool.select("SELECT time FROM scores WHERE day = ? AND time LIKE ? ORDER BY time ASC LIMIT 1;",
-                new Object[]{day, day + "T" + config.getGameFinalTime() + "%"},
+                new Object[]{day, day + "T" + config.getGame().getFinalTime() + "%"},
                 rs -> (rs.next()) ? JDBCTimeUtils.getTimeLong(rs) : 0);
     }
 
@@ -240,9 +226,9 @@ public class Scores {
 
     public Date getDate(String day) {
         try {
-            return formatter.parse(day);
+            return DAY_FORMATTER2.parse(day);
         } catch (ParseException e) {
-            throw new RuntimeException("Unexpected day format, should be: " + YYYY_MM_DD, e);
+            throw new RuntimeException("Unexpected day format, should be: " + DAY_FORMAT, e);
         }
     }
 

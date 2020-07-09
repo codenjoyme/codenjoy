@@ -21,7 +21,7 @@
 }
 
 .logo {
-    height: 54px;
+    height: 96px;
     margin-right: 28px;
     display: inline-block;
 }
@@ -95,6 +95,9 @@
 }
 
 @media all and (max-width: 1020px) {
+    .container .logo {
+      margin-right: 0;
+    }
     .container li {
         width: 100%;
     }
@@ -120,6 +123,7 @@
     }
     .container ul {
         flex-direction: column;
+        margin-left: 0px;
     }
     .container {
         flex-direction: column;

@@ -24,17 +24,22 @@ package com.codenjoy.dojo.services.dao;
 
 import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.DLoggerFactory;
+import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerDetailInfo;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
 import com.codenjoy.dojo.services.entity.server.User;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.httpclient.GameClientResolver;
 import com.codenjoy.dojo.services.httpclient.GameServerClientException;
-import com.codenjoy.dojo.web.controller.GlobalExceptionHandler;
-import java.util.List;
+import com.codenjoy.dojo.web.controller.ErrorTicketService;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static com.codenjoy.dojo.conf.Authority.ROLE_USER;
 
 @Component
 public class GameServer {
@@ -45,16 +50,22 @@ public class GameServer {
     @Autowired GameClientResolver gameClientResolver;
 
     public List<PlayerInfo> getPlayersInfos(String server) {
-        return gameClientResolver.resolveClient(server).getPlayerInfos(config.getGameType());
+        return gameClientResolver.resolveClient(server).getPlayerInfos(config.getGame().getType());
     }
 
-    public String createNewPlayer(String server, String email, String name,
-                                  String password, String callbackUrl,
+    public PParameters getGameSettings(String server) {
+        return gameClientResolver.resolveClient(server).getGameSettings(config.getGame().getType());
+    }
+
+    public void setGameSettings(String server, PParameters parameters) {
+        gameClientResolver.resolveClient(server).setGameSettings(config.getGame().getType(), parameters);
+    }
+
+    public String createNewPlayer(String server, String id, String code,
+                                  String email, String phone, String name,
+                                  String hashedPassword, String callbackUrl,
                                   String score, String save)
     {
-        String id = config.getId(email);
-        String code = Hash.getCode(email, password);
-
         try {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create new player {} ({}) for '{}' on server {} with save {} and score {}",
@@ -65,17 +76,20 @@ public class GameServer {
                 id,
                 name,
                 callbackUrl,
-                config.getGameType(),
+                config.getGame().getType(),
+                config.getGame().getType(),
                 score,
                 save,
                 new User(
                     id,
                     email,
+                    phone,
                     name,
-                    1,
-                    password,
+                    User.APPROVED,
+                    hashedPassword,
                     code,
-                    null)
+                    "{}",
+                    Arrays.asList(ROLE_USER.name()))
             );
 
             return gameClientResolver.resolveClient(server).registerPlayer(player);
@@ -86,14 +100,14 @@ public class GameServer {
         }
     }
 
-    public boolean existsOnServer(String server, String email) {
+    public boolean existsOnServer(String server, String id) {
         try {
             if (logger.isDebugEnabled()) {
                 logger.debug("Check is player {} exists on server {}",
-                        email, server);
+                        id, server);
             }
 
-            return gameClientResolver.resolveClient(server).checkPlayerExists(email);
+            return gameClientResolver.resolveClient(server).checkPlayerExists(id);
         } catch (GameServerClientException e) {
             logger.error("Error check player exists on server: " + server, e);
             return false;
@@ -114,12 +128,12 @@ public class GameServer {
         } catch (GameServerClientException e) {
             logger.error("Error clearing scores on server: " + server, e);
 
-            return GlobalExceptionHandler.getPrintableMessage(e);
+            return ErrorTicketService.getPrintableMessage(e);
         }
     }
 
     public String gameEnable(String server, boolean enable) {
-        String status = enable ? "start" : "stop";
+        String status = status(enable);
         try {
             if (logger.isDebugEnabled()) {
                 logger.debug("Set status {} of game on server {}",
@@ -127,21 +141,25 @@ public class GameServer {
             }
 
             Boolean enabled = gameClientResolver.resolveClient(server).checkGameEnabled(enable);
-            return "Successful; game: " + enabled;
+            return status(enabled);
         } catch (GameServerClientException e) {
             logger.error("Error " + status + " game on server: " + server, e);
 
-            return GlobalExceptionHandler.getPrintableMessage(e);
+            return ErrorTicketService.getPrintableMessage(e);
         }
     }
 
-    public Boolean remove(String server, String email, String code) {
+    private String status(boolean enable) {
+        return enable ? "start" : "stop";
+    }
+
+    public Boolean remove(String server, String id) {
         try {
             if (logger.isDebugEnabled()) {
-                logger.debug("Remove player {} ({}) on server {}",
-                        email, code, server);
+                logger.debug("Remove player {} on server {}",
+                        id, server);
             }
-            Boolean removed = gameClientResolver.resolveClient(server).removePlayer(config.getId(email), code);
+            Boolean removed = gameClientResolver.resolveClient(server).removePlayer(id);
             return removed;
         } catch (GameServerClientException e) {
             String message = "Cant remove player. Status is: " + e.getMessage();
@@ -149,6 +167,4 @@ public class GameServer {
             return false;
         }
     }
-
-
 }

@@ -31,14 +31,6 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
     loadCanvasesData();
     var reloading = false;
 
-    function fromEmail(email) {
-        return email.split('@')[0];
-    }
-
-    function toId(email) {
-        return email.replace(/[@.]/gi, "_");
-    }
-
     function goToHomePage() {
         window.location.href = contextPath;
     }
@@ -49,15 +41,15 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         loadPlayers(function(newPlayers) {
             var remove = [];
             var create = [];
-            var playerNames = getNames(players);
-            var newPlayerNames = getNames(newPlayers);
+            var playerIds = getIds(players);
+            var newPlayerIds = getIds(newPlayers);
             newPlayers.forEach(function (newPlayer) {
-                if ($.inArray(newPlayer.name, playerNames) == -1) {
+                if ($.inArray(newPlayer.id, playerIds) == -1) {
                     create.push(newPlayer);
                 }
             });
             players.forEach(function (player) {
-                if ($.inArray(player.name, newPlayerNames) == -1) {
+                if ($.inArray(player.id, newPlayerIds) == -1) {
                     remove.push(player);
                 }
             });
@@ -90,43 +82,45 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
 
     function removeHtml(playersList) {
         playersList.forEach(function (player) {
-            $('#div_' + toId(player.name)).remove();
+            $('#div_' + player.id).remove();
         });
     }
 
     function buildHtml(playersList) {
         var templateData = [];
         playersList.forEach(function (player) {
-            var playerName = player.name;
-            var id = toId(playerName);
-            var name = fromEmail(player.readableName);
-            var visible = (allPlayersScreen || !enablePlayerInfoLevel) ? 'none' : 'block';
-            templateData.push({name : name, id : id, visible : visible })
+            var id = player.id;
+            var name = player.readableName;
+            var levelVisible = (allPlayersScreen || !enablePlayerInfoLevel) ? 'none' : 'block';
+            var playerVisible  = (!enablePlayerInfo) ? 'none' : 'block';
+            templateData.push({
+                name : name,
+                id : id,
+                levelVisible : levelVisible,
+                playerVisible : playerVisible
+            });
         });
         $('#players_container script').tmpl(templateData).appendTo('#players_container');
         if (!!game.canvasCursor) {
             $('#players_container canvas').css('cursor', game.canvasCursor);
-        }        
-        if (!enablePlayerInfo) {
-            $(".player_info").hide();
         }
     }
 
     function removeCanvases(playersList) {
         playersList.forEach(function (player) {
-            delete canvases[player.name];
-            delete infoPools[player.name];
+            delete canvases[player.id];
+            delete infoPools[player.id];
         });
     }
 
     function buildCanvases(playersList) {
         playersList.forEach(function (player) {
-            canvases[player.name] = createCanvas(toId(player.name));
-            infoPools[player.name] = [];
+            canvases[player.id] = createCanvas(player.id);
+            infoPools[player.id] = [];
         });
     }
 
-    var getBoardDrawer = function(canvas, playerName, playerData) {
+    var getBoardDrawer = function(canvas, playerId, playerData) {
         var data = playerData.board;
 
         var clear = function() {
@@ -153,7 +147,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
             drawLines : drawLines,
             canvas : canvas,
             drawText: canvas.drawText,
-            playerName : playerName,
+            playerId : playerId,
             playerData : playerData
         };
     }
@@ -172,8 +166,8 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         return div[0];
     }
 
-    function showScoreInformation(playerName, information) {
-        var infoPool = infoPools[playerName];
+    function showScoreInformation(playerId, information) {
+        var infoPool = infoPools[playerId];
 
         if (information != '') {
             var arr = information.split(', ');
@@ -186,7 +180,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         }
         if (infoPool.length == 0) return;
 
-        var score = $("#score_info_" + toId(playerName));
+        var score = $("#score_info_" + playerId);
         if (score.is(':visible')) {
             return;
         }
@@ -194,7 +188,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         var text = '<center>' + infoPool.join('<br>') + '</center>';
         infoPool.splice(0, infoPool.length);
 
-        var canvas = $("#" + toId(playerName));
+        var canvas = $("#" + playerId);
         var size = calculateTextSize(text);
         score.css({
                 position: "absolute",
@@ -209,7 +203,7 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         score.show().delay(700).fadeOut(200, function() {
             score.hide();
 
-            showScoreInformation(playerName, '');
+            showScoreInformation(playerId, '');
         });
     }
 
@@ -265,17 +259,17 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         return Object.keys(data).length == 0;
     }
 
-    function getNames(playerList) {
+    function getIds(playerList) {
         var result = [];
         playerList.forEach(function (player) {
-            result.push(player.name);
+            result.push(player.id);
         });
         return result;
     }
 
     function isPlayersListChanged(data) {
         var newPlayers = Object.keys(data);
-        var oldPlayers = getNames(players);
+        var oldPlayers = getIds(players);
 
         if (newPlayers.length != oldPlayers.length) {
             return true;
@@ -312,27 +306,27 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
             $.each(data, drawUserCanvas);
         } else {
             for (var i in players) {
-                var player = players[i].name;
+                var player = players[i].id;
                 drawUserCanvas(player, data[player]);
             }
         }
     }
 
-    function drawUserCanvas(playerName, data) {
-        if (!canvases[playerName]) {
+    function drawUserCanvas(playerId, data) {
+        if (!canvases[playerId]) {
             reloadCanvasesData();
         }
 
-       var canvas = canvases[playerName];
+       var canvas = canvases[playerId];
        canvas.boardSize = boardSize;
-       drawBoard(getBoardDrawer(canvas, playerName, data));
+       drawBoard(getBoardDrawer(canvas, playerId, data));
 
-        $("#score_" + toId(playerName)).text(data.score);
+        $("#score_" + playerId).text(data.score);
 
-        showScoreInformation(playerName, data.info);
+        showScoreInformation(playerId, data.info);
 
         if (!allPlayersScreen) {
-            $("#level_" + toId(playerName)).text(data.heroesData.coordinates[playerName].level + 1);
+            $("#level_" + playerId).text(data.heroesData.coordinates[playerId].level + 1);
         }
     }
 }

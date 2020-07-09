@@ -27,6 +27,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static com.codenjoy.dojo.services.PointImpl.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
 public class PointImplTest {
 
@@ -256,5 +258,17 @@ public class PointImplTest {
         assertEquals("[11,16]", pt.relative(pt(-1, -1)).toString());
         assertEquals("[10,15]", pt.relative(pt(0, 0)).toString());
         assertEquals("[-30,15]", pt.relative(pt(40, 0)).toString());
+    }
+
+    @Test
+    public void shouldGenerateRandom() {
+        Dice dice = mock(Dice.class);
+        when(dice.next(anyInt())).thenReturn(100, 101);
+
+        int size = 24;
+        Point pt = random(dice, size);
+
+        verify(dice, times(2)).next(size);
+        assertEquals("[100,101]", pt.toString());
     }
 }

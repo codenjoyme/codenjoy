@@ -22,12 +22,10 @@ package com.codenjoy.dojo.quake2d.client;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.client.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.quake2d.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.RandomDice;
 
 /**

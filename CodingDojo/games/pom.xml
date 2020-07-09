@@ -11,8 +11,6 @@
     <packaging>pom</packaging>
 
     <properties>
-        <build.time>${maven.build.timestamp}</build.time>
-
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -31,6 +29,10 @@
         <maven-antrun.version>1.8</maven-antrun.version>
         <maven-license.version>2.0.0</maven-license.version>
         <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <maven-buildnumber-plugin.version>1.4</maven-buildnumber-plugin.version>
+
+        <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
 
         <user.resources>src/main/webapp/resources/user</user.resources>
         <client.sources>${user.resources}/${module.name}-servers.zip</client.sources>
@@ -80,6 +82,32 @@
         <module>excitebike</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>jar</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <configuration>
+                            <finalName>${project.artifactId}</finalName>
+                            <archive>
+                                <manifest>
+                                    <addClasspath>false</addClasspath>
+                                    <mainClass>com.codenjoy.dojo.Main</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptors>
+                                <descriptor>../local-ws-game-server-jar.xml</descriptor>
+                            </descriptors>
+                            <appendAssemblyId>false</appendAssemblyId>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -87,7 +115,6 @@
                 <artifactId>engine</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
@@ -167,6 +194,42 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>buildnumber-maven-plugin</artifactId>
+                    <version>${maven-buildnumber-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>create</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <doCheck>false</doCheck>
+                        <doUpdate>false</doUpdate>
+                        <providerImplementations>
+                            <git>jgit</git>
+                        </providerImplementations>
+                        <scmConnectionUrl>scm:git:</scmConnectionUrl>
+                        <scmDirectory>${project.basedir}/../../../</scmDirectory>
+                        <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+                        <shortRevisionLength>8</shortRevisionLength>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.maven.scm</groupId>
+                            <artifactId>maven-scm-api</artifactId>
+                            <version>${maven-scm-jgit.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.apache.maven.scm</groupId>
+                            <artifactId>maven-scm-provider-jgit</artifactId>
+                            <version>${maven-scm-jgit.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler.version}</version>
@@ -214,6 +277,16 @@
                                 <followSymlinks>false</followSymlinks>
                             </fileset>
                         </filesets>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                    <configuration>
+                        <excludes>
+                            <exclude>**/logback.xml</exclude>
+                        </excludes>
                     </configuration>
                 </plugin>
                 <plugin>

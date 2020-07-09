@@ -27,6 +27,8 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.collapse.client.Board;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 
 public class AISolver implements Solver<Board> {
 
@@ -41,10 +43,9 @@ public class AISolver implements Solver<Board> {
     public String get(Board board) {
         this.board = board;
 
-        int x = dice.next(board.size());
-        int y = dice.next(board.size());
+        Point pt = PointImpl.random(dice, board.size());
         Direction direction = Direction.random(dice);
 
-        return String.format("ACT(%s,%s),%s", x, y, direction);
+        return String.format("ACT(%s,%s),%s", pt.getX(), pt.getY(), direction);
     }
 }

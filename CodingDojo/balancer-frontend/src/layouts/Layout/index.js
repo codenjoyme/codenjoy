@@ -6,8 +6,10 @@ import { connect } from 'react-redux';
 import { logout } from '../../redux/auth';
 
 import { Header, Footer } from '../../layouts';
+import { ToastContainer } from 'react-toastify';
 
 // own
+import 'react-toastify/dist/ReactToastify.css';
 import Styles from './styles.module.css';
 
 class LayoutComponent extends Component {
@@ -23,6 +25,7 @@ class LayoutComponent extends Component {
                         server={ server }
                         logout={ logout }
                     />
+                    <ToastContainer />
                     <div className={ Styles.content }>{ children }</div>
                     <Footer />
                 </div>

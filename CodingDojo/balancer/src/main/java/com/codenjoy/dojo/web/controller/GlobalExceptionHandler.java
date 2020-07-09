@@ -23,34 +23,30 @@ package com.codenjoy.dojo.web.controller;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
-import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Oleksandr_Baglai on 2018-06-26.
- */
+// TODO такой же как в Server - подумать как устранить дублирование
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static Logger logger = DLoggerFactory.getLogger(GlobalExceptionHandler.class);
+    @Autowired
+    private ErrorTicketService ticket;
 
     @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<String> defaultErrorHandler(HttpServletRequest request, Exception e) {
-        logger.error("[URL] : {} {}", request.getRequestURL(), e);
-        e.printStackTrace();
+    public ResponseEntity<ModelMap> defaultErrorHandler(HttpServletRequest request, Exception e) {
+        ModelAndView model = ticket.get(request.getRequestURL().toString(), e);
 
-        return new ResponseEntity<>(getPrintableMessage(e),
+        return new ResponseEntity<>(model.getModelMap(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    public static String getPrintableMessage(Exception e) {
-        return e.getClass().getSimpleName() + ": " + e.getMessage();
-    }
 
 }

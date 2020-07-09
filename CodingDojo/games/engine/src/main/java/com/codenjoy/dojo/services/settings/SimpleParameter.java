@@ -36,7 +36,7 @@ public class SimpleParameter<T> implements Parameter<T> {
     }
 
     public static Parameter<Integer> v(int value) {
-        return new SimpleParameter<Integer>(value);
+        return new SimpleParameter<>(value);
     }
 
     @Override
@@ -50,22 +50,23 @@ public class SimpleParameter<T> implements Parameter<T> {
     }
 
     @Override
+    public Class<?> getValueType() {
+        return (value != null) ? value.getClass() : Object.class;
+    }
+
+    @Override
     public String getName() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void update(Object value) {
+    public Parameter<T> update(Object value) {
         this.value = (T) value;
+        return this;
     }
 
     @Override
     public Parameter def(Object value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean itsMe(String name) {
         throw new UnsupportedOperationException();
     }
 
@@ -95,7 +96,12 @@ public class SimpleParameter<T> implements Parameter<T> {
     }
 
     @Override
-    public Parameter type(Class integerClass) {
+    public T getDefault() {
+        return value;
+    }
+
+    @Override
+    public Parameter type(Class type) {
         throw new UnsupportedOperationException();
     }
 }

@@ -17,17 +17,21 @@
         <commons-collections.version>4.3</commons-collections.version>
         <json.version>20180813</json.version>
         <jsonio.version>4.10.1</jsonio.version>
+        <java-web-socket.version>1.5.1</java-web-socket.version>
 
         <reflections.version>0.9.11</reflections.version>
         <fest-reflect.version>1.4.1</fest-reflect.version>
         <fest-assert.version>1.4</fest-assert.version>
 
         <maven-compiler.version>3.5.1</maven-compiler.version>
-        <maven-resources.version>2.7</maven-resources.version>
+        <maven-resources.version>3.1.0</maven-resources.version>
         <maven-antrun.version>1.8</maven-antrun.version>
         <maven-license.version>1.16</maven-license.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <maven-buildnumber-plugin.version>1.4</maven-buildnumber-plugin.version>
+        <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
 
         <user.resources>src/main/webapp/resources/user</user.resources>
         <engine.libs>${user.resources}/engine-libs.zip</engine.libs>
@@ -55,6 +59,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.java-websocket</groupId>
+            <artifactId>Java-WebSocket</artifactId>
+            <version>${java-web-socket.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-server</artifactId>
         </dependency>
@@ -62,7 +71,6 @@
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-client</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -103,7 +111,6 @@
             <artifactId>logback-classic</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -140,6 +147,9 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
             </resource>
             <resource>
                 <directory>src</directory>
@@ -150,6 +160,42 @@
         </resources>
         <plugins>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>${maven-buildnumber-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <providerImplementations>
+                        <git>jgit</git>
+                    </providerImplementations>
+                    <scmConnectionUrl>scm:git:</scmConnectionUrl>
+                    <scmDirectory>${project.basedir}/../../../</scmDirectory>
+                    <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
+                    <shortRevisionLength>8</shortRevisionLength>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-api</artifactId>
+                        <version>${maven-scm-jgit.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.maven.scm</groupId>
+                        <artifactId>maven-scm-provider-jgit</artifactId>
+                        <version>${maven-scm-jgit.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler.version}</version>
@@ -157,6 +203,17 @@
                     <encoding>utf8</encoding>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources.version}</version>
+                <configuration>
+                    <encoding>utf8</encoding>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
                 </configuration>
             </plugin>
             <plugin>
@@ -173,6 +230,16 @@
                             <followSymlinks>false</followSymlinks>
                         </fileset>
                     </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/logback.xml</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
