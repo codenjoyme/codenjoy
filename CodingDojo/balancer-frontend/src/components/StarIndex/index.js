@@ -18,13 +18,13 @@ export class StarIndex extends Component {
     }
 
     render() {
-        const { rowIndex } = this.props;
+        const { rowIndex, winner } = this.props;
 
-        return rowIndex < 10 ? (
+        return winner ? (
             <div className={ Styles.ratingStar }>
                 <span className='fa-layers fa-fw fa-3x'>
                     <FontAwesomeIcon
-                        className={ this._starStyle(rowIndex) }
+                        className={ Styles.topTen }
                         icon={ faStar }
                     />
                     <span

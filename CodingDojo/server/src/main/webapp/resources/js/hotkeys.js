@@ -43,6 +43,8 @@ function initHotkeys() {
             window.open(contextPath);
         } else if (adminKey && ev.keyCode == 74) { // ... + J (Joystick)
             game.enableJoystick = !game.enableJoystick;
+        } else if (adminKey && ev.keyCode == 76) { // ... + l (Log)
+            window.open(contextPath + '/board/log/player/' + game.playerId + '?code=' + game.code + '&gameName=' + gameName);
         } else if (adminKey && ev.keyCode == 66) { // ... + B (Board)
             window.open(contextPath + '/board/game/' + gameName);
         } else if (adminKey && ev.keyCode == 72) { // ... + H (Help)

@@ -58,6 +58,8 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
+        Parameter<Object> parameter = settings.getParameter("name");
+
         return new Battlecity(level.size(),
                 getDice(),
                 level.getConstructions(),
@@ -96,7 +98,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerId) {
         return new Player(listener, getDice());
     }
 

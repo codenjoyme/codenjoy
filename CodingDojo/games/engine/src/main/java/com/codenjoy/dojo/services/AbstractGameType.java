@@ -62,7 +62,7 @@ public abstract class AbstractGameType implements GameType {
 
     @Override
     public String getVersion() {
-        return VersionReader.getCurrentVersion(name());
+        return VersionReader.version(name()).toString();
     }
 
     /**

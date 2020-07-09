@@ -23,13 +23,16 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
 import java.util.Iterator;
 import java.util.List;
 
-public class WallsDecorator implements Walls, Tickable {
+public abstract class WallsDecorator implements Walls, Tickable {
+
     protected Walls walls;
+    protected Field field;
 
     public WallsDecorator(Walls walls) {
         this.walls = walls;
@@ -41,18 +44,29 @@ public class WallsDecorator implements Walls, Tickable {
     }
 
     @Override
-    public void add(int x, int y) {
-        walls.add(x, y);
+    public void add(Point pt) {
+        walls.add(pt);
     }
 
     @Override
-    public boolean itsMe(int x, int y) {
-        return walls.itsMe(x, y);
+    public void init(Field field) {
+        this.field = field;
+        walls.init(field);
     }
 
     @Override
-    public <T extends Wall> List<T> subList(Class<T> filter) {
-        return walls.subList(filter);
+    public boolean itsMe(Point pt) {
+        return walls.itsMe(pt);
+    }
+
+    @Override
+    public <T extends Wall> List<T> listSubtypes(Class<T> filter) {
+        return walls.listSubtypes(filter);
+    }
+
+    @Override
+    public <T extends Wall> List<T> listEquals(Class<T> filter) {
+        return walls.listEquals(filter);
     }
 
     @Override
@@ -61,17 +75,25 @@ public class WallsDecorator implements Walls, Tickable {
     }
 
     @Override
-    public Wall destroy(int x, int y) {
-        return walls.destroy(x, y);
+    public Wall destroy(Point pt) {
+        return walls.destroy(pt);
     }
 
     @Override
-    public Wall get(int x, int y) {
-        return walls.get(x, y);
+    public Wall destroyExact(Wall wall) {
+        return walls.destroyExact(wall);
+    }
+
+    @Override
+    public Wall get(Point pt) {
+        return walls.get(pt);
     }
 
     @Override
     public void tick() {
+        tact();
         walls.tick();
     }
+
+    protected abstract void tact();
 }

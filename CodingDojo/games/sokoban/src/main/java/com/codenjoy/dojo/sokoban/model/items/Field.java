@@ -33,33 +33,33 @@ import com.codenjoy.dojo.sokoban.services.Player;
  */
 public interface Field extends GameField<Player> {
 
-    boolean isBarrier(int x, int y);
+    boolean isBarrier(Point pt);
 
-    boolean isBox(int x, int y);
+    boolean isBox(Point pt);
 
-    boolean isBoxOnTheMark(int x, int y);
+    boolean isBoxOnTheMark(Point pt);
 
-    void moveBox(int x, int y, int xNew, int ynew);
+    void moveBox(Point pt, Point newPt);
 
-    void setBox(int x, int y);
+    void setBox(Point pt);
 
-    boolean isMark(int x, int y);
+    boolean isMark(Point pt);
 
     Point getFreeRandom();
 
-    boolean isFree(int x, int y);
+    boolean isFree(Point pt);
 
-    boolean isBomb(int x, int y);
+    boolean isBomb(Point pt);
 
-    void setBomb(int x, int y);
+    void setBomb(Point pt);
 
-    void setBoxOnTheMark (int x, int y);
+    void setBoxOnTheMark(Point pt);
 
-    void removeBoxOnTheMark (int x, int y);
+    void removeBoxOnTheMark(Point pt);
 
-    void removeBox (int x, int y);
+    void removeBox(Point pt);
 
-    void removeBomb(int x, int y);
+    void removeBomb(Point pt);
 
-    void setMark(int x, int y);
+    void setMark(Point pt);
 }

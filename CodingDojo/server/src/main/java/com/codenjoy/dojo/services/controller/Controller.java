@@ -33,18 +33,16 @@ public interface Controller<TData, TControl> {
      * С помощью этого метода PlayerServiceImpl отправляет через ws
      * всем клиентам информацию об игре
      * @param data Данные к отправке
-     * @throws IOException если что не так
      */
-    void requestControlToAll(TData data) throws IOException;
+    void requestControlToAll(TData data);
 
     /**
      * С помощью этого метода PlayerServiceImpl отправляет через ws
      * клиентам информацию об игре
      * @param player Плеер, которому отправляется ответ
      * @param data Данные к отправке
-     * @throws IOException если что не так
      */
-    boolean requestControl(Player player, TData data) throws IOException;
+    boolean requestControl(Player player, TData data);
 
     /**
      * В момент регистрации пользователя для него создается канал связи

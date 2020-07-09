@@ -25,23 +25,37 @@ package com.codenjoy.dojo.bomberman.services;
 
 import com.codenjoy.dojo.bomberman.model.*;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class DefaultGameSettings implements GameSettings {
 
+    public static int WIN_ROUND = 1000;
+    public static int DIE_PENALTY = 50;
+    public static int KILL_OTHER_HERO_SCORE = 200;
+    public static int KILL_MEAT_CHOPPER_SCORE = 100;
+    public static int KILL_WALL_SCORE = 10;
+    public static int CATCH_PERK_SCORE = 5;
+
     public static int MEAT_CHOPPERS_COUNT = 10;
     public static int BOMB_POWER = 3;
     public static int BOMBS_COUNT = 1;
     public static int BOARD_SIZE = 33;
+    public static boolean BIG_BADABOOM = false;
     public static int DESTROY_WALL_COUNT = BOARD_SIZE * BOARD_SIZE / 10;
     
     private final Dice dice;
 
     public DefaultGameSettings(Dice dice) {
         this.dice = dice;
+    }
+
+    @Override
+    public Dice getDice() {
+        return dice;
     }
 
     @Override
@@ -60,20 +74,95 @@ public class DefaultGameSettings implements GameSettings {
     }
 
     @Override
-    public Walls getWalls(Bomberman board) {
+    public Walls getWalls() {
         OriginalWalls originalWalls = new OriginalWalls(v(BOARD_SIZE));
-        MeatChoppers meatChoppers = new MeatChoppers(originalWalls, board, v(MEAT_CHOPPERS_COUNT), dice);
-        EatSpaceWalls eatWalls = new EatSpaceWalls(meatChoppers, board, v(DESTROY_WALL_COUNT), dice);
+        MeatChoppers meatChoppers = new MeatChoppers(originalWalls, v(MEAT_CHOPPERS_COUNT), dice);
+        EatSpaceWalls eatWalls = new EatSpaceWalls(meatChoppers, v(DESTROY_WALL_COUNT), dice);
         return eatWalls;
     }
 
     @Override
-    public Hero getBomberman(Level level) {
+    public Hero getHero(Level level) {
         return new Hero(level, dice);
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
         return v(BOARD_SIZE);
+    }
+
+    @Override
+    public Parameter<Boolean> isMultiple() {
+        return new SimpleParameter<>(true);
+    }
+
+    @Override
+    public Parameter<Boolean> isBigBadaboom() {
+        return new SimpleParameter<>(BIG_BADABOOM);
+    }
+
+    @Override
+    public Parameter<Integer> getPlayersPerRoom() {
+        return v(Integer.MAX_VALUE);
+    }
+
+    @Override
+    public RoundSettingsWrapper getRoundSettings() {
+        return new RoundSettingsWrapper(){
+            @Override
+            public Parameter<Boolean> roundsEnabled() {
+                return new SimpleParameter<>(false);
+            }
+        };
+    }
+
+    @Override
+    public Parameter<Integer> diePenalty() {
+        return v(DIE_PENALTY);
+    }
+
+    @Override
+    public Parameter<Integer> killOtherHeroScore() {
+        return v(KILL_OTHER_HERO_SCORE);
+    }
+
+    @Override
+    public Parameter<Integer> killMeatChopperScore() {
+        return v(KILL_MEAT_CHOPPER_SCORE);
+    }
+
+    @Override
+    public Parameter<Integer> killWallScore() {
+        return v(KILL_WALL_SCORE);
+    }
+
+    @Override
+    public Parameter<Integer> winRoundScore() {
+        return v(WIN_ROUND);
+    }
+
+    @Override
+    public Parameter<Integer> getDestroyWallCount() {
+        return v(DESTROY_WALL_COUNT);
+    }
+
+    @Override
+    public Parameter<Integer> getBombPower() {
+        return v(BOMB_POWER);
+    }
+
+    @Override
+    public Parameter<Integer> getBombsCount() {
+        return v(BOMBS_COUNT);
+    }
+
+    @Override
+    public Parameter<Integer> getMeatChoppersCount() {
+        return v(MEAT_CHOPPERS_COUNT);
+    }
+
+    @Override
+    public Parameter<Integer> catchPerkScore() {
+        return v(CATCH_PERK_SCORE);
     }
 }

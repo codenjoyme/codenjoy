@@ -60,4 +60,8 @@ public abstract class PlayerHero<F extends GameField> extends PointImpl implemen
     public void init(F field) {
         this.field = field;
     }
+
+    public F field() {
+        return field;
+    }
 }

@@ -26,7 +26,7 @@ if (typeof game == 'undefined') {
     game = {};
     game.demo = true;
     game.code = 123;
-    game.playerName = 'user@gmail.com';
+    game.playerId = 'userId';
     game.readableName = 'Stiven Pupkin';
     initLayout = function(game, html, context, transformations, scripts, onLoad) {
         onLoad();
@@ -66,7 +66,7 @@ var boardAllPageLoad = function() {
         return target.split(search).join(replacement);
     };
 
-    initLeadersTable(game.contextPath, game.playerName, game.code,
+    initLeadersTable(game.contextPath, game.playerId, game.code,
         function(count, you, link, name, score, maxLength, level) {
             var star = '';
             if (count == 1) {
@@ -169,10 +169,10 @@ var loadArrowImages = function() {
 var previousBoard = {};
 game.drawBoard = function(drawer) {
     // so we see past tick on board with current arrows
-    var playerName = drawer.playerName;
+    var playerId = drawer.playerId;
     var allPlayersScreen = drawer.allPlayersScreen;
-    var board = previousBoard[playerName];
-    previousBoard[playerName] = drawer.playerData.board;
+    var board = previousBoard[playerId];
+    previousBoard[playerId] = drawer.playerData.board;
     drawer.playerData.board = board;
     if (!board) {
         return;
@@ -377,8 +377,8 @@ game.drawBoard = function(drawer) {
                 drawLastAction(additionalData.lastAction);
                 var allLastActions = additionalData.allLastActions;
                 if (!!allLastActions) {
-                    for (var otherPlayerName in allLastActions) {
-                        var lastAction = allLastActions[otherPlayerName];
+                    for (var otherPlayerId in allLastActions) {
+                        var lastAction = allLastActions[otherPlayerId];
                         drawLastAction(lastAction);
                     }
                 }
@@ -444,7 +444,7 @@ game.drawBoard = function(drawer) {
             fonts.userBoard.shadowOffsetX = 0;
             fonts.userBoard.shadowOffsetY = 0;
             fonts.userBoard.shadowBlur = 5;
-            var text = playerName;
+            var text = playerId;
             canvas.drawText(text, {'x':1, 'y':0}, fonts.userBoard);
         }
     } catch (err) {

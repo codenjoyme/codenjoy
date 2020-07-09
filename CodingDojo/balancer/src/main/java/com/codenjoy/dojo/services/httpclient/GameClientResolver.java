@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.httpclient;
  */
 
 import com.codenjoy.dojo.services.GameProperties;
+import com.codenjoy.dojo.services.hash.Hash;
 import feign.Feign;
 import feign.Logger.Level;
 import feign.Response;
@@ -33,10 +34,12 @@ import feign.jackson.JacksonEncoder;
 import feign.okhttp.OkHttpClient;
 import feign.slf4j.Slf4jLogger;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -71,7 +74,8 @@ public class GameClientResolver {
                 .errorDecoder(new ClientErrorDecoder())
                 .logger(new Slf4jLogger(GameServerClient.class))
                 .logLevel(Level.BASIC)
-                .requestInterceptor(new BasicAuthRequestInterceptor(gameProperties.getBasicAuthUser(), gameProperties.getBasicAuthPassword()))
+                .requestInterceptor(new BasicAuthRequestInterceptor(gameProperties.getBasicAuthUser(),
+                        Hash.md5(gameProperties.getBasicAuthPassword())))
                 .target(GameServerClient.class, gameProperties.getSchema() + "://" + server);
     }
 
@@ -79,7 +83,12 @@ public class GameClientResolver {
 
         @Override
         public Exception decode(String methodKey, Response response) {
-            return new GameServerClientException(response.reason(), response.status());
+            try {
+                String body = IOUtils.toString(response.body().asInputStream());
+                return new GameServerClientException(body, response.status());
+            } catch (IOException e) {
+                return new GameServerClientException(response.reason(), response.status());
+            }
         }
     }
 }

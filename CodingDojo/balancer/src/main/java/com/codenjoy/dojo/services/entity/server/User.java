@@ -22,68 +22,41 @@ package com.codenjoy.dojo.services.entity.server;
  * #L%
  */
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.Collection;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
+
+    public static final int APPROVED = 1;
 
     private String id;
     private String email;
+    private String phone;
     private String readableName;
     private int approved;
     private String password;
     private String code;
     private String data;
-
-    public User() {
-        // do nothing
-    }
-
-    public User(String id, String email, String readableName, int approved, String password, String code, String data) {
-        this.id = id;
-        this.email = email;
-        this.readableName = readableName;
-        this.approved = approved;
-        this.password = password;
-        this.code = code;
-        this.data = data;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getReadableName() {
-        return readableName;
-    }
-
-    public int getApproved() {
-        return approved;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getData() {
-        return data;
-    }
+    private Collection<String> roles;
 
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
                 ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
                 ", readableName='" + readableName + '\'' +
                 ", approved=" + approved +
                 ", password='" + password + '\'' +
                 ", code='" + code + '\'' +
                 ", data='" + data + '\'' +
+                ", roles='" + roles + '\'' +
                 '}';
     }
 }

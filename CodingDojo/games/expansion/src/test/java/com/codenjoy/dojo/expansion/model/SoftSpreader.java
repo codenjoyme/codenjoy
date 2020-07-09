@@ -68,8 +68,8 @@ public class SoftSpreader {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
-        String playerName = String.format("demo%s@codenjoy.com", playerIndex + 1);
-        Player player = (Player) gameRunner.createPlayer(listener, playerName);
+        String id = String.format("demo%s", playerIndex + 1);
+        Player player = (Player) gameRunner.createPlayer(listener, id);
         Single game = new Single(player, gameRunner.getPrinterFactory());
         game.on(currents.get(playerIndex));
         game.newGame();

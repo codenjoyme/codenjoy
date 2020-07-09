@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.Point;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class Numbers {
 
     public static final int NONE = 0;
@@ -86,12 +88,6 @@ public class Numbers {
 
     public void add(Number number) {
         data[number.getX()][number.getY()] = number.get();
-    }
-
-    public boolean contains(Point pt) {
-        if (pt.getX() == -1 || pt.getY() == -1) return false;
-
-        return isBusy(pt.getX(), pt.getY());
     }
 
     public Number get(int x, int y) {

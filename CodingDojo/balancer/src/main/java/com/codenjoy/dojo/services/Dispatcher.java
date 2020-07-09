@@ -27,20 +27,23 @@ import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
 import com.codenjoy.dojo.services.entity.PlayerScore;
-import com.codenjoy.dojo.services.entity.ServerLocation;
+import com.codenjoy.dojo.services.entity.server.Disqualified;
+import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
+import com.codenjoy.dojo.web.rest.dto.GameSettings;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @Component
 public class Dispatcher {
@@ -52,6 +55,7 @@ public class Dispatcher {
     @Autowired ConfigProperties config;
     @Autowired GameServers gameServers;
     @Autowired GameServer game;
+    @Autowired TimerService timer;
 
     private volatile long lastTime;
 
@@ -59,7 +63,7 @@ public class Dispatcher {
     private Map<String, List<PlayerScore>> currentScores = new ConcurrentHashMap();
     private volatile List<PlayerScore> currentFinalists = new LinkedList<>();
 
-    private List<String> disqualified = new CopyOnWriteArrayList<>();
+    private Set<Disqualified> disqualified = new CopyOnWriteArraySet<>();
 
     @PostConstruct
     public void postConstruct() {
@@ -67,52 +71,89 @@ public class Dispatcher {
         lastTime = scores.getLastTime(now());
     }
 
-    public ServerLocation registerNew(String email, String name, String password, String callbackUrl) {
+    public Player registerNew(Player player) {
         String server = gameServers.getNextServer();
+        player.setServer(server);
 
-        return registerOnServer(server, email, name, password, callbackUrl, "0", "{}");
+        Player created = registerOnServer(player, "0", "{}");
+        players.updateServer(player.getId(), created.getServer(), created.getCode());
+        return created;
     }
 
-    public ServerLocation registerIfNotExists(String server, String email, String name, String code, String callbackUrl) {
-        if (game.existsOnServer(server, email)) {
+    public Player registerIfNotExists(Player player) {
+        if (isFinalDay() && !isFinalist(player)) {
+            removeFromEveryGameServer(player.getId());
+            return null;
+        }
+
+        if (game.existsOnServer(player.getServer(), player.getId())) {
             return null;
         }
 
         // TODO test me
-        // удалить с других серверов если там есть что
-        gameServers.stream()
-                .filter(s -> !s.equals(server))
-                .filter(s -> game.existsOnServer(s, email))
-                .forEach(s -> game.remove(s, email, code));
+        removeFromEveryGameServer(player.getId());
 
-        Player player = players.get(email);
         String score = null; // будет попытка загрузиться с сейва
         String save = null;
-        return registerOnServer(server, email, name, player.getPassword(), callbackUrl, score, save);
+        return registerOnServer(player, score, save);
     }
 
-    public ServerLocation registerOnServer(String server, String email, String name, String password, String callbackUrl, String score, String save) {
+    private boolean isFinalDay() {
+        String today = scores.getDay(Calendar.getInstance().getTimeInMillis());
+        return config.getGame().getEndDay().equals(today);
+    }
+
+    private boolean isFinalist(Player player) {
+        return getFinalists().stream()
+                .anyMatch(finalist -> player.getId().equals(finalist.getId()));
+    }
+
+    public Map<String, Boolean> removeFromEveryGameServer(String id) {
+        // удалить с других серверов если там есть что
+        return gameServers.stream()
+                .filter(s -> game.existsOnServer(s, id))
+                .collect(Collectors.toMap(
+                            s -> s,
+                            s -> game.remove(s, id)));
+    }
+
+    public Map<String, Boolean> existsOnGameServers(String id) {
+        // удалить с других серверов если там есть что
+        return gameServers.stream()
+                .collect(Collectors.toMap(
+                        s -> s,
+                        s -> game.existsOnServer(s, id)));
+    }
+
+    public Player registerOnServer(Player player, String score, String save) {
         if (logger.isDebugEnabled()) {
-            logger.debug("User {} go to {}", email, server);
+            logger.debug("User {} go to {}", player.getEmail(), player.getServer());
         }
 
-        String code = game.createNewPlayer(server, email, name, password, callbackUrl, score, save);
-
-        return new ServerLocation(
-                email,
-                config.getId(email),
-                code,
-                server
+        String code = game.createNewPlayer(
+                player.getServer(),
+                player.getId(),
+                player.getCode(),
+                player.getEmail(),
+                player.getPhone(),
+                player.getFullName(),
+                player.getPassword(),
+                player.getCallback(),
+                score,
+                save
         );
+
+        if (!StringUtils.isEmpty(code) && !code.equals(player.getCode())) {
+            player.setCode(code); // TODO этого не должно случиться
+        }
+
+        return player;
     }
 
     public void updateScores() {
         List<PlayerInfo> players = gameServers.stream()
                 .map(s -> getPlayersInfosCached(s))
                 .collect(LinkedList::new, List::addAll, List::addAll);
-
-        players.stream()
-                .forEach(p -> p.setName(config.getEmail(p.getName())));
 
         long time = now();
         scores.saveScores(time, players);
@@ -145,8 +186,36 @@ public class Dispatcher {
         return Calendar.getInstance().getTimeInMillis();
     }
 
-    public void disqualify(List<String> players) {
-        disqualified.addAll(players);
+    public void disqualify(List<String> emailsOrIds) {
+        List<Disqualified> list = emailsOrIds.stream()
+                .map(emailOrId -> parse(emailOrId))
+                .filter(disqualified -> disqualified != null)
+                .collect(toList());
+
+        disqualified.addAll(list);
+    }
+
+    private Disqualified parse(String emailOrId) {
+        String email = emailOrId;
+        String id = emailOrId;
+
+        if (emailOrId.contains("@")) {
+            Player player = players.getByEmail(email);
+            if (player == null) {
+                return null;
+            }
+
+            id = player.getId();
+        } else {
+            Player player = players.get(id);
+            if (player == null) {
+                return null;
+            }
+
+            email = player.getEmail();
+        }
+
+        return new Disqualified(id, email);
     }
 
     public synchronized List<PlayerScore> getFinalists() {
@@ -155,22 +224,38 @@ public class Dispatcher {
             return cached;
         }
 
-        List<PlayerScore> scores = loadFinalists();
-
-        List<PlayerScore> result = prepareScoresForClient(scores);
+        List<PlayerScore> result = loadFinalists();
 
         currentFinalists = result;
         return result;
     }
 
+    public List<PlayerScore> markWinners() {
+        List<PlayerScore> result = loadFinalists();
+
+        scores.cleanWinnerFlags();
+
+        result.forEach(finalist -> {
+            scores.setWinnerFlag(finalist, true);
+            finalist.setWinner(true);
+        });
+
+        currentScores.clear();
+        currentFinalists.clear();
+
+        return result;
+    }
+
     private List<PlayerScore> loadFinalists() {
-        return this.scores.getFinalists(
-                config.getDayStart(),
-                config.getDayEnd(),
-                lastTime,
-                config.getDayFinalistCount(),
-                disqualified
+        List<PlayerScore> list = scores.getFinalists(
+                config.getGame().getStartDay(),
+                config.getGame().getEndDay(),
+                config.getGame().getFinalistsCount(),
+                disqualifiedIds()
         );
+
+        List<PlayerScore> result = prepareScoresForClient(list);
+        return result;
     }
 
     public synchronized List<PlayerScore> getScores(String day) {
@@ -179,51 +264,29 @@ public class Dispatcher {
             return cached;
         }
 
-        List<PlayerScore> scores = this.scores.getScores(day, lastTime);
-        List<PlayerScore> result = prepareScoresForClient(scores);
-        // List<PlayerScore> result = prepareFinalistsInfo(updated);
+        List<PlayerScore> list = scores.getScores(day, getNow());
+        List<PlayerScore> result = prepareScoresForClient(list);
 
         currentScores.put(day, result);
         return result;
     }
 
-    private List<PlayerScore> prepareFinalistsInfo(List<PlayerScore> scores) {
-        Map<String, PlayerScore> finalists = loadFinalists().stream()
-                .collect(toMap(s -> s.getId(), s -> s));
-
-        return scores.stream()
-                .map(score -> {
-                    if (finalists.containsKey(score.getId())) {
-                        PlayerScore finalistScore = finalists.get(score.getId());
-                        String day = finalistScore.getDay();
-                        score.setDay(day);
-                    }
-                    return score;
-                })
-                .collect(toList());
+    // иначе (если юзать только lastTime) в момент, когда берем сегодня утром getScores
+    // вчерашнего дня, а сервер был на паузе все время со вчерашнего вечера до утра сегодня,
+    // то там будут невалидные данные - последние за вчера (когда стопнули серве),
+    // но не около 19:00 как было бы если сервер не тушили и lastTime согла обновиться в now()
+    private long getNow() {
+        return (timer.isPaused()) ? now() : lastTime;
     }
 
     private List<PlayerScore> prepareScoresForClient(List<PlayerScore> result) {
-        List<String> emails = result.stream()
+        List<String> ids = result.stream()
                 .map(score -> score.getId())
                 .collect(toList());
 
-        Map<String, Player> playerMap = players.getPlayers(emails).stream()
-                .collect(toMap(Player::getEmail, player -> player));
+        Map<String, Player> playerMap = players.getPlayersMap(ids);
 
-        result.forEach(score -> {
-            String email = score.getId();
-            Player player = playerMap.get(email);
-
-            score.setId(config.getId(email));
-            if (player != null) {
-                score.setServer(player.getServer());
-                score.setName(String.format("%s %s", player.getFirstName(), player.getLastName()));
-            } else {
-                score.setServer(null); // TODO убрать загрузку AI с турнира а так же фильтровать всех кто не попал в табличку
-                score.setName(null);
-            }
-        });
+        result.forEach(score -> score.updateFrom(playerMap.get(score.getId())));
 
         return result.stream()
                 .filter(score -> score.getServer() != null)
@@ -244,24 +307,50 @@ public class Dispatcher {
                 .collect(toList());
     }
 
+    public boolean exists(Player player) {
+        return game.existsOnServer(player.getServer(), player.getId());
+    }
 
-    public boolean exists(String email) {
-        Player player = players.get(email);
-        if (player == null) {
-            return false;
+    public void clearCache(int whatToClean) {
+        if ((whatToClean & 0b0001) == 0b0001) {
+            scoresFromGameServers.clear();
         }
-        return game.existsOnServer(player.getServer(), player.getEmail());
+
+        if ((whatToClean & 0b0010) == 0b0010) {
+            currentScores.clear();
+        }
+
+        if ((whatToClean & 0b0100) == 0b0100) {
+            disqualified.clear();
+        }
+
+        if ((whatToClean & 0b1000) == 0b1000) {
+            currentFinalists.clear();
+        }
     }
 
-    public void clearCache() {
-        scoresFromGameServers.clear();
-        currentScores.clear();
-        disqualified.clear();
-        currentFinalists.clear();
-    }
-
-
-    public List<String> disqualified() {
+    public Collection<Disqualified> disqualified() {
         return disqualified;
+    }
+
+    private List<String> disqualifiedIds() {
+        return disqualified.stream()
+                .map(Disqualified::getId)
+                .collect(toList());
+    }
+
+    public List<GameSettings> getGameSettings() {
+        return gameServers.stream()
+                .map(server -> new GameSettings(game.getGameSettings(server)))
+                .collect(toList());
+    }
+
+    public void updateGameSettings(GameSettings input) {
+        PParameters current = getGameSettings().iterator().next().parameters();
+
+        input.update(current.getParameters());
+
+        gameServers.stream()
+                .forEach(server -> game.setGameSettings(server, current));
     }
 }

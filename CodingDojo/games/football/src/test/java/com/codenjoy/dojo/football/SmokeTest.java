@@ -23,7 +23,7 @@ package com.codenjoy.dojo.football;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.football.client.Board;
 import com.codenjoy.dojo.football.client.ai.AISolver;
 import com.codenjoy.dojo.football.services.GameRunner;
@@ -34,7 +34,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 public class SmokeTest {
     @Test
@@ -88,6 +87,7 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: UP, act(1, 3)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -101,6 +101,7 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: UP, act(1, 3)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -114,6 +115,7 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: RIGHT, act(2, 3)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -127,6 +129,7 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: RIGHT, act(2, 3)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -140,6 +143,7 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: RIGHT, act(2, 3)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -153,6 +157,7 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: UP, act(1, 3)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -166,9 +171,24 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: \n" +
-                        "Fire Event: WIN\n" +
-                        "Fire Event: TOP_GOAL\n" +
+                        "1:Fire Event: WIN\n" +
+                        "1:Fire Event: TOP_GOAL\n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼⌂x⌂☼☼☼\n" +
+                        "1:☼       ☼\n" +
+                        "1:☼   ☺   ☼\n" +
+                        "1:☼       ☼\n" +
+                        "1:☼       ☼\n" +
+                        "1:☼       ☼\n" +
+                        "1:☼☼☼===☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Scores: 1\n" +
+                        "1:Answer: \n" +
                         "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:3\n" +
                         "DICE:0\n" +
@@ -186,6 +206,7 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 1\n" +
                         "1:Answer: UP, act(1, 3)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -199,6 +220,7 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 1\n" +
                         "1:Answer: UP, act(1, 3)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -212,6 +234,7 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 1\n" +
                         "1:Answer: RIGHT, act(2, 3)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -225,6 +248,7 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 1\n" +
                         "1:Answer: UP, act(1, 3)\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -238,9 +262,24 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 1\n" +
                         "1:Answer: \n" +
-                        "Fire Event: WIN\n" +
-                        "Fire Event: TOP_GOAL\n" +
+                        "1:Fire Event: WIN\n" +
+                        "1:Fire Event: TOP_GOAL\n" +
+                        "------------------------------------------\n" +
+                        "1:Board:\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:☼☼☼⌂x⌂☼☼☼\n" +
+                        "1:☼       ☼\n" +
+                        "1:☼   ☺   ☼\n" +
+                        "1:☼       ☼\n" +
+                        "1:☼       ☼\n" +
+                        "1:☼       ☼\n" +
+                        "1:☼☼☼===☼☼☼\n" +
+                        "1:☼☼☼☼☼☼☼☼☼\n" +
+                        "1:\n" +
+                        "1:Scores: 2\n" +
+                        "1:Answer: \n" +
                         "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:2\n" +
                         "DICE:2\n" +
@@ -256,33 +295,8 @@ public class SmokeTest {
                         "1:☼☼☼===☼☼☼\n" +
                         "1:☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
+                        "1:Scores: 2\n" +
                         "1:Answer: UP, act(1, 3)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "1:☼       ☼\n" +
-                        "1:☼       ☼\n" +
-                        "1:☼   ∙   ☼\n" +
-                        "1:☼ ☺     ☼\n" +
-                        "1:☼       ☼\n" +
-                        "1:☼☼☼===☼☼☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Answer: UP, act(1, 3)\n" +
-                        "------------------------------------------\n" +
-                        "1:Board:\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:☼☼☼⌂⌂⌂☼☼☼\n" +
-                        "1:☼       ☼\n" +
-                        "1:☼       ☼\n" +
-                        "1:☼ ☺ ∙   ☼\n" +
-                        "1:☼       ☼\n" +
-                        "1:☼       ☼\n" +
-                        "1:☼☼☼===☼☼☼\n" +
-                        "1:☼☼☼☼☼☼☼☼☼\n" +
-                        "1:\n" +
-                        "1:Answer: RIGHT, act(2, 3)\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
 

@@ -23,14 +23,47 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 public interface GameSettings {
+
+    Dice getDice();
+
     Level getLevel();
 
-    Walls getWalls(Bomberman board);
+    Walls getWalls();
 
-    Hero getBomberman(Level level);
+    Hero getHero(Level level);
 
     Parameter<Integer> getBoardSize();
+
+    Parameter<Boolean> isMultiple();
+
+    Parameter<Boolean> isBigBadaboom();
+
+    Parameter<Integer> getPlayersPerRoom();
+
+    RoundSettingsWrapper getRoundSettings();
+
+    Parameter<Integer> diePenalty();
+
+    Parameter<Integer> killOtherHeroScore();
+
+    Parameter<Integer> killMeatChopperScore();
+
+    Parameter<Integer> killWallScore();
+
+    Parameter<Integer> winRoundScore();
+
+    Parameter<Integer> getDestroyWallCount();
+
+    Parameter<Integer> getBombPower();
+
+    Parameter<Integer> getBombsCount();
+
+    Parameter<Integer> getMeatChoppersCount();
+
+    Parameter<Integer> catchPerkScore();
 }

@@ -23,12 +23,11 @@ package com.codenjoy.dojo.tetris;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.client.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.levels.level.AllFigureLevels;
-import com.codenjoy.dojo.tetris.model.levels.level.ProbabilityLevels;
 import com.codenjoy.dojo.tetris.services.GameRunner;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
@@ -37,7 +36,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -133,6 +131,7 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: \n" +
                         "DICE:0\n" +
                         "------------------------------------------\n" +
@@ -163,8 +162,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(1),LEFT,LEFT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:2]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:2]\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -194,8 +194,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 2\n" +
                         "1:Answer: ACT(1),DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:3]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:3]\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -225,8 +226,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 5\n" +
                         "1:Answer: RIGHT,RIGHT,RIGHT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:4]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:4]\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -256,9 +258,10 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 9\n" +
                         "1:Answer: ACT(1),RIGHT,RIGHT,RIGHT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:5]\n" +
-                        "Fire Event: Event[linesRemoved:1:1]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:5]\n" +
+                        "1:Fire Event: Event[linesRemoved:1:1]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -288,8 +291,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 24\n" +
                         "1:Answer: LEFT,LEFT,LEFT,LEFT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:1]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:1]\n" +
                         "DICE:0\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -319,8 +323,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 25\n" +
                         "1:Answer: LEFT,LEFT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:3]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:3]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -350,9 +355,10 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 28\n" +
                         "1:Answer: RIGHT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:3]\n" +
-                        "Fire Event: Event[linesRemoved:1:1]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:3]\n" +
+                        "1:Fire Event: Event[linesRemoved:1:1]\n" +
                         "DICE:4\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -382,8 +388,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 41\n" +
                         "1:Answer: DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:4]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:4]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -413,8 +420,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 45\n" +
                         "1:Answer: LEFT,LEFT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:2]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:2]\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -444,8 +452,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 47\n" +
                         "1:Answer: LEFT,LEFT,LEFT,LEFT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:1]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:1]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -475,9 +484,10 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 48\n" +
                         "1:Answer: RIGHT,RIGHT,RIGHT,RIGHT,RIGHT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:2]\n" +
-                        "Fire Event: Event[linesRemoved:1:1]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:2]\n" +
+                        "1:Fire Event: Event[linesRemoved:1:1]\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -507,8 +517,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 60\n" +
                         "1:Answer: ACT(1),RIGHT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:5]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:5]\n" +
                         "DICE:2\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -538,8 +549,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 65\n" +
                         "1:Answer: RIGHT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:2]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:2]\n" +
                         "DICE:4\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -569,8 +581,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 67\n" +
                         "1:Answer: LEFT,LEFT,LEFT,LEFT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:3]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:3]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -600,9 +613,10 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 70\n" +
                         "1:Answer: RIGHT,RIGHT,RIGHT,RIGHT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:2]\n" +
-                        "Fire Event: Event[linesRemoved:1:1]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:2]\n" +
+                        "1:Fire Event: Event[linesRemoved:1:1]\n" +
                         "DICE:1\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -632,9 +646,10 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 82\n" +
                         "1:Answer: ACT(2),LEFT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:4]\n" +
-                        "Fire Event: Event[linesRemoved:1:1]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:4]\n" +
+                        "1:Fire Event: Event[linesRemoved:1:1]\n" +
                         "DICE:3\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -664,8 +679,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 96\n" +
                         "1:Answer: ACT(2),LEFT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:3]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:3]\n" +
                         "DICE:0\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -695,9 +711,10 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 99\n" +
                         "1:Answer: ACT(1),RIGHT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:5]\n" +
-                        "Fire Event: Event[linesRemoved:1:1]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:5]\n" +
+                        "1:Fire Event: Event[linesRemoved:1:1]\n" +
                         "DICE:0\n" +
                         "------------------------------------------\n" +
                         "1:BoardData {\n" +
@@ -727,8 +744,9 @@ public class SmokeTest {
                         "'\n" +
                         "1:  ]\n" +
                         "1:}\n" +
+                        "1:Scores: 114\n" +
                         "1:Answer: LEFT,LEFT,LEFT,LEFT,DOWN\n" +
-                        "Fire Event: Event[figuresDropped:1:2]\n" +
+                        "1:Fire Event: Event[figuresDropped:1:2]\n" +
                         "DICE:1\n" +
                         "------------------------------------------",
                 join);

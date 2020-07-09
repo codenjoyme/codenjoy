@@ -27,11 +27,11 @@ var getWSProtocol = function() {
     }
 }
 
-function initBoards(players, allPlayersScreen, gameName, playerName, contextPath){
+function initBoards(players, allPlayersScreen, gameName, playerId, contextPath){
     var constructUrl = function() {
         var link = document.createElement('a');
         link.setAttribute('href', window.location.href);
-        var user = (playerName == null) ? "anonymous" : playerName;
+        var user = (playerId == null) ? "anonymous" : playerId;
         return getWSProtocol() + "://" + link.hostname + ':' + link.port + contextPath + "/screen-ws?user=" + user;
     }
 
@@ -76,16 +76,16 @@ function initBoards(players, allPlayersScreen, gameName, playerName, contextPath
             return;
         }
 
-        var playerNames = [];
+        var ids = [];
         for (var index in players) {
-            var playerName = players[index].name;
-            playerNames.push(playerName);
+            var id = players[index].id;
+            ids.push(id);
         }
 
         var request = {
             'name':'getScreen',
             'allPlayersScreen' : allPlayersScreen,
-            'players' : playerNames,
+            'players' : ids,
             'gameName' : gameName
         }
 

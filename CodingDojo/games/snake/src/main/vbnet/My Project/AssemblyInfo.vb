@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("SnakeClientVbnet")>
 <Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("EPAM Systems")>
+<Assembly: AssemblyCompany("Codenjoy")>
 <Assembly: AssemblyProduct("SnakeClientVbnet")>
-<Assembly: AssemblyCopyright("Copyright © EPAM Systems 2018")>
+<Assembly: AssemblyCopyright("Copyright © Codenjoy 2018")>
 <Assembly: AssemblyTrademark("")>
 
 <Assembly: ComVisible(False)>

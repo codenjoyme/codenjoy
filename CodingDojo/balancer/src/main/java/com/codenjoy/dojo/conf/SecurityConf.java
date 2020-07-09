@@ -39,6 +39,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
 
+import static com.codenjoy.dojo.conf.Authority.ROLE_ADMIN;
+import static com.codenjoy.dojo.conf.Authority.ROLE_USER;
+
 /**
  * @author Igor Petrov
  * Created at 4/8/2019
@@ -62,8 +65,9 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsService userDetailsService() {
-       User admin = UserService.buildUserDetails(adminLogin, passwordEncoder().encode(adminPassword),
-               "ROLE_ADMIN", "ROLE_USER");
+       User admin = UserService.buildUserDetails(adminLogin,
+               passwordEncoder().encode(adminPassword),
+               ROLE_ADMIN, ROLE_USER);
        return new UserService(Collections.singletonMap(adminLogin, admin), players);
     }
 
@@ -80,23 +84,19 @@ public class SecurityConf extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                         .antMatchers(
                                 "/login",
-//                                RestController.URI + "/score/day/**",
                                 "/logout",
-                                RestController.URI + RestController.REGISTER,
-                                RestController.URI + RestController.LOGIN)
+                                RestController.URI + RestController.SCORE + "/day/**",
+                                RestController.URI + RestController.REGISTER + "/**",
+                                RestController.URI + RestController.LOGIN,
+                                RestController.URI + RestController.GAME_SETTINGS + "/get")
                             .permitAll()
-                .antMatchers(
-                        RestController.URI + RestController.UPDATE,
-                        RestController.URI + "/score/day/**",
-                        RestController.URI + RestController.PLAYER)
-                .hasRole("USER")
-
+                        .antMatchers(
+                                RestController.URI + RestController.PLAYER + "/**")
+                            .hasRole("USER")
                         .antMatchers(
                                 "/resources/html/**",
-                                RestController.URI + "/**"
-                        )
+                                RestController.URI + "/**")
                             .hasRole("ADMIN")
-
                         .anyRequest()
                             .denyAll()
                 .and()

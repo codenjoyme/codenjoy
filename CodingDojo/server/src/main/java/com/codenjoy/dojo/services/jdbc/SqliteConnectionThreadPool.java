@@ -24,6 +24,8 @@ package com.codenjoy.dojo.services.jdbc;
 
 
 import lombok.SneakyThrows;
+import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteOpenMode;
 
 import java.io.File;
 import java.sql.Connection;
@@ -31,11 +33,12 @@ import java.sql.DriverManager;
 
 public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
 
-    private static final int ONLY_ONE_CONNECTION = 1; // this is sqlite restriction
+    private static final int CONNECTIONS = 3;
     private String database;
 
     public SqliteConnectionThreadPool(String database, String... createTableSqls) {
-        super(ONLY_ONE_CONNECTION, () -> getConnection(database));
+        super(CONNECTIONS, () -> getConnection(database));
+
         this.database = database;
 
         for (String sql : createTableSqls) {
@@ -46,12 +49,13 @@ public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
     @SneakyThrows
     private static Connection getConnection(String database) {
         Class.forName("org.sqlite.JDBC");
-        return DriverManager.getConnection("jdbc:sqlite:" + createDirs(database));
-    }
 
-    private static String createDirs(String databaseFile) {
-        new File(databaseFile).getParentFile().mkdirs();
-        return databaseFile;
+        SQLiteConfig config = new SQLiteConfig();
+        config.setOpenMode(SQLiteOpenMode.READWRITE);
+        config.setOpenMode(SQLiteOpenMode.CREATE);
+        config.setOpenMode(SQLiteOpenMode.NOMUTEX);
+
+        return DriverManager.getConnection("jdbc:sqlite:" + database, config.toProperties());
     }
 
     private void createDB(String sql) {

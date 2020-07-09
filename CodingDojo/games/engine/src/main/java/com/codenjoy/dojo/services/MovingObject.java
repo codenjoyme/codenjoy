@@ -43,12 +43,10 @@ public abstract class MovingObject extends PointImpl {
                 return;
             }
 
-            int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
-            moving(newX, newY);
+            moving(direction.change(this));
         }
     }
 
-    protected abstract void moving(int newX, int newY);
+    protected abstract void moving(Point pt);
 
 }

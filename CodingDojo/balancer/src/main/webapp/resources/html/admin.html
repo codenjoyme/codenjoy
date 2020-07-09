@@ -23,10 +23,14 @@
 <head>
     <script src="jquery.min.js"></script>
     <script src="jquery.md5.js"></script>
+    <script src="formatter/jsonpanel.js"></script>
+    <link href="formatter/jsonpanel.css" rel="stylesheet">
+    <link href="formatter/demo.css" rel="stylesheet">
     <script src="admin.js"></script>
     <style>
         .table {
             display: table;
+            margin: 10px;
         }
         div {
             display: table-row;
@@ -36,13 +40,20 @@
             text-align: end;
             vertical-align: middle;
         }
+        .jsonpanel span {
+            display: unset;
+        }
         button {
             float: right;
             width: 20%;
             height: 30px;
         }
         input, textarea {
-            width: 700px;
+            width: 600px;
+            background-color: #fff3e4;
+            border: 0px;
+            margin: 1px;
+            font-size: 12px;
         }
         input[type='checkbox'] {
             width: 40px;
@@ -51,9 +62,8 @@
         }
         .basic {
             position: fixed;
-            left: calc(100% - 500px);
+            left: calc(100% - 600px);
             top: 10px;
-
         }
         body div {
             padding: 10px;
@@ -61,309 +71,614 @@
             background-color: bisque;
         }
         .basic input, .basic textarea {
-            width: 300px;
+            width: 400px;
+        }
+        .block-header {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .jsonpanel {
+            line-height: 0.9;
+            font-size: 12px;
+        }
+        .jsonpanel div {
+            background-color: #fff3e4;
+            border: 0px solid white;
         }
     </style>
 </head>
 <body>
     <div class="table basic border">
-        <h2>Basic settings</h2>
-        <div>
-            <span>BalancerServer:</span>
-            <input id="balancer-server" value="/codenjoy-balancer/rest"/>
-        </div>
-        <div>
-            <span>GameServer:</span>
-            <input id="game-server" value="/codenjoy-contest/rest"/>
-        </div>
+        <div class="block-header">Basic settings</div>
+        <div class="block">
+            <div>
+                <span>Balancer version:</span>
+                <div class="jsonpanel" id="balancer-server-version-result"></div>
+            </div>
+            <div>
+                <span>Balancer server:</span>
+                <input id="balancer-server" value=""/>
+            </div>
+            <div>
+                <span>Codenjoy version:</span>
+                <div class="jsonpanel" id="game-server-version-result"></div>
+            </div>
+            <div>
+                <span>Game server:</span>
+                <input id="game-server" value=""/>
+            </div>
 
-        <div>
-            <span>Preffix:</span>
-            <input id="preffix" value="a1_"/>
-        </div>
-        <div>
-            <span>Auto increment:</span>
-            <input type="checkbox" id="auto-increment"/>
-        </div>
-        <div>
-            <span>GameType</span>
-            <input id="gametype-result" value="">
+            <div>
+                <span>Preffix:</span>
+                <input id="preffix"/>
+            </div>
+            <div>
+                <span>Auto increment:</span>
+                <input type="checkbox" id="auto-increment"/>
+            </div>
+            <div>
+                <span>Settings:</span>
+                <div class="jsonpanel" id="admin-settings-result"></div>
+            </div>
         </div>
     </div>
 
-    <h2>Register user</h2>
     <div class="table">
+        <div id="collapse-all">Collapse/Expand all</div>
+    </div>
+
+    <div class="table">
+        <div class="block-header">Tickets / Info</div>
         <div>
-            <span>FirstName:</span>
-            <input id="first-name" value="Stiven"/>
-        </div>
-        <div>
-            <span>LastName:</span>
-            <input id="last-name" value="Pupkin"/>
-        </div>
-        <div>
-            <span>Password:</span>
-            <input id="password" value="password"/>
-        </div>
-        <div>
-            <span>Code:</span>
-            <input id="code" value="12345678901234567890"/>
-        </div>
-        <div>
-            <span>Email:</span>
-            <input id="email" value="test@gmail.com"/>
-        </div>
-        <div>
-            <span>City:</span>
-            <input id="city" value="city"/>
-        </div>
-        <div>
-            <span>Skills:</span>
-            <input id="skills" value="Si Senior"/>
-        </div>
-        <div>
-            <span>Comment:</span>
-            <input id="comment" value="no comment"/>
-        </div>
-        <div>
-            <span></span>
-            <button id="register">Register</button>
-            <button id="update">Update</button>
-        </div>
-        <div>
-            <span>Request:</span>
-            <textarea rows="4" id="register-request"></textarea>
-        </div>
-        <div>
-            <span>Response:</span>
-            <textarea rows="2" id="register-result"></textarea>
-        </div>
-        <div>
-            <span>Error:</span>
-            <textarea rows="5" id="register-error"></textarea>
+            <div>
+                <span>Ticket:</span>
+                <input id="ticket" value=""/>
+            </div>
+            <div>
+                <span></span>
+                <button id="get-ticket">Errors</button>
+                <button id="get-info">Info</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="ticket-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="ticket-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="ticket-error"></textarea>
+            </div>
         </div>
     </div>
 
-    <h2>Login user</h2>
     <div class="table">
+        <div class="block-header">Register user</div>
         <div>
-            <span>Email:</span>
-            <input id="login-email" value="test@gmail.com"/>
-        </div>
-        <div>
-            <span>Password:</span>
-            <input id="login-password" value="password"/>
-        </div>
-        <div>
-            <span></span>
-            <button id="login">Login</button>
-        </div>
-        <div>
-            <span>Request:</span>
-            <textarea rows="2" id="login-request"></textarea>
-        </div>
-        <div>
-            <span>Response:</span>
-            <textarea rows="2" id="login-result"></textarea>
-        </div>
-        <div>
-            <span>Error:</span>
-            <textarea rows="5" id="login-error"></textarea>
+            <div>
+                <span>FirstName:</span>
+                <input id="first-name" value="Stiven"/>
+            </div>
+            <div>
+                <span>LastName:</span>
+                <input id="last-name" value="Pupkin"/>
+            </div>
+            <div>
+                <span>Password:</span>
+                <input id="password" value="password"/>
+            </div>
+            <div>
+                <span>Code:</span>
+                <input id="code" value="12345678901234567890"/>
+            </div>
+            <div>
+                <span>Email:</span>
+                <input id="email" value="test@gmail.com"/>
+            </div>
+            <div>
+                <span>Phone:</span>
+                <input id="phone" value="+380501234567"/>
+            </div>
+            <div>
+                <span>City:</span>
+                <input id="city" value="city"/>
+            </div>
+            <div>
+                <span>Skills:</span>
+                <input id="skills" value="Si Senior"/>
+            </div>
+            <div>
+                <span>Comment:</span>
+                <input id="comment" value="no comment"/>
+            </div>
+            <div>
+                <span></span>
+                <button id="register">Register</button>
+                <button id="update">Update</button>
+            </div>
+            <div>
+                <span>Id:</span>
+                <input id="player-id"/>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="4" id="register-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="register-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="register-error"></textarea>
+            </div>
         </div>
     </div>
 
-    <h2>Remove user</h2>
     <div class="table">
+        <div class="block-header">Get confirmation code</div>
         <div>
-            <span>Email:</span>
-            <input id="remove-email" value="test@gmail.com"/>
-        </div>
-        <div>
-            <span></span>
-            <button id="remove">Remove</button>
-        </div>
-        <div>
-            <span>Request:</span>
-            <textarea rows="2" id="remove-request"></textarea>
-        </div>
-        <div>
-            <span>Response:</span>
-            <textarea rows="2" id="remove-result"></textarea>
-        </div>
-        <div>
-            <span>Error:</span>
-            <textarea rows="5" id="remove-error"></textarea>
+            <div>
+                <span>Email:</span>
+                <input id="get-confirm-email" value="test@gmail.com"/>
+            </div>
+            <div>
+                <span></span>
+                <button id="get-confirm">Get</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="get-confirm-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="get-confirm-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="get-confirm-error"></textarea>
+            </div>
         </div>
     </div>
 
-    <h2>Join/Exit game server</h2>
     <div class="table">
+        <div class="block-header">Confirm user registration / change password by phone</div>
         <div>
-            <span>Email:</span>
-            <input id="join-email" value="test@gmail.com"/>
-        </div>
-        <div>
-            <span>Code:</span>
-            <input id="join-code" value="code"/>
-        </div>
-        <div>
-            <span></span>
-            <button id="join">Join</button>
-            <button id="exit">Exit</button>
-            <button id="join-status">Status</button>
-        </div>
-        <div>
-            <span>Request:</span>
-            <textarea rows="2" id="join-request"></textarea>
-        </div>
-        <div>
-            <span>Response:</span>
-            <textarea rows="2" id="join-result"></textarea>
-        </div>
-        <div>
-            <span>Error:</span>
-            <textarea rows="5" id="join-error"></textarea>
+            <div>
+                <span>Phone:</span>
+                <input id="confirm-phone" value="+380501234567"/>
+            </div>
+            <div>
+                <span>Confirm code:</span>
+                <input id="confirm-code" value=""/>
+            </div>
+            <div>
+                <span>Confirm type:</span>
+                <input id="confirm-type" value=""/>
+            </div>
+            <div>
+                <span></span>
+                <button id="confirm-registration">Confirm registration</button>
+                <button id="confirm-change-password">Confirm change password</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="confirm-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="confirm-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="confirm-error"></textarea>
+            </div>
         </div>
     </div>
 
-    <h2>Scores</h2>
     <div class="table">
+        <div class="block-header">Resend password / confirmation by phone</div>
         <div>
-            <span>Day:</span>
-            <input id="scores-day"/>
-        </div>
-        <div>
-            <span></span>
-            <button id="scores">Score</button>
-        </div>
-        <div>
-            <span>Request:</span>
-            <textarea rows="2" id="scores-request"></textarea>
-        </div>
-        <div>
-            <span>Response:</span>
-            <textarea rows="8" id="scores-result"></textarea>
-        </div>
-        <div>
-            <span>Error:</span>
-            <textarea rows="2" id="scores-error"></textarea>
+            <div>
+                <span>Email:</span>
+                <input id="resend-email" value="test@gmail.com"/>
+            </div>
+            <div>
+                <span>Phone:</span>
+                <input id="resend-phone" value="+380501234567"/>
+            </div>
+            <div>
+                <span></span>
+                <button id="resend-password">Password</button>
+                <button id="resend-confirmation">Confirmation</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="resend-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="resend-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="resend-error"></textarea>
+            </div>
         </div>
     </div>
 
-    <h2>Users on balancer</h2>
     <div class="table">
+        <div class="block-header">Login user</div>
         <div>
-            <span></span>
-            <button id="users-balancer">Users</button>
-        </div>
-        <div>
-            <span>Request:</span>
-            <textarea rows="2" id="users-balancer-request"></textarea>
-        </div>
-        <div>
-            <span>Response:</span>
-            <textarea rows="15" id="users-balancer-result"></textarea>
-        </div>
-        <div>
-            <span>Error:</span>
-            <textarea rows="2" id="users-balancer-error"></textarea>
+            <div>
+                <span>Email:</span>
+                <input id="login-email" value="test@gmail.com"/>
+            </div>
+            <div>
+                <span>Password:</span>
+                <input id="login-password" value="password"/>
+            </div>
+            <div>
+                <span></span>
+                <button id="login">Login</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="login-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="login-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="login-error"></textarea>
+            </div>
         </div>
     </div>
 
-    <h2>Users on game</h2>
     <div class="table">
+        <div class="block-header">Join/Exit game server</div>
         <div>
-            <span></span>
-            <button id="users-game">Users</button>
-        </div>
-        <div>
-            <span>Request:</span>
-            <textarea rows="2" id="users-game-request"></textarea>
-        </div>
-        <div>
-            <span>Response:</span>
-            <textarea rows="15" id="users-game-result"></textarea>
-        </div>
-        <div>
-            <span>Error:</span>
-            <textarea rows="3" id="users-game-error"></textarea>
+            <div>
+                <span>Email:</span>
+                <input id="join-email" value="test@gmail.com"/>
+            </div>
+            <div>
+                <span>Code:</span>
+                <input id="join-code" value=""/>
+            </div>
+            <div>
+                <span></span>
+                <button id="join">Join</button>
+                <button id="exit">Exit</button>
+                <button id="join-status">Status</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="join-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <textarea rows="1" id="join-result"></textarea>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="join-error"></textarea>
+            </div>
         </div>
     </div>
 
-    <h2>Settings</h2>
     <div class="table">
+        <div class="block-header">Scores</div>
         <div>
-            <span></span>
-            <button id="get-settings">Get</button>
-            <button id="set-settings">Set</button>
-        </div>
-        <div>
-            <span>Request:</span>
-            <textarea rows="2" id="settings-request"></textarea>
-        </div>
-        <div>
-            <span>Response:</span>
-            <textarea rows="8" id="settings-result"></textarea>
-        </div>
-        <div>
-            <span>Error:</span>
-            <textarea rows="5" id="settings-error"></textarea>
+            <div>
+                <span>Day:</span>
+                <input id="scores-day"/>
+            </div>
+            <div>
+                <span></span>
+                <button id="scores">Score</button>
+                <button id="clear-scores">Clear cache</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="scores-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="scores-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="2" id="scores-error"></textarea>
+            </div>
         </div>
     </div>
 
-    <h2>Debug</h2>
     <div class="table">
+        <div class="block-header">Disqualify</div>
         <div>
-            <span></span>
-            <input type="checkbox" id="debug-result"/>
-        </div>
-        <div>
-            <span>Request:</span>
-            <textarea rows="5" id="debug-request"></textarea>
-        </div>
-        <div>
-            <span>Error:</span>
-            <textarea rows="5" id="debug-error"></textarea>
+            <div>
+                <span>Emails (CSV):</span>
+                <input id="disqualify-emails"/>
+            </div>
+            <div>
+                <span></span>
+                <button id="disqualify">Disqualify</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="disqualify-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <textarea rows="1" id="disqualify-result"></textarea>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="2" id="disqualify-error"></textarea>
+            </div>
         </div>
     </div>
 
-    <h2>Contest started</h2>
     <div class="table">
+        <div class="block-header">Disqualified</div>
         <div>
-            <span></span>
-            <input type="checkbox" id="contest-result"/>
-        </div>
-        <div>
-            <span>Request:</span>
-            <textarea rows="5" id="contest-request"></textarea>
-        </div>
-        <div>
-            <span>Response:</span>
-            <textarea rows="5" id="contest-result-data"></textarea>
-        </div>
-        <div>
-            <span>Error:</span>
-            <textarea rows="5" id="contest-error"></textarea>
+            <div>
+                <span></span>
+                <button id="disqualified">Get</button>
+                <button id="clear-disqualified">Clear</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="disqualified-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="disqualified-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="2" id="disqualified-error"></textarea>
+            </div>
         </div>
     </div>
 
-    <h2>Clear cache</h2>
     <div class="table">
+        <div class="block-header">Finalists</div>
         <div>
-            <span></span>
-            <button id="cache">Clear</button>
+            <div>
+                <span></span>
+                <button id="finalists">Finalists</button>
+                <button id="clear-finalists">Clear cache</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="finalists-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="finalists-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="2" id="finalists-error"></textarea>
+            </div>
         </div>
+    </div>
+
+    <div class="table">
+        <div class="block-header">Mark Winners</div>
         <div>
-            <span>Request:</span>
-            <textarea rows="3" id="cache-request"></textarea>
+            <div>
+                <span></span>
+                <button id="winners">Mark winners</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="winners-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="winners-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="2" id="winners-error"></textarea>
+            </div>
         </div>
+    </div>
+
+    <div class="table">
+        <div class="block-header">Remove user</div>
         <div>
-            <span>Response:</span>
-            <textarea rows="2" id="cache-result"></textarea>
+            <div>
+                <span>Id:</span>
+                <input id="remove-id" value="id"/>
+            </div>
+            <div>
+                <span title="1 (0b0001) - onGameServer, 2 (0b0010) - onBalancer">Where:</span>
+                <input id="where-to-remove" value="3" />
+            </div>
+            <div>
+                <span></span>
+                <button id="remove">Remove</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="remove-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="remove-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="remove-error"></textarea>
+            </div>
         </div>
+    </div>
+
+    <div class="table">
+        <div class="block-header">Users on balancer</div>
         <div>
-            <span>Error:</span>
-            <textarea rows="3" id="cache-error"></textarea>
+            <div>
+                <span></span>
+                <button id="users-balancer">Users</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="users-balancer-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="users-balancer-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="2" id="users-balancer-error"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="table">
+        <div class="block-header">Users on game</div>
+        <div>
+            <div>
+                <span></span>
+                <button id="users-game">Users</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="users-game-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="users-game-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="3" id="users-game-error"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="table">
+        <div class="block-header">Settings</div>
+        <div>
+            <div>
+                <span></span>
+                <button id="get-settings">Get</button>
+                <button id="set-settings">Set</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="settings-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="settings-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="settings-error"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="table">
+        <div class="block-header">GameSettings</div>
+        <div>
+            <div>
+                <span></span>
+                <button id="get-game-settings">Get</button>
+                <button id="set-game-settings">Set</button>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="2" id="game-settings-request"></textarea>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="5" id="game-settings-post-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <div class="jsonpanel" id="game-settings-result"></div>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="game-settings-error"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="table">
+        <div class="block-header">Debug</div>
+        <div>
+            <div>
+                <span></span>
+                <input type="checkbox" id="debug-result"/>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="5" id="debug-request"></textarea>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="debug-error"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="table">
+        <div class="block-header">Contest started</div>
+        <div>
+            <div>
+                <span></span>
+                <input type="checkbox" id="contest-result"/>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="5" id="contest-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <textarea rows="1" id="contest-result-data"></textarea>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="5" id="contest-error"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="table">
+        <div class="block-header">Clear cache</div>
+        <div>
+            <div>
+                <span></span>
+                <button id="clear-cache">Clear</button>
+            </div>
+            <div>
+                <span title="1 (0b0001) - scoresFromGameServers, 2 (0b0010) - currentScores, 4 (0b0100) - disqualified, 8 (0b1000) - currentFinalists">Where:</span>
+                <input id="cache-mask" value="8"/>
+            </div>
+            <div>
+                <span>Request:</span>
+                <textarea rows="3" id="cache-request"></textarea>
+            </div>
+            <div>
+                <span>Response:</span>
+                <textarea rows="1" id="cache-result"></textarea>
+            </div>
+            <div>
+                <span>Error:</span>
+                <textarea rows="3" id="cache-error"></textarea>
+            </div>
         </div>
     </div>
 

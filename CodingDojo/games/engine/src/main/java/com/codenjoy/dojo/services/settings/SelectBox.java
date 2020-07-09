@@ -23,10 +23,13 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
 public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
+
+    public static final String TYPE = "selectbox";
 
     private String name;
     private List<T> options;
@@ -48,7 +51,7 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
     @Override
     public String getType() {
-        return "selectbox";
+        return TYPE;
     }
 
     @Override
@@ -57,10 +60,16 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
     }
 
     @Override
-    public void update(T value) {
+    public Class<?> getValueType() {
+        return (!options.isEmpty() && options.get(0) != null) ? options.get(0).getClass() : Object.class;
+    }
+
+    @Override
+    public SelectBox<T> update(T value) {
         checkIsPresent(value);
         set(options.indexOf(value));
 
+        return this;
     }
 
     private void checkIsPresent(T value) {
@@ -70,23 +79,18 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
     }
 
     @Override
-    public Parameter<T> def(T value) {
+    public SelectBox<T> def(T value) {
         checkIsPresent(value);
         this.def = options.indexOf(value);
         return this;
     }
 
-    @Override
-    public boolean itsMe(String name) {
-        return this.name.equals(name);
-    }
-
-    public <V> Parameter<V> type(Class<V> integerClass) {
-        return (Parameter<V>) this;
+    public <V> SelectBox<V> type(Class<V> type) {
+        return (SelectBox<V>) this;
     }
 
     @Override
-    public Parameter<T> parser(Function<String, T> parser) {
+    public SelectBox<T> parser(Function<String, T> parser) {
         throw new UnsupportedOperationException();
     }
 
@@ -97,6 +101,24 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
     @Override
     public List<T> getOptions() {
-        return options;
+        return new LinkedList<T>(options);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%s:%s = options%s def[%s] val[%s]]",
+                name,
+                "String",
+                options.toString(),
+                def,
+                get());
+    }
+
+    @Override
+    public T getDefault() {
+        if (def == null) {
+            return null;
+        }
+        return options.get(def);
     }
 }

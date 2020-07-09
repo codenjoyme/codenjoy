@@ -24,12 +24,12 @@ package com.codenjoy.dojo.snakebattle.model.board;
 
 
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.round.RoundGameField;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 
-public interface Field extends GameField<Player> {
+public interface Field extends RoundGameField<Player> {
 
     boolean isBarrier(Point p);
 
@@ -58,8 +58,6 @@ public interface Field extends GameField<Player> {
     void setGold(Point p);
 
     Hero enemyEatenWith(Hero h);
-
-    void oneMoreDead(Player player);
 
     Parameter<Integer> flyingCount();
 

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.moebius;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.moebius.client.Board;
 import com.codenjoy.dojo.moebius.client.ai.AISolver;
 import com.codenjoy.dojo.moebius.services.GameRunner;
@@ -89,6 +89,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:0\n" +
                         "DICE:0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(0,0)\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
@@ -103,6 +104,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:1\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(1,1)\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
@@ -117,6 +119,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:2\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(1,2)\n" +
                         "DICE:1\n" +
                         "DICE:3\n" +
@@ -131,6 +134,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:1\n" +
                         "DICE:3\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(1,3)\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
@@ -145,6 +149,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:2\n" +
                         "DICE:1\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(2,1)\n" +
                         "DICE:2\n" +
                         "DICE:2\n" +
@@ -159,6 +164,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:2\n" +
                         "DICE:2\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(2,2)\n" +
                         "DICE:2\n" +
                         "DICE:3\n" +
@@ -173,6 +179,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:2\n" +
                         "DICE:3\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(2,3)\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
@@ -187,6 +194,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:3\n" +
                         "DICE:1\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(3,1)\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
@@ -201,6 +209,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:3\n" +
                         "DICE:2\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: ACT(3,2)\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
@@ -213,6 +222,7 @@ public class SmokeTest {
                         "1:║╔╗╚║\n" +
                         "1:╔═══╝\n" +
                         "1:\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: \n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
@@ -416,19 +426,18 @@ public class SmokeTest {
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
-                        "Fire Event: GAME_OVER\n" +
-                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
+                        "1:Fire Event: GAME_OVER\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:╔═══╗\n" +
-                        "1:║   ║\n" +
-                        "1:║   ║\n" +
-                        "1:║   ║\n" +
-                        "1:╚═══╝\n" +
+                        "1:║╝╬╗║\n" +
+                        "1:║╗═╗║\n" +
+                        "1:║╔╗╚║\n" +
+                        "1:╔═══╝\n" +
                         "1:\n" +
-                        "DICE:3\n" +
-                        "DICE:3\n" +
-                        "1:Answer: ACT(3,3)\n" +
+                        "1:Scores: 0\n" +
+                        "1:Answer: \n" +
+                        "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +
                         "DICE:3\n" +

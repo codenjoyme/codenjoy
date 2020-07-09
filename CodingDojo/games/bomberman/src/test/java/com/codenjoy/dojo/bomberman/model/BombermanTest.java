@@ -10,12 +10,12 @@ package com.codenjoy.dojo.bomberman.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,82 +25,20 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/7/13
- * Time: 9:07 AM
- */
-public class BombermanTest {
-
-    public int SIZE = 5;
-    private Game game;
-    private Joystick hero;
-    private Level level;
-    private WallsImpl walls;
-    private GameSettings settings;
-    private EventListener listener;
-    private Dice meatChppperDice;
-    private Dice bombermanDice;
-    private Player player;
-    private List bombermans;
-    private Bomberman field;
-    private PrinterFactory printer = new PrinterFactoryImpl();
-
-    @Before
-    public void setUp() throws Exception {
-        meatChppperDice = mock(Dice.class);
-        bombermanDice = mock(Dice.class);
-
-        level = mock(Level.class);
-        canDropBombs(1);
-        bombsPower(1);
-        walls = mock(WallsImpl.class);
-        when(walls.iterator()).thenReturn(new LinkedList<Wall>().iterator());
-        settings = mock(GameSettings.class);
-        listener = mock(EventListener.class);
-
-        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
-        when(settings.getLevel()).thenReturn(level);
-        initBomberman();
-        givenBoard(SIZE);
-    }
-
-    private void initBomberman() {
-        dice(bombermanDice, 0, 0);
-        Hero hero = new Hero(level, bombermanDice);
-        when(settings.getBomberman(level)).thenReturn(hero);
-        this.hero = hero;
-    }
-
-    private void givenBoard(int size) {
-        when(settings.getBoardSize()).thenReturn(v(size));
-        field = new Bomberman(settings);
-        player = new Player(listener);
-        game = new Single(player, printer);
-        game.on(field);
-        dice(bombermanDice, 0, 0);
-        game.newGame();
-        hero = game.getJoystick();
-    }
+public class BombermanTest extends AbstractBombermanTest {
 
     @Test
     public void shouldBoard_whenStartGame() {
@@ -117,7 +55,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanOnBoardAtInitPos_whenGameStart() {
+    public void shouldHeroOnBoardAtInitPos_whenGameStart() {
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -126,7 +64,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanOnBoardOneRightStep_whenCallRightCommand() {
+    public void shouldHeroOnBoardOneRightStep_whenCallRightCommand() {
         hero.right();
         field.tick();
 
@@ -138,7 +76,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanOnBoardTwoRightSteps_whenCallRightCommandTwice() {
+    public void shouldHeroOnBoardTwoRightSteps_whenCallRightCommandTwice() {
         hero.right();
         field.tick();
 
@@ -153,7 +91,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanOnBoardOneUpStep_whenCallDownCommand() {
+    public void shouldHeroOnBoardOneUpStep_whenCallDownCommand() {
         hero.up();
         field.tick();
 
@@ -165,7 +103,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanWalkUp() {
+    public void shouldHeroWalkUp() {
         hero.up();
         field.tick();
 
@@ -183,7 +121,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenGoToWallDown() {
+    public void shouldHeroStop_whenGoToWallDown() {
         hero.down();
         field.tick();
 
@@ -194,13 +132,8 @@ public class BombermanTest {
                 "☺    \n");
     }
 
-    private void assertBombermanAt(int x, int y) {
-        assertEquals(x, player.getHero().getX());
-        assertEquals(y, player.getHero().getY());
-    }
-
     @Test
-    public void shouldBombermanWalkLeft() {
+    public void shouldHeroWalkLeft() {
         hero.right();
         field.tick();
 
@@ -218,7 +151,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenGoToWallLeft() {
+    public void shouldHeroStop_whenGoToWallLeft() {
         hero.left();
         field.tick();
 
@@ -230,7 +163,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenGoToWallRight() {
+    public void shouldHeroStop_whenGoToWallRight() {
         gotoMaxRight();
 
         asrtBrd("     \n" +
@@ -241,7 +174,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenGoToWallUp() {
+    public void shouldHeroStop_whenGoToWallUp() {
         gotoMaxUp();
 
         asrtBrd("☺    \n" +
@@ -251,15 +184,8 @@ public class BombermanTest {
                 "     \n");
     }
 
-    private void gotoMaxUp() {
-        for (int y = 0; y <= SIZE + 1; y++) {
-            hero.up();
-            field.tick();
-        }
-    }
-
     @Test
-    public void shouldBombermanMovedOncePerTact() {
+    public void shouldHeroMovedOncePerTact() {
         hero.down();
         hero.up();
         hero.left();
@@ -286,7 +212,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombDropped_whenBombermanDropBomb() {
+    public void shouldBombDropped_whenHeroDropBomb() {
         hero.act();
         field.tick();
 
@@ -298,7 +224,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombDropped_whenBombermanDropBombAtAnotherPlace() {
+    public void shouldBombDropped_whenHeroDropBombAtAnotherPlace() {
         hero.up();
         field.tick();
 
@@ -316,16 +242,18 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombsDropped_whenBombermanDropThreeBomb() {
+    public void shouldBombsDropped_whenHeroDropThreeBomb() {
         canDropBombs(3);
 
         hero.up();
         field.tick();
+
         hero.act();
         field.tick();
 
         hero.right();
         field.tick();
+
         hero.act();
         field.tick();
 
@@ -334,11 +262,6 @@ public class BombermanTest {
                 "     \n" +
                 "2☻   \n" +
                 "     \n");
-    }
-
-    private void canDropBombs(int countBombs) {
-        reset(level);
-        when(level.bombsCount()).thenReturn(countBombs);
     }
 
     // проверить, что бомбермен не может бомб дропать больше, чем у него в level прописано
@@ -400,7 +323,7 @@ public class BombermanTest {
                 "     \n" +
                 "☻    \n");
 
-        assertEquals(1, field.getBombs().size());
+        assertEquals(1, field.bombs().size());
 
         hero.right();
         field.tick();
@@ -441,10 +364,13 @@ public class BombermanTest {
     public void shouldBoom_whenDroppedBombHas5Ticks() {
         hero.act();
         field.tick();
+
         hero.right();
         field.tick();
+
         hero.right();
         field.tick();
+
         field.tick();
 
         asrtBrd("     \n" +
@@ -485,16 +411,17 @@ public class BombermanTest {
 
     // если бомбермен стоит на бомбе то он умирает после ее взрыва
     @Test
-    public void shouldKillBoomberman_whenBombExploded() {
+    public void shouldKillHero_whenBombExploded() {
         hero.act();
         hero.right();
         field.tick();
+
         field.tick();
         field.tick();
 
         field.tick();
 
-        assertBombermanAlive();
+        assertHeroAlive();
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -508,7 +435,9 @@ public class BombermanTest {
                 "     \n" +
                 "҉    \n" +
                 "҉Ѡ   \n");
-        assertBombermanDie();
+
+        verifyAllEvents("[DIED]");
+        assertHeroDie();
 
         field.tick();
 
@@ -517,11 +446,9 @@ public class BombermanTest {
                 "     \n" +
                 "     \n" +
                 " Ѡ   \n");
-        assertBombermanDie();
-    }
 
-    private void assertBombermanDie() {
-        assertTrue("Expected model over", game.isGameOver());
+        verifyAllEvents("[]");
+        assertHeroDie();
     }
 
     // после смерти ходить больше нельзя
@@ -542,9 +469,11 @@ public class BombermanTest {
     private void killBomber() {
         hero.up();
         field.tick();
+
         hero.right();
         hero.act();
         field.tick();
+
         field.tick();
         field.tick();
         field.tick();
@@ -615,11 +544,13 @@ public class BombermanTest {
 
     // если бомбермен стоит под действием ударной волны, он умирает
     @Test
-    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromLeft() {
+    public void shouldKillHero_whenBombExploded_blastWaveAffect_fromLeft() {
         hero.act();
         field.tick();
+
         hero.right();
         field.tick();
+
         field.tick();
 
         field.tick();
@@ -629,7 +560,7 @@ public class BombermanTest {
                 "     \n" +
                 "     \n" +
                 "1☺   \n");
-        assertBombermanAlive();
+        assertHeroAlive();
 
         field.tick();
 
@@ -638,7 +569,9 @@ public class BombermanTest {
                 "     \n" +
                 "҉    \n" +
                 "҉Ѡ   \n");
-        assertBombermanDie();
+
+        verifyAllEvents("[DIED]");
+        assertHeroDie();
 
         field.tick();
 
@@ -647,17 +580,22 @@ public class BombermanTest {
                 "     \n" +
                 "     \n" +
                 " Ѡ   \n");
-        assertBombermanDie();
+
+        verifyAllEvents("[]");
+        assertHeroDie();
     }
 
     @Test
-    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromRight() {
+    public void shouldKillHero_whenBombExploded_blastWaveAffect_fromRight() {
         hero.right();
         field.tick();
+
         hero.act();
         field.tick();
+
         hero.left();
         field.tick();
+
         field.tick();
         field.tick();
 
@@ -666,7 +604,7 @@ public class BombermanTest {
                 "     \n" +
                 "     \n" +
                 "☺1   \n");
-        assertBombermanAlive();
+        assertHeroAlive();
 
         field.tick();
 
@@ -675,7 +613,9 @@ public class BombermanTest {
                 "     \n" +
                 " ҉   \n" +
                 "Ѡ҉҉  \n");
-        assertBombermanDie();
+
+        verifyAllEvents("[DIED]");
+        assertHeroDie();
 
         field.tick();
 
@@ -684,16 +624,20 @@ public class BombermanTest {
                 "     \n" +
                 "     \n" +
                 "Ѡ    \n");
-        assertBombermanDie();
+
+        verifyAllEvents("[]");
+        assertHeroDie();
     }
 
     @Test
-    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromUp() {
+    public void shouldKillHero_whenBombExploded_blastWaveAffect_fromUp() {
         hero.up();
         hero.act();
         field.tick();
+
         hero.down();
         field.tick();
+
         field.tick();
         field.tick();
 
@@ -702,7 +646,7 @@ public class BombermanTest {
                 "     \n" +
                 "1    \n" +
                 "☺    \n");
-        assertBombermanAlive();
+        assertHeroAlive();
 
         field.tick();
 
@@ -711,7 +655,9 @@ public class BombermanTest {
                 "҉    \n" +
                 "҉҉   \n" +
                 "Ѡ    \n");
-        assertBombermanDie();
+
+        verifyAllEvents("[DIED]");
+        assertHeroDie();
 
         field.tick();
 
@@ -720,21 +666,22 @@ public class BombermanTest {
                 "     \n" +
                 "     \n" +
                 "Ѡ    \n");
-        assertBombermanDie();
-    }
 
-    private void assertBombermanAlive() {
-        assertFalse(game.isGameOver());
+        verifyAllEvents("[]");
+        assertHeroDie();
     }
 
     @Test
-    public void shouldKillBoomberman_whenBombExploded_blastWaveAffect_fromDown() {
+    public void shouldKillHero_whenBombExploded_blastWaveAffect_fromDown() {
         hero.down();
         field.tick();
+
         hero.act();
         field.tick();
+
         hero.up();
         field.tick();
+
         field.tick();
         field.tick();
 
@@ -743,7 +690,7 @@ public class BombermanTest {
                 "     \n" +
                 "☺    \n" +
                 "1    \n");
-        assertBombermanAlive();
+        assertHeroAlive();
 
         field.tick();
 
@@ -752,7 +699,9 @@ public class BombermanTest {
                 "     \n" +
                 "Ѡ    \n" +
                 "҉҉   \n");
-        assertBombermanDie();
+
+        verifyAllEvents("[DIED]");
+        assertHeroDie();
 
         field.tick();
 
@@ -761,25 +710,31 @@ public class BombermanTest {
                 "     \n" +
                 "Ѡ    \n" +
                 "     \n");
-        assertBombermanDie();
+
+        verifyAllEvents("[]");
+        assertHeroDie();
     }
 
     @Test
-    public void shouldNoKillBoomberman_whenBombExploded_blastWaveAffect_fromDownRight() {
+    public void shouldNoKillHero_whenBombExploded_blastWaveAffect_fromDownRight() {
         hero.down();
         field.tick();
+
         hero.right();
         field.tick();
+
         hero.act();
         field.tick();
+
         hero.up();
         field.tick();
+
         hero.left();
         field.tick();
 
         field.tick();
 
-        assertBombermanAlive();
+        assertHeroAlive();
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -788,7 +743,7 @@ public class BombermanTest {
 
         field.tick();
 
-        assertBombermanAlive();
+        assertHeroAlive();
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -797,7 +752,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldSameBoomberman_whenNetFromBoard() {
+    public void shouldSameHero_whenNetFromBoard() {
         assertSame(hero, game.getJoystick());
     }
 
@@ -805,10 +760,13 @@ public class BombermanTest {
     public void shouldBlastAfter_whenBombExposed() {
         hero.act();
         field.tick();
+
         hero.right();
         field.tick();
+
         hero.right();
         field.tick();
+
         field.tick();
         field.tick();
 
@@ -826,10 +784,13 @@ public class BombermanTest {
 
         hero.act();
         field.tick();
+
         hero.left();
         field.tick();
+
         hero.left();
         field.tick();
+
         field.tick();
         field.tick();
 
@@ -841,12 +802,15 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBlastAfter_whenBombExposed_bombermanDie() {
+    public void shouldBlastAfter_whenBombExposed_HeroDie() {
         gotoBoardCenter();
+
         hero.act();
         field.tick();
+
         hero.down();
         field.tick();
+
         field.tick();
         field.tick();
         field.tick();
@@ -857,7 +821,8 @@ public class BombermanTest {
                 "  Ѡ  \n" +
                 "     \n");
 
-        assertBombermanDie();
+        verifyAllEvents("[DIED]");
+        assertHeroDie();
 
         field.tick();
         asrtBrd("     \n" +
@@ -866,26 +831,13 @@ public class BombermanTest {
                 "  Ѡ  \n" +
                 "     \n");
 
-        assertBombermanDie();
-    }
-
-    private void gotoBoardCenter() {
-        for (int y = 0; y < SIZE / 2; y++) {
-            hero.up();
-            field.tick();
-            hero.right();
-            field.tick();
-        }
-    }
-
-    private void asrtBrd(String expected) {
-        assertEquals(expected, printer.getPrinter(
-                field.reader(), player).print());
+        verifyAllEvents("[]");
+        assertHeroDie();
     }
 
     // появляются стенки, которые конфигурятся извне
     @Test
-    public void shouldBombermanNotAtWall() {
+    public void shouldHeroNotAtWall() {
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
@@ -904,7 +856,7 @@ public class BombermanTest {
 
     // бомбермен не может пойти вперед на стенку
     @Test
-    public void shouldBombermanStop_whenUpWall() {
+    public void shouldHeroStop_whenUpWall() {
         givenBoardWithWalls();
 
         hero.down();
@@ -918,7 +870,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenLeftWall() {
+    public void shouldHeroStop_whenLeftWall() {
         givenBoardWithWalls();
 
         hero.left();
@@ -932,7 +884,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenRightWall() {
+    public void shouldHeroStop_whenRightWall() {
         givenBoardWithWalls();
 
         gotoMaxRight();
@@ -945,7 +897,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanStop_whenDownWall() {
+    public void shouldHeroStop_whenDownWall() {
         givenBoardWithWalls();
 
         gotoMaxUp();
@@ -964,42 +916,12 @@ public class BombermanTest {
         }
     }
 
-    private void givenBoardWithWalls() {
-        givenBoardWithWalls(SIZE);
-    }
-
-    private void givenBoardWithWalls(int size) {
-        withWalls(new OriginalWalls(v(size)));
-        givenBoard(size);
-    }
-
-    private void givenBoardWithDestroyWalls() {
-        givenBoardWithDestroyWalls(SIZE);
-    }
-
-    private void givenBoardWithDestroyWalls(int size) {
-        withWalls(new DestroyWalls(new OriginalWalls(v(size))));
-        givenBoard(size);
-    }
-
-    private void withWalls(Walls walls) {
-        when(settings.getWalls(any(Bomberman.class))).thenReturn(walls);
-    }
-
-    private void givenBoardWithOriginalWalls() {
-        givenBoardWithOriginalWalls(SIZE);
-    }
-
-    private void givenBoardWithOriginalWalls(int size) {
-        withWalls(new OriginalWalls(v(size)));
-        givenBoard(size);
-    }
-
     // бомбермен не может вернуться на место бомбы, она его не пускает как стена
     @Test
-    public void shouldBombermanStop_whenGotoBomb() {
+    public void shouldHeroStop_whenGotoBomb() {
         hero.act();
         field.tick();
+
         hero.right();
         field.tick();
 
@@ -1015,7 +937,7 @@ public class BombermanTest {
 
     // проверить, что бомбермен может одноверменно перемещаться по полю и дропать бомбы за один такт, только как именно?
     @Test
-    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_bombFirstly() {
+    public void shouldHeroWalkAndDropBombsTogetherInOneTact_bombFirstly() {
         hero.act();
         hero.right();
         field.tick();
@@ -1028,7 +950,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_moveFirstly() {
+    public void shouldHeroWalkAndDropBombsTogetherInOneTact_moveFirstly() {
         hero.right();
         hero.act();
         field.tick();
@@ -1050,9 +972,10 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_bombThanMove() {
+    public void shouldHeroWalkAndDropBombsTogetherInOneTact_bombThanMove() {
         hero.act();
         field.tick();
+
         hero.right();
         field.tick();
 
@@ -1064,9 +987,10 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldBombermanWalkAndDropBombsTogetherInOneTact_moveThanBomb() {
+    public void shouldHeroWalkAndDropBombsTogetherInOneTact_moveThanBomb() {
         hero.right();
         field.tick();
+
         hero.act();
         field.tick();
 
@@ -1087,7 +1011,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldWallProtectsBomberman() {
+    public void shouldWallProtectsHero() {
         givenBoardWithOriginalWalls();
 
         hero.act();
@@ -1107,11 +1031,11 @@ public class BombermanTest {
                 "☼҉҉ ☼\n" +
                 "☼☼☼☼☼\n");
 
-        assertBombermanAlive();
+        assertHeroAlive();
     }
 
     @Test
-    public void shouldWallProtectsBomberman2() {
+    public void shouldWallProtectsHero2() {
         assertBombPower(5,
                 "☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -1123,11 +1047,7 @@ public class BombermanTest {
                 "☼҉҉҉҉҉҉ ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        assertBombermanAlive();
-    }
-
-    private void bombsPower(int power) {
-        when(level.bombsPower()).thenReturn(power);
+        assertHeroAlive();
     }
 
     // проверить, что разрыв бомбы длинной указанной в level
@@ -1173,28 +1093,6 @@ public class BombermanTest {
                 "☼☼☼☼☼☼☼☼☼\n");
     }
 
-    private void assertBombPower(int power, String expected) {
-        givenBoardWithOriginalWalls(9);
-        bombsPower(power);
-
-        hero.act();
-        goOut();
-        field.tick();
-
-        asrtBrd(expected);
-    }
-
-    private void goOut() {
-        hero.right();
-        field.tick();
-        hero.right();
-        field.tick();
-        hero.up();
-        field.tick();
-        hero.up();
-        field.tick();
-    }
-
     // я немогу модифицировать список бомб на доске, меняя getBombs
     // но список бомб, что у меня на руках обязательно синхронизирован с теми, что на поле
     @Test
@@ -1207,9 +1105,9 @@ public class BombermanTest {
         hero.right();
         field.tick();
 
-        List<Bomb> bombs1 = field.getBombs();
-        List<Bomb> bombs2 = field.getBombs();
-        List<Bomb> bombs3 = field.getBombs();
+        List<Bomb> bombs1 = field.bombs();
+        List<Bomb> bombs2 = field.bombs();
+        List<Bomb> bombs3 = field.bombs();
         assertSame(bombs1, bombs2);
         assertSame(bombs2, bombs3);
         assertSame(bombs3, bombs1);
@@ -1258,7 +1156,7 @@ public class BombermanTest {
         hero.right();
         field.tick();
 
-        List<Bomb> bombs1 = field.getBombs();
+        List<Bomb> bombs1 = field.bombs();
         assertEquals(1, bombs1.size());
 
         field.tick();
@@ -1266,7 +1164,7 @@ public class BombermanTest {
         field.tick();
         field.tick();
 
-        List<Bomb> bombs2 = field.getBombs();
+        List<Bomb> bombs2 = field.bombs();
         assertEquals(0, bombs2.size());
         assertEquals(0, bombs1.size());
         assertSame(bombs1, bombs2);
@@ -1283,9 +1181,9 @@ public class BombermanTest {
         field.tick();
         field.tick();
 
-        List<Blast> blasts1 = field.getBlasts();
-        List<Blast> blasts2 = field.getBlasts();
-        List<Blast> blasts3 = field.getBlasts();
+        List<Blast> blasts1 = field.blasts();
+        List<Blast> blasts2 = field.blasts();
+        List<Blast> blasts3 = field.blasts();
         assertSame(blasts1, blasts2);
         assertSame(blasts2, blasts3);
         assertSame(blasts3, blasts1);
@@ -1306,15 +1204,15 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldNoChangeWall_whenUseBoardApi() {
+    public void shouldChangeWall_whenUseBoardApi() {
         givenBoardWithWalls();
 
-        Walls walls1 = field.getWalls();
-        Walls walls2 = field.getWalls();
-        Walls walls3 = field.getWalls();
-        assertNotSame(walls1, walls2);
-        assertNotSame(walls2, walls3);
-        assertNotSame(walls3, walls1);
+        Walls walls1 = field.walls();
+        Walls walls2 = field.walls();
+        Walls walls3 = field.walls();
+        assertSame(walls1, walls2);
+        assertSame(walls2, walls3);
+        assertSame(walls3, walls1);
 
         Iterator<Wall> iterator1 = walls1.iterator();
         Iterator<Wall> iterator2 = walls2.iterator();
@@ -1323,16 +1221,16 @@ public class BombermanTest {
         Point wall11 = iterator1.next();
         Point wall12 = iterator2.next();
         Point wall13 = iterator3.next();
-        assertNotSame(wall11, wall12);
-        assertNotSame(wall12, wall13);
-        assertNotSame(wall13, wall11);
+        assertSame(wall11, wall12);
+        assertSame(wall12, wall13);
+        assertSame(wall13, wall11);
 
         Point wall21 = iterator1.next();
         Point wall22 = iterator2.next();
         Point wall23 = iterator3.next();
-        assertNotSame(wall21, wall22);
-        assertNotSame(wall22, wall23);
-        assertNotSame(wall23, wall21);
+        assertSame(wall21, wall22);
+        assertSame(wall22, wall23);
+        assertSame(wall23, wall21);
     }
 
     // в настройках уровня так же есть и разрущающиеся стены
@@ -1370,19 +1268,13 @@ public class BombermanTest {
                 "#H###\n");
     }
 
-    private void dice(Dice dice, int... values) {
-        OngoingStubbing<Integer> when = when(dice.next(anyInt()));
-        for (int value : values) {
-            when = when.thenReturn(value);
-        }
-    }
-
     // появляются чертики, их несоклько за игру
     // каждый такт чертики куда-то рендомно муваются
     // если бомбермен и чертик попали в одну клетку - бомбермен умирает
     @Test
     public void shouldRandomMoveMonster() {
         givenBoardWithMeatChopper(11);
+
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼        &☼\n" +
                 "☼ ☼ ☼ ☼ ☼ ☼\n" +
@@ -1395,7 +1287,7 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.DOWN.value());
+        dice(chopperDice, 1, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1410,7 +1302,7 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1);
+        dice(chopperDice, 1);
         field.tick();
         field.tick();
         field.tick();
@@ -1429,7 +1321,7 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 0, Direction.LEFT.value());
+        dice(chopperDice, 0, Direction.LEFT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1464,7 +1356,7 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.RIGHT.value());
+        dice(chopperDice, 1, Direction.RIGHT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1479,11 +1371,11 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 0, Direction.LEFT.value());
+        dice(chopperDice, 0, Direction.LEFT.value());
         field.tick();
         field.tick();
 
-        dice(meatChppperDice, Direction.LEFT.value());
+        dice(chopperDice, Direction.LEFT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1498,7 +1390,7 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, Direction.DOWN.value());
+        dice(chopperDice, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1528,24 +1420,9 @@ public class BombermanTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         Assert.assertTrue(game.isGameOver());
-        verify(listener).event(Events.KILL_BOMBERMAN);
+        verify(listener).event(Events.DIED);
     }
 
-    private void givenBoardWithMeatChopper(int size) {
-        dice(meatChppperDice, size - 2, size - 2);
-
-        Field temp = mock(Field.class);
-        when(temp.size()).thenReturn(size);
-        MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), temp, v(1), meatChppperDice);
-        bombermans = mock(List.class);
-        when(bombermans.contains(anyObject())).thenReturn(false);
-        when(temp.getBombermans()).thenReturn(bombermans);
-        withWalls(walls);
-        walls.regenerate();
-        givenBoard(size);
-
-        dice(meatChppperDice, 1, Direction.UP.value());  // Чертик будет упираться в стенку и стоять на месте
-    }
 
     // чертик умирает, если попадает под взывающуюся бомбу
     @Test
@@ -1565,7 +1442,7 @@ public class BombermanTest {
                 "☼☺        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.DOWN.value());
+        dice(chopperDice, 1, Direction.DOWN.value());
         field.tick();
         field.tick();
         field.tick();
@@ -1575,14 +1452,17 @@ public class BombermanTest {
         field.tick();
         field.tick();
 
-        dice(meatChppperDice, 1, Direction.LEFT.value());
+        dice(chopperDice, 1, Direction.LEFT.value());
         field.tick();
         field.tick();
+
         hero.act();
         hero.up();
         field.tick();
+
         hero.up();
         field.tick();
+
         field.tick();
         field.tick();
 
@@ -1612,7 +1492,7 @@ public class BombermanTest {
                 "☼҉x       ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        dice(meatChppperDice, SIZE - 2, SIZE - 2, Direction.DOWN.value());
+        dice(chopperDice, SIZE - 2, SIZE - 2, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -1629,14 +1509,7 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldFireEventWhenKillBomberman() {
-        shouldKillBoomberman_whenBombExploded();
-
-        verify(listener).event(Events.KILL_BOMBERMAN);
-    }
-
-    @Test
-    public void shouldNoEventsWhenBombermanNotMove() {
+    public void shouldNoEventsWhenHeroNotMove() {
         field.tick();
         field.tick();
         field.tick();
@@ -1647,7 +1520,10 @@ public class BombermanTest {
 
     @Test
     public void shouldFireEventWhenKillWall() {
-        givenBoardWithDestroyWallsAt(0, 0);
+        destroyWallAt(0, 0);
+
+        dice(heroDice, 1, 0);
+        givenBoard(SIZE);
 
         asrtBrd("     \n" +
                 "     \n" +
@@ -1674,28 +1550,13 @@ public class BombermanTest {
         verify(listener).event(Events.KILL_DESTROY_WALL);
     }
 
-    static class DestroyWallAt extends WallsDecorator {
-
-        public DestroyWallAt(int x, int y, Walls walls) {
-            super(walls);
-            walls.add(new DestroyWall(x, y));
-        }
-
-        @Override
-        public Wall destroy(int x, int y) {   // неразрушаемая стенка
-            return walls.get(x, y);
-        }
-
-    }
-
-    private void givenBoardWithDestroyWallsAt(int x, int y) {
-        withWalls(new DestroyWallAt(x, y, new WallsImpl()));
-        givenBoard(SIZE);
-    }
-
     @Test
     public void shouldFireEventWhenKillMeatChopper() {
-        givenBoardWithMeatChopperAt(0, 0);
+        meatChopperAt(0, 0);
+
+        dice(heroDice,
+                1, 0);
+        givenBoard(SIZE);
 
         hero.act();
         hero.right();
@@ -1716,30 +1577,16 @@ public class BombermanTest {
         verify(listener).event(Events.KILL_MEAT_CHOPPER);
     }
 
-
-    static class MeatChopperAt extends WallsDecorator {
-
-        public MeatChopperAt(int x, int y, Walls walls) {
-            super(walls);
-            walls.add(new MeatChopper(x, y));
-        }
-
-        @Override
-        public Wall destroy(int x, int y) {   // неубиваемый монстрик
-            return walls.get(x, y);
-        }
-
-    }
-
-    private void givenBoardWithMeatChopperAt(int x, int y) {
-        withWalls(new MeatChopperAt(x, y, new WallsImpl()));
-        givenBoard(SIZE);
-    }
-
     @Test
     public void shouldCalculateMeatChoppersAndWallKills() {
-        withWalls(new MeatChopperAt(0, 0, new DestroyWallAt(0, 1, new MeatChopperAt(0, 2, new DestroyWallAt(0, 3, new WallsImpl())))));
+        meatChopperAt(0, 0);
+        destroyWallAt(0, 1);
+        meatChopperAt(0, 2);
+        destroyWallAt(0, 3);
+
+        dice(heroDice, 1, 0);
         givenBoard(SIZE);
+
         canDropBombs(4);
         bombsPower(1);
 
@@ -1764,6 +1611,7 @@ public class BombermanTest {
         hero.act();
         hero.up();
         field.tick();
+
         asrtBrd(" ☺   \n" +
                 "#4   \n" +
                 "&3   \n" +
@@ -1772,58 +1620,116 @@ public class BombermanTest {
 
         hero.right();
         field.tick();
+
         asrtBrd("  ☺  \n" +
                 "#3   \n" +
                 "&2   \n" +
                 "#1   \n" +
                 "x҉҉  \n");
 
+        verifyAllEvents("[KILL_MEAT_CHOPPER]");
+
         field.tick();
+
         asrtBrd("  ☺  \n" +
                 "#2   \n" +
                 "&1   \n" +
                 "H҉҉  \n" +
-                "&҉   \n");
+                " ҉   \n");
+
+        verifyAllEvents("[KILL_DESTROY_WALL]");
 
         field.tick();
+
         asrtBrd("  ☺  \n" +
                 "#1   \n" +
                 "x҉҉  \n" +
-                "#҉   \n" +
-                "&    \n");
+                " ҉   \n" +
+                "     \n");
+
+        verifyAllEvents("[KILL_MEAT_CHOPPER]");
 
         field.tick();
+
         asrtBrd(" ҉☺  \n" +
                 "H҉҉  \n" +
-                "&҉   \n" +
-                "#    \n" +
-                "&    \n");
+                " ҉   \n" +
+                "     \n" +
+                "     \n");
+
+        verifyAllEvents("[KILL_DESTROY_WALL]");
 
         hero.left();
         field.tick();
+
         hero.down();
         hero.act();
         field.tick();
+
         asrtBrd("     \n" +
-                "#☻   \n" +
-                "&    \n" +
-                "#    \n" +
-                "&    \n");
+                " ☻   \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
+
         field.tick();
         field.tick();
         field.tick();
         field.tick();
+
         asrtBrd(" ҉   \n" +
-                "HѠ҉  \n" +
-                "&҉   \n" +
-                "#    \n" +
-                "&    \n");
+                "҉Ѡ҉  \n" +
+                " ҉   \n" +
+                "     \n" +
+                "     \n");
 
-        assertBombermanDie();
+        verifyAllEvents("[DIED]");
+        assertHeroDie();
 
-        initBomberman();
+        initHero();
         field.tick();
+        dice(heroDice, 1, 0);
         game.newGame();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                " ☺   \n");
+
+        hero.act();
+        hero.right();
+        field.tick();
+
+        hero.right();
+        field.tick();
+
+        field.tick();
+        field.tick();
+        field.tick();
+
+        asrtBrd("     \n" +
+                "     \n" +
+                "     \n" +
+                " ҉   \n" +
+                "҉҉҉☺ \n");
+    }
+
+    @Test
+    public void shouldCalculateMeatChoppersAndWallKills_caseBigBadaboom() {
+        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(true));
+
+        meatChopperAt(0, 0);
+        destroyWallAt(0, 1);
+        meatChopperAt(0, 2);
+        destroyWallAt(0, 3);
+
+        dice(heroDice, 1, 0);
+        givenBoard(SIZE);
+
+        canDropBombs(4);
+        bombsPower(1);
+
         asrtBrd("     \n" +
                 "#    \n" +
                 "&    \n" +
@@ -1831,18 +1737,47 @@ public class BombermanTest {
                 "&☺   \n");
 
         hero.act();
+        hero.up();
+        field.tick();
+
+        hero.act();
+        hero.up();
+        field.tick();
+
+        hero.act();
+        hero.up();
+        field.tick();
+
+        hero.act();
+        hero.up();
+        field.tick();
+
+        asrtBrd(" ☺   \n" +
+                "#4   \n" +
+                "&3   \n" +
+                "#2   \n" +
+                "&1   \n");
+
+        verifyAllEvents("[]");
+
         hero.right();
         field.tick();
-        hero.right();
+
+        asrtBrd(" ҉☺  \n" +
+                "H҉҉  \n" +
+                "x҉҉  \n" +
+                "H҉҉  \n" +
+                "x҉҉  \n");
+
         field.tick();
-        field.tick();
-        field.tick();
-        field.tick();
-        asrtBrd("     \n" +
-                "#    \n" +
-                "&    \n" +
-                "#҉   \n" +
-                "x҉҉☺ \n");
+
+        asrtBrd("  ☺  \n" +
+                "     \n" +
+                "     \n" +
+                "     \n" +
+                "     \n");
+
+        verifyAllEvents("[KILL_MEAT_CHOPPER, KILL_DESTROY_WALL, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]");
     }
 
     // если я двинулся за пределы стены и тут же поставил бомбу, то бомба упадет на моем текущем месте
@@ -1851,6 +1786,7 @@ public class BombermanTest {
         givenBoardWithOriginalWalls();
         hero.up();
         field.tick();
+
         hero.up();
         field.tick();
 
@@ -1878,13 +1814,17 @@ public class BombermanTest {
 
         hero.up();
         field.tick();
+
         hero.up();
         field.tick();
+
         hero.right();
         hero.act();
         field.tick();
+
         hero.left();
         field.tick();
+
         hero.down();
         field.tick();
 
@@ -1894,7 +1834,7 @@ public class BombermanTest {
                 "☼   ☼\n" +
                 "☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, Direction.LEFT.value());
+        dice(chopperDice, Direction.LEFT.value());
         field.tick();
 
         asrtBrd("☼☼☼☼☼\n" +
@@ -1905,16 +1845,21 @@ public class BombermanTest {
     }
 
     @Test
-    public void shouldStopBlastWhenBombermanOrDestroyWalls() {
+    public void shouldStopBlastWhenHeroOrDestroyWalls() {
         bombsPower(5);
-        withWalls(new DestroyWallAt(3, 0, new WallsImpl()));
+
+        destroyWallAt(3, 0);
+
         givenBoard(7);
+        when(heroDice.next(anyInt())).thenReturn(101); // don't drop perk by accident
 
         hero.act();
         hero.up();
         field.tick();
+
         hero.up();
         field.tick();
+
         field.tick();
         field.tick();
         field.tick();
@@ -1931,16 +1876,22 @@ public class BombermanTest {
     @Test
     public void shouldStopBlastWhenMeatChopper() {
         bombsPower(5);
-        withWalls(new MeatChopperAt(4, 0, new WallsImpl()));
+
+        meatChopperAt(4, 0);
+
+        dice(heroDice, 0, 0);
         givenBoard(7);
 
         hero.act();
         hero.up();
         field.tick();
+
         hero.up();
         field.tick();
+
         hero.up();
         field.tick();
+
         hero.right();
         field.tick();
         field.tick();
@@ -1957,15 +1908,21 @@ public class BombermanTest {
     @Test
     public void shouldMeatChopperAppearAfterKill() {
         bombsPower(3);
-        dice(meatChppperDice, 3, 0, Direction.DOWN.value());
-        withWalls(new MeatChoppers(new WallsImpl(), field, v(1), meatChppperDice));
+
+        dice(chopperDice, 3, 0, Direction.DOWN.value());
+        MeatChoppers walls = new MeatChoppers(new WallsImpl(), v(1), chopperDice);
+        walls.init(field);
+        withWalls(walls);
+
         givenBoard(SIZE);
 
         hero.act();
         hero.up();
         field.tick();
+
         hero.right();
         field.tick();
+
         field.tick();
         field.tick();
         field.tick();
@@ -1976,7 +1933,7 @@ public class BombermanTest {
                 "҉☺   \n" +
                 "҉҉҉x \n");
 
-        dice(meatChppperDice, 2, 2, Direction.DOWN.value());
+        dice(chopperDice, 2, 2, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("     \n" +
@@ -1989,15 +1946,22 @@ public class BombermanTest {
     @Test
     public void shouldMeatChopperNotAppearWhenDestroyWall() {
         bombsPower(3);
-        dice(meatChppperDice, 4, 4, Direction.RIGHT.value());
-        withWalls(new MeatChoppers(new DestroyWallAt(3, 0, new WallsImpl()), field, v(1), meatChppperDice));
+
+        dice(chopperDice, 4, 4, Direction.RIGHT.value());
+        destroyWallAt(3, 0);
+        MeatChoppers walls = new MeatChoppers(this.walls, v(1), chopperDice);
+        walls.init(field);
+        withWalls(walls);
+
         givenBoard(SIZE);
 
         hero.act();
         hero.up();
         field.tick();
+
         hero.right();
         field.tick();
+
         field.tick();
         field.tick();
         field.tick();
@@ -2008,20 +1972,21 @@ public class BombermanTest {
                 "҉☺   \n" +
                 "҉҉҉H \n");
 
-        dice(meatChppperDice, Direction.DOWN.value());
+        dice(chopperDice, Direction.DOWN.value());
         field.tick();
 
         asrtBrd("     \n" +
                 "    &\n" +
                 "     \n" +
                 " ☺   \n" +
-                "   # \n");
+                "     \n");
     }
 
     // Чертик не может появится на бомбере!
     @Test
-    public void shouldMeatChopperNotApperOnBommber() {
+    public void shouldMeatChopperNotAppearOnHero() {
         shouldMonsterCanMoveOnBomb();
+
         hero.down();
         field.tick();
 
@@ -2031,28 +1996,75 @@ public class BombermanTest {
                 "☼☺  ☼\n" +
                 "☼☼☼☼☼\n");
 
-        dice(meatChppperDice, 1, 2, Direction.DOWN.value());
-        when(bombermans.contains(anyObject())).thenReturn(true);
+        dice(chopperDice,
+                0, 0, // на неразрушаемой стене нельзя
+                hero.getX(), hero.getY(), // попытка поселиться на бобмере
+                3, 3, // попытка - клетка свободна
+                Direction.DOWN.value()); // а это куда он сразу же отправится
 
-        try {
-            field.tick();
-//            fail(); // TODO надо с этим разобраться
-        } catch (IllegalStateException e) {
-            assertEquals("java.lang.IllegalStateException: Dead loop at MeatChoppers.regenerate!", e.toString());
-        }
+        // when пришла пора регенериться чоперу
+        field.tick();
+
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼   ☼\n" +
+                "☼ ☼&☼\n" +
+                "☼☺  ☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldWallNotAppearOnHero() {
+        int size = 5;
+        dice(wallDice, 2, 1);
+        dice(heroDice, 1, 1);  // hero в левом нижнем углу
+
+        EatSpaceWalls walls = new EatSpaceWalls(new OriginalWalls(v(size)), v(1), wallDice);
+        withWalls(walls);
+
+        givenBoard(size);
+
+        walls.init(field);
+        walls.regenerate();
 
         asrtBrd("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
                 "☼ ☼ ☼\n" +
-                "☼☺  ☼\n" +
+                "☼☺# ☼\n" +
                 "☼☼☼☼☼\n");
 
+        hero.act();
+        field.tick();
+
+        hero.up();
+        field.tick();
+
+        hero.up();
+        field.tick();
+
+        hero.right();
+        field.tick();
+
+        field.tick();
+
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼҉☼ ☼\n" +
+                "☼҉H ☼\n" +
+                "☼☼☼☼☼\n");
+        // when
+        field.tick();
+        dice(wallDice,
+                0, 0,                     // на неразрушаемоей стене нельзя
+                hero.getX(), hero.getY(), // на месте бомбера не должен появиться
+                1, 1);                    // а вот тут свободно
+
+        // then
+        asrtBrd("☼☼☼☼☼\n" +
+                "☼ ☺ ☼\n" +
+                "☼ ☼ ☼\n" +
+                "☼#  ☼\n" +
+                "☼☼☼☼☼\n");
     }
 
-
-    // под разрущающейся стенкой может быть приз - это специальная стенка
-    // появляется приз - увеличение длительности ударной волны - его может бомбермен взять и тогда ударная волна будет больше
-    // появляется приз - хождение сквозь разрушающиеся стенки - взяв его, бомбермен может ходить через тенки
-    // чертики тоже могут ставить бомбы
 
 }

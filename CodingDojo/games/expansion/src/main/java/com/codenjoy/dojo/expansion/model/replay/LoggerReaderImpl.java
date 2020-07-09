@@ -4,7 +4,7 @@ package com.codenjoy.dojo.expansion.model.replay;
  * #%L
  * expansion - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2017 EPAM
+ * Copyright (C) 2016 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -43,15 +43,15 @@ import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 public class LoggerReaderImpl implements LoggerReader {
 
     private List<TickData> boards = new LinkedList<>();
-    private String playerName;
+    private String playerId;
     private String hero;
     private Point basePosition;
     private Elements baseColor;
     private Map<String, String> playerNames = new LinkedHashMap<>();
     private Map<String, JSONObject> bases = new LinkedHashMap<>();
 
-    public LoggerReaderImpl(String replayName, String playerName) {
-        this.playerName = playerName;
+    public LoggerReaderImpl(String replayName, String playerId) {
+        this.playerId = playerId;
 
         File file = GameLoggerImpl.getReplayFile(replayName);
         List<String> strings = Levels.loadLines(
@@ -111,7 +111,7 @@ public class LoggerReaderImpl implements LoggerReader {
 
         bases.put(name, getCoordinateJSON(base));
 
-        if (player.equals(playerName)) {
+        if (player.equals(playerId)) {
             this.hero = hero;
             basePosition = new PointImpl(new JSONObject(base));
             baseColor = Elements.getForce(Integer.valueOf(color));

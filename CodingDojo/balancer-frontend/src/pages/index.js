@@ -7,6 +7,8 @@ import HomePage from './HomePage';
 import PrivacyPolicyPage from './PrivacyPolicyPage';
 import PrivacyRulesPage from './PrivacyRulesPage';
 import UnavailablePage from './UnavailablePage';
+import ForgotPasswordPage from './ForgotPasswordPage';
+import RegisterConfirmPage from './RegisterConfirmPage';
 
 export {
     LoginPage,
@@ -18,4 +20,6 @@ export {
     PrivacyPolicyPage,
     PrivacyRulesPage,
     UnavailablePage,
+    ForgotPasswordPage,
+    RegisterConfirmPage,
 };
