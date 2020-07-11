@@ -3692,13 +3692,14 @@ public class BattlecityTest {
     //3. Река
     @Test
     public void shouldBeConstructionWater_whenGameCreated() {
+	    //given
         tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
         rivers = new LinkedList<>(Arrays.asList(new River(3, 3)));
-
+        //when
         givenGameWithRiver(tanks, rivers);
-
+        //then
         assertEquals(1, game.getRivers().size());
-
+        //then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -3710,31 +3711,49 @@ public class BattlecityTest {
 
 	//3.1) река - через нее герою нельзя пройти. но можно стрелять
 	@Test
-	public void shouldTankCantGoIfRiverAtWay() {
+	public void shouldTankCanGoIfRiverAtWay() {
+	    //given
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
-
+        //when
 		givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
-		hero.up();
-		game.tick();
-		hero.up();
-		game.tick();
-		assertD("☼☼☼☼☼☼☼\n" +
-				"☼     ☼\n" +
-				"☼     ☼\n" +
-				"☼     ☼\n" +
-				"☼▓    ☼\n" +
-				"☼▲    ☼\n" +
-				"☼☼☼☼☼☼☼\n");
-	}
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
 
 	@Test
-	public void shouldBulletCantGoIfRiverAtWay() {
+	public void shouldBulletCanGoIfRiverAtWay() {
+	    //given
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
-
+        //when
 		givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
 		hero.up();
 		game.tick();
@@ -3770,15 +3789,24 @@ public class BattlecityTest {
 	}
 
     @Test
-    public void shouldDoNotMove_whenRiverToWay_goDownOrLeft() {
+    public void shouldDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
+	    //given
         tanks = new LinkedList<>(Arrays.asList(tank(3, 3, Direction.UP)));
         rivers = new LinkedList<>(Arrays.asList(
                 new River(2, 3),
                 new River(4, 3),
                 new River(3, 2),
                 new River(3, 4)));
-
+        //when
         givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓▲▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         hero.right();
         game.tick();
@@ -3823,14 +3851,23 @@ public class BattlecityTest {
 
     //3.2) река - через нее врагу нельзя пройти. но можно стрелять
     @Test
-    public void shouldOtherTankBullet_CantGoIfRiverAtWay() {
+    public void shouldOtherTankBullet_canGoIfRiverAtWay() {
+	    //given
         Tank tankHero = tank(3, 2, Direction.UP);
         Tank otherTank = tank(1, 1, Direction.UP);
 
         tanks = Arrays.asList(tankHero, otherTank);
         rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
-
+        //when
         givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼˄    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         otherTank.up();
         game.tick();
@@ -3866,7 +3903,8 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldOtherTankDoNotMove_whenRiverToWay_goDownOrLeft() {
+    public void shouldOtherTankDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
+	    //given
         Tank tankHero = tank(5, 1, Direction.UP);
         Tank otherTank = tank(3, 3, Direction.UP);
 
@@ -3876,8 +3914,16 @@ public class BattlecityTest {
                 new River(4, 3),
                 new River(3, 2),
                 new River(3, 4)));
-
+        //when
         givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓˄▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         otherTank.right();
         game.tick();
@@ -3922,56 +3968,23 @@ public class BattlecityTest {
 
     //3.3) река - через нее боту нельзя пройти. но можно стрелять
     @Test
-    public void shouldAITank() {
-        Tank aiTank = setAITank(3, 3, Direction.DOWN);
-        givenGameWithAI(tank(5, 1, Direction.UP), aiTank);
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼  ¿  ☼\n" +
-                "☼     ☼\n" +
-                "☼    ▲☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        aiTank.up();
-        game.tick();
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼  ?  ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼    ▲☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        aiTank.right();
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼  »  ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼    ▲☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        game.tick();
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼   » ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼    ▲☼\n" +
-                "☼☼☼☼☼☼☼\n");
-    }
-
-    @Test
-    public void shouldAITankBullet_CantGoIfRiverAtWay() {
+    public void shouldAITankBullet_canGoIfRiverAtWay() {
+	    //given
         Tank tankHero = tank(3, 2, Direction.UP);
         Tank aiTank = setAITank(1, 1, Direction.UP);
 
         tanks = Arrays.asList(tankHero, aiTank);
         rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
-
+        //when
         givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼?    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
 
         aiTank.up();
         game.tick();
@@ -4016,7 +4029,8 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldAITankDoNotMove_whenRiverToWay_goDownOrLeft() {
+    public void shouldAITankDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
+	    //given
         Tank tankHero = tank(5, 1, Direction.UP);
         Tank aiTank = setAITank(3, 3, Direction.DOWN);
 
@@ -4026,10 +4040,9 @@ public class BattlecityTest {
                 new River(4, 3),
                 new River(3, 2),
                 new River(3, 4)));
-
+        //when
         givenGameWithRiver(tanks, rivers);
-
-        game.tick();
+        //then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ▓  ☼\n" +
