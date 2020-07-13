@@ -110,7 +110,8 @@ public class BattlecityTest {
 
     public static Tank aiTank(int x, int y, Direction direction, int ticksPerBullets ) {
         Dice dice = getDice(x, y);
-        return new AITank(x, y, dice, direction);
+        Point pt = pt(x, y);
+        return new AITank(pt, dice, direction);
     }
 
     public Tank aiTank(int x, int y, Direction direction) {
@@ -120,7 +121,8 @@ public class BattlecityTest {
 
     public static Tank aiTankWithPrize(int x, int y, Direction direction, int bulletsForKill) {
         Dice dice = getDice(x, y);
-        return new AITankWithPrize(x, y, dice, direction,  bulletsForKill);
+        Point pt = pt(x, y);
+        return new AITankWithPrize(pt, dice, direction,  bulletsForKill);
     }
 
     private static Dice getDice(int x, int y) {

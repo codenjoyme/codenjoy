@@ -353,7 +353,8 @@ public class Battlecity implements Field {
         if (countRespawnAiWithPrize > 1) {
             int indexAiWithPrize = countRespawnAiWithPrize - 2;
             if (this.aiTanksCount == indexAiWithPrize) {
-                Tank aiTankWithPrize = new AITankWithPrize(tank.getX(), tank.getY(), dice, tank.getDirection(), bulletsForKillAIWithPrize);
+                Point pt = pt(tank.getX(), tank.getY());
+                Tank aiTankWithPrize = new AITankWithPrize(pt, dice, tank.getDirection(), bulletsForKillAIWithPrize);
                 tank = aiTankWithPrize;
             }
         }
