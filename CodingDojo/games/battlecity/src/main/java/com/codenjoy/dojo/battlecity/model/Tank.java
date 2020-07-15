@@ -41,7 +41,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     protected int speed;
     protected boolean moving;
     private boolean fire;
-    private boolean isTankWithPrize;
 
     public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
         super(pt);
@@ -203,8 +202,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    public boolean isTankWithPrize() {
-        isTankWithPrize = false;
-        return isTankWithPrize;
+    protected boolean isTankPrize() {
+        return false;
     }
 }
