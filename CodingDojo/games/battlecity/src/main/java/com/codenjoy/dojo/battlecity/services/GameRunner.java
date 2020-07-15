@@ -45,8 +45,6 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType {
 
     private LevelImpl level;
-    private Parameter<Integer> countRespawnAiWithPrize;
-    private Parameter<Integer> bulletsForKillAIWithPrize;
 
     public GameRunner() {
         new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
@@ -61,17 +59,16 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
-        countRespawnAiWithPrize = settings.addEditBox("count respawn for AI Tank with prize").type(Integer.class).def(4);
-        bulletsForKillAIWithPrize = settings.addEditBox("bullets for kill AI Tank with prize").type(Integer.class).def(3);
-
+        Parameter<Integer> spawnAiPrize = settings.addEditBox("count spawn for AI Tank with prize").type(Integer.class).def(4);
+        Parameter<Integer> hitKillsAiPrize = settings.addEditBox("hits to kill AI Tank with prize").type(Integer.class).def(3);
         Parameter<Object> parameter = settings.getParameter("name");
 
         return new Battlecity(level.size(),
                 getDice(),
                 level.getConstructions(),
                 level.getBorders(),
-                countRespawnAiWithPrize.getValue(),
-                bulletsForKillAIWithPrize.getValue(),
+                spawnAiPrize,
+                hitKillsAiPrize,
                 level.getTanks().toArray(new Tank[0])
         );
     }

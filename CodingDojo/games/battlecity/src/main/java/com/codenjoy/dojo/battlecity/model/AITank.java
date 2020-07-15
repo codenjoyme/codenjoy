@@ -31,7 +31,6 @@ public class AITank extends Tank {
 
     public static final int MAX = 10;
     private int act;
-    private boolean isTankWithPrize;
 
     public AITank(Point pt, Dice dice, Direction direction) {
         super(pt, direction, dice, 1);
@@ -71,10 +70,5 @@ public class AITank extends Tank {
         } else {
             return Elements.BANG;
         }
-    }
-
-    public boolean isTankWithPrize() {
-        isTankWithPrize = false;
-        return isTankWithPrize;
     }
 }
