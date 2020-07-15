@@ -162,8 +162,6 @@ public class BattlecityTest {
             if (count == totalAiPrize) {
                 return true;
             }
-        } else {
-            return false;
         }
         return false;
     }
