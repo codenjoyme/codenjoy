@@ -25,6 +25,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
+import com.codenjoy.dojo.battlecity.model.prizes.Prize;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -34,11 +35,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.PointImpl.random;
 
 public class Battlecity implements Field {
 
     private Dice dice;
     private LinkedList<Tank> aiTanks;
+    private LinkedList<Prize> prizes;
     private int aiCount;
     private int spawnAiPrize;
     private int hitKillsAiPrize;
@@ -63,6 +66,7 @@ public class Battlecity implements Field {
         this.dice = dice;
         this.size = size;
         this.aiTanks = new LinkedList<>();
+        this.prizes = new LinkedList<>();
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
         this.spawnAiPrize = spawnAiPrize.getValue();
@@ -146,12 +150,28 @@ public class Battlecity implements Field {
         for (Tank tank : getTanks()) {
             if (!tank.isAlive()) {
                 aiTanks.remove(tank);
+                if (tank.isTankPrize()) {
+                    dropPrize();
+                }
             }
         }
+
         for (Player player : players.toArray(new Player[0])) {
             if (!player.getHero().isAlive()) {
                 players.remove(player);
             }
+        }
+    }
+
+    private void dropPrize() {
+        Point pt;
+        int c = 0;
+        do {
+           pt = random(dice, size);
+        } while (isBarrier(pt) && c++ < size);
+
+        if (!isBarrier(pt)) {
+            prizes.add(new Prize(pt));
         }
     }
 
@@ -285,6 +305,10 @@ public class Battlecity implements Field {
         return result;
     }
 
+    public List<Prize> getPrizes() {
+        return prizes;
+    }
+
     @Override
     public void remove(Player player) {   // TODO test me
         players.remove(player);
@@ -320,6 +344,7 @@ public class Battlecity implements Field {
                     addAll(Battlecity.this.getTanks());
                     addAll(Battlecity.this.getConstructions());
                     addAll(Battlecity.this.getBullets());
+                    addAll(Battlecity.this.getPrizes());
                 }};
             }
         };

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
+import com.codenjoy.dojo.battlecity.model.prizes.Prize;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -139,6 +140,12 @@ public class BattlecityTest {
         return dice;
     }
 
+    private static Dice getDice(Point pt) {
+        Dice dice = mock(Dice.class);
+        when(dice.next(anyInt())).thenReturn(pt.getX(), pt.getY());
+        return dice;
+    }
+
     public void givenGameWithConstruction(int x, int y) {
         givenGame(tank(1, 1, Direction.UP), new Construction(x, y));
     }
@@ -164,6 +171,33 @@ public class BattlecityTest {
             }
         }
         return false;
+    }
+
+    private boolean assertPrize(Point pt) {
+        List<Prize> prizes = game.getPrizes();
+        if(prizes.size() == 0) {
+            return false;
+        }
+
+        Point point = prizes.get(0).getPoint();
+        if (point.equals(pt)) {
+            return true;
+        }
+        return false;
+    }
+
+    private void givenGameWithKilledAiPrize() {
+        Bullet bullet = mock(Bullet.class);
+        spawnAiPrize = setParameter("count spawn", 0);
+        hitKillsAiPrize = setParameter("hits to kill", 1);
+        Tank tank = tank(1, 1, Direction.UP);
+        Tank aiTank = aiTankPrize(1, 5, Direction.DOWN, hitKillsAiPrize);
+
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction(3, 3)), spawnAiPrize, hitKillsAiPrize);
+        initPlayer(game, tank);
+        this.hero = tank;
+        game.addAI(aiTank);
+        aiTank.kill(bullet);
     }
 
     @Test
@@ -3267,6 +3301,151 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
+
+    @Test
+    public void shouldDropPrizeInPointKilledAiPrize() {
+        size = 7;
+        givenGameWithKilledAiPrize();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.setDice(getDice(1, 5));
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(true, assertPrize(pt(1, 5)));
+    }
+
+    @Test
+    public void shouldDropPrizeInFreePoint() {
+        size = 7;
+        givenGameWithKilledAiPrize();
+        Point pt = pt(4,5);
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.setDice(getDice(pt));
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼   1 ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(true, assertPrize(pt));
+    }
+
+    @Test
+    public void shouldNotDropPrizeInPointPlayerTank() {
+        size = 7;
+        givenGameWithKilledAiPrize();
+        Point pt = pt(1,1);
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.setDice(getDice(pt));
+        game.tick();
+
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(false, assertPrize(pt));
+    }
+
+    // если дропнуть приз в точку [0, 4], [0, 5], [0, 6] -> то дропнет в [4, 4], [5, 5], [6, 6], не могу понять окуда они берутся?
+    // если дропнуть приз в точку [1, 1], [3, 3] -> то не дропнет, возвращает false
+    @Test
+    public void shouldNotDropPrizeInPointField() {
+        size = 7;
+        givenGameWithKilledAiPrize();
+        Point pt = pt(0,4);
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.setDice(getDice(pt));
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼   1 ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(false, assertPrize(pt));
+        assertEquals(true, assertPrize(pt(4, 4))); //откуда он ее берет
+    }
+
+    @Test
+    public void shouldNotDropPrizeInPointConstruction() {
+        size = 7;
+        givenGameWithKilledAiPrize();
+        Point pt = pt(3,3);
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.setDice(getDice(pt));
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(false, assertPrize(pt));
+    }
+
+
 }
 
 
