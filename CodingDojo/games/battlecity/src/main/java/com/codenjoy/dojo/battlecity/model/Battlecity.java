@@ -25,6 +25,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
+import com.codenjoy.dojo.battlecity.model.prizes.PrizeChoice;
 import com.codenjoy.dojo.battlecity.model.prizes.Prize;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.*;
@@ -41,7 +42,7 @@ public class Battlecity implements Field {
 
     private Dice dice;
     private LinkedList<Tank> aiTanks;
-    private LinkedList<Prize> prizes;
+    private LinkedList<Prize> prize;
     private int aiCount;
     private int spawnAiPrize;
     private int hitKillsAiPrize;
@@ -52,6 +53,7 @@ public class Battlecity implements Field {
     private List<Border> borders;
 
     private List<Player> players = new LinkedList<Player>();
+    private PrizeChoice prizeChoice = new PrizeChoice();
 
     public Battlecity(int size, Dice dice, List<Construction> constructions, Parameter<Integer> spawnAiPrize,
                       Parameter<Integer> hitKillsAiPrize, Tank... aiTanks) {
@@ -66,7 +68,7 @@ public class Battlecity implements Field {
         this.dice = dice;
         this.size = size;
         this.aiTanks = new LinkedList<>();
-        this.prizes = new LinkedList<>();
+        this.prize = new LinkedList<>();
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
         this.spawnAiPrize = spawnAiPrize.getValue();
@@ -171,7 +173,9 @@ public class Battlecity implements Field {
         } while (isBarrier(pt) && c++ < size);
 
         if (!isBarrier(pt)) {
-            prizes.add(new Prize(pt));
+            prizeChoice.addPrizes(pt);
+            prize.add(prizeChoice.getPrize());
+            prizeChoice.clear();
         }
     }
 
@@ -305,8 +309,8 @@ public class Battlecity implements Field {
         return result;
     }
 
-    public List<Prize> getPrizes() {
-        return prizes;
+    public List<Prize> getPrize() {
+        return prize;
     }
 
     @Override
@@ -344,7 +348,7 @@ public class Battlecity implements Field {
                     addAll(Battlecity.this.getTanks());
                     addAll(Battlecity.this.getConstructions());
                     addAll(Battlecity.this.getBullets());
-                    addAll(Battlecity.this.getPrizes());
+                    addAll(Battlecity.this.getPrize());
                 }};
             }
         };
