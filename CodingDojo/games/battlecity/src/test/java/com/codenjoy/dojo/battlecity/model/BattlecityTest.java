@@ -25,6 +25,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.battlecity.model.prizes.Prize;
+import com.codenjoy.dojo.battlecity.model.prizes.PrizeChoice;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -35,6 +36,7 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -146,6 +148,12 @@ public class BattlecityTest {
         return dice;
     }
 
+    private Dice getPrizeChoiceDice(int value) {
+        Dice dice = mock(Dice.class);
+        Mockito.when(dice.next(anyInt())).thenReturn(value);
+        return dice;
+    }
+
     public void givenGameWithConstruction(int x, int y) {
         givenGame(tank(1, 1, Direction.UP), new Construction(x, y));
     }
@@ -174,12 +182,12 @@ public class BattlecityTest {
     }
 
     private boolean assertPrize(Point pt) {
-        List<Prize> prizes = game.getPrizes();
-        if(prizes.size() == 0) {
+        List<Prize> prize = game.getPrize();
+        if(prize.size() == 0) {
             return false;
         }
 
-        Point point = prizes.get(0).getPoint();
+        Point point = prize.get(0).getPoint();
         if (point.equals(pt)) {
             return true;
         }
@@ -187,6 +195,7 @@ public class BattlecityTest {
     }
 
     private void givenGameWithKilledAiPrize() {
+        PrizeChoice prizeChoice = mock(PrizeChoice.class);
         Bullet bullet = mock(Bullet.class);
         spawnAiPrize = setParameter("count spawn", 0);
         hitKillsAiPrize = setParameter("hits to kill", 1);
@@ -198,6 +207,7 @@ public class BattlecityTest {
         this.hero = tank;
         game.addAI(aiTank);
         aiTank.kill(bullet);
+        prizeChoice.setDice(getPrizeChoiceDice(0));
     }
 
     @Test
@@ -3306,6 +3316,7 @@ public class BattlecityTest {
     public void shouldDropPrizeInPointKilledAiPrize() {
         size = 7;
         givenGameWithKilledAiPrize();
+        Point pt = pt(1,5);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼Ѡ    ☼\n" +
@@ -3315,7 +3326,7 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        game.setDice(getDice(1, 5));
+        game.setDice(getDice(pt));
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -3326,7 +3337,7 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertEquals(true, assertPrize(pt(1, 5)));
+        assertEquals(true, assertPrize(pt));
     }
 
     @Test
@@ -3444,8 +3455,6 @@ public class BattlecityTest {
 
         assertEquals(false, assertPrize(pt));
     }
-
-
 }
 
 
