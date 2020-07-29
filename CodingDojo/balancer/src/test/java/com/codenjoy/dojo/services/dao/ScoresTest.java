@@ -44,7 +44,7 @@ public class ScoresTest {
     public void setup() {
         String dbFile = "target/scores.db" + new Random().nextInt();
         service = new Scores(
-                new SqliteConnectionThreadPoolFactory(dbFile,
+                new SqliteConnectionThreadPoolFactory(false, dbFile,
                         new ContextPathGetter() {
                             @Override
                             public String getContext() {
