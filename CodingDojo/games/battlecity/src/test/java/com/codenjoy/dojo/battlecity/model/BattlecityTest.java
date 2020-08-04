@@ -3669,11 +3669,12 @@ public class BattlecityTest {
 	//2. Лёд
     @Test
     public void shouldBeConstructionIce_whenGameCreated() {
+	    //given
         tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
         ice = new LinkedList<>(Arrays.asList(new Ice(3, 3)));
-
+        //when
         givenGameWithIce(tanks, ice);
-
+        //then
         assertEquals(1, game.getIce().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -3685,7 +3686,78 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    //2.1) когда на нем двигается герой, он проскальзывает команду на целых два тика
+    //2.1) когда герой двигается по льду, происходит скольжение (он проскальзывает одну команду).
+    @Test
+    public void shouldTankMoveUP_onIce() {
+
+        size = 11;
+        tanks = new LinkedList<>(Arrays.asList(tank(5, 2, Direction.UP)));
+        ice = new LinkedList<>(Arrays.asList(
+                new Ice(5, 3),
+                new Ice(5, 4),
+                new Ice(5, 5)));
+
+        givenGameWithIce(tanks, ice);
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //заежаем на лёд
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //находимся на льду
+        //выполнили команаду right(), но танк не реагирует, так как происходит скольжение
+        //двигается дальше с предедущей командой up()
+        hero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //не задаем никаких команд
+        //ничего не происходит
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
     //2.2) также когда на нем двигается враг он проскальзывает команду на два тика
     //2.3) также когда на нем двигается бот он проскальзывает команду на два тика
 

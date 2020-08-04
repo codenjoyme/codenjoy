@@ -164,6 +164,12 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
             return Elements.TREE;
         }
 
+        //лёд и танк в одной кординате
+        Ice ice = filterOne(alsoAtPoint, Ice.class);
+        if (ice != null) {
+            slide();
+        }
+
         if (isAlive()) {
             if (player.getHero() == this) {
                 switch (direction) {
@@ -185,6 +191,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         } else {
             return Elements.BANG;
         }
+    }
+
+    private void slide() {
+
     }
 
     public void reset() {
