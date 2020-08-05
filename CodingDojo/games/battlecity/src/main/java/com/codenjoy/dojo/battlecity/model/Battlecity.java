@@ -25,8 +25,6 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
-import com.codenjoy.dojo.battlecity.model.prizes.PrizeChoice;
-import com.codenjoy.dojo.battlecity.model.prizes.Prize;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -53,7 +51,7 @@ public class Battlecity implements Field {
     private List<Border> borders;
 
     private List<Player> players = new LinkedList<Player>();
-    private PrizeChoice prizeChoice = new PrizeChoice();
+    private List<Elements> prizes = new LinkedList<Elements>();
 
     public Battlecity(int size, Dice dice, List<Construction> constructions, Parameter<Integer> spawnAiPrize,
                       Parameter<Integer> hitKillsAiPrize, Tank... aiTanks) {
@@ -123,6 +121,7 @@ public class Battlecity implements Field {
                 }
             }
         }
+
         for (Bullet bullet : getBullets()) {
             bullet.move();
         }
@@ -153,6 +152,7 @@ public class Battlecity implements Field {
             if (!tank.isAlive()) {
                 aiTanks.remove(tank);
                 if (tank.isTankPrize()) {
+                    addPrizes();
                     dropPrize();
                 }
             }
@@ -165,6 +165,12 @@ public class Battlecity implements Field {
         }
     }
 
+    private void addPrizes() {
+        prizes.add(Elements.PRIZE_IMMORTALITY);
+        prizes.add(Elements.PRIZE_BREAKING_WALLS);
+        prizes.add(Elements.PRIZE_WALKING_ON_WATER);
+    }
+
     private void dropPrize() {
         Point pt;
         int c = 0;
@@ -173,9 +179,7 @@ public class Battlecity implements Field {
         } while (isBarrier(pt) && c++ < size);
 
         if (!isBarrier(pt)) {
-            prizeChoice.addPrizes(pt);
-            prize.add(prizeChoice.getPrize());
-            prizeChoice.clear();
+            prize.add(new Prize(pt, prizes.get(dice.next(prizes.size()))));
         }
     }
 
