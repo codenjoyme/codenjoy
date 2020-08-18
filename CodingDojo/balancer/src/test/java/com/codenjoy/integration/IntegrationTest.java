@@ -290,7 +290,7 @@ public class IntegrationTest {
     @Test
     public void shouldSameRegisterFailed_whenPresent_byEmail() {
         // given
-        shouldRegister_whenNotPresent();
+        shouldCreateOnGameServer_afterVerification();
         resetMocks();
 
         shouldCreateNewPlayerOnBalancer(playerId);
@@ -323,7 +323,7 @@ public class IntegrationTest {
     @Test
     public void shouldSameRegisterFailed_whenPresent_byPhone() {
         // given
-        shouldRegister_whenNotPresent();
+        shouldCreateOnGameServer_afterVerification();
         resetMocks();
 
         shouldCreateNewPlayerOnBalancer(playerId);
@@ -572,7 +572,7 @@ public class IntegrationTest {
     @Test
     public void shouldUnSuccessfulLogin_whenNotEmailFound() {
         // given
-        shouldRegister_whenNotPresent();
+        shouldCreateOnGameServer_afterVerification();
         resetMocks();
 
         shouldCheckIfExistsOnGame(true);
@@ -597,7 +597,7 @@ public class IntegrationTest {
     @Test
     public void shouldUnSuccessfulLogin_whenBadPassword() {
         // given
-        shouldRegister_whenNotPresent();
+        shouldCreateOnGameServer_afterVerification();
         resetMocks();
 
         shouldCheckIfExistsOnGame(true);
@@ -622,7 +622,7 @@ public class IntegrationTest {
     @Test
     public void shouldSuccessfulLogin_whenCodeInsteadOfPassword() {
         // given
-        shouldRegister_whenNotPresent();
+        shouldCreateOnGameServer_afterVerification();
         resetMocks();
 
         shouldCheckIfExistsOnGame(true);
@@ -647,7 +647,7 @@ public class IntegrationTest {
                 "}");
 
         // then
-        verifyLogin("test@gmail.com", "password");
+        verifyLogin("test@gmail.com", password);
     }
 
     private void assertPlayerApproved(int expected) {
@@ -655,7 +655,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void shouldCreatOnGameServer_afterVerification() {
+    public void shouldCreateOnGameServer_afterVerification() {
         // given
         shouldRegister_whenNotPresent();
         resetMocks();
@@ -689,7 +689,7 @@ public class IntegrationTest {
     @Test
     public void shouldSuccessfulLogin_afterVerification_caseExistsOnGame() {
         // given
-        shouldCreatOnGameServer_afterVerification();
+        shouldCreateOnGameServer_afterVerification();
 
         shouldCheckIfExistsOnGame(true);
         reset(players);
@@ -719,7 +719,7 @@ public class IntegrationTest {
     @Test // TODO продолжаем тут
     public void shouldSuccessfulLogin_afterVerification_caseNotExistsOnGame() {
         // given
-        shouldCreatOnGameServer_afterVerification();
+        shouldCreateOnGameServer_afterVerification();
 
         reset(game);
         shouldCheckIfExistsOnGame(false);
@@ -779,22 +779,22 @@ public class IntegrationTest {
     @Test
     public void shouldExistOnGameServer_whenRegistered() {
         // given
-        shouldRegister_whenNotPresent();
+        shouldCreateOnGameServer_afterVerification();
 
         shouldCheckIfExistsOnGame(true);
 
         // when
-        assertGet("/rest/player/test@gmail.com/active/" + code,
+        assertGet("/rest/player/" + playerId + "/active/" + code,
                 "true");
 
         // then
-        verify(game).existsOnServer("localhost:8080", "test@gmail.com");
+        verify(game).existsOnServer("localhost:8080", playerId);
     }
 
     @Test
     public void shouldExitFromGameServer_whenRegistered() {
         // given
-        shouldRegister_whenNotPresent();
+        shouldCreateOnGameServer_afterVerification();
 
         shouldExitFromGame(true);
 
@@ -814,11 +814,11 @@ public class IntegrationTest {
         shouldCheckIfExistsOnGame(false);
 
         // when
-        assertGet("/rest/player/test@gmail.com/join/" + code,
+        assertGet("/rest/player/" + playerId + "/join/" + code,
                 "true");
 
         // then
-        verify(game).existsOnServer("localhost:8080", "test@gmail.com");
+        verify(game).existsOnServer("localhost:8080", playerId);
         verify(game).createNewPlayer(
                 "localhost:8080",
                 playerId,
@@ -836,16 +836,16 @@ public class IntegrationTest {
     @Test
     public void shouldRemoveFromServer_whenRegistered() {
         // given
-        shouldJoinToGameServer_whenRegistered();
+        shouldCreateOnGameServer_afterVerification();
 
         shouldExitFromGame(true);
 
         // when
-        assertGet("/rest/remove/test@gmail.com/", "true");
+        assertGet("/rest/remove/" + playerId + "/", "true");
 
         // then
-        verify(game).remove("localhost:8080", "test@gmail.com");
-        verify(players).remove("test@gmail.com");
+        verify(game).remove("localhost:8080", playerId);
+        verify(players).remove(playerId);
     }
 
     private void resetMocks() {
