@@ -122,7 +122,12 @@ public class IntegrationTest {
     @SpyBean
     private SecurityContextAuthenticator authenticator;
 
+    private final String password = Hash.md5("password");
+    private final String badPassword = Hash.md5("BAD-password");
+    private final String playerId = "generated-id";
+    private final String passwordEnc = "$2a$10$Enc0dEd2";
     private String verificationCode;
+    private String code;
 
     @Before
     public void setup() {
@@ -234,13 +239,13 @@ public class IntegrationTest {
         shouldRegister_whenNotPresent();
 
         // then
-        verify(sms).sendSmsTo("+380501234567", verificationCode, SmsService.SmsType.REGISTRATION);
+        verifySendSms(SmsService.SmsType.REGISTRATION);
 
         ArgumentCaptor<SmsService.SmsSendRequest> captor = ArgumentCaptor.forClass(SmsService.SmsSendRequest.class);
         verify(gateway).sendSms(captor.capture());
         assertEquals("SmsService.SmsSendRequest(operation=SENDSMS, " +
                 "message=SmsService.Message(lifetime=4, recipient=+380501234567, " +
-                "body=Vash kod pidtverdzennya reestratsui: " + verificationCode + ".\n" +
+                "body=Vash kod pidtverdzennya reestratsii: " + verificationCode + ".\n" +
                 "Codenjoy Team.))", captor.getValue().toString());
     }
 
@@ -249,8 +254,8 @@ public class IntegrationTest {
         // given
         clean();
 
-        shouldCreateNewPlayerOnGame("generated-id", "12345678901234567890");
-        passwordEncoded("password", "$2a$10$Enc0dEd2");
+        passwordEncoded(password, "$2a$10$Enc0dEd2");
+        shouldCreateNewPlayerOnBalancer(playerId);
 
         // when
         assertPost("/rest/register",
@@ -258,33 +263,23 @@ public class IntegrationTest {
                 validPlayer(),
 
                 "{\n" +
-                "  'code':'12345678901234567890',\n" +
+                "  'code':'" + code + "',\n" +
                 "  'email':'test@gmail.com',\n" +
-                "  'id':'generated-id',\n" +
+                "  'id':'" + playerId + "',\n" +
                 // номер нормализировался
                 "  'phone':'+380501234567',\n" +
-                "  'server':'localhost:8080'\n" +
+                "  'server':null\n" +
                 "}");
-
-        // then
-        verify(game).createNewPlayer(
-                "localhost:8080",
-                "generated-id",
-                "12345678901234567890",
-                "test@gmail.com",
-                "+380501234567",
-                "Stiven Pupkin",
-                // raw password идет на game сервер, там он захешируется
-                "password",
-                "127.0.0.1",
-                "0", // create new
-                "{}");
 
         verify(players, times(1)).create(any(Player.class));
 
         assertPlayer();
 
-        verifyLogin("test@gmail.com", "password");
+        verifyLogin("test@gmail.com", password);
+    }
+
+    private void verifySendSms(SmsService.SmsType type) {
+        verify(sms).sendSmsTo("+380501234567", verificationCode, type);
     }
 
     private void passwordEncoded(String encoded, String decoded) {
@@ -298,7 +293,7 @@ public class IntegrationTest {
         shouldRegister_whenNotPresent();
         resetMocks();
 
-        shouldCreateNewPlayerOnGame("generated-id", "12345678901234567890");
+        shouldCreateNewPlayerOnBalancer(playerId);
 
         // when
         assertPost(400, "/rest/register",
@@ -310,7 +305,7 @@ public class IntegrationTest {
                 "  'lastName':'Pupkin'," +
                 // а телефон другой
                 "  'phone':'0500000000'," +
-                "  'password':'password'," +
+                "  'password':'" + password + "'," +
                 "  'city':'city'," +
                 "  'skills':'Si Senior'," +
                 "  'comment':'no comment'" +
@@ -331,23 +326,23 @@ public class IntegrationTest {
         shouldRegister_whenNotPresent();
         resetMocks();
 
-        shouldCreateNewPlayerOnGame("generated-id", "12345678901234567890");
+        shouldCreateNewPlayerOnBalancer(playerId);
 
         // when
         assertPost(400, "/rest/register",
 
                 "{" +
-                        // email другой
-                        "  'email':'other-email@gmail.com'," +
-                        "  'firstName':'Stiven'," +
-                        "  'lastName':'Pupkin'," +
-                        // но телефон тот же
-                        "  'phone':'0501234567'," +
-                        "  'password':'password'," +
-                        "  'city':'city'," +
-                        "  'skills':'Si Senior'," +
-                        "  'comment':'no comment'" +
-                        "}",
+                // email другой
+                "  'email':'other-email@gmail.com'," +
+                "  'firstName':'Stiven'," +
+                "  'lastName':'Pupkin'," +
+                // но телефон тот же
+                "  'phone':'0501234567'," +
+                "  'password':'" + password + "'," +
+                "  'city':'city'," +
+                "  'skills':'Si Senior'," +
+                "  'comment':'no comment'" +
+                "}",
 
                 "IllegalArgumentException: User with this phone number is already registered");
 
@@ -359,23 +354,24 @@ public class IntegrationTest {
     }
 
     private void assertPlayer() {
-        Player player = players.get("generated-id");
+        Player player = players.get(playerId);
         if (verificationCode == null) { // TODO#2 немного жвачки
             verificationCode = player.getVerificationCode();
         }
         assertEquals("Player{" +
-                        "id='generated-id', " +
+                        "id='" + playerId + "', " +
                         "email='test@gmail.com', " +
                         "phone='+380501234567', " +
                         "firstName='Stiven', " +
                         "lastName='Pupkin', " +
-                        "password='$2a$10$Enc0dEd2', " +
+                        "password='" + passwordEnc + "', " +
                         "city='city', " +
                         "skills='Si Senior', " +
                         "comment='no comment', " +
-                        "code='12345678901234567890', " +
-                        "server='localhost:8080', " +
+                        "code='" + code + "', " +
+                        "server='null', " +
                         "approved=0, " +
+                        "callback='127.0.0.1', " +
                         "verificationCode='" + verificationCode + "', " +
                         "verificationType='REGISTRATION'}",
                 player.toString());
@@ -387,7 +383,7 @@ public class IntegrationTest {
         clean();
         debug.setDebugEnable(true);
 
-        shouldCreateNewPlayerOnGame("generated-id", "12345678901234567890");
+        shouldCreateNewPlayerOnBalancer(playerId);
         shouldThrowWhenCreateNewPlayerOnGame(new RuntimeException("Shit happens"));
 
         // when
@@ -400,12 +396,12 @@ public class IntegrationTest {
         // then
         verify(game).createNewPlayer(
                 "localhost:8080",
-                "generated-id",
-                "12345678901234567890",
+                playerId,
+                code,
                 "test@gmail.com",
                 "+380501234567",
                 "Stiven Pupkin",
-                "password",
+                password,
                 "127.0.0.1",
                 "0",
                 "{}");
@@ -416,7 +412,7 @@ public class IntegrationTest {
     private void verifyDoNothingOnPlayers() {
         verify(players, never()).create(any(Player.class));
 
-        assertEquals(players.get("generated-id"),
+        assertEquals(players.get(playerId),
                 null);
     }
 
@@ -428,7 +424,7 @@ public class IntegrationTest {
                 "  'phone':'0501234567'," +
                 // пароль должен быть в чистом виде, потому что мы
                 // авторизируемся так же в spring security
-                "  'password':'password'," +
+                "  'password':'" + password + "'," +
                 "  'city':'city'," +
                 "  'skills':'Si Senior'," +
                 "  'comment':'no comment'" +
@@ -448,7 +444,7 @@ public class IntegrationTest {
                 "  'firstName':'Stiven'," +
                 "  'lastName':'Pupkin'," +
                 "  'phone':'0501234567'," +
-                "  'password':'password'," +
+                "  'password':'" + password + "'," +
                 "  'city':'city'," +
                 "  'skills':'Si Senior'," +
                 "  'comment':'no comment'" +
@@ -473,7 +469,7 @@ public class IntegrationTest {
                 "  'firstName':'Stiven'," +
                 "  'lastName':'Pupkin'," +
                 "  'phone':'0501234567'," +
-                "  'password':'password'," +
+                "  'password':'" + password + "'," +
                 "  'city':'city'," +
                 "  'skills':'Si Senior'," +
                 "  'comment':'no comment'" +
@@ -523,7 +519,7 @@ public class IntegrationTest {
                 "  'firstName':null," +        // there is an error
                 "  'lastName':null," +         // there is an error
                 "  'phone':'123'," +           // there is an error
-                "  'password':'password'," +
+                "  'password':'" + password + "'," +
                 "  'city':null," +             // there is an error
                 "  'skills':null," +           // there is an error
                 "  'comment':null" +           // it's ok
@@ -563,7 +559,7 @@ public class IntegrationTest {
 
                 "{" +
                 "  'email':'test@gmail.com'," +
-                "  'password':'password'" +
+                "  'password':'" + password + "'," +
                 "}",
 
                 "LoginException: User is not verified");
@@ -588,7 +584,7 @@ public class IntegrationTest {
 
                 "{" +
                 "  'email':'bad-email@gmail.com'," +  // не тот имейл
-                "  'password':'password'" +
+                "  'password':'" + password + "'," +
                 "}",
 
                 "LoginException: User with this email not found");
@@ -613,7 +609,7 @@ public class IntegrationTest {
 
                 "{" +
                 "  'email':'test@gmail.com'," +
-                "  'password':'BAD-password'" +  // не тот пароль
+                "  'password':'" + badPassword + "'" +  // не тот пароль
                 "}",
 
                 "LoginException: Wrong password/code for this email");
@@ -638,14 +634,14 @@ public class IntegrationTest {
 
                 "{" +
                 "  'email':'test@gmail.com'," +
-                "  'code':'12345678901234567890'," +  // по коду можно залогиниться
-                "  'password':'BAD-password'" +       // но пароль надо хоть какой-то указать, пусть не верный
+                "  'code':'" + code + "'," +  // по коду можно залогиниться
+                "  'password':'" + badPassword + "'" +       // но пароль надо хоть какой-то указать, пусть не верный
                 "}",
 
                 "{\n" +
-                "  'code':'12345678901234567890',\n" +
+                "  'code':'" + code + "',\n" +
                 "  'email':'test@gmail.com',\n" +
-                "  'id':'generated-id',\n" +
+                "  'id':'" + playerId + "',\n" +
                 "  'phone':'+380501234567',\n" +
                 "  'server':'localhost:8080'\n" +
                 "}");
@@ -655,39 +651,101 @@ public class IntegrationTest {
     }
 
     private void assertPlayerApproved(int expected) {
-        assertEquals(expected, players.get("generated-id").getApproved());
+        assertEquals(expected, players.get(playerId).getApproved());
     }
 
     @Test
-    public void shouldSuccessfulLogin_afterVerification() {
+    public void shouldCreatOnGameServer_afterVerification() {
         // given
         shouldRegister_whenNotPresent();
         resetMocks();
 
-        shouldCheckIfExistsOnGame(true);
-        passwordEncoded("password", "$2a$10$Enc0dEd2");
+        shouldCheckIfExistsOnGame(false);
+        passwordEncoded(password, passwordEnc);
+
+        shouldCreateNewPlayerOnGame();
+
+        // when
         confirmRegistration();
+
+        // then
+        verifyCreatePlayerOnGame();
+    }
+
+    private void verifyCreatePlayerOnGame() {
+        verify(game).createNewPlayer(
+                "localhost:8080",
+                playerId,
+                code,
+                "test@gmail.com",
+                "+380501234567",
+                "Stiven Pupkin",
+                passwordEnc,
+                "127.0.0.1",
+                "0", // create new
+                "{}");
+    }
+
+    @Test
+    public void shouldSuccessfulLogin_afterVerification_caseExistsOnGame() {
+        // given
+        shouldCreatOnGameServer_afterVerification();
+
+        shouldCheckIfExistsOnGame(true);
+        reset(players);
 
         // when
         assertPost("/rest/login",
 
                 "{" +
                 "  'email':'test@gmail.com'," +
-                // пароль не должен быть хешированный
-                "  'password':'password'" +
+                "  'password':'" + password + "'" +
                 "}",
 
                 "{\n" +
-                "  'code':'12345678901234567890',\n" +
+                "  'code':'" + code + "',\n" +
                 "  'email':'test@gmail.com',\n" +
-                "  'id':'generated-id',\n" +
+                "  'id':'" + playerId + "',\n" +
                 "  'phone':'+380501234567',\n" +
                 "  'server':'localhost:8080'\n" +
                 "}");
 
         // then
-        verify(game).existsOnServer("localhost:8080", "test@gmail.com");
-        verifyLogin("test@gmail.com", "password");
+        verify(game).existsOnServer("localhost:8080", playerId);
+        verify(players, never()).updateServer(anyString(), anyString(), anyString());
+        verifyLogin("test@gmail.com", password);
+    }
+
+    @Test // TODO продолжаем тут
+    public void shouldSuccessfulLogin_afterVerification_caseNotExistsOnGame() {
+        // given
+        shouldCreatOnGameServer_afterVerification();
+
+        reset(game);
+        shouldCheckIfExistsOnGame(false);
+        shouldCreateNewPlayerOnGame();
+
+        // when
+        assertPost("/rest/login",
+
+                "{" +
+                "  'email':'test@gmail.com'," +
+                "  'password':'" + password + "'" +
+                "}",
+
+                "{\n" +
+                "  'code':'" + code + "',\n" +
+                "  'email':'test@gmail.com',\n" +
+                "  'id':'" + playerId + "',\n" +
+                "  'phone':'+380501234567',\n" +
+                "  'server':'localhost:8080'\n" +
+                "}");
+
+        // then
+        verifyCreatePlayerOnGame();
+        verify(game).existsOnServer("localhost:8080", playerId);
+        verify(players).updateServer(playerId, "localhost:8080", code);
+        verifyLogin("test@gmail.com", password);
     }
 
     private void confirmRegistration() {
@@ -703,9 +761,9 @@ public class IntegrationTest {
                 "}",
 
                 "{\n" +
-                "  'code':'12345678901234567890',\n" +
+                "  'code':'" + code + "',\n" +
                 "  'email':'test@gmail.com',\n" +
-                "  'id':'generated-id',\n" +
+                "  'id':'" + playerId + "',\n" +
                 "  'phone':'+380501234567',\n" +
                 "  'server':'localhost:8080'\n" +
                 "}");
@@ -726,7 +784,7 @@ public class IntegrationTest {
         shouldCheckIfExistsOnGame(true);
 
         // when
-        assertGet("/rest/player/test@gmail.com/active/12345678901234567890",
+        assertGet("/rest/player/test@gmail.com/active/" + code,
                 "true");
 
         // then
@@ -741,34 +799,34 @@ public class IntegrationTest {
         shouldExitFromGame(true);
 
         // when
-        assertGet("/rest/player/test@gmail.com/exit/12345678901234567890",
+        assertGet("/rest/player/" + playerId + "/exit/" + code,
                 "true");
 
         // then
-        verify(game).remove("localhost:8080", "test@gmail.com");
+        verify(game).remove("localhost:8080", playerId);
     }
 
     @Test
     public void shouldJoinToGameServer_whenRegistered() {
         // given
-        shouldSuccessfulLogin_afterVerification();
+        shouldSuccessfulLogin_afterVerification_caseExistsOnGame();
 
         shouldCheckIfExistsOnGame(false);
 
         // when
-        assertGet("/rest/player/test@gmail.com/join/12345678901234567890",
+        assertGet("/rest/player/test@gmail.com/join/" + code,
                 "true");
 
         // then
         verify(game).existsOnServer("localhost:8080", "test@gmail.com");
         verify(game).createNewPlayer(
                 "localhost:8080",
-                "generated-id",
-                "12345678901234567890",
+                playerId,
+                code,
                 "test@gmail.com",
                 "+380501234567",
                 "Stiven Pupkin",
-                "password",
+                password,
                 "127.0.0.1",
                 null, // try load from save
                 null
@@ -799,13 +857,16 @@ public class IntegrationTest {
                 passwordEncoder, authenticator);
     }
 
-    private void shouldCreateNewPlayerOnGame(String id, String code) {
+    private void shouldCreateNewPlayerOnBalancer(String id) {
         doReturn(id).when(generator).id();
 
-        doReturn(code).when(game).createNewPlayer(anyString(), anyString(), anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString(), anyString(), anyString());
+        code = Hash.getCode(id, passwordEncoder.encode(password));
     }
 
+    private void shouldCreateNewPlayerOnGame() {
+        doReturn(code).when(game).createNewPlayer(anyString(), anyString(), anyString(), anyString(), anyString(),
+                    anyString(), anyString(), anyString(), anyString(), anyString());
+    }
     private void shouldThrowWhenCreateNewPlayerOnGame(Exception exception) {
         doThrow(exception).when(game).createNewPlayer(anyString(), anyString(), anyString(), anyString(), anyString(),
                 anyString(), anyString(), anyString(), anyString(), anyString());
