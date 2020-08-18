@@ -110,6 +110,9 @@ public class RestAdminControllerTest {
     @Autowired
     private SaveService saveService;
 
+    @Autowired
+    private ConfigProperties config;
+
     @Before
     public void setUp() {
         CodenjoyContext.setContext("codenjoy-contest");
@@ -121,7 +124,10 @@ public class RestAdminControllerTest {
 
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
         SecurityContextHolder.getContext()
-                .setAuthentication(new UsernamePasswordAuthenticationToken("admin@codenjoyme.com", Hash.md5("admin")));
+                .setAuthentication(new UsernamePasswordAuthenticationToken(
+                        config.getAdminLogin(),
+                        Hash.md5(config.getAdminPassword()))
+                );
     }
 
     @After

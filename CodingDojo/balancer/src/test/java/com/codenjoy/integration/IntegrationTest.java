@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.dao.GameServer;
 import com.codenjoy.dojo.services.dao.Players;
 import com.codenjoy.dojo.services.dao.Scores;
 import com.codenjoy.dojo.services.entity.Player;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.httpclient.SmsGatewayClient;
 import com.codenjoy.dojo.services.properties.SmsProperties;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -136,8 +137,8 @@ public class IntegrationTest {
         SecurityContextHolder.getContext()
                 .setAuthentication(new UsernamePasswordAuthenticationToken(
                         config.getAdminLogin(),
-                        config.getAdminPassword()
-                ));
+                        Hash.md5(config.getAdminPassword()))
+                );
     }
 
     public void clean() {
