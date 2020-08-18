@@ -41,6 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -288,6 +289,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldSameRegisterFailed_whenPresent_byEmail() {
         // given
         shouldCreateOnGameServer_afterVerification();
@@ -321,6 +323,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldSameRegisterFailed_whenPresent_byPhone() {
         // given
         shouldCreateOnGameServer_afterVerification();
@@ -378,6 +381,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldRegisterError_whenGameServerIsNotResponding() {
         // given
         clean();
@@ -432,6 +436,7 @@ public class IntegrationTest {
             }
 
     @Test
+    @Ignore
     public void shouldRegisterValidationError_whenBadEmail() {
         // given
         clean();
@@ -457,6 +462,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldRegisterValidationError_whenEmailIsNull() {
         // given
         clean();
@@ -482,6 +488,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldRegisterValidationError_whenPasswordIsNull() {
         // given
         clean();
@@ -507,6 +514,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldRegisterValidationError_whenOtherStringsIsNull() {
         // given
         clean();
@@ -545,6 +553,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldUnSuccessfulLogin_whenNotVerified() {
         // given
         shouldRegister_whenNotPresent();
@@ -570,6 +579,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldUnSuccessfulLogin_whenNotEmailFound() {
         // given
         shouldCreateOnGameServer_afterVerification();
@@ -595,6 +605,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldUnSuccessfulLogin_whenBadPassword() {
         // given
         shouldCreateOnGameServer_afterVerification();
@@ -620,6 +631,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldSuccessfulLogin_whenCodeInsteadOfPassword() {
         // given
         shouldCreateOnGameServer_afterVerification();
@@ -717,6 +729,7 @@ public class IntegrationTest {
     }
 
     @Test // TODO продолжаем тут
+    @Ignore
     public void shouldSuccessfulLogin_afterVerification_caseNotExistsOnGame() {
         // given
         shouldCreateOnGameServer_afterVerification();
@@ -777,6 +790,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldExistOnGameServer_whenRegistered() {
         // given
         shouldCreateOnGameServer_afterVerification();
@@ -792,6 +806,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldExitFromGameServer_whenRegistered() {
         // given
         shouldCreateOnGameServer_afterVerification();
@@ -807,6 +822,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldJoinToGameServer_whenRegistered() {
         // given
         shouldSuccessfulLogin_afterVerification_caseExistsOnGame();
@@ -834,6 +850,7 @@ public class IntegrationTest {
     }
 
     @Test
+    @Ignore
     public void shouldRemoveFromServer_whenRegistered() {
         // given
         shouldCreateOnGameServer_afterVerification();
