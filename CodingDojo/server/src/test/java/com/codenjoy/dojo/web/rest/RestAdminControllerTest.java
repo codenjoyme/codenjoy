@@ -26,16 +26,13 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
-import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.stuff.SmartAssert;
-import com.codenjoy.dojo.web.rest.pojo.PGameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import lombok.SneakyThrows;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.After;
@@ -63,7 +60,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.fail;
@@ -114,22 +110,18 @@ public class RestAdminControllerTest {
     @Autowired
     private SaveService saveService;
 
-    @Autowired
-    private ErrorTicketService ticketService;
-
     @Before
     public void setUp() {
         CodenjoyContext.setContext("codenjoy-contest");
 
         debugService.resume();
-        ticketService.setPrintStackTrace(false);
 
         playerService.removeAll();
         saveService.removeAllSaves();
 
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
         SecurityContextHolder.getContext()
-                .setAuthentication(new UsernamePasswordAuthenticationToken("admin@codenjoyme.com", "admin"));
+                .setAuthentication(new UsernamePasswordAuthenticationToken("admin@codenjoyme.com", Hash.md5("admin")));
     }
 
     @After
@@ -551,14 +543,14 @@ public class RestAdminControllerTest {
 
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
         assertEquals("{\"parameters\":[" +
-                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[43],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[false,true],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[false],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[900],\"type\":\"editbox\",\"value\":\"900\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[true],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[50],\"type\":\"editbox\",\"value\":\"50\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[true],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[true],\"type\":\"checkbox\",\"value\":\"true\"}]}",
+                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
+                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
+                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[\"50\"],\"type\":\"editbox\",\"value\":\"50\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}]}",
                 settings2.toString());
 
         // when
@@ -586,19 +578,14 @@ public class RestAdminControllerTest {
 
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
         assertEquals("{\"parameters\":[" +
-                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[43,55],\"type\":\"editbox\",\"value\":\"55\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[false],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[false],\"type\":\"checkbox\",\"value\":\"false\"}," +
-                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[900],\"type\":\"editbox\",\"value\":\"900\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[true],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[50],\"type\":\"editbox\",\"value\":\"50\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[true],\"type\":\"checkbox\",\"value\":\"true\"}," +
-                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[true],\"type\":\"checkbox\",\"value\":\"true\"}]}",
+                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\",\"55\"],\"type\":\"editbox\",\"value\":\"55\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
+                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
+                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[\"50\"],\"type\":\"editbox\",\"value\":\"50\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}]}",
                 settings2.toString());
-    }
-
-    @Test // TODO закончить после того как пойму, почему не запускаются эти тесты
-    public void shouldGetVersion() {
-        assertEquals("{}", get("/rest/admin/version"));
     }
 }
