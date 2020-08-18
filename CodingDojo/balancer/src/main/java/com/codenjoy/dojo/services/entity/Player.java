@@ -67,7 +67,7 @@ public class Player {
     public Player(String id, String email, String phone, String firstName, String lastName,
                   String password, String city, String skills,
                   String comment, String code, String server,
-                  int approved, String verificationCode, String verificationType) {
+                  int approved, String callback, String verificationCode, String verificationType) {
         this.id = id;
         this.email = email;
         this.phone = phone;
@@ -80,6 +80,7 @@ public class Player {
         this.code = code;
         this.server = server;
         this.approved = approved;
+        this.callback = callback;
         this.verificationCode = verificationCode;
         this.verificationType = verificationType;
     }
@@ -99,6 +100,7 @@ public class Player {
                 ", code='" + code + '\'' +
                 ", server='" + server + '\'' +
                 ", approved=" + approved +
+                ", callback='" + callback + '\'' +
                 ", verificationCode='" + verificationCode + '\'' +
                 ", verificationType='" + verificationType + '\'' +
                 '}';
