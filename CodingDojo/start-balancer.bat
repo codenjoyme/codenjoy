@@ -8,8 +8,8 @@ java -jar %ROOT%\balancer\target\codenjoy-balancer.war ^
 		--game.type=bomberman ^
 		--game.servers=localhost:8080 ^
 		--room=1 ^
-		--start-day=2020-03-01 ^
-		--end-day=2020-03-31 ^
+		--start-day=2020-08-18 ^
+		--end-day=2020-08-30 ^
 		--finalists-count=10 ^
 		--final-time=19:00
  
