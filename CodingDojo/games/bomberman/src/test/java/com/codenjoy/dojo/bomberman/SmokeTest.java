@@ -33,6 +33,7 @@ import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.GameRunner;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
@@ -100,16 +101,9 @@ public class SmokeTest {
         String expectedAll = load("src/test/resources/SmokeTest.data");
         String actualAll = String.join("\n", messages);
 
-        String[] expected = expectedAll.split(LocalGameRunner.SEP);
-        String[] actual = actualAll.split(LocalGameRunner.SEP);
-
-        // проверяем порционно, потому что в 'mvn test'
-        // не видно на больших данных, где именно отличие
-        for (int i = 0; i < Math.min(expected.length, actual.length); i++) {
-            assertEquals(expected[i], actual[i]);
-        }
-        assertEquals(expected.length, actual.length);
-        assertEquals(expectedAll, actualAll);
+        TestUtils.assertSmoke(false,
+                (o1, o2) -> assertEquals(o1, o2),
+                expectedAll, actualAll);
     }
 
     private String load(String file) throws IOException {
