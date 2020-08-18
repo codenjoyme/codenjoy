@@ -46,7 +46,7 @@ public class LocalGameRunner {
 
     public static int timeout = 10;
     public static boolean printScores = true;
-    public static boolean printWelcome = true;
+    public static boolean printWelcome = false;
     public static boolean printBoardOnly = false;
     public static Consumer<String> out = System.out::println;
     public static Integer countIterations = null;
