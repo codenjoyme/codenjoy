@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 public class SmokeTest {
     @Test
@@ -74,6 +73,7 @@ public class SmokeTest {
         DefaultGameSettings.DESTROY_WALL_COUNT = 14;
         DefaultGameSettings.MEAT_CHOPPERS_COUNT = 3;
         PerksSettingsWrapper.setDropRatio(20);
+        PerksSettingsWrapper.setPickTimeout(5);
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 10);
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_REMOTE_CONTROL, 5, 10);
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_IMMUNE, 5, 10);
@@ -97,9 +97,19 @@ public class SmokeTest {
                 Arrays.asList(new Board(), new Board()));
 
         // then
-        assertEquals(load("src/test/resources/SmokeTest.data"),
-                String.join("\n", messages));
+        String expectedAll = load("src/test/resources/SmokeTest.data");
+        String actualAll = String.join("\n", messages);
 
+        String[] expected = expectedAll.split(LocalGameRunner.SEP);
+        String[] actual = actualAll.split(LocalGameRunner.SEP);
+
+        // проверяем порционно, потому что в 'mvn test'
+        // не видно на больших данных, где именно отличие
+        for (int i = 0; i < Math.min(expected.length, actual.length); i++) {
+            assertEquals(expected[i], actual[i]);
+        }
+        assertEquals(expected.length, actual.length);
+        assertEquals(expectedAll, actualAll);
     }
 
     private String load(String file) throws IOException {

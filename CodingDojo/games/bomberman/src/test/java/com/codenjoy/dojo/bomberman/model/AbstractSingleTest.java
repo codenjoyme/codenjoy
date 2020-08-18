@@ -22,6 +22,7 @@ package com.codenjoy.dojo.bomberman.model;
  * #L%
  */
 
+import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
@@ -71,6 +72,8 @@ public abstract class AbstractSingleTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     public void setup() {
+        PerksSettingsWrapper.reset();
+
         givenWalls();
 
         level = mock(Level.class);
