@@ -23,11 +23,16 @@ package com.codenjoy.dojo.kata.model.levels;
  */
 
 
-import org.reflections.Reflections;
+import com.codenjoy.dojo.utils.ReflectUtils;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class LevelsLoader {
+
+    private static List<Class<? extends Level>> classes;
 
     // TODO На админке можно менять порядок задач местами для играющих, а это убрать
     public static List<Level> getAlgorithms() {
@@ -43,7 +48,6 @@ public class LevelsLoader {
 
         return result;
     }
-
 
     private static void sortByComplexity(List<Level> result) {
         Collections.sort(result, Comparator.comparingInt(Level::complexity));
@@ -64,10 +68,16 @@ public class LevelsLoader {
     }
 
     private static List<Class<? extends Level>> loadClasses() {
-        List<Class<? extends Level>> classes = new LinkedList<>();
-        classes.addAll(findInPackage("com"));
-        classes.addAll(findInPackage("org"));
-        classes.addAll(findInPackage("net"));
+        // лейзи загрузка
+        if (classes != null) {
+            return classes;
+        }
+
+        classes = new LinkedList<>();
+
+        classes.addAll(ReflectUtils.findInPackage("com", Level.class));
+        classes.addAll(ReflectUtils.findInPackage("org", Level.class));
+        classes.addAll(ReflectUtils.findInPackage("net", Level.class));
 
         classes.remove(Level.class);
         classes.remove(NullLevel.class);
@@ -85,8 +95,4 @@ public class LevelsLoader {
         return classes;
     }
 
-    /// TODO убрать эту рефлексию отсюда - захардкодить уровни и все
-    private static Collection<? extends Class<? extends Level>> findInPackage(String packageName) {
-        return new Reflections(packageName).getSubTypesOf(Level.class);
-    }
 }
