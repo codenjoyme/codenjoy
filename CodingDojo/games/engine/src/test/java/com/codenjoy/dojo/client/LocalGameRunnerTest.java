@@ -63,6 +63,7 @@ public class LocalGameRunnerTest {
         LocalGameRunner.timeout = 100;
         LocalGameRunner.out = (e) -> messages.add(e);
         LocalGameRunner.countIterations = 3;
+        LocalGameRunner.printWelcome = false;
 
         id = 0;
 
@@ -205,20 +206,7 @@ public class LocalGameRunnerTest {
         LocalGameRunner.run(gameType, solver, board);
 
         // then
-        assertEquals("\n" +
-                    "     /\\  ______          _              _               _   \n" +
-                    "    //\\\\/ _____)        | |            (_)            _| |_ \n" +
-                    "   (____)/       ___  _ | | ____ ____   _  ___  _   _(  ___)\n" +
-                    "       | |      / _ \\/ || |/ _  )  _ \\ | |/ _ \\| | | |___  )\n" +
-                    "       | \\_____( (_) )(_| | (/ /| | | || | (_) ) |_| |_   _)\n" +
-                    "        \\______)\\___/\\____|\\____)_| |_|| |\\___/ \\__  | |_|  \n" +
-                    "                                      _| |      __/ /\n" +
-                    " ====================================(__/======(___/===========\n" +
-                    "  :: Codenjoy :: (Version v1.1.1_2020-08-18T10:08:55Z_68f758f9)\n" +
-                    "    :: Fork me on https://github.com/codenjoyme/codenjoy :: \n" +
-                    "   --------------------------------------------------------- \n" +
-                    "\n" +
-                    "GET_READER#0\n" +
+        assertEquals("GET_READER#0\n" +
                     "NEW_GAME#1\n" +
                     "CLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:2,elements:[[1,3], [2,4], [3,5]],player=PLAYER#6}#7}#8\n" +
                     "1:CLIENT_BOARD_PRINTED_TO_STRING#9\n" +

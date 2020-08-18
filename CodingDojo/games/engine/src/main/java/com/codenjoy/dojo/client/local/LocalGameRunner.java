@@ -46,6 +46,7 @@ public class LocalGameRunner {
 
     public static int timeout = 10;
     public static boolean printScores = true;
+    public static boolean printWelcome = true;
     public static boolean printBoardOnly = false;
     public static Consumer<String> out = System.out::println;
     public static Integer countIterations = null;
@@ -65,7 +66,9 @@ public class LocalGameRunner {
     private Integer tick;
 
     {
-        out.accept(VersionReader.getWelcomeMessage());
+        if (printWelcome) {
+            out.accept(VersionReader.getWelcomeMessage());
+        }
     }
 
     public static LocalGameRunner run(GameType gameType, Solver solver, ClientBoard board) {
