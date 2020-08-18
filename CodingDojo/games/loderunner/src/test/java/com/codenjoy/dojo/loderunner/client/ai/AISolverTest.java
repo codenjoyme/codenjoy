@@ -349,6 +349,11 @@ public class AISolverTest {
                 "[RIGHT, RIGHT, UP, UP, RIGHT]");
     }
 
+    /**
+     * Проверяет куда вообще можно походить из каждой клетки
+     * @param boardString поле
+     * @param expected ожидаемая карта возможных движений из каждой клетки
+     */
     private void assertW(String boardString, String expected) {
         DeikstraFindWay way = new DeikstraFindWay();
         Board board = (Board) new Board().forString(boardString);
@@ -385,19 +390,30 @@ public class AISolverTest {
         assertEquals(expected, buffer.toString());
     }
 
-    private void assertB(String boardString, Point pt, String expected) {
+    /**
+     * Проверяет куда можно походить на этом поле из заданной координаты
+     * @param boardString поле
+     * @param from проверяемая координата
+     * @param expected ожидаемые дозволенные направленияч движения из этой клетки
+     */
+    private void assertB(String boardString, Point from, String expected) {
         Board board = (Board) new Board().forString(boardString);
         AISolver solver = new AISolver(dice);
-        List<Direction> possible = new LinkedList<Direction>();
+        List<Direction> actual = new LinkedList<>();
         for (Direction direction : Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT)) {
-            boolean possible1 =  solver.possible(board).possible(pt, direction);
-            if (possible1) {
-                possible.add(direction);
+            boolean possible = solver.possible(board).check(board.size(), from, direction);
+            if (possible) {
+                actual.add(direction);
             }
         }
-        assertEquals(expected, possible.toString());
+        assertEquals(expected, actual.toString());
     }
 
+    /**
+     * Проверяет куда пойдет AISolver на этом поле
+     * @param boardString поле
+     * @param expected ожидаемый путь до горки золота
+     */
     private void assertC(String boardString, String expected) {
         Board board = (Board) new Board().forString(boardString);
         List<Direction> command = new AISolver(dice).getDirections(board);
