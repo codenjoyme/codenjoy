@@ -26,6 +26,7 @@ package com.codenjoy.dojo.client;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -118,12 +119,11 @@ public class LocalGameRunnerTest {
             return "PRINTER_PRINTS_BOARD{reader=" + reader + ",player=" + player + "}" + id();
         }));
 
-        listener = new EventListener() {
-            @Override
-            public void event(Object event) {
-                messages.add("GOT_EVENT{" + event + "}" + id());
-            }
-        };
+        listener = event -> messages.add("GOT_EVENT{" + event + "}" + id());
+
+        PlayerScores scores = mock(PlayerScores.class);
+        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
+        when(scores.getScore()).thenAnswer(inv -> "SCORE" + id());
 
         gamePlayer = new GamePlayer(listener) {
             PlayerHero hero;
@@ -182,25 +182,22 @@ public class LocalGameRunnerTest {
         when(gameType.createPlayer(any(EventListener.class), any(String.class)))
                 .thenReturn(gamePlayer);
 
-        solver = new Solver() {
-            @Override
-            public String get(ClientBoard board) {
-                String command = "ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN";
-                messages.add("SOLVER_SAID_COMMAND{" + command + "}" + id());
-                return command;
-            }
+        solver = board -> {
+            String command = "ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN";
+            messages.add("SOLVER_SAID_COMMAND{" + command + "}" + id());
+            return command;
         };
 
         board = new ClientBoard() {
             @Override
             public ClientBoard forString(String input) {
-                messages.add("GLIENT_GOT_BOARD{" + input + "}" + id());
+                messages.add("CLIENT_GOT_BOARD{" + input + "}" + id());
                 return board;
             }
 
             @Override
             public String toString() {
-                return "CLIENT_BOARD_PRINTED_TO_SRING" + id();
+                return "CLIENT_BOARD_PRINTED_TO_STRING" + id();
             }
         };
 
@@ -208,47 +205,63 @@ public class LocalGameRunnerTest {
         LocalGameRunner.run(gameType, solver, board);
 
         // then
-        assertEquals("GET_READER#0\n" +
-                        "NEW_GAME#1\n" +
-                        "GLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:2,elements:[[1,3], [2,4], [3,5]],player=PLAYER#6}#7}#8\n" +
-                        "1:CLIENT_BOARD_PRINTED_TO_SRING#9\n" +
-                        "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#10\n" +
-                        "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
-                        "GOT_EVENT{EVENT(ACT{[1, 5]})#11}#12\n" +
-                        "GOT_EVENT{EVENT(LEFT)#13}#14\n" +
-                        "GOT_EVENT{EVENT(RIGHT)#15}#16\n" +
-                        "GOT_EVENT{EVENT(ACT{[9]})#17}#18\n" +
-                        "GOT_EVENT{EVENT(UP)#19}#20\n" +
-                        "GOT_EVENT{EVENT(DOWN)#21}#22\n" +
-                        "TICK_GAME#23\n" +
-                        "TICK_HERO#24\n" +
-                        "------------------------------------------\n" +
-                        "GLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:25,elements:[[1,26], [2,27], [3,28]],player=PLAYER#29}#30}#31\n" +
-                        "1:CLIENT_BOARD_PRINTED_TO_SRING#32\n" +
-                        "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#33\n" +
-                        "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
-                        "GOT_EVENT{EVENT(ACT{[1, 5]})#34}#35\n" +
-                        "GOT_EVENT{EVENT(LEFT)#36}#37\n" +
-                        "GOT_EVENT{EVENT(RIGHT)#38}#39\n" +
-                        "GOT_EVENT{EVENT(ACT{[9]})#40}#41\n" +
-                        "GOT_EVENT{EVENT(UP)#42}#43\n" +
-                        "GOT_EVENT{EVENT(DOWN)#44}#45\n" +
-                        "TICK_GAME#46\n" +
-                        "TICK_HERO#47\n" +
-                        "------------------------------------------\n" +
-                        "GLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:48,elements:[[1,49], [2,50], [3,51]],player=PLAYER#52}#53}#54\n" +
-                        "1:CLIENT_BOARD_PRINTED_TO_SRING#55\n" +
-                        "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#56\n" +
-                        "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
-                        "GOT_EVENT{EVENT(ACT{[1, 5]})#57}#58\n" +
-                        "GOT_EVENT{EVENT(LEFT)#59}#60\n" +
-                        "GOT_EVENT{EVENT(RIGHT)#61}#62\n" +
-                        "GOT_EVENT{EVENT(ACT{[9]})#63}#64\n" +
-                        "GOT_EVENT{EVENT(UP)#65}#66\n" +
-                        "GOT_EVENT{EVENT(DOWN)#67}#68\n" +
-                        "TICK_GAME#69\n" +
-                        "TICK_HERO#70\n" +
-                        "------------------------------------------",
+        assertEquals("\n" +
+                    "     /\\  ______          _              _               _   \n" +
+                    "    //\\\\/ _____)        | |            (_)            _| |_ \n" +
+                    "   (____)/       ___  _ | | ____ ____   _  ___  _   _(  ___)\n" +
+                    "       | |      / _ \\/ || |/ _  )  _ \\ | |/ _ \\| | | |___  )\n" +
+                    "       | \\_____( (_) )(_| | (/ /| | | || | (_) ) |_| |_   _)\n" +
+                    "        \\______)\\___/\\____|\\____)_| |_|| |\\___/ \\__  | |_|  \n" +
+                    "                                      _| |      __/ /\n" +
+                    " ====================================(__/======(___/===========\n" +
+                    "  :: Codenjoy :: (Version v1.1.1_2020-08-18T10:08:55Z_68f758f9)\n" +
+                    "    :: Fork me on https://github.com/codenjoyme/codenjoy :: \n" +
+                    "   --------------------------------------------------------- \n" +
+                    "\n" +
+                    "GET_READER#0\n" +
+                    "NEW_GAME#1\n" +
+                    "CLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:2,elements:[[1,3], [2,4], [3,5]],player=PLAYER#6}#7}#8\n" +
+                    "1:CLIENT_BOARD_PRINTED_TO_STRING#9\n" +
+                    "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#10\n" +
+                    "1:Scores: SCORE#11\n" +
+                    "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
+                    "GOT_EVENT{EVENT(ACT{[1, 5]})#12}#13\n" +
+                    "GOT_EVENT{EVENT(LEFT)#14}#15\n" +
+                    "GOT_EVENT{EVENT(RIGHT)#16}#17\n" +
+                    "GOT_EVENT{EVENT(ACT{[9]})#18}#19\n" +
+                    "GOT_EVENT{EVENT(UP)#20}#21\n" +
+                    "GOT_EVENT{EVENT(DOWN)#22}#23\n" +
+                    "TICK_GAME#24\n" +
+                    "TICK_HERO#25\n" +
+                    "------------------------------------------\n" +
+                    "CLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:26,elements:[[1,27], [2,28], [3,29]],player=PLAYER#30}#31}#32\n" +
+                    "1:CLIENT_BOARD_PRINTED_TO_STRING#33\n" +
+                    "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#34\n" +
+                    "1:Scores: SCORE#35\n" +
+                    "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
+                    "GOT_EVENT{EVENT(ACT{[1, 5]})#36}#37\n" +
+                    "GOT_EVENT{EVENT(LEFT)#38}#39\n" +
+                    "GOT_EVENT{EVENT(RIGHT)#40}#41\n" +
+                    "GOT_EVENT{EVENT(ACT{[9]})#42}#43\n" +
+                    "GOT_EVENT{EVENT(UP)#44}#45\n" +
+                    "GOT_EVENT{EVENT(DOWN)#46}#47\n" +
+                    "TICK_GAME#48\n" +
+                    "TICK_HERO#49\n" +
+                    "------------------------------------------\n" +
+                    "CLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:50,elements:[[1,51], [2,52], [3,53]],player=PLAYER#54}#55}#56\n" +
+                    "1:CLIENT_BOARD_PRINTED_TO_STRING#57\n" +
+                    "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#58\n" +
+                    "1:Scores: SCORE#59\n" +
+                    "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
+                    "GOT_EVENT{EVENT(ACT{[1, 5]})#60}#61\n" +
+                    "GOT_EVENT{EVENT(LEFT)#62}#63\n" +
+                    "GOT_EVENT{EVENT(RIGHT)#64}#65\n" +
+                    "GOT_EVENT{EVENT(ACT{[9]})#66}#67\n" +
+                    "GOT_EVENT{EVENT(UP)#68}#69\n" +
+                    "GOT_EVENT{EVENT(DOWN)#70}#71\n" +
+                    "TICK_GAME#72\n" +
+                    "TICK_HERO#73\n" +
+                    "------------------------------------------",
                 String.join("\n", messages));
     }
 
