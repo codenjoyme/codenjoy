@@ -26,6 +26,7 @@ import com.codenjoy.dojo.services.ConfigProperties;
 import com.codenjoy.dojo.services.ContextPathGetter;
 import com.codenjoy.dojo.services.GameProperties;
 import com.codenjoy.dojo.services.entity.server.PlayerInfo;
+import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -42,6 +43,8 @@ public class ScoresTest {
 
     @Before
     public void setup() {
+        JDBCTimeUtils.timeZone = TimeZone.getTimeZone("Europe/Kiev");
+
         String dbFile = "target/scores.db" + new Random().nextInt();
         service = new Scores(
                 new SqliteConnectionThreadPoolFactory(false, dbFile,

@@ -30,6 +30,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by indigo on 13.08.2016.
@@ -37,7 +38,13 @@ import java.util.Date;
 @UtilityClass
 public class JDBCTimeUtils {
 
-    private static final FastDateFormat formatter = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    private static final FastDateFormat formatter;
+    public static TimeZone timeZone;
+
+    static {
+        timeZone = TimeZone.getDefault();
+        formatter = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSSZ", timeZone);
+    }
 
     public static long getTimeLong(ResultSet resultSet) throws SQLException {
         try {
