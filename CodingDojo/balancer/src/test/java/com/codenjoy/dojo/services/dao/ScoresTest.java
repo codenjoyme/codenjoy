@@ -43,7 +43,7 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        JDBCTimeUtils.timeZone = TimeZone.getTimeZone("Europe/Kiev");
+        JDBCTimeUtils.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
 
         String dbFile = "target/scores.db" + new Random().nextInt();
         service = new Scores(

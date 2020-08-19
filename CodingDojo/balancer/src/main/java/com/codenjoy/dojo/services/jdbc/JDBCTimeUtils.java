@@ -38,11 +38,15 @@ import java.util.TimeZone;
 @UtilityClass
 public class JDBCTimeUtils {
 
-    private static final FastDateFormat formatter;
-    public static TimeZone timeZone;
+    private static FastDateFormat formatter;
+    private static TimeZone timeZone;
 
     static {
-        timeZone = TimeZone.getDefault();
+        setTimeZone(TimeZone.getDefault());
+    }
+
+    public static void setTimeZone(TimeZone zone) {
+        timeZone = zone;
         formatter = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSSZ", timeZone);
     }
 
