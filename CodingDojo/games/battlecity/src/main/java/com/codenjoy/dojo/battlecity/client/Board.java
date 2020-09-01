@@ -93,7 +93,10 @@ public class Board extends AbstractBoard<Elements> {
                 Elements.OTHER_TANK_DOWN,
                 Elements.OTHER_TANK_LEFT,
                 Elements.OTHER_TANK_RIGHT,
-                Elements.AI_TANK_PRIZE);
+                Elements.AI_TANK_PRIZE,
+                Elements.PRIZE_IMMORTALITY,
+                Elements.PRIZE_BREAKING_WALLS,
+                Elements.PRIZE_WALKING_ON_WATER);
     }
 
     public List<Point> getBullets() {

@@ -139,6 +139,15 @@ public class BattlecityTest {
         return dice;
     }
 
+    private static Dice getDice(Point pt, int indexPrizes) {
+        Dice dice = mock(Dice.class);
+        when(dice.next(anyInt()))
+                .thenAnswer(x -> pt.getX())
+                .thenAnswer(y -> pt.getY())
+                .thenAnswer(ans -> indexPrizes);
+        return dice;
+    }
+
     public void givenGameWithConstruction(int x, int y) {
         givenGame(tank(1, 1, Direction.UP), new Construction(x, y));
     }
@@ -164,6 +173,29 @@ public class BattlecityTest {
             }
         }
         return false;
+    }
+
+    private boolean assertPrize() {
+        List<Prize> prize = game.getPrize();
+        if (prize.isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    private void givenGameBeforeDropPrize(Point pt) {
+        Bullet bullet = mock(Bullet.class);
+        Dice dice = getDice(pt, 0);
+        spawnAiPrize = setParameter("count spawn", 0);
+        hitKillsAiPrize = setParameter("hits to kill", 1);
+        Tank tank = tank(1, 1, Direction.UP);
+        Tank aiTank = aiTankPrize(1, 5, Direction.DOWN, hitKillsAiPrize);
+
+        game = new Battlecity(size, dice, Arrays.asList(new Construction(3, 3)), spawnAiPrize, hitKillsAiPrize);
+        initPlayer(game, tank);
+        this.hero = tank;
+        game.addAI(aiTank);
+        aiTank.kill(bullet);
     }
 
     @Test
@@ -3266,6 +3298,137 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldDropPrizeInPointKilledAiPrize() {
+        size = 7;
+        givenGameBeforeDropPrize(pt(1,5));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(true, assertPrize());
+
+    }
+
+    @Test
+    public void shouldDropPrizeInFreePoint() {
+        size = 7;
+        givenGameBeforeDropPrize(pt(4,5));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼   1 ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(true, assertPrize());
+    }
+
+    @Test
+    public void shouldNotDropPrizeInPointPlayerTank() {
+        size = 7;
+        givenGameBeforeDropPrize(pt(1,1));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(false, assertPrize());
+    }
+
+    @Test
+    public void shouldNotDropPrizeInPointConstruction() {
+        size = 7;
+        givenGameBeforeDropPrize(pt(3,3));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(false, assertPrize());
+    }
+
+    @Test
+    public void shouldNotDropPrizeInPointField() {
+        size = 7;
+        givenGameBeforeDropPrize(pt(0,2));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(false, assertPrize());
     }
 }
 

@@ -30,15 +30,18 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.PointImpl.random;
 
 public class Battlecity implements Field {
 
     private Dice dice;
     private LinkedList<Tank> aiTanks;
+    private LinkedList<Prize> prize;
     private int aiCount;
     private int spawnAiPrize;
     private int hitKillsAiPrize;
@@ -49,6 +52,7 @@ public class Battlecity implements Field {
     private List<Border> borders;
 
     private List<Player> players = new LinkedList<Player>();
+    private final List<Elements> prizes = Arrays.asList(Elements.PRIZE_IMMORTALITY, Elements.PRIZE_BREAKING_WALLS, Elements.PRIZE_WALKING_ON_WATER);
 
     public Battlecity(int size, Dice dice, List<Construction> constructions, Parameter<Integer> spawnAiPrize,
                       Parameter<Integer> hitKillsAiPrize, Tank... aiTanks) {
@@ -63,6 +67,7 @@ public class Battlecity implements Field {
         this.dice = dice;
         this.size = size;
         this.aiTanks = new LinkedList<>();
+        this.prize = new LinkedList<>();
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
         this.spawnAiPrize = spawnAiPrize.getValue();
@@ -117,6 +122,7 @@ public class Battlecity implements Field {
                 }
             }
         }
+
         for (Bullet bullet : getBullets()) {
             bullet.move();
         }
@@ -146,12 +152,28 @@ public class Battlecity implements Field {
         for (Tank tank : getTanks()) {
             if (!tank.isAlive()) {
                 aiTanks.remove(tank);
+                if (tank.isTankPrize()) {
+                    dropPrize();
+                }
             }
         }
+
         for (Player player : players.toArray(new Player[0])) {
             if (!player.getHero().isAlive()) {
                 players.remove(player);
             }
+        }
+    }
+
+    private void dropPrize() {
+        Point pt;
+        int c = 0;
+        do {
+           pt = random(dice, size);
+        } while (isBarrier(pt) && c++ < size);
+
+        if (!isBarrier(pt)) {
+            prize.add(new Prize(pt, prizes.get(dice.next(prizes.size()))));
         }
     }
 
@@ -285,6 +307,10 @@ public class Battlecity implements Field {
         return result;
     }
 
+    public List<Prize> getPrize() {
+        return prize;
+    }
+
     @Override
     public void remove(Player player) {   // TODO test me
         players.remove(player);
@@ -320,6 +346,7 @@ public class Battlecity implements Field {
                     addAll(Battlecity.this.getTanks());
                     addAll(Battlecity.this.getConstructions());
                     addAll(Battlecity.this.getBullets());
+                    addAll(Battlecity.this.getPrize());
                 }};
             }
         };
