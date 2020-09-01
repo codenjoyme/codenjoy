@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class Battlecity implements Field {
     private List<Border> borders;
 
     private List<Player> players = new LinkedList<Player>();
-    private List<Elements> prizes = new LinkedList<Elements>();
+    private final List<Elements> prizes = Arrays.asList(Elements.PRIZE_IMMORTALITY, Elements.PRIZE_BREAKING_WALLS, Elements.PRIZE_WALKING_ON_WATER);
 
     public Battlecity(int size, Dice dice, List<Construction> constructions, Parameter<Integer> spawnAiPrize,
                       Parameter<Integer> hitKillsAiPrize, Tank... aiTanks) {
@@ -152,7 +153,6 @@ public class Battlecity implements Field {
             if (!tank.isAlive()) {
                 aiTanks.remove(tank);
                 if (tank.isTankPrize()) {
-                    addPrizes();
                     dropPrize();
                 }
             }
@@ -163,12 +163,6 @@ public class Battlecity implements Field {
                 players.remove(player);
             }
         }
-    }
-
-    private void addPrizes() {
-        prizes.add(Elements.PRIZE_IMMORTALITY);
-        prizes.add(Elements.PRIZE_BREAKING_WALLS);
-        prizes.add(Elements.PRIZE_WALKING_ON_WATER);
     }
 
     private void dropPrize() {
