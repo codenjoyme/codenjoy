@@ -3404,6 +3404,32 @@ public class BattlecityTest {
 
         assertEquals(false, assertPrize());
     }
+
+    @Test
+    public void shouldNotDropPrizeInPointField() {
+        size = 7;
+        givenGameBeforeDropPrize(pt(0,2));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(false, assertPrize());
+    }
 }
 
 
