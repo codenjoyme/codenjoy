@@ -61,6 +61,8 @@ public class AbstractBombermanTest {
 
     @Before
     public void setUp() {
+        PerksSettingsWrapper.reset();
+
         givenWalls();
 
         chopperDice = mock(Dice.class);

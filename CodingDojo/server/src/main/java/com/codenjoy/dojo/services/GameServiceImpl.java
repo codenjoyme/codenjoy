@@ -26,9 +26,9 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.classloader.GameLoader;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.utils.ReflectUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
-import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -110,7 +110,7 @@ public class GameServiceImpl implements GameService {
     }
 
     protected Collection<? extends Class> findInPackage(String packageName) {
-        return new Reflections(packageName).getSubTypesOf(GameType.class);
+        return ReflectUtils.findInPackage(packageName, GameType.class);
     }
 
     @Override

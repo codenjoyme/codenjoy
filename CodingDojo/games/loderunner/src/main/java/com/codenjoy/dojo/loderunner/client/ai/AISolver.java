@@ -46,10 +46,20 @@ public class AISolver implements Solver<Board> {
 
     public DeikstraFindWay.Possible possible(final Board board) {
         return new DeikstraFindWay.Possible() {
-            @Override // TODO test me
+            @Override
             public boolean possible(Point from, Direction where) {
                 int x = from.getX();
                 int y = from.getY();
+
+                if (board.aWall(x, y)) return false;
+
+                Point newPt = where.change(from);
+                int nx = newPt.getX();
+                int ny = newPt.getY();
+
+                if (board.isOutOfField(nx, ny)) return false;
+
+                if (board.aWall(nx, ny)) return false;
 
                 if (where == Direction.UP && !board.aLadder(x, y)) return false;
 

@@ -57,6 +57,7 @@ public class Players {
                         "code varchar(255)," +
                         "server varchar(255)," +
                         "approved int," +
+                        "callback varchar(255)," +
                         "verification_code varchar(255)," +
                         "verification_type varchar(255));");
     }
@@ -95,6 +96,7 @@ public class Players {
                 rs.getString("code"),
                 rs.getString("server"),
                 rs.getInt("approved"),
+                rs.getString("callback"),
                 rs.getString("verification_code"),
                 rs.getString("verification_type")
         );
@@ -181,9 +183,10 @@ public class Players {
                             "phone, " +
                             "email, " +
                             "approved, " +
+                            "callback, " +
                             "verification_code, " +
                             "verification_type) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
+                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);",
                 new Object[]{
                         player.getId(),
                         player.getFirstName(),
@@ -197,6 +200,7 @@ public class Players {
                         player.getPhone(),
                         player.getEmail(),
                         player.getApproved(),
+                        player.getCallback(),
                         player.getVerificationCode(),
                         player.getVerificationType(),
                 });
@@ -215,6 +219,7 @@ public class Players {
                         "phone = ?, " +
                         "email = ?, " +
                         "approved = ?, " +
+                        "callback = ?, " +
                         "verification_code = ?, " +
                         "verification_type = ? " +
                         "WHERE id = ?;",
@@ -230,6 +235,7 @@ public class Players {
                         player.getPhone(),
                         player.getEmail(),
                         player.getApproved(),
+                        player.getCallback(),
                         player.getVerificationCode(),
                         player.getVerificationType(),
                         player.getId(),

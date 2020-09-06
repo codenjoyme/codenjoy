@@ -57,6 +57,9 @@ public class ConfigProperties {
     @Value("${admin.password}")
     private String adminPassword;
 
+    @Value("${admin.login}")
+    private String adminLogin;
+
     @Value("${server.ip}")
     private String serverIp;
 

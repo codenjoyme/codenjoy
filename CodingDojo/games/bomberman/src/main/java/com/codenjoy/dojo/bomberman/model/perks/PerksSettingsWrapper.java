@@ -38,9 +38,19 @@ public class PerksSettingsWrapper {
 
     private static final Map<Elements, PerkSettings> settings = new EnumMap<>(Elements.class);
 
-    private static int percentage = 100;
-    private static int dropRatio = 10;
-    private static int pickTimeout = 5;
+    private static int percentage;
+    private static int dropRatio;
+    private static int pickTimeout;
+
+    public static void reset() {
+        percentage = 100;
+        dropRatio = 10;
+        pickTimeout = 5;
+    }
+
+    static {
+        reset();
+    }
 
     private PerksSettingsWrapper() {
     }

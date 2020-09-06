@@ -33,6 +33,7 @@ import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import com.codenjoy.dojo.bomberman.services.GameRunner;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
@@ -45,7 +46,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 public class SmokeTest {
     @Test
@@ -74,6 +74,7 @@ public class SmokeTest {
         DefaultGameSettings.DESTROY_WALL_COUNT = 14;
         DefaultGameSettings.MEAT_CHOPPERS_COUNT = 3;
         PerksSettingsWrapper.setDropRatio(20);
+        PerksSettingsWrapper.setPickTimeout(5);
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 10);
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_REMOTE_CONTROL, 5, 10);
         PerksSettingsWrapper.setPerkSettings(Elements.BOMB_IMMUNE, 5, 10);
@@ -97,9 +98,12 @@ public class SmokeTest {
                 Arrays.asList(new Board(), new Board()));
 
         // then
-        assertEquals(load("src/test/resources/SmokeTest.data"),
-                String.join("\n", messages));
+        String expectedAll = load("src/test/resources/SmokeTest.data");
+        String actualAll = String.join("\n", messages);
 
+        TestUtils.assertSmoke(false,
+                (o1, o2) -> assertEquals(o1, o2),
+                expectedAll, actualAll);
     }
 
     private String load(String file) throws IOException {

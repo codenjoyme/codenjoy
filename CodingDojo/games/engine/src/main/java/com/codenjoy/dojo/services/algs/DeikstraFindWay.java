@@ -46,6 +46,19 @@ public class DeikstraFindWay {
         default boolean possible(Point point) {
             return true;
         }
+
+        default boolean check(int size, Point from, Direction direction) {
+            if (!possible(from)) return false;
+
+            Point to = direction.change(from);
+            if (to.isOutOf(size)) return false;
+
+            if (!possible(to)) return false;
+
+            if (!possible(from, direction)) return false;
+
+            return true;
+        }
     }
 
     public List<Direction> getShortestWay(int size, Point from, List<Point> goals, Possible possible) {
@@ -120,19 +133,6 @@ public class DeikstraFindWay {
         return path;
     }
 
-    boolean check(Point from, Direction direction) {
-        if (!checker.possible(from)) return false;
-
-        Point to = direction.change(from);
-        if (to.isOutOf(size)) return false;
-
-        if (!checker.possible(to)) return false;
-
-        if (!checker.possible(from, direction)) return false;
-
-        return true;
-    }
-
     private void setupWays() {
         ways = new TreeMap<>();
 
@@ -141,7 +141,7 @@ public class DeikstraFindWay {
                 Point from = pt(x, y);
                 List<Direction> directions = new LinkedList<>();
                 for (Direction direction : DIRECTIONS) {
-                    if (check(from, direction)) {
+                    if (checker.check(size, from, direction)) {
                         directions.add(direction);
                     }
                 }

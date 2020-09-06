@@ -24,4 +24,6 @@ IF "%GAMES_TO_RUN%"=="" (
     call %ROOT%\mvnw clean package -DskipTests -P%GAMES_TO_RUN%
 )
 
+cd %ROOT%
+
 pause >nul
