@@ -52,6 +52,7 @@ public class LocalWSGameRunner {
         this.gameType = gameType;
         LocalGameRunner.timeout = timeout;
         LocalGameRunner.printBoardOnly = true;
+        LocalGameRunner.printWelcome = true;
         runner = new LocalGameRunner(gameType);
 
         CompletableFuture.runAsync(() -> startWsServer(host, port));

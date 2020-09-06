@@ -336,14 +336,12 @@ public class RestController {
         return doIt(new DoItOnServers<Player>() {
             @Override
             public Player onGame() {
-                // TODO test not exists - remove from other and create
                 return dispatcher.registerIfNotExists(current);
             }
 
             @Override
             public Player onBalancer(Player updated) {
                 if (updated == null) {
-                    // TODO test me
                     return current;
                 }
 

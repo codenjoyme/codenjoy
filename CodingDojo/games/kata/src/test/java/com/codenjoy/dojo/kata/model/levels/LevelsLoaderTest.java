@@ -26,11 +26,14 @@ package com.codenjoy.dojo.kata.model.levels;
 import javassist.Modifier;
 import org.junit.Test;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
 public class LevelsLoaderTest {
+
     @Test
     public void test() {
         List<Level> levels = LevelsLoader.getAlgorithmsOrderedByComplexity();
@@ -42,5 +45,17 @@ public class LevelsLoaderTest {
             assertFalse(Modifier.isAbstract(aClass.getModifiers()));
             assertFalse(Modifier.isInterface(aClass.getModifiers()));
         }
+
+        assertEquals("HelloWorldAlgorithm, FizzBuzzAlgorithm, " +
+                        "SumSquareDifferenceAlgorithm, Sequence1Algorithm, " +
+                        "FibonacciNumbersAlgorithm, PrimeFactoryAlgorithm, " +
+                        "PowerDigitSumAlgorithm, MakeBricksAlgorithm, " +
+                        "FactorialAlgorithm, ReverseAddPalindromeAlgorithm, " +
+                        "Sequence2Algorithm, XthPrimeAlgorithm, " +
+                        "LongDivisionAlgorithm",
+                levels.stream()
+                        .sorted(Comparator.comparingInt(Level::complexity))
+                        .map(it -> it.getClass().getSimpleName())
+                        .collect(Collectors.joining(", ")));
     }
 }

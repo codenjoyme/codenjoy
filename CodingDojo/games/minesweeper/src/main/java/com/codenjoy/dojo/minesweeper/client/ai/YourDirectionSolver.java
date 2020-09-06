@@ -38,6 +38,7 @@ import java.util.*;
 // (powered by Fernflower decompiler)
 // \com\vaa25\minesweeper-ai\1.0\minesweeper-ai-1.0.jar!\com\YourDirectionSolver.class
 // because of Random in code - I want to test this logic
+// please check TODO FIXED
 public class YourDirectionSolver implements DirectionSolver {
     static List<Direction> path = new LinkedList();
     private Dice dice;
@@ -100,7 +101,7 @@ public class YourDirectionSolver implements DirectionSolver {
                                 result = this.getAction(closest).toString();
                             } else {
                                 this.setSafePathTo((Point)closest.getKey());
-                                result = ((Direction)this.safePath.remove(0)).toString();
+                                result = whereToGo();
                             }
                         } else {
                             result = this.getEscapeTo();
@@ -144,6 +145,12 @@ public class YourDirectionSolver implements DirectionSolver {
 
         System.out.println(Calendar.getInstance().getTime() + ":   " + result);
         return result;
+    }
+
+    private String whereToGo() {
+        List<Direction> safePath = this.safePath;
+        Collections.sort(safePath); // TODO FIXED добавлена эта строчка, потому что если несколько направлений куда можно пойти то они рендомно приходят что приводит к гейзенбаге
+        return safePath.remove(0).toString();
     }
 
     private boolean isNeighbours(Point point1, Point point2) {
@@ -263,6 +270,7 @@ public class YourDirectionSolver implements DirectionSolver {
         } else if(dx < 0) {
             result = Direction.LEFT.toString();
         } else {
+            // TODO FIXED тут убран Random
             result = Direction.valueOf(dice.next(2)).toString();
         }
 
@@ -276,6 +284,7 @@ public class YourDirectionSolver implements DirectionSolver {
         } else if(dy > 0) {
             result = Direction.DOWN.toString();
         } else {
+            // TODO FIXED тут убран Random
             result = Direction.valueOf(dice.next(2) + 2).toString();
         }
 

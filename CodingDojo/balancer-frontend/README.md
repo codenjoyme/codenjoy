@@ -1,11 +1,18 @@
-# JS Challenge 2019
+# Codenjoy Balancer
 [![Build Status](https://travis-ci.com/vreshch/jschallenge.svg?branch=master)](https://travis-ci.org/vreshch/jschallenge)
 
-UI project that support JS Challenge 2019 start
+Make sure all important components already started:
+- [How to launch the game server from sources](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo#run-codenjoy-server-from-sources)
+- [How to launch the balancer server from sources](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/balancer#run-balancer-from-sources)
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm i`
+### `npm audit fix`
+
+Builds the app
 
 ### `npm start`
 
