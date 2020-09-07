@@ -23,13 +23,17 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.classloader.GameLoader;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.utils.ReflectUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
-import org.reflections.Reflections;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -42,11 +46,27 @@ import static java.util.stream.Collectors.toMap;
 @Component("gameService")
 public class GameServiceImpl implements GameService {
 
+    // TODO кажется это старый код комнат, его можно убрать после окончательной имплементации комнат
     public static final String ROOMS_SEPARATOR = "-";
-    
+
     private Map<String, GameType> cache = new TreeMap<>();
 
-    public GameServiceImpl() {
+    @Value("${plugins.enable}")
+    private boolean pluginsEnable;
+
+    @Value("${plugins.path}")
+    private String pluginsPath;
+
+    @Value("${plugins.game.exclude}")
+    protected String[] excludeGames;
+
+    @Value("${plugins.game.package}")
+    private String gamePackage;
+
+    @PostConstruct
+    public void init() {
+        // TODO сделать перезагрузку этого всего контента по запросу админа, но только для тех игрушек, что обновились
+        // TODO так же надо будет для новозагруженной игры всех юзеров перезапустить
         for (Class<? extends GameType> clazz : allGames()) {
             GameType gameType = loadGameType(clazz);
             cache.put(gameType.name(), gameType);
@@ -55,7 +75,7 @@ public class GameServiceImpl implements GameService {
 
     private List<Class> allGames() {
         List<Class> result = new LinkedList<>(
-                findInPackage("com.codenjoy.dojo"));
+                findInPackage(gamePackage));
 
         result.sort(Comparator.comparing(Class::getName));
 
@@ -65,10 +85,22 @@ public class GameServiceImpl implements GameService {
         remove(result,
                 it -> ConstructorUtils.getMatchingAccessibleConstructor(it) == null);
 
-        remove(result, it -> Stream.of("chess", "sokoban")
-                .anyMatch(name -> it.getPackage().toString().contains(name)));
+        if (pluginsEnable) {
+            loadFromPlugins(result);
+        }
+
+        if (excludeGames != null) {
+            remove(result, it -> Stream.of(excludeGames)
+                    .anyMatch(name -> it.getPackage().toString().contains(name)));
+        }
 
         return result;
+    }
+
+    private void loadFromPlugins(List<Class> result) {
+        File directory = new File(pluginsPath);
+        Map<String, Class> games = new GameLoader().loadGames(directory);
+        result.addAll(games.values());
     }
 
     private void remove(List<Class> result, Predicate<Class> predicate) {
@@ -78,7 +110,7 @@ public class GameServiceImpl implements GameService {
     }
 
     protected Collection<? extends Class> findInPackage(String packageName) {
-        return new Reflections(packageName).getSubTypesOf(GameType.class);
+        return ReflectUtils.findInPackage(packageName, GameType.class);
     }
 
     @Override

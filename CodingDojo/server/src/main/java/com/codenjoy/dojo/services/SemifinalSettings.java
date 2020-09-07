@@ -22,9 +22,15 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.settings.CheckBox;
+import com.codenjoy.dojo.services.settings.EditBox;
+import com.codenjoy.dojo.services.settings.Parameter;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by Oleksandr_Baglai on 2019-10-13.
@@ -35,6 +41,15 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SemifinalSettings {
+
+    public static final String SEMIFINAL = "Semifinal";
+
+    public static final String ENABLED = SEMIFINAL + " enabled";
+    public static final String TIMEOUT = SEMIFINAL + " timeout";
+    public static final String PERCENTAGE = SEMIFINAL + " percentage";
+    public static final String LIMIT = SEMIFINAL + " limit";
+    public static final String RESET_BOARD = SEMIFINAL + " reset board";
+    public static final String SHUFFLE_BOARD = SEMIFINAL + " shuffle board";
 
     @Value("${game.semifinal.enabled}")
     private boolean enabled;
@@ -65,5 +80,43 @@ public class SemifinalSettings {
         timeout = input.timeout;
         resetBoard = input.resetBoard;
         shuffleBoard = input.shuffleBoard;
+    }
+
+    // TODO test me
+    public List<Parameter> parameters() {
+        return new LinkedList<Parameter>(){{
+            add(checkbox(ENABLED, enabled));
+            add(editbox(TIMEOUT, timeout));
+            add(checkbox(PERCENTAGE, percentage));
+            add(editbox(LIMIT, limit));
+            add(checkbox(RESET_BOARD, resetBoard));
+            add(checkbox(SHUFFLE_BOARD, shuffleBoard));
+        }};
+    }
+
+    private Parameter editbox(String name, int value) {
+        return new EditBox(name).type(Integer.class).def(value);
+    }
+
+    private Parameter checkbox(String name, boolean value) {
+        return new CheckBox(name).type(Boolean.class).def(value);
+    }
+
+    // TODO test me
+    public void update(List<Parameter> parameters) {
+        enabled      = (boolean)get(parameters, ENABLED);
+        timeout      = (int)get(parameters, TIMEOUT);
+        percentage   = (boolean)get(parameters, PERCENTAGE);
+        limit        = (int)get(parameters, LIMIT);
+        resetBoard   = (boolean)get(parameters, RESET_BOARD);
+        shuffleBoard = (boolean)get(parameters, SHUFFLE_BOARD);
+    }
+
+    private Object get(List<Parameter> parameters, String name) {
+        return parameters.stream()
+                .filter(p -> p.getName().equals(name))
+                .findAny()
+                .orElseThrow(() -> new RuntimeException("Parameter with name " + name + " not found"))
+                .getValue();
     }
 }

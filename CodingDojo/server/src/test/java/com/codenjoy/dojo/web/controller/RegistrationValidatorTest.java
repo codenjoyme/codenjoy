@@ -174,7 +174,7 @@ public class RegistrationValidatorTest {
     public void shouldValidateGameName() {
         // given
         String invalidGameName = "invalidGame";
-        when(commonValidator.checkGameName(invalidGameName, Validator.CANT_BE_NULL)).thenReturn(false);
+        when(commonValidator.isGameName(invalidGameName, Validator.CANT_BE_NULL)).thenReturn(false);
         player.setGameName(invalidGameName);
 
         // when

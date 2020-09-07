@@ -80,11 +80,15 @@ public class SmartAssert extends Runner {
     }
 
     private static class Failure {
-        
+
+        private String actual;
+        private String expected;
         private String message;
         private List<StackTraceElement> where;
 
         private Failure(String expected, String actual) {
+            this.expected = expected;
+            this.actual = actual;
             this.message = new ComparisonFailure("", expected, actual).getMessage();
             where = getLines(STACK_TRACE_COUNT);
         }
@@ -107,11 +111,13 @@ public class SmartAssert extends Runner {
         
         @Override
         public String toString() {
-            // TODO почему-то тут idea не полхватывает expected: but was:  
-            return "org.junit.ComparisonFailure: " + message + "\n"
-                    + where.stream()
-                        .map(s -> "\t" + s + "\n")
-                        .reduce("", (left, right) -> left + right);
+            // TODO почему-то тут idea не полхватывает expected: but was:
+            return  "org.junit.ComparisonFailure: " + message + "\n" +
+                    "\t\texpected: " + expected + "\n" +
+                    "\t\tactual:   " + actual + "\n" +
+                        where.stream()
+                            .map(s -> "\t" + s + "\n")
+                            .reduce("", (left, right) -> left + right);
         }
     }
 
@@ -136,8 +142,12 @@ public class SmartAssert extends Runner {
         try {
             Assert.assertEquals(expected, actual);
         } catch (AssertionError e) {
-            failures().add(new Failure(expected.toString(), actual.toString()));
+            failures().add(new Failure(toString(expected), toString(actual)));
         }
+    }
+
+    private static String toString(Object value) {
+        return (value == null) ? null : value.toString();
     }
 
     private static void checkResult(List<Failure> list) {

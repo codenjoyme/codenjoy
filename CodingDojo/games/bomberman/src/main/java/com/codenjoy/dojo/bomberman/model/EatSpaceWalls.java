@@ -24,73 +24,74 @@ package com.codenjoy.dojo.bomberman.model;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static com.codenjoy.dojo.bomberman.model.Field.FOR_HERO;
 
 public class EatSpaceWalls extends WallsDecorator implements Walls { // TODO протестить класс
 
-    private static final boolean WITH_MEAT_CHOPPERS = true;
+    public static final int MAX = 1000;
 
-    private Field board;
     private Parameter<Integer> count;
     private Dice dice;
 
-    public EatSpaceWalls(Walls walls, Field board, Parameter<Integer> count, Dice dice) {
+    public EatSpaceWalls(Walls walls, Parameter<Integer> count, Dice dice) {
         super(walls);
-        this.board = board;
         this.count = count;
         this.dice = dice;
     }
 
     private int freeSpaces() {
-        return  (board.size()*board.size() - 1) // TODO -1 это один бомбер, а если их несколько?
-                - walls.subList(Wall.class).size();
+        return  (field.size()* field.size() - 1) // TODO -1 это один бомбер, а если их несколько?
+                - walls.listSubtypes(Wall.class).size();
     }
 
     @Override
-    public void tick() {
-        super.tick();    // TODO протестить эту строчку
-
+    public void tact() {
         regenerate();
     }
 
-    private void regenerate() {
+    public void regenerate() {
         if (count.getValue() < 0) {
             count.update(0);
         }
 
-        List<DestroyWall> destroyWalls = walls.subList(DestroyWall.class);
-        int needToCreate = this.count.getValue() - destroyWalls.size();
-        if (needToCreate > freeSpaces()) {  // TODO и это потестить
-            count.update(count.getValue() - (needToCreate - freeSpaces()) - 50); // 50 это место под бомберов
+        List<DestroyWall> destroy = walls.listSubtypes(DestroyWall.class);
+        int need = this.count.getValue() - destroy.size();
+        if (need > freeSpaces()) {  // TODO и это потестить
+            count.update(count.getValue() - (need - freeSpaces()) - 50); // 50 это место под бомберов
         }
 
-        int count = destroyWalls.size();
+        int count = destroy.size();
         if (count > this.count.getValue()) { // TODO и удаление лишних
             for (int i = 0; i < (count - this.count.getValue()); i++) {
-                DestroyWall meatChopper = destroyWalls.remove(0);
-                walls.destroy(meatChopper.getX(), meatChopper.getY());
+                walls.destroy(destroy.remove(0));
             }
             return;
         }
 
-        int c = 0;
-        int maxc = 10000;
-        while (count < this.count.getValue() && c < maxc) {  // TODO и это
-            int x = dice.next(board.size());
-            int y = dice.next(board.size());
+        int iteration = 0;
+        Set<Point> checked = new HashSet<>();
+        while (count < this.count.getValue() && iteration++ < MAX) {  // TODO и это
+            Point pt = PointImpl.random(dice, field.size());
 
-            if (!board.isBarrier(x, y, WITH_MEAT_CHOPPERS)) {
-                walls.add(new DestroyWall(x, y));
-                count++;
+            if (checked.contains(pt) || field.isBarrier(pt, !FOR_HERO)) {
+                checked.add(pt);
+                continue;
             }
 
-            c++;
+            walls.add(new DestroyWall(pt));
+            count++;
         }
 
-        if (c == maxc) {
-            throw new  RuntimeException("Dead loop at EatSpaceWalls.generate!");
+        if (iteration >= MAX) {
+            System.out.println("Dead loop at EatSpaceWalls.generate!");
         }
     }
 }

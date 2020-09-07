@@ -54,11 +54,11 @@ public class ConfigProperties {
     @Value("${donate.code}")
     private String donateCode;
 
-    @Value("${email.hash}")
-    private String emailHash;
-
     @Value("${admin.password}")
     private String adminPassword;
+
+    @Value("${admin.login}")
+    private String adminLogin;
 
     @Value("${server.ip}")
     private String serverIp;

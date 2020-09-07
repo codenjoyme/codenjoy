@@ -28,12 +28,6 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.sokoban.model.items.Field;
 import com.codenjoy.dojo.sokoban.services.Player;
 
-/**
- * Это реализация героя. Обрати внимание, что он имплементит {@see Joystick}, а значит может быть управляем фреймворком
- * Так же он имплементит {@see Tickable}, что значит - есть возможность его оповещать о каждом тике игры.
- * Ну и конечно же он имплементит {@see State}, а значит может быть отрисован на поле.
- * Часть этих интерфейсов объявлены в {@see PlayerHero}, а часть явно тут.
- */
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private boolean alive;
@@ -82,7 +76,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void act(int... p) {
         if (!alive) return;
 
-        field.setBomb(x, y);
+        field.setBomb(this);
     }
 
     @Override
@@ -90,33 +84,31 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         if (!alive) return;
 
         if (direction != null) {
-            int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
-            int newNextX = direction.changeX(newX);
-            int newNextY = direction.changeY(newY);
+            Point dest = direction.change(this);
+            Point newDest = direction.change(dest);
 
-            if (field.isBomb(newX, newY)) {
+            if (field.isBomb(dest)) {
                 alive = false;
-                field.removeBomb(newX, newY);
+                field.removeBomb(dest);
             }
 
-            if (!(field.isBarrier(newNextX, newNextY)||field.isMark(newNextX,newNextY))) {
-                if (field.isBox(newX, newY)) {
-                    field.moveBox(newX, newY, newNextX, newNextY);
+            if (!(field.isBarrier(newDest) || field.isMark(newDest))) {
+                if (field.isBox(dest)) {
+                    field.moveBox(dest, newDest);
                 }
-                if (field.isBoxOnTheMark(newX, newY)) {
-                        field.removeBoxOnTheMark(newX, newY);
-                        field.setBox(newNextX, newNextY);
-                        field.setMark(newX, newY);
+                if (field.isBoxOnTheMark(dest)) {
+                        field.removeBoxOnTheMark(dest);
+                        field.setBox(newDest);
+                        field.setMark(dest);
                 }
             }
-            if (!field.isBarrier(newNextX, newNextY)&&field.isMark(newNextX,newNextY)) {
-                field.removeBox(newX, newY);
-                field.setBoxOnTheMark(newNextX, newNextY);
+            if (!field.isBarrier(newDest) && field.isMark(newDest)) {
+                field.removeBox(dest);
+                field.setBoxOnTheMark(newDest);
             }
 
-                if (!field.isBarrier(newX, newY)) {
-                move(newX, newY);
+                if (!field.isBarrier(dest)) {
+                move(dest);
             }
         }
         direction = null;

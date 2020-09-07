@@ -19,8 +19,8 @@ All you need to develop a game is jdk8, maven3, git client and IDE Idea.
 - install [maven3](https://maven.apache.org/download.cgi) (download the archive and unzip it to `c:\java`)
 - add the `M2_HOME` environment variable that points to the root of `c:\java\apache-maven-3.x.x`
 - add the `;%M2_HOME%\bin` string at the end of the `Path` variable
-- install jdk7, if necessary (also to the folder `c:\java`)
-- add the `JAVA_HOME`environment variable that points to the root of `c:\java\jdk1.8.x_xx`
+- install jdk, if necessary (also to the folder `c:\java`)
+- add the `JAVA_HOME`environment variable that points to the root of `c:\java\jdk1.x.x_xx`
 - add the `;%JAVA_HOME%\bin` string at the end of the Path variable
 - check by running cmd.exe with the `mvn -version` command.
 If installation is successful, you will see the command output the version of maven and java, rather than "command not found"
@@ -28,8 +28,8 @@ If installation is successful, you will see the command output the version of ma
 C:\Users\user>mvn -version
 Apache Maven 3.x.x
 Maven home: C:\java\apache-maven-3.x.x
-Java version: 1.8.x_x, vendor: Oracle Corporation
-Java home: C:\java\jdk1.8.x_xx\jre
+Java version: 1.x.x_x, vendor: Oracle Corporation
+Java home: C:\java\jdk1.x.x_xx\jre
 Default locale: xxxxx, platform encoding: xxxxxxx
 OS name: "xxxxxxxxxx", version: "xxx", arch: "xxxxx", family: "xxxxxxx"
 C:\Users\user>
@@ -44,6 +44,9 @@ To run a project with your game, do the following:
 - clone the project from the [codenjoy main repository](https://github.com/codenjoyme/codenjoy)
 - configure Codenjoy server by modifying the settings in files:
   * [\CodingDojo\server\src\main\resources\application.yml](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/server/src/main/resources/application.yml)
+    * you can change any of these properties in runtime by using parameters 
+      * `mvn ... -Dkey1=value1 -Dkey2=value2`
+      * `java -jar ... --key1=value1 --key2=value2`
   * [\CodingDojo\server\src\main\webapp\resources\js\init.js](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/server/src/main/webapp/resources/js/init.js)
 - run `mvn clean install -DskipTests=true` in the `\CodingDojo\games\engine` project to install the common classes/interfaces
 - build one game
@@ -68,6 +71,11 @@ To run a project with your game, do the following:
     * `spring.profiles.active`
       * `sqlite` for the lightweight database (<50 participants)
       * `postgres` for the postgres database (>50 participants)
+        * `database.host` database server host, `localhost` by default
+        * `database.port` database server port, `5432` by default
+        * `database.name` database name, `codenjoy` by default
+        * `database.user` username to connect, `codenjoy` by default
+        * `database.password` password to connect, `securePostgresDBPassword` by default
       * `trace` for enable log.debug
       * `debug` if you want to debug js files (otherwise it will compress and obfuscate)
       * `yourgame` if you added your custom configuration to the game inside `CodingDojo\games\yourgame\src\main\resources\application-yourgame.yml`
@@ -83,9 +91,15 @@ To run a project with your game, do the following:
 Run Codenjoy in portable mode
 --------------
 There are three scripts to run Codenjoy on Ubuntu and Windows:
-- [how to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy-portable-linux.git#ubuntu-portable-script)
-- [how to run the server on Windows](https://github.com/codenjoyme/codenjoy-portable-windows.git#windows-portable-script)
-- [how to run the server on Linux (simple version)](https://github.com/codenjoyme/codenjoy-portable-linux-lite.git#linux-portable-script-simple-version)
+- [How to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy-portable-linux.git#ubuntu-portable-script)
+- [How to run the server on Windows](https://github.com/codenjoyme/codenjoy-portable-windows.git#windows-portable-script)
+- [How to run the server on Linux (simple version)](https://github.com/codenjoyme/codenjoy-portable-linux-lite.git#linux-portable-script-simple-version)
+
+Run Balancer from sources
+--------------------------------
+
+- [How to launch the balancer server from sources](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/balancer#run-balancer-from-sources)
+- [How to launch the balancer frontend from sources](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/balancer-frontend#available-scripts)
 
 Develop a game
 --------------
@@ -154,7 +168,7 @@ After submit you can see html page with board, try find inside:
 ```
 <body style="display:none;">
     <div id="settings" page="board" contextPath="/codenjoy-contest" gameName="bomberman"
-        playerName="t8o7ty34t9h43fpgf9b8" readableName="Stiven Pupkin" code="3465239452394852393"
+        playerId="t8o7ty34t9h43fpgf9b8" readableName="Stiven Pupkin" code="3465239452394852393"
         allPlayersScreen="false"></div>
 ```
 Another way to add `Authroization: Bearer USER_JWT_TOKEN_FROM_AUTHORIZATION_SERVER` header parameter.

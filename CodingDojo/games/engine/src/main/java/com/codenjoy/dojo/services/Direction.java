@@ -33,7 +33,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  * Имплементит возможные направления движения чего либо
  */
 public enum Direction {
-    LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, -1), DOWN(3, 0, 1),
+    LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, 1), DOWN(3, 0, -1),
     ACT(4, 0, 0), STOP(5, 0, 0);
 
     private final int value;
@@ -86,7 +86,7 @@ public enum Direction {
      * @return New point.y that will be after move from current point.y in given direction.
      */
     public int changeY(int y) {
-        return y - dy;
+        return y + dy;
     }
 
     /**

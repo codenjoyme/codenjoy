@@ -49,11 +49,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -64,10 +64,10 @@ import java.util.Collection;
 @Import(RestGameControllerTest.ContextConfiguration.class)
 @WebAppConfiguration
 public class RestGameControllerTest {
-    
+
     @TestConfiguration
     public static class ContextConfiguration {
-        
+
         @Bean("gameService")
         public GameServiceImpl gameService() {
             return new GameServiceImpl(){
@@ -111,7 +111,18 @@ public class RestGameControllerTest {
 
     @SneakyThrows
     private String get(String uri) {
-        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri)
+        return process(MockMvcRequestBuilders.get(uri));
+    }
+
+    @SneakyThrows
+    private String post(String uri, String data) {
+        return process(MockMvcRequestBuilders.post(uri, data)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(data));
+    }
+
+    private String process(MockHttpServletRequestBuilder post) throws Exception {
+        MvcResult mvcResult = mvc.perform(post
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         assertEquals(200, mvcResult.getResponse().getStatus());
         return mvcResult.getResponse().getContentAsString();
@@ -153,21 +164,27 @@ public class RestGameControllerTest {
                 "  },\n" +
                 "  'parameters':[\n" +
                 "    {\n" +
+                "      'def':'12',\n" +
+                "      'multiline':false,\n" +
                 "      'name':'Parameter 1',\n" +
                 "      'options':[\n" +
-                "        12,\n" +
-                "        15\n" +
+                "        '12',\n" +
+                "        '15'\n" +
                 "      ],\n" +
                 "      'type':'editbox',\n" +
-                "      'value':15\n" +
+                "      'value':'15',\n" +
+                "      'valueType':'Integer'\n" +
                 "    },\n" +
                 "    {\n" +
+                "      'def':'true',\n" +
+                "      'multiline':false,\n" +
                 "      'name':'Parameter 2',\n" +
                 "      'options':[\n" +
-                "        true\n" +
+                "        'true'\n" +
                 "      ],\n" +
                 "      'type':'checkbox',\n" +
-                "      'value':true\n" +
+                "      'value':'true',\n" +
+                "      'valueType':'Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
                 "  'sprites':{\n" +
@@ -187,7 +204,7 @@ public class RestGameControllerTest {
                 "  'version':'version 1.11b',\n" +
                 "  'wsUrl':'ws[s]://SERVER:PORT/codenjoy-contest/ws?user=PLAYER_ID&code=CODE'\n" +
                 "}";
-        
+
         assertEquals(expected1, JsonUtils.prettyPrint(service.type("first")));
         assertEquals(expected1, JsonUtils.prettyPrint(get("/rest/game/first/info")));
 
@@ -213,21 +230,27 @@ public class RestGameControllerTest {
                 "  },\n" +
                 "  'parameters':[\n" +
                 "    {\n" +
+                "      'def':'43',\n" +
+                "      'multiline':false,\n" +
                 "      'name':'Parameter 3',\n" +
                 "      'options':[\n" +
-                "        43\n" +
+                "        '43'\n" +
                 "      ],\n" +
                 "      'type':'editbox',\n" +
-                "      'value':43\n" +
+                "      'value':'43',\n" +
+                "      'valueType':'Integer'\n" +
                 "    },\n" +
                 "    {\n" +
+                "      'def':'false',\n" +
+                "      'multiline':false,\n" +
                 "      'name':'Parameter 4',\n" +
                 "      'options':[\n" +
-                "        false,\n" +
-                "        true\n" +
+                "        'false',\n" +
+                "        'true'\n" +
                 "      ],\n" +
                 "      'type':'checkbox',\n" +
-                "      'value':true\n" +
+                "      'value':'true',\n" +
+                "      'valueType':'Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
                 "  'sprites':{\n" +

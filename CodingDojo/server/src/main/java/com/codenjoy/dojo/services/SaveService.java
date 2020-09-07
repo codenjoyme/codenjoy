@@ -27,13 +27,14 @@ import java.util.List;
 
 public interface SaveService {
 
-    boolean load(String name);
-    void load(String name, String roomName, String gameName, String save);
-    long save(String name);
+    boolean load(String id);
+    void load(String id, String roomName, String gameName, String save);
+    long save(String id);
     List<PlayerInfo> getSaves();
     long saveAll();
+    long saveAll(String roomName);
     void loadAll();
-    void removeSave(String name);
+    void removeSave(String id);
     void removeAllSaves();
 
 }

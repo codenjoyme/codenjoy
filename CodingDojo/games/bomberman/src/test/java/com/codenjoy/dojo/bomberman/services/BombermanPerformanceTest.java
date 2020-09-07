@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.services;
  */
 
 
+import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -49,10 +50,11 @@ public class BombermanPerformanceTest {
         Profiler p = new Profiler();
         p.start();
 
-        GameType bomberman = new GameRunner();
-        bomberman.getSettings().getParameter("Board size").type(Integer.class).update(boardSize);
-        bomberman.getSettings().getParameter("Destroy wall count").type(Integer.class).update(walls);
-        bomberman.getSettings().getParameter("Meat choppers count").type(Integer.class).update(meatChoppers);
+        GameRunner bomberman = new GameRunner();
+        GameSettings settings = bomberman.getGameSettings();
+        settings.getBoardSize().update(boardSize);
+        settings.getDestroyWallCount().update(walls);
+        settings.getMeatChoppersCount().update(meatChoppers);
 
         PrinterFactory factory = new PrinterFactoryImpl();
 

@@ -152,7 +152,7 @@ public class IntegrationTest {
         List<Player> players = playerService.getAll();
         List<String> namesList = new LinkedList<String>();
         for (Player player : players) {
-            namesList.add(player.getName());
+            namesList.add(player.getId());
         }
         assertEquals(names, namesList.toString());
     }

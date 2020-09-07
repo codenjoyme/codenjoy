@@ -41,23 +41,23 @@ public class PlayerResponseHandler implements ResponseHandler {
 
     @Override
     public void onResponse(PlayerSocket socket, String message) {
-        log.debug("Received response: {} from player: {}", message, player.getName());
+        log.debug("Received response: {} from player: {}", message, player.getId());
         new PlayerCommand(joystick, message).execute();
     }
 
     @Override
     public void onClose(PlayerSocket socket, int statusCode, String reason) {
-        log.debug("Websocket closed: {} from player: {} status code: {} reason: {}", player.getName(), statusCode,
+        log.debug("Websocket closed: {} from player: {} status code: {} reason: {}", player.getId(), statusCode,
                 reason);
     }
 
     @Override
     public void onError(PlayerSocket socket, Throwable error) {
-        log.error("Request error: player: {}, error: {}", player.getName(), error);
+        log.error("Request error: player: {}, error: {}", player.getId(), error);
     }
 
     @Override
     public void onConnect(PlayerSocket socket, Session session) {
-        log.debug("Connected: player: {}, session: {}", player.getName(), session);
+        log.debug("Connected: player: {}, session: {}", player.getId(), session);
     }
 }

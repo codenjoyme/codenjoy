@@ -43,8 +43,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 
     @Override
     public Stone generateStone(Hero snake, Apple apple, Walls walls, int boardSize) {
-        int x;
-        int y;
+        Point pt;
         boolean noSoGoodPlace;
 
         if (checkForMaxLength(snake, walls, boardSize)){
@@ -53,31 +52,30 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 
         int c = 0;
         do {
-            x = dice.next(boardSize);
-            y = dice.next(boardSize);
+            pt = PointImpl.random(dice, boardSize);
 
-            boolean onSnake = snake.itsMe(x, y);
-            boolean onApple = (apple != null) && apple.itsMe(x, y);
-            boolean onWall = walls.itsMe(x, y);
+            boolean onSnake = snake.itsMe(pt);
+            boolean onApple = (apple != null) && apple.itsMe(pt);
+            boolean onWall = walls.itsMe(pt);
 
-            boolean onSnakeWayWhenGoRight = (snake.getX() + 1) <= x && x <= boardSize && y == snake.getY() && snake.getDirection().equals(Direction.RIGHT);
-            boolean onSnakeWayWhenGoLeft = 0 <= x && x <= (snake.getX() - 1) && y == snake.getY() && snake.getDirection().equals(Direction.LEFT);
-            boolean onSnakeWayWhenGoDown = (snake.getY() + 1) <= y && y <= boardSize && x == snake.getX() && snake.getDirection().equals(Direction.DOWN);
-            boolean onSnakeWayWhenGoUp = 0 <= y && y <= (snake.getY() - 1) && x == snake.getX() && snake.getDirection().equals(Direction.UP);
+            boolean onSnakeWayWhenGoRight = (snake.getX() + 1) <= pt.getX() && pt.getX() <= boardSize && pt.getY() == snake.getY() && snake.getDirection().equals(Direction.RIGHT);
+            boolean onSnakeWayWhenGoLeft = 0 <= pt.getX() && pt.getX() <= (snake.getX() - 1) && pt.getY() == snake.getY() && snake.getDirection().equals(Direction.LEFT);
+            boolean onSnakeWayWhenGoDown = (snake.getY() + 1) <= pt.getY() && pt.getY() <= boardSize && pt.getX() == snake.getX() && snake.getDirection().equals(Direction.DOWN);
+            boolean onSnakeWayWhenGoUp = 0 <= pt.getY() && pt.getY() <= (snake.getY() - 1) && pt.getX() == snake.getX() && snake.getDirection().equals(Direction.UP);
             boolean onSnakeWay = onSnakeWayWhenGoRight || onSnakeWayWhenGoLeft || onSnakeWayWhenGoDown || onSnakeWayWhenGoUp;
 
-            boolean whenStandstill = isStandstill(apple, pt(x, y), boardSize);
+            boolean whenStandstill = isStandstill(apple, pt, boardSize);
 
-            boolean outOfBoard = pt(x, y).isOutOf(boardSize);
+            boolean outOfBoard = pt.isOutOf(boardSize);
 
             noSoGoodPlace = outOfBoard || onSnake || onSnakeWay || onApple || whenStandstill || onWall;
-        } while (noSoGoodPlace && c++ < 100);
+        } while (noSoGoodPlace && c++ < MAX);
 
         if (c >= MAX) {
             return new Stone(-1, -1);
         }
 
-        return new Stone(x, y);
+        return new Stone(pt);
     }
 
     private boolean isStandstill(Point apple, Point stone, int boardSize) {
@@ -106,8 +104,7 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 
     @Override
     public Apple generateApple(Hero snake, Apple apple, Stone stone, Walls walls, int boardSize) {
-        int x;
-        int y;
+        Point pt;
         boolean noSoGoodPlace;
 
         if (checkForMaxLength(snake, walls, boardSize)){
@@ -116,26 +113,25 @@ public class RandomArtifactGenerator implements ArtifactGenerator {
 
         int c = 0;
         do {
-            x = dice.next(boardSize);
-            y = dice.next(boardSize);
+            pt = PointImpl.random(dice, boardSize);
 
-            boolean onSnake = snake.itsMe(x, y);
-            boolean onStone = stone.itsMe(x, y);
-            boolean onWall = walls.itsMe(x, y);
-            boolean onApple = apple != null && apple.itsMe(x, y);
+            boolean onSnake = snake.itsMe(pt);
+            boolean onStone = stone.itsMe(pt);
+            boolean onWall = walls.itsMe(pt);
+            boolean onApple = apple != null && apple.itsMe(pt);
 
-            boolean whenStandstill = isStandstill(pt(x, y), stone, boardSize);
+            boolean whenStandstill = isStandstill(pt, stone, boardSize);
 
-            boolean outOfBoard = pt(x, y).isOutOf(boardSize);
+            boolean outOfBoard = pt.isOutOf(boardSize);
 
             noSoGoodPlace = outOfBoard || onSnake || onStone || whenStandstill || onWall || onApple;
-        } while (noSoGoodPlace && c++ < 100);
+        } while (noSoGoodPlace && c++ < MAX);
 
         if (c >= MAX) {
             return new Apple(-1, -1);
         }
 
-        return new Apple(x, y);
+        return new Apple(pt);
     }
 
 }

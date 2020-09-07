@@ -36,6 +36,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -162,7 +163,7 @@ public class BattlecityTest {
 
     public static Tank tank(int x, int y, Direction direction, int ticksPerBullets) {
         Dice dice = getDice(x, y);
-        return new Tank(x, y, direction, dice, ticksPerBullets);
+        return new Tank(pt(x, y), direction, dice, ticksPerBullets);
     }
 
     public Tank tank(int x, int y, Direction direction) {

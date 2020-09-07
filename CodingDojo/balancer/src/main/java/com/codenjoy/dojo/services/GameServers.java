@@ -22,14 +22,13 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import static java.util.Optional.ofNullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
-import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @Component
 public class GameServers {
@@ -42,13 +41,13 @@ public class GameServers {
 
     @PostConstruct
     public void postConstruct() {
-        update(config.getServers());
+        update(config.getGame().getServers());
     }
 
     // несколько потоков могут параллельно регаться, и этот инкремент по кругу
     // должeн быть многопоточнобезопасным
     public synchronized String getNextServer() {
-        if (countRegistered++ % config.getGameRoom() == 0) {
+        if (countRegistered++ % config.getGame().getRoom() == 0) {
             currentServer++;
             if (currentServer >= servers.size()) {
                 currentServer = 0;

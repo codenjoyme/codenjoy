@@ -23,27 +23,38 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.services.Point;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toList;
 
 public class WallsImpl implements Walls {
+
     private List<Wall> walls;
 
     public WallsImpl() {
-        walls = new LinkedList<Wall>();
+        walls = new LinkedList<>();
     }
 
-    public WallsImpl(Walls sourceWalls) {
+    public WallsImpl(Walls input) {
         this();
-        for (Wall wall : sourceWalls) {
+        for (Wall wall : input) {
             walls.add(wall.copy());
         }
     }
 
     @Override
-    public void add(int x, int y) {
-        add(new Wall(x, y));
+    public void add(Point pt) {
+        add(new Wall(pt));
+    }
+
+    @Override
+    public void init(Field field) {
+        // do nothing
     }
 
     @Override
@@ -54,24 +65,25 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public boolean itsMe(int x, int y) {
-        for (Wall wall : walls) {
-            if (wall.itsMe(x, y)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean itsMe(Point pt) {
+        return walls.stream()
+                .anyMatch(wall -> wall.itsMe(pt));
     }
 
     @Override
-    public <T extends Wall> List<T> subList(Class<T> filter) {
-        List<Wall> result = new LinkedList<Wall>();
-        for (Wall input: walls) {
-            if (filter.isAssignableFrom(input.getClass())) {
-                result.add(input);
-            }
-        }
-        return (List<T>) result;
+    public <T extends Wall> List<T> listSubtypes(Class<T> filter) {
+        return list(wall -> filter.isAssignableFrom(wall.getClass()));
+    }
+
+    @Override
+    public <T extends Wall> List<T> listEquals(Class<T> filter) {
+        return list(wall -> filter.equals(wall.getClass()));
+    }
+
+    private List list(Predicate<Wall> predicate) {
+        return (List)walls.stream()
+                .filter(predicate)
+                .collect(toList());
     }
 
     @Override
@@ -80,8 +92,8 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public Wall destroy(int x, int y) {
-        int index = walls.indexOf(new Wall(x, y));
+    public Wall destroy(Point pt) {
+        int index = walls.indexOf(new Wall(pt));
         if (index == -1) {
             return new Wall(-1, -1);
         }
@@ -89,16 +101,31 @@ public class WallsImpl implements Walls {
     }
 
     @Override
-    public Wall get(int x, int y) {
-        int index = walls.indexOf(new Wall(x, y));
+    public Wall destroyExact(Wall wall) {
+        for (int index = 0; index < walls.size(); index++) {
+            Wall item = walls.get(index);
+            // если тот же элемент, или тип тот же и координаты идентичны
+            if (item == wall
+                    || ( item.getClass().equals(wall.getClass())
+                        && item.equals(wall)))
+            {
+                return walls.remove(index);
+            }
+        }
+        return new Wall(-1, -1);
+    }
+
+    @Override
+    public Wall get(Point pt) {
+        int index = walls.indexOf(new Wall(pt));
         if (index == -1) {
-            return new Wall(-1, -1);
+            return new NotAWall(-1, -1);
         }
         return walls.get(index);
     }
 
     @Override
     public void tick() {
-        // do nothing
+        new LinkedList<>(walls).forEach(Wall::tick);
     }
 }

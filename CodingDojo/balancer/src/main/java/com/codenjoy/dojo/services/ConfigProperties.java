@@ -23,6 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.hash.Hash;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,76 +40,22 @@ import java.util.List;
  * а это потому, что он не обрабатывается фильтрами maven при сборке в war.
  * Единственное место, где конфигурится *.properties - applicationContext.xml
  */
+@Getter
+@Setter
 @Component
 public class ConfigProperties {
+
+    @Value("${admin.login}")
+    private String adminLogin;
 
     @Value("${admin.password}")
     private String adminPassword;
 
-    @Value("${email.hash}")
-    private String emailHash;
-
     @Autowired
-    private GameProperties gameProperties;
+    private GameProperties game;
 
     public void updateFrom(ConfigProperties config) {
         BeanUtils.copyProperties(config, this);
-    }
-
-    public String getAdminPassword() {
-        return adminPassword;
-    }
-
-    public String getEmailHash() {
-        return emailHash;
-    }
-
-    public String getGameType() {
-        return gameProperties.getType();
-    }
-
-    public int getGameRoom() {
-        return gameProperties.getRoom();
-    }
-
-    public String getGameFinalTime() {
-        return gameProperties.getFinaleTime();
-    }
-
-    public List<String> getServers() {
-        return gameProperties.getServers();
-    }
-
-    public String getEmail(String id) {
-        return Hash.getEmail(id, emailHash);
-    }
-
-    public String getId(String email) {
-        return Hash.getId(email, emailHash);
-    }
-
-    public String getAdminToken() {
-        return DigestUtils.md5DigestAsHex(adminPassword.getBytes());
-    }
-
-    public String getDayStart() {
-        return gameProperties.getStartDay();
-    }
-
-    public String getDayEnd() {
-        return gameProperties.getEndDay();
-    }
-
-    public int getDayFinalistCount() {
-        return gameProperties.getFinalistsCount();
-    }
-
-    public void setAdminPassword(String adminPassword) {
-        this.adminPassword = adminPassword;
-    }
-
-    public void setEmailHash(String emailHash) {
-        this.emailHash = emailHash;
     }
 
 }

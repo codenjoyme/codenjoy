@@ -29,8 +29,6 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-
 @Component
 public class PlayerController implements Controller<String, Joystick> {
 
@@ -48,18 +46,18 @@ public class PlayerController implements Controller<String, Joystick> {
     }
 
     @Override
-    public boolean requestControl(Player player, String board) throws IOException {
-        return transport.sendState(player.getName(), new BoardGameState(board));
+    public boolean requestControl(Player player, String board) {
+        return transport.sendState(player.getId(), new BoardGameState(board));
     }
 
     @Override
     public void registerPlayerTransport(Player player, Joystick joystick) {
-        transport.registerPlayerEndpoint(player.getName(),
+        transport.registerPlayerEndpoint(player.getId(),
                 new PlayerResponseHandler(player, joystick));
     }
 
     @Override
     public void unregisterPlayerTransport(Player player) {
-        transport.unregisterPlayerEndpoint(player.getName());
+        transport.unregisterPlayerEndpoint(player.getId());
     }
 }

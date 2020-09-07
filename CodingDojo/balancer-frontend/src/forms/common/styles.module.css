@@ -29,7 +29,7 @@
 
 .inputWrap {
     position: relative;
-    margin-bottom: 47px;
+    margin-bottom: 27px;
 }
 
 .input {
@@ -37,7 +37,7 @@
     width: calc(100% - 30px);
     line-height: 16px;
     border: 1px solid var(--primary-color);
-    font-size: 12px;
+    font-size: 16px;
     padding: 15px;
     background: var(--main-bg-color);
     color: var(--title-bg-color);
@@ -69,7 +69,7 @@
 .submit {
     display: inline-block;
     width: 100%;
-    font-size: 15px;
+    font-size: 16px;
     text-transform: uppercase;
     padding: 23px 20px;
     background: #255465;
@@ -82,6 +82,16 @@
 .selectWrap {
     margin-bottom: 47px;
     color: var(--title-bg-color);
+}
+
+.phoneInputWrap {
+  display: flex;
+  align-items: center;
+}
+
+.phonePrefix {
+  margin-right: 10px;
+  color: var(--title-bg-color);
 }
 
 .select {
@@ -106,9 +116,9 @@
 }
 
 .checkBoxWrap {
-    padding: 21px 25px;
+    padding: 9px 25px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .checkBoxItem {
@@ -117,8 +127,7 @@
 
 .checkBoxLabel {
     color: var(--title-bg-color);
-    font-size: 12px;
-    text-decoration: underline;
+    font-size: 16px;
     font-weight: 300;
     cursor: pointer;
 }
@@ -126,11 +135,42 @@
 .systemError {
     padding: 24px 24px 0;
     background: var(--block-bg-color);
-    font-size: 16px;
-    font-weight: 200;
-    color: var(--primary-color);
+    font-size: 18px;
+    font-weight: 400;
+    color: #d35d47;
 }
 
 .systemError img {
     margin-bottom: 22px;
+}
+
+.checkBoxText {
+    line-height: 1.6;
+}
+
+.forgotPasswordLink {
+    display: flex;
+    justify-content: flex-end;
+    text-decoration: underline;
+    padding: 10px 25px 0;
+}
+
+.fpPhoneWrapper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 47px;
+}
+.fpPhone {
+    font-size: 20px;
+    color: var(--title-bg-color);
+    margin-right: 15px;
+
+}
+.fpInput {
+    flex: 1;
+}
+.registerConfirmResend {
+    padding: 25px;
+    position: relative;
+    text-align: right;
 }

@@ -23,15 +23,21 @@ package com.codenjoy.dojo.snakebattle.model.board;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.BoardUtils;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.round.Round;
+import com.codenjoy.dojo.services.round.RoundImpl;
+import com.codenjoy.dojo.services.round.RoundField;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.services.Events;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.function.Function;
@@ -42,7 +48,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.snakebattle.model.hero.Hero.NEXT_TICK;
 import static java.util.stream.Collectors.toList;
 
-public class SnakeBoard implements Field {
+public class SnakeBoard extends RoundField<Player> implements Field {
 
     private List<Wall> walls;
     private List<StartFloor> starts;
@@ -53,31 +59,26 @@ public class SnakeBoard implements Field {
     private List<Gold> gold;
 
     private List<Player> players;
-    private List<Player> theWalkingDead;
 
-    private Timer startTimer;
-    private Timer roundTimer;
-    private int round;
-    private Timer winnerTimer;
-
-    private Parameter<Integer> roundsPerMatch;
     private Parameter<Integer> flyingCount;
     private Parameter<Integer> furyCount;
     private Parameter<Integer> stoneReduced;
-    private Parameter<Integer> minTicksForWin;
 
     private int size;
     private Dice dice;
 
-    public SnakeBoard(Level level, Dice dice, Timer startTimer, Timer roundTimer, Timer winnerTimer, Parameter<Integer> roundsPerMatch, Parameter<Integer> flyingCount, Parameter<Integer> furyCount, Parameter<Integer> stoneReduced, Parameter<Integer> minTicksForWin) {
+    public SnakeBoard(Level level, Dice dice, Round round,
+                      Parameter<Integer> flyingCount,
+                      Parameter<Integer> furyCount,
+                      Parameter<Integer> stoneReduced)
+    {
+        super(round, Events.START, Events.WIN, Events.DIE);
+
         this.flyingCount = flyingCount;
         this.furyCount = furyCount;
         this.stoneReduced = stoneReduced;
-        this.roundsPerMatch = roundsPerMatch;
-        this.minTicksForWin = minTicksForWin;
-
         this.dice = dice;
-        round = 0;
+
         walls = level.getWalls();
         starts = level.getStartPoints();
         apples = level.getApples();
@@ -87,85 +88,23 @@ public class SnakeBoard implements Field {
         gold = level.getGold();
         size = level.getSize();
         players = new LinkedList<>();
-        theWalkingDead = new LinkedList<>();
-
-        this.startTimer = startTimer.start();
-        this.roundTimer = roundTimer.stop();
-        this.winnerTimer = winnerTimer.stop();
     }
 
     @Override
-    public void tick() {
+    protected void cleanStuff() {
         snakesClear();
+    }
 
-        startTimer.tick(this::sendTimerStatus);
-        roundTimer.tick(() -> {});
-        winnerTimer.tick(() -> {});
-
-        if (startTimer.justFinished()) {
-            round++;
-            players.forEach(p -> p.start(round));
-            roundTimer.start();
-        }
-
-        if (!startTimer.done()) {
-            return;
-        }
-
-        if (roundTimer.justFinished()) {
-            rewardWinnersByTimeout();
-
-            startTimer.start();
-            return;
-        }
-
-
-        if (isNoOneOnBoard() || winnerTimer.justFinished()) {
-            if (isLastOnBoard()) {
-                reset(getLast());
-            }
-
-            startTimer.start();
-            return;
-        }
-
-        if (!startTimer.unlimited() && winnerTimer.done() && isLastOnBoard()) {
-            winnerTimer.start();
-        }
-
+    @Override
+    public void tickField() {
         snakesMove();
         snakesFight();
         snakesEat();
         // после еды у змеек отрастают хвосты, поэтому столкновения нужно повторить
         // чтобы обработать ситуацию "кусь за растущий хвост", иначе eatTailThatGrows тесты не пройдут
         snakesFight();
-        rewardTheWinner();
+
         setNewObjects();
-    }
-
-    private void rewardWinnersByTimeout() {
-        Integer max = aliveActive().stream()
-                .map(p -> p.getHero().size())
-                .max(Comparator.comparingInt(i1 -> i1))
-                .orElse(Integer.MAX_VALUE);
-
-        aliveActive().forEach(p -> {
-                    if (p.getHero().size() == max
-                        && roundTimer.time() > minTicksForWin.getValue())
-                    {
-                        p.event(Events.WIN);
-                    } else {
-                        p.printMessage("Time is over");
-                    }
-                });
-
-        aliveActive().forEach(player -> reset(player));
-    }
-
-    private void sendTimerStatus() {
-        String pad = StringUtils.leftPad("", startTimer.countdown(), '.');
-        String message = pad + startTimer.countdown() + pad;
-        players.forEach(player -> player.printMessage(message));
     }
 
     private void snakesClear() {
@@ -175,13 +114,7 @@ public class SnakeBoard implements Field {
     }
 
     @Override
-    public void clearScore() {
-        round = 0;
-
-        players.forEach(p -> newGame(p));
-    }
-
-    private void setNewObjects() {
+    public void setNewObjects() {
         int max = (players.size() / 2) + 1;
         int i = dice.next(50);
         if (i == 42 && furyPills.size() < max)
@@ -201,31 +134,13 @@ public class SnakeBoard implements Field {
         return BoardUtils.getFreeRandom(size, dice, pt -> isFree(pt));
     }
 
-    private void rewardTheWinner() {
-        if (theWalkingDead.isEmpty()) {
-            return;
-        }
-        theWalkingDead.clear();
-
-        if (isLastOnBoard()) {
-            if (roundTimer.time() >= minTicksForWin.getValue()) {
-                getLast().event(Events.WIN);
-            }
-        }
-    }
-
-    private Player getLast() {
-        return aliveActive().iterator().next();
-    }
-
-    private List<Player> aliveActive() {
-        return players.stream()
-                .filter(p -> p.isAlive() && p.isActive())
-                .collect(toList());
+    @Override
+    protected List<Player> players() {
+        return players;
     }
 
     private void snakesMove() {
-        for (Player player : aliveActive()) {
+        for (GamePlayer<Hero, Field> player : aliveActive()) {
             Hero hero = player.getHero();
             hero.tick();
         }
@@ -320,7 +235,7 @@ public class SnakeBoard implements Field {
     }
 
     private void snakesEat() {
-        for (Player player : aliveActive()) {
+        for (GamePlayer<Hero, Field> player : aliveActive()) {
             Hero hero = player.getHero();
             Point head = hero.head();
             hero.eat();
@@ -350,31 +265,8 @@ public class SnakeBoard implements Field {
 
     private Stream<Hero> notFlyingHeroes() {
         return aliveActive().stream()
-                .map(Player::getHero)
+                .map(player -> player.getHero())
                 .filter(h -> !h.isFlying());
-    }
-
-    private boolean isNoOneOnBoard() {
-        return aliveActive().size() == 0;
-    }
-
-    private boolean isLastOnBoard() {
-        return aliveActive().size() == 1;
-    }
-
-    private void reset(Player player) {
-        if (isMatchOver()) {
-            player.getHero().setAlive(false);
-            player.leaveBoard();
-        } else {
-            newGame(player);
-        }
-    }
-
-    private boolean isMatchOver() {
-        // тут >= а не == потому что на админке можно поменять roundsPerMatch
-        // в меньшую сторону и тут можно зациклится в противном случае
-        return round >= roundsPerMatch.getValue();
     }
 
     public int size() {
@@ -464,14 +356,8 @@ public class SnakeBoard implements Field {
 
     private Stream<Hero> aliveEnemies(Hero me) {
         return aliveActive().stream()
-                .map(Player::getHero)
+                .map(player -> player.getHero())
                 .filter(h -> !h.equals(me));
-    }
-
-    @Override
-    public void oneMoreDead(Player player) {
-        player.die(isMatchOver());
-        theWalkingDead.add(player);
     }
 
     @Override
@@ -559,15 +445,6 @@ public class SnakeBoard implements Field {
             players.add(player);
         }
         player.newHero(this);
-    }
-
-    public void remove(Player player) {
-        if (players.contains(player)) {
-            // кто уходит из игры не лишает коллег очков за победу
-            player.getHero().die();
-            players.remove(player);
-            rewardTheWinner();
-        }
     }
 
     public List<Wall> getWalls() {

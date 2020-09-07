@@ -23,14 +23,20 @@ package com.codenjoy.dojo.utils;
  */
 
 
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.client.AbstractBoard;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import lombok.experimental.UtilityClass;
+
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 @UtilityClass
 public class TestUtils {
@@ -63,6 +69,61 @@ public class TestUtils {
         game.on(gameField);
         game.newGame();
         return game;
+    }
+
+    public static String printWay(String expected,
+                                  CharElements from, CharElements to,
+                                  CharElements none, CharElements wayChar,
+                                  AbstractBoard board,
+                                  Function<AbstractBoard, DeikstraFindWay.Possible> possible)
+    {
+        expected = expected.replace(wayChar.ch(), none.ch())
+                    .replaceAll("\n", "");
+        board = (AbstractBoard) board.forString(expected);
+        List<Point> starts = board.get(from);
+        Point start = starts.get(0);
+        List<Point> goals = board.get(to);
+        List<Direction> way = new DeikstraFindWay()
+                .getShortestWay(board.size(),
+                        start, goals,
+                        possible.apply(board));
+
+        Point current = start;
+        for (int index = 0; index < way.size(); index++) {
+            Direction direction = way.get(index);
+            current = direction.change(current);
+
+            CharElements element = (index == way.size() - 1) ? to : wayChar;
+            board.set(current.getX(), current.getY(), element.ch());
+        }
+
+        return board.boardAsString();
+    }
+
+    /**
+     * проверяем порционно, потому что в 'mvn test'
+     * не видно на больших данных, где именно отличие и это проблема в отладке
+     * @param allFirst true - если проверяем все сразу, false - если сперва порционно тик за тиком
+     * @param assertor так как assertEquals нельзя использовать в prod code, а этот класс нельзя переместить в test и затянуть потом как дупенденси, тут лямбда )
+     * @param expectedAll что должно быть
+     * @param actualAll что реально пришло
+     */
+    public static void assertSmoke(boolean allFirst, BiConsumer<Object, Object> assertor, String expectedAll, String actualAll) {
+        String[] expected = expectedAll.split(LocalGameRunner.SEP);
+        String[] actual = actualAll.split(LocalGameRunner.SEP);
+
+        if (allFirst) {
+            assertor.accept(expectedAll, actualAll);
+        }
+
+        for (int i = 0; i < Math.min(expected.length, actual.length); i++) {
+            assertor.accept(expected[i], actual[i]);
+        }
+        assertor.accept(expected.length, actual.length);
+
+        if (!allFirst) {
+            assertor.accept(expectedAll, actualAll);
+        }
     }
 
 }

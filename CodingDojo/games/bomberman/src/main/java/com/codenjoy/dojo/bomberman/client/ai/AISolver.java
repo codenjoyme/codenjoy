@@ -26,10 +26,9 @@ package com.codenjoy.dojo.bomberman.client.ai;
 import com.codenjoy.dojo.bomberman.client.Board;
 import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.client.WebSocketRunner;
+import com.codenjoy.dojo.services.*;
+import org.apache.commons.lang3.StringUtils;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -61,7 +60,8 @@ public class AISolver implements Solver<Board> {
 
         direction = tryToMove(bomberman);
 
-        return mergeCommands(bomb, direction);
+        String result = mergeCommands(bomb, direction);
+        return StringUtils.isEmpty(result) ? Direction.STOP.toString() : result;
     }
 
     private String mergeCommands(Point bomb, Direction direction) {

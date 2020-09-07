@@ -1,19 +1,21 @@
 // core
 import React, { Component } from 'react';
 import { Formik, Form, Field } from 'formik';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as Yup from 'yup';
 import _ from 'lodash';
 
 // proj
 import { login } from '../../redux/auth';
+import { book } from '../../routes';
 import { CustomInputComponent } from '../common/customInput';
-import errorSnake from '../common/DuneSnake-icon.svg';
+import errorImg from '../common/Bomb_server_Error.jpg';
 
 // own
 import styles from '../common/styles.module.css';
 
-const { formWrap, title, submit, backgroundSection, systemError } = styles;
+const { formWrap, title, submit, backgroundSection, systemError, checkBoxLabel, forgotPasswordLink } = styles;
 
 const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -28,17 +30,14 @@ const LoginSchema = Yup.object().shape({
 class LoginForm extends Component {
     render() {
         const { login, loginErrors, isLoading } = this.props;
-
+        const error = _.get(loginErrors, 'errorMsg');
         return (
             <div className={ formWrap }>
                 <h1 className={ title }>Увійти</h1>
-                { _.get(loginErrors, 'system') && (
+                { error && (
                     <div className={ systemError }>
-                        <img src={ errorSnake } alt='' />
-                        Через непередбачуваний політ діда Мороза антени було
-                        пошкоджено. <br />
-                        Як тільки пошкодження будуть усунені, сервіс буде
-                        доступним.
+                        <img src={ errorImg } alt='' />
+                        { error }
                     </div>
                 ) }
                 <Formik
@@ -53,14 +52,14 @@ class LoginForm extends Component {
                                     name='email'
                                     placeholder='Електронна пошта'
                                     type='email'
-                                    errors={ _.get(loginErrors, 'credentials') }
+                                    errors={ error }
                                     component={ CustomInputComponent }
                                 />
                                 <Field
                                     name='password'
                                     placeholder='Пароль'
                                     type='password'
-                                    errors={ _.get(loginErrors, 'credentials') }
+                                    errors={ error }
                                     component={ CustomInputComponent }
                                 />
                                 <button
@@ -74,6 +73,9 @@ class LoginForm extends Component {
                         </Form>
                     ) }
                 </Formik>
+                <NavLink to={ book.forgotPassword }>
+                    <div className={ `${checkBoxLabel} ${forgotPasswordLink}` }><span>Забув пароль?</span></div>
+                </NavLink>
             </div>
         );
     }

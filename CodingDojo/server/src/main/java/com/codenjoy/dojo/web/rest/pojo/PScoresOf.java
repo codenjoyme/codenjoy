@@ -31,7 +31,7 @@ public class PScoresOf {
     private PlayerGame playerGame;
 
     public String getId() {
-        return playerGame.getPlayer().getName();
+        return playerGame.getPlayer().getId();
     }
 
     public String getName() {

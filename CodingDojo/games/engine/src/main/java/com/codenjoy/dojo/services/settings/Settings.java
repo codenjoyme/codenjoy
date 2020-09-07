@@ -35,27 +35,19 @@ import java.util.List;
  */
 public interface Settings {
 
-    /**
-     * @return список всех констант
-     */
-    List<Parameter<?>> getParameters();
+    List<Parameter> getParameters();
 
-    /**
-     * @param name имя константы
-     * @return враппер над константой
-     */
-    Parameter<?> addEditBox(String name);
+    // TODO а тут точно надо <?> ?
+    EditBox<?> addEditBox(String name);
 
-    Parameter<?> addSelect(String name, List<Object> strings);
+    SelectBox<?> addSelect(String name, List<Object> strings);
 
-    /**
-     * @param name имя константы
-     * @return враппер над константой boolean типа
-     */
-    Parameter<Boolean> addCheckBox(String name);
+    CheckBox<Boolean> addCheckBox(String name);
 
-
+    // TODO а тут точно надо <T> ?
     <T> Parameter<T> getParameter(String name);
+
+    boolean hasParameter(String name);
 
     void removeParameter(String name);
 
@@ -73,4 +65,8 @@ public interface Settings {
      * Так ты сообщаешь что отреагировал на все изменения.
      */
     void changesReacted();
+
+    void clear();
+
+    void updateAll(List<Parameter> parameters);
 }

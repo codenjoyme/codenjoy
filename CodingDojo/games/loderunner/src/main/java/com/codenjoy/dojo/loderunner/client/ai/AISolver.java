@@ -50,6 +50,7 @@ public class AISolver implements Solver<Board> {
             public boolean possible(Point from, Direction where) {
                 int x = from.getX();
                 int y = from.getY();
+
                 if (board.aWall(x, y)) return false;
 
                 Point newPt = where.change(from);
@@ -74,9 +75,14 @@ public class AISolver implements Solver<Board> {
             }
 
             @Override
-            public boolean possible(Point atWay) {
-                if (board.isEnemyAt(atWay.getX(), atWay.getY())) return false;
-                if (board.isOtherHeroAt(atWay.getX(), atWay.getY())) return false;
+            public boolean possible(Point point) {
+                int x = point.getX();
+                int y = point.getY();
+
+                if (board.aWall(x, y)) return false;
+                if (board.isEnemyAt(x, y)) return false;
+                if (board.isOtherHeroAt(x, y)) return false;
+
                 return true;
             }
         };

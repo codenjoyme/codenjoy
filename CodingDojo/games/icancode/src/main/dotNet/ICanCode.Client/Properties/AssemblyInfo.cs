@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ICanCode.Client")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("EPAM Systems")]
+[assembly: AssemblyCompany("Codenjoy")]
 [assembly: AssemblyProduct("ICanCode.Client")]
-[assembly: AssemblyCopyright("Copyright © EPAM Systems 2019")]
+[assembly: AssemblyCopyright("Copyright © Codenjoy 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

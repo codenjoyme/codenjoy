@@ -55,7 +55,7 @@ var showDescriptionOnClick = function() {
     if (!game.registered) {
         return;
     }
-    var container = "#div_" + game.playerName.replace(/[@.]/gi, "_");
+    var container = "#div_" + game.playerId;
     $(container + " #player_name").click(function(){
         if (!!description) {
             alert(description.replace(/\\n/g, "\n"));

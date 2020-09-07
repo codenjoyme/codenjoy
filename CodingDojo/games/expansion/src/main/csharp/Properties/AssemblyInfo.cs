@@ -2,7 +2,7 @@
  * #%L
  * expansion - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2017 EPAM
+ * Copyright (C) 2016 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -29,9 +29,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("ExpansionBot")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("EPAM Systems")]
+[assembly: AssemblyCompany("Codenjoy")]
 [assembly: AssemblyProduct("ExpansionBot")]
-[assembly: AssemblyCopyright("Copyright © EPAM Systems 2017")]
+[assembly: AssemblyCopyright("Copyright © Codenjoy 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

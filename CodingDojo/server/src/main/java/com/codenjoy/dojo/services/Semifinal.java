@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.PlayerGames.*;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
@@ -50,22 +51,25 @@ public class Semifinal implements Tickable {
 
     @Override
     public void tick() {
-        // если режим включен не очищаем
+        // если режим включен - выходим
+        // TODO эта настройка должна включаться и выключаться не для всех комнат, а для заданных в настройках
         if (!settings.isEnabled()) return;
+
+        // если не с кем работать - выходим
+        if (playerGames.isEmpty()) return;
 
         // ждем заданное количество тиков
         if (++time % settings.getTimeout() != 0) return;
         time = 0;
 
-        // получаем мапу по играм, где значениями являются сортированные по очкам списки PlayerGame
+        // получаем мапу по комнатам, где значениями являются сортированные
+        // по очкам списки PlayerGame
         Map<String, List<PlayerGame>> map =
-                playerGames.getGameTypes().stream()
-                    .map(GameType::name)
-                    .distinct()
-                    .collect(toMap(name -> name,
-                            name -> playerGames.getAll(name)
+                playerGames.getRooms(ACTIVE).stream()
+                    .collect(toMap(room -> room,
+                            room -> playerGames.getAll(withRoom(room))
                                         .stream()
-                                        .sorted(Comparator.comparingInt(game -> (Integer)game.getPlayer().getScore()))
+                                        .sorted(byScore())
                                         .collect(toList())));
 
         List<PlayerGame> toRemove = new LinkedList<>();
@@ -96,8 +100,12 @@ public class Semifinal implements Tickable {
 
         // если после удаления надо перегруппировать участников по бордам
         if (settings.isResetBoard()) {
-            playerGames.reloadAll(settings.isShuffleBoard());
+            playerGames.reloadAll(settings.isShuffleBoard(), playerGames.withActive());
         }
+    }
+
+    private Comparator<PlayerGame> byScore() {
+        return Comparator.comparingInt(game -> (Integer)game.getPlayer().getScore());
     }
 
     public SemifinalSettings settings() {

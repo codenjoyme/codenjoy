@@ -25,7 +25,9 @@ Programming manuals
 ===============
  * [Server source code for contributors](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo)
  * [How to write your own game](https://github.com/codenjoyme/codenjoy-game#create-your-own-codenjoy-game)
- * [How to launch the server from sources](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo#run-codenjoy-server-from-sources)
+ * [How to launch the game server from sources](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo#run-codenjoy-server-from-sources)
+ * [How to launch the balancer server from sources](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/balancer#run-balancer-from-sources)
+ * [How to launch the balancer frontend from sources](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo/balancer-frontend#available-scripts)
  * [How to run the server on Ubuntu](https://github.com/codenjoyme/codenjoy-portable-linux.git#ubuntu-portable-script)
  * [How to run the server on Linux (simple version)](https://github.com/codenjoyme/codenjoy-portable-linux-lite.git#linux-portable-script-simple-version)
  * [How to run the server on Windows](https://github.com/codenjoyme/codenjoy-portable-windows.git#windows-portable-script)

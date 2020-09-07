@@ -4,6 +4,8 @@
 **/bin
 **/obj
 **/Gemfile.lock
+/CodingDojo/external
+/CodingDojo/**/external
 /CodingDojo/repo
 /CodingDojo/repo/**
 /CodingDojo/**/*.log
@@ -21,7 +23,6 @@
 /CodingDojo/games/**/libs
 /CodingDojo/games/**/README.txt
 /CodingDojo/games/**/webapp/resources/user/*.zip
-/CodingDojo/balancer-frontend
 /CodingDojo/*-portable
 /CodingDojo/stuff
 /_temp/**
@@ -37,3 +38,5 @@
 /CodingDojo/games/bomberman/src/main/dotNet/Bomberman/packages/**
 **/node_modules/
 **/package-lock.json
+
+.DS_Store

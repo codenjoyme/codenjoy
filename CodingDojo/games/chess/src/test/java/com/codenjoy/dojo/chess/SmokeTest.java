@@ -25,7 +25,7 @@ package com.codenjoy.dojo.chess;
 
 //import com.codenjoy.dojo.chess.client.Board;
 //import com.codenjoy.dojo.chess.client.ai.ApofigSolver;
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import org.junit.Test;
 
 import java.util.LinkedList;

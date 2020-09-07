@@ -53,11 +53,11 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     }
 
     @Override
-    public void moving(int newX, int newY) {
-        if (field.outOfField(newX, newY)) {
+    public void moving(Point pt) {
+        if (pt.isOutOf(field.size())) {
             onDestroy(); // TODO заимплементить взрыв
         } else {
-            move(newX, newY);
+            move(pt);
             field.affect(this);
         }
     }

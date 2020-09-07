@@ -35,6 +35,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @SQLiteProfile
 public class SQLiteFilesProperties {
 
+    private boolean memory;
     private DBProps files;
 
     @Data

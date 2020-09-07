@@ -19,7 +19,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValue){
+function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue){
 
     var leaderboard = $("#leaderboard");
     leaderboard.show();
@@ -79,14 +79,6 @@ function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValu
         return result;
     }
 
-    function fromEmail(email) {
-        return email.split('@')[0];
-    }
-
-    function toName(email) {
-        return fromEmail(email.replace(' ', '&nbsp;'));
-    }
-
     function drawLeaderTable(data) {
         if (data == null) {
             $("#table-logs-body").empty();
@@ -114,11 +106,11 @@ function initLeadersTable(contextPath, playerName, code, onDrawItem, onParseValu
         var tbody = '';
         var count = 0;
         $.each(scores, function (email, score) {
-            var name = toName(readableNames[email]);
+            var name = readableNames[email];
 
             var you = '';
-            if (!!playerName) {
-                you = (name == toName(readableNames[playerName]))?"*":"";
+            if (!!playerId) {
+                you = (name == readableNames[playerId])?"*":"";
             }
 
             count++;

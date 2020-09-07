@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PlayerDetailInfo {
 
-    private String name;
+    private String id;
     private String readableName;
     private String callbackUrl;
     private String gameType;
@@ -48,7 +49,7 @@ public class PlayerDetailInfo {
     private PHeroData hero;
     private PLevelProgress progress;
     private List<String> group;
-    private Registration.User registration;
+    private PUser registration;
 
     public PlayerDetailInfo(Player player, Registration.User registration,
                             String roomName, Game game, List<String> group)
@@ -59,9 +60,9 @@ public class PlayerDetailInfo {
 
         callbackUrl = player.getCallbackUrl();
         score = String.valueOf(player.getScore());
-        name = player.getName();
+        id = player.getId();
 
-        this.registration = registration;
+        this.registration = new PUser(registration);
 
         progress = new PLevelProgress(game.getProgress());
         save = game.getSave().toString();
@@ -70,6 +71,9 @@ public class PlayerDetailInfo {
     }
 
     public PlayerSave buildPlayerSave() {
-        return new PlayerSave(name, callbackUrl, roomName, gameType, Integer.valueOf(score), save);
+        if (StringUtils.isEmpty(roomName)) { // TODO test me
+            roomName = gameType;
+        }
+        return new PlayerSave(id, callbackUrl, roomName, gameType, Integer.valueOf(score), save);
     }
 }

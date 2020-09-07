@@ -25,6 +25,7 @@ body {
     justify-content: center;
     flex: 1 1 auto;
     font-family: 'Museo Sans Cyrl';
+    text-align: justify;
 }
 
 .content {
@@ -50,6 +51,16 @@ body {
     line-height: 1.5;
     margin-bottom: 30px;
     font-weight: 200;
+}
+
+.content ul ul {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.content ol ol {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .title {
@@ -78,10 +89,30 @@ body {
     line-height: 2;
 }
 
+.responsive-img {
+  width: 100%;
+  height: auto;
+}
+
+.game-field-img-container {
+  /* img width */
+  max-width: 444px;
+}
+
 @media all and (max-width: 1030px) {
     .content {
         padding: 45px 0px;
         width: calc(100% - 40px);
+    }
+
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      text-align: justify !important;
+    }
+
+    li {
+      word-break: break-all;
     }
 }
 

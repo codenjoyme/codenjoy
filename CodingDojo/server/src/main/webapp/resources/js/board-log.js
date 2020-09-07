@@ -26,7 +26,7 @@ pages.boardLog = function() {
     game.enableDonate = false;
     game.enableJoystick = false;
     game.enableAlways = false;
-    game.enablePlayerInfo = false;
+    game.enablePlayerInfo = true;
     game.enablePlayerInfoLevel = false;
     game.enableLeadersTable = false;
     game.enableForkMe = false;
@@ -38,7 +38,7 @@ pages.boardLog = function() {
     game.heroInfo = null;
 
     game.gameName = getSettings('gameName');
-    game.playerName = getSettings('playerName');
+    game.playerId = getSettings('playerId');
     game.readableName = getSettings('readableName');
     game.contextPath = getSettings('contextPath');
     game.code = null;
@@ -58,18 +58,27 @@ function initBoardLogComponents(game) {
         game.gameName, game.enablePlayerInfo,
         game.enablePlayerInfoLevel,
         game.sprites, game.alphabet, game.spriteElements,
-        game.drawBoard);
+        game.drawBoard,
+        function() {
+            initLogs(game.gameName, game.boardSize, game.alphabet, game.playerId);
 
-    initLogs(game.gameName, game.boardSize, game.alphabet, game.playerName);
-
-    if (game.showBody) {
-        $(document.body).show();
-    }
+            if (game.showBody) {
+                $(document.body).show();
+            }
+        });
 }
 
-function loadLogs(playerName, time, onLoad) {
-    loadData('/rest/player/' + playerName + '/log/' + time, function(gameData) {
+var loading = false;
+
+function loadLogs(playerId, time, onLoad) {
+    if (loading) {
+        return;
+    }
+
+    loading = true;
+    loadData('/rest/player/' + playerId + '/log/' + time, function(gameData) {
         onLoad(gameData);
+        loading = false;
     });
 }
 
@@ -78,44 +87,65 @@ var currentTick = 0;
 var firstTick = null;
 var lastTick = null;
 
-function initLogs(gameName, boardSize, alphabet, playerName) {
+function initLogs(gameName, boardSize, alphabet, playerId) {
+
+    function getTickFromUrl(){
+        let url = new URL(window.location.href);
+        if (url.searchParams.has('tick')) {
+            return url.searchParams.get('tick');
+        } else {
+            return 0;
+        }
+    }
+
+    function updateUrl(key, value) {
+        let url = new URL(window.location.href);
+        url.searchParams.set(key, value);
+        window.history.pushState('data', 'Title', url.href);
+    }
 
     function loadTick(time) {
         currentTick = time;
         var tick = logTicks[time];
 
+        updateUrl("tick", time);
+
         var data = {};
-        var info = data[playerName] = {};
+        var info = data[playerId] = {};
+        info.readableName = game.readableName;
         info.score = tick.score;
+        info.tickTime = time;
+        info.command = tick.command;
+        info.message = tick.message;
         info.gameName = tick.gameType;
         info.scores = {};
-        info.scores[playerName] = tick.score;
+        info.scores[playerId] = tick.score;
         info.boardSize = boardSize;
         info.board = tick.board;
         info.info = "";
         info.heroesData = {};
         info.heroesData.readableNames = {};
-        info.heroesData.readableNames[playerName] = playerName;
+        info.heroesData.readableNames[playerId] = playerId;
         info.heroesData.coordinates = {};
-        var coordinates = info.heroesData.coordinates[playerName] = {};
+        var coordinates = info.heroesData.coordinates[playerId] = {};
         coordinates.coordinate = {x:-1, y:-1};
         coordinates.level = 0;
         coordinates.multiplayer = false;
         info.heroesData.group = [];
-        info.heroesData.group[0] = playerName;
+        info.heroesData.group[0] = playerId;
 
         $('body').trigger('board-updated', data);
     }
 
     function loadNewLogs(time, onLoad) {
-        if (firstTick == time || lastTick == time) {
+        if (firstTick == time /*|| lastTick == time*/) {
             if (!!onLoad) {
                 onLoad(time);
             }
             return;
         }
 
-        loadLogs(playerName, time, function(ticks) {
+        loadLogs(playerId, time, function(ticks) {
             var max = 0;
             for (var index in ticks) {
                 var tick = ticks[index];
@@ -130,10 +160,14 @@ function initLogs(gameName, boardSize, alphabet, playerName) {
                 if (!firstTick && !findSmaller(time)) {
                     firstTick = time;
                 }
-                if (!lastTick && !findLarger(time)) {
-                    lastTick = time;
-                }
+                // if (!lastTick && !findLarger(time)) {
+                //     lastTick = time;
+                // }
             }
+            if (time == 0) {
+                return;
+            }
+
             if (!!onLoad) {
                 onLoad(time);
             }
@@ -177,7 +211,10 @@ function initLogs(gameName, boardSize, alphabet, playerName) {
             loadTick(time);
         } else {
             loadNewLogs(currentTick, function(time) {
-                loadTick(time);
+                var prev = findSmaller(time);
+                if (!!prev) {
+                    loadTick(prev);
+                }
             });
         }
     }
@@ -188,7 +225,10 @@ function initLogs(gameName, boardSize, alphabet, playerName) {
             loadTick(time);
         } else {
             loadNewLogs(currentTick, function(time) {
-                loadTick(time);
+                var next = findLarger(time);
+                if (!!next) {
+                    loadTick(next);
+                }
             });
         }
     }
@@ -201,7 +241,7 @@ function initLogs(gameName, boardSize, alphabet, playerName) {
         }
     });
 
-    loadNewLogs(0, function(time) {
+    loadNewLogs(getTickFromUrl(), function(time) {
         loadTick(time);
     });
 }

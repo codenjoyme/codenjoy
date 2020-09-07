@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.services;
  */
 
 
+import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -37,6 +38,7 @@ public class ScoresTest {
     private Integer loosePenalty;
     private Integer winScore;
     private Integer goldScore;
+    private SettingsWrapper wrapper;
 
     public void loose() {
         scores.event(new Events());
@@ -46,6 +48,10 @@ public class ScoresTest {
         scores.event(Events.WIN(0));
     }
 
+    public void winMultiple() {
+        scores.event(Events.WIN(0, ICanCode.MULTIPLE));
+    }
+
     public void win(int goldCount) {
         scores.event(Events.WIN(goldCount));
     }
@@ -53,7 +59,8 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new Scores(0, settings);
+        wrapper = SettingsWrapper.setup(settings);
+        scores = new Scores(0, wrapper);
 
         loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
         winScore = settings.getParameter("Win score").type(Integer.class).getValue();
@@ -62,7 +69,7 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        scores = new Scores(140, wrapper);
 
         win();  //+
         win();  //+
@@ -75,8 +82,20 @@ public class ScoresTest {
     }
 
     @Test
+    public void shouldCollectScores_ignoreOnMultiple() {
+        scores = new Scores(140, wrapper);
+
+        winMultiple();
+        winMultiple();
+        winMultiple();
+        winMultiple();
+
+        Assert.assertEquals(140, scores.getScore());
+    }
+
+    @Test
     public void shouldWithWithGold() {
-        scores = new Scores(0, settings);
+        scores = new Scores(0, wrapper);
 
         win(0);  //+
         win(1);  //+
