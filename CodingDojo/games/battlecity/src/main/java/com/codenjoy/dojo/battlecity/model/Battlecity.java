@@ -242,6 +242,11 @@ public class Battlecity implements Field {
         }
     }
 
+    @Override
+    public boolean isRiver(Point pt) {
+        return rivers.stream().anyMatch(river -> river.itsMe(pt));
+    }
+
     private Construction getConstructionAt(Bullet bullet) {
         int index = constructions.indexOf(bullet);
         return constructions.get(index);
@@ -301,11 +306,6 @@ public class Battlecity implements Field {
             }
         }
         return pt.isOutOf(size);
-    }
-
-    @Override
-    public boolean isRiver(int x, int y) {
-        return rivers.stream().anyMatch(river -> river.itsMe(x, y));
     }
 
     private List<Bullet> getBullets() {
@@ -403,5 +403,4 @@ public class Battlecity implements Field {
     public void setDice(Dice dice) {
         this.dice = dice;
     }
-
 }

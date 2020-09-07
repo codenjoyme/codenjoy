@@ -39,8 +39,8 @@ public class AITank extends Tank {
         super(pt, direction, dice, 1);
     }
 
-    public AITank(int x, int y,  Dice dice, Direction direction, int ticksPerBullets, boolean noBulletFly) {
-        super(x, y, direction, dice, ticksPerBullets);
+    public AITank(Point pt, Dice dice, Direction direction, int ticksPerBullets, boolean noBulletFly) {
+        super(pt, direction, dice, ticksPerBullets);
         this.noBulletFly = noBulletFly;
     }
 

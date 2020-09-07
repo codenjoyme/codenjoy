@@ -24,7 +24,10 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -174,9 +177,10 @@ public class BattlecityTest {
         return setAITank(x, y, direction, ticksPerBullets);
     }
 
-    public static Tank setAITank(int x, int y, Direction direction, int ticksPerBullets) {
+    public static Tank setAITank(int x, int y,  Direction direction, int ticksPerBullets) {
         Dice dice = getDice(x, y);
-        return new AITank(x, y, dice, direction,ticksPerBullets, false);
+        Point pt = pt(x, y);
+        return new AITank(pt, dice, direction,ticksPerBullets, false);
     }
 
     private static Dice getDice(int x, int y) {
