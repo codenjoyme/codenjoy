@@ -219,4 +219,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
             bullets.add(bullet);
         }
     }
+
+    protected boolean isTankPrize() {
+        return false;
+    }
 }

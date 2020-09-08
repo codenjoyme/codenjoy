@@ -38,6 +38,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -58,11 +59,18 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
+        Parameter<Integer> spawnAiPrize = settings.addEditBox("count spawn for AI Tank with prize").type(Integer.class).def(4);
+        Parameter<Integer> hitKillsAiPrize = settings.addEditBox("hits to kill AI Tank with prize").type(Integer.class).def(3);
+        Parameter<Object> parameter = settings.getParameter("name");
+
         return new Battlecity(level.size(),
                 getDice(),
                 level.getConstructions(),
                 level.getBorders(),
-                level.getTanks().toArray(new Tank[0]));
+                spawnAiPrize,
+                hitKillsAiPrize,
+                level.getTanks().toArray(new Tank[0])
+        );
     }
 
     @Override

@@ -42,6 +42,8 @@ import static org.mockito.Mockito.when;
 public class SingleTest {
 
     private int size = 5;
+    private int ticksCountAITankWithPresent = 4;
+    private int bulletsForKill = 3;
     private Battlecity field;
     private Dice dice1;
     private Dice dice2;
@@ -52,7 +54,7 @@ public class SingleTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     public void givenGame() {
-        field = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]));
+        field = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), ticksCountAITankWithPresent, bulletsForKill);
         player1 = new Player(null, dice1);
         player2 = new Player(null, dice2);
         tanks1 = new Single(player1, printerFactory);
