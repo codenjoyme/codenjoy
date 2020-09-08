@@ -45,6 +45,11 @@ function initBoardPage(game, onLoad) {
         game.spriteElements = gameData.sprites;
         game.alphabet = gameData.alphabet;
 
+        // TODO надо как-то иначе решить переключение спрайтов, а то если не грузить icancode c ее кастомной html странички, то спрайты не прорисуются
+        if (!game.sprites && game.gameName == 'icancode') {
+            game.sprites = 'robot';
+        }
+
         var players = gameData.players;
         if (game.allPlayersScreen) {
             game.players = players;
