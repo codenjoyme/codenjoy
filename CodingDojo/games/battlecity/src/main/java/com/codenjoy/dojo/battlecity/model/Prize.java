@@ -34,8 +34,6 @@ public class Prize extends PointImpl implements State<Elements, Player> {
     public Prize(Point pt, Elements elements) {
         super(pt);
         this.elements = elements;
-
-
     }
 
     @Override
