@@ -24,7 +24,10 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Joystick;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -57,7 +60,13 @@ public class BattlecityTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
     private Settings settings = new SettingsImpl();
 
-    @Before
+    private List<Tank> tanks;
+	private List<Tree> trees;
+	private List<Construction> constructions;
+	private List<Ice> ice;
+	private List<River> rivers;
+
+	@Before
     public void setup() {
         size = 7;
         ticksPerBullets = 1;
@@ -90,6 +99,64 @@ public class BattlecityTest {
         this.hero = tank;
     }
 
+    private void givenGameWithTree(List<Tank> allTanks, List<Tree> woods) {
+        givenGameWithTree(allTanks, Arrays.asList(new Construction[0]), woods);
+    }
+
+    private void givenGameWithTree(List<Tank> allTanks, List<Construction> constructions, List<Tree> woods) {
+        List<Tree> trees = new LinkedList<>(woods);
+        List<Tank> tanks = new LinkedList<>(allTanks);
+        game = new Battlecity(size, mock(Dice.class), constructions,
+                new DefaultBorders(size).get(), trees);
+        for (Tank tank : tanks) {
+            initPlayer(game, tank);
+        }
+        this.hero = tanks.get(0);
+    }
+
+    private void givenGameWithIce(List<Tank> allTanks, List<Ice> freeze) {
+        this.trees = new LinkedList<>();
+        givenGameWithIce(allTanks, Arrays.asList(new Construction[0]),trees, freeze);
+    }
+
+    private void givenGameWithIce(List<Tank> allTanks, List<Construction> constructions, List<Tree> woods, List<Ice> freeze) {
+        List<Tree> trees = new LinkedList<>(woods);
+        List<Tank> tanks = new LinkedList<>(allTanks);
+        List<Ice> ice = new LinkedList<>(freeze);
+
+        game = new Battlecity(size, mock(Dice.class), constructions,
+                new DefaultBorders(size).get(), trees, ice);
+        for (Tank tank : tanks) {
+            initPlayer(game, tank);
+        }
+        this.hero = tanks.get(0);
+    }
+
+    private void givenGameWithRiver(List<Tank> allTanks, List<River> water) {
+        this.trees = new LinkedList<>();
+        this.ice = new LinkedList<>();
+        givenGameWithRiver(allTanks, Arrays.asList(new Construction[0]), trees, ice, water);
+    }
+
+    private void givenGameWithRiver(List<Tank> allTanks,
+                                    List<Construction> constructions,
+                                    List<Tree> woods,
+                                    List<Ice> freeze,
+                                    List<River> water) {
+
+        List<Tree> trees = new LinkedList<>(woods);
+        List<Tank> tanks = new LinkedList<>(allTanks);
+        List<Ice> ice = new LinkedList<>(freeze);
+        List<River> rivers = new LinkedList<>(water);
+
+        game = new Battlecity(size, mock(Dice.class), constructions,
+                new DefaultBorders(size).get(), trees, ice, rivers);
+        for (Tank tank : tanks) {
+            initPlayer(game, tank);
+        }
+        this.hero = tanks.get(0);
+    }
+
     private Player initPlayer(Battlecity game, Tank tank) {
         Player player = mock(Player.class);
         when(player.getHero()).thenReturn(tank);
@@ -116,6 +183,22 @@ public class BattlecityTest {
         return tank(x, y, direction, ticksPerBullets);
     }
 
+    private static Dice getDice(int x, int y) {
+        Dice dice = mock(Dice.class);
+        when(dice.next(anyInt())).thenReturn(x, y);
+        return dice;
+    }
+
+    public Tank setAITank(int x, int y, Direction direction) {
+        return setAITank(x, y, direction, ticksPerBullets);
+    }
+
+    public static Tank setAITank(int x, int y,  Direction direction, int ticksPerBullets) {
+        Dice dice = getDice(x, y);
+        Point pt = pt(x, y);
+        return new AITank(pt, dice, direction,ticksPerBullets, false);
+    }
+
     public static Tank aiTank(int x, int y, Direction direction, int ticksPerBullets ) {
         Dice dice = getDice(x, y);
         Point pt = pt(x, y);
@@ -131,12 +214,6 @@ public class BattlecityTest {
         Dice dice = getDice(x, y);
         Point pt = pt(x, y);
         return new AITankPrize(pt, dice, direction,  hitKillsAiPrize.getValue());
-    }
-
-    private static Dice getDice(int x, int y) {
-        Dice dice = mock(Dice.class);
-        when(dice.next(anyInt())).thenReturn(x, y);
-        return dice;
     }
 
     private static Dice getDice(Point pt, int indexPrizes) {
@@ -1986,7 +2063,7 @@ public class BattlecityTest {
     @Ignore
     @Test
     public void shouldRemoveAIWhenKillIt() {
-        givenGameWithAI(tank(1, 1, Direction.UP), tank(1, 5, Direction.UP), tank(5, 1, Direction.UP));
+//        givenGameWithAI(tank(1, 1, Direction.UP), tank(1, 5, Direction.UP), tank(5, 1, Direction.UP));
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼˄    ☼\n" +
@@ -2857,7 +2934,6 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-
     // первый выстрел иногда получается сделать дважды
     @Test
     public void shouldCantFireTwice() {
@@ -2931,6 +3007,1232 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
+    // 1. Кусты
+    @Test
+    public void shouldBeConstructionTree_whenGameCreated() {
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(3, 3)));
+
+		givenGameWithTree(tanks, trees);
+
+        assertEquals(1, game.getTrees().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ▒  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldBeConstructionTwoTree_whenGameCreated() {
+
+		List<Tank> tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		List<Tree> trees = new LinkedList<>(Arrays.asList(new Tree(3, 3), new Tree(5, 1)));
+		givenGameWithTree(tanks, trees);
+
+        assertEquals(2, game.getTrees().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ▒  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲   ▒☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    // 1.1) При выстреле пуля должна пролетать сквозь кусты
+    @Test
+    public void shouldBulletFlyUnderTree_right() {
+        size = 11;
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(6, 1)));
+
+		givenGameWithTree(tanks, trees);
+
+        hero.right();
+        hero.act();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼►    ▒   ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼ ►•  ▒   ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼ ►  •▒   ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼ ►   ▒•  ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼ ►   ▒  •☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼ ►   ▒   ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldBulletDestroyWallUnderTree_whenHittingTheWallUp_whenTwoWalls() {
+        size = 7;
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(1, 2)));
+		constructions = new LinkedList<>(Arrays.asList(new Construction(1, 5), new Construction(1, 4)));
+
+		givenGameWithTree(tanks, constructions, trees);
+
+        hero.act();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╬    ☼\n" +
+                "☼•    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╩    ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╩    ☼\n" +
+                "☼•    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╨    ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼╨    ☼\n" +
+                "☼•    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬    ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╩    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    // Когда пуля и дерево находятся в одной координате когда отработывает метод tick()
+    @Test
+    public void shouldBulletFlyUnderTwoTree_up() {
+        size = 11;
+		tanks = new LinkedList<>(Arrays.asList(tank(5, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(5, 5), new Tree(5, 6)));
+
+		givenGameWithTree(tanks, trees);
+
+        hero.act();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼    •    ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    •    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼    •    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼    ▒    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    //1.2) кусты - когда игрок заходит под них, там видно кусты и больше никакого движения
+    @Test
+    public void shouldTankMove_underTree() {
+        size = 7;
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(1, 3), new Tree(1, 4)));
+
+		givenGameWithTree(tanks, trees);
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▒►   ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼▒ ►  ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldBulletFlyUnderTree_jointly_shouldTankMoveUnderTree() {
+        size = 11;
+		tanks = new LinkedList<>(Arrays.asList(tank(9, 1, Direction.UP)));
+		trees = new LinkedList<>(Arrays.asList(new Tree(9, 5), new Tree(9, 6), new Tree(9, 3)));
+
+		givenGameWithTree(tanks, trees);
+
+        hero.act();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▲☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▲☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼        •☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼        ▲☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+
+        hero.up();
+        game.tick();
+
+        hero.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼       ◄▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+
+        hero.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼     ◄  ▒☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼        ▒☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    //1.3) так же не видно врагов под кустами
+    @Test
+    public void shouldOtherTankMove_underTree() {
+		size = 11;
+		Tank tankHero = tank(1, 1, Direction.UP);
+		Tank otherTank = tank(1, 9, Direction.DOWN);
+
+		tanks = Arrays.asList(tankHero, otherTank);
+		trees = Arrays.asList(new Tree(1, 6), new Tree(1, 7));
+
+		givenGameWithTree(tanks, trees);
+
+		assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+				"☼˅        ☼\n" +
+				"☼         ☼\n" +
+				"☼▒        ☼\n" +
+				"☼▒        ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▲        ☼\n" +
+				"☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        otherTank.down();
+        game.tick();
+		assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+				"☼         ☼\n" +
+				"☼˅        ☼\n" +
+				"☼▒        ☼\n" +
+				"☼▒        ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▲        ☼\n" +
+				"☼☼☼☼☼☼☼☼☼☼☼\n");
+
+		otherTank.down();
+		game.tick();
+
+		otherTank.down();
+		game.tick();
+		assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▒        ☼\n" +
+				"☼▒        ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▲        ☼\n" +
+				"☼☼☼☼☼☼☼☼☼☼☼\n");
+
+		otherTank.down();
+		game.tick();
+		assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▒        ☼\n" +
+				"☼▒        ☼\n" +
+				"☼˅        ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼         ☼\n" +
+				"☼▲        ☼\n" +
+				"☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    //1.4) под кустами не видно так же и ботов белых
+    @Test
+    public void shouldAITankMove_underTree() {
+        size = 11;
+        Tank tankHero = tank(1, 1, Direction.UP);
+        Tank aiTank = setAITank(1, 9, Direction.DOWN);
+
+        tanks = Arrays.asList(tankHero, aiTank);
+        trees = Arrays.asList(new Tree(1, 6), new Tree(1, 7));
+
+        givenGameWithTree(tanks, trees);
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼¿        ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        aiTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼¿        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        aiTank.down();
+        game.tick();
+
+        aiTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        aiTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼¿        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldEnemyCanKillTankUnderTree() {
+        size = 11;
+        Tank tankHero = tank(1, 3, Direction.UP);
+        Tank enemyTank = tank(1, 9, Direction.DOWN);
+
+        tanks = Arrays.asList(tankHero, enemyTank);
+        trees = Arrays.asList(new Tree(1, 4), new Tree(1, 5), new Tree(1, 6));
+
+        givenGameWithTree(tanks, trees);
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼˅        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▲        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();//герой запрятался в кустах
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼˅        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        enemyTank.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼˅        ☼\n" +
+                "☼         ☼\n" +
+                "☼•        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertTrue(tankHero.isAlive());
+        game.tick();//герой должен погибнуть
+        assertFalse(tankHero.isAlive());
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼˅        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼▒        ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldTwoTankCanPassThroughEachOtherUnderTree() {
+        Tank tankHero = tank(1, 1, Direction.UP);
+        Tank enemyTank = tank(1, 4, Direction.DOWN);
+
+        tanks = Arrays.asList(tankHero, enemyTank);
+        trees = Arrays.asList(new Tree(1, 2), new Tree(1, 3));
+
+        givenGameWithTree(tanks, trees);
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼˅    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        enemyTank.down();
+        tankHero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        enemyTank.down();
+        tankHero.up();
+        game.tick();
+
+        enemyTank.down();
+        game.tick();
+        tankHero.up();
+        //Два танка не могут проехать через друг друга
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▒    ☼\n" +
+                "☼▒    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        enemyTank.right();
+        tankHero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▒˃   ☼\n" +
+                "☼▒►   ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+	//2. Лёд
+    @Test
+    public void shouldBeConstructionIce_whenGameCreated() {
+	    //given
+        tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+        ice = new LinkedList<>(Arrays.asList(new Ice(3, 3)));
+        //when
+        givenGameWithIce(tanks, ice);
+        //then
+        assertEquals(1, game.getIce().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  █  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    //2.1) когда герой двигается по льду, происходит скольжение (он проскальзывает одну команду).
+    @Test
+    public void shouldTankMoveUP_onIce() {
+
+        size = 11;
+        tanks = new LinkedList<>(Arrays.asList(tank(5, 2, Direction.UP)));
+        ice = new LinkedList<>(Arrays.asList(
+                new Ice(5, 3),
+                new Ice(5, 4),
+                new Ice(5, 5)));
+
+        givenGameWithIce(tanks, ice);
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //заежаем на лёд
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //находимся на льду
+        //выполнили команаду right(), но танк не реагирует, так как происходит скольжение
+        //двигается дальше с предедущей командой up()
+        hero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //не задаем никаких команд
+        //ничего не происходит
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    //2.2) также когда на нем двигается враг он проскальзывает команду на два тика
+    //2.3) также когда на нем двигается бот он проскальзывает команду на два тика
+
+    //3. Река
+    @Test
+    public void shouldBeConstructionWater_whenGameCreated() {
+	    //given
+        tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+        rivers = new LinkedList<>(Arrays.asList(new River(3, 3)));
+        //when
+        givenGameWithRiver(tanks, rivers);
+        //then
+        assertEquals(1, game.getRivers().size());
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+	//3.1) река - через нее герою нельзя пройти. но можно стрелять
+	@Test
+	public void shouldTankCanGoIfRiverAtWay() {
+	    //given
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
+        //when
+		givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+	@Test
+	public void shouldBulletCanGoIfRiverAtWay() {
+	    //given
+		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
+        //when
+		givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+		hero.up();
+		game.tick();
+		hero.act();
+		game.tick();
+		assertD("☼☼☼☼☼☼☼\n" +
+				"☼     ☼\n" +
+				"☼     ☼\n" +
+				"☼•    ☼\n" +
+				"☼▓    ☼\n" +
+				"☼▲    ☼\n" +
+				"☼☼☼☼☼☼☼\n");
+
+		hero.right();
+		hero.act();
+		game.tick();
+		assertD("☼☼☼☼☼☼☼\n" +
+				"☼•    ☼\n" +
+				"☼     ☼\n" +
+				"☼     ☼\n" +
+				"☼▓    ☼\n" +
+				"☼ ►•  ☼\n" +
+				"☼☼☼☼☼☼☼\n");
+
+		game.tick();
+		assertD("☼☼☼☼☼☼☼\n" +
+				"☼     ☼\n" +
+				"☼     ☼\n" +
+				"☼     ☼\n" +
+				"☼▓    ☼\n" +
+				"☼ ►  •☼\n" +
+				"☼☼☼☼☼☼☼\n");
+	}
+
+    @Test
+    public void shouldDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
+	    //given
+        tanks = new LinkedList<>(Arrays.asList(tank(3, 3, Direction.UP)));
+        rivers = new LinkedList<>(Arrays.asList(
+                new River(2, 3),
+                new River(4, 3),
+                new River(3, 2),
+                new River(3, 4)));
+        //when
+        givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓▲▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓►▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓▲▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓◄▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+		hero.down();
+		game.tick();
+		assertD("☼☼☼☼☼☼☼\n" +
+				"☼     ☼\n" +
+				"☼  ▓  ☼\n" +
+				"☼ ▓▼▓ ☼\n" +
+				"☼  ▓  ☼\n" +
+				"☼     ☼\n" +
+				"☼☼☼☼☼☼☼\n");
+    }
+
+    //3.2) река - через нее врагу нельзя пройти. но можно стрелять
+    @Test
+    public void shouldOtherTankBullet_canGoIfRiverAtWay() {
+	    //given
+        Tank tankHero = tank(3, 2, Direction.UP);
+        Tank otherTank = tank(1, 1, Direction.UP);
+
+        tanks = Arrays.asList(tankHero, otherTank);
+        rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
+        //when
+        givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼˄    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        otherTank.up();
+        game.tick();
+        otherTank.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼˄    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        otherTank.right();
+        otherTank.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼ ˃•  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼ ˃  •☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldOtherTankDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
+	    //given
+        Tank tankHero = tank(5, 1, Direction.UP);
+        Tank otherTank = tank(3, 3, Direction.UP);
+
+        tanks = Arrays.asList(tankHero, otherTank);
+        rivers = new LinkedList<>(Arrays.asList(
+                new River(2, 3),
+                new River(4, 3),
+                new River(3, 2),
+                new River(3, 4)));
+        //when
+        givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓˄▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        otherTank.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓˃▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        otherTank.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓˄▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        otherTank.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓˂▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        otherTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓˅▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    //3.3) река - через нее боту нельзя пройти. но можно стрелять
+    @Test
+    public void shouldAITankBullet_canGoIfRiverAtWay() {
+	    //given
+        Tank tankHero = tank(3, 2, Direction.UP);
+        Tank aiTank = setAITank(1, 1, Direction.UP);
+
+        tanks = Arrays.asList(tankHero, aiTank);
+        rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
+        //when
+        givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼?    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.up();
+        game.tick();
+        aiTank.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼?    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.right();
+        aiTank.act();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼ »•  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼  » •☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ▲  ☼\n" +
+                "☼   » ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldAITankDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
+	    //given
+        Tank tankHero = tank(5, 1, Direction.UP);
+        Tank aiTank = setAITank(3, 3, Direction.DOWN);
+
+        tanks = Arrays.asList(tankHero, aiTank);
+        rivers = new LinkedList<>(Arrays.asList(
+                new River(2, 3),
+                new River(4, 3),
+                new River(3, 2),
+                new River(3, 4)));
+        //when
+        givenGameWithRiver(tanks, rivers);
+        //then
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓¿▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓?▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓«▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼ ▓¿▓ ☼\n" +
+                "☼  ▓  ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    //TODO 4. Добовляем бота
+    //TODO    4.1) добавляем бота, который спаунится каждые N ходов (задается в сеттингах),
+    //TODO         который цветной и его убить можно только за M выстрелов (тоже сеттинги)
+    //TODO    4.2) во время смерти такого AI вываливается приз
     //создаем АИтанк с призами
     @Test
     public void shouldCreatedAiPrize() {
@@ -3430,13 +4732,11 @@ public class BattlecityTest {
 
         assertEquals(false, assertPrize());
     }
+
+    //TODO 5. Добавляем приз
+    //TODO    5.1) добавляем приз неуязвимости, он работает L тиков (сеттинги) и теряется после
+    //TODO    5.2) если в тебя выстрелят во время действия этого приза - ты остаешься жить
+    //TODO 6. Ддобавляется приз пульки которые разбивают бетонную стену
+    //TODO 7. Рендомная борда (тут надо подглядеть как в icancode подобное устроено) и сделать так же
+
 }
-
-
-
-//TODO    4.1) добавляем бота, который спаунится каждые N ходов (задается в сеттингах),
-
-
-//TODO         который цветной и его убить можно только за M выстрелов (тоже сеттинги)
-//TODO    4.2) во время смерти такого AI вываливается приз
-

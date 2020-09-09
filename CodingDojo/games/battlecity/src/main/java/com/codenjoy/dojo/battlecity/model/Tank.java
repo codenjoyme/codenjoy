@@ -29,6 +29,8 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
+
 public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public static final int MAX = 100;
@@ -102,7 +104,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void moving(Point pt) {
-        if (field.isBarrier(pt)) {
+        if (field.isBarrier(pt) || field.isRiver(pt)) {
             // do nothing
         } else {
             move(pt);
@@ -156,6 +158,18 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        //дерево и танк в одной координате
+        if (tree != null) {
+            return Elements.TREE;
+        }
+
+        //лёд и танк в одной кординате
+        Ice ice = filterOne(alsoAtPoint, Ice.class);
+        if (ice != null) {
+            slide();
+        }
+
         if (isAlive()) {
             if (player.getHero() == this) {
                 switch (direction) {
@@ -177,6 +191,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         } else {
             return Elements.BANG;
         }
+    }
+
+    private void slide() {
+
     }
 
     public void reset() {

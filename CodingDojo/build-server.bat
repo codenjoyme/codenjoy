@@ -1,7 +1,6 @@
 set ROOT=%CD%
 
-set GAMES_TO_RUN=bomberman
-rem set GAMES_TO_RUN=tetris,snake,bomberman
+set GAMES_TO_RUN=tetris,snake,bomberman,sample,snakebattle,sokoban,spacerace,startandjump,sudoku,rubicscube,a2048,battlecity,chess,collapse,expansion,fifteen,football,hex,icancode,kata,lemonade,loderunner,lunolet,minesweeper,moebius,pong,puzzlebox,quadro,quake2d,reversi,excitebike
 
 IF "%GAMES_TO_RUN%"=="" (
     call %ROOT%\mvnw clean install -DskipTests
