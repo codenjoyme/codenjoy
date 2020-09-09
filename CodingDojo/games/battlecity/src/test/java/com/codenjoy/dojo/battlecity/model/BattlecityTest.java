@@ -157,12 +157,6 @@ public class BattlecityTest {
         this.hero = tanks.get(0);
     }
 
-//    private void givenGameWithAI(Tank tank, Tank... aiTanks) {
-//        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), aiTanks);
-//        initPlayer(game, tank);
-//        this.hero = tank;
-//    }
-
     private Player initPlayer(Battlecity game, Tank tank) {
         Player player = mock(Player.class);
         when(player.getHero()).thenReturn(tank);

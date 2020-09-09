@@ -55,7 +55,7 @@ public class Battlecity implements Field {
     private List<Ice> ice;
     private List<River> rivers;
 
-    private List<Player> players = new LinkedList<Player>();
+    private List<Player> players = new LinkedList<>();
     private final List<Elements> prizes = Arrays.asList(Elements.PRIZE_IMMORTALITY, Elements.PRIZE_BREAKING_WALLS, Elements.PRIZE_WALKING_ON_WATER);
 
     public Battlecity(int size, Dice dice, List<Construction> constructions, Parameter<Integer> spawnAiPrize,
@@ -149,13 +149,6 @@ public class Battlecity implements Field {
         for (Tank tank : aiTanks) {
             addAI(tank);
         }
-    }
-
-    public <T> Battlecity(int i, T mock, List<T> asList, int i1, int i2, Tank enemy) {
-
-    }
-
-    public <T> Battlecity(int size, T mock, List<T> asList, int ticksCountAITankWithPresent, int bulletsForKill) {
     }
 
     @Override
@@ -432,6 +425,7 @@ public class Battlecity implements Field {
                     addAll(Battlecity.this.getConstructions());
                     addAll(Battlecity.this.getBullets());
                     addAll(Battlecity.this.getPrize());
+
                     addAll(Battlecity.this.getTrees());
                     addAll(Battlecity.this.getIce());
                     addAll(Battlecity.this.getRivers());
