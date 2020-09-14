@@ -99,58 +99,20 @@ public class BattlecityTest {
         this.hero = tank;
     }
 
-    private void givenGameWithTree(List<Tank> allTanks, List<Tree> woods) {
-        givenGameWithTree(allTanks, Arrays.asList(new Construction[0]), woods);
-    }
+    private void givenGameWithTanks(List<Tank> tanks) {
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]),
+                new DefaultBorders(size).get(), spawnAiPrize, hitKillsAiPrize);
 
-    private void givenGameWithTree(List<Tank> allTanks, List<Construction> constructions, List<Tree> woods) {
-        List<Tree> trees = new LinkedList<>(woods);
-        List<Tank> tanks = new LinkedList<>(allTanks);
-        game = new Battlecity(size, mock(Dice.class), constructions,
-                new DefaultBorders(size).get(), trees);
         for (Tank tank : tanks) {
             initPlayer(game, tank);
         }
         this.hero = tanks.get(0);
     }
 
-    private void givenGameWithIce(List<Tank> allTanks, List<Ice> freeze) {
-        this.trees = new LinkedList<>();
-        givenGameWithIce(allTanks, Arrays.asList(new Construction[0]),trees, freeze);
-    }
-
-    private void givenGameWithIce(List<Tank> allTanks, List<Construction> constructions, List<Tree> woods, List<Ice> freeze) {
-        List<Tree> trees = new LinkedList<>(woods);
-        List<Tank> tanks = new LinkedList<>(allTanks);
-        List<Ice> ice = new LinkedList<>(freeze);
-
+    private void givenGameWithTanks(List<Tank> tanks, List<Construction> constructions) {
         game = new Battlecity(size, mock(Dice.class), constructions,
-                new DefaultBorders(size).get(), trees, ice);
-        for (Tank tank : tanks) {
-            initPlayer(game, tank);
-        }
-        this.hero = tanks.get(0);
-    }
+                new DefaultBorders(size).get(), spawnAiPrize, hitKillsAiPrize);
 
-    private void givenGameWithRiver(List<Tank> allTanks, List<River> water) {
-        this.trees = new LinkedList<>();
-        this.ice = new LinkedList<>();
-        givenGameWithRiver(allTanks, Arrays.asList(new Construction[0]), trees, ice, water);
-    }
-
-    private void givenGameWithRiver(List<Tank> allTanks,
-                                    List<Construction> constructions,
-                                    List<Tree> woods,
-                                    List<Ice> freeze,
-                                    List<River> water) {
-
-        List<Tree> trees = new LinkedList<>(woods);
-        List<Tank> tanks = new LinkedList<>(allTanks);
-        List<Ice> ice = new LinkedList<>(freeze);
-        List<River> rivers = new LinkedList<>(water);
-
-        game = new Battlecity(size, mock(Dice.class), constructions,
-                new DefaultBorders(size).get(), trees, ice, rivers);
         for (Tank tank : tanks) {
             initPlayer(game, tank);
         }
@@ -3013,7 +2975,8 @@ public class BattlecityTest {
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		trees = new LinkedList<>(Arrays.asList(new Tree(3, 3)));
 
-		givenGameWithTree(tanks, trees);
+		givenGameWithTanks(tanks);
+		game.setTrees(trees);
 
         assertEquals(1, game.getTrees().size());
 
@@ -3031,7 +2994,8 @@ public class BattlecityTest {
 
 		List<Tank> tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		List<Tree> trees = new LinkedList<>(Arrays.asList(new Tree(3, 3), new Tree(5, 1)));
-		givenGameWithTree(tanks, trees);
+		givenGameWithTanks(tanks);
+		game.setTrees(trees);
 
         assertEquals(2, game.getTrees().size());
 
@@ -3051,7 +3015,8 @@ public class BattlecityTest {
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		trees = new LinkedList<>(Arrays.asList(new Tree(6, 1)));
 
-		givenGameWithTree(tanks, trees);
+		givenGameWithTanks(tanks);
+		game.setTrees(trees);
 
         hero.right();
         hero.act();
@@ -3140,7 +3105,8 @@ public class BattlecityTest {
 		trees = new LinkedList<>(Arrays.asList(new Tree(1, 2)));
 		constructions = new LinkedList<>(Arrays.asList(new Construction(1, 5), new Construction(1, 4)));
 
-		givenGameWithTree(tanks, constructions, trees);
+		givenGameWithTanks(tanks, constructions);
+		game.setTrees(trees);
 
         hero.act();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -3234,7 +3200,8 @@ public class BattlecityTest {
 		tanks = new LinkedList<>(Arrays.asList(tank(5, 1, Direction.UP)));
 		trees = new LinkedList<>(Arrays.asList(new Tree(5, 5), new Tree(5, 6)));
 
-		givenGameWithTree(tanks, trees);
+        givenGameWithTanks(tanks);
+        game.setTrees(trees);
 
         hero.act();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3322,7 +3289,8 @@ public class BattlecityTest {
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		trees = new LinkedList<>(Arrays.asList(new Tree(1, 3), new Tree(1, 4)));
 
-		givenGameWithTree(tanks, trees);
+        givenGameWithTanks(tanks);
+        game.setTrees(trees);
 
         hero.up();
         game.tick();
@@ -3381,7 +3349,8 @@ public class BattlecityTest {
 		tanks = new LinkedList<>(Arrays.asList(tank(9, 1, Direction.UP)));
 		trees = new LinkedList<>(Arrays.asList(new Tree(9, 5), new Tree(9, 6), new Tree(9, 3)));
 
-		givenGameWithTree(tanks, trees);
+        givenGameWithTanks(tanks);
+        game.setTrees(trees);
 
         hero.act();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3486,7 +3455,8 @@ public class BattlecityTest {
 		tanks = Arrays.asList(tankHero, otherTank);
 		trees = Arrays.asList(new Tree(1, 6), new Tree(1, 7));
 
-		givenGameWithTree(tanks, trees);
+        givenGameWithTanks(tanks);
+        game.setTrees(trees);
 
 		assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
 				"☼˅        ☼\n" +
@@ -3556,7 +3526,8 @@ public class BattlecityTest {
         tanks = Arrays.asList(tankHero, aiTank);
         trees = Arrays.asList(new Tree(1, 6), new Tree(1, 7));
 
-        givenGameWithTree(tanks, trees);
+        givenGameWithTanks(tanks);
+        game.setTrees(trees);
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼¿        ☼\n" +
@@ -3625,7 +3596,8 @@ public class BattlecityTest {
         tanks = Arrays.asList(tankHero, enemyTank);
         trees = Arrays.asList(new Tree(1, 4), new Tree(1, 5), new Tree(1, 6));
 
-        givenGameWithTree(tanks, trees);
+        givenGameWithTanks(tanks);
+        game.setTrees(trees);
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼˅        ☼\n" +
@@ -3692,7 +3664,8 @@ public class BattlecityTest {
         tanks = Arrays.asList(tankHero, enemyTank);
         trees = Arrays.asList(new Tree(1, 2), new Tree(1, 3));
 
-        givenGameWithTree(tanks, trees);
+        givenGameWithTanks(tanks);
+        game.setTrees(trees);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -3748,7 +3721,8 @@ public class BattlecityTest {
         tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
         ice = new LinkedList<>(Arrays.asList(new Ice(3, 3)));
         //when
-        givenGameWithIce(tanks, ice);
+        givenGameWithTanks(tanks);
+        game.setIce(ice);
         //then
         assertEquals(1, game.getIce().size());
 
@@ -3772,7 +3746,8 @@ public class BattlecityTest {
                 new Ice(5, 4),
                 new Ice(5, 5)));
 
-        givenGameWithIce(tanks, ice);
+        givenGameWithTanks(tanks);
+        game.setIce(ice);
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -3843,7 +3818,8 @@ public class BattlecityTest {
         tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
         rivers = new LinkedList<>(Arrays.asList(new River(3, 3)));
         //when
-        givenGameWithRiver(tanks, rivers);
+        givenGameWithTanks(tanks);
+        game.setRivers(rivers);
         //then
         assertEquals(1, game.getRivers().size());
         //then
@@ -3863,7 +3839,8 @@ public class BattlecityTest {
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
         //when
-		givenGameWithRiver(tanks, rivers);
+        givenGameWithTanks(tanks);
+        game.setRivers(rivers);
         //then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -3892,7 +3869,8 @@ public class BattlecityTest {
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
         //when
-		givenGameWithRiver(tanks, rivers);
+        givenGameWithTanks(tanks);
+        game.setRivers(rivers);
         //then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -3945,7 +3923,8 @@ public class BattlecityTest {
                 new River(3, 2),
                 new River(3, 4)));
         //when
-        givenGameWithRiver(tanks, rivers);
+        givenGameWithTanks(tanks);
+        game.setRivers(rivers);
         //then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -4006,7 +3985,8 @@ public class BattlecityTest {
         tanks = Arrays.asList(tankHero, otherTank);
         rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
         //when
-        givenGameWithRiver(tanks, rivers);
+        givenGameWithTanks(tanks);
+        game.setRivers(rivers);
         //then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -4062,7 +4042,8 @@ public class BattlecityTest {
                 new River(3, 2),
                 new River(3, 4)));
         //when
-        givenGameWithRiver(tanks, rivers);
+        givenGameWithTanks(tanks);
+        game.setRivers(rivers);
         //then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -4123,7 +4104,8 @@ public class BattlecityTest {
         tanks = Arrays.asList(tankHero, aiTank);
         rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
         //when
-        givenGameWithRiver(tanks, rivers);
+        givenGameWithTanks(tanks);
+        game.setRivers(rivers);;
         //then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -4188,7 +4170,8 @@ public class BattlecityTest {
                 new River(3, 2),
                 new River(3, 4)));
         //when
-        givenGameWithRiver(tanks, rivers);
+        givenGameWithTanks(tanks);
+        game.setRivers(rivers);
         //then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
