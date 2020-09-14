@@ -40,9 +40,12 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     private Gun gun;
 
     protected Direction direction;
+    protected Direction lastDirection;
     protected int speed;
     protected boolean moving;
     private boolean fire;
+    private List<Direction> directions;
+    private boolean isIce;
 
     public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
         super(pt);
@@ -50,6 +53,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         this.dice = dice;
         gun = new Gun(ticksPerBullets);
         reset();
+        this.directions = new LinkedList<>();
+        this.isIce = false;
     }
 
     void turn(Direction direction) {
@@ -98,8 +103,13 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
             if (!moving) {
                 return;
             }
-
-            moving(direction.change(this));
+            if (isIce) {
+                direction = slide();
+                moving(direction.change(this));
+            } else {
+                directions.add(direction);
+                moving(direction.change(this));
+            }
         }
     }
 
@@ -167,7 +177,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         //лёд и танк в одной кординате
         Ice ice = filterOne(alsoAtPoint, Ice.class);
         if (ice != null) {
-            slide();
+            isIce = true;
         }
 
         if (isAlive()) {
@@ -191,10 +201,14 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         } else {
             return Elements.BANG;
         }
+
     }
 
-    private void slide() {
-
+    private Direction slide() {
+        if (!directions.isEmpty()) {
+            lastDirection = directions.get(directions.size() - 1);
+        }
+        return lastDirection;
     }
 
     public void reset() {
