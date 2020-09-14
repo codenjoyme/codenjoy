@@ -62,9 +62,6 @@ public class Battlecity implements Field {
                       Parameter<Integer> hitKillsAiPrize, Tank... aiTanks) {
         this(size, dice, constructions, new DefaultBorders(size).get(), spawnAiPrize,
                 hitKillsAiPrize, aiTanks);
-        this.trees = new LinkedList<>();
-        this.ice = new LinkedList<>();
-        this.rivers = new LinkedList<>();
     }
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
@@ -79,27 +76,6 @@ public class Battlecity implements Field {
         this.borders = new LinkedList<>(borders);
         this.spawnAiPrize = spawnAiPrize.getValue();
         this.hitKillsAiPrize = hitKillsAiPrize.getValue();
-
-        for (Tank tank : aiTanks) {
-            addAI(tank);
-        }
-    }
-
-    public Battlecity(int size, Dice dice, List<Construction> constructions, Tank... aiTanks) {
-        this(size, dice, constructions, new DefaultBorders(size).get(), aiTanks);
-        this.trees = new LinkedList<>();
-        this.ice = new LinkedList<>();
-        this.rivers = new LinkedList<>();
-    }
-
-    public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      List<Border> borders, Tank... aiTanks) {
-        aiCount = aiTanks.length;
-        this.dice = dice;
-        this.size = size;
-        this.aiTanks = new LinkedList<>();
-        this.constructions = new LinkedList<>(constructions);
-        this.borders = new LinkedList<>(borders);
         this.trees = new LinkedList<>();
         this.ice = new LinkedList<>();
         this.rivers = new LinkedList<>();
@@ -109,46 +85,16 @@ public class Battlecity implements Field {
         }
     }
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      List<Border> borders, List<Tree> trees, Tank... aiTanks) {
-        this(size, dice, constructions, borders, aiTanks);
-        aiCount = aiTanks.length;
-        this.trees = new LinkedList<>(trees);
-
-        for (Tank tank : aiTanks) {
-            addAI(tank);
-        }
+    public void setTrees(List<Tree> trees) {
+        this.trees = trees;
     }
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      List<Border> borders, List<Tree> trees, List<Ice> ice, Tank... aiTanks) {
-        this(size, dice, constructions, borders, aiTanks);
-        aiCount = aiTanks.length;
-        this.trees = new LinkedList<>(trees);
-        this.ice = new LinkedList<>(ice);
-
-        for (Tank tank : aiTanks) {
-            addAI(tank);
-        }
+    public void setIce(List<Ice> ice) {
+        this.ice = ice;
     }
 
-    public Battlecity(int size, Dice dice,
-                      List<Construction> constructions,
-                      List<Border> borders,
-                      List<Tree> trees,
-                      List<Ice> ice,
-                      List<River> water,
-                      Tank... aiTanks) {
-
-        this(size, dice, constructions, borders, aiTanks);
-        aiCount = aiTanks.length;
-        this.trees = new LinkedList<>(trees);
-        this.ice = new LinkedList<>(ice);
-        this.rivers = new LinkedList<>(water);
-
-        for (Tank tank : aiTanks) {
-            addAI(tank);
-        }
+    public void setRivers(List<River> rivers) {
+        this.rivers = rivers;
     }
 
     @Override
@@ -425,7 +371,6 @@ public class Battlecity implements Field {
                     addAll(Battlecity.this.getConstructions());
                     addAll(Battlecity.this.getBullets());
                     addAll(Battlecity.this.getPrize());
-
                     addAll(Battlecity.this.getTrees());
                     addAll(Battlecity.this.getIce());
                     addAll(Battlecity.this.getRivers());
