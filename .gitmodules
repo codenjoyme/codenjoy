@@ -10,3 +10,6 @@
 [submodule "CodingDojo/games/excitebike"]
 	path = CodingDojo/games/excitebike
 	url = https://github.com/codenjoyme/codenjoy-excitebike.git
+[submodule "CodingDojo/games/selfdefense"]
+	path = CodingDojo/games/selfdefense
+	url = https://github.com/codenjoyme/codenjoy-selfdefense
