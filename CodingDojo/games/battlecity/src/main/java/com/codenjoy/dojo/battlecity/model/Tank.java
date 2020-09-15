@@ -44,8 +44,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     protected int speed;
     protected boolean moving;
     private boolean fire;
-    private List<Direction> directions;
-    private boolean isIce;
+    private Ice ice;
+    private Tree tree;
 
     public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
         super(pt);
@@ -53,8 +53,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         this.dice = dice;
         gun = new Gun(ticksPerBullets);
         reset();
-        this.directions = new LinkedList<>();
-        this.isIce = false;
     }
 
     void turn(Direction direction) {
@@ -103,11 +101,12 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
             if (!moving) {
                 return;
             }
-            if (isIce) {
-                direction = slide();
+
+            if (ice != null) {
+                direction = lastDirection;
                 moving(direction.change(this));
             } else {
-                directions.add(direction);
+                lastDirection = direction;
                 moving(direction.change(this));
             }
         }
@@ -168,17 +167,14 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        tree = filterOne(alsoAtPoint, Tree.class);
         //дерево и танк в одной координате
         if (tree != null) {
             return Elements.TREE;
         }
 
         //лёд и танк в одной кординате
-        Ice ice = filterOne(alsoAtPoint, Ice.class);
-        if (ice != null) {
-            isIce = true;
-        }
+        ice = filterOne(alsoAtPoint, Ice.class);
 
         if (isAlive()) {
             if (player.getHero() == this) {
@@ -201,14 +197,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         } else {
             return Elements.BANG;
         }
-
-    }
-
-    private Direction slide() {
-        if (!directions.isEmpty()) {
-            lastDirection = directions.get(directions.size() - 1);
-        }
-        return lastDirection;
     }
 
     public void reset() {
