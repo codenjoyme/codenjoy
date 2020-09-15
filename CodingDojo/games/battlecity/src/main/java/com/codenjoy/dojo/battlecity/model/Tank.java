@@ -104,11 +104,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
             if (ice != null) {
                 direction = lastDirection;
-                moving(direction.change(this));
             } else {
                 lastDirection = direction;
-                moving(direction.change(this));
             }
+            moving(direction.change(this));
         }
     }
 
