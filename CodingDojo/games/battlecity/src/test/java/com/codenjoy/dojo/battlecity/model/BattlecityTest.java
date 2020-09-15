@@ -3736,9 +3736,11 @@ public class BattlecityTest {
     }
 
     //2.1) когда герой двигается по льду, происходит скольжение (он проскальзывает одну команду).
-    @Test
-    public void shouldTankMoveUP_onIce() {
 
+    /*Если только заезжаем - то сразу же начинается занос, то есть запоминается команда которой
+    заезжали на лед*/
+    @Test
+    public void shouldTankMoveUP_onIce_beforeEnteringGround() {
         size = 11;
         tanks = new LinkedList<>(Arrays.asList(tank(5, 2, Direction.UP)));
         ice = new LinkedList<>(Arrays.asList(
@@ -3802,6 +3804,111 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼    █    ☼\n" +
                 "☼    ▲    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    /*Если съезжаем на землю, то любой занос прекращается тут же*/
+    @Test
+    public void shouldTankMoveUP_onIce_afterArrivalGround() {
+        size = 11;
+        tanks = new LinkedList<>(Arrays.asList(tank(5, 2, Direction.UP)));
+        ice = new LinkedList<>(Arrays.asList(
+                new Ice(5, 3),
+                new Ice(5, 4),
+                new Ice(5, 5)));
+
+        givenGameWithTanks(tanks);
+        game.setIce(ice);
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //заежаем на лёд
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //находимся на льду
+        //выполнили команаду right(), но танк не реагирует, так как происходит скольжение
+        //двигается дальше с предедущей командой up()
+        hero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //двигаемся дальше в направлении up()
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //выполнили команаду right(), но танк не реагирует, так как происходит скольжение
+        //двигается дальше с предедущей командой up()
+        hero.right();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //выехали со льда
+        //двигается дальше в направлении up()
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
                 "☼    █    ☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
