@@ -1,14 +1,10 @@
 For NonJava languages:
-- DotNet client
-    + read src\main\dotNet\Readme.txt
-- Python client
-    + read src\main\dotNet\README.MD
-    + read src\main\dotNet\README.MD
-- JS client
-    + read src\main\javascript\README.txt
+- please go to .\src\main\<language>
+- chose your language
+- and follow README.md instructions
 
 For Java:
-- setup Java (JDK 8)
+- setup Java (JDK 8/11)
     + setup JAVA_HOME variable
 - setup Maven3
     + setup M2_HOME variable
@@ -22,16 +18,16 @@ For Java:
             - server = codenjoy.com if you play on http://codenjoy.com/codenjoy-contest
         * on this page you can also read game instructions
 - register your hero on server http://server/codenjoy-contest/register
-- in class .\src\main\java\com\codenjoy\dojo\bomberman\client\YourSolver.java
+- in class .\src\main\java\com\codenjoy\dojo\<gamename>\client\YourSolver.java
     + copy board page browser url from address bar and paste into main method
     + implement logic inside method
         * public String get(Board board) {
     + run main method of YourSolver class
-    + on page http://server/codenjoy-contest/board/game/bomberman you can check the leaderboard - your bot should move
+    + on page http://server/codenjoy-contest/board/game/<gamename> you can check the leaderboard - your bot should move
     + if something changed - restart the process
         * warning! only one instance of YourSolver class you can run per player - please check this
-- in class .\src\main\java\com\codenjoy\dojo\bomberman\client\Board.java
+- in class .\src\main\java\com\codenjoy\dojo\<gamename>\client\Board.java
     + you can add you own methods for work with board
-- in test package .\src\test\java\com\codenjoy\dojo\bomberman\client
+- in test package .\src\test\java\com\codenjoy\dojo\<gamename>\client
     + you can write yor own test
 - Codenjoy!
