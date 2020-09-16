@@ -223,8 +223,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
 
         var drawBackground = function(name) {
             if (plotsContains(name)) {
-                var x = boardSize / 2 - 0.5;
-                canvas.drawPlot(name, x, 0);
+                canvas.fillImage(name);
             }
         }
 
@@ -410,7 +409,19 @@ function initCanvases(contextPath, players, allPlayersScreen,
                 x * plotSize - (image.width - plotSize)/2 + dx,
                 (boardSize - 1 - y) * plotSize - (image.height - plotSize) + dy
             );
-        };
+        }
+
+        var fillImage = function(color) {
+            var image = images[color];
+            var ctx = canvas[0].getContext("2d");
+            ctx.drawImage(
+                image,
+                0,
+                0,
+                canvas[0].width,
+                canvas[0].height
+            );
+        }
 
         var drawText = function(text, pt, font) {
             if (pt.x == -1 || pt.y == -1) return;
@@ -462,7 +473,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
 
         return {
-            drawImage : drawImage,
+            fillImage : fillImage,
             drawPlot : drawPlot,
             drawText: drawText,
             clear : clear,
