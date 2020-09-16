@@ -40,12 +40,13 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     private Gun gun;
 
     protected Direction direction;
-    protected Direction lastDirection;
     protected int speed;
     protected boolean moving;
     private boolean fire;
     private Ice ice;
     private Tree tree;
+    private int count;
+    private List<Direction> directions;
 
     public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
         super(pt);
@@ -53,6 +54,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         this.dice = dice;
         gun = new Gun(ticksPerBullets);
         reset();
+        directions = new LinkedList<>();
     }
 
     void turn(Direction direction) {
@@ -101,14 +103,31 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
             if (!moving) {
                 return;
             }
-
-            if (ice != null) {
-                direction = lastDirection;
-            } else {
-                lastDirection = direction;
-            }
+            slide();
             moving(direction.change(this));
         }
+    }
+
+    private void slide() {
+        if (ice != null) {
+            directions.add(direction);
+            if (count()) {
+                this.direction = getLastDirection();
+            }
+        } else {
+            //чистим directions
+            directions.clear();
+            //запоминаем последнюю команду перед заездом на лёд
+            directions.add(direction);
+        }
+    }
+
+    private boolean count() {
+        return ++count % 2 == 1;
+    }
+
+    private Direction getLastDirection() {
+        return directions.get(directions.size() - 2);
     }
 
     public void moving(Point pt) {
@@ -171,7 +190,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         if (tree != null) {
             return Elements.TREE;
         }
-
         //лёд и танк в одной кординате
         ice = filterOne(alsoAtPoint, Ice.class);
 

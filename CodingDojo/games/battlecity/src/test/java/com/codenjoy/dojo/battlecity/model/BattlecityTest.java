@@ -3739,80 +3739,9 @@ public class BattlecityTest {
 
     /*Если только заезжаем - то сразу же начинается занос, то есть запоминается команда которой
     заезжали на лед*/
-    @Test
-    public void shouldTankMoveUP_onIce_beforeEnteringGround() {
-        size = 11;
-        tanks = new LinkedList<>(Arrays.asList(tank(5, 2, Direction.UP)));
-        ice = new LinkedList<>(Arrays.asList(
-                new Ice(5, 3),
-                new Ice(5, 4),
-                new Ice(5, 5)));
-
-        givenGameWithTanks(tanks);
-        game.setIce(ice);
-
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼    █    ☼\n" +
-                "☼    █    ☼\n" +
-                "☼    █    ☼\n" +
-                "☼    ▲    ☼\n" +
-                "☼         ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
-
-        //заежаем на лёд
-        hero.up();
-        game.tick();
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼    █    ☼\n" +
-                "☼    █    ☼\n" +
-                "☼    ▲    ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
-
-        //находимся на льду
-        //выполнили команаду right(), но танк не реагирует, так как происходит скольжение
-        //двигается дальше с предедущей командой up()
-        hero.right();
-        game.tick();
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼    █    ☼\n" +
-                "☼    ▲    ☼\n" +
-                "☼    █    ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
-
-        //не задаем никаких команд
-        //ничего не происходит
-        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼    █    ☼\n" +
-                "☼    ▲    ☼\n" +
-                "☼    █    ☼\n" +
-                "☼         ☼\n" +
-                "☼         ☼\n" +
-                "☼☼☼☼☼☼☼☼☼☼☼\n");
-    }
-
     /*Если съезжаем на землю, то любой занос прекращается тут же*/
     @Test
-    public void shouldTankMoveUP_onIce_afterArrivalGround() {
+    public void shouldTankMoveUP_onIce_afterBeforeGround() {
         size = 11;
         tanks = new LinkedList<>(Arrays.asList(tank(5, 2, Direction.UP)));
         ice = new LinkedList<>(Arrays.asList(
@@ -3911,6 +3840,91 @@ public class BattlecityTest {
                 "☼    █    ☼\n" +
                 "☼    █    ☼\n" +
                 "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldTankMoveLeftThenUpThenDown_onIce() {
+        size = 11;
+        tanks = new LinkedList<>(Arrays.asList(tank(5, 2, Direction.UP)));
+        ice = new LinkedList<>(Arrays.asList(
+                new Ice(5, 3),
+                new Ice(5, 4),
+                new Ice(5, 5)));
+
+        givenGameWithTanks(tanks);
+        game.setIce(ice);
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //заежаем на лёд
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //lEFT -> UP(скольжение)
+        hero.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //DOWN -> DOWN (выполнилась)
+        hero.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▼    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //UP -> DOWN (скольжение)
+        hero.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ▼    ☼\n" +
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
