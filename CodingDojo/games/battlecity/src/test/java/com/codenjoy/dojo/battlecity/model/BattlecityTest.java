@@ -3930,6 +3930,96 @@ public class BattlecityTest {
     }
 
     //2.2) также когда на нем двигается враг он проскальзывает команду на два тика
+    @Test
+    public void shouldOtherTankMoveLeftThenUpThenDown_onIce() {
+        //given
+        size = 11;
+        Tank tankHero = tank(1, 1, Direction.UP);
+        Tank otherTank = tank(5, 6, Direction.DOWN);
+        //when
+        tanks = Arrays.asList(tankHero, otherTank);
+        ice = new LinkedList<>(Arrays.asList(
+                new Ice(5, 3),
+                new Ice(5, 4),
+                new Ice(5, 5)));
+
+        givenGameWithTanks(tanks);
+        game.setIce(ice);
+        //then
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ˅    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //враг заежает на лёд
+        otherTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ˅    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //lEFT -> DOWN(скольжение)
+        otherTank.left();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    ˅    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //UP -> UP (выполнилась)
+        otherTank.up();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ˄    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        //DOWN -> UP (скольжение)
+        //сьезд со льда
+        otherTank.down();
+        game.tick();
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    ˄    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼    █    ☼\n" +
+                "☼         ☼\n" +
+                "☼▲        ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
     //2.3) также когда на нем двигается бот он проскальзывает команду на два тика
 
     //3. Река
