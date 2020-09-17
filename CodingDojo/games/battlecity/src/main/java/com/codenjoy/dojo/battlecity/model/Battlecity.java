@@ -23,10 +23,11 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.battlecity.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 
@@ -50,8 +51,11 @@ public class Battlecity implements Field {
     private int size;
     private List<Construction> constructions;
     private List<Border> borders;
+    private List<Tree> trees;
+    private List<Ice> ice;
+    private List<River> rivers;
 
-    private List<Player> players = new LinkedList<Player>();
+    private List<Player> players = new LinkedList<>();
     private final List<Elements> prizes = Arrays.asList(Elements.PRIZE_IMMORTALITY, Elements.PRIZE_BREAKING_WALLS, Elements.PRIZE_WALKING_ON_WATER);
 
     public Battlecity(int size, Dice dice, List<Construction> constructions, Parameter<Integer> spawnAiPrize,
@@ -72,10 +76,25 @@ public class Battlecity implements Field {
         this.borders = new LinkedList<>(borders);
         this.spawnAiPrize = spawnAiPrize.getValue();
         this.hitKillsAiPrize = hitKillsAiPrize.getValue();
+        this.trees = new LinkedList<>();
+        this.ice = new LinkedList<>();
+        this.rivers = new LinkedList<>();
 
         for (Tank tank : aiTanks) {
             addAI(tank);
         }
+    }
+
+    public void setTrees(List<Tree> trees) {
+        this.trees = trees;
+    }
+
+    public void setIce(List<Ice> ice) {
+        this.ice = ice;
+    }
+
+    public void setRivers(List<River> rivers) {
+        this.rivers = rivers;
     }
 
     @Override
@@ -225,6 +244,11 @@ public class Battlecity implements Field {
         }
     }
 
+    @Override
+    public boolean isRiver(Point pt) {
+        return rivers.stream().anyMatch(river -> river.itsMe(pt));
+    }
+
     private Construction getConstructionAt(Bullet bullet) {
         int index = constructions.indexOf(bullet);
         return constructions.get(index);
@@ -347,6 +371,9 @@ public class Battlecity implements Field {
                     addAll(Battlecity.this.getConstructions());
                     addAll(Battlecity.this.getBullets());
                     addAll(Battlecity.this.getPrize());
+                    addAll(Battlecity.this.getTrees());
+                    addAll(Battlecity.this.getIce());
+                    addAll(Battlecity.this.getRivers());
                 }};
             }
         };
@@ -362,6 +389,18 @@ public class Battlecity implements Field {
         }
         return result;
     }
+
+    public List<Tree> getTrees() {
+        return trees;
+    }
+
+    public List<Ice> getIce() {
+        return ice;
+    }
+
+	public List<River> getRivers() {
+		return rivers;
+	}
 
     @Override
     public List<Border> getBorders() {

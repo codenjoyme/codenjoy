@@ -363,5 +363,4 @@ public class TanksEventsTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
-
 }

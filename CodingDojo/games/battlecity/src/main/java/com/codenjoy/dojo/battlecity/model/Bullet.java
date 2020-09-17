@@ -28,6 +28,8 @@ import com.codenjoy.dojo.services.MovingObject;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
+
 public class Bullet extends MovingObject implements State<Elements, Player> {
 
     private Field field;
@@ -75,6 +77,11 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        //дерево и пуля в одной координате
+        if (tree != null) {
+            return Elements.TREE;
+        }
         if (destroyed()) {
             return Elements.BANG;
         } else {
