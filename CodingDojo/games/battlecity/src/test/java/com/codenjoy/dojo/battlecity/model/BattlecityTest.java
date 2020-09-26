@@ -49,6 +49,7 @@ import static org.mockito.Mockito.*;
 
 public class BattlecityTest {
 
+    protected Dice dice = mock(Dice.class);
     public int ticksPerBullets;
     public int size;
     private Parameter<Integer> spawnAiPrize;
@@ -66,7 +67,7 @@ public class BattlecityTest {
 	private List<Ice> ice;
 	private List<River> rivers;
 
-	@Before
+    @Before
     public void setup() {
         size = 7;
         ticksPerBullets = 1;
@@ -79,7 +80,7 @@ public class BattlecityTest {
     }
 
     private void givenGame(Tank tank, Wall... walls) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(walls), spawnAiPrize, hitKillsAiPrize);
+        game = new Battlecity(size, dice, Arrays.asList(walls), spawnAiPrize, hitKillsAiPrize);
         initPlayer(game, tank);
         this.hero = tank;
     }
@@ -88,19 +89,19 @@ public class BattlecityTest {
         List<Border> borders = new DefaultBorders(size).get();
         borders.addAll(Arrays.asList(walls));
 
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Wall[0]), borders, spawnAiPrize, hitKillsAiPrize);
+        game = new Battlecity(size, dice, Arrays.asList(new Wall[0]), borders, spawnAiPrize, hitKillsAiPrize);
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private void givenGameWithAI(Tank tank, Tank... aiTanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Wall[0]), spawnAiPrize, hitKillsAiPrize, aiTanks);
+        game = new Battlecity(size, dice, Arrays.asList(new Wall[0]), spawnAiPrize, hitKillsAiPrize, aiTanks);
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private void givenGameWithTanks(List<Tank> tanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Wall[0]),
+        game = new Battlecity(size, dice, Arrays.asList(new Wall[0]),
                 new DefaultBorders(size).get(), spawnAiPrize, hitKillsAiPrize);
 
         for (Tank tank : tanks) {
@@ -110,7 +111,7 @@ public class BattlecityTest {
     }
 
     private void givenGameWithTanks(List<Tank> tanks, List<Wall> walls) {
-        game = new Battlecity(size, mock(Dice.class), walls,
+        game = new Battlecity(size, dice, walls,
                 new DefaultBorders(size).get(), spawnAiPrize, hitKillsAiPrize);
 
         for (Tank tank : tanks) {
@@ -129,7 +130,7 @@ public class BattlecityTest {
     }
 
     private void givenGameWithTanks(Tank... tanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Wall[]{}), spawnAiPrize, hitKillsAiPrize);
+        game = new Battlecity(size, dice, Arrays.asList(new Wall[]{}), spawnAiPrize, hitKillsAiPrize);
         for (Tank tank : tanks) {
             initPlayer(game, tank);
         }
@@ -233,7 +234,7 @@ public class BattlecityTest {
         game = new Battlecity(size, dice, Arrays.asList(new Wall(3, 3)), spawnAiPrize, hitKillsAiPrize);
         initPlayer(game, tank);
         this.hero = tank;
-        game.addAI(aiTank);
+        game.getAiGenerator().drop(aiTank);
         aiTank.kill(bullet);
     }
 
@@ -353,7 +354,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         Tank someTank = tank(5, 5, Direction.UP);
-        game.addAI(someTank);
+        game.getAiGenerator().drop(someTank);
 
         someTank.right();
         someTank.right();
@@ -2070,7 +2071,7 @@ public class BattlecityTest {
                 "☼    Ѡ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        game.setDice(getDice(3, 3));
+        when(dice.next(anyInt())).thenReturn(3, 3);
         game.tick();
 
         assertW("☼☼☼☼☼☼☼\n" + // TODO разобраться почему тут скачет ассерт
@@ -4752,7 +4753,7 @@ public class BattlecityTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        game.addAI(ai1);
+        game.getAiGenerator().drop(ai1);
         ai1.down();
         game.tick();
 
@@ -4766,7 +4767,7 @@ public class BattlecityTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        game.addAI(ai2);
+        game.getAiGenerator().drop(ai2);
         ai2.down();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -4791,7 +4792,7 @@ public class BattlecityTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        game.addAI(ai3);
+        game.getAiGenerator().drop(ai3);
         ai3.down();
         game.tick();
 

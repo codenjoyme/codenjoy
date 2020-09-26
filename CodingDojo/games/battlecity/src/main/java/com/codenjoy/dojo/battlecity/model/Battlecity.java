@@ -26,7 +26,6 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -34,19 +33,14 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
-
 public class Battlecity implements Field {
 
-    private List<Tank> ais;
-    private Dice dice;
-    private int maxAi;
-    private Parameter<Integer> whichSpawnWithPrize;
-    private Parameter<Integer> damagesBeforeAiDeath;
-    private int aiSpawn;
+    private int size;
 
     private PrizeGenerator prizeGen;
-    private int size;
+    private AiGenerator aiGen;
+
+    private List<Player> players = new LinkedList<>();
 
     private List<Wall> walls;
     private List<Border> borders;
@@ -54,37 +48,39 @@ public class Battlecity implements Field {
     private List<Ice> ice;
     private List<River> rivers;
     private List<Prize> prizes;
+    private List<Tank> ais;
 
-    private List<Player> players = new LinkedList<>();
-
-    public Battlecity(int size, Dice dice, List<Wall> wall,
-                      Parameter<Integer> whichSpawnWithPrize, Parameter<Integer> damagesBeforeAiDeath,
-                      Tank... ais) {
-        this(size, dice, wall, new DefaultBorders(size).get(), whichSpawnWithPrize,
-                damagesBeforeAiDeath, ais);
+    public Battlecity(int size, Dice dice,
+                      List<Wall> walls,
+                      Parameter<Integer> whichSpawnWithPrize,
+                      Parameter<Integer> damagesBeforeAiDeath,
+                      Tank... tanks)
+    {
+        this(size, dice, walls, new DefaultBorders(size).get(),
+                whichSpawnWithPrize, damagesBeforeAiDeath,
+                tanks);
     }
 
-    public Battlecity(int size, Dice dice, List<Wall> wall,
-                      List<Border> borders, Parameter<Integer> whichSpawnWithPrize,
-                      Parameter<Integer> damagesBeforeAiDeath, Tank... ais) {
-        this.dice = dice;
+    public Battlecity(int size, Dice dice,
+                      List<Wall> inputWalls,
+                      List<Border> inputBorders,
+                      Parameter<Integer> whichSpawnWithPrize,
+                      Parameter<Integer> damagesBeforeAiDeath,
+                      Tank... tanks)
+    {
         this.size = size;
-        this.ais = new LinkedList<>();
-        this.prizes = new LinkedList<>();
-        this.walls = new LinkedList<>(wall);
-        this.borders = new LinkedList<>(borders);
-        this.whichSpawnWithPrize = whichSpawnWithPrize;
-        this.damagesBeforeAiDeath = damagesBeforeAiDeath;
-        this.trees = new LinkedList<>();
-        this.ice = new LinkedList<>();
-        this.rivers = new LinkedList<>();
-        this.aiSpawn = 0;
-        this.prizeGen = new PrizeGenerator(this, dice);
+        ais = new LinkedList<>();
+        prizes = new LinkedList<>();
+        walls = new LinkedList<>(inputWalls);
+        borders = new LinkedList<>(inputBorders);
+        trees = new LinkedList<>();
+        ice = new LinkedList<>();
+        rivers = new LinkedList<>();
 
-        this.maxAi = ais.length;
-        for (Tank tank : ais) {
-            addAI(tank);
-        }
+        prizeGen = new PrizeGenerator(this, dice);
+
+        aiGen = new AiGenerator(this, dice, whichSpawnWithPrize, damagesBeforeAiDeath);
+        aiGen.init(tanks);
     }
 
     public void setTrees(List<Tree> trees) {
@@ -110,7 +106,7 @@ public class Battlecity implements Field {
     public void tick() {
         removeDeadTanks();
 
-        newAI();
+        aiGen.dropAll();
 
         List<Tank> tanks = getTanks();
 
@@ -154,20 +150,6 @@ public class Battlecity implements Field {
         }
     }
 
-    private void newAI() {
-        for (int i = ais.size(); i < maxAi; i++) {
-            Point pt = pt(0, size - 2);
-            int c = 0;
-            do {
-                pt.setX(dice.next(size));
-            } while (isBarrier(pt) && c++ < size);
-
-            if (!isBarrier(pt)) {
-                addAI(new AITank(pt, dice, Direction.DOWN));
-            }
-        }
-    }
-
     private void removeDeadTanks() {
         for (Tank tank : getTanks()) {
             if (!tank.isAlive()) {
@@ -183,13 +165,6 @@ public class Battlecity implements Field {
                 players.remove(player);
             }
         }
-    }
-
-    void addAI(Tank tank) {
-        tank = replaceAiOnAiPrize(tank);
-        tank.init(this);
-        ais.add(tank);
-        aiSpawn++;
     }
 
     @Override
@@ -246,6 +221,11 @@ public class Battlecity implements Field {
     @Override
     public void addPrize(Prize prize) {
         prizes.add(prize);
+    }
+
+    @Override
+    public void addAi(Tank tank) {
+        ais.add(tank);
     }
 
     private Wall getWallAt(Bullet bullet) {
@@ -324,6 +304,11 @@ public class Battlecity implements Field {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<Tank> getAiTanks() {
+        return ais;
     }
 
     @Override
@@ -413,22 +398,7 @@ public class Battlecity implements Field {
         return borders;
     }
 
-    public void setDice(Dice dice) {
-        this.dice = dice;
-    }
-
-    private Tank replaceAiOnAiPrize(Tank tank) {
-        if (aiSpawn == whichSpawnWithPrize.getValue()) {
-            aiSpawn = 0;
-        }
-
-        if (whichSpawnWithPrize.getValue() > 1) {
-            int indexAiPrize = whichSpawnWithPrize.getValue() - 2;
-            if (aiSpawn == indexAiPrize) {
-                Point pt = pt(tank.getX(), tank.getY());
-                return new AITankPrize(pt, dice, tank.getDirection(), damagesBeforeAiDeath.getValue());
-            }
-        }
-        return tank;
+    public AiGenerator getAiGenerator() {
+        return aiGen;
     }
 }
