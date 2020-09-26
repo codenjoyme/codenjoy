@@ -74,7 +74,7 @@ public class BattlecityTest {
         this.hero = tank;
     }
 
-    private void givenGame(Tank tank, Border... walls) {
+    private void givenGameWithBorder(Tank tank, Border... walls) {
         List<Border> borders = new DefaultBorders(size).get();
         borders.addAll(Arrays.asList(walls));
 
@@ -136,39 +136,11 @@ public class BattlecityTest {
         return dice;
     }
 
-    public void givenGameWithWall(int x, int y) {
-        givenGame(tank(1, 1, Direction.UP), new Wall(x, y));
-    }
-
-    public void givenGameWithWall(Tank tank, int x, int y) {
-        givenGame(tank, new Wall(x, y));
-    }
-
-    public void givenGameWithTankAt(int x, int y) {
-        givenGameWithTankAt(x, y, Direction.UP);
-    }
-
-    public void givenGameWithTankAt(int x, int y, Direction direction) {
-        givenGame(tank(x, y, direction), new Wall[]{});
-    }
-
-    private boolean assertAiPrize(int totalAiPrize, int totalTanks) {
+    private String getPrizesCount() {
         List<Tank> tanks = game.getTanks();
-        if (totalTanks == tanks.size()) {
-            long count = tanks.stream().filter(x -> x.isTankPrize()).count();
-            if (count == totalAiPrize) {
-                return true;
-            }
-        }
-        return false;
-    }
+        long prizes = tanks.stream().filter(x -> x.isTankPrize()).count();
 
-    private boolean assertPrize() {
-        List<Prize> prize = game.getPrizes();
-        if (prize.isEmpty()) {
-            return false;
-        }
-        return true;
+        return String.format("%s prizes with %s tanks", prizes, tanks.size());
     }
 
     private void givenGameBeforeDropPrize(Point pt) {
@@ -187,7 +159,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldDrawField() {
-        givenGameWithTankAt(1, 1);
+        givenGame(tank(1, 1, Direction.UP));
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -222,13 +194,13 @@ public class BattlecityTest {
 
     @Test
     public void shouldBeTankOnFieldWhenGameCreated() {
-        givenGameWithTankAt(1, 1);
+        givenGame(tank(1, 1, Direction.UP));
         assertNotNull(game.getTanks());
     }
 
     @Test
     public void shouldTankMove() {
-        givenGameWithTankAt(1, 1);
+        givenGame(tank(1, 1, Direction.UP));
         hero.up();
         game.tick();
 
@@ -276,7 +248,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldTankStayAtPreviousPositionWhenIsNearBorder() {
-        givenGameWithTankAt(1, 1);
+        givenGame(tank(1, 1, Direction.UP));
         hero.down();
         hero.down();
 
@@ -328,7 +300,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletHasSameDirectionAsTank() {
-        givenGameWithTankAt(1, 1);
+        givenGame(tank(1, 1, Direction.UP));
         hero.act();
         game.tick();
 
@@ -338,7 +310,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletGoInertiaWhenTankChangeDirection() {
-        givenGameWithTankAt(3, 1);
+        givenGame(tank(3, 1, Direction.UP));
         hero.act();
         game.tick();
 
@@ -364,7 +336,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletDisappear_whenHittingTheWallUp() {
-        givenGameWithTankAt(1, 1);
+        givenGame(tank(1, 1, Direction.UP));
         hero.act();
         game.tick();
         game.tick();
@@ -388,7 +360,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletDisappear_whenHittingTheWallRight() {
-        givenGameWithTankAt(1, 1, Direction.RIGHT);
+        givenGame(tank(1, 1, Direction.RIGHT));
         hero.act();
         game.tick();
         game.tick();
@@ -412,7 +384,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletDisappear_whenHittingTheWallLeft() {
-        givenGameWithTankAt(5, 5, Direction.LEFT);
+        givenGame(tank(5, 5, Direction.LEFT));
         hero.act();
         game.tick();
         game.tick();
@@ -436,7 +408,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletDisappear_whenHittingTheWallDown() {
-        givenGameWithTankAt(5, 5, Direction.DOWN);
+        givenGame(tank(5, 5, Direction.DOWN));
         hero.act();
         game.tick();
         game.tick();
@@ -461,7 +433,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - снизу
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown() {
-        givenGameWithWall(1, 5);
+        givenGame(tank(1, 1, Direction.UP), new Wall(1, 5));
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -524,7 +496,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - слева
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft() {
-        givenGameWithWall(tank(1, 1, Direction.RIGHT), 5, 1);
+        givenGame(tank(1, 1, Direction.RIGHT), new Wall(5, 1));
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -587,7 +559,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - справа
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight() {
-        givenGameWithWall(tank(5, 1, Direction.LEFT), 1, 1);
+        givenGame(tank(5, 1, Direction.LEFT), new Wall(1, 1));
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -649,7 +621,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - сверху
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp() {
-        givenGameWithWall(tank(1, 5, Direction.DOWN), 1, 1);
+        givenGame(tank(1, 5, Direction.DOWN), new Wall(1, 1));
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -712,7 +684,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - снизу но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown_overWall() {
-        givenGameWithWall(tank(1, 2, Direction.UP), 1, 5);
+        givenGame(tank(1, 2, Direction.UP), new Wall(1, 5));
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -775,7 +747,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - слева но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft_overWall() {
-        givenGameWithWall(tank(2, 1, Direction.RIGHT), 5, 1);
+        givenGame(tank(2, 1, Direction.RIGHT), new Wall(5, 1));
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -838,7 +810,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - справа но через стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight_overWall() {
-        givenGameWithWall(tank(4, 1, Direction.LEFT), 1, 1);
+        givenGame(tank(4, 1, Direction.LEFT), new Wall(1, 1));
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -900,7 +872,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - сверху но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp_overWall() {
-        givenGameWithWall(tank(1, 4, Direction.DOWN), 1, 1);
+        givenGame(tank(1, 4, Direction.DOWN), new Wall(1, 1));
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -2092,7 +2064,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldTankCantGoIfWallAtWay() {
-        givenGame(tank(1, 1, Direction.UP), new Border(1, 2));
+        givenGameWithBorder(tank(1, 1, Direction.UP), new Border(1, 2));
         hero.up();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -2106,7 +2078,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletCantGoIfWallAtWay() {
-        givenGame(tank(1, 1, Direction.UP), new Border(1, 2));
+        givenGameWithBorder(tank(1, 1, Direction.UP), new Border(1, 2));
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -2851,7 +2823,7 @@ public class BattlecityTest {
     public void shouldCantFireTwice() {
         size = 11;
         ticksPerBullets = 4;
-        givenGameWithTankAt(1, 1);
+        givenGame(tank(1, 1, Direction.UP));
 
         game.clearScore();
 
@@ -4435,7 +4407,7 @@ public class BattlecityTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        assertEquals(true, assertAiPrize(1, 2));
+        assertEquals("1 prizes with 2 tanks", getPrizesCount());
     }
 
     // У АИтанка с призами после 4-го хода должен смениться Element
@@ -4522,7 +4494,7 @@ public class BattlecityTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        assertEquals(true, assertAiPrize(1, 2));
+        assertEquals("1 prizes with 2 tanks", getPrizesCount());
     }
 
     // если spawnAiPrize = 3, а спаунится сразу 2 АИтанка, то 2-й должен быть АИтанком с призами
@@ -4545,7 +4517,7 @@ public class BattlecityTest {
 
         game.tick();
 
-        assertEquals(true, assertAiPrize(1, 3));
+        assertEquals("1 prizes with 3 tanks", getPrizesCount());
     }
 
     // если spawnAiPrize = 3 и спаунится сразу 3 АИтанка, то 2-й должен быть АИтанком с призами
@@ -4568,7 +4540,7 @@ public class BattlecityTest {
 
         game.tick();
 
-        assertEquals(true, assertAiPrize(1, 4));
+        assertEquals("1 prizes with 4 tanks", getPrizesCount());
     }
 
     // если spawnAiPrize = 3, а спаунятся сразу 6 АИтанков, то должно быть 2 АИтанка с призами
@@ -4591,7 +4563,7 @@ public class BattlecityTest {
 
         game.tick();
 
-        assertEquals(true, assertAiPrize(2, 7));
+        assertEquals("2 prizes with 7 tanks", getPrizesCount());
     }
 
     // если spawnAiPrize = 3, а 3 АИтанка спаунятся по 1-му за каждый ход,
@@ -4675,7 +4647,7 @@ public class BattlecityTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        assertEquals(true, assertAiPrize(1, 4));
+        assertEquals("1 prizes with 4 tanks", getPrizesCount());
 
         game.tick();
 
@@ -4832,9 +4804,6 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
-
-        assertEquals(true, assertPrize());
-
     }
 
     @Test
@@ -4859,8 +4828,6 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
-
-        assertEquals(true, assertPrize());
     }
 
     @Test
@@ -4885,8 +4852,6 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
-
-        assertEquals(false, assertPrize());
     }
 
     @Test
@@ -4911,8 +4876,6 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
-
-        assertEquals(false, assertPrize());
     }
 
     @Test
@@ -4937,8 +4900,6 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
-
-        assertEquals(false, assertPrize());
     }
 
     // TODO 5. Добавляем приз
