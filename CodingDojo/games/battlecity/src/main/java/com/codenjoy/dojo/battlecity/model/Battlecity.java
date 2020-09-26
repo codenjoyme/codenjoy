@@ -47,7 +47,7 @@ public class Battlecity implements Field {
 
     private Dice dice;
     private LinkedList<Tank> ais;
-    private LinkedList<Prize> prize;
+    private LinkedList<Prize> prizes;
     private int aiCount;
     private int spawnAiPrize;
     private int hitKillsAiPrize;
@@ -76,7 +76,7 @@ public class Battlecity implements Field {
         this.dice = dice;
         this.size = size;
         this.ais = new LinkedList<>();
-        this.prize = new LinkedList<>();
+        this.prizes = new LinkedList<>();
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
         this.spawnAiPrize = spawnAiPrize.getValue();
@@ -196,7 +196,7 @@ public class Battlecity implements Field {
         } while (isBarrier(pt) && c++ < size);
 
         if (!isBarrier(pt)) {
-            prize.add(new Prize(pt, PRIZES.get(dice.next(PRIZES.size()))));
+            prizes.add(new Prize(pt, PRIZES.get(dice.next(PRIZES.size()))));
         }
     }
 
@@ -347,8 +347,8 @@ public class Battlecity implements Field {
         return result;
     }
 
-    public List<Prize> getPrize() {
-        return prize;
+    public List<Prize> getPrizes() {
+        return prizes;
     }
 
     @Override
@@ -386,7 +386,7 @@ public class Battlecity implements Field {
                     addAll(Battlecity.this.getTanks());
                     addAll(Battlecity.this.getConstructions());
                     addAll(Battlecity.this.getBullets());
-                    addAll(Battlecity.this.getPrize());
+                    addAll(Battlecity.this.getPrizes());
                     addAll(Battlecity.this.getTrees());
                     addAll(Battlecity.this.getIce());
                     addAll(Battlecity.this.getRivers());

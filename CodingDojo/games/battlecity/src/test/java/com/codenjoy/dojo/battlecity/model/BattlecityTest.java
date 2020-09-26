@@ -215,7 +215,7 @@ public class BattlecityTest {
     }
 
     private boolean assertPrize() {
-        List<Prize> prize = game.getPrize();
+        List<Prize> prize = game.getPrizes();
         if (prize.isEmpty()) {
             return false;
         }
