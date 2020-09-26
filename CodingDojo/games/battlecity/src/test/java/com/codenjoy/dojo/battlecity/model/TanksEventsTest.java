@@ -61,8 +61,8 @@ public class TanksEventsTest {
         int size = 7;
         game = new Battlecity(size, mock(Dice.class),
                 Arrays.asList(new Wall[0]),
-                new DefaultBorders(size).get(),
                 spawnAiPrize, hitKillsAiPrize);
+        game.addBorders(new DefaultBorders(size).get());
 
         ai = tank(1, 5, Direction.DOWN, 0);
         ai.init(game);

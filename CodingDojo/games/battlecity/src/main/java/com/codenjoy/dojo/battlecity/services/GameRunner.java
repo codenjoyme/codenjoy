@@ -61,14 +61,16 @@ public class GameRunner extends AbstractGameType implements GameType {
         Parameter<Integer> spawnAiPrize = settings.addEditBox("Count spawn for AI Tank with prize").type(Integer.class).def(4);
         Parameter<Integer> hitKillsAiPrize = settings.addEditBox("Hits to kill AI Tank with prize").type(Integer.class).def(3);
 
-        return new Battlecity(level.size(),
+        Battlecity game = new Battlecity(level.size(),
                 getDice(),
                 level.getWalls(),
-                level.getBorders(),
                 spawnAiPrize,
                 hitKillsAiPrize,
                 level.getTanks().toArray(new Tank[0])
         );
+
+        level.getBorders().stream().forEach(it -> game.addBorder(it));
+        return game;
     }
 
     @Override

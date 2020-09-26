@@ -73,20 +73,23 @@ public class BattlecityTest {
     }
 
     private void givenGame(Tank tank, Wall... walls) {
-        game = new Battlecity(size, dice, Arrays.asList(walls), borders(), spawnAiPrize, hitKillsAiPrize);
+        game = new Battlecity(size, dice, Arrays.asList(walls), spawnAiPrize, hitKillsAiPrize);
+        game.addBorders(borders());
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private void givenGameWithAI(Tank tank, Point... ais) {
-        game = new Battlecity(size, dice, Arrays.asList(new Wall[0]), borders(), spawnAiPrize, hitKillsAiPrize, ais);
+        game = new Battlecity(size, dice, Arrays.asList(new Wall[0]), spawnAiPrize, hitKillsAiPrize, ais);
+        game.addBorders(borders());
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private void givenGameWith(Tank... tanks) {
         game = new Battlecity(size, dice, Arrays.asList(new Wall[0]),
-                borders(), spawnAiPrize, hitKillsAiPrize);
+                spawnAiPrize, hitKillsAiPrize);
+        game.addBorders(borders());
 
         for (Tank tank : tanks) {
             initPlayer(game, tank);
@@ -141,7 +144,8 @@ public class BattlecityTest {
         Tank tank = tank(1, 1, Direction.UP);
         Point ai = pt(1, 5);
 
-        game = new Battlecity(size, dice, Arrays.asList(new Wall(3, 3)), borders(), spawnAiPrize, hitKillsAiPrize);
+        game = new Battlecity(size, dice, Arrays.asList(new Wall(3, 3)), spawnAiPrize, hitKillsAiPrize);
+        game.addBorders(borders());
         initPlayer(game, tank);
         this.hero = tank;
         Tank aiTank = game.getAiGenerator().drop(ai);

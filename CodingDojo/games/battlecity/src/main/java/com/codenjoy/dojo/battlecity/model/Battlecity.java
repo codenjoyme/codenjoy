@@ -23,7 +23,6 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
@@ -52,7 +51,6 @@ public class Battlecity implements Field {
 
     public Battlecity(int size, Dice dice,
                       List<Wall> inputWalls,
-                      List<Border> inputBorders,
                       Parameter<Integer> whichSpawnWithPrize,
                       Parameter<Integer> damagesBeforeAiDeath,
                       Point... tanks)
@@ -61,7 +59,7 @@ public class Battlecity implements Field {
         ais = new LinkedList<>();
         prizes = new LinkedList<>();
         walls = new LinkedList<>(inputWalls);
-        borders = new LinkedList<>(inputBorders);
+        borders = new LinkedList<>();
         trees = new LinkedList<>();
         ice = new LinkedList<>();
         rivers = new LinkedList<>();
@@ -70,22 +68,6 @@ public class Battlecity implements Field {
 
         aiGen = new AiGenerator(this, dice, whichSpawnWithPrize, damagesBeforeAiDeath);
         aiGen.init(tanks);
-    }
-
-    public void addTree(Tree tree) {
-        trees.add(tree);
-    }
-
-    public void addBorder(Border border) {
-        borders.add(border);
-    }
-
-    public void addIce(Ice ice) {
-        this.ice.add(ice);
-    }
-
-    public void addRiver(River river) {
-        rivers.add(river);
     }
 
     @Override
@@ -391,7 +373,29 @@ public class Battlecity implements Field {
         return borders;
     }
 
+
+    public void addBorders(List<Border> borders) {
+        this.borders.addAll(borders);
+    }
+
+    public void addTree(Tree tree) {
+        trees.add(tree);
+    }
+
+    public void addBorder(Border border) {
+        borders.add(border);
+    }
+
+    public void addIce(Ice ice) {
+        this.ice.add(ice);
+    }
+
+    public void addRiver(River river) {
+        rivers.add(river);
+    }
+
     public AiGenerator getAiGenerator() {
         return aiGen;
     }
+
 }

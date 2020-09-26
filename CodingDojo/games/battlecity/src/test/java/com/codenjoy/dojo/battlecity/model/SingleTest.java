@@ -45,7 +45,7 @@ import static org.mockito.Mockito.when;
 public class SingleTest {
 
     private int size = 5;
-    private Battlecity field;
+    private Battlecity game;
     private Dice dice1;
     private Dice dice2;
     private Game tanks1;
@@ -58,17 +58,17 @@ public class SingleTest {
         Parameter<Integer> spawnAiPrize = v(4);
         Parameter<Integer> hitKillsAiPrize = v(3);
 
-        field = new Battlecity(size, mock(Dice.class),
+        game = new Battlecity(size, mock(Dice.class),
                 Arrays.asList(new Wall[0]),
-                new DefaultBorders(size).get(),
                 spawnAiPrize, hitKillsAiPrize);
+        game.addBorders(new DefaultBorders(size).get());
 
         player1 = new Player(null, dice1);
         player2 = new Player(null, dice2);
         tanks1 = new Single(player1, printerFactory);
-        tanks1.on(field);
+        tanks1.on(game);
         tanks2 = new Single(player2, printerFactory);
-        tanks2.on(field);
+        tanks2.on(game);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class SingleTest {
         );
 
         tanks1.getPlayer().getHero().act();
-        field.tick();
+        game.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -127,7 +127,7 @@ public class SingleTest {
         assertTrue(tanks2.isGameOver());
         tanks2.newGame();
 
-        field.tick();
+        game.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -156,7 +156,7 @@ public class SingleTest {
         );
 
         tanks1.getPlayer().getHero().act();
-        field.tick();
+        game.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -168,7 +168,7 @@ public class SingleTest {
         assertTrue(tanks2.isGameOver());
         tanks2.newGame();
 
-        field.tick();
+        game.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -190,7 +190,7 @@ public class SingleTest {
 
     private void assertD(String field, Player player) {
         assertEquals(field, printerFactory.getPrinter(
-                this.field.reader(), player).print());
+                this.game.reader(), player).print());
     }
 
 }
