@@ -2025,7 +2025,7 @@ public class BattlecityTest {
     @Ignore
     @Test
     public void shouldRemoveAIWhenKillIt() {
-//        givenGameWithAI(tank(1, 1, Direction.UP), tank(1, 5, Direction.UP), tank(5, 1, Direction.UP));
+        // TODO givenGameWithAI(tank(1, 1, Direction.UP), tank(1, 5, Direction.UP), tank(5, 1, Direction.UP));
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼˄    ☼\n" +
@@ -3282,7 +3282,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    //1.2) кусты - когда игрок заходит под них, там видно кусты и больше никакого движения
+    // 1.2) кусты - когда игрок заходит под них, там видно кусты и больше никакого движения
     @Test
     public void shouldTankMove_underTree() {
         size = 7;
@@ -3445,7 +3445,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    //1.3) так же не видно врагов под кустами
+    // 1.3) так же не видно врагов под кустами
     @Test
     public void shouldOtherTankMove_underTree() {
 		size = 11;
@@ -3516,7 +3516,7 @@ public class BattlecityTest {
 				"☼☼☼☼☼☼☼☼☼☼☼\n");
     }
 
-    //1.4) под кустами не видно так же и ботов белых
+    // 1.4) под кустами не видно так же и ботов белых
     @Test
     public void shouldAITankMove_underTree() {
         size = 11;
@@ -3612,7 +3612,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         hero.up();
-        game.tick();//герой запрятался в кустах
+        game.tick();// герой запрятался в кустах
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼˅        ☼\n" +
                 "☼         ☼\n" +
@@ -3641,7 +3641,7 @@ public class BattlecityTest {
 
         game.tick();
         assertTrue(tankHero.isAlive());
-        game.tick();//герой должен погибнуть
+        game.tick();// герой должен погибнуть
         assertFalse(tankHero.isAlive());
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼˅        ☼\n" +
@@ -3693,7 +3693,7 @@ public class BattlecityTest {
         enemyTank.down();
         game.tick();
         tankHero.up();
-        //Два танка не могут проехать через друг друга
+        // Два танка не могут проехать через друг друга
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -3714,16 +3714,16 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-	//2. Лёд
+	// 2. Лёд
     @Test
     public void shouldBeConstructionIce_whenGameCreated() {
-	    //given
+	    // given
         tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
         ice = new LinkedList<>(Arrays.asList(new Ice(3, 3)));
-        //when
+        // when
         givenGameWithTanks(tanks);
         game.setIce(ice);
-        //then
+        // then
         assertEquals(1, game.getIce().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -3735,11 +3735,10 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    //2.1) когда герой двигается по льду, происходит скольжение (он проскальзывает одну команду).
-
-    /*Если только заезжаем - то сразу же начинается занос, то есть запоминается команда которой
-    заезжали на лед*/
-    /*Если съезжаем на землю, то любой занос прекращается тут же*/
+    // 2.1) когда герой двигается по льду, происходит скольжение (он проскальзывает одну команду).
+    // Если только заезжаем - то сразу же начинается занос,
+    // то есть запоминается команда которой заезжали на лед
+    // Если съезжаем на землю, то любой занос прекращается тут же
     @Test
     public void shouldTankMoveUP_onIce_afterBeforeGround() {
         size = 11;
@@ -3764,7 +3763,7 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //заежаем на лёд
+        // заежаем на лёд
         hero.up();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3779,9 +3778,9 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //находимся на льду
-        //выполнили команаду right(), но танк не реагирует, так как происходит скольжение
-        //двигается дальше с предедущей командой up()
+        // находимся на льду
+        // выполнили команаду right(), но танк не реагирует, так как происходит скольжение
+        // двигается дальше с предедущей командой up()
         hero.right();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3796,7 +3795,7 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //двигаемся дальше в направлении up()
+        // двигаемся дальше в направлении up()
         hero.up();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3811,8 +3810,8 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //выполнили команаду right(), но танк не реагирует, так как происходит скольжение
-        //двигается дальше с предедущей командой up()
+        // выполнили команаду right(), но танк не реагирует, так как происходит скольжение
+        // двигается дальше с предедущей командой up()
         hero.right();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3827,8 +3826,8 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //выехали со льда
-        //двигается дальше в направлении up()
+        // выехали со льда
+        // двигается дальше в направлении up()
         hero.up();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3868,7 +3867,7 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //заежаем на лёд
+        // заежаем на лёд
         hero.up();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3883,7 +3882,7 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //lEFT -> UP(скольжение)
+        // lEFT -> UP(скольжение)
         hero.left();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3898,7 +3897,7 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //DOWN -> DOWN (выполнилась)
+        // DOWN -> DOWN (выполнилась)
         hero.down();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3913,7 +3912,7 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //UP -> DOWN (скольжение)
+        // UP -> DOWN (скольжение)
         hero.up();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3932,11 +3931,11 @@ public class BattlecityTest {
     //2.2) также когда на нем двигается враг он проскальзывает команду на два тика
     @Test
     public void shouldOtherTankMoveLeftThenUpThenDown_onIce() {
-        //given
+        // given
         size = 11;
         Tank tankHero = tank(1, 1, Direction.UP);
         Tank otherTank = tank(5, 6, Direction.DOWN);
-        //when
+        // when
         tanks = Arrays.asList(tankHero, otherTank);
         ice = new LinkedList<>(Arrays.asList(
                 new Ice(5, 3),
@@ -3945,7 +3944,7 @@ public class BattlecityTest {
 
         givenGameWithTanks(tanks);
         game.setIce(ice);
-        //then
+        // then
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
@@ -3958,7 +3957,7 @@ public class BattlecityTest {
                 "☼▲        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //враг заежает на лёд
+        // враг заежает на лёд
         otherTank.down();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3973,7 +3972,7 @@ public class BattlecityTest {
                 "☼▲        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //lEFT -> DOWN(скольжение)
+        // lEFT -> DOWN(скольжение)
         otherTank.left();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3988,7 +3987,7 @@ public class BattlecityTest {
                 "☼▲        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //UP -> UP (выполнилась)
+        // UP -> UP (выполнилась)
         otherTank.up();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -4003,8 +4002,8 @@ public class BattlecityTest {
                 "☼▲        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        //DOWN -> UP (скольжение)
-        //сьезд со льда
+        // DOWN -> UP (скольжение)
+        // сьезд со льда
         otherTank.down();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -4025,15 +4024,15 @@ public class BattlecityTest {
     //3. Река
     @Test
     public void shouldBeConstructionWater_whenGameCreated() {
-	    //given
+	    // given
         tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
         rivers = new LinkedList<>(Arrays.asList(new River(3, 3)));
-        //when
+        // when
         givenGameWithTanks(tanks);
         game.setRivers(rivers);
-        //then
+        // then
         assertEquals(1, game.getRivers().size());
-        //then
+        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -4043,16 +4042,16 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-	//3.1) река - через нее герою нельзя пройти. но можно стрелять
+	// 3.1) река - через нее герою нельзя пройти. но можно стрелять
 	@Test
 	public void shouldTankCanGoIfRiverAtWay() {
-	    //given
+	    // given
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
-        //when
+        // when
         givenGameWithTanks(tanks);
         game.setRivers(rivers);
-        //then
+        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -4076,13 +4075,13 @@ public class BattlecityTest {
 
 	@Test
 	public void shouldBulletCanGoIfRiverAtWay() {
-	    //given
+	    // given
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
-        //when
+        // when
         givenGameWithTanks(tanks);
         game.setRivers(rivers);
-        //then
+        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -4126,17 +4125,17 @@ public class BattlecityTest {
 
     @Test
     public void shouldDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
-	    //given
+	    // given
         tanks = new LinkedList<>(Arrays.asList(tank(3, 3, Direction.UP)));
         rivers = new LinkedList<>(Arrays.asList(
                 new River(2, 3),
                 new River(4, 3),
                 new River(3, 2),
                 new River(3, 4)));
-        //when
+        // when
         givenGameWithTanks(tanks);
         game.setRivers(rivers);
-        //then
+        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ▓  ☼\n" +
@@ -4186,19 +4185,19 @@ public class BattlecityTest {
 				"☼☼☼☼☼☼☼\n");
     }
 
-    //3.2) река - через нее врагу нельзя пройти. но можно стрелять
+    // 3.2) река - через нее врагу нельзя пройти. но можно стрелять
     @Test
     public void shouldOtherTankBullet_canGoIfRiverAtWay() {
-	    //given
+	    // given
         Tank tankHero = tank(3, 2, Direction.UP);
         Tank otherTank = tank(1, 1, Direction.UP);
 
         tanks = Arrays.asList(tankHero, otherTank);
         rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
-        //when
+        // when
         givenGameWithTanks(tanks);
         game.setRivers(rivers);
-        //then
+        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -4242,7 +4241,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldOtherTankDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
-	    //given
+	    // given
         Tank tankHero = tank(5, 1, Direction.UP);
         Tank otherTank = tank(3, 3, Direction.UP);
 
@@ -4252,10 +4251,10 @@ public class BattlecityTest {
                 new River(4, 3),
                 new River(3, 2),
                 new River(3, 4)));
-        //when
+        // when
         givenGameWithTanks(tanks);
         game.setRivers(rivers);
-        //then
+        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ▓  ☼\n" +
@@ -4305,19 +4304,19 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    //3.3) река - через нее боту нельзя пройти. но можно стрелять
+    // 3.3) река - через нее боту нельзя пройти. но можно стрелять
     @Test
     public void shouldAITankBullet_canGoIfRiverAtWay() {
-	    //given
+	    // given
         Tank tankHero = tank(3, 2, Direction.UP);
         Tank aiTank = setAITank(1, 1, Direction.UP);
 
         tanks = Arrays.asList(tankHero, aiTank);
         rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
-        //when
+        // when
         givenGameWithTanks(tanks);
         game.setRivers(rivers);;
-        //then
+        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -4370,7 +4369,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldAITankDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
-	    //given
+	    // given
         Tank tankHero = tank(5, 1, Direction.UP);
         Tank aiTank = setAITank(3, 3, Direction.DOWN);
 
@@ -4380,10 +4379,10 @@ public class BattlecityTest {
                 new River(4, 3),
                 new River(3, 2),
                 new River(3, 4)));
-        //when
+        // when
         givenGameWithTanks(tanks);
         game.setRivers(rivers);
-        //then
+        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ▓  ☼\n" +
@@ -4423,11 +4422,11 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    //TODO 4. Добовляем бота
-    //TODO    4.1) добавляем бота, который спаунится каждые N ходов (задается в сеттингах),
-    //TODO         который цветной и его убить можно только за M выстрелов (тоже сеттинги)
-    //TODO    4.2) во время смерти такого AI вываливается приз
-    //создаем АИтанк с призами
+    // TODO 4. Добовляем бота
+    // TODO    4.1) добавляем бота, который спаунится каждые N ходов (задается в сеттингах),
+    // TODO         который цветной и его убить можно только за M выстрелов (тоже сеттинги)
+    // TODO    4.2) во время смерти такого AI вываливается приз
+    // создаем АИтанк с призами
     @Test
     public void shouldCreatedAiPrize() {
         size = 9;
@@ -4463,7 +4462,7 @@ public class BattlecityTest {
         assertEquals(true, assertAiPrize(1, 2));
     }
 
-    //У АИтанка с призами после 4-го хода должен смениться Element
+    // У АИтанка с призами после 4-го хода должен смениться Element
     @Test
     public void shouldSwapElementAfterFourTicks() {
         size = 9;
@@ -4551,7 +4550,7 @@ public class BattlecityTest {
         assertEquals(true, assertAiPrize(1, 2));
     }
 
-    //если spawnAiPrize = 3, а спаунится сразу 2 АИтанка, то 2-й должен быть АИтанком с призами
+    // если spawnAiPrize = 3, а спаунится сразу 2 АИтанка, то 2-й должен быть АИтанком с призами
     @Test
     public void shouldSpawnAiPrizeWhenTwoAi() {
         size = 9;
@@ -4576,7 +4575,7 @@ public class BattlecityTest {
         assertEquals(true, assertAiPrize(1, 3));
     }
 
-    //если spawnAiPrize = 3 и спаунится сразу 3 АИтанка, то 2-й должен быть АИтанком с призами
+    // если spawnAiPrize = 3 и спаунится сразу 3 АИтанка, то 2-й должен быть АИтанком с призами
     @Test
     public void shouldSpawnAiPrizeWhenThreeAi() {
         size = 9;
@@ -4602,7 +4601,7 @@ public class BattlecityTest {
         assertEquals(true, assertAiPrize(1, 4));
     }
 
-    //если spawnAiPrize = 3, а спаунятся сразу 6 АИтанков, то должно быть 2 АИтанка с призами
+    // если spawnAiPrize = 3, а спаунятся сразу 6 АИтанков, то должно быть 2 АИтанка с призами
     @Test
     public void shouldSpawnTwoAiPrizeWhenSixAi() {
         size = 9;
@@ -4746,7 +4745,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼\n");
     }
 
-    //в АИтанк с призами надо попасть 3 раза, чтобы убить
+    // в АИтанк с призами надо попасть 3 раза, чтобы убить
     @Test
     public void shouldKillAiPrizeInThreeHits() {
         size = 7;
@@ -4975,10 +4974,10 @@ public class BattlecityTest {
         assertEquals(false, assertPrize());
     }
 
-    //TODO 5. Добавляем приз
-    //TODO    5.1) добавляем приз неуязвимости, он работает L тиков (сеттинги) и теряется после
-    //TODO    5.2) если в тебя выстрелят во время действия этого приза - ты остаешься жить
-    //TODO 6. Ддобавляется приз пульки которые разбивают бетонную стену
-    //TODO 7. Рендомная борда (тут надо подглядеть как в icancode подобное устроено) и сделать так же
+    // TODO 5. Добавляем приз
+    // TODO    5.1) добавляем приз неуязвимости, он работает L тиков (сеттинги) и теряется после
+    // TODO    5.2) если в тебя выстрелят во время действия этого приза - ты остаешься жить
+    // TODO 6. Ддобавляется приз пульки которые разбивают бетонную стену
+    // TODO 7. Рендомная борда (тут надо подглядеть как в icancode подобное устроено) и сделать так же
 
 }
