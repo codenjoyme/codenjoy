@@ -40,6 +40,11 @@ import static com.codenjoy.dojo.services.PointImpl.random;
 
 public class Battlecity implements Field {
 
+    private static final List<Elements> PRIZES = Arrays.asList(
+            Elements.PRIZE_IMMORTALITY,
+            Elements.PRIZE_BREAKING_WALLS,
+            Elements.PRIZE_WALKING_ON_WATER);
+
     private Dice dice;
     private LinkedList<Tank> aiTanks;
     private LinkedList<Prize> prize;
@@ -56,7 +61,6 @@ public class Battlecity implements Field {
     private List<River> rivers;
 
     private List<Player> players = new LinkedList<>();
-    private final List<Elements> prizes = Arrays.asList(Elements.PRIZE_IMMORTALITY, Elements.PRIZE_BREAKING_WALLS, Elements.PRIZE_WALKING_ON_WATER);
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
                       Parameter<Integer> spawnAiPrize, Parameter<Integer> hitKillsAiPrize,
@@ -192,7 +196,7 @@ public class Battlecity implements Field {
         } while (isBarrier(pt) && c++ < size);
 
         if (!isBarrier(pt)) {
-            prize.add(new Prize(pt, prizes.get(dice.next(prizes.size()))));
+            prize.add(new Prize(pt, PRIZES.get(dice.next(PRIZES.size()))));
         }
     }
 
