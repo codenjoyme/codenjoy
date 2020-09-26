@@ -27,29 +27,26 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class AITankPrize extends AITank {
 
     public static final int CHANGE_AFTER_TICKS = 4;
-    private List<Bullet> hitsTarget;
+    private int hitsCount;
     private int hitKills;
     private int ticksCount = 0;
 
     public AITankPrize(Point pt, Dice dice, Direction direction, int hitKills) {
         super(pt, dice, direction);
         this.hitKills = hitKills;
-        this.hitsTarget = new LinkedList<Bullet>();
+        this.hitsCount = 0;
     }
 
     public void kill(Bullet bullet) {
-        hitsTarget.add(bullet);
+        hitsCount++;
 
-        if (hitsTarget.size() == hitKills) {
+        if (hitsCount == hitKills) {
+            hitsCount = 0;
             super.kill(bullet);
-            hitsTarget.clear();
-        } else {
-            //do nothing
         }
     }
 
