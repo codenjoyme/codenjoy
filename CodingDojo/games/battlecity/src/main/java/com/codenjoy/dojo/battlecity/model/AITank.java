@@ -73,16 +73,21 @@ public class AITank extends Tank {
         if (tree != null) {
             return Elements.TREE;
         }
-        if (isAlive()) {
-            switch (direction) {
-                case LEFT:  return Elements.AI_TANK_LEFT;
-                case RIGHT: return Elements.AI_TANK_RIGHT;
-                case UP:    return Elements.AI_TANK_UP;
-                case DOWN:  return Elements.AI_TANK_DOWN;
-                default: throw new RuntimeException("Неправильное состояние танка!");
-            }
-        } else {
+
+        if (!isAlive()) {
             return Elements.BANG;
+        }
+
+        return state();
+    }
+
+    protected Elements state() {
+        switch (direction) {
+            case LEFT:  return Elements.AI_TANK_LEFT;
+            case RIGHT: return Elements.AI_TANK_RIGHT;
+            case UP:    return Elements.AI_TANK_UP;
+            case DOWN:  return Elements.AI_TANK_DOWN;
+            default: throw new RuntimeException("Неправильное состояние танка!");
         }
     }
 }

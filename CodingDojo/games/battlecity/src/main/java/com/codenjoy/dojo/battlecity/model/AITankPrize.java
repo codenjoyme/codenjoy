@@ -52,22 +52,17 @@ public class AITankPrize extends AITank {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (isAlive()) {
-            if (ticksCount <= CHANGE_AFTER_TICKS) {
-                this.ticksCount++;
-                switch (direction) {
-                    case LEFT:  return Elements.AI_TANK_LEFT;
-                    case RIGHT: return Elements.AI_TANK_RIGHT;
-                    case UP:    return Elements.AI_TANK_UP;
-                    case DOWN:  return Elements.AI_TANK_DOWN;
-                    default:    throw new RuntimeException("Неправильное состояние танка!");
-                }
-            } else {
-                return Elements.AI_TANK_PRIZE;
-            }
-        } else {
+        if (!isAlive()) {
             return Elements.BANG;
         }
+
+        if (ticksCount > CHANGE_AFTER_TICKS) {
+            return Elements.AI_TANK_PRIZE;
+        }
+
+        ticksCount++;
+
+        return state();
     }
 
     protected boolean isTankPrize() {
