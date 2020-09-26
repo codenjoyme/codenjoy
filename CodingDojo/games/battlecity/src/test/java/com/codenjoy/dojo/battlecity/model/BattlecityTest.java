@@ -60,11 +60,6 @@ public class BattlecityTest {
     private List<Player> players = new LinkedList<>();
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
-    private List<Tank> tanks;
-	private List<Wall> walls;
-	private List<Ice> ice;
-	private List<River> rivers;
-
     @Before
     public void setup() {
         size = 7;
@@ -94,24 +89,18 @@ public class BattlecityTest {
         this.hero = tank;
     }
 
-    private void givenGameWithTanks(List<Tank> tanks) {
-        game = new Battlecity(size, dice, Arrays.asList(new Wall[0]),
-                new DefaultBorders(size).get(), spawnAiPrize, hitKillsAiPrize);
-
-        for (Tank tank : tanks) {
-            initPlayer(game, tank);
-        }
-        this.hero = tanks.get(0);
+    private void givenGameWith(Tank... tanks) {
+        givenGameWith(Arrays.asList(new Wall[0]), tanks);
     }
 
-    private void givenGameWithTanks(List<Tank> tanks, List<Wall> walls) {
+    private void givenGameWith(List<Wall> walls, Tank... tanks) {
         game = new Battlecity(size, dice, walls,
                 new DefaultBorders(size).get(), spawnAiPrize, hitKillsAiPrize);
 
         for (Tank tank : tanks) {
             initPlayer(game, tank);
         }
-        this.hero = tanks.get(0);
+        this.hero = tanks[0];
     }
 
     private Player initPlayer(Battlecity game, Tank tank) {
@@ -121,14 +110,6 @@ public class BattlecityTest {
         tank.init(game);
         game.newGame(player);
         return player;
-    }
-
-    private void givenGameWithTanks(Tank... tanks) {
-        game = new Battlecity(size, dice, Arrays.asList(new Wall[]{}), spawnAiPrize, hitKillsAiPrize);
-        for (Tank tank : tanks) {
-            initPlayer(game, tank);
-        }
-        this.hero = tanks[0];
     }
 
     public static Tank tank(int x, int y, Direction direction, int ticksPerBullets) {
@@ -154,12 +135,6 @@ public class BattlecityTest {
         Dice dice = getDice(x, y);
         Point pt = pt(x, y);
         return new AITank(pt, dice, direction,ticksPerBullets, false);
-    }
-
-    public static Tank aiTankPrize(int x, int y, Direction direction, Parameter<Integer> hitKillsAiPrize) {
-        Dice dice = getDice(x, y);
-        Point pt = pt(x, y);
-        return new AITankPrize(pt, dice, direction,  hitKillsAiPrize.getValue());
     }
 
     private static Dice getDice(Point pt, int indexPrizes) {
@@ -1729,7 +1704,7 @@ public class BattlecityTest {
     public void shouldStopWhenBeforeOtherTank() {
         Tank tank1 = tank(1, 2, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        givenGameWith(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1758,7 +1733,7 @@ public class BattlecityTest {
         Tank tank1 = tank(1, 1, Direction.UP);
         Tank tank2 = tank(1, 2, Direction.DOWN);
         Tank tank3 = tank(1, 3, Direction.DOWN);
-        givenGameWithTanks(tank1, tank2, tank3);
+        givenGameWith(tank1, tank2, tank3);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1832,7 +1807,7 @@ public class BattlecityTest {
     public void shouldStopWhenKill() {
         Tank tank1 = tank(1, 2, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        givenGameWith(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1859,7 +1834,7 @@ public class BattlecityTest {
     public void shouldNoConcurrentException() {
         Tank tank1 = tank(1, 2, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        givenGameWith(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1898,7 +1873,7 @@ public class BattlecityTest {
         size = 9;
         Tank tank1 = tank(1, 7, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        givenGameWith(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼▼      ☼\n" +
@@ -1954,7 +1929,7 @@ public class BattlecityTest {
         size = 9;
         Tank tank1 = tank(1, 6, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        givenGameWith(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2217,7 +2192,7 @@ public class BattlecityTest {
     public void shouldTankCanFireIfAtWayEnemyBullet() {
         Tank tank1 = tank(1, 1, Direction.UP);
         Tank tank2 = tank(1, 5, Direction.DOWN);
-        givenGameWithTanks(tank1, tank2);
+        givenGameWith(tank1, tank2);
 
         tank1.act();
         tank2.act();
@@ -2557,7 +2532,7 @@ public class BattlecityTest {
         size = 9;
         Tank tank1 = tank(1, 6, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        givenGameWith(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2601,7 +2576,7 @@ public class BattlecityTest {
         size = 9;
         Tank tank1 = tank(1, 6, Direction.DOWN);
         Tank tank2 = tank(1, 2, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        givenGameWith(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2645,7 +2620,7 @@ public class BattlecityTest {
         size = 9;
         Tank tank1 = tank(1, 6, Direction.DOWN);
         Tank tank2 = tank(1, 3, Direction.UP);
-        givenGameWithTanks(tank1, tank2);
+        givenGameWith(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2955,9 +2930,7 @@ public class BattlecityTest {
     // 1. Кусты
     @Test
     public void shouldBeWallTree_whenGameCreated() {
-		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-
-		givenGameWithTanks(tanks);
+		givenGameWith(tank(1, 1, Direction.UP));
         game.addTree(new Tree(3, 3));
 
         assertEquals(1, game.getTrees().size());
@@ -2973,8 +2946,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBeWallTwoTree_whenGameCreated() {
-		List<Tank> tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-		givenGameWithTanks(tanks);
+		givenGameWith(tank(1, 1, Direction.UP));
         game.addTree(new Tree(3, 3));
         game.addTree(new Tree(5, 1));
 
@@ -2993,9 +2965,8 @@ public class BattlecityTest {
     @Test
     public void shouldBulletFlyUnderTree_right() {
         size = 11;
-		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 
-		givenGameWithTanks(tanks);
+		givenGameWith(tank(1, 1, Direction.UP));
 		game.addTree(new Tree(6, 1));
 
         hero.right();
@@ -3086,10 +3057,8 @@ public class BattlecityTest {
     @Test
     public void shouldBulletDestroyWallUnderTree_whenHittingTheWallUp_whenTwoWalls() {
         size = 7;
-		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-		walls = new LinkedList<>(Arrays.asList(new Wall(1, 5), new Wall(1, 4)));
-
-		givenGameWithTanks(tanks, walls);
+        givenGameWith(walls(new Wall(1, 5), new Wall(1, 4)),
+                tank(1, 1, Direction.UP));
 		game.addTree(new Tree(1, 2));
 
         hero.act();
@@ -3185,13 +3154,15 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
+    private List<Wall> walls(Wall... walls) {
+        return new LinkedList<>(Arrays.asList(walls));
+    }
+
     // Когда пуля и дерево находятся в одной координате когда отработывает метод tick()
     @Test
     public void shouldBulletFlyUnderTwoTree_up() {
         size = 11;
-		tanks = new LinkedList<>(Arrays.asList(tank(5, 1, Direction.UP)));
-
-        givenGameWithTanks(tanks);
+        givenGameWith(tank(5, 1, Direction.UP));
         game.addTree(new Tree(5, 5));
         game.addTree(new Tree(5, 6));
 
@@ -3283,9 +3254,7 @@ public class BattlecityTest {
     @Test
     public void shouldTankMove_underTree() {
         size = 7;
-		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-
-        givenGameWithTanks(tanks);
+        givenGameWith(tank(1, 1, Direction.UP));
         game.addTree(new Tree(1, 3));
         game.addTree(new Tree(1, 4));
 
@@ -3348,9 +3317,9 @@ public class BattlecityTest {
     @Test
     public void shouldBulletFlyUnderTree_jointly_shouldTankMoveUnderTree() {
         size = 11;
-		tanks = new LinkedList<>(Arrays.asList(tank(9, 1, Direction.UP)));
 
-        givenGameWithTanks(tanks);
+        givenGameWith(tank(9, 1, Direction.UP));
+
         game.addTree(new Tree(9, 5));
         game.addTree(new Tree(9, 6));
         game.addTree(new Tree(9, 3));
@@ -3457,12 +3426,11 @@ public class BattlecityTest {
     @Test
     public void shouldOtherTankMove_underTree() {
 		size = 11;
+
 		Tank tankHero = tank(1, 1, Direction.UP);
 		Tank otherTank = tank(1, 9, Direction.DOWN);
+        givenGameWith(tankHero, otherTank);
 
-		tanks = Arrays.asList(tankHero, otherTank);
-
-        givenGameWithTanks(tanks);
         game.addTree(new Tree(1, 6));
         game.addTree(new Tree(1, 7));
 
@@ -3531,12 +3499,11 @@ public class BattlecityTest {
     @Test
     public void shouldAITankMove_underTree() {
         size = 11;
+
         Tank tankHero = tank(1, 1, Direction.UP);
         Tank aiTank = setAITank(1, 9, Direction.DOWN);
+        givenGameWith(tankHero, aiTank);
 
-        tanks = Arrays.asList(tankHero, aiTank);
-
-        givenGameWithTanks(tanks);
         game.addTree(new Tree(1, 6));
         game.addTree(new Tree(1, 7));
 
@@ -3604,12 +3571,11 @@ public class BattlecityTest {
     @Test
     public void shouldEnemyCanKillTankUnderTree() {
         size = 11;
+
         Tank tankHero = tank(1, 3, Direction.UP);
         Tank enemyTank = tank(1, 9, Direction.DOWN);
+        givenGameWith(tankHero, enemyTank);
 
-        tanks = Arrays.asList(tankHero, enemyTank);
-
-        givenGameWithTanks(tanks);
         game.addTree(new Tree(1, 4));
         game.addTree(new Tree(1, 5));
         game.addTree(new Tree(1, 6));
@@ -3679,10 +3645,8 @@ public class BattlecityTest {
     public void shouldTwoTankCanPassThroughEachOtherUnderTree() {
         Tank tankHero = tank(1, 1, Direction.UP);
         Tank enemyTank = tank(1, 4, Direction.DOWN);
+        givenGameWith(tankHero, enemyTank);
 
-        tanks = Arrays.asList(tankHero, enemyTank);
-
-        givenGameWithTanks(tanks);
         game.addTree(new Tree(1, 2));
         game.addTree(new Tree(1, 3));
 
@@ -3739,9 +3703,8 @@ public class BattlecityTest {
 	// 2. Лёд
     @Test
     public void shouldBeWallIce_whenGameCreated() {
-        tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+        givenGameWith(tank(1, 1, Direction.UP));
 
-        givenGameWithTanks(tanks);
         game.addIce(new Ice(3, 3));
 
         assertEquals(1, game.getIce().size());
@@ -3763,9 +3726,9 @@ public class BattlecityTest {
     @Test
     public void shouldTankMoveUP_onIce_afterBeforeGround() {
         size = 11;
-        tanks = new LinkedList<>(Arrays.asList(tank(5, 2, Direction.UP)));
 
-        givenGameWithTanks(tanks);
+        givenGameWith(tank(5, 2, Direction.UP));
+
         game.addIce(new Ice(5, 3));
         game.addIce(new Ice(5, 4));
         game.addIce(new Ice(5, 5));
@@ -3874,9 +3837,9 @@ public class BattlecityTest {
     @Test
     public void shouldTankMoveLeftThenUpThenDown_onIce() {
         size = 11;
-        tanks = new LinkedList<>(Arrays.asList(tank(5, 2, Direction.UP)));
 
-        givenGameWithTanks(tanks);
+        givenGameWith(tank(5, 2, Direction.UP));
+
         game.addIce(new Ice(5, 3));
         game.addIce(new Ice(5, 4));
         game.addIce(new Ice(5, 5));
@@ -3962,12 +3925,11 @@ public class BattlecityTest {
     @Test
     public void shouldOtherTankMoveLeftThenUpThenDown_onIce() {
         size = 11;
+
         Tank tankHero = tank(1, 1, Direction.UP);
         Tank otherTank = tank(5, 6, Direction.DOWN);
+        givenGameWith(tankHero, otherTank);
 
-        tanks = Arrays.asList(tankHero, otherTank);
-
-        givenGameWithTanks(tanks);
         game.addIce(new Ice(5, 3));
         game.addIce(new Ice(5, 4));
         game.addIce(new Ice(5, 5));
@@ -4056,9 +4018,8 @@ public class BattlecityTest {
     //3. Река
     @Test
     public void shouldBeWallWater_whenGameCreated() {
-        tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
+        givenGameWith(tank(1, 1, Direction.UP));
 
-        givenGameWithTanks(tanks);
         game.addRiver(new River(3, 3));
 
         assertEquals(1, game.getRivers().size());
@@ -4075,9 +4036,7 @@ public class BattlecityTest {
 	// 3.1) река - через нее герою нельзя пройти. но можно стрелять
 	@Test
 	public void shouldTankCanGoIfRiverAtWay() {
-		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-
-        givenGameWithTanks(tanks);
+        givenGameWith(tank(1, 1, Direction.UP));
         game.addRiver(new River(1, 2));
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -4105,14 +4064,9 @@ public class BattlecityTest {
 
 	@Test
 	public void shouldBulletCanGoIfRiverAtWay() {
-	    // given
-		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-
-        // when
-        givenGameWithTanks(tanks);
+        givenGameWith(tank(1, 1, Direction.UP));
         game.addRiver(new River(1, 2));
 
-        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -4160,14 +4114,9 @@ public class BattlecityTest {
 
     @Test
     public void shouldDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
-	    // given
-        tanks = new LinkedList<>(Arrays.asList(tank(3, 3, Direction.UP)));
-
-        // when
-        givenGameWithTanks(tanks);
+        givenGameWith(tank(3, 3, Direction.UP));
         riverAround();
 
-        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ▓  ☼\n" +
@@ -4224,17 +4173,12 @@ public class BattlecityTest {
     // 3.2) река - через нее врагу нельзя пройти. но можно стрелять
     @Test
     public void shouldOtherTankBullet_canGoIfRiverAtWay() {
-	    // given
         Tank tankHero = tank(3, 2, Direction.UP);
         Tank otherTank = tank(1, 1, Direction.UP);
+        givenGameWith(tankHero, otherTank);
 
-        tanks = Arrays.asList(tankHero, otherTank);
-
-        // when
-        givenGameWithTanks(tanks);
         game.addRiver(new River(1, 2));
 
-        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -4282,17 +4226,12 @@ public class BattlecityTest {
 
     @Test
     public void shouldOtherTankDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
-	    // given
         Tank tankHero = tank(5, 1, Direction.UP);
         Tank otherTank = tank(3, 3, Direction.UP);
+        givenGameWith(tankHero, otherTank);
 
-        tanks = Arrays.asList(tankHero, otherTank);
-
-        // when
-        givenGameWithTanks(tanks);
         riverAround();
 
-        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ▓  ☼\n" +
@@ -4349,14 +4288,10 @@ public class BattlecityTest {
     // 3.3) река - через нее боту нельзя пройти. но можно стрелять
     @Test
     public void shouldAITankBullet_canGoIfRiverAtWay() {
-	    // given
         Tank tankHero = tank(3, 2, Direction.UP);
         Tank aiTank = setAITank(1, 1, Direction.UP);
+        givenGameWith(tankHero, aiTank);
 
-        tanks = Arrays.asList(tankHero, aiTank);
-
-        // when
-        givenGameWithTanks(tanks);
         game.addRiver(new River(1, 2));
 
         // then
@@ -4417,17 +4352,11 @@ public class BattlecityTest {
 
     @Test
     public void shouldAITankDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
-	    // given
         Tank tankHero = tank(5, 1, Direction.UP);
         Tank aiTank = setAITank(3, 3, Direction.DOWN);
-
-        tanks = Arrays.asList(tankHero, aiTank);
-
-        // when
-        givenGameWithTanks(tanks);
+        givenGameWith(tankHero, aiTank);
         riverAround();
 
-        // then
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼  ▓  ☼\n" +
