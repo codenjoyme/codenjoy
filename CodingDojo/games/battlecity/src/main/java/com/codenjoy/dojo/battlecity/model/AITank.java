@@ -32,6 +32,7 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 public class AITank extends Tank {
 
     public static final int MAX = 10;
+    public static final int ACT_COUNT = 10;
     private int act;
     private boolean noBulletFly = true;
 
@@ -46,12 +47,9 @@ public class AITank extends Tank {
 
     @Override
     public void move() {
-        if (noBulletFly) {
-            if (act++ % 10 == 0) {
-                act();
-            }
-        } else {
-            //do nothing
+        // TODO пока еще не понятно что тут делается
+        if (noBulletFly && (act++ % ACT_COUNT == 0)) {
+            act();
         }
 
         int c = 0;
