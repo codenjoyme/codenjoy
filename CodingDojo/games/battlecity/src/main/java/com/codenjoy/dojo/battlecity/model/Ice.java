@@ -4,6 +4,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 public class Ice extends PointImpl implements State<Elements, Player> {
+
 	public Ice(int x, int y) {
 		super(x, y);
 	}
