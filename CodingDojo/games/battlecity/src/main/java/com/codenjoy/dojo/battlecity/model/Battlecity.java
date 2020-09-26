@@ -302,16 +302,23 @@ public class Battlecity implements Field {
                 return true;
             }
         }
+
+        if (isRiver(pt)) {
+            return true;
+        }
+
         for (Point border : borders) {
             if (border.itsMe(pt)) {
                 return true;
             }
         }
+
         for (Tank tank : getTanks()) {   //  TODO проверить как один танк не может проходить мимо другого танка игрока (не AI)
             if (tank.itsMe(pt)) {
                 return true;
             }
         }
+
         return pt.isOutOf(size);
     }
 
