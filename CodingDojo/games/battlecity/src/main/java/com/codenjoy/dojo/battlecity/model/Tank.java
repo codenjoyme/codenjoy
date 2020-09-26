@@ -43,8 +43,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     protected boolean moving;
     private boolean fire;
 
-    private int sliding;
-    private Direction iceSlide;
+    private Sliding sliding;
 
     public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
         super(pt);
@@ -52,7 +51,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         this.dice = dice;
         gun = new Gun(ticksPerBullets);
         reset();
-        iceSlide = null;
     }
 
     void turn(Direction direction) {
@@ -100,22 +98,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         if (!moving) {
             return;
         }
-        slide();
+        direction = sliding.act(this);
         moving(direction.change(this));
-    }
-
-    private void slide() {
-        if (!field.isIce(this)) {
-            iceSlide = direction;
-            sliding = 0;
-            return;
-        }
-
-        if (sliding++ % 2 == 0) {
-            direction = iceSlide;
-        } else {
-            iceSlide = direction;
-        }
     }
 
     public void moving(Point pt) {
@@ -140,6 +124,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void init(Field field) {
         super.init(field);
+
+        sliding = new Sliding(field);
 
         int c = 0;
         Point pt = this;
