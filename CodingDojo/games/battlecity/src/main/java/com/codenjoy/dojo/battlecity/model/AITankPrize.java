@@ -26,26 +26,32 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
-import java.util.LinkedList;
-
 public class AITankPrize extends AITank {
 
-    public static final int CHANGE_AFTER_TICKS = 4;
-    private int hitsCount;
-    private int hitKills;
-    private int ticksCount = 0;
+    public static final int CHANGE_EVERY_TICKS = 4;
+    private int damage;
+    private int vitality;
+    private int ticks;
 
-    public AITankPrize(Point pt, Dice dice, Direction direction, int hitKills) {
+    public AITankPrize(Point pt, Dice dice, Direction direction, int vitality) {
         super(pt, dice, direction);
-        this.hitKills = hitKills;
-        this.hitsCount = 0;
+        this.vitality = vitality;
+        damage = 0;
+        ticks = 0;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        ticks++;
     }
 
     public void kill(Bullet bullet) {
-        hitsCount++;
+        damage++;
 
-        if (hitsCount == hitKills) {
-            hitsCount = 0;
+        if (damage == vitality) {
+            damage = 0;
             super.kill(bullet);
         }
     }
@@ -56,11 +62,9 @@ public class AITankPrize extends AITank {
             return Elements.BANG;
         }
 
-        if (ticksCount > CHANGE_AFTER_TICKS) {
+        if (ticks % CHANGE_EVERY_TICKS == 0) {
             return Elements.AI_TANK_PRIZE;
         }
-
-        ticksCount++;
 
         return state();
     }

@@ -4438,7 +4438,7 @@ public class BattlecityTest {
         givenGameWithAI(tank, aiTank);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
-                "☼      ¿☼\n" +
+                "☼      ◘☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4474,7 +4474,7 @@ public class BattlecityTest {
         givenGameWithAI(tank, aiTank);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
-                "☼      ¿☼\n" +
+                "☼      ◘☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4526,7 +4526,7 @@ public class BattlecityTest {
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
-                "☼      »☼\n" +
+                "☼      ◘☼\n" +
                 "☼•      ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4540,7 +4540,7 @@ public class BattlecityTest {
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
-                "☼      ◘☼\n" +
+                "☼      ¿☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4562,7 +4562,7 @@ public class BattlecityTest {
         givenGameWithAI(tank, aiTank1, aiTank2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
-                "☼ ¿    ¿☼\n" +
+                "☼ ¿    ◘☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4588,7 +4588,7 @@ public class BattlecityTest {
         givenGameWithAI(tank, aiTank1, aiTank2, aiTank3);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
-                "☼ ¿  ¿ ¿☼\n" +
+                "☼ ¿  ◘ ¿☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4617,7 +4617,7 @@ public class BattlecityTest {
         givenGameWithAI(tank, aiTank1, aiTank2, aiTank3, aiTank4, aiTank5, aiTank6);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
-                "☼ ¿¿¿¿¿¿☼\n" +
+                "☼ ¿◘¿¿◘¿☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4631,16 +4631,17 @@ public class BattlecityTest {
         assertEquals(true, assertAiPrize(2, 7));
     }
 
-    //если spawnAiPrize = 3, а 3 АИтанка спаунятся по 1-му за каждый ход,
-    //то АИтанк с призами спаунится после 2-го хода
+    // если spawnAiPrize = 3, а 3 АИтанка спаунятся по 1-му за каждый ход,
+    // то АИтанк с призами спаунится после 2-го хода
+    // так же проверяем что призовой танк меняет свой символ каждые 4 тика
     @Test
-    public void shouldSpawnAiPrizeWhenAddOneByOneAI() {
+    public void shouldSpawnAiPrize_whenAddOneByOneAI() {
         size = 9;
         spawnAiPrize = setParameter("count spawn", 3);
         Tank tank = tank(1, 1, Direction.UP);
-        Tank aiTank1 = aiTank(2, 7, Direction.DOWN);
-        Tank aiTank2 = aiTank(5, 7, Direction.DOWN);
-        Tank aiTank3 = aiTank(6, 7, Direction.DOWN);
+        Tank ai1 = aiTank(2, 7, Direction.DOWN);
+        Tank ai2 = aiTank(5, 7, Direction.DOWN);
+        Tank ai3 = aiTank(6, 7, Direction.DOWN);
         givenGameWithAI(tank);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -4653,8 +4654,8 @@ public class BattlecityTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        game.addAI(aiTank1);
-        aiTank1.down();
+        game.addAI(ai1);
+        ai1.down();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -4667,8 +4668,19 @@ public class BattlecityTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        game.addAI(aiTank2);
-        aiTank2.down();
+        game.addAI(ai2);
+        ai2.down();
+
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼    ◘  ☼\n" +
+                "☼ ¿     ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -4681,8 +4693,8 @@ public class BattlecityTest {
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
 
-        game.addAI(aiTank3);
-        aiTank3.down();
+        game.addAI(ai3);
+        ai3.down();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -4696,6 +4708,42 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼\n");
 
         assertEquals(true, assertAiPrize(1, 4));
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼     ¿ ☼\n" +
+                "☼    ¿• ☼\n" +
+                "☼ ¿     ☼\n" +
+                "☼    •  ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼     ¿ ☼\n" +
+                "☼    ◘  ☼\n" +
+                "☼ ¿   • ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼     ¿ ☼\n" +
+                "☼    ¿  ☼\n" +
+                "☼▲¿     ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
     }
 
     //в АИтанк с призами надо попасть 3 раза, чтобы убить
@@ -4709,66 +4757,66 @@ public class BattlecityTest {
         givenGameWithAI(tank, aiTank);
 
         assertD("☼☼☼☼☼☼☼\n" +
-                "☼¿    ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        aiTank.down();
-        tank.act();
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼¿    ☼\n" +
-                "☼•    ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        aiTank.up();
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼?    ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        aiTank.down();
-        tank.act();
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼¿    ☼\n" +
-                "☼•    ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        aiTank.up();
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼?    ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        aiTank.down();
-        tank.act();
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
                 "☼◘    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.down();
+        tank.act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼?    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.down();
+        tank.act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼◘    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        aiTank.down();
+        tank.act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
                 "☼•    ☼\n" +
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +

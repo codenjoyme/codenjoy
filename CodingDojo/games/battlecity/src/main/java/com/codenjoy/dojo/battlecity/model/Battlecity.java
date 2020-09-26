@@ -106,7 +106,6 @@ public class Battlecity implements Field {
 
     @Override
     public void tick() {
-
         removeDeadTanks();
 
         newAI();
