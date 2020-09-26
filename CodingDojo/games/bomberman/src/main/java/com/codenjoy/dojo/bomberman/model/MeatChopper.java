@@ -28,8 +28,9 @@ import com.codenjoy.dojo.services.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.codenjoy.dojo.bomberman.model.Elements.*;
-import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
+import static com.codenjoy.dojo.bomberman.model.Elements.DEAD_MEAT_CHOPPER;
+import static com.codenjoy.dojo.bomberman.model.Elements.MEAT_CHOPPER;
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class MeatChopper extends Wall implements State<Elements, Player>, Tickable {
 

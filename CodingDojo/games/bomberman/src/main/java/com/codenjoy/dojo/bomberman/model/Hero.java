@@ -34,8 +34,8 @@ import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
 import static com.codenjoy.dojo.bomberman.model.Field.FOR_HERO;
-import static com.codenjoy.dojo.bomberman.model.StateUtils.filter;
-import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
+import static com.codenjoy.dojo.services.StateUtils.filter;
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Hero extends RoundPlayerHero<Field> implements State<Elements, Player> {
 
