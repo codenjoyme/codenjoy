@@ -51,17 +51,6 @@ public class Battlecity implements Field {
     private List<Tank> ais;
 
     public Battlecity(int size, Dice dice,
-                      List<Wall> walls,
-                      Parameter<Integer> whichSpawnWithPrize,
-                      Parameter<Integer> damagesBeforeAiDeath,
-                      Point... tanks)
-    {
-        this(size, dice, walls, new DefaultBorders(size).get(),
-                whichSpawnWithPrize, damagesBeforeAiDeath,
-                tanks);
-    }
-
-    public Battlecity(int size, Dice dice,
                       List<Wall> inputWalls,
                       List<Border> inputBorders,
                       Parameter<Integer> whichSpawnWithPrize,
@@ -85,6 +74,10 @@ public class Battlecity implements Field {
 
     public void addTree(Tree tree) {
         trees.add(tree);
+    }
+
+    public void addBorder(Border border) {
+        borders.add(border);
     }
 
     public void addIce(Ice ice) {

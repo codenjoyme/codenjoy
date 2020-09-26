@@ -23,6 +23,7 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
@@ -59,6 +60,7 @@ public class SingleTest {
 
         field = new Battlecity(size, mock(Dice.class),
                 Arrays.asList(new Wall[0]),
+                new DefaultBorders(size).get(),
                 spawnAiPrize, hitKillsAiPrize);
 
         player1 = new Player(null, dice1);

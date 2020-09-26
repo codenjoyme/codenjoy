@@ -23,6 +23,7 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
@@ -57,8 +58,10 @@ public class TanksEventsTest {
         Parameter<Integer> spawnAiPrize = v(4);
         Parameter<Integer> hitKillsAiPrize = v(3);
 
-        game = new Battlecity(7, mock(Dice.class),
+        int size = 7;
+        game = new Battlecity(size, mock(Dice.class),
                 Arrays.asList(new Wall[0]),
+                new DefaultBorders(size).get(),
                 spawnAiPrize, hitKillsAiPrize);
 
         ai = tank(1, 5, Direction.DOWN, 0);
