@@ -40,13 +40,12 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     private Gun gun;
 
     protected Direction direction;
-    protected int speed;
     protected boolean moving;
     private boolean fire;
     private Ice ice;
     private Tree tree;
     private int count;
-    private List<Direction> directions;
+    private List<Direction> iceSlide;
 
     public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
         super(pt);
@@ -54,7 +53,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         this.dice = dice;
         gun = new Gun(ticksPerBullets);
         reset();
-        directions = new LinkedList<>();
+        iceSlide = new LinkedList<>();
     }
 
     void turn(Direction direction) {
@@ -99,26 +98,23 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     // TODO подумать как устранить дублирование с MovingObject
     public void move() {
-        for (int i = 0; i < speed; i++) {
-            if (!moving) {
-                return;
-            }
-            slide();
-            moving(direction.change(this));
+        if (!moving) {
+            return;
         }
+        slide();
+        moving(direction.change(this));
     }
 
     private void slide() {
-        if (ice != null) {
-            directions.add(direction);
-            if (count()) {
-                this.direction = getLastDirection();
-            }
-        } else {
-            //чистим directions
-            directions.clear();
-            //запоминаем последнюю команду перед заездом на лёд
-            directions.add(direction);
+        if (ice == null) {
+            iceSlide.clear();
+            iceSlide.add(direction);
+            return;
+        }
+
+        iceSlide.add(direction);
+        if (count()) {
+            this.direction = getLastDirection();
         }
     }
 
@@ -127,7 +123,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     private Direction getLastDirection() {
-        return directions.get(directions.size() - 2);
+        return iceSlide.get(iceSlide.size() - 2);
     }
 
     public void moving(Point pt) {
@@ -217,7 +213,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void reset() {
-        speed = 1;
         moving = false;
         fire = false;
         alive = true;
