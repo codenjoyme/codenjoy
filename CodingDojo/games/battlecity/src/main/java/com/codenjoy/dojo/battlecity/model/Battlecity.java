@@ -48,7 +48,7 @@ public class Battlecity implements Field {
     private Dice dice;
     private LinkedList<Tank> ais;
     private LinkedList<Prize> prizes;
-    private int aiCount;
+    private int maxAi;
     private int spawnAiPrize;
     private int hitKillsAiPrize;
     private int aiTanksCount = 0;
@@ -72,7 +72,7 @@ public class Battlecity implements Field {
     public Battlecity(int size, Dice dice, List<Construction> constructions,
                       List<Border> borders, Parameter<Integer> spawnAiPrize,
                       Parameter<Integer> hitKillsAiPrize, Tank... ais) {
-        aiCount = ais.length;
+        maxAi = ais.length;
         this.dice = dice;
         this.size = size;
         this.ais = new LinkedList<>();
@@ -158,7 +158,7 @@ public class Battlecity implements Field {
     }
 
     private void newAI() {
-        for (int count = ais.size(); count < aiCount; count++) {
+        for (int i = ais.size(); i < maxAi; i++) {
             Point pt = pt(0, size - 2);
             int c = 0;
             do {
