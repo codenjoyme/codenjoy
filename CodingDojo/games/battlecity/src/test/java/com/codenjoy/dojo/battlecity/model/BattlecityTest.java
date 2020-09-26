@@ -3735,7 +3735,8 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    // 2.1) когда герой двигается по льду, происходит скольжение (он проскальзывает одну команду).
+    // 2.1) когда герой двигается по льду, происходит скольжение
+    // (он проскальзывает одну команду).
     // Если только заезжаем - то сразу же начинается занос,
     // то есть запоминается команда которой заезжали на лед
     // Если съезжаем на землю, то любой занос прекращается тут же
@@ -3781,6 +3782,7 @@ public class BattlecityTest {
         // находимся на льду
         // выполнили команаду right(), но танк не реагирует, так как происходит скольжение
         // двигается дальше с предедущей командой up()
+        // RIGHT -> UP (скольжение)
         hero.right();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3796,6 +3798,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
         // двигаемся дальше в направлении up()
+        // UP -> UP (выполнилась)
         hero.up();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3812,6 +3815,7 @@ public class BattlecityTest {
 
         // выполнили команаду right(), но танк не реагирует, так как происходит скольжение
         // двигается дальше с предедущей командой up()
+        // RIGHT -> UP (скольжение)
         hero.right();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3828,6 +3832,7 @@ public class BattlecityTest {
 
         // выехали со льда
         // двигается дальше в направлении up()
+        // UP -> UP (выполнилась)
         hero.up();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3882,7 +3887,7 @@ public class BattlecityTest {
                 "☼         ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        // lEFT -> UP(скольжение)
+        // LEFT -> UP (скольжение)
         hero.left();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3935,6 +3940,7 @@ public class BattlecityTest {
         size = 11;
         Tank tankHero = tank(1, 1, Direction.UP);
         Tank otherTank = tank(5, 6, Direction.DOWN);
+
         // when
         tanks = Arrays.asList(tankHero, otherTank);
         ice = new LinkedList<>(Arrays.asList(
@@ -3944,6 +3950,7 @@ public class BattlecityTest {
 
         givenGameWithTanks(tanks);
         game.setIce(ice);
+
         // then
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -3972,7 +3979,7 @@ public class BattlecityTest {
                 "☼▲        ☼\n" +
                 "☼☼☼☼☼☼☼☼☼☼☼\n");
 
-        // lEFT -> DOWN(скольжение)
+        // LEFT -> DOWN(скольжение)
         otherTank.left();
         game.tick();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +

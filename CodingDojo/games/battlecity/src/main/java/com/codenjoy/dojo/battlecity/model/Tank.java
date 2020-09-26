@@ -42,10 +42,9 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     protected Direction direction;
     protected boolean moving;
     private boolean fire;
-    private Ice ice;
-    private Tree tree;
-    private int count;
-    private List<Direction> iceSlide;
+
+    private int sliding;
+    private Direction iceSlide;
 
     public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
         super(pt);
@@ -53,7 +52,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         this.dice = dice;
         gun = new Gun(ticksPerBullets);
         reset();
-        iceSlide = new LinkedList<>();
+        iceSlide = null;
     }
 
     void turn(Direction direction) {
@@ -106,24 +105,17 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     private void slide() {
-        if (ice == null) {
-            iceSlide.clear();
-            iceSlide.add(direction);
+        if (!field.isIce(this)) {
+            iceSlide = direction;
+            sliding = 0;
             return;
         }
 
-        iceSlide.add(direction);
-        if (count()) {
-            this.direction = getLastDirection();
+        if (sliding++ % 2 == 0) {
+            direction = iceSlide;
+        } else {
+            iceSlide = direction;
         }
-    }
-
-    private boolean count() {
-        return ++count % 2 == 1;
-    }
-
-    private Direction getLastDirection() {
-        return iceSlide.get(iceSlide.size() - 2);
     }
 
     public void moving(Point pt) {
@@ -181,13 +173,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        tree = filterOne(alsoAtPoint, Tree.class);
-        //дерево и танк в одной координате
+        Tree tree = filterOne(alsoAtPoint, Tree.class);
         if (tree != null) {
             return Elements.TREE;
         }
-        //лёд и танк в одной кординате
-        ice = filterOne(alsoAtPoint, Ice.class);
 
         if (isAlive()) {
             if (player.getHero() == this) {

@@ -34,4 +34,6 @@ public interface Field extends GameField<Player>, Level {
     void affect(Bullet bullet);
 
     boolean isRiver(Point pt);
+
+    boolean isIce(Point pt);
 }

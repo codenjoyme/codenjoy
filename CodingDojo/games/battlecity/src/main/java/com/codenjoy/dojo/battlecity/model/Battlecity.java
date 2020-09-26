@@ -249,6 +249,11 @@ public class Battlecity implements Field {
         return rivers.stream().anyMatch(river -> river.itsMe(pt));
     }
 
+    @Override
+    public boolean isIce(Point pt) {
+        return ice.stream().anyMatch(ice -> ice.itsMe(pt));
+    }
+
     private Construction getConstructionAt(Bullet bullet) {
         int index = constructions.indexOf(bullet);
         return constructions.get(index);
