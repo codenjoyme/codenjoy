@@ -61,7 +61,6 @@ public class BattlecityTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     private List<Tank> tanks;
-	private List<Tree> trees;
 	private List<Wall> walls;
 	private List<Ice> ice;
 	private List<River> rivers;
@@ -2957,10 +2956,9 @@ public class BattlecityTest {
     @Test
     public void shouldBeWallTree_whenGameCreated() {
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-		trees = new LinkedList<>(Arrays.asList(new Tree(3, 3)));
 
 		givenGameWithTanks(tanks);
-		game.setTrees(trees);
+        game.addTree(new Tree(3, 3));
 
         assertEquals(1, game.getTrees().size());
 
@@ -2975,11 +2973,10 @@ public class BattlecityTest {
 
     @Test
     public void shouldBeWallTwoTree_whenGameCreated() {
-
 		List<Tank> tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-		List<Tree> trees = new LinkedList<>(Arrays.asList(new Tree(3, 3), new Tree(5, 1)));
 		givenGameWithTanks(tanks);
-		game.setTrees(trees);
+        game.addTree(new Tree(3, 3));
+        game.addTree(new Tree(5, 1));
 
         assertEquals(2, game.getTrees().size());
 
@@ -2997,10 +2994,9 @@ public class BattlecityTest {
     public void shouldBulletFlyUnderTree_right() {
         size = 11;
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-		trees = new LinkedList<>(Arrays.asList(new Tree(6, 1)));
 
 		givenGameWithTanks(tanks);
-		game.setTrees(trees);
+		game.addTree(new Tree(6, 1));
 
         hero.right();
         hero.act();
@@ -3091,11 +3087,10 @@ public class BattlecityTest {
     public void shouldBulletDestroyWallUnderTree_whenHittingTheWallUp_whenTwoWalls() {
         size = 7;
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-		trees = new LinkedList<>(Arrays.asList(new Tree(1, 2)));
 		walls = new LinkedList<>(Arrays.asList(new Wall(1, 5), new Wall(1, 4)));
 
 		givenGameWithTanks(tanks, walls);
-		game.setTrees(trees);
+		game.addTree(new Tree(1, 2));
 
         hero.act();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -3195,10 +3190,10 @@ public class BattlecityTest {
     public void shouldBulletFlyUnderTwoTree_up() {
         size = 11;
 		tanks = new LinkedList<>(Arrays.asList(tank(5, 1, Direction.UP)));
-		trees = new LinkedList<>(Arrays.asList(new Tree(5, 5), new Tree(5, 6)));
 
         givenGameWithTanks(tanks);
-        game.setTrees(trees);
+        game.addTree(new Tree(5, 5));
+        game.addTree(new Tree(5, 6));
 
         hero.act();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3289,10 +3284,10 @@ public class BattlecityTest {
     public void shouldTankMove_underTree() {
         size = 7;
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-		trees = new LinkedList<>(Arrays.asList(new Tree(1, 3), new Tree(1, 4)));
 
         givenGameWithTanks(tanks);
-        game.setTrees(trees);
+        game.addTree(new Tree(1, 3));
+        game.addTree(new Tree(1, 4));
 
         hero.up();
         game.tick();
@@ -3354,10 +3349,11 @@ public class BattlecityTest {
     public void shouldBulletFlyUnderTree_jointly_shouldTankMoveUnderTree() {
         size = 11;
 		tanks = new LinkedList<>(Arrays.asList(tank(9, 1, Direction.UP)));
-		trees = new LinkedList<>(Arrays.asList(new Tree(9, 5), new Tree(9, 6), new Tree(9, 3)));
 
         givenGameWithTanks(tanks);
-        game.setTrees(trees);
+        game.addTree(new Tree(9, 5));
+        game.addTree(new Tree(9, 6));
+        game.addTree(new Tree(9, 3));
 
         hero.act();
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -3465,10 +3461,10 @@ public class BattlecityTest {
 		Tank otherTank = tank(1, 9, Direction.DOWN);
 
 		tanks = Arrays.asList(tankHero, otherTank);
-		trees = Arrays.asList(new Tree(1, 6), new Tree(1, 7));
 
         givenGameWithTanks(tanks);
-        game.setTrees(trees);
+        game.addTree(new Tree(1, 6));
+        game.addTree(new Tree(1, 7));
 
 		assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
 				"☼˅        ☼\n" +
@@ -3539,10 +3535,10 @@ public class BattlecityTest {
         Tank aiTank = setAITank(1, 9, Direction.DOWN);
 
         tanks = Arrays.asList(tankHero, aiTank);
-        trees = Arrays.asList(new Tree(1, 6), new Tree(1, 7));
 
         givenGameWithTanks(tanks);
-        game.setTrees(trees);
+        game.addTree(new Tree(1, 6));
+        game.addTree(new Tree(1, 7));
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼¿        ☼\n" +
@@ -3612,10 +3608,11 @@ public class BattlecityTest {
         Tank enemyTank = tank(1, 9, Direction.DOWN);
 
         tanks = Arrays.asList(tankHero, enemyTank);
-        trees = Arrays.asList(new Tree(1, 4), new Tree(1, 5), new Tree(1, 6));
 
         givenGameWithTanks(tanks);
-        game.setTrees(trees);
+        game.addTree(new Tree(1, 4));
+        game.addTree(new Tree(1, 5));
+        game.addTree(new Tree(1, 6));
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼˅        ☼\n" +
@@ -3684,10 +3681,10 @@ public class BattlecityTest {
         Tank enemyTank = tank(1, 4, Direction.DOWN);
 
         tanks = Arrays.asList(tankHero, enemyTank);
-        trees = Arrays.asList(new Tree(1, 2), new Tree(1, 3));
 
         givenGameWithTanks(tanks);
-        game.setTrees(trees);
+        game.addTree(new Tree(1, 2));
+        game.addTree(new Tree(1, 3));
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -3742,15 +3739,11 @@ public class BattlecityTest {
 	// 2. Лёд
     @Test
     public void shouldBeWallIce_whenGameCreated() {
-	    // given
         tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-        ice = new LinkedList<>(Arrays.asList(new Ice(3, 3)));
 
-        // when
         givenGameWithTanks(tanks);
-        game.setIce(ice);
+        game.addIce(new Ice(3, 3));
 
-        // then
         assertEquals(1, game.getIce().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -3771,13 +3764,11 @@ public class BattlecityTest {
     public void shouldTankMoveUP_onIce_afterBeforeGround() {
         size = 11;
         tanks = new LinkedList<>(Arrays.asList(tank(5, 2, Direction.UP)));
-        ice = new LinkedList<>(Arrays.asList(
-                new Ice(5, 3),
-                new Ice(5, 4),
-                new Ice(5, 5)));
 
         givenGameWithTanks(tanks);
-        game.setIce(ice);
+        game.addIce(new Ice(5, 3));
+        game.addIce(new Ice(5, 4));
+        game.addIce(new Ice(5, 5));
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -3884,13 +3875,11 @@ public class BattlecityTest {
     public void shouldTankMoveLeftThenUpThenDown_onIce() {
         size = 11;
         tanks = new LinkedList<>(Arrays.asList(tank(5, 2, Direction.UP)));
-        ice = new LinkedList<>(Arrays.asList(
-                new Ice(5, 3),
-                new Ice(5, 4),
-                new Ice(5, 5)));
 
         givenGameWithTanks(tanks);
-        game.setIce(ice);
+        game.addIce(new Ice(5, 3));
+        game.addIce(new Ice(5, 4));
+        game.addIce(new Ice(5, 5));
 
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -3972,20 +3961,16 @@ public class BattlecityTest {
     //2.2) также когда на нем двигается враг он проскальзывает команду на два тика
     @Test
     public void shouldOtherTankMoveLeftThenUpThenDown_onIce() {
-        // given
         size = 11;
         Tank tankHero = tank(1, 1, Direction.UP);
         Tank otherTank = tank(5, 6, Direction.DOWN);
 
-        // when
         tanks = Arrays.asList(tankHero, otherTank);
-        ice = new LinkedList<>(Arrays.asList(
-                new Ice(5, 3),
-                new Ice(5, 4),
-                new Ice(5, 5)));
 
         givenGameWithTanks(tanks);
-        game.setIce(ice);
+        game.addIce(new Ice(5, 3));
+        game.addIce(new Ice(5, 4));
+        game.addIce(new Ice(5, 5));
 
         // then
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -4072,10 +4057,9 @@ public class BattlecityTest {
     @Test
     public void shouldBeWallWater_whenGameCreated() {
         tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-        rivers = new LinkedList<>(Arrays.asList(new River(3, 3)));
 
         givenGameWithTanks(tanks);
-        game.setRivers(rivers);
+        game.addRiver(new River(3, 3));
 
         assertEquals(1, game.getRivers().size());
 
@@ -4092,10 +4076,9 @@ public class BattlecityTest {
 	@Test
 	public void shouldTankCanGoIfRiverAtWay() {
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
 
         givenGameWithTanks(tanks);
-        game.setRivers(rivers);
+        game.addRiver(new River(1, 2));
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -4124,11 +4107,10 @@ public class BattlecityTest {
 	public void shouldBulletCanGoIfRiverAtWay() {
 	    // given
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
-		rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
 
         // when
         givenGameWithTanks(tanks);
-        game.setRivers(rivers);
+        game.addRiver(new River(1, 2));
 
         // then
         assertD("☼☼☼☼☼☼☼\n" +
@@ -4180,15 +4162,10 @@ public class BattlecityTest {
     public void shouldDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
 	    // given
         tanks = new LinkedList<>(Arrays.asList(tank(3, 3, Direction.UP)));
-        rivers = new LinkedList<>(Arrays.asList(
-                new River(2, 3),
-                new River(4, 3),
-                new River(3, 2),
-                new River(3, 4)));
 
         // when
         givenGameWithTanks(tanks);
-        game.setRivers(rivers);
+        riverAround();
 
         // then
         assertD("☼☼☼☼☼☼☼\n" +
@@ -4252,11 +4229,10 @@ public class BattlecityTest {
         Tank otherTank = tank(1, 1, Direction.UP);
 
         tanks = Arrays.asList(tankHero, otherTank);
-        rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
 
         // when
         givenGameWithTanks(tanks);
-        game.setRivers(rivers);
+        game.addRiver(new River(1, 2));
 
         // then
         assertD("☼☼☼☼☼☼☼\n" +
@@ -4311,15 +4287,10 @@ public class BattlecityTest {
         Tank otherTank = tank(3, 3, Direction.UP);
 
         tanks = Arrays.asList(tankHero, otherTank);
-        rivers = new LinkedList<>(Arrays.asList(
-                new River(2, 3),
-                new River(4, 3),
-                new River(3, 2),
-                new River(3, 4)));
 
         // when
         givenGameWithTanks(tanks);
-        game.setRivers(rivers);
+        riverAround();
 
         // then
         assertD("☼☼☼☼☼☼☼\n" +
@@ -4383,11 +4354,10 @@ public class BattlecityTest {
         Tank aiTank = setAITank(1, 1, Direction.UP);
 
         tanks = Arrays.asList(tankHero, aiTank);
-        rivers = new LinkedList<>(Arrays.asList(new River(1, 2)));
 
         // when
         givenGameWithTanks(tanks);
-        game.setRivers(rivers);
+        game.addRiver(new River(1, 2));
 
         // then
         assertD("☼☼☼☼☼☼☼\n" +
@@ -4452,15 +4422,10 @@ public class BattlecityTest {
         Tank aiTank = setAITank(3, 3, Direction.DOWN);
 
         tanks = Arrays.asList(tankHero, aiTank);
-        rivers = new LinkedList<>(Arrays.asList(
-                new River(2, 3),
-                new River(4, 3),
-                new River(3, 2),
-                new River(3, 4)));
 
         // when
         givenGameWithTanks(tanks);
-        game.setRivers(rivers);
+        riverAround();
 
         // then
         assertD("☼☼☼☼☼☼☼\n" +
@@ -4503,6 +4468,13 @@ public class BattlecityTest {
                 "☼  ▓  ☼\n" +
                 "☼    ▲☼\n" +
                 "☼☼☼☼☼☼☼\n");
+    }
+
+    private void riverAround() {
+        game.addRiver(new River(2, 3));
+        game.addRiver(new River(4, 3));
+        game.addRiver(new River(3, 2));
+        game.addRiver(new River(3, 4));
     }
 
     // TODO 4. Добовляем бота

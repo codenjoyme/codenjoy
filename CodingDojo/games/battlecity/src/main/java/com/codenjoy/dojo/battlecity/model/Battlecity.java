@@ -83,16 +83,16 @@ public class Battlecity implements Field {
         aiGen.init(tanks);
     }
 
-    public void setTrees(List<Tree> trees) {
-        this.trees = trees;
+    public void addTree(Tree tree) {
+        trees.add(tree);
     }
 
-    public void setIce(List<Ice> ice) {
-        this.ice = ice;
+    public void addIce(Ice ice) {
+        this.ice.add(ice);
     }
 
-    public void setRivers(List<River> rivers) {
-        this.rivers = rivers;
+    public void addRiver(River river) {
+        rivers.add(river);
     }
 
     @Override
