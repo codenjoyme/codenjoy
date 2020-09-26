@@ -49,12 +49,12 @@ public class Battlecity implements Field {
     private List<Prize> prizes;
     private Dice dice;
     private int maxAi;
-    private Parameter<Integer> spawnAiPrize;
-    private Parameter<Integer> hitKillsAiPrize;
-    private int aiTanksCount = 0;
+    private Parameter<Integer> whichSpawnWithPrize;
+    private Parameter<Integer> damagesBeforeAiDeath;
+    private int aiSpawn;
 
     private int size;
-    private List<Construction> constructions;
+    private List<Construction> constructions; // TODO заменить на wall
     private List<Border> borders;
     private List<Tree> trees;
     private List<Ice> ice;
@@ -63,28 +63,29 @@ public class Battlecity implements Field {
     private List<Player> players = new LinkedList<>();
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      Parameter<Integer> spawnAiPrize, Parameter<Integer> hitKillsAiPrize,
+                      Parameter<Integer> whichSpawnWithPrize, Parameter<Integer> damagesBeforeAiDeath,
                       Tank... ais) {
-        this(size, dice, constructions, new DefaultBorders(size).get(), spawnAiPrize,
-                hitKillsAiPrize, ais);
+        this(size, dice, constructions, new DefaultBorders(size).get(), whichSpawnWithPrize,
+                damagesBeforeAiDeath, ais);
     }
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      List<Border> borders, Parameter<Integer> spawnAiPrize,
-                      Parameter<Integer> hitKillsAiPrize, Tank... ais) {
-        maxAi = ais.length;
+                      List<Border> borders, Parameter<Integer> whichSpawnWithPrize,
+                      Parameter<Integer> damagesBeforeAiDeath, Tank... ais) {
         this.dice = dice;
         this.size = size;
         this.ais = new LinkedList<>();
         this.prizes = new LinkedList<>();
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
-        this.spawnAiPrize = spawnAiPrize;
-        this.hitKillsAiPrize = hitKillsAiPrize;
+        this.whichSpawnWithPrize = whichSpawnWithPrize;
+        this.damagesBeforeAiDeath = damagesBeforeAiDeath;
         this.trees = new LinkedList<>();
         this.ice = new LinkedList<>();
         this.rivers = new LinkedList<>();
+        this.aiSpawn = 0;
 
+        this.maxAi = ais.length;
         for (Tank tank : ais) {
             addAI(tank);
         }
@@ -201,10 +202,10 @@ public class Battlecity implements Field {
     }
 
     void addAI(Tank tank) {
-        Tank resultTank = replaceAiOnAiPrize(tank);
-        resultTank.init(this);
-        ais.add(resultTank);
-        aiTanksCount++;
+        tank = replaceAiOnAiPrize(tank);
+        tank.init(this);
+        ais.add(tank);
+        aiSpawn++;
     }
 
     @Override
@@ -428,15 +429,15 @@ public class Battlecity implements Field {
     }
 
     private Tank replaceAiOnAiPrize(Tank tank) {
-        if (aiTanksCount == spawnAiPrize.getValue()) {
-            aiTanksCount = 0;
+        if (aiSpawn == whichSpawnWithPrize.getValue()) {
+            aiSpawn = 0;
         }
 
-        if (spawnAiPrize.getValue() > 1) {
-            int indexAiPrize = spawnAiPrize.getValue() - 2;
-            if (aiTanksCount == indexAiPrize) {
+        if (whichSpawnWithPrize.getValue() > 1) {
+            int indexAiPrize = whichSpawnWithPrize.getValue() - 2;
+            if (aiSpawn == indexAiPrize) {
                 Point pt = pt(tank.getX(), tank.getY());
-                return new AITankPrize(pt, dice, tank.getDirection(), hitKillsAiPrize.getValue());
+                return new AITankPrize(pt, dice, tank.getDirection(), damagesBeforeAiDeath.getValue());
             }
         }
         return tank;
