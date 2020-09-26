@@ -39,7 +39,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 public class Battlecity implements Field {
 
     private List<Tank> ais;
-    private List<Prize> prizes;
     private Dice dice;
     private int maxAi;
     private Parameter<Integer> whichSpawnWithPrize;
@@ -48,29 +47,31 @@ public class Battlecity implements Field {
 
     private PrizeGenerator prizeGen;
     private int size;
-    private List<Construction> constructions; // TODO заменить на wall
+
+    private List<Wall> walls;
     private List<Border> borders;
     private List<Tree> trees;
     private List<Ice> ice;
     private List<River> rivers;
+    private List<Prize> prizes;
 
     private List<Player> players = new LinkedList<>();
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions,
+    public Battlecity(int size, Dice dice, List<Wall> wall,
                       Parameter<Integer> whichSpawnWithPrize, Parameter<Integer> damagesBeforeAiDeath,
                       Tank... ais) {
-        this(size, dice, constructions, new DefaultBorders(size).get(), whichSpawnWithPrize,
+        this(size, dice, wall, new DefaultBorders(size).get(), whichSpawnWithPrize,
                 damagesBeforeAiDeath, ais);
     }
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions,
+    public Battlecity(int size, Dice dice, List<Wall> wall,
                       List<Border> borders, Parameter<Integer> whichSpawnWithPrize,
                       Parameter<Integer> damagesBeforeAiDeath, Tank... ais) {
         this.dice = dice;
         this.size = size;
         this.ais = new LinkedList<>();
         this.prizes = new LinkedList<>();
-        this.constructions = new LinkedList<>(constructions);
+        this.walls = new LinkedList<>(wall);
         this.borders = new LinkedList<>(borders);
         this.whichSpawnWithPrize = whichSpawnWithPrize;
         this.damagesBeforeAiDeath = damagesBeforeAiDeath;
@@ -101,7 +102,7 @@ public class Battlecity implements Field {
     @Override
     public void clearScore() {
         players.forEach(Player::reset);
-        constructions.forEach(Construction::reset);
+        walls.forEach(Wall::reset);
         getTanks().forEach(Tank::reset);
     }
 
@@ -146,9 +147,9 @@ public class Battlecity implements Field {
             bullet.move();
         }
 
-        for (Construction construction : constructions) {
-            if (!tanks.contains(construction) && !getBullets().contains(construction)) {
-                construction.tick();
+        for (Wall wall : walls) {
+            if (!tanks.contains(wall) && !getBullets().contains(wall)) {
+                wall.tick();
             }
         }
     }
@@ -220,11 +221,11 @@ public class Battlecity implements Field {
             }
         }
 
-        if (constructions.contains(bullet)) {
-            Construction construction = getConstructionAt(bullet);
+        if (walls.contains(bullet)) {
+            Wall wall = getWallAt(bullet);
 
-            if (!construction.destroyed()) {
-                construction.destroyFrom(bullet.getDirection());
+            if (!wall.destroyed()) {
+                wall.destroyFrom(bullet.getDirection());
                 bullet.onDestroy();  // TODO заимплементить взрыв
             }
 
@@ -247,9 +248,9 @@ public class Battlecity implements Field {
         prizes.add(prize);
     }
 
-    private Construction getConstructionAt(Bullet bullet) {
-        int index = constructions.indexOf(bullet);
-        return constructions.get(index);
+    private Wall getWallAt(Bullet bullet) {
+        int index = walls.indexOf(bullet);
+        return walls.get(index);
     }
 
     private void scoresForKill(Bullet killedBullet, Tank diedTank) {
@@ -290,8 +291,8 @@ public class Battlecity implements Field {
 
     @Override
     public boolean isBarrier(Point pt) {
-        for (Construction construction : constructions) {
-            if (construction.itsMe(pt) && !construction.destroyed()) {
+        for (Wall wall : this.walls) {
+            if (wall.itsMe(pt) && !wall.destroyed()) {
                 return true;
             }
         }
@@ -373,7 +374,7 @@ public class Battlecity implements Field {
                 return new LinkedList<Point>() {{
                     addAll(Battlecity.this.getBorders());
                     addAll(Battlecity.this.getTanks());
-                    addAll(Battlecity.this.getConstructions());
+                    addAll(Battlecity.this.getWalls());
                     addAll(Battlecity.this.getBullets());
                     addAll(Battlecity.this.getPrizes());
                     addAll(Battlecity.this.getTrees());
@@ -385,11 +386,11 @@ public class Battlecity implements Field {
     }
 
     @Override
-    public List<Construction> getConstructions() {
-        List<Construction> result = new LinkedList<>();
-        for (Construction construction : constructions) {
-            if (!construction.destroyed()) {
-                result.add(construction);
+    public List<Wall> getWalls() {
+        List<Wall> result = new LinkedList<>();
+        for (Wall wall : walls) {
+            if (!wall.destroyed()) {
+                result.add(wall);
             }
         }
         return result;

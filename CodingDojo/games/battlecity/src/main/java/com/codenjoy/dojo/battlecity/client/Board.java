@@ -26,10 +26,7 @@ package com.codenjoy.dojo.battlecity.client;
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -56,21 +53,21 @@ public class Board extends AbstractBoard<Elements> {
 
     public List<Point> getBarriers() {
         return get(Elements.BATTLE_WALL,
-                Elements.CONSTRUCTION,
-                Elements.CONSTRUCTION_DESTROYED_DOWN,
-                Elements.CONSTRUCTION_DESTROYED_UP,
-                Elements.CONSTRUCTION_DESTROYED_LEFT,
-                Elements.CONSTRUCTION_DESTROYED_RIGHT,
-                Elements.CONSTRUCTION_DESTROYED_DOWN_TWICE,
-                Elements.CONSTRUCTION_DESTROYED_UP_TWICE,
-                Elements.CONSTRUCTION_DESTROYED_LEFT_TWICE,
-                Elements.CONSTRUCTION_DESTROYED_RIGHT_TWICE,
-                Elements.CONSTRUCTION_DESTROYED_LEFT_RIGHT,
-                Elements.CONSTRUCTION_DESTROYED_UP_DOWN,
-                Elements.CONSTRUCTION_DESTROYED_UP_LEFT,
-                Elements.CONSTRUCTION_DESTROYED_RIGHT_UP,
-                Elements.CONSTRUCTION_DESTROYED_DOWN_LEFT,
-                Elements.CONSTRUCTION_DESTROYED_DOWN_RIGHT);
+                Elements.WALL,
+                Elements.WALL_DESTROYED_DOWN,
+                Elements.WALL_DESTROYED_UP,
+                Elements.WALL_DESTROYED_LEFT,
+                Elements.WALL_DESTROYED_RIGHT,
+                Elements.WALL_DESTROYED_DOWN_TWICE,
+                Elements.WALL_DESTROYED_UP_TWICE,
+                Elements.WALL_DESTROYED_LEFT_TWICE,
+                Elements.WALL_DESTROYED_RIGHT_TWICE,
+                Elements.WALL_DESTROYED_LEFT_RIGHT,
+                Elements.WALL_DESTROYED_UP_DOWN,
+                Elements.WALL_DESTROYED_UP_LEFT,
+                Elements.WALL_DESTROYED_RIGHT_UP,
+                Elements.WALL_DESTROYED_DOWN_LEFT,
+                Elements.WALL_DESTROYED_DOWN_RIGHT);
     }
 
     public Point getMe() {

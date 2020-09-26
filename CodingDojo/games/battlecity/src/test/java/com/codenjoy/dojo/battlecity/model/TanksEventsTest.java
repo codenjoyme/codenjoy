@@ -30,8 +30,6 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -63,7 +61,7 @@ public class TanksEventsTest {
         enemy = tank(1, 5, Direction.DOWN, 1);
 
         game = new Battlecity(7, mock(Dice.class),
-                Arrays.asList(new Construction[0]),
+                Arrays.asList(new Wall[0]),
                 spawnAiPrize, hitKillsAiPrize,
                 enemy);
 

@@ -38,7 +38,6 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -64,7 +63,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
         return new Battlecity(level.size(),
                 getDice(),
-                level.getConstructions(),
+                level.getWalls(),
                 level.getBorders(),
                 spawnAiPrize,
                 hitKillsAiPrize,

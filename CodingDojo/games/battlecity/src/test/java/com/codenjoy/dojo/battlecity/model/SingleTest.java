@@ -29,9 +29,6 @@ import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -61,7 +58,7 @@ public class SingleTest {
         Parameter<Integer> hitKillsAiPrize = v(3);
 
         field = new Battlecity(size, mock(Dice.class),
-                Arrays.asList(new Construction[0]),
+                Arrays.asList(new Wall[0]),
                 spawnAiPrize, hitKillsAiPrize);
 
         player1 = new Player(null, dice1);

@@ -48,11 +48,11 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Construction> getConstructions() {
-        List<Construction> result = new LinkedList<Construction>();
+    public List<Wall> getWalls() {
+        List<Wall> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.CONSTRUCTION.ch) {
-                result.add(new Construction(xy.getXY(index)));
+            if (map.charAt(index) == Elements.WALL.ch) {
+                result.add(new Wall(xy.getXY(index)));
             }
         }
         return result;
@@ -70,7 +70,7 @@ public class LevelImpl implements Level {
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>() {{
                     addAll(LevelImpl.this.getBorders());
-                    addAll(LevelImpl.this.getConstructions());
+                    addAll(LevelImpl.this.getWalls());
                     addAll(LevelImpl.this.getTanks());
                 }};
             }
@@ -79,7 +79,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Tank> getTanks() {
-        List<Tank> result = new LinkedList<Tank>();
+        List<Tank> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == Elements.AI_TANK_DOWN.ch) {
                 Point pt = xy.getXY(index);
@@ -91,7 +91,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Border> getBorders() {
-        List<Border> result = new LinkedList<Border>();
+        List<Border> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == Elements.BATTLE_WALL.ch) {
                 result.add(new Border(xy.getXY(index)));

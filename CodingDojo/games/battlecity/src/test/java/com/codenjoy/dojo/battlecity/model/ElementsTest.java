@@ -29,9 +29,9 @@ import static org.junit.Assert.*;
 public class ElementsTest {
 
     @Test
-    public void getConstructions() {
+    public void getWalls() {
         assertEquals("[╬, ╩, ╦, ╠, ╣, ╨, ╥, ╞, ╡, │, ─, ┌, ┐, └, ┘,  ]",
-                Elements.getConstructions().toString());
+                Elements.getWalls().toString());
     }
 
 }

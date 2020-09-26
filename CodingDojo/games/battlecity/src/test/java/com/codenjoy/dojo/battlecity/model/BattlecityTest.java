@@ -62,7 +62,7 @@ public class BattlecityTest {
 
     private List<Tank> tanks;
 	private List<Tree> trees;
-	private List<Construction> constructions;
+	private List<Wall> walls;
 	private List<Ice> ice;
 	private List<River> rivers;
 
@@ -78,8 +78,8 @@ public class BattlecityTest {
         return settings.addEditBox(name).type(Integer.class).def(value);
     }
 
-    private void givenGame(Tank tank, Construction... constructions) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(constructions), spawnAiPrize, hitKillsAiPrize);
+    private void givenGame(Tank tank, Wall... walls) {
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(walls), spawnAiPrize, hitKillsAiPrize);
         initPlayer(game, tank);
         this.hero = tank;
     }
@@ -88,19 +88,19 @@ public class BattlecityTest {
         List<Border> borders = new DefaultBorders(size).get();
         borders.addAll(Arrays.asList(walls));
 
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), borders, spawnAiPrize, hitKillsAiPrize);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Wall[0]), borders, spawnAiPrize, hitKillsAiPrize);
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private void givenGameWithAI(Tank tank, Tank... aiTanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]), spawnAiPrize, hitKillsAiPrize, aiTanks);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Wall[0]), spawnAiPrize, hitKillsAiPrize, aiTanks);
         initPlayer(game, tank);
         this.hero = tank;
     }
 
     private void givenGameWithTanks(List<Tank> tanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]),
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Wall[0]),
                 new DefaultBorders(size).get(), spawnAiPrize, hitKillsAiPrize);
 
         for (Tank tank : tanks) {
@@ -109,8 +109,8 @@ public class BattlecityTest {
         this.hero = tanks.get(0);
     }
 
-    private void givenGameWithTanks(List<Tank> tanks, List<Construction> constructions) {
-        game = new Battlecity(size, mock(Dice.class), constructions,
+    private void givenGameWithTanks(List<Tank> tanks, List<Wall> walls) {
+        game = new Battlecity(size, mock(Dice.class), walls,
                 new DefaultBorders(size).get(), spawnAiPrize, hitKillsAiPrize);
 
         for (Tank tank : tanks) {
@@ -129,7 +129,7 @@ public class BattlecityTest {
     }
 
     private void givenGameWithTanks(Tank... tanks) {
-        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[]{}), spawnAiPrize, hitKillsAiPrize);
+        game = new Battlecity(size, mock(Dice.class), Arrays.asList(new Wall[]{}), spawnAiPrize, hitKillsAiPrize);
         for (Tank tank : tanks) {
             initPlayer(game, tank);
         }
@@ -187,12 +187,12 @@ public class BattlecityTest {
         return dice;
     }
 
-    public void givenGameWithConstruction(int x, int y) {
-        givenGame(tank(1, 1, Direction.UP), new Construction(x, y));
+    public void givenGameWithWall(int x, int y) {
+        givenGame(tank(1, 1, Direction.UP), new Wall(x, y));
     }
 
-    public void givenGameWithConstruction(Tank tank, int x, int y) {
-        givenGame(tank, new Construction(x, y));
+    public void givenGameWithWall(Tank tank, int x, int y) {
+        givenGame(tank, new Wall(x, y));
     }
 
     public void givenGameWithTankAt(int x, int y) {
@@ -200,7 +200,7 @@ public class BattlecityTest {
     }
 
     public void givenGameWithTankAt(int x, int y, Direction direction) {
-        givenGame(tank(x, y, direction), new Construction[]{});
+        givenGame(tank(x, y, direction), new Wall[]{});
     }
 
     private boolean assertAiPrize(int totalAiPrize, int totalTanks) {
@@ -230,7 +230,7 @@ public class BattlecityTest {
         Tank tank = tank(1, 1, Direction.UP);
         Tank aiTank = aiTankPrize(1, 5, Direction.DOWN, hitKillsAiPrize);
 
-        game = new Battlecity(size, dice, Arrays.asList(new Construction(3, 3)), spawnAiPrize, hitKillsAiPrize);
+        game = new Battlecity(size, dice, Arrays.asList(new Wall(3, 3)), spawnAiPrize, hitKillsAiPrize);
         initPlayer(game, tank);
         this.hero = tank;
         game.addAI(aiTank);
@@ -259,9 +259,9 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldBeConstruction_whenGameCreated() {
-        givenGame(tank(1, 1, Direction.UP), new Construction(3, 3));
-        assertEquals(1, game.getConstructions().size());
+    public void shouldBeWall_whenGameCreated() {
+        givenGame(tank(1, 1, Direction.UP), new Wall(3, 3));
+        assertEquals(1, game.getWalls().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -513,7 +513,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - снизу
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown() {
-        givenGameWithConstruction(1, 5);
+        givenGameWithWall(1, 5);
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -576,7 +576,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - слева
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft() {
-        givenGameWithConstruction(tank(1, 1, Direction.RIGHT), 5, 1);
+        givenGameWithWall(tank(1, 1, Direction.RIGHT), 5, 1);
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -639,7 +639,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - справа
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight() {
-        givenGameWithConstruction(tank(5, 1, Direction.LEFT), 1, 1);
+        givenGameWithWall(tank(5, 1, Direction.LEFT), 1, 1);
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -701,7 +701,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - сверху
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp() {
-        givenGameWithConstruction(tank(1, 5, Direction.DOWN), 1, 1);
+        givenGameWithWall(tank(1, 5, Direction.DOWN), 1, 1);
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -764,7 +764,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - снизу но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown_overWall() {
-        givenGameWithConstruction(tank(1, 2, Direction.UP), 1, 5);
+        givenGameWithWall(tank(1, 2, Direction.UP), 1, 5);
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -827,7 +827,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - слева но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft_overWall() {
-        givenGameWithConstruction(tank(2, 1, Direction.RIGHT), 5, 1);
+        givenGameWithWall(tank(2, 1, Direction.RIGHT), 5, 1);
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -890,7 +890,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - справа но через стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight_overWall() {
-        givenGameWithConstruction(tank(4, 1, Direction.LEFT), 1, 1);
+        givenGameWithWall(tank(4, 1, Direction.LEFT), 1, 1);
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -952,7 +952,7 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - сверху но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp_overWall() {
-        givenGameWithConstruction(tank(1, 4, Direction.DOWN), 1, 1);
+        givenGameWithWall(tank(1, 4, Direction.DOWN), 1, 1);
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -1013,7 +1013,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp_whenTwoWalls() {
-        givenGame(tank(1, 1, Direction.UP), new Construction(1, 5), new Construction(1, 4));
+        givenGame(tank(1, 1, Direction.UP), new Wall(1, 5), new Wall(1, 4));
         hero.act();
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
@@ -1102,7 +1102,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight_whenTwoWalls() {
-        givenGame(tank(1, 1, Direction.RIGHT), new Construction(5, 1), new Construction(4, 1));
+        givenGame(tank(1, 1, Direction.RIGHT), new Wall(5, 1), new Wall(4, 1));
         hero.act();
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1190,7 +1190,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft_whenTwoWalls() {
-        givenGame(tank(5, 1, Direction.LEFT), new Construction(1, 1), new Construction(2, 1));
+        givenGame(tank(5, 1, Direction.LEFT), new Wall(1, 1), new Wall(2, 1));
         hero.act();
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1278,7 +1278,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown_whenTwoWalls() {
-        givenGame(tank(5, 5, Direction.DOWN), new Construction(5, 1), new Construction(5, 2));
+        givenGame(tank(5, 5, Direction.DOWN), new Wall(5, 1), new Wall(5, 2));
         hero.act();
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
@@ -1368,8 +1368,8 @@ public class BattlecityTest {
     @Test
     public void shouldDoNotMove_whenWallTaWay_goDownOrLeft() {
         givenGame(tank(3, 3, Direction.DOWN),
-                new Construction(3, 4), new Construction(4, 3),
-                new Construction(3, 2), new Construction(2, 3));
+                new Wall(3, 4), new Wall(4, 3),
+                new Wall(3, 2), new Wall(2, 3));
 
         hero.right();
         game.tick();
@@ -1508,7 +1508,7 @@ public class BattlecityTest {
     @Test
     public void shouldShotWithSeveralBullets_whenHittingTheWallDown() {
         size = 9;
-        givenGame(tank(7, 7, Direction.DOWN), new Construction(7, 1), new Construction(7, 2));
+        givenGame(tank(7, 7, Direction.DOWN), new Wall(7, 1), new Wall(7, 2));
         hero.act();
         game.tick();
 
@@ -1690,7 +1690,7 @@ public class BattlecityTest {
     // стоит проверить, как будут себя вести полуразрушенные конструкции, если их растреливать со всех других сторон
     @Test
     public void shouldDestroyFromUpAndDownTwice() {
-        givenGame(tank(3, 4, Direction.DOWN), new Construction(3, 3));
+        givenGame(tank(3, 4, Direction.DOWN), new Wall(3, 3));
 
         hero.act();
         game.tick();
@@ -2105,7 +2105,7 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        for (int i = 7; i <= Construction.REGENERATE_TIME; i++) {
+        for (int i = 7; i <= Wall.REGENERATE_TIME; i++) {
             game.tick();
         }
 
@@ -2195,7 +2195,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldOnlyOneBulletPerTick() {
-        givenGame(tank(1, 1, Direction.UP), new Construction(1, 2), new Construction(1, 3));
+        givenGame(tank(1, 1, Direction.UP), new Wall(1, 2), new Wall(1, 3));
         hero.act();
         hero.act();
         hero.act();
@@ -2250,8 +2250,8 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldTankCanGoIfDestroyConstruction() {
-        givenGame(tank(1, 1, Direction.UP), new Construction(1, 2), new Construction(1, 3));
+    public void shouldTankCanGoIfDestroyWall() {
+        givenGame(tank(1, 1, Direction.UP), new Wall(1, 2), new Wall(1, 3));
         hero.act();
         game.tick();
         hero.act();
@@ -2278,8 +2278,8 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldConstructionCantRegenerateOnTank() {
-        shouldTankCanGoIfDestroyConstruction();
+    public void shouldWallCantRegenerateOnTank() {
+        shouldTankCanGoIfDestroyWall();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -2289,7 +2289,7 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        for (int i = 3; i <= Construction.REGENERATE_TIME; i++) {
+        for (int i = 3; i <= Wall.REGENERATE_TIME; i++) {
             game.tick();
         }
 
@@ -2304,7 +2304,7 @@ public class BattlecityTest {
         hero.right();
         game.tick();
 
-        for (int i = 2; i <= Construction.REGENERATE_TIME; i++) {
+        for (int i = 2; i <= Wall.REGENERATE_TIME; i++) {
             assertD("☼☼☼☼☼☼☼\n" +
                     "☼     ☼\n" +
                     "☼     ☼\n" +
@@ -2327,8 +2327,8 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldConstructionCantRegenerateOnBullet() {
-        givenGame(tank(1, 1, Direction.UP), new Construction(1, 3));
+    public void shouldWallCantRegenerateOnBullet() {
+        givenGame(tank(1, 1, Direction.UP), new Wall(1, 3));
         hero.act();
         game.tick();
         hero.act();
@@ -2343,7 +2343,7 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        for (int i = 3; i <= Construction.REGENERATE_TIME; i++) {
+        for (int i = 3; i <= Wall.REGENERATE_TIME; i++) {
             game.tick();
         }
 
@@ -2388,7 +2388,7 @@ public class BattlecityTest {
     @Test
     public void shouldNTicksPerBullet() {
         ticksPerBullets = 4;
-        givenGame(tank(1, 1, Direction.UP), new Construction(1, 3));
+        givenGame(tank(1, 1, Direction.UP), new Wall(1, 3));
 
         hero.act();
         game.tick();
@@ -2462,7 +2462,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldOnlyRotateIfNoBarrier() {
-        givenGame(tank(1, 1, Direction.UP), new Construction(3, 1));
+        givenGame(tank(1, 1, Direction.UP), new Wall(3, 1));
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2485,7 +2485,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldOnlyRotateIfBarrier() {
-        givenGame(tank(2, 1, Direction.UP), new Construction(3, 1));
+        givenGame(tank(2, 1, Direction.UP), new Wall(3, 1));
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2507,8 +2507,8 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldEnemyCanKillTankOnConstruction() {
-        givenGame(tank(1, 1, Direction.UP), new Construction(1, 2));
+    public void shouldEnemyCanKillTankOnWall() {
+        givenGame(tank(1, 1, Direction.UP), new Wall(1, 2));
         Tank tank2 = tank(1, 3, Direction.DOWN);
         initPlayer(game, tank2);
 
@@ -2704,10 +2704,10 @@ public class BattlecityTest {
 
     // если стенка недорушенная, снаряд летит, и ресетнули игру, то все конструкции восстанавливаются
     @Test
-    public void shouldRemoveBulletsAndResetConstructions_whenReset() {
+    public void shouldRemoveBulletsAndResetWalls_whenReset() {
         size = 11;
         ticksPerBullets = 3;
-        givenGame(tank(1, 1, Direction.UP), new Construction(1, 9), new Construction(1, 8));
+        givenGame(tank(1, 1, Direction.UP), new Wall(1, 9), new Wall(1, 8));
 
         hero.act();
         game.tick();
@@ -2971,7 +2971,7 @@ public class BattlecityTest {
 
     // 1. Кусты
     @Test
-    public void shouldBeConstructionTree_whenGameCreated() {
+    public void shouldBeWallTree_whenGameCreated() {
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		trees = new LinkedList<>(Arrays.asList(new Tree(3, 3)));
 
@@ -2990,7 +2990,7 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldBeConstructionTwoTree_whenGameCreated() {
+    public void shouldBeWallTwoTree_whenGameCreated() {
 
 		List<Tank> tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		List<Tree> trees = new LinkedList<>(Arrays.asList(new Tree(3, 3), new Tree(5, 1)));
@@ -3108,9 +3108,9 @@ public class BattlecityTest {
         size = 7;
 		tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
 		trees = new LinkedList<>(Arrays.asList(new Tree(1, 2)));
-		constructions = new LinkedList<>(Arrays.asList(new Construction(1, 5), new Construction(1, 4)));
+		walls = new LinkedList<>(Arrays.asList(new Wall(1, 5), new Wall(1, 4)));
 
-		givenGameWithTanks(tanks, constructions);
+		givenGameWithTanks(tanks, walls);
 		game.setTrees(trees);
 
         hero.act();
@@ -3757,7 +3757,7 @@ public class BattlecityTest {
 
 	// 2. Лёд
     @Test
-    public void shouldBeConstructionIce_whenGameCreated() {
+    public void shouldBeWallIce_whenGameCreated() {
 	    // given
         tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
         ice = new LinkedList<>(Arrays.asList(new Ice(3, 3)));
@@ -4086,7 +4086,7 @@ public class BattlecityTest {
 
     //3. Река
     @Test
-    public void shouldBeConstructionWater_whenGameCreated() {
+    public void shouldBeWallWater_whenGameCreated() {
         tanks = new LinkedList<>(Arrays.asList(tank(1, 1, Direction.UP)));
         rivers = new LinkedList<>(Arrays.asList(new River(3, 3)));
 
@@ -5022,7 +5022,7 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldNotDropPrizeInPointConstruction() {
+    public void shouldNotDropPrizeInPointWall() {
         size = 7;
         givenGameBeforeDropPrize(pt(3,3));
 
