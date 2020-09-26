@@ -32,8 +32,6 @@ import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -43,9 +41,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class BattlecityTest {
 
@@ -59,7 +59,6 @@ public class BattlecityTest {
     private Joystick hero;
     private List<Player> players = new LinkedList<>();
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
-    private Settings settings = new SettingsImpl();
 
     private List<Tank> tanks;
 	private List<Tree> trees;
@@ -71,12 +70,8 @@ public class BattlecityTest {
     public void setup() {
         size = 7;
         ticksPerBullets = 1;
-        spawnAiPrize = setParameter("count spawn", 4);
-        hitKillsAiPrize = setParameter("hits to kill", 3);
-    }
-
-    private Parameter<Integer> setParameter(String name, int value) {
-        return settings.addEditBox(name).type(Integer.class).def(value);
+        spawnAiPrize = v(4);
+        hitKillsAiPrize = v(3);
     }
 
     private void givenGame(Tank tank, Wall... walls) {
@@ -94,7 +89,7 @@ public class BattlecityTest {
         this.hero = tank;
     }
 
-    private void givenGameWithAI(Tank tank, Tank... aiTanks) {
+    private void givenGameWithAI(Tank tank, Point... aiTanks) {
         game = new Battlecity(size, dice, Arrays.asList(new Wall[0]), spawnAiPrize, hitKillsAiPrize, aiTanks);
         initPlayer(game, tank);
         this.hero = tank;
@@ -162,17 +157,6 @@ public class BattlecityTest {
         return new AITank(pt, dice, direction,ticksPerBullets, false);
     }
 
-    public static Tank aiTank(int x, int y, Direction direction, int ticksPerBullets ) {
-        Dice dice = getDice(x, y);
-        Point pt = pt(x, y);
-        return new AITank(pt, dice, direction);
-    }
-
-    public Tank aiTank(int x, int y, Direction direction) {
-        ticksPerBullets = 0;
-        return aiTank(x, y, direction, ticksPerBullets);
-    }
-
     public static Tank aiTankPrize(int x, int y, Direction direction, Parameter<Integer> hitKillsAiPrize) {
         Dice dice = getDice(x, y);
         Point pt = pt(x, y);
@@ -226,15 +210,14 @@ public class BattlecityTest {
     private void givenGameBeforeDropPrize(Point pt) {
         Bullet bullet = mock(Bullet.class);
         Dice dice = getDice(pt, 0);
-        spawnAiPrize = setParameter("count spawn", 0);
-        hitKillsAiPrize = setParameter("hits to kill", 1);
+        hitKillsAiPrize = v(1);
         Tank tank = tank(1, 1, Direction.UP);
-        Tank aiTank = aiTankPrize(1, 5, Direction.DOWN, hitKillsAiPrize);
+        Point ai = pt(1, 5);
 
         game = new Battlecity(size, dice, Arrays.asList(new Wall(3, 3)), spawnAiPrize, hitKillsAiPrize);
         initPlayer(game, tank);
         this.hero = tank;
-        game.getAiGenerator().drop(aiTank);
+        Tank aiTank = game.getAiGenerator().drop(ai);
         aiTank.kill(bullet);
     }
 
@@ -353,11 +336,11 @@ public class BattlecityTest {
                 "☼◄    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        Tank someTank = tank(5, 5, Direction.UP);
-        game.getAiGenerator().drop(someTank);
+        Tank other = tank(5, 5, Direction.UP);
+        game.addAi(other);
 
-        someTank.right();
-        someTank.right();
+        other.right();
+        other.right();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ˃☼\n" +
@@ -367,8 +350,8 @@ public class BattlecityTest {
                 "☼◄    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        someTank.up();
-        someTank.up();
+        other.up();
+        other.up();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ˄☼\n" +
@@ -4530,11 +4513,11 @@ public class BattlecityTest {
     @Test
     public void shouldCreatedAiPrize() {
         size = 9;
-        spawnAiPrize = setParameter("count spawn", 0);
-        hitKillsAiPrize = setParameter("hits to kill", 3);
+        hitKillsAiPrize = v(3);
         Tank tank = tank(1, 1, Direction.UP);
-        Tank aiTank = aiTankPrize(7, 7, Direction.DOWN, hitKillsAiPrize);
-        givenGameWithAI(tank, aiTank);
+        Point ai = pt(7, 7);
+        givenGameWithAI(tank, ai);
+        Tank aiTank = game.getAiTanks().get(0);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ◘☼\n" +
@@ -4566,11 +4549,11 @@ public class BattlecityTest {
     @Test
     public void shouldSwapElementAfterFourTicks() {
         size = 9;
-        spawnAiPrize = setParameter("count spawn", 0);
-        hitKillsAiPrize = setParameter("hits to kill", 3);
+        hitKillsAiPrize = v(3);
         Tank tank = tank(1, 1, Direction.UP);
-        Tank aiTank = aiTankPrize(7, 7, Direction.DOWN, hitKillsAiPrize);
-        givenGameWithAI(tank, aiTank);
+        Point ai = pt(7, 7);
+        givenGameWithAI(tank, ai);
+        Tank aiTank = game.getAiTanks().get(0);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ◘☼\n" +
@@ -4654,14 +4637,14 @@ public class BattlecityTest {
     @Test
     public void shouldSpawnAiPrizeWhenTwoAi() {
         size = 9;
-        spawnAiPrize = setParameter("count spawn", 3);
+        spawnAiPrize = v(3);
         Tank tank = tank(1, 1, Direction.UP);
-        Tank aiTank1 = aiTank(2, 7, Direction.DOWN);
-        Tank aiTank2 = aiTank(7, 7, Direction.DOWN);
-        givenGameWithAI(tank, aiTank1, aiTank2);
+        Point ai1 = pt(2, 7);
+        Point ai2 = pt(7, 7);
+        givenGameWithAI(tank, ai1, ai2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
-                "☼ ¿    ◘☼\n" +
+                "☼ ◘    ¿☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4679,15 +4662,15 @@ public class BattlecityTest {
     @Test
     public void shouldSpawnAiPrizeWhenThreeAi() {
         size = 9;
-        spawnAiPrize = setParameter("count spawn", 3);
+        spawnAiPrize = v(3);
         Tank tank = tank(1, 1, Direction.UP);
-        Tank aiTank1 = aiTank(2, 7, Direction.DOWN);
-        Tank aiTank2 = aiTank(5, 7, Direction.DOWN);
-        Tank aiTank3 = aiTank(7, 7, Direction.DOWN);
-        givenGameWithAI(tank, aiTank1, aiTank2, aiTank3);
+        Point ai1 = pt(2, 7);
+        Point ai2 = pt(5, 7);
+        Point ai3 = pt(7, 7);
+        givenGameWithAI(tank, ai1, ai2, ai3);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
-                "☼ ¿  ◘ ¿☼\n" +
+                "☼ ◘  ¿ ¿☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4705,18 +4688,18 @@ public class BattlecityTest {
     @Test
     public void shouldSpawnTwoAiPrizeWhenSixAi() {
         size = 9;
-        spawnAiPrize = setParameter("count spawn", 3);
+        spawnAiPrize = v(3);
         Tank tank = tank(1, 1, Direction.UP);
-        Tank aiTank1 = aiTank(2, 7, Direction.DOWN);
-        Tank aiTank2 = aiTank(3, 7, Direction.DOWN);
-        Tank aiTank3 = aiTank(4, 7, Direction.DOWN);
-        Tank aiTank4 = aiTank(5, 7, Direction.DOWN);
-        Tank aiTank5 = aiTank(6, 7, Direction.DOWN);
-        Tank aiTank6 = aiTank(7, 7, Direction.DOWN);
-        givenGameWithAI(tank, aiTank1, aiTank2, aiTank3, aiTank4, aiTank5, aiTank6);
+        Point ai1 = pt(2, 7);
+        Point ai2 = pt(3, 7);
+        Point ai3 = pt(4, 7);
+        Point ai4 = pt(5, 7);
+        Point ai5 = pt(6, 7);
+        Point ai6 = pt(7, 7);
+        givenGameWithAI(tank, ai1, ai2, ai3, ai4, ai5, ai6);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
-                "☼ ¿◘¿¿◘¿☼\n" +
+                "☼ ◘¿¿◘¿¿☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4736,11 +4719,11 @@ public class BattlecityTest {
     @Test
     public void shouldSpawnAiPrize_whenAddOneByOneAI() {
         size = 9;
-        spawnAiPrize = setParameter("count spawn", 3);
+        spawnAiPrize = v(3);
         Tank tank = tank(1, 1, Direction.UP);
-        Tank ai1 = aiTank(2, 7, Direction.DOWN);
-        Tank ai2 = aiTank(5, 7, Direction.DOWN);
-        Tank ai3 = aiTank(6, 7, Direction.DOWN);
+        Point ai1 = pt(2, 7);
+        Point ai2 = pt(5, 7);
+        Point ai3 = pt(6, 7);
         givenGameWithAI(tank);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -4754,7 +4737,17 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼\n");
 
         game.getAiGenerator().drop(ai1);
-        ai1.down();
+
+        assertD("☼☼☼☼☼☼☼☼☼\n" +
+                "☼ ◘     ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼       ☼\n" +
+                "☼▲      ☼\n" +
+                "☼☼☼☼☼☼☼☼☼\n");
+
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -4768,10 +4761,9 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼\n");
 
         game.getAiGenerator().drop(ai2);
-        ai2.down();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
-                "☼    ◘  ☼\n" +
+                "☼    ¿  ☼\n" +
                 "☼ ¿     ☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4793,7 +4785,6 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼\n");
 
         game.getAiGenerator().drop(ai3);
-        ai3.down();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
@@ -4815,7 +4806,7 @@ public class BattlecityTest {
                 "☼       ☼\n" +
                 "☼     ¿ ☼\n" +
                 "☼    ¿• ☼\n" +
-                "☼ ¿     ☼\n" +
+                "☼ ◘     ☼\n" +
                 "☼    •  ☼\n" +
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
@@ -4827,7 +4818,7 @@ public class BattlecityTest {
                 "☼       ☼\n" +
                 "☼       ☼\n" +
                 "☼     ¿ ☼\n" +
-                "☼    ◘  ☼\n" +
+                "☼    ¿  ☼\n" +
                 "☼ ¿   • ☼\n" +
                 "☼▲      ☼\n" +
                 "☼☼☼☼☼☼☼☼☼\n");
@@ -4849,11 +4840,11 @@ public class BattlecityTest {
     @Test
     public void shouldKillAiPrizeInThreeHits() {
         size = 7;
-        spawnAiPrize = setParameter("count spawn", 0);
-        hitKillsAiPrize = setParameter("hits to kill", 3);
+        hitKillsAiPrize = v(3);
         Tank tank = tank(1, 1, Direction.UP);
-        Tank aiTank = aiTankPrize(1, 5, Direction.DOWN, hitKillsAiPrize);
-        givenGameWithAI(tank, aiTank);
+        Point ai = pt(1, 5);
+        givenGameWithAI(tank, ai);
+        Tank aiTank = game.getAiTanks().get(0);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼◘    ☼\n" +
@@ -4863,7 +4854,6 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        aiTank.down();
         tank.act();
         game.tick();
 

@@ -15,7 +15,7 @@ public class AiGenerator {
     private int maxAi;
     private Parameter<Integer> whichSpawnWithPrize;
     private Parameter<Integer> damagesBeforeAiDeath;
-    private int aiSpawn;
+    private int spawn;
 
     public AiGenerator(Field field, Dice dice,
                        Parameter<Integer> whichSpawnWithPrize,
@@ -23,52 +23,69 @@ public class AiGenerator {
     {
         this.field = field;
         this.dice = dice;
-        this.aiSpawn = 0;
+        this.spawn = 0;
         this.whichSpawnWithPrize = whichSpawnWithPrize;
         this.damagesBeforeAiDeath = damagesBeforeAiDeath;
     }
 
+    void newSpawn(){
+        spawn++;
+    }
+
     public void dropAll() {
         int size = field.size();
+        int needed = maxAi - field.getAiTanks().size();
 
-        for (int i = field.getAiTanks().size(); i < maxAi; i++) {
-            Point pt = pt(0, size - 2);
-            int c = 0;
-            do {
-                pt.setX(dice.next(size));
-            } while (field.isBarrier(pt) && c++ < size);
+        for (int i = 0; i < needed; i++) {
+            int y = size - 2;
+            Point pt = findFreePosition(y, size);
+            if (pt == null) continue;
 
-            if (!field.isBarrier(pt)) {
-                drop(new AITank(pt, dice, Direction.DOWN));
-            }
+            drop(pt);
         }
     }
 
-    public void drop(Tank tank) {
-        tank = replaceAiOnAiPrize(tank);
+    private Point findFreePosition(int y, int size) {
+        Point pt = pt(0, y);
+
+        int c = 0;
+        do {
+            pt.setX(dice.next(size));
+        } while (field.isBarrier(pt) && c++ < size);
+
+        if (field.isBarrier(pt)) {
+            return null;
+        }
+        return pt;
+    }
+
+    private Tank tank(Point pt) {
+        if (isPrizeTankTurn()) {
+            return new AITankPrize(pt, dice, Direction.DOWN, damagesBeforeAiDeath.getValue());
+        } else {
+            return new AITank(pt, dice, Direction.DOWN);
+        }
+    }
+
+    private boolean isPrizeTankTurn() {
+        if (whichSpawnWithPrize.getValue() == 0) {
+            return false;
+        }
+
+        return spawn % whichSpawnWithPrize.getValue() == 0;
+    }
+
+    public Tank drop(Point pt) {
+        Tank tank = tank(pt);
         tank.init(field);
         field.addAi(tank);
-        aiSpawn++;
-    }
-
-    private Tank replaceAiOnAiPrize(Tank tank) {
-        if (aiSpawn == whichSpawnWithPrize.getValue()) {
-            aiSpawn = 0;
-        }
-
-        if (whichSpawnWithPrize.getValue() > 1) {
-            int indexAiPrize = whichSpawnWithPrize.getValue() - 2;
-            if (aiSpawn == indexAiPrize) {
-                Point pt = pt(tank.getX(), tank.getY());
-                return new AITankPrize(pt, dice, tank.getDirection(), damagesBeforeAiDeath.getValue());
-            }
-        }
+        newSpawn();
         return tank;
     }
 
-    public void init(Tank[] tanks) {
+    public void init(Point... tanks) {
         maxAi = tanks.length;
-        for (Tank tank : tanks) {
+        for (Point tank : tanks) {
             drop(tank);
         }
     }

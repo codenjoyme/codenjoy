@@ -41,29 +41,29 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class TanksEventsTest {
 
-    private Tank enemy;
     private Battlecity game;
     private EventListener events;
     private Player player;
     private Tank hero;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private Tank ai;
 
     @Before
     public void setup() {
         Parameter<Integer> spawnAiPrize = v(4);
         Parameter<Integer> hitKillsAiPrize = v(3);
-        enemy = tank(1, 5, Direction.DOWN, 1);
 
         game = new Battlecity(7, mock(Dice.class),
                 Arrays.asList(new Wall[0]),
-                spawnAiPrize, hitKillsAiPrize,
-                enemy);
+                spawnAiPrize, hitKillsAiPrize);
+
+        ai = tank(1, 5, Direction.DOWN, 0);
+        ai.init(game);
+        game.addAi(ai);
 
         events = mock(EventListener.class);
         player = player(1, 1, 2, 2, events);
@@ -127,7 +127,7 @@ public class TanksEventsTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        enemy.act();
+        ai.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -262,7 +262,7 @@ public class TanksEventsTest {
                 "☼☼☼☼☼☼☼\n");
 
         hero.turn(Direction.RIGHT);
-        enemy.act();
+        ai.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -323,7 +323,7 @@ public class TanksEventsTest {
                 "☼☼☼☼☼☼☼\n");
 
         hero.turn(Direction.RIGHT);
-        enemy.act();
+        ai.act();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +

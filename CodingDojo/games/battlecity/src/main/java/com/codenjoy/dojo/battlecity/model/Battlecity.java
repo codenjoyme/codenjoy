@@ -54,7 +54,7 @@ public class Battlecity implements Field {
                       List<Wall> walls,
                       Parameter<Integer> whichSpawnWithPrize,
                       Parameter<Integer> damagesBeforeAiDeath,
-                      Tank... tanks)
+                      Point... tanks)
     {
         this(size, dice, walls, new DefaultBorders(size).get(),
                 whichSpawnWithPrize, damagesBeforeAiDeath,
@@ -66,7 +66,7 @@ public class Battlecity implements Field {
                       List<Border> inputBorders,
                       Parameter<Integer> whichSpawnWithPrize,
                       Parameter<Integer> damagesBeforeAiDeath,
-                      Tank... tanks)
+                      Point... tanks)
     {
         this.size = size;
         ais = new LinkedList<>();
