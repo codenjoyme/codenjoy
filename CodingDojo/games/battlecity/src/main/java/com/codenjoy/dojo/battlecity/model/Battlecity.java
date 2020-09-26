@@ -45,9 +45,9 @@ public class Battlecity implements Field {
             Elements.PRIZE_BREAKING_WALLS,
             Elements.PRIZE_WALKING_ON_WATER);
 
+    private List<Tank> ais;
+    private List<Prize> prizes;
     private Dice dice;
-    private LinkedList<Tank> ais;
-    private LinkedList<Prize> prizes;
     private int maxAi;
     private Parameter<Integer> spawnAiPrize;
     private Parameter<Integer> hitKillsAiPrize;
@@ -204,7 +204,7 @@ public class Battlecity implements Field {
         Tank resultTank = replaceAiOnAiPrize(tank);
         resultTank.init(this);
         ais.add(resultTank);
-        this.aiTanksCount++;
+        aiTanksCount++;
     }
 
     @Override
@@ -429,12 +429,12 @@ public class Battlecity implements Field {
 
     private Tank replaceAiOnAiPrize(Tank tank) {
         if (aiTanksCount == spawnAiPrize.getValue()) {
-            this.aiTanksCount = 0;
+            aiTanksCount = 0;
         }
 
         if (spawnAiPrize.getValue() > 1) {
             int indexAiPrize = spawnAiPrize.getValue() - 2;
-            if (this.aiTanksCount == indexAiPrize) {
+            if (aiTanksCount == indexAiPrize) {
                 Point pt = pt(tank.getX(), tank.getY());
                 return new AITankPrize(pt, dice, tank.getDirection(), hitKillsAiPrize.getValue());
             }
