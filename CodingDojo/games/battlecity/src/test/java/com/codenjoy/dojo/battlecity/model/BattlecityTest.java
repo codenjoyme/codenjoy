@@ -90,11 +90,7 @@ public class BattlecityTest {
     }
 
     private void givenGameWith(Tank... tanks) {
-        givenGameWith(Arrays.asList(new Wall[0]), tanks);
-    }
-
-    private void givenGameWith(List<Wall> walls, Tank... tanks) {
-        game = new Battlecity(size, dice, walls,
+        game = new Battlecity(size, dice, Arrays.asList(new Wall[0]),
                 new DefaultBorders(size).get(), spawnAiPrize, hitKillsAiPrize);
 
         for (Tank tank : tanks) {
@@ -2894,7 +2890,7 @@ public class BattlecityTest {
     // 1. Кусты
     @Test
     public void shouldBeWallTree_whenGameCreated() {
-		givenGameWith(tank(1, 1, Direction.UP));
+		givenGame(tank(1, 1, Direction.UP));
         game.addTree(new Tree(3, 3));
 
         assertEquals(1, game.getTrees().size());
@@ -2910,7 +2906,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldBeWallTwoTree_whenGameCreated() {
-		givenGameWith(tank(1, 1, Direction.UP));
+		givenGame(tank(1, 1, Direction.UP));
         game.addTree(new Tree(3, 3));
         game.addTree(new Tree(5, 1));
 
@@ -2930,7 +2926,7 @@ public class BattlecityTest {
     public void shouldBulletFlyUnderTree_right() {
         size = 11;
 
-		givenGameWith(tank(1, 1, Direction.UP));
+		givenGame(tank(1, 1, Direction.UP));
 		game.addTree(new Tree(6, 1));
 
         hero.right();
@@ -3021,8 +3017,7 @@ public class BattlecityTest {
     @Test
     public void shouldBulletDestroyWallUnderTree_whenHittingTheWallUp_whenTwoWalls() {
         size = 7;
-        givenGameWith(walls(new Wall(1, 5), new Wall(1, 4)),
-                tank(1, 1, Direction.UP));
+        givenGame(tank(1, 1, Direction.UP), new Wall(1, 5), new Wall(1, 4));
 		game.addTree(new Tree(1, 2));
 
         hero.act();
@@ -3126,7 +3121,7 @@ public class BattlecityTest {
     @Test
     public void shouldBulletFlyUnderTwoTree_up() {
         size = 11;
-        givenGameWith(tank(5, 1, Direction.UP));
+        givenGame(tank(5, 1, Direction.UP));
         game.addTree(new Tree(5, 5));
         game.addTree(new Tree(5, 6));
 
@@ -3218,7 +3213,7 @@ public class BattlecityTest {
     @Test
     public void shouldTankMove_underTree() {
         size = 7;
-        givenGameWith(tank(1, 1, Direction.UP));
+        givenGame(tank(1, 1, Direction.UP));
         game.addTree(new Tree(1, 3));
         game.addTree(new Tree(1, 4));
 
@@ -3282,7 +3277,7 @@ public class BattlecityTest {
     public void shouldBulletFlyUnderTree_jointly_shouldTankMoveUnderTree() {
         size = 11;
 
-        givenGameWith(tank(9, 1, Direction.UP));
+        givenGame(tank(9, 1, Direction.UP));
 
         game.addTree(new Tree(9, 5));
         game.addTree(new Tree(9, 6));
@@ -3667,7 +3662,7 @@ public class BattlecityTest {
 	// 2. Лёд
     @Test
     public void shouldBeWallIce_whenGameCreated() {
-        givenGameWith(tank(1, 1, Direction.UP));
+        givenGame(tank(1, 1, Direction.UP));
 
         game.addIce(new Ice(3, 3));
 
@@ -3691,7 +3686,7 @@ public class BattlecityTest {
     public void shouldTankMoveUP_onIce_afterBeforeGround() {
         size = 11;
 
-        givenGameWith(tank(5, 2, Direction.UP));
+        givenGame(tank(5, 2, Direction.UP));
 
         game.addIce(new Ice(5, 3));
         game.addIce(new Ice(5, 4));
@@ -3802,7 +3797,7 @@ public class BattlecityTest {
     public void shouldTankMoveLeftThenUpThenDown_onIce() {
         size = 11;
 
-        givenGameWith(tank(5, 2, Direction.UP));
+        givenGame(tank(5, 2, Direction.UP));
 
         game.addIce(new Ice(5, 3));
         game.addIce(new Ice(5, 4));
@@ -3982,7 +3977,7 @@ public class BattlecityTest {
     //3. Река
     @Test
     public void shouldBeWallWater_whenGameCreated() {
-        givenGameWith(tank(1, 1, Direction.UP));
+        givenGame(tank(1, 1, Direction.UP));
 
         game.addRiver(new River(3, 3));
 
@@ -4000,7 +3995,7 @@ public class BattlecityTest {
 	// 3.1) река - через нее герою нельзя пройти. но можно стрелять
 	@Test
 	public void shouldTankCanGoIfRiverAtWay() {
-        givenGameWith(tank(1, 1, Direction.UP));
+        givenGame(tank(1, 1, Direction.UP));
         game.addRiver(new River(1, 2));
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -4028,7 +4023,7 @@ public class BattlecityTest {
 
 	@Test
 	public void shouldBulletCanGoIfRiverAtWay() {
-        givenGameWith(tank(1, 1, Direction.UP));
+        givenGame(tank(1, 1, Direction.UP));
         game.addRiver(new River(1, 2));
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -4078,7 +4073,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
-        givenGameWith(tank(3, 3, Direction.UP));
+        givenGame(tank(3, 3, Direction.UP));
         riverAround();
 
         assertD("☼☼☼☼☼☼☼\n" +
