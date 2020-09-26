@@ -59,8 +59,8 @@ public class SingleTest {
         Parameter<Integer> hitKillsAiPrize = v(3);
 
         game = new Battlecity(size, mock(Dice.class),
-                Arrays.asList(new Wall[0]),
                 spawnAiPrize, hitKillsAiPrize);
+
         game.addBorders(new DefaultBorders(size).get());
 
         player1 = new Player(null, dice1);

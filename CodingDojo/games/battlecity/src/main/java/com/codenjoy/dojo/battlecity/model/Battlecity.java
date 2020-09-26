@@ -50,7 +50,6 @@ public class Battlecity implements Field {
     private List<Tank> ais;
 
     public Battlecity(int size, Dice dice,
-                      List<Wall> inputWalls,
                       Parameter<Integer> whichSpawnWithPrize,
                       Parameter<Integer> damagesBeforeAiDeath,
                       Point... tanks)
@@ -58,7 +57,7 @@ public class Battlecity implements Field {
         this.size = size;
         ais = new LinkedList<>();
         prizes = new LinkedList<>();
-        walls = new LinkedList<>(inputWalls);
+        walls = new LinkedList<>();
         borders = new LinkedList<>();
         trees = new LinkedList<>();
         ice = new LinkedList<>();
@@ -398,4 +397,7 @@ public class Battlecity implements Field {
         return aiGen;
     }
 
+    public void addWalls(List<Wall> walls) {
+        this.walls.addAll(walls);
+    }
 }
