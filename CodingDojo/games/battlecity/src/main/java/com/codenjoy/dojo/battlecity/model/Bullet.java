@@ -42,7 +42,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
         this.owner = owner;
         moving = true;
         this.onDestroy = onDestroy;
-        this.speed = 2;
+        speed = 2;
     }
 
     public void onDestroy() {
@@ -78,10 +78,10 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         Tree tree = filterOne(alsoAtPoint, Tree.class);
-        //дерево и пуля в одной координате
         if (tree != null) {
             return Elements.TREE;
         }
+
         if (destroyed()) {
             return Elements.BANG;
         } else {
