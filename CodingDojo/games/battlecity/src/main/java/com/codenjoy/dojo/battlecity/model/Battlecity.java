@@ -58,8 +58,9 @@ public class Battlecity implements Field {
     private List<Player> players = new LinkedList<>();
     private final List<Elements> prizes = Arrays.asList(Elements.PRIZE_IMMORTALITY, Elements.PRIZE_BREAKING_WALLS, Elements.PRIZE_WALKING_ON_WATER);
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions, Parameter<Integer> spawnAiPrize,
-                      Parameter<Integer> hitKillsAiPrize, Tank... aiTanks) {
+    public Battlecity(int size, Dice dice, List<Construction> constructions,
+                      Parameter<Integer> spawnAiPrize, Parameter<Integer> hitKillsAiPrize,
+                      Tank... aiTanks) {
         this(size, dice, constructions, new DefaultBorders(size).get(), spawnAiPrize,
                 hitKillsAiPrize, aiTanks);
     }

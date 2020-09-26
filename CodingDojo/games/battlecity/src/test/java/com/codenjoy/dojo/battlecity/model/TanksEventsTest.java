@@ -39,6 +39,7 @@ import org.mockito.Mockito;
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.battlecity.model.BattlecityTest.tank;
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -48,32 +49,28 @@ import static org.mockito.Mockito.when;
 
 public class TanksEventsTest {
 
-    private Parameter<Integer> spawnAiPrize;
-    private Parameter<Integer> hitKillsAiPrize;
     private Tank enemy;
     private Battlecity game;
     private EventListener events;
     private Player player;
     private Tank hero;
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
-    private Settings settings = new SettingsImpl();
 
     @Before
     public void setup() {
-        spawnAiPrize = setParameter("count spawn", 4);
-        hitKillsAiPrize = setParameter("hits to kill", 3);
+        Parameter<Integer> spawnAiPrize = v(4);
+        Parameter<Integer> hitKillsAiPrize = v(3);
         enemy = tank(1, 5, Direction.DOWN, 1);
 
-        game = new Battlecity(7, mock(Dice.class), Arrays.asList(new Construction[0]), spawnAiPrize, hitKillsAiPrize, enemy);
+        game = new Battlecity(7, mock(Dice.class),
+                Arrays.asList(new Construction[0]),
+                spawnAiPrize, hitKillsAiPrize,
+                enemy);
 
         events = mock(EventListener.class);
         player = player(1, 1, 2, 2, events);
         game.newGame(player);
         hero = player.getHero();
-    }
-
-    private Parameter<Integer> setParameter(String name, int value) {
-        return settings.addEditBox(name).type(Integer.class).def(value);
     }
 
     private Player player(int x1, int y1, int x2, int y2, EventListener events) {
