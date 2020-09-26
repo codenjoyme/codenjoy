@@ -71,14 +71,14 @@ public class LevelImpl implements Level {
                 return new LinkedList<Point>() {{
                     addAll(LevelImpl.this.getBorders());
                     addAll(LevelImpl.this.getWalls());
-                    addAll(LevelImpl.this.getTanks());
+                    addAll(LevelImpl.this.getAiTanks());
                 }};
             }
         };
     }
 
     @Override
-    public List<Tank> getTanks() {
+    public List<Tank> getAiTanks() {
         List<Tank> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             if (map.charAt(index) == Elements.AI_TANK_DOWN.ch) {

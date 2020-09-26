@@ -5,6 +5,8 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import java.util.List;
+
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class AiGenerator {
@@ -83,10 +85,11 @@ public class AiGenerator {
         return tank;
     }
 
-    public void init(Point... tanks) {
-        maxAi = tanks.length;
-        for (Point tank : tanks) {
-            drop(tank);
+    public void dropAll(List<? extends Point> pts) {
+
+        maxAi = pts.size();
+        for (Point pt : pts) {
+            drop(pt);
         }
     }
 }

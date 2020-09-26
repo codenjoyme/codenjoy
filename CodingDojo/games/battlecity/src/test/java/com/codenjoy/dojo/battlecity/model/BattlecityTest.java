@@ -72,24 +72,16 @@ public class BattlecityTest {
         return new DefaultBorders(size).get();
     }
 
-    private void givenGame(Tank tank, Wall... walls) {
+    private void givenGameWithAI(Tank tank, Point... ais) {
         game = new Battlecity(size, dice, spawnAiPrize, hitKillsAiPrize);
         game.addBorders(borders());
-        game.addWalls(Arrays.asList(walls));
+        game.addAiTanks(Arrays.asList(ais));
 
         initPlayer(game, tank);
         this.hero = tank;
     }
 
-    private void givenGameWithAI(Tank tank, Point... ais) {
-        game = new Battlecity(size, dice, spawnAiPrize, hitKillsAiPrize, ais);
-        game.addBorders(borders());
-
-        initPlayer(game, tank);
-        this.hero = tank;
-    }
-
-    private void givenGameWith(Tank... tanks) {
+    private void givenGame(Tank... tanks) {
         game = new Battlecity(size, dice,
                 spawnAiPrize, hitKillsAiPrize);
         game.addBorders(borders());
@@ -180,7 +172,9 @@ public class BattlecityTest {
 
     @Test
     public void shouldBeWall_whenGameCreated() {
-        givenGame(tank(1, 1, Direction.UP), new Wall(3, 3));
+        givenGame(tank(1, 1, Direction.UP));
+        game.addWall(new Wall(3, 3));
+
         assertEquals(1, game.getWalls().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -433,7 +427,9 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - снизу
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown() {
-        givenGame(tank(1, 1, Direction.UP), new Wall(1, 5));
+        givenGame(tank(1, 1, Direction.UP));
+        game.addWall(new Wall(1, 5));
+
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -496,7 +492,9 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - слева
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft() {
-        givenGame(tank(1, 1, Direction.RIGHT), new Wall(5, 1));
+        givenGame(tank(1, 1, Direction.RIGHT));
+        game.addWall(new Wall(5, 1));
+
         hero.act();
         game.tick();
         assertD("☼☼☼☼☼☼☼\n" +
@@ -559,9 +557,12 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - справа
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight() {
-        givenGame(tank(5, 1, Direction.LEFT), new Wall(1, 1));
+        givenGame(tank(5, 1, Direction.LEFT));
+        game.addWall(new Wall(1, 1));
+
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -571,6 +572,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -581,6 +583,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -590,6 +593,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -600,6 +604,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -609,6 +614,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -621,9 +627,12 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - сверху
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp() {
-        givenGame(tank(1, 5, Direction.DOWN), new Wall(1, 1));
+        givenGame(tank(1, 5, Direction.DOWN));
+        game.addWall(new Wall(1, 1));
+
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -633,6 +642,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -643,6 +653,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -652,6 +663,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -662,6 +674,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -671,6 +684,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼▼    ☼\n" +
                 "☼     ☼\n" +
@@ -684,9 +698,12 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - снизу но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown_overWall() {
-        givenGame(tank(1, 2, Direction.UP), new Wall(1, 5));
+        givenGame(tank(1, 2, Direction.UP));
+        game.addWall(new Wall(1, 5));
+
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼•    ☼\n" +
@@ -696,6 +713,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╩    ☼\n" +
                 "☼     ☼\n" +
@@ -706,6 +724,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╩    ☼\n" +
                 "☼•    ☼\n" +
@@ -715,6 +734,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╨    ☼\n" +
                 "☼     ☼\n" +
@@ -725,6 +745,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╨    ☼\n" +
                 "☼•    ☼\n" +
@@ -734,6 +755,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -747,9 +769,12 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - слева но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft_overWall() {
-        givenGame(tank(2, 1, Direction.RIGHT), new Wall(5, 1));
+        givenGame(tank(2, 1, Direction.RIGHT));
+        game.addWall(new Wall(5, 1));
+
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -759,6 +784,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -769,6 +795,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -778,6 +805,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -788,6 +816,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -797,6 +826,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -810,9 +840,12 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - справа но через стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight_overWall() {
-        givenGame(tank(4, 1, Direction.LEFT), new Wall(1, 1));
+        givenGame(tank(4, 1, Direction.LEFT));
+        game.addWall(new Wall(1, 1));
+
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -822,6 +855,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -832,6 +866,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -841,6 +876,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -851,6 +887,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -860,6 +897,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -872,9 +910,12 @@ public class BattlecityTest {
     // снарядом уничтожается стенка за три присеста - сверху но сквозь стену
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp_overWall() {
-        givenGame(tank(1, 4, Direction.DOWN), new Wall(1, 1));
+        givenGame(tank(1, 4, Direction.DOWN));
+        game.addWall(new Wall(1, 1));
+
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
@@ -884,6 +925,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
@@ -894,6 +936,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
@@ -903,6 +946,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
@@ -913,6 +957,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
@@ -922,6 +967,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▼    ☼\n" +
@@ -933,8 +979,12 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallUp_whenTwoWalls() {
-        givenGame(tank(1, 1, Direction.UP), new Wall(1, 5), new Wall(1, 4));
+        givenGame(tank(1, 1, Direction.UP));
+        game.addWall(new Wall(1, 5));
+        game.addWall(new Wall(1, 4));
+
         hero.act();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╬    ☼\n" +
@@ -944,6 +994,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╬    ☼\n" +
@@ -953,6 +1004,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╩    ☼\n" +
@@ -963,6 +1015,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╩    ☼\n" +
@@ -972,6 +1025,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╨    ☼\n" +
@@ -982,6 +1036,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╨    ☼\n" +
@@ -991,6 +1046,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼     ☼\n" +
@@ -1001,6 +1057,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼     ☼\n" +
@@ -1010,6 +1067,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╩    ☼\n" +
                 "☼     ☼\n" +
@@ -1017,13 +1075,16 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
-
     }
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallRight_whenTwoWalls() {
-        givenGame(tank(1, 1, Direction.RIGHT), new Wall(5, 1), new Wall(4, 1));
+        givenGame(tank(1, 1, Direction.RIGHT));
+        game.addWall(new Wall(5, 1));
+        game.addWall(new Wall(4, 1));
+
         hero.act();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1033,6 +1094,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1042,6 +1104,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1052,6 +1115,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1061,6 +1125,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1071,6 +1136,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1080,6 +1146,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1090,6 +1157,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1099,6 +1167,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1110,8 +1179,12 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallLeft_whenTwoWalls() {
-        givenGame(tank(5, 1, Direction.LEFT), new Wall(1, 1), new Wall(2, 1));
+        givenGame(tank(5, 1, Direction.LEFT));
+        game.addWall(new Wall(1, 1));
+        game.addWall(new Wall(2, 1));
+
         hero.act();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1121,6 +1194,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1130,6 +1204,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1140,6 +1215,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1149,6 +1225,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1159,6 +1236,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1168,6 +1246,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1178,6 +1257,7 @@ public class BattlecityTest {
 
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1187,6 +1267,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1198,7 +1279,10 @@ public class BattlecityTest {
 
     @Test
     public void shouldBulletDestroyWall_whenHittingTheWallDown_whenTwoWalls() {
-        givenGame(tank(5, 5, Direction.DOWN), new Wall(5, 1), new Wall(5, 2));
+        givenGame(tank(5, 5, Direction.DOWN));
+        game.addWall(new Wall(5, 1));
+        game.addWall(new Wall(5, 2));
+
         hero.act();
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼    ▼☼\n" +
@@ -1287,9 +1371,12 @@ public class BattlecityTest {
     // если я иду а спереди стена, то я не могу двигаться дальше
     @Test
     public void shouldDoNotMove_whenWallTaWay_goDownOrLeft() {
-        givenGame(tank(3, 3, Direction.DOWN),
-                new Wall(3, 4), new Wall(4, 3),
-                new Wall(3, 2), new Wall(2, 3));
+        givenGame(tank(3, 3, Direction.DOWN));
+
+        game.addWall(new Wall(3, 4));
+        game.addWall(new Wall(4, 3));
+        game.addWall(new Wall(3, 2));
+        game.addWall(new Wall(2, 3));
 
         hero.right();
         game.tick();
@@ -1428,7 +1515,11 @@ public class BattlecityTest {
     @Test
     public void shouldShotWithSeveralBullets_whenHittingTheWallDown() {
         size = 9;
-        givenGame(tank(7, 7, Direction.DOWN), new Wall(7, 1), new Wall(7, 2));
+        givenGame(tank(7, 7, Direction.DOWN));
+
+        game.addWall(new Wall(7, 1));
+        game.addWall(new Wall(7, 2));
+
         hero.act();
         game.tick();
 
@@ -1610,7 +1701,8 @@ public class BattlecityTest {
     // стоит проверить, как будут себя вести полуразрушенные конструкции, если их растреливать со всех других сторон
     @Test
     public void shouldDestroyFromUpAndDownTwice() {
-        givenGame(tank(3, 4, Direction.DOWN), new Wall(3, 3));
+        givenGame(tank(3, 4, Direction.DOWN));
+        game.addWall(new Wall(3, 3));
 
         hero.act();
         game.tick();
@@ -1666,7 +1758,7 @@ public class BattlecityTest {
     public void shouldStopWhenBeforeOtherTank() {
         Tank tank1 = tank(1, 2, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1695,7 +1787,7 @@ public class BattlecityTest {
         Tank tank1 = tank(1, 1, Direction.UP);
         Tank tank2 = tank(1, 2, Direction.DOWN);
         Tank tank3 = tank(1, 3, Direction.DOWN);
-        givenGameWith(tank1, tank2, tank3);
+        givenGame(tank1, tank2, tank3);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1769,7 +1861,7 @@ public class BattlecityTest {
     public void shouldStopWhenKill() {
         Tank tank1 = tank(1, 2, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1796,7 +1888,7 @@ public class BattlecityTest {
     public void shouldNoConcurrentException() {
         Tank tank1 = tank(1, 2, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1835,7 +1927,7 @@ public class BattlecityTest {
         size = 9;
         Tank tank1 = tank(1, 7, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼▼      ☼\n" +
@@ -1891,7 +1983,7 @@ public class BattlecityTest {
         size = 9;
         Tank tank1 = tank(1, 6, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2117,11 +2209,15 @@ public class BattlecityTest {
 
     @Test
     public void shouldOnlyOneBulletPerTick() {
-        givenGame(tank(1, 1, Direction.UP), new Wall(1, 2), new Wall(1, 3));
+        givenGame(tank(1, 1, Direction.UP));
+        game.addWall(new Wall(1, 2));
+        game.addWall(new Wall(1, 3));
+
         hero.act();
         hero.act();
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2134,6 +2230,7 @@ public class BattlecityTest {
         hero.act();
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2143,6 +2240,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2156,7 +2254,7 @@ public class BattlecityTest {
     public void shouldTankCanFireIfAtWayEnemyBullet() {
         Tank tank1 = tank(1, 1, Direction.UP);
         Tank tank2 = tank(1, 5, Direction.DOWN);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         tank1.act();
         tank2.act();
@@ -2173,13 +2271,17 @@ public class BattlecityTest {
 
     @Test
     public void shouldTankCanGoIfDestroyWall() {
-        givenGame(tank(1, 1, Direction.UP), new Wall(1, 2), new Wall(1, 3));
+        givenGame(tank(1, 1, Direction.UP));
+        game.addWall(new Wall(1, 2));
+        game.addWall(new Wall(1, 3));
+
         hero.act();
         game.tick();
         hero.act();
         game.tick();
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2190,6 +2292,7 @@ public class BattlecityTest {
 
         hero.up();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2250,13 +2353,16 @@ public class BattlecityTest {
 
     @Test
     public void shouldWallCantRegenerateOnBullet() {
-        givenGame(tank(1, 1, Direction.UP), new Wall(1, 3));
+        givenGame(tank(1, 1, Direction.UP));
+        game.addWall(new Wall(1, 3));
+
         hero.act();
         game.tick();
         hero.act();
         game.tick();
         hero.act();
         game.tick();
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2310,7 +2416,8 @@ public class BattlecityTest {
     @Test
     public void shouldNTicksPerBullet() {
         ticksPerBullets = 4;
-        givenGame(tank(1, 1, Direction.UP), new Wall(1, 3));
+        givenGame(tank(1, 1, Direction.UP));
+        game.addWall(new Wall(1, 3));
 
         hero.act();
         game.tick();
@@ -2386,7 +2493,9 @@ public class BattlecityTest {
 
     @Test
     public void shouldOnlyRotateIfNoBarrier() {
-        givenGame(tank(1, 1, Direction.UP), new Wall(3, 1));
+        givenGame(tank(1, 1, Direction.UP));
+        game.addWall(new Wall(3, 1));
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2409,7 +2518,9 @@ public class BattlecityTest {
 
     @Test
     public void shouldOnlyRotateIfBarrier() {
-        givenGame(tank(2, 1, Direction.UP), new Wall(3, 1));
+        givenGame(tank(2, 1, Direction.UP));
+        game.addWall(new Wall(3, 1));
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2432,7 +2543,8 @@ public class BattlecityTest {
 
     @Test
     public void shouldEnemyCanKillTankOnWall() {
-        givenGame(tank(1, 1, Direction.UP), new Wall(1, 2));
+        givenGame(tank(1, 1, Direction.UP));
+        game.addWall(new Wall(1, 2));
         Tank tank2 = tank(1, 3, Direction.DOWN);
         initPlayer(game, tank2);
 
@@ -2498,7 +2610,7 @@ public class BattlecityTest {
         size = 9;
         Tank tank1 = tank(1, 6, Direction.DOWN);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2542,7 +2654,7 @@ public class BattlecityTest {
         size = 9;
         Tank tank1 = tank(1, 6, Direction.DOWN);
         Tank tank2 = tank(1, 2, Direction.UP);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2586,7 +2698,7 @@ public class BattlecityTest {
         size = 9;
         Tank tank1 = tank(1, 6, Direction.DOWN);
         Tank tank2 = tank(1, 3, Direction.UP);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2631,7 +2743,9 @@ public class BattlecityTest {
     public void shouldRemoveBulletsAndResetWalls_whenReset() {
         size = 11;
         ticksPerBullets = 3;
-        givenGame(tank(1, 1, Direction.UP), new Wall(1, 9), new Wall(1, 8));
+        givenGame(tank(1, 1, Direction.UP));
+        game.addWall(new Wall(1, 9));
+        game.addWall(new Wall(1, 8));
 
         hero.act();
         game.tick();
@@ -3023,7 +3137,9 @@ public class BattlecityTest {
     @Test
     public void shouldBulletDestroyWallUnderTree_whenHittingTheWallUp_whenTwoWalls() {
         size = 7;
-        givenGame(tank(1, 1, Direction.UP), new Wall(1, 5), new Wall(1, 4));
+        givenGame(tank(1, 1, Direction.UP));
+        game.addWall(new Wall(1, 5));
+        game.addWall(new Wall(1, 4));
 		game.addTree(new Tree(1, 2));
 
         hero.act();
@@ -3394,7 +3510,7 @@ public class BattlecityTest {
 
 		Tank tank1 = tank(1, 1, Direction.UP);
 		Tank tank2 = tank(1, 9, Direction.DOWN);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         game.addTree(new Tree(1, 6));
         game.addTree(new Tree(1, 7));
@@ -3539,7 +3655,7 @@ public class BattlecityTest {
 
         Tank tank1 = tank(1, 3, Direction.UP);
         Tank tank2 = tank(1, 9, Direction.DOWN);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         game.addTree(new Tree(1, 4));
         game.addTree(new Tree(1, 5));
@@ -3610,7 +3726,7 @@ public class BattlecityTest {
     public void shouldTwoTankCanPassThroughEachOtherUnderTree() {
         Tank tank1 = tank(1, 1, Direction.UP);
         Tank tank2 = tank(1, 4, Direction.DOWN);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         game.addTree(new Tree(1, 2));
         game.addTree(new Tree(1, 3));
@@ -3893,7 +4009,7 @@ public class BattlecityTest {
 
         Tank tank1 = tank(1, 1, Direction.UP);
         Tank tank2 = tank(5, 6, Direction.DOWN);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         game.addIce(new Ice(5, 3));
         game.addIce(new Ice(5, 4));
@@ -4140,7 +4256,7 @@ public class BattlecityTest {
     public void shouldOtherTankBullet_canGoIfRiverAtWay() {
         Tank tank1 = tank(3, 2, Direction.UP);
         Tank tank2 = tank(1, 1, Direction.UP);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         game.addRiver(new River(1, 2));
 
@@ -4193,7 +4309,7 @@ public class BattlecityTest {
     public void shouldOtherTankDoNotMove_whenRiverToWay_goRightOrUpOrLeftOrDown() {
         Tank tank1 = tank(5, 1, Direction.UP);
         Tank tank2 = tank(3, 3, Direction.UP);
-        givenGameWith(tank1, tank2);
+        givenGame(tank1, tank2);
 
         riverAround();
 

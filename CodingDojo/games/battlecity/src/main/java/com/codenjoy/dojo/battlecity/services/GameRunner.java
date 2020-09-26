@@ -28,7 +28,6 @@ import com.codenjoy.dojo.battlecity.client.ai.AISolver;
 import com.codenjoy.dojo.battlecity.model.Battlecity;
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
-import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
@@ -61,15 +60,12 @@ public class GameRunner extends AbstractGameType implements GameType {
         Parameter<Integer> spawnAiPrize = settings.addEditBox("Count spawn for AI Tank with prize").type(Integer.class).def(4);
         Parameter<Integer> hitKillsAiPrize = settings.addEditBox("Hits to kill AI Tank with prize").type(Integer.class).def(3);
 
-        Battlecity game = new Battlecity(level.size(),
-                getDice(),
-                spawnAiPrize,
-                hitKillsAiPrize,
-                level.getTanks().toArray(new Tank[0])
-        );
+        Battlecity game = new Battlecity(level.size(), getDice(),
+                spawnAiPrize, hitKillsAiPrize);
 
         game.addBorders(level.getBorders());
         game.addWalls(level.getWalls());
+        game.addAiTanks(level.getAiTanks());
         return game;
     }
 

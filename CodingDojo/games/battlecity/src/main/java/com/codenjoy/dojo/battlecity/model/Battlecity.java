@@ -51,8 +51,7 @@ public class Battlecity implements Field {
 
     public Battlecity(int size, Dice dice,
                       Parameter<Integer> whichSpawnWithPrize,
-                      Parameter<Integer> damagesBeforeAiDeath,
-                      Point... tanks)
+                      Parameter<Integer> damagesBeforeAiDeath)
     {
         this.size = size;
         ais = new LinkedList<>();
@@ -66,7 +65,10 @@ public class Battlecity implements Field {
         prizeGen = new PrizeGenerator(this, dice);
 
         aiGen = new AiGenerator(this, dice, whichSpawnWithPrize, damagesBeforeAiDeath);
-        aiGen.init(tanks);
+    }
+
+    public void addAiTanks(List<? extends Point> tanks) {
+        aiGen.dropAll(tanks);
     }
 
     @Override
@@ -285,9 +287,8 @@ public class Battlecity implements Field {
         return ais;
     }
 
-    @Override
     public List<Tank> getTanks() {
-        LinkedList<Tank> result = new LinkedList<>(ais);
+        List<Tank> result = new LinkedList<>(ais);
         for (Player player : players) {
 //            if (player.getTank().isAlive()) { // TODO разремарить с тестом
                 result.add(player.getHero());
@@ -313,7 +314,6 @@ public class Battlecity implements Field {
         player.newHero(this);
     }
 
-    @Override
     public int size() {
         return size;
     }
@@ -344,7 +344,6 @@ public class Battlecity implements Field {
         };
     }
 
-    @Override
     public List<Wall> getWalls() {
         List<Wall> result = new LinkedList<>();
         for (Wall wall : walls) {
@@ -367,7 +366,6 @@ public class Battlecity implements Field {
 		return rivers;
 	}
 
-    @Override
     public List<Border> getBorders() {
         return borders;
     }
@@ -399,5 +397,9 @@ public class Battlecity implements Field {
 
     public void addWalls(List<Wall> walls) {
         this.walls.addAll(walls);
+    }
+
+    public void addWall(Wall wall) {
+        walls.add(wall);
     }
 }

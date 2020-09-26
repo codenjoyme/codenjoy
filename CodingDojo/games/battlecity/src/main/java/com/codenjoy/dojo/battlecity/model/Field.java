@@ -23,13 +23,12 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.List;
 
-public interface Field extends GameField<Player>, Level {
+public interface Field extends GameField<Player> {
 
     boolean isBarrier(Point pt);
 
@@ -44,4 +43,6 @@ public interface Field extends GameField<Player>, Level {
     void addAi(Tank tank);
 
     List<Tank> getAiTanks();
+
+    int size();
 }
