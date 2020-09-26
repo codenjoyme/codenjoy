@@ -4,7 +4,7 @@ package com.codenjoy.dojo.battlecity.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -23,15 +23,21 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.State;
 
-public interface Field extends GameField<Player>, Level {
+public class Prize extends PointImpl implements State<Elements, Player> {
 
-    boolean isBarrier(Point pt);
+    private Elements elements;
 
-    void affect(Bullet bullet);
+    public Prize(Point pt, Elements elements) {
+        super(pt);
+        this.elements = elements;
+    }
 
-    boolean isRiver(Point pt);
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        return elements;
+    }
 }

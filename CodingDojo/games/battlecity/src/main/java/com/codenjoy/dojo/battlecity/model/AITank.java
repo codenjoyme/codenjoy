@@ -27,19 +27,31 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
+
 public class AITank extends Tank {
 
     public static final int MAX = 10;
     private int act;
+    private boolean noBulletFly = true;
 
     public AITank(Point pt, Dice dice, Direction direction) {
         super(pt, direction, dice, 1);
     }
 
+    public AITank(Point pt, Dice dice, Direction direction, int ticksPerBullets, boolean noBulletFly) {
+        super(pt, direction, dice, ticksPerBullets);
+        this.noBulletFly = noBulletFly;
+    }
+
     @Override
     public void move() {
-        if (act++ % 10 == 0) {
-            act();
+        if (noBulletFly) {
+            if (act++ % 10 == 0) {
+                act();
+            }
+        } else {
+            //do nothing
         }
 
         int c = 0;
@@ -59,6 +71,10 @@ public class AITank extends Tank {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        if (tree != null) {
+            return Elements.TREE;
+        }
         if (isAlive()) {
             switch (direction) {
                 case LEFT:  return Elements.AI_TANK_LEFT;

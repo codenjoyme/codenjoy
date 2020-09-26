@@ -23,45 +23,78 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.battlecity.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.Parameter;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.services.PointImpl.random;
 
 public class Battlecity implements Field {
 
     private Dice dice;
     private LinkedList<Tank> aiTanks;
+    private LinkedList<Prize> prize;
     private int aiCount;
+    private int spawnAiPrize;
+    private int hitKillsAiPrize;
+    private int aiTanksCount = 0;
 
     private int size;
     private List<Construction> constructions;
     private List<Border> borders;
+    private List<Tree> trees;
+    private List<Ice> ice;
+    private List<River> rivers;
 
-    private List<Player> players = new LinkedList<Player>();
+    private List<Player> players = new LinkedList<>();
+    private final List<Elements> prizes = Arrays.asList(Elements.PRIZE_IMMORTALITY, Elements.PRIZE_BREAKING_WALLS, Elements.PRIZE_WALKING_ON_WATER);
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions, Tank... aiTanks) {
-        this(size, dice, constructions, new DefaultBorders(size).get(), aiTanks);
+    public Battlecity(int size, Dice dice, List<Construction> constructions, Parameter<Integer> spawnAiPrize,
+                      Parameter<Integer> hitKillsAiPrize, Tank... aiTanks) {
+        this(size, dice, constructions, new DefaultBorders(size).get(), spawnAiPrize,
+                hitKillsAiPrize, aiTanks);
     }
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      List<Border> borders, Tank... aiTanks) {
+                      List<Border> borders, Parameter<Integer> spawnAiPrize,
+                      Parameter<Integer> hitKillsAiPrize, Tank... aiTanks) {
         aiCount = aiTanks.length;
         this.dice = dice;
         this.size = size;
         this.aiTanks = new LinkedList<>();
+        this.prize = new LinkedList<>();
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
+        this.spawnAiPrize = spawnAiPrize.getValue();
+        this.hitKillsAiPrize = hitKillsAiPrize.getValue();
+        this.trees = new LinkedList<>();
+        this.ice = new LinkedList<>();
+        this.rivers = new LinkedList<>();
 
         for (Tank tank : aiTanks) {
             addAI(tank);
         }
+    }
+
+    public void setTrees(List<Tree> trees) {
+        this.trees = trees;
+    }
+
+    public void setIce(List<Ice> ice) {
+        this.ice = ice;
+    }
+
+    public void setRivers(List<River> rivers) {
+        this.rivers = rivers;
     }
 
     @Override
@@ -73,6 +106,7 @@ public class Battlecity implements Field {
 
     @Override
     public void tick() {
+
         removeDeadTanks();
 
         newAI();
@@ -107,6 +141,7 @@ public class Battlecity implements Field {
                 }
             }
         }
+
         for (Bullet bullet : getBullets()) {
             bullet.move();
         }
@@ -136,8 +171,12 @@ public class Battlecity implements Field {
         for (Tank tank : getTanks()) {
             if (!tank.isAlive()) {
                 aiTanks.remove(tank);
+                if (tank.isTankPrize()) {
+                    dropPrize();
+                }
             }
         }
+
         for (Player player : players.toArray(new Player[0])) {
             if (!player.getHero().isAlive()) {
                 players.remove(player);
@@ -145,9 +184,23 @@ public class Battlecity implements Field {
         }
     }
 
+    private void dropPrize() {
+        Point pt;
+        int c = 0;
+        do {
+           pt = random(dice, size);
+        } while (isBarrier(pt) && c++ < size);
+
+        if (!isBarrier(pt)) {
+            prize.add(new Prize(pt, prizes.get(dice.next(prizes.size()))));
+        }
+    }
+
     void addAI(Tank tank) {
-        tank.init(this);
-        aiTanks.add(tank);
+        Tank resultTank = replaceAiOnAiPrize(tank);
+        resultTank.init(this);
+        aiTanks.add(resultTank);
+        this.aiTanksCount++;
     }
 
     @Override
@@ -189,6 +242,11 @@ public class Battlecity implements Field {
 
             return;
         }
+    }
+
+    @Override
+    public boolean isRiver(Point pt) {
+        return rivers.stream().anyMatch(river -> river.itsMe(pt));
     }
 
     private Construction getConstructionAt(Bullet bullet) {
@@ -273,6 +331,10 @@ public class Battlecity implements Field {
         return result;
     }
 
+    public List<Prize> getPrize() {
+        return prize;
+    }
+
     @Override
     public void remove(Player player) {   // TODO test me
         players.remove(player);
@@ -308,6 +370,10 @@ public class Battlecity implements Field {
                     addAll(Battlecity.this.getTanks());
                     addAll(Battlecity.this.getConstructions());
                     addAll(Battlecity.this.getBullets());
+                    addAll(Battlecity.this.getPrize());
+                    addAll(Battlecity.this.getTrees());
+                    addAll(Battlecity.this.getIce());
+                    addAll(Battlecity.this.getRivers());
                 }};
             }
         };
@@ -324,6 +390,18 @@ public class Battlecity implements Field {
         return result;
     }
 
+    public List<Tree> getTrees() {
+        return trees;
+    }
+
+    public List<Ice> getIce() {
+        return ice;
+    }
+
+	public List<River> getRivers() {
+		return rivers;
+	}
+
     @Override
     public List<Border> getBorders() {
         return borders;
@@ -333,4 +411,18 @@ public class Battlecity implements Field {
         this.dice = dice;
     }
 
+    private Tank replaceAiOnAiPrize(Tank tank) {
+        if (aiTanksCount == spawnAiPrize) {
+            this.aiTanksCount = 0;
+        }
+
+        if (spawnAiPrize > 1) {
+            int indexAiPrize = spawnAiPrize - 2;
+            if (this.aiTanksCount == indexAiPrize) {
+                Point pt = pt(tank.getX(), tank.getY());
+                return new AITankPrize(pt, dice, tank.getDirection(), hitKillsAiPrize);
+            }
+        }
+        return tank;
+    }
 }
