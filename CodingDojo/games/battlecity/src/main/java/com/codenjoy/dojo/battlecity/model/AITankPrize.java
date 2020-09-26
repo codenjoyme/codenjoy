@@ -57,16 +57,11 @@ public class AITankPrize extends AITank {
     }
 
     @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        if (!isAlive()) {
-            return Elements.BANG;
-        }
-
+    public Elements subState() {
         if (ticks % CHANGE_EVERY_TICKS == 0) {
             return Elements.AI_TANK_PRIZE;
         }
-
-        return state();
+        return null;
     }
 
     protected boolean isTankPrize() {

@@ -81,10 +81,11 @@ public class AITank extends Tank {
             return Elements.BANG;
         }
 
-        return state();
-    }
+        Elements sub = subState();
+        if (sub != null) {
+            return sub;
+        }
 
-    protected Elements state() {
         switch (direction) {
             case LEFT:  return Elements.AI_TANK_LEFT;
             case RIGHT: return Elements.AI_TANK_RIGHT;
@@ -93,4 +94,9 @@ public class AITank extends Tank {
             default: throw new RuntimeException("Неправильное состояние танка!");
         }
     }
+
+    protected Elements subState() {
+        return null;
+    }
+
 }
