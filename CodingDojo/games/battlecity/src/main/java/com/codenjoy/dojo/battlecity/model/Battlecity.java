@@ -46,7 +46,7 @@ public class Battlecity implements Field {
             Elements.PRIZE_WALKING_ON_WATER);
 
     private Dice dice;
-    private LinkedList<Tank> aiTanks;
+    private LinkedList<Tank> ais;
     private LinkedList<Prize> prize;
     private int aiCount;
     private int spawnAiPrize;
@@ -64,18 +64,18 @@ public class Battlecity implements Field {
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
                       Parameter<Integer> spawnAiPrize, Parameter<Integer> hitKillsAiPrize,
-                      Tank... aiTanks) {
+                      Tank... ais) {
         this(size, dice, constructions, new DefaultBorders(size).get(), spawnAiPrize,
-                hitKillsAiPrize, aiTanks);
+                hitKillsAiPrize, ais);
     }
 
     public Battlecity(int size, Dice dice, List<Construction> constructions,
                       List<Border> borders, Parameter<Integer> spawnAiPrize,
-                      Parameter<Integer> hitKillsAiPrize, Tank... aiTanks) {
-        aiCount = aiTanks.length;
+                      Parameter<Integer> hitKillsAiPrize, Tank... ais) {
+        aiCount = ais.length;
         this.dice = dice;
         this.size = size;
-        this.aiTanks = new LinkedList<>();
+        this.ais = new LinkedList<>();
         this.prize = new LinkedList<>();
         this.constructions = new LinkedList<>(constructions);
         this.borders = new LinkedList<>(borders);
@@ -85,7 +85,7 @@ public class Battlecity implements Field {
         this.ice = new LinkedList<>();
         this.rivers = new LinkedList<>();
 
-        for (Tank tank : aiTanks) {
+        for (Tank tank : ais) {
             addAI(tank);
         }
     }
@@ -158,7 +158,7 @@ public class Battlecity implements Field {
     }
 
     private void newAI() {
-        for (int count = aiTanks.size(); count < aiCount; count++) {
+        for (int count = ais.size(); count < aiCount; count++) {
             Point pt = pt(0, size - 2);
             int c = 0;
             do {
@@ -174,7 +174,7 @@ public class Battlecity implements Field {
     private void removeDeadTanks() {
         for (Tank tank : getTanks()) {
             if (!tank.isAlive()) {
-                aiTanks.remove(tank);
+                ais.remove(tank);
                 if (tank.isTankPrize()) {
                     dropPrize();
                 }
@@ -203,7 +203,7 @@ public class Battlecity implements Field {
     void addAI(Tank tank) {
         Tank resultTank = replaceAiOnAiPrize(tank);
         resultTank.init(this);
-        aiTanks.add(resultTank);
+        ais.add(resultTank);
         this.aiTanksCount++;
     }
 
@@ -265,14 +265,14 @@ public class Battlecity implements Field {
 
     private void scoresForKill(Bullet killedBullet, Tank diedTank) {
         Player died = null;
-        boolean aiDied = aiTanks.contains(diedTank);
+        boolean aiDied = ais.contains(diedTank);
         if (!aiDied) {
              died = getPlayer(diedTank);
         }
 
         Tank killerTank = killedBullet.getOwner();
         Player killer = null;
-        if (!aiTanks.contains(killerTank)) {
+        if (!ais.contains(killerTank)) {
             killer = getPlayer(killerTank);
         }
 
@@ -338,7 +338,7 @@ public class Battlecity implements Field {
 
     @Override
     public List<Tank> getTanks() {
-        LinkedList<Tank> result = new LinkedList<>(aiTanks);
+        LinkedList<Tank> result = new LinkedList<>(ais);
         for (Player player : players) {
 //            if (player.getTank().isAlive()) { // TODO разремарить с тестом
                 result.add(player.getHero());
