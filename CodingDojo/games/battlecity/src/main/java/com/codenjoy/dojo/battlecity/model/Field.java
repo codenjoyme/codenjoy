@@ -36,4 +36,6 @@ public interface Field extends GameField<Player>, Level {
     boolean isRiver(Point pt);
 
     boolean isIce(Point pt);
+
+    void addPrize(Prize prize);
 }

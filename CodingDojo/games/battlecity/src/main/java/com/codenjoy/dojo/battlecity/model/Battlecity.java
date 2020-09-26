@@ -31,19 +31,12 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.Parameter;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.services.PointImpl.random;
 
 public class Battlecity implements Field {
-
-    private static final List<Elements> PRIZES = Arrays.asList(
-            Elements.PRIZE_IMMORTALITY,
-            Elements.PRIZE_BREAKING_WALLS,
-            Elements.PRIZE_WALKING_ON_WATER);
 
     private List<Tank> ais;
     private List<Prize> prizes;
@@ -53,6 +46,7 @@ public class Battlecity implements Field {
     private Parameter<Integer> damagesBeforeAiDeath;
     private int aiSpawn;
 
+    private PrizeGenerator prizeGen;
     private int size;
     private List<Construction> constructions; // TODO заменить на wall
     private List<Border> borders;
@@ -84,6 +78,7 @@ public class Battlecity implements Field {
         this.ice = new LinkedList<>();
         this.rivers = new LinkedList<>();
         this.aiSpawn = 0;
+        this.prizeGen = new PrizeGenerator(this, dice);
 
         this.maxAi = ais.length;
         for (Tank tank : ais) {
@@ -177,7 +172,7 @@ public class Battlecity implements Field {
             if (!tank.isAlive()) {
                 ais.remove(tank);
                 if (tank.isTankPrize()) {
-                    dropPrize();
+                    prizeGen.drop();
                 }
             }
         }
@@ -186,18 +181,6 @@ public class Battlecity implements Field {
             if (!player.getHero().isAlive()) {
                 players.remove(player);
             }
-        }
-    }
-
-    private void dropPrize() {
-        Point pt;
-        int c = 0;
-        do {
-           pt = random(dice, size);
-        } while (isBarrier(pt) && c++ < size);
-
-        if (!isBarrier(pt)) {
-            prizes.add(new Prize(pt, PRIZES.get(dice.next(PRIZES.size()))));
         }
     }
 
@@ -257,6 +240,11 @@ public class Battlecity implements Field {
     @Override
     public boolean isIce(Point pt) {
         return ice.stream().anyMatch(ice -> ice.itsMe(pt));
+    }
+
+    @Override
+    public void addPrize(Prize prize) {
+        prizes.add(prize);
     }
 
     private Construction getConstructionAt(Bullet bullet) {
