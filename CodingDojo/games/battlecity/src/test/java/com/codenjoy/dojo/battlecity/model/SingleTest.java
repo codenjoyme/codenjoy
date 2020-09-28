@@ -33,8 +33,6 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.Arrays;
-
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -61,7 +59,7 @@ public class SingleTest {
         game = new Battlecity(size, mock(Dice.class),
                 spawnAiPrize, hitKillsAiPrize);
 
-        game.addBorders(new DefaultBorders(size).get());
+        game.addBorder(new DefaultBorders(size).get());
 
         player1 = new Player(null, dice1);
         player2 = new Player(null, dice2);

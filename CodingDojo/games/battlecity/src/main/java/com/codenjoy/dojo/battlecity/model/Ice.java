@@ -22,6 +22,7 @@ package com.codenjoy.dojo.battlecity.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
@@ -29,6 +30,10 @@ public class Ice extends PointImpl implements State<Elements, Player> {
 
 	public Ice(int x, int y) {
 		super(x, y);
+	}
+
+	public Ice(Point pt) {
+		this(pt.getX(), pt.getY());
 	}
 
 	@Override

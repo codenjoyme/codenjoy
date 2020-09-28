@@ -69,6 +69,24 @@ public class LevelImpl implements Level {
     }
 
     @Override
+    public List<River> getRivers() {
+        return getObjects(Elements.RIVER,
+                pt -> new River(pt));
+    }
+
+    @Override
+    public List<Ice> getIce() {
+        return getObjects(Elements.ICE,
+                pt -> new Ice(pt));
+    }
+
+    @Override
+    public List<Tree> getTrees() {
+        return getObjects(Elements.TREE,
+                pt -> new Tree(pt));
+    }
+
+    @Override
     public List<Tank> getAiTanks() {
         return getObjects(Elements.AI_TANK_DOWN,
                 pt -> new AITank(pt, dice, Direction.DOWN));
@@ -94,6 +112,9 @@ public class LevelImpl implements Level {
                     addAll(LevelImpl.this.getBorders());
                     addAll(LevelImpl.this.getWalls());
                     addAll(LevelImpl.this.getAiTanks());
+                    addAll(LevelImpl.this.getIce());
+                    addAll(LevelImpl.this.getRivers());
+                    addAll(LevelImpl.this.getTrees());
                 }};
             }
         };

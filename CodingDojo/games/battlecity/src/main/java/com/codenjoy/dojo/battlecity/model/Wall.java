@@ -37,8 +37,8 @@ public class Wall extends PointImpl implements Tickable, State<Elements, Player>
         reset();
     }
 
-    public Wall(Point xy) {
-        this(xy.getX(), xy.getY());
+    public Wall(Point pt) {
+        this(pt.getX(), pt.getY());
     }
 
     public void destroyFrom(Direction bulletDirection) {
