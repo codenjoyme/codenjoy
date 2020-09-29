@@ -23,6 +23,8 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.items.Bullet;
+import com.codenjoy.dojo.battlecity.model.items.Prize;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
@@ -42,7 +44,7 @@ public interface Field extends GameField<Player> {
 
     void addAi(Tank tank);
 
-    List<Tank> getAiTanks();
+    List<Tank> aiTanks();
 
     int size();
 }

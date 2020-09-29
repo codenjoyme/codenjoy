@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.codenjoy.dojo.battlecity.model.items;
 
 /*-
  * #%L
@@ -23,6 +23,8 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.services.*;
 
 public class Wall extends PointImpl implements Tickable, State<Elements, Player> {
@@ -42,7 +44,7 @@ public class Wall extends PointImpl implements Tickable, State<Elements, Player>
     }
 
     public void destroyFrom(Direction bulletDirection) {
-        if (ch.power == 1) {
+        if (ch.power() == 1) {
             ch = Elements.WALL_DESTROYED;
             return;
         }
@@ -106,6 +108,6 @@ public class Wall extends PointImpl implements Tickable, State<Elements, Player>
     }
 
     public boolean destroyed() {
-        return ch.power == 0;
+        return ch.power() == 0;
     }
 }

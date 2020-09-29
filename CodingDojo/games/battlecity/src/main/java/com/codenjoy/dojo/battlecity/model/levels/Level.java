@@ -24,15 +24,16 @@ package com.codenjoy.dojo.battlecity.model.levels;
 
 
 import com.codenjoy.dojo.battlecity.model.*;
+import com.codenjoy.dojo.battlecity.model.items.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.List;
 
-/**
- * Created by indigo on 2018-07-01.
- */
 public interface Level {
+
     int size();
+
+    List<Tank> getTanks(int ticksPerBullets);
 
     List<Border> getBorders();
 

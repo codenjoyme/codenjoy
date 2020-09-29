@@ -22,6 +22,8 @@ package com.codenjoy.dojo.battlecity.model;
  * #L%
  */
 
+import com.codenjoy.dojo.battlecity.model.items.AITank;
+import com.codenjoy.dojo.battlecity.model.items.AITankPrize;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -58,7 +60,7 @@ public class AiGenerator {
 
     public void dropAll() {
         int size = field.size();
-        int needed = maxAi - field.getAiTanks().size();
+        int needed = maxAi - field.aiTanks().size();
 
         for (int i = 0; i < needed; i++) {
             int y = size - 2;
@@ -85,9 +87,9 @@ public class AiGenerator {
 
     private Tank tank(Point pt) {
         if (isPrizeTankTurn()) {
-            return new AITankPrize(pt, dice, Direction.DOWN, damagesBeforeAiDeath.getValue());
+            return new AITankPrize(pt, Direction.DOWN, damagesBeforeAiDeath.getValue(), dice);
         } else {
-            return new AITank(pt, dice, Direction.DOWN);
+            return new AITank(pt, Direction.DOWN, dice);
         }
     }
 
@@ -108,7 +110,6 @@ public class AiGenerator {
     }
 
     public void dropAll(List<? extends Point> pts) {
-
         maxAi = pts.size();
         for (Point pt : pts) {
             drop(pt);

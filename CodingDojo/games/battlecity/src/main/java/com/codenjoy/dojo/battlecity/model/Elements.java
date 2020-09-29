@@ -104,6 +104,10 @@ public enum Elements implements CharElements {
         return ch;
     }
 
+    public int power() {
+        return power;
+    }
+
     Elements(char ch) {
         this.ch = ch;
         this.power = -1;

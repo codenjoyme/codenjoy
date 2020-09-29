@@ -24,16 +24,13 @@ package com.codenjoy.dojo.bomberman.model;
 
 import com.codenjoy.dojo.bomberman.model.perks.*;
 import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
-import com.codenjoy.dojo.bomberman.services.Events;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.bomberman.model.AbstractSingleTest.getEvents;
-import static com.codenjoy.dojo.bomberman.services.Events.DIED;
-import static com.codenjoy.dojo.bomberman.services.Events.DROP_PERK;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 public class PerksBombermanTest extends AbstractBombermanTest {
 

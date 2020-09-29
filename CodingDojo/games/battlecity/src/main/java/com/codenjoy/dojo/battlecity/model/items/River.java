@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.codenjoy.dojo.battlecity.model.items;
 
 /*-
  * #%L
@@ -22,22 +22,24 @@ package com.codenjoy.dojo.battlecity.model;
  * #L%
  */
 
+import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Tree extends PointImpl implements State<Elements, Player> {
+public class River extends PointImpl implements State<Elements, Player> {
 
-    public Tree(int x, int y) {
-        super(x,y);
-    }
+	public River(int x, int y) {
+		super(x, y);
+	}
 
-    public Tree(Point pt) {
-        this(pt.getX(), pt.getY());
-    }
+	public River(Point pt) {
+		this(pt.getX(), pt.getY());
+	}
 
-    @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.TREE;
-    }
+	@Override
+	public Elements state(Player player, Object... alsoAtPoint) {
+		return Elements.RIVER;
+	}
 }

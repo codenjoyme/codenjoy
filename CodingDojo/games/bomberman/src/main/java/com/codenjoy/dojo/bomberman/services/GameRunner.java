@@ -48,7 +48,6 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     public GameRunner() {
         gameSettings = getGameSettings();
-        new Scores(0, gameSettings); // TODO сеттринги разделены по разным классам, продумать архитектуру
     }
 
     @Override

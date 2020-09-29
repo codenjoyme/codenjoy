@@ -35,7 +35,7 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 
-import static com.codenjoy.dojo.bomberman.model.AbstractSingleTest.getEvents;
+import static com.codenjoy.dojo.bomberman.model.EventsListenersAssert.getEvents;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;

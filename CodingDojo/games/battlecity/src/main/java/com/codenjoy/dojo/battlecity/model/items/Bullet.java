@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.codenjoy.dojo.battlecity.model.items;
 
 /*-
  * #%L
@@ -23,10 +23,13 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.*;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.MovingObject;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
+
+import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
@@ -34,9 +37,9 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
 
     private Field field;
     private Tank owner;
-    private OnDestroy onDestroy;
+    private Consumer<Object> onDestroy;
 
-    public Bullet(Field field, Direction tankDirection, Point from, Tank owner, OnDestroy onDestroy) {
+    public Bullet(Field field, Direction tankDirection, Point from, Tank owner, Consumer<Object> onDestroy) {
         super(from.getX(), from.getY(), tankDirection);
         this.field = field;
         this.owner = owner;
@@ -48,7 +51,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     public void onDestroy() {
         moving = false;
         if (onDestroy != null) {
-            onDestroy.destroy(this);
+            onDestroy.accept(this);
         }
     }
 
