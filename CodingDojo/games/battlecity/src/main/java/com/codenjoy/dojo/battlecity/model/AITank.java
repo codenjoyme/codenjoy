@@ -35,7 +35,7 @@ public class AITank extends Tank {
     public static final int SHOOT_EVERY_TICKS = 10;
     private int act;
 
-    public AITank(Point pt, Dice dice, Direction direction) {
+    public AITank(Point pt, Direction direction, Dice dice) {
         super(pt, direction, dice, 1);
     }
 

@@ -24,6 +24,8 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
+import com.codenjoy.dojo.battlecity.services.GameRunner;
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
@@ -60,16 +62,47 @@ public class BattlecityTest {
     private List<Player> players = new LinkedList<>();
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
+    private GameSettings settings = mock(GameSettings.class);
+
+    private List<Tank> heroes = new LinkedList<Tank>();
+
     @Before
     public void setup() {
         size = 7;
         ticksPerBullets = 1;
         spawnAiPrize = v(4);
         hitKillsAiPrize = v(3);
+
+        when(settings.spawnAiPrize()).thenReturn(spawnAiPrize);
+        when(settings.hitKillsAiPrize()).thenReturn(hitKillsAiPrize);
     }
 
     private List<Border> borders() {
         return new DefaultBorders(size).get();
+    }
+
+    private Tank hero(int index) {
+        return heroes.get(index);
+    }
+
+    private void givenFl(String board) {
+        GameRunner runner = new GameRunner() {
+            @Override
+            public String getMap() {
+                return board.replaceAll("\n", "");
+            }
+
+            @Override
+            protected GameSettings getGameSettings() {
+                return BattlecityTest.this.settings;
+            }
+        };
+        game = (Battlecity) runner.createGame(0);
+
+        runner.getLevel().getTanks(ticksPerBullets)
+                .forEach(tank -> initPlayer(game, tank));
+
+        heroes = game.getTanks();
     }
 
     private void givenGameWithAI(Tank tank, Point... ais) {
@@ -152,6 +185,7 @@ public class BattlecityTest {
     @Test
     public void shouldDrawField() {
         givenGame(tank(1, 1, Direction.UP));
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1756,11 +1790,7 @@ public class BattlecityTest {
     // стоять, если спереди другой танк
     @Test
     public void shouldStopWhenBeforeOtherTank() {
-        Tank tank1 = tank(1, 2, Direction.DOWN);
-        Tank tank2 = tank(1, 1, Direction.UP);
-        givenGame(tank1, tank2);
-
-        assertD("☼☼☼☼☼☼☼\n" +
+        givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1768,8 +1798,8 @@ public class BattlecityTest {
                 "☼˄    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        tank1.down();
-        tank2.up();
+        hero(0).down();
+        hero(1).up();
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +

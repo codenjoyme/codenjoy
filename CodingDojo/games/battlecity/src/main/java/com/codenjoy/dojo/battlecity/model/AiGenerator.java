@@ -85,9 +85,9 @@ public class AiGenerator {
 
     private Tank tank(Point pt) {
         if (isPrizeTankTurn()) {
-            return new AITankPrize(pt, dice, Direction.DOWN, damagesBeforeAiDeath.getValue());
+            return new AITankPrize(pt, Direction.DOWN, damagesBeforeAiDeath.getValue(), dice);
         } else {
-            return new AITank(pt, dice, Direction.DOWN);
+            return new AITank(pt, Direction.DOWN, dice);
         }
     }
 

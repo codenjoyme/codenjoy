@@ -33,8 +33,8 @@ public class AITankPrize extends AITank {
     private int vitality;
     private int ticks;
 
-    public AITankPrize(Point pt, Dice dice, Direction direction, int vitality) {
-        super(pt, dice, direction);
+    public AITankPrize(Point pt, Direction direction, int vitality, Dice dice) {
+        super(pt, direction, dice);
         this.vitality = vitality;
         damage = 0;
         ticks = 0;
