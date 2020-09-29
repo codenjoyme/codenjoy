@@ -29,11 +29,13 @@ import com.codenjoy.dojo.battlecity.model.items.Wall;
 import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -65,6 +67,8 @@ public class BattlecityTest {
     private GameSettings settings = mock(GameSettings.class);
 
     private List<Tank> heroes = new LinkedList<>();
+    private List<EventListener> listeners = new LinkedList<>();
+    private EventsListenersAssert events = new EventsListenersAssert(listeners);
 
     @Before
     public void setup() {
@@ -72,6 +76,11 @@ public class BattlecityTest {
         ticksPerBullets = 1;
         spawnAiPrize = v(4);
         hitKillsAiPrize = v(3);
+    }
+
+    @After
+    public void tearDown() {
+        events.verifyNoEvents();
     }
 
     private Tank hero(int index) {
@@ -107,9 +116,19 @@ public class BattlecityTest {
     }
 
     private Player initPlayer(Battlecity game, Tank tank) {
-        Player player = mock(Player.class);
-        when(player.getHero()).thenReturn(tank);
+        EventListener listener = mock(EventListener.class);
+        listeners.add(listener);
+
+        Player player = new Player(listener, dice){
+            @Override
+            public void newHero(Field field) {
+                // do nothing
+            }
+        };
+        player.hero = tank;
+
         players.add(player);
+
         tank.init(game);
         game.newGame(player);
         return player;
@@ -121,6 +140,8 @@ public class BattlecityTest {
 
         return String.format("%s prizes with %s tanks", prizes, tanks.size());
     }
+
+
 
     private void givenGameBeforeDropPrize(Point pt) {
         hitKillsAiPrize = v(1);
@@ -1930,6 +1951,11 @@ public class BattlecityTest {
         hero(0).act();
         game.tick();
 
+        events.verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO_TANK[1]]\n" +
+                "listener(1) => [KILL_YOUR_TANK]\n" +
+                "listener(2) => []\n");
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -1954,6 +1980,11 @@ public class BattlecityTest {
 
         hero(0).act();
         game.tick();
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO_TANK[2]]\n" +
+                "listener(1) => []\n" +
+                "listener(2) => [KILL_YOUR_TANK]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -1996,6 +2027,10 @@ public class BattlecityTest {
                 "☼▼    ☼\n" +
                 "☼Ѡ    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO_TANK[1]]\n" +
+                "listener(1) => [KILL_YOUR_TANK]\n");
     }
 
     @Test
@@ -2022,6 +2057,10 @@ public class BattlecityTest {
 
         game.tick();
         game.tick();
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO_TANK[1], KILL_YOUR_TANK]\n" +
+                "listener(1) => [KILL_YOUR_TANK, KILL_OTHER_HERO_TANK[1]]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -2605,6 +2644,8 @@ public class BattlecityTest {
         hero(0).act();
         game.tick();
 
+        events.verifyAllEvents("listener(0) => [KILL_OTHER_AI_TANK]\n");
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼¿    ☼\n" +
@@ -2718,6 +2759,10 @@ public class BattlecityTest {
         hero(0).act();
         game.tick();
 
+        events.verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO_TANK[1]]\n" +
+                "listener(1) => [KILL_YOUR_TANK]\n");
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -2754,6 +2799,10 @@ public class BattlecityTest {
 
         hero(1).up();
         game.tick();
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO_TANK[1]]\n" +
+                "listener(1) => [KILL_YOUR_TANK]\n");
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -2794,6 +2843,10 @@ public class BattlecityTest {
         hero(1).up();
         game.tick();
 
+        events.verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO_TANK[1]]\n" +
+                "listener(1) => [KILL_YOUR_TANK]\n");
+
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼▼      ☼\n" +
@@ -2832,6 +2885,10 @@ public class BattlecityTest {
 
         hero(1).up();
         game.tick();
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO_TANK[1]]\n" +
+                "listener(1) => [KILL_YOUR_TANK]\n");
 
         assertD("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -3852,6 +3909,10 @@ public class BattlecityTest {
 
         assertEquals(true, hero(1).isAlive());
         game.tick();// герой должен погибнуть
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO_TANK[1]]\n" +
+                "listener(1) => [KILL_YOUR_TANK]\n");
 
         assertEquals(false, hero(1).isAlive());
         assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -5012,6 +5073,9 @@ public class BattlecityTest {
 
         game.tick();
 
+        // TODO должен получить только 1 раз очки в самом конце
+        events.verifyAllEvents("listener(0) => [KILL_OTHER_AI_TANK, KILL_OTHER_AI_TANK, KILL_OTHER_AI_TANK]\n");
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -5136,5 +5200,55 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
+    @Test
+    public void shouldMyBulletsRemovesWhenKillMe() {
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼▼    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼˃   ˃☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▼    ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼˃   ˃☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(1).act();
+        game.tick();
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_OTHER_HERO_TANK[1]]\n" +
+                "listener(1) => [KILL_YOUR_TANK]\n" +
+                "listener(2) => []\n");
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▼    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼Ѡ • ˃☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertEquals(false, hero(1).isAlive());
+        game.tick();
+
+        events.verifyNoEvents();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▼    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼    ˃☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
 
 }

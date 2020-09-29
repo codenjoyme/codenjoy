@@ -23,7 +23,6 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
-import com.codenjoy.dojo.bomberman.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -33,21 +32,16 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.mockito.exceptions.verification.NeverWantedButInvoked;
-import org.mockito.exceptions.verification.WantedButNotInvoked;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.IntStream;
 
+import static com.codenjoy.dojo.bomberman.model.EventsListenersAssert.assertAll;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
-import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -70,6 +64,8 @@ public abstract class AbstractSingleTest {
     protected Dice heroDice = mock(Dice.class);
     protected Dice chopperDice = mock(Dice.class);
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
+
+    protected EventsListenersAssert events = new EventsListenersAssert(listeners);
 
     public void setup() {
         PerksSettingsWrapper.reset();
@@ -131,31 +127,6 @@ public abstract class AbstractSingleTest {
         assertEquals(board, game.getBoardAsString());
     }
 
-    protected void verifyEvents(EventListener events, String expected) {
-        if (expected.equals("[]")) {
-            try {
-                verify(events, never()).event(any(Events.class));
-            } catch (NeverWantedButInvoked e) {
-                assertEquals(expected, getEvents(events));
-            }
-        } else {
-            assertEquals(expected, getEvents(events));
-        }
-        reset(events);
-    }
-
-    public static String getEvents(EventListener events) {
-        try {
-            ArgumentCaptor<Events> captor = ArgumentCaptor.forClass(Events.class);
-            verify(events, atLeast(1)).event(captor.capture());
-            return captor.getAllValues().toString();
-        } catch (WantedButNotInvoked e) {
-            return "[]";
-        } finally {
-            reset(events);
-        }
-    }
-
     protected Hero hero(int index) {
         return heroes.get(index);
     }
@@ -205,42 +176,13 @@ public abstract class AbstractSingleTest {
     }
 
     protected void assertBoards(String expected, Integer... indexes) {
-        assertAll(expected, indexes, index -> {
+        assertAll(expected, games.size(), indexes, index -> {
             Object actual = game(index).getBoardAsString();
             return String.format("game(%s)\n%s\n", index, actual);
         });
     }
 
-    private void assertAll(String expected, Integer[] indexes,
-                           Function<Integer, String> function)
-    {
-        indexes = range(indexes);
-
-        String actual = "";
-        for (int i = 0; i < indexes.length; i++) {
-            actual += function.apply(indexes[i]);
-        }
-
-        assertEquals(expected, actual);
-    }
-
-    private Integer[] range(Integer[] indexes) {
-        if (indexes.length == 0) {
-            indexes = IntStream.range(0, games.size())
-                    .boxed()
-                    .collect(toList()).toArray(new Integer[0]);
-        }
-        return indexes;
-    }
-
     protected void resetListeners() {
         listeners.forEach(Mockito::reset);
-    }
-
-    protected void verifyAllEvents(String expected, Integer... indexes) {
-        assertAll(expected, indexes, index -> {
-            Object actual = getEvents(listener(index));
-            return String.format("listener(%s) => %s\n", index, actual);
-        });
     }
 }

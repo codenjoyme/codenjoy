@@ -35,7 +35,7 @@ public class Player extends GamePlayer<Tank, Field> {
 
     public static final int TICKS_PER_BULLETS = 4;
 
-    private Tank hero;
+    Tank hero;
     private Dice dice;
     private int killed;
 
