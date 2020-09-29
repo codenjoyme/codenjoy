@@ -23,6 +23,7 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.items.Wall;
 import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
 

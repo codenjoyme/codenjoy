@@ -22,6 +22,8 @@ package com.codenjoy.dojo.battlecity.model;
  * #L%
  */
 
+import com.codenjoy.dojo.battlecity.model.items.AITank;
+import com.codenjoy.dojo.battlecity.model.items.AITankPrize;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;

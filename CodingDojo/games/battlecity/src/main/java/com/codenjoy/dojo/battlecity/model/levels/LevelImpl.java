@@ -24,6 +24,7 @@ package com.codenjoy.dojo.battlecity.model.levels;
 
 
 import com.codenjoy.dojo.battlecity.model.*;
+import com.codenjoy.dojo.battlecity.model.items.*;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
