@@ -36,6 +36,7 @@ public class AITank extends Tank {
 
     public static final int MAX = 10;
     public static final int SHOOT_EVERY_TICKS = 10;
+    public boolean dontShoot = false;
     private int act;
 
     public AITank(Point pt, Direction direction, Dice dice) {
@@ -65,6 +66,10 @@ public class AITank extends Tank {
     }
 
     private void shootIfReady() {
+        if (dontShoot) {
+            return;
+        }
+
         if (act++ % SHOOT_EVERY_TICKS == 0) {
             act();
         }

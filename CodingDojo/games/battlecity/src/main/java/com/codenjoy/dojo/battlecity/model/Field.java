@@ -44,7 +44,7 @@ public interface Field extends GameField<Player> {
 
     void addAi(Tank tank);
 
-    List<Tank> getAiTanks();
+    List<Tank> aiTanks();
 
     int size();
 }

@@ -35,7 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static com.codenjoy.dojo.battlecity.model.BattlecityTest.tank;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -62,7 +62,7 @@ public class TanksEventsTest {
 
         game.addBorder(new DefaultBorders(size).get());
 
-        ai = tank(1, 5, Direction.DOWN, 0);
+        ai = new Tank(pt(1, 5), Direction.DOWN, mock(Dice.class), 0);
         ai.init(game);
         game.addAi(ai);
 
@@ -242,8 +242,8 @@ public class TanksEventsTest {
         onlyEvent(events2, Events.KILL_OTHER_HERO_TANK.apply(1));
     }
 
-    private void noEvents(EventListener ev) {
-        Mockito.verifyNoMoreInteractions(ev);
+    private void noEvents(EventListener listener) {
+        Mockito.verifyNoMoreInteractions(listener);
         reset(events);
     }
 
@@ -302,9 +302,9 @@ public class TanksEventsTest {
         noEvents(events2);
     }
 
-    private void onlyEvent(EventListener ev, Events event) {
-        Mockito.verify(ev).event(event);
-        noEvents(ev);
+    private void onlyEvent(EventListener listener, Events event) {
+        Mockito.verify(listener).event(event);
+        noEvents(listener);
         reset(events);
     }
 

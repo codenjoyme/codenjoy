@@ -33,6 +33,8 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class Battlecity implements Field {
 
     private int size;
@@ -76,7 +78,7 @@ public class Battlecity implements Field {
     public void clearScore() {
         players.forEach(Player::reset);
         walls.forEach(Wall::reset);
-        getTanks().forEach(Tank::reset);
+        allTanks().forEach(Tank::reset);
     }
 
     @Override
@@ -85,13 +87,13 @@ public class Battlecity implements Field {
 
         aiGen.dropAll();
 
-        List<Tank> tanks = getTanks();
+        List<Tank> tanks = allTanks();
 
         for (Tank tank : tanks) {
             tank.tick();
         }
 
-        for (Bullet bullet : getBullets()) {
+        for (Bullet bullet : bullets()) {
             if (bullet.destroyed()) {
                 bullet.onDestroy();
             }
@@ -99,7 +101,7 @@ public class Battlecity implements Field {
 
         for (Tank tank : tanks) {
             if (tank.isAlive()) {
-                tank.fire();
+                tank.tryFire();
             }
         }
 
@@ -107,7 +109,7 @@ public class Battlecity implements Field {
             if (tank.isAlive()) {
                 tank.move();
 
-                List<Bullet> bullets = getBullets();
+                List<Bullet> bullets = bullets();
                 int index = bullets.indexOf(tank);
                 if (index != -1) {
                     Bullet bullet = bullets.get(index);
@@ -116,19 +118,19 @@ public class Battlecity implements Field {
             }
         }
 
-        for (Bullet bullet : getBullets()) {
+        for (Bullet bullet : bullets()) {
             bullet.move();
         }
 
         for (Wall wall : walls) {
-            if (!tanks.contains(wall) && !getBullets().contains(wall)) {
+            if (!tanks.contains(wall) && !bullets().contains(wall)) {
                 wall.tick();
             }
         }
     }
 
     private void removeDeadTanks() {
-        for (Tank tank : getTanks()) {
+        for (Tank tank : allTanks()) {
             if (!tank.isAlive()) {
                 ais.remove(tank);
                 if (tank.isTankPrize()) {
@@ -151,9 +153,9 @@ public class Battlecity implements Field {
             return;
         }
 
-        if (getTanks().contains(bullet)) {
-            int index = getTanks().indexOf(bullet);
-            Tank tank = getTanks().get(index);
+        if (allTanks().contains(bullet)) {
+            int index = allTanks().indexOf(bullet);
+            Tank tank = allTanks().get(index);
             if (tank == bullet.getOwner()) {
                 return;
             }
@@ -165,7 +167,7 @@ public class Battlecity implements Field {
             return;
         }
 
-        for (Bullet bullet2 : getBullets().toArray(new Bullet[0])) {
+        for (Bullet bullet2 : bullets().toArray(new Bullet[0])) {
             if (bullet != bullet2 && bullet.equals(bullet2)) {
                 bullet.boom();
                 bullet2.boom();
@@ -264,7 +266,7 @@ public class Battlecity implements Field {
             }
         }
 
-        for (Tank tank : getTanks()) {   //  TODO проверить как один танк не может проходить мимо другого танка игрока (не AI)
+        for (Tank tank : allTanks()) {   //  TODO проверить как один танк не может проходить мимо другого танка игрока (не AI)
             if (tank.itsMe(pt)) {
                 return true;
             }
@@ -273,22 +275,18 @@ public class Battlecity implements Field {
         return pt.isOutOf(size);
     }
 
-    private List<Bullet> getBullets() {
-        List<Bullet> result = new LinkedList<>();
-        for (Tank tank : getTanks()) {
-            for (Bullet bullet : tank.getBullets()) {
-                result.add(bullet);
-            }
-        }
-        return result;
+    private List<Bullet> bullets() {
+        return allTanks().stream()
+                .flatMap(tank -> tank.getBullets().stream())
+                .collect(toList());
     }
 
     @Override
-    public List<Tank> getAiTanks() {
+    public List<Tank> aiTanks() {
         return ais;
     }
 
-    public List<Tank> getTanks() {
+    public List<Tank> allTanks() {
         List<Tank> result = new LinkedList<>(ais);
         for (Player player : players) {
 //            if (player.getTank().isAlive()) { // TODO разремарить с тестом
@@ -296,6 +294,12 @@ public class Battlecity implements Field {
 //            }
         }
         return result;
+    }
+
+    public List<Tank> tanks() {
+        return players.stream()
+                .map(Player::getHero)
+                .collect(toList());
     }
 
     public List<Prize> getPrizes() {
@@ -333,9 +337,9 @@ public class Battlecity implements Field {
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>() {{
                     addAll(Battlecity.this.getBorders());
-                    addAll(Battlecity.this.getTanks());
+                    addAll(Battlecity.this.allTanks());
                     addAll(Battlecity.this.getWalls());
-                    addAll(Battlecity.this.getBullets());
+                    addAll(Battlecity.this.bullets());
                     addAll(Battlecity.this.getPrizes());
                     addAll(Battlecity.this.getTrees());
                     addAll(Battlecity.this.getIce());

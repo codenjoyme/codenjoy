@@ -28,6 +28,7 @@ import com.codenjoy.dojo.battlecity.model.items.Tree;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -120,7 +121,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    public Iterable<Bullet> getBullets() {
+    public Collection<Bullet> getBullets() {
         return new LinkedList<>(bullets);
     }
 
@@ -197,7 +198,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         bullets = new LinkedList<>();
     }
 
-    public void fire() {
+    public void tryFire() {
         if (!fire) return;
         fire = false;
 

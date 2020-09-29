@@ -60,7 +60,7 @@ public class AiGenerator {
 
     public void dropAll() {
         int size = field.size();
-        int needed = maxAi - field.getAiTanks().size();
+        int needed = maxAi - field.aiTanks().size();
 
         for (int i = 0; i < needed; i++) {
             int y = size - 2;
@@ -110,7 +110,6 @@ public class AiGenerator {
     }
 
     public void dropAll(List<? extends Point> pts) {
-
         maxAi = pts.size();
         for (Point pt : pts) {
             drop(pt);
