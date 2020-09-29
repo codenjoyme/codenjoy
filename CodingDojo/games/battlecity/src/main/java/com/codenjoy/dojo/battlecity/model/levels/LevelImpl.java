@@ -24,11 +24,15 @@ package com.codenjoy.dojo.battlecity.model.levels;
 
 
 import com.codenjoy.dojo.battlecity.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 public class LevelImpl implements Level {
 
@@ -47,15 +51,51 @@ public class LevelImpl implements Level {
         return (int) Math.sqrt(map.length());
     }
 
-    @Override
-    public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<>();
+    private <T> List<T> getObjects(Elements element, Function<Point, T> objects) {
+        List<T> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.WALL.ch) {
-                result.add(new Wall(xy.getXY(index)));
+            if (map.charAt(index) == element.ch) {
+                Point pt = xy.getXY(index);
+                result.add(objects.apply(pt));
             }
         }
         return result;
+    }
+
+    @Override
+    public List<Wall> getWalls() {
+        return getObjects(Elements.WALL,
+                pt -> new Wall(pt));
+    }
+
+    @Override
+    public List<River> getRivers() {
+        return getObjects(Elements.RIVER,
+                pt -> new River(pt));
+    }
+
+    @Override
+    public List<Ice> getIce() {
+        return getObjects(Elements.ICE,
+                pt -> new Ice(pt));
+    }
+
+    @Override
+    public List<Tree> getTrees() {
+        return getObjects(Elements.TREE,
+                pt -> new Tree(pt));
+    }
+
+    @Override
+    public List<Tank> getAiTanks() {
+        return getObjects(Elements.AI_TANK_DOWN,
+                pt -> new AITank(pt, dice, Direction.DOWN));
+    }
+
+    @Override
+    public List<Border> getBorders() {
+        return getObjects(Elements.BATTLE_WALL,
+                pt -> new Border(pt));
     }
 
     @Override
@@ -72,31 +112,11 @@ public class LevelImpl implements Level {
                     addAll(LevelImpl.this.getBorders());
                     addAll(LevelImpl.this.getWalls());
                     addAll(LevelImpl.this.getAiTanks());
+                    addAll(LevelImpl.this.getIce());
+                    addAll(LevelImpl.this.getRivers());
+                    addAll(LevelImpl.this.getTrees());
                 }};
             }
         };
-    }
-
-    @Override
-    public List<Tank> getAiTanks() {
-        List<Tank> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.AI_TANK_DOWN.ch) {
-                Point pt = xy.getXY(index);
-                result.add(new AITank(pt, dice, Direction.DOWN));
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public List<Border> getBorders() {
-        List<Border> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == Elements.BATTLE_WALL.ch) {
-                result.add(new Border(xy.getXY(index)));
-            }
-        }
-        return result;
     }
 }

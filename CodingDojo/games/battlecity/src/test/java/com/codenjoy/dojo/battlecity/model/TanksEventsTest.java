@@ -35,8 +35,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.util.Arrays;
-
 import static com.codenjoy.dojo.battlecity.model.BattlecityTest.tank;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
@@ -62,7 +60,7 @@ public class TanksEventsTest {
         game = new Battlecity(size, mock(Dice.class),
                 spawnAiPrize, hitKillsAiPrize);
 
-        game.addBorders(new DefaultBorders(size).get());
+        game.addBorder(new DefaultBorders(size).get());
 
         ai = tank(1, 5, Direction.DOWN, 0);
         ai.init(game);

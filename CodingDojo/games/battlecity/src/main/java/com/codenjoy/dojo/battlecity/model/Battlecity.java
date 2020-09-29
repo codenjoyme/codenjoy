@@ -371,7 +371,7 @@ public class Battlecity implements Field {
     }
 
 
-    public void addBorders(List<Border> borders) {
+    public void addBorder(List<Border> borders) {
         this.borders.addAll(borders);
     }
 
@@ -395,11 +395,23 @@ public class Battlecity implements Field {
         return aiGen;
     }
 
-    public void addWalls(List<Wall> walls) {
+    public void addWall(List<Wall> walls) {
         this.walls.addAll(walls);
     }
 
     public void addWall(Wall wall) {
         walls.add(wall);
+    }
+
+    public void addRiver(List<River> rivers) {
+        this.rivers.addAll(rivers);
+    }
+
+    public void addTree(List<Tree> trees) {
+        this.trees.addAll(trees);
+    }
+
+    public void addIce(List<Ice> ice) {
+        this.ice.addAll(ice);
     }
 }
