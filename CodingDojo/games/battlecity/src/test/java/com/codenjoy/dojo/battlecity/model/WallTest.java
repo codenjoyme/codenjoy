@@ -23,12 +23,13 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.items.Wall;
 import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class ConstructionTest {
+public class WallTest {
 
     @Test
     public void shouldDestroyOnce() {
@@ -96,10 +97,10 @@ public class ConstructionTest {
     }
 
     private void assertDestroyFrom(char expected, Direction... directions) {
-        Construction construction = new Construction(0, 0);
+        Wall wall = new Wall(0, 0);
         for (Direction direction : directions) {
-            construction.destroyFrom(direction);
+            wall.destroyFrom(direction);
         }
-        assertEquals(expected, construction.state(null).ch);
+        assertEquals(expected, wall.state(null).ch);
     }
 }

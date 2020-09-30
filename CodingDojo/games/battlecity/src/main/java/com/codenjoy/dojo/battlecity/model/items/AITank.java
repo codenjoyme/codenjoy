@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.codenjoy.dojo.battlecity.model.items;
 
 /*-
  * #%L
@@ -23,6 +23,9 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.battlecity.model.Player;
+import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -32,34 +35,27 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 public class AITank extends Tank {
 
     public static final int MAX = 10;
+    public static final int SHOOT_EVERY_TICKS = 10;
+    public boolean dontShoot = false;
     private int act;
-    private boolean noBulletFly = true;
 
-    public AITank(Point pt, Dice dice, Direction direction) {
+    public AITank(Point pt, Direction direction, Dice dice) {
         super(pt, direction, dice, 1);
-    }
-
-    public AITank(Point pt, Dice dice, Direction direction, int ticksPerBullets, boolean noBulletFly) {
-        super(pt, direction, dice, ticksPerBullets);
-        this.noBulletFly = noBulletFly;
     }
 
     @Override
     public void move() {
-        if (noBulletFly) {
-            if (act++ % 10 == 0) {
-                act();
-            }
-        } else {
-            //do nothing
-        }
+        shootIfReady();
 
         int c = 0;
         Point pt;
         do {
             pt = direction.change(this);
 
-            if (field.isBarrier(pt)) {
+            // !field.isRiver(pt) потому что мы хотим сделать так, чтобы боты пытались
+            // пройти через речку но не могли - это даст иллюзию, что
+            // они пытаются отстрливаться через воду
+            if (field.isBarrier(pt) && !field.isRiver(pt)) {
                 direction = Direction.random(dice);
             }
         } while (field.isBarrier(pt) && c++ < MAX);
@@ -69,22 +65,43 @@ public class AITank extends Tank {
         super.move();
     }
 
+    private void shootIfReady() {
+        if (dontShoot) {
+            return;
+        }
+
+        if (act++ % SHOOT_EVERY_TICKS == 0) {
+            act();
+        }
+    }
+
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         Tree tree = filterOne(alsoAtPoint, Tree.class);
         if (tree != null) {
             return Elements.TREE;
         }
-        if (isAlive()) {
-            switch (direction) {
-                case LEFT:  return Elements.AI_TANK_LEFT;
-                case RIGHT: return Elements.AI_TANK_RIGHT;
-                case UP:    return Elements.AI_TANK_UP;
-                case DOWN:  return Elements.AI_TANK_DOWN;
-                default: throw new RuntimeException("Неправильное состояние танка!");
-            }
-        } else {
+
+        if (!isAlive()) {
             return Elements.BANG;
         }
+
+        Elements sub = subState();
+        if (sub != null) {
+            return sub;
+        }
+
+        switch (direction) {
+            case LEFT:  return Elements.AI_TANK_LEFT;
+            case RIGHT: return Elements.AI_TANK_RIGHT;
+            case UP:    return Elements.AI_TANK_UP;
+            case DOWN:  return Elements.AI_TANK_DOWN;
+            default: throw new RuntimeException("Неправильное состояние танка!");
+        }
     }
+
+    protected Elements subState() {
+        return null;
+    }
+
 }

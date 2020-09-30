@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.codenjoy.dojo.battlecity.model.items;
 
 /*-
  * #%L
@@ -23,10 +23,13 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.*;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.MovingObject;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
+
+import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
@@ -34,21 +37,21 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
 
     private Field field;
     private Tank owner;
-    private OnDestroy onDestroy;
+    private Consumer<Object> onDestroy;
 
-    public Bullet(Field field, Direction tankDirection, Point from, Tank owner, OnDestroy onDestroy) {
+    public Bullet(Field field, Direction tankDirection, Point from, Tank owner, Consumer<Object> onDestroy) {
         super(from.getX(), from.getY(), tankDirection);
         this.field = field;
         this.owner = owner;
         moving = true;
         this.onDestroy = onDestroy;
-        this.speed = 2;
+        speed = 2;
     }
 
     public void onDestroy() {
         moving = false;
         if (onDestroy != null) {
-            onDestroy.destroy(this);
+            onDestroy.accept(this);
         }
     }
 
@@ -78,10 +81,10 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         Tree tree = filterOne(alsoAtPoint, Tree.class);
-        //дерево и пуля в одной координате
         if (tree != null) {
             return Elements.TREE;
         }
+
         if (destroyed()) {
             return Elements.BANG;
         } else {

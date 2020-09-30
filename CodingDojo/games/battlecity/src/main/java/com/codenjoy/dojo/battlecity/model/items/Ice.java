@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.codenjoy.dojo.battlecity.model.items;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,22 +22,24 @@ package com.codenjoy.dojo.battlecity.model;
  * #L%
  */
 
-
+import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-public class Border extends PointImpl implements State<Elements, Player> {
-    public Border(int x, int y) {
-        super(x, y);
-    }
+public class Ice extends PointImpl implements State<Elements, Player> {
 
-    public Border(Point point) {
-        super(point);
-    }
+	public Ice(int x, int y) {
+		super(x, y);
+	}
 
-    @Override
-    public Elements state(Player player, Object... alsoAtPoint) {
-        return Elements.BATTLE_WALL;
-    }
+	public Ice(Point pt) {
+		this(pt.getX(), pt.getY());
+	}
+
+	@Override
+	public Elements state(Player player, Object... alsoAtPoint) {
+		return Elements.ICE;
+	}
 }

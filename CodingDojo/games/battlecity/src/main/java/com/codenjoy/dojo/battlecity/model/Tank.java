@@ -23,9 +23,12 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.items.Bullet;
+import com.codenjoy.dojo.battlecity.model.items.Tree;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,13 +43,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     private Gun gun;
 
     protected Direction direction;
-    protected int speed;
     protected boolean moving;
     private boolean fire;
-    private Ice ice;
-    private Tree tree;
-    private int count;
-    private List<Direction> directions;
+
+    private Sliding sliding;
 
     public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
         super(pt);
@@ -54,7 +54,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         this.dice = dice;
         gun = new Gun(ticksPerBullets);
         reset();
-        directions = new LinkedList<>();
     }
 
     void turn(Direction direction) {
@@ -99,39 +98,15 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     // TODO подумать как устранить дублирование с MovingObject
     public void move() {
-        for (int i = 0; i < speed; i++) {
-            if (!moving) {
-                return;
-            }
-            slide();
-            moving(direction.change(this));
+        if (!moving) {
+            return;
         }
-    }
-
-    private void slide() {
-        if (ice != null) {
-            directions.add(direction);
-            if (count()) {
-                this.direction = getLastDirection();
-            }
-        } else {
-            //чистим directions
-            directions.clear();
-            //запоминаем последнюю команду перед заездом на лёд
-            directions.add(direction);
-        }
-    }
-
-    private boolean count() {
-        return ++count % 2 == 1;
-    }
-
-    private Direction getLastDirection() {
-        return directions.get(directions.size() - 2);
+        direction = sliding.act(this);
+        moving(direction.change(this));
     }
 
     public void moving(Point pt) {
-        if (field.isBarrier(pt) || field.isRiver(pt)) {
+        if (field.isBarrier(pt)) {
             // do nothing
         } else {
             move(pt);
@@ -146,12 +121,14 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    public Iterable<Bullet> getBullets() {
+    public Collection<Bullet> getBullets() {
         return new LinkedList<>(bullets);
     }
 
     public void init(Field field) {
         super.init(field);
+
+        sliding = new Sliding(field);
 
         int c = 0;
         Point pt = this;
@@ -185,13 +162,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        tree = filterOne(alsoAtPoint, Tree.class);
-        //дерево и танк в одной координате
+        Tree tree = filterOne(alsoAtPoint, Tree.class);
         if (tree != null) {
             return Elements.TREE;
         }
-        //лёд и танк в одной кординате
-        ice = filterOne(alsoAtPoint, Ice.class);
 
         if (isAlive()) {
             if (player.getHero() == this) {
@@ -217,7 +191,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void reset() {
-        speed = 1;
         moving = false;
         fire = false;
         alive = true;
@@ -225,7 +198,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         bullets = new LinkedList<>();
     }
 
-    public void fire() {
+    public void tryFire() {
         if (!fire) return;
         fire = false;
 

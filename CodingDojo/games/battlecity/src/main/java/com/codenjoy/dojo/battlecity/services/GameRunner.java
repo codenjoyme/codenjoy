@@ -28,7 +28,7 @@ import com.codenjoy.dojo.battlecity.client.ai.AISolver;
 import com.codenjoy.dojo.battlecity.model.Battlecity;
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
-import com.codenjoy.dojo.battlecity.model.Tank;
+import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
@@ -38,44 +38,46 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
-    private LevelImpl level;
+    private GameSettings gameSettings;
 
     public GameRunner() {
-        new Scores(0, settings); // TODO сеттринги разделены по разным классам, продумать архитектуру
-
-        level = new LevelImpl(getMap(), getDice());
+        gameSettings = getGameSettings();
     }
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer) score, settings);
+        return new Scores((Integer) score, gameSettings);
     }
 
     @Override
     public GameField createGame(int levelNumber) {
-        Parameter<Integer> spawnAiPrize = settings.addEditBox("count spawn for AI Tank with prize").type(Integer.class).def(4);
-        Parameter<Integer> hitKillsAiPrize = settings.addEditBox("hits to kill AI Tank with prize").type(Integer.class).def(3);
-        Parameter<Object> parameter = settings.getParameter("name");
+        Level level = getLevel();
+        Battlecity game = new Battlecity(level.size(), getDice(),
+                gameSettings.spawnAiPrize(),
+                gameSettings.hitKillsAiPrize());
 
-        return new Battlecity(level.size(),
-                getDice(),
-                level.getConstructions(),
-                level.getBorders(),
-                spawnAiPrize,
-                hitKillsAiPrize,
-                level.getTanks().toArray(new Tank[0])
-        );
+        game.addBorder(level.getBorders());
+        game.addWall(level.getWalls());
+        game.addAiTanks(level.getAiTanks());
+        game.addRiver(level.getRivers());
+        game.addTree(level.getTrees());
+        game.addIce(level.getIce());
+        return game;
+    }
+
+    public Level getLevel() {
+        return new LevelImpl(getMap(), getDice());
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(level.size());
+        // TODO взять size из другого места
+        return v(getLevel().size());
     }
 
     @Override
@@ -108,44 +110,45 @@ public class GameRunner extends AbstractGameType implements GameType {
         return new Player(listener, getDice());
     }
 
-    /**
-     * @return Карта для игры, но ты так же можешь ее переопределить
-     */
     public String getMap() {
         return
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼ ¿    ¿    ¿        ¿    ¿    ¿ ☼" +
                 "☼                                ☼" +
                 "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬☼☼╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬☼☼╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬            ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬            ╬╬╬  ╬╬╬  ☼" +
-                "☼            ╬╬╬  ╬╬╬            ☼" +
-                "☼            ╬╬╬  ╬╬╬            ☼" +
+                "☼ █╬╬╬█ ╬╬╬ █╬╬╬██╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
+                "☼ █╬╬╬█ ╬╬╬ █╬╬╬██╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
+                "☼ █╬╬╬█ ╬╬╬ █╬╬╬██╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
+                "☼ █╬╬╬█ ╬╬╬ █╬╬╬☼☼╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
+                "☼ █╬╬╬█ ╬╬╬ █╬╬╬☼☼╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
+                "☼ █╬╬╬█ ╬╬╬ █╬╬╬  ╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
+                "☼ █╬╬╬█ ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬ █╬╬╬█ ☼" +
+                "☼ █╬╬╬█ ╬╬╬            ╬╬╬ █╬╬╬█ ☼" +
+                "☼  ╬╬╬  ╬╬╬   ▓    ▓   ╬╬╬  ╬╬╬  ☼" +
+                "☼  ▓▓▓       ╬╬╬  ╬╬╬       ▓▓▓  ☼" +
+                "☼  ▓▓        ╬╬╬  ╬╬╬        ▓▓  ☼" +
                 "☼     ╬╬╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬╬╬     ☼" +
                 "☼☼☼   ╬╬╬╬╬            ╬╬╬╬╬   ☼☼☼" +
-                "☼                                ☼" +
-                "☼            ╬╬╬  ╬╬╬            ☼" +
+                "☼ ▓▓          ▒▒▒▒▒▒          ▓▓ ☼" +
+                "☼           ▓╬╬╬▒▒╬╬╬▓           ☼" +
+                "☼  ╬╬╬  ╬╬╬ ▓╬╬╬▒▒╬╬╬▓ ╬╬╬  ╬╬╬  ☼" +
                 "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬▓ ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬ ▓╬╬╬  ☼" +
                 "☼  ╬╬╬  ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬                      ╬╬╬  ☼" +
-                "☼  ╬╬╬                      ╬╬╬  ☼" +
-                "☼  ╬╬╬       ╬╬╬╬╬╬╬╬       ╬╬╬  ☼" +
+                "☼ ▒╬╬╬  ╬╬╬  ╬╬╬▒▒╬╬╬  ╬╬╬  ╬╬╬▒ ☼" +
+                "☼ ▒╬╬╬  ╬╬╬▓ ╬╬╬▒▒╬╬╬ ▓╬╬╬  ╬╬╬▒ ☼" +
+                "☼ ▒╬╬╬  ╬╬╬▓ ╬╬╬▒▒╬╬╬ ▓╬╬╬  ╬╬╬▒ ☼" +
+                "☼ ▒╬╬╬ ▓╬╬╬  ╬╬╬▒▒╬╬╬  ╬╬╬▓ ╬╬╬▒ ☼" +
+                "☼ ▒╬╬╬  ▒▒▒            ▒▒▒  ╬╬╬▒ ☼" +
+                "☼  ╬╬╬  ▒▒▒    ▓▓▓▓    ▒▒▒  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ▒▒▒  ╬╬╬╬╬╬╬╬  ▒▒▒  ╬╬╬  ☼" +
                 "☼  ╬╬╬       ╬╬╬╬╬╬╬╬       ╬╬╬  ☼" +
                 "☼            ╬╬    ╬╬            ☼" +
-                "☼            ╬╬    ╬╬            ☼" +
+                "☼  ▒▒▒▒▒▒    ╬╬    ╬╬    ▒▒▒▒▒▒  ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
+    }
+
+    protected GameSettings getGameSettings() {
+        return new OptionGameSettings(settings, getDice());
     }
 }

@@ -119,7 +119,7 @@ public class SingleTest extends AbstractSingleTest {
                 "҉    \n" +
                 "҉♣   \n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO]\n" +
                 "listener(1) => [DIED]\n");
     }
@@ -197,7 +197,7 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n" +
                 "♥ Ѡ  \n", game(1));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => [DIED]\n");
     }
@@ -235,7 +235,7 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n" +
                 "♥Ѡ   \n", game(1));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => [DIED]\n");
     }
@@ -272,7 +272,7 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n" +
                 "♥&Ѡ  \n", game(1));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => [DIED]\n");
     }
@@ -525,7 +525,7 @@ public class SingleTest extends AbstractSingleTest {
                 " ҉   \n" +
                 "H҉҉ ☺\n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [KILL_DESTROY_WALL]\n" +
                 "listener(1) => []\n");
 
@@ -566,7 +566,7 @@ public class SingleTest extends AbstractSingleTest {
                 " ҉   \n" +
                 "x҉҉ ☺\n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => []\n");
 
@@ -616,7 +616,7 @@ public class SingleTest extends AbstractSingleTest {
                 "҉҉҉҉ \n" +
                 "#xx  \n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => [KILL_MEAT_CHOPPER]\n");
 
@@ -659,7 +659,7 @@ public class SingleTest extends AbstractSingleTest {
                 "Ѡ ♣  \n" +
                 "҉H҉҉ \n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [DIED, KILL_DESTROY_WALL]\n" +
                 "listener(1) => [DIED, KILL_DESTROY_WALL]\n");
 
@@ -701,7 +701,7 @@ public class SingleTest extends AbstractSingleTest {
                 "҉ ҉  \n" +
                 "҉H҉҉ \n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [KILL_DESTROY_WALL]\n" +
                 "listener(1) => [KILL_DESTROY_WALL]\n");
 
@@ -744,7 +744,7 @@ public class SingleTest extends AbstractSingleTest {
                 "҉HH҉҉\n", game(0));
 
         // по 1 ачивке за стенку, потому что взрывная волна не проходит через стенку
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [DIED, KILL_DESTROY_WALL]\n" +
                 "listener(1) => [DIED, KILL_DESTROY_WALL]\n");
 
@@ -785,7 +785,7 @@ public class SingleTest extends AbstractSingleTest {
                 " ҉♣҉ \n" +
                 "  ҉  \n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [DIED, KILL_DESTROY_WALL]\n" +
                         "listener(1) => [DIED, KILL_DESTROY_WALL]\n" +
                         "listener(2) => [DIED, KILL_DESTROY_WALL]\n" +
@@ -830,7 +830,7 @@ public class SingleTest extends AbstractSingleTest {
                 " H♣҉ \n" +  // эту стенку подбили только лвое
                 "  ҉  \n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [DIED, KILL_DESTROY_WALL, KILL_DESTROY_WALL, KILL_DESTROY_WALL]\n" +
                 "listener(1) => [DIED, KILL_DESTROY_WALL, KILL_DESTROY_WALL]\n" +
                 "listener(2) => [DIED, KILL_DESTROY_WALL]\n" +
@@ -881,7 +881,7 @@ public class SingleTest extends AbstractSingleTest {
                 "҉HH҉҉\n", game(0));
 
         // по 1 ачивке за стенку, потому что взрывная волна не проходит через стенку
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [KILL_DESTROY_WALL]\n" +
                 "listener(1) => [KILL_DESTROY_WALL]\n");
 
@@ -919,7 +919,7 @@ public class SingleTest extends AbstractSingleTest {
                 "Ѡ ♣  \n" +
                 "҉x҉҉ \n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [DIED, KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => [DIED, KILL_MEAT_CHOPPER]\n");
 
@@ -961,7 +961,7 @@ public class SingleTest extends AbstractSingleTest {
                 "҉ ҉  \n" +
                 "҉x҉҉ \n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => [KILL_MEAT_CHOPPER]\n");
 
@@ -1002,7 +1002,7 @@ public class SingleTest extends AbstractSingleTest {
                 " ҉♣҉ \n" +
                 "  ҉  \n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [DIED, KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => [DIED, KILL_MEAT_CHOPPER]\n" +
                 "listener(2) => [DIED, KILL_MEAT_CHOPPER]\n" +
@@ -1047,7 +1047,7 @@ public class SingleTest extends AbstractSingleTest {
                 "҉    \n" +
                 "҉x   \n", game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [KILL_MEAT_CHOPPER]\n");
 
         tick();
@@ -1128,7 +1128,7 @@ public class SingleTest extends AbstractSingleTest {
                 "☺    \n",
                 game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n" +
@@ -1136,7 +1136,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [KILL_OTHER_HERO, KILL_DESTROY_WALL, KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => [DIED, KILL_OTHER_HERO, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]\n" +
                 "listener(2) => [DIED, KILL_OTHER_HERO, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]\n" +
@@ -1150,7 +1150,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n" +
@@ -1232,7 +1232,7 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n",
                 game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n" +
@@ -1240,7 +1240,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [DIED, KILL_OTHER_HERO, KILL_DESTROY_WALL, KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => [DIED, KILL_OTHER_HERO, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]\n" +
                 "listener(2) => [DIED, KILL_OTHER_HERO, KILL_MEAT_CHOPPER, KILL_DESTROY_WALL]\n" +
@@ -1254,7 +1254,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n" +
@@ -1336,7 +1336,7 @@ public class SingleTest extends AbstractSingleTest {
                 "     \n",
                 game(0));
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n" +
@@ -1344,7 +1344,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [DIED, KILL_OTHER_HERO, KILL_DESTROY_WALL]\n" +
                 "listener(1) => [DIED]\n" +
                 "listener(2) => []\n" +
@@ -1358,7 +1358,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => [KILL_MEAT_CHOPPER]\n" +
                 "listener(1) => [KILL_OTHER_HERO, KILL_MEAT_CHOPPER]\n" +
                 "listener(2) => [DIED]\n" +
@@ -1372,7 +1372,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n" +
                 "listener(2) => [KILL_OTHER_HERO, KILL_MEAT_CHOPPER]\n" +
@@ -1386,7 +1386,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n" +
@@ -1400,7 +1400,7 @@ public class SingleTest extends AbstractSingleTest {
 
         tick();
 
-        verifyAllEvents(
+        events.verifyAllEvents(
                 "listener(0) => []\n" +
                 "listener(1) => []\n" +
                 "listener(2) => []\n" +

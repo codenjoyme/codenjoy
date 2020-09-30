@@ -48,15 +48,15 @@ function runTest() {
 
     assertEquals(false, board.isGameOver());
 
-    assertEquals(true, board.isAt(2, 2, Elements.CONSTRUCTION));
-    assertEquals(false, board.isAt(3, 2, Elements.CONSTRUCTION));
+    assertEquals(true, board.isAt(2, 2, Elements.WALL));
+    assertEquals(false, board.isAt(3, 2, Elements.WALL));
     assertEquals(true, board.isAt(1, 9, Elements.TANK_UP));
     assertEquals(false, board.isAt(1, 9, Elements.TANK_DOWN));
 
     assertEquals(false, board.isAt(3, board.size(), Elements.BATTLE_WALL));
     assertEquals(true, board.isAt(3, board.size() - 1, Elements.BATTLE_WALL));
 
-    assertEquals(Elements.CONSTRUCTION, board.getAt(2, 2));
+    assertEquals(Elements.WALL, board.getAt(2, 2));
     assertEquals(Elements.TANK_UP, board.getAt(1, 9));
     assertEquals(Elements.BATTLE_WALL, board.getAt(3, -1));
 
@@ -147,7 +147,7 @@ function runTest() {
         "[12,9],[2,10],[4,10],[6,10],[8,10],[10,10],[12,10],[2,11],[4,11]," +
         "[6,11],[8,11],[10,11],[12,11],[2,12],[4,12],[6,12],[8,12],[10,12]," +
         "[12,12]",
-        board.findAll(Elements.CONSTRUCTION));
+        board.findAll(Elements.WALL));
 
     assertEquals("",
         board.findAll(Elements.TANK_DOWN));
@@ -155,7 +155,7 @@ function runTest() {
     assertEquals(true,
         board.isAnyOfAt(1, 9,
             [Elements.TANK_UP,
-            Elements.CONSTRUCTION,
+            Elements.WALL,
             Elements.OTHER_TANK_DOWN]));
 
     assertEquals(true,
@@ -168,16 +168,16 @@ function runTest() {
 
     assertEquals(false,
         board.isAnyOfAt(1, 9,
-            [Elements.CONSTRUCTION,
+            [Elements.WALL,
             Elements.OTHER_TANK_DOWN]));
 
     assertEquals(false,
         board.isAnyOfAt(1, 9,
-            [Elements.CONSTRUCTION]));
+            [Elements.WALL]));
 
     assertEquals(false,
         board.isAnyOfAt(1, 9,
-            Elements.CONSTRUCTION));
+            Elements.WALL));
 
     assertEquals(false,
         board.isAnyOfAt(3, -1,
@@ -239,10 +239,10 @@ function runTest() {
     assertEquals(false,
         board.isBarrierAt(3, 3));
 
-    assertEquals(0, board.countNear(0, 0, Elements.CONSTRUCTION));
-    assertEquals(1, board.countNear(2, 1, Elements.CONSTRUCTION));
-    assertEquals(5, board.countNear(5, 5, Elements.CONSTRUCTION));
-    assertEquals(5, board.countNear(7, 6, Elements.CONSTRUCTION));
+    assertEquals(0, board.countNear(0, 0, Elements.WALL));
+    assertEquals(1, board.countNear(2, 1, Elements.WALL));
+    assertEquals(5, board.countNear(5, 5, Elements.WALL));
+    assertEquals(5, board.countNear(7, 6, Elements.WALL));
 
     assertEquals("[5,4]",
         Direction.DOWN.change(new Point(5, 5)));

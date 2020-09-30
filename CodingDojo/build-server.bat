@@ -1,8 +1,14 @@
 set ROOT=%CD%
 
-set GAMES_TO_RUN=tetris,snake,bomberman,sample,snakebattle,sokoban,spacerace,startandjump,sudoku,rubicscube,a2048,battlecity,chess,collapse,expansion,fifteen,football,hex,icancode,kata,lemonade,loderunner,lunolet,minesweeper,moebius,pong,puzzlebox,quadro,quake2d,reversi,excitebike
-
 IF "%GAMES_TO_RUN%"=="" (
+	rem set GAMES_TO_RUN=all
+	set GAMES_TO_RUN=bomberman
+	rem set GAMES_TO_RUN=tetris,snake,bomberman
+)
+
+echo Building server with [%GAMES_TO_RUN%]
+
+IF "%GAMES_TO_RUN%"=="all" (
     call %ROOT%\mvnw clean install -DskipTests
     
     cd %ROOT%\server

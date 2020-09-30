@@ -1914,6 +1914,7 @@ public class SnakeMultiplayerTest {
         verifyNoMoreInteractions(enemyEvents);
     }
 
+    // TODO ###223 сделать так же как в bomberman/battlecity EventsListenersAssert
     public static void verifyEvents(EventListener events, String expected) {
         if (expected.equals("[]")) {
             try {

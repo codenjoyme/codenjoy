@@ -86,14 +86,14 @@ public class BoardTest {
     public void shouldWork_getAt() {
         assertEquals(Elements.OTHER_TANK_DOWN, board.getAt(1, 4));
         assertEquals(Elements.BATTLE_WALL, board.getAt(0, 8));
-        assertEquals(Elements.CONSTRUCTION, board.getAt(6, 1));
+        assertEquals(Elements.WALL, board.getAt(6, 1));
     }
 
     @Test
     public void shouldWork_getAt_point() {
         assertEquals(Elements.OTHER_TANK_DOWN, board.getAt(pt(1, 4)));
         assertEquals(Elements.BATTLE_WALL, board.getAt(pt(0, 8)));
-        assertEquals(Elements.CONSTRUCTION, board.getAt(pt(6, 1)));
+        assertEquals(Elements.WALL, board.getAt(pt(6, 1)));
     }
 
     @Test
@@ -157,10 +157,10 @@ public class BoardTest {
 
     @Test
     public void shouldWork_countNear() {
-        assertEquals(0, board.countNear(0, 0, Elements.CONSTRUCTION));
-        assertEquals(1, board.countNear(2, 1, Elements.CONSTRUCTION));
-        assertEquals(5, board.countNear(5, 5, Elements.CONSTRUCTION));
-        assertEquals(5, board.countNear(7, 6, Elements.CONSTRUCTION));
+        assertEquals(0, board.countNear(0, 0, Elements.WALL));
+        assertEquals(1, board.countNear(2, 1, Elements.WALL));
+        assertEquals(5, board.countNear(5, 5, Elements.WALL));
+        assertEquals(5, board.countNear(7, 6, Elements.WALL));
 
         assertEquals(1, board.countNear(0, 7, Elements.BULLET));
         assertEquals(1, board.countNear(0, 8, Elements.BULLET));
@@ -175,17 +175,17 @@ public class BoardTest {
 
     @Test
     public void shouldWork_countNear_point() {
-        assertEquals(0, board.countNear(pt(0, 0), Elements.CONSTRUCTION));
-        assertEquals(1, board.countNear(pt(2, 1), Elements.CONSTRUCTION));
-        assertEquals(5, board.countNear(pt(5, 5), Elements.CONSTRUCTION));
-        assertEquals(5, board.countNear(pt(7, 6), Elements.CONSTRUCTION));
+        assertEquals(0, board.countNear(pt(0, 0), Elements.WALL));
+        assertEquals(1, board.countNear(pt(2, 1), Elements.WALL));
+        assertEquals(5, board.countNear(pt(5, 5), Elements.WALL));
+        assertEquals(5, board.countNear(pt(7, 6), Elements.WALL));
     }
 
     @Test
     public void shouldWork_isAt_point() {
         assertEquals(true, board.isAt(pt(1, 4), Elements.OTHER_TANK_DOWN));
         assertEquals(true, board.isAt(pt(0, 8), Elements.BATTLE_WALL));
-        assertEquals(true, board.isAt(pt(6, 1), Elements.CONSTRUCTION));
+        assertEquals(true, board.isAt(pt(6, 1), Elements.WALL));
 
         assertEquals(false, board.isAt(pt(1, 4), Elements.AI_TANK_LEFT));
         assertEquals(false, board.isAt(pt(0, 8), Elements.AI_TANK_LEFT));
@@ -193,14 +193,14 @@ public class BoardTest {
 
         assertEquals(true, board.isAt(pt(1, 4), Elements.OTHER_TANK_DOWN, Elements.AI_TANK_LEFT));
         assertEquals(true, board.isAt(pt(0, 8), Elements.AI_TANK_LEFT, Elements.BATTLE_WALL));
-        assertEquals(true, board.isAt(pt(6, 1), Elements.CONSTRUCTION, Elements.AI_TANK_LEFT));
+        assertEquals(true, board.isAt(pt(6, 1), Elements.WALL, Elements.AI_TANK_LEFT));
     }
 
     @Test
     public void shouldWork_isAt() {
         assertEquals(true, board.isAt(1, 4, Elements.OTHER_TANK_DOWN));
         assertEquals(true, board.isAt(0, 8, Elements.BATTLE_WALL));
-        assertEquals(true, board.isAt(6, 1, Elements.CONSTRUCTION));
+        assertEquals(true, board.isAt(6, 1, Elements.WALL));
 
         assertEquals(false, board.isAt(1, 4, Elements.AI_TANK_LEFT));
         assertEquals(false, board.isAt(0, 8, Elements.AI_TANK_LEFT));
@@ -208,21 +208,21 @@ public class BoardTest {
 
         assertEquals(true, board.isAt(1, 4, Elements.OTHER_TANK_DOWN, Elements.AI_TANK_LEFT));
         assertEquals(true, board.isAt(0, 8, Elements.AI_TANK_LEFT, Elements.BATTLE_WALL));
-        assertEquals(true, board.isAt(6, 1, Elements.CONSTRUCTION, Elements.AI_TANK_LEFT));
+        assertEquals(true, board.isAt(6, 1, Elements.WALL, Elements.AI_TANK_LEFT));
     }
 
     @Test
     public void shouldWork_isNear() {
-        assertEquals(true, board.isNear(1, 1, Elements.CONSTRUCTION));
-        assertEquals(true, board.isNear(9, 3, Elements.CONSTRUCTION));
-        assertEquals(false, board.isNear(12, 7, Elements.CONSTRUCTION));
+        assertEquals(true, board.isNear(1, 1, Elements.WALL));
+        assertEquals(true, board.isNear(9, 3, Elements.WALL));
+        assertEquals(false, board.isNear(12, 7, Elements.WALL));
     }
 
     @Test
     public void shouldWork_isNear_point() {
-        assertEquals(true, board.isNear(pt(1, 1), Elements.CONSTRUCTION));
-        assertEquals(true, board.isNear(pt(9, 3), Elements.CONSTRUCTION));
-        assertEquals(false, board.isNear(pt(12, 7), Elements.CONSTRUCTION));
+        assertEquals(true, board.isNear(pt(1, 1), Elements.WALL));
+        assertEquals(true, board.isNear(pt(9, 3), Elements.WALL));
+        assertEquals(false, board.isNear(pt(12, 7), Elements.WALL));
     }
 
     @Test

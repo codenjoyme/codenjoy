@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.List;
 
+// TODO этот алгоритм выполняется достаточно продолжительно, смотри SmokeTest на 40 итерациях с участием этого бота
 public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay way;

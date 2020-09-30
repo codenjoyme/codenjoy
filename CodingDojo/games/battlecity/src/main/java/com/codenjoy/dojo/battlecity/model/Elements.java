@@ -41,27 +41,27 @@ public enum Elements implements CharElements {
 	TREE('▒'),
 	RIVER('▓'),
 
-	CONSTRUCTION('╬', 3),
+	WALL('╬', 3),
 
-    CONSTRUCTION_DESTROYED_DOWN('╩', 2),
-    CONSTRUCTION_DESTROYED_UP('╦', 2),
-    CONSTRUCTION_DESTROYED_LEFT('╠', 2),
-    CONSTRUCTION_DESTROYED_RIGHT('╣', 2),
+    WALL_DESTROYED_DOWN('╩', 2),
+    WALL_DESTROYED_UP('╦', 2),
+    WALL_DESTROYED_LEFT('╠', 2),
+    WALL_DESTROYED_RIGHT('╣', 2),
 
-    CONSTRUCTION_DESTROYED_DOWN_TWICE('╨', 1),
-    CONSTRUCTION_DESTROYED_UP_TWICE('╥', 1),
-    CONSTRUCTION_DESTROYED_LEFT_TWICE('╞', 1),
-    CONSTRUCTION_DESTROYED_RIGHT_TWICE('╡', 1),
+    WALL_DESTROYED_DOWN_TWICE('╨', 1),
+    WALL_DESTROYED_UP_TWICE('╥', 1),
+    WALL_DESTROYED_LEFT_TWICE('╞', 1),
+    WALL_DESTROYED_RIGHT_TWICE('╡', 1),
 
-    CONSTRUCTION_DESTROYED_LEFT_RIGHT('│', 1),
-    CONSTRUCTION_DESTROYED_UP_DOWN('─', 1),
+    WALL_DESTROYED_LEFT_RIGHT('│', 1),
+    WALL_DESTROYED_UP_DOWN('─', 1),
 
-    CONSTRUCTION_DESTROYED_UP_LEFT('┌', 1),
-    CONSTRUCTION_DESTROYED_RIGHT_UP('┐', 1),
-    CONSTRUCTION_DESTROYED_DOWN_LEFT('└', 1),
-    CONSTRUCTION_DESTROYED_DOWN_RIGHT('┘', 1),
+    WALL_DESTROYED_UP_LEFT('┌', 1),
+    WALL_DESTROYED_RIGHT_UP('┐', 1),
+    WALL_DESTROYED_DOWN_LEFT('└', 1),
+    WALL_DESTROYED_DOWN_RIGHT('┘', 1),
 
-    CONSTRUCTION_DESTROYED(' ', 0),
+    WALL_DESTROYED(' ', 0),
 
     BULLET('•'),
 
@@ -90,10 +90,10 @@ public enum Elements implements CharElements {
     int power;
 
     private static List<Elements> result = null;
-    public static Collection<Elements> getConstructions() {
+    public static Collection<Elements> getWalls() {
         if (result == null) {
             result = Arrays.stream(values())
-                    .filter(e -> e.name().startsWith(CONSTRUCTION.name()))
+                    .filter(e -> e.name().startsWith(WALL.name()))
                     .collect(toList());
         }
         return result;
@@ -102,6 +102,10 @@ public enum Elements implements CharElements {
     @Override
     public char ch() {
         return ch;
+    }
+
+    public int power() {
+        return power;
     }
 
     Elements(char ch) {

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.battlecity.model;
+package com.codenjoy.dojo.battlecity.model.items;
 
 /*-
  * #%L
@@ -23,6 +23,8 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.Elements;
+import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;

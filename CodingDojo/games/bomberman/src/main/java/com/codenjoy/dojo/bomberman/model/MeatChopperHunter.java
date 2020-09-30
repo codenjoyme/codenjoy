@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.*;
-import static com.codenjoy.dojo.bomberman.model.StateUtils.filterOne;
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class MeatChopperHunter extends MeatChopper {
 

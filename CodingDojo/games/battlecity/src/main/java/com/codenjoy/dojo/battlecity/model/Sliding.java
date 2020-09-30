@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.bomberman.model;
+package com.codenjoy.dojo.battlecity.model;
 
 /*-
  * #%L
@@ -22,27 +22,34 @@ package com.codenjoy.dojo.bomberman.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.Direction;
 
-import java.util.Arrays;
-import java.util.List;
+public class Sliding {
 
-import static java.util.stream.Collectors.toList;
+    public static final int TAKE_CONTROL_EVERY_TICKS = 2;
+    private Field field;
+    
+    private int tick;
+    private Direction before;
 
-public final class StateUtils {
-
-    public static <T extends Point> List<T> filter(Object[] array, Class<T> clazz) {
-        return (List) Arrays.stream(array)
-                .filter(it -> it != null)
-                .filter(it -> it.getClass().equals(clazz))
-                .collect(toList());
+    public Sliding(Field field) {
+        this.field = field;
     }
 
-    public static <T extends Point> T filterOne(Object[] array, Class<T> clazz) {
-        return (T)Arrays.stream(array)
-                .filter(it -> it != null)
-                .filter(it -> it.getClass().equals(clazz))
-                .findFirst()
-                .orElse(null);
+    public Direction act(Tank tank) {
+        if (!field.isIce(tank)) {
+            tick = 0;
+            return before = tank.getDirection();
+        }
+
+        tick++;
+
+        if (tick % TAKE_CONTROL_EVERY_TICKS == 0) {
+            before = tank.getDirection();
+        } else {
+            // ignore current direction because sliding
+        }
+
+        return before;
     }
 }
