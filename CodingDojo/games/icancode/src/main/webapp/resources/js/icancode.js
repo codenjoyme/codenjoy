@@ -80,6 +80,14 @@ game.enableForkMe = false;
 game.enableAdvertisement = false;
 game.showBody = false;
 game.debug = false;
+if (window.location.href.includes("controlsOnly=true")) {
+    game.drawCanvases = false;
+    game.enableHeader = false;
+    game.enableFooter = false;
+} else {
+    game.enableHeader = true;
+    game.enableFooter = true;
+}
 
 // ========================== leaderboard page ==========================
 
