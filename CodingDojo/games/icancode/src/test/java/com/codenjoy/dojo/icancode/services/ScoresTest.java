@@ -38,6 +38,8 @@ public class ScoresTest {
     private Integer loosePenalty;
     private Integer winScore;
     private Integer goldScore;
+    private Integer killHeroScore;
+    private Integer killZombieScore;
     private SettingsWrapper wrapper;
 
     public void loose() {
@@ -56,6 +58,22 @@ public class ScoresTest {
         scores.event(Events.WIN(goldCount));
     }
 
+    public void killHero(int count) {
+        scores.event(Events.KILL_HERO(count, ICanCode.SINGLE));
+    }
+
+    public void killZombie(int count) {
+        scores.event(Events.KILL_ZOMBIE(count, ICanCode.SINGLE));
+    }
+
+    public void killHeroMultiple(int count) {
+        scores.event(Events.KILL_HERO(count, ICanCode.MULTIPLE));
+    }
+
+    public void killZombieMultiple(int count) {
+        scores.event(Events.KILL_ZOMBIE(count, ICanCode.MULTIPLE));
+    }
+
     @Before
     public void setup() {
         settings = new SettingsImpl();
@@ -65,6 +83,9 @@ public class ScoresTest {
         loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
         winScore = settings.getParameter("Win score").type(Integer.class).getValue();
         goldScore = settings.getParameter("Gold score").type(Integer.class).getValue();
+
+        killHeroScore = settings.getParameter("Kill hero score").type(Integer.class).getValue();
+        killZombieScore = settings.getParameter("Kill zombie score").type(Integer.class).getValue();
     }
 
     @Test
@@ -120,5 +141,35 @@ public class ScoresTest {
         Assert.assertEquals(0, scores.getScore());
     }
 
+    @Test
+    public void shouldNotCountZombieKillInSingleMode() {
+        settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
 
+        killZombie(1);
+        killHero(1);
+
+        Assert.assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void disabledKillsShouldNotCountKillZombiesAndHero() {
+        settings.addCheckBox("Enable score for kill").type(Boolean.class).def(false);
+
+        killZombieMultiple(1);
+        killHeroMultiple(1);
+
+        Assert.assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void shouldCountKills() {
+        int zombie = 2;
+        int heros = 1;
+        settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
+
+        killZombieMultiple(zombie);
+        killHeroMultiple(heros);
+
+        Assert.assertEquals(killHeroScore * heros + killZombieScore * zombie, scores.getScore());
+    }
 }

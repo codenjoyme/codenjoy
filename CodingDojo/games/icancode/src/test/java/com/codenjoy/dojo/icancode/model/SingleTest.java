@@ -3764,4 +3764,45 @@ public class SingleTest {
                 "----" +
                 "----");
     }
+
+    @Test
+    public void shouldRunEventAfterKillHero() {
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║.E..│" +
+                "└────┘");
+        hero1().down();
+        tick();
+        hero1().down();
+        tick();
+
+        assertE(single1, "------" +
+                "--X---" +
+                "------" +
+                "--☺---" +
+                "------" +
+                "------");
+
+        hero1().fire();
+        hero1().up();
+        tick();
+
+        assertE(single1, "------" +
+                "--X---" +
+                "--↑---" +
+                "--☺---" +
+                "------" +
+                "------");
+        tick();
+
+        assertE(single1, "------" +
+                "--&---" +
+                "------" +
+                "--☺---" +
+                "------" +
+                "------");
+        verify(listener1).event(Events.KILL_HERO(1, true));
+    }
 }
