@@ -112,7 +112,7 @@ public class LevelProgressTest {
         MultiplayerType type = MultiplayerType.SINGLE;
 
         // when
-        LevelProgress progress = new LevelProgress(type);
+        LevelProgress progress = type.progress();
 
         // then
         assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
@@ -125,7 +125,7 @@ public class LevelProgressTest {
         MultiplayerType type = MultiplayerType.TRAINING.apply(5);
 
         // when
-        LevelProgress progress = new LevelProgress(type);
+        LevelProgress progress = type.progress();
 
         // then
         assertEquals("{'current':0,'passed':-1,'total':5,'valid':true}",

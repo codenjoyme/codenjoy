@@ -41,15 +41,6 @@ public class LevelProgress {
         this.total = 1;
     }
 
-    public LevelProgress(MultiplayerType type) {
-        this();
-        if (type.isTraining()) {
-            this.current = 0;
-            this.passed = -1;
-            this.total = type.getLevelsCount();
-        }
-    }
-
     public LevelProgress(JSONObject json) {
         try {
             JSONObject progress = json.getJSONObject("levelProgress");

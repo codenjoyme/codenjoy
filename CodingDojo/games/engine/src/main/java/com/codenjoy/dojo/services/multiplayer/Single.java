@@ -54,7 +54,7 @@ public class Single implements Game {
     public Single(GamePlayer player, PrinterFactory factory, MultiplayerType multiplayerType) {
         this.player = player;
         this.multiplayerType = multiplayerType;
-        this.progress = new LevelProgress(multiplayerType);
+        this.progress = multiplayerType.progress();
         this.factory = factory;
     }
 

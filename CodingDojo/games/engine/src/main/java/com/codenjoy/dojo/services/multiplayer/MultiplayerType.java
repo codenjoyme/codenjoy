@@ -195,6 +195,15 @@ public class MultiplayerType {
             progress.saveTo(result);
             return result;
         }
+
+        @Override
+        public LevelProgress progress() {
+            return new LevelProgress(){{
+                this.current = 0;
+                this.passed = -1;
+                this.total = TRAINING_.this.getLevelsCount();
+            }};
+        }
     }
 
     private int roomSize;
@@ -263,11 +272,11 @@ public class MultiplayerType {
         int roomSize;
         if (isTraining() && save.has("levelProgress")) {
             LevelProgress progress = new LevelProgress(save);
-            roomSize = this.getRoomSize(progress);
+            roomSize = getRoomSize(progress);
             game.setProgress(progress);
         } else {
-            roomSize = this.getRoomSize();
-            game.setProgress(new LevelProgress(this));
+            roomSize = getRoomSize();
+            game.setProgress(progress());
         }
         return roomSize;
     }
@@ -307,5 +316,14 @@ public class MultiplayerType {
             return new JSONObject();
         }
         return save;
+    }
+
+    /**
+     * Прогресс содержит в себе информацию об уровнях,
+     * а она зависит от MultiplayerType
+     * @return объект прогресса на основе типа
+     */
+    public LevelProgress progress() {
+        return new LevelProgress();
     }
 }
