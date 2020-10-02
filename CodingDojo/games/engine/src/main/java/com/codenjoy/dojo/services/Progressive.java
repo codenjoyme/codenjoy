@@ -27,5 +27,6 @@ import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 public interface Progressive {
 
     void setProgress(LevelProgress progress);
+
     LevelProgress getProgress();
 }

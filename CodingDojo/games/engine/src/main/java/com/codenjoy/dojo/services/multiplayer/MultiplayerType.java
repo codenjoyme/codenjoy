@@ -204,6 +204,18 @@ public class MultiplayerType {
                 this.total = TRAINING_.this.getLevelsCount();
             }};
         }
+
+        @Override
+        public int loadProgress(Game game, JSONObject save) {
+            if (!save.has("levelProgress")) {
+                return super.loadProgress(game, save);
+            }
+
+            LevelProgress progress = new LevelProgress(save);
+            int roomSize = getRoomSize(progress);
+            game.setProgress(progress);
+            return roomSize;
+        }
     }
 
     private int roomSize;
@@ -269,15 +281,8 @@ public class MultiplayerType {
     }
 
     public int loadProgress(Game game, JSONObject save) {
-        int roomSize;
-        if (isTraining() && save.has("levelProgress")) {
-            LevelProgress progress = new LevelProgress(save);
-            roomSize = getRoomSize(progress);
-            game.setProgress(progress);
-        } else {
-            roomSize = getRoomSize();
-            game.setProgress(progress());
-        }
+        int roomSize = getRoomSize();
+        game.setProgress(progress());
         return roomSize;
     }
 
