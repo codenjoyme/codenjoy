@@ -183,7 +183,7 @@ public class MultiplayerType {
     }
 
     public String getType() {
-        return this.getClass().getSimpleName().toLowerCase().replace("_", "");
+        return this.getClass().getSimpleName().toLowerCase().replace("type", "");
     }
 
     public int loadProgress(Game game, JSONObject save) {
