@@ -6,16 +6,16 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import org.json.JSONObject;
 
-public class Training extends MultiplayerType {
+public class TrainingType extends MultiplayerType {
 
-    public Training(Integer levels) {
+    public TrainingType(Integer levels) {
         super(1, levels, !DISPOSABLE);
     }
 
     @Override
     public int getRoomSize(LevelProgress progress) {
         if (progress == null) {
-            return super.getRoomSize();
+            return super.roomSize;
         }
 
         if (progress.getCurrent() < progress.getTotal()) {

@@ -24,7 +24,7 @@ package com.codenjoy.dojo.services.multiplayer;
 
 
 import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.multiplayer.types.Training;
+import com.codenjoy.dojo.services.multiplayer.types.*;
 import org.json.JSONObject;
 
 import java.util.function.BiFunction;
@@ -46,12 +46,7 @@ public class MultiplayerType {
      * Удаляется игрок - удаляется поле.
      * Создается игрок - создается новое поле.
      */
-    public static final MultiplayerType SINGLE = new SINGLE();
-    static class SINGLE extends MultiplayerType {
-        SINGLE() {
-            super(1, DISPOSABLE);
-        }
-    }
+    public static final MultiplayerType SINGLE = new SingleType();
 
     /**
      * Все игроки на одном поле без ограничений по количеству.
@@ -59,12 +54,7 @@ public class MultiplayerType {
      * Последний игрок удаляется - поле тоже удаляется. TODO ##1 можно поменять тут
      * Каждый новый игрок создается на этом же поле.
      */
-    public static final MultiplayerType MULTIPLE = new MULTIPLE();
-    static class MULTIPLE extends MultiplayerType {
-        MULTIPLE() {
-            super(Integer.MAX_VALUE, !DISPOSABLE);
-        }
-    }
+    public static final MultiplayerType MULTIPLE = new MultipleType();
 
     /**
      * На поле только заданное количество игроков.
@@ -84,12 +74,7 @@ public class MultiplayerType {
      * В любом случае если игроков было несколько и они все ушли, оставив одного на поле -
      *    для него создастся новое поле и к нему можно будет добавляться.
      */
-    public static final BiFunction<Integer, Boolean, MultiplayerType> TEAM = TEAM_::new;
-    static class TEAM_ extends MultiplayerType {
-        TEAM_(Integer count, Boolean disposable) {
-            super(count, disposable);
-        }
-    }
+    public static final BiFunction<Integer, Boolean, MultiplayerType> TEAM = TeamType::new;
 
     /**
      * По двое игроков за раз на одном поле.
@@ -102,12 +87,7 @@ public class MultiplayerType {
      * TODO Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появится игрок, с которым он еще не играл.
      * TODO Игра находится на паузе, пока не соберется заданное количество игроков.
      */
-    public static final MultiplayerType TOURNAMENT = new TOURNAMENT();
-    static class TOURNAMENT extends MultiplayerType {
-        TOURNAMENT() {
-            super(2, DISPOSABLE);
-        }
-    }
+    public static final MultiplayerType TOURNAMENT = new TournamentType();
 
     /**
      * Трое игроков за раз на одном поле.
@@ -120,12 +100,7 @@ public class MultiplayerType {
      * TODO Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появятся двое других игроков, с которыми он еще не играл.
      * TODO Игра находится на паузе, пока не соберется заданное количество игроков.
      */
-    public static final MultiplayerType TRIPLE = new TRIPLE();
-    static class TRIPLE extends MultiplayerType {
-        TRIPLE() {
-            super(3, DISPOSABLE);
-        }
-    }
+    public static final MultiplayerType TRIPLE = new TripleType();
 
     /**
      * Четверо игроков за раз на одном поле.
@@ -138,12 +113,7 @@ public class MultiplayerType {
      * TODO Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появятся трое других игроков, с которыми он еще не играл.
      * TODO Игра находится на паузе, пока не соберется заданное количество игроков.
      */
-    public static MultiplayerType QUADRO = new QUADRO();
-    static class QUADRO extends MultiplayerType {
-        QUADRO() {
-            super(4, DISPOSABLE);
-        }
-    }
+    public static MultiplayerType QUADRO = new QuadroType();
 
     /**
      * Игроки играют каждый на своем уровне (single) заданное количество уровней,
@@ -152,13 +122,13 @@ public class MultiplayerType {
      * Переходить между уровнями вполне можно, тогда single команты пересоздаются
      * всякий раз когда на них заходят, а multiple остается общей для всех.
      */
-    public static final Function<Integer, MultiplayerType> TRAINING = Training::new;
+    public static final Function<Integer, MultiplayerType> TRAINING = TrainingType::new;
 
-    private int roomSize;
-    private int levelsCount;
-    private boolean disposable;
+    protected int roomSize;
+    protected int levelsCount;
+    protected boolean disposable;
 
-    MultiplayerType(int roomSize, boolean disposable) {
+    protected MultiplayerType(int roomSize, boolean disposable) {
         this(roomSize, 1, disposable);
     }
 
@@ -173,27 +143,27 @@ public class MultiplayerType {
     }
 
     public boolean isSingle() {
-        return this instanceof SINGLE;
+        return this instanceof SingleType;
     }
 
     public boolean isMultiple() {
-        return this instanceof MULTIPLE;
+        return this instanceof MultipleType;
     }
 
     public boolean isTriple() {
-        return this instanceof TRIPLE;
+        return this instanceof TripleType;
     }
 
     public boolean isTournament() {
-        return this instanceof TOURNAMENT;
+        return this instanceof TournamentType;
     }
 
     public boolean isQuadro() {
-        return this instanceof QUADRO;
+        return this instanceof QuadroType;
     }
 
     public boolean isTeam() {
-        return this instanceof TEAM_;
+        return this instanceof TeamType;
     }
 
     public boolean isSingleplayer() {
@@ -205,7 +175,7 @@ public class MultiplayerType {
     }
 
     public boolean isTraining() {
-        return this instanceof Training;
+        return this instanceof TrainingType;
     }
 
     public boolean isLastLevel(int levelNumber) {
