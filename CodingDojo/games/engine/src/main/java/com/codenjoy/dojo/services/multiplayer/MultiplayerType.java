@@ -158,11 +158,11 @@ public class MultiplayerType {
         }
 
         @Override
-        public int getRoomSize(Object data) {
-            if (data == null) {
+        public int getRoomSize(LevelProgress progress) {
+            if (progress == null) {
                 return super.roomSize;
             }
-            LevelProgress progress = (LevelProgress)data;
+
             if (progress.getCurrent() < progress.getTotal()) {
                 return SINGLE.getRoomSize();
             } else {
@@ -246,7 +246,7 @@ public class MultiplayerType {
         return roomSize;
     }
 
-    public int getRoomSize(Object data) {
+    public int getRoomSize(LevelProgress progress) {
         return roomSize;
     }
 
