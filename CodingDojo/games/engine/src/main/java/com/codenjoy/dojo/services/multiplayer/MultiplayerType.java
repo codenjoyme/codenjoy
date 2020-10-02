@@ -169,6 +169,22 @@ public class MultiplayerType {
                 return MULTIPLE.getRoomSize();
             }
         }
+
+        @Override
+        public Object postProcess(Object board, Single single) {
+            LevelProgress progress = single.getProgress();
+
+            if (board instanceof JSONObject) {
+                JSONObject json = (JSONObject) board;
+                progress.saveTo(json);
+                return json;
+            }
+
+            JSONObject json = new JSONObject();
+            progress.saveTo(json);
+            json.put("board", board);
+            return json;
+        }
     }
 
     private int roomSize;
@@ -256,5 +272,16 @@ public class MultiplayerType {
 
     public int getLevelsCount() {
         return levelsCount;
+    }
+
+    /**
+     * Постобработка борды после прорисовки.
+     * Некоторые типы уровней могут захотеть добавить туда информацию, скажем про уровень.
+     * @param board подготовленная борда (String или JSONObject)
+     * @param single вся информация о игре
+     * @return измененная борда, отправляемая клиенту
+     */
+    public Object postProcess(Object board, Single single) {
+        return board;
     }
 }

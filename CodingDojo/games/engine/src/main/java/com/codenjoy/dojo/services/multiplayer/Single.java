@@ -125,20 +125,7 @@ public class Single implements Game {
 
         Object data = printer.print();
 
-        if (multiplayerType.isTraining()) { // TODO инкапсулировать
-            if (data instanceof JSONObject) {
-                JSONObject json = (JSONObject) data;
-                progress.saveTo(json);
-                return json;
-            } else {
-                JSONObject json = new JSONObject();
-                progress.saveTo(json);
-                json.put("board", data);
-                return json;
-            }
-        } else {
-            return data;
-        }
+        return multiplayerType.postProcess(data, this);
     }
 
     @Override
