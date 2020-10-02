@@ -171,7 +171,7 @@ public class MultiplayerType {
         }
 
         @Override
-        public Object postProcess(Object board, Single single) {
+        public Object postProcessBoard(Object board, Single single) {
             LevelProgress progress = single.getProgress();
 
             if (board instanceof JSONObject) {
@@ -184,6 +184,16 @@ public class MultiplayerType {
             progress.saveTo(json);
             json.put("board", board);
             return json;
+        }
+
+        @Override
+        public JSONObject postProcessSave(JSONObject save, Single single) {
+            LevelProgress progress = single.getProgress();
+
+            JSONObject result = new JSONObject();
+            result.put("field", save);
+            progress.saveTo(result);
+            return result;
         }
     }
 
@@ -277,11 +287,25 @@ public class MultiplayerType {
     /**
      * Постобработка борды после прорисовки.
      * Некоторые типы уровней могут захотеть добавить туда информацию, скажем про уровень.
-     * @param board подготовленная борда (String или JSONObject)
+     * @param board подготовленная игрой борда (String или JSONObject)
      * @param single вся информация о игре
      * @return измененная борда, отправляемая клиенту
      */
-    public Object postProcess(Object board, Single single) {
+    public Object postProcessBoard(Object board, Single single) {
         return board;
+    }
+
+    /**
+     * Постобработка сейва игры после создания.
+     * Некоторые типы уровней могут захотеть добавить туда информацию, скажем про уровень.
+     * @param save подготовленный игрой сейв
+     * @param single вся информация о игре
+     * @return измененный сейв игры, который затем уйдет на сохранение
+     */
+    public JSONObject postProcessSave(JSONObject save, Single single) {
+        if (save == null) {
+            return new JSONObject();
+        }
+        return save;
     }
 }

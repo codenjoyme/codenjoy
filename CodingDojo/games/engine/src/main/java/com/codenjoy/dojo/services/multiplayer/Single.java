@@ -125,7 +125,7 @@ public class Single implements Game {
 
         Object data = printer.print();
 
-        return multiplayerType.postProcess(data, this);
+        return multiplayerType.postProcessBoard(data, this);
     }
 
     @Override
@@ -157,17 +157,7 @@ public class Single implements Game {
     @Override
     public JSONObject getSave() {
         JSONObject save = (field == null) ? null : field.getSave();
-        if (multiplayerType.isTraining()) { // TODO это надо инкапсулировать
-            JSONObject result = new JSONObject();
-            result.put("field", save);
-            progress.saveTo(result);
-            return result;
-        } else {
-            if (save == null) {
-                return new JSONObject();
-            }
-            return save;
-        }
+        return multiplayerType.postProcessSave(save, this);
     }
 
     @Override
