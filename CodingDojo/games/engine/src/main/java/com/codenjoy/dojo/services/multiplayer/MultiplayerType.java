@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.multiplayer;
 
 
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.multiplayer.types.Training;
 import org.json.JSONObject;
 
 import java.util.function.BiFunction;
@@ -151,72 +152,7 @@ public class MultiplayerType {
      * Переходить между уровнями вполне можно, тогда single команты пересоздаются
      * всякий раз когда на них заходят, а multiple остается общей для всех.
      */
-    public static final Function<Integer, MultiplayerType> TRAINING = TRAINING_::new;
-    static class TRAINING_ extends MultiplayerType {
-        TRAINING_(Integer levels) {
-            super(1, levels, !DISPOSABLE);
-        }
-
-        @Override
-        public int getRoomSize(LevelProgress progress) {
-            if (progress == null) {
-                return super.roomSize;
-            }
-
-            if (progress.getCurrent() < progress.getTotal()) {
-                return SINGLE.getRoomSize();
-            } else {
-                return MULTIPLE.getRoomSize();
-            }
-        }
-
-        @Override
-        public Object postProcessBoard(Object board, Single single) {
-            LevelProgress progress = single.getProgress();
-
-            if (board instanceof JSONObject) {
-                JSONObject json = (JSONObject) board;
-                progress.saveTo(json);
-                return json;
-            }
-
-            JSONObject json = new JSONObject();
-            progress.saveTo(json);
-            json.put("board", board);
-            return json;
-        }
-
-        @Override
-        public JSONObject postProcessSave(JSONObject save, Single single) {
-            LevelProgress progress = single.getProgress();
-
-            JSONObject result = new JSONObject();
-            result.put("field", save);
-            progress.saveTo(result);
-            return result;
-        }
-
-        @Override
-        public LevelProgress progress() {
-            return new LevelProgress(){{
-                this.current = 0;
-                this.passed = -1;
-                this.total = TRAINING_.this.getLevelsCount();
-            }};
-        }
-
-        @Override
-        public int loadProgress(Game game, JSONObject save) {
-            if (!save.has("levelProgress")) {
-                return super.loadProgress(game, save);
-            }
-
-            LevelProgress progress = new LevelProgress(save);
-            int roomSize = getRoomSize(progress);
-            game.setProgress(progress);
-            return roomSize;
-        }
-    }
+    public static final Function<Integer, MultiplayerType> TRAINING = Training::new;
 
     private int roomSize;
     private int levelsCount;
@@ -269,7 +205,7 @@ public class MultiplayerType {
     }
 
     public boolean isTraining() {
-        return this instanceof TRAINING_;
+        return this instanceof Training;
     }
 
     public boolean isLastLevel(int levelNumber) {
