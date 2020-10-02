@@ -91,13 +91,15 @@ public class Laser extends FieldItem implements Tickable {
     }
 
     private void addOwnerKillZombieScore() {
-        if (owner != null && owner instanceof Hero)
+        if (owner != null && owner instanceof Hero) {
             ((Hero) owner).addZombieKill();
+        }
     }
 
     private void addOwnerKillHeroScore() {
-        if (owner != null && owner instanceof Hero)
+        if (owner != null && owner instanceof Hero) {
             ((Hero) owner).addHeroKill();
+        }
     }
 
     @Override

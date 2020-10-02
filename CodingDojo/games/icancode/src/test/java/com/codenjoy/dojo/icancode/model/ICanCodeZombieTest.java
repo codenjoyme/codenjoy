@@ -350,7 +350,7 @@ public class ICanCodeZombieTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.KILL_ZOMBIE(1,false));
+        verify(listener).event(Events.KILL_ZOMBIE(1, false));
         assertE("------" +
                 "--☺---" +
                 "------" +

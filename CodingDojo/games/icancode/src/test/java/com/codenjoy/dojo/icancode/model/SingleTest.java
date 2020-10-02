@@ -3778,7 +3778,8 @@ public class SingleTest {
         hero1().down();
         tick();
 
-        assertE(single1, "------" +
+        assertE(single1,
+                "------" +
                 "--X---" +
                 "------" +
                 "--☺---" +
@@ -3789,7 +3790,8 @@ public class SingleTest {
         hero1().up();
         tick();
 
-        assertE(single1, "------" +
+        assertE(single1,
+                "------" +
                 "--X---" +
                 "--↑---" +
                 "--☺---" +
@@ -3797,7 +3799,8 @@ public class SingleTest {
                 "------");
         tick();
 
-        assertE(single1, "------" +
+        assertE(single1,
+                "------" +
                 "--&---" +
                 "------" +
                 "--☺---" +

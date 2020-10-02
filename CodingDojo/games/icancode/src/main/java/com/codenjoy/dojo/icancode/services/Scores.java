@@ -66,22 +66,15 @@ public class Scores implements PlayerScores {
             case LOOSE:
                 score -= settings.loosePenalty();
                 break;
-
             case KILL_ZOMBIE:
+                if (settings.enableKillScore() && events.isMultiple())
+                    score += events.getKillCount() * settings.killZombieScore();
+                break;
             case KILL_HERO:
                 if (settings.enableKillScore() && events.isMultiple())
-                    score += getScoreCountForType(eventsType, events.getKillCount());
+                    score += events.getKillCount() * settings.killHeroScore();
                 break;
         }
-
         score = Math.max(0, score);
-    }
-
-    private int getScoreCountForType(Events.Type type, int killCount) {
-        if (type == Events.Type.KILL_HERO)
-            return killCount * settings.killHeroScore();
-        else if (type == Events.Type.KILL_ZOMBIE)
-            return killCount * settings.killZombieScore();
-        return 0;
     }
 }

@@ -27,9 +27,10 @@ import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
     private PlayerScores scores;
@@ -88,6 +89,10 @@ public class ScoresTest {
         killZombieScore = settings.getParameter("Kill zombie score").type(Integer.class).getValue();
     }
 
+    private void setEnableScoreKills(boolean enableKills) {
+        settings.addCheckBox("Enable score for kill").type(Boolean.class).def(enableKills);
+    }
+
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, wrapper);
@@ -99,7 +104,7 @@ public class ScoresTest {
 
         loose(); //-
 
-        Assert.assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
+        assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
     }
 
     @Test
@@ -111,7 +116,7 @@ public class ScoresTest {
         winMultiple();
         winMultiple();
 
-        Assert.assertEquals(140, scores.getScore());
+        assertEquals(140, scores.getScore());
     }
 
     @Test
@@ -122,14 +127,14 @@ public class ScoresTest {
         win(1);  //+
         win(2);  //+
 
-        Assert.assertEquals(3 * winScore + 3 * goldScore, scores.getScore());
+        assertEquals(3 * winScore + 3 * goldScore, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
         loose();   //-
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
     @Test
@@ -138,38 +143,38 @@ public class ScoresTest {
 
         scores.clear();
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldNotCountZombieKillInSingleMode() {
-        settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
+        setEnableScoreKills(true);
 
         killZombie(1);
         killHero(1);
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
     @Test
     public void disabledKillsShouldNotCountKillZombiesAndHero() {
-        settings.addCheckBox("Enable score for kill").type(Boolean.class).def(false);
+        setEnableScoreKills(false);
 
         killZombieMultiple(1);
         killHeroMultiple(1);
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldCountKills() {
         int zombie = 2;
         int heros = 1;
-        settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
+        setEnableScoreKills(true);
 
         killZombieMultiple(zombie);
         killHeroMultiple(heros);
 
-        Assert.assertEquals(killHeroScore * heros + killZombieScore * zombie, scores.getScore());
+        assertEquals(killHeroScore * heros + killZombieScore * zombie, scores.getScore());
     }
 }
