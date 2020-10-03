@@ -121,7 +121,7 @@ public final class SettingsWrapper {
     }
 
     private String levelPrefix(int index) {
-        return "level" + index + ".";
+        return "Level[" + index + "].";
     }
 
     // setters for testing
