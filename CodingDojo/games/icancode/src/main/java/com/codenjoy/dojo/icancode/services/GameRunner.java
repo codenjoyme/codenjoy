@@ -78,7 +78,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        int count = Levels.all().size() - 2; // TODO понять почему тут 2
+        int count = Levels.all().size();
         int roomSize = SettingsWrapper.data.roomSize();
 
         switch (SettingsWrapper.data.gameMode()) {
@@ -98,8 +98,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
     }
 
     public Level loadLevel(int level) {
-        // +1 потому что мы хотим дать юзерам считать не от 0, а от 1
-        return Levels.loadLevel(level + 1);
+        return Levels.loadLevel(level);
     }
 
     @Override

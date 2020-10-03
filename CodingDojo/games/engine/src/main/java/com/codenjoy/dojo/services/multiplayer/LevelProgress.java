@@ -31,13 +31,21 @@ import org.json.JSONObject;
 @Getter
 public class LevelProgress {
 
+    // так как уровни в настройках хрантся начиная с номера 1,
+    // а индексы у нормальных программистов с 0
+    // я пробовал нормально - путаница получается, лучше так, поверь
+    // эта константа тут, чтобы связать все места в коде (java + js),
+    // где считаем с 1 коммит, отвечающий за это так же
+    // можно посмортреть в git _________
+    public static final int levelsStartsFrom1 = 1;
+
     protected int total;
     protected int current;
     protected int passed;
 
     public LevelProgress() {
-        this.current = 0;
-        this.passed = -1;
+        this.current = levelsStartsFrom1;
+        this.passed = levelsStartsFrom1 - 1;
         this.total = 1;
     }
 
@@ -110,8 +118,12 @@ public class LevelProgress {
     }
 
     public boolean isValid() {
-        return current < total + 1 // TODO 0..count (single), count+1 (multiple)
-                && current - 1 <= passed
+        // for LevelsType: 1..count-1 (training), count (contest)
+        return current >= levelsStartsFrom1
+                && passed >= levelsStartsFrom1 - 1
+                && total > 0
+                && current <= total
+                && current <= passed + 1
                 && passed <= total;
     }
 

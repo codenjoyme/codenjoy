@@ -98,12 +98,12 @@ public class SingleTest {
         GamePlayer player1 = gameRunner.createPlayer(listener1, null);
         GamePlayer player2 = gameRunner.createPlayer(listener2, null);
 
-        MultiplayerType type = MultiplayerType.TRAINING.apply(boards.length - 1);
+        MultiplayerType type = MultiplayerType.TRAINING.apply(boards.length);
         single1 = new Single(player1, gameRunner.getPrinterFactory(), type);
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(LevelProgress.levelsStartsFrom1);
 
         single2 = new Single(player2, gameRunner.getPrinterFactory(), type);
-        player2TryLoadLevel(0);
+        player2TryLoadLevel(LevelProgress.levelsStartsFrom1);
     }
 
     private Hero hero1() {
@@ -799,7 +799,7 @@ public class SingleTest {
         ICanCode field = (ICanCode)single.getField();
         if (single.isGameOver()) {
             if (single.isWin()) {
-                nextlevel(single, field);
+                nextLevel(single, field);
             }
             single.newGame();
         }
@@ -818,7 +818,7 @@ public class SingleTest {
         }
     }
 
-    private void nextlevel(Single single, ICanCode field) {
+    private void nextLevel(Single single, ICanCode field) {
         List<Level> levels = this.singles1;
         if (levels.indexOf(field.getLevel()) == -1) {
             levels = this.singles2;
@@ -832,24 +832,27 @@ public class SingleTest {
         }
 
         int index = levels.indexOf(field.getLevel());
-        loadLevel(single, levels, index + 1, false);
+        int level = index + LevelProgress.levelsStartsFrom1;
+        level++;
+        loadLevel(single, levels, level, false);
     }
 
-    private boolean loadLevel(Single single, List<Level> levels, int index, boolean ask) {
+    private boolean loadLevel(Single single, List<Level> levels, int level, boolean ask) {
         LevelProgress progress = single.getProgress();
         if (ask) {
-            if (!progress.canChange(index)) {
+            if (!progress.canChange(level)) {
                 return false;
             }
         }
-        progress.change(index, Math.max(progress.getPassed(), index - 1));
+        progress.change(level, Math.max(progress.getPassed(), level - 1));
         if (!progress.isValid()) {
             return false;
         }
 
-        if (index == levels.size()) {
+        if (level == levels.size() + 1) {
             single.on(gameMultiple);
         } else {
+            int index = level - LevelProgress.levelsStartsFrom1;
             ICanCode gameSingle = new ICanCode(levels.get(index), dice, ICanCode.TRAINING);
             single.on(gameSingle);
         }
@@ -1749,7 +1752,7 @@ public class SingleTest {
         shouldAllLevelsAreDone();
 
         // when try to change level 1  - success from multiple to single
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(1);
         tick();
 
         // then
@@ -1766,7 +1769,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2  - success from single to single
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
 
         // then
@@ -1783,7 +1786,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3  - success from single to single
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
 
         // then
@@ -1800,7 +1803,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success from single to multiple
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -1836,7 +1839,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2 - success from multiple to single
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
 
         // then
@@ -1854,8 +1857,8 @@ public class SingleTest {
 
     }
 
-    void player1TryLoadLevel(int index) {
-        if (loadLevel(single1, singles1, index, true)) {
+    void player1TryLoadLevel(int level) {
+        if (loadLevel(single1, singles1, level, true)) {
             single1.newGame();
         }
     }
@@ -1872,7 +1875,7 @@ public class SingleTest {
         shouldAllLevelsAreDone();
 
         // when win on level then try to change to last - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
         tick();
         hero1().right();
@@ -1892,7 +1895,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3 (previous) - success
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
 
         // then
@@ -1967,7 +1970,7 @@ public class SingleTest {
                 "└───┘");
 
         // when then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':1,'y':3}\n" +
@@ -1991,7 +1994,7 @@ public class SingleTest {
                 "-----\n", single1);
 
         // when then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':1,'y':3}\n" +
@@ -2059,7 +2062,7 @@ public class SingleTest {
                 "-----");
 
         // when then
-        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':2,'lastPassed':1,'total':2}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':2,'y':3}\n" +
@@ -2083,7 +2086,7 @@ public class SingleTest {
                 "-----\n", single1);
 
         // when then
-        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':2,'lastPassed':1,'total':2}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':1,'y':2}\n" +
@@ -2135,7 +2138,7 @@ public class SingleTest {
                 field, field);
 
         // when then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':0,'y':4}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':1,'y':14}\n" +
@@ -2191,7 +2194,7 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n", single1);
 
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':0,'y':4}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':1,'y':14}\n" +
@@ -2256,7 +2259,7 @@ public class SingleTest {
         }
 
         // then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':4,'y':4}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':14,'y':14}\n" +
@@ -2312,7 +2315,7 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n", single1);
 
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':1,'y':1}\n" +
@@ -2383,7 +2386,7 @@ public class SingleTest {
         }
 
         // then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':4,'y':4}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':4,'y':4}\n" +
@@ -2439,7 +2442,7 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n", single1);
 
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':11,'y':11}\n" +
@@ -2503,7 +2506,7 @@ public class SingleTest {
         tick(single2);
 
         // then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':3,'y':4}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':4,'y':4}\n" +
@@ -2559,7 +2562,7 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n", single1);
 
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':0,'y':1}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':11,'y':11}\n" +
@@ -2773,7 +2776,7 @@ public class SingleTest {
                 "----");
 
         // when
-        player2TryLoadLevel(0);
+        player2TryLoadLevel(1);
         tick(single1);
         tick(single2);
 
@@ -2933,7 +2936,7 @@ public class SingleTest {
         shouldAllLevelsAreDone_case2();
 
         // when try to change level 1  - success
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(LevelProgress.levelsStartsFrom1);
         tick();
 
         // then
@@ -2950,7 +2953,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -2967,7 +2970,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2  - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
 
         // then
@@ -2984,7 +2987,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -3001,7 +3004,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3  - success
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
 
         // then
@@ -3018,7 +3021,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -3054,7 +3057,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2 - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
 
         // then
@@ -3078,7 +3081,7 @@ public class SingleTest {
         shouldAllLevelsAreDone_case2();
 
         // when win on level then try to change to last - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
         hero1().down();
         tick();
@@ -3098,7 +3101,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -3121,7 +3124,7 @@ public class SingleTest {
         shouldAllLevelsAreDone_case2();
 
         // when win on level then try to change to last - success
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
         hero1().left();
         tick();
@@ -3141,7 +3144,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -3164,7 +3167,7 @@ public class SingleTest {
         shouldAllLevelsAreDone_case2();
 
         // when win on level then try to change to last - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
         hero1().right();
         tick();
@@ -3184,7 +3187,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3 (previous) - success
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
 
         // then
@@ -3403,7 +3406,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 1  - success
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(1);
         tick();
         tick();
         hero1().down();
@@ -3440,7 +3443,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2  - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
         tick();
         hero1().left();
@@ -3477,7 +3480,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3  - success
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
         tick();
         hero1().up();
@@ -3514,7 +3517,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
         tick();
         hero1().right();
@@ -3588,7 +3591,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2 - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
         tick();
         hero1().left();
@@ -3678,7 +3681,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level to 1 - success
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(1);
         tick();
 
         // then
@@ -3695,7 +3698,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level to 2 - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
         hero1().left();
         tick();
@@ -3714,23 +3717,6 @@ public class SingleTest {
                 "----");
 
         // when try to change level to 3 - fail
-        player1TryLoadLevel(2);
-        tick();
-
-        // then
-        assertL(single1,
-                "╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE(single1,
-                "----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when try to change level 4 - fail
         player1TryLoadLevel(3);
         tick();
 
@@ -3747,8 +3733,25 @@ public class SingleTest {
                 "----" +
                 "----");
 
+        // when try to change level 4 - fail
+        player1TryLoadLevel(4);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
         // when try to change level to 1 - success
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(1);
         tick();
 
         // then

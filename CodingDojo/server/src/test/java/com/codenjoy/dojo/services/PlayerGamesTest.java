@@ -472,7 +472,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void shouldNextLevel_whenGameOver_andIsWin_caseTrainingMultiplayerType() {
         // given
-        Player player = createPlayer(MultiplayerType.TRAINING.apply(2));
+        Player player = createPlayer(MultiplayerType.TRAINING.apply(3));
 
         resetAllFields();
         assertEquals(1, fields.size());
@@ -480,14 +480,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerIsWin(0);
 
         // then
-        assertProgress("player", "{'current':0,'passed':-1,'total':2,'valid':true}");
+        assertProgress("player", "{'current':1,'passed':0,'total':3,'valid':true}");
 
         // when
         // win + gameOver > next level
         playerGames.tick();
 
         // then
-        String progress1 = "{'current':1,'passed':0,'total':2,'valid':true}";
+        String progress1 = "{'current':2,'passed':1,'total':3,'valid':true}";
         assertProgress("player", progress1);
         verifyPlayerEventListenerLevelChanged("player", progress1);
 
@@ -501,7 +501,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        String progress2 = "{'current':2,'passed':1,'total':2,'valid':true}";
+        String progress2 = "{'current':3,'passed':2,'total':3,'valid':true}";
         assertProgress("player", progress2);
         verifyPlayerEventListenerLevelChanged("player", progress2);
 
@@ -515,7 +515,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertProgress("player", "{'current':2,'passed':1,'total':2,'valid':true}");
+        assertProgress("player", "{'current':3,'passed':2,'total':3,'valid':true}");
         verifyPlayerEventListenerLevelChanged("player", null);
 
         newField = fields.size() - 1;
@@ -539,11 +539,11 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        String same = "{'current':0,'passed':-1,'total':2,'valid':true}";
+        String same = "{'current':1,'passed':0,'total':2,'valid':true}";
         assertProgress("player", same);
 
         // when
-        playerGames.changeLevel("player", 1);
+        playerGames.changeLevel("player", 2);
 
         // then
         assertProgress("player", same);
@@ -562,14 +562,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertProgress("player", "{'current':2,'passed':1,'total':2,'valid':true}");
+        assertProgress("player", "{'current':3,'passed':2,'total':3,'valid':true}");
 
         // when
         // change decrease - create new field
-        playerGames.changeLevel("player", 1);
+        playerGames.changeLevel("player", 2);
 
         // then
-        String progress = "{'current':1,'passed':1,'total':2,'valid':true}";
+        String progress = "{'current':2,'passed':2,'total':3,'valid':true}";
         assertProgress("player", progress);
         verifyPlayerEventListenerLevelChanged("player", progress);
 
@@ -589,7 +589,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        String same = "{'current':0,'passed':-1,'total':2,'valid':true}";
+        String same = "{'current':1,'passed':0,'total':2,'valid':true}";
         assertProgress("player", same);
 
         // when
@@ -614,14 +614,14 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertProgress("player", "{'current':2,'passed':1,'total':2,'valid':true}");
+        assertProgress("player", "{'current':3,'passed':2,'total':3,'valid':true}");
 
         // when
         // change decrease - create new field
-        playerGames.setLevel("player", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
+        playerGames.setLevel("player", new JSONObject("{'levelProgress':{'current':2,'lastPassed':2,'total':3}}"));
 
         // then
-        String progress = "{'current':1,'passed':1,'total':2,'valid':true}";
+        String progress = "{'current':2,'passed':2,'total':3,'valid':true}";
         assertProgress("player", progress);
         verifyPlayerEventListenerLevelChanged("player", progress);
 
@@ -640,13 +640,13 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertProgress("player", "{'current':2,'passed':1,'total':2,'valid':true}");
+        assertProgress("player", "{'current':3,'passed':2,'total':3,'valid':true}");
 
         // when
         playerGames.setLevel("player", new JSONObject("{}"));
 
         // then
-        String progress = "{'current':0,'passed':-1,'total':2,'valid':true}";
+        String progress = "{'current':1,'passed':0,'total':3,'valid':true}";
         assertProgress("player", progress);
         verifyPlayerEventListenerLevelChanged("player", progress);
 
@@ -665,7 +665,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        String same = "{'current':2,'passed':1,'total':2,'valid':true}";
+        String same = "{'current':3,'passed':2,'total':3,'valid':true}";
         assertProgress("player", same);
 
         // when
@@ -1129,7 +1129,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when then
         assertBoard("player",
                 "{\"board\":\"data\"," +
-                        "\"levelProgress\":{\"total\":3,\"current\":0,\"lastPassed\":-1}}");
+                        "\"levelProgress\":{\"total\":3,\"current\":1,\"lastPassed\":0}}");
     }
 
     private void assertBoard(String playerName, String expected) {
@@ -1150,7 +1150,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         // when then
         assertBoard("player",
                 "{\"board\":\"board-data\"," +
-                        "\"levelProgress\":{\"total\":3,\"current\":0,\"lastPassed\":-1}}");
+                        "\"levelProgress\":{\"total\":3,\"current\":1,\"lastPassed\":0}}");
     }
 
     @Test
@@ -1179,7 +1179,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // then
         assertProgress("player1", "{'current':3,'passed':2,'total':3,'valid':true}");
-        assertProgress("player2", "{'current':0,'passed':-1,'total':3,'valid':true}");
+        assertProgress("player2", "{'current':1,'passed':0,'total':3,'valid':true}");
     }
 
     @Test
@@ -1192,8 +1192,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertProgress("player1", "{'current':0,'passed':-1,'total':3,'valid':true}");
-        assertProgress("player2", "{'current':0,'passed':-1,'total':3,'valid':true}");
+        assertProgress("player1", "{'current':1,'passed':0,'total':3,'valid':true}");
+        assertProgress("player2", "{'current':1,'passed':0,'total':3,'valid':true}");
     }
 
     @Test
@@ -1206,8 +1206,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertProgress("player1", "{'current':0,'passed':-1,'total':1,'valid':true}");
-        assertProgress("player2", "{'current':0,'passed':-1,'total':1,'valid':true}");
+        assertProgress("player1", "{'current':1,'passed':0,'total':1,'valid':true}");
+        assertProgress("player2", "{'current':1,'passed':0,'total':1,'valid':true}");
     }
 
     private void assertProgress(String player, String expected) {
@@ -1227,8 +1227,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertProgress("player1", "{'current':0,'passed':-1,'total':3,'valid':true}");
-        assertProgress("player2", "{'current':0,'passed':-1,'total':5,'valid':true}");
+        assertProgress("player1", "{'current':1,'passed':0,'total':3,'valid':true}");
+        assertProgress("player2", "{'current':1,'passed':0,'total':5,'valid':true}");
     }
 
     @Test
@@ -1401,7 +1401,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "1=[player3, player4], " +
                 "2=[player5]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
         playerGames.changeRoom("player1", "otherRoom");
@@ -1418,8 +1418,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "3=[player1, player2], " +
                 "4=[player5]}");
 
-        assertRoomsNames("{otherRoom[0]=[[player1, player2]], " +
-                "room[0]=[[player3, player4], [player5]]}");
+        assertRoomsNames("{otherRoom[1]=[[player1, player2]], " +
+                "room[1]=[[player3, player4], [player5]]}");
     }
 
     @Test
@@ -1436,7 +1436,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "1=[player3, player4], " +
                 "2=[player5]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
         playerGames.changeRoom("player1", "otherRoom");
@@ -1450,8 +1450,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "2=[player5], " +
                 "3=[player1, player2]}");
 
-        assertRoomsNames("{otherRoom[0]=[[player1, player2]], " +
-                "room[0]=[[player3, player4], [player5]]}");
+        assertRoomsNames("{otherRoom[1]=[[player1, player2]], " +
+                "room[1]=[[player3, player4], [player5]]}");
     }
 
     @Test
@@ -1468,7 +1468,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "1=[player3, player4], " +
                 "2=[player5]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
         playerGames.changeRoom("player1", "otherRoom");
@@ -1485,8 +1485,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "3=[player1, player2], " +
                 "4=[player5]}");
 
-        assertRoomsNames("{otherRoom[0]=[[player1, player2]], " +
-                "room[0]=[[player3, player4], [player5]]}");
+        assertRoomsNames("{otherRoom[1]=[[player1, player2]], " +
+                "room[1]=[[player3, player4], [player5]]}");
     }
 
     @Test
@@ -1503,7 +1503,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "1=[player3, player4], " +
                 "2=[player5]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
         playerGames.changeRoom("player1", "otherRoom");
@@ -1517,8 +1517,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "2=[player5], " +
                 "3=[player1, player2]}");
 
-        assertRoomsNames("{otherRoom[0]=[[player1, player2]], " +
-                "room[0]=[[player3, player4], [player5]]}");
+        assertRoomsNames("{otherRoom[1]=[[player1, player2]], " +
+                "room[1]=[[player3, player4], [player5]]}");
     }
 
     @Test
@@ -1535,7 +1535,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "1=[player3, player4], " +
                 "2=[player5]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
         playerGames.changeRoom("player1", "otherRoom");
@@ -1548,8 +1548,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "2=[player2, player5], " +
                 "3=[player1]}");
 
-        assertRoomsNames("{otherRoom[0]=[[player1]], " +
-                "room[0]=[[player3, player4], [player5, player2]]}");
+        assertRoomsNames("{otherRoom[1]=[[player1]], " +
+                "room[1]=[[player3, player4], [player5, player2]]}");
     }
 
     @Test
@@ -1566,7 +1566,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "1=[player3, player4], " +
                 "2=[player5]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
 
         // when
         playerGames.changeRoom("player1", "otherRoom");
@@ -1578,8 +1578,8 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
                 "1=[player3, player4], " +
                 "2=[player5], 3=[player1]}");
 
-        assertRoomsNames("{otherRoom[0]=[[player1]], " +
-                "room[0]=[[player3, player4], [player5]]}");
+        assertRoomsNames("{otherRoom[1]=[[player1]], " +
+                "room[1]=[[player3, player4], [player5]]}");
     }
 
     @Test
@@ -1595,32 +1595,32 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]]}");
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]]}");
 
         // when
         // player1 переходит на новый уровень
         // при этом остальные игроки остаются где были
         playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
-                "{'current':1,'lastPassed':1,'total':3}}"));
+                "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
         assertRooms("{0=[player2, player3], " +
                 "1=[player4, player5], 2=[player1]}");
 
-        assertRoomsNames("{room[0]=[[player2, player3], [player4, player5]], " +
-                "room[1]=[[player1]]}");
+        assertRoomsNames("{room[1]=[[player2, player3], [player4, player5]], " +
+                "room[2]=[[player1]]}");
 
         // when
         // player1 возвращается обратно
         // и так как уровень не DISPOSABLE то игрок вернулся назад
         // в первую свободную комнату (свою же)
-        playerGames.changeLevel("player1", 0);
+        playerGames.changeLevel("player1", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
 
-        assertRoomsNames("{room[0]=[[player2, player3, player1], [player4, player5]]}");
+        assertRoomsNames("{room[1]=[[player2, player3, player1], [player4, player5]]}");
     }
 
     @Test
@@ -1636,32 +1636,32 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]]}");
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]]}");
 
         // when
         // player1 переходит на новый уровень
         // при этом остальные игроки остаются где были
         playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
-                "{'current':1,'lastPassed':1,'total':3}}"));
+                "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
         assertRooms("{0=[player2, player3], " +
                 "1=[player4, player5], 2=[player1]}");
 
-        assertRoomsNames("{room[0]=[[player2, player3], [player4, player5]], " +
-                "room[1]=[[player1]]}");
+        assertRoomsNames("{room[1]=[[player2, player3], [player4, player5]], " +
+                "room[2]=[[player1]]}");
 
         // when
         // player1 возвращается обратно
         // и так как уровень не DISPOSABLE то игрок вернулся назад
         // в первую свободную комнату (свою же)
-        playerGames.changeLevel("player1", 0);
+        playerGames.changeLevel("player1", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
 
-        assertRoomsNames("{room[0]=[[player2, player3, player1], [player4, player5]]}");
+        assertRoomsNames("{room[1]=[[player2, player3, player1], [player4, player5]]}");
     }
 
     @Test
@@ -1678,33 +1678,33 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5, player6]}");
 
-        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
                 "[player1, player2, player3]]}");
 
         // when
         // player6 переходит на новый уровень
         // при этом остальные остаются на месте
         playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
-                "{'current':1,'lastPassed':1,'total':3}}"));
+                "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5], " +
                 "2=[player6]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]], " +
-                "room[1]=[[player6]]}");
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]], " +
+                "room[2]=[[player6]]}");
 
         // when
         // player6 возвращается обратно
         // и так как уровень не DISPOSABLE его старая комната может его принять назад
-        playerGames.changeLevel("player6", 0);
+        playerGames.changeLevel("player6", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5, player6]}");
 
-        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
                 "[player1, player2, player3]]}");
     }
 
@@ -1722,33 +1722,33 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5, player6]}");
 
-        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
                 "[player1, player2, player3]]}");
 
         // when
         // player6 переходит на новый уровень
         // при этом остальные остаются на месте
         playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
-                "{'current':1,'lastPassed':1,'total':3}}"));
+                "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5], " +
                 "2=[player6]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]], " +
-                "room[1]=[[player6]]}");
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]], " +
+                "room[2]=[[player6]]}");
 
         // when
         // player6 возвращается обратно
         // и так как уровень не DISPOSABLE его старая комната может его принять назад
-        playerGames.changeLevel("player6", 0);
+        playerGames.changeLevel("player6", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5, player6]}");
 
-        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
                 "[player1, player2, player3]]}");
     }
 
@@ -1765,31 +1765,31 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]]}");
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]]}");
 
         // when
         // player1 переходит на новый уровень
         // при этом остальные игроки остаются где были
         playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
-                "{'current':1,'lastPassed':1,'total':3}}"));
+                "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
         assertRooms("{0=[player2, player3], " +
                 "1=[player4, player5], 2=[player1]}");
 
-        assertRoomsNames("{room[0]=[[player2, player3], [player4, player5]], " +
-                "room[1]=[[player1]]}");
+        assertRoomsNames("{room[1]=[[player2, player3], [player4, player5]], " +
+                "room[2]=[[player1]]}");
 
         // when
         // player1 возвращается обратно
         // и так как уровень DISPOSABLE то игрок попадает в новую комнату к player4 и player5
-        playerGames.changeLevel("player1", 0);
+        playerGames.changeLevel("player1", 1);
 
         // then
         assertRooms("{0=[player2, player3], " +
                 "1=[player1, player4, player5]}");
 
-        assertRoomsNames("{room[0]=[[player4, player5, player1], [player2, player3]]}");
+        assertRoomsNames("{room[1]=[[player4, player5, player1], [player2, player3]]}");
     }
 
     @Test
@@ -1805,31 +1805,31 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]]}");
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]]}");
 
         // when
         // player1 переходит на новый уровень
         // при этом остальные игроки остаются где были
         playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
-                "{'current':1,'lastPassed':1,'total':3}}"));
+                "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
         assertRooms("{0=[player2, player3], " +
                 "1=[player4, player5], 2=[player1]}");
 
-        assertRoomsNames("{room[0]=[[player2, player3], [player4, player5]], " +
-                "room[1]=[[player1]]}");
+        assertRoomsNames("{room[1]=[[player2, player3], [player4, player5]], " +
+                "room[2]=[[player1]]}");
 
         // when
         // player1 возвращается обратно
         // и так как уровень DISPOSABLE то игрок попадает в новую комнату к player4 и player5
-        playerGames.changeLevel("player1", 0);
+        playerGames.changeLevel("player1", 1);
 
         // then
         assertRooms("{0=[player2, player3], " +
                 "1=[player1, player4, player5]}");
 
-        assertRoomsNames("{room[0]=[[player4, player5, player1], [player2, player3]]}");
+        assertRoomsNames("{room[1]=[[player4, player5, player1], [player2, player3]]}");
     }
 
     @Test
@@ -1846,35 +1846,35 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5, player6]}");
 
-        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
                 "[player1, player2, player3]]}");
 
         // when
         // player6 переходит на новый уровень
         // при этом остальные остаются на месте
         playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
-                "{'current':1,'lastPassed':1,'total':3}}"));
+                "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5], " +
                 "2=[player6]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]], " +
-                "room[1]=[[player6]]}");
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]], " +
+                "room[2]=[[player6]]}");
 
         // when
         // player6 возвращается обратно
         // и так как уровень DISPOSABLE его старая комната не может его принять назад
         // и он отправляется в новую
-        playerGames.changeLevel("player6", 0);
+        playerGames.changeLevel("player6", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5], " +
                 "3=[player6]}");
 
-        assertRoomsNames("{room[0]=[[player6], " +
+        assertRoomsNames("{room[1]=[[player6], " +
                 "[player1, player2, player3], " +
                 "[player4, player5]]}");
     }
@@ -1893,35 +1893,35 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5, player6]}");
 
-        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
                 "[player1, player2, player3]]}");
 
         // when
         // player6 переходит на новый уровень
         // при этом остальные остаются на месте
         playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
-                "{'current':1,'lastPassed':1,'total':3}}"));
+                "{'current':2,'lastPassed':1,'total':3}}"));
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5], " +
                 "2=[player6]}");
 
-        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]], " +
-                "room[1]=[[player6]]}");
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]], " +
+                "room[2]=[[player6]]}");
 
         // when
         // player6 возвращается обратно
         // и так как уровень DISPOSABLE его старая комната не может его принять назад
         // и он отправляется в новую
-        playerGames.changeLevel("player6", 0);
+        playerGames.changeLevel("player6", 1);
 
         // then
         assertRooms("{0=[player1, player2, player3], " +
                 "1=[player4, player5], " +
                 "3=[player6]}");
 
-        assertRoomsNames("{room[0]=[[player6], " +
+        assertRoomsNames("{room[1]=[[player6], " +
                 "[player1, player2, player3], " +
                 "[player4, player5]]}");
     }

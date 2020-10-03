@@ -119,7 +119,7 @@ var boardPageLoad = function() {
 
         previous.click(function(){
             hide();
-            levelProgress.selectLevel(0);
+            levelProgress.selectLevel(levelsStartsFrom1);
         });
 
         $("body").keydown(function(event){

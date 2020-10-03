@@ -63,9 +63,7 @@ public class LevelsType extends MultiplayerType {
     @Override
     public LevelProgress progress() {
         return new LevelProgress(){{
-            this.current = 0;
-            this.passed = -1;
-            this.total = getLevelsCount();
+            total = getLevelsCount();
         }};
     }
 

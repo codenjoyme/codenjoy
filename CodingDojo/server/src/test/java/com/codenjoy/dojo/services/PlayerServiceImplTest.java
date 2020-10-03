@@ -669,7 +669,7 @@ public class PlayerServiceImplTest {
 
         // when, then
         when(playerScores(0).getScore()).thenReturn(10, 13);
-        informationCollector.levelChanged(new LevelProgress(2, 1, 1));
+        informationCollector.levelChanged(new LevelProgress(3, 2, 1));
         informationCollector.event("event1");
         checkInfo("+3, Level 2");
     }

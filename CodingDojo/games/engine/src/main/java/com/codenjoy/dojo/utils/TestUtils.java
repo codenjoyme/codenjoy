@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -63,7 +64,7 @@ public class TestUtils {
     }
 
     public static Game  buildGame(GameType gameType, EventListener listener, PrinterFactory factory) {
-        GameField gameField = gameType.createGame(0);
+        GameField gameField = gameType.createGame(LevelProgress.levelsStartsFrom1);
         GamePlayer gamePlayer = gameType.createPlayer(listener, null);
         Game game = new Single(gamePlayer, factory);
         game.on(gameField);

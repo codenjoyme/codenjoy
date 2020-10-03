@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.*;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -66,10 +67,10 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
+    public GameField createGame(int level) {
         Figures queue = new Figures();
         Levels levels = loadLevelsFor(queue, gameLevels.getValue());
-        levels.gotoLevel(levelNumber);
+        levels.gotoLevel(level - LevelProgress.levelsStartsFrom1);
         return new Tetris(levels, queue, glassSize.getValue());
     }
 

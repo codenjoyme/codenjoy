@@ -370,7 +370,7 @@ public class MultiplayerTypeTest {
 
         // then
         assertEquals(1, roomSize);
-        assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
+        assertEquals("{'current':1,'passed':0,'total':1,'valid':true}",
                 game.getProgress().toString());
     }
 

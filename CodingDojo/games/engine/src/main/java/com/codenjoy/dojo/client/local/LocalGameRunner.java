@@ -29,6 +29,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -96,7 +97,7 @@ public class LocalGameRunner {
         games = new LinkedList<>();
         scores = new LinkedList<>();
 
-        field = gameType.createGame(0);
+        field = gameType.createGame(LevelProgress.levelsStartsFrom1);
     }
 
     public LocalGameRunner run(Consumer<Integer> onTick) {

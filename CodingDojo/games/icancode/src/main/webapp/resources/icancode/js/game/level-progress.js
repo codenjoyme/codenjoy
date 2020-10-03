@@ -19,6 +19,15 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+
+// так как уровни в настройках хрантся начиная с номера 1,
+// а индексы у нормальных программистов с 0
+// я пробовал нормально - путаница получается, лучше так, поверь
+// эта константа тут, чтобы связать все места в коде (java + js),
+// где считаем с 1 коммит, отвечающий за это так же
+// можно посмортреть в git _________
+var levelsStartsFrom1 = 1
+
 function initLevelProgress(game, onChangeLevel) {
 
     if (game.debug) {
@@ -26,14 +35,14 @@ function initLevelProgress(game, onChangeLevel) {
     }
 
     var currentLevel = -1;
-    var currentLevelIsMultiple = false;
+    var currentLevelIsContest = false;
 
     var progressBar = initProgressbar('progress-bar');
     progressBar.setProgress = function(current, lastPassed) {
-        for (var i = 0; i < progressBar.levelsCount; ++i) {
+        for (var i = levelsStartsFrom1; i <= progressBar.levelsCount; ++i) {
             this.notActive(i);
         }
-        for (var i = 0; i <= lastPassed; ++i) {
+        for (var i = levelsStartsFrom1; i <= lastPassed; ++i) {
             this.done(i);
         }
         this.process(lastPassed + 1);
@@ -81,7 +90,7 @@ function initLevelProgress(game, onChangeLevel) {
         var level = board.levelProgress.current;
         var countLevels = board.levelProgress.total;
         var lastPassed = board.levelProgress.lastPassed;
-        var multiple = (level >= countLevels);
+        var contest = (level == countLevels);
 
         var firstRun = !progressBar.levelProgress;
         if (!firstRun &&
@@ -93,7 +102,7 @@ function initLevelProgress(game, onChangeLevel) {
         }
         progressBar.levelProgress = board.levelProgress;
         currentLevel = level;
-        currentLevelIsMultiple = multiple;
+        currentLevelIsContest = contest;
 
         if (firstRun || progressBar.levelProgress.total != countLevels) {
             progressBar.countLevels(countLevels);
@@ -102,7 +111,7 @@ function initLevelProgress(game, onChangeLevel) {
 
         scrollProgress();
 
-        fireOnChangeLevel(level, multiple, lastPassed);
+        fireOnChangeLevel(level, contest, lastPassed);
     });
 
     var oldLastPassed = -1;
@@ -115,7 +124,7 @@ function initLevelProgress(game, onChangeLevel) {
         var lastPassedIncreased = oldLastPassed < lastPassed;
         var win = false;
         if (lastPassedIncreased) {
-            var firstWin = (lastPassed == 0 && level == 1 && oldLastPassed == -1);
+            var firstWin = (lastPassed == 0 && level == levelsStartsFrom1 && oldLastPassed == -1);
             win = (firstWin || oldLastPassed != -1);
             oldLastPassed = lastPassed;
         }
@@ -125,14 +134,14 @@ function initLevelProgress(game, onChangeLevel) {
     }
 
     return {
-        getCurrentLevel: function () {
+        getCurrentLevel: function() {
             return currentLevel;
         },
-        isCurrentLevelMultiple: function () {
-            return currentLevelIsMultiple;
+        isCurrentLevelMultiple: function() {
+            return currentLevelIsContest;
         },
-        selectLevel: function (level) {
-            $(progressBar[level]).click();
+        selectLevel: function(level) {
+            progressBar.element(level).click();
         }
     }
 }
