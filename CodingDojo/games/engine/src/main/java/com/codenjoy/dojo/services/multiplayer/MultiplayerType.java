@@ -130,6 +130,14 @@ public class MultiplayerType {
      */
     public static final Function<Integer, MultiplayerType> TRAINING = TrainingType::new;
 
+    /**
+     * Игра многоуровневая.
+     * Игроки играют в комнатах (disposable которых задается) по N в каждой,
+     * при этом продвигаясь по уровням вперед.
+     * Что будет с комнатой когда ее покидают зависит от disposable.
+     */
+    public static final FourFunction<Integer, Integer, Boolean, Boolean, MultiplayerType> LEVELS = LevelsType::new;
+
     protected int roomSize;
     protected int levelsCount;
     protected boolean disposable;
@@ -184,6 +192,13 @@ public class MultiplayerType {
 
     public boolean isTraining() {
         return this instanceof TrainingType;
+    }
+
+    /**
+     * @return говорит является ли этот тип представителем подтипа содержащего ряд уровней
+     */
+    public boolean isLevels() {
+        return LevelsType.class.isAssignableFrom(getClass());
     }
 
     public boolean isLastLevel(int levelNumber) {

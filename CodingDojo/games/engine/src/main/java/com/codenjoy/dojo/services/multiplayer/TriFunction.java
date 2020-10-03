@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.tetris.model.levels.random;
+package com.codenjoy.dojo.services.multiplayer;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,12 +22,9 @@ package com.codenjoy.dojo.tetris.model.levels.random;
  * #L%
  */
 
+@FunctionalInterface
+public interface TriFunction<T, U, V, R> {
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 1:46 AM
- */
-public interface RandomizerFetcher {
-    Randomizer get();
+    R apply(T t, U u, V v);
+
 }

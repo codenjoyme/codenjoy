@@ -273,7 +273,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 quiet(() -> {
                     JSONObject level = game.getSave();
 
-                    if (type.isTraining() && game.isWin()) {
+                    if (type.isLevels() && game.isWin()) {
                         level = LevelProgress.goNext(level);
                         if (level != null) {
                             reload(game, roomName, level);
