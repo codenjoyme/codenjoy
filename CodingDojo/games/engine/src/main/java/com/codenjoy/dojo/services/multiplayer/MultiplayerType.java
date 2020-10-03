@@ -246,6 +246,26 @@ public class MultiplayerType {
         return new LevelProgress();
     }
 
+    /**
+     * Иногда случается так, что надо создавать отдельную комнату,
+     * а иногда искать свободную, если она конечно есть.
+     * @param levelNumber номер уровня для которого делаем проверку
+     * @return надо ли создавать новую комнату?
+     */
+    public boolean shouldTryFindUnfilled(int levelNumber) {
+        return true;
+    }
+
+    /**
+     * Некоторые типы игр могут иметь иное именование комнат,
+     * скажем в зависимости от номера уровня (см. переопределенные методы)
+     * @param roomName исходное имя комнаты
+     * @param levelNumber номер уровня
+     * @return обновленное имя комнаты
+     */
+    public String getRoomName(String roomName, int levelNumber) {
+        return roomName;
+    }
 
     /**
      * Иногда случается так, что предпоследний игрок уходит с поля,

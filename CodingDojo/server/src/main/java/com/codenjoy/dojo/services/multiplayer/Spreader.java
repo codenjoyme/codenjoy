@@ -42,10 +42,12 @@ public class Spreader {
                               int roomSize, int levelNumber,
                               Supplier<GameField> field)
     {
+        roomName = type.getRoomName(roomName, levelNumber);
         Room room = null;
-        if (!type.isTraining() || type.isLastLevel(levelNumber)) {
+        if (type.shouldTryFindUnfilled(levelNumber)) {
             room = findUnfilled(roomName);
         }
+
         if (room == null) {
             room = new Room(field.get(), roomSize, type.isDisposable());
             add(roomName, room);
