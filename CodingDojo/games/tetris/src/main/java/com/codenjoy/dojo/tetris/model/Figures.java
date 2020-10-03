@@ -24,20 +24,20 @@ package com.codenjoy.dojo.tetris.model;
 
 
 import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
-import com.codenjoy.dojo.tetris.model.levels.random.RandomizerFetcher;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.function.Supplier;
 
 public class Figures implements FigureQueue {
     public static final int DEFAULT_FUTURE_COUNT = 4;
 
     private ReadWriteLock lock = new ReentrantReadWriteLock();
     private Type[] open = null;
-    private RandomizerFetcher fetcher;
+    private Supplier<Randomizer> fetcher;
     private List<Type> figures = new LinkedList<>();
     private int futureCount;
 
@@ -49,7 +49,8 @@ public class Figures implements FigureQueue {
         this.futureCount = futureCount;
     }
 
-    public void setRandomizer(RandomizerFetcher fetcher) {
+    @Override
+    public void setRandomizer(Supplier<Randomizer> fetcher) {
         this.fetcher = fetcher;
     }
 
