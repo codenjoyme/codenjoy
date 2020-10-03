@@ -63,13 +63,13 @@ public final class SettingsWrapper {
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
         isTrainingMode = settings.addCheckBox("Is training mode").type(Boolean.class).def(true);
-        levelsCount = settings.addEditBox("levels.count").type(Integer.class).def(0);
 
         gameMode = settings.addSelect("Game mode", Arrays.asList(
                 CLASSSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP))
                 .type(String.class).def(CLASSSIC_TRAINING);
         roomSize = settings.addEditBox("Room size").type(Integer.class).def(5);
 
+        levelsCount = settings.addEditBox("Levels count").type(Integer.class).def(0);
         Levels.setup();
     }
 
