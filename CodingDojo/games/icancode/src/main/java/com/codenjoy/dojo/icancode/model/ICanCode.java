@@ -96,11 +96,11 @@ public class ICanCode implements Tickable, Field {
         for (Player player : players) {
             Hero hero = player.getHero();
             if (hero.getKillZombieCount() > 0) {
-                player.event(Events.KILL_ZOMBIE(hero.getKillZombieCount(), isMultiplayer));
+                player.event(Events.KILL_ZOMBIE(hero.getKillZombieCount(), contest));
                 hero.resetZombieKillCount();
             }
             if (hero.getKillHeroCount() > 0) {
-                player.event(Events.KILL_HERO(hero.getKillHeroCount(), isMultiplayer));
+                player.event(Events.KILL_HERO(hero.getKillHeroCount(), contest));
                 hero.resetHeroKillCount();
             }
             if (!hero.isAlive()) {

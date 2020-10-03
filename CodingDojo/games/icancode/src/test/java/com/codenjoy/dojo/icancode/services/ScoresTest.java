@@ -60,19 +60,19 @@ public class ScoresTest {
     }
 
     public void killHero(int count) {
-        scores.event(Events.KILL_HERO(count, ICanCode.SINGLE));
+        scores.event(Events.KILL_HERO(count, ICanCode.TRAINING));
     }
 
     public void killZombie(int count) {
-        scores.event(Events.KILL_ZOMBIE(count, ICanCode.SINGLE));
+        scores.event(Events.KILL_ZOMBIE(count, ICanCode.TRAINING));
     }
 
     public void killHeroMultiple(int count) {
-        scores.event(Events.KILL_HERO(count, ICanCode.MULTIPLE));
+        scores.event(Events.KILL_HERO(count, ICanCode.CONTEST));
     }
 
     public void killZombieMultiple(int count) {
-        scores.event(Events.KILL_ZOMBIE(count, ICanCode.MULTIPLE));
+        scores.event(Events.KILL_ZOMBIE(count, ICanCode.CONTEST));
     }
 
     @Before
