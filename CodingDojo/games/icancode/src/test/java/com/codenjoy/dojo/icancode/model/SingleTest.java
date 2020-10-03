@@ -89,7 +89,7 @@ public class SingleTest {
         singles2 = createLevels(strings);
 
         Level levelMultiple = createLevels(Arrays.asList(multiple)).get(0);
-        gameMultiple = new ICanCode(levelMultiple, dice, ICanCode.MULTIPLE);
+        gameMultiple = new ICanCode(levelMultiple, dice, ICanCode.CONTEST);
 
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);
@@ -850,7 +850,7 @@ public class SingleTest {
         if (index == levels.size()) {
             single.on(gameMultiple);
         } else {
-            ICanCode gameSingle = new ICanCode(levels.get(index), dice, ICanCode.SINGLE);
+            ICanCode gameSingle = new ICanCode(levels.get(index), dice, ICanCode.TRAINING);
             single.on(gameSingle);
         }
         return true;

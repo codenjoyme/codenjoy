@@ -107,7 +107,7 @@ public class Player extends GamePlayer<Hero, Field> {
 
         @Override
         public boolean isMultiplayer() {
-            return Player.this.field.isMultiplayer();
+            return Player.this.field.isContest();
         }
 
         @Override

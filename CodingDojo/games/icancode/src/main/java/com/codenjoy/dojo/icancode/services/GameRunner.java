@@ -63,7 +63,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public GameField createGame(int levelNumber) {
         Level level = loadLevel(levelNumber);
         boolean isSingle = levelNumber < getMultiplayerType().getLevelsCount();
-        return new ICanCode(level, getDice(), isSingle ? ICanCode.SINGLE : ICanCode.MULTIPLE);
+        return new ICanCode(level, getDice(), isSingle ? ICanCode.TRAINING : ICanCode.CONTEST);
     }
 
     @Override

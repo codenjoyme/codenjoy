@@ -32,7 +32,7 @@ import com.codenjoy.dojo.icancode.model.ICanCode;
 public class Events {
 
     public static Events WIN(int goldCount) {
-        return WIN(goldCount, ICanCode.SINGLE);
+        return WIN(goldCount, ICanCode.TRAINING);
     }
 
     public static Events WIN(int goldCount, boolean multiple) {

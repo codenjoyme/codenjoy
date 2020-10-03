@@ -36,20 +36,20 @@ import java.util.function.BiFunction;
 
 public class ICanCode implements Tickable, Field {
 
-    public static final boolean SINGLE = false;
-    public static final boolean MULTIPLE = true;
+    public static final boolean TRAINING = false;
+    public static final boolean CONTEST = true;
 
     private Dice dice;
     private Level level;
 
     private List<Player> players;
-    private boolean isMultiplayer;
+    private boolean contest;
 
-    public ICanCode(Level level, Dice dice, boolean isMultiplayer) {
+    public ICanCode(Level level, Dice dice, boolean contest) {
         this.level = level;
         level.setField(this);
         this.dice = dice;
-        this.isMultiplayer = isMultiplayer;
+        this.contest = contest;
         players = new LinkedList();
     }
 
@@ -99,7 +99,7 @@ public class ICanCode implements Tickable, Field {
             if (!hero.isAlive()) {
                 player.event(Events.LOOSE());
             } else if (hero.isWin()) {
-                player.event(Events.WIN(hero.getGoldCount(), isMultiplayer));
+                player.event(Events.WIN(hero.getGoldCount(), contest));
                 hero.die();
             }
         }
@@ -193,13 +193,13 @@ public class ICanCode implements Tickable, Field {
     public void reset() {
         List<Gold> golds = golds();
 
-        if (isMultiplayer) {
+        if (contest) {
             setRandomGold(golds); // TODO test me
         }
 
         golds.forEach(it -> it.reset());
 
-        if (!isMultiplayer) {
+        if (!contest) {
             // TODO test me
             zombiePots().forEach(it -> it.reset());
 
@@ -209,8 +209,8 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public boolean isMultiplayer() {
-        return isMultiplayer;
+    public boolean isContest() {
+        return contest;
     }
 
     private void setRandomGold(List<Gold> golds) {

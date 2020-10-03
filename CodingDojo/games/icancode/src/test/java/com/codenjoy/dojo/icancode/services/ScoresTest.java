@@ -49,7 +49,7 @@ public class ScoresTest {
     }
 
     public void winMultiple() {
-        scores.event(Events.WIN(0, ICanCode.MULTIPLE));
+        scores.event(Events.WIN(0, ICanCode.CONTEST));
     }
 
     public void win(int goldCount) {
