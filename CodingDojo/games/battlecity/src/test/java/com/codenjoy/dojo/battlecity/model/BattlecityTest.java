@@ -30,7 +30,6 @@ import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -139,24 +138,6 @@ public class BattlecityTest {
         long prizes = tanks.stream().filter(x -> x.isTankPrize()).count();
 
         return String.format("%s prizes with %s tanks", prizes, tanks.size());
-    }
-
-    private void givenGameBeforeDropPrize(Point pt) {
-        hitKillsAiPrize = v(1);
-
-        givenFl("☼☼☼☼☼☼☼\n" +
-                "☼?    ☼\n" +
-                "☼     ☼\n" +
-                "☼  ╬  ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        when(dice.next(anyInt())).thenReturn(pt.getX(), pt.getY(), 0);
-        ai(0).kill(mock(Bullet.class));
-       /* ai(0).kill(mock(Bullet.class));
-        ai(0).kill(mock(Bullet.class));
-        ai(0).kill(mock(Bullet.class));*/
     }
 
     @Test
@@ -5075,124 +5056,9 @@ public class BattlecityTest {
         events.verifyAllEvents("listener(0) => [KILL_OTHER_AI_TANK, KILL_OTHER_AI_TANK, KILL_OTHER_AI_TANK]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-    }
-
-    @Test
-    public void shouldDropPrizeInPointKilledAiPrize() {
-        givenGameBeforeDropPrize(pt(1,5));
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼Ѡ    ☼\n" +
-                "☼     ☼\n" +
-                "☼  ╬  ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
                 "☼1    ☼\n" +
                 "☼     ☼\n" +
-                "☼  ╬  ☼\n" +
                 "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-    }
-
-    @Test
-    public void shouldDropPrizeInFreePoint() {
-        givenGameBeforeDropPrize(pt(4, 5));
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼Ѡ    ☼\n" +
-                "☼     ☼\n" +
-                "☼  ╬  ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼   1 ☼\n" +
-                "☼     ☼\n" +
-                "☼  ╬  ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-    }
-
-    @Test
-    public void shouldNotDropPrizeInPointPlayerTank() {
-        givenGameBeforeDropPrize(pt(1,1));
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼Ѡ    ☼\n" +
-                "☼     ☼\n" +
-                "☼  ╬  ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼  ╬  ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-    }
-
-    @Test
-    public void shouldNotDropPrizeInPointWall() {
-        givenGameBeforeDropPrize(pt(3,3));
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼Ѡ    ☼\n" +
-                "☼     ☼\n" +
-                "☼  ╬  ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼  ╬  ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-    }
-
-    @Test
-    public void shouldNotDropPrizeInPointField() {
-        givenGameBeforeDropPrize(pt(0,2));
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼Ѡ    ☼\n" +
-                "☼     ☼\n" +
-                "☼  ╬  ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼  ╬  ☼\n" +
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
@@ -5250,7 +5116,7 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldDropPrizeInPointKilledAiPrize2() {
+    public void shouldDropPrizeInPointKilledAiPrize() {
         hitKillsAiPrize = v(1);
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -5289,46 +5155,4 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
-
-    @Test
-    public void shouldDropPrizeInPointKilledAiPrize3() {
-        hitKillsAiPrize = v(1);
-        givenFl("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼  ¿  ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼  ◘  ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        ai(0).kill(mock(Bullet.class));
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼  Ѡ  ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        when(dice.next(anyInt())).thenReturn(0);
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
-                "☼     ☼\n" +
-                "☼  1  ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-    }
-
 }
