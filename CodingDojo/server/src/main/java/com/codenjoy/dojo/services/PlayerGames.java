@@ -273,7 +273,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                         level = LevelProgress.winLevel(level);
                         if (level != null) {
                             reload(game, roomName, level);
-                            fireOnLevelChanged(playerGame);
+                            playerGame.fireOnLevelChanged();
                             return;
                         }
                     }
@@ -301,12 +301,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(GameType::quietTick);
-    }
-
-    private void fireOnLevelChanged(PlayerGame playerGame) {
-        Game game = playerGame.getGame();
-        Player player = playerGame.getPlayer();
-        player.getEventListener().levelChanged(game.getProgress());
     }
 
     // перевод текущего игрока в новую комнату
@@ -383,7 +377,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         if (progress.canChange(level)) {
             progress.change(level);
             reload(game, roomName, progress.saveTo(new JSONObject()));
-            fireOnLevelChanged(playerGame);
+            playerGame.fireOnLevelChanged();
         }
     }
 
@@ -395,7 +389,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         String roomName = playerGame.getRoomName();
         Game game = playerGame.getGame();
         reload(game, roomName, save);
-        fireOnLevelChanged(playerGame);
+        playerGame.fireOnLevelChanged();
     }
 
     public void changeRoom(String playerId, String roomName) {
