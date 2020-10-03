@@ -315,7 +315,7 @@ public class LevelProgressTest {
 
         // when
         try {
-            LevelProgress.winLevel(json);
+            LevelProgress.goNext(json);
             fail();
         } catch (IllegalArgumentException e) {
             assertEquals("Progress is invalid: {'current':2,'passed':0,'total':3,'valid':false}", e.getMessage());
@@ -328,7 +328,7 @@ public class LevelProgressTest {
         json = new JSONObject("{'levelProgress':{'total':3,'current':2,'lastPassed':2}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}");
@@ -340,7 +340,7 @@ public class LevelProgressTest {
         json = new JSONObject("{'levelProgress':{'total':2,'current':2,'lastPassed':2}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertEquals(null, json);
@@ -352,19 +352,19 @@ public class LevelProgressTest {
         json = new JSONObject("{'a':'data','levelProgress':{'total':4,'current':2,'lastPassed':3}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':3,'lastPassed':3}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':4,'lastPassed':3}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertEquals(null, json);
@@ -378,31 +378,31 @@ public class LevelProgressTest {
         assertJson("{'a':'data','levelProgress':{'total':4,'current':0,'lastPassed':-1}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':1,'lastPassed':0}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':2,'lastPassed':1}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':3,'lastPassed':2}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':4,'lastPassed':3}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertEquals(null, json);

@@ -95,7 +95,7 @@ public class LevelProgress {
         this.current = level;
     }
 
-    public static JSONObject winLevel(JSONObject json) {
+    public static JSONObject goNext(JSONObject json) {
         LevelProgress progress = new LevelProgress(json);
         JSONObject clone = new JSONObject(json.toString());
 
