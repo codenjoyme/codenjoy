@@ -135,7 +135,7 @@ public class Levels implements GlassEventListener {
         private int totalRemovedLines;
         private int currentLevel;
         private String name;
-        private Figures queue;
+        private FigureQueue queue;
         private Levels levels;
         private Dice dice;
 
