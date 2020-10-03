@@ -298,6 +298,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         //      недокомплектованные пользователями
         //      а так же котмнаты которых активны
         active.stream()
+                .filter(playerGame -> playerGame.getField() != null) // TODO разобраться почему так случается при переключении уровней icancode
                 .map(PlayerGame::getField)
                 .distinct()
                 .filter(spreader::isRoomStaffed)
