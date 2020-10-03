@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
 public class Battlecity implements Field {
@@ -134,7 +135,7 @@ public class Battlecity implements Field {
             if (!tank.isAlive()) {
                 ais.remove(tank);
                 if (tank.isTankPrize()) {
-                    prizeGen.drop();
+                    prizeGen.drop(pt(tank.getX(), tank.getY()));
                 }
             }
         }

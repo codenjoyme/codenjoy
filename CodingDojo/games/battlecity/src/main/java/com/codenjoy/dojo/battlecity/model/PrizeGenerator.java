@@ -46,15 +46,7 @@ public class PrizeGenerator {
         this.dice = dice;
     }
 
-    public void drop() {
-        Point pt;
-        int c = 0;
-        do {
-            pt = random(dice, field.size());
-        } while (field.isBarrier(pt) && c++ < field.size());
-
-        if (!field.isBarrier(pt)) {
-            field.addPrize(new Prize(pt, PRIZES.get(dice.next(PRIZES.size()))));
-        }
+    public void drop(Point pt) {
+        field.addPrize(new Prize(pt, PRIZES.get(dice.next(PRIZES.size()))));
     }
 }
