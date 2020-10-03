@@ -26,7 +26,7 @@ import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 
 public class TrainingType extends LevelsType {
 
-    public TrainingType(Integer levels) {
+    public TrainingType(int levels) {
         super(SINGLE.getRoomSize(), levels, !DISPOSABLE, RELOAD_ALONE);
     }
 
