@@ -10,12 +10,12 @@ package com.codenjoy.dojo.icancode.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -39,6 +39,9 @@ public final class SettingsWrapper {
 
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> goldScore;
+    private final Parameter<Integer> killZombieScore;
+    private final Parameter<Integer> killHeroScore;
+    private final Parameter<Boolean> enableKillScore;
     private final Parameter<Integer> loosePenalty;
     private final Parameter<Boolean> isTrainingMode;
     private final Parameter<String> gameMode;
@@ -61,6 +64,9 @@ public final class SettingsWrapper {
 
         winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
+        killZombieScore = settings.addEditBox("Kill zombie score").type(Integer.class).def(20);
+        killHeroScore = settings.addEditBox("Kill hero score").type(Integer.class).def(50);
+        enableKillScore = settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
         isTrainingMode = settings.addCheckBox("Is training mode").type(Boolean.class).def(true);
 
@@ -75,6 +81,18 @@ public final class SettingsWrapper {
 
     public int goldScore() {
         return goldScore.getValue();
+    }
+
+    public int killZombieScore() {
+        return killZombieScore.getValue();
+    }
+
+    public int killHeroScore() {
+        return killHeroScore.getValue();
+    }
+
+    public Boolean enableKillScore() {
+        return enableKillScore.getValue();
     }
 
     public int loosePenalty() {
@@ -138,6 +156,21 @@ public final class SettingsWrapper {
 
     public SettingsWrapper winScore(int value) {
         winScore.update(value);
+        return this;
+    }
+
+    public SettingsWrapper killZombieScore(int value) {
+        killZombieScore.update(value);
+        return this;
+    }
+
+    public SettingsWrapper killHeroScore(int value) {
+        killHeroScore.update(value);
+        return this;
+    }
+
+    public SettingsWrapper enableKillScore(boolean value) {
+        enableKillScore.update(value);
         return this;
     }
 
