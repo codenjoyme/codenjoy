@@ -5116,7 +5116,7 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldDropPrizeInPointKilledAiPrize() {
+    public void shouldDropPrize_onlyInPointKilledAiPrize() {
         hitKillsAiPrize = v(1);
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +

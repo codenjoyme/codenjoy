@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.Point;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.PointImpl.random;
 
 public class PrizeGenerator {
 
