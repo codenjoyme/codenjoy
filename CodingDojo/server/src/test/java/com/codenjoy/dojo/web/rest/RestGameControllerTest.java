@@ -149,6 +149,7 @@ public class RestGameControllerTest {
                 "  'info':'GameType[first]',\n" +
                 "  'multiplayerType':{\n" +
                 "    'disposable':true,\n" +
+                "    'levels':false,\n" +
                 "    'levelsCount':1,\n" +
                 "    'multiplayer':false,\n" +
                 "    'multiple':false,\n" +
@@ -215,6 +216,7 @@ public class RestGameControllerTest {
                 "  'info':'GameType[second]',\n" +
                 "  'multiplayerType':{\n" +
                 "    'disposable':false,\n" +
+                "    'levels':true,\n" +
                 "    'levelsCount':10,\n" +
                 "    'multiplayer':true,\n" +
                 "    'multiple':false,\n" +

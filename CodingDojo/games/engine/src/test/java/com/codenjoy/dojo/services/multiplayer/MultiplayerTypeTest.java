@@ -32,15 +32,16 @@ import lombok.experimental.Delegate;
 import org.json.JSONObject;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.DISPOSABLE;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.RELOAD_ALONE;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
 
 public class MultiplayerTypeTest {
 
     @Test
     public void twoTeamTypesShouldBeDifferent() {
-        MultiplayerType team1 = MultiplayerType.TEAM.apply(1, !MultiplayerType.DISPOSABLE);
-        MultiplayerType team2 = MultiplayerType.TEAM.apply(3, MultiplayerType.DISPOSABLE);
+        MultiplayerType team1 = MultiplayerType.TEAM.apply(1, !DISPOSABLE);
+        MultiplayerType team2 = MultiplayerType.TEAM.apply(3, DISPOSABLE);
 
         assertEquals(1, team1.getRoomSize());
         assertEquals(false, team1.isDisposable());
@@ -63,6 +64,9 @@ public class MultiplayerTypeTest {
         assertEquals(false, type.isTeam());
         assertEquals(false, type.isMultiple());
 
+        assertEquals(false, type.isLevels());
+        assertEquals(true, type.shouldReloadAlone());
+
         assertEquals(true, type.isSingleplayer());
         assertEquals(false, type.isMultiplayer());
 
@@ -83,6 +87,9 @@ public class MultiplayerTypeTest {
         assertEquals(false, type.isQuadro());
         assertEquals(false, type.isTeam());
         assertEquals(false, type.isMultiple());
+
+        assertEquals(false, type.isLevels());
+        assertEquals(true, type.shouldReloadAlone());
 
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
@@ -105,6 +112,9 @@ public class MultiplayerTypeTest {
         assertEquals(false, type.isTeam());
         assertEquals(false, type.isMultiple());
 
+        assertEquals(false, type.isLevels());
+        assertEquals(true, type.shouldReloadAlone());
+
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
 
@@ -126,6 +136,9 @@ public class MultiplayerTypeTest {
         assertEquals(false, type.isTeam());
         assertEquals(false, type.isMultiple());
 
+        assertEquals(false, type.isLevels());
+        assertEquals(true, type.shouldReloadAlone());
+
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
 
@@ -135,7 +148,7 @@ public class MultiplayerTypeTest {
 
     @Test
     public void typeTeam() {
-        MultiplayerType type = MultiplayerType.TEAM.apply(9, !MultiplayerType.DISPOSABLE);
+        MultiplayerType type = MultiplayerType.TEAM.apply(9, !DISPOSABLE);
 
         assertEquals(9, type.getRoomSize());
         assertEquals(1, type.getLevelsCount());
@@ -146,6 +159,9 @@ public class MultiplayerTypeTest {
         assertEquals(false, type.isQuadro());
         assertEquals(true, type.isTeam());
         assertEquals(false, type.isMultiple());
+
+        assertEquals(false, type.isLevels());
+        assertEquals(true, type.shouldReloadAlone());
 
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
@@ -167,6 +183,9 @@ public class MultiplayerTypeTest {
         assertEquals(false, type.isQuadro());
         assertEquals(false, type.isTeam());
         assertEquals(true, type.isMultiple());
+
+        assertEquals(false, type.isLevels());
+        assertEquals(true, type.shouldReloadAlone());
 
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
@@ -190,10 +209,141 @@ public class MultiplayerTypeTest {
         assertEquals(false, type.isMultiple());
         assertEquals(true, type.isTraining());
 
+        assertEquals(true, type.isLevels());
+        assertEquals(true, type.shouldReloadAlone());
+
         assertEquals(false, type.isSingleplayer());
         assertEquals(true, type.isMultiplayer());
 
         assertEquals("training", type.getType());
+        assertEquals(false, type.isDisposable());
+    }
+
+    @Test
+    public void typeLevels_disposable_reloadAlone() {
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 4, DISPOSABLE, RELOAD_ALONE);
+
+        assertEquals(3, type.getRoomSize());
+        assertEquals(4, type.getLevelsCount());
+
+        assertEquals(false, type.isSingle());
+        assertEquals(false, type.isTournament());
+        assertEquals(false, type.isTriple());
+        assertEquals(false, type.isQuadro());
+        assertEquals(false, type.isTeam());
+        assertEquals(false, type.isMultiple());
+        assertEquals(false, type.isTraining());
+
+        assertEquals(true, type.isLevels());
+        assertEquals(true, type.shouldReloadAlone());
+
+        assertEquals(false, type.isSingleplayer());
+        assertEquals(true, type.isMultiplayer());
+
+        assertEquals("levels", type.getType());
+        assertEquals(true, type.isDisposable());
+    }
+
+    @Test
+    public void typeLevels_notDisposable_dontReloadAlone() {
+        MultiplayerType type = MultiplayerType.LEVELS.apply(5, 6, !DISPOSABLE, !RELOAD_ALONE);
+
+        assertEquals(5, type.getRoomSize());
+        assertEquals(6, type.getLevelsCount());
+
+        assertEquals(false, type.isSingle());
+        assertEquals(false, type.isTournament());
+        assertEquals(false, type.isTriple());
+        assertEquals(false, type.isQuadro());
+        assertEquals(false, type.isTeam());
+        assertEquals(false, type.isMultiple());
+        assertEquals(false, type.isTraining());
+
+        assertEquals(true, type.isLevels());
+        assertEquals(false, type.shouldReloadAlone());
+
+        assertEquals(false, type.isSingleplayer());
+        assertEquals(true, type.isMultiplayer());
+
+        assertEquals("levels", type.getType());
+        assertEquals(false, type.isDisposable());
+    }
+
+    @Test
+    public void typeSingleLevels() {
+        MultiplayerType type = MultiplayerType.SINGLE_LEVELS.apply(5);
+
+        assertEquals(1, type.getRoomSize());
+        assertEquals(5, type.getLevelsCount());
+
+        assertEquals(true, type.isSingle());
+        assertEquals(false, type.isTournament());
+        assertEquals(false, type.isTriple());
+        assertEquals(false, type.isQuadro());
+        assertEquals(false, type.isTeam());
+        assertEquals(false, type.isMultiple());
+        assertEquals(false, type.isTraining());
+
+        assertEquals(true, type.isLevels());
+        assertEquals(true, type.shouldReloadAlone());
+
+        assertEquals(true, type.isSingleplayer());
+        assertEquals(false, type.isMultiplayer());
+
+        assertEquals("singlelevels", type.getType());
+        assertEquals(true, type.isDisposable());
+    }
+
+    @Test
+    public void typeMultipleLevels() {
+        MultiplayerType type = MultiplayerType.MULTIPLE_LEVELS.apply(5, 7);
+
+        assertEquals(5, type.getRoomSize());
+        assertEquals(7, type.getLevelsCount());
+
+        assertEquals(false, type.isSingle());
+        assertEquals(false, type.isTournament());
+        assertEquals(false, type.isTriple());
+        assertEquals(false, type.isQuadro());
+        assertEquals(false, type.isTeam());
+        assertEquals(true, type.isMultiple());
+        assertEquals(false, type.isTraining());
+
+        assertEquals(true, type.isLevels());
+        assertEquals(false, type.shouldReloadAlone());
+
+        assertEquals(false, type.isSingleplayer());
+        assertEquals(true, type.isMultiplayer());
+
+        assertEquals("multiplelevels", type.getType());
+        assertEquals(false, type.isDisposable());
+    }
+
+    @Test
+    public void typeMultipleLevelsMultiroom() {
+        MultiplayerType type = MultiplayerType.MULTIPLE_LEVELS_MULTIROOM.apply(5, 7);
+
+        assertEquals(1, type.getRoomSize());
+        assertEquals(1, type.getRoomSize(new LevelProgress(7, 1, 2))); // level 1
+        assertEquals(1, type.getRoomSize(new LevelProgress(7, 6, 6))); // level N - 1
+        assertEquals(5, type.getRoomSize(new LevelProgress(7, 7, 7))); // level N
+        assertEquals(7, type.getLevelsCount());
+
+        assertEquals(false, type.isSingle());
+        assertEquals(false, type.isTournament());
+        assertEquals(false, type.isTriple());
+        assertEquals(false, type.isQuadro());
+        assertEquals(false, type.isTeam());
+        assertEquals(true, type.isMultiple());
+        assertEquals(false, type.isTraining());
+
+        assertEquals(true, type.isLevels());
+        assertEquals(false, type.shouldReloadAlone());
+
+        assertEquals(false, type.isSingleplayer());
+        assertEquals(true, type.isMultiplayer());
+
+        assertEquals("multiplelevelsmultiroom", type.getType());
         assertEquals(false, type.isDisposable());
     }
 

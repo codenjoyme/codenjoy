@@ -37,6 +37,8 @@ import org.mockito.Mockito;
 import java.util.*;
 
 import static com.codenjoy.dojo.services.PlayerGames.*;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.DISPOSABLE;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.RELOAD_ALONE;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -797,7 +799,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     @Test
     public void testReloadAll_withoutShuffle_disposable() {
         // given
-        MultiplayerType type = MultiplayerType.TEAM.apply(3, MultiplayerType.DISPOSABLE);
+        MultiplayerType type = MultiplayerType.TEAM.apply(3, DISPOSABLE);
         Player player1 = createPlayer("player1", type);
         Player player2 = createPlayer("player2", type);
         Player player3 = createPlayer("player3", type);
@@ -821,7 +823,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
     public void testReloadAll_withoutShuffle_notDisposable() {
         // TODO почему-то в этом тесте флаг игнорируется, то ли это условия такие, то ли бага
         // given
-        MultiplayerType type = MultiplayerType.TEAM.apply(3, !MultiplayerType.DISPOSABLE);
+        MultiplayerType type = MultiplayerType.TEAM.apply(3, !DISPOSABLE);
         Player player1 = createPlayer("player1", type);
         Player player2 = createPlayer("player2", type);
         Player player3 = createPlayer("player3", type);
@@ -1383,6 +1385,545 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         assertRoomsNames("{otherRoom=[[player1, player2]], " +
                 "room=[[player3, player4]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_disposable_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player2", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате и был удален оттуда
+        //         попав к player5 у которого комната еще была недоукомплектована
+        // затем и player2 ушел в отдельный мир otherRoom
+        //         чем вынудил последнего в комнате player5 отправиться в новую комнату
+        //         такое себе лишнее телодвижение TODO подумать может можно красиво решить
+        assertRooms("{1=[player3, player4], " +
+                "3=[player1, player2], " +
+                "4=[player5]}");
+
+        assertRoomsNames("{otherRoom[0]=[[player1, player2]], " +
+                "room[0]=[[player3, player4], [player5]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_disposable_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player2", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате, т.к. !RELOAD_ALONE
+        // затем и player2 ушел в отдельный мир otherRoom
+        assertRooms("{1=[player3, player4], " +
+                "2=[player5], " +
+                "3=[player1, player2]}");
+
+        assertRoomsNames("{otherRoom[0]=[[player1, player2]], " +
+                "room[0]=[[player3, player4], [player5]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_notDisposable_twoLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, !DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player2", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате и был удален оттуда
+        //         попав к player5 у которого комната еще была недоукомплектована
+        // затем и player2 ушел в отдельный мир otherRoom
+        //         чем вынудил последнего в комнате player5 отправиться в новую комнату
+        //         такое себе лишнее телодвижение TODO подумать может можно красиво решить
+        assertRooms("{1=[player3, player4], " +
+                "3=[player1, player2], " +
+                "4=[player5]}");
+
+        assertRoomsNames("{otherRoom[0]=[[player1, player2]], " +
+                "room[0]=[[player3, player4], [player5]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_notDisposable_twoLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, !DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player2", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате
+        // затем и player2 ушел в отдельный мир otherRoom
+        assertRooms("{1=[player3, player4], " +
+                "2=[player5], " +
+                "3=[player1, player2]}");
+
+        assertRoomsNames("{otherRoom[0]=[[player1, player2]], " +
+                "room[0]=[[player3, player4], [player5]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_notDisposable_oneLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, !DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате и был удален оттуда
+        //         попав к player5 у которого комната еще была недоукомплектована
+        assertRooms("{1=[player3, player4], " +
+                "2=[player2, player5], " +
+                "3=[player1]}");
+
+        assertRoomsNames("{otherRoom[0]=[[player1]], " +
+                "room[0]=[[player3, player4], [player5, player2]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_notDisposable_oneLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, !DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате
+        assertRooms("{0=[player2], " +
+                "1=[player3, player4], " +
+                "2=[player5], 3=[player1]}");
+
+        assertRoomsNames("{otherRoom[0]=[[player1]], " +
+                "room[0]=[[player3, player4], [player5]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_notDisposable_firstLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, !DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]]}");
+
+        // when
+        // player1 переходит на новый уровень
+        // при этом остальные игроки остаются где были
+        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+                "{'current':1,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player4, player5], 2=[player1]}");
+
+        assertRoomsNames("{room[0]=[[player2, player3], [player4, player5]], " +
+                "room[1]=[[player1]]}");
+
+        // when
+        // player1 возвращается обратно
+        // и так как уровень не DISPOSABLE то игрок вернулся назад
+        // в первую свободную комнату (свою же)
+        playerGames.changeLevel("player1", 0);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[0]=[[player2, player3, player1], [player4, player5]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_notDisposable_firstLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, !DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]]}");
+
+        // when
+        // player1 переходит на новый уровень
+        // при этом остальные игроки остаются где были
+        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+                "{'current':1,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player4, player5], 2=[player1]}");
+
+        assertRoomsNames("{room[0]=[[player2, player3], [player4, player5]], " +
+                "room[1]=[[player1]]}");
+
+        // when
+        // player1 возвращается обратно
+        // и так как уровень не DISPOSABLE то игрок вернулся назад
+        // в первую свободную комнату (свою же)
+        playerGames.changeLevel("player1", 0);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[0]=[[player2, player3, player1], [player4, player5]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_notDisposable_lastLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, !DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+        createPlayer("player6", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+
+        // when
+        // player6 переходит на новый уровень
+        // при этом остальные остаются на месте
+        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+                "{'current':1,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "2=[player6]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]], " +
+                "room[1]=[[player6]]}");
+
+        // when
+        // player6 возвращается обратно
+        // и так как уровень не DISPOSABLE его старая комната может его принять назад
+        playerGames.changeLevel("player6", 0);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_notDisposable_lastLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, !DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+        createPlayer("player6", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+
+        // when
+        // player6 переходит на новый уровень
+        // при этом остальные остаются на месте
+        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+                "{'current':1,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "2=[player6]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]], " +
+                "room[1]=[[player6]]}");
+
+        // when
+        // player6 возвращается обратно
+        // и так как уровень не DISPOSABLE его старая комната может его принять назад
+        playerGames.changeLevel("player6", 0);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_disposable_firstLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]]}");
+
+        // when
+        // player1 переходит на новый уровень
+        // при этом остальные игроки остаются где были
+        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+                "{'current':1,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player4, player5], 2=[player1]}");
+
+        assertRoomsNames("{room[0]=[[player2, player3], [player4, player5]], " +
+                "room[1]=[[player1]]}");
+
+        // when
+        // player1 возвращается обратно
+        // и так как уровень DISPOSABLE то игрок попадает в новую комнату к player4 и player5
+        playerGames.changeLevel("player1", 0);
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player1, player4, player5]}");
+
+        assertRoomsNames("{room[0]=[[player4, player5, player1], [player2, player3]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_disposable_firstLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]]}");
+
+        // when
+        // player1 переходит на новый уровень
+        // при этом остальные игроки остаются где были
+        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+                "{'current':1,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player4, player5], 2=[player1]}");
+
+        assertRoomsNames("{room[0]=[[player2, player3], [player4, player5]], " +
+                "room[1]=[[player1]]}");
+
+        // when
+        // player1 возвращается обратно
+        // и так как уровень DISPOSABLE то игрок попадает в новую комнату к player4 и player5
+        playerGames.changeLevel("player1", 0);
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player1, player4, player5]}");
+
+        assertRoomsNames("{room[0]=[[player4, player5, player1], [player2, player3]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_disposable_lastLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+        createPlayer("player6", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+
+        // when
+        // player6 переходит на новый уровень
+        // при этом остальные остаются на месте
+        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+                "{'current':1,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "2=[player6]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]], " +
+                "room[1]=[[player6]]}");
+
+        // when
+        // player6 возвращается обратно
+        // и так как уровень DISPOSABLE его старая комната не может его принять назад
+        // и он отправляется в новую
+        playerGames.changeLevel("player6", 0);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "3=[player6]}");
+
+        assertRoomsNames("{room[0]=[[player6], " +
+                "[player1, player2, player3], " +
+                "[player4, player5]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_disposable_lastLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+        createPlayer("player6", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[0]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+
+        // when
+        // player6 переходит на новый уровень
+        // при этом остальные остаются на месте
+        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+                "{'current':1,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "2=[player6]}");
+
+        assertRoomsNames("{room[0]=[[player1, player2, player3], [player4, player5]], " +
+                "room[1]=[[player6]]}");
+
+        // when
+        // player6 возвращается обратно
+        // и так как уровень DISPOSABLE его старая комната не может его принять назад
+        // и он отправляется в новую
+        playerGames.changeLevel("player6", 0);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "3=[player6]}");
+
+        assertRoomsNames("{room[0]=[[player6], " +
+                "[player1, player2, player3], " +
+                "[player4, player5]]}");
     }
 
     @Test
