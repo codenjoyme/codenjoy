@@ -68,13 +68,13 @@ var initLevelInfo = function(contextPath) {
 
     var save = function(index, level) {
         var number = toNumber(index);
-        saveParameter('level' + number + '.map', encode(level.map));
-        saveParameter('level' + number + '.help', encode(level.help));
-        saveParameter('level' + number + '.defaultCode', encode(level.defaultCode));
-        saveParameter('level' + number + '.winCode', encode(level.winCode));
-        saveParameter('level' + number + '.refactoringCode', encode(level.refactoringCode));
-        saveParameter('level' + number + '.befungeCommands', encode(level.befungeCommands));
-//        saveParameter('level' + number + '.autocomplete', JSON.stringify(level.autocomplete)); // TODO разобраться с этим
+        saveParameter('levels[' + number + '].map', encode(level.map));
+        saveParameter('levels[' + number + '].help', encode(level.help));
+        saveParameter('levels[' + number + '].defaultCode', encode(level.defaultCode));
+        saveParameter('levels[' + number + '].winCode', encode(level.winCode));
+        saveParameter('levels[' + number + '].refactoringCode', encode(level.refactoringCode));
+        saveParameter('levels[' + number + '].befungeCommands', encode(level.befungeCommands));
+//        saveParameter('levels[' + number + '].autocomplete', JSON.stringify(level.autocomplete)); // TODO разобраться с этим
     }
 
     var getLevel = function(index) {
@@ -98,13 +98,13 @@ var initLevelInfo = function(contextPath) {
 
         var number = toNumber(index);
         return {
-            map :             decode(get('level' + number + '.map').value),
-            help :            decode(get('level' + number + '.help').value),
-            defaultCode :     decode(get('level' + number + '.defaultCode').value),
-            winCode :         decode(get('level' + number + '.winCode').value),
-            refactoringCode : decode(get('level' + number + '.refactoringCode').value),
-            befungeCommands : decode(get('level' + number + '.befungeCommands').value),
-//            autocomplete :    JSON.parse(get('level' + number + '.autocomplete').value) // TODO разобраться с этим
+            map :             decode(get('levels[' + number + '].map').value),
+            help :            decode(get('levels[' + number + '].help').value),
+            defaultCode :     decode(get('levels[' + number + '].defaultCode').value),
+            winCode :         decode(get('levels[' + number + '].winCode').value),
+            refactoringCode : decode(get('levels[' + number + '].refactoringCode').value),
+            befungeCommands : decode(get('levels[' + number + '].befungeCommands').value),
+//            autocomplete :    JSON.parse(get('levels[' + number + '].autocomplete').value) // TODO разобраться с этим
         };
     }
 

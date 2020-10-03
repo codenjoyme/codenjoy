@@ -69,7 +69,7 @@ public final class SettingsWrapper {
                 .type(String.class).def(CLASSSIC_TRAINING);
         roomSize = settings.addEditBox("Room size").type(Integer.class).def(5);
 
-        levelsCount = settings.addEditBox("Levels count").type(Integer.class).def(0);
+        levelsCount = settings.addEditBox("levels.count").type(Integer.class).def(0);
         Levels.setup();
     }
 
@@ -121,7 +121,7 @@ public final class SettingsWrapper {
     }
 
     private String levelPrefix(int index) {
-        return "Level[" + index + "].";
+        return "levels[" + index + "].";
     }
 
     // setters for testing
