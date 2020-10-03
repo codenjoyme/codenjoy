@@ -132,11 +132,13 @@ public class Battlecity implements Field {
 
     private void removeDeadTanks() {
         for (Tank tank : allTanks()) {
-            if (!tank.isAlive()) {
-                ais.remove(tank);
-                if (tank.isTankPrize()) {
-                    prizeGen.drop(pt(tank.getX(), tank.getY()));
-                }
+            if (tank.isAlive()) {
+                continue;
+            }
+            ais.remove(tank);
+
+            if (tank.isTankPrize()) {
+                prizeGen.drop(pt(tank.getX(), tank.getY()));
             }
         }
 
@@ -234,6 +236,7 @@ public class Battlecity implements Field {
                 killer.event(Events.KILL_OTHER_HERO_TANK.apply(killer.score()));
             }
         }
+
         if (died != null) {
             died.event(Events.KILL_YOUR_TANK);
         }
