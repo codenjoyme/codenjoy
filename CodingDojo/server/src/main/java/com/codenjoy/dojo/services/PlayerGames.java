@@ -263,14 +263,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             Game game = playerGame.getGame();
             String roomName = playerGame.getRoomName();
 
-            MultiplayerType multiplayerType = playerGame.getGameType().getMultiplayerType();
+            MultiplayerType type = playerGame.getGameType().getMultiplayerType();
             if (game.isGameOver()) {
                 quiet(() -> {
                     JSONObject level = game.getSave();
 
-                    // TODO ##2 попробовать какой-то другой тип с несколькими уровнями, а не только isTraining
-                    if (game.isWin() && multiplayerType.isTraining()) {
-                        level = LevelProgress.winLevel(level);
+                    if (type.isTraining() && game.isWin()) {
+                        level = LevelProgress.goNext(level);
                         if (level != null) {
                             reload(game, roomName, level);
                             playerGame.fireOnLevelChanged();
@@ -278,7 +277,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                         }
                     }
 
-                    if (game.shouldLeave() && multiplayerType.isDisposable()) {
+                    if (type.isDisposable() && game.shouldLeave()) {
                         reload(game, roomName, level);
                         return;
                     }
