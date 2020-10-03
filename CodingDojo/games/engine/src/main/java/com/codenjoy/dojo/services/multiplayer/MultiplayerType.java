@@ -138,6 +138,29 @@ public class MultiplayerType {
      */
     public static final FourFunction<Integer, Integer, Boolean, Boolean, MultiplayerType> LEVELS = LevelsType::new;
 
+    /**
+     * Игра многоуровневая однопользовательская.
+     * Игроки играют каждый в своей независимой комнате,
+     * при этом продвигаясь по уровням вперед.
+     * Другими словами это SINGLE на N уровней
+     */
+    public static final Function<Integer, MultiplayerType> SINGLE_LEVELS = SingleLevelsType::new;
+
+    /**
+     * Игра многоуровневая многопользовательская.
+     * Игроки играют все вместе в группах по N человек в комнате,
+     * при этом продвигаясь по уровням вперед.
+     * Другими словами это MULTIPLE на N уровней
+     */
+    public static final BiFunction<Integer, Integer, MultiplayerType> MULTIPLE_LEVELS = MultipleLevelsType::new;
+
+    /**
+     * Так же как и TRAINING только последний уровень
+     * разделен на комнаты по N участников.
+     */
+    public static final BiFunction<Integer, Integer, MultiplayerType> MULTIPLE_LEVELS_MULTIROOM = MultipleLevelsMultiroomType::new;
+
+
     protected int roomSize;
     protected int levelsCount;
     protected boolean disposable;
@@ -159,11 +182,14 @@ public class MultiplayerType {
     }
 
     public boolean isSingle() {
-        return this instanceof SingleType;
+        return this instanceof SingleType
+                || this instanceof SingleLevelsType;
     }
 
     public boolean isMultiple() {
-        return this instanceof MultipleType;
+        return this instanceof MultipleType
+                || this instanceof MultipleLevelsType
+                || this instanceof MultipleLevelsMultiroomType;
     }
 
     public boolean isTriple() {
