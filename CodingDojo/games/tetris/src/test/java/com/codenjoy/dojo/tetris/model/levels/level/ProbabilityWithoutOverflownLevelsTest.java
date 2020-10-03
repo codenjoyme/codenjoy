@@ -59,14 +59,18 @@ public class ProbabilityWithoutOverflownLevelsTest extends ProbabilityLevelsTest
         assertEquals(0, levels.getCurrentLevelNumber());
 
         levels.linesRemoved(10);
+        levels.tryGoNextLevel();
 
         levels.glassOverflown();
+        levels.tryGoNextLevel();
 
         levels.linesRemoved(10);
+        levels.tryGoNextLevel();
 
         assertEquals(0, levels.getCurrentLevelNumber());
 
         levels.linesRemoved(10);
+        levels.tryGoNextLevel();
 
         assertEquals(1, levels.getCurrentLevelNumber());
     }
@@ -74,11 +78,13 @@ public class ProbabilityWithoutOverflownLevelsTest extends ProbabilityLevelsTest
     @Test
     public void shouldClearLinesRemovedCounterWhenLevelChanged() {
         levels.linesRemoved(20);
+        levels.tryGoNextLevel();
 
         assertEquals(1, levels.getCurrentLevelNumber());
         assertLinesRemovedWithoutOverflown(0);
 
         levels.linesRemoved(10);
+        levels.tryGoNextLevel();
 
         assertLinesRemovedWithoutOverflown(10);
     }

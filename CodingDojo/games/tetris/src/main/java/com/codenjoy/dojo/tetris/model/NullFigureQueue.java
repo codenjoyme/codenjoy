@@ -4,7 +4,7 @@ package com.codenjoy.dojo.tetris.model;
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,15 +22,38 @@ package com.codenjoy.dojo.tetris.model;
  * #L%
  */
 
+import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
 
-/**
- * User: oleksandr.baglai
- * Date: 9/29/12
- * Time: 1:36 PM
- */
-public interface ChangeLevelListener {
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Supplier;
 
-    void levelCompleted(int levelNumber, GameLevel level);
+public class NullFigureQueue implements FigureQueue {
 
-    void levelChanged(int levelNumber, GameLevel level);
+    public static final FigureQueue INSTANCE = new NullFigureQueue();
+
+    @Override
+    public Figure next() {
+        return null;
+    }
+
+    @Override
+    public List<Type> future() {
+        return Arrays.asList();
+    }
+
+    @Override
+    public void clear() {
+        // do nothing
+    }
+
+    @Override
+    public void setRandomizer(Supplier<Randomizer> get) {
+        // do nothing
+    }
+
+    @Override
+    public void open(Type[] figureTypesToOpen) {
+        // do nothing
+    }
 }

@@ -69,6 +69,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     public GameField createGame(int levelNumber) {
         Figures queue = new Figures();
         Levels levels = loadLevelsFor(queue, gameLevels.getValue());
+        levels.gotoLevel(levelNumber);
         return new Tetris(levels, queue, glassSize.getValue());
     }
 
@@ -98,7 +99,10 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.SINGLE;
+        // TODO слишком много тут делается для получения количества уровней
+        Levels levels = loadLevelsFor(NullFigureQueue.INSTANCE, gameLevels.getValue());
+
+        return MultiplayerType.SINGLE_LEVELS.apply(levels.count());
     }
 
     @Override
