@@ -39,7 +39,13 @@ public class MultiplayerType {
     /**
      * Если комната игры одноразовая, то этот флаг стоит в true
      */
-    public final static boolean DISPOSABLE = true;
+    public static final boolean DISPOSABLE = true;
+
+    /**
+     * Если за предпоследним игроком должен уходить
+     * из комнаты так же и последний, то этот флаг стоит в true
+     */
+    public static final boolean RELOAD_ALONE = true;
 
     /**
      * Каждый игрок на своем отдельном поле.
@@ -127,15 +133,17 @@ public class MultiplayerType {
     protected int roomSize;
     protected int levelsCount;
     protected boolean disposable;
+    protected boolean shouldReloadAlone;
 
     protected MultiplayerType(int roomSize, boolean disposable) {
-        this(roomSize, 1, disposable);
+        this(roomSize, 1, disposable, RELOAD_ALONE);
     }
 
-    public MultiplayerType(int roomSize, int levelsCount, boolean disposable) {
+    public MultiplayerType(int roomSize, int levelsCount, boolean disposable, boolean shouldReloadAlone) {
         this.roomSize = roomSize;
         this.levelsCount = levelsCount;
         this.disposable = disposable;
+        this.shouldReloadAlone = shouldReloadAlone;
     }
 
     public boolean isDisposable() {
@@ -236,5 +244,15 @@ public class MultiplayerType {
      */
     public LevelProgress progress() {
         return new LevelProgress();
+    }
+
+
+    /**
+     * Иногда случается так, что предпоследний игрок уходит с поля,
+     * так вот этот флаг говорит стоит ли уходить так же и последнему
+     * @return true если стоит уходить последнему игроку с карты
+     */
+    public boolean shouldReloadAlone() {
+        return shouldReloadAlone;
     }
 }

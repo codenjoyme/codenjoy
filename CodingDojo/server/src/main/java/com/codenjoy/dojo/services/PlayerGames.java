@@ -91,19 +91,24 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         int index = all.indexOf(player);
         if (index == -1) return;
         PlayerGame game = all.remove(index);
+        GameType gameType = game.getGameType();
+        MultiplayerType type = gameType.getMultiplayerType();
 
         if (reloadAlone) {
-            removeWithResetAlone(game.getGame());
+            removeWithResetAlone(game.getGame(), type.shouldReloadAlone());
         }
 
         game.remove(onRemove);
         game.getGame().on(null);
     }
 
-    private void removeWithResetAlone(Game game) {
+    private void removeWithResetAlone(Game game, boolean reloadAlone) {
         List<PlayerGame> alone = removeAndLeaveAlone(game);
-        alone.forEach(gp -> play(gp.getGame(), gp.getRoomName(),
-                gp.getGameType(), gp.getGame().getSave()));
+
+        if (reloadAlone) {
+            alone.forEach(gp -> play(gp.getGame(), gp.getRoomName(),
+                    gp.getGameType(), gp.getGame().getSave()));
+        }
     }
 
     public PlayerGame get(String id) {
@@ -314,8 +319,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         PlayerGame playerGame = getPlayerGame(game);
         playerGame.setRoomName(roomName);
         GameType gameType = playerGame.getGameType();
+        MultiplayerType type = gameType.getMultiplayerType();
+
         if (reloadAlone) {
-            removeWithResetAlone(game);
+            removeWithResetAlone(game, type.shouldReloadAlone());
         }
 
         play(game, roomName, gameType, save);
