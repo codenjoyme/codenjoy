@@ -24,11 +24,16 @@ package com.codenjoy.dojo.icancode.services;
 
 
 import com.codenjoy.dojo.icancode.services.levels.Level;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.*;
+
+import java.util.Arrays;
 
 public final class SettingsWrapper {
+
+    public static final String ALL_SINGLE = "All levels are single";
+    public static final String CLASSSIC_TRAINING = "Single training & all in one final";
+    public static final String ALL_IN_ROOMS = "All levels in rooms";
+    public static final String TRAINING_MULTIMAP = "Single training & final in rooms";
 
     public static SettingsWrapper data;
 
@@ -36,6 +41,9 @@ public final class SettingsWrapper {
     private final Parameter<Integer> goldScore;
     private final Parameter<Integer> loosePenalty;
     private final Parameter<Boolean> isTrainingMode;
+    private final Parameter<String> gameMode;
+    private final Parameter<Integer> roomSize;
+    private final Parameter<Integer> levelsCount;
     private final Settings settings;
 
     public static SettingsWrapper setup(Settings settings) {
@@ -55,6 +63,12 @@ public final class SettingsWrapper {
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
         isTrainingMode = settings.addCheckBox("Is training mode").type(Boolean.class).def(true);
+        levelsCount = settings.addEditBox("levels.count").type(Integer.class).def(0);
+
+        gameMode = settings.addSelect("Game mode", Arrays.asList(
+                CLASSSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP))
+                .type(String.class).def(CLASSSIC_TRAINING);
+        roomSize = settings.addEditBox("Room size").type(Integer.class).def(5);
 
         Levels.setup();
     }
@@ -75,17 +89,25 @@ public final class SettingsWrapper {
         return isTrainingMode.getValue();
     }
 
+    public String gameMode() {
+        return gameMode.getValue();
+    }
+
+    public int roomSize() {
+        return (roomSize.getValue() == 0) ? Integer.MAX_VALUE : roomSize.getValue();
+    }
+
     public String levelMap(int index) {
         String prefix = levelPrefix(index);
         return settings.addEditBox(prefix + "map").type(String.class).getValue();
     }
 
     public int levelsCount() {
-        return settings.addEditBox("levels.count").type(Integer.class).getValue();
+        return levelsCount.getValue();
     }
 
     public SettingsWrapper addLevel(int index, Level level) {
-        settings.addEditBox("levels.count").type(Integer.class).def(0).update(index);
+        levelsCount.update(index);
 
         String prefix = levelPrefix(index);
         settings.addEditBox(prefix + "map").multiline().type(String.class).def(level.map());
@@ -121,6 +143,21 @@ public final class SettingsWrapper {
 
     public SettingsWrapper isTrainingMode(boolean value) {
         isTrainingMode.update(value);
+        return this;
+    }
+
+    public SettingsWrapper setGameMode(String mode) {
+        gameMode.update(mode);
+        return this;
+    }
+
+    public SettingsWrapper roomSize(int value) {
+        roomSize.update(value);
+        return this;
+    }
+
+    public SettingsWrapper levelsCount(int value) {
+        levelsCount.update(value);
         return this;
     }
 
