@@ -25,21 +25,33 @@ package com.codenjoy.dojo.battlecity.model.items;
 
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.*;
 
-public class Prize extends PointImpl implements State<Elements, Player> {
+public class Prize extends PointImpl implements Tickable, State<Elements, Player> {
 
     private Elements elements;
+    private int prizeOnField;
+    private int timer;
 
-    public Prize(Point pt, Elements elements) {
+    public Prize(Point pt, int prizeOnField, Elements elements) {
         super(pt);
         this.elements = elements;
+        this.prizeOnField = prizeOnField;
+        timer = 0;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return elements;
+    }
+
+    @Override
+    public void tick() {
+        if (timer == prizeOnField) {
+            timer = 0;
+            elements = Elements.NONE;
+        }
+
+        timer++;
     }
 }

@@ -55,7 +55,8 @@ public class Battlecity implements Field {
 
     public Battlecity(int size, Dice dice,
                       Parameter<Integer> whichSpawnWithPrize,
-                      Parameter<Integer> damagesBeforeAiDeath)
+                      Parameter<Integer> damagesBeforeAiDeath,
+                      Parameter<Integer> prizeOnField)
     {
         this.size = size;
         ais = new LinkedList<>();
@@ -66,7 +67,7 @@ public class Battlecity implements Field {
         ice = new LinkedList<>();
         rivers = new LinkedList<>();
 
-        prizeGen = new PrizeGenerator(this, dice);
+        prizeGen = new PrizeGenerator(this, dice, prizeOnField);
 
         aiGen = new AiGenerator(this, dice, whichSpawnWithPrize, damagesBeforeAiDeath);
     }
@@ -127,6 +128,10 @@ public class Battlecity implements Field {
             if (!tanks.contains(wall) && !bullets().contains(wall)) {
                 wall.tick();
             }
+        }
+
+        for (Prize prize : prizes) {
+            prize.tick();
         }
     }
 
