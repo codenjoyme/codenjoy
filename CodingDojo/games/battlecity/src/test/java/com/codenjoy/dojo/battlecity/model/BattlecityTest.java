@@ -5262,9 +5262,9 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    // приз должен исчезнуть через 2 тика, если его не подобрали
+    // приз должен експайриться и исчезнуть через 2 тика, если его не подобрали
     @Test
-    public void shouldPrizeOnField_TwoTicks() {
+    public void shouldExpirePrizeOnField_disappearTwoTicks() {
         prizeOnField = v(2);
 
         hitKillsAiPrize = v(1);
@@ -5281,6 +5281,62 @@ public class BattlecityTest {
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼!    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    // приз должен експайриться и исчезнуть через 3 тика, если его не подобрали
+    @Test
+    public void shouldExpirePrizeOnField_disappearThreeTicks() {
+        prizeOnField = v(3);
+
+        hitKillsAiPrize = v(1);
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼¿    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼!    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -5308,10 +5364,10 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
     }
 
-    // приз должен исчезнуть через 3 тика, если его не подобрали
+    // приз должен експайриться и исчезнуть через 4 тика, если его не подобрали
     @Test
-    public void shouldPrizeOnField_ThreeTicks() {
-        prizeOnField = v(3);
+    public void shouldExpirePrizeOnField_disappearFourTicks() {
+        prizeOnField = v(4);
 
         hitKillsAiPrize = v(1);
         givenFl("☼☼☼☼☼☼☼\n" +
@@ -5336,7 +5392,7 @@ public class BattlecityTest {
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
-                "☼1    ☼\n" +
+                "☼!    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -5347,6 +5403,16 @@ public class BattlecityTest {
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼!    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
