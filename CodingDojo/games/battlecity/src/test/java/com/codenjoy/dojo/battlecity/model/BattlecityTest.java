@@ -58,6 +58,7 @@ public class BattlecityTest {
     public int size;
     private Parameter<Integer> spawnAiPrize;
     private Parameter<Integer> hitKillsAiPrize;
+    private Parameter<Integer> prizeOnField;
 
     private Battlecity game;
     private List<Player> players = new LinkedList<>();
@@ -75,6 +76,7 @@ public class BattlecityTest {
         ticksPerBullets = 1;
         spawnAiPrize = v(4);
         hitKillsAiPrize = v(3);
+        prizeOnField = v(3);
     }
 
     @After
@@ -89,6 +91,7 @@ public class BattlecityTest {
     private void givenFl(String board) {
         when(settings.spawnAiPrize()).thenReturn(spawnAiPrize);
         when(settings.hitKillsAiPrize()).thenReturn(hitKillsAiPrize);
+        when(settings.prizeOnField()).thenReturn(prizeOnField);
 
         GameRunner runner = new GameRunner() {
             @Override
@@ -5144,7 +5147,6 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -5197,7 +5199,6 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -5250,12 +5251,113 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(0);
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    // приз должен исчезнуть через 2 тика, если его не подобрали
+    @Test
+    public void shouldPrizeOnField_TwoTicks() {
+        prizeOnField = v(2);
+
+        hitKillsAiPrize = v(1);
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼¿    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    // приз должен исчезнуть через 3 тика, если его не подобрали
+    @Test
+    public void shouldPrizeOnField_ThreeTicks() {
+        prizeOnField = v(3);
+
+        hitKillsAiPrize = v(1);
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼¿    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
