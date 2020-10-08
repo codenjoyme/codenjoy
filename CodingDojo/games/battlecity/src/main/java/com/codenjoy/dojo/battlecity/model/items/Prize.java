@@ -27,8 +27,10 @@ import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.services.*;
 
+
 public class Prize extends PointImpl implements Tickable, State<Elements, Player> {
 
+    public static final int CHANGE_EVERY_TICKS = 2;
     private Elements elements;
     private int prizeOnField;
     private int timer;
@@ -42,6 +44,10 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        if (timer % CHANGE_EVERY_TICKS == 0) {
+            return Elements.PRIZE;
+        }
+
         return elements;
     }
 
