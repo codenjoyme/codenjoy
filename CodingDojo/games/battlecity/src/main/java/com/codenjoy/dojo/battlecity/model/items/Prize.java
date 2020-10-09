@@ -27,11 +27,14 @@ import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.services.*;
 
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
+
 
 public class Prize extends PointImpl implements Tickable, State<Elements, Player> {
 
     public static final int CHANGE_EVERY_TICKS = 2;
     private Elements elements;
+    private Elements prevElements;
     private int prizeOnField;
     private int timer;
 
@@ -44,6 +47,10 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        Ice ice = filterOne(alsoAtPoint, Ice.class);
+        prevElements = getElements(tree, ice);
+
         if (timer % CHANGE_EVERY_TICKS == 0) {
             return Elements.PRIZE;
         }
@@ -51,11 +58,23 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
         return elements;
     }
 
+    private Elements getElements(Tree tree, Ice ice) {
+        if (tree != null) {
+            return Elements.TREE;
+        }
+
+        if (ice != null) {
+            return Elements.ICE;
+        }
+
+        return Elements.NONE;
+    }
+
     @Override
     public void tick() {
         if (timer == prizeOnField) {
             timer = 0;
-            elements = Elements.NONE;
+            elements = prevElements;
         }
 
         timer++;
