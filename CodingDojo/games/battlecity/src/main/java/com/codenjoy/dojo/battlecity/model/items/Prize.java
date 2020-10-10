@@ -34,49 +34,31 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
 
     public static final int CHANGE_EVERY_TICKS = 2;
     private Elements elements;
-    private Elements prevElements;
     private int prizeOnField;
-    private int timer;
+    private int timeout;
 
     public Prize(Point pt, int prizeOnField, Elements elements) {
         super(pt);
         this.elements = elements;
         this.prizeOnField = prizeOnField;
-        timer = 0;
+        timeout = prizeOnField;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Tree tree = filterOne(alsoAtPoint, Tree.class);
-        Ice ice = filterOne(alsoAtPoint, Ice.class);
-        prevElements = getElements(tree, ice);
-
-        if (timer % CHANGE_EVERY_TICKS == 0) {
-            return Elements.PRIZE;
+        if (timeout % CHANGE_EVERY_TICKS == 0) {
+            return elements;
         }
 
-        return elements;
-    }
-
-    private Elements getElements(Tree tree, Ice ice) {
-        if (tree != null) {
-            return Elements.TREE;
-        }
-
-        if (ice != null) {
-            return Elements.ICE;
-        }
-
-        return Elements.NONE;
+        return Elements.PRIZE;
     }
 
     @Override
     public void tick() {
-        if (timer == prizeOnField) {
-            timer = 0;
-            elements = prevElements;
-        }
+        timeout--;
+    }
 
-        timer++;
+    public int timeout() {
+        return timeout;
     }
 }
