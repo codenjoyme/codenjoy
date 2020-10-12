@@ -24,7 +24,9 @@ package com.codenjoy.dojo.icancode.services;
 
 
 import com.codenjoy.dojo.icancode.services.levels.Level;
-import com.codenjoy.dojo.services.settings.*;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import java.util.Arrays;
 
@@ -37,6 +39,9 @@ public final class SettingsWrapper {
 
     public static SettingsWrapper data;
 
+    private final Parameter<Integer> perkDropRatio;
+    private final Parameter<Integer> perkAvailability;
+    private final Parameter<Integer> perkActivity;
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> goldScore;
     private final Parameter<Integer> killZombieScore;
@@ -62,6 +67,9 @@ public final class SettingsWrapper {
         data = this;
         this.settings = settings;
 
+        perkDropRatio = settings.addEditBox("Perk drop ration").type(Integer.class).def(50);
+        perkAvailability = settings.addEditBox("Perk availability").type(Integer.class).def(5);
+        perkActivity = settings.addEditBox("Perk activity").type(Integer.class).def(10);
         winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
         killZombieScore = settings.addEditBox("Kill zombie score").type(Integer.class).def(20);
@@ -77,6 +85,18 @@ public final class SettingsWrapper {
 
         levelsCount = settings.addEditBox("levels.count").type(Integer.class).def(0);
         Levels.setup();
+    }
+
+    public int perkDropRatio() {
+        return perkDropRatio.getValue();
+    }
+
+    public int perkAvailability() {
+        return perkAvailability.getValue();
+    }
+
+    public int perkActivity() {
+        return perkActivity.getValue();
     }
 
     public int goldScore() {
@@ -143,6 +163,21 @@ public final class SettingsWrapper {
     }
 
     // setters for testing
+
+    public SettingsWrapper perkDropRatio(int value) {
+        perkDropRatio.update(value);
+        return this;
+    }
+
+    public SettingsWrapper perkAvailability(int value) {
+        perkAvailability.update(value);
+        return this;
+    }
+
+    public SettingsWrapper perkActivity(int value) {
+        perkActivity.update(value);
+        return this;
+    }
 
     public SettingsWrapper loosePenalty(int value) {
         loosePenalty.update(value);
