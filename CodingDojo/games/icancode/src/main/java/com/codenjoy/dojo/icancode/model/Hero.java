@@ -23,17 +23,20 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.items.Box;
-import com.codenjoy.dojo.icancode.model.items.Gold;
-import com.codenjoy.dojo.icancode.model.items.HeroItem;
-import com.codenjoy.dojo.icancode.model.items.LaserMachine;
+import com.codenjoy.dojo.icancode.model.items.*;
+import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaser;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
@@ -54,6 +57,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private int killHeroCount;
     private HeroItem item;
 
+    private List<AbstractPerk> perks = new ArrayList<>();
+
     public void removeFromCell() {
         item.removeFromCell();
     }
@@ -67,6 +72,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         item.init(this);
 
         resetFlags();
+    }
+
+    public List<AbstractPerk> getPerks() {
+        return Collections.unmodifiableList(perks);
     }
 
     private void resetFlags() {
@@ -276,6 +285,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             fireLaser();
         }
 
+        perks = perks.stream()
+                .peek(AbstractPerk::tick)
+                .filter(AbstractPerk::isActive)
+                .collect(Collectors.toList());
+
         if (direction != null) {
             int x = item.getCell().getX();
             int y = item.getCell().getY();
@@ -307,6 +321,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                         }
                     }
                     field.move(item, newX, newY);
+                    field.pickPerk(newX, newY).ifPresent(perk -> {
+                        perk.removeFromCell();
+                        perks.add(perk);
+                    });
                 }
             }
         }
@@ -429,8 +447,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     private void fireLaser() {
+        boolean unstoppableLaserPerk = perks.stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaser);
         if (fireDirection != null) {
-            field.fire(this, fireDirection, item.getCell());
+            Laser laser = new Laser(this, fireDirection, unstoppableLaserPerk);
+            laser.setField(field);
+            field.fire(fireDirection, item.getCell(), laser);
             fireDirection = null;
         }
     }

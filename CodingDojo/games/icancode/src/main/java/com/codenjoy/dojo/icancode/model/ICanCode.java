@@ -24,14 +24,19 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.items.*;
+import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.Timer;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaser;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class ICanCode implements Tickable, Field {
@@ -42,7 +47,7 @@ public class ICanCode implements Tickable, Field {
     private Dice dice;
     private Level level;
 
-    private List<Player> players;
+    private final List<Player> players = new LinkedList<>();
     private boolean contest;
 
     public ICanCode(Level level, Dice dice, boolean contest) {
@@ -50,21 +55,15 @@ public class ICanCode implements Tickable, Field {
         level.setField(this);
         this.dice = dice;
         this.contest = contest;
-        players = new LinkedList();
     }
 
     @Override
-    public void fire(State owner, Direction direction, Point from) {
+    public void fire(Direction direction, Point from, Laser laser) {
         Point to = direction.change(from);
-        move(newLaser(owner, direction), to.getX(), to.getY());
+        move(laser, to.getX(), to.getY());
     }
 
-    private Laser newLaser(State owner, Direction direction) {
-        Laser laser = new Laser(owner, direction);
-        laser.setField(this);
-        return laser;
-    }
-
+    // TODO: set perk priority
     int priority(Object o) {
         if (o instanceof HeroItem) return 12;
         if (o instanceof ZombiePot) return 10;
@@ -87,6 +86,10 @@ public class ICanCode implements Tickable, Field {
                 .sorted((o1, o2) -> Integer.compare(priority(o2), priority(o1)))
                 .map(it -> (Tickable)it)
                 .forEach(Tickable::tick);
+
+        perks().stream()
+                .filter(perk -> !perk.isAvailable())
+                .forEach(BaseItem::removeFromCell);
 
         // после всех перемещений, если герой в полете его надо на 3й леер, иначе приземлить
         level.getItems(HeroItem.class).stream()
@@ -148,6 +151,11 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
+    public List<AbstractPerk> perks() {
+        return level.getItems(AbstractPerk.class);
+    }
+
+    @Override
     public boolean isBarrier(int x, int y) {
         return level.isBarrier(x, y);
     }
@@ -169,6 +177,14 @@ public class ICanCode implements Tickable, Field {
         Cell cell = level.getCell(x, y);
         cell.add(item);
         cell.comeIn(item);
+    }
+
+    @Override
+    public Optional<AbstractPerk> pickPerk(int x, int y) {
+        Cell cell = level.getCell(x, y);
+        return perks().stream()
+                .filter(perk -> perk.getCell().equals(cell))
+                .findAny();
     }
 
     @Override
@@ -249,6 +265,22 @@ public class ICanCode implements Tickable, Field {
             result.add(player.getHero());
         }
         return result;
+    }
+
+    @Override
+    public Optional<AbstractPerk> dropNextPerk() {
+        if (dice.next(100) > SettingsWrapper.data.perkDropRatio()) {
+            return Optional.empty();
+        }
+        Elements element = Elements.getRandomPerk();
+        Timer availability = new Timer(SettingsWrapper.data.perkAvailability());
+        Timer activity = new Timer(SettingsWrapper.data.perkActivity());
+        switch (element) {
+            case UNSTOPPABLE_LASER:
+                return Optional.of(new UnstoppableLaser(element, availability, activity));
+            default:
+                return Optional.empty();
+        }
     }
 
     public void newGame(Player player) {
