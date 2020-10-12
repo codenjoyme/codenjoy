@@ -43,12 +43,11 @@ public class Laser extends FieldItem implements Tickable {
         this.direction = getDirection(element);
     }
 
-    public Laser(State owner, Direction direction, boolean unstoppable) {
+    public Laser(State owner, Direction direction) {
         super(getElement(direction));
         this.owner = owner;
         skip = (owner instanceof Hero);
         this.direction = direction;
-        this.unstoppable = unstoppable;
     }
 
     private static Elements getElement(Direction direction) {
@@ -128,6 +127,10 @@ public class Laser extends FieldItem implements Tickable {
 
     public boolean isUnstoppable() {
         return unstoppable;
+    }
+
+    public void setUnstoppable(boolean unstoppable) {
+        this.unstoppable = unstoppable;
     }
 
     public boolean skipFirstTick() {

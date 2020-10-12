@@ -450,8 +450,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         boolean unstoppableLaserPerk = perks.stream()
                 .anyMatch(perk -> perk instanceof UnstoppableLaser);
         if (fireDirection != null) {
-            Laser laser = new Laser(this, fireDirection, unstoppableLaserPerk);
+            Laser laser = new Laser(this, fireDirection);
             laser.setField(field);
+            laser.setUnstoppable(unstoppableLaserPerk);
             field.fire(fireDirection, item.getCell(), laser);
             fireDirection = null;
         }
