@@ -153,14 +153,6 @@ public class Battlecity implements Field {
         }
     }
 
-    private Point getPointPlayer(Player player) {
-        return pt(player.getHero().getX(), player.getHero().getY());
-    }
-
-    private Point getPointPrize(Prize prize) {
-        return pt(prize.getX(), prize.getY());
-    }
-
     private void removeDeadTanks() {
         for (Tank tank : allTanks()) {
             if (tank.isAlive()) {
