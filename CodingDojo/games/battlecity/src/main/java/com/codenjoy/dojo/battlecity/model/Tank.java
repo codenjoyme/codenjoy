@@ -24,6 +24,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.items.Bullet;
+import com.codenjoy.dojo.battlecity.model.items.Prize;
 import com.codenjoy.dojo.battlecity.model.items.Tree;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
@@ -38,9 +39,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public static final int MAX = 100;
     protected Dice dice;
-    private List<Bullet> bullets;
     private boolean alive;
     private Gun gun;
+    private List<Bullet> bullets;
+    private List<Prize> prizesTaken;
 
     protected Direction direction;
     protected boolean moving;
@@ -196,6 +198,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         alive = true;
         gun.reset();
         bullets = new LinkedList<>();
+        prizesTaken = new LinkedList<>();
     }
 
     public void tryFire() {
@@ -214,5 +217,13 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     protected boolean isTankPrize() {
         return false;
+    }
+
+    public List<Prize> getPrizesTaken() {
+        return prizesTaken;
+    }
+
+    public void addPrize(Prize prize) {
+        prizesTaken.add(prize);
     }
 }
