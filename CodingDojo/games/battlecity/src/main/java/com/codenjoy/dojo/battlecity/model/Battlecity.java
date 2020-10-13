@@ -86,6 +86,7 @@ public class Battlecity implements Field {
     @Override
     public void tick() {
         removeDeadTanks();
+        removeDeadPrizes();
 
         aiGen.dropAll();
 
@@ -131,10 +132,10 @@ public class Battlecity implements Field {
         }
 
         for (Prize prize : prizes) {
-            if (prize.timeout() == 0) {
-                prizes.remove(prize);
-            } else {
+            if (prize.timeout() != 0) {
                 prize.tick();
+            } else {
+                prizes.remove(prize);
             }
         }
 
@@ -171,6 +172,16 @@ public class Battlecity implements Field {
             }
         }
     }
+
+    private void removeDeadPrizes() {
+        for (Prize prize : prizes) {
+            if (prize.isAlive()) {
+                continue;
+            }
+            prizes.remove(prize);
+        }
+    }
+
 
     @Override
     public void affect(Bullet bullet) {
@@ -211,6 +222,14 @@ public class Battlecity implements Field {
 
             return;
         }
+
+        if (prizes.contains(bullet)) {
+            Prize prize = getPrizeAt(bullet);
+            prize.kill(bullet);
+            bullet.onDestroy();
+
+            return;
+        }
     }
 
     @Override
@@ -236,6 +255,11 @@ public class Battlecity implements Field {
     private Wall getWallAt(Bullet bullet) {
         int index = walls.indexOf(bullet);
         return walls.get(index);
+    }
+
+    private Prize getPrizeAt(Bullet bullet) {
+        int index = prizes.indexOf(bullet);
+        return prizes.get(index);
     }
 
     private void scoresForKill(Bullet killedBullet, Tank diedTank) {
