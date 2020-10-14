@@ -42,6 +42,7 @@ public final class SettingsWrapper {
     private final Parameter<Integer> killZombieScore;
     private final Parameter<Integer> killHeroScore;
     private final Parameter<Boolean> enableKillScore;
+    private final Parameter<Integer> ticksPerBullets;
     private final Parameter<Integer> loosePenalty;
     private final Parameter<Boolean> isTrainingMode;
     private final Parameter<String> gameMode;
@@ -69,6 +70,7 @@ public final class SettingsWrapper {
         enableKillScore = settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
         isTrainingMode = settings.addCheckBox("Is training mode").type(Boolean.class).def(true);
+        ticksPerBullets = settings.addEditBox("Ticks per bullets").type(Integer.class).def(3);
 
         gameMode = settings.addSelect("Game mode", Arrays.asList(
                 CLASSSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP))
@@ -81,6 +83,10 @@ public final class SettingsWrapper {
 
     public int goldScore() {
         return goldScore.getValue();
+    }
+
+    public int ticksPerBullets() {
+        return ticksPerBullets.getValue();
     }
 
     public int killZombieScore() {
@@ -156,6 +162,11 @@ public final class SettingsWrapper {
 
     public SettingsWrapper winScore(int value) {
         winScore.update(value);
+        return this;
+    }
+
+    public SettingsWrapper ticksPerBullets(int value) {
+        ticksPerBullets.update(value);
         return this;
     }
 

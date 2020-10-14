@@ -122,7 +122,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 //            int total = Levels.collectSingle().size();
 //            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }
-        return new Player(listener);
+        return new Player(listener, SettingsWrapper.data.ticksPerBullets());
     }
 
     @Override

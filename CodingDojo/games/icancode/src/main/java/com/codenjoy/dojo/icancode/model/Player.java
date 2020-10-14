@@ -38,9 +38,11 @@ public class Player extends GamePlayer<Hero, Field> {
     Hero hero;
     private Field field;
     private Printer<PrinterData> printer;
+    private int ticksPerBullets;
 
-    public Player(EventListener listener) {
+    public Player(EventListener listener, int ticksPerBullets) {
         super(listener);
+        this.ticksPerBullets = ticksPerBullets;
         setupPrinter();
     }
 
@@ -58,7 +60,8 @@ public class Player extends GamePlayer<Hero, Field> {
     public void newHero(Field field) {
         this.field = field;
         if (hero == null) {
-            hero = new Hero(Elements.ROBO);
+            hero = new Hero(Elements.ROBO)
+                    .withTicksPerBullets(ticksPerBullets);
         }
 
         hero.init(field);

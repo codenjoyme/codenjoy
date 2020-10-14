@@ -3127,6 +3127,64 @@ public class ICanCodeTest extends AbstractGameTest {
                 "└───┘");
     }
 
+    @Test
+    public void shouldShootWithDelay() {
+        // given
+        givenFl("╔═══┐" +
+                "║.S.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘");
+
+        // when
+        hero.fire();
+        hero.down();
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "--☺--" +
+                "--↓--" +
+                "-----" +
+                "-----");
+
+        // when
+        hero.fire();
+        hero.down();
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "--☺--" +
+                "-----" +
+                "--↓--" +
+                "-----");
+        // when
+        hero.fire();
+        hero.down();
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "--☺--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        // when
+        hero.fire();
+        hero.down();
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "--☺--" +
+                "--↓--" +
+                "-----" +
+                "-----");
+    }
+
+
     /*@Test
     public void shouldFlyOnOtherPlayer() {
         // given

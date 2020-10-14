@@ -48,6 +48,8 @@ public class AbstractGameTest {
 
     public static final int FIRE_TICKS = 6;
     private static final int COUNT_LAYERS = 3;
+    private static final int TICKS_PER_BULLETS = 3;
+
     ICanCode game;
     private Printer<PrinterData> printer;
 
@@ -79,7 +81,7 @@ public class AbstractGameTest {
         Level level = createLevels(new String[]{board}).get(0);
         game = new ICanCode(level, dice, ICanCode.TRAINING);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, TICKS_PER_BULLETS);
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
 
@@ -88,7 +90,7 @@ public class AbstractGameTest {
                 .forEach(item -> {
                     HeroItem heroItem = (HeroItem) item;
                     if (heroItem.getHero() == null) {
-                        Player player = new Player(mock(EventListener.class));
+                        Player player = new Player(mock(EventListener.class), TICKS_PER_BULLETS);
                         game.newGame(player);
                         Hero hero = player.getHero();
                         heroItem.init(hero);

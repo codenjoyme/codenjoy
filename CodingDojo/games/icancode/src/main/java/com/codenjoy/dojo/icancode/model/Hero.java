@@ -37,6 +37,8 @@ import java.util.Arrays;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
+    private final static int DEFAULT_TICKS_PER_BULLETS_WITHOUT_DELAY = 0;
+
     private boolean alive;
     private boolean win;
     private Direction direction;
@@ -53,6 +55,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private int killZombieCount;
     private int killHeroCount;
     private HeroItem item;
+    private Gun gun;
 
     public void removeFromCell() {
         item.removeFromCell();
@@ -62,9 +65,15 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return item;
     }
 
+    public Hero withTicksPerBullets(int ticksPerBullets) {
+        gun = new Gun(ticksPerBullets);
+        return this;
+    }
+
     public Hero(Elements el) {
         item = new HeroItem(el);
         item.init(this);
+        gun= new Gun(DEFAULT_TICKS_PER_BULLETS_WITHOUT_DELAY);
 
         resetFlags();
     }
@@ -83,6 +92,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         goldCount = 0;
         resetZombieKillCount();
         resetHeroKillCount();
+        gun.reset();
     }
 
     public void resetZombieKillCount() {
@@ -273,7 +283,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             fireDirection = direction;
             fire = false;
             direction = null;
-            fireLaser();
+            if (gun.tryToFire()) {
+                fireLaser();
+            }
         }
 
         if (direction != null) {
@@ -315,6 +327,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
         landOn = false;
         pull = false;
+        gun.tick();
     }
 
     public void fixLayer() {
