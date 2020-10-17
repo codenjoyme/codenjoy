@@ -193,9 +193,12 @@ public class Battlecity implements Field {
                 return;
             }
 
-            scoresForKill(bullet, tank);
-
             tank.kill(bullet);
+
+            if (!tank.isAlive()) {
+                scoresForKill(bullet, tank);
+            }
+
             bullet.onDestroy();  // TODO заимплементить взрыв
             return;
         }
