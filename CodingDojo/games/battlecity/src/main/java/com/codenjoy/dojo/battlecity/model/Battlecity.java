@@ -85,8 +85,7 @@ public class Battlecity implements Field {
 
     @Override
     public void tick() {
-        removeDeadTanks();
-        removeDeadPrizes();
+        removeDeadItems();
 
         aiGen.dropAll();
 
@@ -154,7 +153,7 @@ public class Battlecity implements Field {
         }
     }
 
-    private void removeDeadTanks() {
+    private void removeDeadItems() {
         for (Tank tank : allTanks()) {
             if (tank.isAlive()) {
                 continue;
@@ -171,9 +170,7 @@ public class Battlecity implements Field {
                 players.remove(player);
             }
         }
-    }
 
-    private void removeDeadPrizes() {
         for (Prize prize : prizes) {
             if (prize.isAlive()) {
                 continue;
@@ -181,7 +178,6 @@ public class Battlecity implements Field {
             prizes.remove(prize);
         }
     }
-
 
     @Override
     public void affect(Bullet bullet) {
