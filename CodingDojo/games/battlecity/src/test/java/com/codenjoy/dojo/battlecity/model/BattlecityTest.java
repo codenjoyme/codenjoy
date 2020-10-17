@@ -5055,8 +5055,7 @@ public class BattlecityTest {
 
         game.tick();
 
-        // TODO должен получить только 1 раз очки в самом конце
-        events.verifyAllEvents("listener(0) => [KILL_OTHER_AI_TANK, KILL_OTHER_AI_TANK, KILL_OTHER_AI_TANK]\n");
+        events.verifyAllEvents("listener(0) => [KILL_OTHER_AI_TANK]\n");
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼1    ☼\n" +
@@ -6153,5 +6152,104 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         assertEquals(0, hero(0).getPrizesTaken().size());
+    }
+
+    @Test
+    public void shouldAddScores_forKilledTanks() {
+        prizeOnField = v(3);
+        hitKillsAiPrize = v(2);
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼¿    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).dontShoot = true;
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼◘    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).down();
+        hero(0).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼?    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        events.verifyAllEvents(
+                "listener(0) => []\n");
+
+        ai(0).down();
+        hero(0).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_OTHER_AI_TANK]\n");
+
+        hero(0).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        events.verifyAllEvents(
+                "listener(0) => []\n");
     }
 }
