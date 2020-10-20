@@ -87,11 +87,32 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         // then
         assertEquals("[]", reader.errors().toString());
         assertEquals(
-                "[[???♥☺???? > [RIGHT]], " +
-                "[????☺♥??? > [LEFT]], " +
-                "[?♥??☺???? > [DOWN]], " +
-                "[?☼?☼☺??♥? > [RIGHT]], " +
-                "[????☺??♥? > [UP]]]", rules.toString());
+                "[[\n" +
+                "???\n" +
+                "♥☺?\n" +
+                "???\n" +
+                "synonyms: {} \n" +
+                " >>> [RIGHT]], [\n" +
+                "???\n" +
+                "?☺♥\n" +
+                "???\n" +
+                "synonyms: {} \n" +
+                " >>> [LEFT]], [\n" +
+                "?♥?\n" +
+                "?☺?\n" +
+                "???\n" +
+                "synonyms: {} \n" +
+                " >>> [DOWN]], [\n" +
+                "?☼?\n" +
+                "☼☺?\n" +
+                "?♥?\n" +
+                "synonyms: {} \n" +
+                " >>> [RIGHT]], [\n" +
+                "???\n" +
+                "?☺?\n" +
+                "?♥?\n" +
+                "synonyms: {} \n" +
+                " >>> [UP]]]", rules.toString());
     }
 
     @Test
@@ -142,14 +163,45 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         // then
         assertEquals("[]", reader.errors().toString());
         assertEquals(
-                "[[?☼??☺???? > [DOWN]], " +
-                "[????????????????????????☺???????????????????????? > [" +
-                    "[?☼??☺ ?☼? > [RIGHT]], " +
-                    "[?☼??☺ ?#? > [DOWN]], " +
-                    "[?#??☺ ?☼? > [UP]], " +
-                    "[?#??☺ ?#? > [LEFT]]]" +
-                "], " +
-                "[???☼☺☼?#? > [LEFT]]]", rules.toString());
+                "[[\n" +
+                "?☼?\n" +
+                "?☺?\n" +
+                "???\n" +
+                "synonyms: {} \n" +
+                " >>> [DOWN]], [\n" +
+                "???????\n" +
+                "???????\n" +
+                "???????\n" +
+                "???☺???\n" +
+                "???????\n" +
+                "???????\n" +
+                "???????\n" +
+                "synonyms: {} > [[\n" +
+                "?☼?\n" +
+                "?☺ \n" +
+                "?☼?\n" +
+                "synonyms: {} \n" +
+                " >>> [RIGHT]], [\n" +
+                "?☼?\n" +
+                "?☺ \n" +
+                "?#?\n" +
+                "synonyms: {} \n" +
+                " >>> [DOWN]], [\n" +
+                "?#?\n" +
+                "?☺ \n" +
+                "?☼?\n" +
+                "synonyms: {} \n" +
+                " >>> [UP]], [\n" +
+                "?#?\n" +
+                "?☺ \n" +
+                "?#?\n" +
+                "synonyms: {} \n" +
+                " >>> [LEFT]]]], [\n" +
+                "???\n" +
+                "☼☺☼\n" +
+                "?#?\n" +
+                "synonyms: {} \n" +
+                " >>> [LEFT]]]", rules.toString());
     }
 
     @Test
@@ -202,11 +254,32 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         // then
         assertEquals("[]", reader.errors().toString());
         assertEquals(
-                "[[          > [RIGHT, LEFT, DOWN]], " +
-                "[          > [LEFT, RIGHT, UP]], " +
-                "[          > [DOWN, UP]], " +
-                "[          > [RIGHT]], " +
-                "[          > [UP, DOWN, LEFT, RIGHT, RIGHT]]]", 
+                "[[\n" +
+                "   \n" +
+                "   \n" +
+                "   \n" +
+                "synonyms: {} \n" +
+                " >>> [RIGHT, LEFT, DOWN]], [\n" +
+                "   \n" +
+                "   \n" +
+                "   \n" +
+                "synonyms: {} \n" +
+                " >>> [LEFT, RIGHT, UP]], [\n" +
+                "   \n" +
+                "   \n" +
+                "   \n" +
+                "synonyms: {} \n" +
+                " >>> [DOWN, UP]], [\n" +
+                "   \n" +
+                "   \n" +
+                "   \n" +
+                "synonyms: {} \n" +
+                " >>> [RIGHT]], [\n" +
+                "   \n" +
+                "   \n" +
+                "   \n" +
+                "synonyms: {} \n" +
+                " >>> [UP, DOWN, LEFT, RIGHT, RIGHT]]]",
                 rules.toString());
     }
 
@@ -303,7 +376,12 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         assertEquals("[[ERROR] Directions is empty for pattern: '?????????' at directory" + SEP + "main.rule:9]",
                 reader.errors().toString());
 
-        assertEquals("[[????????? > [UP]]]", rules.toString());
+        assertEquals("[[\n" +
+                "???\n" +
+                "???\n" +
+                "???\n" +
+                "synonyms: {} \n" +
+                " >>> [UP]]]", rules.toString());
     }
 
     @Test
@@ -374,10 +452,27 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         // then
         assertEquals("[]", reader.errors().toString());
         assertEquals(
-                "[[???B☺???? > [RIGHT, RIGHT, RIGHT]], " +
-                "[????☺B??? > [LEFT, LEFT, LEFT]], " +
-                "[?B??☺???? > [DOWN, DOWN, DOWN]], " +
-                "[????☺??B? > [UP, UP, UP]]]", rules.toString());
+                "[[\n" +
+                "???\n" +
+                "B☺?\n" +
+                "???\n" +
+                "synonyms: {B=[5, 4, 3, 2, 1, ҉]} \n" +
+                " >>> [RIGHT, RIGHT, RIGHT]], [\n" +
+                "???\n" +
+                "?☺B\n" +
+                "???\n" +
+                "synonyms: {B=[5, 4, 3, 2, 1, ҉]} \n" +
+                " >>> [LEFT, LEFT, LEFT]], [\n" +
+                "?B?\n" +
+                "?☺?\n" +
+                "???\n" +
+                "synonyms: {B=[5, 4, 3, 2, 1, ҉]} \n" +
+                " >>> [DOWN, DOWN, DOWN]], [\n" +
+                "???\n" +
+                "?☺?\n" +
+                "?B?\n" +
+                "synonyms: {B=[5, 4, 3, 2, 1, ҉]} \n" +
+                " >>> [UP, UP, UP]]]", rules.toString());
     }
 
     @Test
@@ -440,10 +535,27 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
         // then
         assertEquals("[]", reader.errors().toString());
         assertEquals(
-                "[[???B☺???? > [RIGHT, RIGHT, RIGHT]], " +
-                "[????☺B??? > [LEFT, LEFT, LEFT]], " +
-                "[?C??☺???? > [DOWN, DOWN, DOWN]], " +
-                "[????☺??C? > [UP, UP, UP]]]", rules.toString());
+                "[[\n" +
+                "???\n" +
+                "B☺?\n" +
+                "???\n" +
+                "synonyms: {B=[5, 4, 3], C=[2, 1, ҉]} \n" +
+                " >>> [RIGHT, RIGHT, RIGHT]], [\n" +
+                "???\n" +
+                "?☺B\n" +
+                "???\n" +
+                "synonyms: {B=[5, 4, 3], C=[2, 1, ҉]} \n" +
+                " >>> [LEFT, LEFT, LEFT]], [\n" +
+                "?C?\n" +
+                "?☺?\n" +
+                "???\n" +
+                "synonyms: {B=[5, 4, 3], C=[2, 1, ҉]} \n" +
+                " >>> [DOWN, DOWN, DOWN]], [\n" +
+                "???\n" +
+                "?☺?\n" +
+                "?C?\n" +
+                "synonyms: {B=[5, 4, 3], C=[2, 1, ҉]} \n" +
+                " >>> [UP, UP, UP]]]", rules.toString());
     }
 
     @Test

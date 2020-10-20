@@ -126,6 +126,11 @@ public class RuleReaderFileTest {
         reader.load(rules, file);
         
         // then 
-        assertEquals("[[?☼??☺ ?☼? > [RIGHT]]]", rules.toString());
+        assertEquals("[[\n" +
+                "?☼?\n" +
+                "?☺ \n" +
+                "?☼?\n" +
+                "synonyms: {} \n" +
+                " >>> [RIGHT]]]", rules.toString());
     }
 }

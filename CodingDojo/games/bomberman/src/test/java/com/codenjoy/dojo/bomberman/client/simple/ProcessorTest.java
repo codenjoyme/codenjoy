@@ -92,8 +92,12 @@ public class ProcessorTest extends AbstractRuleReaderTest {
         assertEquals(Direction.UP, processor.next(board));
         assertEquals(Direction.LEFT, processor.next(board));
         
-        assertEquals("[[MESSAGE] Mach rule: : '[          > [RIGHT, LEFT, DOWN, UP, UP, LEFT]]', " +
-                "[MESSAGE] Got directions: '[RIGHT, LEFT, DOWN, UP, UP, LEFT]']", messages.toString());
+        assertEquals("[[MESSAGE] Mach rule: : '[\n" +
+                "   \n" +
+                "   \n" +
+                "   \n" +
+                "synonyms: {} \n" +
+                " >>> [RIGHT, LEFT, DOWN, UP, UP, LEFT]]']", messages.toString());
         messages.clear();
     }
     
@@ -123,8 +127,7 @@ public class ProcessorTest extends AbstractRuleReaderTest {
         // then
         assertEquals(Direction.STOP, direction);
 
-        assertEquals("[[ERROR] Pattern is not valid: '         BAD RULE' at " + SEP + "main.rule:5, " +
-                "[MESSAGE] Got directions: '[STOP]']", messages.toString());
+        assertEquals("[[ERROR] Pattern is not valid: '         BAD RULE' at " + SEP + "main.rule:5]", messages.toString());
     }
 
     @Test

@@ -69,9 +69,7 @@ public class Processor {
                 reader.cleanErrors();
             }
 
-            List<Direction> directions = rules.process(board);
-            console.accept(Message.get("Got directions", directions));
-            commands.addAll(directions);
+            commands.addAll(rules.process(board));
         }
         
         return commands.removeFirst();
