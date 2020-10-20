@@ -60,7 +60,7 @@ public class Processor {
         }
         
         if (commands.isEmpty()) {
-            rules = new Rules();
+            rules = new Rules(console);
             
             reader.load(rules, rulesFile);
 

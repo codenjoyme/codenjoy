@@ -92,7 +92,8 @@ public class ProcessorTest extends AbstractRuleReaderTest {
         assertEquals(Direction.UP, processor.next(board));
         assertEquals(Direction.LEFT, processor.next(board));
         
-        assertEquals("[[MESSAGE] Got directions: '[RIGHT, LEFT, DOWN, UP, UP, LEFT]']", messages.toString());
+        assertEquals("[[MESSAGE] Mach rule: : '[          > [RIGHT, LEFT, DOWN, UP, UP, LEFT]]', " +
+                "[MESSAGE] Got directions: '[RIGHT, LEFT, DOWN, UP, UP, LEFT]']", messages.toString());
         messages.clear();
     }
     

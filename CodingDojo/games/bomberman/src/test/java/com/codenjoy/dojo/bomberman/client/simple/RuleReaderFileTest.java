@@ -43,7 +43,7 @@ public class RuleReaderFileTest {
     public void setup() {
         // given
         reader = new RuleReader();
-        rules = new Rules();
+        rules = new Rules(message -> {});
     }
     
     @Test
