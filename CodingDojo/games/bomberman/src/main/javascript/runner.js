@@ -132,14 +132,14 @@ var Element = {
     /// meatchoppers
     MEAT_CHOPPER : '&',          // this guys runs over the board randomly and gets in the way all the time
                                  // if it will touch bomberman - it will die
-                                 // you'd better kill this piece of ... meat, you'll get +100 point for it
-    DEAD_MEAT_CHOPPER : 'x',     // this is chopper corpse
+    DEAD_MEAT_CHOPPER : 'x',     // you'd better kill this piece of ... meat, you'll get +100 point for it
+                                 // this is chopper corpse
 
     /// perks
     BOMB_BLAST_RADIUS_INCREASE : '+', // Bomb blast radius increase. Applicable only to new bombs. The perk is temporary.
     BOMB_COUNT_INCREASE : 'c',   // Increase available bombs count. Number of extra bombs can be set in settings. Temporary.
     BOMB_REMOTE_CONTROL : 'r',   // Bomb blast not by timer but by second act. Number of RC triggers is limited and can be set in settings.
-    BOMB_IMMUNE : 'i',
+    BOMB_IMMUNE : 'i',           // Do not die after bomb blast (own bombs and others as well). Temporary.
 
     /// a void
     NONE : ' '                  // this is the only place where you can move your Bomberman

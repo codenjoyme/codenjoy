@@ -56,8 +56,8 @@ public enum Elements implements CharElements {
     /// meatchoppers
     MEAT_CHOPPER('&'),          // this guys runs over the board randomly and gets in the way all the time
                                 // if it will touch bomberman - it will die
-                                // you'd better kill this piece of ... meat, you'll get score points for it
-    DEAD_MEAT_CHOPPER('x'),     // this is chopper corpse
+    DEAD_MEAT_CHOPPER('x'),     // you'd better kill this piece of ... meat, you'll get score points for it
+                                // this is chopper corpse
 
     /// perks
     BOMB_BLAST_RADIUS_INCREASE('+'), // Bomb blast radius increase. Applicable only to new bombs. The perk is temporary.
