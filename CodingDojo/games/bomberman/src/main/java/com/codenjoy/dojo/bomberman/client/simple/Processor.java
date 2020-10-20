@@ -28,20 +28,21 @@ import com.codenjoy.dojo.services.Direction;
 import java.io.File;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static com.codenjoy.dojo.bomberman.client.simple.RuleReader.MAIN_RULE_FILE_NAME;
 
 public class Processor {
 
-    private Consumer<ErrorMessage> console;
+    private Consumer<Message> console;
     private RuleReader reader;
     private File rulesFile;
     private Dice dice;
     private Deque<Direction> commands;
     private Rules rules;
 
-    public Processor(String rulesPlace, Dice dice, Consumer<ErrorMessage> console) {
+    public Processor(String rulesPlace, Dice dice, Consumer<Message> console) {
         rulesFile = new File(rulesPlace + MAIN_RULE_FILE_NAME);
         this.dice = dice;
         commands = new LinkedList<>();
@@ -68,7 +69,9 @@ public class Processor {
                 reader.cleanErrors();
             }
 
-            commands.addAll(rules.process(board));
+            List<Direction> directions = rules.process(board);
+            console.accept(Message.get("Got directions", directions));
+            commands.addAll(directions);
         }
         
         return commands.removeFirst();

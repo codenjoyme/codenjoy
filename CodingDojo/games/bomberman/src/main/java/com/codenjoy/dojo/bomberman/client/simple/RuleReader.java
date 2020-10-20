@@ -43,7 +43,7 @@ public class RuleReader {
     public static final String DIRECTIVE_SYNONYM = "LET ";
     public static final String MAIN_RULE_FILE_NAME = "/main.rule";
     
-    private List<ErrorMessage> errors = new LinkedList<>(); 
+    private List<Message> errors = new LinkedList<>();
 
     public void load(Rules rules, File file) {
         validate(file);
@@ -54,7 +54,7 @@ public class RuleReader {
                 try {
                     return reader.readLine();
                 } catch (IOException e) {
-                    errors.add(new ErrorMessage(READING_FILE_ERROR, file));
+                    errors.add(Message.error(READING_FILE_ERROR, file));
                     return null;
                 }
             };
@@ -62,7 +62,7 @@ public class RuleReader {
             processLines(rules, file, lines);
 
         } catch (IOException e) {
-            errors.add(new ErrorMessage(READING_FILE_ERROR, file));
+            errors.add(Message.error(READING_FILE_ERROR, file));
             return;
         }
     }
@@ -70,12 +70,12 @@ public class RuleReader {
     private void validate(File file) {
         File directory = file.getParentFile();
         if (directory == null || !directory.exists() || !directory.isDirectory()) {
-            errors.add(new ErrorMessage(RULES_DIRECTORY_NOT_FOUND_HERE, 
+            errors.add(Message.error(RULES_DIRECTORY_NOT_FOUND_HERE,
                     (directory != null) ? directory.getAbsolutePath() : null));
             return;
         }
         if (!file.exists() || !file.isFile()) {
-            errors.add(new ErrorMessage(MAIN_RULE_FILE_NOT_FOUND_HERE, 
+            errors.add(Message.error(MAIN_RULE_FILE_NOT_FOUND_HERE,
                     directory.getAbsolutePath()));
             return;
         }
@@ -95,9 +95,9 @@ public class RuleReader {
             if (line == null) {
                 if (!StringUtils.isEmpty(pattern)) {
                     if (isValidPattern(new Pattern(pattern, synonyms))) {
-                        errors.add(new ErrorMessage(DIRECTIONS_IS_EMPTY_FOR_PATTERN, file, number, pattern));
+                        errors.add(Message.error(DIRECTIONS_IS_EMPTY_FOR_PATTERN, file, number, pattern));
                     } else {
-                        errors.add(new ErrorMessage(PATTERN_IS_NOT_VALID, file, number, pattern));
+                        errors.add(Message.error(PATTERN_IS_NOT_VALID, file, number, pattern));
                     }
                 }
                 
@@ -113,7 +113,7 @@ public class RuleReader {
                 String substring = line.substring(DIRECTIVE_SYNONYM.length());
                 String[] split = substring.split("=");
                 if (split.length != 2 || split[0].length() != 1 || split[1].length() <= 1) { 
-                    errors.add(new ErrorMessage(SYNONYM_IS_NOT_VALID, file, number, line));
+                    errors.add(Message.error(SYNONYM_IS_NOT_VALID, file, number, line));
                     continue;
                 }
 
@@ -128,13 +128,13 @@ public class RuleReader {
             
             if (isRuleDirective || (isDirectionsDirective && !isJustComma)) {
                 if (!isValidPattern(new Pattern(pattern, synonyms))) {
-                    errors.add(new ErrorMessage(PATTERN_IS_NOT_VALID, file, number, pattern));
+                    errors.add(Message.error(PATTERN_IS_NOT_VALID, file, number, pattern));
                     
                     pattern = StringUtils.EMPTY;
                     continue;
                 }
             } else if (isJustComma || isContainsDirection) {
-                errors.add(new ErrorMessage(DIRECTIONS_IS_NOT_VALID_FOR_PATTERN,
+                errors.add(Message.error(DIRECTIONS_IS_NOT_VALID_FOR_PATTERN,
                         file, number, pattern, line));
 
                 pattern = StringUtils.EMPTY;
@@ -164,7 +164,7 @@ public class RuleReader {
                                 .collect(toList());
                 
                 if (directions.isEmpty()) {
-                    errors.add(new ErrorMessage(DIRECTIONS_IS_NOT_VALID_FOR_PATTERN,
+                    errors.add(Message.error(DIRECTIONS_IS_NOT_VALID_FOR_PATTERN,
                             file, number, pattern, line));
 
                     pattern = StringUtils.EMPTY;
@@ -236,7 +236,7 @@ public class RuleReader {
         return !errors.isEmpty();
     }
 
-    public List<ErrorMessage> errors() {
+    public List<Message> errors() {
         return errors;
     }
 
