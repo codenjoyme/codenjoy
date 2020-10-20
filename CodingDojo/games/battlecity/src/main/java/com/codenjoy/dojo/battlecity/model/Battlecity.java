@@ -139,7 +139,9 @@ public class Battlecity implements Field {
         }
 
         for (Player player : players) {
-            takePrize(player);
+            if (player.isAlive()) {
+                takePrize(player);
+            }
         }
     }
 
