@@ -559,6 +559,62 @@ public class RuleReaderTest extends AbstractRuleReaderTest {
     }
 
     @Test
+    public void shouldSeveralSynonyms_whenLetNotCommandsInLine() {
+        // given
+        loadLns("LET B!=543",
+                "",
+                "???",
+                "B☺?",
+                "???",
+                "RIGHT,RIGHT,RIGHT",
+                "",
+                "???",
+                "?☺B",
+                "???",
+                "LEFT,LEFT,LEFT",
+                "",
+                "LET C!=21҉",
+                "",
+                "?C?",
+                "?☺?",
+                "???",
+                "DOWN,DOWN,DOWN",
+                "",
+                "???",
+                "?☺?",
+                "?C?",
+                "UP,UP,UP");
+
+        // when
+        reader.load(rules, file);
+
+        // then
+        assertEquals("[]", reader.errors().toString());
+        assertEquals(
+                "[[\n" +
+                "???\n" +
+                "B☺?\n" +
+                "???\n" +
+                "synonyms: {B=[☺, ☻, Ѡ, ♥, ♠, ♣, 2, 1, ҉, ☼, #, H, &, x, +, c, r, i,  ], C=[☺, ☻, Ѡ, ♥, ♠, ♣, 5, 4, 3, ☼, #, H, &, x, +, c, r, i,  ]} \n" +
+                " >>> [RIGHT, RIGHT, RIGHT]], [\n" +
+                "???\n" +
+                "?☺B\n" +
+                "???\n" +
+                "synonyms: {B=[☺, ☻, Ѡ, ♥, ♠, ♣, 2, 1, ҉, ☼, #, H, &, x, +, c, r, i,  ], C=[☺, ☻, Ѡ, ♥, ♠, ♣, 5, 4, 3, ☼, #, H, &, x, +, c, r, i,  ]} \n" +
+                " >>> [LEFT, LEFT, LEFT]], [\n" +
+                "?C?\n" +
+                "?☺?\n" +
+                "???\n" +
+                "synonyms: {B=[☺, ☻, Ѡ, ♥, ♠, ♣, 2, 1, ҉, ☼, #, H, &, x, +, c, r, i,  ], C=[☺, ☻, Ѡ, ♥, ♠, ♣, 5, 4, 3, ☼, #, H, &, x, +, c, r, i,  ]} \n" +
+                " >>> [DOWN, DOWN, DOWN]], [\n" +
+                "???\n" +
+                "?☺?\n" +
+                "?C?\n" +
+                "synonyms: {B=[☺, ☻, Ѡ, ♥, ♠, ♣, 2, 1, ҉, ☼, #, H, &, x, +, c, r, i,  ], C=[☺, ☻, Ѡ, ♥, ♠, ♣, 5, 4, 3, ☼, #, H, &, x, +, c, r, i,  ]} \n" +
+                " >>> [UP, UP, UP]]]", rules.toString());
+    }
+
+    @Test
     public void shouldCheckBoardWithSynonyms_whenSeveralLetDirectives() {
         // given
         shouldSeveralSynonyms_whenLetCommandsInLine();

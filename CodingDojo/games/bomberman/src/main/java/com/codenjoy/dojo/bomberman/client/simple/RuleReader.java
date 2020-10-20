@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 
 import static com.codenjoy.dojo.bomberman.client.simple.Messages.*;
 import static java.util.stream.Collectors.toList;
@@ -112,12 +113,19 @@ public class RuleReader {
             if (isSynonymDirective) {
                 String substring = line.substring(DIRECTIVE_SYNONYM.length());
                 String[] split = substring.split("=");
-                if (split.length != 2 || split[0].length() != 1 || split[1].length() <= 1) { 
+
+                if (split.length != 2 || split[0].length() < 1 || split[0].length() > 2 || split[1].length() <= 1) {
                     errors.add(Message.error(SYNONYM_IS_NOT_VALID, file, number, line));
                     continue;
                 }
+                String variable = split[0];
+                String values = split[1];
 
-                synonyms.add(split[0].charAt(0), split[1]);
+                if (variable.endsWith("!")) {
+                    values = invert(values);
+                }
+
+                synonyms.add(variable.charAt(0), values);
                 continue;
             }
             
@@ -179,6 +187,21 @@ public class RuleReader {
         } while (line != null);
 
         onLinesFinish();
+    }
+
+    private String invert(String chars) {
+        return Arrays.stream(Elements.values())
+                .map(el -> el.ch())
+                .filter(ch -> chars.indexOf(ch) == -1)
+                .collect(asString());
+    }
+
+    private Collector<Character, StringBuilder, String> asString() {
+        return Collector.of(
+                StringBuilder::new,
+                StringBuilder::append,
+                StringBuilder::append,
+                StringBuilder::toString);
     }
 
     protected void onLinesFinish() {

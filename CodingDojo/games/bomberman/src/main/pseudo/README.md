@@ -235,7 +235,7 @@ Follow the instructions below to understand how to use it.
     NONE(' ');                 // this is the only place where you can move your Bomberman
     ```
    
-8. There are occasions when it is necessary to combine several characters into one group. To do this, use the `LET directive A = QWERTYUIOP`, where `A `is the character that can be used in the mask after the `LET` command, and `QWERTYUIOP` are the characters that will be substituted for `A`. For example, we can generalize our past example with saving from the bomb so that the hero does not run away only from a bomb with a timer of `5`, but also from `4`, `3`, `2` and `1`.
+8. There are occasions when it is necessary to combine several characters into one group. To do this, use the `LET A=QWERTYUIOP`, where `A `is the character that can be used in the mask after the `LET` command, and `QWERTYUIOP` are the characters that will be substituted for `A`. For example, we can generalize our past example with saving from the bomb so that the hero does not run away only from a bomb with a timer of `5`, but also from `4`, `3`, `2` and `1`.
 
     ```
     LET B=54321
@@ -268,8 +268,34 @@ Follow the instructions below to understand how to use it.
     ????
     DOWN
     ```
+   
+9. You can invert characters by using `LET A!=QWERTYUIOP`, where `A `is the character that can be used in the mask after the `LET` command, and `QWERTYUIOP` are the characters that will be inverted, then result will be substituted for `A`. For example, we can use any bot bumb elements with this: 
+
+    ```
+    LET X!=54321
+
+    ???
+    ?☺?
+    ?X?
+    DOWN
+
+    ???
+    ?☺X
+    ???
+    RIGHT
+
+    ?X?
+    ?☺?
+    ???
+    UP
+
+    ???
+    X☺?
+    ???
+    LEFT
+    ```
     
-9. In some cases, you may need to place part of the behavior script in a separate file. For example, if there is no bomb, we do one action, but if the bomb appears, we run away. To do this, instead of a specific command `LEFT`, `RIGHT`, `UP`, `DOWN` or `ACT`, you should specify the RULE directive:
+10. In some cases, you may need to place part of the behavior script in a separate file. For example, if there is no bomb, we do one action, but if the bomb appears, we run away. To do this, instead of a specific command `LEFT`, `RIGHT`, `UP`, `DOWN` or `ACT`, you should specify the RULE directive:
 
     ```
     &☺
@@ -291,11 +317,11 @@ Follow the instructions below to understand how to use it.
    
     In this script, we said that if a hunter appears around our hero, we must run. And how to run is described in the `runAway.rule` file. If you need to, create it! Inside the new script, you can write everything the same as in the main `main.rule` script.
 
-10. **DO NOT FORGET** that each mask should be square (2x2, 3x3, 4x4, 5x5). 
+11. **DO NOT FORGET** that each mask should be square (2x2, 3x3, 4x4, 5x5). 
 
-11. Also, **WATCH CAREFULLY** for the symbols ` `  - this is an empty space on the field that is not occupied by anything. The space character ` `  is easy to skip (or add some redundant), so check back carefully.
+12. Also, **WATCH CAREFULLY** for the symbols ` `  - this is an empty space on the field that is not occupied by anything. The space character ` `  is easy to skip (or add some redundant), so check back carefully.
 
-12. The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
+13. The order of the commands depends on the order of their execution. Possible overlap - one command / rule overlaps another.
 
 ## Other stuff
 
