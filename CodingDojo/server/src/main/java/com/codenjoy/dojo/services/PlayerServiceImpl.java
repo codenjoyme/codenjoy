@@ -606,6 +606,16 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public void cleanScores(String id) {
+        lock.writeLock().lock();
+        try {
+            playerGames.get(id).clearScore();
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+
+    @Override
     public void reloadAllRooms() {
         lock.writeLock().lock();
         try {

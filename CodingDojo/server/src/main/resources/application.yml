@@ -24,6 +24,8 @@ mvc:
 game:
   save.auto: true
   ai: true
+  player:
+    score-cleanup.enabled: false
   semifinal:
     enabled: false
     timeout: 900

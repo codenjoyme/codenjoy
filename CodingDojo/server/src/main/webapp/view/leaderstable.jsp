@@ -23,6 +23,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 
 <div id="leaderboard" class="board" style="display:none;" zoom-on-wheel>
+    <c:if test="${playerScoreCleanupEnabled}">
+        <a href="#" onclick="cleanPlayerScores()">Clear my scores</a>
+    </c:if>
     <table id="table-logs" class="table table-striped leaderboard-table">
         <thead>
             <th width="5%">
