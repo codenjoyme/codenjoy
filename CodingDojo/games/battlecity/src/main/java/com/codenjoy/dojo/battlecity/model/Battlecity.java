@@ -301,15 +301,28 @@ public class Battlecity implements Field {
     }
 
     @Override
+    public boolean isBarrierFor(Point pt, Tank tank) {
+        if (isBarrier(pt)) {
+            return true;
+        }
+
+        List<Prize> prizesTaken = tank.getPrizesTaken();
+        if (isRiver(pt)) {
+            if (checkPrizes(Elements.PRIZE_WALKING_ON_WATER, prizesTaken)) {
+                return false;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean isBarrier(Point pt) {
         for (Wall wall : this.walls) {
             if (wall.itsMe(pt) && !wall.destroyed()) {
                 return true;
             }
-        }
-
-        if (isRiver(pt)) {
-            return true;
         }
 
         for (Point border : borders) {
@@ -325,6 +338,11 @@ public class Battlecity implements Field {
         }
 
         return pt.isOutOf(size);
+    }
+
+    private boolean checkPrizes(Elements elements, List<Prize> prizesTaken) {
+        return prizesTaken.stream()
+                .anyMatch(x -> elements.equals(x.getElements()));
     }
 
     private List<Bullet> bullets() {
