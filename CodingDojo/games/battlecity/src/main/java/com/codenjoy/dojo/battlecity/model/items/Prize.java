@@ -25,21 +25,55 @@ package com.codenjoy.dojo.battlecity.model.items;
 
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.*;
 
-public class Prize extends PointImpl implements State<Elements, Player> {
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
+
+public class Prize extends PointImpl implements Tickable, State<Elements, Player> {
+
+    public static final int CHANGE_EVERY_TICKS = 2;
     private Elements elements;
+    private int timeout;
+    private boolean alive;
 
-    public Prize(Point pt, Elements elements) {
+    public Prize(Point pt, int prizeOnField, Elements elements) {
         super(pt);
         this.elements = elements;
+        timeout = prizeOnField;
+        alive = true;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        return elements;
+        if (alive) {
+            if (timeout % CHANGE_EVERY_TICKS == 0) {
+                return elements;
+            }
+
+            return Elements.PRIZE;
+        } else {
+
+            return Elements.BANG;
+        }
+    }
+
+    @Override
+    public void tick() {
+        if (alive) {
+            timeout--;
+        }
+    }
+
+    public int timeout() {
+        return timeout;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void kill(Bullet bullet) {
+        alive = false;
     }
 }

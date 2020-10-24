@@ -25,11 +25,11 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.battlecity.model.items.Prize;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.PointImpl.random;
 
 public class PrizeGenerator {
 
@@ -40,21 +40,15 @@ public class PrizeGenerator {
 
     private Field field;
     private Dice dice;
+    private Parameter<Integer> prizeOnField;
 
-    public PrizeGenerator(Field field, Dice dice) {
+    public PrizeGenerator(Field field, Dice dice, Parameter<Integer> prizeOnField) {
         this.field = field;
         this.dice = dice;
+        this.prizeOnField = prizeOnField;
     }
 
-    public void drop() {
-        Point pt;
-        int c = 0;
-        do {
-            pt = random(dice, field.size());
-        } while (field.isBarrier(pt) && c++ < field.size());
-
-        if (!field.isBarrier(pt)) {
-            field.addPrize(new Prize(pt, PRIZES.get(dice.next(PRIZES.size()))));
-        }
+    public void drop(Point pt) {
+        field.addPrize(new Prize(pt, prizeOnField.getValue(), PRIZES.get(dice.next(PRIZES.size()))));
     }
 }

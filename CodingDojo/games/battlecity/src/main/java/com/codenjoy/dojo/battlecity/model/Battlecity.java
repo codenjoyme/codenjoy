@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static java.util.stream.Collectors.toList;
 
 public class Battlecity implements Field {
@@ -54,7 +55,8 @@ public class Battlecity implements Field {
 
     public Battlecity(int size, Dice dice,
                       Parameter<Integer> whichSpawnWithPrize,
-                      Parameter<Integer> damagesBeforeAiDeath)
+                      Parameter<Integer> damagesBeforeAiDeath,
+                      Parameter<Integer> prizeOnField)
     {
         this.size = size;
         ais = new LinkedList<>();
@@ -65,7 +67,7 @@ public class Battlecity implements Field {
         ice = new LinkedList<>();
         rivers = new LinkedList<>();
 
-        prizeGen = new PrizeGenerator(this, dice);
+        prizeGen = new PrizeGenerator(this, dice, prizeOnField);
 
         aiGen = new AiGenerator(this, dice, whichSpawnWithPrize, damagesBeforeAiDeath);
     }
@@ -83,7 +85,7 @@ public class Battlecity implements Field {
 
     @Override
     public void tick() {
-        removeDeadTanks();
+        removeDeadItems();
 
         aiGen.dropAll();
 
@@ -127,15 +129,41 @@ public class Battlecity implements Field {
                 wall.tick();
             }
         }
+
+        for (Prize prize : prizes) {
+            if (prize.timeout() != 0) {
+                prize.tick();
+            } else {
+                prizes.remove(prize);
+            }
+        }
+
+        for (Player player : players) {
+            if (player.isAlive()) {
+                takePrize(player);
+            }
+        }
     }
 
-    private void removeDeadTanks() {
+    private void takePrize(Player player) {
+        if (prizes.contains(player.getHero())) {
+            int index = prizes.indexOf(player.getHero());
+            Prize prize = prizes.get(index);
+
+            player.takePrize(prize);
+            prizes.remove(prize);
+        }
+    }
+
+    private void removeDeadItems() {
         for (Tank tank : allTanks()) {
-            if (!tank.isAlive()) {
-                ais.remove(tank);
-                if (tank.isTankPrize()) {
-                    prizeGen.drop();
-                }
+            if (tank.isAlive()) {
+                continue;
+            }
+            ais.remove(tank);
+
+            if (tank.isTankPrize()) {
+                prizeGen.drop(pt(tank.getX(), tank.getY()));
             }
         }
 
@@ -143,6 +171,13 @@ public class Battlecity implements Field {
             if (!player.getHero().isAlive()) {
                 players.remove(player);
             }
+        }
+
+        for (Prize prize : prizes) {
+            if (prize.isAlive()) {
+                continue;
+            }
+            prizes.remove(prize);
         }
     }
 
@@ -160,9 +195,12 @@ public class Battlecity implements Field {
                 return;
             }
 
-            scoresForKill(bullet, tank);
-
             tank.kill(bullet);
+
+            if (!tank.isAlive()) {
+                scoresForKill(bullet, tank);
+            }
+
             bullet.onDestroy();  // TODO заимплементить взрыв
             return;
         }
@@ -182,6 +220,14 @@ public class Battlecity implements Field {
                 wall.destroyFrom(bullet.getDirection());
                 bullet.onDestroy();  // TODO заимплементить взрыв
             }
+
+            return;
+        }
+
+        if (prizes.contains(bullet)) {
+            Prize prize = getPrizeAt(bullet);
+            prize.kill(bullet);
+            bullet.onDestroy();
 
             return;
         }
@@ -212,6 +258,11 @@ public class Battlecity implements Field {
         return walls.get(index);
     }
 
+    private Prize getPrizeAt(Bullet bullet) {
+        int index = prizes.indexOf(bullet);
+        return prizes.get(index);
+    }
+
     private void scoresForKill(Bullet killedBullet, Tank diedTank) {
         Player died = null;
         boolean aiDied = ais.contains(diedTank);
@@ -233,6 +284,7 @@ public class Battlecity implements Field {
                 killer.event(Events.KILL_OTHER_HERO_TANK.apply(killer.score()));
             }
         }
+
         if (died != null) {
             died.event(Events.KILL_YOUR_TANK);
         }
