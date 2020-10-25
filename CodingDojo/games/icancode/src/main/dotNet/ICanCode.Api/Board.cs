@@ -153,6 +153,15 @@ namespace ICanCode.Api
                     Element.LASER_DOWN);
         }
 
+        /**
+         * @return Returns list of coordinates for all perks.
+         */
+        public List<Point> GetPerks()
+        {
+            return Get(Layers.LAYER2,
+                    Element.UNSTOPPABLE_LASER);
+        }
+
         public override string ToString()
         {
             string temp = "0123456789012345678901234567890";
@@ -203,6 +212,9 @@ namespace ICanCode.Api
                         break;
                     case 8:
                         builder.Append(" Zombies: " + ListToString(GetZombies()));
+                        break;
+                    case 9:
+                        builder.Append(" Perks: " + ListToString(GetPerks()));
                         break;
                 }
 

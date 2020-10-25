@@ -64,6 +64,9 @@
         MALE_ZOMBIE = (short)'♂',
         ZOMBIE_DIE = (short)'✝',
 
+        // perks
+        UNSTOPPABLE_LASER(LAYER2, 'l'),
+
         // system elements, don't touch it
         FOG = (short)'F',
         BACKGROUND = (short)'G'

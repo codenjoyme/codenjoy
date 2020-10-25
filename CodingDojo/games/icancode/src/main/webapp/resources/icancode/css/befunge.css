@@ -334,6 +334,12 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
   height: 22px;
 }
 
+.value-unstoppable-laser::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1364px -10px;
+  width: 22px;
+  height: 22px;
+}
+
 .shortest-way::after {
   background: url(../img/befunge_sprite.png) no-repeat -1404px -10px;
   width: 22px;
