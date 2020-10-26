@@ -87,6 +87,6 @@ public class Player extends GamePlayer<Tank, Field> {
     }
 
     public void takePrize(Prize prize) {
-        getHero().addPrize(prize);
+        hero.addPrize(prize);
     }
 }

@@ -53,7 +53,7 @@ import static org.mockito.Mockito.when;
 
 public class BattlecityTest {
 
-    protected Dice dice = mock(Dice.class);
+    protected Dice dice;
     public int ticksPerBullets;
     public int size;
     private Parameter<Integer> spawnAiPrize;
@@ -77,6 +77,7 @@ public class BattlecityTest {
         spawnAiPrize = v(4);
         hitKillsAiPrize = v(3);
         prizeOnField = v(3);
+        dice = mock(Dice.class);
     }
 
     @After

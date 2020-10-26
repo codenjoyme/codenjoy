@@ -46,16 +46,15 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (alive) {
-            if (timeout % CHANGE_EVERY_TICKS == 0) {
-                return elements;
-            }
-
-            return Elements.PRIZE;
-        } else {
-
+        if (!alive) {
             return Elements.BANG;
         }
+
+        if (timeout % CHANGE_EVERY_TICKS == 0) {
+            return elements;
+        }
+
+        return Elements.PRIZE;
     }
 
     @Override
