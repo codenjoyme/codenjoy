@@ -146,10 +146,9 @@ public class Battlecity implements Field {
     }
 
     private void takePrize(Player player) {
-        if (prizes.contains(player.getHero())) {
-            int index = prizes.indexOf(player.getHero());
+        int index = prizes.indexOf(player.getHero());
+        if (index != -1) {
             Prize prize = prizes.get(index);
-
             player.takePrize(prize);
             prizes.remove(prize);
         }
