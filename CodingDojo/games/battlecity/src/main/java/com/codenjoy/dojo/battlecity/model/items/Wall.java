@@ -33,18 +33,29 @@ public class Wall extends PointImpl implements Tickable, State<Elements, Player>
 
     private Elements ch;
     private int timer;
+    private boolean overDamage;
 
     public Wall(int x, int y) {
         super(x, y);
         reset();
+        overDamage = false;
     }
 
     public Wall(Point pt) {
         this(pt.getX(), pt.getY());
+        overDamage = false;
+    }
+
+    public void destroy(Bullet bullet) {
+        if (bullet.isHeavy()) {
+            overDamage = true;
+        }
+
+        destroyFrom(bullet.getDirection());
     }
 
     public void destroyFrom(Direction bulletDirection) {
-        if (ch.power() == 1) {
+        if (ch.power() == 1 || overDamage) {
             ch = Elements.WALL_DESTROYED;
             return;
         }
