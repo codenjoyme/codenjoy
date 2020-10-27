@@ -12,6 +12,7 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> spawnAiPrize;
     private final Parameter<Integer> hitKillsAiPrize;
     private final Parameter<Integer> prizeOnField;
+    private final Parameter<Integer> prizeWorking;
     private final Parameter<Integer> killYourTankPenalty;
     private final Parameter<Integer> killOtherHeroTankScore;
     private final Parameter<Integer> killOtherAITankScore;
@@ -25,7 +26,8 @@ public class OptionGameSettings implements GameSettings {
 
         spawnAiPrize = settings.addEditBox("Count spawn for AI Tank with prize").type(Integer.class).def(4);
         hitKillsAiPrize = settings.addEditBox("Hits to kill AI Tank with prize").type(Integer.class).def(3);
-        prizeOnField = settings.addEditBox("Prize must be on the field n-ticks").type(Integer.class).def(3);
+        prizeOnField = settings.addEditBox("Prize must be on the field").type(Integer.class).def(3);
+        prizeWorking = settings.addEditBox("Working time of the prize").type(Integer.class).def(3);
     }
 
     @Override
@@ -61,5 +63,10 @@ public class OptionGameSettings implements GameSettings {
     @Override
     public Parameter<Integer> prizeOnField() {
         return prizeOnField;
+    }
+
+    @Override
+    public Parameter<Integer> prizeWorking() {
+        return prizeWorking;
     }
 }

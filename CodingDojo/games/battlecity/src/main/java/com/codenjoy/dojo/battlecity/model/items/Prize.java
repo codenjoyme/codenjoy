@@ -27,35 +27,33 @@ import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
 import com.codenjoy.dojo.services.*;
 
-import static com.codenjoy.dojo.services.StateUtils.filterOne;
-
-
 public class Prize extends PointImpl implements Tickable, State<Elements, Player> {
 
     public static final int CHANGE_EVERY_TICKS = 2;
     private Elements elements;
     private int timeout;
+    private int timelimit;
     private boolean alive;
 
-    public Prize(Point pt, int prizeOnField, Elements elements) {
+    public Prize(Point pt, int prizeOnField, int prizeWorking, Elements elements) {
         super(pt);
         this.elements = elements;
         timeout = prizeOnField;
+        timelimit = prizeWorking;
         alive = true;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (alive) {
-            if (timeout % CHANGE_EVERY_TICKS == 0) {
-                return elements;
-            }
-
-            return Elements.PRIZE;
-        } else {
-
+        if (!alive) {
             return Elements.BANG;
         }
+
+        if (timeout % CHANGE_EVERY_TICKS == 0) {
+            return elements;
+        }
+
+        return Elements.PRIZE;
     }
 
     @Override
@@ -65,8 +63,16 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
         }
     }
 
+    public void tickTaken() {
+        timelimit--;
+    }
+
     public int timeout() {
         return timeout;
+    }
+
+    public int timelimit() {
+        return timelimit;
     }
 
     public boolean isAlive() {

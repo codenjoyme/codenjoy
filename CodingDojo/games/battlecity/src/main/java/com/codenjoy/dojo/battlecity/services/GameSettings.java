@@ -18,4 +18,6 @@ public interface GameSettings {
     Parameter<Integer> killOtherAITankScore();
 
     Parameter<Integer> prizeOnField();
+
+    Parameter<Integer> prizeWorking();
 }

@@ -160,6 +160,11 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public void tick() {
         gun.tick();
+        checkTaken();
+
+        for (Prize prize : prizesTaken) {
+            prize.tickTaken();
+        }
     }
 
     @Override
@@ -225,5 +230,17 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void addPrize(Prize prize) {
         prizesTaken.add(prize);
+    }
+
+    private void checkTaken() {
+        if (prizesTaken.size() == 0) {
+            return;
+        }
+
+        for (Prize prize : prizesTaken) {
+            if (prize.timelimit() == 0) {
+                prizesTaken.remove(prize);
+            }
+        }
     }
 }

@@ -60,7 +60,8 @@ public class GameRunner extends AbstractGameType implements GameType {
         Battlecity game = new Battlecity(level.size(), getDice(),
                 gameSettings.spawnAiPrize(),
                 gameSettings.hitKillsAiPrize(),
-                gameSettings.prizeOnField());
+                gameSettings.prizeOnField(),
+                gameSettings.prizeWorking());
 
         game.addBorder(level.getBorders());
         game.addWall(level.getWalls());
