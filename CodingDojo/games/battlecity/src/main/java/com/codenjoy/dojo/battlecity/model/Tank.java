@@ -38,6 +38,7 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public static final int MAX = 100;
+    public static final int PRIZE_ACTION_WALKING_RIVER = 30;
     protected Dice dice;
     private boolean alive;
     private Gun gun;
@@ -47,6 +48,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     protected Direction direction;
     protected boolean moving;
     private boolean fire;
+    private int timeout;
 
     private Sliding sliding;
 
@@ -157,7 +159,27 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void tick() {
+        if (checkPrize()) {
+            timeout--;
+            if (timeout % PRIZE_ACTION_WALKING_RIVER == 0) {
+                Prize prize = getPrize();
+                prizesTaken.remove(prize);
+            }
+        }
+
         gun.tick();
+    }
+
+    private Prize getPrize() {
+        return prizesTaken.stream().
+                filter(prize -> prize.getElements().equals(Elements.PRIZE_WALKING_ON_WATER)).
+                findAny().
+                get();
+    }
+
+    private boolean checkPrize() {
+        return prizesTaken.stream().
+                anyMatch(prize -> Elements.PRIZE_WALKING_ON_WATER.equals(prize.getElements()));
     }
 
     @Override
