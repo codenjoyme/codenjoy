@@ -59,6 +59,7 @@ public class BattlecityTest {
     private Parameter<Integer> spawnAiPrize;
     private Parameter<Integer> hitKillsAiPrize;
     private Parameter<Integer> prizeOnField;
+    private Parameter<Integer> prizeWorking;
 
     private Battlecity game;
     private List<Player> players = new LinkedList<>();
@@ -77,6 +78,7 @@ public class BattlecityTest {
         spawnAiPrize = v(4);
         hitKillsAiPrize = v(3);
         prizeOnField = v(3);
+        prizeWorking = v(2);
         dice = mock(Dice.class);
     }
 
@@ -93,6 +95,7 @@ public class BattlecityTest {
         when(settings.spawnAiPrize()).thenReturn(spawnAiPrize);
         when(settings.hitKillsAiPrize()).thenReturn(hitKillsAiPrize);
         when(settings.prizeOnField()).thenReturn(prizeOnField);
+        when(settings.prizeWorking()).thenReturn(prizeWorking);
 
         GameRunner runner = new GameRunner() {
             @Override
@@ -139,7 +142,7 @@ public class BattlecityTest {
 
     private String getPrizesCount() {
         List<Tank> tanks = game.allTanks();
-        long prizes = tanks.stream().filter(x -> x.isTankPrize()).count();
+        long prizes = tanks.stream().filter(Tank::isTankPrize).count();
 
         return String.format("%s prizes with %s tanks", prizes, tanks.size());
     }
@@ -6502,6 +6505,97 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼▓▓▓  ☼\n" +
                 "☼  ˄  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    //когда заканчивается действие приза движение по воде отключается
+    @Test
+    public void shouldTankCanGoIfRiverAtWay_whenPrizeIsOver() {
+
+        prizeOnField = v(5);
+        hitKillsAiPrize = v(1);
+        prizeWorking = v(2);
+
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼▓    ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ╬  ☼\n" +
+                "☼?    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▓    ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ╬  ☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        when(dice.next(anyInt())).thenReturn(2).thenReturn(0);
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▓    ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ╬  ☼\n" +
+                "☼3    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▓    ☼\n" +
+                "☼     ☼\n" +
+                "☼▓ ╬  ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▓    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲ ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▓    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼▓ ╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        hero(0).up();
+        game.tick();
+
+        hero(0).up();
+        game.tick();
+
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▓    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼▓ ╬  ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
