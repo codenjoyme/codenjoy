@@ -75,4 +75,8 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
     public void kill(Bullet bullet) {
         alive = false;
     }
+
+    public Elements getElements() {
+        return elements;
+    }
 }

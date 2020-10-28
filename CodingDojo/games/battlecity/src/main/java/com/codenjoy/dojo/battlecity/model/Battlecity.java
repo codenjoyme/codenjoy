@@ -358,6 +358,21 @@ public class Battlecity implements Field {
     }
 
     @Override
+    public boolean isBarrier(Point pt, Tank tank) {
+        List<Prize> prizesTaken = tank.getPrizesTaken();
+        if (isRiver(pt)) {
+            return !checkPrizes(prizesTaken);
+        }
+
+        return isBarrier(pt);
+    }
+
+    private boolean checkPrizes(List<Prize> prizesTaken) {
+        return prizesTaken.stream().
+                anyMatch(prize -> Elements.PRIZE_WALKING_ON_WATER.equals(prize.getElements()));
+    }
+
+    @Override
     public void remove(Player player) {   // TODO test me
         players.remove(player);
     }
