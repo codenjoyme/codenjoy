@@ -52,6 +52,17 @@ if (typeof game == 'undefined') {
 }
 
 var gameName = localStorage.getItem('gameType'); // check KEYS constants in register.js
+
+if (window.location.href.includes("controlsOnly=true")) {
+    game.drawCanvases = false;
+    game.enableHeader = false;
+    game.enableFooter = false;
+    gameName = 'JavaScript';
+} else {
+    game.enableHeader = true;
+    game.enableFooter = true;
+}
+
 if (gameName == 'JavaScript') {
     game.enableBefunge = false;
     game.sprites = 'robot';
@@ -67,6 +78,7 @@ if (gameName == 'JavaScript') {
     game.sprites = 'robot';
     game.onlyLeaderBoard = true;
 }
+
 game.isDrawByOrder = (game.sprites == 'ekids');
 game.enableDonate = false;
 game.enableJoystick = false;
@@ -80,14 +92,6 @@ game.enableForkMe = false;
 game.enableAdvertisement = false;
 game.showBody = false;
 game.debug = false;
-if (window.location.href.includes("controlsOnly=true")) {
-    game.drawCanvases = false;
-    game.enableHeader = false;
-    game.enableFooter = false;
-} else {
-    game.enableHeader = true;
-    game.enableFooter = true;
-}
 
 // ========================== leaderboard page ==========================
 
