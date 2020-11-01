@@ -25,7 +25,6 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
-import com.codenjoy.dojo.icancode.model.perks.Timer;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaser;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
@@ -273,11 +272,9 @@ public class ICanCode implements Tickable, Field {
             return Optional.empty();
         }
         Elements element = Elements.getRandomPerk(dice);
-        Timer availability = new Timer(SettingsWrapper.data.perkAvailability());
-        Timer activity = new Timer(SettingsWrapper.data.perkActivity());
         switch (element) {
             case UNSTOPPABLE_LASER:
-                return Optional.of(new UnstoppableLaser(element, availability, activity));
+                return Optional.of(new UnstoppableLaser(element));
             default:
                 return Optional.empty();
         }

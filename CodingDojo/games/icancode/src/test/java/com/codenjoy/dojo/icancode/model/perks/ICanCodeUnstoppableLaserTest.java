@@ -19,8 +19,8 @@ public class ICanCodeUnstoppableLaserTest extends AbstractGameTest {
     public void perkAppearAfterZombieDie() {
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 4;
         givenZombie().thenReturn(UP);
-        SettingsWrapper.setup(new SettingsImpl());
-        SettingsWrapper.data.perkDropRatio(100);
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkDropRatio(100);
 
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -29,7 +29,7 @@ public class ICanCodeUnstoppableLaserTest extends AbstractGameTest {
                 "║.Z..│" +
                 "└────┘");
 
-        generateFemale();
+        generateMale();
         game.tick();
         game.tick();
         game.tick();
@@ -39,7 +39,7 @@ public class ICanCodeUnstoppableLaserTest extends AbstractGameTest {
                 "--☺---" +
                 "------" +
                 "------" +
-                "--♀---" +
+                "--♂---" +
                 "------");
 
         hero.down();
@@ -50,7 +50,7 @@ public class ICanCodeUnstoppableLaserTest extends AbstractGameTest {
                 "--☺---" +
                 "--↓---" +
                 "------" +
-                "--♀---" +
+                "--♂---" +
                 "------");
 
         game.tick();
@@ -74,13 +74,17 @@ public class ICanCodeUnstoppableLaserTest extends AbstractGameTest {
 
     @Test
     public void heroTakesPerk() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(10)
+                .perkActivity(10);
+
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        game.move(new UnstoppableLaser(UNSTOPPABLE_LASER, new Timer(10), new Timer(10)), 2, 2);
+        game.move(new UnstoppableLaser(UNSTOPPABLE_LASER), 2, 2);
 
         hero.down();
         game.tick();
@@ -107,6 +111,10 @@ public class ICanCodeUnstoppableLaserTest extends AbstractGameTest {
 
     @Test
     public void unstoppableLaserTest() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(10)
+                .perkActivity(10);
+
         givenFl("╔══════┐" +
                 "║..S...│" +
                 "║......│" +
@@ -115,7 +123,7 @@ public class ICanCodeUnstoppableLaserTest extends AbstractGameTest {
                 "║......│" +
                 "║......│" +
                 "└──────┘");
-        game.move(new UnstoppableLaser(UNSTOPPABLE_LASER, new Timer(10), new Timer(10)), 3, 5);
+        game.move(new UnstoppableLaser(UNSTOPPABLE_LASER), 3, 5);
         game.move(new Box(BOX), 3, 3);
 
         assertE("--------" +
@@ -179,13 +187,17 @@ public class ICanCodeUnstoppableLaserTest extends AbstractGameTest {
 
     @Test
     public void perkAvailabilityTest() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(3)
+                .perkActivity(10);
+
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        game.move(new UnstoppableLaser(UNSTOPPABLE_LASER, new Timer(3), new Timer(10)), 2, 2);
+        game.move(new UnstoppableLaser(UNSTOPPABLE_LASER), 2, 2);
 
         assertE("------" +
                 "--☺---" +
@@ -224,13 +236,17 @@ public class ICanCodeUnstoppableLaserTest extends AbstractGameTest {
 
     @Test
     public void perkActivityTest() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(10)
+                .perkActivity(3);
+
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        game.move(new UnstoppableLaser(UNSTOPPABLE_LASER, new Timer(10), new Timer(3)), 2, 2);
+        game.move(new UnstoppableLaser(UNSTOPPABLE_LASER), 2, 2);
 
         hero.down();
         game.tick();

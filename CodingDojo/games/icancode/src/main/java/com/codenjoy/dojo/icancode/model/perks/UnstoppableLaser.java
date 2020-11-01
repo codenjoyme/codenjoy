@@ -8,7 +8,7 @@ public class UnstoppableLaser extends AbstractPerk {
         super(element);
     }
 
-    public UnstoppableLaser(Elements element, Timer availability, Timer activity) {
-        super(element, availability, activity);
+    public UnstoppableLaser(Elements element, String value) {
+        super(element, value);
     }
 }
