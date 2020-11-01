@@ -63,9 +63,9 @@ public class ICanCode implements Tickable, Field {
         move(laser, to.getX(), to.getY());
     }
 
-    // TODO: set perk priority
     int priority(Object o) {
-        if (o instanceof HeroItem) return 12;
+        if (o instanceof HeroItem) return 20;
+        if (o instanceof UnstoppableLaser) return 12;
         if (o instanceof ZombiePot) return 10;
         if (o instanceof Zombie) return 8;
         if (o instanceof LaserMachine) return 6;
