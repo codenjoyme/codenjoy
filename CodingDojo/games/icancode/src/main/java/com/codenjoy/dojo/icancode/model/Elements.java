@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.google.common.collect.ImmutableList;
 
@@ -30,7 +31,6 @@ import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
 
@@ -161,10 +161,9 @@ public enum Elements implements CharElements {
                 .build();
     }
 
-    public static Elements getRandomPerk() {
+    public static Elements getRandomPerk(Dice dice) {
         List<Elements> perks = getPerks();
-        int randomIndex = ThreadLocalRandom.current().nextInt(perks.size());
-        return perks.get(randomIndex);
+        return perks.get(dice.next(perks.size()));
     }
 
     public int getLayer() {

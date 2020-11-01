@@ -272,7 +272,7 @@ public class ICanCode implements Tickable, Field {
         if (dice.next(100) > SettingsWrapper.data.perkDropRatio()) {
             return Optional.empty();
         }
-        Elements element = Elements.getRandomPerk();
+        Elements element = Elements.getRandomPerk(dice);
         Timer availability = new Timer(SettingsWrapper.data.perkAvailability());
         Timer activity = new Timer(SettingsWrapper.data.perkActivity());
         switch (element) {
