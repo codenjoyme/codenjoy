@@ -67,7 +67,7 @@ public final class SettingsWrapper {
         data = this;
         this.settings = settings;
 
-        perkDropRatio = settings.addEditBox("Perk drop ration").type(Integer.class).def(50);
+        perkDropRatio = settings.addEditBox("Perk drop ratio").type(Integer.class).def(50);
         perkAvailability = settings.addEditBox("Perk availability").type(Integer.class).def(5);
         perkActivity = settings.addEditBox("Perk activity").type(Integer.class).def(10);
         winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
