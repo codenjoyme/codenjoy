@@ -65,7 +65,7 @@
         ZOMBIE_DIE = (short)'✝',
 
         // perks
-        UNSTOPPABLE_LASER(LAYER2, 'l'),
+        UNSTOPPABLE_LASER = (short)'l',
 
         // system elements, don't touch it
         FOG = (short)'F',
