@@ -526,6 +526,10 @@ function initRobot(logger, controller) {
                 return b.getGold();
             }
 
+            var getPerks = function () {
+                return b.getPerks();
+            }
+
             var getZombieStart = function() {
                 return b.getZombieStart();
             }
@@ -677,6 +681,7 @@ function initRobot(logger, controller) {
                 getWalls : getWalls,
                 getBoxes : getBoxes,
                 getGold : getGold,
+                getPerks : getPerks,
                 getStart : getStart,
                 getZombieStart : getZombieStart,
                 getExit : getExit,

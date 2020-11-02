@@ -105,6 +105,8 @@ var Element = {
     MALE_ZOMBIE: el('♂', 'ZOMBIE'),
     ZOMBIE_DIE: el('✝', 'ZOMBIE_DIE'),
 
+    UNSTOPPABLE_LASER: el('l', 'UNSTOPPABLE_LASER'),
+
     getElements: function () {
         return elements.slice(0);
     },
