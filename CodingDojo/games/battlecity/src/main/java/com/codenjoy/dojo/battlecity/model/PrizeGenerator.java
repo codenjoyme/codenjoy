@@ -41,14 +41,16 @@ public class PrizeGenerator {
     private Field field;
     private Dice dice;
     private Parameter<Integer> prizeOnField;
+    private Parameter<Integer> prizeOnWorked;
 
-    public PrizeGenerator(Field field, Dice dice, Parameter<Integer> prizeOnField) {
+    public PrizeGenerator(Field field, Dice dice, Parameter<Integer> prizeOnField, Parameter<Integer> prizeOnWorked) {
         this.field = field;
         this.dice = dice;
         this.prizeOnField = prizeOnField;
+        this.prizeOnWorked = prizeOnWorked;
     }
 
     public void drop(Point pt) {
-        field.addPrize(new Prize(pt, prizeOnField.getValue(), PRIZES.get(dice.next(PRIZES.size()))));
+        field.addPrize(new Prize(pt, prizeOnField.getValue(), prizeOnWorked.getValue(), PRIZES.get(dice.next(PRIZES.size()))));
     }
 }

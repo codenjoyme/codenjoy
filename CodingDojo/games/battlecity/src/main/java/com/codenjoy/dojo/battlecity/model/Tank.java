@@ -159,27 +159,21 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void tick() {
-        if (checkPrize()) {
-            timeout--;
-            if (timeout % PRIZE_ACTION_WALKING_RIVER == 0) {
-                Prize prize = getPrize();
-                prizesTaken.remove(prize);
-            }
+        checkTaken();
+
+        for (Prize prize : prizesTaken) {
+            prize.getTimeOfPrize();
         }
 
         gun.tick();
     }
 
-    private Prize getPrize() {
-        return prizesTaken.stream().
-                filter(prize -> prize.getElements().equals(Elements.PRIZE_WALKING_ON_WATER)).
-                findAny().
-                get();
-    }
+    private void checkTaken() {
+        if (prizesTaken.isEmpty()) {
+            return;
+        }
 
-    private boolean checkPrize() {
-        return prizesTaken.stream().
-                anyMatch(prize -> Elements.PRIZE_WALKING_ON_WATER.equals(prize.getElements()));
+        prizesTaken.removeIf(prize -> prize.getTimeOfPrize() == 0);
     }
 
     @Override

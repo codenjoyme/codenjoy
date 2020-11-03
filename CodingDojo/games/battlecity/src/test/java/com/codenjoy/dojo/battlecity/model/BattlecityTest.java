@@ -6361,6 +6361,7 @@ public class BattlecityTest {
 
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
+        prizeWorking = v(3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -6440,6 +6441,8 @@ public class BattlecityTest {
     public void shouldHeroTakePrize_walkOnWater() {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
+        prizeWorking = v(3);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼▓▓▓  ☼\n" +
@@ -6516,7 +6519,7 @@ public class BattlecityTest {
 
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
-        prizeWorking = v(3);
+        prizeWorking = v(2);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼▓    ☼\n" +
