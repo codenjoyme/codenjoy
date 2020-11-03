@@ -43,7 +43,7 @@ public class Battlecity implements Field {
     private PrizeGenerator prizeGen;
     private AiGenerator aiGen;
 
-    private List<Player> players = new LinkedList<>();
+    private List<Player> players;
 
     private List<Wall> walls;
     private List<Border> borders;
@@ -56,7 +56,8 @@ public class Battlecity implements Field {
     public Battlecity(int size, Dice dice,
                       Parameter<Integer> whichSpawnWithPrize,
                       Parameter<Integer> damagesBeforeAiDeath,
-                      Parameter<Integer> prizeOnField)
+                      Parameter<Integer> prizeOnField,
+                      Parameter<Integer> prizeOnWorked)
     {
         this.size = size;
         ais = new LinkedList<>();
@@ -66,8 +67,9 @@ public class Battlecity implements Field {
         trees = new LinkedList<>();
         ice = new LinkedList<>();
         rivers = new LinkedList<>();
+        players = new LinkedList<>();
 
-        prizeGen = new PrizeGenerator(this, dice, prizeOnField);
+        prizeGen = new PrizeGenerator(this, dice, prizeOnField, prizeOnWorked);
 
         aiGen = new AiGenerator(this, dice, whichSpawnWithPrize, damagesBeforeAiDeath);
     }
