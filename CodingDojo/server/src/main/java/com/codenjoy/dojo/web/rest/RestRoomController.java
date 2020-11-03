@@ -57,11 +57,11 @@ public class RestRoomController {
     private Validator validator;
 
     // TODO test me
-    @GetMapping("/room/{roomName}/game/{gameName}/leave")
+    @GetMapping("/room/{roomName}/leave")
     @ResponseBody
-    public synchronized boolean removePlayerFromRoom(@PathVariable("roomName") String roomName,
-                                  HttpServletRequest request,
-                                  @AuthenticationPrincipal Registration.User user)
+    public synchronized boolean leavePlayerFromRoom(@PathVariable("roomName") String roomName,
+                                                    HttpServletRequest request,
+                                                    @AuthenticationPrincipal Registration.User user)
     {
         if (user == null) {
             return false;
@@ -84,9 +84,9 @@ public class RestRoomController {
     }
 
     // TODO test me
-    @GetMapping("/room/{roomName}/game/{gameName}/joined")
+    @GetMapping("/room/{roomName}/joined")
     @ResponseBody
-    public boolean checkUserLogin(@PathVariable("roomName") String roomName,
+    public boolean isPlayerInRoom(@PathVariable("roomName") String roomName,
                                   HttpServletRequest request,
                                   @AuthenticationPrincipal Registration.User user)
     {
