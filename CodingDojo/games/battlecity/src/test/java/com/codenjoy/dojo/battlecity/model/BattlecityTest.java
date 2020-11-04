@@ -6763,4 +6763,378 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
+
+    @Test
+    public void shouldHeroTakePrizeEnemyShootsHero_immortality() {
+        prizeOnField = v(5);
+        hitKillsAiPrize = v(1);
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼▲   ˄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼▲   ˄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        when(dice.next(anyInt())).thenReturn(0);
+        hero(1).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼1   ˄☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        hero(1).left();
+        game.tick();
+
+        assertEquals(1, hero(0).getPrizesTaken().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲  ˂ ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(1).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲• ˂ ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲  ˂ ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldEndPrizeWorkingEnemyShootsHero_immortality() {
+        prizeOnField = v(5);
+        hitKillsAiPrize = v(1);
+        prizeWorking = v(3);
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼▲   ˄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼▲   ˄☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        when(dice.next(anyInt())).thenReturn(0);
+        hero(1).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼1   ˄☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        hero(1).left();
+        game.tick();
+
+        assertEquals(1, hero(0).getPrizesTaken().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲  ˂ ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(1).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲• ˂ ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲  ˂ ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        game.tick();
+
+        assertEquals(0, hero(0).getPrizesTaken().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲  ˂ ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(1).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲• ˂ ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼Ѡ  ˂ ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_YOUR_TANK]\n" +
+                        "listener(1) => [KILL_OTHER_HERO_TANK[1]]\n");
+    }
+
+    @Test
+    public void shouldHeroTakePrizeAiShootsHero_immortality() {
+        prizeOnField = v(5);
+        hitKillsAiPrize = v(1);
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼¿    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+        ai(1).dontShoot = true;
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        when(dice.next(anyInt())).thenReturn(0);
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼«    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        ai(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼!    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼?    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        ai(0).down();
+        game.tick();
+
+        assertEquals(1, hero(0).getPrizesTaken().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).up();
+        ai(0).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼?    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼?    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldEndPrizeWorkingAiShootsHero_immortality() {
+        prizeOnField = v(5);
+        hitKillsAiPrize = v(1);
+        prizeWorking = v(2);
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼¿    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+        ai(1).dontShoot = true;
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        when(dice.next(anyInt())).thenReturn(0);
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼«    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        ai(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼!    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼?    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        ai(0).down();
+        game.tick();
+
+        assertEquals(1, hero(0).getPrizesTaken().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).up();
+        ai(0).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼?    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).up();
+        ai(0).act();
+        game.tick();
+
+        assertEquals(0, hero(0).getPrizesTaken().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼?    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼?    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        events.verifyAllEvents(
+                "listener(0) => [KILL_YOUR_TANK]\n");
+    }
 }
