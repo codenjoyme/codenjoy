@@ -6596,6 +6596,95 @@ public class BattlecityTest {
     }
 
     @Test
+    public void shouldHeroNotBreakingBorder_breakingWalls() {
+        prizeOnField = v(5);
+        hitKillsAiPrize = v(1);
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼╬╬╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬╬╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        when(dice.next(anyInt())).thenReturn(1).thenReturn(0);
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬╬╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼2    ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertEquals(1, hero(0).getPrizesTaken().size());
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬╬╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬╬╬  ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ╬╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ╬╬  ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ╬╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
     public void shouldEndPrizeWorking_breakingWalls() {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
