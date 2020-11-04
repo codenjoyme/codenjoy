@@ -200,7 +200,9 @@ public class Battlecity implements Field {
                 return;
             }
 
-            tank.kill(bullet);
+            if (!checkPrizes(Elements.PRIZE_IMMORTALITY, tank.getPrizesTaken())) {
+                tank.kill(bullet);
+            }
 
             if (!tank.isAlive()) {
                 scoresForKill(bullet, tank);
