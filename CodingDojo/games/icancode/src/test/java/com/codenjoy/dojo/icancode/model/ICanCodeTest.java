@@ -23,15 +23,54 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
+import java.util.Optional;
+import java.util.Random;
+
+import static com.codenjoy.dojo.icancode.model.ICanCode.TRAINING;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class ICanCodeTest extends AbstractGameTest {
+
+    @Test
+    public void doNotDropNextPerk() {
+        // Given
+        game = new ICanCode(mock(Level.class), dice, TRAINING);
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkDropRatio(0);
+        when(dice.next(anyInt())).thenReturn(100);
+
+        // When
+        Optional<AbstractPerk> nextPerk = game.dropNextPerk();
+
+        // Then
+        assertFalse(nextPerk.isPresent());
+    }
+
+    @Test
+    public void doDropNextPerk() {
+        // Given
+        game = new ICanCode(mock(Level.class), dice, TRAINING);
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkDropRatio(100);
+        when(dice.next(anyInt()))
+                .thenReturn(0)
+                .thenReturn(new Random().nextInt(Elements.getPerks().size()));
+
+        // When
+        Optional<AbstractPerk> nextPerk = game.dropNextPerk();
+
+        // Then
+        assertTrue(nextPerk.isPresent());
+    }
 
     @Test
     public void shouldFieldAtStart() {

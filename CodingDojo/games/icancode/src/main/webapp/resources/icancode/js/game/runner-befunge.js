@@ -367,6 +367,10 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         stack.push('LASER');
     }
 
+    var valueUnstoppableLaserCommand = function (x, y) {
+        stack.push('UNSTOPPABLE_LASER')
+    }
+
     // ------------------------------------- commands -----------------------------------
     var gameName = game.sprites;
     var commands = [
@@ -772,6 +776,15 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: valueZombieCommand,
             description: 'Значние - "Зомби". Испольузется совместно с другими командами.',
             img1: 'zombies.png'
+        },
+
+        {
+            id: 'value-unstoppable-laser',
+            type: 3,
+            title: 'value-unstoppable-laser',
+            process: valueUnstoppableLaserCommand,
+            description: 'Значние - "Неостанавливаемый лазер". Испольузется совместно с другими командами.',
+            img1: 'unstoppable_laser.png'
         }
     ];
 

@@ -23,7 +23,10 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.*;
+import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.icancode.model.FieldItem;
+import com.codenjoy.dojo.icancode.model.Hero;
+import com.codenjoy.dojo.icancode.model.Item;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
@@ -33,6 +36,7 @@ public class Laser extends FieldItem implements Tickable {
     private Direction direction;
     private State owner;
     private boolean skip;
+    private boolean unstoppable;
 
     public Laser(Elements element) {
         super(element);
@@ -110,6 +114,8 @@ public class Laser extends FieldItem implements Tickable {
 
         if (!field.isBarrier(newX, newY)) {
             field.move(this, newX, newY);
+        } else if (unstoppable && field.isAt(newX, newY, Box.class)) {
+            field.move(this, newX, newY);
         } else {
             removeFromCell();
         }
@@ -117,6 +123,14 @@ public class Laser extends FieldItem implements Tickable {
 
     public State owner() {
         return owner;
+    }
+
+    public boolean isUnstoppable() {
+        return unstoppable;
+    }
+
+    public void setUnstoppable(boolean unstoppable) {
+        this.unstoppable = unstoppable;
     }
 
     public boolean skipFirstTick() {

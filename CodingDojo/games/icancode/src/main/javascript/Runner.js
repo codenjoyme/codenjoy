@@ -312,6 +312,8 @@ var Element = {
     MALE_ZOMBIE: el('♂', 'ZOMBIE'),
     ZOMBIE_DIE: el('✝', 'ZOMBIE_DIE'),
 
+    UNSTOPPABLE_LASER: el('l', 'UNSTOPPABLE_LASER'),
+
     getElements: function () {
         return elements.slice(0);
     },
@@ -610,6 +612,11 @@ var Board = function (boardString) {
                     Element.ZOMBIE_DIE];
         return get(LAYER2, elements);
     };
+
+    var getPerks = function () {
+        var elements = [Element.UNSTOPPABLE_LASER];
+        return get(LAYER2, elements);
+    }
 
     var getHoles = function () {
         return get(LAYER1, Element.HOLE);
@@ -913,6 +920,9 @@ var Board = function (boardString) {
                 case 8:
                     result += ' Zombies: ' + printArray(getZombies());
                     break;
+                case 9:
+                    result += ' Perks: ' + printArray(getPerks());
+                    break;
             }
 
             if (i != layer1.length - 1) {
@@ -940,6 +950,7 @@ var Board = function (boardString) {
         getStarts: getStarts,
         getZombies: getZombies,
         getZombieStart: getZombieStart,
+        getPerks: getPerks,
         getExits: getExits,
         getHoles: getHoles,
         isMeAlive: isMeAlive,

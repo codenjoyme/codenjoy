@@ -211,6 +211,14 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     /**
+     * @return Returns list of coordinates for all perks.
+     */
+    public List<Point> getPerks() {
+        return get(LAYER2,
+                UNSTOPPABLE_LASER);
+    }
+
+    /**
      * @return Checks if your robot is alive.
      */
     public boolean isMeAlive() {
@@ -277,6 +285,9 @@ public class Board extends AbstractBoard<Elements> {
                     break;
                 case 8:
                     builder.append(" Zombies: " + listToString(getZombies()));
+                    break;
+                case 9:
+                    builder.append(" Perks: " + listToString(getPerks()));
                     break;
             }
 
