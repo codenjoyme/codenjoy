@@ -1,0 +1,49 @@
+.gameElements {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.elementContainer {
+    display: flex;
+    flex-direction: row;
+    width: 327px;
+    margin: 7px 0px;
+}
+
+.elementDescriptionContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 8px;
+}
+
+.elementImage {
+    align-self: flex-start;
+}
+
+.elementTitle {
+    padding: 7px 10px;
+    background-color: var(--block-bg-color);
+    font-size: 15px;
+    font-weight: 330;
+    color: var(--primary-color);
+}
+
+.elementDescription {
+    font-size: 16px;
+    font-weight: 200;
+    line-height: 1.43;
+    letter-spacing: normal;
+    color: var(--title-bg-color);
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-right: 15px;
+}
+
+@media all and (max-width: 930px) {
+    .gameElements {
+        justify-content: space-around;
+    }
+}

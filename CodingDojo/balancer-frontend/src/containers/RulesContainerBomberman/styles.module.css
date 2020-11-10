@@ -1,0 +1,63 @@
+.mask {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 260px;
+    font-size: 58px;
+    line-height: 1.07;
+    color: #ffffff;
+    text-align: center;
+    background-image: url(./../../styles/images/layout/dark.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+b {
+    font-weight: 400;
+}
+
+.highligteUnderNotes,
+.highligte {
+    font-size: 16px;
+    line-height: 1.88;
+    color: var(--primary-color);
+    background-color: var(--block-bg-color);
+    padding: 17px 32px;
+    margin-bottom: 40px;
+}
+
+.highligteNotes {
+    font-size: 16px;
+    line-height: 1.63;
+    color: var(--primary-color);
+    margin-bottom: 40px;
+    padding: 0 30px;
+}
+
+.highligteUnderNotes {
+    margin-bottom: 16px;
+}
+
+.mb15 {
+    margin-bottom: 15px;
+}
+
+.mb30 {
+    margin-bottom: 30px;
+}
+
+.boardExample {
+    font-family: monospace;
+    letter-spacing: 5px;
+    white-space: pre-wrap;
+}
+
+.copyConnection {
+    cursor: pointer;
+}
+
+ul {
+    list-style-type: circle;
+    margin-left: 40px;
+}
