@@ -25,6 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
@@ -32,6 +33,7 @@ import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
+import org.fest.util.Lists;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -57,13 +59,67 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public void fire(Direction direction, Point from, Laser laser) {
+    public void fire(Direction direction, Point from, FieldItem owner) {
+        if (owner instanceof LaserMachine) {
+            fireByLaserMachine(direction, from, owner);
+        } else if (owner instanceof HeroItem) {
+            HeroItem heroItem = (HeroItem) owner;
+            Laser laser = new Laser(heroItem.getHero(), direction, this);
+            if (heroItem.getHero().hasDeathRayPerk()) {
+                fireDeathRayByHero(laser, from, heroItem);
+            } else {
+                fireRegularLaserByHero(laser, heroItem);
+            }
+        }
+    }
+
+    private void fireByLaserMachine(Direction direction, Point from, FieldItem owner) {
         Point to = direction.change(from);
-        move(laser, to.getX(), to.getY());
+        move(new Laser(owner, direction, this), to.getX(), to.getY());
+    }
+
+    private void fireDeathRayByHero(Laser laser, Point from, HeroItem heroItem) {
+        boolean unstoppableLaserPerk = heroItem.getHero().hasUnstoppableLaserPerk();
+        Laser topLaser = laser;
+        topLaser.setDeathRay(true);
+        List<Laser> lasers = Lists.newArrayList(topLaser);
+
+        Point to = topLaser.getDirection().change(from);
+        getCell(to.getX(), to.getY()).add(topLaser);
+        for (int i = 0; i < SettingsWrapper.data.getDeathRayRange() - 1; i++) {
+            Optional<Cell> nextCell = findNextAvailableCell(topLaser, unstoppableLaserPerk);
+            if (!nextCell.isPresent()) {
+                break;
+            }
+            topLaser = new Laser(heroItem, topLaser.getDirection(), this);
+            topLaser.setDeathRay(true);
+            nextCell.get().add(topLaser);
+            lasers.add(topLaser);
+        }
+    }
+
+    private Optional<Cell> findNextAvailableCell(Laser laser, boolean unstoppableLaser) {
+        Point point = laser.getCell();
+        while (true) {
+            point = laser.getDirection().change(point);
+            if (point.isOutOf(size())) {
+                return Optional.empty();
+            } else if (!isBarrier(point.getX(), point.getY())) {
+                return Optional.of(getCell(point.getX(), point.getY()));
+            } else if (isBarrier(point.getX(), point.getY()) && !unstoppableLaser) {
+                return Optional.empty();
+            }
+        }
+    }
+
+    private void fireRegularLaserByHero(Laser laser, HeroItem heroItem) {
+        laser.setUnstoppable(heroItem.getHero().hasUnstoppableLaserPerk());
+        heroItem.getCell().add(laser);
     }
 
     int priority(Object o) {
         if (o instanceof HeroItem) return 20;
+        if (o instanceof DeathRayPerk) return 13;
         if (o instanceof UnstoppableLaserPerk) return 12;
         if (o instanceof ZombiePot) return 10;
         if (o instanceof Zombie) return 8;
@@ -76,14 +132,13 @@ public class ICanCode implements Tickable, Field {
     @Override
     public void tick() {
         level.getItems(HeroItem.class).stream()
-                .map(it -> (HeroItem)it)
+                .map(it -> (HeroItem) it)
                 .forEach(HeroItem::tick);
 
         level.getItems(Tickable.class).stream()
                 .filter(it -> !(it instanceof HeroItem))
-                .filter(it -> !(it instanceof Laser && ((Laser)it).skipFirstTick()) ) // TODO это хак, надо разобраться!
                 .sorted((o1, o2) -> Integer.compare(priority(o2), priority(o1)))
-                .map(it -> (Tickable)it)
+                .map(it -> (Tickable) it)
                 .forEach(Tickable::tick);
 
         perks().stream()
@@ -92,7 +147,7 @@ public class ICanCode implements Tickable, Field {
 
         // после всех перемещений, если герой в полете его надо на 3й леер, иначе приземлить
         level.getItems(HeroItem.class).stream()
-                .map(it -> (HeroItem)it)
+                .map(it -> (HeroItem) it)
                 .forEach(HeroItem::fixLayer);
 
         for (Player player : players) {
@@ -275,6 +330,8 @@ public class ICanCode implements Tickable, Field {
         switch (element) {
             case UNSTOPPABLE_LASER_PERK:
                 return Optional.of(new UnstoppableLaserPerk(element));
+            case DEATH_RAY_PERK:
+                return Optional.of(new DeathRayPerk(element));
             default:
                 return Optional.empty();
         }
@@ -332,7 +389,7 @@ public class ICanCode implements Tickable, Field {
 
             @Override
             public Point viewCenter(Object player) {
-                return ((Player)player).getHero().getPosition();
+                return ((Player) player).getHero().getPosition();
             }
 
             @Override

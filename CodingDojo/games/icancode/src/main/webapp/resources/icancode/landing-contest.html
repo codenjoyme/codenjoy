@@ -350,6 +350,7 @@ Send program to Robot by running the YourSolver class as Main Application.
             <li><span class="list-values text-uppercase">laser_machine_ready</span> - <span class="list-values"> In this state laser tells you that next tick it will issue a deadly beam.</span></li>
             <li><span class="list-values text-uppercase">laser</span> - <span class="list-values"> Laser beam is moving in given direction.</span></li>
             <li><span class="list-values text-uppercase">perk_unstoppable_laser</span> - <span class="list-values"> This is a special perk that gives your laser power to pass through boxes</span></li>
+            <li><span class="list-values text-uppercase">perk_death_ray</span> - <span class="list-values"> This is a special perk that gives your laser power to goes as a ray</span></li>
         </ul>
         <p>For check all board elements please check Elements enum</p>
 <pre>public enum Elements implements CharElements {
@@ -418,7 +419,8 @@ Send program to Robot by running the YourSolver class as Main Application.
     ZOMBIE_DIE(LAYER2, '✝'),
 
         // perks
-    UNSTOPPABLE_LASER_PERK(LAYER1, 'l')
+    UNSTOPPABLE_LASER_PERK(LAYER1, 'l'),
+    DEATH_RAY_PERK(LAYER1, 'r')
 }</pre>
 
         <p>Robot can walk, jump over (holes, lasers, pull boxes and zombie) and fire with the following code:</p>

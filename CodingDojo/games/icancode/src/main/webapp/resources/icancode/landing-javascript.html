@@ -156,6 +156,7 @@ You can always stop the program by clicking the <button class="button reset">Res
             <li><span class="list-values text-uppercase">laser_up</span> - <span class="list-values"> Laser beam is moving up.</span></li>
             <li><span class="list-values text-uppercase">laser_down</span> - <span class="list-values"> Laser beam is moving down.</span></li>
             <li><span class="list-values text-uppercase">perk_unstoppable_laser</span> - <span class="list-values"> This is a special perk that gives your laser power to pass through boxes</span></li>
+            <li><span class="list-values text-uppercase">perk_death_ray</span> - <span class="list-values"> This is a special perk that gives your laser power to goes as a ray</span></li>
         </ul>
 
         <p>Robot can walk, jump over holes and lasers and pull boxes with the following code:</p>
@@ -303,7 +304,7 @@ assert scanner.countNear(12, 7, "BOX") == 3;</pre>
 'LASER_MACHINE', 'LASER_MACHINE_READY',
 'LASER_LEFT', 'LASER_RIGHT', 'LASER_UP', 'LASER_DOWN',
 'START', 'EXIT', 'GOLD', 'HOLE', 'BOX',
-'UNSTOPPABLE_LASER_PERK']; </pre>
+'UNSTOPPABLE_LASER_PERK', 'DEATH_RAY_PERK']; </pre>
 
           <p><span class="func">function getWholeBoard()</span> - Returns all elements on board. This is three-dimensional array [x][y][elements].</p>
             <pre>assert scanner.getWholeBoard() ==

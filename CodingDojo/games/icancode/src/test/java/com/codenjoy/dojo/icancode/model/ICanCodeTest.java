@@ -23,17 +23,21 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.Optional;
 import java.util.Random;
 
 import static com.codenjoy.dojo.icancode.model.ICanCode.TRAINING;
+import static com.codenjoy.dojo.services.Direction.STOP;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -1578,6 +1582,57 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----↓-" +
                 "--←----" +
                 "-------");
+    }
+
+    @Test
+    public void killZombieNearYouByFirstLaserTick() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(10)
+                .perkActivity(10);
+
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        givenZombie().thenReturn(STOP);
+        Zombie zombie = new Zombie(true);
+        zombie.setField(Mockito.mock(Field.class));
+        game.move(zombie, 2, 3);
+
+        assertL("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        assertE("------" +
+                "--☺---" +
+                "--♂---" +
+                "------" +
+                "------" +
+                "------");
+
+        hero.down();
+        hero.fire();
+        game.tick();
+
+        assertE("------" +
+                "--☺---" +
+                "--✝---" +
+                "------" +
+                "------" +
+                "------");
+
+        game.tick();
+
+        assertE("------" +
+                "--☺---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
     }
 
     @Test

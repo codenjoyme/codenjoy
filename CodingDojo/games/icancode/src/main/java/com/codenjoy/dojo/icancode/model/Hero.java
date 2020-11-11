@@ -23,8 +23,12 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.items.*;
+import com.codenjoy.dojo.icancode.model.items.Box;
+import com.codenjoy.dojo.icancode.model.items.Gold;
+import com.codenjoy.dojo.icancode.model.items.HeroItem;
+import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
 import com.codenjoy.dojo.services.Direction;
@@ -49,7 +53,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private boolean reset;
     private boolean laser;
     private boolean fire;
-    private Direction fireDirection;
     private boolean hole;
     private boolean landOn;
     private int goldCount;
@@ -279,10 +282,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (fire) {
-            fireDirection = direction;
+            field.fire(direction, item.getCell(), item);
             fire = false;
             direction = null;
-            fireLaser();
         }
 
         perks = perks.stream()
@@ -446,15 +448,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         die();
     }
 
-    private void fireLaser() {
-        boolean unstoppableLaserPerk = perks.stream()
-                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk);
-        if (fireDirection != null) {
-            Laser laser = new Laser(this, fireDirection);
-            laser.setField(field);
-            laser.setUnstoppable(unstoppableLaserPerk);
-            field.fire(fireDirection, item.getCell(), laser);
-            fireDirection = null;
-        }
+    public boolean hasDeathRayPerk() {
+        return perks.stream().anyMatch(perk -> perk instanceof DeathRayPerk);
+    }
+
+    public boolean hasUnstoppableLaserPerk() {
+        return perks.stream().anyMatch(perk -> perk instanceof UnstoppableLaserPerk);
     }
 }

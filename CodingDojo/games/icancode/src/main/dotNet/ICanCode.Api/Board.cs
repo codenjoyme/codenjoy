@@ -159,7 +159,8 @@ namespace ICanCode.Api
         public List<Point> GetPerks()
         {
             return Get(Layers.LAYER1,
-                    Element.UNSTOPPABLE_LASER_PERK);
+                    Element.UNSTOPPABLE_LASER_PERK,
+                    Element.DEATH_RAY_PERK);
         }
 
         public override string ToString()
