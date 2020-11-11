@@ -80,7 +80,9 @@ public class Laser extends FieldItem implements Tickable {
         if (heroItem != null) {
             Hero hero = heroItem.getHero();
             if (!hero.isFlying()) {
-                die();
+                if (!unstoppable) {
+                    die();
+                }
                 hero.dieOnLaser();
                 addOwnerKillHeroScore();
             }
@@ -88,7 +90,9 @@ public class Laser extends FieldItem implements Tickable {
 
         Zombie zombie = getIf(item, Zombie.class);
         if (zombie != null) {
-            die();
+            if (!unstoppable) {
+                die();
+            }
             zombie.die();
             addOwnerKillZombieScore();
         }
@@ -114,7 +118,7 @@ public class Laser extends FieldItem implements Tickable {
 
         if (!field.isBarrier(newX, newY)) {
             field.move(this, newX, newY);
-        } else if (unstoppable && field.isAt(newX, newY, Box.class)) {
+        } else if (field.isAt(newX, newY, Box.class, Zombie.class, HeroItem.class) && unstoppable) {
             field.move(this, newX, newY);
         } else {
             removeFromCell();
