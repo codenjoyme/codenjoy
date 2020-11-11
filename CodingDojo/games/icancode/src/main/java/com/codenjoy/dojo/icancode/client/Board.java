@@ -214,8 +214,8 @@ public class Board extends AbstractBoard<Elements> {
      * @return Returns list of coordinates for all perks.
      */
     public List<Point> getPerks() {
-        return get(LAYER2,
-                UNSTOPPABLE_LASER);
+        return get(LAYER1,
+                UNSTOPPABLE_LASER_PERK);
     }
 
     /**

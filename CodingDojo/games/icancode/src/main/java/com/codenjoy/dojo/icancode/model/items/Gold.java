@@ -24,6 +24,10 @@ package com.codenjoy.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.icancode.model.*;
+import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 public class Gold extends BaseItem {
 
@@ -46,11 +50,11 @@ public class Gold extends BaseItem {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (hidden) {
-            return Elements.FLOOR;
-        } else {
-            return super.state(player, alsoAtPoint);
-        }
+        Optional<Elements> perk = Arrays.stream(alsoAtPoint)
+                .filter(obj -> obj instanceof AbstractPerk)
+                .map(obj -> ((AbstractPerk) obj).getState())
+                .findFirst();
+        return perk.orElseGet(() -> hidden ? Elements.FLOOR : super.state(player, alsoAtPoint));
     }
 
     @Override

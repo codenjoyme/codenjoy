@@ -25,7 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
-import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaser;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
@@ -64,7 +64,7 @@ public class ICanCode implements Tickable, Field {
 
     int priority(Object o) {
         if (o instanceof HeroItem) return 20;
-        if (o instanceof UnstoppableLaser) return 12;
+        if (o instanceof UnstoppableLaserPerk) return 12;
         if (o instanceof ZombiePot) return 10;
         if (o instanceof Zombie) return 8;
         if (o instanceof LaserMachine) return 6;
@@ -273,8 +273,8 @@ public class ICanCode implements Tickable, Field {
         }
         Elements element = Elements.getRandomPerk(dice);
         switch (element) {
-            case UNSTOPPABLE_LASER:
-                return Optional.of(new UnstoppableLaser(element));
+            case UNSTOPPABLE_LASER_PERK:
+                return Optional.of(new UnstoppableLaserPerk(element));
             default:
                 return Optional.empty();
         }

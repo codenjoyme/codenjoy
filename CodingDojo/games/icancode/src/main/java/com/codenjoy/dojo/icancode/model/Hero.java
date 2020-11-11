@@ -25,7 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
-import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaser;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -448,7 +448,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     private void fireLaser() {
         boolean unstoppableLaserPerk = perks.stream()
-                .anyMatch(perk -> perk instanceof UnstoppableLaser);
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk);
         if (fireDirection != null) {
             Laser laser = new Laser(this, fireDirection);
             laser.setField(field);

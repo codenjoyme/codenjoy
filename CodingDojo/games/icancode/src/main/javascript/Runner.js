@@ -312,7 +312,7 @@ var Element = {
     MALE_ZOMBIE: el('♂', 'ZOMBIE'),
     ZOMBIE_DIE: el('✝', 'ZOMBIE_DIE'),
 
-    UNSTOPPABLE_LASER: el('l', 'UNSTOPPABLE_LASER'),
+    UNSTOPPABLE_LASER_PERK: el('l', 'UNSTOPPABLE_LASER_PERK'),
 
     getElements: function () {
         return elements.slice(0);
@@ -614,8 +614,8 @@ var Board = function (boardString) {
     };
 
     var getPerks = function () {
-        var elements = [Element.UNSTOPPABLE_LASER];
-        return get(LAYER2, elements);
+        var elements = [Element.UNSTOPPABLE_LASER_PERK];
+        return get(LAYER1, elements);
     }
 
     var getHoles = function () {

@@ -24,7 +24,7 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.items.*;
-import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaser;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -88,7 +88,7 @@ public class ElementsMapper {
         put(FEMALE_ZOMBIE, Zombie.class);
         put(MALE_ZOMBIE, Zombie.class);
 
-        put(UNSTOPPABLE_LASER, UnstoppableLaser.class);
+        put(UNSTOPPABLE_LASER_PERK, UnstoppableLaserPerk.class);
 
         put(FOG, Wall.class);
         put(BACKGROUND, Wall.class);

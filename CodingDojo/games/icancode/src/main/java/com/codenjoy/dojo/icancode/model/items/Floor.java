@@ -25,10 +25,24 @@ package com.codenjoy.dojo.icancode.model.items;
 
 import com.codenjoy.dojo.icancode.model.BaseItem;
 import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.icancode.model.Player;
+import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 public class Floor extends BaseItem {
 
     public Floor(Elements el) {
         super(el);
+    }
+
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        Optional<Elements> perk = Arrays.stream(alsoAtPoint)
+                .filter(obj -> obj instanceof AbstractPerk)
+                .map(obj -> ((AbstractPerk) obj).getState())
+                .findFirst();
+        return perk.orElseGet(() -> super.state(player, alsoAtPoint));
     }
 }

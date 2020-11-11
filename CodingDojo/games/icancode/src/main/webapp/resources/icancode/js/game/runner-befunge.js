@@ -367,8 +367,8 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         stack.push('LASER');
     }
 
-    var valueUnstoppableLaserCommand = function (x, y) {
-        stack.push('UNSTOPPABLE_LASER')
+    var valueUnstoppableLaserPerkCommand = function (x, y) {
+        stack.push('UNSTOPPABLE_LASER_PERK')
     }
 
     // ------------------------------------- commands -----------------------------------
@@ -779,12 +779,12 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         },
 
         {
-            id: 'value-unstoppable-laser',
+            id: 'value-unstoppable-laser-perk',
             type: 3,
-            title: 'value-unstoppable-laser',
-            process: valueUnstoppableLaserCommand,
+            title: 'value-unstoppable-laser-perk',
+            process: valueUnstoppableLaserPerkCommand,
             description: 'Значние - "Неостанавливаемый лазер". Испольузется совместно с другими командами.',
-            img1: 'unstoppable_laser.png'
+            img1: 'unstoppable_laser_perk.png'
         }
     ];
 
