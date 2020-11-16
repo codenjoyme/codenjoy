@@ -125,7 +125,7 @@ public class Laser extends FieldItem implements Tickable {
             removeFromCell();
         } else if (!field.isBarrier(newX, newY)) {
             field.move(this, newX, newY);
-        } else if (field.isAt(newX, newY, Box.class, Zombie.class, HeroItem.class) && unstoppable) {
+        } else if (field.isAt(newX, newY, Box.class) && unstoppable) {
             field.move(this, newX, newY);
         } else {
             removeFromCell();
