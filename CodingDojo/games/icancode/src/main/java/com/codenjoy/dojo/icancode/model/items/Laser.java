@@ -28,12 +28,9 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class Laser extends FieldItem implements Tickable {
 
-    private AtomicInteger ticks = new AtomicInteger();
-
+    private int ticks;
     private Direction direction;
     private State owner;
     private boolean unstoppable;
@@ -122,7 +119,7 @@ public class Laser extends FieldItem implements Tickable {
         int newX = direction.changeX(getCell().getX());
         int newY = direction.changeY(getCell().getY());
 
-        if (deathRay && ticks.get() == 0) {
+        if (deathRay && ticks == 0) {
             cell.comeIn(this);
         } else if (deathRay) {
             removeFromCell();
@@ -134,7 +131,7 @@ public class Laser extends FieldItem implements Tickable {
             removeFromCell();
         }
 
-        ticks.incrementAndGet();
+        ticks++;
     }
 
     public State owner() {
