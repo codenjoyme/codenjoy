@@ -26,10 +26,10 @@ package com.codenjoy.dojo.icancode.model.items;
 import com.codenjoy.dojo.icancode.model.BaseItem;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Player;
-import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 
-import java.util.Arrays;
-import java.util.Optional;
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Floor extends BaseItem {
 
@@ -39,10 +39,12 @@ public class Floor extends BaseItem {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Optional<Elements> perk = Arrays.stream(alsoAtPoint)
-                .filter(obj -> obj instanceof AbstractPerk)
-                .map(obj -> ((AbstractPerk) obj).getState())
-                .findFirst();
-        return perk.orElseGet(() -> super.state(player, alsoAtPoint));
+        if (filterOne(alsoAtPoint, DeathRayPerk.class) != null) {
+            return Elements.DEATH_RAY_PERK;
+        }
+        if (filterOne(alsoAtPoint, UnstoppableLaserPerk.class) != null) {
+            return Elements.UNSTOPPABLE_LASER_PERK;
+        }
+        return super.state(player, alsoAtPoint);
     }
 }
