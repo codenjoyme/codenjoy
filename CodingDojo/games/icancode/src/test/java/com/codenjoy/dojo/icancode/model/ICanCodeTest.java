@@ -10,12 +10,12 @@ package com.codenjoy.dojo.icancode.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,8 +23,10 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
@@ -36,6 +38,8 @@ import org.mockito.Mockito;
 import java.util.Optional;
 import java.util.Random;
 
+import static com.codenjoy.dojo.icancode.model.Elements.DEATH_RAY_PERK;
+import static com.codenjoy.dojo.icancode.model.Elements.UNSTOPPABLE_LASER_PERK;
 import static com.codenjoy.dojo.icancode.model.ICanCode.TRAINING;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static org.junit.Assert.*;
@@ -43,38 +47,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class ICanCodeTest extends AbstractGameTest {
-
-    @Test
-    public void doNotDropNextPerk() {
-        // Given
-        game = new ICanCode(mock(Level.class), dice, TRAINING);
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkDropRatio(0);
-        when(dice.next(anyInt())).thenReturn(100);
-
-        // When
-        Optional<AbstractPerk> nextPerk = game.dropNextPerk();
-
-        // Then
-        assertFalse(nextPerk.isPresent());
-    }
-
-    @Test
-    public void doDropNextPerk() {
-        // Given
-        game = new ICanCode(mock(Level.class), dice, TRAINING);
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkDropRatio(100);
-        when(dice.next(anyInt()))
-                .thenReturn(0)
-                .thenReturn(new Random().nextInt(Elements.getPerks().size()));
-
-        // When
-        Optional<AbstractPerk> nextPerk = game.dropNextPerk();
-
-        // Then
-        assertTrue(nextPerk.isPresent());
-    }
 
     @Test
     public void shouldFieldAtStart() {
@@ -2756,25 +2728,25 @@ public class ICanCodeTest extends AbstractGameTest {
         //given
         givenFl(Levels.VIEW_SIZE_TESTING,
                 "╔══════════════════┐" +
-                "║S.................│" +
-                "║..................│" +
-                "║....┌──╗..........│" +
-                "║....│  ║..........│" +
-                "║..┌─┘  └─╗........│" +
-                "║..│      ║........│" +
-                "║..│      ║........│" +
-                "║..╚═┐  ╔═╝........│" +
-                "║....│  ║..........│" +
-                "║....╚══╝..........│" +
-                "║..................│" +
-                "║..................│" +
-                "║..................│" +
-                "║..................│" +
-                "║..................│" +
-                "║..................│" +
-                "║..................│" +
-                "║.................E│" +
-                "└──────────────────┘");
+                        "║S.................│" +
+                        "║..................│" +
+                        "║....┌──╗..........│" +
+                        "║....│  ║..........│" +
+                        "║..┌─┘  └─╗........│" +
+                        "║..│      ║........│" +
+                        "║..│      ║........│" +
+                        "║..╚═┐  ╔═╝........│" +
+                        "║....│  ║..........│" +
+                        "║....╚══╝..........│" +
+                        "║..................│" +
+                        "║..................│" +
+                        "║..................│" +
+                        "║..................│" +
+                        "║..................│" +
+                        "║..................│" +
+                        "║..................│" +
+                        "║.................E│" +
+                        "└──────────────────┘");
 
         //then
         assertL("╔═══════════════" +
@@ -2971,43 +2943,43 @@ public class ICanCodeTest extends AbstractGameTest {
         //given
         givenFl(Levels.VIEW_SIZE_TESTING,
                 "╔════════════════════════════════════┐" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║.................S..................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║....................................│" +
-                "║...................................E│" +
-                "└────────────────────────────────────┘");
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║.................S..................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║....................................│" +
+                        "║...................................E│" +
+                        "└────────────────────────────────────┘");
 
         //then
         assertL("................" +

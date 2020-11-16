@@ -230,4 +230,43 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------");
     }
+
+    @Test
+    public void heroHasDeathRayPerk() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(10)
+                .perkActivity(10);
+
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        game.move(new DeathRayPerk(DEATH_RAY_PERK), 2, 3);
+
+        assertL("╔════┐" +
+                "║.S..│" +
+                "║.r..│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        hero.down();
+        game.tick();
+
+        assertE("------" +
+                "------" +
+                "--☺---" +
+                "------" +
+                "------" +
+                "------");
+        assertL("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        assertTrue(hero.hasDeathRayPerk());
+    }
 }

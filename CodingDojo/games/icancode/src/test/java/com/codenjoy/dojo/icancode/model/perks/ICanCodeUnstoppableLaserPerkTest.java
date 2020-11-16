@@ -4,6 +4,7 @@ import com.codenjoy.dojo.icancode.model.AbstractGameTest;
 import com.codenjoy.dojo.icancode.model.Field;
 import com.codenjoy.dojo.icancode.model.items.Box;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
+import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import static com.codenjoy.dojo.icancode.model.Elements.BOX;
 import static com.codenjoy.dojo.icancode.model.Elements.UNSTOPPABLE_LASER_PERK;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
 
 public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
@@ -88,7 +90,95 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void heroKillsTwoZombiesWithUnstoppableLaser() {
+    public void heroFireThroughOtherHeroWithUnstoppableLaser() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(10)
+                .perkActivity(10);
+
+        givenFl("╔═════┐" +
+                "║.....│" +
+                "║..S..│" +
+                "║..X..│" +
+                "║.....│" +
+                "║.....│" +
+                "└─────┘");
+
+        hero.down();
+        game.tick();
+
+        assertE("-------" +
+                "-------" +
+                "---X---" +
+                "---☺---" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 3, 2);
+
+        assertL("╔═════┐" +
+                "║.....│" +
+                "║..S..│" +
+                "║.....│" +
+                "║..l..│" +
+                "║.....│" +
+                "└─────┘");
+
+        hero.down();
+        game.tick();
+
+        assertE("-------" +
+                "-------" +
+                "---X---" +
+                "-------" +
+                "---☺---" +
+                "-------" +
+                "-------");
+        assertTrue(hero.getPerks().stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+
+        hero.up();
+        hero.fire();
+        game.tick();
+
+        assertE("-------" +
+                "-------" +
+                "---X---" +
+                "---↑---" +
+                "---☺---" +
+                "-------" +
+                "-------");
+        assertTrue(hero.getPerks().stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+
+        game.tick();
+
+        assertE("-------" +
+                "-------" +
+                "---&---" +
+                "-------" +
+                "---☺---" +
+                "-------" +
+                "-------");
+        assertTrue(hero.getPerks().stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+        verify(listener).event(Events.KILL_HERO(1, true));
+
+        game.tick();
+
+        assertE("-------" +
+                "---↑---" +
+                "---X---" +
+                "-------" +
+                "---☺---" +
+                "-------" +
+                "-------");
+        assertTrue(hero.getPerks().stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+    }
+
+    @Test
+    public void heroFireThroughZombieWithUnstoppableLaser() {
         SettingsWrapper.setup(new SettingsImpl())
                 .perkAvailability(10)
                 .perkActivity(10);
@@ -104,12 +194,9 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "└───────┘");
         game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 2, 6);
         givenZombie().thenReturn(STOP);
-        Zombie zombie1 = new Zombie(true);
-        zombie1.setField(Mockito.mock(Field.class));
-        game.move(zombie1, 2, 4);
-        Zombie zombie2 = new Zombie(true);
-        zombie2.setField(Mockito.mock(Field.class));
-        game.move(zombie2, 2, 2);
+        Zombie zombie = new Zombie(true);
+        zombie.setField(Mockito.mock(Field.class));
+        game.move(zombie, 2, 4);
 
         assertL("╔═══════┐" +
                 "║.S.....│" +
@@ -126,7 +213,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------" +
                 "--♂------" +
                 "---------" +
-                "--♂------" +
+                "---------" +
                 "---------" +
                 "---------");
 
@@ -148,7 +235,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------" +
                 "--♂------" +
                 "---------" +
-                "--♂------" +
+                "---------" +
                 "---------" +
                 "---------");
         assertTrue(hero.getPerks().stream()
@@ -164,7 +251,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "--↓------" +
                 "--♂------" +
                 "---------" +
-                "--♂------" +
+                "---------" +
                 "---------" +
                 "---------");
         assertTrue(hero.getPerks().stream()
@@ -178,11 +265,12 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------" +
                 "--✝------" +
                 "---------" +
-                "--♂------" +
+                "---------" +
                 "---------" +
                 "---------");
         assertTrue(hero.getPerks().stream()
                 .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+        verify(listener).event(Events.KILL_ZOMBIE(1, true));
 
         game.tick();
 
@@ -192,8 +280,105 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------" +
                 "---------" +
                 "--↓------" +
+                "---------" +
+                "---------" +
+                "---------");
+        assertTrue(hero.getPerks().stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+    }
+
+    @Test
+    public void heroKillsZombieAndOtherHeroWithUnstoppableLaser() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(10)
+                .perkActivity(10);
+
+        givenFl("╔═══════┐" +
+                "║.......│" +
+                "║.S.....│" +
+                "║.X.....│" +
+                "║.......│" +
+                "║.......│" +
+                "║.......│" +
+                "║.......│" +
+                "└───────┘");
+
+        hero.down();
+        game.tick();
+        hero.down();
+        game.tick();
+        hero.down();
+        game.tick();
+        hero.down();
+        game.tick();
+
+        assertE("---------" +
+                "---------" +
+                "--X------" +
+                "---------" +
+                "---------" +
+                "---------" +
+                "--☺------" +
+                "---------" +
+                "---------");
+
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 2, 1);
+
+        assertL("╔═══════┐" +
+                "║.......│" +
+                "║.S.....│" +
+                "║.......│" +
+                "║.......│" +
+                "║.......│" +
+                "║.......│" +
+                "║.l.....│" +
+                "└───────┘");
+
+        hero.down();
+        game.tick();
+
+        assertE("---------" +
+                "---------" +
+                "--X------" +
+                "---------" +
+                "---------" +
+                "---------" +
+                "---------" +
+                "--☺------" +
+                "---------");
+        assertTrue(hero.getPerks().stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+
+        givenZombie().thenReturn(STOP);
+        Zombie zombie = new Zombie(true);
+        zombie.setField(Mockito.mock(Field.class));
+        game.move(zombie, 2, 4);
+
+        assertE("---------" +
+                "---------" +
+                "--X------" +
+                "---------" +
                 "--♂------" +
                 "---------" +
+                "---------" +
+                "--☺------" +
+                "---------");
+        assertTrue(hero.getPerks().stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+
+
+        hero.up();
+        hero.fire();
+        game.tick();
+
+        assertE("---------" +
+                "---------" +
+                "--X------" +
+                "---------" +
+                "--♂------" +
+                "---------" +
+                "--↑------" +
+                "--☺------" +
                 "---------");
         assertTrue(hero.getPerks().stream()
                 .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
@@ -202,12 +387,41 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
         assertE("---------" +
                 "---------" +
+                "--X------" +
+                "---------" +
+                "--♂------" +
+                "--↑------" +
+                "---------" +
                 "--☺------" +
+                "---------");
+        assertTrue(hero.getPerks().stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+
+        game.tick();
+
+        assertE("---------" +
                 "---------" +
-                "---------" +
+                "--X------" +
                 "---------" +
                 "--✝------" +
                 "---------" +
+                "---------" +
+                "--☺------" +
+                "---------");
+        assertTrue(hero.getPerks().stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+        verify(listener).event(Events.KILL_ZOMBIE(1, true));
+
+        game.tick();
+
+        assertE("---------" +
+                "---------" +
+                "--X------" +
+                "--↑------" +
+                "---------" +
+                "---------" +
+                "---------" +
+                "--☺------" +
                 "---------");
         assertTrue(hero.getPerks().stream()
                 .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
@@ -216,14 +430,68 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
         assertE("---------" +
                 "---------" +
+                "--&------" +
+                "---------" +
+                "---------" +
+                "---------" +
+                "---------" +
                 "--☺------" +
-                "---------" +
-                "---------" +
-                "---------" +
-                "---------" +
-                "--↓------" +
                 "---------");
         assertTrue(hero.getPerks().stream()
                 .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+        verify(listener).event(Events.KILL_HERO(1, true));
+
+        game.tick();
+
+        assertE("---------" +
+                "--↑------" +
+                "--X------" +
+                "---------" +
+                "---------" +
+                "---------" +
+                "---------" +
+                "--☺------" +
+                "---------");
+        assertTrue(hero.getPerks().stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+    }
+
+    @Test
+    public void heroHasUnstoppableLaserPerk() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(10)
+                .perkActivity(10);
+
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 2, 3);
+
+        assertL("╔════┐" +
+                "║.S..│" +
+                "║.l..│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        hero.down();
+        game.tick();
+
+        assertE("------" +
+                "------" +
+                "--☺---" +
+                "------" +
+                "------" +
+                "------");
+        assertL("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        assertTrue(hero.hasUnstoppableLaserPerk());
     }
 }

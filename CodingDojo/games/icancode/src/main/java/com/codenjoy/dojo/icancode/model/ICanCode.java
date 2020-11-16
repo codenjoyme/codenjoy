@@ -22,7 +22,6 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
