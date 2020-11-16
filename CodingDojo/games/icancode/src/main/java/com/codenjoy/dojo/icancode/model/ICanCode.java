@@ -99,17 +99,16 @@ public class ICanCode implements Tickable, Field {
     }
 
     private Optional<Cell> findNextAvailableCell(Laser laser, boolean unstoppableLaser) {
-        Point point = laser.getCell();
-        while (true) {
-            point = laser.getDirection().change(point);
-            if (point.isOutOf(size())) {
-                return Optional.empty();
-            } else if (!isBarrier(point.getX(), point.getY())) {
+        Point point = laser.getDirection().change(laser.getCell());
+        while (!point.isOutOf(size())) {
+            if (!isBarrier(point.getX(), point.getY())) {
                 return Optional.of(getCell(point.getX(), point.getY()));
             } else if (isBarrier(point.getX(), point.getY()) && !unstoppableLaser) {
                 return Optional.empty();
             }
+            point = laser.getDirection().change(point);
         }
+        return Optional.empty();
     }
 
     private void fireRegularLaserByHero(Laser laser, HeroItem heroItem) {
