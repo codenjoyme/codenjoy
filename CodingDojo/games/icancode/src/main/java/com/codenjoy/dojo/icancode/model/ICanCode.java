@@ -33,7 +33,6 @@ import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
-import org.fest.util.Lists;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +50,8 @@ public class ICanCode implements Tickable, Field {
     private final List<Player> players = new LinkedList<>();
     private boolean contest;
 
+    private final Shooter shooter = new Shooter(this);
+
     public ICanCode(Level level, Dice dice, boolean contest) {
         this.level = level;
         level.setField(this);
@@ -60,60 +61,7 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public void fire(Direction direction, Point from, FieldItem owner) {
-        if (owner instanceof LaserMachine) {
-            fireByLaserMachine(direction, from, owner);
-        } else if (owner instanceof HeroItem) {
-            HeroItem heroItem = (HeroItem) owner;
-            Laser laser = new Laser(heroItem.getHero(), direction, this);
-            if (heroItem.getHero().hasDeathRayPerk()) {
-                fireDeathRayByHero(laser, from, heroItem);
-            } else {
-                fireRegularLaserByHero(laser, heroItem);
-            }
-        }
-    }
-
-    private void fireByLaserMachine(Direction direction, Point from, FieldItem owner) {
-        Point to = direction.change(from);
-        move(new Laser(owner, direction, this), to.getX(), to.getY());
-    }
-
-    private void fireDeathRayByHero(Laser laser, Point from, HeroItem heroItem) {
-        boolean unstoppableLaserPerk = heroItem.getHero().hasUnstoppableLaserPerk();
-        Laser topLaser = laser;
-        topLaser.setDeathRay(true);
-        List<Laser> lasers = Lists.newArrayList(topLaser);
-
-        Point to = topLaser.getDirection().change(from);
-        getCell(to.getX(), to.getY()).add(topLaser);
-        for (int i = 0; i < SettingsWrapper.data.getDeathRayRange() - 1; i++) {
-            Optional<Cell> nextCell = findNextAvailableCell(topLaser, unstoppableLaserPerk);
-            if (!nextCell.isPresent()) {
-                break;
-            }
-            topLaser = new Laser(heroItem, topLaser.getDirection(), this);
-            topLaser.setDeathRay(true);
-            nextCell.get().add(topLaser);
-            lasers.add(topLaser);
-        }
-    }
-
-    private Optional<Cell> findNextAvailableCell(Laser laser, boolean unstoppableLaser) {
-        Point point = laser.getDirection().change(laser.getCell());
-        while (!point.isOutOf(size())) {
-            if (!isBarrier(point.getX(), point.getY())) {
-                return Optional.of(getCell(point.getX(), point.getY()));
-            } else if (isBarrier(point.getX(), point.getY()) && !unstoppableLaser) {
-                return Optional.empty();
-            }
-            point = laser.getDirection().change(point);
-        }
-        return Optional.empty();
-    }
-
-    private void fireRegularLaserByHero(Laser laser, HeroItem heroItem) {
-        laser.setUnstoppable(heroItem.getHero().hasUnstoppableLaserPerk());
-        heroItem.getCell().add(laser);
+        shooter.fire(direction, from, owner);
     }
 
     int priority(Object o) {
