@@ -15,7 +15,7 @@ import empty from '../../styles/images/game/icancode/empty.png';
 import exit from '../../styles/images/game/icancode/exit.png';
 import female_zombie from '../../styles/images/game/icancode/female_zombie.png';
 import floor from '../../styles/images/game/icancode/floor.png';
-import fog from '../../styles/images/game/icancode/fog.png';
+//import fog from '../../styles/images/game/icancode/fog.png';
 import gold from '../../styles/images/game/icancode/gold.png';
 import hole from '../../styles/images/game/icancode/hole.png';
 import laser_down from '../../styles/images/game/icancode/laser_down.png';
@@ -103,11 +103,6 @@ const ELEMENTS = [
 		image:  gold,
 		title: `GOLD('$')`,
 		description: `Мішечок золота. Дуже користна річь. Хапай його та донеси до виходу.`,
-	},
-	{
-		image:  fog,
-		title: `FOG('F')`,
-		description: `Туман. Невідома частина карти`,
 	},
     {
 		image:  unstoppable_laser_perk,

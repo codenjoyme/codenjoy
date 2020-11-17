@@ -234,7 +234,6 @@ class RulesContainer extends Component {
                             Можна стрибати через дірки, ящики, зомбі, лазери, інших героїв; </li>
                             <li><span className='command'>ACT(2),Direction</span> - змушує героя тягнути ящик у вказаному напрямку.</li>
                             <li><span className='command'>ACT(3),Direction</span> - герой стріляє лазером у вказанному напрямку. Між пострілами існує затримка в { this._gets('gunRecharge') } тіків;</li>
-                            <li></li>
                         </ul>
                     <p>
                         Ваше завдання - написати вебсокет клієнта, який підключиться
@@ -268,18 +267,18 @@ class RulesContainer extends Component {
                     </div>
                     <ul>
                         <li>
-                            UNSTOPPABLE_LASER - Дає можливість герою запустити лазер,
+                            <span className='command'>UNSTOPPABLE_LASER</span> - Дає можливість герою запустити лазер,
                             який не зникатимє при взаємодії з коробками, зомбі та іншими героями.<br />
-                            <ul>
+                            <ul class="sub_ul">
                                 <li>
                                     Дія перку зникає через { this._gets('perkAvailability') } тіків (секунд).
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            DEATH_RAY - дозволяє герою вистрілити промінем смерті  в заданному напрямку.
+                            <span className='command'>DEATH_RAY</span> - дозволяє герою вистрілити промінем смерті  в заданному напрямку.
                             Промінь розповсюджується одразу на певну кількість клітинок и зникає через 1 тік.
-                            <ul>
+                            <ul class="sub_ul">
                                 <li>
                                     Дія перку зникає через { this._gets('perkAvailability') } тіків (секунд).
                                 </li>
@@ -291,7 +290,7 @@ class RulesContainer extends Component {
 
                         <li>
                             Перки випадають на місці вбитого зомбі з
-                            певною верогідністю({ this._gets('perkDropRatio') }%).
+                            певною верогідністю { this._gets('perkDropRatio') }%.
                         </li>
                         <li>
                             Якщо перк ніхто не підібрав, він зникає з поля
