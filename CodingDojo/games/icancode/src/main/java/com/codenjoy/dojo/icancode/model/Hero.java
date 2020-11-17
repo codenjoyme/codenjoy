@@ -28,6 +28,7 @@ import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
@@ -36,8 +37,7 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import java.util.Arrays;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
-
-    private final static int DEFAULT_TICKS_PER_BULLETS_WITHOUT_DELAY = 0;
+    private final static SettingsWrapper settings = SettingsWrapper.data;
 
     private boolean alive;
     private boolean win;
@@ -65,16 +65,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return item;
     }
 
-    public Hero withTicksPerBullets(int ticksPerBullets) {
-        gun = new Gun(ticksPerBullets);
-        return this;
-    }
-
     public Hero(Elements el) {
         item = new HeroItem(el);
         item.init(this);
-        gun= new Gun(DEFAULT_TICKS_PER_BULLETS_WITHOUT_DELAY);
-
+        gun= new Gun(settings.gunRecharge());
         resetFlags();
     }
 
