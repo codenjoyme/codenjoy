@@ -10,12 +10,12 @@ package com.codenjoy.dojo.icancode.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,22 +23,22 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
+import com.codenjoy.dojo.icancode.services.Levels;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.icancode.services.Levels;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER1;
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
-import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
+import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -48,7 +48,6 @@ public class AbstractGameTest {
 
     public static final int FIRE_TICKS = 6;
     private static final int COUNT_LAYERS = 3;
-    private static final int TICKS_PER_BULLETS = 3;
 
     ICanCode game;
     private Printer<PrinterData> printer;
@@ -58,9 +57,11 @@ public class AbstractGameTest {
     EventListener listener;
     Player player;
     private Player otherPlayer;
+    protected SettingsWrapper settings;
 
     @Before
     public void setup() {
+        settings = SettingsWrapper.setup(new SettingsImpl());
         dice = mock(Dice.class);
     }
 
@@ -81,16 +82,17 @@ public class AbstractGameTest {
         Level level = createLevels(new String[]{board}).get(0);
         game = new ICanCode(level, dice, ICanCode.TRAINING);
         listener = mock(EventListener.class);
-        player = new Player(listener, TICKS_PER_BULLETS);
+        player = new Player(listener);
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
+        settings.data.gunRecharge(0);
 
         // логика добавления нового героя на start позиции для 'X' символа
         level.getItems(HeroItem.class)
                 .forEach(item -> {
                     HeroItem heroItem = (HeroItem) item;
                     if (heroItem.getHero() == null) {
-                        Player player = new Player(mock(EventListener.class), TICKS_PER_BULLETS);
+                        Player player = new Player(mock(EventListener.class));
                         game.newGame(player);
                         Hero hero = player.getHero();
                         heroItem.init(hero);
@@ -105,7 +107,7 @@ public class AbstractGameTest {
     }
 
     int viewSize(String board) {
-        return (int)Math.sqrt(board.length());
+        return (int) Math.sqrt(board.length());
     }
 
     List<Level> createLevels(String[] boards) {
