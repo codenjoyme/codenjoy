@@ -23,11 +23,11 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
+import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.FieldItem;
+import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Tickable;
-import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.Player;
 
 public class LaserMachine extends FieldItem implements Tickable {
 
@@ -74,8 +74,7 @@ public class LaserMachine extends FieldItem implements Tickable {
     public void tick() {
         if (timer == CHARGED) {
             timer = 0;
-
-            field.fire(this, direction, getCell());
+            field.fire(direction, getCell(), this);
         } else {
             timer++;
         }
