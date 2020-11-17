@@ -66,6 +66,7 @@ public class AbstractGameTest {
     @Before
     public void setup() {
         settings = SettingsWrapper.setup(new SettingsImpl());
+        settings.data.gunRecharge(0);
         dice = mock(Dice.class);
     }
 
@@ -89,7 +90,6 @@ public class AbstractGameTest {
         player = new Player(listener);
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
-        settings.data.gunRecharge(0);
 
         // логика добавления нового героя на start позиции для 'X' символа
         level.getItems(HeroItem.class)

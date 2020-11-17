@@ -44,8 +44,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
-    private final static SettingsWrapper settings = SettingsWrapper.data;
-
     private boolean alive;
     private boolean win;
     private Direction direction;
@@ -76,7 +74,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public Hero(Elements el) {
         item = new HeroItem(el);
         item.init(this);
-        gun= new Gun(settings.gunRecharge());
+        gun= new Gun(SettingsWrapper.data.gunRecharge());
         resetFlags();
     }
 
