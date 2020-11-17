@@ -41,6 +41,7 @@ public class ICanCodeGameSettings extends AbstractSettings {
     public static final String PERK_AVAILABILITY = "Perk availability";
     public static final String PERK_ACTIVITY = "Perk activity";
     public static final String TICKS_PER_BULLETS = "Ticks per bullets";
+    public static final String DEATH_RAY_PERK_RANGE = "Death-Ray perk range";
 
     public ICanCodeGameSettings(PParameters parameters) {
         super(parameters);
@@ -94,6 +95,10 @@ public class ICanCodeGameSettings extends AbstractSettings {
         return getInteger(TICKS_PER_BULLETS);
     }
 
+    public Integer getDeathRayRange() {
+        return getInteger(DEATH_RAY_PERK_RANGE);
+    }
+
     public void setRoomSize(Integer input) {
         add(ROOM_SIZE, input);
     }
@@ -142,6 +147,9 @@ public class ICanCodeGameSettings extends AbstractSettings {
         add(TICKS_PER_BULLETS, input);
     }
 
+    public void setDeathRayRange(Integer input) {
+        add(DEATH_RAY_PERK_RANGE, input);
+    }
 
     @Override
     public void update(List<PParameter> parameters) {
@@ -157,5 +165,6 @@ public class ICanCodeGameSettings extends AbstractSettings {
         update(parameters, PERK_AVAILABILITY);
         update(parameters, PERK_ACTIVITY);
         update(parameters, TICKS_PER_BULLETS);
+        update(parameters, DEATH_RAY_PERK_RANGE);
     }
 }
