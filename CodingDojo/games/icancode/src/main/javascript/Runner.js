@@ -313,6 +313,7 @@ var Element = {
     ZOMBIE_DIE: el('✝', 'ZOMBIE_DIE'),
 
     UNSTOPPABLE_LASER_PERK: el('l', 'UNSTOPPABLE_LASER_PERK'),
+    DEATH_RAY_PERK: el('r', 'DEATH_RAY_PERK'),
 
     getElements: function () {
         return elements.slice(0);
@@ -614,7 +615,7 @@ var Board = function (boardString) {
     };
 
     var getPerks = function () {
-        var elements = [Element.UNSTOPPABLE_LASER_PERK];
+        var elements = [Element.UNSTOPPABLE_LASER_PERK, Element.DEATH_RAY_PERK];
         return get(LAYER1, elements);
     }
 

@@ -64,7 +64,7 @@ public interface Field extends GameField<Player> {
 
     Level getLevel();
 
-    void fire(Direction direction, Point from, Laser laser);
+    void fire(Direction direction, Point from, FieldItem owner);
 
     int size();
 

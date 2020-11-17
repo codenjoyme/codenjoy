@@ -49,7 +49,7 @@ public class BoardTest {
                 "║E│     ║.│" +
                 "║.╚═┐ ╔═╝$│" +
                 "║l.O│ ║..O│" +
-                "║...╚═╝...│" +
+                "║r..╚═╝...│" +
                 "║O.$.....E│" +
                 "└─────────┘",
 
@@ -90,8 +90,8 @@ public class BoardTest {
                         " 5║E│     ║.│  5║-│     ║-│  5║-│     ║-│ Holes: [1,1], [3,3], [9,3]\n" +
                         " 4║.╚═┐ ╔═╝$│  4║-╚═┐ ╔═╝→│  4║-╚═┐ ╔═╝-│ LaserMachine: [5,9], [7,7]\n" +
                         " 3║l.O│ ║..O│  3║---│ ║B-x│  3║---│ ║---│ Lasers: [6,9], [8,2], [9,4], [9,6]\n" +
-                        " 2║...╚═╝...│  2║---╚═╝-↓-│  2║---╚═╝---│ Zombies: \n" +
-                        " 1║O.$.....E│  1║-B---X^--│  1║---------│ Perks: [1,3]\n" +
+                        " 2║r..╚═╝...│  2║---╚═╝-↓-│  2║---╚═╝---│ Zombies: \n" +
+                        " 1║O.$.....E│  1║-B---X^--│  1║---------│ Perks: [1,2], [1,3]\n" +
                         " 0└─────────┘  0└─────────┘  0└─────────┘\n" +
                         "  01234567890   01234567890   01234567890",
                 board.toString());
@@ -144,7 +144,7 @@ public class BoardTest {
 
     @Test
     public void shouldGetPerks(){
-        assertEquals("[[1,3]]", board.getPerks().toString());
+        assertEquals("[[1,2], [1,3]]", board.getPerks().toString());
     }
 
     @Test
@@ -177,6 +177,7 @@ public class BoardTest {
         assertEquals(false, board.isBarrierAt(3, 1));
 
         assertEquals(true, board.isBarrierAt(1, 3));
+        assertEquals(true, board.isBarrierAt(1, 2));
     }
 
     @Test

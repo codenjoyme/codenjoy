@@ -42,6 +42,7 @@ public final class SettingsWrapper {
     private final Parameter<Integer> perkDropRatio;
     private final Parameter<Integer> perkAvailability;
     private final Parameter<Integer> perkActivity;
+    private final Parameter<Integer> deathRayRange;
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> goldScore;
     private final Parameter<Integer> killZombieScore;
@@ -70,6 +71,7 @@ public final class SettingsWrapper {
         perkDropRatio = settings.addEditBox("Perk drop ratio").type(Integer.class).def(50);
         perkAvailability = settings.addEditBox("Perk availability").type(Integer.class).def(5);
         perkActivity = settings.addEditBox("Perk activity").type(Integer.class).def(10);
+        deathRayRange = settings.addEditBox("Death-Ray perk range").type(Integer.class).def(10);
         winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
         killZombieScore = settings.addEditBox("Kill zombie score").type(Integer.class).def(20);
@@ -97,6 +99,10 @@ public final class SettingsWrapper {
 
     public int perkActivity() {
         return perkActivity.getValue();
+    }
+
+    public int getDeathRayRange() {
+        return deathRayRange.getValue();
     }
 
     public int goldScore() {
@@ -176,6 +182,11 @@ public final class SettingsWrapper {
 
     public SettingsWrapper perkActivity(int value) {
         perkActivity.update(value);
+        return this;
+    }
+
+    public SettingsWrapper deathRayRange(int value) {
+        deathRayRange.update(value);
         return this;
     }
 

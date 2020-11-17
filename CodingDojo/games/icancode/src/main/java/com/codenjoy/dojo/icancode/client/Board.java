@@ -215,7 +215,8 @@ public class Board extends AbstractBoard<Elements> {
      */
     public List<Point> getPerks() {
         return get(LAYER1,
-                UNSTOPPABLE_LASER_PERK);
+                UNSTOPPABLE_LASER_PERK,
+                DEATH_RAY_PERK);
     }
 
     /**

@@ -74,10 +74,7 @@ public class LaserMachine extends FieldItem implements Tickable {
     public void tick() {
         if (timer == CHARGED) {
             timer = 0;
-
-            Laser laser = new Laser(this, direction);
-            laser.setField(field);
-            field.fire(direction, getCell(), laser);
+            field.fire(direction, getCell(), this);
         } else {
             timer++;
         }

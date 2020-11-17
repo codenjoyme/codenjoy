@@ -102,6 +102,7 @@ public enum Elements implements CharElements {
 
     // perks
     UNSTOPPABLE_LASER_PERK(LAYER1, 'l'),
+    DEATH_RAY_PERK(LAYER1, 'r'),
 
     // system elements, don't touch it
     FOG(LAYER1, 'F'),
@@ -158,6 +159,7 @@ public enum Elements implements CharElements {
     public static List<Elements> getPerks() {
         return ImmutableList.<Elements>builder()
                 .add(UNSTOPPABLE_LASER_PERK)
+                .add(DEATH_RAY_PERK)
                 .build();
     }
 

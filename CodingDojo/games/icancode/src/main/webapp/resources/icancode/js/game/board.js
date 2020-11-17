@@ -214,7 +214,7 @@ var Board = function (boardString) {
     };
 
     var getPerks = function () {
-        var elements = [Element.UNSTOPPABLE_LASER_PERK];
+        var elements = [Element.UNSTOPPABLE_LASER_PERK, Element.DEATH_RAY_PERK];
         return get(elements, LAYER1);
     };
 

@@ -371,6 +371,10 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         stack.push('UNSTOPPABLE_LASER_PERK')
     }
 
+    var valueDeathRayPerkCommand = function (x, y) {
+        stack.push('DEATH_RAY_PERK')
+    }
+
     // ------------------------------------- commands -----------------------------------
     var gameName = game.sprites;
     var commands = [
@@ -785,6 +789,14 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: valueUnstoppableLaserPerkCommand,
             description: 'Значние - "Неостанавливаемый лазер". Испольузется совместно с другими командами.',
             img1: 'unstoppable_laser_perk.png'
+        },
+        {
+            id: 'value-death-ray-perk',
+            type: 3,
+            title: 'value-death-ray-perk',
+            process: valueDeathRayPerkCommand,
+            description: 'Значние - "Луч смерти". Испольузется совместно с другими командами.',
+            img1: 'death_ray_perk.png'
         }
     ];
 

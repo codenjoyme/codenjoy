@@ -22,9 +22,9 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
@@ -49,6 +49,8 @@ public class ICanCode implements Tickable, Field {
     private final List<Player> players = new LinkedList<>();
     private boolean contest;
 
+    private final Shooter shooter = new Shooter(this);
+
     public ICanCode(Level level, Dice dice, boolean contest) {
         this.level = level;
         level.setField(this);
@@ -57,13 +59,13 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public void fire(Direction direction, Point from, Laser laser) {
-        Point to = direction.change(from);
-        move(laser, to.getX(), to.getY());
+    public void fire(Direction direction, Point from, FieldItem owner) {
+        shooter.fire(direction, from, owner);
     }
 
     int priority(Object o) {
         if (o instanceof HeroItem) return 20;
+        if (o instanceof DeathRayPerk) return 13;
         if (o instanceof UnstoppableLaserPerk) return 12;
         if (o instanceof ZombiePot) return 10;
         if (o instanceof Zombie) return 8;
@@ -76,14 +78,13 @@ public class ICanCode implements Tickable, Field {
     @Override
     public void tick() {
         level.getItems(HeroItem.class).stream()
-                .map(it -> (HeroItem)it)
+                .map(it -> (HeroItem) it)
                 .forEach(HeroItem::tick);
 
         level.getItems(Tickable.class).stream()
                 .filter(it -> !(it instanceof HeroItem))
-                .filter(it -> !(it instanceof Laser && ((Laser)it).skipFirstTick()) ) // TODO это хак, надо разобраться!
                 .sorted((o1, o2) -> Integer.compare(priority(o2), priority(o1)))
-                .map(it -> (Tickable)it)
+                .map(it -> (Tickable) it)
                 .forEach(Tickable::tick);
 
         perks().stream()
@@ -92,7 +93,7 @@ public class ICanCode implements Tickable, Field {
 
         // после всех перемещений, если герой в полете его надо на 3й леер, иначе приземлить
         level.getItems(HeroItem.class).stream()
-                .map(it -> (HeroItem)it)
+                .map(it -> (HeroItem) it)
                 .forEach(HeroItem::fixLayer);
 
         for (Player player : players) {
@@ -275,6 +276,8 @@ public class ICanCode implements Tickable, Field {
         switch (element) {
             case UNSTOPPABLE_LASER_PERK:
                 return Optional.of(new UnstoppableLaserPerk(element));
+            case DEATH_RAY_PERK:
+                return Optional.of(new DeathRayPerk(element));
             default:
                 return Optional.empty();
         }
@@ -332,7 +335,7 @@ public class ICanCode implements Tickable, Field {
 
             @Override
             public Point viewCenter(Object player) {
-                return ((Player)player).getHero().getPosition();
+                return ((Player) player).getHero().getPosition();
             }
 
             @Override
