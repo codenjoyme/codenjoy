@@ -64,16 +64,137 @@ import Styles from './styles.module.css';
 
 const ELEMENTS = [
 	{
-		image:  empty,
-		title: `EMPTY('-')`,
-		description: ` Пуста клітина. На неї можна ставати`,
+		image:  start,
+		title: `START('S')`,
+		description: ` Стартова точка`,
+	},
+	{
+		image:  exit,
+		title: `EXIT('E')`,
+		description: ` Вихід. Саме до цієї точки герой має донести золото`,
 	},
 	{
 		image:  floor,
 		title: `FLOOR('.')`,
 		description: ` Підлога. На неї можна ставати.`,
 	},
+	{
+		image:  hole,
+		title: `HOLE('O')`,
+		description: ` Дірка. Бажано не потрапляти в неї бо помреш`,
+	},
+	{
+		image:  zombie_start,
+		title: `ZOMBIE_START('Z')`,
+		description: ` Респаун зомбі. На неї можна ставати`,
+	},
+	{
+		image:  box,
+		title: `BOX('B')`,
+		description: ` Коробка. Її можно переміщати або перестрибнути`,
+	},
+	{
+		image:  gold,
+		title: `GOLD('$')`,
+		description: ` Мішечок золота. Дуже користна річь. Хапай його та донеси до виходу.`,
+	},
+    {
+		image:  robo,
+		title: `ROBO('☺')`,
+		description: ` Герой`,
+	},
+	{
+		image:  robo_falling,
+		title: `ROBO_FALLING('o')`,
+		description: ` Герой, що впав`,
+	},
+	{
+		image:  robo_flying,
+		title: `ROBO_FLYING('*')`,
+		description: ` Герой стрибає`,
+	},
+	{
+		image:  robo_laser,
+		title: `ROBO_LASER('☻')`,
+		description: ` Герой помер`,
+	},
 
+	{
+		image:  female_zombie,
+		title: `FEMALE_ZOMBIE('♀')`,
+		description: ` Зомбі-хлопчик`,
+	},
+	{
+		image:  male_zombie,
+		title: `MALE_ZOMBIE('♂')`,
+		description: ` Зомбі-дівчинка`,
+	},
+	{
+		image:  zombie_die,
+		title: `ZOMBIE_DIE('✝')`,
+		description: ` Мертвий зомбі`,
+	},
+	{
+    	image:  robo_other,
+    	title: `ROBO_OTHER('X')`,
+    	description: ` Ворожий герой`,
+    },
+    {
+    	image:  robo_other_falling,
+    	title: `ROBO_OTHER_FALLING('x')`,
+    	description: ` Ворожий герой, що впав`,
+    },
+    {
+    	image:  robo_other_flying,
+    	title: `ROBO_OTHER_FLYING('^')`,
+    	description: ` Ворожий герой стрибає`,
+    },
+    {
+    	image:  robo_other_laser,
+    	title: `ROBO_OTHER_LASER('&')`,
+    	description: ` Ворожий герой помер`,
+    },
+
+	{
+		image:  laser_machine_charging_left,
+		title: `LASER_MACHINE_CHARGING_LEFT('˂')`,
+		description: ` Лазерна машина заряджаеться`,
+	},
+	{
+		image:  laser_machine_charging_right,
+		title: `LASER_MACHINE_CHARGING_RIGHT('˃')`,
+		description: ` Лазерна машина заряджаеться`,
+	},
+	{
+		image:  laser_machine_charging_up,
+		title: `LASER_MACHINE_CHARGING_UP('˄')`,
+		description: ` Лазерна машина заряджаеться`,
+	},
+	{
+		image:  laser_machine_charging_down,
+		title: `LASER_MACHINE_CHARGING_DOWN('˅')`,
+		description: ` Лазерна машина заряджаеться`,
+	},
+	{
+		image:  laser_left,
+		title: `LASER_LEFT('←')`,
+		description: ` Лазер`,
+	},
+	{
+		image:  laser_right,
+		title: `LASER_RIGHT('→')`,
+		description: ` Лазер`,
+	},
+	{
+		image:  laser_up,
+		title: `LASER_UP('↑')`,
+		description: ` Лазер`,
+	},
+	{
+		image:  laser_down,
+		title: `LASER_DOWN('↓')`,
+		description: ` Лазер`,
+	},
 
 	{
 		image:  angle_in_left,
@@ -138,168 +259,8 @@ const ELEMENTS = [
 	{
 		image:  space,
 		title: `SPACE(' ')`,
-		description: ` Стінка. Її треба обходити`,
+		description: ` Пуста клітина. Звичайно знаходиться поза межої ігрової зони`,
 	},
-
-
-	{
-		image:  laser_machine_charging_left,
-		title: `LASER_MACHINE_CHARGING_LEFT('˂')`,
-		description: ` Лазерна машина заряджаеться`,
-	},
-	{
-		image:  laser_machine_charging_right,
-		title: `LASER_MACHINE_CHARGING_RIGHT('˃')`,
-		description: ` Лазерна машина заряджаеться`,
-	},
-	{
-		image:  laser_machine_charging_up,
-		title: `LASER_MACHINE_CHARGING_UP('˄')`,
-		description: ` Лазерна машина заряджаеться`,
-	},
-	{
-		image:  laser_machine_charging_down,
-		title: `LASER_MACHINE_CHARGING_DOWN('˅')`,
-		description: ` Лазерна машина заряджаеться`,
-	},
-
-
-	{
-		image:  laser_machine_ready_left,
-		title: `LASER_MACHINE_READY_LEFT('◄')`,
-		description: ` Лазерна машина готова стріляти`,
-	},
-	{
-		image:  laser_machine_ready_right,
-		title: `LASER_MACHINE_READY_RIGHT('►')`,
-		description: ` Лазерна машина готова стріляти`,
-	},
-	{
-		image:  laser_machine_ready_up,
-		title: `LASER_MACHINE_READY_UP('▲')`,
-		description: ` Лазерна машина готова стріляти`,
-	},
-	{
-		image:  laser_machine_ready_down,
-		title: `LASER_MACHINE_READY_DOWN('▼')`,
-		description: ` Лазерна машина готова стріляти`,
-	},
-
-
-	{
-		image:  start,
-		title: `START('S')`,
-		description: ` Стартова точка`,
-	},
-	{
-		image:  exit,
-		title: `EXIT('E')`,
-		description: ` Вихід. Саме до цієї точки герой має донести золото`,
-	},
-	{
-		image:  hole,
-		title: `HOLE('O')`,
-		description: ` Дірка. Бажано не потрапляти в неї бо помреш`,
-	},
-	{
-		image:  box,
-		title: `BOX('B')`,
-		description: ` Коробка. Її можно переміщати або перестрибнути`,
-	},
-	{
-		image:  zombie_start,
-		title: `ZOMBIE_START('Z')`,
-		description: ` Респаун зомбі`,
-	},
-	{
-		image:  gold,
-		title: `GOLD('$')`,
-		description: ` Мішечок золота. Дуже користна річь. Хапай його та донеси до виходу.`,
-	},
-
-
-	{
-		image:  robo,
-		title: `ROBO('☺')`,
-		description: ` Герой`,
-	},
-	{
-		image:  robo_falling,
-		title: `ROBO_FALLING('o')`,
-		description: ` Герой, що впав`,
-	},
-	{
-		image:  robo_flying,
-		title: `ROBO_FLYING('*')`,
-		description: ` Герой стрибає`,
-	},
-	{
-		image:  robo_laser,
-		title: `ROBO_LASER('☻')`,
-		description: ` Герой помер`,
-	},
-
-
-	{
-		image:  robo_other,
-		title: `ROBO_OTHER('X')`,
-		description: ` Ворожий герой`,
-	},
-	{
-		image:  robo_other_falling,
-		title: `ROBO_OTHER_FALLING('x')`,
-		description: ` Ворожий герой, що впав`,
-	},
-	{
-		image:  robo_other_flying,
-		title: `ROBO_OTHER_FLYING('^')`,
-		description: ` Ворожий герой стрибає`,
-	},
-	{
-		image:  robo_other_laser,
-		title: `ROBO_OTHER_LASER('&')`,
-		description: ` Ворожий герой помер`,
-	},
-
-
-	{
-		image:  laser_left,
-		title: `LASER_LEFT('←')`,
-		description: ` Лазер`,
-	},
-	{
-		image:  laser_right,
-		title: `LASER_RIGHT('→')`,
-		description: ` Лазер`,
-	},
-	{
-		image:  laser_up,
-		title: `LASER_UP('↑')`,
-		description: ` Лазер`,
-	},
-	{
-		image:  laser_down,
-		title: `LASER_DOWN('↓')`,
-		description: ` Лазер`,
-	},
-
-
-	{
-		image:  female_zombie,
-		title: `FEMALE_ZOMBIE('♀')`,
-		description: ` Зомбі-хлопчик`,
-	},
-	{
-		image:  male_zombie,
-		title: `MALE_ZOMBIE('♂')`,
-		description: ` Зомбі-дівчинка`,
-	},
-	{
-		image:  zombie_die,
-		title: `ZOMBIE_DIE('✝')`,
-		description: ` Мертвий зомбі`,
-	},
-
 
 ];
 
