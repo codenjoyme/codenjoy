@@ -37,6 +37,10 @@ public class ICanCodeGameSettings extends AbstractSettings {
     public static final String LOOSE_PENALTY = "Loose penalty";
     public static final String IS_TRAINING_MODE = "Is training mode";
     public static final String ROOM_SIZE = "Room size";
+    public static final String PERK_DROP_RATIO = "Perk drop ratio";
+    public static final String PERK_AVAILABILITY = "Perk availability";
+    public static final String PERK_ACTIVITY = "Perk activity";
+    public static final String TICKS_PER_BULLETS = "Ticks per bullets";
 
     public ICanCodeGameSettings(PParameters parameters) {
         super(parameters);
@@ -74,6 +78,22 @@ public class ICanCodeGameSettings extends AbstractSettings {
         return getBoolean(ENABLE_SCORE_FOR_KILL);
     }
 
+    public Integer getPerkDropRatio() {
+        return getInteger(PERK_DROP_RATIO);
+    }
+
+    public Integer getPerkAvailability() {
+        return getInteger(PERK_AVAILABILITY);
+    }
+
+    public Integer getPerkActivity() {
+        return getInteger(PERK_ACTIVITY);
+    }
+
+    public Integer getPicksPerBullets() {
+        return getInteger(TICKS_PER_BULLETS);
+    }
+
     public void setRoomSize(Integer input) {
         add(ROOM_SIZE, input);
     }
@@ -106,6 +126,23 @@ public class ICanCodeGameSettings extends AbstractSettings {
         add(ENABLE_SCORE_FOR_KILL, input);
     }
 
+    public void setPerkDropRatio(Integer input) {
+        add(PERK_DROP_RATIO, input);
+    }
+
+    public void setPerkAvailability(Integer input) {
+        add(PERK_AVAILABILITY, input);
+    }
+
+    public void setPerkActivity(Integer input) {
+        add(PERK_ACTIVITY, input);
+    }
+
+    public void setTicksPerBullets(Integer input) {
+        add(TICKS_PER_BULLETS, input);
+    }
+
+
     @Override
     public void update(List<PParameter> parameters) {
         update(parameters, WIN_SCORE);
@@ -116,5 +153,9 @@ public class ICanCodeGameSettings extends AbstractSettings {
         update(parameters, LOOSE_PENALTY);
         update(parameters, IS_TRAINING_MODE);
         update(parameters, ROOM_SIZE);
+        update(parameters, PERK_DROP_RATIO);
+        update(parameters, PERK_AVAILABILITY);
+        update(parameters, PERK_ACTIVITY);
+        update(parameters, TICKS_PER_BULLETS);
     }
 }
