@@ -24,6 +24,10 @@ package com.codenjoy.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.icancode.model.*;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
+
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Gold extends BaseItem {
 
@@ -46,11 +50,16 @@ public class Gold extends BaseItem {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        if (filterOne(alsoAtPoint, DeathRayPerk.class) != null) {
+            return Elements.DEATH_RAY_PERK;
+        }
+        if (filterOne(alsoAtPoint, UnstoppableLaserPerk.class) != null) {
+            return Elements.UNSTOPPABLE_LASER_PERK;
+        }
         if (hidden) {
             return Elements.FLOOR;
-        } else {
-            return super.state(player, alsoAtPoint);
         }
+        return super.state(player, alsoAtPoint);
     }
 
     @Override

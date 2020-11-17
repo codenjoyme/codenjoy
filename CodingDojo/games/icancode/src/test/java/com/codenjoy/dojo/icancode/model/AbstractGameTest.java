@@ -10,12 +10,12 @@ package com.codenjoy.dojo.icancode.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,10 +23,14 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
+import com.codenjoy.dojo.icancode.model.items.Zombie;
+import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
@@ -40,6 +44,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -48,14 +53,13 @@ public class AbstractGameTest {
 
     public static final int FIRE_TICKS = 6;
     private static final int COUNT_LAYERS = 3;
-
-    ICanCode game;
+    protected ICanCode game;
     private Printer<PrinterData> printer;
 
-    Hero hero;
-    Dice dice;
-    EventListener listener;
-    Player player;
+    protected Hero hero;
+    protected Dice dice;
+    protected EventListener listener;
+    protected Player player;
     private Player otherPlayer;
     protected SettingsWrapper settings;
 
@@ -65,7 +69,7 @@ public class AbstractGameTest {
         dice = mock(Dice.class);
     }
 
-    OngoingStubbing<Integer> dice(int... ints) {
+    protected OngoingStubbing<Integer> dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -73,11 +77,11 @@ public class AbstractGameTest {
         return when;
     }
 
-    void givenFl(String board) {
+    protected void givenFl(String board) {
         givenFl(viewSize(board), board);
     }
 
-    void givenFl(int viewSize, String board) {
+    protected void givenFl(int viewSize, String board) {
         Levels.VIEW_SIZE = viewSize;
         Level level = createLevels(new String[]{board}).get(0);
         game = new ICanCode(level, dice, ICanCode.TRAINING);
@@ -106,11 +110,11 @@ public class AbstractGameTest {
                 COUNT_LAYERS);
     }
 
-    int viewSize(String board) {
+    protected int viewSize(String board) {
         return (int) Math.sqrt(board.length());
     }
 
-    List<Level> createLevels(String[] boards) {
+    protected List<Level> createLevels(String[] boards) {
         List<Level> levels = new LinkedList<>();
         for (String board : boards) {
             Level level = new LevelImpl(board);
@@ -119,7 +123,20 @@ public class AbstractGameTest {
         return levels;
     }
 
-    void assertL(String expected) {
+    protected OngoingStubbing<Integer> generateFemale() {
+        return dice(1);
+    }
+
+    protected OngoingStubbing<Integer> generateMale() {
+        return dice(0);
+    }
+
+    protected OngoingStubbing<Direction> givenZombie() {
+        Zombie.BRAIN = mock(ZombieBrain.class);
+        return when(Zombie.BRAIN.whereToGo(any(Point.class), any(Field.class)));
+    }
+
+    protected void assertL(String expected) {
         assertA(expected, LAYER1);
     }
 
@@ -128,11 +145,11 @@ public class AbstractGameTest {
                 TestUtils.injectN(printer.print().getLayers().get(index)));
     }
 
-    void assertE(String expected) {
+    protected void assertE(String expected) {
         assertA(expected, LAYER2);
     }
 
-    void assertF(String expected) {
+    protected void assertF(String expected) {
         assertA(expected, LAYER3);
     }
 }

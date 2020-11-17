@@ -23,11 +23,14 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.printer.CharElements;
+import com.google.common.collect.ImmutableList;
 
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.List;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
 
@@ -97,6 +100,10 @@ public enum Elements implements CharElements {
     MALE_ZOMBIE(LAYER2, '♂'),
     ZOMBIE_DIE(LAYER2, '✝'),
 
+    // perks
+    UNSTOPPABLE_LASER_PERK(LAYER1, 'l'),
+    DEATH_RAY_PERK(LAYER1, 'r'),
+
     // system elements, don't touch it
     FOG(LAYER1, 'F'),
     BACKGROUND(LAYER2, 'G');
@@ -147,6 +154,18 @@ public enum Elements implements CharElements {
         for (Elements el : Elements.values()) {
             elementsMap.put(el.toString(), el);
         }
+    }
+
+    public static List<Elements> getPerks() {
+        return ImmutableList.<Elements>builder()
+                .add(UNSTOPPABLE_LASER_PERK)
+                .add(DEATH_RAY_PERK)
+                .build();
+    }
+
+    public static Elements getRandomPerk(Dice dice) {
+        List<Elements> perks = getPerks();
+        return perks.get(dice.next(perks.size()));
     }
 
     public int getLayer() {

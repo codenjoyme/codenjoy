@@ -27,6 +27,9 @@ import com.codenjoy.dojo.icancode.model.items.Box;
 import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
+import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
@@ -34,7 +37,11 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private final static SettingsWrapper settings = SettingsWrapper.data;
@@ -48,7 +55,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private boolean reset;
     private boolean laser;
     private boolean fire;
-    private Direction fireDirection;
     private boolean hole;
     private boolean landOn;
     private int goldCount;
@@ -56,6 +62,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private int killHeroCount;
     private HeroItem item;
     private Gun gun;
+
+    private List<AbstractPerk> perks = new ArrayList<>();
 
     public void removeFromCell() {
         item.removeFromCell();
@@ -70,6 +78,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         item.init(this);
         gun= new Gun(settings.gunRecharge());
         resetFlags();
+    }
+
+    public List<AbstractPerk> getPerks() {
+        return Collections.unmodifiableList(perks);
     }
 
     private void resetFlags() {
@@ -274,13 +286,17 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (fire) {
-            fireDirection = direction;
+            if (gun.tryToFire()) {
+                field.fire(direction, item.getCell(), item);
+            }
             fire = false;
             direction = null;
-            if (gun.tryToFire()) {
-                fireLaser();
-            }
         }
+
+        perks = perks.stream()
+                .peek(AbstractPerk::tick)
+                .filter(AbstractPerk::isActive)
+                .collect(Collectors.toList());
 
         if (direction != null) {
             int x = item.getCell().getX();
@@ -313,6 +329,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                         }
                     }
                     field.move(item, newX, newY);
+                    field.pickPerk(newX, newY).ifPresent(perk -> {
+                        perk.removeFromCell();
+                        perks.add(perk);
+                    });
                 }
             }
         }
@@ -435,10 +455,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         die();
     }
 
-    private void fireLaser() {
-        if (fireDirection != null) {
-            field.fire(this, fireDirection, item.getCell());
-            fireDirection = null;
-        }
+    public boolean hasDeathRayPerk() {
+        return perks.stream().anyMatch(perk -> perk instanceof DeathRayPerk);
+    }
+
+    public boolean hasUnstoppableLaserPerk() {
+        return perks.stream().anyMatch(perk -> perk instanceof UnstoppableLaserPerk);
     }
 }
