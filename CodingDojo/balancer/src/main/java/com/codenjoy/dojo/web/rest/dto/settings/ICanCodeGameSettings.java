@@ -40,7 +40,7 @@ public class ICanCodeGameSettings extends AbstractSettings {
     public static final String PERK_DROP_RATIO = "Perk drop ratio";
     public static final String PERK_AVAILABILITY = "Perk availability";
     public static final String PERK_ACTIVITY = "Perk activity";
-    public static final String TICKS_PER_BULLETS = "Ticks per bullets";
+    public static final String GUN_RECHARGE = "Heroes gun recharge";
     public static final String DEATH_RAY_PERK_RANGE = "Death-Ray perk range";
 
     public ICanCodeGameSettings(PParameters parameters) {
@@ -91,8 +91,8 @@ public class ICanCodeGameSettings extends AbstractSettings {
         return getInteger(PERK_ACTIVITY);
     }
 
-    public Integer getPicksPerBullets() {
-        return getInteger(TICKS_PER_BULLETS);
+    public Integer getGunRecharge() {
+        return getInteger(GUN_RECHARGE);
     }
 
     public Integer getDeathRayRange() {
@@ -143,8 +143,8 @@ public class ICanCodeGameSettings extends AbstractSettings {
         add(PERK_ACTIVITY, input);
     }
 
-    public void setTicksPerBullets(Integer input) {
-        add(TICKS_PER_BULLETS, input);
+    public void setGunRecharge(Integer input) {
+        add(GUN_RECHARGE, input);
     }
 
     public void setDeathRayRange(Integer input) {
@@ -164,7 +164,7 @@ public class ICanCodeGameSettings extends AbstractSettings {
         update(parameters, PERK_DROP_RATIO);
         update(parameters, PERK_AVAILABILITY);
         update(parameters, PERK_ACTIVITY);
-        update(parameters, TICKS_PER_BULLETS);
+        update(parameters, GUN_RECHARGE);
         update(parameters, DEATH_RAY_PERK_RANGE);
     }
 }

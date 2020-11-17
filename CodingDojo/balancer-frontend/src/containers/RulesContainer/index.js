@@ -233,7 +233,7 @@ class RulesContainer extends Component {
                             <li><span className='command'>ACT(1),Direction</span> - стрибок у заданному напрямку. Стрибок займає 2 тіка і призводить до руху героя на 2 клітини в заданному напрямку.
                             Можна стрибати через дірки, ящики, зомбі, лазери, інших героїв; </li>
                             <li><span className='command'>ACT(2),Direction</span> - змушує героя тягнути ящик у вказаному напрямку.</li>
-                            <li><span className='command'>ACT(3),Direction</span> - герой стріляє лазером у вказанному напрямку. Між пострілами існує затримка в { this._gets('ticksPerBullets') } тіків;</li>
+                            <li><span className='command'>ACT(3),Direction</span> - герой стріляє лазером у вказанному напрямку. Між пострілами існує затримка в { this._gets('gunRecharge') } тіків;</li>
                             <li></li>
                         </ul>
                     <p>
@@ -335,7 +335,7 @@ class RulesContainer extends Component {
                             <li>Скільки часу перк не зникатимє з карті: { this._gets('perkAvailability') }.</li>
                             <li>Термін дії перку: { this._gets('perkActivity') }.</li>
                             <li>Область дії луча смерті: { this._gets('deathRayRange') }.</li>
-                            <li>Затримка між пострілами: { this._gets('ticksPerBullets') }.</li>
+                            <li>Затримка між пострілами: { this._gets('gunRecharge') }.</li>
                         </ul>
                     </div>
                     <p>
