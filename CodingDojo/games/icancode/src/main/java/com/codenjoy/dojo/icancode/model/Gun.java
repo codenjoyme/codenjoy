@@ -4,11 +4,11 @@ import com.codenjoy.dojo.services.Tickable;
 
 public class Gun implements Tickable {
     private boolean canFire;
-    private int ticksPerBullets;
+    private int recharge;
     private int ticks;
 
-    public Gun(int ticksPerBullets) {
-        this.ticksPerBullets = ticksPerBullets;
+    public Gun(int recharge) {
+        this.recharge = recharge;
         reset();
     }
 
@@ -22,9 +22,9 @@ public class Gun implements Tickable {
         if (!canFire) {
             ticks++;
         }
-        if (ticksPerBullets <= 0) {
+        if (recharge <= 0) {
             canFire = true;
-        } else if (ticks == ticksPerBullets) {
+        } else if (ticks == recharge) {
             reset();
         }
     }
