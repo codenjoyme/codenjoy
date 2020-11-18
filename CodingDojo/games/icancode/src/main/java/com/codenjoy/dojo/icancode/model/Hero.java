@@ -150,46 +150,34 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void down() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.DOWN;
-        }
+        direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.UP;
-        }
+        direction = Direction.UP;
     }
 
     @Override
     public void left() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.LEFT;
-        }
+        direction = Direction.LEFT;
     }
 
     @Override
     public void right() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.RIGHT;
-        }
+        direction = Direction.RIGHT;
     }
 
     public void reset() {
@@ -210,14 +198,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void act(int... p) {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
 
         if (p.length == 0 || p[0] == 1) {
-            if (!flying) {
-                jump = true;
-            }
+            jump = true;
         } else if (p.length == 1 && p[0] == 2) {
             pull = true;
         } else if (p.length == 1 && p[0] == 3) { // TODO test me
@@ -436,6 +422,22 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public boolean isFlying() {
         return flying;
+    }
+
+    public boolean isJump() {
+        return jump;
+    }
+
+    public boolean isPull() {
+        return pull;
+    }
+
+    public boolean isReset() {
+        return reset;
+    }
+
+    public boolean isFire() {
+        return fire;
     }
 
     public void dieOnHole() {
