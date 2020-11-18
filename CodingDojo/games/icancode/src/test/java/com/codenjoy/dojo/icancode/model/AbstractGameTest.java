@@ -70,6 +70,12 @@ public class AbstractGameTest {
         dice = mock(Dice.class);
     }
 
+    protected void ticks(int count) {
+        for (int i = 0; i < count; i++) {
+            game.tick();
+        }
+    }
+
     protected OngoingStubbing<Integer> dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
