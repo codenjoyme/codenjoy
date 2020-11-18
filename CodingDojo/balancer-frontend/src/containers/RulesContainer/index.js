@@ -1,4 +1,4 @@
-﻿// vendor
+// vendor
 import React, {  Component  } from 'react';
 import {  connect  } from 'react-redux';
 // import classnames from 'classnames';
@@ -287,6 +287,14 @@ class RulesContainer extends Component {
                                 </li>
                             </ul>
                         </li>
+                        <li>
+                            <span className='command'>UNLIMITED_FIRE_PERK</span> - Дає можливість герою стріляти кожний тік.<br />
+                            <ul class="sub_ul">
+                                <li>
+                                    Дія перку зникає через { this._gets('perkAvailability') } тіків (секунд).
+                                </li>
+                            </ul>
+                        </li>
 
                         <li>
                             Перки випадають на місці вбитого зомбі з
@@ -332,7 +340,7 @@ class RulesContainer extends Component {
                             <li>Очки за поразку: { this._gets('loosePenalty') }.</li>
                             <li>Частота випадіння перків : { this._gets('perkDropRatio') }.</li>
                             <li>Скільки часу перк не зникатимє з карті: { this._gets('perkAvailability') }.</li>
-                            <li>Термін дії перку: { this._gets('perkActivity') }.</li>
+                            <li>Термін дії перків: { this._gets('perkActivity') }.</li>
                             <li>Область дії луча смерті: { this._gets('deathRayRange') }.</li>
                             <li>Затримка між пострілами: { this._gets('gunRecharge') }.</li>
                         </ul>

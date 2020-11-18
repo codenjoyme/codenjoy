@@ -59,6 +59,8 @@ import zombie_die from '../../styles/images/game/icancode/zombie_die.png';
 import zombie_start from '../../styles/images/game/icancode/zombie_start.png';
 import death_ray_perk from '../../styles/images/game/icancode/death_ray_perk.png';
 import unstoppable_laser_perk from '../../styles/images/game/icancode/unstoppable_laser_perk.png';
+import unlimited_fire_perk from '../../styles/images/game/icancode/unlimited_fire_perk.png';
+
 
 //own
 import Styles from './styles.module.css';
@@ -113,6 +115,11 @@ const ELEMENTS = [
     	image:  death_ray_perk,
     	title: `DEATH_RAY_PERK('r')`,
     	description: `Перк. Промінь смерті.`,
+    },
+    {
+        	image:  unlimited_fire_perk,
+        	title: `UNLIMITED_FIRE_PERK('f')`,
+        	description: `Перк. Бесперервна стрільба.`,
     },
     {
 		image:  robo,
