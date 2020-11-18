@@ -67,6 +67,7 @@
         // perks
         UNSTOPPABLE_LASER_PERK = (short)'l',
         DEATH_RAY_PERK = (short)'r',
+        UNLIMITED_FIRE_PERK = (short)'f',
 
         // system elements, don't touch it
         FOG = (short)'F',

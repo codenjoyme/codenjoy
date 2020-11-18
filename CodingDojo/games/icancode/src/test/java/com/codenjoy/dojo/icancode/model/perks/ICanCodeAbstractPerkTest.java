@@ -28,8 +28,6 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     public void perkAppearAfterZombieDie() {
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 4;
         givenZombie().thenReturn(UP);
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkDropRatio(100);
 
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -83,10 +81,6 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
 
     @Test
     public void heroTakesPerk() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(10)
-                .perkActivity(10);
-
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +
@@ -123,9 +117,7 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
 
     @Test
     public void perkAvailabilityTest() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(3)
-                .perkActivity(10);
+        settings.perkAvailability(3);
 
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -172,9 +164,7 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
 
     @Test
     public void perkActivityTest() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(10)
-                .perkActivity(3);
+        settings.perkActivity(3);
 
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -229,8 +219,7 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     public void doNotDropNextPerk() {
         // Given
         game = new ICanCode(mock(Level.class), dice, TRAINING);
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkDropRatio(0);
+        settings.perkDropRatio(0);
         when(dice.next(anyInt())).thenReturn(100);
 
         // When
@@ -244,8 +233,6 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     public void doDropNextPerk() {
         // Given
         game = new ICanCode(mock(Level.class), dice, TRAINING);
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkDropRatio(100);
         when(dice.next(anyInt()))
                 .thenReturn(0)
                 .thenReturn(new Random().nextInt(Elements.getPerks().size()));
@@ -259,11 +246,6 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
 
     @Test
     public void pickPerk() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(5)
-                .perkActivity(10)
-                .perkDropRatio(100);
-
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +
@@ -286,11 +268,6 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
 
     @Test
     public void perksOnBoard() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(5)
-                .perkActivity(10)
-                .perkDropRatio(100);
-
         givenFl("╔═════════┐" +
                 "║.........│" +
                 "║.S.┌─╗...│" +
@@ -309,10 +286,6 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     @Test
     public void goldStateWithUnstoppableLaserPerk() {
         // given
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(5)
-                .perkActivity(10)
-                .perkDropRatio(100);
         Gold gold = new Gold(Elements.GOLD);
 
         // when
@@ -325,10 +298,6 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     @Test
     public void goldStateWithDeathRayPerk() {
         // given
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(5)
-                .perkActivity(10)
-                .perkDropRatio(100);
         Gold gold = new Gold(Elements.GOLD);
 
         // when
@@ -339,12 +308,20 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     }
 
     @Test
+    public void goldStateWithUnlimitedFirePerk() {
+        // given
+        Gold gold = new Gold(Elements.GOLD);
+
+        // when
+        Elements element = gold.state(player, new UnlimitedFirePerk(UNLIMITED_FIRE_PERK));
+
+        // then
+        assertEquals(UNLIMITED_FIRE_PERK, element);
+    }
+
+    @Test
     public void floorStateWithUnstoppableLaserPerk() {
         // given
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(5)
-                .perkActivity(10)
-                .perkDropRatio(100);
         Floor floor = new Floor(FLOOR);
 
         // when
@@ -357,10 +334,6 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     @Test
     public void floorStateWithDeathRayPerk() {
         // given
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(5)
-                .perkActivity(10)
-                .perkDropRatio(100);
         Floor floor = new Floor(FLOOR);
 
         // when
@@ -368,5 +341,17 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
 
         // then
         assertEquals(DEATH_RAY_PERK, element);
+    }
+
+    @Test
+    public void floorStateWithUnlimitedFirePerk() {
+        // given
+        Floor floor = new Floor(FLOOR);
+
+        // when
+        Elements element = floor.state(player, new UnlimitedFirePerk(UNLIMITED_FIRE_PERK));
+
+        // then
+        assertEquals(UNLIMITED_FIRE_PERK, element);
     }
 }

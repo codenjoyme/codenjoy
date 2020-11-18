@@ -20,10 +20,6 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
     @Test
     public void heroFireThroughBoxWithUnstoppableLaser() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(10)
-                .perkActivity(10);
-
         givenFl("╔═════┐" +
                 "║..S..│" +
                 "║.....│" +
@@ -91,10 +87,6 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
     @Test
     public void heroFireThroughOtherHeroWithUnstoppableLaser() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(10)
-                .perkActivity(10);
-
         givenFl("╔═════┐" +
                 "║.....│" +
                 "║..S..│" +
@@ -179,10 +171,6 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
     @Test
     public void heroFireThroughZombieWithUnstoppableLaser() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(10)
-                .perkActivity(10);
-
         givenFl("╔═══════┐" +
                 "║.S.....│" +
                 "║.......│" +
@@ -289,10 +277,6 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
     @Test
     public void heroKillsZombieAndOtherHeroWithUnstoppableLaser() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(10)
-                .perkActivity(10);
-
         givenFl("╔═══════┐" +
                 "║.......│" +
                 "║.S.....│" +
@@ -458,10 +442,6 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
     @Test
     public void heroHasUnstoppableLaserPerk() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(10)
-                .perkActivity(10);
-
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +

@@ -29,6 +29,7 @@ import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
@@ -44,6 +45,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
+
     private boolean alive;
     private boolean win;
     private Direction direction;
@@ -74,7 +76,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public Hero(Elements el) {
         item = new HeroItem(el);
         item.init(this);
-        gun= new Gun(SettingsWrapper.data.gunRecharge());
+        gun = new Gun(SettingsWrapper.data.gunRecharge());
         resetFlags();
     }
 
@@ -96,7 +98,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         goldCount = 0;
         resetZombieKillCount();
         resetHeroKillCount();
-        gun.reset();
+        gun.recharge();
     }
 
     public void resetZombieKillCount() {
@@ -284,7 +286,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (fire) {
-            if (gun.tryToFire()) {
+            if (hasUnlimitedFirePerk()) {
+                field.fire(direction, item.getCell(), item);
+                gun.discharge();
+            } else if (gun.tryToFire()) {
                 field.fire(direction, item.getCell(), item);
             }
             fire = false;
@@ -459,5 +464,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public boolean hasUnstoppableLaserPerk() {
         return perks.stream().anyMatch(perk -> perk instanceof UnstoppableLaserPerk);
+    }
+
+    public boolean hasUnlimitedFirePerk() {
+        return perks.stream().anyMatch(perk -> perk instanceof UnlimitedFirePerk);
     }
 }
