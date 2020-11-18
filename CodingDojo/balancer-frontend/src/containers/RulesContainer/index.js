@@ -1,4 +1,4 @@
-// vendor
+﻿// vendor
 import React, {  Component  } from 'react';
 import {  connect  } from 'react-redux';
 // import classnames from 'classnames';
@@ -93,7 +93,7 @@ class RulesContainer extends Component {
 
         return (
             <div className='container'>
-                <div className={ mask }>Bot Challenge - як грати?</div>
+                <div className={ mask }>EPAM Bot Challenge - як грати?</div>
                 <div className='content'>
                     <h2 className='title'>У чому суть гри?</h2>
                      <div className='subTitle' id='commands'>

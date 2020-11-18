@@ -9,7 +9,7 @@ import { UnavailableContainer } from '../../containers';
 export default class HomePage extends Component {
     render() {
         return (
-            <DocumentTitle title='Bot Challenge'>
+            <DocumentTitle title='EPAM Bot Challenge'>
                 <Layout>
                     <UnavailableContainer />
                 </Layout>
