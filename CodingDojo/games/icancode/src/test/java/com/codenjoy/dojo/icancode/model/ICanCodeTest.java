@@ -47,6 +47,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class ICanCodeTest extends AbstractGameTest {
+    public static final int GUN_RECHARGE_DELAY = 3;
 
     @Test
     public void shouldFieldAtStart() {
@@ -3192,6 +3193,65 @@ public class ICanCodeTest extends AbstractGameTest {
                 "║...│" +
                 "└───┘");
     }
+
+    @Test
+    public void shouldShootWithDelay() {
+        // given
+        settings.gunRecharge(GUN_RECHARGE_DELAY);
+        givenFl("╔═══┐" +
+                "║.S.│" +
+                "║...│" +
+                "║...│" +
+                "└───┘");
+
+        // when
+        hero.fire();
+        hero.down();
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "--☺--" +
+                "--↓--" +
+                "-----" +
+                "-----");
+
+        // when
+        hero.fire();
+        hero.down();
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "--☺--" +
+                "-----" +
+                "--↓--" +
+                "-----");
+        // when
+        hero.fire();
+        hero.down();
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "--☺--" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        // when
+        hero.fire();
+        hero.down();
+        game.tick();
+
+        // then
+        assertE("-----" +
+                "--☺--" +
+                "--↓--" +
+                "-----" +
+                "-----");
+    }
+
 
     /*@Test
     public void shouldFlyOnOtherPlayer() {

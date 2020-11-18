@@ -31,6 +31,7 @@ import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
@@ -43,7 +44,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
-
     private boolean alive;
     private boolean win;
     private Direction direction;
@@ -59,6 +59,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private int killZombieCount;
     private int killHeroCount;
     private HeroItem item;
+    private Gun gun;
 
     private List<AbstractPerk> perks = new ArrayList<>();
 
@@ -73,7 +74,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public Hero(Elements el) {
         item = new HeroItem(el);
         item.init(this);
-
+        gun= new Gun(SettingsWrapper.data.gunRecharge());
         resetFlags();
     }
 
@@ -95,6 +96,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         goldCount = 0;
         resetZombieKillCount();
         resetHeroKillCount();
+        gun.reset();
     }
 
     public void resetZombieKillCount() {
@@ -282,7 +284,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (fire) {
-            field.fire(direction, item.getCell(), item);
+            if (gun.tryToFire()) {
+                field.fire(direction, item.getCell(), item);
+            }
             fire = false;
             direction = null;
         }
@@ -335,6 +339,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
         landOn = false;
         pull = false;
+        gun.tick();
     }
 
     public void fixLayer() {
