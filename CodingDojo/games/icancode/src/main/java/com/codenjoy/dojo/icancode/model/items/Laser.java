@@ -82,7 +82,7 @@ public class Laser extends FieldItem implements Tickable {
         if (heroItem != null) {
             Hero hero = heroItem.getHero();
             if (!hero.isFlying()) {
-                if (isNeedLaserAttackHero(hero)) {
+                if (shouldLaserAttackHero(hero)) {
                     if (!unstoppable) {
                         die();
                     }
@@ -102,15 +102,13 @@ public class Laser extends FieldItem implements Tickable {
         }
     }
 
-    private boolean isNeedLaserAttackHero(Hero hero) {
+    private boolean shouldLaserAttackHero(Hero hero) {
         Direction heroDirection = hero.getDirection();
         if (heroDirection == null) {
             return true;
         }
         if (heroDirection == direction.inverted()) {
-            if (!hero.isLandOn()) {
-                return true;
-            }
+            return !hero.isLandOn();
         }
         return false;
     }
