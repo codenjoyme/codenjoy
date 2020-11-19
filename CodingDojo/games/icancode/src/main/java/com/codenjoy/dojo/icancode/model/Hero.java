@@ -61,6 +61,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private HeroItem item;
     private Gun gun;
 
+    public boolean isLandOn() {
+        return landOn;
+    }
+
     private List<AbstractPerk> perks = new ArrayList<>();
 
     public void removeFromCell() {

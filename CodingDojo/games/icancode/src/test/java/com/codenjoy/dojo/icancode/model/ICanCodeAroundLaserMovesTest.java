@@ -295,8 +295,6 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
         game.tick();
 
         // then
-        verify(listener).event(Events.LOOSE());
-
         assertL("╔═════┐" +
                 "║˃...S│" +
                 "║.....│" +
@@ -321,7 +319,6 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
                 "-------" +
                 "-------");
         assertEquals(true, player.isAlive());
-
     }
 
     @Test
