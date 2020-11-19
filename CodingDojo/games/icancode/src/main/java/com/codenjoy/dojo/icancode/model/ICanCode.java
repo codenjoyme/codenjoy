@@ -25,6 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
@@ -67,6 +68,7 @@ public class ICanCode implements Tickable, Field {
         if (o instanceof HeroItem) return 20;
         if (o instanceof DeathRayPerk) return 13;
         if (o instanceof UnstoppableLaserPerk) return 12;
+        if (o instanceof UnlimitedFirePerk) return 11;
         if (o instanceof ZombiePot) return 10;
         if (o instanceof Zombie) return 8;
         if (o instanceof LaserMachine) return 6;
@@ -278,6 +280,8 @@ public class ICanCode implements Tickable, Field {
                 return Optional.of(new UnstoppableLaserPerk(element));
             case DEATH_RAY_PERK:
                 return Optional.of(new DeathRayPerk(element));
+            case UNLIMITED_FIRE_PERK:
+                return Optional.of(new UnlimitedFirePerk(element));
             default:
                 return Optional.empty();
         }

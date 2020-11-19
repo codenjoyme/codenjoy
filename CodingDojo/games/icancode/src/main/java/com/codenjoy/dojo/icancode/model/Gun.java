@@ -3,18 +3,24 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.services.Tickable;
 
 public class Gun implements Tickable {
+
     private boolean canFire;
-    private int recharge;
+    private int chargePoints;
     private int ticks;
 
-    public Gun(int recharge) {
-        this.recharge = recharge;
-        reset();
+    public Gun(int chargePoints) {
+        this.chargePoints = chargePoints;
+        recharge();
     }
 
-    public void reset() {
+    public void recharge() {
         ticks = 0;
         canFire = true;
+    }
+
+    public void discharge() {
+        ticks = 0;
+        canFire = false;
     }
 
     @Override
@@ -22,10 +28,10 @@ public class Gun implements Tickable {
         if (!canFire) {
             ticks++;
         }
-        if (recharge <= 0) {
+        if (chargePoints <= 0) {
             canFire = true;
-        } else if (ticks == recharge) {
-            reset();
+        } else if (ticks == chargePoints) {
+            recharge();
         }
     }
 

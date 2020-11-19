@@ -27,6 +27,7 @@ import com.codenjoy.dojo.icancode.model.BaseItem;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
@@ -44,6 +45,9 @@ public class Floor extends BaseItem {
         }
         if (filterOne(alsoAtPoint, UnstoppableLaserPerk.class) != null) {
             return Elements.UNSTOPPABLE_LASER_PERK;
+        }
+        if (filterOne(alsoAtPoint, UnlimitedFirePerk.class) != null) {
+            return Elements.UNLIMITED_FIRE_PERK;
         }
         return super.state(player, alsoAtPoint);
     }
