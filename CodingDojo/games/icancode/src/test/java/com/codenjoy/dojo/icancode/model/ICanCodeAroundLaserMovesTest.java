@@ -210,7 +210,7 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
                 "-------" +
                 "-------" +
                 "-------");
-        assertE("-------" +
+        assertF("-------" +
                 "-------" +
                 "-------" +
                 "-------" +
