@@ -84,7 +84,7 @@ const ELEMENTS = [
 	{
 		image:  empty,
 		title: `EMPTY('-')`,
-		description: `Пуста клітина. На неї можна ставати`,
+		description: `Пуста клітинка. На неї можна ставати`,
 	},
 	{
 		image:  zombie_start,
@@ -94,7 +94,7 @@ const ELEMENTS = [
 	{
 		image:  hole,
 		title: `HOLE('O')`,
-		description: `Дірка. Бажано не потрапляти в неї.`,
+		description: `Провалля. Сюди краще не ставати`,
 	},
 	{
 		image:  box,
@@ -104,22 +104,22 @@ const ELEMENTS = [
 	{
 		image:  gold,
 		title: `GOLD('$')`,
-		description: `Мішечок золота. Дуже користна річь. Хапай його та донеси до виходу.`,
+		description: `Мішечок золота. Дуже корисна річ. Хапай його та донеси до виходу.`,
 	},
     {
 		image:  unstoppable_laser_perk,
 		title: `UNSTOPPABLE_LASER_PERK('l')`,
-		description: `Перк. Неспинний лазер.`,
+		description: `Перк. Неспинний лазер`,
 	},
 	{
     	image:  death_ray_perk,
     	title: `DEATH_RAY_PERK('r')`,
-    	description: `Перк. Промінь смерті.`,
+    	description: `Перк. Промінь смерті`,
     },
     {
         	image:  unlimited_fire_perk,
         	title: `UNLIMITED_FIRE_PERK('f')`,
-        	description: `Перк. Бесперервна стрільба.`,
+        	description: `Перк. Бесперервна стрільба`,
     },
     {
 		image:  robo,
@@ -129,7 +129,7 @@ const ELEMENTS = [
 	{
 		image:  robo_falling,
 		title: `ROBO_FALLING('o')`,
-		description: `Герой, що впав`,
+		description: `Герой падає`,
 	},
 	{
 		image:  robo_flying,
@@ -145,12 +145,12 @@ const ELEMENTS = [
 	{
 		image:  female_zombie,
 		title: `FEMALE_ZOMBIE('♀')`,
-		description: `Зомбі-хлопчик`,
+		description: `Зомбі-дівчинка`,
 	},
 	{
 		image:  male_zombie,
 		title: `MALE_ZOMBIE('♂')`,
-		description: `Зомбі-дівчинка`,
+		description: `Зомбі-хлопчик`,
 	},
 	{
 		image:  zombie_die,
@@ -165,7 +165,7 @@ const ELEMENTS = [
     {
     	image:  robo_other_falling,
     	title: `ROBO_OTHER_FALLING('x')`,
-    	description: `Ворожий герой, що впав`,
+    	description: `Ворожий герой падає`,
     },
     {
     	image:  robo_other_flying,
@@ -181,22 +181,22 @@ const ELEMENTS = [
 	{
 		image:  laser_machine_charging_left,
 		title: `LASER_MACHINE_CHARGING_LEFT('˂')`,
-		description: `Лазерна машина заряджаеться`,
+		description: `Лазерна машина заряджається`,
 	},
 	{
 		image:  laser_machine_charging_right,
 		title: `LASER_MACHINE_CHARGING_RIGHT('˃')`,
-		description: `Лазерна машина заряджаеться`,
+		description: `Лазерна машина заряджається`,
 	},
 	{
 		image:  laser_machine_charging_up,
 		title: `LASER_MACHINE_CHARGING_UP('˄')`,
-		description: `Лазерна машина заряджаеться`,
+		description: `Лазерна машина заряджається`,
 	},
 	{
 		image:  laser_machine_charging_down,
 		title: `LASER_MACHINE_CHARGING_DOWN('˅')`,
-		description: `Лазерна машина заряджаеться`,
+		description: `Лазерна машина заряджається`,
 	},
 	{
 		image:  laser_machine_ready_left,
@@ -228,7 +228,7 @@ const ELEMENTS = [
 	{
 		image:  laser_right,
 		title: `LASER_RIGHT('→')`,
-		description: `Лазер, що рухається праворуч`,
+		description: `Лазер, що рухається вправо`,
 	},
 	{
 		image:  laser_up,
@@ -304,7 +304,7 @@ const ELEMENTS = [
 	{
 		image:  space,
 		title: `SPACE(' ')`,
-		description: `Елемент стіни. `,
+		description: `Елемент стіни`,
 	},
 ];
 
