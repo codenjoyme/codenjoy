@@ -71,19 +71,13 @@ import static org.mockito.Mockito.*;
 @ActiveProfiles(SQLiteProfile.NAME)
 @Import(RestAdminControllerTest.ContextConfiguration.class)
 @WebAppConfiguration
-public class RestAdminControllerTest {
+public class RestAdminControllerTest extends AbstractRestControllerTest {
 
     @TestConfiguration
     public static class ContextConfiguration {
-
         @Bean("gameService")
         public GameServiceImpl gameService() {
-            return new GameServiceImpl(){
-                @Override
-                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(FirstGameType.class, SecondGameType.class);
-                }
-            };
+            return AbstractRestControllerTest.gameService();
         }
     }
 

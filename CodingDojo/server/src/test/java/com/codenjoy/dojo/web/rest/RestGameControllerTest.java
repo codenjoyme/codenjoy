@@ -63,19 +63,13 @@ import java.util.Collection;
 @ActiveProfiles(SQLiteProfile.NAME)
 @Import(RestGameControllerTest.ContextConfiguration.class)
 @WebAppConfiguration
-public class RestGameControllerTest {
+public class RestGameControllerTest extends AbstractRestControllerTest {
 
     @TestConfiguration
     public static class ContextConfiguration {
-
         @Bean("gameService")
         public GameServiceImpl gameService() {
-            return new GameServiceImpl(){
-                @Override
-                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(FirstGameType.class, SecondGameType.class);
-                }
-            };
+            return AbstractRestControllerTest.gameService();
         }
     }
 
