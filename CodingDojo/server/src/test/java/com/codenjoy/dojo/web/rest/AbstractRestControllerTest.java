@@ -1,17 +1,20 @@
 package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.client.CodenjoyContext;
-import com.codenjoy.dojo.services.ConfigProperties;
-import com.codenjoy.dojo.services.GameServiceImpl;
-import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.security.GameAuthorities;
+import com.codenjoy.dojo.stuff.SmartAssert;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.SortedJSONObject;
+import org.junit.After;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -29,6 +32,7 @@ import java.util.Collection;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.reset;
 
 public abstract class AbstractRestControllerTest {
 
@@ -47,18 +51,81 @@ public abstract class AbstractRestControllerTest {
     protected WebApplicationContext context;
 
     @Autowired
-    private ConfigProperties config;
+    protected PlayerService playerService;
+
+    @Autowired
+    protected Registration registration;
+
+    @Autowired
+    protected PlayerGames playerGames;
+
+    @Autowired
+    protected ConfigProperties config;
+
+
+    @Autowired
+    protected DebugService debugService;
 
     @Before
     public void setUp() {
         CodenjoyContext.setContext("codenjoy-contest");
         mvc = MockMvcBuilders.webAppContextSetup(context).build();
 
-        SecurityContextHolder.getContext()
-                .setAuthentication(new UsernamePasswordAuthenticationToken(
-                        config.getAdminLogin(),
-                        Hash.md5(config.getAdminPassword()))
-                );
+        debugService.resume();
+    }
+
+    @After
+    public void checkErrors() {
+        SmartAssert.checkResult(getClass());
+    }
+
+    protected void asAdmin() {
+        login(new UsernamePasswordAuthenticationToken(
+                config.getAdminLogin(),
+                Hash.md5(config.getAdminPassword()))
+        );
+    }
+
+    protected void asUser(String playerId, String password) {
+        Player player = playerService.get(playerId);
+        if (player == NullPlayer.INSTANCE) {
+            fail("Expected: Player with id = " + playerId +
+                    " But was: NullPlayer");
+        }
+
+        Registration.User user = registration.getUserById(playerId).orElse(null);
+        if (user == null) {
+            fail("Expected: Registered user with id = " + playerId +
+                    " But was: Registration not found");
+        }
+
+
+        login(new UsernamePasswordAuthenticationToken(
+                user,
+                Hash.md5(password)
+        ));
+    }
+
+    private void login(UsernamePasswordAuthenticationToken token) {
+        SecurityContextHolder.getContext().setAuthentication(token);
+    }
+
+    protected void asNone() {
+        login(null);
+    }
+
+    protected PlayerGame register(String id, String ip, String roomName, String gameName) {
+        String password = Hash.md5(id);
+        registration.register(id, id, id, password, "", GameAuthorities.USER.roles());
+        playerService.register(id, ip, roomName, gameName);
+        PlayerGame playerGame = playerGames.get(id);
+        resetMocks(playerGame);
+        return playerGame;
+    }
+
+    private void resetMocks(PlayerGame playerGame) {
+        reset(playerGame.getField());
+        reset(playerGame.getGame().getPlayer());
     }
 
     @SneakyThrows
@@ -104,7 +171,6 @@ public abstract class AbstractRestControllerTest {
         assertEquals(status, mvcResult.getResponse().getStatus());
         return mvcResult.getResponse().getContentAsString();
     }
-
 
     protected void assertException(String expected, Runnable supplier) {
         try {

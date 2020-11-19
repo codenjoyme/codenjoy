@@ -23,19 +23,13 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.hash.Hash;
-import com.codenjoy.dojo.services.mocks.FirstGameType;
-import com.codenjoy.dojo.services.mocks.SecondGameType;
-import com.codenjoy.dojo.stuff.SmartAssert;
+import com.codenjoy.dojo.services.GameServiceImpl;
+import com.codenjoy.dojo.services.PlayerGame;
+import com.codenjoy.dojo.services.PlayerGamesView;
+import com.codenjoy.dojo.services.SaveService;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
-import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,24 +39,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class,
@@ -85,16 +66,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     private RestAdminController service;
 
     @Autowired
-    private DebugService debugService;
-
-    @Autowired
-    private PlayerService playerService;
-
-    @Autowired
     private PlayerGamesView playerGamesView;
-
-    @Autowired
-    private PlayerGames playerGames;
 
     @Autowired
     private SaveService saveService;
@@ -103,15 +75,10 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     public void setUp() {
         super.setUp();
 
-        debugService.resume();
+        asAdmin();
 
         playerService.removeAll();
         saveService.removeAllSaves();
-    }
-
-    @After
-    public void checkErrors() {
-        SmartAssert.checkResult();
     }
 
     @Test
@@ -351,18 +318,6 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
     private void verifyNewGame(PlayerGame playerGame, VerificationMode mode) {
         verify(playerGame.getField(), mode).newGame(playerGame.getGame().getPlayer());
-    }
-
-    private PlayerGame register(String id, String ip, String roomName, String gameName) {
-        playerService.register(id, ip, roomName, gameName);
-        PlayerGame playerGame = playerGames.get(id);
-        resetMocks(playerGame);
-        return playerGame;
-    }
-
-    private void resetMocks(PlayerGame playerGame) {
-        reset(playerGame.getField());
-        reset(playerGame.getGame().getPlayer());
     }
 
     @Test

@@ -42,8 +42,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Используется внешним сервисом для входа и выхода из комнаты залогиненного пользователя.
- * Валидации нет, т.к. ее клиент не будет обрабатывать.
+ * Используется внешним сервисом для входа, выхода из
+ * комнаты и проверки статуса для залогиненного/незалогиненного пользователя.
  */
 @Controller
 @RequestMapping("/rest")
@@ -54,13 +54,13 @@ public class RestRoomController {
     private GameService gameService;
     private Validator validator;
 
-    // TODO test me
     @GetMapping("/room/{roomName}/leave")
     @ResponseBody
     public synchronized boolean leavePlayerFromRoom(@PathVariable("roomName") String roomName,
-                                                    HttpServletRequest request,
                                                     @AuthenticationPrincipal Registration.User user)
     {
+        validator.checkRoomName(roomName, Validator.CANT_BE_NULL);
+
         if (user == null) {
             return false;
         }
@@ -81,13 +81,13 @@ public class RestRoomController {
         return true;
     }
 
-    // TODO test me
     @GetMapping("/room/{roomName}/joined")
     @ResponseBody
     public boolean isPlayerInRoom(@PathVariable("roomName") String roomName,
-                                  HttpServletRequest request,
                                   @AuthenticationPrincipal Registration.User user)
     {
+        validator.checkRoomName(roomName, Validator.CANT_BE_NULL);
+
         if (user == null) {
             return false;
         }
@@ -99,17 +99,18 @@ public class RestRoomController {
     @GetMapping("/room/{roomName}/player/{playerId}/joined")
     @ResponseBody
     public boolean isPlayerInRoom(@PathVariable("roomName") String roomName,
-                                  HttpServletRequest request,
-                                  @PathVariable("playerId") String id)
+                                  @PathVariable("playerId") String playerId)
     {
-        if (id == null) {
+        validator.checkRoomName(roomName, Validator.CANT_BE_NULL);
+        validator.checkPlayerId(playerId, Validator.CANT_BE_NULL);
+
+        if (playerId == null) {
             return false;
         }
 
-        return validator.isPlayerInRoom(id, roomName);
+        return validator.isPlayerInRoom(playerId, roomName);
     }
 
-    // TODO test me
     @GetMapping("/room/{roomName}/game/{gameName}/join")
     @ResponseBody
     public synchronized PlayerId joinPlayerInRoom(@PathVariable("gameName") String gameName,
@@ -117,7 +118,8 @@ public class RestRoomController {
                                                   HttpServletRequest request,
                                                   @AuthenticationPrincipal Registration.User user)
     {
-        // TODO where is validation
+        validator.checkRoomName(roomName, Validator.CANT_BE_NULL);
+
         if (user == null) {
             return null;
         }
