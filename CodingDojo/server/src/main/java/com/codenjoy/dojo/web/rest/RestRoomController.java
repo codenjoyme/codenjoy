@@ -23,25 +23,23 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.GameService;
+import com.codenjoy.dojo.services.Player;
+import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.web.controller.Validator;
-import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
 import com.codenjoy.dojo.web.rest.pojo.PlayerId;
-import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import lombok.AllArgsConstructor;
-import org.json.JSONObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-
-import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
-import static java.util.stream.Collectors.toList;
 
 /**
  * Используется внешним сервисом для входа и выхода из комнаты залогиненного пользователя.
@@ -95,6 +93,19 @@ public class RestRoomController {
         }
 
         String id = user.getId();
+        return validator.isPlayerInRoom(id, roomName);
+    }
+
+    @GetMapping("/room/{roomName}/player/{playerId}/joined")
+    @ResponseBody
+    public boolean isPlayerInRoom(@PathVariable("roomName") String roomName,
+                                  HttpServletRequest request,
+                                  @PathVariable("playerId") String id)
+    {
+        if (id == null) {
+            return false;
+        }
+
         return validator.isPlayerInRoom(id, roomName);
     }
 
