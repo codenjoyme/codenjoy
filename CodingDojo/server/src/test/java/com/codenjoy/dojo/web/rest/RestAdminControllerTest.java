@@ -114,50 +114,6 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         SmartAssert.checkResult();
     }
 
-    @SneakyThrows
-    protected String mapToJson(Object obj) {
-        return new ObjectMapper().writeValueAsString(obj);
-    }
-
-    @SneakyThrows
-    protected <T> T mapFromJson(String json, Class<T> clazz) {
-        return new ObjectMapper().readValue(json, clazz);
-    }
-
-    @SneakyThrows
-    private String get(String uri) {
-        return process(200, MockMvcRequestBuilders.get(uri));
-    }
-
-    @SneakyThrows
-    private String get(int status, String uri) {
-        return process(status, MockMvcRequestBuilders.get(uri));
-    }
-
-    @SneakyThrows
-    private String post(int status, String uri) {
-        return process(status, MockMvcRequestBuilders.post(uri));
-    }
-
-    @SneakyThrows
-    private String post(String uri) {
-        return process(200, MockMvcRequestBuilders.post(uri));
-    }
-
-    @SneakyThrows
-    private String post(int status, String uri, String data) {
-        return process(status, MockMvcRequestBuilders.post(uri, data)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(data));
-    }
-
-    private String process(int status, MockHttpServletRequestBuilder post) throws Exception {
-        MvcResult mvcResult = mvc.perform(post
-                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-        assertEquals(status, mvcResult.getResponse().getStatus());
-        return mvcResult.getResponse().getContentAsString();
-    }
-
     @Test
     public void shouldStartStopGame_oneRoom() {
         // given
@@ -216,32 +172,6 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         assertError("java.lang.IllegalArgumentException: Room name is invalid: '$bad$'",
                 "/rest/admin/room/$bad$/pause");
-    }
-
-    private void assertException(String expected, Runnable supplier) {
-        try {
-            supplier.run();
-            fail("expected exception");
-        } catch (Exception e) {
-            assertEquals(expected, e.getMessage());
-        }
-    }
-
-    private void assertError(String message, String uri) {
-        String source = get(500, uri);
-        JSONObject error = tryParseAsJson(source);
-        assertEquals(message, error.getString("message"));
-    }
-
-    private JSONObject tryParseAsJson(String source) {
-        try {
-            return new JSONObject(source);
-        } catch (JSONException e) {
-            System.out.println("actual data is: " + source);
-            return new JSONObject(){{
-                put("message", "no json value");
-            }};
-        }
     }
 
     @Test

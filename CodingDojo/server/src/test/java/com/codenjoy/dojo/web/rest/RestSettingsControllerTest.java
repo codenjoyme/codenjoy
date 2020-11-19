@@ -101,7 +101,6 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
 
         second.addSelect("three", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option1");
         second.addEditBox("four").type(String.class).def("some-data");
-
     }
 
     @After
@@ -109,40 +108,11 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
         SmartAssert.checkResult();
     }
 
-    @SneakyThrows
-    protected String mapToJson(Object obj) {
-        return new ObjectMapper().writeValueAsString(obj);
-    }
-
-    @SneakyThrows
-    protected <T> T mapFromJson(String json, Class<T> clazz) {
-        return new ObjectMapper().readValue(json, clazz);
-    }
-
-    @SneakyThrows
-    private String get(String uri) {
-        return process(MockMvcRequestBuilders.get(uri));
-    }
-
-    @SneakyThrows
-    private String post(String uri, String data) {
-        return process(MockMvcRequestBuilders.post(uri, data)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(data));
-    }
-
-    private String process(MockHttpServletRequestBuilder post) throws Exception {
-        MvcResult mvcResult = mvc.perform(post
-                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        return mvcResult.getResponse().getContentAsString();
-    }
-
     @Test
     public void shouldGetSet_caseGameDataAsStorage() {
         // when
         assertEquals("{}", service.set("first", "key", "value"));
-        assertEquals("{}", post("/rest/settings/second/key2", "value2"));
+        assertEquals("{}", post(200, "/rest/settings/second/key2", "value2"));
 
         // then
         assertEquals("value", get("/rest/settings/first/key"));
@@ -160,17 +130,11 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
                 fix(service.get("second", RestSettingsController.SETTINGS)));
     }
 
-    private String fix(String input) {
-        return new SortedJSONObject(input)
-                .toString()
-                .replace('\"', '\'');
-    }
-
     @Test
     public void shouldGetSet_caseGameDataAsStorage_caseGeneral() {
         // when
         assertEquals("{}", service.set(RestSettingsController.GENERAL, "key", "value"));
-        assertEquals("{}", post("/rest/settings/" + RestSettingsController.GENERAL + "/key2", "value2"));
+        assertEquals("{}", post(200, "/rest/settings/" + RestSettingsController.GENERAL + "/key2", "value2"));
 
         // then
         assertEquals("value", get("/rest/settings/" + RestSettingsController.GENERAL + "/key"));
@@ -192,7 +156,7 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     public void shouldGetSet_caseSettingsAsStorage() {
         // when
         assertEquals("{}", service.set("first", "two", "135"));
-        assertEquals("{}", post("/rest/settings/second/three", "option2"));
+        assertEquals("{}", post(200, "/rest/settings/second/three", "option2"));
 
         // then
         assertEquals("true", get("/rest/settings/first/one"));
@@ -240,9 +204,4 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
         assertEquals("{}", service.set("second", "four", quotes(input)));
         assertEquals(expected, service.get("second", "four"));
     }
-
-    private String quotes(String input) {
-        return "\"" + input + "\"";
-    }
-
 }

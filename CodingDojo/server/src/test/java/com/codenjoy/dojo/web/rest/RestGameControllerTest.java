@@ -81,35 +81,6 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
         SmartAssert.checkResult();
     }
 
-    @SneakyThrows
-    protected String mapToJson(Object obj) {
-        return new ObjectMapper().writeValueAsString(obj);
-    }
-
-    @SneakyThrows
-    protected <T> T mapFromJson(String json, Class<T> clazz) {
-        return new ObjectMapper().readValue(json, clazz);
-    }
-
-    @SneakyThrows
-    private String get(String uri) {
-        return process(MockMvcRequestBuilders.get(uri));
-    }
-
-    @SneakyThrows
-    private String post(String uri, String data) {
-        return process(MockMvcRequestBuilders.post(uri, data)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(data));
-    }
-
-    private String process(MockHttpServletRequestBuilder post) throws Exception {
-        MvcResult mvcResult = mvc.perform(post
-                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        return mvcResult.getResponse().getContentAsString();
-    }
-
     @Test
     public void shouldExists() {
         assertEquals(true, service.exists("first"));
