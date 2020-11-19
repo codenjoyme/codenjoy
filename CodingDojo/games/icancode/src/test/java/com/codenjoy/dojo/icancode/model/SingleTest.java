@@ -23,14 +23,17 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Single;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import org.json.JSONArray;
@@ -45,8 +48,8 @@ import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER1;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
 import static com.codenjoy.dojo.utils.TestUtils.injectN;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -3811,4 +3814,262 @@ public class SingleTest {
                 "------");
         verify(listener1).event(Events.KILL_HERO(1, true));
     }
+
+    @Test
+    public void shouldAlive_heroJumpsOnDeathRay() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(10)
+                .perkActivity(10)
+                .deathRayRange(10);
+
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║...E│" +
+                "└────┘");
+        gameMultiple.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), 2, 1);
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        assertL(single1,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║.r.E│" +
+                "└────┘");
+        assertL(single2,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║.r.E│" +
+                "└────┘");
+
+        hero1().down();
+        tick();
+        hero1().down();
+        tick();
+        hero1().down();
+        tick();
+        hero2().down();
+        tick();
+
+        assertL(single1,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║...E│" +
+                "└────┘");
+        assertL(single2,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║...E│" +
+                "└────┘");
+        assertE(single1,
+                "------" +
+                "------" +
+                "--X---" +
+                "------" +
+                "--☺---" +
+                "------");
+        assertE(single2,
+                "------" +
+                "------" +
+                "--☺---" +
+                "------" +
+                "--X---" +
+                "------");
+        assertTrue(hero1().hasDeathRayPerk());
+
+        hero1().fire();
+        hero1().up();
+        hero2().jump();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--↑---" +
+                "--↑---" +
+                "--↑---" +
+                "--☺---" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--↑---" +
+                "--↑---" +
+                "--↑---" +
+                "--X---" +
+                "------");
+        assertF(single1,
+                "------" +
+                "------" +
+                "--^---" +
+                "------" +
+                "------" +
+                "------");
+        assertF(single2,
+                "------" +
+                "------" +
+                "--*---" +
+                "------" +
+                "------" +
+                "------");
+
+        tick();
+
+        assertE(single1,
+                "------" +
+                "------" +
+                "--X---" +
+                "------" +
+                "--☺---" +
+                "------");
+        assertE(single2,
+                "------" +
+                "------" +
+                "--☺---" +
+                "------" +
+                "--X---" +
+                "------");
+        assertTrue(single1.getPlayer().isAlive());
+        assertTrue(single2.getPlayer().isAlive());
+    }
+
+    @Test
+    public void shouldAlive_heroJumpsOnDeathRay_FromRightSide() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(10)
+                .perkActivity(10)
+                .deathRayRange(10);
+
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║...E│" +
+                "└────┘");
+        gameMultiple.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), 2, 1);
+
+        verifyNoMoreInteractions(listener1);
+        verifyNoMoreInteractions(listener2);
+
+        assertL(single1,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║.r.E│" +
+                "└────┘");
+        assertL(single2,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║.r.E│" +
+                "└────┘");
+
+        hero1().down();
+        tick();
+        hero1().down();
+        tick();
+        hero1().down();
+        tick();
+        hero2().down();
+        tick();
+        hero2().right();
+        tick();
+        hero2().right();
+        tick();
+
+        assertL(single1,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║...E│" +
+                "└────┘");
+        assertL(single2,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║...E│" +
+                "└────┘");
+        assertE(single1,
+                "------" +
+                "------" +
+                "----X-" +
+                "------" +
+                "--☺---" +
+                "------");
+        assertE(single2,
+                "------" +
+                "------" +
+                "----☺-" +
+                "------" +
+                "--X---" +
+                "------");
+        assertTrue(hero1().hasDeathRayPerk());
+
+        hero1().fire();
+        hero1().up();
+        hero2().jump();
+        hero2().left();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--↑---" +
+                "--↑---" +
+                "--↑---" +
+                "--☺---" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--↑---" +
+                "--↑---" +
+                "--↑---" +
+                "--X---" +
+                "------");
+        assertF(single1,
+                "------" +
+                "------" +
+                "---^--" +
+                "------" +
+                "------" +
+                "------");
+        assertF(single2,
+                "------" +
+                "------" +
+                "---*--" +
+                "------" +
+                "------" +
+                "------");
+
+        tick();
+
+        assertE(single1,
+                "------" +
+                "------" +
+                "--X---" +
+                "------" +
+                "--☺---" +
+                "------");
+        assertE(single2,
+                "------" +
+                "------" +
+                "--☺---" +
+                "------" +
+                "--X---" +
+                "------");
+        assertTrue(single1.getPlayer().isAlive());
+        assertTrue(single2.getPlayer().isAlive());
+    }
+
 }
