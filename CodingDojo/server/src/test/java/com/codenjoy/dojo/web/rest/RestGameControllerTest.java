@@ -73,12 +73,6 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
         }
     }
 
-    private MockMvc mvc;
-    
-    @Autowired
-    private WebApplicationContext context;
-
-
     @Autowired
     private RestGameController service;
 

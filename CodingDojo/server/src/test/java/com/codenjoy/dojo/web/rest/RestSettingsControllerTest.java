@@ -80,11 +80,6 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
         }
     }
 
-    private MockMvc mvc;
-
-    @Autowired
-    private WebApplicationContext context;
-
     @Autowired
     private RestSettingsController service;
 
