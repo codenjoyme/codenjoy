@@ -88,8 +88,7 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
 
     @Before
     public void setUp() {
-        CodenjoyContext.setContext("codenjoy-contest");
-        mvc = MockMvcBuilders.webAppContextSetup(context).build();
+        super.setUp();
 
         first = gameService.getGame("first").getSettings();
         second = gameService.getGame("second").getSettings();

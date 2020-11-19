@@ -76,12 +76,6 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
     @Autowired
     private RestGameController service;
 
-    @Before
-    public void setUp() {
-        CodenjoyContext.setContext("codenjoy-contest");
-        mvc = MockMvcBuilders.webAppContextSetup(context).build();
-    }
-
     @After
     public void checkErrors() {
         SmartAssert.checkResult();

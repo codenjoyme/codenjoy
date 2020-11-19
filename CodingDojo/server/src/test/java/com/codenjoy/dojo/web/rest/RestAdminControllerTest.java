@@ -99,24 +99,14 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Autowired
     private SaveService saveService;
 
-    @Autowired
-    private ConfigProperties config;
-
     @Before
     public void setUp() {
-        CodenjoyContext.setContext("codenjoy-contest");
+        super.setUp();
 
         debugService.resume();
 
         playerService.removeAll();
         saveService.removeAllSaves();
-
-        mvc = MockMvcBuilders.webAppContextSetup(context).build();
-        SecurityContextHolder.getContext()
-                .setAuthentication(new UsernamePasswordAuthenticationToken(
-                        config.getAdminLogin(),
-                        Hash.md5(config.getAdminPassword()))
-                );
     }
 
     @After
