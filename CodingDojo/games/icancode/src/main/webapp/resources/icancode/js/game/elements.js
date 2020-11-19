@@ -107,6 +107,7 @@ var Element = {
 
     UNSTOPPABLE_LASER_PERK: el('l', 'UNSTOPPABLE_LASER_PERK'),
     DEATH_RAY_PERK: el('r', 'DEATH_RAY_PERK'),
+    UNLIMITED_FIRE_PERK: el('f', 'UNLIMITED_FIRE_PERK'),
 
     getElements: function () {
         return elements.slice(0);

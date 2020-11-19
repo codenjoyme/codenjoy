@@ -25,6 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 
 import java.util.EnumMap;
@@ -91,6 +92,7 @@ public class ElementsMapper {
 
         put(UNSTOPPABLE_LASER_PERK, UnstoppableLaserPerk.class);
         put(DEATH_RAY_PERK, DeathRayPerk.class);
+        put(UNLIMITED_FIRE_PERK, UnlimitedFirePerk.class);
 
         put(FOG, Wall.class);
         put(BACKGROUND, Wall.class);

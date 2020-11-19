@@ -82,11 +82,13 @@ public class Laser extends FieldItem implements Tickable {
         if (heroItem != null) {
             Hero hero = heroItem.getHero();
             if (!hero.isFlying()) {
-                if (!unstoppable) {
-                    die();
+                if (shouldLaserAttackHero(hero)) {
+                    if (!unstoppable) {
+                        die();
+                    }
+                    hero.dieOnLaser();
+                    addOwnerKillHeroScore();
                 }
-                hero.dieOnLaser();
-                addOwnerKillHeroScore();
             }
         }
 
@@ -98,6 +100,17 @@ public class Laser extends FieldItem implements Tickable {
             zombie.die();
             addOwnerKillZombieScore();
         }
+    }
+
+    private boolean shouldLaserAttackHero(Hero hero) {
+        Direction heroDirection = hero.getDirection();
+        if (heroDirection == null) {
+            return true;
+        }
+        if (heroDirection == direction.inverted()) {
+            return !hero.isLandOn();
+        }
+        return false;
     }
 
     private void addOwnerKillZombieScore() {

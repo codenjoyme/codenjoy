@@ -160,7 +160,8 @@ namespace ICanCode.Api
         {
             return Get(Layers.LAYER1,
                     Element.UNSTOPPABLE_LASER_PERK,
-                    Element.DEATH_RAY_PERK);
+                    Element.DEATH_RAY_PERK,
+                    Element.UNLIMITED_FIRE_PERK);
         }
 
         public override string ToString()

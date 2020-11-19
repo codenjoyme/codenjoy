@@ -17,10 +17,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
 
     @Test
     public void testDeathRayPerk() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(10)
-                .perkActivity(10)
-                .deathRayRange(10);
+        settings.deathRayRange(10);
 
         givenFl("╔══════════┐" +
                 "║..S.......│" +
@@ -119,10 +116,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
 
     @Test
     public void deathRayAndUnstoppableLaser() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(10)
-                .perkActivity(10)
-                .deathRayRange(10);
+        settings.deathRayRange(10);
 
         givenFl("╔══════════┐" +
                 "║..S.......│" +
@@ -233,10 +227,6 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
 
     @Test
     public void heroHasDeathRayPerk() {
-        SettingsWrapper.setup(new SettingsImpl())
-                .perkAvailability(10)
-                .perkActivity(10);
-
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +

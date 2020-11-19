@@ -375,6 +375,10 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         stack.push('DEATH_RAY_PERK')
     }
 
+    var valueUnlimitedFirePerkCommand = function (x, y) {
+        stack.push('UNLIMITED_FIRE_PERK')
+    }
+
     // ------------------------------------- commands -----------------------------------
     var gameName = game.sprites;
     var commands = [
@@ -797,6 +801,14 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: valueDeathRayPerkCommand,
             description: 'Значние - "Луч смерти". Испольузется совместно с другими командами.',
             img1: 'death_ray_perk.png'
+        },
+        {
+            id: 'value-unlimited-fire-perk',
+            type: 3,
+            title: 'value-unlimited-fire-perk',
+            process: valueUnlimitedFirePerkCommand,
+            description: 'Значние - "Безлимитный выстрел". Испольузется совместно с другими командами.',
+            img1: 'unlimited_fire_perk.png'
         }
     ];
 

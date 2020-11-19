@@ -26,6 +26,7 @@ import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.services.Levels;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
@@ -33,6 +34,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
@@ -59,10 +61,23 @@ public class AbstractGameTest {
     protected EventListener listener;
     protected Player player;
     private Player otherPlayer;
+    protected SettingsWrapper settings;
 
     @Before
     public void setup() {
+        settings = SettingsWrapper.setup(new SettingsImpl())
+                .perkActivity(10)
+                .perkAvailability(10)
+                .perkDropRatio(100)
+                .deathRayRange(10)
+                .gunRecharge(0);
         dice = mock(Dice.class);
+    }
+
+    protected void ticks(int count) {
+        for (int i = 0; i < count; i++) {
+            game.tick();
+        }
     }
 
     protected OngoingStubbing<Integer> dice(int... ints) {

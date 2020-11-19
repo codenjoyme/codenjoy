@@ -29,8 +29,10 @@ import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
@@ -59,6 +61,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private int killZombieCount;
     private int killHeroCount;
     private HeroItem item;
+    private Gun gun;
+
+    public boolean isLandOn() {
+        return landOn;
+    }
 
     private List<AbstractPerk> perks = new ArrayList<>();
 
@@ -73,7 +80,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public Hero(Elements el) {
         item = new HeroItem(el);
         item.init(this);
-
+        gun = new Gun(SettingsWrapper.data.gunRecharge());
         resetFlags();
     }
 
@@ -95,6 +102,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         goldCount = 0;
         resetZombieKillCount();
         resetHeroKillCount();
+        gun.recharge();
     }
 
     public void resetZombieKillCount() {
@@ -148,46 +156,34 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void down() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.DOWN;
-        }
+        direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.UP;
-        }
+        direction = Direction.UP;
     }
 
     @Override
     public void left() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.LEFT;
-        }
+        direction = Direction.LEFT;
     }
 
     @Override
     public void right() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.RIGHT;
-        }
+        direction = Direction.RIGHT;
     }
 
     public void reset() {
@@ -208,14 +204,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void act(int... p) {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
 
         if (p.length == 0 || p[0] == 1) {
-            if (!flying) {
-                jump = true;
-            }
+            jump = true;
         } else if (p.length == 1 && p[0] == 2) {
             pull = true;
         } else if (p.length == 1 && p[0] == 3) { // TODO test me
@@ -282,7 +276,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (fire) {
-            field.fire(direction, item.getCell(), item);
+            if (hasUnlimitedFirePerk()) {
+                field.fire(direction, item.getCell(), item);
+                gun.discharge();
+            } else if (gun.tryToFire()) {
+                field.fire(direction, item.getCell(), item);
+            }
             fire = false;
             direction = null;
         }
@@ -335,6 +334,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
         landOn = false;
         pull = false;
+        gun.tick();
     }
 
     public void fixLayer() {
@@ -433,6 +433,22 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return flying;
     }
 
+    public boolean isJump() {
+        return jump;
+    }
+
+    public boolean isPull() {
+        return pull;
+    }
+
+    public boolean isReset() {
+        return reset;
+    }
+
+    public boolean isFire() {
+        return fire;
+    }
+
     public void dieOnHole() {
         hole = true;
         die();
@@ -454,5 +470,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public boolean hasUnstoppableLaserPerk() {
         return perks.stream().anyMatch(perk -> perk instanceof UnstoppableLaserPerk);
+    }
+
+    public boolean hasUnlimitedFirePerk() {
+        return perks.stream().anyMatch(perk -> perk instanceof UnlimitedFirePerk);
     }
 }
