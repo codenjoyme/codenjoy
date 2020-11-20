@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.controller;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -83,12 +83,13 @@ public class RegistrationController {
     public String registerByName(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
             populateCommonRegistrationModel(model, false);
+            player.dropPassword();
             return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getReadableName());
         }
 
         String gameName = rooms.getGameName(player.getGameName());
         String roomName = gameName; // TODO ROOM взять roomName с формы регистрации, либо если не установлено взять как тут
-        
+
         player.setGameName(gameName);
 
         if (player.getId() == null) {
