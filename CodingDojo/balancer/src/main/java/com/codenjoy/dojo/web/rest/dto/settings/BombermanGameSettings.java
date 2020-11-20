@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.web.rest.dto;
+package com.codenjoy.dojo.web.rest.dto.settings;
 
 /*-
  * #%L
@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest.dto;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -26,11 +26,11 @@ import com.codenjoy.dojo.services.entity.server.PParameter;
 import com.codenjoy.dojo.services.entity.server.PParameters;
 import com.codenjoy.dojo.services.entity.server.SimpleNamedParameter;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.web.rest.dto.settings.AbstractSettings;
 
-import java.util.LinkedList;
 import java.util.List;
 
-public class GameSettings {
+public class BombermanGameSettings extends AbstractSettings {
 
     public static final String GAME_IS_MULTIPLE_OR_DISPOSABLE = "[Game] Is multiple or disposable";
     public static final String GAME_PLAYERS_PER_ROOM_FOR_DISPOSABLE = "[Game] Players per room for disposable";
@@ -67,14 +67,8 @@ public class GameSettings {
     public static final String SEMIFINAL_RESET_BOARD = "Semifinal reset board";
     public static final String SEMIFINAL_SHUFFLE_BOARD = "Semifinal shuffle board";
 
-    private final List<PParameter> parameters;
-
-    public GameSettings() {
-        parameters = new LinkedList<>();
-    }
-
-    public GameSettings(PParameters parameters) {
-        this.parameters = parameters.getParameters();
+    public BombermanGameSettings(PParameters parameters) {
+        super(parameters);
     }
 
     public Boolean isMultiple() {
@@ -212,7 +206,7 @@ public class GameSettings {
     public Boolean isSemifinalShuffleBoard() {
         return getBoolean(SEMIFINAL_SHUFFLE_BOARD);
     }
-    
+
     public void setMultiple(Boolean input) {
         add(GAME_IS_MULTIPLE_OR_DISPOSABLE, input);
     }
@@ -305,12 +299,8 @@ public class GameSettings {
         add(PERKS_BOMB_COUNT_INCREASE, input);
     }
 
-    private void add(String name, Object value) {
-        parameters.add(new PParameter(new SimpleNamedParameter(name, value)));
-    }
-
     public void setPerksBombCountEffectTimeout(Integer input) {
-        add(PERKS_BOMB_COUNT_EFFECT_TIMEOUT, input);;
+        add(PERKS_BOMB_COUNT_EFFECT_TIMEOUT, input);
     }
 
     public void setPerksBombImmuneEffectTimeout(Integer input) {
@@ -357,14 +347,7 @@ public class GameSettings {
         add(SEMIFINAL_PERCENTAGE, input);
     }
 
-    private Parameter<Object> find(String name, List<PParameter> input) {
-        return input.stream()
-                .filter(parameter -> parameter.getName().equals(name))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Parameter name not found: " + name))
-                .build();
-    }
-
+    @Override
     public void update(List<PParameter> parameters) {
         update(parameters, GAME_IS_MULTIPLE_OR_DISPOSABLE);
         update(parameters, LEVEL_BIG_BADABOOM);
@@ -400,28 +383,5 @@ public class GameSettings {
         update(parameters, SEMIFINAL_ENABLED);
         update(parameters, SEMIFINAL_RESET_BOARD);
         update(parameters, SEMIFINAL_SHUFFLE_BOARD);
-    }
-
-    private void update(List<PParameter> input, String name) {
-        try {
-            Object value = find(name, parameters).getValue();
-            find(name, input).update(value);
-        } catch (IllegalArgumentException e) {
-            // do nothing
-        }
-    }
-
-    private Boolean getBoolean(String name) {
-        return (Boolean) find(name, parameters).getValue();
-    }
-    
-    private Integer getInteger(String name) {
-        return (Integer) find(name, parameters).getValue();
-    }
-
-    public PParameters parameters() {
-        return new PParameters(){{
-            setParameters(parameters);
-        }};
     }
 }

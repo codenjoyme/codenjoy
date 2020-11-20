@@ -8,9 +8,11 @@
     line-height: 1.07;
     color: #ffffff;
     text-align: center;
-    background-image: url(./../../styles/images/layout/dark.jpg);
+    background: rgb( 45, 45, 45 , 0.3) url(./../../styles/images/layout/dark-icancode.png);
     background-size: cover;
     background-repeat: no-repeat;
+    background-blend-mode: overlay;
+
 }
 
 b {
@@ -58,6 +60,6 @@ b {
 }
 
 ul {
-    list-style-type: circle;
+    list-style-type: disc;
     margin-left: 40px;
 }

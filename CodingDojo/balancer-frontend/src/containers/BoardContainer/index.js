@@ -43,7 +43,7 @@ class BoardContainer extends Component {
             QS_PARSE_OPTIONS,
         );
         const excludedDays = EXCLUDED_DAYS.split(',')
-        const dayFromQueryParam = queryParams && queryParams.day || moment().format(DATE_FORMAT);
+        const dayFromQueryParam = (queryParams && queryParams.day) || moment().format(DATE_FORMAT);
         if (excludedDays.includes(dayFromQueryParam)) {
             const startDate = moment(period.start).startOf('day');
             const endDate = moment(period.end).startOf('day');

@@ -9,7 +9,7 @@ import { BoardContainer } from '../../containers';
 export default class BoardPage extends Component {
     render() {
         return (
-            <DocumentTitle title='Bot Challenge'>
+            <DocumentTitle title='EPAM Bot Challenge'>
                 <Layout>
                     <BoardContainer />
                 </Layout>

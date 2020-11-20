@@ -9,7 +9,7 @@ export const getIFrameLink = (server, id) =>
     `${protocol}://${server}/codenjoy-contest/board/player/${id}?only=true`;
 
 export const getJsClient = server =>
-    `${protocol}://${server}/codenjoy-contest/resources/user/bomberman-servers.zip`;
+    `${protocol}://${server}/codenjoy-contest/resources/user/icancode-servers.zip`;
 
 export const getJavaClient = server =>
-    `${protocol}://${server}/codenjoy-contest/resources/user/bomberman-servers.zip`;
+    `${protocol}://${server}/codenjoy-contest/resources/user/icancode-servers.zip`;

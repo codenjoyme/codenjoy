@@ -29,12 +29,12 @@ const HomeContainer = () => (
             <div className={ Styles.subText }>Змагайся з іншими учасниками</div>
             <div className={ Styles.subText }>Вигравай один із трьох призів</div>
             <div className={ Styles.prizeList }>
-                <img className={ Styles.prizeImage } src={ First } alt='PS4'
-                     title='Iгрова консоль PlayStation 4 Pro 1TB'/>
-                <img className={ Styles.prizeImage } src={ Second } alt='SegaMegaDriveMini'
-                     title='Iгрова консоль Sega Mega Drive Mini'/>
+                <img className={ Styles.prizeImage } src={ First } alt='PS5'
+                     title='Iгрова консоль PlayStation 5 Pro 1TB'/>
+                <img className={ Styles.prizeImage } src={ Second } alt='NintendoSwitchLite'
+                     title='Ігрова консоль Nintendo Switch Lite (Yellow)'/>
                 <img className={ Styles.prizeImage } src={ Third } alt='HobbyWorldFallout'
-                     title='Настільна гра Hobby World Fallout'/>
+                     title='Настільна гра Hobby World Fallout'/>
             </div>
             <Link to={ book.rules } className={ Styles.acceptButton }>
                 Виклик прийнято
@@ -88,9 +88,9 @@ const HomeContainer = () => (
                         </div>
                         <br/>
                         <ol>
-                            <li>місце - ігрова консоль PlayStation 4 Pro 1TB</li>
-                            <li>місце - ігрова консоль Sega Mega Drive Mini</li>
-                            <li>місце - настільна гра Hobby World Fallout</li>
+                            <li>Ігрова консоль PlayStation 5 Pro 1TB</li>
+                            <li>Ігрова консоль Nintendo Switch Lite (Yellow)</li>
+                            <li>Настільна гра Hobby World Fallout</li>
                         </ol>
                     </div>
                 </div>
