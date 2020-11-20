@@ -310,7 +310,8 @@
                                                src/test/${client.java.package}/client/*.java,
                                                README.*,
                                                src/license/**,
-                                               **/pom.xml"
+                                               **/pom.xml,
+                                               src/main/resources/logback.xml"
                                          excludes="src/main/${client.java.package}/client/ai/*,
                                                src/test/${client.java.package}/client/ai/*,
                                                **/target/**"
