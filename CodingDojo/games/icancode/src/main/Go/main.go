@@ -1,7 +1,7 @@
 package main
 
 import (
-	"icancode/api"
+	"icancode/game"
 	"icancode/solver"
 	"log"
 )
@@ -9,7 +9,7 @@ import (
 func main() {
 	browserURL := "https://epam-botchallenge.com/codenjoy-contest/board/player/{player-id}?code={code}&gameName=icancode"
 
-	game, c := api.StartGame(browserURL)
+	game, c := game.StartGame(browserURL)
 	b := game.GetBoard()
 	s := solver.New()
 
