@@ -99,6 +99,11 @@ public class LevelProgress {
         this.passed = passed;
     }
 
+    public void reset() {
+        this.current = levelsStartsFrom1;
+        this.passed = 0;
+    }
+
     public void change(int level) {
         this.current = level;
     }
