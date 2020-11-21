@@ -3,8 +3,6 @@ Client for the icancode game
 
 Check details at: https://epam-botchallenge.com/rules
 
-####Dev setup:
-
 Install Go 1.11 or higher.
 
 Implement your bot logic in solver package.
