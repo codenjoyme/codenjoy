@@ -283,6 +283,14 @@ func (b *Board) GetZombies() []Point {
 	)
 }
 
+func (b *Board) GetPerks() []Point {
+	return b.GetAllPoints(
+		DEATH_RAY_PERK, //layer1
+		UNLIMITED_FIRE_PERK,
+		UNSTOPPABLE_LASER_PERK,
+	)
+}
+
 func (b *Board) AreMyHeroesDead() bool {
 	return 0 == len(b.GetAllPoints(
 		ROBO, ROBO_FALLING, ROBO_LASER,
