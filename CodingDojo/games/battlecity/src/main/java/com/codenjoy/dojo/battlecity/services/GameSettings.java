@@ -20,4 +20,6 @@ public interface GameSettings {
     Parameter<Integer> prizeOnField();
 
     Parameter<Integer> prizeWorking();
+
+    Parameter<Integer> slidingValue();
 }
