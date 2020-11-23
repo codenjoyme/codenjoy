@@ -65,6 +65,26 @@ const options = [
         value: 'bigData',
     },
     {
+        label: 'Golang',
+        value: 'golang',
+    },
+    {
+        label: 'Python',
+        value: 'python',
+    },
+    {
+        label: '.NET',
+        value: 'dotNet',
+    },
+    {
+        label: 'Python',
+        value: 'python',
+    },
+    {
+        label: 'C#',
+        value: 'cSharp',
+    },
+    {
         label: 'Automated Testing',
         value: 'dutomatedTesting',
     },

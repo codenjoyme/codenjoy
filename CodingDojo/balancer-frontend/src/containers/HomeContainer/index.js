@@ -8,9 +8,9 @@ import First from '../../styles/images/prizes/first.png';
 import Second from '../../styles/images/prizes/second.png';
 import Third from '../../styles/images/prizes/third.png';
 import Icon from '../../styles/images/icons/rules.svg';
-import StepWinHeader from '../../styles/images/layout/presents.png';
-import stepBattleHeader from '../../styles/images/layout/battle.png';
-import stepCreateHeader from '../../styles/images/layout/create.png';
+import StepWinHeader from '../../styles/images/layout/presents.jpg';
+import stepBattleHeader from '../../styles/images/layout/battle.jpg';
+import stepCreateHeader from '../../styles/images/layout/create.jpg';
 
 // own
 import Styles from './styles.module.css';
@@ -50,11 +50,11 @@ const HomeContainer = () => (
                     <div className={ Styles.stepTitle }>СТВОРИ</div>
                     <div className={ Styles.stepDescription }>
                         <div>
-                            Завантаж проект гри
+                            Завантаж проєкт гри
                         </div>
                         <br />
                         <div>
-                            Cтвори логіку для переміщення свого Бота
+                            Cтвори логіку для переміщення свого бота
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@ const HomeContainer = () => (
                         </div>
                         <br />
                         <div>
-                            Вдосконалюй свого Бота кожен день
+                            Вдосконалюй свого бота кожен день
                         </div>
                         <br />
                         <div>
@@ -97,7 +97,7 @@ const HomeContainer = () => (
             </div>
             <div className='title'>Правила гри</div>
             <p>
-                Завантажуйте проект гри. Створіть логіку для переміщення свого Бота.
+                Завантажуйте проєкт гри. Створіть логіку для переміщення свого бота.
                 Отримуйте найбільшу кількість балів, щоб увійти до числа
                 Фіналістів.
             </p>
@@ -112,7 +112,7 @@ const HomeContainer = () => (
                 місць і отримайте драйвовий подарунок!
             </p>
             <p>
-                Детальні правила і проект гри для створення Бота шукайте
+                Детальні правила і проєкт гри для створення бота шукайте
                 &nbsp;
                 <Link to={ book.rules }>
                     за посиланням <img src={ Icon } alt='Правила Конкурсу' />

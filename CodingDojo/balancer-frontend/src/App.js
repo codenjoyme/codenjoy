@@ -26,6 +26,10 @@ import {
     faComments as farComments,
     faUserCircle as farUserCircle,
 } from '@fortawesome/free-regular-svg-icons';
+import {
+    faTelegramPlane,
+    faSlack,
+} from '@fortawesome/free-brands-svg-icons';
 
 // proj
 import './momentConfig';
@@ -50,6 +54,10 @@ library.add(
     farUserCircle,
     faLightbulb,
 );
+library.add(
+    faTelegramPlane,
+    faSlack,
+    );
 
 const reactPixelOptions = { autoConfig: false };
 const reactGAOptions =
