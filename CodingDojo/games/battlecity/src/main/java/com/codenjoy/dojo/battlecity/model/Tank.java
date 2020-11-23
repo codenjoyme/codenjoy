@@ -100,7 +100,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     // TODO подумать как устранить дублирование с MovingObject
     public void move() {
-        if (!moving) {
+        if (!moving && !field.isIce(this)) {
             return;
         }
         direction = sliding.act(this);
@@ -109,7 +109,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void moving(Point pt) {
         if (field.isBarrierFor(pt, this)) {
-            // do nothing
+            sliding.canceled();
         } else {
             move(pt);
         }
