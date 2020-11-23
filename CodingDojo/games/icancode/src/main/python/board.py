@@ -72,7 +72,6 @@ class Board:
         points.update(self._find_all(Element('ROBO_LASER')))
         points.update(self._find_all(Element('ROBO')))
         points.update(self._find_all(Element('ROBO_FLYING')))
-        print(points)
         assert len(points) <= 1, "There should be only one robo"
         return list(points)[0]
 
