@@ -18,8 +18,7 @@ import BoardSample from '../../styles/images/game/icancode/field_sample.png';
 import Styles from './styles.module.css';
 
 const BOARD_EXAMPLE =
-`{"heroPosition":{"x":15,"y":6},"showName":true,"offset":{"x":8,"y":18},"levelFinished":false,"levelProgress":{"total":22,"current":22,"lastPassed":21}}
-Board:
+`Board:
   01234567890123456789\t01234567890123456789\t   01234567890123456789
 0                     \t--------------------\t   --------------------
 1 ┐      ╔═════════┐  \t--------------------\t   --------------------
