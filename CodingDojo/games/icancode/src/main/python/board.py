@@ -13,7 +13,6 @@ class Board:
 
     def __init__(self, input):
         matcher = re.search(Board.INPUT_REGEX, input)
-        print(matcher.group(1) + matcher.group(3))
         board_string = matcher.group(2).replace('\n', '').replace(',', '').replace('\"', '')  # one line board
 
         self._board = []
