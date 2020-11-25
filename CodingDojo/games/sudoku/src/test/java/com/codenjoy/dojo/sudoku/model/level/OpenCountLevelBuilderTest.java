@@ -55,7 +55,7 @@ public class OpenCountLevelBuilderTest {
 
         when(dice.next(9)).thenReturn(0,0, 1,2, 3,5, 8,8);
 
-        builder.build();
+        builder.build(levelNumber);
 
         assertM("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼???☼???☼?? ☼" +
@@ -76,7 +76,7 @@ public class OpenCountLevelBuilderTest {
     public void testGetBoard() {
         builder = new OpenCountLevelBuilder(0, dice);
 
-        builder.build();
+        builder.build(levelNumber);
 
         assertB("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼534☼678☼912☼" +

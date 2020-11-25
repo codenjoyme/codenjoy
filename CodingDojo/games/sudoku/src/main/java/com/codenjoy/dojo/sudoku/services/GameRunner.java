@@ -54,10 +54,14 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
-        LevelBuilder builder = new OpenCountLevelBuilder(40, getDice());
-        builder.build();
+        LevelBuilder builder = getLevelBuilder();
+        builder.build(levelNumber);
         Level level = new LevelImpl(builder.getBoard(), builder.getMask());
         return new Sudoku(level);
+    }
+
+    private OpenCountLevelBuilder getLevelBuilder() {
+        return new OpenCountLevelBuilder(40, getDice());
     }
 
     @Override

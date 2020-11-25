@@ -5,5 +5,5 @@ public interface LevelBuilder {
 
     String getBoard();
 
-    void build();
+    void build(int level);
 }

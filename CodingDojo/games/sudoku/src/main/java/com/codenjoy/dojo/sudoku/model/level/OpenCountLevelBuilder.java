@@ -89,7 +89,7 @@ public class OpenCountLevelBuilder implements LevelBuilder {
     }
 
     @Override
-    public void build() {
+    public void build(int level) {
         mask = FIELD.replaceAll(" ", "?").toCharArray();
 
         int index = 0;
