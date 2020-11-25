@@ -26,9 +26,12 @@ import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Single;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class LevelsType extends MultiplayerType {
+
+    public static final String LAYERS = "layers";
 
     public LevelsType(int roomSize, int levelsCount, boolean disposable, boolean shouldReloadAlone) {
         super(roomSize, levelsCount, disposable, shouldReloadAlone);
@@ -46,7 +49,9 @@ public class LevelsType extends MultiplayerType {
 
         JSONObject json = new JSONObject();
         progress.saveTo(json);
-        json.put("board", board);
+        json.put(LAYERS, new JSONArray(){{
+            put(board);
+        }});
         return json;
     }
 
