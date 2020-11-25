@@ -1,6 +1,6 @@
 package com.codenjoy.dojo.sudoku.model.level;
 
-import com.codenjoy.dojo.sudoku.model.level.levels.Level1;
+import com.codenjoy.dojo.sudoku.model.level.levels.*;
 import com.codenjoy.dojo.sudoku.services.SettingsWrapper;
 
 import java.util.Arrays;
@@ -16,6 +16,8 @@ public class Levels {
 
     public static List<Level> all() {
         return Arrays.asList(
-                new Level1());
+                new Level1(),
+                new Level2()
+        );
     }
 }
