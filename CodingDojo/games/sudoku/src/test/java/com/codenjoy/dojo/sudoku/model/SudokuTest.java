@@ -279,10 +279,12 @@ public class SudokuTest {
         shouldWinEventWhenAllSuccess();
 
         assertTrue(game.isGameOver());
+        assertTrue(game.isWin());
 
         game.newGame(player);
 
         assertFalse(game.isGameOver());
+        assertFalse(game.isWin());
 
         game.tick();
 

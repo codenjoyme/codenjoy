@@ -89,7 +89,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.SINGLE;
+        return MultiplayerType.SINGLE_LEVELS.apply(Levels.all().size());
     }
 
     @Override

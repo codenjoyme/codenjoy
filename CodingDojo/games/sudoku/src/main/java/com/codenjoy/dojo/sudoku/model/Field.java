@@ -30,6 +30,8 @@ public interface Field extends GameField<Player> {
 
     boolean isGameOver();
 
+    boolean isWin();
+
     void gameOver();
 
     void set(Point pt, int n);

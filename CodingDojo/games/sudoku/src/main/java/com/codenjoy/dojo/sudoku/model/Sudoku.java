@@ -42,6 +42,7 @@ public class Sudoku implements Field {
     private List<Cell> acts;
     private Cell act;
     private boolean gameOver;
+    private boolean win;
 
     public Sudoku(Level level) {
         cells = level.cells();
@@ -49,6 +50,7 @@ public class Sudoku implements Field {
         size = level.size();
         acts = new LinkedList<>();
         gameOver = false;
+        win = false;
     }
 
     @Override
@@ -88,6 +90,7 @@ public class Sudoku implements Field {
             }
         }
 
+        win = true;
         gameOver = true;
         player.event(Events.WIN);
     }
@@ -101,6 +104,7 @@ public class Sudoku implements Field {
         this.player = player;
         this.acts.clear();
         gameOver = false;
+        win = false;
         player.newHero(this);
     }
 
@@ -125,6 +129,11 @@ public class Sudoku implements Field {
     @Override
     public boolean isGameOver() {
         return gameOver;
+    }
+
+    @Override
+    public boolean isWin() {
+        return win;
     }
 
     @Override
