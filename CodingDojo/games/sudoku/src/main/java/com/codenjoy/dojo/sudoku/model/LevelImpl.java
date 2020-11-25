@@ -39,7 +39,7 @@ public class LevelImpl implements Level {
         this.mask = mask;
 
         if (map.length() != mask.length()) {
-            throw new IllegalArgumentException("Маска не совпадает с полем по размеhу: " +
+            throw new IllegalArgumentException("Маска не совпадает с полем по размеру: " +
                     map.length() + "-" + mask.length());
         }
 
@@ -53,7 +53,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Cell> getCells() {
-        List<Cell> result = new LinkedList<Cell>();
+        List<Cell> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             char ch = map.charAt(index);
             char mch = mask.charAt(index);

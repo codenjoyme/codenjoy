@@ -108,7 +108,7 @@ public class Sudoku implements Field {
     }
 
     public List<Cell> getCells() {
-        List<Cell> result = new LinkedList<Cell>();
+        List<Cell> result = new LinkedList<>();
 
         for (Cell cell : cells) {
             if (acts.contains(cell)) {
@@ -139,6 +139,11 @@ public class Sudoku implements Field {
     @Override
     public void set(Point pt, int n) {
         this.act = new Cell(pt, n, true);
+    }
+
+    @Override
+    public int level() {
+        return 0;
     }
 
     public BoardReader reader() {

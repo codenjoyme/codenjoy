@@ -64,9 +64,9 @@ public class LevelBuilder {
         for (int i = 0; i <= size - 1; i++) {
             result.append('☼');
             String line = board.substring(i * size, (i + 1) * size);
-            result.append(line.substring(0, 3)).append('☼');
-            result.append(line.substring(3, 6)).append('☼');
-            result.append(line.substring(6, 9)).append('☼');
+            result.append(line, 0, 3).append('☼');
+            result.append(line, 3, 6).append('☼');
+            result.append(line, 6, 9).append('☼');
             if ((i + 1) % 3 == 0) {
                 result.append("☼☼☼☼☼☼☼☼☼☼☼☼☼");
             }
