@@ -690,6 +690,7 @@ public class SmokeTest {
                     "1:\n" +
                     "1:Scores: 1340\n" +
                     "1:Answer: ACT(0)\n" +
+                    "1:PLAYER_GAME_OVER -> START_NEW_GAME\n" +
                     "------------------------------------------",
                 String.join("\n", messages));
 

@@ -36,6 +36,7 @@ public class Sudoku implements Field {
     private List<Cell> cells;
     private Player player;
 
+    private int levelNumber;
     private final int size;
     private List<Wall> walls;
 
@@ -44,12 +45,13 @@ public class Sudoku implements Field {
     private boolean gameOver;
     private boolean win;
 
-    public Sudoku(Level level) {
+    public Sudoku(Level level, int levelNumber) {
         cells = level.cells();
         walls = level.walls();
         size = level.size();
         acts = new LinkedList<>();
         gameOver = false;
+        this.levelNumber = levelNumber;
         win = false;
     }
 
@@ -153,7 +155,7 @@ public class Sudoku implements Field {
 
     @Override
     public int level() {
-        return 0;
+        return levelNumber;
     }
 
     public BoardReader reader() {

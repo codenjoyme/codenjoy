@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -57,9 +56,9 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
+    public Sudoku createGame(int levelNumber) {
         Level level = Levels.all().get(levelNumber - LevelProgress.levelsStartsFrom1);
-        return new Sudoku(level);
+        return new Sudoku(level, levelNumber);
     }
 
     @Override

@@ -62,7 +62,7 @@ public class SudokuTest {
     private void givenFl(String board, String mask) {
         Level level = new LevelImpl(removeBoard(board), removeBoard(mask));
 
-        game = new Sudoku(level);
+        game = new Sudoku(level, 0);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
