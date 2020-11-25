@@ -57,8 +57,9 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public Sudoku createGame(int levelNumber) {
-        Level level = Levels.all().get(levelNumber - LevelProgress.levelsStartsFrom1);
-        return new Sudoku(level, levelNumber);
+        int index = levelNumber - LevelProgress.levelsStartsFrom1;
+        Level level = Levels.all().get(index);
+        return new Sudoku(level, index);
     }
 
     @Override
