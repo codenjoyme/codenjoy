@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.sudoku.model.level.LevelImpl;
 import com.codenjoy.dojo.sudoku.services.Events;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;

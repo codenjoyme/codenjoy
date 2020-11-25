@@ -34,6 +34,10 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.sudoku.client.Board;
 import com.codenjoy.dojo.sudoku.client.ai.AISolver;
 import com.codenjoy.dojo.sudoku.model.*;
+import com.codenjoy.dojo.sudoku.model.level.Level;
+import com.codenjoy.dojo.sudoku.model.level.LevelBuilder;
+import com.codenjoy.dojo.sudoku.model.level.LevelImpl;
+import com.codenjoy.dojo.sudoku.model.level.OpenCountLevelBuilder;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -50,7 +54,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
-        LevelBuilder builder = new LevelBuilder(40, getDice());
+        LevelBuilder builder = new OpenCountLevelBuilder(40, getDice());
         builder.build();
         Level level = new LevelImpl(builder.getBoard(), builder.getMask());
         return new Sudoku(level);

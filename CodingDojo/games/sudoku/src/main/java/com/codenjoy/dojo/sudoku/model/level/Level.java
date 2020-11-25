@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sudoku.model;
+package com.codenjoy.dojo.sudoku.model.level;
 
 /*-
  * #%L
@@ -22,6 +22,9 @@ package com.codenjoy.dojo.sudoku.model;
  * #L%
  */
 
+
+import com.codenjoy.dojo.sudoku.model.Cell;
+import com.codenjoy.dojo.sudoku.model.Wall;
 
 import java.util.List;
 

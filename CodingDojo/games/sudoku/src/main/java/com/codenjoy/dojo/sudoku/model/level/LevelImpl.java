@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sudoku.model;
+package com.codenjoy.dojo.sudoku.model.level;
 
 /*-
  * #%L
@@ -24,6 +24,9 @@ package com.codenjoy.dojo.sudoku.model;
 
 
 import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.sudoku.model.Cell;
+import com.codenjoy.dojo.sudoku.model.Elements;
+import com.codenjoy.dojo.sudoku.model.Wall;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -57,7 +60,7 @@ public class LevelImpl implements Level {
         for (int index = 0; index < map.length(); index++) {
             char ch = map.charAt(index);
             char mch = mask.charAt(index);
-            if (ch != Elements.BORDER.ch) {
+            if (ch != Elements.BORDER.ch()) {
                 result.add(new Cell(xy.getXY(index), Integer.parseInt("" + ch), mch != '?'));
             }
         }
@@ -70,7 +73,7 @@ public class LevelImpl implements Level {
         List<Wall> result = new LinkedList<Wall>();
         for (int index = 0; index < map.length(); index++) {
             char ch = map.charAt(index);
-            if (ch == Elements.BORDER.ch) {
+            if (ch == Elements.BORDER.ch()) {
                 result.add(new Wall(xy.getXY(index)));
             }
         }

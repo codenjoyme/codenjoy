@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sudoku.model;
+package com.codenjoy.dojo.sudoku.model.level;
 
 /*-
  * #%L
@@ -25,8 +25,6 @@ package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,12 +38,11 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class LevelBuilderTest {
+public class OpenCountLevelBuilderTest {
 
     private Dice dice;
-    private LevelBuilder builder;
+    private OpenCountLevelBuilder builder;
     private final int SIZE = 9;
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     @Before
     public void setup() {
@@ -53,8 +50,8 @@ public class LevelBuilderTest {
     }
 
     @Test
-    public void testGetMask() throws Exception {
-        builder = new LevelBuilder(4, dice);
+    public void testGetMask() {
+        builder = new OpenCountLevelBuilder(4, dice);
 
         when(dice.next(9)).thenReturn(0,0, 1,2, 3,5, 8,8);
 
@@ -76,8 +73,8 @@ public class LevelBuilderTest {
     }
 
     @Test
-    public void testGetBoard() throws Exception {
-        builder = new LevelBuilder(0, dice);
+    public void testGetBoard() {
+        builder = new OpenCountLevelBuilder(0, dice);
 
         builder.build();
 
@@ -122,7 +119,7 @@ public class LevelBuilderTest {
     }
 
     public List<Integer> getY(int y, int[][] arr) {
-        List<Integer> result = new LinkedList<Integer>();
+        List<Integer> result = new LinkedList<>();
 
         for (int x = 0; x < SIZE; x++) {
             result.add(arr[x][y]);
@@ -133,7 +130,7 @@ public class LevelBuilderTest {
     }
 
     public List<Integer> getX(int x, int[][] arr) {
-        List<Integer> result = new LinkedList<Integer>();
+        List<Integer> result = new LinkedList<>();
 
         for (int y = 0; y < SIZE; y++) {
             result.add(arr[x][y]);
@@ -144,7 +141,7 @@ public class LevelBuilderTest {
     }
 
     public List<Integer> getC(int tx, int ty, int[][] arr) {
-        List<Integer> result = new LinkedList<Integer>();
+        List<Integer> result = new LinkedList<>();
 
         for (int dy = -1; dy <= 1; dy++) {
             for (int dx = -1; dx <= 1; dx++) {

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sudoku.model;
+package com.codenjoy.dojo.sudoku.model.level;
 
 /*-
  * #%L
@@ -26,7 +26,7 @@ package com.codenjoy.dojo.sudoku.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.LengthToXY;
 
-public class LevelBuilder {
+public class OpenCountLevelBuilder implements LevelBuilder {
 
     private final LengthToXY xy;
     private final int size;
@@ -46,13 +46,14 @@ public class LevelBuilder {
     private int openCount;
     private Dice dice;
 
-    public LevelBuilder(int openCount, Dice dice) {
+    public OpenCountLevelBuilder(int openCount, Dice dice) {
         this.openCount = openCount;
         this.dice = dice;
         this.size = (int)Math.sqrt(FIELD.length());
         this.xy = new LengthToXY(size);
     }
 
+    @Override
     public String getMask() {
         return withBorders(String.valueOf(mask));
     }
@@ -74,6 +75,7 @@ public class LevelBuilder {
         return result.toString();
     }
 
+    @Override
     public String getBoard() {
         return withBorders("534678912" +
                         "672195348" +
@@ -86,6 +88,7 @@ public class LevelBuilder {
                         "345286179");
     }
 
+    @Override
     public void build() {
         mask = FIELD.replaceAll(" ", "?").toCharArray();
 
