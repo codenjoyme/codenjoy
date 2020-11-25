@@ -134,7 +134,8 @@ public class LevelImplTest {
 
     @Test
     public void testSumsIsOk() {
-        assertSum(level.map());
+        Levels.all().forEach(
+                level -> assertSum(level.map()));
     }
 
     private void assertSum(String board) {
