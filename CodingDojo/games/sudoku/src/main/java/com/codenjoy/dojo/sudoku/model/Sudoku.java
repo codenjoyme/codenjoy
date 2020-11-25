@@ -44,10 +44,10 @@ public class Sudoku implements Field {
     private boolean gameOver;
 
     public Sudoku(Level level) {
-        cells = level.getCells();
-        walls = level.getWalls();
-        size = level.getSize();
-        acts = new LinkedList<Cell>();
+        cells = level.cells();
+        walls = level.walls();
+        size = level.size();
+        acts = new LinkedList<>();
         gameOver = false;
     }
 

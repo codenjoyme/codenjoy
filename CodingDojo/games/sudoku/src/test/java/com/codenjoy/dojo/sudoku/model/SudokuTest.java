@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.sudoku.model.level.Level;
 import com.codenjoy.dojo.sudoku.model.level.LevelImpl;
 import com.codenjoy.dojo.sudoku.services.Events;
 import com.codenjoy.dojo.utils.TestUtils;
@@ -59,13 +60,17 @@ public class SudokuTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     private void givenFl(String board, String mask) {
-        LevelImpl level = new LevelImpl(board, mask);
+        Level level = new LevelImpl(removeBoard(board), removeBoard(mask));
 
         game = new Sudoku(level);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
         joystick = player.getJoystick();
+    }
+
+    private String removeBoard(String map) {
+        return map.replaceAll("☼", "");
     }
 
     private void assertE(String expected) {
@@ -91,17 +96,17 @@ public class SudokuTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼",
 
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼  ?☼? ?☼???☼" +
-                "☼ ??☼   ☼???☼" +
-                "☼?  ☼???☼? ?☼" +
+                "☼  *☼* *☼***☼" +
+                "☼ **☼   ☼***☼" +
+                "☼*  ☼***☼* *☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼ ??☼? ?☼?? ☼" +
-                "☼ ??☼ ? ☼?? ☼" +
-                "☼ ??☼? ?☼?? ☼" +
+                "☼ **☼* *☼** ☼" +
+                "☼ **☼ * ☼** ☼" +
+                "☼ **☼* *☼** ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼? ?☼???☼  ?☼" +
-                "☼???☼   ☼?? ☼" +
-                "☼???☼? ?☼?  ☼" +
+                "☼* *☼***☼  *☼" +
+                "☼***☼   ☼** ☼" +
+                "☼***☼* *☼*  ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
 
 //        assertE(INITIAL);
@@ -252,7 +257,7 @@ public class SudokuTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼   ☼   ☼   ☼" +
                 "☼   ☼   ☼   ☼" +
-                "☼???☼   ☼   ☼" +
+                "☼***☼   ☼   ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
 
         joystick.act(1, 9, 3);

@@ -30,9 +30,15 @@ import java.util.List;
 
 public interface Level {
 
-    int getSize();
+    int size();
 
-    List<Cell> getCells();
+    List<Cell> cells();
 
-    List<Wall> getWalls();
+    List<Wall> walls();
+
+    String mask();
+
+    String map();
+
+    String all();
 }

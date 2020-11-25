@@ -25,19 +25,23 @@ package com.codenjoy.dojo.sudoku.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.sudoku.client.Board;
 import com.codenjoy.dojo.sudoku.client.ai.AISolver;
-import com.codenjoy.dojo.sudoku.model.*;
+import com.codenjoy.dojo.sudoku.model.Elements;
+import com.codenjoy.dojo.sudoku.model.Player;
+import com.codenjoy.dojo.sudoku.model.Sudoku;
 import com.codenjoy.dojo.sudoku.model.level.Level;
-import com.codenjoy.dojo.sudoku.model.level.LevelBuilder;
-import com.codenjoy.dojo.sudoku.model.level.LevelImpl;
-import com.codenjoy.dojo.sudoku.model.level.OpenCountLevelBuilder;
+import com.codenjoy.dojo.sudoku.model.level.Levels;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -54,15 +58,8 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GameField createGame(int levelNumber) {
-        LevelBuilder builder = buildLevel(levelNumber);
-        Level level = new LevelImpl(builder.getBoard(), builder.getMask());
+        Level level = Levels.all().get(levelNumber - LevelProgress.levelsStartsFrom1);
         return new Sudoku(level);
-    }
-
-    private OpenCountLevelBuilder buildLevel(int levelNumber) {
-        return new OpenCountLevelBuilder(40, getDice()){{
-            build(levelNumber);
-        }};
     }
 
     @Override

@@ -32,36 +32,89 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class LevelImpl implements Level {
-    private final LengthToXY xy;
+
+    private static final int SIZE = 9;
+    public static final char MASK_CHAR = '*';
+
+    private LengthToXY xy;
+    private String all;
 
     private String map;
     private String mask;
 
+    public LevelImpl(String all) {
+        this.all = all.replaceAll("[\n\r]", "");
+
+        split(this.all);
+        parse();
+    }
+
     public LevelImpl(String map, String mask) {
         this.map = map;
         this.mask = mask;
+
+        parse();
+    }
+
+    private void parse() {
+        map = withBorders(map);
+        mask = withBorders(mask);
 
         if (map.length() != mask.length()) {
             throw new IllegalArgumentException("Маска не совпадает с полем по размеру: " +
                     map.length() + "-" + mask.length());
         }
 
-        xy = new LengthToXY(getSize());
+        xy = new LengthToXY(size());
+    }
+
+    private String withBorders(String input) {
+        StringBuffer result = new StringBuffer();
+
+        result.append("☼☼☼☼☼☼☼☼☼☼☼☼☼");
+        for (int i = 0; i <= SIZE - 1; i++) {
+            result.append('☼');
+            String line = input.substring(i * SIZE, (i + 1) * SIZE);
+            result.append(line, 0, 3).append('☼');
+            result.append(line, 3, 6).append('☼');
+            result.append(line, 6, 9).append('☼');
+            if ((i + 1) % 3 == 0) {
+                result.append("☼☼☼☼☼☼☼☼☼☼☼☼☼");
+            }
+        }
+        return result.toString();
+    }
+
+    private void split(String all) {
+        StringBuilder mask = new StringBuilder();
+        StringBuilder board = new StringBuilder();
+
+        for (int index = 0; index < all.length(); index++) {
+            char ch = all.charAt(index);
+            if (index % 2 == 0) {
+                board.append(ch);
+            } else {
+                mask.append(ch);
+            }
+        }
+
+        this.mask = mask.toString();
+        this.map = board.toString();
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return (int) Math.sqrt(map.length());
     }
 
     @Override
-    public List<Cell> getCells() {
+    public List<Cell> cells() {
         List<Cell> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             char ch = map.charAt(index);
             char mch = mask.charAt(index);
             if (ch != Elements.BORDER.ch()) {
-                result.add(new Cell(xy.getXY(index), Integer.parseInt("" + ch), mch != '?'));
+                result.add(new Cell(xy.getXY(index), Integer.parseInt("" + ch), mch != MASK_CHAR));
             }
         }
 
@@ -69,8 +122,8 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<Wall>();
+    public List<Wall> walls() {
+        List<Wall> result = new LinkedList<>();
         for (int index = 0; index < map.length(); index++) {
             char ch = map.charAt(index);
             if (ch == Elements.BORDER.ch()) {
@@ -78,5 +131,20 @@ public class LevelImpl implements Level {
             }
         }
         return result;
+    }
+
+    @Override
+    public String mask() {
+        return mask;
+    }
+
+    @Override
+    public String map() {
+        return map;
+    }
+
+    @Override
+    public String all() {
+        return all;
     }
 }
