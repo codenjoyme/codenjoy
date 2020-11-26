@@ -124,8 +124,8 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public PrinterFactory getPrinterFactory() {
-        return PrinterFactory.get((BoardReader reader, Player player) -> {
-            String data = player.getPrinter().print();
+        return PrinterFactory.get((BoardReader reader, Printer<String> printer, Player player) -> {
+            String data = printer.print();
             String board = data.replace("\n", "").replace(" ", ".");
 
             Hero hero = player.getHero();

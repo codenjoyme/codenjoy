@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services.printer;
  */
 
 import com.codenjoy.dojo.services.GraphicPrinter;
+import com.codenjoy.dojo.services.GraphicPrinter2;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 @FunctionalInterface
@@ -38,5 +39,18 @@ public interface PrinterFactory <E extends CharElements, P extends GamePlayer> {
         // во закрутил :)
         return (PrinterFactory<CharElements, GamePlayer>) (reader, player)
                 -> parameters -> printer.print(reader, (P)player);
+    }
+
+    /**
+     * @param printer Кастомный принтер, который будет прорисовывать борду.
+     *                Его главное отличие от прошлого, в том что он так же предоставит классический принтер
+     * @param <P> Тип объекта-игрока в игре (не путать с Player во время регистрации пользователя)
+     * @return Фабрика, которая потом создаст кастомный принтер.
+     */
+    static <P extends GamePlayer, A> PrinterFactory get(GraphicPrinter2<Object, A, P> printer) {
+        return (PrinterFactory<CharElements, GamePlayer>) (reader, player) -> {
+                    Printer classic = PrinterImpl.getPrinter(reader, player);
+                    return parameters -> printer.print(reader, classic, (P) player);
+                };
     }
 }

@@ -35,25 +35,13 @@ import com.codenjoy.dojo.tetris.services.Events;
 public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
-    private Printer<String> printer;
-    private Field field;
 
     public Player(EventListener listener) {
         super(listener);
-        setupPrinter();
     }
 
-    private void setupPrinter() {
-        printer = LazyPrinterImpl.getPrinter(
-                () -> field.reader(),
-                () -> this);
-    }
     public Hero getHero() {
         return hero;
-    }
-
-    public Printer<String> getPrinter() {
-        return printer;
     }
 
     @Override
@@ -64,7 +52,6 @@ public class Player extends GamePlayer<Hero, Field> {
 
     @Override
     public void newHero(Field field) {
-        this.field = field;
         hero = new Hero();
         hero.init(field);
 
