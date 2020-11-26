@@ -37,15 +37,15 @@ public class LevelImpl implements Level {
     public static final char MASK_CHAR = '*';
 
     private LengthToXY xy;
-    private String all;
 
+    private String all;
     private String map;
     private String mask;
 
-    public LevelImpl(String all) {
-        this.all = all.replaceAll("[\n\r]", "");
+    public LevelImpl(String input) {
+        all = input;
 
-        split(this.all);
+        split(all.replaceAll("[\n\r]", ""));
         parse();
     }
 
