@@ -34,6 +34,10 @@ public final class SettingsWrapper {
 
     private final Settings settings;
 
+    private final Parameter<Integer> winScore;
+    private final Parameter<Integer> failPenalty;
+    private final Parameter<Integer> successScore;
+    private final Parameter<Integer> loosePenalty;
     private final Parameter<Integer> levelsCount;
 
     public static SettingsWrapper setup(Settings settings) {
@@ -48,6 +52,11 @@ public final class SettingsWrapper {
     private SettingsWrapper(Settings settings) {
         data = this;
         this.settings = settings;
+
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(1000);
+        failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).def(10);
+        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(500);
+        successScore = settings.addEditBox("Success score").type(Integer.class).def(10);
 
         levelsCount = settings.addEditBox("levels.count").type(Integer.class).def(0);
         Levels.setup();
@@ -67,6 +76,22 @@ public final class SettingsWrapper {
 
     private String levelPrefix(int index) {
         return "levels[" + index + "]";
+    }
+
+    public int winScore() {
+        return winScore.getValue();
+    }
+
+    public int failPenalty() {
+        return failPenalty.getValue();
+    }
+
+    public int successScore() {
+        return successScore.getValue();
+    }
+
+    public int loosePenalty() {
+        return loosePenalty.getValue();
     }
 
     // setters for testing

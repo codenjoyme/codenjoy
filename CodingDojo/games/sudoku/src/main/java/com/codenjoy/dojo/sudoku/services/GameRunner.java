@@ -47,12 +47,16 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 public class GameRunner extends AbstractGameType implements GameType {
 
     public GameRunner() {
-        new Scores(0, settings);
+        setupSettings();
+    }
+
+    private void setupSettings() {
+        SettingsWrapper.setup(settings);
     }
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer)score, settings);
+        return new Scores((Integer)score, SettingsWrapper.data);
     }
 
     @Override
