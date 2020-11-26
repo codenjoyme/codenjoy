@@ -21,10 +21,12 @@
  */
 
 // you can get this code after registration on the server with your email
-var url = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789";
+var url = "https://epam-botchallenge.com/codenjoy-contest/board/player/gdtrropufdy7vkzudsf?code=1234553023525789";
 
 var util = require('util');
 var WSocket = require('ws');
+var printBoardOnTextArea = false;
+var tick = 0;
 
 var log = function(string) {
     console.log(string);
@@ -45,16 +47,18 @@ var printArray = function (array) {
 var processBoard = function(boardString) {
     var boardJson = eval(boardString);
     var board = new Board(boardJson);
+    tick++;
     if (!!printBoardOnTextArea) {
-        printBoardOnTextArea(board.toString());
+        printBoardOnTextArea("Tick: " + tick + "\n" + board.toString());
     }
 
     var logMessage = board + "\n\n";
     var answer = new YourSolver(board).whatToDo().toString();
-    logMessage += "Answer: " + answer + "\n";
+    logMessage += "Tick: " + tick + " Answer: " + answer + "\n";
     logMessage += "---------------------------------------------------------------------------------------------------------\n";
     
     log(logMessage);
+
 
     return answer;
 };
