@@ -161,12 +161,53 @@ public class SudokuTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
+    // я могу передумать и сбросить установленное ранее значение
+    @Test
+    public void shouldCanClearMySpep() {
+        shouldFieldAtStart();
+
+        assertE(INITIAL);
+
+        joystick.act(2, 8, 5);
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼53 ☼ 7 ☼   ☼" +
+                "☼6  ☼195☼   ☼" +
+                "☼ 98☼   ☼ 6 ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼8  ☼ 6 ☼  3☼" +
+                "☼4  ☼8 3☼  1☼" +
+                "☼7  ☼ 2 ☼  6☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼ 6 ☼   ☼28 ☼" +
+                "☼ 5 ☼419☼  5☼" +
+                "☼   ☼ 8 ☼ 79☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼");
+
+        joystick.act(2, 8, 0);
+        game.tick();
+
+        assertE(INITIAL);
+    }
+
     // я не могу ходить на поля, которые уже заняты
     @Test
     public void shouldCantOpenOpenedCell() {
         shouldFieldAtStart();
 
         joystick.act(2, 3, 1);
+        game.tick();
+
+        assertE(INITIAL);
+    }
+
+    // я не могу сбросить поля, которые установлены изначально
+    @Test
+    public void shouldCantClearOpenedCell() {
+        shouldFieldAtStart();
+
+        joystick.act(2, 3, 0);
         game.tick();
 
         assertE(INITIAL);

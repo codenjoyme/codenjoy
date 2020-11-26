@@ -68,11 +68,16 @@ public class Sudoku implements Field {
             if (acts.contains(act)) {
                 acts.remove(act);
             }
-            acts.add(act);
-            if (cell.getNumber() == act.getNumber()) {
-                player.event(Events.SUCCESS);
+            if (act.isHidden()) {
+                // все норм, юзер просто сбросил свой
+                // прошлый выбор командой ACT(x, y, 0)
             } else {
-                player.event(Events.FAIL);
+                acts.add(act);
+                if (cell.getNumber() == act.getNumber()) {
+                    player.event(Events.SUCCESS);
+                } else {
+                    player.event(Events.FAIL);
+                }
             }
         }
         act = null;
@@ -150,7 +155,7 @@ public class Sudoku implements Field {
 
     @Override
     public void set(Point pt, int n) {
-        this.act = new Cell(pt, n, true);
+        act = new Cell(pt, n, n != 0);
     }
 
     @Override

@@ -45,9 +45,8 @@ public class Player extends GamePlayer<PlayerHero, Field> {
 
     public static final int SIZE = 9;
 
-    private boolean check(int i) {
-        if (i > SIZE || i < 1) return true;
-        return false;
+    private boolean valid(int i) {
+        return i >= 1 && i <= SIZE;
     }
 
     @Override
@@ -75,9 +74,10 @@ public class Player extends GamePlayer<PlayerHero, Field> {
                 return;
             }
 
-            if (check(p[0])) return;
-            if (check(p[1])) return;
-            if (check(p[2])) return;
+            if (!valid(p[0])) return;
+            if (!valid(p[1])) return;
+            // командой 0 мы очищаем поле, если поставили туда не то значение
+            if (p[2] != 0 && !valid(p[2])) return;
 
             int x = fix(p[0]);
             int y = fix(SIZE + 1 - p[1]);
