@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.*;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.tetris.client.Board;
@@ -123,31 +124,14 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public PrinterFactory getPrinterFactory() {
-        PrinterFactoryImpl graphic = new PrinterFactoryImpl();
-
         return PrinterFactory.get((BoardReader reader, Player player) -> {
-            JSONObject result = new JSONObject();
+            String data = player.getPrinter().print();
+            String board = data.replace("\n", "").replace(" ", ".");
 
             Hero hero = player.getHero();
 
-            Printer<String> graphicPrinter = graphic.getPrinter(new BoardReader() {
-                @Override
-                public int size() {
-                    return hero.boardSize();
-                }
+            JSONObject result = new JSONObject();
 
-                @Override
-                public Iterable<? extends Point> elements() {
-                    return new LinkedList<Point>() {{
-                        List<Plot> droppedPlots = hero.dropped();
-                        List<Plot> currentFigurePlots = hero.currentFigure();
-                        droppedPlots.removeAll(currentFigurePlots);
-                        addAll(droppedPlots);
-                        addAll(currentFigurePlots);
-                    }};
-                }
-            }, player);
-            String board = graphicPrinter.print().replace("\n", "").replace(" ", ".");
             result.put("layers", Arrays.asList(board));
 
             result.put("currentFigureType", hero.currentFigureType());

@@ -210,10 +210,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                 .collect(toList());
     }
 
-    public int boardSize() {
-        return field.size();
-    }
-
     public int level() {
         return levels.getCurrentLevelNumber();
     }
