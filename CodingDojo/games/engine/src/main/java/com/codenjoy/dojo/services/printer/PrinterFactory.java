@@ -22,8 +22,6 @@ package com.codenjoy.dojo.services.printer;
  * #L%
  */
 
-import com.codenjoy.dojo.services.GraphicPrinter;
-import com.codenjoy.dojo.services.GraphicPrinter2;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 @FunctionalInterface
