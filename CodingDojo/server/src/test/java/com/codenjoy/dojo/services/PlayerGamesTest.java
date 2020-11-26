@@ -1149,7 +1149,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
         // when then
         assertBoard("player",
-                "{\"board\":\"board-data\"," +
+                "{\"layers\":[\"board-data\"]," +
                         "\"levelProgress\":{\"total\":3,\"current\":1,\"lastPassed\":0}}");
     }
 
