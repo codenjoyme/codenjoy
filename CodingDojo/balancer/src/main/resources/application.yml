@@ -45,7 +45,7 @@ sms:
   gateway:
     send-endpoint: http://sms-fly.com/api/api.noai.php
     user: 380989207390
-    password: 123456789
+    password: pWbdSsrK4PQMMnx
 
 messages:
   invalid-player-id: "Невірний формат playerId: '%s'"
