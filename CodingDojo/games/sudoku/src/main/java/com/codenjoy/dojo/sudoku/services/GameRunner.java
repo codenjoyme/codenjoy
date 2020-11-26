@@ -40,6 +40,7 @@ import com.codenjoy.dojo.sudoku.model.Elements;
 import com.codenjoy.dojo.sudoku.model.Player;
 import com.codenjoy.dojo.sudoku.model.Sudoku;
 import com.codenjoy.dojo.sudoku.model.level.Level;
+import com.codenjoy.dojo.sudoku.model.level.LevelImpl;
 import com.codenjoy.dojo.sudoku.model.level.Levels;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
@@ -62,8 +63,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     @Override
     public Sudoku createGame(int levelNumber) {
         int index = levelNumber - LevelProgress.levelsStartsFrom1;
-        Level level = Levels.all().get(index);
+        Level level = getLevel(levelNumber);
         return new Sudoku(level, index);
+    }
+
+    private Level getLevel(int levelNumber) {
+        return new LevelImpl(SettingsWrapper.data.levelMap(levelNumber));
     }
 
     @Override

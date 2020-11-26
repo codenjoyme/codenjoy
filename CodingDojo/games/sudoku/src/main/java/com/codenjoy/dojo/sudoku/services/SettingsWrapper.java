@@ -74,6 +74,11 @@ public final class SettingsWrapper {
         return this;
     }
 
+    public String levelMap(int index) {
+        String prefix = levelPrefix(index);
+        return settings.addEditBox(prefix).type(String.class).getValue();
+    }
+
     private String levelPrefix(int index) {
         return "levels[" + index + "]";
     }
