@@ -50,7 +50,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
         heavy = false;
     }
 
-    public void onDestroy() {
+    public void remove() {
         moving = false;
         if (onDestroy != null) {
             onDestroy.accept(this);
@@ -60,7 +60,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     @Override
     public void moving(Point pt) {
         if (pt.isOutOf(field.size())) {
-            onDestroy(); // TODO заимплементить взрыв
+            remove(); // TODO заимплементить взрыв
         } else {
             move(pt);
             field.affect(this);

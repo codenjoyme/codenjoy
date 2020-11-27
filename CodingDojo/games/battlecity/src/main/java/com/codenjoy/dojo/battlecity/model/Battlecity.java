@@ -103,7 +103,7 @@ public class Battlecity implements Field {
 
         for (Bullet bullet : bullets()) {
             if (bullet.destroyed()) {
-                bullet.onDestroy();
+                bullet.remove();
             }
         }
 
@@ -161,26 +161,25 @@ public class Battlecity implements Field {
     }
 
     private void removeDeadItems() {
-        for (Tank tank : allTanks()) {
-            if (tank.isAlive()) {
-                continue;
-            }
-            ais.remove(tank);
-
-            if (tank.isTankPrize()) {
-                prizeGen.drop(tank);
-            }
-        }
-
+        removeDeadAi();
         players.removeIf(Player::isDestroyed);
-
         prizes.removeIf(Prize::isDestroyed);
+    }
+
+    private void removeDeadAi() {
+        List<Tank> dead = ais.stream()
+                .filter(Tank::isDestroyed)
+                .collect(toList());
+        ais.removeAll(dead);
+        dead.stream()
+            .filter(Tank::isTankPrize)
+            .forEach(tank -> prizeGen.drop(tank));
     }
 
     @Override
     public void affect(Bullet bullet) {
         if (borders.contains(bullet)) {
-            bullet.onDestroy();
+            bullet.remove();
             return;
         }
 
@@ -199,7 +198,7 @@ public class Battlecity implements Field {
                 scoresForKill(bullet, tank);
             }
 
-            bullet.onDestroy();  // TODO заимплементить взрыв
+            bullet.remove();  // TODO заимплементить взрыв
             return;
         }
 
@@ -216,7 +215,7 @@ public class Battlecity implements Field {
 
             if (!wall.destroyed()) {
                 wall.destroy(bullet);
-                bullet.onDestroy();  // TODO заимплементить взрыв
+                bullet.remove();  // TODO заимплементить взрыв
             }
 
             return;
@@ -225,7 +224,7 @@ public class Battlecity implements Field {
         if (prizes.contains(bullet)) {
             Prize prize = getPrizeAt(bullet);
             prize.kill();
-            bullet.onDestroy();
+            bullet.remove();
 
             return;
         }
@@ -484,8 +483,8 @@ public class Battlecity implements Field {
         this.trees.addAll(trees);
     }
 
-    public void addIce(List<Ice> ice, Parameter<Integer> slidingValue) {
+    public void add(List<Ice> ice, Parameter<Integer> sliding) {
         this.ice.addAll(ice);
-        Sliding.slidingValue = slidingValue.getValue();
+        Sliding.slidingValue = sliding.getValue();
     }
 }

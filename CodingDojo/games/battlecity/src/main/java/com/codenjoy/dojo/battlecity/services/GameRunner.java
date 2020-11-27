@@ -68,7 +68,7 @@ public class GameRunner extends AbstractGameType implements GameType {
         game.addAiTanks(level.getAiTanks());
         game.addRiver(level.getRivers());
         game.addTree(level.getTrees());
-        game.addIce(level.getIce(),
+        game.add(level.getIce(),
                 gameSettings.slidingValue());
         return game;
     }
