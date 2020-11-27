@@ -50,7 +50,7 @@ public class Battlecity implements Field {
     private List<Tree> trees;
     private List<Ice> ice;
     private List<River> rivers;
-    private List<Prize> prizes;
+    private Prizes prizes;
     private List<Tank> ais;
 
     public Battlecity(int size, Dice dice,
@@ -61,7 +61,7 @@ public class Battlecity implements Field {
     {
         this.size = size;
         ais = new LinkedList<>();
-        prizes = new LinkedList<>();
+        prizes = new Prizes();
         walls = new LinkedList<>();
         borders = new LinkedList<>();
         trees = new LinkedList<>();
@@ -140,30 +140,19 @@ public class Battlecity implements Field {
             }
         }
 
-        prizes.forEach(Prize::tick);
+        prizes.tick();
 
         for (Player player : players) {
             if (player.isAlive()) {
-                takePrize(player.getHero());
+                prizes.takeBy(player.getHero());
             }
         }
-    }
-
-    private void takePrize(Tank hero) {
-        int index = prizes.indexOf(hero);
-        if (index == -1) {
-            return;
-        }
-
-        Prize prize = prizes.get(index);
-        hero.take(prize);
-        prizes.remove(prize);
     }
 
     private void removeDeadItems() {
         removeDeadAi();
         players.removeIf(Player::isDestroyed);
-        prizes.removeIf(Prize::isDestroyed);
+        prizes.removeDead();
     }
 
     private void removeDeadAi() {
@@ -221,11 +210,8 @@ public class Battlecity implements Field {
             return;
         }
 
-        if (prizes.contains(bullet)) {
-            Prize prize = getPrizeAt(bullet);
-            prize.kill();
+        if (prizes.affect(bullet)) {
             bullet.remove();
-
             return;
         }
     }
@@ -243,7 +229,6 @@ public class Battlecity implements Field {
     @Override
     public void add(Prize prize) {
         prizes.add(prize);
-        prize.taken(item -> Battlecity.this.prizes.remove(item));
     }
 
     @Override
@@ -254,11 +239,6 @@ public class Battlecity implements Field {
     private Wall getWallAt(Point pt) {
         int index = walls.indexOf(pt);
         return walls.get(index);
-    }
-
-    private Prize getPrizeAt(Point pt) {
-        int index = prizes.indexOf(pt);
-        return prizes.get(index);
     }
 
     private void scoresForKill(Bullet killedBullet, Tank diedTank) {
@@ -369,8 +349,8 @@ public class Battlecity implements Field {
                 .collect(toList());
     }
 
-    public List<Prize> getPrizes() {
-        return prizes;
+    public List<Prize> prizes() {
+        return prizes.all();
     }
 
     @Override
@@ -407,7 +387,7 @@ public class Battlecity implements Field {
                     addAll(Battlecity.this.allTanks());
                     addAll(Battlecity.this.getWalls());
                     addAll(Battlecity.this.bullets());
-                    addAll(Battlecity.this.getPrizes());
+                    addAll(Battlecity.this.prizes());
                     addAll(Battlecity.this.getTrees());
                     addAll(Battlecity.this.getIce());
                     addAll(Battlecity.this.getRivers());
