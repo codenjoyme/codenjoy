@@ -38,19 +38,19 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public static final int MAX = 100;
-    public static final int PRIZE_ACTION_WALKING_RIVER = 30;
-    protected Dice dice;
-    private boolean alive;
-    private Gun gun;
-    private List<Bullet> bullets;
-    private List<Prize> prizesTaken;
 
+    protected Dice dice;
+
+    private boolean alive;
     protected Direction direction;
     protected boolean moving;
     private boolean fire;
-    private int timeout;
 
+    private Gun gun;
     private Sliding sliding;
+
+    private List<Bullet> bullets;
+    private List<Prize> prizes;
 
     public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
         super(pt);
@@ -58,10 +58,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         this.dice = dice;
         gun = new Gun(ticksPerBullets);
         reset();
-    }
-
-    void turn(Direction direction) {
-        this.direction = direction;
     }
 
     @Override
@@ -110,8 +106,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void moving(Point pt) {
-        if (field.isBarrierFor(pt, this)) {
-            sliding.canceled();
+        if (field.isBarrierFor(this, pt)) {
+            sliding.stop();
         } else {
             move(pt);
         }
@@ -164,17 +160,17 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         gun.tick();
         checkTaken();
 
-        for (Prize prize : prizesTaken) {
+        for (Prize prize : prizes) {
             prize.tickTaken();
         }
     }
 
     private void checkTaken() {
-        if (prizesTaken.isEmpty()) {
+        if (prizes.isEmpty()) {
             return;
         }
 
-        prizesTaken.removeIf(prize -> prize.timelimit() == 0);
+        prizes.removeIf(prize -> prize.timelimit() == 0);
     }
 
     @Override
@@ -213,7 +209,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         alive = true;
         gun.reset();
         bullets = new LinkedList<>();
-        prizesTaken = new LinkedList<>();
+        prizes = new LinkedList<>();
     }
 
     public void tryFire() {
@@ -234,12 +230,12 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         return false;
     }
 
-    public List<Prize> getPrizesTaken() {
-        return prizesTaken;
+    public List<Prize> getPrizes() {
+        return prizes;
     }
 
     public void addPrize(Prize prize) {
-        prizesTaken.add(prize);
+        prizes.add(prize);
     }
 
 }

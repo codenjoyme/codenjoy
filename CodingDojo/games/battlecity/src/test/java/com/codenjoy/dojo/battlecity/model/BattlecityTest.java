@@ -6086,7 +6086,7 @@ public class BattlecityTest {
     }
 
     private void assertPrize(Tank hero, int expected) {
-        assertEquals(expected, hero.getPrizesTaken().size());
+        assertEquals(expected, hero.getPrizes().size());
     }
 
     // если в момент подбора приза прилетает снаряд, то умирает танк, а приз остается

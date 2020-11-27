@@ -33,19 +33,22 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
     private Elements elements;
     private int timeout;
     private int timelimit;
-    private boolean alive;
+
+    private boolean destroyed;
+    private boolean active;
 
     public Prize(Point pt, int prizeOnField, int prizeWorking, Elements elements) {
         super(pt);
         this.elements = elements;
         timeout = prizeOnField;
         timelimit = prizeWorking;
-        alive = true;
+        destroyed = false;
+        active = true;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        if (!alive) {
+        if (destroyed) {
             return Elements.BANG;
         }
 
@@ -58,7 +61,12 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
 
     @Override
     public void tick() {
-        if (alive) {
+        if (destroyed || !active) {
+            return;
+        }
+        if (timeout == 0) {
+            active = false;
+        } else {
             timeout--;
         }
     }
@@ -67,20 +75,20 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
         timelimit--;
     }
 
-    public int timeout() {
-        return timeout;
-    }
-
     public int timelimit() {
         return timelimit;
     }
 
-    public boolean isAlive() {
-        return alive;
+    public boolean isDestroyed() {
+        return destroyed;
     }
 
-    public void kill(Bullet bullet) {
-        alive = false;
+    public boolean isActive() {
+        return active;
+    }
+
+    public void kill() {
+        destroyed = true;
     }
 
     public Elements getElements() {

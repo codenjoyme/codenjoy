@@ -108,7 +108,7 @@ public class Battlecity implements Field {
                 tank.tryFire();
             }
 
-            if (checkPrizes(Elements.PRIZE_BREAKING_WALLS, tank.getPrizesTaken())) {
+            if (checkPrizes(Elements.PRIZE_BREAKING_WALLS, tank.getPrizes())) {
                 tank.getBullets().stream().forEach(Bullet::heavy);
             }
         }
@@ -137,18 +137,23 @@ public class Battlecity implements Field {
         }
 
         for (Prize prize : prizes) {
-            if (prize.timeout() != 0) {
-                prize.tick();
-            } else {
-                prizes.remove(prize);
-            }
+            prize.tick();
         }
+        removeDeactivatedPrizes();
 
         for (Player player : players) {
             if (player.isAlive()) {
                 takePrize(player);
             }
         }
+    }
+
+    private boolean removeDeactivatedPrizes() {
+        return prizes.removeIf(prize -> !prize.isActive());
+    }
+
+    private boolean removeDestroyedPrizes() {
+        return prizes.removeIf(prize -> prize.isDestroyed());
     }
 
     private void takePrize(Player player) {
@@ -178,12 +183,7 @@ public class Battlecity implements Field {
             }
         }
 
-        for (Prize prize : prizes) {
-            if (prize.isAlive()) {
-                continue;
-            }
-            prizes.remove(prize);
-        }
+        removeDestroyedPrizes();
     }
 
     @Override
@@ -200,7 +200,7 @@ public class Battlecity implements Field {
                 return;
             }
 
-            if (!checkPrizes(Elements.PRIZE_IMMORTALITY, tank.getPrizesTaken())) {
+            if (!checkPrizes(Elements.PRIZE_IMMORTALITY, tank.getPrizes())) {
                 tank.kill(bullet);
             }
 
@@ -233,7 +233,7 @@ public class Battlecity implements Field {
 
         if (prizes.contains(bullet)) {
             Prize prize = getPrizeAt(bullet);
-            prize.kill(bullet);
+            prize.kill();
             bullet.onDestroy();
 
             return;
@@ -308,13 +308,13 @@ public class Battlecity implements Field {
     }
 
     @Override
-    public boolean isBarrierFor(Point pt, Tank tank) {
+    public boolean isBarrierFor(Tank tank, Point pt) {
         if (isBarrier(pt)) {
             return true;
         }
 
         if (isRiver(pt)) {
-            if (checkPrizes(Elements.PRIZE_WALKING_ON_WATER, tank.getPrizesTaken())) {
+            if (checkPrizes(Elements.PRIZE_WALKING_ON_WATER, tank.getPrizes())) {
                 return false;
             }
             return true;
@@ -380,21 +380,6 @@ public class Battlecity implements Field {
 
     public List<Prize> getPrizes() {
         return prizes;
-    }
-
-    @Override
-    public boolean isBarrier(Point pt, Tank tank) {
-        List<Prize> prizesTaken = tank.getPrizesTaken();
-        if (isRiver(pt)) {
-            return !checkPrizes(prizesTaken);
-        }
-
-        return isBarrier(pt);
-    }
-
-    private boolean checkPrizes(List<Prize> prizesTaken) {
-        return prizesTaken.stream().
-                anyMatch(prize -> Elements.PRIZE_WALKING_ON_WATER.equals(prize.getElements()));
     }
 
     @Override

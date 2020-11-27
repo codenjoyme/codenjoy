@@ -54,7 +54,7 @@ public class Sliding {
         return before;
     }
 
-    public void canceled() {
+    public void stop() {
         tick = slidingValue;
     }
 }
