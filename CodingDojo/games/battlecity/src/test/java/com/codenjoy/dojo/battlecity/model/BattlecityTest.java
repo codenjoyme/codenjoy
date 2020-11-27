@@ -188,7 +188,7 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertEquals(1, game.getWalls().size());
+        assertEquals(1, game.walls().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -3190,7 +3190,7 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertEquals(1, game.getTrees().size());
+        assertEquals(1, game.trees().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -3211,7 +3211,7 @@ public class BattlecityTest {
                 "☼▲   ▒☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertEquals(2, game.getTrees().size());
+        assertEquals(2, game.trees().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -3981,7 +3981,7 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertEquals(1, game.getIce().size());
+        assertEquals(1, game.ice().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -4277,7 +4277,7 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertEquals(1, game.getRivers().size());
+        assertEquals(1, game.rivers().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +

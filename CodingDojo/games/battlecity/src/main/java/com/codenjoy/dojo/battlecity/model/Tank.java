@@ -152,10 +152,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         return alive;
     }
 
-    public boolean isDestroyed() {
-        return !isAlive();
-    }
-
     public void removeBullets() {
         bullets.clear();
     }

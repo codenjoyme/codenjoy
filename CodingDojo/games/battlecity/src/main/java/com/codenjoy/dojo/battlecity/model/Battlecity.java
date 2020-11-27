@@ -34,6 +34,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.*;
+import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
 
 public class Battlecity implements Field {
@@ -157,7 +158,7 @@ public class Battlecity implements Field {
 
     private void removeDeadAi() {
         List<Tank> dead = ais.stream()
-                .filter(Tank::isDestroyed)
+                .filter(not(Tank::isAlive))
                 .collect(toList());
         ais.removeAll(dead);
         dead.stream()
@@ -378,42 +379,38 @@ public class Battlecity implements Field {
             @Override
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>() {{
-                    addAll(Battlecity.this.getBorders());
+                    addAll(Battlecity.this.borders());
                     addAll(Battlecity.this.allTanks());
-                    addAll(Battlecity.this.getWalls());
+                    addAll(Battlecity.this.walls());
                     addAll(Battlecity.this.bullets());
                     addAll(Battlecity.this.prizes());
-                    addAll(Battlecity.this.getTrees());
-                    addAll(Battlecity.this.getIce());
-                    addAll(Battlecity.this.getRivers());
+                    addAll(Battlecity.this.trees());
+                    addAll(Battlecity.this.ice());
+                    addAll(Battlecity.this.rivers());
                 }};
             }
         };
     }
 
-    public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<>();
-        for (Wall wall : walls) {
-            if (!wall.destroyed()) {
-                result.add(wall);
-            }
-        }
-        return result;
+    public List<Wall> walls() {
+        return walls.stream()
+                .filter(not(Wall::destroyed))
+                .collect(toList());
     }
 
-    public List<Tree> getTrees() {
+    public List<Tree> trees() {
         return trees;
     }
 
-    public List<Ice> getIce() {
+    public List<Ice> ice() {
         return ice;
     }
 
-	public List<River> getRivers() {
+	public List<River> rivers() {
 		return rivers;
 	}
 
-    public List<Border> getBorders() {
+    public List<Border> borders() {
         return borders;
     }
 
