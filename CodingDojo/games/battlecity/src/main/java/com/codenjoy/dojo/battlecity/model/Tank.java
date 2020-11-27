@@ -223,8 +223,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         return false;
     }
 
-    public List<Prize> prizes() {
-        return prizes.all();
+    public Prizes prizes() {
+        return prizes;
     }
 
     public void take(Prize prize) {

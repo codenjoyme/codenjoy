@@ -112,7 +112,7 @@ public class Battlecity implements Field {
                 tank.tryFire();
             }
 
-            if (contains(tank.prizes(), PRIZE_BREAKING_WALLS)) {
+            if (tank.prizes().contains(PRIZE_BREAKING_WALLS)) {
                 tank.getBullets().stream().forEach(Bullet::heavy);
             }
         }
@@ -179,7 +179,7 @@ public class Battlecity implements Field {
                 return;
             }
 
-            if (!contains(tank.prizes(), PRIZE_IMMORTALITY)) {
+            if (!tank.prizes().contains(PRIZE_IMMORTALITY)) {
                 tank.kill(bullet);
             }
 
@@ -285,7 +285,7 @@ public class Battlecity implements Field {
         }
 
         if (isRiver(pt)) {
-            if (contains(tank.prizes(), PRIZE_WALKING_ON_WATER)) {
+            if (tank.prizes().contains(PRIZE_WALKING_ON_WATER)) {
                 return false;
             }
             return true;
@@ -315,11 +315,6 @@ public class Battlecity implements Field {
         }
 
         return pt.isOutOf(size);
-    }
-
-    private boolean contains(List<Prize> prizes, Elements elements) {
-        return prizes.stream()
-                .anyMatch(x -> elements.equals(x.elements()));
     }
 
     private List<Bullet> bullets() {

@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.battlecity.model.items;
 
+import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
@@ -52,5 +53,14 @@ public class Prizes implements Tickable {
 
     public List<Prize> all() {
         return prizes;
+    }
+
+    public boolean contains(Elements elements) {
+        return prizes.stream()
+                .anyMatch(x -> elements.equals(x.elements()));
+    }
+
+    public int size() {
+        return prizes.size();
     }
 }
