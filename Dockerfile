@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM openjdk:11
 
 ARG SPRING_PROFILES=sqlite
 ARG CODENJOY_CONTEXT=codenjoy-contest
