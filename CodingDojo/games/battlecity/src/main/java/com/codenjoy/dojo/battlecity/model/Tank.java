@@ -25,6 +25,7 @@ package com.codenjoy.dojo.battlecity.model;
 
 import com.codenjoy.dojo.battlecity.model.items.Bullet;
 import com.codenjoy.dojo.battlecity.model.items.Prize;
+import com.codenjoy.dojo.battlecity.model.items.Prizes;
 import com.codenjoy.dojo.battlecity.model.items.Tree;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
@@ -50,7 +51,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     private Sliding sliding;
 
     private List<Bullet> bullets;
-    private List<Prize> prizes;
+    private Prizes prizes;
 
     public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
         super(pt);
@@ -162,7 +163,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public void tick() {
         gun.tick();
-        prizes.forEach(Prize::tick);
+        prizes.tick();
     }
 
     @Override
@@ -201,7 +202,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         alive = true;
         gun.reset();
         bullets = new LinkedList<>();
-        prizes = new LinkedList<>();
+        prizes = new Prizes();
     }
 
     public void tryFire() {
@@ -223,11 +224,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public List<Prize> prizes() {
-        return prizes;
+        return prizes.all();
     }
 
     public void take(Prize prize) {
         prizes.add(prize);
-        prize.taken(item -> Tank.this.prizes.remove(item));
     }
 }
