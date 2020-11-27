@@ -48,8 +48,8 @@ public class OptionGameSettings implements GameSettings {
 
         spawnAiPrize = settings.addEditBox("Count spawn for AI Tank with prize").type(Integer.class).def(4);
         hitKillsAiPrize = settings.addEditBox("Hits to kill AI Tank with prize").type(Integer.class).def(3);
-        prizeOnField = settings.addEditBox("Prize must be on the field").type(Integer.class).def(3);
-        prizeWorking = settings.addEditBox("Working time of the prize").type(Integer.class).def(3);
+        prizeOnField = settings.addEditBox("The period of prize validity on the field after the appearance").type(Integer.class).def(3);
+        prizeWorking = settings.addEditBox("Working time of the prize after catch up").type(Integer.class).def(3);
         slidingValue = settings.addEditBox("Value of tank sliding on ice").type(Integer.class).def(3);
     }
 

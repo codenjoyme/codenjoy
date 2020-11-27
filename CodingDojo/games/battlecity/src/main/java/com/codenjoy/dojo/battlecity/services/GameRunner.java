@@ -28,7 +28,6 @@ import com.codenjoy.dojo.battlecity.client.ai.AISolver;
 import com.codenjoy.dojo.battlecity.model.Battlecity;
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
-import com.codenjoy.dojo.battlecity.model.items.Ice;
 import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.battlecity.model.levels.LevelImpl;
 import com.codenjoy.dojo.client.ClientBoard;
@@ -39,8 +38,6 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
-
-import java.util.List;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -71,7 +68,8 @@ public class GameRunner extends AbstractGameType implements GameType {
         game.addAiTanks(level.getAiTanks());
         game.addRiver(level.getRivers());
         game.addTree(level.getTrees());
-        game.addIce(level.getIce(), gameSettings.slidingValue());
+        game.addIce(level.getIce(),
+                gameSettings.slidingValue());
         return game;
     }
 
