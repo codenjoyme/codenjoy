@@ -492,7 +492,8 @@ public class Battlecity implements Field {
         this.trees.addAll(trees);
     }
 
-    public void addIce(List<Ice> ice) {
+    public void addIce(List<Ice> ice, Parameter<Integer> slidingValue) {
         this.ice.addAll(ice);
+        Sliding.slidingValue = slidingValue.getValue();
     }
 }
