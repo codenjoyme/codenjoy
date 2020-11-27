@@ -1645,7 +1645,6 @@ public class BattlecityTest {
         game.tick();
     }
 
-
     // если я стреляю дважды, то выпускается два снаряда
     // при этом я проверяю, что они уничтожаются в порядке очереди
     @Test
@@ -2895,6 +2894,7 @@ public class BattlecityTest {
     @Test
     public void shouldRemoveBulletsAndResetWalls_whenReset() {
         ticksPerBullets = 3;
+
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼╬        ☼\n" +
                 "☼╬        ☼\n" +
@@ -3100,6 +3100,7 @@ public class BattlecityTest {
     @Test
     public void shouldCantFireTwice() {
         ticksPerBullets = 4;
+
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
@@ -3997,7 +3998,7 @@ public class BattlecityTest {
     // то есть запоминается команда которой заезжали на лед
     // Если съезжаем на землю, то любой занос прекращается тут же
     @Test
-    public void shouldTankMoveUP_onIce_afterBeforeGround() {
+    public void shouldTankMoveUp_onIce_afterBeforeGround() {
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
@@ -4102,6 +4103,7 @@ public class BattlecityTest {
     @Test
     public void shouldTankMoveLeftThenUpThenDown_onIce() {
         slidingValue = v(1);
+
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
@@ -4183,6 +4185,7 @@ public class BattlecityTest {
     @Test
     public void shouldOtherTankMoveLeftThenUpThenDown_onIce() {
         slidingValue = v(1);
+
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
@@ -4642,6 +4645,7 @@ public class BattlecityTest {
     @Test
     public void shouldCreatedAiPrize() {
         hitKillsAiPrize = v(3);
+
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ?☼\n" +
                 "☼       ☼\n" +
@@ -4682,6 +4686,7 @@ public class BattlecityTest {
     @Test
     public void shouldSwapElementAfterFourTicks() {
         hitKillsAiPrize = v(3);
+
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ?☼\n" +
                 "☼       ☼\n" +
@@ -4774,6 +4779,7 @@ public class BattlecityTest {
     @Test
     public void shouldSpawnAiPrizeWhenTwoAi() {
         spawnAiPrize = v(3);
+
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ¿    ¿☼\n" +
                 "☼       ☼\n" +
@@ -4803,6 +4809,7 @@ public class BattlecityTest {
     @Test
     public void shouldSpawnAiPrizeWhenThreeAi() {
         spawnAiPrize = v(3);
+
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ¿  ¿ ¿☼\n" +
                 "☼       ☼\n" +
@@ -4832,6 +4839,7 @@ public class BattlecityTest {
     @Test
     public void shouldSpawnTwoAiPrizeWhenSixAi() {
         spawnAiPrize = v(3);
+
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ¿¿¿¿¿¿☼\n" +
                 "☼       ☼\n" +
@@ -4863,6 +4871,7 @@ public class BattlecityTest {
     @Test
     public void shouldSpawnAiPrize_whenAddOneByOneAI() {
         spawnAiPrize = v(3);
+
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
                 "☼       ☼\n" +
@@ -4973,10 +4982,11 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼☼☼\n");
     }
 
-    // в АИтанк с призами надо попасть 3 раза, чтобы убить
+    // в AI-танк с призами надо попасть 3 раза, чтобы убить
     @Test
     public void shouldKillAiPrizeInThreeHits() {
         hitKillsAiPrize = v(3);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼?    ☼\n" +
                 "☼     ☼\n" +
@@ -5129,6 +5139,7 @@ public class BattlecityTest {
     @Test
     public void shouldDropPrize_onlyInPointKilledAiPrize() {
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
                 "☼     ☼\n" +
@@ -5167,8 +5178,9 @@ public class BattlecityTest {
     }
 
     @Test
-    public void shouldDropPrize_InPointKilledAiPrize_underTree() {
+    public void shouldDropPrize_inPointKilledAiPrize_underTree() {
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
                 "☼▒    ☼\n" +
@@ -5221,6 +5233,7 @@ public class BattlecityTest {
     @Test
     public void shouldDropPrize_InPointKilledAiPrize_onIce() {
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
                 "☼█    ☼\n" +
@@ -5274,8 +5287,8 @@ public class BattlecityTest {
     @Test
     public void shouldExpirePrizeOnField_disappearTwoTicks() {
         prizeOnField = v(2);
-
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
                 "☼     ☼\n" +
@@ -5320,8 +5333,8 @@ public class BattlecityTest {
     @Test
     public void shouldExpirePrizeOnField_disappearThreeTicks() {
         prizeOnField = v(3);
-
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
                 "☼     ☼\n" +
@@ -5376,8 +5389,8 @@ public class BattlecityTest {
     @Test
     public void shouldExpirePrizeOnField_disappearFourTicks() {
         prizeOnField = v(4);
-
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
                 "☼     ☼\n" +
@@ -5443,8 +5456,8 @@ public class BattlecityTest {
     @Test
     public void shouldExpirePrizeOnField_disappearOnTree() {
         prizeOnField = v(2);
-
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
                 "☼▒    ☼\n" +
@@ -5519,8 +5532,8 @@ public class BattlecityTest {
     @Test
     public void shouldExpirePrizeOnField_disappearOnIce() {
         prizeOnField = v(2);
-
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
                 "☼█    ☼\n" +
@@ -5594,6 +5607,7 @@ public class BattlecityTest {
     public void shouldHeroTookPrize() {
         prizeOnField = v(3);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -5635,6 +5649,8 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
+        assertPrize(hero(0), 1);
+
         hero(0).up();
         game.tick();
 
@@ -5651,6 +5667,7 @@ public class BattlecityTest {
     public void shouldOtherTookPrize() {
         prizeOnField = v(3);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -5692,6 +5709,9 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
+        assertPrize(hero(0), 0);
+        assertPrize(hero(1), 1);
+
         hero(1).up();
         game.tick();
 
@@ -5708,6 +5728,7 @@ public class BattlecityTest {
     public void shouldHeroTookPrize_underTree() {
         prizeOnField = v(3);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼¿    ☼\n" +
@@ -5750,6 +5771,8 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
+
+        assertPrize(hero(0), 1);
 
         hero(0).up();
         game.tick();
@@ -5767,6 +5790,7 @@ public class BattlecityTest {
     public void shouldOtherTookPrize_underTree() {
         prizeOnField = v(3);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼    ¿☼\n" +
@@ -5810,6 +5834,9 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
+        assertPrize(hero(0), 0);
+        assertPrize(hero(1), 1);
+
         hero(1).up();
         game.tick();
 
@@ -5826,6 +5853,7 @@ public class BattlecityTest {
     public void shouldHeroTookPrize_onIce() {
         prizeOnField = v(3);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼¿    ☼\n" +
@@ -5869,6 +5897,8 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
+        assertPrize(hero(0), 1);
+
         hero(0).up();
         game.tick();
 
@@ -5885,6 +5915,7 @@ public class BattlecityTest {
     public void shouldOtherTookPrize_onIce() {
         prizeOnField = v(3);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼    ¿☼\n" +
@@ -5928,6 +5959,9 @@ public class BattlecityTest {
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
+        assertPrize(hero(0), 0);
+        assertPrize(hero(1), 1);
+
         hero(1).up();
         game.tick();
 
@@ -5944,6 +5978,7 @@ public class BattlecityTest {
     public void shouldAiDontTookPrize() {
         prizeOnField = v(3);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼¿    ☼\n" +
@@ -6004,6 +6039,7 @@ public class BattlecityTest {
     public void shouldHeroTookPrize_inPointKillAi() {
         prizeOnField = v(3);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -6034,6 +6070,8 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
+        assertPrize(hero(0), 1);
+
         hero(0).up();
         game.tick();
 
@@ -6045,7 +6083,10 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertEquals(1, hero(0).getPrizesTaken().size());
+    }
+
+    private void assertPrize(Tank hero, int expected) {
+        assertEquals(expected, hero.getPrizesTaken().size());
     }
 
     // если в момент подбора приза прилетает снаряд, то умирает танк, а приз остается
@@ -6053,6 +6094,7 @@ public class BattlecityTest {
     public void shouldKillHero_whenHeroTookPrizeAndComesBullet() {
         prizeOnField = v(6);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -6096,6 +6138,8 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
+        assertPrize(hero(0), 0);
+
         hero(1).left();
         game.tick();
 
@@ -6129,6 +6173,8 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
+        assertPrize(hero(1), 1);
+
         hero(1).up();
         game.tick();
 
@@ -6144,13 +6190,14 @@ public class BattlecityTest {
                 "listener(0) => [KILL_YOUR_TANK]\n" +
                         "listener(1) => [KILL_OTHER_HERO_TANK[1]]\n");
 
-        assertEquals(1, hero(1).getPrizesTaken().size());
+        assertPrize(hero(1), 1);
     }
 
     @Test
     public void shouldHeroKillPrize() {
         prizeOnField = v(3);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼¿    ☼\n" +
@@ -6200,6 +6247,8 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
+
+        assertPrize(hero(0), 0);
     }
 
     // если я подстрелил приз, а в следующий тик в эту ячейку въезжаю сам,
@@ -6208,6 +6257,7 @@ public class BattlecityTest {
     public void shouldHeroKillPrize_dontTakeNextTick() {
         prizeOnField = v(3);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -6259,13 +6309,14 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        assertEquals(0, hero(0).getPrizesTaken().size());
+        assertPrize(hero(0), 0);
     }
 
     @Test
-    public void shouldAddScores_forKilledTanks() {
+    public void shouldKilAITankWithPrize_whenHitKillsIs2() {
         prizeOnField = v(3);
         hitKillsAiPrize = v(2);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
                 "☼     ☼\n" +
@@ -6365,6 +6416,7 @@ public class BattlecityTest {
     public void shouldHeroTakePrize_breakingWalls() {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼  ╬  ☼\n" +
                 "☼     ☼\n" +
@@ -6406,11 +6458,11 @@ public class BattlecityTest {
                 "☼  ╬  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
+        assertPrize(hero(0), 1);
+
         hero(0).right();
         hero(0).act();
         game.tick();
-
-        assertEquals(1, hero(0).getPrizesTaken().size());
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼  ╬  ☼\n" +
@@ -6461,6 +6513,7 @@ public class BattlecityTest {
     public void shouldHeroTakePrizeEnemyWithoutPrize_breakingWalls() {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼╬╬╬  ☼\n" +
                 "☼     ☼\n" +
@@ -6494,7 +6547,7 @@ public class BattlecityTest {
         hero(1).up();
         game.tick();
 
-        assertEquals(1, hero(0).getPrizesTaken().size());
+        assertPrize(hero(0), 1);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬╬╬  ☼\n" +
@@ -6531,6 +6584,7 @@ public class BattlecityTest {
     public void shouldHeroNotBreakingBorder_breakingWalls() {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼╬╬╬  ☼\n" +
                 "☼     ☼\n" +
@@ -6563,7 +6617,7 @@ public class BattlecityTest {
         hero(0).up();
         game.tick();
 
-        assertEquals(1, hero(0).getPrizesTaken().size());
+        assertPrize(hero(0), 1);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬╬╬  ☼\n" +
@@ -6621,6 +6675,7 @@ public class BattlecityTest {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
         prizeWorking = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
                 "☼╬    ☼\n" +
@@ -6653,7 +6708,7 @@ public class BattlecityTest {
         hero(0).up();
         game.tick();
 
-        assertEquals(1, hero(0).getPrizesTaken().size());
+        assertPrize(hero(0), 1);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
@@ -6700,6 +6755,7 @@ public class BattlecityTest {
     public void shouldHeroTakePrizeEnemyShootsHero_immortality() {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -6734,7 +6790,7 @@ public class BattlecityTest {
         hero(1).left();
         game.tick();
 
-        assertEquals(1, hero(0).getPrizesTaken().size());
+        assertPrize(hero(0), 1);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -6764,6 +6820,10 @@ public class BattlecityTest {
                 "☼▲  ˂ ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
+
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n");
     }
 
     @Test
@@ -6771,6 +6831,7 @@ public class BattlecityTest {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
         prizeWorking = v(3);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -6805,7 +6866,7 @@ public class BattlecityTest {
         hero(1).left();
         game.tick();
 
-        assertEquals(1, hero(0).getPrizesTaken().size());
+        assertPrize(hero(0), 1);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -6828,6 +6889,10 @@ public class BattlecityTest {
 
         game.tick();
 
+        events.verifyAllEvents(
+                "listener(0) => []\n" +
+                "listener(1) => []\n");
+
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -6839,7 +6904,7 @@ public class BattlecityTest {
         game.tick();
         game.tick();
 
-        assertEquals(0, hero(0).getPrizesTaken().size());
+        assertPrize(hero(0), 0);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -6872,13 +6937,14 @@ public class BattlecityTest {
 
         events.verifyAllEvents(
                 "listener(0) => [KILL_YOUR_TANK]\n" +
-                        "listener(1) => [KILL_OTHER_HERO_TANK[1]]\n");
+                "listener(1) => [KILL_OTHER_HERO_TANK[1]]\n");
     }
 
     @Test
     public void shouldHeroTakePrizeAiShootsHero_immortality() {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
                 "☼     ☼\n" +
@@ -6925,7 +6991,7 @@ public class BattlecityTest {
         ai(0).down();
         game.tick();
 
-        assertEquals(1, hero(0).getPrizesTaken().size());
+        assertPrize(hero(0), 1);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼▲    ☼\n" +
@@ -6956,6 +7022,10 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
+
+        events.verifyAllEvents(
+                "listener(0) => []\n");
+
     }
 
     @Test
@@ -6963,6 +7033,7 @@ public class BattlecityTest {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
         prizeWorking = v(2);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
                 "☼     ☼\n" +
@@ -7009,7 +7080,7 @@ public class BattlecityTest {
         ai(0).down();
         game.tick();
 
-        assertEquals(1, hero(0).getPrizesTaken().size());
+        assertPrize(hero(0), 1);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼▲    ☼\n" +
@@ -7042,11 +7113,14 @@ public class BattlecityTest {
                 "☼¿    ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
+        events.verifyAllEvents(
+                "listener(0) => []\n");
+
         ai(0).up();
         ai(0).act();
         game.tick();
 
-        assertEquals(0, hero(0).getPrizesTaken().size());
+        assertPrize(hero(0), 0);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼▲    ☼\n" +
@@ -7075,6 +7149,7 @@ public class BattlecityTest {
     @Test
     public void shouldTankSlidingOneTicks() {
         slidingValue = v(3);
+
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
@@ -7122,6 +7197,7 @@ public class BattlecityTest {
     @Test
     public void shouldTankSlidingNTicks() {
         slidingValue = v(3);
+
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
@@ -7219,6 +7295,7 @@ public class BattlecityTest {
     @Test
     public void shouldTankSlidingNTicks_andAgainSliding() {
         slidingValue = v(3);
+
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
                 "☼         ☼\n" +
@@ -7363,6 +7440,7 @@ public class BattlecityTest {
     @Test
     public void shouldTankAndSliding_ifBumpedWall() {
         slidingValue = v(5);
+
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼███  ☼\n" +
                 "☼█    ☼\n" +
@@ -7433,7 +7511,6 @@ public class BattlecityTest {
 
     @Test
     public void shouldTankCanGoIfRiverAtWay_whenTankTakePrize() {
-
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
         prizeWorking = v(3);
@@ -7553,7 +7630,7 @@ public class BattlecityTest {
         hero(1).up();
         game.tick();
 
-        assertEquals(1, hero(0).getPrizesTaken().size());
+        assertPrize(hero(0), 1);
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -7591,7 +7668,6 @@ public class BattlecityTest {
     // когда заканчивается действие приза движение по воде отключается
     @Test
     public void shouldTankCanGoIfRiverAtWay_whenPrizeIsOver() {
-
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
         prizeWorking = v(2);
@@ -7687,7 +7763,6 @@ public class BattlecityTest {
     @Test
     @Ignore // TODO продолжить тут
     public void shouldTankCanGoIfRiverAtWay_whenPrizeIsOver_butTankOnWater() {
-
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
         prizeWorking = v(3);
