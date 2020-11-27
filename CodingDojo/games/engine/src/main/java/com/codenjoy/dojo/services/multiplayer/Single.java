@@ -54,7 +54,7 @@ public class Single implements Game {
     public Single(GamePlayer player, PrinterFactory factory, MultiplayerType multiplayerType) {
         this.player = player;
         this.multiplayerType = multiplayerType;
-        this.progress = new LevelProgress(multiplayerType);
+        this.progress = multiplayerType.progress();
         this.factory = factory;
     }
 
@@ -125,20 +125,7 @@ public class Single implements Game {
 
         Object data = printer.print();
 
-        if (multiplayerType.isTraining()) { // TODO инкапсулировать
-            if (data instanceof JSONObject) {
-                JSONObject json = (JSONObject) data;
-                progress.saveTo(json);
-                return json;
-            } else {
-                JSONObject json = new JSONObject();
-                progress.saveTo(json);
-                json.put("board", data);
-                return json;
-            }
-        } else {
-            return data;
-        }
+        return multiplayerType.postProcessBoard(data, this);
     }
 
     @Override
@@ -170,17 +157,7 @@ public class Single implements Game {
     @Override
     public JSONObject getSave() {
         JSONObject save = (field == null) ? null : field.getSave();
-        if (multiplayerType.isTraining()) { // TODO это надо инкапсулировать
-            JSONObject result = new JSONObject();
-            result.put("field", save);
-            progress.saveTo(result);
-            return result;
-        } else {
-            if (save == null) {
-                return new JSONObject();
-            }
-            return save;
-        }
+        return multiplayerType.postProcessSave(save, this);
     }
 
     @Override

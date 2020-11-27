@@ -41,6 +41,7 @@ import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.GraphicPrinter;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import com.codenjoy.dojo.transport.screen.ScreenSender;
@@ -669,7 +670,7 @@ public class PlayerServiceImplTest {
 
         // when, then
         when(playerScores(0).getScore()).thenReturn(10, 13);
-        informationCollector.levelChanged(new LevelProgress(2, 1, 1));
+        informationCollector.levelChanged(new LevelProgress(3, 2, 1));
         informationCollector.event("event1");
         checkInfo("+3, Level 2");
     }

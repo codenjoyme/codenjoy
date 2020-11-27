@@ -62,7 +62,7 @@ public class LevelsFactory {
         String className = LevelsFactory.class.getPackage().getName() + ".level." + level;
         try {
             Class<?> aClass = this.getClass().getClassLoader().loadClass(className);
-            Constructor<?> constructor = aClass.getConstructor(Dice.class, Figures.class);
+            Constructor<?> constructor = aClass.getConstructor(Dice.class, FigureQueue.class);
             Object result = constructor.newInstance(dice, playerQueue);
             return (Levels)result;
         } catch (ReflectiveOperationException e) {

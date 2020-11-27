@@ -130,10 +130,15 @@ public class SmartAssert extends Runner {
         StackTraceElement[] elements = stackTrace();
         for (int i = 0; i < elements.length; i++) {
             StackTraceElement element = elements[i];
-            if (!element.getClassName().equals(SmartAssert.class.getName()) &&
-                    !element.getClassName().contains(SmartAssert.class.getSimpleName() + "$")) {
-                return element;
-            }             
+            String className = element.getClassName();
+
+            if (className.contains("Abstract")
+                || className.equals(SmartAssert.class.getName())
+                || className.contains(SmartAssert.class.getSimpleName() + "$"))
+            {
+                continue;
+            }
+            return element;
         }
         throw new RuntimeException();
     }
@@ -157,13 +162,17 @@ public class SmartAssert extends Runner {
         list.clear();
         fail("There are errors");
     }
-    
+
     public static void checkResult() {
         checkResult(failures());
     }
+    
+    public static void checkResult(Class<?> caller) {
+        checkResult(failures(caller.getName()));
+    }
 
     private static List<Failure> failures() {
-        return failures(getCaller().getClassName());    
+        return failures(getCaller().getClassName());
     }
     
     private static List<Failure> failures(String caller) {

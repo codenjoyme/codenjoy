@@ -40,7 +40,7 @@ public class YourSolverLite implements Solver<Board> {
         this.processor = new Processor(rulesPlace, dice, this::println);
     }
 
-    private void println(ErrorMessage message) {
+    private void println(Message message) {
         try {
             new PrintStream(System.out, true, Encoding.UTF8).println(message.toString());
         } catch (IOException e) {

@@ -96,6 +96,7 @@ public class ProbabilityLevelsTest {
         for (int i = 0; i < 20; i++) {
             actuals.add(calculateFiguresProbabilities());
             levels.linesRemoved(LINES_REMOVED_FOR_NEXT_LEVEL);
+            levels.tryGoNextLevel();
         }
         assertEquals(expected, String.join("\n", actuals));
     }
@@ -115,6 +116,7 @@ public class ProbabilityLevelsTest {
         assertEquals(0, levels.getCurrentLevelNumber());
 
         levels.linesRemoved(LINES_REMOVED_FOR_NEXT_LEVEL);
+        levels.tryGoNextLevel();
 
         assertEquals(1, levels.getCurrentLevelNumber());
     }

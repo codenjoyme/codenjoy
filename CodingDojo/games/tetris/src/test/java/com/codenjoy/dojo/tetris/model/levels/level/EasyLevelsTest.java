@@ -72,6 +72,7 @@ public class EasyLevelsTest {
         assertEquals(Arrays.toString(expected), Arrays.toString(openFigures));
 
         levels.linesRemoved(LINES_REMOVED_FOR_NEXT_LEVEL);
+        levels.tryGoNextLevel();
     }
 
     public static Type[] getOpenFigures(FigureQueue queue) {

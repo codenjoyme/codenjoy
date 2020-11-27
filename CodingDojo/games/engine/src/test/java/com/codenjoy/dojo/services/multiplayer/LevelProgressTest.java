@@ -77,6 +77,81 @@ public class LevelProgressTest {
     }
 
     @Test
+    public void constructFromInts_valid_currentIsEqualsPassedPlus1() {
+        // given
+        int total = 5;
+        int current = 1;
+        int passed = 0;
+
+        // when
+        LevelProgress progress = new LevelProgress(total, current, passed);
+
+        // then
+        assertEquals("{'current':1,'passed':0,'total':5,'valid':true}",
+                progress.toString());
+    }
+
+    @Test
+    public void constructFromInts_invalid_passedIsNegative() {
+        // given
+        int total = 5;
+        int current = 0;
+        int passed = -1; // BUG
+
+        // when
+        LevelProgress progress = new LevelProgress(total, current, passed);
+
+        // then
+        assertEquals("{'current':0,'passed':-1,'total':5,'valid':false}",
+                progress.toString());
+    }
+
+    @Test
+    public void constructFromInts_invalid_totalIsEquals0() {
+        // given
+        int total = 0; // BUG
+        int current = 1;
+        int passed = 2;
+
+        // when
+        LevelProgress progress = new LevelProgress(total, current, passed);
+
+        // then
+        assertEquals("{'current':1,'passed':2,'total':0,'valid':false}",
+                progress.toString());
+    }
+
+    @Test
+    public void constructFromInts_invalid_totalIsNegative() {
+        // given
+        int total = -1; // BUG
+        int current = 1;
+        int passed = 2;
+
+        // when
+        LevelProgress progress = new LevelProgress(total, current, passed);
+
+        // then
+        assertEquals("{'current':1,'passed':2,'total':-1,'valid':false}",
+                progress.toString());
+    }
+
+    @Test
+    public void constructFromInts_valid_totalIsEqual1() {
+        // given
+        int total = 1;
+        int current = 1;
+        int passed = 0;
+
+        // when
+        LevelProgress progress = new LevelProgress(total, current, passed);
+
+        // then
+        assertEquals("{'current':1,'passed':0,'total':1,'valid':true}",
+                progress.toString());
+    }
+
+    @Test
     public void constructFromInts_invalid_passedMoreThanTotal() {
         // given
         int total = 5;
@@ -90,6 +165,37 @@ public class LevelProgressTest {
         assertEquals("{'current':2,'passed':6,'total':5,'valid':false}",
                 progress.toString());
     }
+
+    @Test
+    public void constructFromInts_invalid_currentIsZerro() {
+        // given
+        int total = 2;
+        int current = 0; // BUG
+        int passed = 1;
+
+        // when
+        LevelProgress progress = new LevelProgress(total, current, passed);
+
+        // then
+        assertEquals("{'current':0,'passed':1,'total':2,'valid':false}",
+                progress.toString());
+    }
+
+    @Test
+    public void constructFromInts_invalid_currentIsNegative() {
+        // given
+        int total = 2;
+        int current = -1; // BUG
+        int passed = 1;
+
+        // when
+        LevelProgress progress = new LevelProgress(total, current, passed);
+
+        // then
+        assertEquals("{'current':-1,'passed':1,'total':2,'valid':false}",
+                progress.toString());
+    }
+
 
     @Test
     public void constructFromInts_valid_totalCanBeEqualsWithCurrent_thisIsLasMultipleLevelForTraining() {
@@ -112,10 +218,10 @@ public class LevelProgressTest {
         MultiplayerType type = MultiplayerType.SINGLE;
 
         // when
-        LevelProgress progress = new LevelProgress(type);
+        LevelProgress progress = type.progress();
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
+        assertEquals("{'current':1,'passed':0,'total':1,'valid':true}",
                 progress.toString());
     }
 
@@ -125,10 +231,10 @@ public class LevelProgressTest {
         MultiplayerType type = MultiplayerType.TRAINING.apply(5);
 
         // when
-        LevelProgress progress = new LevelProgress(type);
+        LevelProgress progress = type.progress();
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':5,'valid':true}",
+        assertEquals("{'current':1,'passed':0,'total':5,'valid':true}",
                 progress.toString());
     }
 
@@ -315,7 +421,7 @@ public class LevelProgressTest {
 
         // when
         try {
-            LevelProgress.winLevel(json);
+            LevelProgress.goNext(json);
             fail();
         } catch (IllegalArgumentException e) {
             assertEquals("Progress is invalid: {'current':2,'passed':0,'total':3,'valid':false}", e.getMessage());
@@ -328,7 +434,7 @@ public class LevelProgressTest {
         json = new JSONObject("{'levelProgress':{'total':3,'current':2,'lastPassed':2}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}");
@@ -340,7 +446,7 @@ public class LevelProgressTest {
         json = new JSONObject("{'levelProgress':{'total':2,'current':2,'lastPassed':2}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertEquals(null, json);
@@ -352,19 +458,19 @@ public class LevelProgressTest {
         json = new JSONObject("{'a':'data','levelProgress':{'total':4,'current':2,'lastPassed':3}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':3,'lastPassed':3}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':4,'lastPassed':3}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertEquals(null, json);
@@ -373,36 +479,30 @@ public class LevelProgressTest {
     @Test
     public void nextLevel_ok_increaseLassPassedWithCurrent() {
         // given
-        json = new JSONObject("{'a':'data','levelProgress':{'total':4,'current':0,'lastPassed':-1}}");
+        json = new JSONObject("{'a':'data','levelProgress':{'total':4,'current':1,'lastPassed':0}}");
 
-        assertJson("{'a':'data','levelProgress':{'total':4,'current':0,'lastPassed':-1}}");
-
-        // when
-        json = LevelProgress.winLevel(json);
-
-        // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':1,'lastPassed':0}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':2,'lastPassed':1}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':3,'lastPassed':2}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertJson("{'a':'data','levelProgress':{'total':4,'current':4,'lastPassed':3}}");
 
         // when
-        json = LevelProgress.winLevel(json);
+        json = LevelProgress.goNext(json);
 
         // then
         assertEquals(null, json);
@@ -420,10 +520,10 @@ public class LevelProgressTest {
         assertJson("{'levelProgress':{'total':4,'current':4,'lastPassed':3}}");
 
         // when
-        changeLevel(0);
+        cantChangeLevel(0);
 
         // then
-        assertJson("{'levelProgress':{'total':4,'current':0,'lastPassed':3}}");
+        assertJson("{'levelProgress':{'total':4,'current':4,'lastPassed':3}}");
 
         // when
         changeLevel(1);
@@ -445,6 +545,12 @@ public class LevelProgressTest {
 
         // when
         changeLevel(4);
+
+        // then
+        assertJson("{'levelProgress':{'total':4,'current':4,'lastPassed':3}}");
+
+        // when
+        cantChangeLevel(5);
 
         // then
         assertJson("{'levelProgress':{'total':4,'current':4,'lastPassed':3}}");
@@ -532,9 +638,9 @@ public class LevelProgressTest {
         assertJson("{'levelProgress':{'total':4,'current':2,'lastPassed':1}}");
 
         // when
-        changeLevel(0);
+        changeLevel(1);
 
         // then
-        assertJson("{'levelProgress':{'total':4,'current':0,'lastPassed':1}}");
+        assertJson("{'levelProgress':{'total':4,'current':1,'lastPassed':1}}");
     }
 }

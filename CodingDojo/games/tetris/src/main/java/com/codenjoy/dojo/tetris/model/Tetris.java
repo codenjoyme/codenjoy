@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -73,7 +74,25 @@ public class Tetris implements Field {
 
     @Override
     public BoardReader reader() {
-        return null; // do nothing because board has JSON format
+        return new BoardReader() {
+            @Override
+            public int size() {
+                return Tetris.this.size();
+            }
+
+            @Override
+            public Iterable<? extends Point> elements() {
+                Hero hero = player.getHero();
+
+                return new LinkedList<Point>() {{
+                    List<Plot> droppedPlots = hero.dropped();
+                    List<Plot> currentFigurePlots = hero.currentFigure();
+                    droppedPlots.removeAll(currentFigurePlots);
+                    addAll(droppedPlots);
+                    addAll(currentFigurePlots);
+                }};
+            }
+        };
     }
 
     @Override

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.bomberman.client.simple;
  */
 
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.utils.TestUtils;
 
 import java.util.List;
 
@@ -48,6 +49,6 @@ public class RuleChild implements Rule {
 
     @Override
     public String toString() {
-        return String.format("[%s > %s]", pattern, directions);
+        return String.format("[%s \n >>> %s]", pattern, directions);
     }
 }

@@ -42,17 +42,17 @@ public class ProcessorTest extends AbstractRuleReaderTest {
 
     private Processor processor;
     private Board board;
-    private List<ErrorMessage> errors;
+    private List<Message> messages;
 
     @Before
     public void setup() {
         // given 
         super.setup();
 
-        errors = new LinkedList<>();
+        messages = new LinkedList<>();
         board = mock(Board.class);
         
-        processor = new Processor("", mock(Dice.class), this.errors::add) {
+        processor = new Processor("", mock(Dice.class), this.messages::add) {
             @Override
             protected RuleReader getReader() {
                 return reader;
@@ -70,7 +70,7 @@ public class ProcessorTest extends AbstractRuleReaderTest {
         
         // then
         assertEquals(Direction.STOP, direction);
-        assertEquals("[]", errors.toString());
+        assertEquals("[]", messages.toString());
     }
 
     @Test
@@ -92,7 +92,13 @@ public class ProcessorTest extends AbstractRuleReaderTest {
         assertEquals(Direction.UP, processor.next(board));
         assertEquals(Direction.LEFT, processor.next(board));
         
-        assertEquals("[]", errors.toString());
+        assertEquals("[[MESSAGE] Mach rule: : '[\n" +
+                "   \n" +
+                "   \n" +
+                "   \n" +
+                "synonyms: {} \n" +
+                " >>> [RIGHT, LEFT, DOWN, UP, UP, LEFT]]']", messages.toString());
+        messages.clear();
     }
     
     @Test
@@ -102,7 +108,7 @@ public class ProcessorTest extends AbstractRuleReaderTest {
         shouldSeveralDirections_whenOneRule();
         shouldSeveralDirections_whenOneRule();
         
-        assertEquals("[]", errors.toString());
+        assertEquals("[]", messages.toString());
     }
 
     @Test
@@ -121,7 +127,7 @@ public class ProcessorTest extends AbstractRuleReaderTest {
         // then
         assertEquals(Direction.STOP, direction);
 
-        assertEquals("[[ERROR] Pattern is not valid: '         BAD RULE' at " + SEP + "main.rule:5]", errors.toString());
+        assertEquals("[[ERROR] Pattern is not valid: '         BAD RULE' at " + SEP + "main.rule:5]", messages.toString());
     }
 
     @Test

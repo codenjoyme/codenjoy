@@ -22,6 +22,7 @@ package com.codenjoy.dojo.bomberman.client.simple;
  * #L%
  */
 
+import com.codenjoy.dojo.utils.TestUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
@@ -64,6 +65,9 @@ public class Pattern {
 
     @Override
     public String toString() {
-        return pattern;
+        return String.format("\n" +
+                TestUtils.injectN(pattern) +
+                "synonyms: " +
+                synonyms);
     }
 }

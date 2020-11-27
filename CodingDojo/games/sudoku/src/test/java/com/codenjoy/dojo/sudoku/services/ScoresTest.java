@@ -35,6 +35,7 @@ public class ScoresTest {
     private PlayerScores scores;
 
     private Settings settings;
+    private SettingsWrapper wrapper;
 
     private Integer failPenalty;
     private Integer winScore;
@@ -60,17 +61,18 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new Scores(0, settings);
+        wrapper = SettingsWrapper.setup(settings);
+        scores = new Scores(0, wrapper);
 
-        winScore = settings.addEditBox("Win score").type(Integer.class).getValue();
-        failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).getValue();
-        successScore = settings.addEditBox("Success score").type(Integer.class).getValue();
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).getValue();
+        winScore = settings.getParameter("Win score").type(Integer.class).getValue();
+        failPenalty = settings.getParameter("Fail penalty").type(Integer.class).getValue();
+        successScore = settings.getParameter("Success score").type(Integer.class).getValue();
+        loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        scores = new Scores(140, wrapper);
 
         success();  //+10
         success();  //+10

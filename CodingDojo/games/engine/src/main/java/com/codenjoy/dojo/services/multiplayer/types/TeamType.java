@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.sudoku.model;
+package com.codenjoy.dojo.services.multiplayer.types;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,14 +22,11 @@ package com.codenjoy.dojo.sudoku.model;
  * #L%
  */
 
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 
-import java.util.List;
+public class TeamType extends MultiplayerType {
 
-public interface Level {
-
-    int getSize();
-
-    List<Cell> getCells();
-
-    List<Wall> getWalls();
+    public TeamType(Integer count, Boolean disposable) {
+        super(count, disposable);
+    }
 }

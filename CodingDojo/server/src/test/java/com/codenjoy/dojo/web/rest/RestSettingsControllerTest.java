@@ -23,19 +23,10 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GameServiceImpl;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.mocks.FirstGameType;
-import com.codenjoy.dojo.services.mocks.SecondGameType;
 import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.stuff.SmartAssert;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
-import org.json.SortedJSONObject;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,22 +35,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
-import java.util.Collection;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
@@ -67,29 +49,18 @@ import static org.mockito.Mockito.mock;
 @ActiveProfiles(SQLiteProfile.NAME)
 @Import(RestSettingsControllerTest.ContextConfiguration.class)
 @WebAppConfiguration
-public class RestSettingsControllerTest {
+public class RestSettingsControllerTest extends AbstractRestControllerTest {
 
     private Settings first;
     private Settings second;
 
     @TestConfiguration
     public static class ContextConfiguration {
-
         @Bean("gameService")
         public GameServiceImpl gameService() {
-            return new GameServiceImpl(){
-                @Override
-                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(FirstGameType.class, SecondGameType.class);
-                }
-            };
+            return AbstractRestControllerTest.gameService();
         }
     }
-
-    private MockMvc mvc;
-
-    @Autowired
-    private WebApplicationContext context;
 
     @Autowired
     private RestSettingsController service;
@@ -99,8 +70,7 @@ public class RestSettingsControllerTest {
 
     @Before
     public void setUp() {
-        CodenjoyContext.setContext("codenjoy-contest");
-        mvc = MockMvcBuilders.webAppContextSetup(context).build();
+        super.setUp();
 
         first = gameService.getGame("first").getSettings();
         second = gameService.getGame("second").getSettings();
@@ -113,48 +83,13 @@ public class RestSettingsControllerTest {
 
         second.addSelect("three", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option1");
         second.addEditBox("four").type(String.class).def("some-data");
-
-    }
-
-    @After
-    public void checkErrors() {
-        SmartAssert.checkResult();
-    }
-
-    @SneakyThrows
-    protected String mapToJson(Object obj) {
-        return new ObjectMapper().writeValueAsString(obj);
-    }
-
-    @SneakyThrows
-    protected <T> T mapFromJson(String json, Class<T> clazz) {
-        return new ObjectMapper().readValue(json, clazz);
-    }
-
-    @SneakyThrows
-    private String get(String uri) {
-        return process(MockMvcRequestBuilders.get(uri));
-    }
-
-    @SneakyThrows
-    private String post(String uri, String data) {
-        return process(MockMvcRequestBuilders.post(uri, data)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(data));
-    }
-
-    private String process(MockHttpServletRequestBuilder post) throws Exception {
-        MvcResult mvcResult = mvc.perform(post
-                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        return mvcResult.getResponse().getContentAsString();
     }
 
     @Test
     public void shouldGetSet_caseGameDataAsStorage() {
         // when
         assertEquals("{}", service.set("first", "key", "value"));
-        assertEquals("{}", post("/rest/settings/second/key2", "value2"));
+        assertEquals("{}", post(200, "/rest/settings/second/key2", "value2"));
 
         // then
         assertEquals("value", get("/rest/settings/first/key"));
@@ -172,17 +107,11 @@ public class RestSettingsControllerTest {
                 fix(service.get("second", RestSettingsController.SETTINGS)));
     }
 
-    private String fix(String input) {
-        return new SortedJSONObject(input)
-                .toString()
-                .replace('\"', '\'');
-    }
-
     @Test
     public void shouldGetSet_caseGameDataAsStorage_caseGeneral() {
         // when
         assertEquals("{}", service.set(RestSettingsController.GENERAL, "key", "value"));
-        assertEquals("{}", post("/rest/settings/" + RestSettingsController.GENERAL + "/key2", "value2"));
+        assertEquals("{}", post(200, "/rest/settings/" + RestSettingsController.GENERAL + "/key2", "value2"));
 
         // then
         assertEquals("value", get("/rest/settings/" + RestSettingsController.GENERAL + "/key"));
@@ -204,7 +133,7 @@ public class RestSettingsControllerTest {
     public void shouldGetSet_caseSettingsAsStorage() {
         // when
         assertEquals("{}", service.set("first", "two", "135"));
-        assertEquals("{}", post("/rest/settings/second/three", "option2"));
+        assertEquals("{}", post(200, "/rest/settings/second/three", "option2"));
 
         // then
         assertEquals("true", get("/rest/settings/first/one"));
@@ -252,9 +181,4 @@ public class RestSettingsControllerTest {
         assertEquals("{}", service.set("second", "four", quotes(input)));
         assertEquals(expected, service.get("second", "four"));
     }
-
-    private String quotes(String input) {
-        return "\"" + input + "\"";
-    }
-
 }

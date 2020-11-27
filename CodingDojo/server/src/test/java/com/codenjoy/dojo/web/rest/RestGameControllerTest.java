@@ -23,19 +23,9 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.CodenjoyContestApplication;
-import static com.codenjoy.dojo.stuff.SmartAssert.*;
-import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.GameServiceImpl;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.mocks.FirstGameType;
-import com.codenjoy.dojo.services.mocks.SecondGameType;
-import com.codenjoy.dojo.stuff.SmartAssert;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,19 +33,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
@@ -63,70 +45,18 @@ import java.util.Collection;
 @ActiveProfiles(SQLiteProfile.NAME)
 @Import(RestGameControllerTest.ContextConfiguration.class)
 @WebAppConfiguration
-public class RestGameControllerTest {
+public class RestGameControllerTest extends AbstractRestControllerTest {
 
     @TestConfiguration
     public static class ContextConfiguration {
-
         @Bean("gameService")
         public GameServiceImpl gameService() {
-            return new GameServiceImpl(){
-                @Override
-                public Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-                    return Arrays.asList(FirstGameType.class, SecondGameType.class);
-                }
-            };
+            return AbstractRestControllerTest.gameService();
         }
     }
 
-    private MockMvc mvc;
-    
-    @Autowired
-    private WebApplicationContext context;
-
-
     @Autowired
     private RestGameController service;
-
-    @Before
-    public void setUp() {
-        CodenjoyContext.setContext("codenjoy-contest");
-        mvc = MockMvcBuilders.webAppContextSetup(context).build();
-    }
-
-    @After
-    public void checkErrors() {
-        SmartAssert.checkResult();
-    }
-
-    @SneakyThrows
-    protected String mapToJson(Object obj) {
-        return new ObjectMapper().writeValueAsString(obj);
-    }
-
-    @SneakyThrows
-    protected <T> T mapFromJson(String json, Class<T> clazz) {
-        return new ObjectMapper().readValue(json, clazz);
-    }
-
-    @SneakyThrows
-    private String get(String uri) {
-        return process(MockMvcRequestBuilders.get(uri));
-    }
-
-    @SneakyThrows
-    private String post(String uri, String data) {
-        return process(MockMvcRequestBuilders.post(uri, data)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(data));
-    }
-
-    private String process(MockHttpServletRequestBuilder post) throws Exception {
-        MvcResult mvcResult = mvc.perform(post
-                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
-        assertEquals(200, mvcResult.getResponse().getStatus());
-        return mvcResult.getResponse().getContentAsString();
-    }
 
     @Test
     public void shouldExists() {
@@ -149,6 +79,7 @@ public class RestGameControllerTest {
                 "  'info':'GameType[first]',\n" +
                 "  'multiplayerType':{\n" +
                 "    'disposable':true,\n" +
+                "    'levels':false,\n" +
                 "    'levelsCount':1,\n" +
                 "    'multiplayer':false,\n" +
                 "    'multiple':false,\n" +
@@ -215,6 +146,7 @@ public class RestGameControllerTest {
                 "  'info':'GameType[second]',\n" +
                 "  'multiplayerType':{\n" +
                 "    'disposable':false,\n" +
+                "    'levels':true,\n" +
                 "    'levelsCount':10,\n" +
                 "    'multiplayer':true,\n" +
                 "    'multiple':false,\n" +

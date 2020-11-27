@@ -25,35 +25,50 @@ package com.codenjoy.dojo.sudoku.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.sudoku.client.Board;
 import com.codenjoy.dojo.sudoku.client.ai.AISolver;
-import com.codenjoy.dojo.sudoku.model.*;
+import com.codenjoy.dojo.sudoku.model.Elements;
+import com.codenjoy.dojo.sudoku.model.Player;
+import com.codenjoy.dojo.sudoku.model.Sudoku;
+import com.codenjoy.dojo.sudoku.model.level.Level;
+import com.codenjoy.dojo.sudoku.model.level.LevelImpl;
+import com.codenjoy.dojo.sudoku.model.level.Levels;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType {
 
     public GameRunner() {
-        new Scores(0, settings);
+        setupSettings();
+    }
+
+    private void setupSettings() {
+        SettingsWrapper.setup(settings);
     }
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer)score, settings);
+        return new Scores((Integer)score, SettingsWrapper.data);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        LevelBuilder builder = new LevelBuilder(40, getDice());
-        builder.build();
-        Level level = new LevelImpl(builder.getBoard(), builder.getMask());
-        return new Sudoku(level);
+    public Sudoku createGame(int levelNumber) {
+        int index = levelNumber - LevelProgress.levelsStartsFrom1;
+        Level level = getLevel(levelNumber);
+        return new Sudoku(level, index);
+    }
+
+    private Level getLevel(int levelNumber) {
+        return new LevelImpl(SettingsWrapper.data.levelMap(levelNumber));
     }
 
     @Override
@@ -83,7 +98,7 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.SINGLE;
+        return MultiplayerType.SINGLE_LEVELS.apply(Levels.all().size());
     }
 
     @Override

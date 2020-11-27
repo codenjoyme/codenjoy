@@ -77,7 +77,7 @@ public class AbstractGameTest {
     void givenFl(int viewSize, String board) {
         Levels.VIEW_SIZE = viewSize;
         Level level = createLevels(new String[]{board}).get(0);
-        game = new ICanCode(level, dice, ICanCode.SINGLE);
+        game = new ICanCode(level, dice, ICanCode.TRAINING);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
