@@ -69,9 +69,13 @@ public class Battlecity implements Field {
         rivers = new LinkedList<>();
         players = new LinkedList<>();
 
-        prizeGen = new PrizeGenerator(this, dice, prizeOnField, prizeWorking);
+        prizeGen = new PrizeGenerator(this, dice,
+                prizeOnField,
+                prizeWorking);
 
-        aiGen = new AiGenerator(this, dice, whichSpawnWithPrize, damagesBeforeAiDeath);
+        aiGen = new AiGenerator(this, dice,
+                whichSpawnWithPrize,
+                damagesBeforeAiDeath);
     }
 
     public void addAiTanks(List<? extends Point> tanks) {
@@ -145,10 +149,6 @@ public class Battlecity implements Field {
         }
     }
 
-    private boolean removeDestroyedPrizes() {
-        return prizes.removeIf(prize -> prize.isDestroyed());
-    }
-
     private void takePrize(Tank hero) {
         int index = prizes.indexOf(hero);
         if (index == -1) {
@@ -172,13 +172,9 @@ public class Battlecity implements Field {
             }
         }
 
-        for (Player player : players.toArray(new Player[0])) {
-            if (!player.getHero().isAlive()) {
-                players.remove(player);
-            }
-        }
+        players.removeIf(player -> !player.getHero().isAlive());
 
-        removeDestroyedPrizes();
+        prizes.removeIf(prize -> prize.isDestroyed());
     }
 
     @Override

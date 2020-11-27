@@ -23,7 +23,6 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.items.Prize;
 import com.codenjoy.dojo.battlecity.services.Events;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
@@ -85,5 +84,4 @@ public class Player extends GamePlayer<Tank, Field> {
     void setKilled(int killed) {
         this.killed = killed;
     }
-
 }

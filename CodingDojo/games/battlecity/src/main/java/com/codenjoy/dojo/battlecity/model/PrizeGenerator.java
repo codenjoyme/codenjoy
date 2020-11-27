@@ -43,7 +43,10 @@ public class PrizeGenerator {
     private Parameter<Integer> prizeOnField;
     private Parameter<Integer> prizeWorking;
 
-    public PrizeGenerator(Field field, Dice dice, Parameter<Integer> prizeOnField, Parameter<Integer> prizeWorking) {
+    public PrizeGenerator(Field field, Dice dice,
+                          Parameter<Integer> prizeOnField,
+                          Parameter<Integer> prizeWorking)
+    {
         this.field = field;
         this.dice = dice;
         this.prizeOnField = prizeOnField;
