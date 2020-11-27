@@ -24,6 +24,7 @@ package com.codenjoy.dojo.tetris.model.levels.level;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
 import com.codenjoy.dojo.tetris.model.GlassEvent;
 import com.codenjoy.dojo.tetris.model.Levels;
 import com.codenjoy.dojo.tetris.model.Figures;
@@ -33,16 +34,11 @@ import static com.codenjoy.dojo.tetris.model.Type.I;
 import static com.codenjoy.dojo.tetris.model.Type.O;
 import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.LINES_REMOVED;
 
-/**
- * User: oleksandr.baglai
- * Date: 11/18/12
- * Time: 6:37 PM
- */
 public class MockLevels extends Levels {
 
     public static final int LINES_REMOVED_FOR_NEXT_LEVEL = 4;
 
-    public MockLevels(Dice dice, Figures queue) {
+    public MockLevels(Dice dice, FigureQueue queue) {
         super(new FigureTypesLevel(dice, queue,
                 new GlassEvent<>(LINES_REMOVED, LINES_REMOVED_FOR_NEXT_LEVEL),
                         I),

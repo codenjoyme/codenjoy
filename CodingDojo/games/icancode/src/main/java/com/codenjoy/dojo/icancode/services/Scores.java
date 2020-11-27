@@ -24,8 +24,6 @@ package com.codenjoy.dojo.icancode.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 public class Scores implements PlayerScores {
 
@@ -55,15 +53,27 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object input) {
-        Events events = (Events)input;
+        Events events = (Events) input;
 
-        if (events.getType() == Events.Type.WIN) {
-            if (!events.isMultiple()) {
-                score += settings.winScore();
-            }
-            score += settings.goldScore() * events.getGoldCount();
-        } else if (events.getType() == Events.Type.LOOSE) {
-            score -= settings.loosePenalty();
+        Events.Type eventsType = events.getType();
+        switch (eventsType) {
+            case WIN:
+                if (!events.isMultiple()) {
+                    score += settings.winScore();
+                }
+                score += settings.goldScore() * events.getGoldCount();
+                break;
+            case LOOSE:
+                score -= settings.loosePenalty();
+                break;
+            case KILL_ZOMBIE:
+                if (settings.enableKillScore() && events.isMultiple())
+                    score += events.getKillCount() * settings.killZombieScore();
+                break;
+            case KILL_HERO:
+                if (settings.enableKillScore() && events.isMultiple())
+                    score += events.getKillCount() * settings.killHeroScore();
+                break;
         }
         score = Math.max(0, score);
     }

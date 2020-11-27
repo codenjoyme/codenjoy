@@ -26,11 +26,11 @@ package com.codenjoy.dojo.tetris.model;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.tetris.model.levels.random.EquiprobableRandomizer;
 import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
-import com.codenjoy.dojo.tetris.model.levels.random.RandomizerFetcher;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.tetris.model.Type.*;
 import static org.junit.Assert.assertEquals;
@@ -52,7 +52,7 @@ public class FiguresTest {
     @Test
     public void shouldCheckRandomizerForNextFigure(){
         Randomizer randomizer = mock(Randomizer.class);
-        RandomizerFetcher randomizerFetcher = mock(RandomizerFetcher.class);
+        Supplier<Randomizer> randomizerFetcher = mock(Supplier.class);
         when(randomizerFetcher.get()).thenReturn(randomizer);
         Figures figures = new Figures(4);
         figures.setRandomizer(randomizerFetcher);
@@ -79,8 +79,8 @@ public class FiguresTest {
         assertTypesEqual(figures, types, 3);
     }
 
-    private RandomizerFetcher getFetcher(Randomizer random) {
-        RandomizerFetcher randomizer = mock(RandomizerFetcher.class);
+    private Supplier<Randomizer> getFetcher(Randomizer random) {
+        Supplier<Randomizer> randomizer = mock(Supplier.class);
         when(randomizer.get()).thenReturn(random);
         return randomizer;
     }

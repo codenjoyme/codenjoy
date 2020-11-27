@@ -89,7 +89,23 @@
 																			if ([symbol isEqualToString:@"5"]) {
 																				type = BOMB_TIMER_5;
 																				isBarrier = YES;
-																			}
+																			} else
+                                                                                if ([symbol isEqualToString:@"+"]) {
+                                                                                    type = BOMB_BLAST_RADIUS_INCREASE;
+                                                                                    isBarrier = NO;
+                                                                                } else
+                                                                                    if ([symbol isEqualToString:@"c"]) {
+                                                                                        type = BOMB_COUNT_INCREASE;
+                                                                                        isBarrier = NO;
+                                                                                    } else
+                                                                                        if ([symbol isEqualToString:@"r"]) {
+                                                                                            type = BOMB_REMOTE_CONTROL;
+                                                                                            isBarrier = NO;
+                                                                                        } else
+                                                                                            if ([symbol isEqualToString:@"i"]) {
+                                                                                                type = BOMB_IMMUNE;
+                                                                                                isBarrier = NO;
+                                                                                            }
 
 	}
 	return self;

@@ -66,8 +66,8 @@ public class InformationCollectorTest {
         collector.event(Events.EAT_STONE);
     }
 
-    private void levelChanged(int levelNumber) {
-        collector.levelChanged(new LevelProgress(levelNumber + 1, levelNumber, levelNumber - 1));
+    private void levelChanged(int level) {
+        collector.levelChanged(new LevelProgress(level + 1, level, level - 1));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class InformationCollectorTest {
         snakeEatApple();
         snakeEatStone();
         snakeIsDead();
-        levelChanged(4 - 1);
+        levelChanged(4);
 
         assertEquals("+1, +2, +3, Level 4", collector.getMessage());
         assertNull(collector.getMessage());
@@ -102,7 +102,7 @@ public class InformationCollectorTest {
         snakeEatApple();
         snakeEatStone();
         snakeIsDead();
-        levelChanged(4 - 1);
+        levelChanged(4);
 
         assertEquals("+1, +2, +3, Level 4", collector.getMessage());
         assertNull(collector.getMessage());
@@ -123,7 +123,7 @@ public class InformationCollectorTest {
                 .thenReturn(3);
 
         snakeEatApple();
-        levelChanged(4 - 1);
+        levelChanged(4);
         snakeEatStone();
         snakeIsDead();
 

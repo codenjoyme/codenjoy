@@ -45,7 +45,7 @@ public abstract class AbstractRuleReaderTest {
     public void setup() {
         // given
         file = new File("directory/main.rule");
-        rules = new Rules();
+        rules = new Rules(message -> {});
         subFiles = new LinkedList<>();
 
         cleanLns();

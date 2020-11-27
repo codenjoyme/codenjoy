@@ -153,4 +153,10 @@ public class PlayerGame implements Tickable {
         player.clearScore();
         game.clearScore();
     }
+
+    public void fireOnLevelChanged() {
+        Game game = getGame();
+        Player player = getPlayer();
+        player.getEventListener().levelChanged(game.getProgress());
+    }
 }

@@ -24,25 +24,15 @@ package com.codenjoy.dojo.sudoku.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> failPenalty;
-    private final Parameter<Integer> successScore;
-    private final Parameter<Integer> loosePenalty;
-
     private volatile int score;
+    private SettingsWrapper settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, SettingsWrapper settings) {
         this.score = startScore;
-
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(1000);
-        failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).def(10);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(500);
-        successScore = settings.addEditBox("Success score").type(Integer.class).def(10);
+        this.settings = settings;
     }
 
     @Override
@@ -58,13 +48,13 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.WIN)) {
-            score += winScore.getValue();
+            score += settings.winScore();
         } else if (event.equals(Events.FAIL)) {
-            score -= failPenalty.getValue();
+            score -= settings.failPenalty();
         } else if (event.equals(Events.SUCCESS)) {
-            score += successScore.getValue();
+            score += settings.successScore();
         } else if (event.equals(Events.LOOSE)) {
-            score -= loosePenalty.getValue();
+            score -= settings.loosePenalty();
         }
         score = Math.max(0, score);
     }

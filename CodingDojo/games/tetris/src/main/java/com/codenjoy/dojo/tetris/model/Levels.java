@@ -35,6 +35,7 @@ public class Levels implements GlassEventListener {
     private int currentLevel;
     private ChangeLevelListener listener;
     private int totalRemovedLines;
+    protected boolean levelCompleted;
 
     public Levels(GameLevel ... levels) {
         if (levels.length == 0) {
@@ -43,7 +44,12 @@ public class Levels implements GlassEventListener {
         this.levels = levels;
         currentLevel = 0;
         totalRemovedLines = 0;
+        levelCompleted = false;
         levels[0].apply();
+    }
+
+    public int count() {
+        return levels.length;
     }
 
     @Override
@@ -60,13 +66,21 @@ public class Levels implements GlassEventListener {
 
     private void applyLevelIfAccepted(GlassEvent event) {
         if (getNextLevel().accept(event)){
-            gotToNextLevel();
+            levelCompleted = true;
+            onLevelCompleted();
         }
     }
 
-    private void gotToNextLevel() {
-        getNextLevel().apply();
-        currentLevel++;
+    public void tryGoNextLevel() {
+        if (levelCompleted) {
+            levelCompleted = false;
+            gotoLevel(currentLevel + 1);
+        }
+    }
+
+    public void gotoLevel(int levelNumber) {
+        currentLevel = levelNumber;
+        levels[currentLevel].apply();
         onLevelChanged();
     }
 
@@ -104,14 +118,23 @@ public class Levels implements GlassEventListener {
         }
     }
 
+    protected void onLevelCompleted() {
+        if (listener != null) {
+            listener.levelCompleted(getCurrentLevelNumber(), getCurrentLevel());
+        }
+    }
+
     public int totalRemovedLines() {
         return totalRemovedLines;
     }
 
     public void clearScore() {
         Arrays.stream(levels).forEach(it -> it.queue().clear());
-        currentLevel = -1;
-        gotToNextLevel();
+        gotoLevel(0);
+    }
+
+    public boolean levelCompleted() {
+        return levelCompleted;
     }
 
     public class LevelsReader {
@@ -135,7 +158,7 @@ public class Levels implements GlassEventListener {
         private int totalRemovedLines;
         private int currentLevel;
         private String name;
-        private Figures queue;
+        private FigureQueue queue;
         private Levels levels;
         private Dice dice;
 

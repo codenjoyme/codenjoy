@@ -164,7 +164,7 @@ public class GuiPlotColorDecoderTest {
     }
 
     @Test
-    public void shouldEncodeJsonWithoutLayers() {
+    public void shouldEncodeJsonWithoutLayersAndBoard() {
         // given
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 

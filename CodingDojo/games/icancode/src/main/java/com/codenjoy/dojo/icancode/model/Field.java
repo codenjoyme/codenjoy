@@ -51,7 +51,7 @@ public interface Field extends GameField<Player> {
 
     void reset();
 
-    boolean isMultiplayer();
+    boolean isContest();
 
     LayeredBoardReader layeredReader();
 

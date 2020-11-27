@@ -52,9 +52,14 @@ public class LevelsTest {
     private ChangeLevelListener levelChangedListener;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         levels = new Levels(level0, level1, level2);
         levels.onChangeLevel(levelChangedListener);
+
+        doAnswer(inv -> {
+            levels.tryGoNextLevel();
+            return null;
+        }).when(levelChangedListener).levelCompleted(anyInt(), any());
     }
 
     @Test
@@ -64,6 +69,7 @@ public class LevelsTest {
 
         levels.figureDropped(new FigureImpl().type());
 
+        verify(levelChangedListener).levelCompleted(0, level0);
         verify(levelChangedListener).levelChanged(1, level1);
         verifyNoMoreInteractions(levelChangedListener);
     }

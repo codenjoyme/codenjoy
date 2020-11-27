@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.sudoku.model.level.Level;
+import com.codenjoy.dojo.sudoku.model.level.LevelImpl;
 import com.codenjoy.dojo.sudoku.services.Events;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
@@ -58,13 +60,17 @@ public class SudokuTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     private void givenFl(String board, String mask) {
-        LevelImpl level = new LevelImpl(board, mask);
+        Level level = new LevelImpl(removeBoard(board), removeBoard(mask));
 
-        game = new Sudoku(level);
+        game = new Sudoku(level, 0);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);
         joystick = player.getJoystick();
+    }
+
+    private String removeBoard(String map) {
+        return map.replaceAll("☼", "");
     }
 
     private void assertE(String expected) {
@@ -90,17 +96,17 @@ public class SudokuTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼",
 
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼  ?☼? ?☼???☼" +
-                "☼ ??☼   ☼???☼" +
-                "☼?  ☼???☼? ?☼" +
+                "☼  *☼* *☼***☼" +
+                "☼ **☼   ☼***☼" +
+                "☼*  ☼***☼* *☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼ ??☼? ?☼?? ☼" +
-                "☼ ??☼ ? ☼?? ☼" +
-                "☼ ??☼? ?☼?? ☼" +
+                "☼ **☼* *☼** ☼" +
+                "☼ **☼ * ☼** ☼" +
+                "☼ **☼* *☼** ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼? ?☼???☼  ?☼" +
-                "☼???☼   ☼?? ☼" +
-                "☼???☼? ?☼?  ☼" +
+                "☼* *☼***☼  *☼" +
+                "☼***☼   ☼** ☼" +
+                "☼***☼* *☼*  ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
 
 //        assertE(INITIAL);
@@ -155,12 +161,53 @@ public class SudokuTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
+    // я могу передумать и сбросить установленное ранее значение
+    @Test
+    public void shouldCanClearMySpep() {
+        shouldFieldAtStart();
+
+        assertE(INITIAL);
+
+        joystick.act(2, 8, 5);
+        game.tick();
+
+        assertE("☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼53 ☼ 7 ☼   ☼" +
+                "☼6  ☼195☼   ☼" +
+                "☼ 98☼   ☼ 6 ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼8  ☼ 6 ☼  3☼" +
+                "☼4  ☼8 3☼  1☼" +
+                "☼7  ☼ 2 ☼  6☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼ 6 ☼   ☼28 ☼" +
+                "☼ 5 ☼419☼  5☼" +
+                "☼   ☼ 8 ☼ 79☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼");
+
+        joystick.act(2, 8, 0);
+        game.tick();
+
+        assertE(INITIAL);
+    }
+
     // я не могу ходить на поля, которые уже заняты
     @Test
     public void shouldCantOpenOpenedCell() {
         shouldFieldAtStart();
 
         joystick.act(2, 3, 1);
+        game.tick();
+
+        assertE(INITIAL);
+    }
+
+    // я не могу сбросить поля, которые установлены изначально
+    @Test
+    public void shouldCantClearOpenedCell() {
+        shouldFieldAtStart();
+
+        joystick.act(2, 3, 0);
         game.tick();
 
         assertE(INITIAL);
@@ -251,7 +298,7 @@ public class SudokuTest {
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼   ☼   ☼   ☼" +
                 "☼   ☼   ☼   ☼" +
-                "☼???☼   ☼   ☼" +
+                "☼***☼   ☼   ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼");
 
         joystick.act(1, 9, 3);
@@ -273,10 +320,12 @@ public class SudokuTest {
         shouldWinEventWhenAllSuccess();
 
         assertTrue(game.isGameOver());
+        assertTrue(game.isWin());
 
         game.newGame(player);
 
         assertFalse(game.isGameOver());
+        assertFalse(game.isWin());
 
         game.tick();
 

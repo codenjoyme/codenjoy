@@ -28,8 +28,10 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.*;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.tetris.client.Board;
@@ -66,13 +68,14 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
+    public GameField createGame(int level) {
         Figures queue = new Figures();
         Levels levels = loadLevelsFor(queue, gameLevels.getValue());
+        levels.gotoLevel(level - LevelProgress.levelsStartsFrom1);
         return new Tetris(levels, queue, glassSize.getValue());
     }
 
-    private Levels loadLevelsFor(Figures queue, String levelName) {
+    private Levels loadLevelsFor(FigureQueue queue, String levelName) {
         return new LevelsFactory().createLevels(levelName, getDice(), queue);
     }
 
@@ -98,7 +101,10 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.SINGLE;
+        // TODO слишком много тут делается для получения количества уровней
+        Levels levels = loadLevelsFor(NullFigureQueue.INSTANCE, gameLevels.getValue());
+
+        return MultiplayerType.SINGLE_LEVELS.apply(levels.count());
     }
 
     @Override
@@ -118,31 +124,14 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public PrinterFactory getPrinterFactory() {
-        PrinterFactoryImpl graphic = new PrinterFactoryImpl();
-
-        return PrinterFactory.get((BoardReader reader, Player player) -> {
-            JSONObject result = new JSONObject();
+        return PrinterFactory.get((BoardReader reader, Printer<String> printer, Player player) -> {
+            String data = printer.print();
+            String board = data.replace("\n", "").replace(" ", ".");
 
             Hero hero = player.getHero();
 
-            Printer<String> graphicPrinter = graphic.getPrinter(new BoardReader() {
-                @Override
-                public int size() {
-                    return hero.boardSize();
-                }
+            JSONObject result = new JSONObject();
 
-                @Override
-                public Iterable<? extends Point> elements() {
-                    return new LinkedList<Point>() {{
-                        List<Plot> droppedPlots = hero.dropped();
-                        List<Plot> currentFigurePlots = hero.currentFigure();
-                        droppedPlots.removeAll(currentFigurePlots);
-                        addAll(droppedPlots);
-                        addAll(currentFigurePlots);
-                    }};
-                }
-            }, player);
-            String board = graphicPrinter.print().replace("\n", "").replace(" ", ".");
             result.put("layers", Arrays.asList(board));
 
             result.put("currentFigureType", hero.currentFigureType());
