@@ -161,7 +161,7 @@ public class Battlecity implements Field {
                 .collect(toList());
         ais.removeAll(dead);
         dead.stream()
-            .filter(Tank::isTankPrize)
+            .filter(Tank::withPrize)
             .forEach(tank -> prizeGen.drop(tank));
     }
 

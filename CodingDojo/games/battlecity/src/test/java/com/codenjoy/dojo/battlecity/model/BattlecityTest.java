@@ -145,7 +145,7 @@ public class BattlecityTest {
 
     private String getPrizesCount() {
         List<Tank> tanks = game.allTanks();
-        long prizes = tanks.stream().filter(Tank::isTankPrize).count();
+        long prizes = tanks.stream().filter(Tank::withPrize).count();
 
         return String.format("%s prizes with %s tanks", prizes, tanks.size());
     }

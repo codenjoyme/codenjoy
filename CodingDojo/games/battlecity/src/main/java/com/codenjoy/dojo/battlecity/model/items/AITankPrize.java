@@ -65,7 +65,7 @@ public class AITankPrize extends AITank {
         return null;
     }
 
-    protected boolean isTankPrize() {
+    protected boolean withPrize() {
         return true;
     }
 }

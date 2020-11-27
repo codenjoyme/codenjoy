@@ -219,7 +219,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    protected boolean isTankPrize() {
+    protected boolean withPrize() {
         return false;
     }
 
