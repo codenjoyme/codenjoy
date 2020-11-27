@@ -7685,6 +7685,7 @@ public class BattlecityTest {
     // За исключением - если после смещения он оказался снова на воде, то процедура повторяется до тех пор,
     // пока танк не выйдет полностью из воды.
     @Test
+    @Ignore // TODO продолжить тут
     public void shouldTankCanGoIfRiverAtWay_whenPrizeIsOver_butTankOnWater() {
 
         prizeOnField = v(5);
