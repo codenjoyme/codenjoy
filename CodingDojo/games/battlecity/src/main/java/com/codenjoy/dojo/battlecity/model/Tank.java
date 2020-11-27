@@ -218,16 +218,12 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         return false;
     }
 
-    public List<Prize> getPrizes() {
+    public List<Prize> prizes() {
         return prizes;
     }
 
     public void take(Prize prize) {
         prizes.add(prize);
-        prize.takenBy(this);
-    }
-
-    public void remove(Prize prize) {
-        prizes.remove(prize);
+        prize.taken(item -> Tank.this.prizes.remove(item));
     }
 }

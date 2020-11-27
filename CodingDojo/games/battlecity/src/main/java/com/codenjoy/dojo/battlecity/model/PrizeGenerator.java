@@ -51,6 +51,11 @@ public class PrizeGenerator {
     }
 
     public void drop(Point pt) {
-        field.addPrize(new Prize(pt, prizeOnField.getValue(), prizeWorking.getValue(), PRIZES.get(dice.next(PRIZES.size()))));
+        Elements type = PRIZES.get(dice.next(PRIZES.size()));
+
+        field.add(new Prize(pt,
+                prizeOnField.getValue(),
+                prizeWorking.getValue(),
+                type));
     }
 }

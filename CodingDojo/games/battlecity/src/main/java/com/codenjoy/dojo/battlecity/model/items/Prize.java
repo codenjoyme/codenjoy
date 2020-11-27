@@ -25,24 +25,27 @@ package com.codenjoy.dojo.battlecity.model.items;
 
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
-import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.services.*;
+
+import java.util.function.Consumer;
 
 public class Prize extends PointImpl implements Tickable, State<Elements, Player> {
 
     public static final int CHANGE_EVERY_TICKS = 2;
-    private Elements elements;
-    private int timeout;
-    private int prizeWorking;
+    private final Elements elements;
+    private final int prizeOnField;
+    private final int prizeWorking;
 
     private boolean destroyed;
     private boolean active;
-    private Tank owner;
+    private Consumer<Object> onDestroy;
+    private int timeout;
+    private int ticks;
 
     public Prize(Point pt, int prizeOnField, int prizeWorking, Elements elements) {
         super(pt);
         this.elements = elements;
-        timeout = prizeOnField;
+        this.prizeOnField = prizeOnField;
         this.prizeWorking = prizeWorking;
         destroyed = false;
         active = true;
@@ -54,11 +57,11 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
             return Elements.BANG;
         }
 
-        if (timeout % CHANGE_EVERY_TICKS == 0) {
-            return elements;
+        if (ticks % CHANGE_EVERY_TICKS == 0) {
+            return Elements.PRIZE;
         }
 
-        return Elements.PRIZE;
+        return elements;
     }
 
     @Override
@@ -66,36 +69,36 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
         if (destroyed || !active) {
             return;
         }
-        if (timeout == 0) {
+        if (ticks == timeout) {
             active = false;
 
-            if (owner != null) {
-                owner.remove(this);
+            if (onDestroy != null) {
+                onDestroy.accept(this);
             }
         } else {
-            timeout--;
+            ticks++;
         }
-
     }
 
     public boolean isDestroyed() {
         return destroyed;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
     public void kill() {
         destroyed = true;
     }
 
-    public void takenBy(Tank tank) {
-        owner = tank;
-        timeout = prizeWorking;
+    public Elements elements() {
+        return elements;
     }
 
-    public Elements getElements() {
-        return elements;
+    public void taken(Consumer<Object> onDestroy) {
+        if (this.onDestroy == null) {
+            timeout = prizeOnField;
+        } else {
+            timeout = prizeWorking;
+        }
+        ticks = 0;
+        this.onDestroy = onDestroy;
     }
 }

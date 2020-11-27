@@ -33,7 +33,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static java.util.stream.Collectors.toList;
 
 public class Battlecity implements Field {
@@ -108,7 +108,7 @@ public class Battlecity implements Field {
                 tank.tryFire();
             }
 
-            if (checkPrizes(Elements.PRIZE_BREAKING_WALLS, tank.getPrizes())) {
+            if (contains(tank.prizes(), PRIZE_BREAKING_WALLS)) {
                 tank.getBullets().stream().forEach(Bullet::heavy);
             }
         }
@@ -136,20 +136,13 @@ public class Battlecity implements Field {
             }
         }
 
-        for (Prize prize : prizes) {
-            prize.tick();
-        }
-        removeDeactivatedPrizes();
+        prizes.forEach(Prize::tick);
 
         for (Player player : players) {
             if (player.isAlive()) {
                 takePrize(player.getHero());
             }
         }
-    }
-
-    private boolean removeDeactivatedPrizes() {
-        return prizes.removeIf(prize -> !prize.isActive());
     }
 
     private boolean removeDestroyedPrizes() {
@@ -175,7 +168,7 @@ public class Battlecity implements Field {
             ais.remove(tank);
 
             if (tank.isTankPrize()) {
-                prizeGen.drop(pt(tank.getX(), tank.getY()));
+                prizeGen.drop(tank);
             }
         }
 
@@ -202,7 +195,7 @@ public class Battlecity implements Field {
                 return;
             }
 
-            if (!checkPrizes(Elements.PRIZE_IMMORTALITY, tank.getPrizes())) {
+            if (!contains(tank.prizes(), PRIZE_IMMORTALITY)) {
                 tank.kill(bullet);
             }
 
@@ -253,8 +246,9 @@ public class Battlecity implements Field {
     }
 
     @Override
-    public void addPrize(Prize prize) {
+    public void add(Prize prize) {
         prizes.add(prize);
+        prize.taken(item -> Battlecity.this.prizes.remove(item));
     }
 
     @Override
@@ -316,7 +310,7 @@ public class Battlecity implements Field {
         }
 
         if (isRiver(pt)) {
-            if (checkPrizes(Elements.PRIZE_WALKING_ON_WATER, tank.getPrizes())) {
+            if (contains(tank.prizes(), PRIZE_WALKING_ON_WATER)) {
                 return false;
             }
             return true;
@@ -348,9 +342,9 @@ public class Battlecity implements Field {
         return pt.isOutOf(size);
     }
 
-    private boolean checkPrizes(Elements elements, List<Prize> prizesTaken) {
-        return prizesTaken.stream()
-                .anyMatch(x -> elements.equals(x.getElements()));
+    private boolean contains(List<Prize> prizes, Elements elements) {
+        return prizes.stream()
+                .anyMatch(x -> elements.equals(x.elements()));
     }
 
     private List<Bullet> bullets() {

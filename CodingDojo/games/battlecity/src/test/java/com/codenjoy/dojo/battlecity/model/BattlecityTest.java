@@ -79,7 +79,7 @@ public class BattlecityTest {
         spawnAiPrize = v(4);
         hitKillsAiPrize = v(3);
         prizeOnField = v(3);
-        prizeWorking = v(10); // TODO prizeWorking = v(2);
+        prizeWorking = v(10);
         slidingValue = v(3);
         dice = mock(Dice.class);
     }
@@ -5301,7 +5301,7 @@ public class BattlecityTest {
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
-                "☼!    ☼\n" +
+                "☼1    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -5311,7 +5311,7 @@ public class BattlecityTest {
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
-                "☼1    ☼\n" +
+                "☼!    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -5344,6 +5344,15 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n");
 
         ai(0).kill(mock(Bullet.class));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
@@ -5403,16 +5412,6 @@ public class BattlecityTest {
         game.tick();
 
         assertD("☼☼☼☼☼☼☼\n" +
-                "☼!    ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼     ☼\n" +
-                "☼▲    ☼\n" +
-                "☼☼☼☼☼☼☼\n");
-
-        game.tick();
-
-        assertD("☼☼☼☼☼☼☼\n" +
                 "☼1    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -5434,6 +5433,16 @@ public class BattlecityTest {
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼1    ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼!    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
@@ -5500,7 +5509,7 @@ public class BattlecityTest {
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
-                "☼!    ☼\n" +
+                "☼1    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
@@ -5510,7 +5519,7 @@ public class BattlecityTest {
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
-                "☼1    ☼\n" +
+                "☼!    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
@@ -5576,7 +5585,7 @@ public class BattlecityTest {
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
-                "☼!    ☼\n" +
+                "☼1    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
@@ -5586,7 +5595,7 @@ public class BattlecityTest {
 
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
-                "☼1    ☼\n" +
+                "☼!    ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼▲    ☼\n" +
@@ -6086,7 +6095,7 @@ public class BattlecityTest {
     }
 
     private void assertPrize(Tank hero, int expected) {
-        assertEquals(expected, hero.getPrizes().size());
+        assertEquals(expected, hero.prizes().size());
     }
 
     // если в момент подбора приза прилетает снаряд, то умирает танк, а приз остается
@@ -6121,7 +6130,7 @@ public class BattlecityTest {
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
-                "☼! • ˂☼\n" +
+                "☼1 • ˂☼\n" +
                 "☼▲    ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
@@ -6146,7 +6155,7 @@ public class BattlecityTest {
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
-                "☼! ˂  ☼\n" +
+                "☼1 ˂  ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
@@ -6157,7 +6166,7 @@ public class BattlecityTest {
         assertD("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
-                "☼1˂   ☼\n" +
+                "☼!˂   ☼\n" +
                 "☼     ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
@@ -7613,7 +7622,7 @@ public class BattlecityTest {
                 "☼▲ ˄  ☼\n" +
                 "☼☼☼☼☼☼☼\n");
 
-        when(dice.next(anyInt())).thenReturn(2).thenReturn(0);
+        when(dice.next(anyInt())).thenReturn(2, 0);
         hero(0).up();
         hero(1).up();
         game.tick();
