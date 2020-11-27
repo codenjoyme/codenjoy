@@ -172,9 +172,9 @@ public class Battlecity implements Field {
             }
         }
 
-        players.removeIf(player -> !player.isAlive());
+        players.removeIf(Player::isDestroyed);
 
-        prizes.removeIf(prize -> prize.isDestroyed());
+        prizes.removeIf(Prize::isDestroyed);
     }
 
     @Override

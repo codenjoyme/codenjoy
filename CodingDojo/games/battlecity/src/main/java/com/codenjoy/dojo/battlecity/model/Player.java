@@ -58,6 +58,10 @@ public class Player extends GamePlayer<Tank, Field> {
         return hero != null && hero.isAlive();
     }
 
+    public boolean isDestroyed() {
+        return !isAlive();
+    }
+
     public void event(Events event) {
         if (event.isKillYourTank()) {
             hero.kill(null);
