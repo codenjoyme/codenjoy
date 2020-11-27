@@ -143,7 +143,7 @@ public class Battlecity implements Field {
 
         for (Player player : players) {
             if (player.isAlive()) {
-                takePrize(player);
+                takePrize(player.getHero());
             }
         }
     }
@@ -156,13 +156,15 @@ public class Battlecity implements Field {
         return prizes.removeIf(prize -> prize.isDestroyed());
     }
 
-    private void takePrize(Player player) {
-        int index = prizes.indexOf(player.getHero());
-        if (index != -1) {
-            Prize prize = prizes.get(index);
-            player.takePrize(prize);
-            prizes.remove(prize);
+    private void takePrize(Tank hero) {
+        int index = prizes.indexOf(hero);
+        if (index == -1) {
+            return;
         }
+
+        Prize prize = prizes.get(index);
+        hero.take(prize);
+        prizes.remove(prize);
     }
 
     private void removeDeadItems() {
@@ -260,13 +262,13 @@ public class Battlecity implements Field {
         ais.add(tank);
     }
 
-    private Wall getWallAt(Bullet bullet) {
-        int index = walls.indexOf(bullet);
+    private Wall getWallAt(Point pt) {
+        int index = walls.indexOf(pt);
         return walls.get(index);
     }
 
-    private Prize getPrizeAt(Bullet bullet) {
-        int index = prizes.indexOf(bullet);
+    private Prize getPrizeAt(Point pt) {
+        int index = prizes.indexOf(pt);
         return prizes.get(index);
     }
 

@@ -25,6 +25,7 @@ package com.codenjoy.dojo.battlecity.model.items;
 
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
+import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.services.*;
 
 public class Prize extends PointImpl implements Tickable, State<Elements, Player> {
@@ -32,16 +33,17 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
     public static final int CHANGE_EVERY_TICKS = 2;
     private Elements elements;
     private int timeout;
-    private int timelimit;
+    private int prizeWorking;
 
     private boolean destroyed;
     private boolean active;
+    private Tank owner;
 
     public Prize(Point pt, int prizeOnField, int prizeWorking, Elements elements) {
         super(pt);
         this.elements = elements;
         timeout = prizeOnField;
-        timelimit = prizeWorking;
+        this.prizeWorking = prizeWorking;
         destroyed = false;
         active = true;
     }
@@ -66,17 +68,14 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
         }
         if (timeout == 0) {
             active = false;
+
+            if (owner != null) {
+                owner.remove(this);
+            }
         } else {
             timeout--;
         }
-    }
 
-    public void tickTaken() {
-        timelimit--;
-    }
-
-    public int timelimit() {
-        return timelimit;
     }
 
     public boolean isDestroyed() {
@@ -89,6 +88,11 @@ public class Prize extends PointImpl implements Tickable, State<Elements, Player
 
     public void kill() {
         destroyed = true;
+    }
+
+    public void takenBy(Tank tank) {
+        owner = tank;
+        timeout = prizeWorking;
     }
 
     public Elements getElements() {

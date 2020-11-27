@@ -86,7 +86,4 @@ public class Player extends GamePlayer<Tank, Field> {
         this.killed = killed;
     }
 
-    public void takePrize(Prize prize) {
-        hero.addPrize(prize);
-    }
 }
