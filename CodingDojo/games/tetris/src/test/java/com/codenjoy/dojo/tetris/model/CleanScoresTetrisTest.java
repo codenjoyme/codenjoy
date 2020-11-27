@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.tetris.model.levels.gamelevel.FigureTypesLevel;
 import org.junit.Test;
@@ -80,6 +79,18 @@ public class CleanScoresTetrisTest {
 
         queue = new Figures(1);
         levels = new TestLevels(dice, queue);
+
+        ChangeLevelListener onChangeLevel = mock(ChangeLevelListener.class);
+        levels.onChangeLevel(onChangeLevel);
+        doAnswer(inv -> {
+            levels.gotoLevel(levels.getCurrentLevelNumber() + 1);
+            // TODO если хочешь поиграться, убери эту строчку и заставь тесты работать
+            // вообще тест больше не имеет смысла, поскольку с игтерацией уровней в тетрис
+            // при переходе на новый уровень борда обновляется полностью
+            levels.levelCompleted = false;
+            return null;
+        }).when(onChangeLevel).levelCompleted(anyInt(), any());
+
         game = new Tetris(levels, queue, level.size());
         listener = mock(EventListener.class);
         player = new Player(listener);

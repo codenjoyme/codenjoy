@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
+import lombok.extern.java.Log;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.function.Supplier;
 
 import static java.util.stream.Collectors.toList;
 
+@Log
 public class Spreader {
 
     private Multimap<String, Room> rooms = LinkedHashMultimap.create();
@@ -40,10 +42,12 @@ public class Spreader {
                               int roomSize, int levelNumber,
                               Supplier<GameField> field)
     {
+        roomName = type.getRoomName(roomName, levelNumber);
         Room room = null;
-        if (!type.isTraining() || type.isLastLevel(levelNumber)) {
+        if (type.shouldTryFindUnfilled(levelNumber)) {
             room = findUnfilled(roomName);
         }
+
         if (room == null) {
             room = new Room(field.get(), roomSize, type.isDisposable());
             add(roomName, room);
@@ -115,9 +119,14 @@ public class Spreader {
     }
 
     public boolean isRoomStaffed(GameField field) {
+        if (field == null) {
+            log.warning("Почему-то комната для поля == null");
+        }
+
         List<Room> rooms = roomsFor(field);
         if (rooms.size() != 1) {
-            throw new IllegalArgumentException("Почему-то комната для поля не одна: " + rooms.size());
+            log.warning("Почему-то комната для поля не одна: " + rooms.size());
+            return true;
         }
         return rooms.get(0).isStuffed();
     }

@@ -68,28 +68,32 @@ function initBoardPage(game, onLoad) {
 }
 
 function initBoardComponents(game) {
-    initBoards(game.players, game.allPlayersScreen,
+    if (game.loadBoardData) {
+        initBoards(game.players, game.allPlayersScreen,
             game.gameName, game.playerId, game.contextPath);
+    }
 
-    if (typeof initCanvasesGame == 'function') {
-        initCanvasesGame(game.contextPath, game.players, game.allPlayersScreen,
-                    game.multiplayerType, game.boardSize,
-                    game.gameName, game.enablePlayerInfo,
-                    game.enablePlayerInfoLevel,
-                    game.sprites, game.alphabet, game.spriteElements,
-                    game.drawBoard);
-    } else if (game.isGraphicOrTextGame) {
-        initCanvases(game.contextPath, game.players, game.allPlayersScreen,
-                    game.multiplayerType, game.boardSize,
-                    game.gameName, game.enablePlayerInfo,
-                    game.enablePlayerInfoLevel,
-                    game.sprites, game.alphabet, game.spriteElements,
-                    game.drawBoard);
-    } else {
-        initCanvasesText(game.contextPath, game.players, game.allPlayersScreen,
-                        game.multiplayerType, game.boardSize,
-                        game.gameName, game.enablePlayerInfo,
-                        game.enablePlayerInfoLevel, game.drawBoard);
+    if (game.drawCanvases) {
+        if (typeof initCanvasesGame == 'function') {
+            initCanvasesGame(game.contextPath, game.players, game.allPlayersScreen,
+                game.multiplayerType, game.boardSize,
+                game.gameName, game.enablePlayerInfo,
+                game.enablePlayerInfoLevel,
+                game.sprites, game.alphabet, game.spriteElements,
+                game.drawBoard);
+        } else if (game.isGraphicOrTextGame) {
+            initCanvases(game.contextPath, game.players, game.allPlayersScreen,
+                game.multiplayerType, game.boardSize,
+                game.gameName, game.enablePlayerInfo,
+                game.enablePlayerInfoLevel,
+                game.sprites, game.alphabet, game.spriteElements,
+                game.drawBoard);
+        } else {
+            initCanvasesText(game.contextPath, game.players, game.allPlayersScreen,
+                game.multiplayerType, game.boardSize,
+                game.gameName, game.enablePlayerInfo,
+                game.enablePlayerInfoLevel, game.drawBoard);
+        }
     }
 
     if (game.enableDonate) {

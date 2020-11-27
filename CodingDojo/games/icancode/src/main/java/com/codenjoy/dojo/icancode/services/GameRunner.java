@@ -40,6 +40,8 @@ import com.codenjoy.dojo.icancode.model.Player;
 import com.codenjoy.dojo.icancode.model.Level;
 import org.json.JSONObject;
 
+import static com.codenjoy.dojo.icancode.services.SettingsWrapper.*;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.*;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType  {
@@ -61,7 +63,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
     public GameField createGame(int levelNumber) {
         Level level = loadLevel(levelNumber);
         boolean isSingle = levelNumber < getMultiplayerType().getLevelsCount();
-        return new ICanCode(level, getDice(), isSingle ? ICanCode.SINGLE : ICanCode.MULTIPLE);
+        return new ICanCode(level, getDice(), isSingle ? ICanCode.TRAINING : ICanCode.CONTEST);
     }
 
     @Override
@@ -76,13 +78,27 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        // -1 потому что считаются только SINGLE уровни не включая последнего MULTIPLE
-        return MultiplayerType.TRAINING.apply(Levels.all().size() - 1);
+        int count = Levels.all().size();
+        int roomSize = SettingsWrapper.data.roomSize();
+
+        switch (SettingsWrapper.data.gameMode()) {
+            default:
+            case CLASSSIC_TRAINING:
+                return TRAINING.apply(count);
+
+            case ALL_SINGLE:
+                return SINGLE_LEVELS.apply(count);
+
+            case ALL_IN_ROOMS:
+                return MULTIPLE_LEVELS.apply(roomSize, count);
+
+            case TRAINING_MULTIMAP:
+                return MULTIPLE_LEVELS_MULTIROOM.apply(roomSize, count);
+        }
     }
 
     public Level loadLevel(int level) {
-        // +1 потому что мы хотим дать юзерам считать не от 0, а от 1
-        return Levels.loadLevel(level + 1);
+        return Levels.loadLevel(level);
     }
 
     @Override

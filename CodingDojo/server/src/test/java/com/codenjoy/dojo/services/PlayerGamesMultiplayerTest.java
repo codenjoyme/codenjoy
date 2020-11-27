@@ -59,7 +59,7 @@ public class PlayerGamesMultiplayerTest {
     private GameType quadro;
     private GameType team4NotDisposable;
     private GameType team5Disposable;
-    private GameType training3;
+    private GameType training4;
 
     private List<GameField> fields = new LinkedList<>();
     private List<GamePlayer> gamePlayers = new LinkedList<>();
@@ -83,7 +83,7 @@ public class PlayerGamesMultiplayerTest {
         team4NotDisposable = setupGameType("team4", MultiplayerType.TEAM.apply(4, !MultiplayerType.DISPOSABLE));
         team5Disposable = setupGameType("team5", MultiplayerType.TEAM.apply(5, MultiplayerType.DISPOSABLE));
         multiple = setupGameType("multiple", MultiplayerType.MULTIPLE);
-        training3 = setupGameType("training3", MultiplayerType.TRAINING.apply(3));
+        training4 = setupGameType("training4", MultiplayerType.TRAINING.apply(4));
     }
 
     private GameType setupGameType(String gameName, MultiplayerType type) {
@@ -370,10 +370,10 @@ public class PlayerGamesMultiplayerTest {
     @Test
     public void shouldSeveralTrainings_whenTraining() {
         // given
-        playerWantsToPlay(training3);
-        playerWantsToPlay(training3);
-        playerWantsToPlay(training3);
-        playerWantsToPlay(training3);
+        playerWantsToPlay(training4);
+        playerWantsToPlay(training4);
+        playerWantsToPlay(training4);
+        playerWantsToPlay(training4);
 
         assertGroup(0)     // все комнаты на первом уровне одиночные как single
                 .notIn(1)  // -- " --
@@ -464,8 +464,8 @@ public class PlayerGamesMultiplayerTest {
         resetAllFields();
 
         // when
-        playerWantsToPlay(training3);
-        playerWantsToPlay(training3);
+        playerWantsToPlay(training4);
+        playerWantsToPlay(training4);
 
         // then
         assertGroup(0)        // все там же - первый уровень single
@@ -910,10 +910,10 @@ public class PlayerGamesMultiplayerTest {
     @Test
     public void shouldPlayerStartsNewGameAndAnotherGoWithHim_whenTraining_whenRemove() {
         // given
-        playerWantsToPlay(training3);
-        playerWantsToPlay(training3);
-        playerWantsToPlay(training3);
-        playerWantsToPlay(training3);
+        playerWantsToPlay(training4);
+        playerWantsToPlay(training4);
+        playerWantsToPlay(training4);
+        playerWantsToPlay(training4);
 
         assertGroup(0)     // все комнаты на первом уровне одиночные как single
                 .notIn(1)  // -- " --
@@ -932,7 +932,7 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerWantsToPlay(training3);
+        playerWantsToPlay(training4);
 
         // then
         assertGroup(1)     // все комнаты на первом уровне одиночные как single
@@ -983,8 +983,8 @@ public class PlayerGamesMultiplayerTest {
                 .check();
 
         // when
-        playerWantsToPlay(training3);
-        playerWantsToPlay(training3);
+        playerWantsToPlay(training4);
+        playerWantsToPlay(training4);
 
         // then
         assertGroup(3)        // все там же - первый уровень single

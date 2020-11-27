@@ -118,6 +118,6 @@ public final class NullGame implements Game {
 
     @Override
     public LevelProgress getProgress() {
-        return new LevelProgress(MultiplayerType.SINGLE);
+        return MultiplayerType.SINGLE.progress();
     }
 }

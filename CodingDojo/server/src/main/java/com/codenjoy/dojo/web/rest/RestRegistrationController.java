@@ -25,18 +25,14 @@ package com.codenjoy.dojo.web.rest;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerDetailInfo;
-import com.codenjoy.dojo.web.rest.pojo.PlayerId;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -75,27 +71,6 @@ public class RestRegistrationController {
                 .collect(toList());
     }
 
-    // TODO test me
-    @GetMapping("/room/{roomName}/game/{gameName}/join")
-    @ResponseBody
-    public synchronized PlayerId joinPlayerInRoom(@PathVariable("gameName") String gameName,
-                                                  @PathVariable("roomName") String roomName,
-                                                  HttpServletRequest request,
-                                                  @AuthenticationPrincipal Registration.User user) 
-    {
-        if (user == null) {
-            return null;
-        }
-        
-        if (gameService.getGame(gameName) instanceof NullGameType) {
-            return null;
-        }
-        
-        playerService.register(user.getId(), request.getRemoteAddr(), roomName, gameName);
-        
-        return new PlayerId(user);
-    }
-    
     // TODO test me
     @PostMapping("/player/create")
     @ResponseBody

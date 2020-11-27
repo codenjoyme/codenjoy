@@ -28,18 +28,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Rules {
 
     private List<Rule> rules = new LinkedList<>();
+    private Consumer<Message> console;
+
+    public Rules(Consumer<Message> console) {
+        this.console = console;
+    }
 
     public void addIf(List<Direction> directions, Pattern pattern) {
         rules.add(new RuleChild(pattern, directions));
     }
 
     public Rules addSubIf(Pattern pattern) {
-        Rules rules = new Rules();
+        Rules rules = new Rules(console);
         this.rules.add(new RuleNode(pattern, rules));
         return rules;
     }
@@ -59,9 +65,15 @@ public class Rules {
     }
     
     public Optional<Rule> findFor(Board board) {
-        return rules.stream()
+        Optional<Rule> result = rules.stream()
                 .map(rule -> rule.findFor(board))
                 .filter(Objects::nonNull)
                 .findFirst();
+
+        if (result.isPresent()) {
+            console.accept(Message.get("Mach rule: ", result.get()));
+        }
+
+        return result;
     }
 }

@@ -25,6 +25,7 @@ package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.sudoku.model.level.Level;
 import com.codenjoy.dojo.sudoku.services.Events;
 
 import java.util.LinkedList;
@@ -35,19 +36,23 @@ public class Sudoku implements Field {
     private List<Cell> cells;
     private Player player;
 
+    private int levelNumber;
     private final int size;
     private List<Wall> walls;
 
     private List<Cell> acts;
     private Cell act;
     private boolean gameOver;
+    private boolean win;
 
-    public Sudoku(Level level) {
-        cells = level.getCells();
-        walls = level.getWalls();
-        size = level.getSize();
-        acts = new LinkedList<Cell>();
+    public Sudoku(Level level, int levelNumber) {
+        cells = level.cells();
+        walls = level.walls();
+        size = level.size();
+        acts = new LinkedList<>();
         gameOver = false;
+        this.levelNumber = levelNumber;
+        win = false;
     }
 
     @Override
@@ -63,11 +68,16 @@ public class Sudoku implements Field {
             if (acts.contains(act)) {
                 acts.remove(act);
             }
-            acts.add(act);
-            if (cell.getNumber() == act.getNumber()) {
-                player.event(Events.SUCCESS);
+            if (act.isHidden()) {
+                // все норм, юзер просто сбросил свой
+                // прошлый выбор командой ACT(x, y, 0)
             } else {
-                player.event(Events.FAIL);
+                acts.add(act);
+                if (cell.getNumber() == act.getNumber()) {
+                    player.event(Events.SUCCESS);
+                } else {
+                    player.event(Events.FAIL);
+                }
             }
         }
         act = null;
@@ -87,6 +97,7 @@ public class Sudoku implements Field {
             }
         }
 
+        win = true;
         gameOver = true;
         player.event(Events.WIN);
     }
@@ -100,6 +111,7 @@ public class Sudoku implements Field {
         this.player = player;
         this.acts.clear();
         gameOver = false;
+        win = false;
         player.newHero(this);
     }
 
@@ -108,7 +120,7 @@ public class Sudoku implements Field {
     }
 
     public List<Cell> getCells() {
-        List<Cell> result = new LinkedList<Cell>();
+        List<Cell> result = new LinkedList<>();
 
         for (Cell cell : cells) {
             if (acts.contains(cell)) {
@@ -127,6 +139,11 @@ public class Sudoku implements Field {
     }
 
     @Override
+    public boolean isWin() {
+        return win;
+    }
+
+    @Override
     public void gameOver() {
         player.event(Events.LOOSE);
         this.gameOver = true;
@@ -138,7 +155,12 @@ public class Sudoku implements Field {
 
     @Override
     public void set(Point pt, int n) {
-        this.act = new Cell(pt, n, true);
+        act = new Cell(pt, n, n != 0);
+    }
+
+    @Override
+    public int level() {
+        return levelNumber;
     }
 
     public BoardReader reader() {

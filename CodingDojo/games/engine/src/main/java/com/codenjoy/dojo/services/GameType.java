@@ -48,7 +48,8 @@ public interface GameType extends Tickable {
 
     /**
      * Так фреймворк будет стартовать новую игру для каждого пользователя
-     * @level уровень игры (опциональное поле, обычно == 0)
+     * @level уровень игры (опциональное поле, обычно начинается с 1
+     *          {@see LevelProgress#levelsStartsFrom1})
      * @return Экземпляр игры пользователя
      */
     GameField createGame(int levelNumber);

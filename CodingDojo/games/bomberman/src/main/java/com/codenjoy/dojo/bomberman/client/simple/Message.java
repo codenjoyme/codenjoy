@@ -22,30 +22,46 @@ package com.codenjoy.dojo.bomberman.client.simple;
  * #L%
  */
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-public class ErrorMessage {
+public class Message {
     
     private String message;
     private List<Object> data;
+    private String type;
     
-    public ErrorMessage(String message, Object... data) {
+    protected Message(String type, String message, Object... data) {
+        this.type = type;
         this.message = message;
         this.data = Arrays.asList(data);
+    }
+
+    public static Message get(String message, Object... data) {
+        return new Message("MESSAGE", message, data);
+    }
+
+    public static Message error(String message, Object... data) {
+        return new Message("ERROR", message, data);
     }
     
     @Override
     public String toString() {
         switch (data.size()) {
-            case 0 : return String.format("[ERROR] %s", message);
-            case 1 : return String.format("[ERROR] %s: '%s'", message, data.get(0));
-            case 3 : return String.format("[ERROR] %s: '%s' at %s:%s",
-                    message, data.get(2), data.get(0), data.get(1));
-            case 4 : return String.format("[ERROR] %s: '%s' at %s:%s",
-                    String.format(message, data.get(3)), data.get(2), data.get(0), data.get(1));
-            default: return String.format("[ERROR] %s: %s", message, data.toString());
+            case 0 : return String.format("[%s] %s",
+                    type, message);
+
+            case 1 : return String.format("[%s] %s: '%s'",
+                    type, message, data.get(0));
+
+            case 3 : return String.format("[%s] %s: '%s' at %s:%s",
+                    type, message, data.get(2), data.get(0), data.get(1));
+
+            case 4 : return String.format("[%s] %s: '%s' at %s:%s",
+                    type, String.format(message, data.get(3)), data.get(2), data.get(0), data.get(1));
+
+            default: return String.format("[%s] %s: %s",
+                    type, message, data.toString());
         }
     }
 }

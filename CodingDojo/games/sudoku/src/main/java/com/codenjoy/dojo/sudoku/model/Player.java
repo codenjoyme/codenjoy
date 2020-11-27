@@ -26,8 +26,11 @@ package com.codenjoy.dojo.sudoku.model;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.hero.HeroDataImpl;
 import com.codenjoy.dojo.services.joystick.ActJoystick;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
@@ -42,10 +45,16 @@ public class Player extends GamePlayer<PlayerHero, Field> {
 
     public static final int SIZE = 9;
 
-    private boolean check(int i) {
-        if (i > SIZE || i < 1) return true;
-        return false;
+    private boolean valid(int i) {
+        return i >= 1 && i <= SIZE;
     }
+
+    @Override
+    public HeroData getHeroData() {
+        return new HeroDataImpl(field.level(),
+                MultiplayerType.SINGLE.isSingle());
+    }
+
 
     public static int fix(int x) {
         return x + Math.abs((x - 1) / 3);
@@ -65,9 +74,10 @@ public class Player extends GamePlayer<PlayerHero, Field> {
                 return;
             }
 
-            if (check(p[0])) return;
-            if (check(p[1])) return;
-            if (check(p[2])) return;
+            if (!valid(p[0])) return;
+            if (!valid(p[1])) return;
+            // командой 0 мы очищаем поле, если поставили туда не то значение
+            if (p[2] != 0 && !valid(p[2])) return;
 
             int x = fix(p[0]);
             int y = fix(SIZE + 1 - p[1]);
@@ -89,6 +99,11 @@ public class Player extends GamePlayer<PlayerHero, Field> {
 
     @Override
     public boolean isAlive() {
-        return true;
+        return !field.isGameOver();
+    }
+
+    @Override
+    public boolean isWin() {
+        return field.isWin();
     }
 }

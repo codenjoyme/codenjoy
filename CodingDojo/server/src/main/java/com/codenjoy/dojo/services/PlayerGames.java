@@ -91,19 +91,24 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         int index = all.indexOf(player);
         if (index == -1) return;
         PlayerGame game = all.remove(index);
+        GameType gameType = game.getGameType();
+        MultiplayerType type = gameType.getMultiplayerType();
 
         if (reloadAlone) {
-            removeWithResetAlone(game.getGame());
+            removeWithResetAlone(game.getGame(), type.shouldReloadAlone());
         }
 
         game.remove(onRemove);
         game.getGame().on(null);
     }
 
-    private void removeWithResetAlone(Game game) {
+    private void removeWithResetAlone(Game game, boolean reloadAlone) {
         List<PlayerGame> alone = removeAndLeaveAlone(game);
-        alone.forEach(gp -> play(gp.getGame(), gp.getRoomName(),
-                gp.getGameType(), gp.getGame().getSave()));
+
+        if (reloadAlone) {
+            alone.forEach(gp -> play(gp.getGame(), gp.getRoomName(),
+                    gp.getGameType(), gp.getGame().getSave()));
+        }
     }
 
     public PlayerGame get(String id) {
@@ -263,22 +268,21 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             Game game = playerGame.getGame();
             String roomName = playerGame.getRoomName();
 
-            MultiplayerType multiplayerType = playerGame.getGameType().getMultiplayerType();
+            MultiplayerType type = playerGame.getGameType().getMultiplayerType();
             if (game.isGameOver()) {
                 quiet(() -> {
                     JSONObject level = game.getSave();
 
-                    // TODO ##2 попробовать какой-то другой тип с несколькими уровнями, а не только isTraining
-                    if (game.isWin() && multiplayerType.isTraining()) {
-                        level = LevelProgress.winLevel(level);
+                    if (type.isLevels() && game.isWin()) {
+                        level = LevelProgress.goNext(level);
                         if (level != null) {
                             reload(game, roomName, level);
-                            fireOnLevelChanged(playerGame);
+                            playerGame.fireOnLevelChanged();
                             return;
                         }
                     }
 
-                    if (game.shouldLeave() && multiplayerType.isDisposable()) {
+                    if (type.isDisposable() && game.shouldLeave()) {
                         reload(game, roomName, level);
                         return;
                     }
@@ -294,6 +298,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         //      недокомплектованные пользователями
         //      а так же котмнаты которых активны
         active.stream()
+                .filter(playerGame -> playerGame.getField() != null) // TODO разобраться почему так случается при переключении уровней icancode
                 .map(PlayerGame::getField)
                 .distinct()
                 .filter(spreader::isRoomStaffed)
@@ -301,12 +306,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         // ну и тикаем все GameRunner мало ли кому надо на это подписаться
         getGameTypes().forEach(GameType::quietTick);
-    }
-
-    private void fireOnLevelChanged(PlayerGame playerGame) {
-        Game game = playerGame.getGame();
-        Player player = playerGame.getPlayer();
-        player.getEventListener().levelChanged(game.getProgress());
     }
 
     // перевод текущего игрока в новую комнату
@@ -321,8 +320,10 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         PlayerGame playerGame = getPlayerGame(game);
         playerGame.setRoomName(roomName);
         GameType gameType = playerGame.getGameType();
+        MultiplayerType type = gameType.getMultiplayerType();
+
         if (reloadAlone) {
-            removeWithResetAlone(game);
+            removeWithResetAlone(game, type.shouldReloadAlone());
         }
 
         play(game, roomName, gameType, save);
@@ -383,7 +384,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         if (progress.canChange(level)) {
             progress.change(level);
             reload(game, roomName, progress.saveTo(new JSONObject()));
-            fireOnLevelChanged(playerGame);
+            playerGame.fireOnLevelChanged();
         }
     }
 
@@ -395,7 +396,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         String roomName = playerGame.getRoomName();
         Game game = playerGame.getGame();
         reload(game, roomName, save);
-        fireOnLevelChanged(playerGame);
+        playerGame.fireOnLevelChanged();
     }
 
     public void changeRoom(String playerId, String roomName) {

@@ -45,7 +45,7 @@ public class ProbabilityWithoutOverflownLevels extends Levels {
 
     private int removedLinesWithoutOverflown;
 
-    public ProbabilityWithoutOverflownLevels(Dice dice, Figures queue) {
+    public ProbabilityWithoutOverflownLevels(Dice dice, FigureQueue queue) {
         super(new ProbabilityFigureTypesLevel(dice, queue,
                         new GlassEvent<>(criteria, 0),
                         lastFigureProbability(dice, 100),

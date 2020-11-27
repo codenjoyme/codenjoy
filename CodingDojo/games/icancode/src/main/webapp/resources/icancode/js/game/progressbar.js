@@ -23,7 +23,7 @@
 function initProgressbar(container) {
     var progressBar = $('#' + container + ' li.training');
     progressBar.all = function(aClass) {
-        for (var level = 0; level < progressBar.length; level++) {
+        for (var level = levelsStartsFrom1; level <= progressBar.length; level++) {
             progressBar.change(level, aClass);
         }
     }
@@ -50,8 +50,8 @@ function initProgressbar(container) {
     }
     progressBar.countLevels = function(count) {
         progressBar.levelsCount = count;
-        for (var level = 0; level < progressBar.length; level++) {
-            progressBar.name(level, "Level " + (level + 1));
+        for (var level = levelsStartsFrom1; level <= progressBar.length; level++) {
+            progressBar.name(level, "Level " + level);
             if (level == count) {
                 progressBar.name(level, "Contest");
             }
@@ -62,6 +62,10 @@ function initProgressbar(container) {
             }
         }
     }
+    progressBar.element = function(level) {
+        var index = level - levelsStartsFrom1;
+        return $(progressBar[index]);
+    }
     progressBar.done = function(level) {
         progressBar.change(level, "level-done");
     }
@@ -70,18 +74,19 @@ function initProgressbar(container) {
         progressBar.set(level, aClass);
     }
     progressBar.set = function(level, aClass) {
-        $(progressBar[level]).addClass(aClass);
+        progressBar.element(level).addClass(aClass);
     }
     progressBar.remove = function(level, aClass) {
-        $(progressBar[level]).removeClass(aClass);
+        progressBar.element(level).removeClass(aClass);
     }
     progressBar.name = function(level, name) {
-        $(progressBar[level]).html(name);
+        progressBar.element(level).html(name);
     }
 
     progressBar.each(function(index) {
-        progressBar.notActive(index);
-        progressBar.hide(index);
+        var level = index + levelsStartsFrom1;
+        progressBar.notActive(level);
+        progressBar.hide(level);
     });
 
     $(".trainings").mCustomScrollbar({

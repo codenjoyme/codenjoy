@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.tetris.model.levels.random;
+package com.codenjoy.dojo.services.multiplayer.types;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,12 +22,11 @@ package com.codenjoy.dojo.tetris.model.levels.random;
  * #L%
  */
 
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 1:46 AM
- */
-public interface RandomizerFetcher {
-    Randomizer get();
+public class TripleType extends MultiplayerType {
+
+    public TripleType() {
+        super(3, DISPOSABLE);
+    }
 }
