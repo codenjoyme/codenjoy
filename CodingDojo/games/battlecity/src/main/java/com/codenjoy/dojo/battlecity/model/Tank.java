@@ -102,7 +102,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     // TODO подумать как устранить дублирование с MovingObject
     public void move() {
-        if (!moving) {
+        if (!moving && !field.isIce(this)) {
             return;
         }
         direction = sliding.act(this);
@@ -110,7 +110,9 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void moving(Point pt) {
-        if (!field.isBarrier(pt, this)) {
+        if (field.isBarrierFor(pt, this)) {
+            sliding.canceled();
+        } else {
             move(pt);
         }
         moving = false;
@@ -159,13 +161,12 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void tick() {
+        gun.tick();
         checkTaken();
 
         for (Prize prize : prizesTaken) {
-            prize.getTimeOfPrize();
+            prize.tickTaken();
         }
-
-        gun.tick();
     }
 
     private void checkTaken() {
@@ -173,7 +174,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
             return;
         }
 
-        prizesTaken.removeIf(prize -> prize.getTimeOfPrize() == 0);
+        prizesTaken.removeIf(prize -> prize.timelimit() == 0);
     }
 
     @Override
@@ -240,4 +241,5 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     public void addPrize(Prize prize) {
         prizesTaken.add(prize);
     }
+
 }

@@ -55,11 +55,12 @@ public class SingleTest {
     public void givenGame() {
         Parameter<Integer> spawnAiPrize = v(4);
         Parameter<Integer> hitKillsAiPrize = v(3);
-        Parameter<Integer> prizeOnField = v(4);
-        Parameter<Integer> prizeOnWorked = v(3);
+        Parameter<Integer> prizeOnField = v(3);
+        Parameter<Integer> prizeWorking = v(3);
 
         game = new Battlecity(size, mock(Dice.class),
-                spawnAiPrize, hitKillsAiPrize, prizeOnField, prizeOnWorked );
+                spawnAiPrize, hitKillsAiPrize, prizeOnField, prizeWorking);
+
 
         game.addBorder(new DefaultBorders(size).get());
 

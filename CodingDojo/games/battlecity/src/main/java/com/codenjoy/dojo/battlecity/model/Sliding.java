@@ -26,7 +26,7 @@ import com.codenjoy.dojo.services.Direction;
 
 public class Sliding {
 
-    public static final int TAKE_CONTROL_EVERY_TICKS = 2;
+    public static int slidingValue;
     private Field field;
     
     private int tick;
@@ -42,14 +42,19 @@ public class Sliding {
             return before = tank.getDirection();
         }
 
-        tick++;
-
-        if (tick % TAKE_CONTROL_EVERY_TICKS == 0) {
+        if (tick == slidingValue) {
+            tick = 0;
             before = tank.getDirection();
         } else {
             // ignore current direction because sliding
         }
 
+        tick++;
+
         return before;
+    }
+
+    public void canceled() {
+        tick = slidingValue;
     }
 }

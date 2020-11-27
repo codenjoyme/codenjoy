@@ -38,6 +38,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     private Field field;
     private Tank owner;
     private Consumer<Object> onDestroy;
+    private boolean heavy;
 
     public Bullet(Field field, Direction tankDirection, Point from, Tank owner, Consumer<Object> onDestroy) {
         super(from.getX(), from.getY(), tankDirection);
@@ -46,6 +47,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
         moving = true;
         this.onDestroy = onDestroy;
         speed = 2;
+        heavy = false;
     }
 
     public void onDestroy() {
@@ -90,5 +92,13 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
         } else {
             return Elements.BULLET;
         }
+    }
+
+    public void heavy() {
+        heavy = true;
+    }
+
+    public boolean isHeavy() {
+        return heavy;
     }
 }

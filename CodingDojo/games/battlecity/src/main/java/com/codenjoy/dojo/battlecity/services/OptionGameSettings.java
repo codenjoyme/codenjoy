@@ -33,10 +33,11 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> spawnAiPrize;
     private final Parameter<Integer> hitKillsAiPrize;
     private final Parameter<Integer> prizeOnField;
+    private final Parameter<Integer> prizeWorking;
+    private final Parameter<Integer> slidingValue;
     private final Parameter<Integer> killYourTankPenalty;
     private final Parameter<Integer> killOtherHeroTankScore;
     private final Parameter<Integer> killOtherAITankScore;
-    private final Parameter<Integer> prizeWorking;
 
     public OptionGameSettings(Settings settings, Dice dice) {
         this.dice = dice;
@@ -47,8 +48,9 @@ public class OptionGameSettings implements GameSettings {
 
         spawnAiPrize = settings.addEditBox("Count spawn for AI Tank with prize").type(Integer.class).def(4);
         hitKillsAiPrize = settings.addEditBox("Hits to kill AI Tank with prize").type(Integer.class).def(3);
-        prizeOnField = settings.addEditBox("Prize must be on the field n-ticks").type(Integer.class).def(3);
-        prizeWorking = settings.addCheckBox("Prize action must be n-ticks ").type(Integer.class).def(5);
+        prizeOnField = settings.addEditBox("Prize must be on the field").type(Integer.class).def(3);
+        prizeWorking = settings.addEditBox("Working time of the prize").type(Integer.class).def(3);
+        slidingValue = settings.addEditBox("Value of tank sliding on ice").type(Integer.class).def(3);
     }
 
     @Override
@@ -89,5 +91,10 @@ public class OptionGameSettings implements GameSettings {
     @Override
     public Parameter<Integer> prizeWorking() {
         return prizeWorking;
+    }
+
+    @Override
+    public Parameter<Integer> slidingValue() {
+        return slidingValue;
     }
 }

@@ -57,7 +57,7 @@ public class Battlecity implements Field {
                       Parameter<Integer> whichSpawnWithPrize,
                       Parameter<Integer> damagesBeforeAiDeath,
                       Parameter<Integer> prizeOnField,
-                      Parameter<Integer> prizeOnWorked)
+                      Parameter<Integer> prizeWorking)
     {
         this.size = size;
         ais = new LinkedList<>();
@@ -69,7 +69,7 @@ public class Battlecity implements Field {
         rivers = new LinkedList<>();
         players = new LinkedList<>();
 
-        prizeGen = new PrizeGenerator(this, dice, prizeOnField, prizeOnWorked);
+        prizeGen = new PrizeGenerator(this, dice, prizeOnField, prizeWorking);
 
         aiGen = new AiGenerator(this, dice, whichSpawnWithPrize, damagesBeforeAiDeath);
     }
@@ -106,6 +106,10 @@ public class Battlecity implements Field {
         for (Tank tank : tanks) {
             if (tank.isAlive()) {
                 tank.tryFire();
+            }
+
+            if (checkPrizes(Elements.PRIZE_BREAKING_WALLS, tank.getPrizesTaken())) {
+                tank.getBullets().stream().forEach(Bullet::heavy);
             }
         }
 
@@ -196,7 +200,9 @@ public class Battlecity implements Field {
                 return;
             }
 
-            tank.kill(bullet);
+            if (!checkPrizes(Elements.PRIZE_IMMORTALITY, tank.getPrizesTaken())) {
+                tank.kill(bullet);
+            }
 
             if (!tank.isAlive()) {
                 scoresForKill(bullet, tank);
@@ -218,7 +224,7 @@ public class Battlecity implements Field {
             Wall wall = getWallAt(bullet);
 
             if (!wall.destroyed()) {
-                wall.destroyFrom(bullet.getDirection());
+                wall.destroy(bullet);
                 bullet.onDestroy();  // TODO заимплементить взрыв
             }
 
@@ -302,15 +308,27 @@ public class Battlecity implements Field {
     }
 
     @Override
+    public boolean isBarrierFor(Point pt, Tank tank) {
+        if (isBarrier(pt)) {
+            return true;
+        }
+
+        if (isRiver(pt)) {
+            if (checkPrizes(Elements.PRIZE_WALKING_ON_WATER, tank.getPrizesTaken())) {
+                return false;
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean isBarrier(Point pt) {
         for (Wall wall : this.walls) {
             if (wall.itsMe(pt) && !wall.destroyed()) {
                 return true;
             }
-        }
-
-        if (isRiver(pt)) {
-            return true;
         }
 
         for (Point border : borders) {
@@ -326,6 +344,11 @@ public class Battlecity implements Field {
         }
 
         return pt.isOutOf(size);
+    }
+
+    private boolean checkPrizes(Elements elements, List<Prize> prizesTaken) {
+        return prizesTaken.stream()
+                .anyMatch(x -> elements.equals(x.getElements()));
     }
 
     private List<Bullet> bullets() {
@@ -484,7 +507,8 @@ public class Battlecity implements Field {
         this.trees.addAll(trees);
     }
 
-    public void addIce(List<Ice> ice) {
+    public void addIce(List<Ice> ice, Parameter<Integer> slidingValue) {
         this.ice.addAll(ice);
+        Sliding.slidingValue = slidingValue.getValue();
     }
 }
