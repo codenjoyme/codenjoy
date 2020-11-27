@@ -43,5 +43,5 @@ public interface GameSettings {
 
     Parameter<Integer> prizeWorking();
 
-    Parameter<Integer> slidingValue();
+    Parameter<Integer> slipperiness();
 }

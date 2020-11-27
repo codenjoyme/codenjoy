@@ -34,7 +34,7 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> hitKillsAiPrize;
     private final Parameter<Integer> prizeOnField;
     private final Parameter<Integer> prizeWorking;
-    private final Parameter<Integer> slidingValue;
+    private final Parameter<Integer> slipperiness;
     private final Parameter<Integer> killYourTankPenalty;
     private final Parameter<Integer> killOtherHeroTankScore;
     private final Parameter<Integer> killOtherAITankScore;
@@ -50,7 +50,7 @@ public class OptionGameSettings implements GameSettings {
         hitKillsAiPrize = settings.addEditBox("Hits to kill AI Tank with prize").type(Integer.class).def(3);
         prizeOnField = settings.addEditBox("The period of prize validity on the field after the appearance").type(Integer.class).def(3);
         prizeWorking = settings.addEditBox("Working time of the prize after catch up").type(Integer.class).def(3);
-        slidingValue = settings.addEditBox("Value of tank sliding on ice").type(Integer.class).def(3);
+        slipperiness = settings.addEditBox("Value of tank sliding on ice").type(Integer.class).def(3);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class OptionGameSettings implements GameSettings {
     }
 
     @Override
-    public Parameter<Integer> slidingValue() {
-        return slidingValue;
+    public Parameter<Integer> slipperiness() {
+        return slipperiness;
     }
 }

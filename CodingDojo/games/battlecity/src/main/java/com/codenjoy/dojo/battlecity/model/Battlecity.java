@@ -39,6 +39,8 @@ import static java.util.stream.Collectors.toList;
 
 public class Battlecity implements Field {
 
+    private final Parameter<Integer> slipperiness;
+
     private int size;
 
     private PrizeGenerator prizeGen;
@@ -58,7 +60,8 @@ public class Battlecity implements Field {
                       Parameter<Integer> whichSpawnWithPrize,
                       Parameter<Integer> damagesBeforeAiDeath,
                       Parameter<Integer> prizeOnField,
-                      Parameter<Integer> prizeWorking)
+                      Parameter<Integer> prizeWorking,
+                      Parameter<Integer> slipperiness)
     {
         this.size = size;
         ais = new LinkedList<>();
@@ -77,6 +80,8 @@ public class Battlecity implements Field {
         aiGen = new AiGenerator(this, dice,
                 whichSpawnWithPrize,
                 damagesBeforeAiDeath);
+
+        this.slipperiness = slipperiness;
     }
 
     public void addAiTanks(List<? extends Point> tanks) {
@@ -296,6 +301,11 @@ public class Battlecity implements Field {
     }
 
     @Override
+    public int slipperiness() {
+        return slipperiness.getValue();
+    }
+
+    @Override
     public boolean isBarrier(Point pt) {
         for (Wall wall : this.walls) {
             if (wall.itsMe(pt) && !wall.destroyed()) {
@@ -414,7 +424,6 @@ public class Battlecity implements Field {
         return borders;
     }
 
-
     public void addBorder(List<Border> borders) {
         this.borders.addAll(borders);
     }
@@ -455,8 +464,7 @@ public class Battlecity implements Field {
         this.trees.addAll(trees);
     }
 
-    public void add(List<Ice> ice, Parameter<Integer> sliding) {
+    public void addIce(List<Ice> ice) {
         this.ice.addAll(ice);
-        Sliding.slidingValue = sliding.getValue();
     }
 }

@@ -98,7 +98,7 @@ public class BattlecityTest {
         when(settings.hitKillsAiPrize()).thenReturn(hitKillsAiPrize);
         when(settings.prizeOnField()).thenReturn(prizeOnField);
         when(settings.prizeWorking()).thenReturn(prizeWorking);
-        when(settings.slidingValue()).thenReturn(slidingValue);
+        when(settings.slipperiness()).thenReturn(slidingValue);
 
         GameRunner runner = new GameRunner() {
             @Override
