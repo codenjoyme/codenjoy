@@ -102,7 +102,12 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         if (!moving && !field.isIce(this)) {
             return;
         }
-        direction = sliding.act(this);
+        Direction updated = sliding.act(this);
+        if (updated == null) {
+            // TODO исследовать иногда тут NPE что ломает всю игру
+        } else {
+            direction = updated;
+        }
         moving(direction.change(this));
     }
 
