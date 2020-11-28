@@ -96,6 +96,10 @@ var Elements = {
     BATTLE_WALL: '☼',
     BANG: 'Ѡ',
 
+    ICE: '#',
+    TREE: '%',
+    RIVER: '~',
+
     WALL: '╬',
 
     WALL_DESTROYED_DOWN: '╩',
@@ -133,7 +137,14 @@ var Elements = {
     AI_TANK_UP: '?',
     AI_TANK_RIGHT: '»',
     AI_TANK_DOWN: '¿',
-    AI_TANK_LEFT: '«'
+    AI_TANK_LEFT: '«',
+
+    AI_TANK_PRIZE: '◘',
+
+    PRIZE: '!',
+    PRIZE_IMMORTALITY: '1',
+    PRIZE_BREAKING_WALLS: '2',
+    PRIZE_WALKING_ON_WATER: '3'
     
 };
 
