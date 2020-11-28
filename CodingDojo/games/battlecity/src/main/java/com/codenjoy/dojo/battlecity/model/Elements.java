@@ -37,9 +37,9 @@ public enum Elements implements CharElements {
     BATTLE_WALL('☼'),
     BANG('Ѡ'),
 
-	ICE('█'),
-	TREE('▒'),
-	RIVER('▓'),
+	ICE('#'),
+	TREE('%'),
+	RIVER('~'),
 
 	WALL('╬', 3),
 
