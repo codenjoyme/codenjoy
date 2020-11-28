@@ -52,14 +52,12 @@ class LoginForm extends Component {
                                     name='email'
                                     placeholder='Електронна пошта'
                                     type='email'
-                                    errors={ error }
                                     component={ CustomInputComponent }
                                 />
                                 <Field
                                     name='password'
                                     placeholder='Пароль'
                                     type='password'
-                                    errors={ error }
                                     component={ CustomInputComponent }
                                 />
                                 <button
