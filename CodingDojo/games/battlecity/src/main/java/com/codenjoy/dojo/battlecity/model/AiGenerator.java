@@ -35,13 +35,14 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class AiGenerator {
 
-    private Field field;
-    private Dice dice;
+    private final Field field;
+    private final Dice dice;
 
-    private int maxAi;
     private Parameter<Integer> whichSpawnWithPrize;
     private Parameter<Integer> damagesBeforeAiDeath;
     private Parameter<Integer> aiTicksPerShoot;
+
+    private int capacity;
     private int spawn;
 
     public AiGenerator(Field field, Dice dice,
@@ -63,7 +64,7 @@ public class AiGenerator {
 
     public void dropAll() {
         int size = field.size();
-        int needed = maxAi - field.aiTanks().size();
+        int needed = capacity - field.aiTanks().size();
 
         for (int i = 0; i < needed; i++) {
             int y = size - 2;
@@ -119,9 +120,9 @@ public class AiGenerator {
         return tank;
     }
 
-    public void dropAll(List<? extends Point> pts) {
-        maxAi = pts.size();
-        for (Point pt : pts) {
+    public void dropAll(List<? extends Point> points) {
+        capacity = points.size();
+        for (Point pt : points) {
             drop(pt);
         }
     }

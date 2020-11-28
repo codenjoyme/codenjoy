@@ -35,7 +35,7 @@ public class DefaultBorders {
 
     public DefaultBorders(int size) {
         this.size = size;
-        result = new LinkedList<Border>();
+        result = new LinkedList<>();
         addHorizontal();
         addVertical();
     }

@@ -53,11 +53,11 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     private List<Bullet> bullets;
     private Prizes prizes;
 
-    public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
+    public Tank(Point pt, Direction direction, Dice dice, int ticksPerShoot) {
         super(pt);
         this.direction = direction;
         this.dice = dice;
-        gun = new Gun(ticksPerBullets);
+        gun = new Gun(ticksPerShoot);
         reset();
     }
 

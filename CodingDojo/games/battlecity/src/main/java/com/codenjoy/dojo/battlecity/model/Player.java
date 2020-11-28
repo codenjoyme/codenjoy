@@ -28,19 +28,24 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.settings.Parameter;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Player extends GamePlayer<Tank, Field> {
 
-    public static final int TICKS_PER_BULLETS = 4;
+    private final Parameter<Integer> tankTicksPerShoot;
 
     Tank hero;
     private Dice dice;
     private int killed;
 
-    public Player(EventListener listener, Dice dice) {
+    public Player(EventListener listener,
+                  Dice dice,
+                  Parameter<Integer> tankTicksPerShoot)
+    {
         super(listener);
+        this.tankTicksPerShoot = tankTicksPerShoot;
         this.dice = dice;
         reset();
     }
@@ -75,7 +80,9 @@ public class Player extends GamePlayer<Tank, Field> {
     }
 
     public void newHero(Field field) {
-        hero = new Tank(pt(0, 0), Direction.UP, dice, TICKS_PER_BULLETS);
+        hero = new Tank(pt(0, 0), Direction.UP,
+                dice,
+                tankTicksPerShoot.getValue());
         hero.removeBullets();
         hero.init(field);
         reset();

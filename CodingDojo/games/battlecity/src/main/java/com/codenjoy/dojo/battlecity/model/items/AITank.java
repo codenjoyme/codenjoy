@@ -57,7 +57,7 @@ public class AITank extends Tank {
 
             // !field.isRiver(pt) потому что мы хотим сделать так, чтобы боты пытались
             // пройти через речку но не могли - это даст иллюзию, что
-            // они пытаются отстрливаться через воду
+            // они пытаются отстреливаться через воду
             if (field.isBarrier(pt) && !field.isRiver(pt)) {
                 direction = Direction.random(dice);
             }

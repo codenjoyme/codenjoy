@@ -46,4 +46,6 @@ public interface GameSettings {
     Parameter<Integer> slipperiness();
 
     Parameter<Integer> aiTicksPerShoot();
+
+    Parameter<Integer> tankTicksPerShoot();
 }

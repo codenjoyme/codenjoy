@@ -112,7 +112,9 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener, getDice());
+        return new Player(listener,
+                getDice(),
+                gameSettings.tankTicksPerShoot());
     }
 
     public String getMap() {

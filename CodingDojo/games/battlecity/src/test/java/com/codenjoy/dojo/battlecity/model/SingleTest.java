@@ -58,6 +58,7 @@ public class SingleTest {
         Parameter<Integer> prizeOnField = v(3);
         Parameter<Integer> prizeWorking = v(3);
         Parameter<Integer> aiTicksPerShoot = v(3);
+        Parameter<Integer> tankTicksPerShoot = v(4);
         Parameter<Integer> slipperiness = v(3);
 
         game = new Battlecity(size, mock(Dice.class),
@@ -71,8 +72,8 @@ public class SingleTest {
 
         game.addBorder(new DefaultBorders(size).get());
 
-        player1 = new Player(null, dice1);
-        player2 = new Player(null, dice2);
+        player1 = new Player(null, dice1, tankTicksPerShoot);
+        player2 = new Player(null, dice2, tankTicksPerShoot);
         tanks1 = new Single(player1, printerFactory);
         tanks1.on(game);
         tanks2 = new Single(player2, printerFactory);

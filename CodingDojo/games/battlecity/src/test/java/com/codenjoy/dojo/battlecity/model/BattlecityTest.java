@@ -61,6 +61,7 @@ public class BattlecityTest {
     private Parameter<Integer> prizeOnField;
     private Parameter<Integer> prizeWorking;
     private Parameter<Integer> aiTicksPerShoot;
+    private Parameter<Integer> tankTicksPerShoot;
     private Parameter<Integer> slidingValue;
 
     private Battlecity game;
@@ -82,6 +83,7 @@ public class BattlecityTest {
         prizeOnField = v(3);
         prizeWorking = v(10);
         aiTicksPerShoot = v(10);
+        tankTicksPerShoot = v(4);
         slidingValue = v(3);
         dice = mock(Dice.class);
     }
@@ -101,6 +103,7 @@ public class BattlecityTest {
         when(settings.prizeOnField()).thenReturn(prizeOnField);
         when(settings.prizeWorking()).thenReturn(prizeWorking);
         when(settings.aiTicksPerShoot()).thenReturn(aiTicksPerShoot);
+        when(settings.tankTicksPerShoot()).thenReturn(tankTicksPerShoot);
         when(settings.slipperiness()).thenReturn(slidingValue);
 
         GameRunner runner = new GameRunner() {
@@ -131,7 +134,7 @@ public class BattlecityTest {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
-        Player player = new Player(listener, dice){
+        Player player = new Player(listener, dice, tankTicksPerShoot){
             @Override
             public void newHero(Field field) {
                 // do nothing

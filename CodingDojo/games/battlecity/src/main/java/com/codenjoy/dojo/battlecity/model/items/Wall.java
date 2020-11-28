@@ -29,7 +29,7 @@ import com.codenjoy.dojo.services.*;
 
 public class Wall extends PointImpl implements Tickable, State<Elements, Player> {
 
-    public static final int REGENERATE_TIME = 30;
+    public static final int REGENERATE_TIME = 30; // TODO вынести в settings
 
     private Elements ch;
     private int timer;

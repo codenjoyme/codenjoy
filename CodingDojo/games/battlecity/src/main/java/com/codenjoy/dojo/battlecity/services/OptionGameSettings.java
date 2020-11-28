@@ -36,6 +36,7 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> prizeWorking;
     private final Parameter<Integer> slipperiness;
     private final Parameter<Integer> aiTicksPerShoot;
+    private final Parameter<Integer> tankTicksPerShoot;
     private final Parameter<Integer> killYourTankPenalty;
     private final Parameter<Integer> killOtherHeroTankScore;
     private final Parameter<Integer> killOtherAITankScore;
@@ -52,6 +53,7 @@ public class OptionGameSettings implements GameSettings {
         prizeOnField = settings.addEditBox("The period of prize validity on the field after the appearance").type(Integer.class).def(3);
         prizeWorking = settings.addEditBox("Working time of the prize after catch up").type(Integer.class).def(3);
         aiTicksPerShoot = settings.addEditBox("Ticks until the next AI Tank shoot").type(Integer.class).def(10);
+        tankTicksPerShoot = settings.addEditBox("Ticks until the next Tank shoot").type(Integer.class).def(10);
         slipperiness = settings.addEditBox("Value of tank sliding on ice").type(Integer.class).def(3);
     }
 
@@ -103,5 +105,10 @@ public class OptionGameSettings implements GameSettings {
     @Override
     public Parameter<Integer> aiTicksPerShoot() {
         return aiTicksPerShoot;
+    }
+
+    @Override
+    public Parameter<Integer> tankTicksPerShoot() {
+        return tankTicksPerShoot;
     }
 }

@@ -35,12 +35,15 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Bullet extends MovingObject implements State<Elements, Player> {
 
-    private Field field;
+    private final Field field;
     private Tank owner;
     private Consumer<Object> onDestroy;
     private boolean heavy;
 
-    public Bullet(Field field, Direction tankDirection, Point from, Tank owner, Consumer<Object> onDestroy) {
+    public Bullet(Field field, Direction tankDirection,
+                  Point from, Tank owner,
+                  Consumer<Object> onDestroy)
+    {
         super(from.getX(), from.getY(), tankDirection);
         this.field = field;
         this.owner = owner;

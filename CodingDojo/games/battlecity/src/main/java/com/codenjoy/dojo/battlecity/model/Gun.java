@@ -26,12 +26,14 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.services.Tickable;
 
 public class Gun implements Tickable {
+
+    private final int ticksPerShoot;
+
     private boolean canFire;
-    private int ticksPerBullets;
     private int ticks;
 
-    public Gun(int ticksPerBullets) {
-        this.ticksPerBullets = ticksPerBullets;
+    public Gun(int ticksPerShoot) {
+        this.ticksPerShoot = ticksPerShoot;
         reset();
     }
 
@@ -45,9 +47,9 @@ public class Gun implements Tickable {
         if (!canFire) {
             ticks++;
         }
-        if (ticksPerBullets <= 0) {
+        if (ticksPerShoot <= 0) {
             canFire = true;
-        } else if (ticks == ticksPerBullets) {
+        } else if (ticks == ticksPerShoot) {
             reset();
         }
     }

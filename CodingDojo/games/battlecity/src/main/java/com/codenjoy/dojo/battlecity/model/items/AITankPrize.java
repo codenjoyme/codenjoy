@@ -29,9 +29,10 @@ import com.codenjoy.dojo.services.Point;
 
 public class AITankPrize extends AITank {
 
-    private int CHANGE_EVERY_TICKS = 4;
+    private final int CHANGE_EVERY_TICKS = 4;
+    private final int vitality;
+
     private int damage;
-    private int vitality;
     private int ticks;
 
     public AITankPrize(Point pt, Direction direction,
