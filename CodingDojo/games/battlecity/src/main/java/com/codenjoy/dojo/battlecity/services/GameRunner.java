@@ -62,11 +62,13 @@ public class GameRunner extends AbstractGameType implements GameType {
                 gameSettings.hitKillsAiPrize(),
                 gameSettings.prizeOnField(),
                 gameSettings.prizeWorking(),
+                gameSettings.aiTicksPerShoot(),
                 gameSettings.slipperiness());
 
         game.addBorder(level.getBorders());
         game.addWall(level.getWalls());
-        game.addAiTanks(level.getAiTanks());
+        game.addAiTanks(level.getAiTanks(
+                gameSettings.aiTicksPerShoot().getValue()));
         game.addRiver(level.getRivers());
         game.addTree(level.getTrees());
         game.addIce(level.getIce());

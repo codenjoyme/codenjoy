@@ -29,13 +29,16 @@ import com.codenjoy.dojo.services.Point;
 
 public class AITankPrize extends AITank {
 
-    public static final int CHANGE_EVERY_TICKS = 4;
+    private int CHANGE_EVERY_TICKS = 4;
     private int damage;
     private int vitality;
     private int ticks;
 
-    public AITankPrize(Point pt, Direction direction, int vitality, Dice dice) {
-        super(pt, direction, dice);
+    public AITankPrize(Point pt, Direction direction,
+                       int vitality, int ticksPerShoot,
+                       Dice dice)
+    {
+        super(pt, direction, ticksPerShoot, dice);
         this.vitality = vitality;
         damage = 0;
         ticks = 0;

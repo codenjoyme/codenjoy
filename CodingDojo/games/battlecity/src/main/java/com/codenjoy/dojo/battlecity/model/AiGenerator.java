@@ -41,17 +41,20 @@ public class AiGenerator {
     private int maxAi;
     private Parameter<Integer> whichSpawnWithPrize;
     private Parameter<Integer> damagesBeforeAiDeath;
+    private Parameter<Integer> aiTicksPerShoot;
     private int spawn;
 
     public AiGenerator(Field field, Dice dice,
                        Parameter<Integer> whichSpawnWithPrize,
-                       Parameter<Integer> damagesBeforeAiDeath)
+                       Parameter<Integer> damagesBeforeAiDeath,
+                       Parameter<Integer> aiTicksPerShoot)
     {
         this.field = field;
         this.dice = dice;
         this.spawn = 0;
         this.whichSpawnWithPrize = whichSpawnWithPrize;
         this.damagesBeforeAiDeath = damagesBeforeAiDeath;
+        this.aiTicksPerShoot = aiTicksPerShoot;
     }
 
     void newSpawn(){
@@ -87,9 +90,16 @@ public class AiGenerator {
 
     private Tank tank(Point pt) {
         if (isPrizeTankTurn()) {
-            return new AITankPrize(pt, Direction.DOWN, damagesBeforeAiDeath.getValue(), dice);
+            return new AITankPrize(pt,
+                    Direction.DOWN,
+                    damagesBeforeAiDeath.getValue(),
+                    aiTicksPerShoot.getValue(),
+                    dice);
         } else {
-            return new AITank(pt, Direction.DOWN, dice);
+            return new AITank(pt,
+                    Direction.DOWN,
+                    aiTicksPerShoot.getValue(),
+                    dice);
         }
     }
 

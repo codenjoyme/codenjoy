@@ -89,25 +89,25 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Tank> getAiTanks() {
-        return new LinkedList<Tank>(){{
-            addAll(getObjects(pt -> new AITank(pt, DOWN, dice),
+    public List<Tank> getAiTanks(int aiTicksPerShoot) {
+        return new LinkedList<>(){{
+            addAll(getObjects(pt -> new AITank(pt, DOWN, aiTicksPerShoot, dice),
                     AI_TANK_DOWN));
 
-            addAll(getObjects(pt -> new AITank(pt, UP, dice),
+            addAll(getObjects(pt -> new AITank(pt, UP, aiTicksPerShoot, dice),
                     AI_TANK_UP));
 
-            addAll(getObjects(pt -> new AITank(pt, LEFT, dice),
+            addAll(getObjects(pt -> new AITank(pt, LEFT, aiTicksPerShoot, dice),
                     AI_TANK_LEFT));
 
-            addAll(getObjects(pt -> new AITank(pt, RIGHT, dice),
+            addAll(getObjects(pt -> new AITank(pt, RIGHT, aiTicksPerShoot, dice),
                     AI_TANK_RIGHT));
         }};
     }
 
     @Override
     public List<Tank> getTanks(int ticksPerBullets) {
-        return new LinkedList<Tank>(){{
+        return new LinkedList<>(){{
             addAll(getObjects(pt -> new Tank(pt, DOWN, dice, ticksPerBullets),
                     TANK_DOWN, OTHER_TANK_DOWN));
 
@@ -137,10 +137,10 @@ public class LevelImpl implements Level {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new LinkedList<Point>() {{
+                return new LinkedList<>() {{
                     addAll(LevelImpl.this.getBorders());
                     addAll(LevelImpl.this.getWalls());
-                    addAll(LevelImpl.this.getAiTanks());
+                    addAll(LevelImpl.this.getAiTanks(0));
                     addAll(LevelImpl.this.getIce());
                     addAll(LevelImpl.this.getRivers());
                     addAll(LevelImpl.this.getTrees());

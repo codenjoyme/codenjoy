@@ -44,4 +44,6 @@ public interface GameSettings {
     Parameter<Integer> prizeWorking();
 
     Parameter<Integer> slipperiness();
+
+    Parameter<Integer> aiTicksPerShoot();
 }

@@ -60,6 +60,7 @@ public class BattlecityTest {
     private Parameter<Integer> hitKillsAiPrize;
     private Parameter<Integer> prizeOnField;
     private Parameter<Integer> prizeWorking;
+    private Parameter<Integer> aiTicksPerShoot;
     private Parameter<Integer> slidingValue;
 
     private Battlecity game;
@@ -80,6 +81,7 @@ public class BattlecityTest {
         hitKillsAiPrize = v(3);
         prizeOnField = v(3);
         prizeWorking = v(10);
+        aiTicksPerShoot = v(10);
         slidingValue = v(3);
         dice = mock(Dice.class);
     }
@@ -98,6 +100,7 @@ public class BattlecityTest {
         when(settings.hitKillsAiPrize()).thenReturn(hitKillsAiPrize);
         when(settings.prizeOnField()).thenReturn(prizeOnField);
         when(settings.prizeWorking()).thenReturn(prizeWorking);
+        when(settings.aiTicksPerShoot()).thenReturn(aiTicksPerShoot);
         when(settings.slipperiness()).thenReturn(slidingValue);
 
         GameRunner runner = new GameRunner() {

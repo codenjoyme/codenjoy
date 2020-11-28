@@ -61,6 +61,7 @@ public class Battlecity implements Field {
                       Parameter<Integer> damagesBeforeAiDeath,
                       Parameter<Integer> prizeOnField,
                       Parameter<Integer> prizeWorking,
+                      Parameter<Integer> aiTicksPerShoot,
                       Parameter<Integer> slipperiness)
     {
         this.size = size;
@@ -79,7 +80,8 @@ public class Battlecity implements Field {
 
         aiGen = new AiGenerator(this, dice,
                 whichSpawnWithPrize,
-                damagesBeforeAiDeath);
+                damagesBeforeAiDeath,
+                aiTicksPerShoot);
 
         this.slipperiness = slipperiness;
     }
@@ -119,7 +121,7 @@ public class Battlecity implements Field {
             }
 
             if (tank.prizes().contains(PRIZE_BREAKING_WALLS)) {
-                tank.getBullets().stream().forEach(Bullet::heavy);
+                tank.getBullets().forEach(Bullet::heavy);
             }
         }
 
