@@ -4,7 +4,7 @@ For NonJava languages:
 - and follow README.md instructions
 
 For Java:
-- setup Java (JDK 8/11)
+- setup Java (JDK 11)
     + setup JAVA_HOME variable
 - setup Maven3
     + setup M2_HOME variable
