@@ -560,6 +560,21 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>japanese</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>japanese-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
 <!-- this is your new game
         <profile>
             <id>yourgame</id>
