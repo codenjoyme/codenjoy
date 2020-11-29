@@ -23,14 +23,16 @@ package com.codenjoy.dojo.pong.model;
  */
 
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
+import static com.codenjoy.dojo.pong.model.BarrierOrientation.*;
+import static com.codenjoy.dojo.pong.model.Elements.*;
 
 public class LevelImpl implements Level {
+
     private final LengthToXY xy;
 
     private String map;
@@ -47,39 +49,24 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHero() {
-        return getPointsOf(Elements.HERO).stream()
-                .map(Hero::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                Hero::new, HERO);
     }
 
     @Override
     public List<Wall> getWalls() {
-        return new LinkedList<Wall>(){{
-            addAll(getPointsOf(Elements.VERTICAL_WALL).stream()
-                    .map(pt -> new Wall(pt, BarrierOrientation.VERTICAL))
-                    .collect(toList()));
-
-            addAll(getPointsOf(Elements.HORIZONTAL_WALL).stream()
-                    .map(pt -> new Wall(pt, BarrierOrientation.HORIZONTAL))
-                    .collect(toList()));
-
-        }};
+        return LevelUtils.getObjects(xy, map,
+                new HashMap<>(){{
+                    put(VERTICAL_WALL, pt -> new Wall(pt, VERTICAL));
+                    put(HORIZONTAL_WALL, pt -> new Wall(pt, HORIZONTAL));
+                }});
     }
 
     @Override
     public Ball getBall() {
-        return new Ball(getPointsOf(Elements.BALL).get(0));
+        return LevelUtils.getObjects(xy, map,
+                Ball::new, BALL)
+                .get(0);
     }
-
-    private List<Point> getPointsOf(Elements element) {
-        List<Point> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.ch) {
-                result.add(xy.getXY(index));
-            }
-        }
-        return result;
-    }
-
 
 }

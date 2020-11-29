@@ -37,10 +37,6 @@ public class Ball extends PointImpl implements Tickable, State<Elements, Player>
         super(pt);
     }
 
-    public Ball(int x, int y) {
-        super(x, y);
-    }
-
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         return Elements.BALL;
