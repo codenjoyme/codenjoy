@@ -24,10 +24,11 @@ package com.codenjoy.dojo.hex.model;
 
 
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.hex.model.Elements.*;
 
 public class LevelImpl implements Level {
 
@@ -47,37 +48,15 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHeroes() {
-        List<Hero> result = new LinkedList<>();
-
-        for (Point pt : getPointsOf(Elements.HERO1)) {
-            result.add(new Hero(pt, Elements.HERO1));
-        }
-
-        for (Point pt : getPointsOf(Elements.HERO2)) {
-            result.add(new Hero(pt, Elements.HERO2));
-        }
-
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                Hero::new,
+                HERO1, HERO2);
     }
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<>();
-
-        for (Point pt : getPointsOf(Elements.WALL)) {
-            result.add(new Wall(pt));
-        }
-
-        return result;
-    }
-
-    private List<Point> getPointsOf(Elements element) {
-        List<Point> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.ch) {
-                result.add(xy.getXY(index));
-            }
-        }
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                Wall::new,
+                WALL);
     }
 }
