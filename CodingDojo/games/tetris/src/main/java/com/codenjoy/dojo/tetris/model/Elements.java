@@ -25,6 +25,11 @@ package com.codenjoy.dojo.tetris.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 /**
  * User: serhiy.zelenin
  * Date: 5/9/12
@@ -70,5 +75,14 @@ public enum Elements implements CharElements {
             }
         }
         throw new IllegalArgumentException("No such element for " + ch);
+    }
+
+
+    public static Elements[] valuesExcept(Elements... excluded) {
+        List<Elements> list = Arrays.asList(excluded);
+        return Arrays.stream(values())
+                .filter(el -> !list.contains(el))
+                .collect(toList())
+                .toArray(new Elements[0]);
     }
 }
