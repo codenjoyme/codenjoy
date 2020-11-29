@@ -61,11 +61,11 @@ public class Spacerace implements Field {
         walls = level.getWalls();
         gold = level.getGold();
         size = level.getSize();
-        players = new LinkedList<Player>();
-        bulletPacks = new LinkedList<BulletPack>();
-        bombs = new LinkedList<Bomb>();
-        bullets = new LinkedList<Bullet>();
-        stones = new LinkedList<Stone>();
+        players = new LinkedList<>();
+        bulletPacks = new LinkedList<>();
+        bombs = new LinkedList<>();
+        bullets = new LinkedList<>();
+        stones = new LinkedList<>();
         explosions = new LinkedList<>();
     }
 
@@ -402,7 +402,7 @@ public class Spacerace implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new LinkedList<Point>(){{
+                return new LinkedList<>(){{
                     addAll(explosions);
                     addAll(walls);
                     addAll(getHeroes());
