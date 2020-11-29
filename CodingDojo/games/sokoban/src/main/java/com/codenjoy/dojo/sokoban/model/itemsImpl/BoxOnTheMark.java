@@ -27,11 +27,8 @@ import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.sokoban.services.Player;
 
 public class BoxOnTheMark extends PointImpl implements State<Elements, Player> {
-    private boolean isActive;
 
-    public BoxOnTheMark(int x, int y) {
-        super(x, y);
-    }
+    private boolean isActive;
 
     public BoxOnTheMark(Point point) {
         super(point);

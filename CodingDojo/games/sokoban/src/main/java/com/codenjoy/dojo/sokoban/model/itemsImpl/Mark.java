@@ -29,15 +29,9 @@ import com.codenjoy.dojo.sokoban.model.items.Field;
 import com.codenjoy.dojo.sokoban.services.Player;
 import com.codenjoy.dojo.sokoban.model.items.PointEnriched;
 
-/**
- * Boxes to push
- */
 public class Mark extends PointEnriched<Field> implements State<Elements, Player> {
-    private boolean isFilled;
 
-    public Mark(int x, int y) {
-        super(x, y);
-    }
+    private boolean isFilled;
 
     public Mark(Point point) {
         super(point);
