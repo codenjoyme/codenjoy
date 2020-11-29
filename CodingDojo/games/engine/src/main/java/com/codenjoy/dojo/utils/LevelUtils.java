@@ -7,6 +7,7 @@ import lombok.experimental.UtilityClass;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -38,4 +39,15 @@ public class LevelUtils {
                 elements);
     }
 
+    public static <T, E extends CharElements> List<T> getObjects(LengthToXY xy, String map,
+                                                                    Map<E, Function<Point, T>> conversions)
+    {
+        List<T> result = new LinkedList<>();
+        for (Map.Entry<E, Function<Point, T>> entry : conversions.entrySet()) {
+            result.addAll(getObjects(xy, map,
+                    entry.getValue(),
+                    entry.getKey()));
+        }
+        return result;
+    }
 }
