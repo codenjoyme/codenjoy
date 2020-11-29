@@ -25,6 +25,11 @@ package com.codenjoy.dojo.collapse.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 public enum Elements implements CharElements {
 
     NONE(' '),
@@ -55,6 +60,14 @@ public enum Elements implements CharElements {
         return String.valueOf(ch);
     }
 
+    public static Elements[] valuesExcept(Elements... excluded) {
+        List<Elements> list = Arrays.asList(excluded);
+        return Arrays.stream(values())
+                .filter(el -> !list.contains(el))
+                .collect(toList())
+                .toArray(new Elements[0]);
+    }
+
     public static Elements valueOf(char ch) {
         for (Elements el : Elements.values()) {
             if (el.ch == ch) {
@@ -64,4 +77,10 @@ public enum Elements implements CharElements {
         throw new IllegalArgumentException("No such element for " + ch);
     }
 
+    public int number() {
+        if (this == NONE || this == BORDER) {
+            return -1;
+        }
+        return Integer.parseInt("" + ch);
+    }
 }
