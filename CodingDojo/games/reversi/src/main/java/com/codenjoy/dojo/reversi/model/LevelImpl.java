@@ -26,14 +26,15 @@ package com.codenjoy.dojo.reversi.model;
 import com.codenjoy.dojo.reversi.model.items.Break;
 import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
+import static com.codenjoy.dojo.reversi.model.Elements.*;
 
 public class LevelImpl implements Level {
+    
     private final LengthToXY xy;
 
     private String map;
@@ -50,32 +51,28 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Break> breaks(Field field) {
-        return new LinkedList<Break>(){{
-            addAll(pointsOf(Elements.BREAK).stream()
-                    .map(Break::new)
-                    .collect(toList()));
-        }};
+        return LevelUtils.getObjects(xy, map,
+                Break::new,
+                BREAK);
     }
 
     @Override
     public List<Chip> chips(Field field) {
-        return new LinkedList<Chip>(){{
-            addAll(pointsOf(Elements.WHITE, Elements.WHITE_TURN).stream()
-                    .map(pt -> new Chip(true, pt, field))
-                    .collect(toList()));
-
-            addAll(pointsOf(Elements.BLACK, Elements.BLACK_TURN).stream()
-                    .map(pt -> new Chip(false, pt, field))
-                    .collect(toList()));
-        }};
+        return LevelUtils.getObjects(xy, map,
+                new HashMap<>(){{
+                    put(WHITE,      pt -> new Chip(true, pt, field));
+                    put(WHITE_TURN, pt -> new Chip(true, pt, field));
+                    put(BLACK,      pt -> new Chip(false, pt, field));
+                    put(BLACK_TURN, pt -> new Chip(false, pt, field));
+                }});
     }
 
     @Override
     public boolean currentColor() {
-        boolean whiteTurn = !pointsOf(Elements.WHITE_TURN).isEmpty();
-        boolean white = !pointsOf(Elements.WHITE).isEmpty();
-        boolean blackTurn = !pointsOf(Elements.BLACK_TURN).isEmpty();
-        boolean black = !pointsOf(Elements.BLACK).isEmpty();
+        boolean whiteTurn = exists(WHITE_TURN);
+        boolean white = exists(WHITE);
+        boolean blackTurn = exists(BLACK_TURN);
+        boolean black = exists(BLACK);
 
         if (whiteTurn && white
                 || blackTurn && black
@@ -87,20 +84,13 @@ public class LevelImpl implements Level {
         return whiteTurn || !blackTurn;
     }
 
+    private boolean exists(Elements element) {
+        return !LevelUtils.getObjects(xy, map, pt -> pt, element).isEmpty();
+    }
+
     private void error() {
         throw new IllegalArgumentException("Пожалуйста используте либо WHITE_TURN + BLACK, " +
                 "либо BLACK_TURN + WHITE");
     }
-
-    private List<Point> pointsOf(Elements... elements) {
-        List<Point> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            for (Elements el : elements) {
-                if (map.charAt(index) == el.ch) {
-                    result.add(xy.getXY(index));
-                }
-            }
-        }
-        return result;
-    }
+    
 }
