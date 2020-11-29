@@ -25,6 +25,11 @@ package com.codenjoy.dojo.a2048.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 public enum Elements implements CharElements {
 
     _x('x'),
@@ -70,6 +75,14 @@ public enum Elements implements CharElements {
 
     public static Elements valueOf(int number) {
         return Elements.valueOf("_" + String.valueOf(number));
+    }
+
+    public static Elements[] valuesExcept(Elements... excluded) {
+        List<Elements> list = Arrays.asList(excluded);
+        return Arrays.stream(values())
+                .filter(el -> !list.contains(el))
+                .collect(toList())
+                .toArray(new Elements[0]);
     }
 
     public static Elements valueOf(char ch) {
