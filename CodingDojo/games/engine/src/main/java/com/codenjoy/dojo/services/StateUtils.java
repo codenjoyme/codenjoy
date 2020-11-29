@@ -27,6 +27,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+// TODO перенести в utils пакет
 public class StateUtils {
 	public static <T extends Point> List<T> filter(Object[] array, Class<T> clazz) {
 		return (List) Arrays.stream(array)
