@@ -26,9 +26,8 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
+import static com.codenjoy.dojo.utils.LevelUtils.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.sample.model.Elements.GOLD;
@@ -40,6 +39,7 @@ import static java.util.stream.Collectors.toList;
  * Полезный утилитный класс для получения объектов на поле из текстового вида.
  */
 public class LevelImpl implements Level {
+
     private final LengthToXY xy;
 
     private String map;
@@ -56,33 +56,18 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHero() {
-        return pointsOf(HERO).stream()
-                .map(Hero::new)
-                .collect(toList());
-
+        return getObjects(xy, map, Hero::new, HERO);
     }
 
     @Override
     public List<Gold> getGold() {
-        return pointsOf(GOLD).stream()
-                .map(Gold::new)
-                .collect(toList());
+        return getObjects(xy, map, Gold::new, GOLD);
     }
 
     @Override
     public List<Wall> getWalls() {
-        return pointsOf(WALL).stream()
-                .map(Wall::new)
-                .collect(toList());
+        return getObjects(xy, map, Wall::new, WALL);
     }
 
-    private List<Point> pointsOf(Elements element) {
-        List<Point> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.ch) {
-                result.add(xy.getXY(index));
-            }
-        }
-        return result;
-    }
+
 }
