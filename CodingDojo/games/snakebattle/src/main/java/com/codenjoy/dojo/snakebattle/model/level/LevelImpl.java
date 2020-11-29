@@ -28,16 +28,15 @@ import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snakebattle.model.Elements;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
-import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
+import com.codenjoy.dojo.snakebattle.model.objects.*;
+import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.snakebattle.model.Elements.*;
-import static com.codenjoy.dojo.snakebattle.model.Elements.ENEMY_HEAD_SLEEP;
-import static java.util.stream.Collectors.toList;
 
 public class LevelImpl implements Level {
 
@@ -56,7 +55,8 @@ public class LevelImpl implements Level {
 
     @Override
     public Hero getHero(Field field) {
-        Point point = getPointsOf(
+        Point point = LevelUtils.getObjects(xy, map, 
+                pt -> pt,
                 HEAD_DOWN,
                 HEAD_UP,
                 HEAD_LEFT,
@@ -108,7 +108,7 @@ public class LevelImpl implements Level {
     }
 
     private Direction getHeadDirectionWithMod(Point head) {
-        Elements atLeft = getAt(Direction.LEFT.change(head));
+        Elements atLeft = getAt(LEFT.change(head));
         if (Arrays.asList(Elements.BODY_HORIZONTAL,
                 Elements.BODY_RIGHT_DOWN,
                 Elements.BODY_RIGHT_UP,
@@ -118,10 +118,10 @@ public class LevelImpl implements Level {
                 Elements.ENEMY_BODY_RIGHT_UP,
                 Elements.ENEMY_TAIL_END_LEFT).contains(atLeft))
         {
-            return Direction.RIGHT;
+            return RIGHT;
         }
 
-        Elements atRight = getAt(Direction.RIGHT.change(head));
+        Elements atRight = getAt(RIGHT.change(head));
         if (Arrays.asList(Elements.BODY_HORIZONTAL,
                 Elements.BODY_LEFT_DOWN,
                 Elements.BODY_LEFT_UP,
@@ -131,10 +131,10 @@ public class LevelImpl implements Level {
                 Elements.ENEMY_BODY_LEFT_UP,
                 Elements.ENEMY_TAIL_END_RIGHT).contains(atRight))
         {
-            return Direction.LEFT;
+            return LEFT;
         }
 
-        Elements atDown = getAt(Direction.DOWN.change(head));
+        Elements atDown = getAt(DOWN.change(head));
         if (Arrays.asList(Elements.BODY_VERTICAL,
                 Elements.BODY_LEFT_UP,
                 Elements.BODY_RIGHT_UP,
@@ -144,10 +144,10 @@ public class LevelImpl implements Level {
                 Elements.ENEMY_BODY_RIGHT_UP,
                 Elements.ENEMY_TAIL_END_DOWN).contains(atDown))
         {
-            return Direction.UP;
+            return UP;
         }
 
-        Elements atUp = getAt(Direction.UP.change(head));
+        Elements atUp = getAt(UP.change(head));
         if (Arrays.asList(Elements.BODY_VERTICAL,
                 Elements.BODY_LEFT_DOWN,
                 Elements.BODY_RIGHT_DOWN,
@@ -157,7 +157,7 @@ public class LevelImpl implements Level {
                 Elements.ENEMY_BODY_RIGHT_DOWN,
                 Elements.ENEMY_TAIL_END_UP).contains(atUp))
         {
-            return Direction.DOWN;
+            return DOWN;
         }
 
         throw new RuntimeException("Smth wrong with head");
@@ -173,23 +173,24 @@ public class LevelImpl implements Level {
                 return direction;
             case BODY_LEFT_DOWN:
             case ENEMY_BODY_LEFT_DOWN:
-                return ((direction == Direction.RIGHT) ? Direction.DOWN : Direction.LEFT);
+                return ((direction == RIGHT) ? DOWN : LEFT);
             case BODY_RIGHT_DOWN:
             case ENEMY_BODY_RIGHT_DOWN:
-                return ((direction == Direction.LEFT) ? Direction.DOWN : Direction.RIGHT);
+                return ((direction == LEFT) ? DOWN : RIGHT);
             case BODY_LEFT_UP:
             case ENEMY_BODY_LEFT_UP:
-                return ((direction == Direction.RIGHT) ? Direction.UP : Direction.LEFT);
+                return ((direction == RIGHT) ? UP : LEFT);
             case BODY_RIGHT_UP:
             case ENEMY_BODY_RIGHT_UP:
-                return ((direction == Direction.LEFT) ? Direction.UP : Direction.RIGHT);
+                return ((direction == LEFT) ? UP : RIGHT);
         }
         return null;
     }
 
     @Override
     public Hero getEnemy(Field field) {
-        Point point = getPointsOf(
+        Point point = LevelUtils.getObjects(xy, map, 
+                pt -> pt,
                 ENEMY_HEAD_DOWN,
                 ENEMY_HEAD_UP,
                 ENEMY_HEAD_LEFT,
@@ -211,75 +212,63 @@ public class LevelImpl implements Level {
 
     private Direction getDirection(Point point) {
         switch (getAt(point)) {
-            case HEAD_DOWN : return Direction.DOWN;
-            case ENEMY_HEAD_DOWN : return Direction.DOWN;
-            case HEAD_UP : return Direction.UP;
-            case ENEMY_HEAD_UP : return Direction.UP;
-            case HEAD_LEFT : return Direction.LEFT;
-            case ENEMY_HEAD_LEFT : return Direction.LEFT;
-            default : return Direction.RIGHT;
+            case HEAD_DOWN :       return DOWN;
+            case ENEMY_HEAD_DOWN : return DOWN;
+            case HEAD_UP :         return UP;
+            case ENEMY_HEAD_UP :   return UP;
+            case HEAD_LEFT :       return LEFT;
+            case ENEMY_HEAD_LEFT : return LEFT;
+            default :              return RIGHT;
         }
     }
 
     @Override
     public List<Apple> getApples() {
-        return getPointsOf(APPLE).stream()
-                .map(Apple::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map, 
+                pt -> new Apple(pt),
+                APPLE);
     }
 
     @Override
     public List<Stone> getStones() {
-        return getPointsOf(STONE).stream()
-                .map(Stone::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                pt -> new Stone(pt),
+                STONE);
     }
 
     @Override
     public List<FlyingPill> getFlyingPills() {
-        return getPointsOf(FLYING_PILL).stream()
-                .map(FlyingPill::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                pt -> new FlyingPill(pt),
+                FLYING_PILL);
     }
 
     @Override
     public List<FuryPill> getFuryPills() {
-        return getPointsOf(FURY_PILL).stream()
-                .map(FuryPill::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                pt -> new FuryPill(pt),
+                FURY_PILL);
     }
 
     @Override
     public List<Gold> getGold() {
-        return getPointsOf(GOLD).stream()
-                .map(Gold::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                pt -> new Gold(pt),
+                GOLD);
     }
 
     @Override
     public List<Wall> getWalls() {
-        return getPointsOf(WALL).stream()
-                .map(Wall::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                pt -> new Wall(pt),
+                WALL);
     }
 
     @Override
     public List<StartFloor> getStartPoints() {
-        return getPointsOf(START_FLOOR).stream()
-                .map(StartFloor::new)
-                .collect(toList());
-    }
-
-    private List<Point> getPointsOf(Elements... elements) {
-        List<Point> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            for (Elements element : elements) {
-                if (map.charAt(index) == element.ch()) {
-                    result.add(xy.getXY(index));
-                }
-            }
-        }
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                pt -> new StartFloor(pt),
+                START_FLOOR);
     }
 
     private Elements getAt(Point pt) {
