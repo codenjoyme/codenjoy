@@ -48,12 +48,5 @@ public class Board extends AbstractBoard<Elements> {
     public List<Point> getAllMyBoxes() {
         return get(Elements.BOX);
     }
-//
-//    public boolean isGameOver() {
-//        return !get(Elements.DEAD_HERO).isEmpty();
-//    }
-//
-//    public boolean isBombAt(int x, int y) {
-//        return isAt(x, y, Elements.BOMB);
-//    }
+
 }

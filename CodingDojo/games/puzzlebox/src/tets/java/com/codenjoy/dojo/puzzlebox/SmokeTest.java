@@ -23,7 +23,7 @@ package com.codenjoy.dojo.puzzlebox;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.puzzlebox.client.Board;
 import com.codenjoy.dojo.puzzlebox.client.ai.AISolver;
 import com.codenjoy.dojo.puzzlebox.services.GameRunner;
@@ -97,6 +97,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -113,6 +114,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:1\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: RIGHT, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -129,6 +131,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:2\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: UP, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -145,6 +148,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:3\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -162,8 +166,9 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:4\n" +
                         "DICE_CORRECTED < 4 :0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
-                        "Fire Event: FILL\n" +
+                        "1:Fire Event: FILL\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
@@ -179,6 +184,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -195,6 +201,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:1\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: RIGHT, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -211,6 +218,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:2\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: UP, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -227,6 +235,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:3\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -244,6 +253,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:4\n" +
                         "DICE_CORRECTED < 4 :0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -260,6 +270,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -276,6 +287,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:1\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: RIGHT, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -292,6 +304,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:2\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: UP, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -308,6 +321,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:3\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -325,6 +339,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:4\n" +
                         "DICE_CORRECTED < 4 :0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -341,6 +356,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -357,6 +373,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:1\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: RIGHT, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -373,6 +390,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:2\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: UP, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -389,6 +407,7 @@ public class SmokeTest {
                         "1:☼☼☼☼☼☼☼☼☼☼☼\n" +
                         "1:\n" +
                         "DICE:3\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: DOWN, ACT\n" +
                         "------------------------------------------\n" +
                         "1:Board:\n" +
@@ -406,6 +425,7 @@ public class SmokeTest {
                         "1:\n" +
                         "DICE:4\n" +
                         "DICE_CORRECTED < 4 :0\n" +
+                        "1:Scores: 0\n" +
                         "1:Answer: LEFT, ACT\n" +
                         "------------------------------------------",
                 String.join("\n", messages));
