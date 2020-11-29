@@ -25,16 +25,18 @@ package com.codenjoy.dojo.sudoku.model.level;
 
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.sudoku.model.Cell;
-import com.codenjoy.dojo.sudoku.model.Elements;
 import com.codenjoy.dojo.sudoku.model.Wall;
+import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.codenjoy.dojo.sudoku.model.Elements.*;
+import static java.util.stream.Collectors.toList;
 
 public class LevelImpl implements Level {
 
     private static final int SIZE = 9;
-    public static final char MASK_CHAR = '*';
 
     private LengthToXY xy;
 
@@ -109,28 +111,23 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Cell> cells() {
-        List<Cell> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            char ch = map.charAt(index);
-            char mch = mask.charAt(index);
-            if (ch != Elements.BORDER.ch()) {
-                result.add(new Cell(xy.getXY(index), Integer.parseInt("" + ch), mch != MASK_CHAR));
-            }
-        }
-
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                (pt, el) -> {
+                    int i = xy.getLength(pt.getX(), pt.getY());
+                    boolean visible = mask.charAt(i) != HIDDEN.ch();
+                    return new Cell(pt, el.value(), visible);
+                },
+                valuesExcept(BORDER, NONE, HIDDEN))
+                .stream()
+                .sorted()
+                .collect(toList());
     }
 
     @Override
     public List<Wall> walls() {
-        List<Wall> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            char ch = map.charAt(index);
-            if (ch == Elements.BORDER.ch()) {
-                result.add(new Wall(xy.getXY(index)));
-            }
-        }
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                Wall::new,
+                BORDER);
     }
 
     @Override
