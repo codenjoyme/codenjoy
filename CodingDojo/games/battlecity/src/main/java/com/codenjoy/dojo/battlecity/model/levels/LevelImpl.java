@@ -57,25 +57,29 @@ public class LevelImpl implements Level {
     @Override
     public List<Wall> getWalls() {
         return LevelUtils.getObjects(xy, map,
-                (pt, el) -> new Wall(pt), WALL);
+                Wall::new,
+                WALL);
     }
 
     @Override
     public List<River> getRivers() {
         return LevelUtils.getObjects(xy, map,
-                (pt, el) -> new River(pt), RIVER);
+                River::new,
+                RIVER);
     }
 
     @Override
     public List<Ice> getIce() {
         return LevelUtils.getObjects(xy, map,
-                (pt, el) -> new Ice(pt), ICE);
+                Ice::new,
+                ICE);
     }
 
     @Override
     public List<Tree> getTrees() {
         return LevelUtils.getObjects(xy, map,
-                (pt, el) -> new Tree(pt), TREE);
+                Tree::new,
+                TREE);
     }
 
     @Override

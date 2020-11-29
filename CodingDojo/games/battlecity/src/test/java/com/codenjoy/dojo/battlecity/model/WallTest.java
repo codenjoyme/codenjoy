@@ -27,6 +27,7 @@ import com.codenjoy.dojo.battlecity.model.items.Wall;
 import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 
 public class WallTest {
@@ -97,7 +98,7 @@ public class WallTest {
     }
 
     private void assertDestroyFrom(char expected, Direction... directions) {
-        Wall wall = new Wall(0, 0);
+        Wall wall = new Wall(pt(0, 0));
         for (Direction direction : directions) {
             wall.destroyFrom(direction);
         }

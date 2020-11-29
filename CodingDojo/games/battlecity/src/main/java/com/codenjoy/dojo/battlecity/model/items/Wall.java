@@ -35,14 +35,9 @@ public class Wall extends PointImpl implements Tickable, State<Elements, Player>
     private int timer;
     private boolean overDamage;
 
-    public Wall(int x, int y) {
-        super(x, y);
-        reset();
-        overDamage = false;
-    }
-
     public Wall(Point pt) {
-        this(pt.getX(), pt.getY());
+        super(pt);
+        reset();
         overDamage = false;
     }
 

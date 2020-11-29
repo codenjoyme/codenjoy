@@ -30,12 +30,8 @@ import com.codenjoy.dojo.services.State;
 
 public class Ice extends PointImpl implements State<Elements, Player> {
 
-	public Ice(int x, int y) {
-		super(x, y);
-	}
-
 	public Ice(Point pt) {
-		this(pt.getX(), pt.getY());
+		super(pt);
 	}
 
 	@Override
