@@ -119,7 +119,7 @@ public class Quadro implements Field {
         }
 
             Chip chip = new Chip(color, x, y);
-            chips.put(chip, chip);
+            chips.put(chip);
 
         chipMoved = true;
         checkWin(chip);

@@ -38,16 +38,12 @@ class ChipSet {
 
     private Map<Point, Chip> chips = new HashMap<>();
 
-    void put(Point point, Chip chip) {
-        chips.put(point, chip);
+    void put(Chip chip) {
+        chips.put(chip, chip);
     }
 
-    void putAll(List<Point> points, Elements element) {
-        chips.putAll(points.stream()
-                .map(element.equals(Elements.YELLOW) ? YellowChip::new
-                        : element.equals(Elements.RED) ? RedChip::new
-                        : null)
-                .collect(toMap(i -> i, i -> i)));
+    void putAll(List<Chip> list) {
+        list.forEach(chip -> put(chip));
     }
 
     int size() {
