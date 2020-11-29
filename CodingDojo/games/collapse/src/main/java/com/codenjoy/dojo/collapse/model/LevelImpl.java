@@ -57,7 +57,7 @@ public class LevelImpl implements Level {
     @Override
     public List<Wall> getWalls() {
         return LevelUtils.getObjects(xy, map,
-                (pt, el) -> new Wall(pt),
+                Wall::new,
                 BORDER);
     }
 }
