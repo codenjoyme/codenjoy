@@ -24,19 +24,19 @@ package com.codenjoy.dojo.moebius.model;
 
 
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+
+import static com.codenjoy.dojo.moebius.model.Elements.*;
 
 public class LevelImpl implements Level {
     private final LengthToXY xy;
 
     private String map;
 
-    public LevelImpl(int size) { // TODO test me
+    public LevelImpl(int size) {
         this.map = buildMap(size);
         xy = new LengthToXY(getSize());
     }
@@ -67,23 +67,14 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Line> getLines() {
-        List<Line> result = new LinkedList<Line>();
-
-        for (int index = 0; index < map.length(); index++) {
-            for (Elements el : Arrays.asList(Elements.LEFT_UP,
-                    Elements.UP_RIGHT,
-                    Elements.RIGHT_DOWN,
-                    Elements.DOWN_LEFT,
-                    Elements.LEFT_RIGHT,
-                    Elements.UP_DOWN,
-                    Elements.CROSS)) {
-                if (map.charAt(index) == el.ch()) {
-                    Point pt = xy.getXY(index);
-                    result.add(new Line(pt, el));
-                }
-            }
-        }
-
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                Line::new,
+                LEFT_UP,
+                UP_RIGHT,
+                RIGHT_DOWN,
+                DOWN_LEFT,
+                LEFT_RIGHT,
+                UP_DOWN,
+                CROSS);
     }
 }
