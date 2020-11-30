@@ -29,6 +29,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.sample.client.Board;
 import com.codenjoy.dojo.sample.client.ai.AISolver;
 import com.codenjoy.dojo.sample.services.GameRunner;
+import com.codenjoy.dojo.sample.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 
@@ -70,22 +71,20 @@ public class SmokeTest {
             public Dice getDice() {
                 return dice;
             }
-
-            @Override
-            protected String getMap() {
-                return  "☼☼☼☼☼☼☼☼☼☼☼" +
-                        "☼ $       ☼" +
-                        "☼     $  $☼" +
-                        "☼         ☼" +
-                        "☼   $  $  ☼" +
-                        "☼         ☼" +
-                        "☼     $   ☼" +
-                        "☼         ☼" +
-                        "☼ ☺    $  ☼" +
-                        "☼  $      ☼" +
-                        "☼☼☼☼☼☼☼☼☼☼☼";
-            }
         };
+
+        SettingsWrapper.data.levelMap(
+                "☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼ $       ☼" +
+                "☼     $  $☼" +
+                "☼         ☼" +
+                "☼   $  $  ☼" +
+                "☼         ☼" +
+                "☼     $   ☼" +
+                "☼         ☼" +
+                "☼ ☺    $  ☼" +
+                "☼  $      ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼");
 
         // when
         LocalGameRunner.run(gameType,
@@ -93,7 +92,7 @@ public class SmokeTest {
                     add(new AISolver(dice));
                     add(new AISolver(dice));
                 }},
-                new LinkedList<ClientBoard>(){{
+                new LinkedList<>(){{
                     add(new Board());
                     add(new Board());
                 }});

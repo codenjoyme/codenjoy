@@ -42,59 +42,28 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
  */
 public class GameRunner extends AbstractGameType implements GameType {
 
-    private final Level level;
-
     public GameRunner() {
-        new Scores(0, settings);
-        level = new LevelImpl(getMap());
+        setupSettings();
     }
 
-    protected String getMap() {
-        return "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼          $                 ☼" +
-                "☼                            ☼" +
-                "☼   $              $         ☼" +
-                "☼                       $    ☼" +
-                "☼  $                         ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼              $             ☼" +
-                "☼        $                   ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼ $                         $☼" +
-                "☼                            ☼" +
-                "☼              $             ☼" +
-                "☼                            ☼" +
-                "☼    $                       ☼" +
-                "☼                            ☼" +
-                "☼                       $    ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼            $               ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼       $                $   ☼" +
-                "☼                            ☼" +
-                "☼       ☺        $           ☼" +
-                "☼                            ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
+    private void setupSettings() {
+        SettingsWrapper.setup(settings);
     }
 
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer)score, settings);
+        return new Scores((Integer)score, SettingsWrapper.data);
     }
 
     @Override
     public GameField createGame(int levelNumber) {
+        Level level = new LevelImpl(SettingsWrapper.data.levelMap());
         return new Sample(level, getDice());
     }
 
     @Override
     public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+        return v(SettingsWrapper.data.getSize());
     }
 
     @Override
