@@ -96,7 +96,7 @@ namespace ICanCode.Api
         /**
          * @return Returns list of coordinates for all Zombies (even die).
          */
-        public List<Point> getZombies()
+        public List<Point> GetZombies()
         {
             return Get(Layers.LAYER2,
                     Element.FEMALE_ZOMBIE,
