@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading;
 using System.Web;
 using WebSocketSharp;
@@ -33,6 +34,7 @@ namespace ICanCode.Api
             string url = GetWebSocketUrl(this.ServerUrl);
 
             var socket = new WebSocket(url);
+            socket.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls12;
 
             socket.OnMessage += Socket_OnMessage;
             socket.Connect();
@@ -86,7 +88,7 @@ namespace ICanCode.Api
 
         private static string GetWebSocketUrl(string userName, string code, string server)
         {
-            return string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}",
+            return string.Format("wss://{0}/codenjoy-contest/ws?user={1}&code={2}",
                             server,
                             Uri.EscapeDataString(userName),
                             code);
