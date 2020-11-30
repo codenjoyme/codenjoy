@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sample.services;
  */
 
 
-import com.codenjoy.dojo.sample.model.LevelImpl;
+import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
@@ -99,7 +99,7 @@ public final class SettingsWrapper {
     }
 
     public int getSize() {
-        return new LevelImpl(levelMap()).getSize(); // TODO а что если уровней несколько?
+        return new LevelImpl(levelMap()).size(); // TODO а что если уровней несколько?
     }
 
     // setters for testing

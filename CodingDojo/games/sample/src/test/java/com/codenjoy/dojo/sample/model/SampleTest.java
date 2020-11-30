@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.sample.services.Events;
@@ -62,7 +63,7 @@ public class SampleTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        Hero hero = level.getHero().get(0);
+        Hero hero = level.heroes().get(0);
 
         game = new Sample(level, dice);
         listener = mock(EventListener.class);

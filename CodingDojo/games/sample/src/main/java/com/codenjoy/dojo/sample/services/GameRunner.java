@@ -28,6 +28,8 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.sample.client.Board;
 import com.codenjoy.dojo.sample.client.ai.AISolver;
 import com.codenjoy.dojo.sample.model.*;
+import com.codenjoy.dojo.sample.model.level.Level;
+import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;

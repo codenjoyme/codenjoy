@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model;
+package com.codenjoy.dojo.sample.model.level;
 
 /*-
  * #%L
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.model.Hero;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 
@@ -36,11 +37,11 @@ public interface Level {
     /**
      * @return Размер поля (обязательно квадратное)
      */
-    int getSize();
+    int size();
 
-    List<Wall> getWalls();
+    List<Wall> walls();
 
-    List<Hero> getHero();
+    List<Hero> heroes();
 
-    List<Gold> getGold();
+    List<Gold> gold();
 }
