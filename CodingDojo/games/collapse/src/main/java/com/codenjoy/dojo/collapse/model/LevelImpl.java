@@ -24,11 +24,15 @@ package com.codenjoy.dojo.collapse.model;
 
 
 import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.collapse.model.Elements.BORDER;
+import static com.codenjoy.dojo.collapse.model.Elements.NONE;
+
 public class LevelImpl implements Level {
+
     private final LengthToXY xy;
 
     private String map;
@@ -45,26 +49,15 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Cell> getCells() {
-        List<Cell> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            char ch = map.charAt(index);
-            if (ch != Elements.BORDER.ch && ch != ' ') {
-                result.add(new Cell(xy.getXY(index), Integer.parseInt("" + ch)));
-            }
-        }
-
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                (pt, el) -> new Cell(pt, el.number()),
+                Elements.valuesExcept(NONE, BORDER));
     }
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            char ch = map.charAt(index);
-            if (ch == Elements.BORDER.ch) {
-                result.add(new Wall(xy.getXY(index)));
-            }
-        }
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                Wall::new,
+                BORDER);
     }
 }

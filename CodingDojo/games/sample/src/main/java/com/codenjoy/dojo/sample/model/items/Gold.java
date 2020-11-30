@@ -34,10 +34,6 @@ import com.codenjoy.dojo.services.State;
  */
 public class Gold extends PointImpl implements State<Elements, Player> {
 
-    public Gold(int x, int y) {
-        super(x, y);
-    }
-
     public Gold(Point point) {
         super(point);
     }

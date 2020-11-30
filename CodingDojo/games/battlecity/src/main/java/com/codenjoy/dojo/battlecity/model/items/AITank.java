@@ -35,12 +35,15 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 public class AITank extends Tank {
 
     public static final int MAX = 10;
-    public static final int SHOOT_EVERY_TICKS = 10;
+    private final int ticksPerShoot;
     public boolean dontShoot = false;
     private int act;
 
-    public AITank(Point pt, Direction direction, Dice dice) {
+    public AITank(Point pt, Direction direction,
+                  int ticksPerShoot, Dice dice)
+    {
         super(pt, direction, dice, 1);
+        this.ticksPerShoot = ticksPerShoot;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class AITank extends Tank {
 
             // !field.isRiver(pt) потому что мы хотим сделать так, чтобы боты пытались
             // пройти через речку но не могли - это даст иллюзию, что
-            // они пытаются отстрливаться через воду
+            // они пытаются отстреливаться через воду
             if (field.isBarrier(pt) && !field.isRiver(pt)) {
                 direction = Direction.random(dice);
             }
@@ -70,7 +73,7 @@ public class AITank extends Tank {
             return;
         }
 
-        if (act++ % SHOOT_EVERY_TICKS == 0) {
+        if (act++ % ticksPerShoot == 0) {
             act();
         }
     }
@@ -96,7 +99,8 @@ public class AITank extends Tank {
             case RIGHT: return Elements.AI_TANK_RIGHT;
             case UP:    return Elements.AI_TANK_UP;
             case DOWN:  return Elements.AI_TANK_DOWN;
-            default: throw new RuntimeException("Неправильное состояние танка!");
+            default: throw new RuntimeException(
+                    "Неправильное состояние танка!");
         }
     }
 

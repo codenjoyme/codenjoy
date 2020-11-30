@@ -23,19 +23,18 @@ package com.codenjoy.dojo.battlecity.model.levels;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.*;
+import com.codenjoy.dojo.battlecity.model.Tank;
 import com.codenjoy.dojo.battlecity.model.items.*;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.utils.LevelUtils;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.*;
-import static com.codenjoy.dojo.battlecity.model.Elements.AI_TANK_LEFT;
 import static com.codenjoy.dojo.services.Direction.*;
 
 public class LevelImpl implements Level {
@@ -55,76 +54,81 @@ public class LevelImpl implements Level {
         return (int) Math.sqrt(map.length());
     }
 
-    private <T> List<T> getObjects(Function<Point, T> objects, Elements... elements) {
-        List<T> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            for (Elements el : elements) {
-                if (map.charAt(index) == el.ch) {
-                    Point pt = xy.getXY(index);
-                    result.add(objects.apply(pt));
-                }
-            }
-        }
-        return result;
-    }
-
     @Override
     public List<Wall> getWalls() {
-        return getObjects(pt -> new Wall(pt), WALL);
+        return LevelUtils.getObjects(xy, map,
+                Wall::new,
+                WALL);
     }
 
     @Override
     public List<River> getRivers() {
-        return getObjects(pt -> new River(pt), RIVER);
+        return LevelUtils.getObjects(xy, map,
+                River::new,
+                RIVER);
     }
 
     @Override
     public List<Ice> getIce() {
-        return getObjects(pt -> new Ice(pt), ICE);
+        return LevelUtils.getObjects(xy, map,
+                Ice::new,
+                ICE);
     }
 
     @Override
     public List<Tree> getTrees() {
-        return getObjects(pt -> new Tree(pt), TREE);
+        return LevelUtils.getObjects(xy, map,
+                Tree::new,
+                TREE);
     }
 
     @Override
-    public List<Tank> getAiTanks() {
-        return new LinkedList<Tank>(){{
-            addAll(getObjects(pt -> new AITank(pt, DOWN, dice),
+    public List<Tank> getAiTanks(int aiTicksPerShoot) {
+        return new LinkedList<>(){{
+            addAll(LevelUtils.getObjects(xy, map,
+                    (pt, el) -> new AITank(pt, DOWN, aiTicksPerShoot, dice),
                     AI_TANK_DOWN));
 
-            addAll(getObjects(pt -> new AITank(pt, UP, dice),
+            addAll(LevelUtils.getObjects(xy, map,
+                    (pt, el) -> new AITank(pt, UP, aiTicksPerShoot, dice),
                     AI_TANK_UP));
 
-            addAll(getObjects(pt -> new AITank(pt, LEFT, dice),
+            addAll(LevelUtils.getObjects(xy, map,
+                    (pt, el) -> new AITank(pt, LEFT, aiTicksPerShoot, dice),
                     AI_TANK_LEFT));
 
-            addAll(getObjects(pt -> new AITank(pt, RIGHT, dice),
+            addAll(LevelUtils.getObjects(xy, map,
+                    (pt, el) -> new AITank(pt, RIGHT, aiTicksPerShoot, dice),
                     AI_TANK_RIGHT));
         }};
     }
 
     @Override
     public List<Tank> getTanks(int ticksPerBullets) {
-        return new LinkedList<Tank>(){{
-            addAll(getObjects(pt -> new Tank(pt, DOWN, dice, ticksPerBullets),
+        return new LinkedList<>(){{
+            addAll(LevelUtils.getObjects(xy, map,
+                    (pt, el) -> new Tank(pt, DOWN, dice, ticksPerBullets),
                     TANK_DOWN, OTHER_TANK_DOWN));
 
-            addAll(getObjects(pt -> new Tank(pt, UP, dice, ticksPerBullets),
+            addAll(LevelUtils.getObjects(xy, map,
+                    (pt, el) -> new Tank(pt, UP, dice, ticksPerBullets),
                     TANK_UP, OTHER_TANK_UP));
 
-            addAll(getObjects(pt -> new Tank(pt, LEFT, dice, ticksPerBullets),
+            addAll(LevelUtils.getObjects(xy, map,
+                    (pt, el) -> new Tank(pt, LEFT, dice, ticksPerBullets),
                     TANK_LEFT, OTHER_TANK_LEFT));
 
-            addAll(getObjects(pt -> new Tank(pt, RIGHT, dice, ticksPerBullets),
+            addAll(LevelUtils.getObjects(xy, map,
+                    (pt, el) -> new Tank(pt, RIGHT, dice, ticksPerBullets),
                     TANK_RIGHT, OTHER_TANK_RIGHT));
         }};
     }
 
     @Override
     public List<Border> getBorders() {
-        return getObjects(pt -> new Border(pt), BATTLE_WALL);
+        return LevelUtils.getObjects(xy, map,
+                (pt, el) -> new Border(pt),
+                BATTLE_WALL);
     }
 
     @Override
@@ -137,10 +141,10 @@ public class LevelImpl implements Level {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new LinkedList<Point>() {{
+                return new LinkedList<>() {{
                     addAll(LevelImpl.this.getBorders());
                     addAll(LevelImpl.this.getWalls());
-                    addAll(LevelImpl.this.getAiTanks());
+                    addAll(LevelImpl.this.getAiTanks(0));
                     addAll(LevelImpl.this.getIce());
                     addAll(LevelImpl.this.getRivers());
                     addAll(LevelImpl.this.getTrees());

@@ -43,7 +43,7 @@ public class RuleReaderFileTest {
     public void setup() {
         // given
         reader = new RuleReader();
-        rules = new Rules();
+        rules = new Rules(message -> {});
     }
     
     @Test
@@ -63,7 +63,7 @@ public class RuleReaderFileTest {
         reader.load(rules, file);
 
         // then
-        List<ErrorMessage> errors = reader.errors();
+        List<Message> errors = reader.errors();
         
         assertEquals(2, errors.size());
         
@@ -83,7 +83,7 @@ public class RuleReaderFileTest {
         reader.load(rules, file);
 
         // then
-        List<ErrorMessage> errors = reader.errors();
+        List<Message> errors = reader.errors();
 
         assertEquals(2, errors.size());
 
@@ -105,7 +105,7 @@ public class RuleReaderFileTest {
         reader.load(rules, file);
 
         // then
-        List<ErrorMessage> errors = reader.errors();
+        List<Message> errors = reader.errors();
 
         assertEquals(2, errors.size());
 
@@ -126,6 +126,11 @@ public class RuleReaderFileTest {
         reader.load(rules, file);
         
         // then 
-        assertEquals("[[?☼??☺ ?☼? > [RIGHT]]]", rules.toString());
+        assertEquals("[[\n" +
+                "?☼?\n" +
+                "?☺ \n" +
+                "?☼?\n" +
+                "synonyms: {} \n" +
+                " >>> [RIGHT]]]", rules.toString());
     }
 }

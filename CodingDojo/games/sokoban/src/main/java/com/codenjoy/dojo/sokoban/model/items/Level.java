@@ -28,16 +28,11 @@ import com.codenjoy.dojo.sokoban.model.itemsImpl.*;
 
 import java.util.List;
 
-/**
- * Я вот для простоты и удобства хочу указывать борду в тестовом виде, а реализация этого интерфейса позволяет мне это сделать
- */
 public interface Level {
 
-    /**
-     * @return Размер поля (обязательно квадратное)
-     */
     int getSize();
-    int getExpectedBoxesValuesInMarks();
+
+    int getMarksToWin();
 
     List<Wall> getWalls();
 

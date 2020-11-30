@@ -35,23 +35,27 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class AiGenerator {
 
-    private Field field;
-    private Dice dice;
+    private final Field field;
+    private final Dice dice;
 
-    private int maxAi;
     private Parameter<Integer> whichSpawnWithPrize;
     private Parameter<Integer> damagesBeforeAiDeath;
+    private Parameter<Integer> aiTicksPerShoot;
+
+    private int capacity;
     private int spawn;
 
     public AiGenerator(Field field, Dice dice,
                        Parameter<Integer> whichSpawnWithPrize,
-                       Parameter<Integer> damagesBeforeAiDeath)
+                       Parameter<Integer> damagesBeforeAiDeath,
+                       Parameter<Integer> aiTicksPerShoot)
     {
         this.field = field;
         this.dice = dice;
         this.spawn = 0;
         this.whichSpawnWithPrize = whichSpawnWithPrize;
         this.damagesBeforeAiDeath = damagesBeforeAiDeath;
+        this.aiTicksPerShoot = aiTicksPerShoot;
     }
 
     void newSpawn(){
@@ -60,7 +64,7 @@ public class AiGenerator {
 
     public void dropAll() {
         int size = field.size();
-        int needed = maxAi - field.aiTanks().size();
+        int needed = capacity - field.aiTanks().size();
 
         for (int i = 0; i < needed; i++) {
             int y = size - 2;
@@ -87,9 +91,16 @@ public class AiGenerator {
 
     private Tank tank(Point pt) {
         if (isPrizeTankTurn()) {
-            return new AITankPrize(pt, Direction.DOWN, damagesBeforeAiDeath.getValue(), dice);
+            return new AITankPrize(pt,
+                    Direction.DOWN,
+                    damagesBeforeAiDeath.getValue(),
+                    aiTicksPerShoot.getValue(),
+                    dice);
         } else {
-            return new AITank(pt, Direction.DOWN, dice);
+            return new AITank(pt,
+                    Direction.DOWN,
+                    aiTicksPerShoot.getValue(),
+                    dice);
         }
     }
 
@@ -109,9 +120,9 @@ public class AiGenerator {
         return tank;
     }
 
-    public void dropAll(List<? extends Point> pts) {
-        maxAi = pts.size();
-        for (Point pt : pts) {
+    public void dropAll(List<? extends Point> points) {
+        capacity = points.size();
+        for (Point pt : points) {
             drop(pt);
         }
     }

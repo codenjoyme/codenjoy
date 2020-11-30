@@ -25,6 +25,7 @@ package com.codenjoy.dojo.tetris.model.levels.level;
 
 
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.tetris.model.FigureQueue;
 import com.codenjoy.dojo.tetris.model.levels.gamelevel.FigureTypesLevel;
 import com.codenjoy.dojo.tetris.model.GlassEvent;
 import com.codenjoy.dojo.tetris.model.Levels;
@@ -40,7 +41,7 @@ import static com.codenjoy.dojo.tetris.model.GlassEvent.Type.LINES_REMOVED;
  */
 public class HardLevels extends Levels {
 
-    public HardLevels(Dice dice, Figures queue) {
+    public HardLevels(Dice dice, FigureQueue queue) {
         super(new FigureTypesLevel(dice, queue,
                         new GlassEvent<>(LINES_REMOVED, 4),
                         O),

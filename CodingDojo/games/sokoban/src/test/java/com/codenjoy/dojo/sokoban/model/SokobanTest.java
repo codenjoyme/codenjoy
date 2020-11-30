@@ -68,10 +68,10 @@ public class SokobanTest {
         }
     }
 
-    private void givenF1(String board, int expectedMarksToWin) {
+    private void givenF1(String board, int marksToWin) {
         LevelImpl level;
-        if (expectedMarksToWin != 0)
-            level = new LevelImpl(board, expectedMarksToWin);
+        if (marksToWin != 0)
+            level = new LevelImpl(board, marksToWin);
         else
             level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
@@ -277,7 +277,7 @@ public class SokobanTest {
         hero.right();
         game.tick();
         assertTrue("\nWe need to have same expected and real marks, but" +
-                "\n expected marks to fill is: " + game.getExpectedMarksToWin() + " real value is:" + game.getRealMarksToWin(), game.isWon());
+                "\n expected marks to fill is: " + game.getMarksToWin() + " real value is:" + game.getRealMarksToWin(), game.isWon());
     }
 
     @Test

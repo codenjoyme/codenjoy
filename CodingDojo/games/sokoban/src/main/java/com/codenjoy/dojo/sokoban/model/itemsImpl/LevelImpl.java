@@ -25,29 +25,28 @@ package com.codenjoy.dojo.sokoban.model.itemsImpl;
 
 import com.codenjoy.dojo.sokoban.model.items.Level;
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.sokoban.model.itemsImpl.Elements.*;
-import static java.util.stream.Collectors.toList;
 
 public class LevelImpl implements Level {
+
     private final LengthToXY xy;
-    private final int expectedBoxesValuesInMarks;
+    private final int marksToWin;
     private String map;
 
     public LevelImpl(String map) {
         this.map = map;
         xy = new LengthToXY(getSize());
-        this.expectedBoxesValuesInMarks = getMarks().size();
+        this.marksToWin = getMarks().size();
     }
 
-    public LevelImpl(String map, int expectedBoxesValuesInMarks) {
+    public LevelImpl(String map, int marksToWin) {
         this.map = map;
         xy = new LengthToXY(getSize());
-        this.expectedBoxesValuesInMarks = expectedBoxesValuesInMarks;
+        this.marksToWin = marksToWin;
     }
 
     @Override
@@ -56,62 +55,51 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public int getExpectedBoxesValuesInMarks() {
-        return this.expectedBoxesValuesInMarks;
+    public int getMarksToWin() {
+        return marksToWin;
     }
 
     @Override
     public List<Hero> getHero() {
-        return pointsOf(HERO).stream()
-                .map(Hero::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                Hero::new,
+                HERO);
 
     }
 
     @Override
     public List<Gold> getGold() {
-        return pointsOf(GOLD).stream()
-                .map(Gold::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                Gold::new,
+                GOLD);
     }
 
     @Override
     public List<Wall> getWalls() {
-        return pointsOf(WALL).stream()
-                .map(Wall::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                Wall::new,
+                WALL);
     }
 
     @Override
     public List<Box> getBoxes() {
-        return pointsOf(BOX).stream()
-                .map(Box::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                Box::new,
+                BOX);
     }
 
     @Override
     public List<Mark> getMarks() {
-        return pointsOf(MARK_TO_WIN).stream()
-                .map(Mark::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                Mark::new,
+                MARK_TO_WIN);
     }
 
     @Override
     public List<BoxOnTheMark> getBoxesOnTheMarks() {
-        return pointsOf(BOX_ON_THE_MARK).stream()
-                .map(BoxOnTheMark::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                BoxOnTheMark::new,
+                BOX_ON_THE_MARK);
     }
-
-    private List<Point> pointsOf(Elements element) {
-        List<Point> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.ch) {
-                result.add(xy.getXY(index));
-            }
-        }
-        return result;
-    }
-
 
 }

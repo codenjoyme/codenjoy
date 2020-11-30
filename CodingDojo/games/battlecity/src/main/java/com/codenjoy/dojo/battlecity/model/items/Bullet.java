@@ -35,20 +35,25 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Bullet extends MovingObject implements State<Elements, Player> {
 
-    private Field field;
+    private final Field field;
     private Tank owner;
     private Consumer<Object> onDestroy;
+    private boolean heavy;
 
-    public Bullet(Field field, Direction tankDirection, Point from, Tank owner, Consumer<Object> onDestroy) {
+    public Bullet(Field field, Direction tankDirection,
+                  Point from, Tank owner,
+                  Consumer<Object> onDestroy)
+    {
         super(from.getX(), from.getY(), tankDirection);
         this.field = field;
         this.owner = owner;
         moving = true;
         this.onDestroy = onDestroy;
         speed = 2;
+        heavy = false;
     }
 
-    public void onDestroy() {
+    public void remove() {
         moving = false;
         if (onDestroy != null) {
             onDestroy.accept(this);
@@ -58,7 +63,7 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
     @Override
     public void moving(Point pt) {
         if (pt.isOutOf(field.size())) {
-            onDestroy(); // TODO заимплементить взрыв
+            remove(); // TODO заимплементить взрыв
         } else {
             move(pt);
             field.affect(this);
@@ -90,5 +95,13 @@ public class Bullet extends MovingObject implements State<Elements, Player> {
         } else {
             return Elements.BULLET;
         }
+    }
+
+    public void heavy() {
+        heavy = true;
+    }
+
+    public boolean isHeavy() {
+        return heavy;
     }
 }

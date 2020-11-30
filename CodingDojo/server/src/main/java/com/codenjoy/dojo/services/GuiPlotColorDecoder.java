@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.types.LevelsType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import lombok.AllArgsConstructor;
 import org.json.JSONArray;
@@ -66,16 +67,16 @@ public class GuiPlotColorDecoder {
         JSONObject result = (JSONObject)board;
 
         // TODO а что если придумать другой формат и не делать этого двойного безобразия?
-        String key = "layers";
-        if (!result.has(key)) {
+        String key = LevelsType.LAYERS;
+        if (result.has(key)) {
+            JSONArray encoded = new JSONArray();
+            for (Object layer : result.getJSONArray(key)) {
+                encoded.put(encode((String)layer));
+            }
+            result.put(key, encoded);
             return result;
         }
 
-        JSONArray encoded = new JSONArray();
-        for (Object layer : result.getJSONArray(key)) {
-            encoded.put(encode((String)layer));
-        }
-        result.put(key, encoded);
         return result;
     }
 

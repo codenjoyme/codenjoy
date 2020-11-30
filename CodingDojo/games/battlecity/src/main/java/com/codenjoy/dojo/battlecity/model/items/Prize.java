@@ -25,21 +25,80 @@ package com.codenjoy.dojo.battlecity.model.items;
 
 import com.codenjoy.dojo.battlecity.model.Elements;
 import com.codenjoy.dojo.battlecity.model.Player;
-import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.*;
 
-public class Prize extends PointImpl implements State<Elements, Player> {
+import java.util.function.Consumer;
 
-    private Elements elements;
+public class Prize extends PointImpl implements Tickable, State<Elements, Player> {
 
-    public Prize(Point pt, Elements elements) {
+    public static final int CHANGE_EVERY_TICKS = 2;
+    private final Elements elements;
+    private final int prizeOnField;
+    private final int prizeWorking;
+
+    private boolean destroyed;
+    private boolean active;
+    private Consumer<Object> onDestroy;
+    private int timeout;
+    private int ticks;
+
+    public Prize(Point pt, int prizeOnField, int prizeWorking, Elements elements) {
         super(pt);
         this.elements = elements;
+        this.prizeOnField = prizeOnField;
+        this.prizeWorking = prizeWorking;
+        destroyed = false;
+        active = true;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        if (destroyed) {
+            return Elements.BANG;
+        }
+
+        if (ticks % CHANGE_EVERY_TICKS == 0) {
+            return Elements.PRIZE;
+        }
+
         return elements;
+    }
+
+    @Override
+    public void tick() {
+        if (destroyed || !active) {
+            return;
+        }
+        if (ticks == timeout) {
+            active = false;
+
+            if (onDestroy != null) {
+                onDestroy.accept(this);
+            }
+        } else {
+            ticks++;
+        }
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public void kill() {
+        destroyed = true;
+    }
+
+    public Elements elements() {
+        return elements;
+    }
+
+    public void taken(Consumer<Object> onDestroy) {
+        if (this.onDestroy == null) {
+            timeout = prizeOnField;
+        } else {
+            timeout = prizeWorking;
+        }
+        ticks = 0;
+        this.onDestroy = onDestroy;
     }
 }

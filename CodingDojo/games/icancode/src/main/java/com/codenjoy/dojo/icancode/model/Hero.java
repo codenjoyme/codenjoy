@@ -10,12 +10,12 @@ package com.codenjoy.dojo.icancode.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,7 +23,10 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.items.*;
+import com.codenjoy.dojo.icancode.model.items.Box;
+import com.codenjoy.dojo.icancode.model.items.Gold;
+import com.codenjoy.dojo.icancode.model.items.HeroItem;
+import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -47,6 +50,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private boolean hole;
     private boolean landOn;
     private int goldCount;
+    private int killZombieCount;
+    private int killHeroCount;
     private HeroItem item;
 
     public void removeFromCell() {
@@ -76,6 +81,16 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         laser = false;
         alive = true;
         goldCount = 0;
+        resetZombieKillCount();
+        resetHeroKillCount();
+    }
+
+    public void resetZombieKillCount() {
+        killZombieCount = 0;
+    }
+
+    public void resetHeroKillCount() {
+        killHeroCount = 0;
     }
 
     @Override
@@ -341,7 +356,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return false;
         }
 
-        Gold gold = (Gold)field.getIfPresent(Gold.class, newX, newY);
+        Gold gold = (Gold) field.getIfPresent(Gold.class, newX, newY);
         if (gold != null && !gold.getHidden()) {
             return false;
         }
@@ -374,8 +389,24 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         goldCount++;
     }
 
+    public void addZombieKill() {
+        killZombieCount++;
+    }
+
+    public void addHeroKill() {
+        killHeroCount++;
+    }
+
     public int getGoldCount() {
         return goldCount;
+    }
+
+    public int getKillZombieCount() {
+        return killZombieCount;
+    }
+
+    public int getKillHeroCount() {
+        return killHeroCount;
     }
 
     public boolean isFlying() {

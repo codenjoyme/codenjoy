@@ -23,6 +23,7 @@ package com.codenjoy.dojo.client;
  */
 
 
+import com.codenjoy.dojo.services.multiplayer.types.LevelsType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.Point;
 import org.json.JSONArray;
@@ -39,13 +40,13 @@ public abstract class AbstractLayeredBoard<E extends CharElements> implements Cl
     protected List<String> layersString = new LinkedList<>();
 
     public ClientBoard forString(String boardString) {
-        if (boardString.contains("layer")) {
+        if (boardString.contains(LevelsType.LAYERS)) {
             source = new JSONObject(boardString);
-            JSONArray layers = source.getJSONArray("layers");
+            JSONArray layers = source.getJSONArray(LevelsType.LAYERS);
             return forString(layers.toList().toArray(new String[0]));
-        } else {
-            return forString(new String[]{boardString});
         }
+
+        return forString(new String[]{boardString});
     }
 
     public ClientBoard forString(String... layers) {

@@ -23,9 +23,7 @@ package com.codenjoy.dojo.services.printer;
  */
 
 
-import com.codenjoy.dojo.services.GamePrinter;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;

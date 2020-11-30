@@ -102,6 +102,7 @@ public class LevelsBuilderTest {
 
     private void gotoNextLevel() {
         levels.linesRemoved(MockLevels.LINES_REMOVED_FOR_NEXT_LEVEL);
+        levels.tryGoNextLevel();
     }
 
 

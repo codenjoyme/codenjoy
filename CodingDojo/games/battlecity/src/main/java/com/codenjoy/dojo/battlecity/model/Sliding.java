@@ -26,14 +26,15 @@ import com.codenjoy.dojo.services.Direction;
 
 public class Sliding {
 
-    public static final int TAKE_CONTROL_EVERY_TICKS = 2;
-    private Field field;
+    public final int slipperiness;
+    private final Field field;
     
     private int tick;
     private Direction before;
 
     public Sliding(Field field) {
         this.field = field;
+        this.slipperiness = field.slipperiness();
     }
 
     public Direction act(Tank tank) {
@@ -42,14 +43,19 @@ public class Sliding {
             return before = tank.getDirection();
         }
 
-        tick++;
-
-        if (tick % TAKE_CONTROL_EVERY_TICKS == 0) {
+        if (tick == slipperiness) {
+            tick = 0;
             before = tank.getDirection();
         } else {
             // ignore current direction because sliding
         }
 
+        tick++;
+
         return before;
+    }
+
+    public void stop() {
+        tick = slipperiness;
     }
 }

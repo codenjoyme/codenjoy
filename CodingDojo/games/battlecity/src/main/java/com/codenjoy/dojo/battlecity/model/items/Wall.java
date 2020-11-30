@@ -29,22 +29,28 @@ import com.codenjoy.dojo.services.*;
 
 public class Wall extends PointImpl implements Tickable, State<Elements, Player> {
 
-    public static final int REGENERATE_TIME = 30;
+    public static final int REGENERATE_TIME = 30; // TODO вынести в settings
 
     private Elements ch;
     private int timer;
-
-    public Wall(int x, int y) {
-        super(x, y);
-        reset();
-    }
+    private boolean overDamage;
 
     public Wall(Point pt) {
-        this(pt.getX(), pt.getY());
+        super(pt);
+        reset();
+        overDamage = false;
+    }
+
+    public void destroy(Bullet bullet) {
+        if (bullet.isHeavy()) {
+            overDamage = true;
+        }
+
+        destroyFrom(bullet.getDirection());
     }
 
     public void destroyFrom(Direction bulletDirection) {
-        if (ch.power() == 1) {
+        if (ch.power() == 1 || overDamage) {
             ch = Elements.WALL_DESTROYED;
             return;
         }

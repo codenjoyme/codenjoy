@@ -119,7 +119,7 @@ public class LevelImpl implements Level {
                     cell = new CellImpl(x, y);
                 }
                 String ch = map.substring(indexChar*len, (indexChar + 1)*len);
-                function.accept(cell, String.valueOf(ch));
+                function.accept(cell, ch);
                 cells[length] = cell;
                 ++indexChar;
             }
@@ -127,8 +127,7 @@ public class LevelImpl implements Level {
     }
 
     private BaseItem getBaseItem(Elements element) {
-        return constructor()
-                            .withParameterTypes(Elements.class)
+        return constructor().withParameterTypes(Elements.class)
                             .in(ElementsMapper.getItsClass(element))
                             .newInstance(element);
     }
@@ -167,7 +166,7 @@ public class LevelImpl implements Level {
 
     @Override
     public <T> List<T> getItems(Class<T> clazz) {
-        List<T> result = new LinkedList<T>();
+        List<T> result = new LinkedList<>();
         for (Cell cell : cells) {
             for (Item item : cell.getItems()) {
                 if (clazz.isInstance(item)) {
@@ -180,7 +179,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Cell> getCellsWith(Class with) {
-        List<Cell> result = new LinkedList<Cell>();
+        List<Cell> result = new LinkedList<>();
         for (Cell cell : cells) {
             for (Item item : cell.getItems()) {
                 if (with.isInstance(item)) {
@@ -194,7 +193,7 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Cell> getCellsWith(Predicate<Cell> is) {
-        List<Cell> result = new LinkedList<Cell>();
+        List<Cell> result = new LinkedList<>();
         for (Cell cell : cells) {
             if (is.test(cell)) {
                 result.add(cell);

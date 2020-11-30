@@ -23,12 +23,20 @@ package com.codenjoy.dojo.tetris.model;
  */
 
 
+import com.codenjoy.dojo.tetris.model.levels.random.Randomizer;
+
 import java.util.List;
+import java.util.function.Supplier;
 
 public interface FigureQueue {
+
     Figure next();
 
     List<Type> future();
 
     void clear();
+
+    void setRandomizer(Supplier<Randomizer> get);
+
+    void open(Type[] figureTypesToOpen);
 }

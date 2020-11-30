@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
 public class Border extends PointImpl implements State<Elements, Player> {
+
     public Border(int x, int y) {
         super(x, y);
     }

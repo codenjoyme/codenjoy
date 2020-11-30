@@ -48,10 +48,14 @@ public class Laser extends FieldItem implements Tickable {
 
     private static Elements getElement(Direction direction) {
         switch (direction) {
-            case LEFT: return Elements.LASER_LEFT;
-            case RIGHT: return Elements.LASER_RIGHT;
-            case DOWN: return Elements.LASER_DOWN;
-            case UP: return Elements.LASER_UP;
+            case LEFT:
+                return Elements.LASER_LEFT;
+            case RIGHT:
+                return Elements.LASER_RIGHT;
+            case DOWN:
+                return Elements.LASER_DOWN;
+            case UP:
+                return Elements.LASER_UP;
         }
         throw new IllegalStateException("Unexpected direction: " + direction);
     }
@@ -74,6 +78,7 @@ public class Laser extends FieldItem implements Tickable {
             if (!hero.isFlying()) {
                 die();
                 hero.dieOnLaser();
+                addOwnerKillHeroScore();
             }
         }
 
@@ -81,6 +86,19 @@ public class Laser extends FieldItem implements Tickable {
         if (zombie != null) {
             die();
             zombie.die();
+            addOwnerKillZombieScore();
+        }
+    }
+
+    private void addOwnerKillZombieScore() {
+        if (owner != null && owner instanceof Hero) {
+            ((Hero) owner).addZombieKill();
+        }
+    }
+
+    private void addOwnerKillHeroScore() {
+        if (owner != null && owner instanceof Hero) {
+            ((Hero) owner).addHeroKill();
         }
     }
 

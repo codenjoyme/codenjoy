@@ -23,14 +23,16 @@ package com.codenjoy.dojo.fifteen.model;
  */
 
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
 import java.util.List;
 
-public class LevelImpl implements Level {
-    private final LengthToXY xy;
+import static com.codenjoy.dojo.fifteen.model.Elements.HERO;
+import static com.codenjoy.dojo.fifteen.model.Elements.WALL;
 
+public class LevelImpl implements Level {
+
+    private final LengthToXY xy;
     private String map;
 
     public LevelImpl(String map) {
@@ -40,14 +42,9 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Digit> getDigits() {
-        List<Digit> result = new LinkedList<>();
-
-        for (Elements digit : DigitHandler.DIGITS) {
-            for (Point pt : getPointsOf(digit)) {
-                result.add(new Digit(pt, digit));
-            }
-        }
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                (pt, el) -> new Digit(pt, el),
+                DigitHandler.DIGITS);
     }
 
     @Override
@@ -57,33 +54,15 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHero() {
-        List<Hero> result = new LinkedList<>();
-
-        for (Point pt : getPointsOf(Elements.HERO)) {
-            result.add(new Hero(pt));
-        }
-
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                (pt, el) -> new Hero(pt),
+                HERO);
     }
 
     @Override
     public List<Wall> getWalls() {
-        List<Wall> result = new LinkedList<>();
-
-        for (Point pt : getPointsOf(Elements.WALL)) {
-            result.add(new Wall(pt));
-        }
-
-        return result;
-    }
-
-    private List<Point> getPointsOf(Elements element) {
-        List<Point> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.ch) {
-                result.add(xy.getXY(index));
-            }
-        }
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                (pt, el) -> new Wall(pt),
+                WALL);
     }
 }

@@ -25,13 +25,12 @@ package com.codenjoy.dojo.loderunner.model;
 
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.codenjoy.dojo.loderunner.model.Elements.*;
-import static java.util.stream.Collectors.toList;
 
 public class LevelImpl implements Level {
 
@@ -53,73 +52,55 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Hero> getHeroes() {
-        return new LinkedList<Hero>(){{
-            addAll(pointsOf(HERO_LEFT).stream()
-                    .map(pt -> new Hero(pt, Direction.LEFT))
-                    .collect(toList()));
-            
-            addAll(pointsOf(HERO_RIGHT).stream()
-                    .map(pt -> new Hero(pt, Direction.RIGHT))
-                    .collect(toList()));
-        }};
+        return LevelUtils.getObjects(xy, map,
+                new HashMap<>(){{
+                    put(HERO_LEFT, pt -> new Hero(pt, Direction.LEFT));
+                    put(HERO_RIGHT, pt -> new Hero(pt, Direction.RIGHT));
+                }});
     }
 
     @Override
     public List<Brick> getBricks() {
-        return pointsOf(BRICK).stream()
-                .map(Brick::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                Brick::new,
+                BRICK);
     }
 
     @Override
     public List<Border> getBorders() {
-                return pointsOf(UNDESTROYABLE_WALL).stream()
-            .map(Border::new)
-                .collect(toList());
-    }
-
-    private List<Point> pointsOf(Elements el) {
-        List<Point> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == el.ch()) {
-                result.add(xy.getXY(index));
-            }
-        }
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                Border::new,
+                UNDESTROYABLE_WALL);
     }
 
     @Override
     public List<Gold> getGold() {
-        return pointsOf(GOLD).stream()
-                .map(Gold::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                Gold::new,
+                GOLD);
     }
 
     @Override
     public List<Ladder> getLadder() {
-        return pointsOf(Elements.LADDER).stream()
-                .map(Ladder::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                Ladder::new,
+                LADDER);
     }
 
     @Override
     public List<Pipe> getPipe() {
-        return pointsOf(PIPE).stream()
-                .map(Pipe::new)
-                .collect(toList());
+        return LevelUtils.getObjects(xy, map,
+                Pipe::new,
+                PIPE);
     }
 
     @Override
     public List<Enemy> getEnemies() {
-        return new LinkedList<Enemy>(){{
-            addAll(pointsOf(ENEMY_LEFT).stream()
-                    .map(pt -> new Enemy(pt, Direction.LEFT, ai))
-                    .collect(toList()));
-
-            addAll(pointsOf(ENEMY_RIGHT).stream()
-                    .map(pt -> new Enemy(pt, Direction.RIGHT, ai))
-                    .collect(toList()));
-        }};
+        return LevelUtils.getObjects(xy, map,
+                new HashMap<>(){{
+                    put(ENEMY_LEFT, pt -> new Enemy(pt, Direction.LEFT, ai));
+                    put(ENEMY_RIGHT, pt -> new Enemy(pt, Direction.RIGHT, ai));
+                }});
     }
 
     public void setAI(EnemyAI ai) {

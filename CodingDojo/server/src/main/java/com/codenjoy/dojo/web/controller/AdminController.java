@@ -436,7 +436,7 @@ public class AdminController {
         model.addAttribute("timerPeriod", timerService.getPeriod());
 
         MultiplayerType type = gameService.getGame(gameName).getMultiplayerType();
-        JSONObject save = new LevelProgress(type).saveTo(new JSONObject());
+        JSONObject save = type.progress().saveTo(new JSONObject());
         model.addAttribute("defaultProgress", save.toString().replace('"', '\''));
 
         checkGameStatus(model);

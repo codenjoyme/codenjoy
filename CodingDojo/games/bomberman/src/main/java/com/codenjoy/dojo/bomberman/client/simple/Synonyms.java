@@ -50,4 +50,9 @@ public class Synonyms {
     public Collection<Character> chars() {
         return map.keySet();
     }
+
+    @Override
+    public String toString() {
+        return map.toString();
+    }
 }

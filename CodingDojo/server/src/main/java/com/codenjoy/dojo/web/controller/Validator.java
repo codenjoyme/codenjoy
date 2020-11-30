@@ -236,8 +236,12 @@ public class Validator {
         checkRoomName(roomName, CANT_BE_NULL);
         checkPlayerId(id, CANT_BE_NULL);
 
-        if (!playerService.get(id).getRoomName().equals(roomName)) {
+        if (!isPlayerInRoom(id, roomName)) {
             throw new IllegalArgumentException(String.format("Player '%s' is not in room '%s'", id, roomName));
         }
+    }
+
+    public boolean isPlayerInRoom(String id, String roomName) {
+        return playerService.get(id).getRoomName().equals(roomName);
     }
 }

@@ -34,6 +34,18 @@ var boardPageLoad = function() {
         libs = 'js';
     }
 
+    // ------------------------ headers/footers/board --------------------
+    if (!game.enableHeader) {
+        $('.header-container').hide();
+    }
+    if (!game.enableFooter) {
+        $('footer.footer').hide();
+    }
+    if (!game.drawCanvases) {
+        $('#main').addClass('editor-fullscreen');
+        $('#editor-panel').hide();
+    }
+
     // ----------------------- disable backspace -------------------
     $(document).on('keydown', function(e) {
         if ((e.which === 8 || e.which === 32
@@ -107,7 +119,7 @@ var boardPageLoad = function() {
 
         previous.click(function(){
             hide();
-            levelProgress.selectLevel(0);
+            levelProgress.selectLevel(levelsStartsFrom1);
         });
 
         $("body").keydown(function(event){

@@ -54,7 +54,7 @@ public class Sokoban implements Field {
     private boolean boxesBlocked;
     private boolean isWon;
     private List<Player> players;
-    private final int expectedMarksToWin;
+    private final int marksToWin;
     private final int size;
     static int realMarksToWin;
     private Dice dice;
@@ -69,7 +69,7 @@ public class Sokoban implements Field {
         boxesOnTheMarks = level.getBoxesOnTheMarks();
         marks.stream().forEach(mark -> mark.init(this));
         gold = level.getGold();
-        this.expectedMarksToWin = level.getExpectedBoxesValuesInMarks();
+        this.marksToWin = level.getMarksToWin();
         players = new LinkedList<>();
         bombs = new LinkedList<>();
     }
@@ -102,7 +102,7 @@ public class Sokoban implements Field {
             }
         }
 
-        if (expectedMarksToWin == realMarksToWin) {
+        if (marksToWin == realMarksToWin) {
             isWon = true;
             player.event(Events.WIN);
         }
@@ -310,8 +310,8 @@ public class Sokoban implements Field {
         return realMarksToWin;
     }
 
-    public int getExpectedMarksToWin() {
-        return expectedMarksToWin;
+    public int getMarksToWin() {
+        return marksToWin;
     }
 
     public boolean isWon() {

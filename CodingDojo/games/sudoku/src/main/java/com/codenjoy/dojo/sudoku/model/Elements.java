@@ -25,10 +25,16 @@ package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.printer.CharElements;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 public enum Elements implements CharElements {
 
     NONE(' '),   // отгадай, что тут за цифра
     BORDER('☼'), // граница, проигнорь ее ;) она не учитывается в координатах
+    HIDDEN('*'), // если число не отображается на поле
     ONE('1'),    // циферки
     TWO('2'),
     THREE('3'),
@@ -73,11 +79,19 @@ public enum Elements implements CharElements {
         throw new IllegalArgumentException("No such element for " + ch);
     }
 
+    public static Elements[] valuesExcept(Elements... excluded) {
+        List<Elements> list = Arrays.asList(excluded);
+        return Arrays.stream(values())
+                .filter(el -> !list.contains(el))
+                .collect(toList())
+                .toArray(new Elements[0]);
+    }
+
     public Integer value() {
         if (this == NONE) {
             return 0;
         }
-        if (this == BORDER) {
+        if (this == BORDER || this == HIDDEN) {
             return -1;
         }
         return Integer.valueOf("" + ch);

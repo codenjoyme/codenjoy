@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.multiplayer.types;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,14 +22,11 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.printer.BoardReader;
+public class TripleType extends MultiplayerType {
 
-/**
- * Это кастомная версия {@see Printer}
- */
-@FunctionalInterface
-public interface GraphicPrinter<T, P extends GamePlayer> {
-    T print(BoardReader reader, P player);
+    public TripleType() {
+        super(3, DISPOSABLE);
+    }
 }

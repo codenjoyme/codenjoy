@@ -116,11 +116,12 @@ public class LocalGameRunnerTest {
             }
         };
         when(gameType.createGame(anyInt())).thenReturn(field);
-        when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get((BoardReader reader, GamePlayer player) -> {
-            return "PRINTER_PRINTS_BOARD{reader=" + reader + ",player=" + player + "}" + id();
-        }));
+        when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(
+                (BoardReader reader, GamePlayer player)
+                        -> "PRINTER_PRINTS_BOARD" + id() + "{reader=" + reader + ",player=" + player + "}")
+        );
 
-        listener = event -> messages.add("GOT_EVENT{" + event + "}" + id());
+        listener = event -> messages.add("GOT_EVENT" + id() + "{" + event + "}");
 
         PlayerScores scores = mock(PlayerScores.class);
         when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
@@ -139,27 +140,27 @@ public class LocalGameRunnerTest {
                 hero = new PlayerHero() {
                     @Override
                     public void down() {
-                        gamePlayer.event("EVENT(DOWN)" + id());
+                        gamePlayer.event("EVENT" + id() + "(DOWN)");
                     }
 
                     @Override
                     public void up() {
-                        gamePlayer.event("EVENT(UP)" + id());
+                        gamePlayer.event("EVENT" + id() + "(UP)");
                     }
 
                     @Override
                     public void left() {
-                        gamePlayer.event("EVENT(LEFT)" + id());
+                        gamePlayer.event("EVENT" + id() + "(LEFT)");
                     }
 
                     @Override
                     public void right() {
-                        gamePlayer.event("EVENT(RIGHT)" + id());
+                        gamePlayer.event("EVENT" + id() + "(RIGHT)");
                     }
 
                     @Override
                     public void act(int... p) {
-                        gamePlayer.event("EVENT(ACT{" + Arrays.toString(p) + "})" + id());
+                        gamePlayer.event("EVENT" + id() + "(ACT{" + Arrays.toString(p) + "})");
                     }
 
                     @Override
@@ -185,14 +186,14 @@ public class LocalGameRunnerTest {
 
         solver = board -> {
             String command = "ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN";
-            messages.add("SOLVER_SAID_COMMAND{" + command + "}" + id());
+            messages.add("SOLVER_SAID_COMMAND" + id() + "{" + command + "}");
             return command;
         };
 
         board = new ClientBoard() {
             @Override
             public ClientBoard forString(String input) {
-                messages.add("CLIENT_GOT_BOARD{" + input + "}" + id());
+                messages.add("CLIENT_GOT_BOARD" + id() + "{" + input + "}");
                 return board;
             }
 
@@ -207,49 +208,49 @@ public class LocalGameRunnerTest {
 
         // then
         assertEquals("GET_READER#0\n" +
-                    "NEW_GAME#1\n" +
-                    "CLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:2,elements:[[1,3], [2,4], [3,5]],player=PLAYER#6}#7}#8\n" +
-                    "1:CLIENT_BOARD_PRINTED_TO_STRING#9\n" +
-                    "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#10\n" +
-                    "1:Scores: SCORE#11\n" +
-                    "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
-                    "GOT_EVENT{EVENT(ACT{[1, 5]})#12}#13\n" +
-                    "GOT_EVENT{EVENT(LEFT)#14}#15\n" +
-                    "GOT_EVENT{EVENT(RIGHT)#16}#17\n" +
-                    "GOT_EVENT{EVENT(ACT{[9]})#18}#19\n" +
-                    "GOT_EVENT{EVENT(UP)#20}#21\n" +
-                    "GOT_EVENT{EVENT(DOWN)#22}#23\n" +
-                    "TICK_GAME#24\n" +
-                    "TICK_HERO#25\n" +
-                    "------------------------------------------\n" +
-                    "CLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:26,elements:[[1,27], [2,28], [3,29]],player=PLAYER#30}#31}#32\n" +
-                    "1:CLIENT_BOARD_PRINTED_TO_STRING#33\n" +
-                    "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#34\n" +
-                    "1:Scores: SCORE#35\n" +
-                    "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
-                    "GOT_EVENT{EVENT(ACT{[1, 5]})#36}#37\n" +
-                    "GOT_EVENT{EVENT(LEFT)#38}#39\n" +
-                    "GOT_EVENT{EVENT(RIGHT)#40}#41\n" +
-                    "GOT_EVENT{EVENT(ACT{[9]})#42}#43\n" +
-                    "GOT_EVENT{EVENT(UP)#44}#45\n" +
-                    "GOT_EVENT{EVENT(DOWN)#46}#47\n" +
-                    "TICK_GAME#48\n" +
-                    "TICK_HERO#49\n" +
-                    "------------------------------------------\n" +
-                    "CLIENT_GOT_BOARD{PRINTER_PRINTS_BOARD{reader=size:50,elements:[[1,51], [2,52], [3,53]],player=PLAYER#54}#55}#56\n" +
-                    "1:CLIENT_BOARD_PRINTED_TO_STRING#57\n" +
-                    "SOLVER_SAID_COMMAND{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}#58\n" +
-                    "1:Scores: SCORE#59\n" +
-                    "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
-                    "GOT_EVENT{EVENT(ACT{[1, 5]})#60}#61\n" +
-                    "GOT_EVENT{EVENT(LEFT)#62}#63\n" +
-                    "GOT_EVENT{EVENT(RIGHT)#64}#65\n" +
-                    "GOT_EVENT{EVENT(ACT{[9]})#66}#67\n" +
-                    "GOT_EVENT{EVENT(UP)#68}#69\n" +
-                    "GOT_EVENT{EVENT(DOWN)#70}#71\n" +
-                    "TICK_GAME#72\n" +
-                    "TICK_HERO#73\n" +
-                    "------------------------------------------",
+                "NEW_GAME#1\n" +
+                "CLIENT_GOT_BOARD#8{PRINTER_PRINTS_BOARD#2{reader=size:3,elements:[[1,4], [2,5], [3,6]],player=PLAYER#7}}\n" +
+                "1:CLIENT_BOARD_PRINTED_TO_STRING#9\n" +
+                "SOLVER_SAID_COMMAND#10{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}\n" +
+                "1:Scores: SCORE#11\n" +
+                "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
+                "GOT_EVENT#13{EVENT#12(ACT{[1, 5]})}\n" +
+                "GOT_EVENT#15{EVENT#14(LEFT)}\n" +
+                "GOT_EVENT#17{EVENT#16(RIGHT)}\n" +
+                "GOT_EVENT#19{EVENT#18(ACT{[9]})}\n" +
+                "GOT_EVENT#21{EVENT#20(UP)}\n" +
+                "GOT_EVENT#23{EVENT#22(DOWN)}\n" +
+                "TICK_GAME#24\n" +
+                "TICK_HERO#25\n" +
+                "------------------------------------------\n" +
+                "CLIENT_GOT_BOARD#32{PRINTER_PRINTS_BOARD#26{reader=size:27,elements:[[1,28], [2,29], [3,30]],player=PLAYER#31}}\n" +
+                "1:CLIENT_BOARD_PRINTED_TO_STRING#33\n" +
+                "SOLVER_SAID_COMMAND#34{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}\n" +
+                "1:Scores: SCORE#35\n" +
+                "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
+                "GOT_EVENT#37{EVENT#36(ACT{[1, 5]})}\n" +
+                "GOT_EVENT#39{EVENT#38(LEFT)}\n" +
+                "GOT_EVENT#41{EVENT#40(RIGHT)}\n" +
+                "GOT_EVENT#43{EVENT#42(ACT{[9]})}\n" +
+                "GOT_EVENT#45{EVENT#44(UP)}\n" +
+                "GOT_EVENT#47{EVENT#46(DOWN)}\n" +
+                "TICK_GAME#48\n" +
+                "TICK_HERO#49\n" +
+                "------------------------------------------\n" +
+                "CLIENT_GOT_BOARD#56{PRINTER_PRINTS_BOARD#50{reader=size:51,elements:[[1,52], [2,53], [3,54]],player=PLAYER#55}}\n" +
+                "1:CLIENT_BOARD_PRINTED_TO_STRING#57\n" +
+                "SOLVER_SAID_COMMAND#58{ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN}\n" +
+                "1:Scores: SCORE#59\n" +
+                "1:Answer: ACT(1,5),LEFT,RIGHT,ACT(9),UP,DOWN\n" +
+                "GOT_EVENT#61{EVENT#60(ACT{[1, 5]})}\n" +
+                "GOT_EVENT#63{EVENT#62(LEFT)}\n" +
+                "GOT_EVENT#65{EVENT#64(RIGHT)}\n" +
+                "GOT_EVENT#67{EVENT#66(ACT{[9]})}\n" +
+                "GOT_EVENT#69{EVENT#68(UP)}\n" +
+                "GOT_EVENT#71{EVENT#70(DOWN)}\n" +
+                "TICK_GAME#72\n" +
+                "TICK_HERO#73\n" +
+                "------------------------------------------",
                 String.join("\n", messages));
     }
 

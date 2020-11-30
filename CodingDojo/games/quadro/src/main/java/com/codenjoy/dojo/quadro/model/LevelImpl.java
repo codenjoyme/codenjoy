@@ -23,11 +23,21 @@ package com.codenjoy.dojo.quadro.model;
  */
 
 
+import com.codenjoy.dojo.quadro.model.items.Chip;
+import com.codenjoy.dojo.quadro.model.items.RedChip;
+import com.codenjoy.dojo.quadro.model.items.YellowChip;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import static com.codenjoy.dojo.quadro.model.Elements.*;
 
 public class LevelImpl implements Level {
 
@@ -47,19 +57,16 @@ public class LevelImpl implements Level {
 
     @Override
     public ChipSet getChips() {
-        return new ChipSet() {{
-            putAll(pointsOf(Elements.YELLOW), Elements.YELLOW);
-            putAll(pointsOf(Elements.RED), Elements.RED);
+        List<Chip> chips = LevelUtils.getObjects(xy, map,
+                new HashMap<>() {{
+                    put(YELLOW, pt -> new YellowChip(pt));
+                    put(RED, pt -> new RedChip(pt));
+                }});
+
+
+        return new ChipSet(){{
+            putAll(chips);
         }};
     }
 
-    private List<Point> pointsOf(Elements element) {
-        List<Point> result = new LinkedList<>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.ch) {
-                result.add(xy.getXY(index));
-            }
-        }
-        return result;
-    }
 }

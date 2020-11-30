@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.tetris.model.levels.random;
+package com.codenjoy.dojo.a2048.model;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 Codenjoy
+ * Copyright (C) 2018 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,12 +22,22 @@ package com.codenjoy.dojo.tetris.model.levels.random;
  * #L%
  */
 
+import org.junit.Test;
 
-/**
- * User: oleksandr.baglai
- * Date: 10/1/12
- * Time: 1:46 AM
- */
-public interface RandomizerFetcher {
-    Randomizer get();
+import java.util.Arrays;
+
+import static org.junit.Assert.*;
+
+public class ElementsTest {
+
+    @Test
+    public void testValuesExcept() {
+        assertEquals("[x, 2, 4, 8, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S,  ]",
+                Arrays.toString(Elements.valuesExcept()));
+
+        assertEquals("[2, 4, 8, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S]",
+                Arrays.toString(Elements.valuesExcept(Elements.NONE, Elements._x)));
+
+    }
+
 }

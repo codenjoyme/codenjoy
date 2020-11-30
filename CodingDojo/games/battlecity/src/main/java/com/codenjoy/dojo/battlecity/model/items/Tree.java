@@ -30,12 +30,8 @@ import com.codenjoy.dojo.services.State;
 
 public class Tree extends PointImpl implements State<Elements, Player> {
 
-    public Tree(int x, int y) {
-        super(x,y);
-    }
-
     public Tree(Point pt) {
-        this(pt.getX(), pt.getY());
+        super(pt);
     }
 
     @Override

@@ -29,9 +29,6 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by indigo on 2018-07-04.
- */
 public class Hero extends PlayerHero<Field> {
 
     private int currentIndex;

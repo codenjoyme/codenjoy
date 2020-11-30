@@ -24,14 +24,12 @@ package com.codenjoy.dojo.a2048.model;
 
 
 import com.codenjoy.dojo.services.LengthToXY;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.utils.LevelUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.*;
-import java.util.LinkedList;
 import java.util.List;
 
 public class LevelImpl implements Level {
@@ -67,18 +65,9 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Number> getNumbers() {
-        List<Number> result = new LinkedList<Number>();
-
-        for (Elements element : Elements.values()) {
-            if (element == Elements.NONE) continue;
-
-            List<Point> points = getPointsOf(element);
-            for (Point pt : points) {
-                result.add(new Number(element.number(), pt));
-            }
-        }
-
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                (pt, el) -> new Number(el.number(), pt),
+                Elements.valuesExcept(Elements.NONE));
     }
 
     @Override
@@ -96,13 +85,4 @@ public class LevelImpl implements Level {
         return Mode.values()[mode.getValue()];
     }
 
-    private List<Point> getPointsOf(Elements element) {
-        List<Point> result = new LinkedList<Point>();
-        for (int index = 0; index < map.length(); index++) {
-            if (map.charAt(index) == element.ch) {
-                result.add(xy.getXY(index));
-            }
-        }
-        return result;
-    }
 }

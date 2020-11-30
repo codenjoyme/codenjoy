@@ -59,11 +59,16 @@ public class GameRunner extends AbstractGameType implements GameType {
         Level level = getLevel();
         Battlecity game = new Battlecity(level.size(), getDice(),
                 gameSettings.spawnAiPrize(),
-                gameSettings.hitKillsAiPrize());
+                gameSettings.hitKillsAiPrize(),
+                gameSettings.prizeOnField(),
+                gameSettings.prizeWorking(),
+                gameSettings.aiTicksPerShoot(),
+                gameSettings.slipperiness());
 
         game.addBorder(level.getBorders());
         game.addWall(level.getWalls());
-        game.addAiTanks(level.getAiTanks());
+        game.addAiTanks(level.getAiTanks(
+                gameSettings.aiTicksPerShoot().getValue()));
         game.addRiver(level.getRivers());
         game.addTree(level.getTrees());
         game.addIce(level.getIce());
@@ -107,7 +112,9 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener, getDice());
+        return new Player(listener,
+                getDice(),
+                gameSettings.tankTicksPerShoot());
     }
 
     public String getMap() {
@@ -116,35 +123,35 @@ public class GameRunner extends AbstractGameType implements GameType {
                 "☼ ¿    ¿    ¿        ¿    ¿    ¿ ☼" +
                 "☼                                ☼" +
                 "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼ █╬╬╬█ ╬╬╬ █╬╬╬██╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
-                "☼ █╬╬╬█ ╬╬╬ █╬╬╬██╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
-                "☼ █╬╬╬█ ╬╬╬ █╬╬╬██╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
-                "☼ █╬╬╬█ ╬╬╬ █╬╬╬☼☼╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
-                "☼ █╬╬╬█ ╬╬╬ █╬╬╬☼☼╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
-                "☼ █╬╬╬█ ╬╬╬ █╬╬╬  ╬╬╬█ ╬╬╬ █╬╬╬█ ☼" +
-                "☼ █╬╬╬█ ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬ █╬╬╬█ ☼" +
-                "☼ █╬╬╬█ ╬╬╬            ╬╬╬ █╬╬╬█ ☼" +
-                "☼  ╬╬╬  ╬╬╬   ▓    ▓   ╬╬╬  ╬╬╬  ☼" +
-                "☼  ▓▓▓       ╬╬╬  ╬╬╬       ▓▓▓  ☼" +
-                "☼  ▓▓        ╬╬╬  ╬╬╬        ▓▓  ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬☼☼╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬☼☼╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬  ╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬            ╬╬╬ #╬╬╬# ☼" +
+                "☼  ╬╬╬  ╬╬╬   ~    ~   ╬╬╬  ╬╬╬  ☼" +
+                "☼  ~~~       ╬╬╬  ╬╬╬       ~~~  ☼" +
+                "☼  ~~        ╬╬╬  ╬╬╬        ~~  ☼" +
                 "☼     ╬╬╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬╬╬     ☼" +
                 "☼☼☼   ╬╬╬╬╬            ╬╬╬╬╬   ☼☼☼" +
-                "☼ ▓▓          ▒▒▒▒▒▒          ▓▓ ☼" +
-                "☼           ▓╬╬╬▒▒╬╬╬▓           ☼" +
-                "☼  ╬╬╬  ╬╬╬ ▓╬╬╬▒▒╬╬╬▓ ╬╬╬  ╬╬╬  ☼" +
+                "☼ ~~          %%%%%%          ~~ ☼" +
+                "☼           ~╬╬╬%%╬╬╬~           ☼" +
+                "☼  ╬╬╬  ╬╬╬ ~╬╬╬%%╬╬╬~ ╬╬╬  ╬╬╬  ☼" +
                 "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼  ╬╬╬▓ ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬ ▓╬╬╬  ☼" +
+                "☼  ╬╬╬~ ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬ ~╬╬╬  ☼" +
                 "☼  ╬╬╬  ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                "☼ ▒╬╬╬  ╬╬╬  ╬╬╬▒▒╬╬╬  ╬╬╬  ╬╬╬▒ ☼" +
-                "☼ ▒╬╬╬  ╬╬╬▓ ╬╬╬▒▒╬╬╬ ▓╬╬╬  ╬╬╬▒ ☼" +
-                "☼ ▒╬╬╬  ╬╬╬▓ ╬╬╬▒▒╬╬╬ ▓╬╬╬  ╬╬╬▒ ☼" +
-                "☼ ▒╬╬╬ ▓╬╬╬  ╬╬╬▒▒╬╬╬  ╬╬╬▓ ╬╬╬▒ ☼" +
-                "☼ ▒╬╬╬  ▒▒▒            ▒▒▒  ╬╬╬▒ ☼" +
-                "☼  ╬╬╬  ▒▒▒    ▓▓▓▓    ▒▒▒  ╬╬╬  ☼" +
-                "☼  ╬╬╬  ▒▒▒  ╬╬╬╬╬╬╬╬  ▒▒▒  ╬╬╬  ☼" +
+                "☼ %╬╬╬  ╬╬╬  ╬╬╬%%╬╬╬  ╬╬╬  ╬╬╬% ☼" +
+                "☼ %╬╬╬  ╬╬╬~ ╬╬╬%%╬╬╬ ~╬╬╬  ╬╬╬% ☼" +
+                "☼ %╬╬╬  ╬╬╬~ ╬╬╬%%╬╬╬ ~╬╬╬  ╬╬╬% ☼" +
+                "☼ %╬╬╬ ~╬╬╬  ╬╬╬%%╬╬╬  ╬╬╬~ ╬╬╬% ☼" +
+                "☼ %╬╬╬  %%%            %%%  ╬╬╬% ☼" +
+                "☼  ╬╬╬  %%%    ~~~~    %%%  ╬╬╬  ☼" +
+                "☼  ╬╬╬  %%%  ╬╬╬╬╬╬╬╬  %%%  ╬╬╬  ☼" +
                 "☼  ╬╬╬       ╬╬╬╬╬╬╬╬       ╬╬╬  ☼" +
                 "☼            ╬╬    ╬╬            ☼" +
-                "☼  ▒▒▒▒▒▒    ╬╬    ╬╬    ▒▒▒▒▒▒  ☼" +
+                "☼  %%%%%%    ╬╬    ╬╬    %%%%%%  ☼" +
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
     }
 

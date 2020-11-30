@@ -342,7 +342,7 @@ public class Loderunner implements Field {
 
     @Override
     public void leaveGold(int x, int y) {
-        gold.add(new Gold(x, y));
+        gold.add(new Gold(pt(x, y)));
     }
 
     @Override

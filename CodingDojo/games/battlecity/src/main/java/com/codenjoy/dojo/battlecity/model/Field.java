@@ -40,11 +40,15 @@ public interface Field extends GameField<Player> {
 
     boolean isIce(Point pt);
 
-    void addPrize(Prize prize);
+    void add(Prize prize);
 
     void addAi(Tank tank);
 
     List<Tank> aiTanks();
 
     int size();
+
+    boolean isBarrierFor(Tank tank, Point pt);
+
+    int slipperiness();
 }

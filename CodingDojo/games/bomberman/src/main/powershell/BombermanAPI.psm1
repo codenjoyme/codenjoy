@@ -450,6 +450,30 @@ Process
 					$GameBoardElementArray[$x,$y] = 'DeadMeatChopper'
 				}
 
+                # Bomb blast radius increase. Applicable only to new bombs. The perk is temporary.
+                '+'
+                {
+                    $GameBoardElementArray[$x,$y] = 'BombBlastRadiusIncrease'
+                }
+
+                # Increase available bombs count. Number of extra bombs can be set in settings. Temporary.
+                'c'
+                {
+                    $GameBoardElementArray[$x,$y] = 'BombCountIncrease'
+                }
+
+                # Bomb blast not by timer but by second act. Number of RC triggers is limited and can be set in settings.
+                'r'
+                {
+                    $GameBoardElementArray[$x,$y] = 'BombRemoteControl'
+                }
+
+				# Do not die after bomb blast (own bombs and others as well). Temporary.
+				'i'
+				{
+					$GameBoardElementArray[$x,$y] = 'BombImmune'
+				}
+
 				# Empty space on a map. This is the only place where you can move your Bomberman
 				Default
 				{

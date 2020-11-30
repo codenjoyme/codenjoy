@@ -24,6 +24,8 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.items.Bullet;
+import com.codenjoy.dojo.battlecity.model.items.Prize;
+import com.codenjoy.dojo.battlecity.model.items.Prizes;
 import com.codenjoy.dojo.battlecity.model.items.Tree;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
@@ -37,27 +39,26 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public static final int MAX = 100;
-    protected Dice dice;
-    private List<Bullet> bullets;
-    private boolean alive;
-    private Gun gun;
 
+    protected Dice dice;
+
+    private boolean alive;
     protected Direction direction;
     protected boolean moving;
     private boolean fire;
 
+    private Gun gun;
     private Sliding sliding;
 
-    public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
+    private List<Bullet> bullets;
+    private Prizes prizes;
+
+    public Tank(Point pt, Direction direction, Dice dice, int ticksPerShoot) {
         super(pt);
         this.direction = direction;
         this.dice = dice;
-        gun = new Gun(ticksPerBullets);
+        gun = new Gun(ticksPerShoot);
         reset();
-    }
-
-    void turn(Direction direction) {
-        this.direction = direction;
     }
 
     @Override
@@ -98,16 +99,21 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     // TODO подумать как устранить дублирование с MovingObject
     public void move() {
-        if (!moving) {
+        if (!moving && !field.isIce(this)) {
             return;
         }
-        direction = sliding.act(this);
+        Direction updated = sliding.act(this);
+        if (updated == null) {
+            // TODO исследовать иногда тут NPE что ломает всю игру
+        } else {
+            direction = updated;
+        }
         moving(direction.change(this));
     }
 
     public void moving(Point pt) {
-        if (field.isBarrier(pt)) {
-            // do nothing
+        if (field.isBarrierFor(this, pt)) {
+            sliding.stop();
         } else {
             move(pt);
         }
@@ -158,6 +164,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     @Override
     public void tick() {
         gun.tick();
+        prizes.tick();
     }
 
     @Override
@@ -196,6 +203,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         alive = true;
         gun.reset();
         bullets = new LinkedList<>();
+        prizes = new Prizes();
     }
 
     public void tryFire() {
@@ -212,7 +220,15 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    protected boolean isTankPrize() {
+    protected boolean withPrize() {
         return false;
+    }
+
+    public Prizes prizes() {
+        return prizes;
+    }
+
+    public void take(Prize prize) {
+        prizes.add(prize);
     }
 }

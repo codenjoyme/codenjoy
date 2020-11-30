@@ -37,9 +37,9 @@ public enum Elements implements CharElements {
     BATTLE_WALL('☼'),
     BANG('Ѡ'),
 
-	ICE('█'),
-	TREE('▒'),
-	RIVER('▓'),
+	ICE('#'),
+	TREE('%'),
+	RIVER('~'),
 
 	WALL('╬', 3),
 
@@ -82,6 +82,7 @@ public enum Elements implements CharElements {
 
     AI_TANK_PRIZE('◘'),
 
+    PRIZE('!'),
     PRIZE_IMMORTALITY('1'),
     PRIZE_BREAKING_WALLS('2'),
     PRIZE_WALKING_ON_WATER('3');

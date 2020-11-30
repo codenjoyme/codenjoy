@@ -30,12 +30,8 @@ import com.codenjoy.dojo.services.State;
 
 public class River extends PointImpl implements State<Elements, Player> {
 
-	public River(int x, int y) {
-		super(x, y);
-	}
-
 	public River(Point pt) {
-		this(pt.getX(), pt.getY());
+		super(pt);
 	}
 
 	@Override

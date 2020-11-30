@@ -34,10 +34,6 @@ import com.codenjoy.dojo.services.State;
  */
 public class Bomb extends PointImpl implements State<Elements, Player> {
 
-    public Bomb(int x, int y) {
-        super(x, y);
-    }
-
     public Bomb(Point point) {
         super(point);
     }

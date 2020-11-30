@@ -37,7 +37,7 @@ public interface Level {
 
     List<Border> getBorders();
 
-    List<Tank> getAiTanks();
+    List<Tank> getAiTanks(int aiTicksPerShoot);
 
     List<Wall> getWalls();
 

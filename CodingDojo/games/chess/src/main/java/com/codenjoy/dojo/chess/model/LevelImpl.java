@@ -25,9 +25,14 @@ package com.codenjoy.dojo.chess.model;
 
 import com.codenjoy.dojo.chess.model.figures.*;
 import com.codenjoy.dojo.services.LengthToXY;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.utils.LevelUtils;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
+
+import static com.codenjoy.dojo.chess.model.Elements.*;
 
 public class LevelImpl implements Level {
     private final LengthToXY xy;
@@ -46,25 +51,21 @@ public class LevelImpl implements Level {
 
     @Override
     public List<Figure> getFigures(boolean isWhite) {
-        List<Figure> result = new LinkedList<Figure>();
-        for (int index = 0; index < map.length(); index++) {
-            if (isWhite) {
-                if (map.charAt(index) == Elements.WHITE_FERZ.ch) result.add(new Ferz(xy.getXY(index), isWhite));
-                if (map.charAt(index) == Elements.WHITE_KON.ch) result.add(new Kon(xy.getXY(index), isWhite));
-                if (map.charAt(index) == Elements.WHITE_KOROL.ch) result.add(new Korol(xy.getXY(index), isWhite));
-                if (map.charAt(index) == Elements.WHITE_LADIA.ch) result.add(new Ladia(xy.getXY(index), isWhite));
-                if (map.charAt(index) == Elements.WHITE_PESHKA.ch) result.add(new Peshka(xy.getXY(index), isWhite));
-                if (map.charAt(index) == Elements.WHITE_SLON.ch) result.add(new Slon(xy.getXY(index), isWhite));
-            } else {
-                if (map.charAt(index) == Elements.BLACK_FERZ.ch) result.add(new Ferz(xy.getXY(index), isWhite));
-                if (map.charAt(index) == Elements.BLACK_KON.ch) result.add(new Kon(xy.getXY(index), isWhite));
-                if (map.charAt(index) == Elements.BLACK_KOROL.ch) result.add(new Korol(xy.getXY(index), isWhite));
-                if (map.charAt(index) == Elements.BLACK_LADIA.ch) result.add(new Ladia(xy.getXY(index), isWhite));
-                if (map.charAt(index) == Elements.BLACK_PESHKA.ch) result.add(new Peshka(xy.getXY(index), isWhite));
-                if (map.charAt(index) == Elements.BLACK_SLON.ch) result.add(new Slon(xy.getXY(index), isWhite));
-            }
-        }
-        return result;
+        return LevelUtils.getObjects(xy, map,
+                new HashMap<Elements, Function<Point, Figure>>(){{
+                    put(WHITE_FERZ, pt -> new Ferz(pt, true));
+                    put(WHITE_KON, pt -> new Kon(pt, true));
+                    put(WHITE_KOROL, pt -> new Korol(pt, true));
+                    put(WHITE_LADIA, pt -> new Ladia(pt, true));
+                    put(WHITE_PESHKA, pt -> new Peshka(pt, true));
+                    put(WHITE_SLON, pt -> new Slon(pt, true));
+                    put(BLACK_FERZ, pt -> new Ferz(pt, false));
+                    put(BLACK_KON, pt -> new Kon(pt, false));
+                    put(BLACK_KOROL, pt -> new Korol(pt, false));
+                    put(BLACK_LADIA, pt -> new Ladia(pt, false));
+                    put(BLACK_PESHKA, pt -> new Peshka(pt, false));
+                    put(BLACK_SLON, pt -> new Slon(pt, false));
+                }});
     }
 
     private char upper(char ch) {
