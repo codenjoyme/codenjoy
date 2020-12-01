@@ -6,7 +6,6 @@ import com.codenjoy.dojo.services.Tickable;
 public class Gun implements Tickable {
 
     private boolean canFire;
-    private int chargePoints;
     private int ticks;
 
     public Gun() {
@@ -16,7 +15,10 @@ public class Gun implements Tickable {
     public void recharge() {
         ticks = 0;
         canFire = true;
-        chargePoints = SettingsWrapper.data.gunRecharge();
+    }
+
+    private int getChargePoints(){
+        return SettingsWrapper.data.gunRecharge();
     }
 
     public void discharge() {
@@ -29,6 +31,7 @@ public class Gun implements Tickable {
         if (!canFire) {
             ticks++;
         }
+        int chargePoints = getChargePoints();
         if (chargePoints <= 0) {
             canFire = true;
         } else if (ticks == chargePoints) {
