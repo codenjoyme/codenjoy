@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.icancode.model;
 
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Tickable;
 
 public class Gun implements Tickable {
@@ -8,14 +9,14 @@ public class Gun implements Tickable {
     private int chargePoints;
     private int ticks;
 
-    public Gun(int chargePoints) {
-        this.chargePoints = chargePoints;
+    public Gun() {
         recharge();
     }
 
     public void recharge() {
         ticks = 0;
         canFire = true;
+        chargePoints = SettingsWrapper.data.gunRecharge();
     }
 
     public void discharge() {
