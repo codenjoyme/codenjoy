@@ -46,6 +46,7 @@ import static java.util.stream.Collectors.toList;
 @FieldNameConstants
 public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
+    public static final int LOSE_TO_DECREMENT_LEVEL = 10;
     public static final boolean ALL = true;
     public static final boolean ACTIVE = !ALL;
 
@@ -55,6 +56,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     private Consumer<PlayerGame> onRemove;
     private ReadWriteLock lock;
     private Spreader spreader = new Spreader();
+
+    private int loseCount;
 
     @Autowired
     protected RoomService roomService;
@@ -278,6 +281,15 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                         if (level != null) {
                             reload(game, roomName, level);
                             playerGame.fireOnLevelChanged();
+                            return;
+                        }
+                    } else if (type.isLevels() && !game.getPlayer().isAlive()
+                            && loseCount++ >= LOSE_TO_DECREMENT_LEVEL) {
+                        level = LevelProgress.goBack(level);
+                        if (level != null) {
+                            reload(game, roomName, level);
+                            playerGame.fireOnLevelChanged();
+                            loseCount = 0;
                             return;
                         }
                     }
