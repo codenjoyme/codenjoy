@@ -105,16 +105,15 @@ public class LevelProgress {
 
     public static JSONObject goNext(JSONObject json) {
         LevelProgress progress = new LevelProgress(json);
-        JSONObject clone = new JSONObject(json.toString());
-
         progress.change(progress.current + 1,
                 Math.max(progress.passed, progress.current));
+        return progress.isValid() ? progress.saveTo(new JSONObject(json.toString())) : null;
+    }
 
-        if (progress.isValid()) {
-            return progress.saveTo(clone);
-        } else {
-            return null;
-        }
+    public static JSONObject goBack(JSONObject json) {
+        LevelProgress progress = new LevelProgress(json);
+        progress.change(progress.current - 1, progress.passed);
+        return progress.isValid() ? progress.saveTo(new JSONObject(json.toString())) : null;
     }
 
     public boolean isValid() {

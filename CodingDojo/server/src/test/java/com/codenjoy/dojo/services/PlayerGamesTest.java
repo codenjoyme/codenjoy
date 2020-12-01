@@ -318,6 +318,25 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         verifyNewGameCreated(0);
     }
 
+    @Test
+    public void decrementLevel_after_N_Death() {
+        createPlayer("player", MultiplayerType.TRAINING.apply(5),
+                new PlayerSave("{'levelProgress':{'total':5,'current':4,'lastPassed':3}}"));
+
+        assertProgress("player", "{'current':4,'passed':3,'total':5,'valid':true}");
+
+        when(gamePlayers.get(0).isAlive()).thenReturn(false);
+        when(gamePlayers.get(0).isWin()).thenReturn(false);
+
+        for (int i = 0; i < LOSE_TO_DECREMENT_LEVEL; i++) {
+            playerGames.tick();
+            assertProgress("player", "{'current':4,'passed':3,'total':5,'valid':true}");
+        }
+
+        playerGames.tick();
+        assertProgress("player", "{'current':3,'passed':3,'total':5,'valid':true}");
+    }
+
     private void playerIsNotAlive(int index) {
         when(gamePlayers.get(index).isAlive()).thenReturn(false);
     }
