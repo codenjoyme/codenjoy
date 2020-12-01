@@ -438,7 +438,10 @@
                                             <span class="a" href="${ctx}/joystick?command=down&player=${player.id}&code=${player.code}">D</span>
                                             <span class="a" href="${ctx}/joystick?command=left&player=${player.id}&code=${player.code}">L</span>
                                             <span class="a" href="${ctx}/joystick?command=right&player=${player.id}&code=${player.code}">R</span>
-                                            <span class="a" href="${ctx}/joystick?command=act&player=${player.id}&code=${player.code}">A</span>
+                                            <span class="a" href="${ctx}/joystick?command=act(3),up&player=${player.id}&code=${player.code}">3U</span>
+                                            <span class="a" href="${ctx}/joystick?command=act(3),down&player=${player.id}&code=${player.code}">3D</span>
+                                            <span class="a" href="${ctx}/joystick?command=act(3),left&player=${player.id}&code=${player.code}">3L</span>
+                                            <span class="a" href="${ctx}/joystick?command=act(3),right&player=${player.id}&code=${player.code}">3R</span>
                                         </td>
                                     </c:when>
                                     <c:otherwise>
