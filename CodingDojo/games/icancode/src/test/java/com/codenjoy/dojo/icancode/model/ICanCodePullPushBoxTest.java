@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.icancode.model;
 
+import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.services.Events;
 import org.junit.Test;
 
@@ -660,6 +661,134 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
 
         assertE("------" +
                 "-☺BB--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldNotMovedBox_whenHeroPushItOnZombie() {
+        // given
+        givenFl("╔════┐" +
+                "║SB..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        game.move(new Zombie(true),3,4);
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        assertE("------" +
+                "-☺B♂--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "-☺B♂--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldNotMovedBox_whenHeroPushItOnStartPoint() {
+        // given
+        givenFl("╔════┐" +
+                "║SBS.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        assertL("╔════┐" +
+                "║S.S.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        assertE("------" +
+                "-☺B---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S.S.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "-☺B---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldNotMovedBox_whenHeroPullItOnStartPoint() {
+        // given
+        givenFl("╔════┐" +
+                "║.BS.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        assertL("╔════┐" +
+                "║..S.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+        assertE("------" +
+                "--B☺--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        hero.pull();
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║..S.│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "--B-☺-" +
                 "------" +
                 "------" +
                 "------" +
