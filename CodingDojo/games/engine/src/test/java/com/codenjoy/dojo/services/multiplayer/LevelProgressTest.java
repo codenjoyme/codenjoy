@@ -508,38 +508,6 @@ public class LevelProgressTest {
         assertEquals(null, json);
     }
 
-    @Test
-    public void backLevel_ok_lastPassedRemain_currentDecrement() {
-        // given
-        json = new JSONObject("{'a':'data','levelProgress':{'total':5,'current':4,'lastPassed':3}}");
-
-        assertJson("{'a':'data','levelProgress':{'total':5,'current':4,'lastPassed':3}}");
-
-        // when
-        json = LevelProgress.goBack(json);
-
-        // then
-        assertJson("{'a':'data','levelProgress':{'total':5,'current':3,'lastPassed':3}}");
-
-        // when
-        json = LevelProgress.goBack(json);
-
-        // then
-        assertJson("{'a':'data','levelProgress':{'total':5,'current':2,'lastPassed':3}}");
-
-        // when
-        json = LevelProgress.goBack(json);
-
-        // then
-        assertJson("{'a':'data','levelProgress':{'total':5,'current':1,'lastPassed':3}}");
-
-        // when
-        json = LevelProgress.goBack(json);
-
-        // then
-        assertEquals(null, json);
-    }
-
     void assertJson(String expected) {
         assertEquals(expected, json.toString().replace('"', '\''));
     }
