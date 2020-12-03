@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.gun.Gun;
 import com.codenjoy.dojo.icancode.model.gun.GunWithOverHeat;
 import com.codenjoy.dojo.icancode.model.items.Box;
@@ -356,6 +357,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return false;
         }
 
+        if (field.isAt(x, y, Start.class)) {
+            return false;
+        }
+
         field.move(item, x, y);
         return true;
     }
@@ -375,6 +380,14 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (field.isAt(newX, newY, HeroItem.class)) {
+            return false;
+        }
+
+        if (field.isAt(newX, newY, Zombie.class)) {
+            return false;
+        }
+
+        if (field.isAt(newX, newY, Start.class)) {
             return false;
         }
 
