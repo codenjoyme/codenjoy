@@ -49,6 +49,8 @@ public final class SettingsWrapper {
     private final Parameter<Integer> killHeroScore;
     private final Parameter<Boolean> enableKillScore;
     private final Parameter<Integer> gunRecharge;
+    private final Parameter<Integer> gunShotQueue;
+    private final Parameter<Integer> gunRestTime;
     private final Parameter<Integer> loosePenalty;
     private final Parameter<Boolean> isTrainingMode;
     private final Parameter<String> gameMode;
@@ -80,7 +82,9 @@ public final class SettingsWrapper {
         enableKillScore = settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(5);
         isTrainingMode = settings.addCheckBox("Is training mode").type(Boolean.class).def(true);
-        gunRecharge = settings.addEditBox("Heroes gun recharge").type(Integer.class).def(4);
+        gunRecharge = settings.addEditBox("Heroes gun recharge").type(Integer.class).def(2);
+        gunShotQueue =  settings.addEditBox("Heroes gun need to relax after a series of shots").type(Integer.class).def(10);
+        gunRestTime =  settings.addEditBox("Heroes gun rest time(ticks)").type(Integer.class).def(10);
 
         gameMode = settings.addSelect("Game mode", Arrays.asList(
                 CLASSSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP))
@@ -113,6 +117,14 @@ public final class SettingsWrapper {
 
     public int gunRecharge() {
         return gunRecharge.getValue();
+    }
+
+    public int gunShotQueue() {
+        return gunShotQueue.getValue();
+    }
+
+    public int gunRestTime() {
+        return gunRestTime.getValue();
     }
 
     public int killZombieScore() {
@@ -213,6 +225,17 @@ public final class SettingsWrapper {
 
     public SettingsWrapper gunRecharge(int value) {
         gunRecharge.update(value);
+        return this;
+    }
+
+    public SettingsWrapper gunShotQueue(int value) {
+        gunShotQueue.update(value);
+        return this;
+
+    }
+
+    public SettingsWrapper gunRestTime(int value) {
+        gunRestTime.update(value);
         return this;
     }
 

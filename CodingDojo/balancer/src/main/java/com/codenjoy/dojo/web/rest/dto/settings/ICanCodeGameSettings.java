@@ -42,6 +42,8 @@ public class ICanCodeGameSettings extends AbstractSettings {
     public static final String PERK_ACTIVITY = "Perk activity";
     public static final String GUN_RECHARGE = "Heroes gun recharge";
     public static final String DEATH_RAY_PERK_RANGE = "Death-Ray perk range";
+    public static final String GUN_SHOT_QUEUE = "Heroes gun need to relax after a series of shots";
+    public static final String GUN_REST_TIME =  "Heroes gun rest time(ticks)";
 
     public ICanCodeGameSettings(PParameters parameters) {
         super(parameters);
@@ -99,6 +101,14 @@ public class ICanCodeGameSettings extends AbstractSettings {
         return getInteger(DEATH_RAY_PERK_RANGE);
     }
 
+    public Integer gunShotQueue() {
+        return getInteger(GUN_SHOT_QUEUE);
+    }
+
+    public Integer gunRestTime() {
+        return getInteger(GUN_REST_TIME);
+    }
+
     public void setRoomSize(Integer input) {
         add(ROOM_SIZE, input);
     }
@@ -151,6 +161,14 @@ public class ICanCodeGameSettings extends AbstractSettings {
         add(DEATH_RAY_PERK_RANGE, input);
     }
 
+    public void setGunShotQueue(Integer input) {
+        add(GUN_SHOT_QUEUE, input);
+    }
+
+    public void setGunRestTime(Integer input) {
+        add(GUN_REST_TIME, input);
+    }
+
     @Override
     public void update(List<PParameter> parameters) {
         update(parameters, WIN_SCORE);
@@ -166,5 +184,7 @@ public class ICanCodeGameSettings extends AbstractSettings {
         update(parameters, PERK_ACTIVITY);
         update(parameters, GUN_RECHARGE);
         update(parameters, DEATH_RAY_PERK_RANGE);
+        update(parameters, GUN_SHOT_QUEUE);
+        update(parameters, GUN_REST_TIME);
     }
 }

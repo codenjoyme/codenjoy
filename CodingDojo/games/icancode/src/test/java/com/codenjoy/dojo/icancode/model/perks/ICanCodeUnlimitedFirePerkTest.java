@@ -46,7 +46,7 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
 
     @Test
     public void testFireWithoutUnlimitedFirePerk() {
-        settings.gunRecharge(3);
+        settings.gunRecharge(2);
 
         givenFl("╔═════┐" +
                 "║.S...│" +
