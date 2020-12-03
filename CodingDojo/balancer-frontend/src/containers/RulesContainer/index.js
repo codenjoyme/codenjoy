@@ -362,7 +362,7 @@ class RulesContainer extends Component {
                             <li>Термін дії перків: { this._gets('perkActivity') }.</li>
                             <li>Область дії луча смерті: { this._gets('deathRayRange') }.</li>
                             <li>Затримка між пострілами(перезарядка)(тік): { this._gets('gunRecharge') }.</li>
-                            <li>Рушниця перегрівається після кількості пострілів вряд(шт): { this._gets('gunShotQueue') }.</li>
+                            <li>Рушниця перегрівається після певної кількості пострілів поспіль(шт): { this._gets('gunShotQueue') }.</li>
                             <li>Час потрібній на охолодження рушниці(тік): { this._gets('gunRestTime') }.</li>
                         </ul>
                     </div>
