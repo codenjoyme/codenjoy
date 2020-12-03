@@ -105,7 +105,7 @@ public class ICanCodeGameSettings extends AbstractSettings {
         return getInteger(GUN_SHOT_QUEUE);
     }
 
-    public Integer getGungunRestTime() {
+    public Integer getGunRestTime() {
         return getInteger(GUN_REST_TIME);
     }
 
