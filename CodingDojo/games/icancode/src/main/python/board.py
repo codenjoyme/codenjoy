@@ -59,9 +59,8 @@ class Board:
         points.update(self.get_exits())
         points.update(self.get_golds())
         points.update(self.get_holes())
-        points.update(self.get_empty())
         points.update(self.get_lasers())
-        points.update(self.get_hero())
+        points.add(self.get_hero())
         points.update(self.get_other_heroes())
         return Point(x, y) not in list(points)
 
