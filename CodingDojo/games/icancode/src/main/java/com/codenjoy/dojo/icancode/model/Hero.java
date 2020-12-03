@@ -24,7 +24,7 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.gun.Gun;
-import com.codenjoy.dojo.icancode.model.gun.GunWithRecharge;
+import com.codenjoy.dojo.icancode.model.gun.GunWithOverHeat;
 import com.codenjoy.dojo.icancode.model.items.Box;
 import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
@@ -81,7 +81,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public Hero(Elements el) {
         item = new HeroItem(el);
         item.init(this);
-        gun = new GunWithRecharge();
+        gun = new GunWithOverHeat();
         resetFlags();
     }
 

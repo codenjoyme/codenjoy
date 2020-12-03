@@ -15,4 +15,13 @@ public interface Gun extends Tickable {
     default int getChargePoints() {
         return SettingsWrapper.data.gunRecharge();
     }
+
+    default int getGunShotQueue() {
+        return SettingsWrapper.data.gunShotQueue();
+    }
+
+    default int getGunRestTime() {
+        return SettingsWrapper.data.gunRestTime();
+    }
+
 }
