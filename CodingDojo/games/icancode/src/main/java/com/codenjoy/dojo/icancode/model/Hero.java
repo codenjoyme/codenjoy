@@ -23,6 +23,8 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.icancode.model.gun.Gun;
+import com.codenjoy.dojo.icancode.model.gun.GunWithRecharge;
 import com.codenjoy.dojo.icancode.model.items.Box;
 import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
@@ -79,7 +81,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public Hero(Elements el) {
         item = new HeroItem(el);
         item.init(this);
-        gun = new Gun();
+        gun = new GunWithRecharge();
         resetFlags();
     }
 
@@ -101,7 +103,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         goldCount = 0;
         resetZombieKillCount();
         resetHeroKillCount();
-        gun.recharge();
+        gun.reset();
     }
 
     public void resetZombieKillCount() {
@@ -277,9 +279,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         if (fire) {
             if (hasUnlimitedFirePerk()) {
                 field.fire(direction, item.getCell(), item);
-                gun.discharge();
-            } else if (gun.tryToFire()) {
+                gun.unlimitedShoot();
+            } else if (gun.isCanShoot()) {
                 field.fire(direction, item.getCell(), item);
+                gun.shoot();
             }
             fire = false;
             direction = null;
