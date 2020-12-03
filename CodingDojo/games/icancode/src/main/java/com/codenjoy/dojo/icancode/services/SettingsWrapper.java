@@ -73,12 +73,12 @@ public final class SettingsWrapper {
         perkAvailability = settings.addEditBox("Perk availability").type(Integer.class).def(10);
         perkActivity = settings.addEditBox("Perk activity").type(Integer.class).def(10);
         deathRayRange = settings.addEditBox("Death-Ray perk range").type(Integer.class).def(10);
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(25);
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
         killZombieScore = settings.addEditBox("Kill zombie score").type(Integer.class).def(5);
         killHeroScore = settings.addEditBox("Kill hero score").type(Integer.class).def(10);
         enableKillScore = settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
+        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(5);
         isTrainingMode = settings.addCheckBox("Is training mode").type(Boolean.class).def(true);
         gunRecharge = settings.addEditBox("Heroes gun recharge").type(Integer.class).def(4);
 
