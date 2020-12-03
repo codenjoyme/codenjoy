@@ -66,7 +66,7 @@ class Command:
         return _inv_dir
 
     def to_string(self):
-        return self._name
+        return self._command
 
     def __eq__(self, other):
         return self._name == other._name and self._command == other._command
