@@ -101,11 +101,11 @@ public class ICanCodeGameSettings extends AbstractSettings {
         return getInteger(DEATH_RAY_PERK_RANGE);
     }
 
-    public Integer gunShotQueue() {
+    public Integer getGunShotQueue() {
         return getInteger(GUN_SHOT_QUEUE);
     }
 
-    public Integer gunRestTime() {
+    public Integer getGungunRestTime() {
         return getInteger(GUN_REST_TIME);
     }
 
