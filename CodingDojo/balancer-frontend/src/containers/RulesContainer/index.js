@@ -266,6 +266,18 @@ class RulesContainer extends Component {
                             Ви маєте враховувати, що на видимій частині може не бути золота, виходу та інших героїв.
                             Вам треба навчити вашого бота проводити розвідку закритих частин карти.
                         </li>
+                        <li>
+                            Герой не може стріляти бесперервно. С часом рушниця може перегрітися та їй потрібен час,
+                            щоб охолонути.
+                            <ul class="sub_ul">
+                                <li>Рушниця перегрівається після кількості пострілів вряд(шт): { this._gets('gunShotQueue') }.</li>
+                                <li>Час потрібній на охолодження рушниці(тік): { this._gets('gunRestTime') }.</li>
+                                <li>Якщо між пострилами робити перерву більше ніж довжина перезарядки { this._gets('gunRecharge') }
+                                    рушниця буде поступово охолоджуватися
+                                </li>
+                            </ul>
+                        </li>
+
                     </ul>
 
                     <div className='subTitle' id='perks'>
@@ -294,7 +306,8 @@ class RulesContainer extends Component {
                             </ul>
                         </li>
                         <li>
-                            <span className='command'>UNLIMITED_FIRE_PERK</span> - дозволяє герою виконувати постріл на кожний новий тік.<br />
+                            <span className='command'>UNLIMITED_FIRE_PERK</span> - дозволяє герою виконувати постріл на кожний новий тік.
+                            <br /> Під цим перком рушніця не перегрівається.
                             <ul class="sub_ul">
                                 <li>
                                     Дія перку зникає через { this._gets('perkAvailability') } тіків (секунд).
@@ -348,7 +361,9 @@ class RulesContainer extends Component {
                             <li>Термін доступності перків на карті: { this._gets('perkAvailability') }.</li>
                             <li>Термін дії перків: { this._gets('perkActivity') }.</li>
                             <li>Область дії луча смерті: { this._gets('deathRayRange') }.</li>
-                            <li>Затримка між пострілами: { this._gets('gunRecharge') }.</li>
+                            <li>Затримка між пострілами(перезарядка)(тік): { this._gets('gunRecharge') }.</li>
+                            <li>Рушниця перегрівається після кількості пострілів вряд(шт): { this._gets('gunShotQueue') }.</li>
+                            <li>Час потрібній на охолодження рушниці(тік): { this._gets('gunRestTime') }.</li>
                         </ul>
                     </div>
                     <p>
