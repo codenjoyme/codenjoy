@@ -108,7 +108,7 @@ public class ScoresTest {
     }
 
     @Test
-    public void shouldCollectScores_ignoreOnMultiple() {
+    public void shouldCollectScores_notIgnoreOnMultiple() {
         scores = new Scores(140, wrapper);
 
         winMultiple();
@@ -116,7 +116,7 @@ public class ScoresTest {
         winMultiple();
         winMultiple();
 
-        assertEquals(140, scores.getScore());
+        assertEquals(240, scores.getScore());
     }
 
     @Test

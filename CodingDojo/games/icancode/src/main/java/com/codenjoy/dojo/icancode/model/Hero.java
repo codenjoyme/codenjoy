@@ -23,6 +23,8 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.icancode.model.gun.Gun;
+import com.codenjoy.dojo.icancode.model.gun.GunWithOverHeat;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
@@ -76,7 +78,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public Hero(Elements el) {
         item = new HeroItem(el);
         item.init(this);
-        gun = new Gun();
+        gun = new GunWithOverHeat();
         resetFlags();
     }
 
@@ -98,7 +100,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         goldCount = 0;
         resetZombieKillCount();
         resetHeroKillCount();
-        gun.recharge();
+        gun.reset();
     }
 
     public void resetZombieKillCount() {
@@ -274,9 +276,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         if (fire) {
             if (hasUnlimitedFirePerk()) {
                 field.fire(direction, item.getCell(), item);
-                gun.discharge();
-            } else if (gun.tryToFire()) {
+                gun.unlimitedShoot();
+            } else if (gun.isCanShoot()) {
                 field.fire(direction, item.getCell(), item);
+                gun.shoot();
             }
             fire = false;
             direction = null;
@@ -407,7 +410,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void die() {
         alive = false;
-        item.getCell().add(field.dropTemporaryGold());
     }
 
     public boolean isWin() {
@@ -466,6 +468,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void dieOnLaser() {
         laser = true;
         die();
+        getItem().getCell().add(field.dropTemporaryGold());
     }
 
     public void dieOnZombie() {

@@ -979,7 +979,7 @@ public class SingleTest {
 
         assertL(single1,
                 "╔═══┐" +
-                "║S..│" +
+                "║S$.│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -993,7 +993,7 @@ public class SingleTest {
 
         assertL(single2,
                 "╔═══┐" +
-                "║S..│" +
+                "║S$.│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -1012,7 +1012,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔═══┐" +
-                "║S..│" +
+                "║S$.│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -1026,7 +1026,7 @@ public class SingleTest {
 
         assertL(single2,
                 "╔═══┐" +
-                "║S..│" +
+                "║S$.│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");

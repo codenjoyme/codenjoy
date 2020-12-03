@@ -37,7 +37,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class ICanCodeTest extends AbstractGameTest {
-    public static final int GUN_RECHARGE_DELAY = 3;
+    public static final int GUN_RECHARGE_DELAY = 2;
 
     @Test
     public void leftHaveNoEffectWhenFlying() {
@@ -1956,7 +1956,7 @@ public class ICanCodeTest extends AbstractGameTest {
         verify(listener).event(Events.LOOSE());
 
         assertL("╔═════┐" +
-                "║˃....│" +
+                "║˃.$..│" +
                 "║..S..│" +
                 "└─────┘" +
                 "       " +
@@ -1983,7 +1983,7 @@ public class ICanCodeTest extends AbstractGameTest {
         assertEquals(false, player.isWin());
 
         assertL("╔═════┐" +
-                "║˃....│" +
+                "║˃.$..│" +
                 "║..S..│" +
                 "└─────┘" +
                 "       " +
@@ -2145,7 +2145,7 @@ public class ICanCodeTest extends AbstractGameTest {
         verify(listener).event(Events.LOOSE());
 
         assertL("╔══┐" +
-                "║S.│" +
+                "║S$│" +
                 "║.˄│" +
                 "└──┘");
 
