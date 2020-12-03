@@ -385,7 +385,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         Gold gold = (Gold) field.getIfPresent(Gold.class, newX, newY);
-        if (gold != null && !gold.getHidden()) {
+        if (gold != null && !gold.isHidden()) {
             return false;
         }
 
@@ -407,6 +407,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void die() {
         alive = false;
+        item.getCell().add(field.dropTemporaryGold());
     }
 
     public boolean isWin() {

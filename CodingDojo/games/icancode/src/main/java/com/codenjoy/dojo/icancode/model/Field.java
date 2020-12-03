@@ -48,6 +48,8 @@ public interface Field extends GameField<Player> {
 
     Optional<AbstractPerk> dropNextPerk();
 
+    Gold dropTemporaryGold();
+
     Cell getCell(int x, int y);
 
     Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y);

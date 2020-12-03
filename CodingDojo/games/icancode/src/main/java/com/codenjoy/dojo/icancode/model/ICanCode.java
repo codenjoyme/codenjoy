@@ -248,7 +248,7 @@ public class ICanCode implements Tickable, Field {
         }
 
         for (Gold gold : golds) {
-            if (gold.getHidden() && !floors.isEmpty()) {
+            if (gold.isHidden() && !floors.isEmpty()) {
                 int random = dice.next(floors.size());
 
                 Floor floor = floors.get(random);
@@ -285,6 +285,13 @@ public class ICanCode implements Tickable, Field {
             default:
                 return Optional.empty();
         }
+    }
+
+    @Override
+    public Gold dropTemporaryGold() {
+        Gold gold = new Gold(Elements.GOLD);
+        gold.setTemporary(true);
+        return gold;
     }
 
     public void newGame(Player player) {

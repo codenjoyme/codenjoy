@@ -33,10 +33,12 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 public class Gold extends BaseItem {
 
     private boolean hidden;
+    private boolean temporary;
 
     public Gold(Elements el) {
         super(el);
         hidden = false;
+        temporary = false;
     }
 
     @Override
@@ -78,7 +80,11 @@ public class Gold extends BaseItem {
         Hero hero = heroItem.getHero();
         if (!hero.isFlying()) {
             hero.pickUpGold();
-            hidden = true;
+            if (temporary) {
+                removeFromCell();
+            } else {
+                hidden = true;
+            }
         }
     }
 
@@ -86,7 +92,15 @@ public class Gold extends BaseItem {
         hidden = false;
     }
 
-    public boolean getHidden() {
+    public boolean isHidden() {
         return hidden;
+    }
+
+    public boolean isTemporary() {
+        return temporary;
+    }
+
+    public void setTemporary(boolean temporary) {
+        this.temporary = temporary;
     }
 }
