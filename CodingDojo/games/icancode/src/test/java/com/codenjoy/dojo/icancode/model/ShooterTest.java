@@ -35,6 +35,51 @@ public class ShooterTest extends AbstractGameTest {
     }
 
     @Test
+    public void LaserMachineShouldNotShootThroughTheBarrier() {
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║..B.│" +
+                "║....│" +
+                "║.B..│" +
+                "└────┘");
+
+        new Shooter(game).fire(Direction.UP, new PointImpl(2, 0), mock(LaserMachine.class));
+        new Shooter(game).fire(Direction.UP, new PointImpl(3, 0), mock(LaserMachine.class));
+        //first laser shouldn't go
+        //the second one must stuck in box
+        assertE("------" +
+                "--☺---" +
+                "---B--" +
+                "------" +
+                "--B↑--" +
+                "------");
+        game.tick();
+
+        assertE("------" +
+                "--☺---" +
+                "---B--" +
+                "---↑--" +
+                "--B---" +
+                "------");
+        game.tick();
+
+        assertE("------" +
+                "--☺---" +
+                "---B--" +
+                "------" +
+                "--B---" +
+                "------");
+
+        game.tick();
+        assertE("------" +
+                "--☺---" +
+                "---B--" +
+                "------" +
+                "--B---" +
+                "------");
+    }
+
+    @Test
     public void fireRegularLaserWhenHeroIsOwner() {
         givenFl("╔════┐" +
                 "║.S..│" +

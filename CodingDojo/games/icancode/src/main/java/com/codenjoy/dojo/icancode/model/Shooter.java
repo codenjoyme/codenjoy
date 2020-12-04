@@ -36,7 +36,9 @@ public class Shooter {
 
     public void fireByLaserMachine(Direction direction, Point from, LaserMachine owner) {
         Point to = direction.change(from);
-        field.move(new Laser(owner, direction, field), to.getX(), to.getY());
+        if (!field.isBarrier(to.getX(),to.getY())) {
+            field.move(new Laser(owner, direction, field), to.getX(), to.getY());
+        }
     }
 
     public void fireDeathRayByHero(Laser laser, Point from, HeroItem heroItem) {
