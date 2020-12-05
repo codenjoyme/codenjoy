@@ -468,7 +468,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void dieOnLaser() {
         laser = true;
         die();
-        getItem().getCell().add(field.dropTemporaryGold());
     }
 
     public void dieOnZombie() {

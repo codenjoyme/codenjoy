@@ -4162,4 +4162,73 @@ public class SingleTest {
         assertTrue(gameMultiple.golds().stream()
                 .noneMatch(Gold::isTemporary));
     }
+
+    @Test
+    public void dropTemporaryGold_onlyOnFloor() {
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+
+        hero2().right();
+        tick();
+        hero2().right();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺-X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--X-☺-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        hero2().fire();
+        hero2().left();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺←X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--X←☺-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☻-X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertL(single1,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+        assertTrue(gameMultiple.golds().stream()
+                .noneMatch(Gold::isTemporary));
+    }
+
 }
