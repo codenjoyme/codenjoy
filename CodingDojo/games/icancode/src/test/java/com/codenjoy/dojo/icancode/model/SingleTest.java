@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
@@ -978,7 +979,7 @@ public class SingleTest {
 
         assertL(single1,
                 "╔═══┐" +
-                "║S..│" +
+                "║S$.│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -992,7 +993,7 @@ public class SingleTest {
 
         assertL(single2,
                 "╔═══┐" +
-                "║S..│" +
+                "║S$.│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -1011,7 +1012,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔═══┐" +
-                "║S..│" +
+                "║S$.│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -1025,7 +1026,7 @@ public class SingleTest {
 
         assertL(single2,
                 "╔═══┐" +
-                "║S..│" +
+                "║S$.│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -4070,6 +4071,164 @@ public class SingleTest {
                 "------");
         assertTrue(single1.getPlayer().isAlive());
         assertTrue(single2.getPlayer().isAlive());
+    }
+
+    @Test
+    public void dropTemporaryGoldAfterPlayerDeath() {
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+
+        hero2().right();
+        tick();
+        hero2().right();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺-X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--X-☺-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        hero1().fire();
+        hero1().right();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺→X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--X→☺-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺-&-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertL(single1,
+                "╔════┐" +
+                "║.S.$│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+        assertTrue(gameMultiple.golds().stream()
+                .anyMatch(Gold::isTemporary));
+
+        hero1().right();
+        tick();
+        hero1().right();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--X-☺-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertL(single1,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+        assertTrue(gameMultiple.golds().stream()
+                .noneMatch(Gold::isTemporary));
+    }
+
+    @Test
+    public void dropTemporaryGold_onlyOnFloor() {
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+
+        hero2().right();
+        tick();
+        hero2().right();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺-X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--X-☺-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        hero2().fire();
+        hero2().left();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺←X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--X←☺-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☻-X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertL(single1,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+        assertTrue(gameMultiple.golds().stream()
+                .noneMatch(Gold::isTemporary));
     }
 
 }

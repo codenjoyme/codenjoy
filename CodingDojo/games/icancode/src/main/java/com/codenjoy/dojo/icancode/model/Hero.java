@@ -388,7 +388,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         Gold gold = (Gold) field.getIfPresent(Gold.class, newX, newY);
-        if (gold != null && !gold.getHidden()) {
+        if (gold != null && !gold.isHidden()) {
             return false;
         }
 

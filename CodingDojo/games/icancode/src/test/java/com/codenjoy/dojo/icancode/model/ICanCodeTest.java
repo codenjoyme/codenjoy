@@ -1956,7 +1956,7 @@ public class ICanCodeTest extends AbstractGameTest {
         verify(listener).event(Events.LOOSE());
 
         assertL("╔═════┐" +
-                "║˃....│" +
+                "║˃.$..│" +
                 "║..S..│" +
                 "└─────┘" +
                 "       " +
@@ -1983,7 +1983,7 @@ public class ICanCodeTest extends AbstractGameTest {
         assertEquals(false, player.isWin());
 
         assertL("╔═════┐" +
-                "║˃....│" +
+                "║˃.$..│" +
                 "║..S..│" +
                 "└─────┘" +
                 "       " +
@@ -2145,7 +2145,7 @@ public class ICanCodeTest extends AbstractGameTest {
         verify(listener).event(Events.LOOSE());
 
         assertL("╔══┐" +
-                "║S.│" +
+                "║S$│" +
                 "║.˄│" +
                 "└──┘");
 
