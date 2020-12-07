@@ -21,6 +21,8 @@
  */
 var currentBoardSize = null;
 
+var onlyBoard = window.location.href.includes("only=true");
+
 function initCanvasesText(contextPath, players, allPlayersScreen,
                 multiplayerType, boardSize, gameName,
                 enablePlayerInfo, enablePlayerInfoLevel, drawBoard)
@@ -210,8 +212,11 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
     function createCanvas(canvasName) {
         var plotSize = 20;
         var canvas = $("#" + canvasName);
-        canvas[0].width = plotSize * 15 ;
+        canvas[0].width = plotSize * 15;
         canvas[0].height = plotSize * 15;
+        if (onlyBoard) {
+            canvas[0].width = canvas[0].width * 2;
+        }
 
         var drawPlot = function(color, x, y) {
             var plot = $("#" + color)[0];
@@ -244,6 +249,9 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
         var resizeHeight = function(current) {
             if (canvas[0].height < current * plotSize) {
                 canvas[0].height = canvas[0].height * 1.5;
+                if (onlyBoard) {
+                    canvas[0].width = canvas[0].width * 1.5;
+                }
             }
         }
 

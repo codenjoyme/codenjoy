@@ -19,9 +19,10 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+var onlyBoard = window.location.href.includes("only=true");
 
 var getQuestionCoordinate = function(index) {
-    return {x:7, y:index + 1};
+    return {x:(onlyBoard ? 30 : 7), y:index + 1};
 }
 
 var getQuestionFormatted = function(value) {
