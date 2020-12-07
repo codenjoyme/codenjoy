@@ -289,6 +289,7 @@ public class ICanCode implements Tickable, Field {
     public void dropTemporaryGold(Hero hero) {
         Cell cell = hero.getItem().getCell();
         List<Cell> neighborhoodCells = getNeighborhoodCells(cell);
+        dice.shuffle(neighborhoodCells);
         int goldsRemaining = Math.min(hero.getGoldCount(), neighborhoodCells.size());
         for (int i = 0; i < neighborhoodCells.size() && goldsRemaining > 0; i++) {
             Cell nextCell = neighborhoodCells.get(i);
