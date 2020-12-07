@@ -255,11 +255,24 @@ function initCanvasesText(contextPath, players, allPlayersScreen,
             }
         }
 
+        var width = function(){
+            return canvas[0].width;
+        }
+
+        var height = function(){
+            return canvas[0].height;
+        }
+
         return {
             drawPlot : drawPlot,
             drawText: drawText,
             clear : clear,
-            resizeHeight : resizeHeight
+            resizeHeight : resizeHeight,
+            width : width,
+            height : height,
+            plotSize : function() {
+                return plotSize;
+            }
         };
     }
 

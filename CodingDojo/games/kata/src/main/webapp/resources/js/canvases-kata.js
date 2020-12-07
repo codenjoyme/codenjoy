@@ -21,8 +21,8 @@
  */
 var onlyBoard = window.location.href.includes("only=true");
 
-var getQuestionCoordinate = function(index) {
-    return {x:(onlyBoard ? 30 : 7), y:index + 1};
+var getQuestionCoordinate = function(x, y) {
+    return {x:(onlyBoard ? x : 7), y:y + 1};
 }
 
 var getQuestionFormatted = function(value) {
@@ -47,6 +47,7 @@ function unescapeUnicode(unicode) {
 
 game.drawBoard = function(drawer) {
     drawer.clear();
+    var centerX = (drawer.canvas.width() / drawer.canvas.plotSize())/2;
 
     var data = drawer.playerData.board;
     if (typeof setDescription != 'undefined') {
@@ -56,7 +57,7 @@ game.drawBoard = function(drawer) {
     var isWaitNext = (data.questions.length == 0);
     if (isWaitNext) {
         drawer.drawText('Algorithm done! Wait next...',
-            getQuestionCoordinate(0), '#099');
+            getQuestionCoordinate(centerX, 0), '#099');
         return;
     }
 
@@ -68,11 +69,11 @@ game.drawBoard = function(drawer) {
             if (value.question == data.nextQuestion) continue;
 
             drawer.drawText(getQuestionFormatted(value),
-                getQuestionCoordinate(++index),
+                getQuestionCoordinate(centerX, ++index),
                 (value.valid)?'#090':'#900');
         }
     }
 
     drawer.drawText(getQuestionFormatted(data.nextQuestion),
-        getQuestionCoordinate(++index), '#099');
+        getQuestionCoordinate(centerX, ++index), '#099');
 }
