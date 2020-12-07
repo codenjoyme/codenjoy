@@ -979,7 +979,7 @@ public class SingleTest {
 
         assertL(single1,
                 "╔═══┐" +
-                "║S$$│" +
+                "║S..│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -993,7 +993,7 @@ public class SingleTest {
 
         assertL(single2,
                 "╔═══┐" +
-                "║S$$│" +
+                "║S..│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -1012,7 +1012,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔═══┐" +
-                "║S$$│" +
+                "║S..│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -1026,7 +1026,7 @@ public class SingleTest {
 
         assertL(single2,
                 "╔═══┐" +
-                "║S$$│" +
+                "║S..│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -1046,7 +1046,7 @@ public class SingleTest {
         // then
         assertL(single1,
                 "╔═══┐" +
-                "║S.$│" +
+                "║S..│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -1057,11 +1057,10 @@ public class SingleTest {
                 "-----" +
                 "-----" +
                 "-----");
-        assertEquals(1, hero1().getGoldCount());
 
         assertL(single2,
                 "╔═══┐" +
-                "║S.$│" +
+                "║S..│" +
                 "║...│" +
                 "║˄˄E│" +
                 "└───┘");
@@ -1069,41 +1068,6 @@ public class SingleTest {
         assertE(single2,
                 "-----" +
                 "-☺X--" +
-                "-----" +
-                "-----" +
-                "-----");
-
-        // when
-        hero1().right(); // other hero goes right
-        tick(single2);
-        tick(single1);
-
-        // then
-        assertL(single1,
-                "╔═══┐" +
-                "║S..│" +
-                "║...│" +
-                "║˄˄E│" +
-                "└───┘");
-
-        assertE(single1,
-                "-----" +
-                "-X-☺-" +
-                "-----" +
-                "-----" +
-                "-----");
-        assertEquals(2, hero1().getGoldCount());
-
-        assertL(single2,
-                "╔═══┐" +
-                "║S..│" +
-                "║...│" +
-                "║˄˄E│" +
-                "└───┘");
-
-        assertE(single2,
-                "-----" +
-                "-☺-X-" +
                 "-----" +
                 "-----" +
                 "-----");
@@ -4109,8 +4073,14 @@ public class SingleTest {
         assertTrue(single2.getPlayer().isAlive());
     }
 
+    private void setGoldCount(Hero hero, int goldCount) {
+        for (int i = 0; i < goldCount; i++) {
+            hero.pickUpGold();
+        }
+    }
+
     @Test
-    public void dropTemporaryGoldAfterPlayerDeath() {
+    public void doNotDropTemporaryGoldAfterPlayerDeath_IfHeroIsEmpty() {
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +
@@ -4130,6 +4100,13 @@ public class SingleTest {
                 "------" +
                 "------" +
                 "------");
+        assertL(single1,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
         assertE(single2,
                 "------" +
                 "--X-☺-" +
@@ -4137,6 +4114,96 @@ public class SingleTest {
                 "------" +
                 "------" +
                 "------");
+        assertL(single2,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+
+        hero1().fire();
+        hero1().right();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺→X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--X→☺-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺-&-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertL(single1,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+        assertTrue(gameMultiple.golds().stream()
+                .noneMatch(Gold::isTemporary));
+    }
+
+    @Test
+    public void dropTemporaryGoldAfterPlayerDeath() {
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+        setGoldCount(hero2(), 1);
+
+        hero2().right();
+        tick();
+        hero2().right();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺-X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertL(single1,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+        assertE(single2,
+                "------" +
+                "--X-☺-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertL(single2,
+                "╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
 
         hero1().fire();
         hero1().right();
@@ -4207,6 +4274,7 @@ public class SingleTest {
                 "║..E.│" +
                 "║....│" +
                 "└────┘");
+        setGoldCount(hero1(), 1);
 
         hero2().right();
         tick();
@@ -4266,15 +4334,14 @@ public class SingleTest {
     }
 
     @Test
-    public void threeTemporaryGoldsDrop_AfterHeroDeath() {
+    public void dropThreeHeroGoldsAfterDeath() {
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +
                 "║..E.│" +
                 "║....│" +
                 "└────┘");
-        SettingsWrapper.setup()
-                .dropGoldsAfterHeroDeath(3);
+        setGoldCount(hero1(), 3);
 
         hero2().right();
         tick();
@@ -4337,6 +4404,76 @@ public class SingleTest {
     }
 
     @Test
+    public void dropMax6GoldsAfterHeroDeath() {
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+        setGoldCount(hero1(), 10);
+
+        hero2().right();
+        tick();
+        hero2().right();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺-X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--X-☺-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        hero2().fire();
+        hero2().left();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺←X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--X←☺-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☻-X-" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertL(single1,
+                "╔════┐" +
+                "║$S$.│" +
+                "║$$$.│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+        assertEquals(5, gameMultiple.golds().stream()
+                .filter(Gold::isTemporary)
+                .count());
+    }
+
+    @Test
     public void onlyOneTemporaryGold_cabDrop_onAvailableCell() {
         givenFl("╔════┐" +
                 "║OS..│" +
@@ -4344,8 +4481,7 @@ public class SingleTest {
                 "║..E.│" +
                 "║....│" +
                 "└────┘");
-        SettingsWrapper.setup()
-                .dropGoldsAfterHeroDeath(5);
+        setGoldCount(hero1(), 6);
 
         hero2().right();
         tick();

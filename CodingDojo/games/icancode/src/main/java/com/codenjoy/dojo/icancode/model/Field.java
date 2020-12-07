@@ -48,7 +48,7 @@ public interface Field extends GameField<Player> {
 
     Optional<AbstractPerk> dropNextPerk();
 
-    void dropTemporaryGold(Cell cell);
+    void dropTemporaryGold(Hero hero);
 
     Cell getCell(int x, int y);
 

@@ -45,7 +45,6 @@ public final class SettingsWrapper {
     private final Parameter<Integer> deathRayRange;
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> goldScore;
-    private final Parameter<Integer> dropGoldsAfterHeroDeath;
     private final Parameter<Integer> killZombieScore;
     private final Parameter<Integer> killHeroScore;
     private final Parameter<Boolean> enableKillScore;
@@ -78,7 +77,6 @@ public final class SettingsWrapper {
         deathRayRange = settings.addEditBox("Death-Ray perk range").type(Integer.class).def(10);
         winScore = settings.addEditBox("Win score").type(Integer.class).def(25);
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
-        dropGoldsAfterHeroDeath = settings.addEditBox("Drop golds after hero death").type(Integer.class).def(1);
         killZombieScore = settings.addEditBox("Kill zombie score").type(Integer.class).def(5);
         killHeroScore = settings.addEditBox("Kill hero score").type(Integer.class).def(10);
         enableKillScore = settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
@@ -115,10 +113,6 @@ public final class SettingsWrapper {
 
     public int goldScore() {
         return goldScore.getValue();
-    }
-
-    public int getDropGoldsAfterHeroDeath() {
-        return dropGoldsAfterHeroDeath.getValue();
     }
 
     public int gunRecharge() {
@@ -221,11 +215,6 @@ public final class SettingsWrapper {
 
     public SettingsWrapper goldScore(int value) {
         goldScore.update(value);
-        return this;
-    }
-
-    public SettingsWrapper dropGoldsAfterHeroDeath(int value) {
-        dropGoldsAfterHeroDeath.update(value);
         return this;
     }
 
