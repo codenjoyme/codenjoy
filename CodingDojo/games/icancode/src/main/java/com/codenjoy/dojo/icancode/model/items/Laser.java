@@ -87,7 +87,7 @@ public class Laser extends FieldItem implements Tickable {
                         die();
                     }
                     hero.dieOnLaser();
-                    dropTemporaryGoldOnFloor(hero);
+                    field.dropTemporaryGold(heroItem.getCell());
                     addOwnerKillHeroScore();
                 }
             }
@@ -112,14 +112,6 @@ public class Laser extends FieldItem implements Tickable {
             return !hero.isLandOn();
         }
         return false;
-    }
-
-    private void dropTemporaryGoldOnFloor(Hero hero) {
-        boolean onlyFloorInTheCell = hero.getItem().getItemsInSameCell(0).stream()
-                .allMatch(item -> item instanceof Floor);
-        if (onlyFloorInTheCell) {
-            hero.getItem().getCell().add(field.dropTemporaryGold());
-        }
     }
 
     private void addOwnerKillZombieScore() {

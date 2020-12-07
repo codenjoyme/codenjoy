@@ -34,9 +34,7 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public class ICanCode implements Tickable, Field {
@@ -288,10 +286,39 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public Gold dropTemporaryGold() {
-        Gold gold = new Gold(Elements.GOLD);
-        gold.setTemporary(true);
-        return gold;
+    public void dropTemporaryGold(Cell cell) {
+        Iterator<Cell> cellIterator = getNeighborhoodCells(cell);
+        int goldsRemaining = SettingsWrapper.data.getDropGoldsAfterHeroDeath();
+        while (cellIterator.hasNext() && goldsRemaining > 0) {
+            Cell nextCell = cellIterator.next();
+            if (!nextCell.isOutOf(size()) && containsOnlyFloorItem(nextCell)) {
+                Gold gold = new Gold(Elements.GOLD);
+                gold.setTemporary(true);
+                nextCell.add(gold);
+                goldsRemaining--;
+            }
+        }
+    }
+
+    private Iterator<Cell> getNeighborhoodCells(Cell cell) {
+        List<Cell> cells = Arrays.asList(
+                cell,
+                getCell(cell.getX() - 1, cell.getY()),
+                getCell(cell.getX() + 1, cell.getY()),
+
+                getCell(cell.getX(), cell.getY() + 1),
+                getCell(cell.getX() - 1, cell.getY() + 1),
+                getCell(cell.getX() + 1, cell.getY() + 1),
+
+                getCell(cell.getX(), cell.getY() - 1),
+                getCell(cell.getX() - 1, cell.getY() - 1),
+                getCell(cell.getX() + 1, cell.getY() - 1));
+        return cells.iterator();
+    }
+
+    private boolean containsOnlyFloorItem(Cell cell) {
+        return cell.items(0).stream()
+                .allMatch(item -> item instanceof Floor);
     }
 
     public void newGame(Player player) {
