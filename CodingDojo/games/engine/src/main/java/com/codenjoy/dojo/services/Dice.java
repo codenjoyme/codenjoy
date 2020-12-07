@@ -23,9 +23,15 @@ package com.codenjoy.dojo.services;
  */
 
 
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Реализация этого интерфейса скрывает Random с целью тестирования.
  */
 public interface Dice {
     int next(int n);
+    default void shuffle(List<?> collection){
+        Collections.shuffle(collection);
+    }
 }
