@@ -705,7 +705,7 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
         verify(listener).event(Events.LOOSE());
 
         assertL("╔═════┐" +
-                "║˃.$..│" +
+                "║˃....│" +
                 "║..S..│" +
                 "└─────┘" +
                 "       " +
@@ -742,7 +742,7 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
         verifyNoMoreInteractions(listener);
 
         assertL("╔═════┐" +
-                "║˃.$..│" +
+                "║˃....│" +
                 "║..S..│" +
                 "└─────┘" +
                 "       " +
@@ -811,7 +811,7 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
         verify(listener).event(Events.LOOSE());
 
         assertL("╔═════┐" +
-                "║˃.$..│" +
+                "║˃....│" +
                 "║..S..│" +
                 "└─────┘" +
                 "       " +
@@ -840,7 +840,7 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
         verifyNoMoreInteractions(listener);
 
         assertL("╔═════┐" +
-                "║˃.$..│" +
+                "║˃....│" +
                 "║..S..│" +
                 "└─────┘" +
                 "       " +

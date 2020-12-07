@@ -286,11 +286,12 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public void dropTemporaryGold(Cell cell) {
-        Iterator<Cell> cellIterator = getNeighborhoodCells(cell);
-        int goldsRemaining = SettingsWrapper.data.getDropGoldsAfterHeroDeath();
-        while (cellIterator.hasNext() && goldsRemaining > 0) {
-            Cell nextCell = cellIterator.next();
+    public void dropTemporaryGold(Hero hero) {
+        Cell cell = hero.getItem().getCell();
+        List<Cell> neighborhoodCells = getNeighborhoodCells(cell);
+        int goldsRemaining = Math.min(hero.getGoldCount(), neighborhoodCells.size());
+        for (int i = 0; i < neighborhoodCells.size() && goldsRemaining > 0; i++) {
+            Cell nextCell = neighborhoodCells.get(i);
             if (!nextCell.isOutOf(size()) && containsOnlyFloorItem(nextCell)) {
                 Gold gold = new Gold(Elements.GOLD);
                 gold.setTemporary(true);
@@ -300,8 +301,8 @@ public class ICanCode implements Tickable, Field {
         }
     }
 
-    private Iterator<Cell> getNeighborhoodCells(Cell cell) {
-        List<Cell> cells = Arrays.asList(
+    private List<Cell> getNeighborhoodCells(Cell cell) {
+        return Arrays.asList(
                 cell,
                 getCell(cell.getX() - 1, cell.getY()),
                 getCell(cell.getX() + 1, cell.getY()),
@@ -313,7 +314,6 @@ public class ICanCode implements Tickable, Field {
                 getCell(cell.getX(), cell.getY() - 1),
                 getCell(cell.getX() - 1, cell.getY() - 1),
                 getCell(cell.getX() + 1, cell.getY() - 1));
-        return cells.iterator();
     }
 
     private boolean containsOnlyFloorItem(Cell cell) {
