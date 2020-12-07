@@ -22,30 +22,6 @@
 
 game.enableJoystick = false;
 
-var getQuestionCoordinate = function(index) {
-    return {x:7, y:index + 1};
-}
-
-var getQuestionFormatted = function(value) {
-    if (!!value.question) {
-        var equals = (value.valid)?'==':'!=';
-        var message = 'f(' + value.question + ') '
-                    + equals + ' ' + value.answer;
-        return message;
-    } else {
-        var message = 'f(' + value + ') = ?';
-        return message;
-    }
-}
-
-function unescapeUnicode(unicode) {
-    var r = /\\u([\d\w]{4})/gi;
-    var temp = unicode.replace(r, function (match, grp) {
-        return String.fromCharCode(parseInt(grp, 16));
-    });
-    return decodeURIComponent(temp).split("\\\"").join("\"");
-}
-
 var description = null;
 var setDescription = function(text) {
     description = text;
@@ -71,32 +47,3 @@ game.onBoardAllPageLoad = function() {
     showDescriptionOnClick();
 }
 
-game.drawBoard = function(drawer) {
-    drawer.clear();
-
-    var data = drawer.playerData.board;
-    setDescription(unescapeUnicode(data.description));
-
-    var isWaitNext = (data.questions.length == 0);
-    if (isWaitNext) {
-        drawer.drawText('Algorithm done! Wait next...',
-                        getQuestionCoordinate(0), '#099');
-        return;
-    }
-
-    var index = -1;
-    var isNewLevel = (data.questions.length < data.history.length);
-    if (!isNewLevel) {
-        for (var key in data.history) {
-            var value = data.history[key];
-            if (value.question == data.nextQuestion) continue;
-
-            drawer.drawText(getQuestionFormatted(value),
-                    getQuestionCoordinate(++index),
-                    (value.valid)?'#090':'#900');
-        }
-    }
-
-    drawer.drawText(getQuestionFormatted(data.nextQuestion),
-                getQuestionCoordinate(++index), '#099');
-}
