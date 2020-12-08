@@ -4542,4 +4542,63 @@ public class SingleTest {
                 .filter(Gold::isTemporary)
                 .count());
     }
+
+    @Test
+    public void doNotDropTemporaryGoldOnAliveHero() {
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+        setGoldCount(hero1(), 6);
+
+        hero2().right();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☺X--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--X☺--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        hero2().fire();
+        hero2().left();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--☻X--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertE(single2,
+                "------" +
+                "--&☺--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+        assertL(single1,
+                "╔════┐" +
+                "║$S..│" +
+                "║$$$.│" +
+                "║..E.│" +
+                "║....│" +
+                "└────┘");
+        assertEquals(4, gameMultiple.golds().stream()
+                .filter(Gold::isTemporary)
+                .count());
+    }
+
 }

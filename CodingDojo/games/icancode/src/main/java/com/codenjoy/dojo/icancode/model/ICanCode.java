@@ -34,8 +34,12 @@ import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 public class ICanCode implements Tickable, Field {
 
@@ -293,7 +297,7 @@ public class ICanCode implements Tickable, Field {
         int goldsRemaining = Math.min(hero.getGoldCount(), neighborhoodCells.size());
         for (int i = 0; i < neighborhoodCells.size() && goldsRemaining > 0; i++) {
             Cell nextCell = neighborhoodCells.get(i);
-            if (!nextCell.isOutOf(size()) && containsOnlyFloorItem(nextCell)) {
+            if (!nextCell.isOutOf(size()) && isCellAvailable(nextCell)) {
                 Gold gold = new Gold(Elements.GOLD);
                 gold.setTemporary(true);
                 nextCell.add(gold);
@@ -317,9 +321,13 @@ public class ICanCode implements Tickable, Field {
                 getCell(cell.getX() + 1, cell.getY() - 1));
     }
 
-    private boolean containsOnlyFloorItem(Cell cell) {
-        return cell.items(0).stream()
-                .allMatch(item -> item instanceof Floor);
+    private boolean isCellAvailable(Cell cell) {
+        Predicate<Item> floor = item -> item instanceof Floor;
+        Predicate<Item> air = item -> item instanceof Air;
+        Predicate<Item> deathHero = item -> item instanceof HeroItem && !((HeroItem) item).getHero().isAlive();
+        return cell.items(0).stream().allMatch(floor)
+                && cell.items(1).stream().allMatch(air.or(deathHero))
+                && cell.items(2).stream().allMatch(air);
     }
 
     public void newGame(Player player) {
