@@ -58,7 +58,7 @@ public final class SettingsWrapper {
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(500);
         successScore = settings.addEditBox("Success score").type(Integer.class).def(10);
 
-        levelsCount = settings.addEditBox("levels.count").type(Integer.class).def(0);
+        levelsCount = settings.addEditBox("Levels count").type(Integer.class).def(0);
         Levels.setup();
     }
 

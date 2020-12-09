@@ -45,7 +45,7 @@ var initLevelInfo = function(contextPath) {
         var ajax = new AdminSettings(contextPath, 'icancode', '_settings_');
         ajax.load(function(data) {
             settings = data.parameters;
-            count = get('levels.count').value;
+            count = get('Levels count').value;
             if (!!onLoad) {
                 onLoad();
             }
