@@ -80,7 +80,7 @@ public final class SettingsWrapper {
     }
 
     private String levelPrefix(int index) {
-        return "levels[" + index + "]";
+        return "Level" + index + "";
     }
 
     public int winScore() {
