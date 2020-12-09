@@ -78,4 +78,6 @@ public interface Parameter<T> {
     List<T> getOptions();
 
     T getDefault();
+
+    void reset();
 }

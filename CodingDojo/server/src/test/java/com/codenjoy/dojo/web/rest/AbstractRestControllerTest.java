@@ -84,6 +84,8 @@ public abstract class AbstractRestControllerTest {
     @Autowired
     protected ConfigProperties config;
 
+    @Autowired
+    protected GameService games;
 
     @Autowired
     protected DebugService debugService;

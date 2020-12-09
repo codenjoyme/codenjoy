@@ -116,4 +116,9 @@ public class SettingsImpl implements Settings {
             }
         });
     }
+
+    @Override
+    public void reset() {
+        map.values().forEach(parameter -> parameter.reset());
+    }
 }

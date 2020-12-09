@@ -121,4 +121,10 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
         }
         return options.get(def);
     }
+
+    @Override
+    public void reset() {
+        set(def);
+        changesReacted();
+    }
 }

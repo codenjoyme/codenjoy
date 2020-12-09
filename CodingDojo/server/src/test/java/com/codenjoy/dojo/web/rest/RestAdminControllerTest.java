@@ -79,6 +79,13 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         playerService.removeAll();
         saveService.removeAllSaves();
+
+        resetAllSettings();
+    }
+
+    private void resetAllSettings() {
+        games.getGameNames().stream()
+                .forEach(name -> games.getGame(name).getSettings().reset());
     }
 
     @Test
@@ -400,8 +407,8 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
     @Test
     public void shouldGetSetSettings() {
-        PParameters settings1 = service.getSettings("room1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
+        PParameters settings1 = service.getSettings("name1", "first");
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
                         "[Parameter 2:Boolean = def[true] val[true]], " +
                         "[Semifinal enabled:Boolean = def[false] val[false]], " +
                         "[Semifinal timeout:Integer = multiline[false] def[900] val[900]], " +
@@ -414,7 +421,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
         assertEquals("{\"parameters\":[" +
                         "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
                         "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
                         "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
                         "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
@@ -428,14 +435,14 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         settings1.getParameters().get(1).setValue("false");
 
         settings2.getJSONArray("parameters").getJSONObject(0).put("value", 55);
-        settings2.getJSONArray("parameters").getJSONObject(1).put("value", false);
+        settings2.getJSONArray("parameters").getJSONObject(1).put("value", true);
 
-        service.setSettings("room1", "first", settings1);
+        service.setSettings("name1", "first", settings1);
         assertEquals("", post(200, "/rest/admin/room/name2/settings/second",
                 settings2.toString()));
 
         // then
-        settings1 = service.getSettings("room1", "first");
+        settings1 = service.getSettings("name1", "first");
         assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[30]], " +
                         "[Parameter 2:Boolean = def[true] val[false]], " +
                         "[Semifinal enabled:Boolean = def[false] val[false]], " +
@@ -449,7 +456,71 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
         assertEquals("{\"parameters\":[" +
                         "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\",\"55\"],\"type\":\"editbox\",\"value\":\"55\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
+                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
+                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[\"50\"],\"type\":\"editbox\",\"value\":\"50\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}]}",
+                settings2.toString());
+    }
+
+    // тест такой же как и прошлый, только мы апдейтим не весь сеттинг каким он пришел,
+    // а только name/value этого должно быть достаточно
+    @Test
+    public void shouldSetSettings_onlyKeyValue() {
+        PParameters settings1 = service.getSettings("name1", "first");
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
+                        "[Parameter 2:Boolean = def[true] val[true]], " +
+                        "[Semifinal enabled:Boolean = def[false] val[false]], " +
+                        "[Semifinal timeout:Integer = multiline[false] def[900] val[900]], " +
+                        "[Semifinal percentage:Boolean = def[true] val[true]], " +
+                        "[Semifinal limit:Integer = multiline[false] def[50] val[50]], " +
+                        "[Semifinal reset board:Boolean = def[true] val[true]], " +
+                        "[Semifinal shuffle board:Boolean = def[true] val[true]]]",
+                settings1.build().toString());
+
+        JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
+        assertEquals("{\"parameters\":[" +
+                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
                         "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
+                        "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
+                        "{\"def\":\"50\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal limit\",\"options\":[\"50\"],\"type\":\"editbox\",\"value\":\"50\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal reset board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
+                        "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal shuffle board\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}]}",
+                settings2.toString());
+
+        // when
+        // обновляем сеттинги передавая только ключик и значение
+        assertEquals("", post(200, "/rest/admin/room/name1/settings/first",
+                "{\"parameters\":[" +
+                        "{\"name\":\"Parameter 1\",\"value\":30}," +
+                        "{\"name\":\"Parameter 2\",\"value\":false}]}"));
+
+        assertEquals("", post(200, "/rest/admin/room/name2/settings/second",
+                "{\"parameters\":[" +
+                        "{\"name\":\"Parameter 3\",\"value\":55}," +
+                        "{\"name\":\"Parameter 4\",\"value\":true}]}"));
+
+        // then
+        settings1 = service.getSettings("name1", "first");
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[30]], " +
+                        "[Parameter 2:Boolean = def[true] val[false]], " +
+                        "[Semifinal enabled:Boolean = def[false] val[false]], " +
+                        "[Semifinal timeout:Integer = multiline[false] def[900] val[900]], " +
+                        "[Semifinal percentage:Boolean = def[true] val[true]], " +
+                        "[Semifinal limit:Integer = multiline[false] def[50] val[50]], " +
+                        "[Semifinal reset board:Boolean = def[true] val[true]], " +
+                        "[Semifinal shuffle board:Boolean = def[true] val[true]]]",
+                settings1.build().toString());
+
+        settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
+        assertEquals("{\"parameters\":[" +
+                        "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\",\"55\"],\"type\":\"editbox\",\"value\":\"55\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
                         "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
                         "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
                         "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +

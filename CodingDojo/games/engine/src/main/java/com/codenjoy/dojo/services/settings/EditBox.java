@@ -135,4 +135,10 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     public T getDefault() {
         return def;
     }
+
+    @Override
+    public void reset() {
+        set(def);
+        changesReacted();
+    }
 }

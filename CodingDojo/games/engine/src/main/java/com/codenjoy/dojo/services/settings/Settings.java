@@ -69,4 +69,6 @@ public interface Settings {
     void clear();
 
     void updateAll(List<Parameter> parameters);
+
+    void reset();
 }

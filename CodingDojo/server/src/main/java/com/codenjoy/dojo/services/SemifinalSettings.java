@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by Oleksandr_Baglai on 2019-10-13.
@@ -104,19 +105,22 @@ public class SemifinalSettings {
 
     // TODO test me
     public void update(List<Parameter> parameters) {
-        enabled      = (boolean)get(parameters, ENABLED);
-        timeout      = (int)get(parameters, TIMEOUT);
-        percentage   = (boolean)get(parameters, PERCENTAGE);
-        limit        = (int)get(parameters, LIMIT);
-        resetBoard   = (boolean)get(parameters, RESET_BOARD);
-        shuffleBoard = (boolean)get(parameters, SHUFFLE_BOARD);
+        trySetFrom(parameters, ENABLED,       value -> enabled = (boolean)value);
+        trySetFrom(parameters, TIMEOUT,       value -> timeout = (int)value);
+        trySetFrom(parameters, PERCENTAGE,    value -> percentage = (boolean)value);
+        trySetFrom(parameters, LIMIT,         value -> limit = (int)value);
+        trySetFrom(parameters, RESET_BOARD,   value -> resetBoard = (boolean)value);
+        trySetFrom(parameters, SHUFFLE_BOARD, value -> shuffleBoard = (boolean)value);
     }
 
-    private Object get(List<Parameter> parameters, String name) {
-        return parameters.stream()
+    private void trySetFrom(List<Parameter> parameters, String name, Consumer<Object> set) {
+        Parameter result = parameters.stream()
                 .filter(p -> p.getName().equals(name))
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("Parameter with name " + name + " not found"))
-                .getValue();
+                .orElse(null);
+
+        if (result != null) {
+            set.accept(result.getValue());
+        }
     }
 }

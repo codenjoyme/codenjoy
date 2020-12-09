@@ -102,4 +102,9 @@ public final class NullParameter<T> implements Parameter<T> {
     public T getDefault() {
         return null;
     }
+
+    @Override
+    public void reset() {
+        // do nothing
+    }
 }
