@@ -54,7 +54,7 @@ public class Shooter {
             if (!nextCell.isPresent()) {
                 break;
             }
-            topLaser = new Laser(heroItem, topLaser.getDirection(), field);
+            topLaser = new Laser(heroItem.getHero(), topLaser.getDirection(), field);
             topLaser.setDeathRay(true);
             nextCell.get().add(topLaser);
             lasers.add(topLaser);
