@@ -38,7 +38,12 @@ public class GameProperties {
   private int room; // по сколько участников зарегается на каждый сервер, до его переключения на следующий
   private String startDay;
   private String endDay;
+
+  @Value("#{'${game.excluded-days}'.split(',')}")
+  private List<String> excludedDays;
+
   private int finalistsCount;
+
   private String finalTime;
   
   @Value("#{'${game.servers}'.split(',')}")
