@@ -28,6 +28,7 @@ game:
   room: 10
   start-day: "2020-03-01"
   end-day: "2020-03-31"
+  excluded-days: "2020-03-06,2020-03-07"
   finalists-count: 10
   final-time: "19:00"
 
