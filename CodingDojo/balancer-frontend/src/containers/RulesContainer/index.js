@@ -17,6 +17,9 @@ import BoardSample from '../../styles/images/game/icancode/field_sample.png';
 // own
 import Styles from './styles.module.css';
 
+const endDate = process.env.REACT_APP_EVENT_END_DATE;
+const dayTimeStart = process.env.REACT_APP_EVENT_START_TIME;
+const dayTimeEnd = process.env.REACT_APP_EVENT_FINAL_TIME;
 const BOARD_EXAMPLE =
 `Board:
   01234567890123456789\t01234567890123456789\t   01234567890123456789
@@ -104,6 +107,22 @@ class RulesContainer extends Component {
             <div className='container'>
                 <div className={ mask }>EPAM Bot Challenge - як грати?</div>
                 <div className='content'>
+                    <h2 className='title'>Регламент проведення фіналу:</h2>
+                    <p>
+                        Пропонуємо приєднатись <span className='command'>{ endDate }</span>
+                         <span> о </span>
+                          <span className='command'>{ dayTimeStart }</span> годині на сайт гри для того,
+                        щоб заздалегідь вирішити всі можливі нюанси зі связком та підключенням до ігрового серверу або будь-які інші.
+                    </p>
+                    <p>
+                        І вже о <span className='command'>10:00</span> розпочнеться заліковий час,
+                        який буде тривати до <span className='command'>{ dayTimeEnd }</span>!
+                    </p>
+                    <p>
+                        Також зверніть увагу, що у Фіналі час від часу ми будемо повертати гравців на перший рівень,
+                        щоб прибрати вплив ботів, які не грають.
+                    </p>
+
                     <h2 className='title'>У чому суть гри?</h2>
                      <div className='subTitle' id='commands'>
                                             Параметри гри:
