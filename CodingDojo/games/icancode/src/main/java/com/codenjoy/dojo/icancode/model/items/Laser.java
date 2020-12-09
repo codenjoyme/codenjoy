@@ -35,10 +35,12 @@ public class Laser extends FieldItem implements Tickable {
     private State owner;
     private boolean unstoppable;
     private boolean deathRay;
+    private boolean die;
 
     public Laser(Elements element) {
         super(element);
         this.direction = getDirection(element);
+        die = false;
     }
 
     public Laser(State owner, Direction direction, Field field) {
@@ -105,6 +107,9 @@ public class Laser extends FieldItem implements Tickable {
 
     private boolean shouldLaserAttackHero(Hero hero) {
         Direction heroDirection = hero.getDirection();
+        if (die) {
+            return false;
+        }
         if (heroDirection == null) {
             return true;
         }
@@ -177,6 +182,7 @@ public class Laser extends FieldItem implements Tickable {
     }
 
     public void die() {
+        die = true;
         removeFromCell();
     }
 }
