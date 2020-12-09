@@ -75,7 +75,7 @@ public final class SettingsWrapper {
                 .type(String.class).def(CLASSSIC_TRAINING);
         roomSize = settings.addEditBox("Room size").type(Integer.class).def(5);
 
-        levelsCount = settings.addEditBox("levels.count").type(Integer.class).def(0);
+        levelsCount = settings.addEditBox("Levels count").type(Integer.class).def(0);
         Levels.setup();
     }
 
@@ -130,16 +130,16 @@ public final class SettingsWrapper {
         String prefix = levelPrefix(index);
         settings.addEditBox(prefix + "map").multiline().type(String.class).def(level.map());
         settings.addEditBox(prefix + "help").multiline().type(String.class).def(level.help());
-        settings.addEditBox(prefix + "defaultCode").multiline().type(String.class).def(level.defaultCode());
-        settings.addEditBox(prefix + "refactoringCode").multiline().type(String.class).def(level.refactoringCode());
-        settings.addEditBox(prefix + "winCode").multiline().type(String.class).def(level.winCode());
+        settings.addEditBox(prefix + "default code").multiline().type(String.class).def(level.defaultCode());
+        settings.addEditBox(prefix + "refactoring code").multiline().type(String.class).def(level.refactoringCode());
+        settings.addEditBox(prefix + "win code").multiline().type(String.class).def(level.winCode());
         settings.addEditBox(prefix + "autocomplete").multiline().type(String.class).def(level.autocomplete().replace("'", "\""));
-        settings.addEditBox(prefix + "befungeCommands").multiline().type(String.class).def(String.join("\n", level.befungeCommands()));
+        settings.addEditBox(prefix + "befunge commands").multiline().type(String.class).def(String.join("\n", level.befungeCommands()));
         return this;
     }
 
     private String levelPrefix(int index) {
-        return "levels[" + index + "].";
+        return "Level" + index + " ";
     }
 
     // setters for testing
