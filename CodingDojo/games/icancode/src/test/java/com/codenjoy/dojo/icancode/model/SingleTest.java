@@ -24,12 +24,15 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.items.Gold;
+import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
@@ -3814,6 +3817,61 @@ public class SingleTest {
                 "------" +
                 "------");
         verify(listener1).event(Events.KILL_HERO(1, true));
+    }
+
+    @Test
+    public void shouldAliveOneHero_WhenLaserCameInCell() {
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║...E│" +
+                "└────┘");
+
+        assertL(single1,
+                "╔════┐" +
+                        "║.S..│" +
+                        "║....│" +
+                        "║....│" +
+                        "║...E│" +
+                        "└────┘");
+        assertL(single2,
+                "╔════┐" +
+                        "║.S..│" +
+                        "║....│" +
+                        "║....│" +
+                        "║...E│" +
+                        "└────┘");
+        assertTrue(hero1().isAlive());
+        assertTrue(hero2().isAlive());
+        new Shooter(gameMultiple).fire(Direction.UP, new PointImpl(2, 0), mock(LaserMachine.class));
+        gameMultiple.tick();
+
+        assertE(single1,
+                "------" +
+                        "--☺---" +
+                        "------" +
+                        "--↑---" +
+                        "------" +
+                        "------");
+        assertE(single2,
+                "------" +
+                        "--☺---" +
+                        "------" +
+                        "--↑---" +
+                        "------" +
+                        "------");
+        //laser should kill someone
+        gameMultiple.tick();
+        gameMultiple.tick();
+
+        //then
+        int aliveHeroesCount = 0;
+        if (hero1().isAlive()) aliveHeroesCount++;
+        if (hero2().isAlive()) aliveHeroesCount++;
+
+        //should stay only one
+        assertTrue("Should stay only one", aliveHeroesCount == 1);
     }
 
     @Test
