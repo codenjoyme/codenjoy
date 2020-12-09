@@ -48,6 +48,7 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.icancode.model.Elements.DEATH_RAY_PERK;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER1;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
@@ -3773,6 +3774,63 @@ public class SingleTest {
                 "-☺--" +
                 "----" +
                 "----");
+    }
+
+    @Test
+    public void shouldRunEventAfterKillHero_WithDeathRayPerk() {
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkAvailability(10)
+                .perkActivity(10)
+                .deathRayRange(10);
+
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║..E.│" +
+                "└────┘");
+        gameMultiple.move(new DeathRayPerk(DEATH_RAY_PERK), 2, 3);
+
+//        tick();
+        assertL(single1,
+                "╔════┐" +
+                "║.S..│" +
+                "║.r..│" +
+                "║....│" +
+                "║..E.│" +
+                "└────┘");
+
+        hero1().down();
+        tick();
+        hero1().down();
+        tick();
+        hero1().down();
+        tick();
+
+        assertE(single1,"------" +
+                "--X---" +
+                "------" +
+                "------" +
+                "--☺---" +
+                "------");
+
+        hero1().fire();
+        hero1().up();
+        tick();
+
+        assertE(single1,"------" +
+                "--&---" +
+                "--↑---" +
+                "--↑---" +
+                "--☺---" +
+                "------");
+        assertE(single2,"------" +
+                "--☻---" +
+                "--↑---" +
+                "--↑---" +
+                "--X---" +
+                "------");
+        verify(listener1).event(Events.KILL_HERO(1, true));
     }
 
     @Test
