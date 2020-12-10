@@ -6431,6 +6431,7 @@ public class BattlecityTest {
     public void shouldHeroTakePrize_breakingWalls() {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
+        prizeWorking = v(10);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼  ╬  ☼\n" +
@@ -7934,6 +7935,119 @@ public class BattlecityTest {
                 "☼ ~~~►☼\n" +
                 "☼ ~~~ ☼\n" +
                 "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldHeroTakePrizeAndShootsEveryTick_breakingWalls() {
+        ticksPerBullets = 3;
+        prizeOnField = v(5);
+        hitKillsAiPrize = v(1);
+        prizeWorking = v(3);
+
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼╬╬╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼¿    ☼\n" +
+                "☼▲ ˄  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬╬╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼Ѡ    ☼\n" +
+                "☼▲ ˄  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        when(dice.next(anyInt())).thenReturn(1).thenReturn(0);
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬╬╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼2    ☼\n" +
+                "☼▲ ˄  ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        hero(1).up();
+        game.tick();
+
+        assertPrize(hero(0), 1);
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬╬╬  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲ ˄  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).act();
+        hero(1).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼╬╬╬  ☼\n" +
+                "☼• •  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲ ˄  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).act();
+        hero(1).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ╬╩  ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲ ˄  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).act();
+        hero(1).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ╬╩  ☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼▲ ˄  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).act();
+        hero(1).act();
+        game.tick();
+
+        assertPrize(hero(0), 0);
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ╬╩  ☼\n" +
+                "☼• •  ☼\n" +
+                "☼     ☼\n" +
+                "☼▲ ˄  ☼\n" +
+                "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        hero(0).act();
+        hero(1).act();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼ ╬╨  ☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼▲ ˄  ☼\n" +
                 "☼     ☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
