@@ -30,7 +30,9 @@ public class Gun implements Tickable {
     private final int ticksPerShoot;
 
     private boolean canFire;
+    private boolean machineGun;
     private int ticks;
+    private int shootThrough;
 
     public Gun(int ticksPerShoot) {
         this.ticksPerShoot = ticksPerShoot;
@@ -40,16 +42,20 @@ public class Gun implements Tickable {
     public void reset() {
         ticks = 0;
         canFire = true;
+        machineGun = false;
     }
 
     @Override
     public void tick() {
+        selectMode();
+
         if (!canFire) {
             ticks++;
         }
-        if (ticksPerShoot <= 0) {
+        if (shootThrough <= 0) {
             canFire = true;
-        } else if (ticks == ticksPerShoot) {
+            machineGun = false;
+        } else if (ticks == shootThrough) {
             reset();
         }
     }
@@ -58,5 +64,18 @@ public class Gun implements Tickable {
         boolean result = canFire;
         canFire = false;
         return result;
+    }
+
+
+    public void machineGun() {
+        machineGun = true;
+    }
+
+    private void selectMode() {
+        if (machineGun) {
+            shootThrough = 0;
+        } else {
+            shootThrough = ticksPerShoot;
+        }
     }
 }
