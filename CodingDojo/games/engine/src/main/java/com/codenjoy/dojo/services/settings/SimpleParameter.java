@@ -112,7 +112,20 @@ public class SimpleParameter<T> implements Parameter<T> {
     }
 
     @Override
+    public Parameter<T> clone() {
+        return new SimpleParameter<T>(name, value);
+    }
+
+    @Override
     public Parameter type(Class type) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%s:%s = val[%s]]",
+                name,
+                (value == null) ? "Object" : value.getClass().getSimpleName(),
+                value);
     }
 }

@@ -54,7 +54,7 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     }
 
     @Override
-    public CheckBox<T> update(T value) {
+    public CheckBox<T> update(Object value) {
         if (value == null) {
             return null;
         }
@@ -89,7 +89,7 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
         return (CheckBox<T>) super.parser(parser);
     }
 
-    private Boolean parse(T value) {
+    private Boolean parse(Object value) {
         if (value instanceof Boolean) {
             return (Boolean)value;
         } else if (value instanceof String) {
@@ -133,6 +133,17 @@ public class CheckBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     public void reset() {
         set(def);
         changesReacted();
+    }
+
+    @Override
+    public Parameter<T> clone() {
+        CheckBox<T> result = new CheckBox<>(name);
+        result.def = def;
+        result.value = value;
+        result.parser = parser;
+        result.type = type;
+        result.changed = changed;
+        return result;
     }
 
     @Override

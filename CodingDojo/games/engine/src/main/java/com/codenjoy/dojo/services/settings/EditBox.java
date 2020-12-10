@@ -60,7 +60,19 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
     }
 
     @Override
-    public EditBox<T> update(T value) {
+    public Parameter<T> clone() {
+        EditBox<T> result = new EditBox<>(name);
+        result.def = def;
+        result.multiline = multiline;
+        result.value = value;
+        result.parser = parser;
+        result.type = type;
+        result.changed = changed;
+        return result;
+    }
+
+    @Override
+    public EditBox<T> update(Object value) {
         if (value instanceof String) {
             if (Integer.class.equals(type)) {
                 set((T) Integer.valueOf((String) value));
@@ -69,12 +81,12 @@ public class EditBox<T> extends TypeUpdatable<T> implements Parameter<T> {
             } else if (Double.class.equals(type)) {
                 set((T) Double.valueOf((String) value));
             } else if (String.class.equals(type)) {
-                set(value);
+                set((T)value);
             } else {
                 set(tryParse(value));
             }
         } else {
-            set(value);
+            set((T)value);
         }
         return this;
     }

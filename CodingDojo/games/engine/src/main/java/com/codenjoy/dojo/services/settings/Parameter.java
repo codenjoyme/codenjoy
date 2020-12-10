@@ -32,7 +32,7 @@ import java.util.function.Function;
  *
  * @see Settings
  */
-public interface Parameter<T> {
+public interface Parameter<T> extends Cloneable {
 
     /**
      * @return Значение параметра
@@ -51,7 +51,7 @@ public interface Parameter<T> {
 
     String getName();
 
-    Parameter<T> update(T value);
+    Parameter<T> update(Object value);
 
     /**
      * Так ты указываешь значение по умолчанию. Обычно этого достаточно для ввода значения.
@@ -80,4 +80,6 @@ public interface Parameter<T> {
     T getDefault();
 
     void reset();
+
+    Parameter<T> clone();
 }

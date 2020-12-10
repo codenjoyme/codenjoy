@@ -812,4 +812,63 @@ public class SettingsTest {
                 "[new:String = options[1, 2, 3] def[0] val[2]]]",
                 settings.getParameters().toString());
     }
+
+    @Test
+    public void shouldClone() {
+        // given
+        Parameter<Integer> edit = settings.addEditBox("edit").type(Integer.class).def(12);
+        Parameter<String> select = settings.addSelect("select", Arrays.asList("option1", "option2", "option3")).type(String.class).def("option1");
+        Parameter<Boolean> check = settings.addCheckBox("check").def(true);
+        Parameter<String> simple = new SimpleParameter<>("key", "value");
+
+        assertEquals("[[edit:Integer = multiline[false] def[12] val[null]], " +
+                        "[select:String = options[option1, option2, option3] def[0] val[null]], " +
+                        "[check:Boolean = def[true] val[null]]]",
+                settings.getParameters().toString());
+
+        assertEquals("[key:String = val[value]]",
+                simple.toString());
+
+        // when
+        Parameter<Integer> editClone = edit.clone();
+        Parameter<String> selectClone = select.clone();
+        Parameter<Boolean> checkClone = check.clone();
+        Parameter<String> simpleClone = simple.clone();
+
+        // then
+        // проверяем что в клоны скопировались значения
+        assertEquals("[[edit:Integer = multiline[false] def[12] val[null]], " +
+                        "[select:String = options[option1, option2, option3] def[0] val[null]], " +
+                        "[check:Boolean = def[true] val[null]]]",
+                Arrays.asList(editClone, selectClone, checkClone).toString());
+
+        assertEquals("[key:String = val[value]]",
+                simple.toString());
+
+        // when
+        // меняем значения
+        editClone.update(23);
+        selectClone.update("option2");
+        checkClone.update(false);
+        simpleClone.update("other");
+
+        // then
+        // исходные параметры не меняются
+        assertEquals("[[edit:Integer = multiline[false] def[12] val[null]], " +
+                        "[select:String = options[option1, option2, option3] def[0] val[null]], " +
+                        "[check:Boolean = def[true] val[null]]]",
+                settings.getParameters().toString());
+
+        assertEquals("[key:String = val[value]]",
+                simple.toString());
+
+        // а клонированные меняются
+        assertEquals("[[edit:Integer = multiline[false] def[12] val[23]], " +
+                        "[select:String = options[option1, option2, option3] def[0] val[1]], " +
+                        "[check:Boolean = def[true] val[false]]]",
+                Arrays.asList(editClone, selectClone, checkClone).toString());
+
+        assertEquals("[key:String = val[other]]",
+                simpleClone.toString());
+    }
 }

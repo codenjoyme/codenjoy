@@ -88,6 +88,9 @@ public abstract class AbstractRestControllerTest {
     protected GameService games;
 
     @Autowired
+    protected SemifinalSettings semifinal;
+
+    @Autowired
     protected DebugService debugService;
 
     @Before
