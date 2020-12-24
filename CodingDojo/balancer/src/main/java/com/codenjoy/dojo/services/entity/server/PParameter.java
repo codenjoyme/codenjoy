@@ -142,6 +142,11 @@ public class PParameter {
             public void reset() {
                 // do nothing
             }
+
+            @Override
+            public Parameter clone() {
+                return this;
+            }
         };
     }
 
