@@ -29,6 +29,7 @@ import com.codenjoy.dojo.battlecity.model.items.Wall;
 import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -48,8 +49,7 @@ import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class BattlecityTest {
 
@@ -7942,6 +7942,7 @@ public class BattlecityTest {
     @Test
     public void shouldHeroTakePrizeAndShootsEveryTick_breakingWalls() {
         ticksPerBullets = 3;
+        //tankTicksPerShoot = v(3); TODO не работает ... почему непонятно
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
         prizeWorking = v(3);
@@ -8049,6 +8050,71 @@ public class BattlecityTest {
                 "☼     ☼\n" +
                 "☼▲ ˄  ☼\n" +
                 "☼     ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    // когда бот упирается в водоем -> он останавливается на 5 тиков и отстреливается
+    // после этого меняет направление и уезжает
+    @Test
+    public void shouldAiMoveAfterFiveTicks() {
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼~    ☼\n" +
+                "☼~   ▲☼\n" +
+                "☼?    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼~    ☼\n" +
+                "☼~   ▲☼\n" +
+                "☼◘    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼~    ☼\n" +
+                "☼~   ▲☼\n" +
+                "☼?    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        when(dice.next(anyInt())).thenReturn(1);
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼•    ☼\n" +
+                "☼~   ▲☼\n" +
+                "☼?    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼•    ☼\n" +
+                "☼     ☼\n" +
+                "☼~    ☼\n" +
+                "☼~   ▲☼\n" +
+                "☼?    ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.tick();
+        game.tick();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼     ☼\n" +
+                "☼     ☼\n" +
+                "☼~    ☼\n" +
+                "☼~   ▲☼\n" +
+                "☼ »   ☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
 }
