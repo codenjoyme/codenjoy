@@ -29,7 +29,6 @@ import com.codenjoy.dojo.battlecity.model.items.Wall;
 import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -54,7 +53,6 @@ import static org.mockito.Mockito.*;
 public class BattlecityTest {
 
     protected Dice dice;
-    public int ticksPerBullets;
     public int size;
     private Parameter<Integer> spawnAiPrize;
     private Parameter<Integer> hitKillsAiPrize;
@@ -77,13 +75,12 @@ public class BattlecityTest {
     @Before
     public void setup() {
         size = 7;
-        ticksPerBullets = 1;
         spawnAiPrize = v(4);
         hitKillsAiPrize = v(3);
         prizeOnField = v(3);
         prizeWorking = v(10);
         aiTicksPerShoot = v(10);
-        tankTicksPerShoot = v(4);
+        tankTicksPerShoot = v(1);
         slidingValue = v(3);
         dice = mock(Dice.class);
     }
@@ -124,7 +121,7 @@ public class BattlecityTest {
         };
         game = (Battlecity) runner.createGame(0);
 
-        runner.getLevel().getTanks(ticksPerBullets)
+        runner.getLevel().getTanks(tankTicksPerShoot.getValue())
                 .forEach(tank -> initPlayer(game, tank));
 
         heroes = game.tanks();
@@ -2583,7 +2580,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldNTicksPerBullet() {
-        ticksPerBullets = 4;
+        tankTicksPerShoot = v(4);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -2606,7 +2603,7 @@ public class BattlecityTest {
                 "☼☼☼☼☼☼☼\n";
         assertD(field);
 
-        for (int i = 1; i < ticksPerBullets; i++) {
+        for (int i = 1; i < tankTicksPerShoot.getValue(); i++) {
             hero(0).act();
             game.tick();
 
@@ -2899,7 +2896,7 @@ public class BattlecityTest {
     // если стенка недорушенная, снаряд летит, и ресетнули игру, то все конструкции восстанавливаются
     @Test
     public void shouldRemoveBulletsAndResetWalls_whenReset() {
-        ticksPerBullets = 3;
+        tankTicksPerShoot = v(3);
 
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼╬        ☼\n" +
@@ -3105,7 +3102,7 @@ public class BattlecityTest {
     // первый выстрел иногда получается сделать дважды
     @Test
     public void shouldCantFireTwice() {
-        ticksPerBullets = 4;
+        tankTicksPerShoot = v(4);
 
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -7941,8 +7938,7 @@ public class BattlecityTest {
 
     @Test
     public void shouldHeroTakePrizeAndShootsEveryTick_breakingWalls() {
-        ticksPerBullets = 3;
-        //tankTicksPerShoot = v(3); TODO не работает ... почему непонятно
+        tankTicksPerShoot = v(3);
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);
         prizeWorking = v(3);
