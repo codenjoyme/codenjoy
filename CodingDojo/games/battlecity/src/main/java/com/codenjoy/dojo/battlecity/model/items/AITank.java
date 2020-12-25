@@ -36,14 +36,17 @@ public class AITank extends Tank {
 
     public static final int MAX = 10;
     private final int ticksPerShoot;
+    private final int ticksStandByRiver = 5;
     public boolean dontShoot = false;
     private int act;
+    private int count;
 
     public AITank(Point pt, Direction direction,
                   int ticksPerShoot, Dice dice)
     {
         super(pt, direction, dice, 1);
         this.ticksPerShoot = ticksPerShoot;
+        this.count = 0;
     }
 
     @Override
@@ -54,13 +57,19 @@ public class AITank extends Tank {
         Point pt;
         do {
             pt = direction.change(this);
-
-            // !field.isRiver(pt) потому что мы хотим сделать так, чтобы боты пытались
-            // пройти через речку но не могли - это даст иллюзию, что
-            // они пытаются отстреливаться через воду
-            if (field.isBarrier(pt) && !field.isRiver(pt)) {
+            if (field.isBarrier(pt)) {
                 direction = Direction.random(dice);
             }
+
+            if (count == ticksStandByRiver) {
+                direction = Direction.random(dice);
+                count = 0;
+            }
+
+            if (field.isRiver(pt)) {
+                count++;
+            }
+
         } while (field.isBarrier(pt) && c++ < MAX);
 
         moving = true;
