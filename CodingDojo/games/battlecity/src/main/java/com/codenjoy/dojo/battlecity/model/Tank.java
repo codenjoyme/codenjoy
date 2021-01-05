@@ -103,12 +103,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         if (!moving && !field.isIce(this)) {
             return;
         }
-        Direction updated = sliding.act(this);
-        if (updated == null) {
-            // TODO исследовать иногда тут NPE что ломает всю игру
-        } else {
-            direction = updated;
-        }
+
+        direction = sliding.act(this);
         moving(direction.change(this));
     }
 
@@ -135,7 +131,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     public void init(Field field) {
         super.init(field);
 
-        sliding = new Sliding(field);
+        sliding = new Sliding(field, direction);
 
         int c = 0;
         Point pt = this;
