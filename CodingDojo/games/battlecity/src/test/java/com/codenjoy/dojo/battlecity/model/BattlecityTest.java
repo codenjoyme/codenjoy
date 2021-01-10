@@ -29,6 +29,7 @@ import com.codenjoy.dojo.battlecity.model.items.Wall;
 import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -8111,6 +8112,99 @@ public class BattlecityTest {
                 "☼~    ☼\n" +
                 "☼~   ▲☼\n" +
                 "☼ »   ☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    // если дропнуть танк на лед, то случался NPE
+    // теперь все нормально
+    @Test
+    public void shouldDropAiOnIce() {
+        slidingValue = v(2);
+
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼#    ☼\n" +
+                "☼#    ☼\n" +
+                "☼#    ☼\n" +
+                "☼#    ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        game.getAiGenerator().drop(pt(1, 5));
+        ai(0).dontShoot = true;
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼◘    ☼\n" +
+                "☼#    ☼\n" +
+                "☼#    ☼\n" +
+                "☼#    ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼#    ☼\n" +
+                "☼¿    ☼\n" +
+                "☼#    ☼\n" +
+                "☼#    ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼#    ☼\n" +
+                "☼#    ☼\n" +
+                "☼¿    ☼\n" +
+                "☼#    ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).right();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼#    ☼\n" +
+                "☼#    ☼\n" +
+                "☼#»   ☼\n" +
+                "☼#    ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+    }
+
+    // мы не можем дропнуть танк на воду
+    @Test
+    public void shouldCantDropAiInRiver() {
+        givenFl("☼☼☼☼☼☼☼\n" +
+                "☼~    ☼\n" +
+                "☼~    ☼\n" +
+                "☼~    ☼\n" +
+                "☼~    ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        when(dice.next(anyInt())).thenReturn(2);
+        game.getAiGenerator().drop(pt(1, 5));
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼~◘   ☼\n" +
+                "☼~    ☼\n" +
+                "☼~    ☼\n" +
+                "☼~    ☼\n" +
+                "☼    ▲☼\n" +
+                "☼☼☼☼☼☼☼\n");
+
+        ai(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼\n" +
+                "☼~    ☼\n" +
+                "☼~¿   ☼\n" +
+                "☼~    ☼\n" +
+                "☼~    ☼\n" +
+                "☼    ▲☼\n" +
                 "☼☼☼☼☼☼☼\n");
     }
 }
