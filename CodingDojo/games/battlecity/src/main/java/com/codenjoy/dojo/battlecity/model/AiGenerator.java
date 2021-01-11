@@ -119,11 +119,13 @@ public class AiGenerator {
     }
 
     public Tank drop(Point pt) {
-        Tank tank = tank(pt);
+        Tank tank;
 
-        if (field.isBarrierFor(tank, pt)) {
+        if (field.isRiver(pt)) {
             Point freePt = position();
             tank = tank(freePt);
+        } else {
+            tank = tank(pt);
         }
 
         tank.init(field);
