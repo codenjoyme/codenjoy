@@ -34,6 +34,7 @@ public class AITankPrize extends AITank {
 
     private int damage;
     private int ticks;
+    private boolean wounded;
 
     public AITankPrize(Point pt, Direction direction,
                        int vitality, int ticksPerShoot,
@@ -43,6 +44,7 @@ public class AITankPrize extends AITank {
         this.vitality = vitality;
         damage = 0;
         ticks = 0;
+        wounded = false;
     }
 
     @Override
@@ -50,10 +52,12 @@ public class AITankPrize extends AITank {
         super.tick();
 
         ticks++;
+        wounded = false;
     }
 
     public void kill(Bullet bullet) {
         damage++;
+        wounded = true;
 
         if (damage == vitality) {
             damage = 0;
@@ -63,8 +67,12 @@ public class AITankPrize extends AITank {
 
     @Override
     public Elements subState() {
-        if (ticks % CHANGE_EVERY_TICKS == 0) {
+        if (ticks % CHANGE_EVERY_TICKS == 0 && !wounded) {
             return Elements.AI_TANK_PRIZE;
+        }
+
+        if (wounded) {
+            return Elements.BANG;
         }
         return null;
     }
