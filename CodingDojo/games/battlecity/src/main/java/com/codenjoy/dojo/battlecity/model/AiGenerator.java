@@ -41,21 +41,27 @@ public class AiGenerator {
     private Parameter<Integer> whichSpawnWithPrize;
     private Parameter<Integer> damagesBeforeAiDeath;
     private Parameter<Integer> aiTicksPerShoot;
+    private Parameter<Integer> aiPrizeLimit;
 
     private int capacity;
     private int spawn;
+    private int haveWithPrize;
+    private int aiPrize;
 
     public AiGenerator(Field field, Dice dice,
                        Parameter<Integer> whichSpawnWithPrize,
                        Parameter<Integer> damagesBeforeAiDeath,
-                       Parameter<Integer> aiTicksPerShoot)
+                       Parameter<Integer> aiTicksPerShoot,
+                       Parameter<Integer> aiPrizeLimit)
     {
         this.field = field;
         this.dice = dice;
         this.spawn = 0;
+        this.aiPrize = 0;
         this.whichSpawnWithPrize = whichSpawnWithPrize;
         this.damagesBeforeAiDeath = damagesBeforeAiDeath;
         this.aiTicksPerShoot = aiTicksPerShoot;
+        this.aiPrizeLimit = aiPrizeLimit;
     }
 
     void newSpawn(){
@@ -96,7 +102,7 @@ public class AiGenerator {
     }
 
     private Tank tank(Point pt) {
-        if (isPrizeTankTurn()) {
+        if (isPrizeTankTurn() && neededAiPrize()) {
             return new AITankPrize(pt,
                     Direction.DOWN,
                     damagesBeforeAiDeath.getValue(),
@@ -114,7 +120,6 @@ public class AiGenerator {
         if (whichSpawnWithPrize.getValue() == 0) {
             return false;
         }
-
         return spawn % whichSpawnWithPrize.getValue() == 0;
     }
 
@@ -139,5 +144,27 @@ public class AiGenerator {
         for (Point pt : points) {
             drop(pt);
         }
+    }
+
+    public void allHave(int haveWithPrize) {
+        this.haveWithPrize = haveWithPrize;
+    }
+
+    private boolean neededAiPrize() {
+        if (aiPrizeLimit.getValue() == 0) {
+            return false;
+        }
+
+        int neededWithPrize = aiPrizeLimit.getValue() - haveWithPrize;
+        if (aiPrize < neededWithPrize) {
+            aiPrize++;
+            return true;
+        }
+
+        if (aiPrize == neededWithPrize) {
+            aiPrize = 0;
+            return false;
+        }
+        return false;
     }
 }

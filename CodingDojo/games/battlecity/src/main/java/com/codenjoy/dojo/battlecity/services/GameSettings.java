@@ -48,4 +48,6 @@ public interface GameSettings {
     Parameter<Integer> aiTicksPerShoot();
 
     Parameter<Integer> tankTicksPerShoot();
+
+    Parameter<Integer> aiPrizeLimit();
 }
