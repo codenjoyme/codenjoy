@@ -365,6 +365,16 @@
                                                 **/target/**"
                                          update="true"/>
 
+                                    <!-- используется для отключения DEBUG информации в STDOUT java клиентов -->
+                                    <echo file="./target/stuff/logback.xml" append="false">
+                                        <![CDATA[
+                                            <configuration></configuration>
+                                        ]]>
+                                    </echo>
+                                    <zip destfile="${client.sources}" update="true">
+                                        <zipfileset dir="./target/stuff/" prefix="src/main/resources"/>
+                                    </zip>
+
                                     <copy file="${client.sources}" todir="target/classes/resources/user"/>
                                 </target>
                             </configuration>
