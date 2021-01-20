@@ -244,10 +244,13 @@ location of the `.git` directory. You can also use
 After assembly, a file `<GAMENAME>-engine-exec.jar` 
 will appear in `target` so you can run it:
 ```
-java -jar ./target/<GAMENAME>-engine-exec.jar
+java -jar ./target/<GAMENAME>-engine-exec.jar "<CONNECTION_URL>"
 ```
 Here the `<GAMENAME>` is game name that you try to build.
-
+Parameter `<CONNECTION_URL>` is optional - you can override connection URL hardcoded inside YourSolver class 
+```
+java -jar ./target/<GAMENAME>-engine-exec.jar "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789"
+```
 
 Run game engine in a simple mode
 --------------
