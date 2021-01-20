@@ -69,7 +69,23 @@ public class WebSocketRunner implements Closeable {
         this.forceClose = false;
     }
 
+    /**
+     * @param args параметры окружения из которого будем пробовать достать URL
+     * @param url если не достали из args то берем тут
+     * @param solver solver
+     * @param board board
+     * @return
+     */
+    public static WebSocketRunner runClient(String[] args, String url, Solver solver, ClientBoard board) {
+        if (args == null || args.length != 1) {
+            return runClient(url, solver, board);
+        } else {
+            return runClient(args[0], solver, board);
+        }
+    }
+
     public static WebSocketRunner runClient(String url, Solver solver, ClientBoard board) {
+
         UrlParser parser = new UrlParser(url);
         return run(parser.protocol, parser.server, parser.context,
                 parser.userName, parser.code,
