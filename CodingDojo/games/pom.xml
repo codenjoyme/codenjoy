@@ -87,7 +87,22 @@
 
     <profiles>
         <profile>
-            <id>jar</id>
+            <id>noGit</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>buildnumber-maven-plugin</artifactId>
+                        <version>${maven-buildnumber-plugin.version}</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jar-local</id>
             <build>
                 <plugins>
                     <plugin>
