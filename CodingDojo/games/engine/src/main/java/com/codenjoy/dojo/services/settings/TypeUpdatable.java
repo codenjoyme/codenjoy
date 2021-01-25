@@ -28,7 +28,7 @@ import java.util.function.Function;
 public abstract class TypeUpdatable<T> extends Updatable<T> implements Parameter<T> {
 
     protected Class<?> type;
-    private Function<String, T> parser;
+    protected Function<String, T> parser;
 
     @Override
     public Class<?> getValueType() {
@@ -58,4 +58,7 @@ public abstract class TypeUpdatable<T> extends Updatable<T> implements Parameter
                             value.getClass(), value));
         }
     }
+
+    @Override
+    public abstract Parameter<T> clone();
 }

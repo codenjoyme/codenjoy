@@ -62,26 +62,27 @@ public class YourSolver extends AbstractTextSolver {
     }
 
     public static void main(String[] args) {
-        run(new YourSolver());
+        run(new YourSolver(), args);
     }
 
-    private static void run(Solver solver) {
-            WebSocketRunner.runClient(
-                // paste here board page url from browser after registration
-                    "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789",
-                solver,
-                new Board());
+    private static void run(Solver solver, String[] args) {
+        WebSocketRunner.runClient(args,
+            // paste here board page url from browser after registration
+            // or put it as command line parameter
+        "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789",
+            solver,
+            new Board());
     }
     
     public static class StartNextLevel {
         public static void main(String[] args) {
-            run(new OneCommandSolver<Board>("message('" + Elements.START_NEXT_LEVEL + "')"));
+            run(new OneCommandSolver<Board>("message('" + Elements.START_NEXT_LEVEL + "')"), null);
         }
     }
 
     public static class SkipThisLevel extends YourSolver {
         public static void main(String[] args) {
-            run(new OneCommandSolver<Board>("message('" + Elements.SKIP_THIS_LEVEL + "')"));
+            run(new OneCommandSolver<Board>("message('" + Elements.SKIP_THIS_LEVEL + "')"), null);
         }
     }
 }

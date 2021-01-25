@@ -29,9 +29,15 @@ import java.util.function.Function;
 
 public class SimpleParameter<T> implements Parameter<T> {
 
+    private String name;
     private T value;
 
     public SimpleParameter(T value) {
+        this.value = value;
+    }
+
+    public SimpleParameter(String name, T value) {
+        this.name = name;
         this.value = value;
     }
 
@@ -56,7 +62,7 @@ public class SimpleParameter<T> implements Parameter<T> {
 
     @Override
     public String getName() {
-        throw new UnsupportedOperationException();
+        return name;
     }
 
     @Override
@@ -101,7 +107,25 @@ public class SimpleParameter<T> implements Parameter<T> {
     }
 
     @Override
+    public void reset() {
+        // do nothing
+    }
+
+    @Override
+    public Parameter<T> clone() {
+        return new SimpleParameter<T>(name, value);
+    }
+
+    @Override
     public Parameter type(Class type) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[%s:%s = val[%s]]",
+                name,
+                (value == null) ? "Object" : value.getClass().getSimpleName(),
+                value);
     }
 }

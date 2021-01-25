@@ -59,7 +59,7 @@ public final class NullParameter<T> implements Parameter<T> {
     }
 
     @Override
-    public Parameter<T> update(T value) {
+    public Parameter<T> update(Object value) {
         return null;
     }
 
@@ -101,5 +101,15 @@ public final class NullParameter<T> implements Parameter<T> {
     @Override
     public T getDefault() {
         return null;
+    }
+
+    @Override
+    public void reset() {
+        // do nothing
+    }
+
+    @Override
+    public Parameter<T> clone() {
+        return this;
     }
 }

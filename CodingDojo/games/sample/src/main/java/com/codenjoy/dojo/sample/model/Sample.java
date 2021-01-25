@@ -26,6 +26,7 @@ package com.codenjoy.dojo.sample.model;
 import com.codenjoy.dojo.sample.model.items.Bomb;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
+import com.codenjoy.dojo.sample.model.level.Level;
 import com.codenjoy.dojo.sample.services.Events;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -56,9 +57,9 @@ public class Sample implements Field {
 
     public Sample(Level level, Dice dice) {
         this.dice = dice;
-        walls = level.getWalls();
-        gold = level.getGold();
-        size = level.getSize();
+        walls = level.walls();
+        gold = level.gold();
+        size = level.size();
         players = new LinkedList<>();
         bombs = new LinkedList<>();
     }

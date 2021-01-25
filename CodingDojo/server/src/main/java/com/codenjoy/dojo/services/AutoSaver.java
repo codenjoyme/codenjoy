@@ -35,9 +35,13 @@ public class AutoSaver extends Suspendable implements Tickable {
 
     public static final int TICKS = 30;
 
+    @Value("${game.save.load-on-start}")
+    private boolean loadOnStart = true;
+
     @Autowired private SaveService save;
+
     private ExecutorService executor = Executors.newSingleThreadExecutor();
-    private boolean justStart = true;
+
     private int count = 0;
 
     @Value("${game.save.auto}")
@@ -51,16 +55,17 @@ public class AutoSaver extends Suspendable implements Tickable {
             return;
         }
 
-        if (justStart) {
-            justStart = false;
+        if (loadOnStart) {
+            loadOnStart = false;
             save.loadAll();
             java.awt.Toolkit.getDefaultToolkit().beep();
-        } else {
-            count++;
-            if (count % TICKS == (TICKS - 1)) {
-                // executor.submit потому что sqlite тормозит при сохранении
-                executor.submit(() -> save.saveAll());
-            }
+            return;
+        }
+
+        count++;
+        if (count % TICKS == (TICKS - 1)) {
+            // executor.submit потому что sqlite тормозит при сохранении
+            executor.submit(() -> save.saveAll());
         }
     }
 }

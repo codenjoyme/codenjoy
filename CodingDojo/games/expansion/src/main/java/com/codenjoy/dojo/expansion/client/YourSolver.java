@@ -86,8 +86,9 @@ public class YourSolver extends AbstractSolver {
     }
 
     public static void main(String[] args) {
-        WebSocketRunner.runClient(
+        WebSocketRunner.runClient(args,
                 // paste here board page url from browser after registration
+                // or put it as command line parameter
                 "http://codenjoy.com:80/codenjoy-contest/board/player/your@email.com?code=12345678901234567890",
                 new YourSolver(new RandomDice()),
                 new Board());

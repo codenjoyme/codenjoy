@@ -19,5 +19,61 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
+var onlyBoard = window.location.href.includes("only=true");
 
-var doNothing = true;
+var getQuestionCoordinate = function(x, y) {
+    return {x:(onlyBoard ? x : 7), y:y + 1};
+}
+
+var getQuestionFormatted = function(value) {
+    if (!!value.question) {
+        var equals = (value.valid)?'==':'!=';
+        var message = 'f(' + value.question + ') '
+            + equals + ' ' + value.answer;
+        return message;
+    } else {
+        var message = 'f(' + value + ') = ?';
+        return message;
+    }
+}
+
+function unescapeUnicode(unicode) {
+    var r = /\\u([\d\w]{4})/gi;
+    var temp = unicode.replace(r, function (match, grp) {
+        return String.fromCharCode(parseInt(grp, 16));
+    });
+    return decodeURIComponent(temp).split("\\\"").join("\"");
+}
+
+game.drawBoard = function(drawer) {
+    drawer.clear();
+    var centerX = (drawer.canvas.width() / drawer.canvas.plotSize())/2;
+
+    var data = drawer.playerData.board;
+    if (typeof setDescription != 'undefined') {
+        setDescription(unescapeUnicode(data.description));
+    }
+
+    var isWaitNext = (data.questions.length == 0);
+    if (isWaitNext) {
+        drawer.drawText('Algorithm done! Wait next...',
+            getQuestionCoordinate(centerX, 0), '#099');
+        return;
+    }
+
+    var index = -1;
+    var isNewLevel = (data.questions.length < data.history.length);
+    if (!isNewLevel) {
+        for (var key in data.history) {
+            var value = data.history[key];
+            if (value.question == data.nextQuestion) continue;
+
+            drawer.drawText(getQuestionFormatted(value),
+                getQuestionCoordinate(centerX, ++index),
+                (value.valid)?'#090':'#900');
+        }
+    }
+
+    drawer.drawText(getQuestionFormatted(data.nextQuestion),
+        getQuestionCoordinate(centerX, ++index), '#099');
+}

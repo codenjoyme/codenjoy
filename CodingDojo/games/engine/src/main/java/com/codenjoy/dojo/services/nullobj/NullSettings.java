@@ -95,4 +95,9 @@ public final class NullSettings implements Settings {
     public void updateAll(List<Parameter> parameters) {
         // do nothing
     }
+
+    @Override
+    public void reset() {
+        // do nothing
+    }
 }

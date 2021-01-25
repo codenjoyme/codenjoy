@@ -87,8 +87,9 @@ public class AIPerksHunterSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        WebSocketRunner.runClient(
+        WebSocketRunner.runClient(args,
                 // paste here board page url from browser after registration
+                // or put it as command line parameter
                 "http://127.0.0.1:8080/codenjoy-contest/board/player/anyidyouwant?code=12345678901234567890",
                 new AISolver(new RandomDice()),
                 new Board());

@@ -22,7 +22,9 @@ mvc:
   control-servlet-path: /ws/*
 
 game:
-  save.auto: true
+  save:
+    auto: true
+    load-on-start: true
   ai: true
   semifinal:
     enabled: false
