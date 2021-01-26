@@ -63,12 +63,10 @@ public class AiGenerator {
     }
 
     public void dropAll() {
-        int size = field.size();
         int needed = capacity - field.aiTanks().size();
 
         for (int i = 0; i < needed; i++) {
-            int y = size - 2;
-            Point pt = findFreePosition(y, size);
+            Point pt = position();
             if (pt == null) continue;
 
             drop(pt);
@@ -81,11 +79,19 @@ public class AiGenerator {
         int c = 0;
         do {
             pt.setX(dice.next(size));
-        } while (field.isBarrier(pt) && c++ < size);
+
+        } while ((field.isBarrier(pt) || field.isRiver(pt)) && c++ < size);
 
         if (field.isBarrier(pt)) {
             return null;
         }
+        return pt;
+    }
+
+    private Point position() {
+        int size = field.size();
+        int y = size - 2;
+        Point pt = findFreePosition(y, size);
         return pt;
     }
 
@@ -113,7 +119,15 @@ public class AiGenerator {
     }
 
     public Tank drop(Point pt) {
-        Tank tank = tank(pt);
+        Tank tank;
+
+        if (field.isRiver(pt)) {
+            Point freePt = position();
+            tank = tank(freePt);
+        } else {
+            tank = tank(pt);
+        }
+
         tank.init(field);
         field.addAi(tank);
         newSpawn();

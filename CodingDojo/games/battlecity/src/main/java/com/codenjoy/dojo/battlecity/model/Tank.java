@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
@@ -102,12 +103,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         if (!moving && !field.isIce(this)) {
             return;
         }
-        Direction updated = sliding.act(this);
-        if (updated == null) {
-            // TODO исследовать иногда тут NPE что ломает всю игру
-        } else {
-            direction = updated;
-        }
+
+        direction = sliding.act(this);
         moving(direction.change(this));
     }
 
@@ -134,7 +131,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     public void init(Field field) {
         super.init(field);
 
-        sliding = new Sliding(field);
+        sliding = new Sliding(field, direction);
 
         int c = 0;
         Point pt = this;
@@ -163,6 +160,8 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void tick() {
+        gunType();
+
         gun.tick();
         prizes.tick();
     }
@@ -230,5 +229,11 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void take(Prize prize) {
         prizes.add(prize);
+    }
+
+    private void gunType() {
+        if (prizes.contains(PRIZE_BREAKING_WALLS)) {
+            gun.machineGun();
+        }
     }
 }
