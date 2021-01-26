@@ -33,7 +33,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
+
     private PlayerScores scores;
+    private SettingsWrapper wrapper;
 
     private Settings settings;
     private Integer loosePenalty;
@@ -50,7 +52,8 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new Scores(0, settings);
+        wrapper = SettingsWrapper.setup(settings);
+        scores = new Scores(0, wrapper);
 
         loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
         winScore = settings.getParameter("Win score").type(Integer.class).getValue();
@@ -58,7 +61,7 @@ public class ScoresTest {
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        scores = new Scores(140, wrapper);
 
         win();  //+30
         win();  //+30

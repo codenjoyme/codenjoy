@@ -31,13 +31,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
-/**
- * Created by Oleksandr_Baglai on 2019-10-13.
- */
 @Component
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class SemifinalSettings {
@@ -51,29 +47,80 @@ public class SemifinalSettings {
     public static final String RESET_BOARD = SEMIFINAL + " reset board";
     public static final String SHUFFLE_BOARD = SEMIFINAL + " shuffle board";
 
+    private Parameter<Boolean> enabled;
+    private Parameter<Integer> timeout;
+    private Parameter<Boolean> percentage;
+    private Parameter<Integer> limit;
+    private Parameter<Boolean> resetBoard;
+    private Parameter<Boolean> shuffleBoard;
+    
     @Value("${game.semifinal.enabled}")
-    private boolean enabled;
+    public void setEnabled(boolean input) {
+        if (enabled == null) {
+            enabled = checkbox(ENABLED, input);
+        } else {
+            enabled.update(input);
+        }
+    }
 
     @Value("${game.semifinal.timeout}")
-    private int timeout;
+    public void setTimeout(int input) {
+        if (timeout == null) {
+            timeout = editbox(TIMEOUT, input);
+        } else {
+            timeout.update(input);
+        }
+    }
 
     @Value("${game.semifinal.limit.percentage}")
-    private boolean percentage;
+    public void setPercentage(boolean input) {
+        if (percentage == null) {
+            percentage = checkbox(PERCENTAGE, input);
+        } else {
+            percentage.update(input);
+        }
+    }
 
     @Value("${game.semifinal.limit.value}")
-    private int limit;
+    public void setLimit(int input) {
+        if (limit == null) {
+            limit = editbox(LIMIT, input);
+        } else {
+            limit.update(input);
+        }
+    }
 
     @Value("${game.semifinal.board.reset}")
-    private boolean resetBoard;
+    public void setResetBoard(boolean input) {
+        if (resetBoard == null) {
+            resetBoard = checkbox(RESET_BOARD, input);
+        } else {
+            resetBoard.update(input);
+        }
+    }
 
     @Value("${game.semifinal.board.shuffle}")
-    private boolean shuffleBoard;
-
+    public void setShuffleBoard(boolean input) {
+        if (shuffleBoard == null) {
+            shuffleBoard = checkbox(SHUFFLE_BOARD, input);
+        } else {
+            shuffleBoard.update(input);
+        }
+    }
+    
     public SemifinalSettings clone() {
-        return new SemifinalSettings(enabled, timeout, percentage, limit, resetBoard, shuffleBoard);
+        return new SemifinalSettings(
+                enabled.clone(),
+                timeout.clone(),
+                percentage.clone(),
+                limit.clone(),
+                resetBoard.clone(),
+                shuffleBoard.clone());
     }
 
     public void apply(SemifinalSettings input) {
+        input = input.clone();
+
         enabled = input.enabled;
         percentage = input.percentage;
         limit = input.limit;
@@ -84,13 +131,13 @@ public class SemifinalSettings {
 
     // TODO test me
     public List<Parameter> parameters() {
-        return new LinkedList<Parameter>(){{
-            add(checkbox(ENABLED, enabled));
-            add(editbox(TIMEOUT, timeout));
-            add(checkbox(PERCENTAGE, percentage));
-            add(editbox(LIMIT, limit));
-            add(checkbox(RESET_BOARD, resetBoard));
-            add(checkbox(SHUFFLE_BOARD, shuffleBoard));
+        return new LinkedList<>(){{
+            add(enabled);
+            add(timeout);
+            add(percentage);
+            add(limit);
+            add(resetBoard);
+            add(shuffleBoard);
         }};
     }
 
@@ -104,19 +151,50 @@ public class SemifinalSettings {
 
     // TODO test me
     public void update(List<Parameter> parameters) {
-        enabled      = (boolean)get(parameters, ENABLED);
-        timeout      = (int)get(parameters, TIMEOUT);
-        percentage   = (boolean)get(parameters, PERCENTAGE);
-        limit        = (int)get(parameters, LIMIT);
-        resetBoard   = (boolean)get(parameters, RESET_BOARD);
-        shuffleBoard = (boolean)get(parameters, SHUFFLE_BOARD);
+        trySetFrom(parameters, ENABLED, enabled);
+        trySetFrom(parameters, TIMEOUT, timeout);
+        trySetFrom(parameters, PERCENTAGE, percentage);
+        trySetFrom(parameters, LIMIT, limit);
+        trySetFrom(parameters, RESET_BOARD, resetBoard);
+        trySetFrom(parameters, SHUFFLE_BOARD, shuffleBoard);
     }
 
-    private Object get(List<Parameter> parameters, String name) {
-        return parameters.stream()
+    private void trySetFrom(List<Parameter> parameters, String name, Parameter parameter) {
+        Parameter result = parameters.stream()
                 .filter(p -> p.getName().equals(name))
                 .findAny()
-                .orElseThrow(() -> new RuntimeException("Parameter with name " + name + " not found"))
-                .getValue();
+                .orElse(null);
+
+        if (result != null) {
+            try {
+                parameter.update(result.getValue());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean isEnabled() {
+        return enabled.getValue();
+    }
+
+    public int getTimeout() {
+        return timeout.getValue();
+    }
+
+    public boolean isPercentage() {
+        return percentage.getValue();
+    }
+
+    public int getLimit() {
+        return limit.getValue();
+    }
+
+    public boolean isResetBoard() {
+        return resetBoard.getValue();
+    }
+
+    public boolean isShuffleBoard() {
+        return shuffleBoard.getValue();
     }
 }

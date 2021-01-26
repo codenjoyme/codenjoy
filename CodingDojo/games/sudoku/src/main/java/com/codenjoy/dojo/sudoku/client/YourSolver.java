@@ -48,8 +48,9 @@ public class YourSolver implements Solver<Board> {
     }
 
     public static void main(String[] args) {
-        WebSocketRunner.runClient(
+        WebSocketRunner.runClient(args,
                 // paste here board page url from browser after registration
+                // or put it as command line parameter
                 "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890",
                 new YourSolver(new RandomDice()),
                 new Board());

@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model;
+package com.codenjoy.dojo.sample.model.level;
 
 /*-
  * #%L
@@ -23,6 +23,7 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
+import com.codenjoy.dojo.sample.model.Hero;
 import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.services.LengthToXY;
@@ -33,7 +34,6 @@ import java.util.List;
 import static com.codenjoy.dojo.sample.model.Elements.GOLD;
 import static com.codenjoy.dojo.sample.model.Elements.HERO;
 import static com.codenjoy.dojo.sample.model.Elements.WALL;
-import static java.util.stream.Collectors.toList;
 
 /**
  * Полезный утилитный класс для получения объектов на поле из текстового вида.
@@ -46,26 +46,26 @@ public class LevelImpl implements Level {
 
     public LevelImpl(String map) {
         this.map = map;
-        xy = new LengthToXY(getSize());
+        xy = new LengthToXY(size());
     }
 
     @Override
-    public int getSize() {
+    public int size() {
         return (int) Math.sqrt(map.length());
     }
 
     @Override
-    public List<Hero> getHero() {
+    public List<Hero> heroes() {
         return getObjects(xy, map, Hero::new, HERO);
     }
 
     @Override
-    public List<Gold> getGold() {
+    public List<Gold> gold() {
         return getObjects(xy, map, Gold::new, GOLD);
     }
 
     @Override
-    public List<Wall> getWalls() {
+    public List<Wall> walls() {
         return getObjects(xy, map, Wall::new, WALL);
     }
 

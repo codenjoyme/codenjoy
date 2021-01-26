@@ -53,7 +53,8 @@ if (typeof game == 'undefined') {
 
 var gameName = localStorage.getItem('gameType'); // check KEYS constants in register.js
 
-if (window.location.href.includes("controlsOnly=true")) {
+var onlyControls = window.location.href.includes("controlsOnly=true");
+if (onlyControls) {
     game.drawCanvases = false;
     game.enableHeader = false;
     game.enableFooter = false;

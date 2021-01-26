@@ -57,6 +57,9 @@ public class PParameter {
     }
 
     public Parameter build() {
+        if (type == null) {
+            type = ""; // default
+        }
         switch (type) {
             case EditBox.TYPE:
                 return new EditBox<>(name)
@@ -78,10 +81,7 @@ public class PParameter {
                         .update(value);
 
             default:
-                return new SimpleParameter(name)
-                        .type(type(valueType))
-                        .def(def)
-                        .update(value);
+                return new SimpleParameter(name, value);
         }
     }
 

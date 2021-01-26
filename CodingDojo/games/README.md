@@ -2,7 +2,7 @@ Create your own Codenjoy game
 ==============
 
 Introduction
---------------
+==============
 [Codenjoy](http://codenjoy.com) - CodingDojo framework for developers. Its goal is
 to organize fun teambuilding activities and/or train how to code.
 Already now [we have a lot of games on board](http://codenjoy.com/codenjoy-contest).
@@ -224,6 +224,79 @@ name for simplicity:
 - `git push --all origin`
 - then you can [run codenjoy with this game](https://github.com/codenjoyme/codenjoy/tree/master/CodingDojo#run-codenjoy-server-from-sources)
 - if everything is OK, please prepare Pull Request with your game
+
+Build options
+==============
+There are several ways how you can build a game in jar. 
+Each of them is used for its specific purpose.
+
+Create java-client executable jar
+--------------
+To package an existing java client into an executable 
+jar, run the following command:
+```
+mvn clean compile assembly:single -DskipTests=true -DgitDir=. -Pjar-with-dependencies
+```
+Here the `gitDir` parameter is used to specify the 
+location of the `.git` directory. You can also use 
+`-Pjar-with-dependencies,noGit` to skip git-info phase.
+
+After assembly, a file `<GAMENAME>-engine-exec.jar` 
+will appear in `target` so you can run it:
+```
+java -jar ./target/<GAMENAME>-engine-exec.jar "<CONNECTION_URL>"
+```
+Here the `<GAMENAME>` is game name that you try to build.
+Parameter `<CONNECTION_URL>` is optional - you can override connection URL hardcoded inside YourSolver class 
+```
+java -jar ./target/<GAMENAME>-engine-exec.jar "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=1234567890123456789"
+```
+
+Run game engine in a simple mode
+--------------
+You can run the game without a codenjoy server so that 
+it will fully communicate with the ws client, as if the 
+server were up. This is useful during game development.
+
+To do this, the game must be able to implement it. 
+For example Bomberman game contains a 
+[startup class Main](https://github.com/codenjoyme/codenjoy/blob/master/CodingDojo/games/bomberman/src/main/java/com/codenjoy/dojo/Main.java)
+in which the game starts. If your game has the same 
+file, you can run the command:
+```
+mvn clean compile assembly:single -DskipTests=true -DgitDir=. -Pjar-local
+```
+Here the `gitDir` parameter is used to specify the 
+location of the `.git` directory. You can also use 
+`-Pjar-local,noGit` to skip git-info phase.
+
+After assembly, a file `<GAMENAME>-engine.jar` will 
+appear in `target` so you can run it:
+- for windows
+```
+java -jar -Dhost=127.0.0.1 -Dport=8080 -Dtimeout=1000 -DlogDisable=false -Dlog="output.txt" -DlogTime=true -DshowPlayers="2,3" -Drandom="random-soul-string" -DwaitFor=2 -Dsettings="{'boardSize':11, 'bombPower':7} <GAMENAME>-engine.jar"
+```
+- for linux
+```
+java -jar --host=127.0.0.1 --port=8080 --timeout=1000 --logDisable=false --log="output.txt" --logTime=true --showPlayers="2,3" --random="random-soul-string" --waitFor=2 --settings="{'boardSize':11, 'bombPower':7} <GAMENAME>-engine.jar"
+```
+Here: 
+- `<GAMENAME>` is game name that you try to build.
+- `host` is always `127.0.0.1`
+- `port` any port you want
+- `timeout` milliseconds between ticks
+- `logDisable` disable log output 
+- `log` log file
+- `logTime` true if you want to print timestamp 
+of each message in log
+- `showPlayers` true if you want to print player 
+id of each message in log 
+- `random` pseudo random soul string - it will affect 
+pseudo random. For same string soul pseudo random will 
+work the same.
+- `waitFor` list of players that we are waiting for 
+for before the start
+- `settings` json of game settings
 
 Other materials
 --------------

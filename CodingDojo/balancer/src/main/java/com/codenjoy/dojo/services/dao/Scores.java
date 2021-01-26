@@ -147,12 +147,28 @@ public class Scores {
         pool.update("update scores set winner = 0 where winner <> 0");
     }
 
+    /**
+     * @param from Левая граница диапазона (включительно)
+     * @param to Правая граница диапазона (включительно)
+     * @return Список дат в заданном диапазоне с исключенными выходными
+     */
     private List<LocalDate> getDaysBetween(String from, String to) {
         LocalDate start = LocalDate.parse(from, DAY_FORMATTER);
         LocalDate end = LocalDate.parse(to, DAY_FORMATTER);
         return Stream.iterate(start, date -> date.plusDays(1))
                 .limit(ChronoUnit.DAYS.between(start, end))
+                .filter(day -> excludeWeekend(day))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Фильтр для исключения выходных дней
+     * @param day проверяемая дата
+     * @return true если она выходная
+     */
+    private boolean excludeWeekend(LocalDate day) {
+        List<String> days = config.getGame().getExcludedDays();
+        return !days.contains(day.format(Scores.DAY_FORMATTER));
     }
 
     public List<PlayerScore> getScores(String day, long time) {

@@ -137,6 +137,16 @@ public class PParameter {
             public Object getDefault() {
                 return value;
             }
+
+            @Override
+            public void reset() {
+                // do nothing
+            }
+
+            @Override
+            public Parameter clone() {
+                return this;
+            }
         };
     }
 

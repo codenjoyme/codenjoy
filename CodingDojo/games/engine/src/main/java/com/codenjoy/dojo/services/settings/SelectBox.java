@@ -65,14 +65,14 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
     }
 
     @Override
-    public SelectBox<T> update(T value) {
+    public SelectBox<T> update(Object value) {
         checkIsPresent(value);
         set(options.indexOf(value));
 
         return this;
     }
 
-    private void checkIsPresent(T value) {
+    private void checkIsPresent(Object value) {
         if (!options.contains(value)) {
             throw new IllegalArgumentException(String.format("No option '%s' in set %s", value, options));
         }
@@ -120,5 +120,20 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
             return null;
         }
         return options.get(def);
+    }
+
+    @Override
+    public void reset() {
+        set(def);
+        changesReacted();
+    }
+
+    @Override
+    public Parameter<T> clone() {
+        SelectBox<T> result = new SelectBox<>(name, new LinkedList<>(options));
+        result.def = def;
+        result.value = value;
+        result.changed = changed;
+        return result;
     }
 }

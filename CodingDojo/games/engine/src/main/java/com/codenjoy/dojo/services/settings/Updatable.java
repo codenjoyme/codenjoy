@@ -28,8 +28,8 @@ package com.codenjoy.dojo.services.settings;
  */
 public abstract class Updatable<T> {
 
-    private T value;
-    private boolean changed = false;
+    protected T value;
+    protected boolean changed = false;
 
     protected T get() {
         return value;

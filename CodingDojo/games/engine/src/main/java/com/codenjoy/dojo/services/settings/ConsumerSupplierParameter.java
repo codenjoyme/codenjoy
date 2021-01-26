@@ -112,6 +112,16 @@ public class ConsumerSupplierParameter<T> implements Parameter<T> {
     }
 
     @Override
+    public void reset() {
+        // do nothing
+    }
+
+    @Override
+    public Parameter<T> clone() {
+        return new ConsumerSupplierParameter<T>(set, get);
+    }
+
+    @Override
     public Parameter type(Class type) {
         throw new UnsupportedOperationException();
     }
