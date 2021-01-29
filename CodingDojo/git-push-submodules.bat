@@ -11,7 +11,7 @@ git push https://github.com/codenjoyme/codenjoy-selfdefense.git master
 cd .\..\..
 
 cd .\client-runner
-git push https://github.com/codenjoyme/codenjoy-client-runner.git main
+git push https://github.com/codenjoyme/codenjoy-client-runner.git master
 cd .\..
 
 cd .\portable\linux-docker
