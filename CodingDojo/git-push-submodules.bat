@@ -10,6 +10,10 @@ cd .\games\selfdefense
 git push https://github.com/codenjoyme/codenjoy-selfdefense.git master 
 cd .\..\..
 
+cd .\client-runner
+git push https://github.com/codenjoyme/codenjoy-client-runner.git master
+cd .\..
+
 cd .\portable\linux-docker
 git push https://github.com/codenjoyme/codenjoy-portable-linux-lite.git master 
 cd .\..\..

@@ -16,3 +16,6 @@
 [submodule "CodingDojo/games/japanese"]
 	path = CodingDojo/games/japanese
 	url = https://github.com/codenjoyme/codenjoy-japanese.git
+[submodule "CodingDojo/client-runner"]
+	path = CodingDojo/client-runner
+	url = https://github.com/codenjoyme/codenjoy-client-runner.git
