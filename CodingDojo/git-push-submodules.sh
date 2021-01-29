@@ -23,7 +23,7 @@ git push https://codenjoyme:$password@github.com/codenjoyme/codenjoy-selfdefense
 cd ./../..
 
 cd ./client-runner
-git push https://github.com/codenjoyme/codenjoy-client-runner.git master
+git push https://github.com/codenjoyme/codenjoy-client-runner.git main
 cd ./..
 
 cd ./portable/linux-docker
