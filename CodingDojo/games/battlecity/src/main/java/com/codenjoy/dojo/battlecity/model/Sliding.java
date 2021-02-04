@@ -30,30 +30,30 @@ public class Sliding {
     private final Field field;
     
     private int tick;
-    private Direction direction;
+    private Direction before;
 
-    public Sliding(Field field, Direction direction) {
+    public Sliding(Field field, Direction before) {
         this.field = field;
-        this.direction = direction;
+        this.before = before;
         this.slipperiness = field.slipperiness();
     }
 
     public Direction act(Tank tank) {
         if (!field.isIce(tank) || slipperiness == 0) {
             tick = 0;
-            return direction = tank.getDirection();
+            return before = tank.getDirection();
         }
 
         if (tick == slipperiness) {
             tick = 0;
-            direction = tank.getDirection();
+            before = tank.getDirection();
         } else {
             // ignore current direction because sliding
         }
 
         tick++;
 
-        return direction;
+        return before;
     }
 
     public void stop() {
