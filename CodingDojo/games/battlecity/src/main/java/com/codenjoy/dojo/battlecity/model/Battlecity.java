@@ -417,9 +417,7 @@ public class Battlecity implements Field {
     private int withPrize() {
         int withPrize = allTanks().stream().filter(Tank::withPrize)
                 .collect(Collectors.reducing(0, e -> 1, Integer::sum));
-
-        int result = prizes().size() + withPrize;
-        return result;
+        return prizes().size() + withPrize;
     }
 
     public List<Tree> trees() {

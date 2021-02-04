@@ -102,7 +102,7 @@ public class AiGenerator {
     }
 
     private Tank tank(Point pt) {
-        if (isPrizeTankTurn() && neededAiPrize()) {
+        if (isPrizeTankTurn() && canDrop()) {
             return new AITankPrize(pt,
                     Direction.DOWN,
                     damagesBeforeAiDeath.getValue(),
@@ -150,21 +150,30 @@ public class AiGenerator {
         this.haveWithPrize = haveWithPrize;
     }
 
-    private boolean neededAiPrize() {
+    private int neededWithPrize() {
         if (aiPrizeLimit.getValue() == 0) {
-            return false;
+            aiPrize = 0;
         }
-
         int neededWithPrize = aiPrizeLimit.getValue() - haveWithPrize;
+
         if (aiPrize < neededWithPrize) {
             aiPrize++;
-            return true;
-        }
-
-        if (aiPrize == neededWithPrize) {
+        } else {
             aiPrize = 0;
+        }
+        return aiPrize;
+    }
+
+    private boolean canDrop() {
+        int moreWithPrize = neededWithPrize();
+
+        if(moreWithPrize == 0) {
             return false;
         }
-        return false;
+
+        if (moreWithPrize > 0) {
+            return true;
+        }
+       return false;
     }
 }
