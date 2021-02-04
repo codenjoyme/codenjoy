@@ -95,10 +95,7 @@ public class AiGenerator {
     }
 
     private Point freePosition() {
-        int size = field.size();
-        int y = size - 2;
-        Point pt = findFreePosition(y, size);
-        return pt;
+        return findFreePosition(field.size() - 2, field.size());
     }
 
     private Tank tank(Point pt) {
