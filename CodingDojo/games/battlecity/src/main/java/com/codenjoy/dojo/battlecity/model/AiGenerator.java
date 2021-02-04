@@ -72,7 +72,7 @@ public class AiGenerator {
         int needed = capacity - field.aiTanks().size();
 
         for (int i = 0; i < needed; i++) {
-            Point pt = position();
+            Point pt = freePosition();
             if (pt == null) continue;
 
             drop(pt);
@@ -94,7 +94,7 @@ public class AiGenerator {
         return pt;
     }
 
-    private Point position() {
+    private Point freePosition() {
         int size = field.size();
         int y = size - 2;
         Point pt = findFreePosition(y, size);
@@ -124,18 +124,20 @@ public class AiGenerator {
     }
 
     public Tank drop(Point pt) {
-        Tank tank;
-
-        if (field.isRiver(pt)) {
-            Point freePt = position();
-            tank = tank(freePt);
-        } else {
-            tank = tank(pt);
-        }
-
+        Tank tank = checkDropPt(pt);
         tank.init(field);
         field.addAi(tank);
         newSpawn();
+        return tank;
+    }
+
+    private Tank checkDropPt(Point pt) {
+        Tank tank;
+        if (field.isRiver(pt)) {
+            tank = tank(freePosition());
+        } else {
+            tank = tank(pt);
+        }
         return tank;
     }
 
