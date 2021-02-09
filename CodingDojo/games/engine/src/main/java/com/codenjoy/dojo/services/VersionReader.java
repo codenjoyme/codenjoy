@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -89,10 +90,9 @@ public class VersionReader {
 
                 private void putIfExists(String name) {
                     String data = properties.getProperty(name);
-                    if (data == null) {
-                        return;
-                    }
-                    if (KEY_REVISION.equals(name)) {
+                    if (StringUtils.isEmpty(data)) {
+                        data = "not-set";
+                    } else if (KEY_REVISION.equals(name)) {
                         data = data.substring(0, 8);
                     }
                     put(name, data);
