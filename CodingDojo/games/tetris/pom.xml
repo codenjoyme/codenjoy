@@ -14,7 +14,7 @@
 
     <properties>
         <module.name>tetris</module.name>
-        <scala.version>2.12.7</scala.version>
+        <scala.version>2.13.4</scala.version>
         <maven-scala-plugin.version>2.15.2</maven-scala-plugin.version>
     </properties>
 
