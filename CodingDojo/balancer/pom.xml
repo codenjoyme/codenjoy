@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.8.RELEASE</version>
+        <version>2.1.8.RELEASE</version> <!-- do not update -->
         <relativePath/> 
     </parent>
 
@@ -22,25 +22,22 @@
         
         <!-- please do not update these versions
              they are not in spring boot  -->
-        <json.version>20180813</json.version>
+        <json.version>20180813</json.version> <!-- do not update -->
         <commons-collections.version>4.4</commons-collections.version>
-        <reflections.version>0.9.11</reflections.version>
+        <reflections.version>0.9.11</reflections.version> <!-- do not update -->
         <fest-reflect.version>1.4.1</fest-reflect.version>
-        <selenium.version>3.141.59</selenium.version>
         <fest-assert.version>1.4</fest-assert.version>
-        <spring-cloud.version>Greenwich.SR4</spring-cloud.version>
-        <!-- end -->
-
+        <spring-cloud.version>Greenwich.SR4</spring-cloud.version> <!-- do not update -->
         <cglib.version>3.2.10</cglib.version>
         <jackson-xml.version>2.9.8</jackson-xml.version>
+        <!-- end -->
 
+        <!-- Maven -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
+        <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
         <maven-license-plugin.version>2.0.0</maven-license-plugin.version>
-        <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
-        <maven-compiler-plugin.target>1.8</maven-compiler-plugin.target>
-        <maven-source-plugin.version>3.1.0</maven-source-plugin.version>
-        <maven-minify-plugin.version>1.7.6</maven-minify-plugin.version>
+        <maven-source-plugin.version>3.2.0</maven-source-plugin.version>
+        <maven-minify-plugin.version>3.6.3</maven-minify-plugin.version>
         <maven-buildnumber-plugin.version>1.4</maven-buildnumber-plugin.version>
         <maven-scm-jgit.version>1.11.2</maven-scm-jgit.version>
 
@@ -61,7 +58,7 @@
             <url>http://maven.springframework.org/milestone/</url>
         </repository>
     </repositories>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -144,7 +141,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-okhttp</artifactId>
