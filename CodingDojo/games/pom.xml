@@ -20,6 +20,8 @@
         <org.json.version>20180813</org.json.version> <!-- do not update -->
         <json-io.version>4.10.1</json-io.version>
 
+        <!-- Testing -->
+        <hamcrest.version>1.3</hamcrest.version>
         <fest-reflect.version>1.4.1</fest-reflect.version>
         <fest-assert.version>1.4</fest-assert.version>
         <junit.version>4.12</junit.version>
@@ -196,6 +198,12 @@
                 <groupId>org.easytesting</groupId>
                 <artifactId>fest-reflect</artifactId>
                 <version>${fest-reflect.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest-all</artifactId>
+                <version>${hamcrest.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
