@@ -14,7 +14,7 @@
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <commons-collections.version>4.3</commons-collections.version>
+        <commons-collections.version>4.4</commons-collections.version>
         <json.version>20180813</json.version>
         <jsonio.version>4.10.1</jsonio.version>
         <java-web-socket.version>1.5.1</java-web-socket.version>
