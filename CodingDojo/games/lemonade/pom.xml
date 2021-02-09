@@ -20,8 +20,7 @@
         <client.javascript-sources>${user.resources}/${module.name}-javascript-client.zip</client.javascript-sources>
         <client.python-sources>${user.resources}/${module.name}-python-client.zip</client.python-sources>
 
-        <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
-        <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
+        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
     </properties>
 
     <repositories>
