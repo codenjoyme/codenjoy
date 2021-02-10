@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.codenjoy.dojo.battlecity.model.Elements.*;
 import static java.util.function.Predicate.not;
@@ -62,7 +63,8 @@ public class Battlecity implements Field {
                       Parameter<Integer> prizeOnField,
                       Parameter<Integer> prizeWorking,
                       Parameter<Integer> aiTicksPerShoot,
-                      Parameter<Integer> slipperiness)
+                      Parameter<Integer> slipperiness,
+                      Parameter<Integer> aiPrizeLimit)
     {
         this.size = size;
         ais = new LinkedList<>();
@@ -81,7 +83,8 @@ public class Battlecity implements Field {
         aiGen = new AiGenerator(this, dice,
                 whichSpawnWithPrize,
                 damagesBeforeAiDeath,
-                aiTicksPerShoot);
+                aiTicksPerShoot,
+                aiPrizeLimit);
 
         this.slipperiness = slipperiness;
     }
@@ -101,6 +104,7 @@ public class Battlecity implements Field {
     public void tick() {
         removeDeadItems();
 
+        aiGen.allHave(withPrize());
         aiGen.dropAll();
 
         List<Tank> tanks = allTanks();
@@ -408,6 +412,11 @@ public class Battlecity implements Field {
         return walls.stream()
                 .filter(not(Wall::destroyed))
                 .collect(toList());
+    }
+
+    private int withPrize() {
+        int withPrize = (int) allTanks().stream().filter(Tank::withPrize).count();
+        return prizes().size() + withPrize;
     }
 
     public List<Tree> trees() {

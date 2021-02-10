@@ -40,6 +40,7 @@ public class OptionGameSettings implements GameSettings {
     private final Parameter<Integer> killYourTankPenalty;
     private final Parameter<Integer> killOtherHeroTankScore;
     private final Parameter<Integer> killOtherAITankScore;
+    private final Parameter<Integer> aiPrizeLimit;
 
     public OptionGameSettings(Settings settings, Dice dice) {
         this.dice = dice;
@@ -55,6 +56,7 @@ public class OptionGameSettings implements GameSettings {
         aiTicksPerShoot = settings.addEditBox("Ticks until the next AI Tank shoot").type(Integer.class).def(10);
         tankTicksPerShoot = settings.addEditBox("Ticks until the next Tank shoot").type(Integer.class).def(4);
         slipperiness = settings.addEditBox("Value of tank sliding on ice").type(Integer.class).def(3);
+        aiPrizeLimit = settings.addEditBox("The total number of prize tanks and prizes on the board").type(Integer.class).def(3);
     }
 
     @Override
@@ -110,5 +112,10 @@ public class OptionGameSettings implements GameSettings {
     @Override
     public Parameter<Integer> tankTicksPerShoot() {
         return tankTicksPerShoot;
+    }
+
+    @Override
+    public Parameter<Integer> aiPrizeLimit() {
+        return aiPrizeLimit;
     }
 }

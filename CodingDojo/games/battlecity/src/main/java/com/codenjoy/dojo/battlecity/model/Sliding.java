@@ -32,13 +32,14 @@ public class Sliding {
     private int tick;
     private Direction before;
 
-    public Sliding(Field field) {
+    public Sliding(Field field, Direction before) {
         this.field = field;
+        this.before = before;
         this.slipperiness = field.slipperiness();
     }
 
     public Direction act(Tank tank) {
-        if (!field.isIce(tank)) {
+        if (!field.isIce(tank) || slipperiness == 0) {
             tick = 0;
             return before = tank.getDirection();
         }
