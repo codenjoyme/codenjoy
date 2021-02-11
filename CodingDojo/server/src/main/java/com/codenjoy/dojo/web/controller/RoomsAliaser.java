@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.controller;
  */
 
 import com.codenjoy.dojo.services.GameService;
+import lombok.NoArgsConstructor;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualLinkedHashBidiMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Component
+@NoArgsConstructor
 public class RoomsAliaser {
 
     @Autowired private GameService gameService;
@@ -56,10 +58,6 @@ public class RoomsAliaser {
         rooms = new DualLinkedHashBidiMap();
         gameService.getGameNames()
                 .forEach(gameName -> rooms.put(gameName, gameName));
-    }
-
-    public RoomsAliaser() {
-
     }
 
     public String getAlias(String gameName) {

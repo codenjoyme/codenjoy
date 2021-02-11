@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.services;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -24,28 +24,15 @@ package com.codenjoy.dojo.icancode.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 
-/**
- * Класс, который умеет подсчитывать очки за те или иные действия.
- * Обычно хочется, чтобы константы очков не были захардкоджены, потому используй объект {@see Settings} для их хранения.
- */
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> loosePenalty;
-    private final Parameter<Integer> goldScore;
-
     private volatile int score;
+    private SettingsWrapper settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, SettingsWrapper settings) {
         this.score = startScore;
-
-        // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
-        goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
+        this.settings = settings;
     }
 
     @Override
@@ -66,15 +53,27 @@ public class Scores implements PlayerScores {
 
     @Override
     public void event(Object input) {
-        Events events = (Events)input;
+        Events events = (Events) input;
 
-        if (events.getType() == Events.Type.WIN) {
-            if (!events.isMultiple()) {
-                score += winScore.getValue(); // TODO test me
-            }
-            score += goldScore.getValue()*events.getGoldCount();
-        } else if (events.getType() == Events.Type.LOOSE) {
-            score -= loosePenalty.getValue();
+        Events.Type eventsType = events.getType();
+        switch (eventsType) {
+            case WIN:
+                if (!events.isMultiple()) {
+                    score += settings.winScore();
+                }
+                score += settings.goldScore() * events.getGoldCount();
+                break;
+            case LOOSE:
+                score -= settings.loosePenalty();
+                break;
+            case KILL_ZOMBIE:
+                if (settings.enableKillScore() && events.isMultiple())
+                    score += events.getKillCount() * settings.killZombieScore();
+                break;
+            case KILL_HERO:
+                if (settings.enableKillScore() && events.isMultiple())
+                    score += events.getKillCount() * settings.killHeroScore();
+                break;
         }
         score = Math.max(0, score);
     }

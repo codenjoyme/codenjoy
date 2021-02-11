@@ -10,7 +10,7 @@ namespace ICanCode.Client
     class Program
     {
         // you can get this code after registration on the server with your email
-        static string ServerUrl = "http://ecsc00a059f2.epam.com/codenjoy-contest/board/player/0?code=000000000000&gameName=icancode";
+        static string ServerUrl = "http://codenjoy.com:80/codenjoy-contest/board/player/3edq63tw0bq4w4iem7nb?code=12345678901234567890";
 
         static void Main(string[] args)
         {

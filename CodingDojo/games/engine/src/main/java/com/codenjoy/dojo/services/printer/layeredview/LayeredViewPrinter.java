@@ -49,17 +49,17 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
     private int bound;
     private Boolean needToCenter;
 
-    public LayeredViewPrinter(Supplier<LayeredBoardReader> reader, Supplier<Object> player, int viewSize, int countLayers) {
+    public LayeredViewPrinter(Supplier<LayeredBoardReader> reader, Supplier<Object> player, int countLayers) {
         this.getReader = reader;
         this.getPlayer = player;
         this.countLayers = countLayers;
-        this.viewSize = viewSize;
     }
 
     @Override
     public PrinterData print(Object... parameters) {
         reader = this.getReader.get();
         size = reader.size();
+        viewSize = reader.viewSize();
 
         if (needToCenter == null) {
             int min = Math.min(size, viewSize);
@@ -91,10 +91,10 @@ public class LayeredViewPrinter implements Printer<PrinterData> {
             for (int x = vx; x < vx + viewSize; ++x) {
                 int index = xy.getLength(x, y);
 
-                for (int j = 0; j < countLayers; ++j) {
-                    State item = elements.apply(index, j);
-                    Object[] inSameCell = reader.itemsInSameCell(item);
-                    builders[j].append(makeState(item, player, inSameCell));
+                for (int layer = 0; layer < countLayers; ++layer) {
+                    State item = elements.apply(index, layer);
+                    Object[] inSameCell = reader.itemsInSameCell(item, layer);
+                    builders[layer].append(makeState(item, player, inSameCell));
                 }
             }
         }

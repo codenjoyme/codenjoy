@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import lombok.experimental.UtilityClass;
 import org.junit.Assert;
 import org.mockito.stubbing.Answer;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,6 +39,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@UtilityClass
 public class TestUtils {
 
     public static class Env {
@@ -50,7 +52,12 @@ public class TestUtils {
 
     public static Env getPlayerGame(PlayerGames playerGames,
                                     Player player,
-                                    Answer<Object> answerCreateGame, MultiplayerType type, PlayerSave save, Printer printer) {
+                                    String roomName,
+                                    Answer<Object> getGame,
+                                    MultiplayerType type, 
+                                    PlayerSave save, 
+                                    Printer printer) 
+    {
         Joystick joystick = mock(Joystick.class);
         GamePlayer gamePlayer = mock(GamePlayer.class);
         when(gamePlayer.getJoystick()).thenReturn(joystick);
@@ -66,7 +73,7 @@ public class TestUtils {
         }
 
         when(gameType.getMultiplayerType()).thenReturn(type);
-        when(gameType.createGame(anyInt())).thenAnswer(answerCreateGame);
+        when(gameType.createGame(anyInt())).thenAnswer(getGame);
         PrinterFactory printerFactory = mock(PrinterFactory.class);
         when(gameType.getPrinterFactory()).thenReturn(printerFactory);
         when(printerFactory.getPrinter(any(BoardReader.class), any()))
@@ -74,7 +81,7 @@ public class TestUtils {
         when(gameType.createPlayer(any(EventListener.class), anyString()))
                 .thenAnswer(inv -> gamePlayer);
 
-        PlayerGame playerGame = playerGames.add(player, save);
+        PlayerGame playerGame = playerGames.add(player, roomName, save);
         Env result = new Env();
         result.gamePlayer = gamePlayer;
         result.gameType = gameType;

@@ -2,7 +2,7 @@
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 Codenjoy
+ * Copyright (C) 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -20,108 +20,151 @@
  * #L%
  */
 using System;
-using System.Web;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Text;
+using System.Runtime.CompilerServices;
+using System.Security.Authentication;
+using System.Threading.Tasks;
+using System.Web;
 using WebSocketSharp;
 
+[assembly: InternalsVisibleTo("Bomberman.Api.Tests")]
 namespace Bomberman.Api
 {
-   public abstract class AbstractSolver
+    public abstract class AbstractSolver
     {
-        private const string ResponsePrefix = "board=";
+        private const string _responsePrefix = "board=";
+
+        private const int _maxRetriesCount = 3;
+
+        private const int _retriestTimeoutInMilliseconds = 10000;
+
+        private readonly string _webSocketUrl;
+
+        private int _retriesCount;
+
+        private bool _shouldExit;
+
+        private WebSocket _gameServer;
 
         /// <summary>
-        /// constructor
+        /// Intializes a new instance for class.
         /// </summary>
-        /// <param name="server">server http address including email and code</param>
-        public AbstractSolver(string server)
+        /// <param name="serverUrl">The server http(s) address including user and code data.</param>
+        public AbstractSolver(string serverUrl)
         {
             // Console.OutputEncoding = Encoding.UTF8;
-            ServerUrl = server;
+            _webSocketUrl = GetWebSocketUrl(serverUrl);
         }
-
-        public string ServerUrl { get; private set; }
-
 
         /// <summary>
-        /// Set this property to true to finish playing
+        /// Starts the web socket connection ang recieving board;
         /// </summary>
-        public bool ShouldExit { get; protected set; }
-
         public void Play()
         {
-            string url = GetWebSocketUrl(this.ServerUrl);
+            _gameServer = new WebSocket(_webSocketUrl);
+            _gameServer.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls12;
 
-            var socket = new WebSocket(url);
+            _gameServer.OnMessage += Socket_OnMessage;
+            _gameServer.OnClose += async (s, e) => await ReconnectAsync(e.WasClean, e.Code);
 
-            socket.OnMessage += Socket_OnMessage;
-            socket.Connect();
-
-            while (!ShouldExit && socket.ReadyState != WebSocketState.Closed)
-            {
-                Thread.Sleep(50);
-            }
+            _gameServer.Connect();
         }
-        private void Socket_OnMessage(object sender, MessageEventArgs e)
-        {
-            if (!ShouldExit)
-            {
-                var response = e.Data;
-
-                if (!response.StartsWith(ResponsePrefix))
-                    {
-                        Console.WriteLine("Something strange is happening on the server... Response:\n{0}", response);
-                        ShouldExit = true;
-                    }
-                    else
-                    {
-                        var boardString = response.Substring(ResponsePrefix.Length);
-                        var board = new Board(boardString);
-
-                        //Just print current state (gameBoard) to console
-                        Console.Clear();
-                        Console.SetCursorPosition(0, 0);
-                        Console.WriteLine(board.ToString());
-
-                        var action = Get(board);
-
-                        Console.WriteLine("Answer: " + action);
-                        Console.SetCursorPosition(0, 0);
-
-                        ((WebSocket)sender).Send(action);
-                    }
-            }
-        }
-
-        public static string GetWebSocketUrl(string serverUrl)
-        {
-            Uri uri = new Uri(serverUrl);
-
-            var server = $"{uri.Host}:{uri.Port}";
-            var userName = uri.Segments.Last();
-            var code = HttpUtility.ParseQueryString(uri.Query).Get("code");
-
-            return GetWebSocketUrl(userName, code, server);
-        }
-
-        private static string GetWebSocketUrl(string userName, string code, string server)
-        {
-            return string.Format("ws://{0}/codenjoy-contest/ws?user={1}&code={2}",
-                            server,
-                            Uri.EscapeDataString(userName),
-                            code);
-        }
-
-        protected internal abstract string Get(Board gameBoard);
 
         /// <summary>
         /// Starts client shutdown.
         /// </summary>
         public void InitiateExit()
         {
-            ShouldExit = true;
+            Console.WriteLine("Exit initiated...");
+
+            _shouldExit = true;
+
+            if (_gameServer.ReadyState == WebSocketState.Open)
+            {
+                _gameServer.Close();
+            }
+        }
+
+        /// <summary>
+        /// Sould provide action for bot that will be sent back to game server, (quering each second).
+        /// </summary>
+        /// <param name="gameBoard">The Game board.</param>
+        /// <returns>Action for the bot.</returns>
+        protected internal abstract string Get(Board gameBoard);
+
+        /// <summary>
+        /// Convers game server URL to web socket URL.
+        /// </summary>
+        /// <param name="serverUrl">The game server URL.</param>
+        /// <returns>The web socket URL.</returns>
+        protected internal string GetWebSocketUrl(string serverUrl)
+        {
+            return serverUrl.Replace("http", "ws")
+                            .Replace("board/player/", "ws?user=")
+                            .Replace("?code=", "&code=");
+        }
+
+        private void Socket_OnMessage(object sender, MessageEventArgs e)
+        {
+            if (!_shouldExit)
+            {
+                var response = e.Data;
+                _retriesCount = default;
+
+                if (!response.StartsWith(_responsePrefix))
+                {
+                    Console.WriteLine("Something strange is happening on the server... Response:\n{0}", response);
+                    InitiateExit();
+                }
+                else
+                {
+                    var boardString = response.Substring(_responsePrefix.Length);
+                    var board = new Board(boardString);
+
+                    //Just print current state (gameBoard) to console
+                    Console.Clear();
+                    Console.SetCursorPosition(0, 0);
+                    Console.WriteLine(board.ToString());
+
+                    var action = Get(board);
+
+                    Console.WriteLine("Answer: " + action);
+                    Console.SetCursorPosition(0, 0);
+
+                    ((WebSocket)sender).Send(action);
+                }
+            }
+        }
+
+        private async Task ReconnectAsync(bool wasClean, ushort code)
+        {
+            if (!wasClean && !_gameServer.IsAlive && IsAllowedToReconnect(code))
+            {
+                if (_retriesCount < _maxRetriesCount)
+                {
+                    Console.WriteLine($"Trying to recconnect, attempt {_retriesCount + 1} of {_maxRetriesCount}...");
+                    await Task.Delay(_retriestTimeoutInMilliseconds);
+
+                    _retriesCount++;
+                    _gameServer.Connect();
+                }
+                else
+                {
+                    Console.WriteLine("Could not reconnect to the server, please try again later. Press any key to exit...");
+                }
+            }
+        }
+
+        private bool IsAllowedToReconnect(ushort code)
+        {
+            var reconnectList = new List<ushort>
+            {
+                1006, // The connection was closed abnormally, e.g., without sending or receiving a Close control frame.
+                1011 // A server is terminating the connection because it encountered an unexpected condition that prevented it from fulfilling the request.
+            };
+
+            return reconnectList.Contains(code);
         }
     }
 }

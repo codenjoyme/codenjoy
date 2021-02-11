@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  #%L
+  Codenjoy - it's a dojo-like platform from developers to developers.
+  %%
+  Copyright (C) 2018 - 2020 Codenjoy
+  %%
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as
+  published by the Free Software Foundation, either version 3 of the
+  License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public
+  License along with this program.  If not, see
+  <http://www.gnu.org/licenses/gpl-3.0.html>.
+  #L%
+  -->
+
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 https://maven.apache.org/xsd/assembly-2.1.0.xsd">
+    <id>jar-with-dependencies-and-exclude-classes</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <useProjectArtifact>false</useProjectArtifact>
+            <unpack>true</unpack>
+            <scope>runtime</scope>
+            <excludes>
+                <exclude>org.eclipse.jetty.websocket:websocket-server</exclude>
+                <exclude>org.eclipse.jetty.websocket:websocket-client</exclude>
+                <exclude>org.eclipse.jetty.websocket:websocket-common</exclude>
+                <exclude>org.eclipse.jetty.websocket:websocket-api</exclude>
+                <exclude>org.eclipse.jetty.websocket:websocket-servlet</exclude>
+                <exclude>org.eclipse.jetty:jetty-util</exclude>
+                <exclude>org.eclipse.jetty:jetty-io</exclude>
+                <exclude>org.eclipse.jetty:jetty-client</exclude>
+                <exclude>org.eclipse.jetty:jetty-http</exclude>
+                <exclude>org.eclipse.jetty:jetty-xml</exclude>
+                <exclude>org.eclipse.jetty:jetty-servlet</exclude>
+                <exclude>org.eclipse.jetty:jetty-security</exclude>
+                <exclude>org.eclipse.jetty:jetty-server</exclude>
+                <exclude>javax.servlet:javax.servlet-api</exclude>
+                <exclude>org.javassist:javassist</exclude>
+                <exclude>org.apache.commons:commons-collections4</exclude>
+                <exclude>commons-codec:commons-codec</exclude>
+                <exclude>org.reflections:reflections</exclude>
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.outputDirectory}</directory>
+            <outputDirectory>/</outputDirectory>
+            <excludes>
+                <exclude>resources/**/*</exclude>
+                <exclude>com/codenjoy/dojo/*/client/ai/*.*</exclude>
+                <exclude>com/codenjoy/dojo/services/hash/*.*</exclude>
+                <exclude>com/codenjoy/dojo/services/algs/*.*</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+</assembly>

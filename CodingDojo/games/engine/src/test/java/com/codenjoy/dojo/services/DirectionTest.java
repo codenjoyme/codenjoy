@@ -42,6 +42,21 @@ public class DirectionTest {
     }
 
     @Test
+    public void test_isValid() {
+        assertEquals(true, Direction.isValid("LEFT"));
+        assertEquals(true, Direction.isValid("RIGHT"));
+        assertEquals(true, Direction.isValid("UP"));
+        assertEquals(true, Direction.isValid("DOWN"));
+        assertEquals(true, Direction.isValid("ACT"));
+        assertEquals(true, Direction.isValid("STOP"));
+        assertEquals(true, Direction.isValid("left"));
+        assertEquals(true, Direction.isValid("Left"));
+
+        assertEquals(false, Direction.isValid("qwe"));
+        assertEquals(false, Direction.isValid(null));
+    }
+
+    @Test
     public void test_valueOfName() {
         assertEquals(0, Direction.valueOf("LEFT").value());
         assertEquals(1, Direction.valueOf("RIGHT").value());

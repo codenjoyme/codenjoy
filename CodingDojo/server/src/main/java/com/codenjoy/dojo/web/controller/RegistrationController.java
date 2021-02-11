@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.security.RegistrationService;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,17 +40,17 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping(RegistrationController.URI)
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RegistrationController {
 
     private static final String ADMIN = "/admin";
     public static final String URI = "/register";
 
-    private final PlayerService playerService;
-    private final RoomsAliaser rooms;
-    private final ConfigProperties properties;
-    private final RegistrationValidator registrationValidator;
-    private final RegistrationService registrationService;
+    private PlayerService playerService;
+    private RoomsAliaser rooms;
+    private ConfigProperties properties;
+    private RegistrationValidator registrationValidator;
+    private RegistrationService registrationService;
 
     @InitBinder
     private void initBinder(WebDataBinder webDataBinder) {
@@ -79,19 +79,21 @@ public class RegistrationController {
         model.addAttribute("gameNames", rooms.alises());
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String registerByNameOrEmail(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
+    @PostMapping()
+    public String registerByName(@Valid Player player, BindingResult result, HttpServletRequest request, Model model) {
         if (result.hasErrors()) {
             populateCommonRegistrationModel(model, false);
             return registrationService.openRegistrationForm(request, model, null, player.getEmail(), player.getReadableName());
         }
 
         String gameName = rooms.getGameName(player.getGameName());
+        String roomName = gameName; // TODO ROOM взять roomName с формы регистрации, либо если не установлено взять как тут
+        
         player.setGameName(gameName);
 
-        if (player.getName() == null) {
-            player.setName(Hash.getRandomId());
+        if (player.getId() == null) {
+            player.setId(Hash.getRandomId());
         }
-        return registrationService.register(player, result, request, model);
+        return registrationService.register(player, roomName, result, request, model);
     }
 }

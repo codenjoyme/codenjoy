@@ -23,18 +23,18 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
-import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
 import com.codenjoy.dojo.transport.ws.PlayerTransport;
+import com.codenjoy.dojo.transport.ws.ResponseHandler;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
 import org.json.JSONObject;
-import org.slf4j.Logger;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -43,15 +43,11 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toMap;
 
 @Slf4j
+@AllArgsConstructor
 public class ScreenResponseHandler implements ResponseHandler {
 
     private PlayerTransport transport;
     private Player player;
-
-    public ScreenResponseHandler(PlayerTransport transport, Player player) {
-        this.transport = transport;
-        this.player = player;
-    }
 
     @Override
     public void onResponse(PlayerSocket socket, String message) {
@@ -85,16 +81,16 @@ public class ScreenResponseHandler implements ResponseHandler {
 
     @Override
     public void onClose(PlayerSocket socket, int statusCode, String reason) {
-        log.debug("Websocket closed: {} from player: {} status code: {} reason: {}", player.getName(), statusCode, reason);
+        log.debug("Websocket closed: {} from player: {} status code: {} reason: {}", player.getId(), statusCode, reason);
     }
 
     @Override
     public void onError(PlayerSocket socket, Throwable error) {
-        log.error("Request error: player: {}, error: {}", player.getName(), error);
+        log.error("Request error: player: {}, error: {}", player.getId(), error);
     }
 
     @Override
     public void onConnect(PlayerSocket socket, Session session) {
-        log.debug("Connected: player: {}, session: {}", player.getName(), session);
+        log.debug("Connected: player: {}, session: {}", player.getId(), session);
     }
 }

@@ -23,17 +23,33 @@ package com.codenjoy.dojo.services.jdbc;
  */
 
 import com.codenjoy.dojo.services.ContextPathGetter;
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.File;
 
 public class SqliteConnectionThreadPoolFactory implements ConnectionThreadPoolFactory {
 
-    private String dbFile;
+    private String database;
 
-    public SqliteConnectionThreadPoolFactory(String dbFile, ContextPathGetter context) {
-        this.dbFile = dbFile.replace(".db", "_" + context.getContext() + ".db");
+    public SqliteConnectionThreadPoolFactory(boolean inMemory, String uri, ContextPathGetter context) {
+        if (inMemory) {
+            String name = StringUtils.substringBetween(uri, "/", ".db");
+            database = String.format("file:%s?mode=memory&cache=shared", name);
+        } else {
+            database = uri.replace(".db", "_" + context.getContext() + ".db");
+            createDirs(database);
+        }
+    }
+
+    private void createDirs(String file) {
+        File parent = new File(file).getParentFile();
+        if (parent != null) {
+            parent.mkdirs();
+        }
     }
 
     @Override
     public CrudConnectionThreadPool create(String... createTableSqls) {
-        return new SqliteConnectionThreadPool(dbFile, createTableSqls);
+        return new SqliteConnectionThreadPool(database, createTableSqls);
     }
 }

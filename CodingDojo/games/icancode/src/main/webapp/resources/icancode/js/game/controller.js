@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -86,7 +86,7 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
                 try {
                     runner.runProgram(getRobot());
                 } catch (e) {
-                    logger.error(e, 'runProgram');
+                    logger.error(e, false);
                     finish();
                     buttons.error();
                     return;
@@ -120,7 +120,7 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
             var robot = getRobot();
             runner.compileProgram(robot);
         } catch (e) {
-            logger.error(e, 'compileProgram');
+            logger.error(e, true);
             finish();
             buttons.error();
             buttons.enableReset();
@@ -165,7 +165,7 @@ function initController(socket, runner, logger, buttons, levelProgress, getRobot
     var preparePart = function(date, part, index, count) {
         var SEP = "|$%&|";
         return "message('" +
-                    game.playerName + SEP +
+                    game.playerId + SEP +
                     date.getTime() + SEP +
                     index + SEP +
                     count + SEP +

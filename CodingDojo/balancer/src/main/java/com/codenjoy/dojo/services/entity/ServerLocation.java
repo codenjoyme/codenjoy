@@ -22,9 +22,13 @@ package com.codenjoy.dojo.services.entity;
  * #L%
  */
 
+import lombok.Getter;
+
+@Getter
 public class ServerLocation {
 
     private String email;
+    private String phone; // TODO я не уверен, что это сейчас надо тут - глянуть на фронт
     private String id;
     private String code;
     private String server;
@@ -33,34 +37,28 @@ public class ServerLocation {
         // do nothing
     }
 
-    public ServerLocation(String email, String id, String code, String server) {
+    public ServerLocation(Player player) {
+        this(player.getEmail(),
+                player.getPhone(),
+                player.getId(),
+                player.getCode(),
+                player.getServer());
+    }
+
+    public ServerLocation(String email, String phone, String id, String code, String server) {
         this.email = email;
+        this.phone = phone;
         this.id = id;
         this.code = code;
         this.server = server;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getServer() {
-        return server;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getId() {
-        return id;
     }
 
     @Override
     public String toString() {
         return "ServerLocation{" +
                 "email='" + email + '\'' +
-                ", id'" + id + '\'' +
+                ", phone='" + phone + '\'' +
+                ", id='" + id + '\'' +
                 ", code='" + code + '\'' +
                 ", server='" + server + '\'' +
                 '}';

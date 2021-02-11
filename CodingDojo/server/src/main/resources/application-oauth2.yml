@@ -1,6 +1,28 @@
 auth-server:
   location: ${OAUTH2_AUTH_SERVER_URL}
 
+# if you want to use nginx proxypass to codenjoy runned in oauth mode, set this true
+# and change proxy_pass settings
+# server {
+#   listen 80;
+#
+#   location /codenjoy-contest {
+#     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#     proxy_set_header X-Forwarded-Proto $scheme;
+#     proxy_set_header X-Forwarded-Port $server_port;
+#     proxy_set_header Host $host;
+#
+#     proxy_http_version 1.1;
+#     proxy_set_header Upgrade $http_upgrade;
+#     proxy_set_header Connection "upgrade";
+#
+#     proxy_pass http://localhost:8080;
+#   }
+# Thanks to https://vkuzel.com/configuration-of-a-nginx-reverse-proxy-in-front-of-a-spring-boot-2-1-application-protected-by-oauth-2-0
+# And https://github.com/socketio/socket.io/issues/1942#issuecomment-82352072
+server:
+  use-forward-headers: true
+
 spring:
   security:
     oauth2:
@@ -11,7 +33,7 @@ spring:
             client-secret: ${OAUTH2_CLIENT_SECRET}
             client-authentication-method: basic
             authorization-grant-type: authorization_code
-            redirect-uri-template: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirect-uri-template: "${OAUTH2_RESOURCE_SERVER_LOCATION:${baseUri}}/login/oauth2/code/{registrationId}"
             scope: ${OAUTH2_SCOPES:openid profile email}
             client-name: ${CLIENT_NAME}
         provider:

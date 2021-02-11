@@ -150,6 +150,11 @@ public class LayeredViewPrinterTest {
             }
 
             @Override
+            public int viewSize() {
+                return viewSize;
+            }
+
+            @Override
             public BiFunction<Integer, Integer, State> elements() {
                 return (index, layer) -> {
                     Point pt = lxy.getXY(index);
@@ -176,7 +181,7 @@ public class LayeredViewPrinterTest {
             }
 
             @Override
-            public Object[] itemsInSameCell(State item) {
+            public Object[] itemsInSameCell(State item, int layer) {
                 Point pt = (Point) item;
                 int length = lxy.getLength(pt.getX(), pt.getY());
                 State inCell = elements().apply(length, 0);
@@ -191,7 +196,6 @@ public class LayeredViewPrinterTest {
         printer = new LayeredViewPrinter(
                 () -> reader,
                 () -> player,
-                viewSize,
                 countLayers);
     }
 

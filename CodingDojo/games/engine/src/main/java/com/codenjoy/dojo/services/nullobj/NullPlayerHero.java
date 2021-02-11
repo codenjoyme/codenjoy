@@ -24,9 +24,13 @@ package com.codenjoy.dojo.services.nullobj;
 
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
-public class NullPlayerHero extends PlayerHero {
+public final class NullPlayerHero extends PlayerHero {
 
     public static final PlayerHero INSTANCE = new NullPlayerHero();
+
+    private NullPlayerHero() {
+        // do nothing
+    }
 
     @Override
     public void down() {

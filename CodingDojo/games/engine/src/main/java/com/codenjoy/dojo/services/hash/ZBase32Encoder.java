@@ -22,6 +22,7 @@ package com.codenjoy.dojo.services.hash;
  * #L%
  */
 
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -29,6 +30,7 @@ import org.apache.commons.lang3.StringUtils;
  * Читай  https://habrahabr.ru/post/190054/
  * Спасибо автору!
  */
+@UtilityClass
 public class ZBase32Encoder {
 
     private static final String ENCODING_TABLE = "ybndrfg8ejkmcpqxot1uwisza345h769";

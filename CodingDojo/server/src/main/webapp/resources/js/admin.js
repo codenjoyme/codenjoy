@@ -32,7 +32,12 @@ function defaultRegistrationSettings() {
         showData4: true,
         defaultGame: null,
         gameTypes: {
-            icancode: ['JavaScript', 'Java', 'eKids', 'Befunge']
+            icancode: [   // TODO вынести это как-то в настройки игры icancode
+                {'name' : 'JavaScript', 'title':'JavaScript (browser version)'},
+                {'name' : 'Contest',    'title':'Java | Kotlin | .Net | JavaScript'},
+                {'name' : 'Befunge',    'title':'Befunge (esoteric language)'},
+                {'name' : 'eKids',      'title':'For Kids'}
+            ]
         }
     };
 }
@@ -44,17 +49,20 @@ pages.admin = function() {
     var settings = new AdminSettings(contextPath, 'general', 'registration');
 
     var loadRegSettings = function() {
-        settings.load(function(data) {
-            setRegSettings(data);
-        });
+        settings.load(
+            function(data) {
+                setRegSettings(data);
+            }, function(error) {
+                setRegSettings(null);
+            });
     }
 
     var saveRegSettings = function() {
         settings.save(getRegSettings(),
             function() {
                 loadRegSettings();
-            }, function(errMsg) {
-                console.log(errMsg);
+            }, function(error) {
+                // do nothing
             });
     }
 
@@ -67,7 +75,7 @@ pages.admin = function() {
         result.showData2 = $('#show-data2').prop('checked');
         result.showData3 = $('#show-data3').prop('checked');
         result.showData4 = $('#show-data4').prop('checked');
-        result.defaultGame = $('#default-game').find('option:selected').text();
+        result.defaultGame = $('#default-game').find('option:selected').val();
 
         return result;
     }
@@ -94,8 +102,9 @@ pages.admin = function() {
         for (var gameName in allTypes) {
             var gameTypes = allTypes[gameName];
             for (var index in gameTypes) {
-                var gameType = gameTypes[index];
-                select.append('<option value="' + gameType + '">' + gameType + '</option>');
+                var name = gameTypes[index].name;
+                var title = gameTypes[index].title;
+                select.append('<option value="' + name + '">' + title + '</option>');
             }
         }
 
@@ -110,11 +119,13 @@ pages.admin = function() {
 
     var setupSaveUserDetails = function() {
         var ajax = new AdminAjax(contextPath, 'admin/user/info');
+        var PLAYER_ID = 'id';
 
-        var names = $('[id$=\\.name]');
-        names.each(function(index, obj) {
-            var name = $(obj);
-            var index = name.attr('index');
+        var elements = $('[id$=\\.' + PLAYER_ID + ']');
+        elements.each(function(index, obj) {
+            var element = $(obj);
+            var index = element.attr('index');
+            var playerId = element.val();
             var prefix = '#players' + index + '\\.';
 
             var setup = function(field) {
@@ -123,7 +134,7 @@ pages.admin = function() {
                     if (!!input.data('button')) return;
                     var test = $('<button type="button">Save</button>').click(function () {
                         var data = {};
-                        data['name'] = name.val();
+                        data[PLAYER_ID] = playerId;
                         data[field] = input.val();
                         ajax.save(data,
                             function() {
@@ -140,10 +151,18 @@ pages.admin = function() {
             };
 
             setup('readableName');
-            setup('name');
+            setup(PLAYER_ID);
+            setup('roomName');
             setup('score');
             setup('callbackUrl');
             setup('data');
+        });
+    }
+
+    var setupSpanHref = function() {
+        $('span.a').click(function() {
+            var url = $(this).attr('href');
+            $.get(url);
         });
     }
 
@@ -152,4 +171,5 @@ pages.admin = function() {
     initHotkeys();
     loadRegSettings();
     setupSaveUserDetails();
+    setupSpanHref();
 }

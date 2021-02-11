@@ -30,7 +30,6 @@ import com.codenjoy.dojo.transport.ws.PlayerTransport;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.util.Map;
 
 @Component
@@ -38,6 +37,7 @@ public class ScreenController implements Controller<Map<ScreenRecipient, ScreenD
 
     private final PlayerTransport transport;
 
+    // autowiring by name
     public ScreenController(PlayerTransport screenPlayerTransport) {
         this.transport = screenPlayerTransport;
     }
@@ -48,24 +48,24 @@ public class ScreenController implements Controller<Map<ScreenRecipient, ScreenD
     }
 
     @Override
-    public void requestControlToAll(Map<ScreenRecipient, ScreenData> data) throws IOException {
+    public void requestControlToAll(Map<ScreenRecipient, ScreenData> data) {
         transport.sendStateToAll(data);
     }
 
     @Override
-    public boolean requestControl(Player player, Map<ScreenRecipient, ScreenData> data) throws IOException {
+    public boolean requestControl(Player player, Map<ScreenRecipient, ScreenData> data) {
         // TODO этот метод вообще не используется
-        return transport.sendState(player.getName(), data);
+        return transport.sendState(player.getId(), data);
     }
 
     @Override
     public void registerPlayerTransport(Player player, Void nothing) {
-        transport.registerPlayerEndpoint(player.getName(),
+        transport.registerPlayerEndpoint(player.getId(),
                 new ScreenResponseHandler(transport, player));
     }
 
     @Override
     public void unregisterPlayerTransport(Player player) {
-        transport.unregisterPlayerEndpoint(player.getName());
+        transport.unregisterPlayerEndpoint(player.getId());
     }
 }

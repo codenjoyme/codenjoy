@@ -32,9 +32,11 @@ public interface LayeredBoardReader {
 
     int size();
 
+    int viewSize();
+
     BiFunction<Integer, Integer, State> elements();
 
     Point viewCenter(Object player);
 
-    Object[] itemsInSameCell(State item);
+    Object[] itemsInSameCell(State item, int layer);
 }

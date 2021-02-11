@@ -27,7 +27,10 @@ import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
+
 public class OriginalWalls extends WallsImpl implements Iterable<Wall> {
+
     private int currentSize;
     private Parameter<Integer> size;
 
@@ -61,15 +64,19 @@ public class OriginalWalls extends WallsImpl implements Iterable<Wall> {
         }
     }
 
+    private void add(int x, int y) {
+        add(pt(x, y));
+    }
+
     @Override
     public void tick() {
         super.tick(); // TODO протестить эту строчку
 
         if (currentSize != size.getValue()) {
             currentSize = size.getValue();
-            List<Wall> walls = subList(Wall.class);
+            List<Wall> walls = this.listSubtypes(Wall.class);
             for (Wall wall : walls.toArray(new Wall[0])) {
-                destroy(wall.getX(), wall.getY());
+                destroy(wall);
             }
 
             regenerate();

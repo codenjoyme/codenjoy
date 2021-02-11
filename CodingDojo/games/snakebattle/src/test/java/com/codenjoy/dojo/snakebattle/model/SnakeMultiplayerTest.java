@@ -28,8 +28,8 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
+import com.codenjoy.dojo.services.round.RoundImpl;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
-import com.codenjoy.dojo.snakebattle.model.board.Timer;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.services.Events;
@@ -74,20 +74,29 @@ public class SnakeMultiplayerTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board.replaceAll("\n", ""));
-        game = new SnakeBoard(level, dice,
-                new Timer(timer),
-                new Timer(new SimpleParameter<>(300)),
-                new Timer(new SimpleParameter<>(1)),
+        RoundImpl round = new RoundImpl(
                 roundsPerMatch,
+                minTicksForWin,
+                timer,
+                new SimpleParameter<>(300),
+                new SimpleParameter<>(1)
+        );
+
+        game = new SnakeBoard(
+                level,
+                dice,
+                round,
                 new SimpleParameter<>(10),
                 new SimpleParameter<>(10),
-                new SimpleParameter<>(3),
-                minTicksForWin);
+                new SimpleParameter<>(3)
+        );
+
+        SimpleParameter<Boolean> roundsEnabled = new SimpleParameter<>(true);
 
         Hero hero = level.getHero(game);
         hero.setActive(true);
         heroEvents = mock(EventListener.class);
-        heroPlayer = new Player(heroEvents);
+        heroPlayer = new Player(heroEvents, roundsEnabled);
         game.newGame(heroPlayer);
         heroPlayer.setHero(hero);
         hero.init(game);
@@ -96,7 +105,7 @@ public class SnakeMultiplayerTest {
         Hero enemy = level.getEnemy(game);
         enemy.setActive(true);
         enemyEvents = mock(EventListener.class);
-        enemyPlayer = new Player(enemyEvents);
+        enemyPlayer = new Player(enemyEvents, roundsEnabled);
         game.newGame(enemyPlayer);
         enemyPlayer.setHero(enemy);
         enemy.init(game);
@@ -1905,6 +1914,7 @@ public class SnakeMultiplayerTest {
         verifyNoMoreInteractions(enemyEvents);
     }
 
+    // TODO ###223 сделать так же как в bomberman/battlecity EventsListenersAssert
     public static void verifyEvents(EventListener events, String expected) {
         if (expected.equals("[]")) {
             try {

@@ -29,34 +29,34 @@ import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/joystick")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class JoystickController {
 
-    private final Registration registration;
-    private final PlayerService playerService;
-    private final Validator validator;
+    private Registration registration;
+    private PlayerService playerService;
+    private Validator validator;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public String joystick(@RequestParam("playerName") String playerName,
+    @GetMapping()
+    public String joystick(@RequestParam("player") String id, // TODO playerId
                            @RequestParam("code") String code,
                            @RequestParam("command") String command)
     {
         validator.checkCommand(command);
-        String playerId = validator.checkPlayerCode(playerName, code);
+        validator.checkPlayerCode(id, code);
 
-        Player registeredPlayer = playerService.get(playerId);
-        if (registeredPlayer == NullPlayer.INSTANCE || !registeredPlayer.getName().equals(playerName)) {
+        Player registeredPlayer = playerService.get(id);
+        if (registeredPlayer == NullPlayer.INSTANCE || !registeredPlayer.getId().equals(id)) {
             return "fail";
         }
-        Joystick joystick = playerService.getJoystick(playerName);
+        Joystick joystick = playerService.getJoystick(id);
 
         new PlayerCommand(joystick, command).execute();
 

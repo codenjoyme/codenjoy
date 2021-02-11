@@ -26,9 +26,13 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 
-public class NullGameField implements GameField {
+public final class NullGameField implements GameField {
 
     public static final GameField INSTANCE = new NullGameField();
+
+    private NullGameField() {
+        // do nothing
+    }
 
     @Override
     public BoardReader reader() {

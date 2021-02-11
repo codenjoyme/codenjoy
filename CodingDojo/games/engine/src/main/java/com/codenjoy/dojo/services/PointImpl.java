@@ -23,23 +23,25 @@ package com.codenjoy.dojo.services;
  */
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.json.JSONObject;
 
 /**
  * Каждый объект на поле имеет свои координаты. Этот класс обычно используется дял указания координат или как родитель.
  * Может использоваться в коллекциях.
  */
+@Getter
+@Setter
+@AllArgsConstructor
 public class PointImpl implements Point, Comparable<Point> {
+
     protected int x;
     protected int y;
 
     public PointImpl() {
         this(-1, -1);
-    }
-
-    public PointImpl(int x, int y) {
-        this.x = x;
-        this.y = y;
     }
 
     public PointImpl(Point point) {
@@ -48,26 +50,6 @@ public class PointImpl implements Point, Comparable<Point> {
 
     public PointImpl(JSONObject json) {
         this(json.getInt("x"), json.getInt("y"));
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
-    }
-
-    @Override
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    @Override
-    public void setY(int y) {
-        this.y = y;
     }
 
     @Override
@@ -97,6 +79,14 @@ public class PointImpl implements Point, Comparable<Point> {
     @Override
     public int hashCode() {
         return x*1000 + y;
+    }
+
+    public int parentHashCode() {
+        return super.hashCode();
+    }
+
+    public boolean parentEquals(Object o) {
+        return super.equals(o);
     }
 
     @Override
@@ -171,5 +161,9 @@ public class PointImpl implements Point, Comparable<Point> {
     @Override
     public Point relative(Point offset) {
         return pt(x - offset.getX(), y - offset.getY());
+    }
+
+    public static Point random(Dice dice, int size) {
+        return pt(dice.next(size), dice.next(size));
     }
 }

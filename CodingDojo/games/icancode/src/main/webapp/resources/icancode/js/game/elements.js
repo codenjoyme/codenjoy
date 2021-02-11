@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -139,6 +139,9 @@ var Element = {
 
     getElementsOfType: function (type) {
         return elementsByType[type];
-    }
+    },
 
+    isWall: function(element) {
+        return element.type == 'WALL';
+    }
 };

@@ -23,18 +23,36 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.services.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.codenjoy.dojo.bomberman.model.Elements.DEAD_MEAT_CHOPPER;
 import static com.codenjoy.dojo.bomberman.model.Elements.MEAT_CHOPPER;
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
-public class MeatChopper extends Wall implements State<Elements, Player> {
+public class MeatChopper extends Wall implements State<Elements, Player>, Tickable {
 
-    private Direction direction;
+    public static final int MAX = 100;
+
+    protected Dice dice;
+    protected Field field;
+    protected Direction direction;
+    protected boolean stop = false;
+
+    public MeatChopper(Point pt, Field field, Dice dice) {
+        super(pt);
+        this.field = field;
+        this.dice = dice;
+    }
 
     public MeatChopper(int x, int y) {
         super(x, y);
+    }
+
+    public void stop() {
+        this.stop = true;
     }
 
     @Override
@@ -47,23 +65,62 @@ public class MeatChopper extends Wall implements State<Elements, Player> {
     }
 
     public void setDirection(Direction direction) {
+        stop = false;
         this.direction = direction;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Blast blast = null;
-
-        if (alsoAtPoint.length > 1 && alsoAtPoint[1] != null) {
-            if (alsoAtPoint[1] instanceof Blast) {
-                blast = (Blast)alsoAtPoint[1];
-            }
-        }
-
+        Blast blast = filterOne(alsoAtPoint, Blast.class);
         if (blast != null) {
             return DEAD_MEAT_CHOPPER;
-        } else {
-            return MEAT_CHOPPER;
         }
+
+        return MEAT_CHOPPER;
+    }
+
+    @Override
+    public void tick() {
+        // неугомонные чоперы в тестах только так останавливаются
+        if (stop) {
+            return;
+        }
+
+        Point from = this;
+        if (direction == null
+            || dice.next(5) == 0
+            || field.walls().itsMe(direction.change(from)))
+        {
+            direction = selectNew(from);
+        }
+
+        if (direction != null) {
+            move(direction.change(from));
+        }
+    }
+
+    private Direction selectNew(Point from) {
+        int iteration = 0;
+        Point to;
+        Direction direction;
+        Set<Direction> all = new HashSet<>();
+        do {
+            int n = 4;
+            int move = dice.next(n);
+            direction = Direction.valueOf(move);
+            all.add(direction);
+
+            to = direction.change(from);
+        } while (barrier(to) && iteration++ < MAX && all.size() < 4);
+
+        if (iteration >= MAX) {
+            return null;
+        }
+
+        return direction;
+    }
+
+    private boolean barrier(Point to) {
+        return field.walls().itsMe(to) || to.isOutOf(field.size());
     }
 }

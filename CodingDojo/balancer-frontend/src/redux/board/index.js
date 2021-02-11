@@ -209,9 +209,10 @@ function* fetchRatingSaga() {
 }
 
 function* ratingSync() {
+    const timeout = process.env.REACT_APP_SCORES_UPDATE_TIMEOUT;
     while (true) {
         yield put(fetchRating());
-        yield delay(10000);
+        yield delay(timeout);
     }
 }
 

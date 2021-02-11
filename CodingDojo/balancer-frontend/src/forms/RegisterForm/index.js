@@ -2,21 +2,24 @@
 import React, { Component } from 'react';
 import { Formik, Form, Field } from 'formik';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
+
 import * as Yup from 'yup';
 import _ from 'lodash';
-
+import { book } from '../../routes';
 // proj
 import { register, setVisiblePrivacyModal } from '../../redux/register';
 import { PrivacyPolicyModal } from '../../components';
 import { CustomInputComponent } from '../common/customInput';
 import { CustomCheckboxComponent } from '../common/customCheckbox';
 import { CustomSelectComponent } from '../common/customSelect';
-import errorSnake from '../common/DuneSnake-icon.svg';
-
+import errorImg from '../common/Bomb_server_Error.jpg';
+import { PhoneInput } from 'forms/common/phoneInput';
 // own
 import styles from '../common/styles.module.css';
 
-const { formWrap, title, submit, backgroundSection, systemError } = styles;
+const { formWrap, title, submit, backgroundSection, systemError, checkBoxText } = styles;
 
 const requiredShortString = Yup.string()
     .min(2, 'Too Short!')
@@ -26,6 +29,8 @@ const optionalString = Yup.string().nullable(true);
 
 const RegisterSchema = Yup.object().shape({
     password:  requiredShortString,
+    phone:     requiredShortString,
+    updates:   Yup.boolean().oneOf([ true ]),
     firstName: requiredShortString,
     lastName:  requiredShortString,
     city:      requiredShortString,
@@ -86,20 +91,24 @@ const options = [
 ];
 
 class LoginForm extends Component {
+    componentDidUpdate() {
+        const { history, shouldConfirmRegistration } = this.props;
+        if(shouldConfirmRegistration) {
+            history.push(`${book.registerConfirm}`)
+        }
+    }
+
     render() {
         const { register, setVisiblePrivacyModal } = this.props;
         const { visiblePrivacyModal, registerErrors, isLoading } = this.props;
-
+        const errorMsg = _.get(registerErrors, 'errorMsg')
         return (
             <div className={ formWrap }>
                 <h1 className={ title }>Новий гравець</h1>
-                { _.get(registerErrors, 'system') && (
+                { errorMsg&& (
                     <div className={ systemError }>
-                        <img src={ errorSnake } alt='' />
-                        Через непередбачуваний політ діда Мороза антени було
-                        пошкоджено. <br />
-                        Як тільки пошкодження будуть усунені, сервіс буде
-                        доступним.
+                        <img src={ errorImg } alt='' />
+                        {errorMsg}
                     </div>
                 ) }
                 <Formik
@@ -108,11 +117,13 @@ class LoginForm extends Component {
                         lastName:        '',
                         firstName:       '',
                         passwordConfirm: '',
+                        phone:           '',
                         city:            '',
                         email:           '',
                         skills:          '',
                         others:          '',
                         terms:           false,
+                        updates:         false,
                     } }
                     validationSchema={ RegisterSchema }
                     onSubmit={ payload => {
@@ -143,11 +154,21 @@ class LoginForm extends Component {
                                     name='email'
                                     errors={ _.get(
                                         registerErrors,
-                                        'credentials',
+                                        'errorMsg',
                                     ) }
                                     placeholder='Електронна пошта*'
                                     component={ CustomInputComponent }
                                 />
+                                  <Field
+                                      type='phone'
+                                      name='phone'
+                                      placeholder='Номер телефону*'
+                                      component={ PhoneInput }
+                                      errors={ _.get(
+                                          registerErrors,
+                                          'errorMsg',
+                                      ) }
+                                  />
                                 <Field
                                     type='password'
                                     name='password'
@@ -186,11 +207,28 @@ class LoginForm extends Component {
                                 component={ CustomCheckboxComponent }
                                 label={
                                     <div
+                                        className={ checkBoxText }
                                         onClick={ () =>
                                             setVisiblePrivacyModal(true)
                                         }
                                     >
-                                        Погоджуюсь с політикою конфіденційності*
+                                        Погоджуюсь с політикою конфіденційності
+                                        <div style={{ textDecoration: 'underline' }}>
+                                            (будь ласка, клікніть на посилання для подробиць)
+                                        </div>
+                                    </div>
+                                }
+                                type='checkbox'
+                            />
+
+                            <Field
+                                name='updates'
+                                component={ CustomCheckboxComponent }
+                                label={
+                                    <div
+                                        className={ checkBoxText }
+                                    >
+                                        Я хочу отримувати листи про можливість віддаленої роботи: вакансії, новини статті, заходи та іншу інформацію, пов'язану з інноваційною програмою для IT-спеціалістів та розробників, які хочуть працювати віддалено
                                     </div>
                                 }
                                 type='checkbox'
@@ -210,7 +248,7 @@ class LoginForm extends Component {
                                     className={ submit }
                                     type='submit'
                                 >
-                                    Зареєструватися
+                                    Продовжити
                                 </button>
                             </div>
                         </Form>
@@ -222,14 +260,18 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps = state => ({
-    registerErrors:      state.register.registerErrors,
-    isLoading:           state.register.isLoading,
-    visiblePrivacyModal: state.register.visiblePrivacyModal,
+    registerErrors:            state.register.registerErrors,
+    isLoading:                 state.register.isLoading,
+    visiblePrivacyModal:       state.register.visiblePrivacyModal,
+    shouldConfirmRegistration: state.register.shouldConfirmRegistration,
 });
 
 const mapDispatchToProps = { register, setVisiblePrivacyModal };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
+export default compose(
+    connect(
+        mapStateToProps,
+        mapDispatchToProps,
+    ),
+    withRouter,
 )(LoginForm);

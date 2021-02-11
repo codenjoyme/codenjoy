@@ -34,7 +34,7 @@ import org.springframework.validation.Validator;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 3/27/2019
  */
 @Component
@@ -98,7 +98,7 @@ public class RegistrationValidator implements Validator {
         }
 
         String gameName = rooms.getGameName(player.getGameName());
-        if (!validator.checkGameName(gameName, CANT_BE_NULL)) {
+        if (!validator.isGameName(gameName, CANT_BE_NULL)) {
             errors.rejectValue("gameName", "registration.game.invalid", new Object[]{ gameName }, null);
         }
     }
@@ -127,14 +127,14 @@ public class RegistrationValidator implements Validator {
     }
 
     private boolean validateEmailStructure(String email) {
-        return validator.checkEmail(email, CANT_BE_NULL);
+        return validator.isEmail(email, CANT_BE_NULL);
     }
 
     private boolean validateNicknameStructure(String name) {
         if (nicknameAllowed) {
-            return validator.checkNickName(name);
+            return validator.isNickName(name);
         } else {
-            return validator.checkReadableName(name);
+            return validator.isReadableName(name);
         }
     }
 }

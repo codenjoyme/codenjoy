@@ -32,11 +32,12 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
-public class NullGameType implements GameType {
+public final class NullGameType implements GameType {
 
     public static final GameType INSTANCE = new NullGameType();
 
@@ -65,11 +66,11 @@ public class NullGameType implements GameType {
 
     @Override
     public String name() {
-        throw exception();
+        return getClass().getSimpleName();
     }
 
     @Override
-    public Enum[] getPlots() {
+    public CharElements[] getPlots() {
         throw exception();
     }
 
@@ -94,7 +95,7 @@ public class NullGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerId) {
         throw exception();
     }
 

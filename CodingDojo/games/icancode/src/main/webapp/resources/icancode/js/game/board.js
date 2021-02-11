@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -24,7 +24,8 @@
  */
 
 // ========================== board ==========================
-
+// TODO привести этот класс в соответствие с js клиентом icancode (и лдругих итгрушек) у них есть отличия полезные друг другу
+// TODO затем устранить дубликаты, пусть клиент js тянется maven отсюда
 var LengthToXY = function (boardSize) {
     var inversion = function (y) {
         return boardSize - 1 - y;
@@ -125,7 +126,7 @@ var Board = function (boardString) {
         return result;
     }
 
-    var findAllElements = function (elements, layer) {
+    var get = function (elements, layer) {
         var result = [];
         for (var x = 0; x < size; x++) {
             for (var y = 0; y < size; y++) {
@@ -183,7 +184,7 @@ var Board = function (boardString) {
 
     var getOtherHeroes = function () {
         var elements = [Element.ROBOT_OTHER, Element.ROBOT_OTHER_FALLING, Element.ROBOT_OTHER_LASER];
-        return findAllElements(elements, LAYER2)
+        return get(elements, LAYER2)
             .concat(findAll(Element.ROBOT_OTHER_FLYING, LAYER3));
     };
 
@@ -192,13 +193,13 @@ var Board = function (boardString) {
             Element.LASER_MACHINE_CHARGING_UP, Element.LASER_MACHINE_CHARGING_DOWN,
             Element.LASER_MACHINE_READY_LEFT, Element.LASER_MACHINE_READY_RIGHT,
             Element.LASER_MACHINE_READY_UP, Element.LASER_MACHINE_READY_DOWN];
-        return findAllElements(elements, LAYER1);
+        return get(elements, LAYER1);
     };
 
     var getLasers = function () {
         var elements = [Element.LASER_LEFT, Element.LASER_RIGHT,
             Element.LASER_UP, Element.LASER_DOWN];
-        return findAllElements(elements, LAYER2);
+        return get(elements, LAYER2);
     };
 
     var getWalls = function () {
@@ -209,7 +210,7 @@ var Board = function (boardString) {
             Element.WALL_BACK_ANGLE_LEFT, Element.WALL_BACK_ANGLE_RIGHT,
             Element.ANGLE_OUT_RIGHT, Element.ANGLE_OUT_LEFT,
             Element.SPACE];
-        return findAllElements(elements, LAYER1);
+        return get(elements, LAYER1);
     };
 
     var getBoxes = function () {
@@ -450,6 +451,10 @@ var Board = function (boardString) {
         return result;
     };
 
+    var getHero = function() {
+        return pt(heroPosition.x, heroPosition.y);
+    }
+
     // thanks http://jsfiddle.net/queryj/g109jvxd/
     String.format = function () {
         // The string containing the format items (e.g. "{0}")
@@ -466,31 +471,23 @@ var Board = function (boardString) {
     }
 
     var toString = function () {
-        return String.format(
-            "Board layer 1:\n{0}\n" +
-            "Board layer 2:\n{1}\n" +
-            "Board layer 3:\n{2}\n" +
-            "Robot at: {3}\n" +
-            "Other robots at: {4}\n" +
-            "LaserMachine at: {5}" +
-            "Laser at: {6}" +
-            boardAsString(LAYER1),
-            boardAsString(LAYER2),
-            boardAsString(LAYER3),
-            getHero(),
-            printArray(getOtherHeroes()),
-            printArray(getLaserMachines()),
-            printArray(getLasers())
-        );
+        return "Board layer 1:\n" +
+            boardAsString(LAYER1) + "\n" +
+            "Board layer 2:\n" +
+            boardAsString(LAYER2) + "\n" +
+            "Board layer 3:\n" +
+            boardAsString(LAYER3) + "\n" +
+            "Robot at: " + getHero() + "\n" +
+            "Other robots at: " + printArray(getOtherHeroes()) + "\n" +
+            "LaserMachine at: " + printArray(getLaserMachines()) + "\n" +
+            "Laser at: " + printArray(getLasers()) + "";
     };
 
     return {
         size: function () {
             return size;
         },
-        getHero: function () {
-            return pt(heroPosition.x, heroPosition.y);
-        },
+        getHero: getHero,
         isLevelFinished: function() {
             return levelFinished;
         },

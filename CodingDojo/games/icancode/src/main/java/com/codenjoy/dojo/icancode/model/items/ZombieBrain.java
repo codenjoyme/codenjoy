@@ -2,9 +2,9 @@ package com.codenjoy.dojo.icancode.model.items;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2018 EPAM
+ * Copyright (C) 2016 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,7 +22,7 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
+import com.codenjoy.dojo.icancode.model.Field;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
@@ -33,7 +33,7 @@ import static java.util.stream.Collectors.toList;
 
 public class ZombieBrain {
 
-    public Direction whereToGo(Point zombie, IField field) {
+    public Direction whereToGo(Point zombie, Field field) {
         List<Point> heroes = field.getLevel().getItems(HeroItem.class).stream()
                 .map(item -> item.getCell()).collect(toList());
         if (heroes.isEmpty()) {
@@ -43,47 +43,31 @@ public class ZombieBrain {
         if (shortestWay.isEmpty()) {
             return null;
         }
-        Direction nextStep = shortestWay.get(0);
-        return nextStep;
+        Direction result = shortestWay.get(0);
+        return result;
     }
 
-    List<Direction> getShortestWay(IField field, Point from, List<Point> to) {
+    List<Direction> getShortestWay(Field field, Point from, List<Point> to) {
         DeikstraFindWay.Possible map = possible(field);
         DeikstraFindWay findWay = new DeikstraFindWay();
-        List<Direction> shortestWay = findWay.getShortestWay(field.size(), from, to, map);
-        return shortestWay;
+        List<Direction> result = findWay.getShortestWay(field.size(), from, to, map);
+        return result;
     }
 
-    private DeikstraFindWay.Possible possible(IField field) {
-        return new DeikstraFindWay.Possible() {
+    private DeikstraFindWay.Possible possible(Field field) {
+        return new DeikstraFindWay.Possible() { // TODO test me
             @Override
-            public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
+            public boolean possible(Point point) {
+                int x = point.getX();
+                int y = point.getY();
 
-                if (isNotFree(x, y, field)) return false;
+                if (field.isBarrier(x, y)) return false;
+                if (field.isAt(x, y, Hole.class)) return false;
+                if (field.isAt(x, y, Box.class)) return false;
 
-                Point to = where.change(from);
-                int nx = to.getX();
-                int ny = to.getY();
-
-                if (to.isOutOf(field.size())) return false;
-
-                if (isNotFree(nx, ny, field)) return false;
-
-                return true;
-            }
-
-            @Override
-            public boolean possible(Point atWay) {
                 return true;
             }
         };
     }
 
-    boolean isNotFree(int x, int y, IField field) {
-        return field.isBarrier(x, y)
-                || field.isAt(x, y, Hole.class)
-                || field.isAt(x, y, Box.class);
-    }
 }

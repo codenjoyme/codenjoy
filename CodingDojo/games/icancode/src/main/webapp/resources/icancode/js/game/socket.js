@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -64,7 +64,7 @@ function initSocket(game, buttons, logger, onSocketMessage, onSocketClose) {
         var server = getWSProtocol() + '://' + hostIp + ':' + port + '/codenjoy-contest/ws';
 
         logger.print('Connecting to Hero...');
-        socket = createSocket(server + '?user=' + game.playerName + "&code=" + game.code);
+        socket = createSocket(server + '?user=' + game.playerId + "&code=" + game.code);
 
         socket.onopen = function() {
             logger.print('...connected successfully!');
@@ -88,7 +88,7 @@ function initSocket(game, buttons, logger, onSocketMessage, onSocketClose) {
         }
 
         socket.onerror = function(error) {
-            logger.error(error, 'runProgram');
+            logger.error(error, false);
             socket = null;
         }
 

@@ -71,7 +71,14 @@ function initRegistration(waitApprove, contextPath) {
     function configureFormFromAdminSettings(onFinish) {
         var general = new AdminSettings(contextPath, 'general', 'registration');
 
-        general.load(function(data) {
+        general.load(
+            function(data) {
+                onLoad(data);
+            }, function(error) {
+                onLoad(null);            
+            });
+        
+        var onLoad = function(data) {
             if ($.isEmptyObject(data)) {
                 data = defaultRegistrationSettings();
             }
@@ -91,7 +98,7 @@ function initRegistration(waitApprove, contextPath) {
             if (!!onFinish) {
                 onFinish();
             }
-        });
+        } 
     }
 
     function loadRegistrationPage() {
@@ -179,6 +186,12 @@ function initRegistration(waitApprove, contextPath) {
             validation(index);
         }
 
+        var fixMd5 = function(element) {
+            if ($(element).length) {
+                $(element).val($.md5($(element).val()));
+            }
+        }
+
         var submitForm = function () {
             if ($('form .not-valid').length == 0) {
                 $('#data input').val(
@@ -189,7 +202,9 @@ function initRegistration(waitApprove, contextPath) {
                 );
 
                 saveDataToLocalStorage();
-                $("#form").submit();
+                fixMd5('#password input');
+                fixMd5('#passwordConfirmation input');
+                $('#form').submit();
             }
         };
 
@@ -240,18 +255,19 @@ function initRegistration(waitApprove, contextPath) {
         var select = $(selector).find('select');
         select.children().remove();
 
-        var currentGameName = null;
+        var current = null;
         for (var index in gameTypes) {
             var types = gameTypes[index];
             if (gameName == index && !!types) {
-                currentGameName = types;
+                current = types;
                 break;
             }
         }
 
-        for (var index in currentGameName) {
-            var gameType = currentGameName[index];
-            select.append('<option value="' + gameType + '">' + gameType + '</option>');
+        for (var index in current) {
+            var name = current[index].name;
+            var title = current[index].title;
+            select.append('<option value="' + name + '">' + title + '</option>');
         }
 
         return select;
@@ -275,7 +291,7 @@ function initRegistration(waitApprove, contextPath) {
     }
 
     function saveDataToLocalStorage() {
-        localStorage.setItem(KEYS.game.type, $('#gameType').find('option:selected').text());
+        localStorage.setItem(KEYS.game.type, $('#gameType').find('option:selected').val());
         localStorage.setItem(KEYS.game.name, $('#gameName').find('option:selected').text());
         localStorage.setItem(KEYS.userData.email, $('#email input').val());
         localStorage.setItem(KEYS.userData.readableName, $('#readableName input').val());

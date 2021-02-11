@@ -23,7 +23,7 @@ package com.codenjoy.dojo.lemonade;
  */
 
 
-import com.codenjoy.dojo.client.LocalGameRunner;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.lemonade.client.Board;
 import com.codenjoy.dojo.lemonade.client.ai.AISolver;
 import com.codenjoy.dojo.lemonade.services.GameRunner;
@@ -49,6 +49,7 @@ public class SmokeTest {
         LocalGameRunner.timeout = 0;
         LocalGameRunner.out = (e) -> messages.add(e);
         LocalGameRunner.countIterations = 10;
+        LocalGameRunner.printScores = false;
 
         Dice dice = LocalGameRunner.getDice( // "random numbers"
                 1);
@@ -144,7 +145,7 @@ public class SmokeTest {
             expected.append("1:  'weatherForecast':'" + data[day * dataSize + 4].replace(' ', '_') + "'\n");
             expected.append("1:}\n");
             expected.append("1:Answer: message('go " + moveStr + "')\n");
-            expected.append("Fire Event: WIN (" + profitStr + ", " + data[(day + 1) * dataSize] + ")\n");
+            expected.append("1:Fire Event: WIN (" + profitStr + ", " + data[(day + 1) * dataSize] + ")\n");
             expected.append("------------------------------------------");
 
             history.add("1:    {\n" +

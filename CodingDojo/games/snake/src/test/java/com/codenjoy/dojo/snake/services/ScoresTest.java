@@ -35,10 +35,7 @@ public class ScoresTest {
     private Scores scores;
     private Settings settings;
 
-    private Integer gameOverPenalty;
-    private Integer startSnakeLength;
-    private Integer eatStonePenalty;
-    private Integer eatStoneDecrease;
+    private SnakeSettings setup;
 
     public void snakeEatApple() {
         scores.event(Events.EAT_APPLE);
@@ -55,18 +52,16 @@ public class ScoresTest {
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new Scores(0, settings);
-
-        gameOverPenalty = settings.getParameter("Game over penalty").type(Integer.class).getValue();
-        startSnakeLength = settings.getParameter("Start snake length").type(Integer.class).getValue();
-        eatStonePenalty = settings.getParameter("Eat stone penalty").type(Integer.class).getValue();
-        eatStoneDecrease = settings.getParameter("Eat stone decrease").type(Integer.class).getValue();
+        setup = new SnakeSettings(settings);
+        scores = getScores(0);
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        // given
+        scores = getScores(140);
 
+        // when
         snakeEatApple();  //+3
         snakeEatApple();  //+4
         snakeEatApple();  //+5
@@ -76,27 +71,43 @@ public class ScoresTest {
 
         snakeIsDead();    //-50
 
-        assertEquals(140 + 3 + 4 + 5 + 6 - eatStonePenalty - gameOverPenalty,
+        // then
+        assertEquals(140 + 3 + 4 + 5 + 6
+                        - setup.eatStonePenalty().getValue()
+                        - setup.gameOverPenalty().getValue(),
                 score());
+        assertEquals(2, length());
     }
 
     @Test
     public void shouldSnakeLengthCantLessThen3() {
-        scores = new Scores(0, settings);
+        // given
+        scores = getScores(0);
 
+        // when
         snakeEatStone();  //-10
         snakeEatStone();  //-10
 
+        // then
         assertEquals(0, score());
+        assertEquals(2, length());
 
+        // when
         snakeEatApple();
 
+        // then
         assertEquals(3, score());
+        assertEquals(3, length());
+    }
+
+    private Scores getScores(int startScore) {
+        return new Scores(startScore, setup);
     }
 
     @Test
     public void shouldShortLengthWhenEatStone() {
-        scores = new Scores(0, settings);
+        // given
+        scores = getScores(0);
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
@@ -109,18 +120,29 @@ public class ScoresTest {
         snakeEatApple();  //+11
         snakeEatApple();  //+12
 
+        assertEquals(12, length());
+
+        // when
         snakeEatStone();  //-10
 
+        // then
+        assertEquals(2, length());
+
+        // when
         snakeEatApple();  //+3
         snakeEatApple();  //+4
 
+        // then
         assertEquals(3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12
-                - eatStonePenalty + 3 + 4, score());
+                - setup.eatStonePenalty().getValue()
+                + 3 + 4, score());
+        assertEquals(4, length());
     }
 
     @Test
     public void shouldClearScoreTogetherWithSnakeLength() {
-        scores = new Scores(0, settings);
+        // given
+        scores = getScores(0);
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
@@ -133,56 +155,86 @@ public class ScoresTest {
         snakeEatApple();  //+11
         snakeEatApple();  //+12
 
+        assertEquals(12, length());
+
+        // when
         scores.clear();
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
 
+        // then
         assertEquals(3 + 4, score());
+        assertEquals(4, length());
     }
 
     @Test
-    public void shouldStartsFrom3AfterDead() {
-        scores = new Scores(100, settings);
+    public void shouldStartsFrom3_afterDead() {
+        // given
+        scores = getScores(100);
 
+        // when
         snakeIsDead();    //-5
 
         snakeEatApple();  //+3
         snakeEatApple();  //+4
 
-        assertEquals(100 - gameOverPenalty + 3 + 4, score());
+        // then
+        assertEquals(100
+                - setup.gameOverPenalty().getValue()
+                + 3 + 4, score());
+        assertEquals(4, length());
     }
 
     private int score() {
         return scores.getScore().intValue();
     }
 
-    @Test
-    public void shouldStillZeroAfterDead() {
-        scores = new Scores(0, settings);
-
-        snakeIsDead();    //-5
-
-        assertEquals(0, score());
+    private int length() {
+        return scores.getLength().intValue();
     }
 
     @Test
-    public void shouldStillZeroAfterEatStone() {
-        scores = new Scores(0, settings);
+    public void shouldStillZeroAfterDead() {
+        // given
+        scores = getScores(0);
 
+        // when
+        snakeIsDead();    //-5
+
+        // then
+        assertEquals(0, score());
+        assertEquals(2, length());
+    }
+
+    @Test
+    public void shouldStillZero_afterEatStone() {
+        // given
+        scores = getScores(0);
+
+        // when
         snakeEatStone();    //-10
 
+        // then
         assertEquals(0, score());
+        assertEquals(2, length());
     }
 
     @Test
     public void shouldClearScore() {
-        scores = new Scores(0, settings);
+        // given
+        scores = getScores(0);
 
         snakeEatApple();  //+3
 
+        assertEquals(3, score());
+        assertEquals(3, length());
+
+        // when
         scores.clear();
 
+        // then
         assertEquals(0, score());
+        assertEquals(2, length());
     }
 }

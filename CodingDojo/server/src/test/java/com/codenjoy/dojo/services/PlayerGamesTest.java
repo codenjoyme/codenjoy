@@ -23,40 +23,30 @@ package com.codenjoy.dojo.services;
  */
 
 
-import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.printer.BoardReader;
-import lombok.SneakyThrows;
 import org.json.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
+import org.mockito.Mockito;
 
 import java.util.*;
 
+import static com.codenjoy.dojo.services.PlayerGames.*;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.DISPOSABLE;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.RELOAD_ALONE;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-public class PlayerGamesTest {
+public class PlayerGamesTest extends AbstractPlayerGamesTest {
 
-    private PlayerGames playerGames;
-    private List<GameType> gameTypes = new LinkedList<>();
-    private Map<Player, Closeable> ais = new HashMap<>();
-    private List<Joystick> joysticks = new LinkedList<>();
-    private List<Joystick> lazyJoysticks = new LinkedList<>();
-    private List<GamePlayer> gamePlayers = new LinkedList<>();
-    private List<GameField> fields = new LinkedList<>();
-
-    @Before
-    public void setUp() {
-        playerGames = new PlayerGames();
-    }
+    private static final int NEVER = 0;
+    public static final int ONCE = 1;
 
     private PlayerGame removed;
 
@@ -65,9 +55,9 @@ public class PlayerGamesTest {
         // given
         Player player = createPlayer();
 
-        assertEquals(false,playerGames.isEmpty());
+        assertEquals(false, playerGames.isEmpty());
         assertEquals(1, playerGames.size());
-        PlayerGame playerGame = playerGames.get(player.getName());
+        PlayerGame playerGame = playerGames.get(player.getId());
         GameField field = playerGame.getGame().getField();
         playerGames.onRemove(pg -> removed = pg);
 
@@ -75,7 +65,7 @@ public class PlayerGamesTest {
         playerGames.remove(player);
 
         // then
-        assertEquals(true,playerGames.isEmpty());
+        assertEquals(true, playerGames.isEmpty());
         assertEquals(0, playerGames.size());
 
         verifyRemove(playerGame, field);
@@ -83,18 +73,25 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void testGet() {
-        // given
-        Player player = createPlayer();
+    public void testGet_notExists() {
+        // when
+        PlayerGame playerGame = playerGames.get("bla");
 
-        assertEquals(NullPlayerGame.INSTANCE, playerGames.get("bla"));
+        // then
+        assertEquals(NullPlayerGame.INSTANCE, playerGame);
+    }
+
+    @Test
+    public void testGet_exists() {
+        // given
+        Player player = createPlayer("game");
 
         // when
-        PlayerGame playerGame = playerGames.get(player.getName());
+        PlayerGame playerGame = playerGames.get(player.getId());
 
         // then
         assertEquals(player, playerGame.getPlayer());
-//        assertEquals(game, playerGame.getGame());
+        assertEquals(fields.get(0), playerGame.getGame().getField());
     }
 
     @Test
@@ -121,7 +118,7 @@ public class PlayerGamesTest {
         assertEquals(false, playerGames.isEmpty());
         assertEquals(2, playerGames.size());
 
-        PlayerGame playerGame = playerGames.get(otherPlayer.getName());
+        PlayerGame playerGame = playerGames.get(otherPlayer.getId());
 
         // TODO интересная бага, время от времени при запуске всех тестов parent проекта этот ассерт слетает потому что == не то же самое что equals. Интересный квест почему. Не критично, просто любопытно
         // System.out.println("==> " + (otherPlayer == playerGame.getPlayer()));
@@ -149,57 +146,6 @@ public class PlayerGamesTest {
         assertEquals(false,iterator.hasNext());
     }
 
-    private Player createPlayer(String game) {
-        return createPlayer(game, "player" + Calendar.getInstance().getTimeInMillis(),
-                MultiplayerType.SINGLE);
-    }
-
-    private Player createPlayer(String gameName, String name, MultiplayerType type) {
-        return createPlayer(gameName, name, type, null);
-    }
-
-    private Player createPlayer(String gameName, String name, MultiplayerType type, PlayerSave save) {
-        return createPlayer(gameName, name, type, save, "board");
-    }
-
-    private Player createPlayer(String gameName, String name, MultiplayerType type, PlayerSave save, Object board) {
-        GameService gameService = mock(GameService.class);
-        GameType gameType = mock(GameType.class);
-        gameTypes.add(gameType);
-        PlayerScores scores = mock(PlayerScores.class);
-        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
-        when(gameType.name()).thenReturn(gameName);
-        when(gameService.getGame(anyString())).thenReturn(gameType);
-
-        Player player = new Player(name, "url", gameType, scores, mock(Information.class));
-        player.setEventListener(mock(InformationCollector.class));
-        Closeable ai = mock(Closeable.class);
-        ais.put(player, ai);
-        player.setAI(ai);
-
-        playerGames.onAdd(pg -> lazyJoysticks.add(pg.getJoystick()));
-
-        TestUtils.Env env =
-                TestUtils.getPlayerGame(
-                        playerGames,
-                        player,
-                        inv -> {
-                            GameField field = mock(GameField.class);
-                            when(field.reader()).thenReturn(mock(BoardReader.class));
-                            fields.add(field);
-                            return field;
-                        },
-                        type,
-                        save,
-                        parameters -> board
-                );
-
-        joysticks.add(env.joystick);
-        gamePlayers.add(env.gamePlayer);
-
-        return player;
-    }
-
     @Test
     public void testPlayers() {
         // given
@@ -213,29 +159,6 @@ public class PlayerGamesTest {
         assertEquals(player, players.get(0));
         assertEquals(otherPlayer, players.get(1));
         assertEquals(2, players.size());
-    }
-
-    @Test
-    public void testGetAll() {
-        // given
-        Player player = createPlayer();
-        Player secondPlayer = createPlayer();
-        Player thirdPlayer = createPlayer("game2");
-
-        // when
-        List<PlayerGame> result = playerGames.getAll("game");
-
-        // then
-        assertEquals(2, result.size());
-        assertEquals(player, result.get(0).getPlayer());
-        assertEquals(secondPlayer, result.get(1).getPlayer());
-
-        // when
-        List<PlayerGame> result2 = playerGames.getAll("game2");
-
-        // then
-        assertEquals(1, result2.size());
-        assertEquals(thirdPlayer, result2.get(0).getPlayer());
     }
 
     @Test
@@ -261,10 +184,6 @@ public class PlayerGamesTest {
         assertEquals(thirdPlayer, result2.get(0));
     }
 
-    private Player createPlayer() {
-        return createPlayer("game");
-    }
-
     @Test
     public void testClear() {
         // given
@@ -272,13 +191,13 @@ public class PlayerGamesTest {
         Player player2 = createPlayer();
         Player player3 = createPlayer();
 
-        PlayerGame playerGame1 = playerGames.get(player.getName());
+        PlayerGame playerGame1 = playerGames.get(player.getId());
         GameField field1 = playerGame1.getGame().getField();
 
-        PlayerGame playerGame2 = playerGames.get(player2.getName());
+        PlayerGame playerGame2 = playerGames.get(player2.getId());
         GameField field2 = playerGame2.getGame().getField();
 
-        PlayerGame playerGame3 = playerGames.get(player3.getName());
+        PlayerGame playerGame3 = playerGames.get(player3.getId());
         GameField field3 = playerGame3.getGame().getField();
 
         assertEquals(3, playerGames.size());
@@ -294,17 +213,12 @@ public class PlayerGamesTest {
         verifyRemove(playerGame3, field3);
     }
 
-    private void verifyRemove(PlayerGame playerGame, GameField field) {
-        verify(field).remove(playerGame.getGame().getPlayer());
-        verify(ais.get(playerGame.getPlayer())).close();
-    }
-
     @Test
     public void testGetGameTypes() {
         // given
         Player player = createPlayer();
         Player player2 = createPlayer("game2");
-        playerGames.add(player2, null);
+        playerGames.add(player2, "room", null);
 
         // when
         List<GameType> gameTypes = playerGames.getGameTypes();
@@ -328,6 +242,34 @@ public class PlayerGamesTest {
 
         // then
         verify(joysticks.get(0)).right();
+    }
+
+    @Test
+    public void shouldTickLazyJoystickWhenTick_skipNonActiveRooms() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room2", "game2", type); // paused
+        createPlayer("player3", "room3", "game1", type);
+
+        setActive("room2", false);
+
+        lazyJoysticks.get(0).right();
+        verifyNoMoreInteractions(joysticks.get(0));
+
+        lazyJoysticks.get(1).up();
+        verifyNoMoreInteractions(joysticks.get(1));
+
+        lazyJoysticks.get(2).down();
+        verifyNoMoreInteractions(joysticks.get(2));
+
+        // when
+        playerGames.tick();
+
+        // then
+        verify(joysticks.get(0)).right();
+        verifyNoMoreInteractions(joysticks.get(1)); // because paused
+        verify(joysticks.get(2)).down();
     }
 
     @Test
@@ -365,59 +307,193 @@ public class PlayerGamesTest {
     public void shouldNewGame_whenGameOver_caseAnyMultiplayerType() {
         // given
         createPlayer();
-        reset(fields.get(0));
-        when(gamePlayers.get(0).isAlive()).thenReturn(false);
+        resetAllFields();
+        int index = 0;
+        playerIsNotAlive(index);
 
         // when
         playerGames.tick();
 
         // then
-        verify(fields.get(0), times(1)).newGame(gamePlayers.get(0));
+        verifyNewGameCreated(0);
+    }
+
+    private void playerIsNotAlive(int index) {
+        when(gamePlayers.get(index).isAlive()).thenReturn(false);
+    }
+
+    private void resetAllFields() {
+        fields.forEach(Mockito::reset);
+    }
+
+    @Test
+    public void shouldNewGame_whenGameOver_caseAnyMultiplayerType_skipNonActiveRooms() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room2", "game2", type); // paused
+        createPlayer("player3", "room3", "game1", type);
+
+        setActive("room2", false);
+
+        resetAllFields();
+        playerIsNotAlive(0);
+        playerIsNotAlive(1);
+        playerIsNotAlive(2);
+
+        // when
+        playerGames.tick();
+
+        // then
+        verifyNewGameCreated(0);
+        verifyNewGameCreated(1, NEVER); // because paused
+        verifyNewGameCreated(2);
+
+        // when
+        setActive("room2", true);
+        resetAllFields();
+
+        playerGames.tick();
+
+        // then
+        verifyNewGameCreated(0);
+        verifyNewGameCreated(1); // because active
+        verifyNewGameCreated(2);
+    }
+
+    @Test
+    public void shouldTickFields_onlyDistinctFields() {
+        // given
+        createPlayer("player1", "room1", "game1", MultiplayerType.MULTIPLE); // field 0
+        createPlayer("player2", "room1", "game1", MultiplayerType.MULTIPLE);
+
+        createPlayer("player3", "room2", "game2", MultiplayerType.SINGLE); // field 1
+        createPlayer("player4", "room2", "game2", MultiplayerType.SINGLE); // field 2
+
+        resetAllFields();
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals(3, fields.size()); // only 3 fields created
+        verifyFieldTicked(0);
+        verifyFieldTicked(1);
+        verifyFieldTicked(2);
+    }
+
+    @Test
+    public void shouldTickFields_onlyStuffedRooms() {
+        // given
+
+        // field 0 not stuffed
+        createPlayer("player1", "room1", "game1", MultiplayerType.TRIPLE);
+        createPlayer("player2", "room1", "game1", MultiplayerType.TRIPLE);
+
+        // field 1 stuffed
+        createPlayer("player3", "room2", "game1", MultiplayerType.TRIPLE);
+        createPlayer("player4", "room2", "game1", MultiplayerType.TRIPLE);
+        createPlayer("player5", "room2", "game1", MultiplayerType.TRIPLE);
+
+        resetAllFields();
+
+        // when
+        playerGames.tick();
+
+        // then
+        assertEquals(2, fields.size()); // only 2 fields created
+        verifyFieldTicked(0, NEVER);
+        verifyFieldTicked(1);
+    }
+
+    @Test
+    public void shouldTickFields_skipNonActiveRooms() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room2", "game2", type); // paused
+        createPlayer("player3", "room3", "game1", type);
+
+        setActive("room2", false);
+
+        resetAllFields();
+
+        // when
+        playerGames.tick();
+
+        // then
+        verifyFieldTicked(0);
+        verifyFieldTicked(1, NEVER); // because paused
+        verifyFieldTicked(2);
+
+        // when
+        setActive("room2", true);
+        resetAllFields();
+
+        playerGames.tick();
+
+        // then
+        verifyFieldTicked(0);
+        verifyFieldTicked(1); // because active
+        verifyFieldTicked(2);
+    }
+
+    private void verifyFieldTicked(int index) {
+        verifyFieldTicked(index, ONCE);
+    }
+
+    private void verifyFieldTicked(int index, int times) {
+        verify(fields.get(index), times(times)).quietTick();
+    }
+
+    private void verifyNewGameCreated(int index) {
+        verifyNewGameCreated(index, ONCE);
+    }
+
+    private void verifyNewGameCreated(int index, int times) {
+        verify(fields.get(index), times(times)).newGame(gamePlayers.get(index));
     }
 
     @Test
     public void shouldNewGame_whenGameOver_caseTrainingMultiplayerType() {
         // given
-        createPlayer("game2", "player2", MultiplayerType.TRAINING.apply(3));
+        createPlayer("player2", "room", "game2", MultiplayerType.TRAINING.apply(3));
 
-        reset(fields.get(0));
-        when(gamePlayers.get(0).isAlive()).thenReturn(false);
+        resetAllFields();
+        playerIsNotAlive(0);
 
         // when
         playerGames.tick();
 
         // then
-        verify(fields.get(0), times(1)).newGame(gamePlayers.get(0));
+        verifyNewGameCreated(0);
     }
 
     @Test
     public void shouldNextLevel_whenGameOver_andIsWin_caseTrainingMultiplayerType() {
         // given
-        createPlayer("game2", "player2",
-                MultiplayerType.TRAINING.apply(2));
+        Player player = createPlayer(MultiplayerType.TRAINING.apply(3));
 
-        reset(fields.get(0));
+        resetAllFields();
         assertEquals(1, fields.size());
-        when(gamePlayers.get(0).isAlive()).thenReturn(false);
-        when(gamePlayers.get(0).isWin()).thenReturn(true);
+        playerIsNotAlive(0);
+        playerIsWin(0);
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player", "{'current':1,'passed':0,'total':3,'valid':true}");
 
         // when
         // win + gameOver > next level
         playerGames.tick();
 
         // then
-        assertEquals("{'current':1,'passed':0,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        String progress1 = "{'current':2,'passed':1,'total':3,'valid':true}";
+        assertProgress("player", progress1);
+        verifyPlayerEventListenerLevelChanged("player", progress1);
 
         int newField = fields.size() - 1;
         assertEquals(2, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
         reset(fields.get(newField));
 
         // when
@@ -425,13 +501,13 @@ public class PlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        String progress2 = "{'current':3,'passed':2,'total':3,'valid':true}";
+        assertProgress("player", progress2);
+        verifyPlayerEventListenerLevelChanged("player", progress2);
 
         newField = fields.size() - 1;
         assertEquals(3, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
         reset(fields.get(newField));
 
         // when
@@ -439,40 +515,38 @@ public class PlayerGamesTest {
         playerGames.tick();
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player", "{'current':3,'passed':2,'total':3,'valid':true}");
+        verifyPlayerEventListenerLevelChanged("player", null);
 
         newField = fields.size() - 1;
         assertEquals(3, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
         reset(fields.get(newField));
+    }
+
+    private void playerIsWin(int index) {
+        when(gamePlayers.get(index).isWin()).thenReturn(true);
     }
 
     @Test
     public void testChangeLevel_cantBecauseNotPassedLevel() {
         // given
-        createPlayer("game2", "player2",
-                MultiplayerType.TRAINING.apply(2));
+        createPlayer(MultiplayerType.TRAINING.apply(2));
 
-        reset(fields.get(0));
+        resetAllFields();
         assertEquals(1, fields.size());
         when(gamePlayers.get(0).isAlive()).thenReturn(true);
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        String same = "{'current':0,'passed':-1,'total':2,'valid':true}";
-        assertEquals(same,
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        String same = "{'current':1,'passed':0,'total':2,'valid':true}";
+        assertProgress("player", same);
 
         // when
-        playerGames.changeLevel("player2", 1);
+        playerGames.changeLevel("player", 2);
 
         // then
-        assertEquals(same,
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player", same);
 
         assertEquals(1, fields.size());
         verify(fields.get(0), never()).newGame(gamePlayers.get(0));
@@ -488,53 +562,46 @@ public class PlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player", "{'current':3,'passed':2,'total':3,'valid':true}");
 
         // when
         // change decrease - create new field
-        playerGames.changeLevel("player2", 1);
+        playerGames.changeLevel("player", 2);
 
         // then
-        assertEquals("{'current':1,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        String progress = "{'current':2,'passed':2,'total':3,'valid':true}";
+        assertProgress("player", progress);
+        verifyPlayerEventListenerLevelChanged("player", progress);
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
     }
 
     @Test
     public void testSetLevel_caseNotPassedLevel() {
         // given
-        createPlayer("game2", "player2",
-                MultiplayerType.TRAINING.apply(2));
+        createPlayer(MultiplayerType.TRAINING.apply(2));
 
-        reset(fields.get(0));
+        resetAllFields();
         assertEquals(1, fields.size());
         when(gamePlayers.get(0).isAlive()).thenReturn(true);
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        String same = "{'current':0,'passed':-1,'total':2,'valid':true}";
-        assertEquals(same,
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        String same = "{'current':1,'passed':0,'total':2,'valid':true}";
+        assertProgress("player", same);
 
         // when
         // change increase - don't create new field
-        playerGames.setLevel("player2", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
+        playerGames.setLevel("player", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
 
         // then
-        assertEquals("{'current':1,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player", "{'current':1,'passed':1,'total':2,'valid':true}");
 
         int newField = fields.size() - 1;
         assertEquals(2, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
     }
 
     @Test
@@ -547,22 +614,20 @@ public class PlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player", "{'current':3,'passed':2,'total':3,'valid':true}");
 
         // when
         // change decrease - create new field
-        playerGames.setLevel("player2", new JSONObject("{'levelProgress':{'current':1,'lastPassed':1,'total':2}}"));
+        playerGames.setLevel("player", new JSONObject("{'levelProgress':{'current':2,'lastPassed':2,'total':3}}"));
 
         // then
-        assertEquals("{'current':1,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        String progress = "{'current':2,'passed':2,'total':3,'valid':true}";
+        assertProgress("player", progress);
+        verifyPlayerEventListenerLevelChanged("player", progress);
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
     }
 
     @Test
@@ -575,21 +640,19 @@ public class PlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player", "{'current':3,'passed':2,'total':3,'valid':true}");
 
         // when
-        playerGames.setLevel("player2", new JSONObject("{}"));
+        playerGames.setLevel("player", new JSONObject("{}"));
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        String progress = "{'current':1,'passed':0,'total':3,'valid':true}";
+        assertProgress("player", progress);
+        verifyPlayerEventListenerLevelChanged("player", progress);
 
         int newField = fields.size() - 1;
         assertEquals(4, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(0));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(0));
     }
 
     @Test
@@ -602,17 +665,15 @@ public class PlayerGamesTest {
         when(gamePlayers.get(0).isWin()).thenReturn(false);
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        String same = "{'current':3,'passed':2,'total':3,'valid':true}";
+        assertProgress("player", same);
 
         // when
-        playerGames.setLevel("player2", null);
+        playerGames.setLevel("player", null);
 
         // then
-        assertEquals("{'current':2,'passed':1,'total':2,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player", same);
+        verifyPlayerEventListenerLevelChanged("player", null);
 
         int newField = fields.size() - 1;
         assertEquals(3, fields.size());
@@ -620,16 +681,14 @@ public class PlayerGamesTest {
     }
 
     @Test
-    public void testResetAloneUsersField() {
+    public void testResetAloneUsersField_whenRemove() {
         // given
         MultiplayerType type = MultiplayerType.MULTIPLE;
-        Player player1 = createPlayer("game", "player1", type);
-        Player player2 = createPlayer("game", "player2", type);
-        Player player3 = createPlayer("game", "player3", type);
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
 
-        GameField field3 = playerGames.get("player3").getGame().getField();
-
-        assertEquals(1, fields.size());
+        assertRooms("{0=[player1, player2, player3]}");
 
         // when
         playerGames.remove(player1);
@@ -642,11 +701,198 @@ public class PlayerGamesTest {
 
         // then
         // created new field for player3
+        assertRooms("{1=[player3]}");
         assertEquals(2, fields.size());
-        GameField newField3 = playerGames.get("player3").getGame().getField();
-        assertNotSame(field3, newField3);
 
-        verify(fields.get(1), times(1)).newGame(gamePlayers.get(2));
+        verify(fields.get(1), times(ONCE)).newGame(gamePlayers.get(2));
+    }
+
+    @Test
+    public void testDontResetAloneUsersField_whenRemoveCurrent() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
+
+        assertRooms("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.removeCurrent(player1);
+
+        // then
+        assertEquals(1, fields.size());
+
+        // when
+        playerGames.removeCurrent(player2);
+
+        // then
+        assertRooms("{0=[player3]}");
+        assertEquals(1, fields.size());
+    }
+
+    @Test
+    public void testResetAloneUsersField_whenReload() {
+        // given
+        MultiplayerType type = MultiplayerType.TOURNAMENT;
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+
+        assertRooms("{0=[player1, player2]}");
+
+        // when
+        Game game = playerGames.get(0).getGame();
+        playerGames.reload(game, "room", game.getSave());
+
+        // then
+        // created new field for player3
+        assertRooms("{1=[player1, player2]}");
+        assertEquals(2, fields.size());
+
+        verifyNewGameCreated(1);
+    }
+
+    @Test
+    public void testDontResetAloneUsersField_whenReloadCurrent() {
+        // given
+        MultiplayerType type = MultiplayerType.TOURNAMENT;
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+
+        assertRooms("{0=[player1, player2]}");
+
+        // when
+        PlayerGame playerGame = playerGames.get(0);
+        playerGames.reloadCurrent(playerGame);
+
+        // then
+        assertRooms("{0=[player2], 1=[player1]}");
+        assertEquals(2, fields.size());
+    }
+
+    @Test
+    public void testReloadAll_withShuffle() {
+        // given
+        MultiplayerType type = MultiplayerType.TRIPLE;
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
+        Player player4 = createPlayer("player4", type);
+        Player player5 = createPlayer("player5", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        // when
+        playerGames.reloadAll(true);
+
+        // then
+        Map<Integer, Collection<String>> rooms = getRooms();
+        assertEquals("[player1, player2, player3, player4, player5]",
+                rooms.values().stream()
+                    .flatMap(Collection::stream)
+                    .sorted()
+                    .collect(toList())
+                    .toString());
+    }
+
+    @Test
+    public void testReloadAll_withoutShuffle_disposable() {
+        // given
+        MultiplayerType type = MultiplayerType.TEAM.apply(3, DISPOSABLE);
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
+        Player player4 = createPlayer("player4", type);
+        Player player5 = createPlayer("player5", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        // when
+        playerGames.reloadAll(false);
+
+        // then
+        assertRooms("{1=[player1], " +
+                "2=[player2, player3, player4], " +
+                "3=[player5]}");
+        assertEquals(4, fields.size());
+    }
+
+    @Test
+    public void testReloadAll_withoutShuffle_notDisposable() {
+        // TODO почему-то в этом тесте флаг игнорируется, то ли это условия такие, то ли бага
+        // given
+        MultiplayerType type = MultiplayerType.TEAM.apply(3, !DISPOSABLE);
+        Player player1 = createPlayer("player1", type);
+        Player player2 = createPlayer("player2", type);
+        Player player3 = createPlayer("player3", type);
+        Player player4 = createPlayer("player4", type);
+        Player player5 = createPlayer("player5", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        // when
+        playerGames.reloadAll(false);
+
+        // then
+        assertRooms("{1=[player1], " +
+                "2=[player2, player3, player4], " +
+                "3=[player5]}");
+        assertEquals(4, fields.size());
+    }
+
+    @Test
+    public void testReloadAll_forRoom() {
+        // given
+        MultiplayerType type = MultiplayerType.TRIPLE;
+        Player player1 = createPlayer("player1", "room1", "game1", type);
+        Player player2 = createPlayer("player2", "room1", "game1", type);
+        Player player3 = createPlayer("player3", "room1", "game1", type);
+        Player player4 = createPlayer("player4", "room1", "game1", type);
+
+        Player player5 = createPlayer("player5", "room2", "game1", type);
+        Player player6 = createPlayer("player6", "room2", "game1", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4], " +
+                "2=[player5, player6]}");
+
+        // when
+        playerGames.reloadAll(false, withRoom("room1"));
+
+        // then
+        assertRooms("{1=[player1, player2], " +
+                "2=[player5, player6], " + // didn't touch because room2
+                "3=[player3, player4]}");
+        assertEquals(4, fields.size());
+    }
+
+    @Test
+    public void testReloadAll_forGame() {
+        // given
+        MultiplayerType type = MultiplayerType.TRIPLE;
+        Player player1 = createPlayer("player1", "room1", "game1", type);
+        Player player2 = createPlayer("player2", "room1", "game1", type);
+        Player player3 = createPlayer("player3", "room1", "game1", type);
+        Player player4 = createPlayer("player4", "room1", "game1", type);
+
+        Player player5 = createPlayer("player5", "room2", "game2", type);
+        Player player6 = createPlayer("player6", "room2", "game2", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4], " +
+                "2=[player5, player6]}");
+
+        // when
+        playerGames.reloadAll(false, withType("game1"));
+
+        // then
+        assertRooms("{1=[player1, player2], " +
+                "2=[player5, player6], " + // didn't touch because game2
+                "3=[player3, player4]}");
+        assertEquals(4, fields.size());
     }
 
     @Test
@@ -654,33 +900,27 @@ public class PlayerGamesTest {
         // given when
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player1 = createPlayer("game", "player1", type,
+        Player player1 = createPlayer("player1", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':1,'lastPassed':0}}"));
 
-        Player player2 = createPlayer("game", "player2", type,
+        Player player2 = createPlayer("player2", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':2,'lastPassed':1}}"));
 
-        Player player3 = createPlayer("game", "player3", type,
+        Player player3 = createPlayer("player3", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
         // then
         assertEquals(3, fields.size());
-
-        assertEquals("{'current':1,'passed':0,'total':3,'valid':true}",
-                playerGames.get("player1").getGame().getProgress().toString());
-
-        assertEquals("{'current':2,'passed':1,'total':3,'valid':true}",
-                playerGames.get("player2").getGame().getProgress().toString());
-
-        assertEquals("{'current':3,'passed':2,'total':3,'valid':true}",
-                playerGames.get("player3").getGame().getProgress().toString());
+        assertProgress("player1", "{'current':1,'passed':0,'total':3,'valid':true}");
+        assertProgress("player2", "{'current':2,'passed':1,'total':3,'valid':true}");
+        assertProgress("player3", "{'current':3,'passed':2,'total':3,'valid':true}");
     }
 
     @Test
     public void testLoadLevelProgressFromSave_failBecauseBadFormat() {
         // given when
         try {
-            createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3),
+            createPlayer("player1", MultiplayerType.TRAINING.apply(3),
                     new PlayerSave("{'levelProgress':{'total':3,'current':50,'lastPassed':0}}"));
             fail();
         } catch (IllegalArgumentException e) {
@@ -694,13 +934,13 @@ public class PlayerGamesTest {
         // given when
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player1 = createPlayer("game", "player1", type,
+        Player player1 = createPlayer("player1", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
-        Player player2 = createPlayer("game", "player2", type,
+        Player player2 = createPlayer("player2", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
-        Player player3 = createPlayer("game", "player3", type,
+        Player player3 = createPlayer("player3", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
         // then
@@ -710,11 +950,11 @@ public class PlayerGamesTest {
 
     @Test
     public void testLoadFromSave_whenNullPlayerSave() {
-        // given when
+        // given
         PlayerSave save = null;
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        // when
+        createPlayer("player1", MultiplayerType.SINGLE, save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -722,12 +962,11 @@ public class PlayerGamesTest {
 
     @Test
     public void testLoadFromSave_whenNullSaveInPlayerSave() {
-        // given when
-        String stringSave = null;
-        PlayerSave save = new PlayerSave(stringSave);
+        // given
+        String save = null;
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        // when
+        createPlayerFromSave("player1", save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -735,12 +974,11 @@ public class PlayerGamesTest {
 
     @Test
     public void testLoadFromSave_whenEmptyStringSaveInPlayerSave() {
-        // given when
-        String stringSave = "";
-        PlayerSave save = new PlayerSave(stringSave);
+        // given
+        String save = "";
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        // when
+        createPlayerFromSave("player1", save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -748,12 +986,11 @@ public class PlayerGamesTest {
 
     @Test
     public void testLoadFromSave_whenNullStringSaveInPlayerSave() {
-        // given when
-        String stringSave = "null";
-        PlayerSave save = new PlayerSave(stringSave);
+        // given
+        String save = null;
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        // when
+        createPlayerFromSave("player1", save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -761,12 +998,11 @@ public class PlayerGamesTest {
 
     @Test
     public void testLoadFromSave_whenEmptyJsonSaveInPlayerSave() {
-        // given when
-        String stringSave = "{}";
-        PlayerSave save = new PlayerSave(stringSave);
+        // given
+        String save = "{}";
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        // when
+        createPlayerFromSave("player1", save);
 
         // then
         verify(fields.get(0), never()).loadSave(anyObject());
@@ -774,32 +1010,47 @@ public class PlayerGamesTest {
 
     @Test
     public void testLoadFromSave_saveGoesToField() {
-        // given when
-        String stringSave = "{\"some\":\"data\"}";
-        PlayerSave save = new PlayerSave(stringSave);
+        // given
+        String save = "{\"some\":\"data\"}";
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        // when
+        createPlayerFromSave("player1", save);
 
         // then
+        verifyFiledLoadSave(0, "[{\"some\":\"data\"}]");
+    }
+
+    private void verifyFiledLoadSave(int field, String expected) {
         ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
-        verify(fields.get(0)).loadSave(captor.capture());
-        assertEquals("[{\"some\":\"data\"}]", captor.getAllValues().toString());
+        verify(fields.get(field)).loadSave(captor.capture());
+        assertEquals(expected, captor.getAllValues().toString());
+    }
+
+    private void verifyPlayerEventListenerLevelChanged(String playerId, String expected) {
+        ArgumentCaptor<LevelProgress> captor = ArgumentCaptor.forClass(LevelProgress.class);
+        Player player = playerGames.get(playerId).getPlayer();
+        if (expected == null) {
+            verifyNoMoreInteractions(player.getEventListener());
+        } else {
+            verify(player.getEventListener(), times(ONCE)).levelChanged(captor.capture());
+            assertEquals(expected, captor.getValue().toString());
+        }
+        reset(player.getEventListener());
     }
 
     @Test
     public void testLoadFromSave_saveGoesToField_anyLevelProgressWillRemove() {
         // given when
-        String stringSave = "{'levelProgress':{'total':3,'current':3,'lastPassed':2},'some':'data'}";
-        PlayerSave save = new PlayerSave(stringSave);
+        String save = "{'levelProgress':{'total':3,'current':3,'lastPassed':2},'some':'data'}";
 
-        MultiplayerType type = MultiplayerType.SINGLE;
-        Player player = createPlayer("game", "player1", type, save);
+        createPlayerFromSave("player1", save);
 
         // then
-        ArgumentCaptor<JSONObject> captor = ArgumentCaptor.forClass(JSONObject.class);
-        verify(fields.get(0)).loadSave(captor.capture());
-        assertEquals("[{\"some\":\"data\"}]", captor.getAllValues().toString());
+        verifyFiledLoadSave(0, "[{\"some\":\"data\"}]");
+    }
+
+    private Player createPlayerFromSave(String name, String save) {
+        return createPlayer(name, MultiplayerType.SINGLE, new PlayerSave(save));
     }
 
     @Test
@@ -807,14 +1058,13 @@ public class PlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player = createPlayer("game", "player", type,
+        Player player = createPlayer("player", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
         when(fields.get(0).getSave()).thenReturn(null);
 
         // when then
-        assertEquals("{\"levelProgress\":{\"total\":3,\"current\":3,\"lastPassed\":2}}",
-                playerGames.get("player").getGame().getSave().toString());
+        assertSave("player", "{\"levelProgress\":{\"total\":3,\"current\":3,\"lastPassed\":2}}");
     }
 
     @Test
@@ -822,15 +1072,14 @@ public class PlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player = createPlayer("game", "player", type,
+        Player player = createPlayer("player", type,
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
         when(fields.get(0).getSave()).thenReturn(new JSONObject("{'some':'data'}"));
 
         // when then
-        assertEquals("{\"field\":{\"some\":\"data\"}," +
-                        "\"levelProgress\":{\"total\":3,\"current\":3,\"lastPassed\":2}}",
-                playerGames.get("player").getGame().getSave().toString());
+        assertSave("player", "{\"field\":{\"some\":\"data\"}," +
+                        "\"levelProgress\":{\"total\":3,\"current\":3,\"lastPassed\":2}}");
     }
 
     @Test
@@ -838,15 +1087,18 @@ public class PlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.SINGLE;
 
-        Player player = createPlayer("game", "player", type,
+        Player player = createPlayer("player", type,
                 new PlayerSave("{'save':'data2'}"));
 
         when(fields.get(0).getSave()).thenReturn(new JSONObject("{'some':'data'}"));
 
         // when then
-        assertEquals("{\"some\":\"data\"}",
-                playerGames.get("player").getGame().getSave().toString());
+        assertSave("player", "{\"some\":\"data\"}");
 
+    }
+
+    private void assertSave(String playerName, String expected) {
+        assertEquals(expected, playerGames.get(playerName).getGame().getSave().toString());
     }
 
     @Test
@@ -854,14 +1106,13 @@ public class PlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.SINGLE;
 
-        Player player = createPlayer("game", "player", type,
+        Player player = createPlayer("player", type,
                 new PlayerSave("{'save':'data'}"));
 
         when(fields.get(0).getSave()).thenReturn(null);
 
         // when then
-        assertEquals("{}",
-                playerGames.get("player").getGame().getSave().toString());
+        assertSave("player", "{}");
 
     }
 
@@ -870,15 +1121,20 @@ public class PlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player = createPlayer("game", "player", type, null,
+        Player player = createPlayer("player", "room", "game", type, null,
                 new JSONObject("{'board':'data'}"));
 
         when(fields.get(0).reader()).thenReturn(mock(BoardReader.class));
 
         // when then
-        assertEquals("{\"board\":\"data\"," +
-                        "\"levelProgress\":{\"total\":3,\"current\":0,\"lastPassed\":-1}}",
-                playerGames.get("player").getGame().getBoardAsString().toString());
+        assertBoard("player",
+                "{\"board\":\"data\"," +
+                        "\"levelProgress\":{\"total\":3,\"current\":1,\"lastPassed\":0}}");
+    }
+
+    private void assertBoard(String playerName, String expected) {
+        assertEquals(expected,
+                playerGames.get(playerName).getGame().getBoardAsString().toString());
     }
 
     @Test
@@ -886,15 +1142,15 @@ public class PlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.TRAINING.apply(3);
 
-        Player player = createPlayer("game", "player", type, null,
+        Player player = createPlayer("player", "room", "game", type, null,
                 "board-data");
 
         when(fields.get(0).reader()).thenReturn(mock(BoardReader.class));
 
         // when then
-        assertEquals("{\"board\":\"board-data\"," +
-                        "\"levelProgress\":{\"total\":3,\"current\":0,\"lastPassed\":-1}}",
-                playerGames.get("player").getGame().getBoardAsString().toString());
+        assertBoard("player",
+                "{\"board\":\"board-data\"," +
+                        "\"levelProgress\":{\"total\":3,\"current\":1,\"lastPassed\":0}}");
     }
 
     @Test
@@ -902,102 +1158,87 @@ public class PlayerGamesTest {
         // given
         MultiplayerType type = MultiplayerType.SINGLE;
 
-        Player player = createPlayer("game", "player", type, null,
+        Player player = createPlayer("player", "room", "game", type, null,
                 "board");
 
         when(fields.get(0).reader()).thenReturn(mock(BoardReader.class));
 
         // when then
-        assertEquals("board",
-                playerGames.get("player").getGame().getBoardAsString().toString());
+        assertBoard("player", "board");
     }
 
     @Test
     public void shouldNewPlayerGoToFirstLEvel_evenIfOtherOnMultiplayer_forTraining() {
         // given
-        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3),
+        createPlayer("player1", MultiplayerType.TRAINING.apply(3),
                 new PlayerSave("{'levelProgress':{'total':3,'current':3,'lastPassed':2}}"));
 
         // when
-        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(3));
+        createPlayer("player2", MultiplayerType.TRAINING.apply(3));
         playerGames.tick();
 
         // then
-        assertEquals("{'current':3,'passed':2,'total':3,'valid':true}",
-                playerGames.get("player1")
-                        .getGame().getProgress().toString());
-
-        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player1", "{'current':3,'passed':2,'total':3,'valid':true}");
+        assertProgress("player2", "{'current':1,'passed':0,'total':3,'valid':true}");
     }
 
     @Test
     public void shouldNewPlayerGoToFirstLevel_forTraining() {
         // given
-        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3));
-        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(3));
+        createPlayer("player1", MultiplayerType.TRAINING.apply(3));
+        createPlayer("player2", MultiplayerType.TRAINING.apply(3));
 
         // when
         playerGames.tick();
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
-                playerGames.get("player1")
-                        .getGame().getProgress().toString());
-
-        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player1", "{'current':1,'passed':0,'total':3,'valid':true}");
+        assertProgress("player2", "{'current':1,'passed':0,'total':3,'valid':true}");
     }
 
     @Test
     public void shouldNewPlayerGoToFirstLevel_forSingle() {
         // given
-        createPlayer("game", "player1", MultiplayerType.SINGLE);
-        createPlayer("game", "player2", MultiplayerType.SINGLE);
+        createPlayer("player1", MultiplayerType.SINGLE);
+        createPlayer("player2", MultiplayerType.SINGLE);
 
         // when
         playerGames.tick();
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
-                playerGames.get("player1")
-                        .getGame().getProgress().toString());
+        assertProgress("player1", "{'current':1,'passed':0,'total':1,'valid':true}");
+        assertProgress("player2", "{'current':1,'passed':0,'total':1,'valid':true}");
+    }
 
-        assertEquals("{'current':0,'passed':-1,'total':1,'valid':true}",
-                playerGames.get("player2")
+    private void assertProgress(String player, String expected) {
+        assertEquals(expected,
+                playerGames.get(player)
                         .getGame().getProgress().toString());
     }
 
     @Test
     public void whatIfTwoPlayersForDifferentTrainings() {
         // given
-        // TODO обрати внимание, тут 3 и 5 - для ожной игры, нельзя такого допускать
-        createPlayer("game", "player1", MultiplayerType.TRAINING.apply(3));
-        createPlayer("game", "player2", MultiplayerType.TRAINING.apply(5));
+        // TODO обрати внимание, тут 3 и 5 - для одной игры, нельзя такого допускать
+        createPlayer("player1", MultiplayerType.TRAINING.apply(3));
+        createPlayer("player2", MultiplayerType.TRAINING.apply(5));
 
         // when
         playerGames.tick();
 
         // then
-        assertEquals("{'current':0,'passed':-1,'total':3,'valid':true}",
-                playerGames.get("player1")
-                        .getGame().getProgress().toString());
-
-        assertEquals("{'current':0,'passed':-1,'total':5,'valid':true}",
-                playerGames.get("player2")
-                        .getGame().getProgress().toString());
+        assertProgress("player1", "{'current':1,'passed':0,'total':3,'valid':true}");
+        assertProgress("player2", "{'current':1,'passed':0,'total':5,'valid':true}");
     }
 
     @Test
     public void shouldRemovePlayerFromBoard_whenShouldLeaveIsTrue() {
         // given
-        createPlayer("game", "player1", MultiplayerType.TRIPLE);
-        createPlayer("game", "player2", MultiplayerType.TRIPLE);
-        createPlayer("game", "player3", MultiplayerType.TRIPLE);
+        createPlayer("player1", MultiplayerType.TRIPLE);
+        createPlayer("player2", MultiplayerType.TRIPLE);
+        createPlayer("player3", MultiplayerType.TRIPLE);
 
-        reset(fields.get(0));
+        resetAllFields();
         assertEquals(1, fields.size());
 
         setPlayerStatus(0, true);  // still play on board
@@ -1011,7 +1252,7 @@ public class PlayerGamesTest {
         // then
         int newField = fields.size() - 1;
         assertEquals(2, fields.size());
-        verify(fields.get(newField), times(1)).newGame(gamePlayers.get(2));
+        verify(fields.get(newField), times(ONCE)).newGame(gamePlayers.get(2));
 
         assertEquals(3, playerGames.size());
         assertEquals(fields.get(0), playerGames.get("player1").getField());
@@ -1020,8 +1261,8 @@ public class PlayerGamesTest {
 
         // when
         // add another player
-        createPlayer("game", "player4", MultiplayerType.TRIPLE);
-        createPlayer("game", "player5", MultiplayerType.TRIPLE);
+        createPlayer("player4", MultiplayerType.TRIPLE);
+        createPlayer("player5", MultiplayerType.TRIPLE);
 
         // then
         assertEquals(2, fields.size());
@@ -1037,9 +1278,735 @@ public class PlayerGamesTest {
         assertEquals(fields.get(1), playerGames.get("player5").getField());
     }
 
-    private void setPlayerStatus(int index, boolean stillPlay) {
-        when(gamePlayers.get(index).isAlive()).thenReturn(stillPlay);
-        when(gamePlayers.get(index).isWin()).thenReturn(!stillPlay);
-        when(gamePlayers.get(index).shouldLeave()).thenReturn(!stillPlay);
+
+    @Test
+    public void testChangeRoom_oneLeftTwoRemained() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player1]}");
+
+        assertRoomsNames("{otherRoom=[[player1]], " +
+                "room=[[player2, player3]]}");
+    }
+
+    @Test
+    public void testChangeRoom_twoLeftOneRemained() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player3", "otherRoom");
+
+        // then
+        assertRooms("{1=[player1, player3], " +
+                "2=[player2]}"); // второй покинул alone комнату и зашел в новую
+
+        assertRoomsNames("{otherRoom=[[player1, player3]], " +
+                "room=[[player2]]}");
+    }
+
+    @Test
+    public void testChangeRoom_nullRoomDoNothing() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3]}");
+
+        // when
+        playerGames.changeRoom("player1", null);
+
+        // then
+        assertRooms("{0=[player1, player2, player3]}");
+
+        assertRoomsNames("{room=[[player1, player2, player3]]}");
+    }
+
+    @Test
+    public void testChangeRoom_keepSave() {
+        // given
+        MultiplayerType type = MultiplayerType.MULTIPLE;
+        createPlayer("player1", "room", "game", type, new PlayerSave("{\"some\":\"data1\"}"));
+        createPlayer("player2", "room", "game", type, new PlayerSave("{\"some\":\"data2\"}"));
+
+        assertRooms("{0=[player1, player2]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+
+        // then
+        assertRooms("{1=[player2], " +
+                "2=[player1]}");
+
+        assertSave("player1", "{\"some\":\"data1\"}");
+        assertSave("player2", "{\"some\":\"data2\"}");
+    }
+
+    @Test
+    public void testChangeRoom_caseTournament() {
+        // given
+        MultiplayerType type = MultiplayerType.TOURNAMENT;
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4]}");
+
+        assertRoomsNames("{room=[[player1, player2], [player3, player4]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player2", "otherRoom");
+
+        // then
+        assertRooms("{1=[player3, player4], " +
+                "3=[player1, player2]}");
+
+        assertRoomsNames("{otherRoom=[[player1, player2]], " +
+                "room=[[player3, player4]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_disposable_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player2", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате и был удален оттуда
+        //         попав к player5 у которого комната еще была недоукомплектована
+        // затем и player2 ушел в отдельный мир otherRoom
+        //         чем вынудил последнего в комнате player5 отправиться в новую комнату
+        //         такое себе лишнее телодвижение TODO подумать может можно красиво решить
+        assertRooms("{1=[player3, player4], " +
+                "3=[player1, player2], " +
+                "4=[player5]}");
+
+        assertRoomsNames("{otherRoom[1]=[[player1, player2]], " +
+                "room[1]=[[player3, player4], [player5]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_disposable_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player2", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате, т.к. !RELOAD_ALONE
+        // затем и player2 ушел в отдельный мир otherRoom
+        assertRooms("{1=[player3, player4], " +
+                "2=[player5], " +
+                "3=[player1, player2]}");
+
+        assertRoomsNames("{otherRoom[1]=[[player1, player2]], " +
+                "room[1]=[[player3, player4], [player5]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_notDisposable_twoLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, !DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player2", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате и был удален оттуда
+        //         попав к player5 у которого комната еще была недоукомплектована
+        // затем и player2 ушел в отдельный мир otherRoom
+        //         чем вынудил последнего в комнате player5 отправиться в новую комнату
+        //         такое себе лишнее телодвижение TODO подумать может можно красиво решить
+        assertRooms("{1=[player3, player4], " +
+                "3=[player1, player2], " +
+                "4=[player5]}");
+
+        assertRoomsNames("{otherRoom[1]=[[player1, player2]], " +
+                "room[1]=[[player3, player4], [player5]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_notDisposable_twoLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, !DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+        playerGames.changeRoom("player2", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате
+        // затем и player2 ушел в отдельный мир otherRoom
+        assertRooms("{1=[player3, player4], " +
+                "2=[player5], " +
+                "3=[player1, player2]}");
+
+        assertRoomsNames("{otherRoom[1]=[[player1, player2]], " +
+                "room[1]=[[player3, player4], [player5]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_notDisposable_oneLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, !DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате и был удален оттуда
+        //         попав к player5 у которого комната еще была недоукомплектована
+        assertRooms("{1=[player3, player4], " +
+                "2=[player2, player5], " +
+                "3=[player1]}");
+
+        assertRoomsNames("{otherRoom[1]=[[player1]], " +
+                "room[1]=[[player3, player4], [player5, player2]]}");
+    }
+
+    @Test
+    public void testChangeRoom_caseLevels_notDisposable_oneLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(2, 3, !DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2], " +
+                "1=[player3, player4], " +
+                "2=[player5]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2], [player3, player4], [player5]]}");
+
+        // when
+        playerGames.changeRoom("player1", "otherRoom");
+
+        // then
+        // player1 покинул комнату и попал в отдельный мир otherRoom
+        // player2 при этом остался однин в своей комнате
+        assertRooms("{0=[player2], " +
+                "1=[player3, player4], " +
+                "2=[player5], 3=[player1]}");
+
+        assertRoomsNames("{otherRoom[1]=[[player1]], " +
+                "room[1]=[[player3, player4], [player5]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_notDisposable_firstLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, !DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]]}");
+
+        // when
+        // player1 переходит на новый уровень
+        // при этом остальные игроки остаются где были
+        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+                "{'current':2,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player4, player5], 2=[player1]}");
+
+        assertRoomsNames("{room[1]=[[player2, player3], [player4, player5]], " +
+                "room[2]=[[player1]]}");
+
+        // when
+        // player1 возвращается обратно
+        // и так как уровень не DISPOSABLE то игрок вернулся назад
+        // в первую свободную комнату (свою же)
+        playerGames.changeLevel("player1", 1);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[1]=[[player2, player3, player1], [player4, player5]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_notDisposable_firstLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, !DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]]}");
+
+        // when
+        // player1 переходит на новый уровень
+        // при этом остальные игроки остаются где были
+        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+                "{'current':2,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player4, player5], 2=[player1]}");
+
+        assertRoomsNames("{room[1]=[[player2, player3], [player4, player5]], " +
+                "room[2]=[[player1]]}");
+
+        // when
+        // player1 возвращается обратно
+        // и так как уровень не DISPOSABLE то игрок вернулся назад
+        // в первую свободную комнату (свою же)
+        playerGames.changeLevel("player1", 1);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[1]=[[player2, player3, player1], [player4, player5]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_notDisposable_lastLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, !DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+        createPlayer("player6", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+
+        // when
+        // player6 переходит на новый уровень
+        // при этом остальные остаются на месте
+        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+                "{'current':2,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "2=[player6]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]], " +
+                "room[2]=[[player6]]}");
+
+        // when
+        // player6 возвращается обратно
+        // и так как уровень не DISPOSABLE его старая комната может его принять назад
+        playerGames.changeLevel("player6", 1);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_notDisposable_lastLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, !DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+        createPlayer("player6", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+
+        // when
+        // player6 переходит на новый уровень
+        // при этом остальные остаются на месте
+        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+                "{'current':2,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "2=[player6]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]], " +
+                "room[2]=[[player6]]}");
+
+        // when
+        // player6 возвращается обратно
+        // и так как уровень не DISPOSABLE его старая комната может его принять назад
+        playerGames.changeLevel("player6", 1);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_disposable_firstLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]]}");
+
+        // when
+        // player1 переходит на новый уровень
+        // при этом остальные игроки остаются где были
+        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+                "{'current':2,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player4, player5], 2=[player1]}");
+
+        assertRoomsNames("{room[1]=[[player2, player3], [player4, player5]], " +
+                "room[2]=[[player1]]}");
+
+        // when
+        // player1 возвращается обратно
+        // и так как уровень DISPOSABLE то игрок попадает в новую комнату к player4 и player5
+        playerGames.changeLevel("player1", 1);
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player1, player4, player5]}");
+
+        assertRoomsNames("{room[1]=[[player4, player5, player1], [player2, player3]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_disposable_firstLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]]}");
+
+        // when
+        // player1 переходит на новый уровень
+        // при этом остальные игроки остаются где были
+        playerGames.setLevel("player1", new JSONObject("{'levelProgress':" +
+                "{'current':2,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player4, player5], 2=[player1]}");
+
+        assertRoomsNames("{room[1]=[[player2, player3], [player4, player5]], " +
+                "room[2]=[[player1]]}");
+
+        // when
+        // player1 возвращается обратно
+        // и так как уровень DISPOSABLE то игрок попадает в новую комнату к player4 и player5
+        playerGames.changeLevel("player1", 1);
+
+        // then
+        assertRooms("{0=[player2, player3], " +
+                "1=[player1, player4, player5]}");
+
+        assertRoomsNames("{room[1]=[[player4, player5, player1], [player2, player3]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_disposable_lastLeave_reloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, DISPOSABLE, RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+        createPlayer("player6", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+
+        // when
+        // player6 переходит на новый уровень
+        // при этом остальные остаются на месте
+        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+                "{'current':2,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "2=[player6]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]], " +
+                "room[2]=[[player6]]}");
+
+        // when
+        // player6 возвращается обратно
+        // и так как уровень DISPOSABLE его старая комната не может его принять назад
+        // и он отправляется в новую
+        playerGames.changeLevel("player6", 1);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "3=[player6]}");
+
+        assertRoomsNames("{room[1]=[[player6], " +
+                "[player1, player2, player3], " +
+                "[player4, player5]]}");
+    }
+
+    @Test
+    public void testGoNextLevel_caseLevels_disposable_lastLeave_dontReloadAlone() {
+        // given
+        MultiplayerType type = MultiplayerType.LEVELS.apply(3, 3, DISPOSABLE, !RELOAD_ALONE);
+        createPlayer("player1", "room", "game", type);
+        createPlayer("player2", "room", "game", type);
+        createPlayer("player3", "room", "game", type);
+        createPlayer("player4", "room", "game", type);
+        createPlayer("player5", "room", "game", type);
+        createPlayer("player6", "room", "game", type);
+
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5, player6]}");
+
+        assertRoomsNames("{room[1]=[[player4, player5, player6], " +
+                "[player1, player2, player3]]}");
+
+        // when
+        // player6 переходит на новый уровень
+        // при этом остальные остаются на месте
+        playerGames.setLevel("player6", new JSONObject("{'levelProgress':" +
+                "{'current':2,'lastPassed':1,'total':3}}"));
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "2=[player6]}");
+
+        assertRoomsNames("{room[1]=[[player1, player2, player3], [player4, player5]], " +
+                "room[2]=[[player6]]}");
+
+        // when
+        // player6 возвращается обратно
+        // и так как уровень DISPOSABLE его старая комната не может его принять назад
+        // и он отправляется в новую
+        playerGames.changeLevel("player6", 1);
+
+        // then
+        assertRooms("{0=[player1, player2, player3], " +
+                "1=[player4, player5], " +
+                "3=[player6]}");
+
+        assertRoomsNames("{room[1]=[[player6], " +
+                "[player1, player2, player3], " +
+                "[player4, player5]]}");
+    }
+
+    @Test
+    public void testGetAll_withType() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room", "game1", type);
+        createPlayer("player2", "room", "game1", type);
+        createPlayer("player3", "room", "game2", type);
+        createPlayer("player4", "room", "game3", type);
+
+        // when then
+        assertPlayers("[player1, player2]", playerGames.getAll(withType("game1")));
+        assertPlayers("[player3]", playerGames.getAll(withType("game2")));
+        assertPlayers("[player4]", playerGames.getAll(withType("game3")));
+    }
+
+    @Test
+    public void testGetAll_withAll() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room", "game1", type);
+        createPlayer("player2", "room", "game1", type);
+        createPlayer("player3", "room", "game2", type);
+        createPlayer("player4", "room", "game3", type);
+
+        // when then
+        assertPlayers("[player1, player2, player3, player4]", playerGames.getAll(withAll()));
+    }
+
+    @Test
+    public void testGetAll_withRoom() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room1", "game1", type);
+        createPlayer("player3", "room2", "game2", type);
+        createPlayer("player4", "room2", "game2", type);
+
+        // when then
+        assertPlayers("[player1, player2]", playerGames.getAll(withRoom("room1")));
+        assertPlayers("[player3, player4]", playerGames.getAll(withRoom("room2")));
+    }
+
+    @Test
+    public void testGetAll_withActive() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room1", "game1", type);
+        createPlayer("player3", "room2", "game2", type); // paused
+        createPlayer("player4", "room2", "game2", type); // paused
+        createPlayer("player5", "room3", "game1", type);
+
+        setActive("room2", false);
+
+        // when then
+        assertPlayers("[player1, player2, player5]", playerGames.getAll(playerGames.withActive()));
+        assertPlayers("[player1, player2, player5]", playerGames.active());
+    }
+
+    @Test
+    public void testGetRooms() {
+        // given
+        MultiplayerType type = MultiplayerType.SINGLE;
+        createPlayer("player1", "room1", "game1", type);
+        createPlayer("player2", "room1", "game1", type);
+        createPlayer("player3", "room2", "game2", type); // paused
+        createPlayer("player4", "room2", "game2", type); // paused
+        createPlayer("player5", "room3", "game1", type);
+
+        setActive("room2", false);
+
+        // when then
+        assertEquals("[room1, room3]", playerGames.getRooms(ACTIVE).toString());
+        assertEquals("[room1, room2, room3]", playerGames.getRooms(ALL).toString());
+    }
+
+    private void assertPlayers(String expected, List<PlayerGame> list) {
+        assertEquals(expected,
+                list.stream()
+                        .map(it -> it.getPlayer().getId())
+                        .collect(toList())
+                        .toString());
     }
 }

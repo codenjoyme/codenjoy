@@ -23,16 +23,17 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Parameter;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.Arrays;
-
+import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -42,7 +43,7 @@ import static org.mockito.Mockito.when;
 public class SingleTest {
 
     private int size = 5;
-    private Battlecity field;
+    private Battlecity game;
     private Dice dice1;
     private Dice dice2;
     private Game tanks1;
@@ -52,13 +53,20 @@ public class SingleTest {
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
     public void givenGame() {
-        field = new Battlecity(size, mock(Dice.class), Arrays.asList(new Construction[0]));
+        Parameter<Integer> spawnAiPrize = v(4);
+        Parameter<Integer> hitKillsAiPrize = v(3);
+
+        game = new Battlecity(size, mock(Dice.class),
+                spawnAiPrize, hitKillsAiPrize);
+
+        game.addBorder(new DefaultBorders(size).get());
+
         player1 = new Player(null, dice1);
         player2 = new Player(null, dice2);
         tanks1 = new Single(player1, printerFactory);
-        tanks1.on(field);
+        tanks1.on(game);
         tanks2 = new Single(player2, printerFactory);
-        tanks2.on(field);
+        tanks2.on(game);
     }
 
     @Test
@@ -105,7 +113,7 @@ public class SingleTest {
         );
 
         tanks1.getPlayer().getHero().act();
-        field.tick();
+        game.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -117,7 +125,7 @@ public class SingleTest {
         assertTrue(tanks2.isGameOver());
         tanks2.newGame();
 
-        field.tick();
+        game.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -146,7 +154,7 @@ public class SingleTest {
         );
 
         tanks1.getPlayer().getHero().act();
-        field.tick();
+        game.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -158,7 +166,7 @@ public class SingleTest {
         assertTrue(tanks2.isGameOver());
         tanks2.newGame();
 
-        field.tick();
+        game.tick();
 
         assertD("☼☼☼☼☼\n" +
                 "☼   ☼\n" +
@@ -180,7 +188,7 @@ public class SingleTest {
 
     private void assertD(String field, Player player) {
         assertEquals(field, printerFactory.getPrinter(
-                this.field.reader(), player).print());
+                this.game.reader(), player).print());
     }
 
 }

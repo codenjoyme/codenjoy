@@ -33,7 +33,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -41,9 +40,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static com.codenjoy.dojo.services.dao.Registration.User.APPROVED;
+import static com.codenjoy.dojo.services.dao.Registration.User.NOT_APPROVED;
 import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_ADMIN;
 import static com.codenjoy.dojo.services.security.GameAuthoritiesConstants.ROLE_USER;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphanumeric;
@@ -59,7 +58,7 @@ public class Registration {
     public Registration(ConnectionThreadPoolFactory factory, String adminEmail, String adminPassword, PasswordEncoder passwordEncoder, ConfigProperties properties, boolean initAdminUser) {
         this.passwordEncoder = passwordEncoder;
         this.properties = properties;
-        adminPassword = passwordEncoder.encode(adminPassword);
+        adminPassword = passwordEncoder.encode(Hash.md5(adminPassword));
         List<String> initialScripts = new ArrayList<>();
         initialScripts.add("CREATE TABLE IF NOT EXISTS users (" +
                 "email varchar(255), " +
@@ -74,7 +73,7 @@ public class Registration {
             initialScripts.add(String.format("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles)" +
                     " select '%s', '%s', '%s', %s,  '%s', '%s', '{}', '%s, %s'" +
                     " where not exists (select 1 from users where id = '%s')",
-                    ADMIN_USER_ID, adminEmail, "admin", "1", adminPassword, "000000000000", ROLE_ADMIN, ROLE_USER,
+                    ADMIN_USER_ID, adminEmail, "admin", APPROVED, adminPassword, "000000000000", ROLE_ADMIN, ROLE_USER,
                     ADMIN_USER_ID));
         }
         pool = factory.create(initialScripts.toArray(new String[initialScripts.size()]));
@@ -87,7 +86,7 @@ public class Registration {
     public boolean approved(String id) {
         return pool.select("SELECT * FROM users WHERE id = ?;",
                 new Object[]{id},
-                rs -> rs.next() && rs.getInt("email_approved") == 1
+                rs -> rs.next() && rs.getInt("email_approved") == APPROVED
         );
     }
 
@@ -109,8 +108,17 @@ public class Registration {
         return count > 0;
     }
 
-    public User register(String email, String readableName) {
-        String id = Hash.getRandomId();
+    public User getOrRegister(String id, String email, String readableName) {
+        Registration.User result = getUserById(id)
+                .orElseGet(() -> getUserByEmail(email)
+                    .orElseGet(() -> registerApproved(id, email, readableName)));
+        return result;
+    }
+    
+    public User registerApproved(String id, String email, String readableName) {
+        if (StringUtils.isEmpty(id)) {
+            id = Hash.getRandomId();
+        }
         String password = passwordEncoder.encode(randomAlphanumeric(properties.getAutoGenPasswordLen()));
 
         User user = register(id, email, readableName,
@@ -118,23 +126,26 @@ public class Registration {
 
         if (!properties.isEmailVerificationNeeded()) {
             approve(user.getCode());
+            user.setApproved(APPROVED);
         }
 
         return user;
     }
 
-    public User register(String id, String email, String readableName, String password, String data, String... roles) {
-        roles = roles.length > 0 ? roles : GameAuthorities.USER.roles();
+    public User register(String id, String email, String readableName, String password, String data, Collection<String> roles) {
+        roles = roles.isEmpty() ? GameAuthorities.USER.roles() : roles;
         String code = Hash.getCode(id, password);
         password = passwordEncoder.encode(password);
+        
         pool.update("INSERT INTO users (id, email, readable_name, email_approved, password, code, data, roles) VALUES (?,?,?,?,?,?,?,?);",
-                new Object[]{id, email, readableName, 0, password, code, data, GameAuthorities.buildRolesString(roles)});
+                new Object[]{id, email, readableName, NOT_APPROVED, password, code, data, GameAuthorities.joinRoles(roles)});
+        
         return getUserByCode(code);
     }
 
     public String login(String id, String password) {
-        return pool.select("SELECT code, password FROM users WHERE id = ? AND email_approved != 0;",
-                new Object[]{id},
+        return pool.select("SELECT code, password FROM users WHERE id = ? AND email_approved = ?;",
+                new Object[]{id, APPROVED},
                 rs -> {
                     if (!rs.next()) {
                         return null;
@@ -148,8 +159,7 @@ public class Registration {
                 }
         );
     }
-
-    // TODO test me
+    
     public String checkUser(String id) {
         if (getCodeById(id) != null) {
             return id;
@@ -172,7 +182,6 @@ public class Registration {
         return null;
     }
 
-    // TODO test me
     public String checkUserByPassword(String id, String password) {
         return checkUser(id, Hash.getCode(id, password));
     }
@@ -184,7 +193,6 @@ public class Registration {
         );
     }
 
-    // TODO test me
     public boolean emailIsUsed(String email) {
         return pool.select("SELECT count(*) AS total FROM users WHERE email = ?;",
                 new Object[]{email},
@@ -192,7 +200,6 @@ public class Registration {
         );
     }
 
-    // TODO test me
     public boolean nameIsUsed(String name) {
         return pool.select("SELECT count(*) AS total FROM users WHERE readable_name = ?;",
                 new Object[]{name},
@@ -200,7 +207,6 @@ public class Registration {
         );
     }
 
-    // TODO test me
     public String getEmailById(String id) {
         return pool.select("SELECT email FROM users WHERE id = ?;",
                 new Object[]{id},
@@ -208,7 +214,6 @@ public class Registration {
         );
     }
 
-    // TODO test me
     public String getIdByName(String name) {
         return pool.select("SELECT id FROM users WHERE readable_name = ?;",
                 new Object[]{name},
@@ -216,7 +221,6 @@ public class Registration {
         );
     }
 
-    // TODO test me
     public String getIdByEmail(String email) {
         return pool.select("SELECT id FROM users WHERE email = ?;",
                 new Object[]{email},
@@ -240,7 +244,7 @@ public class Registration {
 
     public void approve(String code) {
         pool.update("UPDATE users SET email_approved = ? WHERE code = ?;",
-                new Object[]{1, code});
+                new Object[]{APPROVED, code});
     }
 
     public void updateReadableName(String id, String name) {
@@ -263,6 +267,10 @@ public class Registration {
     @EqualsAndHashCode(callSuper = true)
     @Accessors(chain = true)
     public static class User extends org.springframework.security.core.userdetails.User implements OAuth2User {
+
+        public static final int APPROVED = 1;
+        public static final int NOT_APPROVED = 0;
+
         private String email;
         private String id;
         private String readableName;
@@ -274,8 +282,8 @@ public class Registration {
             super("anonymous", "", Collections.emptyList());
         }
 
-        public User(String id, String email, String readableName, int approved, String password, String code, String data, String... roles) {
-            super(email, password, Stream.of(roles).map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
+        public User(String id, String email, String readableName, int approved, String password, String code, String data, Collection<String> roles) {
+            super(email, password, GameAuthorities.toGranted(roles));
             this.id = id;
             this.email = email;
             this.readableName = readableName;
@@ -317,6 +325,15 @@ public class Registration {
         });
     }
 
+    public Optional<User> getUserById(String id) {
+        return pool.select("SELECT * FROM users where id = ?", new Object[] {id}, rs -> {
+            if (!rs.next()) {
+                return Optional.empty();
+            }
+            return Optional.of(extractUser(rs));
+        });
+    }
+
     public List<User> getUsers() {
         return pool.select("SELECT * FROM users;", rs -> {
             List<User> result = new LinkedList<>();
@@ -336,17 +353,35 @@ public class Registration {
                 rs.getString("password"),
                 rs.getString("code"),
                 rs.getString("data"),
-                GameAuthorities.splitRolesString(rs.getString("roles")));
+                GameAuthorities.splitRoles(rs.getString("roles")));
     }
 
     public void replace(User user) {
         String code = user.getCode();
+
+        String password = user.getPassword();
+        // если пришло md5, а не bcrypt(md5)
+        if (!password.contains("$")) {
+            password = passwordEncoder.encode(password);
+        }
+
         if (StringUtils.isEmpty(code)) {
-            code = Hash.getCode(user.getEmail(), user.getPassword());
+            // code = code(bcrypt(md5))
+            code = Hash.getCode(user.getEmail(), password);
             user.setCode(code);
         }
 
-        Object[] parameters = {user.getReadableName(), user.getEmail(), 1, passwordEncoder.encode(user.getPassword()), code, user.getData(), GameAuthorities.authoritiesToRolesString(user.getAuthorities()), user.getId()};
+        Object[] parameters = {
+                user.getReadableName(),
+                user.getEmail(),
+                APPROVED,
+                password,
+                code,
+                user.getData(),
+                GameAuthorities.toRoles(user.getAuthorities()),
+                user.getId()
+        };
+
         if (getCodeById(user.getId()) == null) {
             pool.update("INSERT INTO users (readable_name, email, email_approved, password, code, data, roles, id) VALUES (?,?,?,?,?,?,?,?);",
                     parameters);

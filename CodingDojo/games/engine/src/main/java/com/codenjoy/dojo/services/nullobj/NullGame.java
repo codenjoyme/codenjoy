@@ -33,11 +33,11 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
-public class NullGame implements Game {
+public final class NullGame implements Game {
 
     public static final Game INSTANCE = new NullGame();
 
-    protected NullGame() {
+    private NullGame() {
         // do nothing
     }
 
@@ -118,6 +118,6 @@ public class NullGame implements Game {
 
     @Override
     public LevelProgress getProgress() {
-        return new LevelProgress(MultiplayerType.SINGLE);
+        return MultiplayerType.SINGLE.progress();
     }
 }

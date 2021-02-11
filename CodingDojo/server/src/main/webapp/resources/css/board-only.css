@@ -45,7 +45,7 @@
 }
 
 body {
-    margin: 0px;
+    margin: -4px;
     padding: 0px;
     background-color: #263852 !important;
     overflow: hidden;
@@ -53,5 +53,4 @@ body {
 
 canvas {
     width: 100%;
-    cursor: pointer;
 }

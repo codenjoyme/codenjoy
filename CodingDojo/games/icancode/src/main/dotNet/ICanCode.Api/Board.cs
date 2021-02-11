@@ -94,6 +94,17 @@ namespace ICanCode.Api
         }
 
         /**
+         * @return Returns list of coordinates for all Zombies (even die).
+         */
+        public List<Point> getZombies()
+        {
+            return Get(Layers.LAYER2,
+                    Element.FEMALE_ZOMBIE,
+                    Element.MALE_ZOMBIE,
+                    Element.ZOMBIE_DIE);
+        }
+
+        /**
         * @return Returns list of coordinates for all visible Boxes.
         */
         public List<Point> GetBoxes()
@@ -189,6 +200,9 @@ namespace ICanCode.Api
                         break;
                     case 7:
                         builder.Append(" Lasers: " + ListToString(GetLasers()));
+                        break;
+                    case 8:
+                        builder.Append(" Zombies: " + ListToString(GetZombies()));
                         break;
                 }
 

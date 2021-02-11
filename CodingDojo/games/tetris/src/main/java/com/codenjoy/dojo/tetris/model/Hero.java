@@ -40,7 +40,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void init(Field field) {
-        this.levels = field.getLevels();
+        levels = field.getLevels();
         glass = new GlassImpl(field.size(), field.size(),
                 () -> levels.getCurrentLevelNumber() + 1);
         this.field = field;
@@ -108,6 +108,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     
     @Override
     public void tick() {
+        if (levelCompleted()) {
+            return;
+        }
+
         if (processFigure()) {
             takeNewFigure();
         }
@@ -137,14 +141,14 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    private void takeNewFigure() {
+    protected void takeNewFigure() {
         Figure figure = field.take();
         setFigure(figure);
         showCurrentFigure();
     }
 
-    public boolean isAlive() {
-        return true;
+    public boolean levelCompleted() {
+        return levels.levelCompleted();
     }
 
     @Override

@@ -23,65 +23,77 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-
-import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
+import com.codenjoy.dojo.battlecity.model.items.*;
 import com.codenjoy.dojo.battlecity.services.Events;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.Parameter;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 public class Battlecity implements Field {
 
-    private Dice dice;
-    private LinkedList<Tank> aiTanks;
-    private int aiCount;
-
     private int size;
-    private List<Construction> constructions;
+
+    private PrizeGenerator prizeGen;
+    private AiGenerator aiGen;
+
+    private List<Player> players = new LinkedList<>();
+
+    private List<Wall> walls;
     private List<Border> borders;
+    private List<Tree> trees;
+    private List<Ice> ice;
+    private List<River> rivers;
+    private List<Prize> prizes;
+    private List<Tank> ais;
 
-    private List<Player> players = new LinkedList<Player>();
+    public Battlecity(int size, Dice dice,
+                      Parameter<Integer> whichSpawnWithPrize,
+                      Parameter<Integer> damagesBeforeAiDeath)
+    {
+        this.size = size;
+        ais = new LinkedList<>();
+        prizes = new LinkedList<>();
+        walls = new LinkedList<>();
+        borders = new LinkedList<>();
+        trees = new LinkedList<>();
+        ice = new LinkedList<>();
+        rivers = new LinkedList<>();
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions, Tank... aiTanks) {
-        this(size, dice, constructions, new DefaultBorders(size).get(), aiTanks);
+        prizeGen = new PrizeGenerator(this, dice);
+
+        aiGen = new AiGenerator(this, dice, whichSpawnWithPrize, damagesBeforeAiDeath);
     }
 
-    public Battlecity(int size, Dice dice, List<Construction> constructions,
-                      List<Border> borders, Tank... aiTanks) {
-        aiCount = aiTanks.length;
-        this.dice = dice;
-        this.size = size;
-        this.aiTanks = new LinkedList<>();
-        this.constructions = new LinkedList<>(constructions);
-        this.borders = new LinkedList<>(borders);
-
-        for (Tank tank : aiTanks) {
-            addAI(tank);
-        }
+    public void addAiTanks(List<? extends Point> tanks) {
+        aiGen.dropAll(tanks);
     }
 
     @Override
     public void clearScore() {
         players.forEach(Player::reset);
-        constructions.forEach(Construction::reset);
-        getTanks().forEach(Tank::reset);
+        walls.forEach(Wall::reset);
+        allTanks().forEach(Tank::reset);
     }
 
     @Override
     public void tick() {
         removeDeadTanks();
 
-        newAI();
+        aiGen.dropAll();
 
-        List<Tank> tanks = getTanks();
+        List<Tank> tanks = allTanks();
 
         for (Tank tank : tanks) {
             tank.tick();
         }
 
-        for (Bullet bullet : getBullets()) {
+        for (Bullet bullet : bullets()) {
             if (bullet.destroyed()) {
                 bullet.onDestroy();
             }
@@ -89,7 +101,7 @@ public class Battlecity implements Field {
 
         for (Tank tank : tanks) {
             if (tank.isAlive()) {
-                tank.fire();
+                tank.tryFire();
             }
         }
 
@@ -97,7 +109,7 @@ public class Battlecity implements Field {
             if (tank.isAlive()) {
                 tank.move();
 
-                List<Bullet> bullets = getBullets();
+                List<Bullet> bullets = bullets();
                 int index = bullets.indexOf(tank);
                 if (index != -1) {
                     Bullet bullet = bullets.get(index);
@@ -105,48 +117,33 @@ public class Battlecity implements Field {
                 }
             }
         }
-        for (Bullet bullet : getBullets()) {
+
+        for (Bullet bullet : bullets()) {
             bullet.move();
         }
 
-        for (Construction construction : constructions) {
-            if (!tanks.contains(construction) && !getBullets().contains(construction)) {
-                construction.tick();
-            }
-        }
-    }
-
-    private void newAI() {
-        for (int count = aiTanks.size(); count < aiCount; count++) {
-            int y = size - 2;
-            int x;
-            int c = 0;
-            do {
-                x = dice.next(size);
-            } while (isBarrier(x, y) && c++ < size);
-
-            if (!isBarrier(x, y)) {
-                addAI(new AITank(x, y, dice, Direction.DOWN));
+        for (Wall wall : walls) {
+            if (!tanks.contains(wall) && !bullets().contains(wall)) {
+                wall.tick();
             }
         }
     }
 
     private void removeDeadTanks() {
-        for (Tank tank : getTanks()) {
+        for (Tank tank : allTanks()) {
             if (!tank.isAlive()) {
-                aiTanks.remove(tank);
+                ais.remove(tank);
+                if (tank.isTankPrize()) {
+                    prizeGen.drop();
+                }
             }
         }
+
         for (Player player : players.toArray(new Player[0])) {
             if (!player.getHero().isAlive()) {
                 players.remove(player);
             }
         }
-    }
-
-    void addAI(Tank tank) {
-        tank.init(this);
-        aiTanks.add(tank);
     }
 
     @Override
@@ -156,9 +153,9 @@ public class Battlecity implements Field {
             return;
         }
 
-        if (getTanks().contains(bullet)) {
-            int index = getTanks().indexOf(bullet);
-            Tank tank = getTanks().get(index);
+        if (allTanks().contains(bullet)) {
+            int index = allTanks().indexOf(bullet);
+            Tank tank = allTanks().get(index);
             if (tank == bullet.getOwner()) {
                 return;
             }
@@ -170,7 +167,7 @@ public class Battlecity implements Field {
             return;
         }
 
-        for (Bullet bullet2 : getBullets().toArray(new Bullet[0])) {
+        for (Bullet bullet2 : bullets().toArray(new Bullet[0])) {
             if (bullet != bullet2 && bullet.equals(bullet2)) {
                 bullet.boom();
                 bullet2.boom();
@@ -178,11 +175,11 @@ public class Battlecity implements Field {
             }
         }
 
-        if (constructions.contains(bullet)) {
-            Construction construction = getConstructionAt(bullet);
+        if (walls.contains(bullet)) {
+            Wall wall = getWallAt(bullet);
 
-            if (!construction.destroyed()) {
-                construction.destroyFrom(bullet.getDirection());
+            if (!wall.destroyed()) {
+                wall.destroyFrom(bullet.getDirection());
                 bullet.onDestroy();  // TODO заимплементить взрыв
             }
 
@@ -190,21 +187,41 @@ public class Battlecity implements Field {
         }
     }
 
-    private Construction getConstructionAt(Bullet bullet) {
-        int index = constructions.indexOf(bullet);
-        return constructions.get(index);
+    @Override
+    public boolean isRiver(Point pt) {
+        return rivers.stream().anyMatch(river -> river.itsMe(pt));
+    }
+
+    @Override
+    public boolean isIce(Point pt) {
+        return ice.stream().anyMatch(ice -> ice.itsMe(pt));
+    }
+
+    @Override
+    public void addPrize(Prize prize) {
+        prizes.add(prize);
+    }
+
+    @Override
+    public void addAi(Tank tank) {
+        ais.add(tank);
+    }
+
+    private Wall getWallAt(Bullet bullet) {
+        int index = walls.indexOf(bullet);
+        return walls.get(index);
     }
 
     private void scoresForKill(Bullet killedBullet, Tank diedTank) {
         Player died = null;
-        boolean aiDied = aiTanks.contains(diedTank);
+        boolean aiDied = ais.contains(diedTank);
         if (!aiDied) {
              died = getPlayer(diedTank);
         }
 
         Tank killerTank = killedBullet.getOwner();
         Player killer = null;
-        if (!aiTanks.contains(killerTank)) {
+        if (!ais.contains(killerTank)) {
             killer = getPlayer(killerTank);
         }
 
@@ -232,49 +249,61 @@ public class Battlecity implements Field {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        for (Construction construction : constructions) {
-            if (construction.itsMe(x, y) && !construction.destroyed()) {
+    public boolean isBarrier(Point pt) {
+        for (Wall wall : this.walls) {
+            if (wall.itsMe(pt) && !wall.destroyed()) {
                 return true;
             }
         }
+
+        if (isRiver(pt)) {
+            return true;
+        }
+
         for (Point border : borders) {
-            if (border.itsMe(x, y)) {
+            if (border.itsMe(pt)) {
                 return true;
             }
         }
-        for (Tank tank : getTanks()) {   //  TODO проверить как один танк не может проходить мимо другого танка игрока (не AI)
-            if (tank.itsMe(x, y)) {
+
+        for (Tank tank : allTanks()) {   //  TODO проверить как один танк не может проходить мимо другого танка игрока (не AI)
+            if (tank.itsMe(pt)) {
                 return true;
             }
         }
-        return outOfField(x, y);
+
+        return pt.isOutOf(size);
+    }
+
+    private List<Bullet> bullets() {
+        return allTanks().stream()
+                .flatMap(tank -> tank.getBullets().stream())
+                .collect(toList());
     }
 
     @Override
-    public boolean outOfField(int x, int y) { // TODO заменить все есть в point
-        return x < 0 || y < 0 || y > size - 1 || x > size - 1;
+    public List<Tank> aiTanks() {
+        return ais;
     }
 
-    private List<Bullet> getBullets() {
-        List<Bullet> result = new LinkedList<>();
-        for (Tank tank : getTanks()) {
-            for (Bullet bullet : tank.getBullets()) {
-                result.add(bullet);
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public List<Tank> getTanks() {
-        LinkedList<Tank> result = new LinkedList<>(aiTanks);
+    public List<Tank> allTanks() {
+        List<Tank> result = new LinkedList<>(ais);
         for (Player player : players) {
 //            if (player.getTank().isAlive()) { // TODO разремарить с тестом
                 result.add(player.getHero());
 //            }
         }
         return result;
+    }
+
+    public List<Tank> tanks() {
+        return players.stream()
+                .map(Player::getHero)
+                .collect(toList());
+    }
+
+    public List<Prize> getPrizes() {
+        return prizes;
     }
 
     @Override
@@ -290,7 +319,6 @@ public class Battlecity implements Field {
         player.newHero(this);
     }
 
-    @Override
     public int size() {
         return size;
     }
@@ -309,32 +337,86 @@ public class Battlecity implements Field {
             public Iterable<? extends Point> elements() {
                 return new LinkedList<Point>() {{
                     addAll(Battlecity.this.getBorders());
-                    addAll(Battlecity.this.getTanks());
-                    addAll(Battlecity.this.getConstructions());
-                    addAll(Battlecity.this.getBullets());
+                    addAll(Battlecity.this.allTanks());
+                    addAll(Battlecity.this.getWalls());
+                    addAll(Battlecity.this.bullets());
+                    addAll(Battlecity.this.getPrizes());
+                    addAll(Battlecity.this.getTrees());
+                    addAll(Battlecity.this.getIce());
+                    addAll(Battlecity.this.getRivers());
                 }};
             }
         };
     }
 
-    @Override
-    public List<Construction> getConstructions() {
-        List<Construction> result = new LinkedList<>();
-        for (Construction construction : constructions) {
-            if (!construction.destroyed()) {
-                result.add(construction);
+    public List<Wall> getWalls() {
+        List<Wall> result = new LinkedList<>();
+        for (Wall wall : walls) {
+            if (!wall.destroyed()) {
+                result.add(wall);
             }
         }
         return result;
     }
 
-    @Override
+    public List<Tree> getTrees() {
+        return trees;
+    }
+
+    public List<Ice> getIce() {
+        return ice;
+    }
+
+	public List<River> getRivers() {
+		return rivers;
+	}
+
     public List<Border> getBorders() {
         return borders;
     }
 
-    public void setDice(Dice dice) {
-        this.dice = dice;
+
+    public void addBorder(List<Border> borders) {
+        this.borders.addAll(borders);
     }
 
+    public void addTree(Tree tree) {
+        trees.add(tree);
+    }
+
+    public void addBorder(Border border) {
+        borders.add(border);
+    }
+
+    public void addIce(Ice ice) {
+        this.ice.add(ice);
+    }
+
+    public void addRiver(River river) {
+        rivers.add(river);
+    }
+
+    public AiGenerator getAiGenerator() {
+        return aiGen;
+    }
+
+    public void addWall(List<Wall> walls) {
+        this.walls.addAll(walls);
+    }
+
+    public void addWall(Wall wall) {
+        walls.add(wall);
+    }
+
+    public void addRiver(List<River> rivers) {
+        this.rivers.addAll(rivers);
+    }
+
+    public void addTree(List<Tree> trees) {
+        this.trees.addAll(trees);
+    }
+
+    public void addIce(List<Ice> ice) {
+        this.ice.addAll(ice);
+    }
 }

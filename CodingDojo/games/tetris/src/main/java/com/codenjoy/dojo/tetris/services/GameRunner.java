@@ -28,11 +28,9 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.BoardReader;
-import com.codenjoy.dojo.services.printer.Printer;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.printer.*;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.tetris.client.Board;
@@ -69,13 +67,14 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
+    public GameField createGame(int level) {
         Figures queue = new Figures();
         Levels levels = loadLevelsFor(queue, gameLevels.getValue());
+        levels.gotoLevel(level - LevelProgress.levelsStartsFrom1);
         return new Tetris(levels, queue, glassSize.getValue());
     }
 
-    private Levels loadLevelsFor(Figures queue, String levelName) {
+    private Levels loadLevelsFor(FigureQueue queue, String levelName) {
         return new LevelsFactory().createLevels(levelName, getDice(), queue);
     }
 
@@ -90,7 +89,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Enum[] getPlots() {
+    public CharElements[] getPlots() {
         return Elements.values();
     }
 
@@ -101,11 +100,14 @@ public class GameRunner extends AbstractGameType implements GameType {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.SINGLE;
+        // TODO слишком много тут делается для получения количества уровней
+        Levels levels = loadLevelsFor(NullFigureQueue.INSTANCE, gameLevels.getValue());
+
+        return MultiplayerType.SINGLE_LEVELS.apply(levels.count());
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerId) {
         return new Player(listener);
     }
 

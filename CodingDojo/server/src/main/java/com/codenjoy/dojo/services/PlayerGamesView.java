@@ -23,13 +23,13 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.*;
 
@@ -40,7 +40,7 @@ public class PlayerGamesView {
     protected PlayerGames service;
 
     public Map<String, GameData> getGamesDataMap() {
-        Map<GameType, GuiPlotColorDecoder> decoders = getDecoders();
+        Map<String, GuiPlotColorDecoder> decoders = getDecoders();
         Map<String, List<String>> groupsMap = getGroupsMap();
         Map<String, Object> scores = getScores();
         Map<String, HeroData> coordinates = getCoordinates();
@@ -48,15 +48,15 @@ public class PlayerGamesView {
 
         return service.all().stream()
                 .collect(toMap(
-                        pg -> pg.getPlayer().getName(),
+                        pg -> pg.getPlayer().getId(),
                         pg -> {
                             GameType gameType = pg.getGameType();
-                            String player = pg.getPlayer().getName();
+                            String player = pg.getPlayer().getId();
                             List<String> group = groupsMap.get(player);
 
                             return new GameData(
                                     gameType.getBoardSize().getValue(),
-                                    decoders.get(gameType),
+                                    decoders.get(gameType.name()),
                                     filterByGroup(scores, group),
                                     group,
                                     filterByGroup(coordinates, group),
@@ -64,9 +64,9 @@ public class PlayerGamesView {
                         }));
     }
 
-    private Map<GameType, GuiPlotColorDecoder> getDecoders() {
+    protected Map<String, GuiPlotColorDecoder> getDecoders() {
         return service.getGameTypes().stream()
-                .collect(toMap(type -> type,
+                .collect(toMap(type -> type.name(),
                         type -> new GuiPlotColorDecoder(type.getPlots())));
     }
 
@@ -79,13 +79,13 @@ public class PlayerGamesView {
 
     private Map<String, HeroData> getCoordinates() {
         return service.all().stream()
-                .collect(toMap(pg -> pg.getPlayer().getName(),
+                .collect(toMap(pg -> pg.getPlayer().getId(),
                         pg -> pg.getGame().getHero()));
     }
 
     public Map<String, List<String>> getGroupsMap() {
         Map<String, List<String>> result = new LinkedHashMap<>();
-        for (List<String> group : getGroups()) {
+        for (List<String> group : getGroupsByField()) {
             for (String player : group) {
                 if (result.containsKey(player)) {
                     continue;
@@ -96,25 +96,48 @@ public class PlayerGamesView {
         return result;
     }
 
-    public List<List<String>> getGroups() {
+    public List<List<String>> getGroupsByRooms() {
+        return getGroupBy(PlayerGame::getRoomName);
+    }
+
+    public List<List<String>> getGroupsByField() {
+        return getGroupBy(PlayerGame::getField);
+    }
+
+    private List<List<String>> getGroupBy(Function<PlayerGame, Object> function) {
         return service.all().stream()
-                    .collect(groupingBy(PlayerGame::getField))
+                    .collect(groupingBy(function))
                     .values().stream()
                     .map(group -> group.stream()
-                            .map(pg -> pg.getPlayer().getName())
+                            .map(pg -> pg.getPlayer().getId())
                             .collect(toList()))
                     .collect(toList());
     }
 
     public Map<String, Object> getScores() {
         return service.all().stream()
-                .collect(toMap(pg -> pg.getPlayer().getName(),
+                .collect(toMap(pg -> pg.getPlayer().getId(),
                         pg -> pg.getPlayer().getScore()));
+    }
+
+    public List<PScoresOf> getScoresForGame(String gameName) {
+        return scoresFor(pg -> pg.getPlayer().getGameName().equals(gameName));
+    }
+
+    private List<PScoresOf> scoresFor(Predicate<PlayerGame> predicate) {
+        return service.all().stream()
+                .filter(predicate)
+                .map(pg -> new PScoresOf(pg))
+                .collect(toList());
+    }
+
+    public List<PScoresOf> getScoresForRoom(String roomName) {
+        return scoresFor(pg -> pg.getRoomName().equals(roomName));
     }
 
     public Map<String, String> getReadableNames() {
         return service.all().stream()
-                .collect(toMap(pg -> pg.getPlayer().getName(),
+                .collect(toMap(pg -> pg.getPlayer().getId(),
                         pg -> pg.getPlayer().getNotNullReadableName()));
     }
 }

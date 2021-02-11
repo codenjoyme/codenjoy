@@ -4,7 +4,7 @@ package com.codenjoy.dojo.expansion.model.replay;
  * #%L
  * expansion - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2017 EPAM
+ * Copyright (C) 2016 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -30,6 +30,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.util.*;
 
 import static java.util.stream.Collectors.toList;
@@ -62,8 +64,9 @@ public class LoggerReaderTest {
             "                    " +
             "                    ";
 
+    private static final String SEP = FileSystems.getDefault().getSeparator();
+
     @Test
-    @Ignore("TODO: пофиксить логику")
     public void testParseFile() throws IOException {
         // given
         SettingsWrapper.setup().roundTicks(50);
@@ -199,7 +202,6 @@ public class LoggerReaderTest {
             "--------------------------------------------------------------";
 
     @Test
-    @Ignore("TODO: пофиксить логику")
     public void testParseFileWhenHeroIsNotAlive_forDiedUser() throws IOException {
         // given
         SettingsWrapper.setup().roundTicks(50);
@@ -253,7 +255,6 @@ public class LoggerReaderTest {
     }
 
     @Test
-    @Ignore("TODO: пофиксить логику")
     public void testParseFileWhenHeroIsNotAlive_forAttackerUser() throws IOException {
         // given
         SettingsWrapper.setup().roundTicks(50);
@@ -307,7 +308,6 @@ public class LoggerReaderTest {
     }
 
     @Test
-    @Ignore("TODO: пофиксить логику")
     public void testParseFileWhenHeroIsNotAlive_forNeutralUser() throws IOException {
         // given
         SettingsWrapper.setup().roundTicks(50);
@@ -370,12 +370,12 @@ public class LoggerReaderTest {
 
     private String saveToFile(String data) throws IOException {
         String replayName = "testReplay-" + unique();
-        File file = new File("gameData\\" + replayName + ".txt");
+        File file = new File("gameData" + SEP + replayName + ".txt");
         file.getParentFile().mkdirs();
         file.createNewFile();
 
         FileOutputStream fos = new FileOutputStream(file);
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos, StandardCharsets.UTF_8));
 
         List<String> lines = Arrays.asList(data.split("\n"));
 

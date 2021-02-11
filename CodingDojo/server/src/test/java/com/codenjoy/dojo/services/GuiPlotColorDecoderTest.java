@@ -23,8 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.utils.JsonUtils;
-import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,59 +36,99 @@ import static org.mockito.Mockito.when;
 
 public class GuiPlotColorDecoderTest {
 
-    enum Elements {
-        ONE('1'), TWO('2'), THREE('3'), FOUR('4');
-        private char c;
+    enum Elements implements CharElements {
+        ONE('1'),
+        TWO('2'),
+        THREE('3'),
+        FOUR('4');
 
-        Elements(char c) {
-            this.c = c;
+        private char ch;
+
+        Elements(char ch) {
+            this.ch = ch;
         }
 
         @Override
         public String toString() {
-            return String.valueOf(c);
+            return String.valueOf(ch);
+        }
+
+        @Override
+        public char ch() {
+            return ch;
         }
     }
 
     @Test
     public void shouldEncode() {
+        // given
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
+        // when then
         assertEquals("ABCD", decoder.encodeForBrowser("1234"));
         assertEquals("DCBA", decoder.encodeForBrowser("4321"));
     }
 
-    public enum Elements1 {
-        STONE, HERO, GOLD;
+    @Test
+    public void shouldToString() {
+        // given when then
+        assertEquals("[1234 -> ABCD]",
+                new GuiPlotColorDecoder(Elements.values()).toString());
+
+        assertEquals("[SHG -> ABC]",
+                new GuiPlotColorDecoder(Elements1.values()).toString());
+
+        assertEquals("[SH -> AB]",
+                new GuiPlotColorDecoder(Elements2.values()).toString());
+    }
+
+    public enum Elements1 implements CharElements {
+        STONE,
+        HERO,
+        GOLD;
 
         @Override
         public String toString() {
-            return "" + super.toString().charAt(0);
+            return "" + ch();
+        }
+
+        @Override
+        public char ch() {
+            return super.toString().charAt(0);
         }
     }
 
-    public enum Elements2 {
-        SPACE, HERO;
+    public enum Elements2 implements CharElements {
+        SPACE,
+        HERO;
 
         @Override
         public String toString() {
-            return "" + super.toString().charAt(0);
+            return "" + ch();
+        }
+
+        @Override
+        public char ch() {
+            return super.toString().charAt(0);
         }
     }
 
     @Test
     public void shouldWorkWithAllSymbols() {
+        // given
         GameType game1 = mock(GameType.class);
         when(game1.getPlots()).thenReturn(Elements1.values());
-        assertEncode(game1, "ABC");
 
         GameType game2 = mock(GameType.class);
         when(game2.getPlots()).thenReturn(Elements2.values());
+
+        // when then
+        assertEncode(game1, "ABC");
         assertEncode(game2, "AB");
     }
 
     private void assertEncode(GameType game, String expected) {
-        Object[] plots = game.getPlots();
+        CharElements[] plots = game.getPlots();
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(plots);
 
         String plotsString = "";
@@ -101,8 +141,10 @@ public class GuiPlotColorDecoderTest {
 
     @Test
     public void shouldEncodeJsonWithLayers() {
+        // given
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
+        // when then
         assertEncode(decoder, "{'key1':'value1','key2':'value2','layers':['ABCD','DCBA','DCAB','DABC']}",
                 "{'key1':'value1','layers':['1234','4321','4312','4123'],'key2':'value2'}");
 
@@ -123,8 +165,10 @@ public class GuiPlotColorDecoderTest {
 
     @Test
     public void shouldEncodeJsonWithoutLayers() {
+        // given
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
+        // when then
         assertEncode(decoder, "{'key1':'value1','key2':'value2','key3':['1234','4321','4312','4123']}",
                 "{'key1':'value1','key3':['1234','4321','4312','4123'],'key2':'value2'}");
 
@@ -140,32 +184,40 @@ public class GuiPlotColorDecoderTest {
 
     @Test
     public void shouldEncodeUnexpectedObject() {
+        // given
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
         try {
+            // when
             decoder.encodeForBrowser(Boolean.TRUE);
             fail("Expected exception");
         } catch (IllegalArgumentException e) {
+            // then
             Assert.assertEquals("You can use only String or JSONObject as board", e.getMessage());
         }
     }
 
     @Test
     public void shouldNotEnumSymbol() {
+        // given
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
         try {
+            // when
             decoder.encodeForBrowser("12345");
             fail("Expected exception");
         } catch (IllegalArgumentException e) {
+            // then
             Assert.assertEquals("Not enum symbol '5'", e.getMessage());
         }
     }
 
     @Test
     public void shouldRemoveNSymbolsFromLayers() {
+        // given
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
+        // when then
         assertEquals(fix("ABCD"),
                 decoder.encodeForBrowser("12\n34").toString());
 
@@ -179,8 +231,10 @@ public class GuiPlotColorDecoderTest {
 
     @Test
     public void shouldEncodeForClient_removeN() {
+        // given
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(Elements.values());
 
+        // when then
         assertEquals("1234", decoder.encodeForClient("12\n34"));
         assertEquals("4321", decoder.encodeForClient("43\n21"));
 

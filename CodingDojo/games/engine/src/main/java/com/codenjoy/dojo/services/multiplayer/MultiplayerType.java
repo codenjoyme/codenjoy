@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services.multiplayer;
 
 
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.multiplayer.types.*;
 import org.json.JSONObject;
 
 import java.util.function.BiFunction;
@@ -38,19 +39,20 @@ public class MultiplayerType {
     /**
      * Если комната игры одноразовая, то этот флаг стоит в true
      */
-    public final static boolean DISPOSABLE = true;
+    public static final boolean DISPOSABLE = true;
+
+    /**
+     * Если за предпоследним игроком должен уходить
+     * из комнаты так же и последний, то этот флаг стоит в true
+     */
+    public static final boolean RELOAD_ALONE = true;
 
     /**
      * Каждый игрок на своем отдельном поле.
      * Удаляется игрок - удаляется поле.
      * Создается игрок - создается новое поле.
      */
-    public static final MultiplayerType SINGLE = new SINGLE();
-    static class SINGLE extends MultiplayerType {
-        SINGLE() {
-            super(1, DISPOSABLE);
-        }
-    }
+    public static final MultiplayerType SINGLE = new SingleType();
 
     /**
      * Все игроки на одном поле без ограничений по количеству.
@@ -58,12 +60,7 @@ public class MultiplayerType {
      * Последний игрок удаляется - поле тоже удаляется. TODO ##1 можно поменять тут
      * Каждый новый игрок создается на этом же поле.
      */
-    public static final MultiplayerType MULTIPLE = new MULTIPLE();
-    static class MULTIPLE extends MultiplayerType {
-        MULTIPLE() {
-            super(Integer.MAX_VALUE, !DISPOSABLE);
-        }
-    }
+    public static final MultiplayerType MULTIPLE = new MultipleType();
 
     /**
      * На поле только заданное количество игроков.
@@ -77,18 +74,13 @@ public class MultiplayerType {
      *    Все новый игроки сверх вместимости поля будут добавляться на новое поле.
      * Для false (многоразовое):
      *    Игроки будут добавляться до тех пор пока поле не заполнится.
-     *    Но, в отличие от прошлого случая (оджноразовая борда), берется во внимание
+     *    Но, в отличие от прошлого случая (одноразовая борда), берется во внимание
      *    только текущее количество игроков на поле, если оно меньше вместимости -
      *    новый игрок добавится на это поле, иначе для него создастся новое поле
      * В любом случае если игроков было несколько и они все ушли, оставив одного на поле -
      *    для него создастся новое поле и к нему можно будет добавляться.
      */
-    public static final BiFunction<Integer, Boolean, MultiplayerType> TEAM = TEAM_::new;
-    static class TEAM_ extends MultiplayerType {
-        TEAM_(Integer count, Boolean disposable) {
-            super(count, disposable);
-        }
-    }
+    public static final BiFunction<Integer, Boolean, MultiplayerType> TEAM = TeamType::new;
 
     /**
      * По двое игроков за раз на одном поле.
@@ -101,12 +93,7 @@ public class MultiplayerType {
      * TODO Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появится игрок, с которым он еще не играл.
      * TODO Игра находится на паузе, пока не соберется заданное количество игроков.
      */
-    public static final MultiplayerType TOURNAMENT = new TOURNAMENT();
-    static class TOURNAMENT extends MultiplayerType {
-        TOURNAMENT() {
-            super(2, DISPOSABLE);
-        }
-    }
+    public static final MultiplayerType TOURNAMENT = new TournamentType();
 
     /**
      * Трое игроков за раз на одном поле.
@@ -119,12 +106,7 @@ public class MultiplayerType {
      * TODO Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появятся двое других игроков, с которыми он еще не играл.
      * TODO Игра находится на паузе, пока не соберется заданное количество игроков.
      */
-    public static final MultiplayerType TRIPLE = new TRIPLE();
-    static class TRIPLE extends MultiplayerType {
-        TRIPLE() {
-            super(3, DISPOSABLE);
-        }
-    }
+    public static final MultiplayerType TRIPLE = new TripleType();
 
     /**
      * Четверо игроков за раз на одном поле.
@@ -137,12 +119,7 @@ public class MultiplayerType {
      * TODO Если один из игроков закончил, он попадает в лобби и ждет пока в нем не появятся трое других игроков, с которыми он еще не играл.
      * TODO Игра находится на паузе, пока не соберется заданное количество игроков.
      */
-    public static MultiplayerType QUADRO = new QUADRO();
-    static class QUADRO extends MultiplayerType {
-        QUADRO() {
-            super(4, DISPOSABLE);
-        }
-    }
+    public static MultiplayerType QUADRO = new QuadroType();
 
     /**
      * Игроки играют каждый на своем уровне (single) заданное количество уровней,
@@ -151,38 +128,53 @@ public class MultiplayerType {
      * Переходить между уровнями вполне можно, тогда single команты пересоздаются
      * всякий раз когда на них заходят, а multiple остается общей для всех.
      */
-    public static final Function<Integer, MultiplayerType> TRAINING = TRAINING_::new;
-    static class TRAINING_ extends MultiplayerType {
-        TRAINING_(Integer levels) {
-            super(1, levels, !DISPOSABLE);
-        }
+    public static final Function<Integer, MultiplayerType> TRAINING = TrainingType::new;
 
-        @Override
-        public int getRoomSize(Object data) {
-            if (data == null) {
-                return super.roomSize;
-            }
-            LevelProgress progress = (LevelProgress)data;
-            if (progress.getCurrent() < progress.getTotal()) {
-                return SINGLE.getRoomSize();
-            } else {
-                return MULTIPLE.getRoomSize();
-            }
-        }
+    /**
+     * Игра многоуровневая.
+     * Игроки играют в комнатах (disposable которых задается) по N в каждой,
+     * при этом продвигаясь по уровням вперед.
+     * Что будет с комнатой когда ее покидают зависит от disposable.
+     */
+    public static final FourFunction<Integer, Integer, Boolean, Boolean, MultiplayerType> LEVELS = LevelsType::new;
+
+    /**
+     * Игра многоуровневая однопользовательская.
+     * Игроки играют каждый в своей независимой комнате,
+     * при этом продвигаясь по уровням вперед.
+     * Другими словами это SINGLE на N уровней
+     */
+    public static final Function<Integer, MultiplayerType> SINGLE_LEVELS = SingleLevelsType::new;
+
+    /**
+     * Игра многоуровневая многопользовательская.
+     * Игроки играют все вместе в группах по N человек в комнате,
+     * при этом продвигаясь по уровням вперед.
+     * Другими словами это MULTIPLE на N уровней
+     */
+    public static final BiFunction<Integer, Integer, MultiplayerType> MULTIPLE_LEVELS = MultipleLevelsType::new;
+
+    /**
+     * Так же как и TRAINING только последний уровень
+     * разделен на комнаты по N участников.
+     */
+    public static final BiFunction<Integer, Integer, MultiplayerType> MULTIPLE_LEVELS_MULTIROOM = MultipleLevelsMultiroomType::new;
+
+
+    protected int roomSize;
+    protected int levelsCount;
+    protected boolean disposable;
+    protected boolean shouldReloadAlone;
+
+    protected MultiplayerType(int roomSize, boolean disposable) {
+        this(roomSize, 1, disposable, RELOAD_ALONE);
     }
 
-    private int roomSize;
-    private int levelsCount;
-    private boolean disposable;
-
-    MultiplayerType(int roomSize, boolean disposable) {
-        this(roomSize, 1, disposable);
-    }
-
-    public MultiplayerType(int roomSize, int levelsCount, boolean disposable) {
+    public MultiplayerType(int roomSize, int levelsCount, boolean disposable, boolean shouldReloadAlone) {
         this.roomSize = roomSize;
         this.levelsCount = levelsCount;
         this.disposable = disposable;
+        this.shouldReloadAlone = shouldReloadAlone;
     }
 
     public boolean isDisposable() {
@@ -190,27 +182,30 @@ public class MultiplayerType {
     }
 
     public boolean isSingle() {
-        return this instanceof SINGLE;
+        return this instanceof SingleType
+                || this instanceof SingleLevelsType;
     }
 
     public boolean isMultiple() {
-        return this instanceof MULTIPLE;
+        return this instanceof MultipleType
+                || this instanceof MultipleLevelsType
+                || this instanceof MultipleLevelsMultiroomType;
     }
 
     public boolean isTriple() {
-        return this instanceof TRIPLE;
+        return this instanceof TripleType;
     }
 
     public boolean isTournament() {
-        return this instanceof TOURNAMENT;
+        return this instanceof TournamentType;
     }
 
     public boolean isQuadro() {
-        return this instanceof QUADRO;
+        return this instanceof QuadroType;
     }
 
     public boolean isTeam() {
-        return this instanceof TEAM_;
+        return this instanceof TeamType;
     }
 
     public boolean isSingleplayer() {
@@ -222,7 +217,14 @@ public class MultiplayerType {
     }
 
     public boolean isTraining() {
-        return this instanceof TRAINING_;
+        return this instanceof TrainingType;
+    }
+
+    /**
+     * @return говорит является ли этот тип представителем подтипа содержащего ряд уровней
+     */
+    public boolean isLevels() {
+        return LevelsType.class.isAssignableFrom(getClass());
     }
 
     public boolean isLastLevel(int levelNumber) {
@@ -230,23 +232,16 @@ public class MultiplayerType {
     }
 
     public String getType() {
-        return this.getClass().getSimpleName().toLowerCase().replace("_", "");
+        return this.getClass().getSimpleName().toLowerCase().replace("type", "");
     }
 
     public int loadProgress(Game game, JSONObject save) {
-        int roomSize;
-        if (isTraining() && save.has("levelProgress")) {
-            LevelProgress progress = new LevelProgress(save);
-            roomSize = this.getRoomSize(progress);
-            game.setProgress(progress);
-        } else {
-            roomSize = this.getRoomSize();
-            game.setProgress(new LevelProgress(this));
-        }
+        int roomSize = getRoomSize();
+        game.setProgress(progress());
         return roomSize;
     }
 
-    public int getRoomSize(Object data) {
+    public int getRoomSize(LevelProgress progress) {
         return roomSize;
     }
 
@@ -256,5 +251,69 @@ public class MultiplayerType {
 
     public int getLevelsCount() {
         return levelsCount;
+    }
+
+    /**
+     * Постобработка борды после прорисовки.
+     * Некоторые типы уровней могут захотеть добавить туда информацию, скажем про уровень.
+     * @param board подготовленная игрой борда (String или JSONObject)
+     * @param single вся информация о игре
+     * @return измененная борда, отправляемая клиенту
+     */
+    public Object postProcessBoard(Object board, Single single) {
+        return board;
+    }
+
+    /**
+     * Постобработка сейва игры после создания.
+     * Некоторые типы уровней могут захотеть добавить туда информацию, скажем про уровень.
+     * @param save подготовленный игрой сейв
+     * @param single вся информация о игре
+     * @return измененный сейв игры, который затем уйдет на сохранение
+     */
+    public JSONObject postProcessSave(JSONObject save, Single single) {
+        if (save == null) {
+            return new JSONObject();
+        }
+        return save;
+    }
+
+    /**
+     * Прогресс содержит в себе информацию об уровнях,
+     * а она зависит от MultiplayerType
+     * @return объект прогресса на основе типа
+     */
+    public LevelProgress progress() {
+        return new LevelProgress();
+    }
+
+    /**
+     * Иногда случается так, что надо создавать отдельную комнату,
+     * а иногда искать свободную, если она конечно есть.
+     * @param levelNumber номер уровня для которого делаем проверку
+     * @return надо ли создавать новую комнату?
+     */
+    public boolean shouldTryFindUnfilled(int levelNumber) {
+        return true;
+    }
+
+    /**
+     * Некоторые типы игр могут иметь иное именование комнат,
+     * скажем в зависимости от номера уровня (см. переопределенные методы)
+     * @param roomName исходное имя комнаты
+     * @param levelNumber номер уровня
+     * @return обновленное имя комнаты
+     */
+    public String getRoomName(String roomName, int levelNumber) {
+        return roomName;
+    }
+
+    /**
+     * Иногда случается так, что предпоследний игрок уходит с поля,
+     * так вот этот флаг говорит стоит ли уходить так же и последнему
+     * @return true если стоит уходить последнему игроку с карты
+     */
+    public boolean shouldReloadAlone() {
+        return shouldReloadAlone;
     }
 }

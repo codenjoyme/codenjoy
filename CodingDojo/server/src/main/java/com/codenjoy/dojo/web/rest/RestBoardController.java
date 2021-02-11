@@ -23,151 +23,79 @@ package com.codenjoy.dojo.web.rest;
  */
 
 
+import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.nullobj.NullGameType;
-import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.web.controller.Validator;
-import com.codenjoy.dojo.web.rest.pojo.GameTypeInfo;
+import com.codenjoy.dojo.web.rest.pojo.PGameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PPlayerWantsToPlay;
+import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import com.codenjoy.dojo.web.rest.pojo.PlayerInfo;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import lombok.AllArgsConstructor;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletContext;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
 @RestController
-@RequestMapping(value = "/rest")
-@RequiredArgsConstructor
+@RequestMapping("/rest")
+@AllArgsConstructor
 public class RestBoardController {
 
-    private final GameService gameService;
-    private final RestRegistrationController registrationController;
-    private final PlayerService playerService;
-    private final Registration registration;
-    private final ServletContext servletContext;
-    private final Validator validator;
-    private final PlayerGames playerGames;
-    private final PlayerGamesView playerGamesView;
-    private final TimerService timerService;
-    private final SaveService saveService;
-    private final ActionLogger actionLogger;
+    private GameService gameService;
+    private RestRegistrationController registrationController;
+    private RestGameController gameController;
+    private PlayerService playerService;
+    private Registration registration;
+    private Validator validator;
+    private PlayerGames playerGames;
+    private PlayerGamesView playerGamesView;
+    private SaveService saveService;
+    private ActionLogger actionLogger;
 
-//    @RequestMapping(value = "/sprites", method = RequestMethod.GET)
-    public Map<String, List<String>> getAllSprites() {
-        return gameService.getSprites();
-    }
-
-//    @RequestMapping(value = "/sprites/{gameName}/exists", method = RequestMethod.GET)
-    public boolean isGraphicOrTextGame(@PathVariable("gameName") String gameName) {
-        return !getSpritesForGame(gameName).isEmpty();
-    }
-
-//    @RequestMapping(value = "/sprites/{gameName}", method = RequestMethod.GET)
-    public List<String> getSpritesForGame(@PathVariable("gameName") String gameName) {
-        if (StringUtils.isEmpty(gameName)) {
-            return new ArrayList<>();
-        }
-        return gameService.getSprites().get(gameName);
-    }
-
-//    @RequestMapping(value = "/sprites/alphabet", method = RequestMethod.GET)
-    public String getSpritesAlphabet() {
-        return String.valueOf(GuiPlotColorDecoder.GUI.toCharArray());
-    }
-
-//    @RequestMapping(value = "/context", method = RequestMethod.GET)
+    @GetMapping("/context")
     public String getContext() {
-        String contextPath = servletContext.getContextPath();
-        if (contextPath.charAt(contextPath.length() - 1) == '/') {
-            contextPath += contextPath.substring(0, contextPath.length() - 1);
-        }
-        return contextPath;
+        return "/" + CodenjoyContext.getContext();
     }
 
-//    @RequestMapping(value = "/game/{gameName}/type", method = RequestMethod.GET)
-    public GameTypeInfo getGameType(@PathVariable("gameName") String gameName) {
-        if (StringUtils.isEmpty(gameName)) {
-            return new GameTypeInfo(NullGameType.INSTANCE);
-        }
-        GameType game = gameService.getGame(gameName);
-
-        return new GameTypeInfo(game);
-    }
-
-    @RequestMapping(value = "/player/{player}/{code}/level/{level}", method = RequestMethod.GET)
-    public synchronized boolean changeLevel(@PathVariable("player") String emailOrId,
+    @GetMapping("/player/{player}/{code}/level/{level}")
+    public synchronized boolean changeLevel(@PathVariable("player") String id,
                                 @PathVariable("code") String code,
                                 @PathVariable("level") int level)
     {
-        String id = validator.checkPlayerCode(emailOrId, code);
+        validator.checkPlayerCode(id, code);
 
         playerGames.changeLevel(id, level);
 
         return true;
     }
 
-    // TODO test me и вообще где это надо?
-//    @RequestMapping(value = "/player/all/groups", method = RequestMethod.GET)
-    public Map<String, List<List<String>>> getPlayersGroups() {
-        Map<String, List<List<String>>> result = new HashMap<>();
-        List<Player> players = playerService.getAll();
-        List<List<String>> groups = playerGamesView.getGroups();
-        for (List<String> group : groups) {
-            String playerId = group.get(0);
-            Player player = players.stream()
-                    .filter(p -> p.getName().equals(playerId))
-                    .findFirst()
-                    .orElse(NullPlayer.INSTANCE);
-
-            String gameName = player.getGameName();
-            if (!result.containsKey(gameName)) {
-                result.put(gameName, new LinkedList<>());
-            }
-            result.get(gameName).add(group);
-        }
-        return result;
-    }
-
-//    @RequestMapping(value = "/player/all/scores", method = RequestMethod.GET)
-    public Map<String, Object> getPlayersScores() {
-        return playerGamesView.getScores();
-    }
-
-//    @RequestMapping(value = "/scores/clear/{adminPassword}", method = RequestMethod.GET)
-    public boolean clearAllScores(@PathVariable("adminPassword") String adminPassword) {
-        validator.checkIsAdmin(adminPassword);
-
-        playerService.cleanAllScores();
-
-        return true;
-    }
-
-//    @RequestMapping(value = "/game/enabled/{enabled}/{adminPassword}", method = RequestMethod.GET)
-    public boolean startStopGame(@PathVariable("adminPassword") String adminPassword,
-                                  @PathVariable("enabled") boolean enabled)
-    {
-        validator.checkIsAdmin(adminPassword);
-
-        if (enabled) {
-            timerService.resume();
-        } else {
-            timerService.pause();
-        }
-
-        return timerService.isPaused();
+    @GetMapping("/game/{gameName}/scores")
+    public List<PScoresOf> getPlayersScoresForGame(@PathVariable("gameName") String gameName) {
+        return playerGamesView.getScoresForGame(gameName);
     }
 
     // TODO test me
-//    @RequestMapping(value = "/player/{player}/{code}/reset", method = RequestMethod.GET)
-    public synchronized boolean reset(@PathVariable("player") String emailOrId, @PathVariable("code") String code){
-        String id = validator.checkPlayerCode(emailOrId, code);
+    @GetMapping("/room/{roomName}/scores")
+    public List<PScoresOf> getPlayersScoresForRoom(@PathVariable("roomName") String roomName) {
+        return playerGamesView.getScoresForRoom(roomName);
+    }
+
+    // TODO test me
+    @GetMapping("/player/{player}/{code}/reset")
+    public synchronized boolean reset(@PathVariable("player") String id, @PathVariable("code") String code){
+        validator.checkPlayerCode(id, code);
 
         if (!playerService.contains(id)) {
             return false;
@@ -188,35 +116,37 @@ public class RestBoardController {
     }
 
     // TODO test me
-    @RequestMapping(value = "/player/{player}/{code}/wantsToPlay/{gameName}", method = RequestMethod.GET)
+    @GetMapping("/player/{player}/{code}/wantsToPlay/{gameName}")
     public synchronized PPlayerWantsToPlay playerWantsToPlay(
-            @PathVariable("player") String emailOrId,
+            @PathVariable("player") String id,
             @PathVariable("code") String code,
             @PathVariable("gameName") String gameName)
     {
-        validator.checkPlayerName(emailOrId, CAN_BE_NULL);
+        validator.checkPlayerId(id, CAN_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
         validator.checkGameName(gameName, CANT_BE_NULL);
 
         String context = getContext();
-        GameTypeInfo gameType = getGameType(gameName);
-        boolean registered = registration.checkUser(emailOrId, code) != null;
-        List<String> sprites = getSpritesForGame(gameName);
-        String alphabet = getSpritesAlphabet();
+        PGameTypeInfo gameType = gameController.type(gameName);
+        boolean registered = registration.checkUser(id, code) != null;
+        List<String> sprites = gameController.spritesNames(gameName);
+        String alphabet = gameController.spritesAlphabet();
         List<PlayerInfo> players = registrationController.getGamePlayers(gameName);
 
         return new PPlayerWantsToPlay(context, gameType,
                 registered, sprites, alphabet, players);
     }
 
-    // TOOD test me
-    @RequestMapping(value = "/player/{player}/log/{time}", method = RequestMethod.GET)
-    public List<BoardLog> changeLevel(@PathVariable("player") String emailOrId,
+    // TODO test me
+    @GetMapping("/player/{player}/log/{time}")
+    public List<BoardLog> changeLevel(@PathVariable("player") String id,
                                             @PathVariable("time") Long time)
     {
-        validator.checkPlayerName(emailOrId, CANT_BE_NULL);
+        validator.checkPlayerId(id, CANT_BE_NULL);
 
-        String id = registration.checkUser(emailOrId);
+        if (registration.checkUser(id) == null) {
+            return Arrays.asList();
+        }
 
         if (time == null || time == 0) {
             time = actionLogger.getLastTime(id);
@@ -228,19 +158,30 @@ public class RestBoardController {
             return Arrays.asList();
         }
 
-        // TODO Как-то тут сложно
+        // TODO Как-то тут сложно и долго грузится
+        // TODO а еще если участник играл в одну игру, а потом переключился в бомбер и там продолжал, то тут будет ошибка так как одной игрой парсим другую
         GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameService.getGame(result.get(0).getGameType()).getPlots());
 
+        // TODO доделать для icancode
         result.forEach(log -> {
-            String board = log.getBoard().replaceAll("\n", "");
-            log.setBoard((String) decoder.encodeForBrowser(board));
+            Object board = tryJson(log.getBoard());
+            log.setBoard(decoder.encodeForBrowser(board).toString());
         });
 
         return result;
     }
 
+    private Object tryJson(String board) {
+        try {
+            return new JSONObject(board);
+        } catch (JSONException e) {
+            return board;
+        }
+    }
+
     @GetMapping("/{gameName}/status")
     public Map<String, Object> checkGameIsActive(@PathVariable("gameName") String gameName) {
-        return Collections.singletonMap("active", playerGames.getPlayers(gameName).size() > 0);
+        boolean active = playerGames.getPlayers(gameName).size() > 0;
+        return Collections.singletonMap("active", active);
     }
 }

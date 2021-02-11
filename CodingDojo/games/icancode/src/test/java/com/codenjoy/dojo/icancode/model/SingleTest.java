@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -32,8 +32,6 @@ import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.utils.JsonUtils;
-import com.codenjoy.dojo.utils.TestUtils;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,8 +57,8 @@ public class SingleTest {
     private EventListener listener2;
     private Single single1;
     private Single single2;
-    private List<ILevel> singles1;
-    private List<ILevel> singles2;
+    private List<Level> singles1;
+    private List<Level> singles2;
     private ICanCode gameMultiple;
 
     @Before
@@ -75,15 +73,23 @@ public class SingleTest {
         }
     }
 
-    private void givenFl(String... boards) {
-        Levels.VIEW_SIZE = Levels.VIEW_SIZE_TESTING;
+    void givenFl(String... boards) {
+        givenFl(viewSize(boards[0]), boards);
+    }
+
+    int viewSize(String board) {
+        return (int)Math.sqrt(board.length());
+    }
+
+    void givenFl(int viewSize, String... boards) {
+        Levels.VIEW_SIZE = viewSize;
         Deque<String> strings = new LinkedList<>(Arrays.asList(boards));
         String multiple = strings.removeLast();
         singles1 = createLevels(strings);
         singles2 = createLevels(strings);
 
-        ILevel levelMultiple = createLevels(Arrays.asList(multiple)).get(0);
-        gameMultiple = new ICanCode(levelMultiple, dice, ICanCode.MULTIPLE);
+        Level levelMultiple = createLevels(Arrays.asList(multiple)).get(0);
+        gameMultiple = new ICanCode(levelMultiple, dice, ICanCode.CONTEST);
 
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);
@@ -92,12 +98,12 @@ public class SingleTest {
         GamePlayer player1 = gameRunner.createPlayer(listener1, null);
         GamePlayer player2 = gameRunner.createPlayer(listener2, null);
 
-        MultiplayerType type = MultiplayerType.TRAINING.apply(boards.length - 1);
+        MultiplayerType type = MultiplayerType.TRAINING.apply(boards.length);
         single1 = new Single(player1, gameRunner.getPrinterFactory(), type);
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(LevelProgress.levelsStartsFrom1);
 
         single2 = new Single(player2, gameRunner.getPrinterFactory(), type);
-        player2TryLoadLevel(0);
+        player2TryLoadLevel(LevelProgress.levelsStartsFrom1);
     }
 
     private Hero hero1() {
@@ -108,10 +114,10 @@ public class SingleTest {
         return (Hero)single2.getJoystick();
     }
 
-    private List<ILevel> createLevels(Collection<String> boards) {
-        List<ILevel> levels = new LinkedList<>();
+    private List<Level> createLevels(Collection<String> boards) {
+        List<Level> levels = new LinkedList<>();
         for (String board : boards) {
-            ILevel level = new LevelImpl(board);
+            Level level = new LevelImpl(board);
             levels.add(level);
         }
         return levels;
@@ -139,7 +145,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldNextLevelWhenFinishCurrent() {
+    public void shouldNextLevel_whenFinishCurrent() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +
@@ -595,12 +601,205 @@ public class SingleTest {
                 "----");
     }
 
+    @Test
+    public void shouldSeveralPlayersAtOneField_checkDrawing() {
+        // given
+        shouldSeveralPlayersCollectionAtLastLevel();
+
+        allAtFloor();
+
+        // when
+        hero2().jump();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        assertF(single1,
+                "----" +
+                "-^--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-X--" +
+                "----" +
+                "----");
+
+
+        assertF(single2,
+                "----" +
+                "-*--" +
+                "----" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        allAtFloor();
+
+        // when
+        hero1().jump();
+        hero2().jump();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "----" +
+                "----" +
+                "----");
+
+        assertF(single1,
+                "----" +
+                "-*--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "----" +
+                "----" +
+                "----");
+
+
+        assertF(single2,
+                "----" +
+                "-*--" +
+                "----" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        allAtFloor();
+
+        // when
+        hero1().jump();
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-X--" +
+                "----" +
+                "----");
+
+        assertF(single1,
+                "----" +
+                "-*--" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+
+        assertF(single2,
+                "----" +
+                "-^--" +
+                "----" +
+                "----");
+
+        // when
+        tick();
+
+        // then
+        allAtFloor();
+
+    }
+
+    private void allAtFloor() {
+        assertL(single1,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+        assertF(single1,
+                "----" +
+                "----" +
+                "----" +
+                "----");
+
+        assertL(single2,
+                "╔══┐" +
+                "║S.│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single2,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
+
+        assertF(single2,
+                "----" +
+                "----" +
+                "----" +
+                "----");
+    }
+
     int count = 0;
     private void tick(Single single) {
         ICanCode field = (ICanCode)single.getField();
         if (single.isGameOver()) {
             if (single.isWin()) {
-                nextlevel(single, field);
+                nextLevel(single, field);
             }
             single.newGame();
         }
@@ -619,8 +818,8 @@ public class SingleTest {
         }
     }
 
-    private void nextlevel(Single single, ICanCode field) {
-        List<ILevel> levels = this.singles1;
+    private void nextLevel(Single single, ICanCode field) {
+        List<Level> levels = this.singles1;
         if (levels.indexOf(field.getLevel()) == -1) {
             levels = this.singles2;
             if (levels.indexOf(field.getLevel()) == -1) {
@@ -633,25 +832,28 @@ public class SingleTest {
         }
 
         int index = levels.indexOf(field.getLevel());
-        loadLevel(single, levels, index + 1, false);
+        int level = index + LevelProgress.levelsStartsFrom1;
+        level++;
+        loadLevel(single, levels, level, false);
     }
 
-    private boolean loadLevel(Single single, List<ILevel> levels, int index, boolean ask) {
+    private boolean loadLevel(Single single, List<Level> levels, int level, boolean ask) {
         LevelProgress progress = single.getProgress();
         if (ask) {
-            if (!progress.canChange(index)) {
+            if (!progress.canChange(level)) {
                 return false;
             }
         }
-        progress.change(index, Math.max(progress.getPassed(), index - 1));
+        progress.change(level, Math.max(progress.getPassed(), level - 1));
         if (!progress.isValid()) {
             return false;
         }
 
-        if (index == levels.size()) {
+        if (level == levels.size() + 1) {
             single.on(gameMultiple);
         } else {
-            ICanCode gameSingle = new ICanCode(levels.get(index), dice, ICanCode.SINGLE);
+            int index = level - LevelProgress.levelsStartsFrom1;
+            ICanCode gameSingle = new ICanCode(levels.get(index), dice, ICanCode.TRAINING);
             single.on(gameSingle);
         }
         return true;
@@ -1545,12 +1747,12 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldSelectLevelWhenAllLevelsAreDone() {
+    public void shouldSelectLevel_whenAllLevelsAreDone() {
         // given
         shouldAllLevelsAreDone();
 
         // when try to change level 1  - success from multiple to single
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(1);
         tick();
 
         // then
@@ -1567,7 +1769,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2  - success from single to single
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
 
         // then
@@ -1584,7 +1786,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3  - success from single to single
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
 
         // then
@@ -1601,7 +1803,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success from single to multiple
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -1637,7 +1839,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2 - success from multiple to single
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
 
         // then
@@ -1655,8 +1857,8 @@ public class SingleTest {
 
     }
 
-    void player1TryLoadLevel(int index) {
-        if (loadLevel(single1, singles1, index, true)) {
+    void player1TryLoadLevel(int level) {
+        if (loadLevel(single1, singles1, level, true)) {
             single1.newGame();
         }
     }
@@ -1673,7 +1875,7 @@ public class SingleTest {
         shouldAllLevelsAreDone();
 
         // when win on level then try to change to last - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
         tick();
         hero1().right();
@@ -1693,7 +1895,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3 (previous) - success
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
 
         // then
@@ -1768,10 +1970,10 @@ public class SingleTest {
                 "└───┘");
 
         // when then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':1,'y':1}\n" +
+                "heroPosition: {'x':1,'y':3}\n" +
                 "\n" +
                 "╔═══┐\n" +
                 "║SE.│\n" +
@@ -1792,10 +1994,10 @@ public class SingleTest {
                 "-----\n", single1);
 
         // when then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':1,'y':1}\n" +
+                "heroPosition: {'x':1,'y':3}\n" +
                 "\n" +
                 "╔═══┐\n" +
                 "║SE.│\n" +
@@ -1860,10 +2062,10 @@ public class SingleTest {
                 "-----");
 
         // when then
-        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':2,'lastPassed':1,'total':2}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':2,'y':1}\n" +
+                "heroPosition: {'x':2,'y':3}\n" +
                 "\n" +
                 "╔═══┐\n" +
                 "║S..│\n" +
@@ -1884,7 +2086,7 @@ public class SingleTest {
                 "-----\n", single1);
 
         // when then
-        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':1}\n" +
+        assertBoardData("levelProgress: {'current':2,'lastPassed':1,'total':2}\n" +
                 "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
                 "heroPosition: {'x':1,'y':2}\n" +
@@ -1932,13 +2134,14 @@ public class SingleTest {
                 "║..................│" +
                 "║.................E│" +
                 "└──────────────────┘";
-        givenFl(field, field);
+        givenFl(Levels.VIEW_SIZE_TESTING,
+                field, field);
 
         // when then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':0,'y':0}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
+                "offset: {'x':0,'y':4}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':1,'y':1}\n" +
+                "heroPosition: {'x':1,'y':14}\n" +
                 "\n" +
                 "╔═══════════════\n" +
                 "║S..............\n" +
@@ -1991,10 +2194,10 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n", single1);
 
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':0,'y':0}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
+                "offset: {'x':0,'y':4}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':1,'y':1}\n" +
+                "heroPosition: {'x':1,'y':14}\n" +
                 "\n" +
                 "╔═══════════════\n" +
                 "║S..............\n" +
@@ -2056,10 +2259,10 @@ public class SingleTest {
         }
 
         // then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':4,'y':0}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
+                "offset: {'x':4,'y':4}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':14,'y':1}\n" +
+                "heroPosition: {'x':14,'y':14}\n" +
                 "\n" +
                 "═══════════════┐\n" +
                 "...............│\n" +
@@ -2112,10 +2315,10 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n", single1);
 
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':0,'y':4}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
+                "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':1,'y':14}\n" +
+                "heroPosition: {'x':1,'y':1}\n" +
                 "\n" +
                 "║....│  ║.......\n" +
                 "║..┌─┘  └─╗.....\n" +
@@ -2183,10 +2386,10 @@ public class SingleTest {
         }
 
         // then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':4,'y':0}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
+                "offset: {'x':4,'y':4}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':4,'y':11}\n" +
+                "heroPosition: {'x':4,'y':4}\n" +
                 "\n" +
                 "═══════════════┐\n" +
                 "...............│\n" +
@@ -2239,10 +2442,10 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n", single1);
 
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':0,'y':4}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
+                "offset: {'x':0,'y':0}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':11,'y':4}\n" +
+                "heroPosition: {'x':11,'y':11}\n" +
                 "\n" +
                 "║....│  ║.......\n" +
                 "║..┌─┘  └─╗.....\n" +
@@ -2303,10 +2506,10 @@ public class SingleTest {
         tick(single2);
 
         // then
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':3,'y':0}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
+                "offset: {'x':3,'y':4}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':4,'y':11}\n" +
+                "heroPosition: {'x':4,'y':4}\n" +
                 "\n" +
                 "════════════════\n" +
                 "................\n" +
@@ -2359,10 +2562,10 @@ public class SingleTest {
                 "----------------\n" +
                 "----------------\n", single1);
 
-        assertBoardData("levelProgress: {'current':0,'lastPassed':-1,'total':1}\n" +
-                "offset: {'x':0,'y':3}\n" +
+        assertBoardData("levelProgress: {'current':1,'lastPassed':0,'total':2}\n" +
+                "offset: {'x':0,'y':1}\n" +
                 "levelFinished: false\n" +
-                "heroPosition: {'x':11,'y':4}\n" +
+                "heroPosition: {'x':11,'y':11}\n" +
                 "\n" +
                 "║....┌──╗.......\n" +
                 "║....│  ║.......\n" +
@@ -2573,7 +2776,7 @@ public class SingleTest {
                 "----");
 
         // when
-        player2TryLoadLevel(0);
+        player2TryLoadLevel(1);
         tick(single1);
         tick(single2);
 
@@ -2728,12 +2931,12 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldChangeLevelWhenAllLevelsAreDone() {
+    public void shouldChangeLevel_whenAllLevelsAreDone() {
         // given
         shouldAllLevelsAreDone_case2();
 
         // when try to change level 1  - success
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(LevelProgress.levelsStartsFrom1);
         tick();
 
         // then
@@ -2750,7 +2953,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -2767,7 +2970,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2  - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
 
         // then
@@ -2784,7 +2987,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -2801,7 +3004,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3  - success
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
 
         // then
@@ -2818,7 +3021,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -2854,7 +3057,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2 - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
 
         // then
@@ -2878,7 +3081,7 @@ public class SingleTest {
         shouldAllLevelsAreDone_case2();
 
         // when win on level then try to change to last - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
         hero1().down();
         tick();
@@ -2898,7 +3101,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -2921,7 +3124,7 @@ public class SingleTest {
         shouldAllLevelsAreDone_case2();
 
         // when win on level then try to change to last - success
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
         hero1().left();
         tick();
@@ -2941,7 +3144,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
 
         // then
@@ -2964,7 +3167,7 @@ public class SingleTest {
         shouldAllLevelsAreDone_case2();
 
         // when win on level then try to change to last - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
         hero1().right();
         tick();
@@ -2984,7 +3187,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3 (previous) - success
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
 
         // then
@@ -3002,7 +3205,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldResetLevelWhenAllLevelsAreDone() {
+    public void shouldResetLevel_whenAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +
@@ -3203,7 +3406,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 1  - success
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(1);
         tick();
         tick();
         hero1().down();
@@ -3240,7 +3443,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2  - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
         tick();
         hero1().left();
@@ -3277,7 +3480,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 3  - success
-        player1TryLoadLevel(2);
+        player1TryLoadLevel(3);
         tick();
         tick();
         hero1().up();
@@ -3314,7 +3517,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 4 - success
-        player1TryLoadLevel(3);
+        player1TryLoadLevel(4);
         tick();
         tick();
         hero1().right();
@@ -3388,7 +3591,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level 2 - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
         tick();
         hero1().left();
@@ -3427,7 +3630,7 @@ public class SingleTest {
     }
 
     @Test
-    public void shouldSelectLevelWhenNotAllLevelsAreDone() {
+    public void shouldSelectLevel_whenNotAllLevelsAreDone() {
         // given
         givenFl("╔══┐" +
                 "║SE│" +
@@ -3478,7 +3681,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level to 1 - success
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(1);
         tick();
 
         // then
@@ -3495,7 +3698,7 @@ public class SingleTest {
                 "----");
 
         // when try to change level to 2 - success
-        player1TryLoadLevel(1);
+        player1TryLoadLevel(2);
         tick();
         hero1().left();
         tick();
@@ -3514,23 +3717,6 @@ public class SingleTest {
                 "----");
 
         // when try to change level to 3 - fail
-        player1TryLoadLevel(2);
-        tick();
-
-        // then
-        assertL(single1,
-                "╔══┐" +
-                "║.S│" +
-                "║.E│" +
-                "└──┘");
-
-        assertE(single1,
-                "----" +
-                "-☺--" +
-                "----" +
-                "----");
-
-        // when try to change level 4 - fail
         player1TryLoadLevel(3);
         tick();
 
@@ -3547,8 +3733,25 @@ public class SingleTest {
                 "----" +
                 "----");
 
+        // when try to change level 4 - fail
+        player1TryLoadLevel(4);
+        tick();
+
+        // then
+        assertL(single1,
+                "╔══┐" +
+                "║.S│" +
+                "║.E│" +
+                "└──┘");
+
+        assertE(single1,
+                "----" +
+                "-☺--" +
+                "----" +
+                "----");
+
         // when try to change level to 1 - success
-        player1TryLoadLevel(0);
+        player1TryLoadLevel(1);
         tick();
 
         // then
@@ -3563,5 +3766,49 @@ public class SingleTest {
                 "-☺--" +
                 "----" +
                 "----");
+    }
+
+    @Test
+    public void shouldRunEventAfterKillHero() {
+        givenFl("╔════┐" +
+                "║.S..│" +
+                "║....│" +
+                "║....│" +
+                "║.E..│" +
+                "└────┘");
+        hero1().down();
+        tick();
+        hero1().down();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--X---" +
+                "------" +
+                "--☺---" +
+                "------" +
+                "------");
+
+        hero1().fire();
+        hero1().up();
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--X---" +
+                "--↑---" +
+                "--☺---" +
+                "------" +
+                "------");
+        tick();
+
+        assertE(single1,
+                "------" +
+                "--&---" +
+                "------" +
+                "--☺---" +
+                "------" +
+                "------");
+        verify(listener1).event(Events.KILL_HERO(1, true));
     }
 }

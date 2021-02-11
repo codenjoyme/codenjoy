@@ -2,9 +2,9 @@ package com.codenjoy.dojo.icancode.model.items;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2018 EPAM
+ * Copyright (C) 2016 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,6 +22,7 @@ package com.codenjoy.dojo.icancode.model.items;
  * #L%
  */
 
+import com.codenjoy.dojo.icancode.model.FieldItem;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.icancode.model.Elements;
 

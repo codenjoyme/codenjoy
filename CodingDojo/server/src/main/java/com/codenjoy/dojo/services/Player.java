@@ -31,51 +31,45 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.Accessors;
-import lombok.experimental.Wither;
 import org.apache.commons.lang3.StringUtils;
 
 import static com.codenjoy.dojo.services.GameServiceImpl.removeNumbers;
 
 @Getter
 @Setter
-@Accessors(chain = true)
-@Wither
 @NoArgsConstructor
 @AllArgsConstructor
 public class Player implements ScreenRecipient, Closeable {
 
     public static final Player ANONYMOUS = new Player("anonymous");
 
-    private String name;
+    private String id;
     private String email;
     private String readableName;
     private String code;
     private String data;
     private String callbackUrl;
     private String gameName;
+    private String roomName;
     private String password;
     private String passwordConfirmation;
     private PlayerScores scores;
+    private Object score;
     private Information info;
     private GameType gameType;
     private InformationCollector eventListener;
     private Closeable ai;
 
-    public Player(String name) {
-        this.name = name;
+    public Player(String id) {
+        this.id = id;
     }
 
-    public Player(String name, String callbackUrl, GameType gameType, PlayerScores scores, Information info) {
-        this.name = name;
+    public Player(String id, String callbackUrl, GameType gameType, PlayerScores scores, Information info) {
+        this.id = id;
         this.callbackUrl = callbackUrl;
         this.gameType = gameType;
         this.scores = scores;
         this.info = info;
-    }
-
-    public GameType getGameType() {
-        return gameType;
     }
 
     @Override
@@ -86,11 +80,11 @@ public class Player implements ScreenRecipient, Closeable {
         if (o instanceof Player) {
             Player p = (Player)o;
 
-            if (p.name == null) {
-                return name == null;
+            if (p.id == null) {
+                return id == null;
             }
 
-            return (p.name.equals(name));
+            return (p.id.equals(id));
         }
 
         if (o instanceof PlayerGame) {
@@ -104,11 +98,11 @@ public class Player implements ScreenRecipient, Closeable {
 
     @Override
     public int hashCode() {
-        return (name + code).hashCode();
+        return (id + code).hashCode();
     }
     
     public String getNotNullReadableName() {
-        return StringUtils.isEmpty(readableName) ? name : readableName;
+        return StringUtils.isEmpty(readableName) ? id : readableName;
     }
 
     public int clearScore() {
@@ -116,40 +110,13 @@ public class Player implements ScreenRecipient, Closeable {
     }
 
     public Object getScore() {
-        return (scores != null) ? scores.getScore() : null;
+        return (scores != null) ? scores.getScore() : score;
     }
 
-    // TODO this method is only for admin save player score
     public void setScore(Object score) {
-        initScores();
-        this.scores.update(score);
-    }
-
-    void initScores() {
-        if (scores == null) {
-            scores = new PlayerScores() {
-                int score;
-
-                @Override
-                public Object getScore() {
-                    return score;
-                }
-
-                @Override
-                public int clear() {
-                    return score = 0;
-                }
-
-                @Override
-                public void update(Object score) {
-                    this.score = Integer.valueOf(score.toString());
-                }
-
-                @Override
-                public void event(Object event) {
-
-                }
-            };
+        this.score = score;
+        if (scores != null) {
+            scores.update(score);
         }
     }
 
@@ -166,18 +133,6 @@ public class Player implements ScreenRecipient, Closeable {
         return removeNumbers(getGameName());
     }
 
-    public InformationCollector getEventListener() {
-        return eventListener;
-    }
-
-    public void setGameType(GameType gameType) {
-        this.gameType = gameType;
-    }
-
-    public void setAI(Closeable ai) {
-        this.ai = ai;
-    }
-
     @Override
     public void close() {
         if (ai != null) {
@@ -185,12 +140,13 @@ public class Player implements ScreenRecipient, Closeable {
         }
     }
 
-    public boolean hasAI() {
+    public boolean hasAi() {
         return ai != null;
     }
 
     @Override
     public String toString() {
-        return name;
+        return id;
     }
+
 }

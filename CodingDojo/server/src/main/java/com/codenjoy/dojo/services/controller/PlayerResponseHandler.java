@@ -23,46 +23,41 @@ package com.codenjoy.dojo.services.controller;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerCommand;
 import com.codenjoy.dojo.transport.ws.ResponseHandler;
 import com.codenjoy.dojo.transport.ws.PlayerSocket;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jetty.websocket.api.Session;
-import org.slf4j.Logger;
 
 @Slf4j
+@AllArgsConstructor
 public class PlayerResponseHandler implements ResponseHandler {
 
     private Player player;
     private Joystick joystick;
 
-    public PlayerResponseHandler(Player player, Joystick joystick) {
-        this.player = player;
-        this.joystick = joystick;
-    }
-
     @Override
     public void onResponse(PlayerSocket socket, String message) {
-        log.debug("Received response: {} from player: {}", message, player.getName());
+        log.debug("Received response: {} from player: {}", message, player.getId());
         new PlayerCommand(joystick, message).execute();
     }
 
     @Override
     public void onClose(PlayerSocket socket, int statusCode, String reason) {
-        log.debug("Websocket closed: {} from player: {} status code: {} reason: {}", player.getName(), statusCode,
+        log.debug("Websocket closed: {} from player: {} status code: {} reason: {}", player.getId(), statusCode,
                 reason);
     }
 
     @Override
     public void onError(PlayerSocket socket, Throwable error) {
-        log.error("Request error: player: {}, error: {}", player.getName(), error);
+        log.error("Request error: player: {}, error: {}", player.getId(), error);
     }
 
     @Override
     public void onConnect(PlayerSocket socket, Session session) {
-        log.debug("Connected: player: {}, session: {}", player.getName(), session);
+        log.debug("Connected: player: {}, session: {}", player.getId(), session);
     }
 }

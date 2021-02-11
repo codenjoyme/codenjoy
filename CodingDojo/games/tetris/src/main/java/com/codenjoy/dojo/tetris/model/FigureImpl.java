@@ -34,12 +34,10 @@ public class FigureImpl implements Figure, Cloneable {
     private int[] codes;
     private int[] uncoloredCodes;
 
-    @Deprecated
     public FigureImpl() {
         this(0, 0, "#");
     }
 
-    @Deprecated
     public FigureImpl(int x, int y, String... rows) {
         this(x, y, Type.I, rows);
     }

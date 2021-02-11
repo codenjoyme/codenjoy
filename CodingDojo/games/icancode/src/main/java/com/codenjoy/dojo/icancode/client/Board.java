@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.client;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -27,12 +27,14 @@ import com.codenjoy.dojo.client.AbstractBoard;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.icancode.model.Elements;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.icancode.model.Elements.*;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Board extends AbstractBoard<Elements> {
 
@@ -199,6 +201,16 @@ public class Board extends AbstractBoard<Elements> {
     }
 
     /**
+     * @return Returns list of coordinates for all visible Zombies (even die).
+     */
+    public List<Point> getZombies() {
+        return get(LAYER2,
+                FEMALE_ZOMBIE,
+                MALE_ZOMBIE,
+                ZOMBIE_DIE);
+    }
+
+    /**
      * @return Checks if your robot is alive.
      */
     public boolean isMeAlive() {
@@ -263,6 +275,9 @@ public class Board extends AbstractBoard<Elements> {
                 case 7:
                     builder.append(" Lasers: " + listToString(getLasers()));
                     break;
+                case 8:
+                    builder.append(" Zombies: " + listToString(getZombies()));
+                    break;
             }
 
             if (i != layer1.length - 1) {
@@ -277,5 +292,10 @@ public class Board extends AbstractBoard<Elements> {
         String result = list.toString();
 
         return result.substring(1, result.length() - 1);
+    }
+
+    public Point getScannerOffset() {
+        JSONObject offset = source.getJSONObject("offset");
+        return pt(offset.getInt("x"), offset.getInt("y"));
     }
 }

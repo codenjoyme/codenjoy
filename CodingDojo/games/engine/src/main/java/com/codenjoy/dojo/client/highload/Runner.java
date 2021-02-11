@@ -44,12 +44,12 @@ public class Runner {
 
         for (int index = 1; index <= count; index++) {
             String number = StringUtils.leftPad(String.valueOf(index), numLength, "0");
-            String name = "demo" + number + "@codenjoy.com";
-            String code = Hash.getCode(name, name);
+            String id = "demo" + number;
+            String code = Hash.getCode(id, id);
             String url = String.format("http://" + host + "/codenjoy-contest/board/player/" +
-                    "%s?code=%s", name, code);
+                    "%s?code=%s", id, code);
 
-            setupListener(name, url);
+            setupListener(id, url);
         }
     }
 

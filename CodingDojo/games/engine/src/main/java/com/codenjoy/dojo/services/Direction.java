@@ -33,7 +33,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
  * Имплементит возможные направления движения чего либо
  */
 public enum Direction {
-    LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, -1), DOWN(3, 0, 1),
+    LEFT(0, -1, 0), RIGHT(1, 1, 0), UP(2, 0, 1), DOWN(3, 0, -1),
     ACT(4, 0, 0), STOP(5, 0, 0);
 
     private final int value;
@@ -60,6 +60,20 @@ public enum Direction {
     }
 
     /**
+     * @param string any string
+     * @return true if this is valid direction -
+     * one of: LEFT, RIGHT, UP, DOWN, ACT, STOP; in any case
+     */
+    public static boolean isValid(String string) {
+        try {
+            Direction.valueOf(string.toUpperCase());
+            return true;
+        } catch (NullPointerException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    /**
      * @param x Given point.x.
      * @return New point.x that will be after move from current point.x in given direction.
      */
@@ -72,7 +86,7 @@ public enum Direction {
      * @return New point.y that will be after move from current point.y in given direction.
      */
     public int changeY(int y) {
-        return y - dy;
+        return y + dy;
     }
 
     /**

@@ -25,55 +25,25 @@ package com.codenjoy.dojo.services.playerdata;
 
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.utils.JsonUtils;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
+@Getter
+@AllArgsConstructor
 public class PlayerData implements ScreenData {
 
+    private int boardSize;
     private Object board;
     private String gameName;
     private Object score;
-    private int boardSize;
     private String info;
     private JSONObject scores;
     private JSONObject heroesData;
 
-    public PlayerData(int boardSize, Object board, String gameName, Object score,
-                      String info, JSONObject scores, JSONObject heroesData) {
-        this.board = board;
-        this.gameName = gameName;
-        this.score = score;
-        this.boardSize = boardSize;
-        this.info = info;
-        this.scores = scores;
-        this.heroesData = heroesData;
-    }
-
-    public JSONObject getHeroesData() {
-        return heroesData;
-    }
-
-    public String getGameName() {
-        return gameName;
-    }
-
-    public void setGameName(String gameName) {
-        this.gameName = gameName;
-    }
-
-    public JSONObject getScores() {
-        return scores;
-    }
-
-    public Object getBoard() {
-        return board;
-    }
-
-    public Object getScore() {
-        return score;
-    }
-
-    public int getBoardSize() {
-        return boardSize;
+    public String getInfo() {
+        return (info == null) ? StringUtils.EMPTY : info;
     }
 
     @Override
@@ -93,10 +63,6 @@ public class PlayerData implements ScreenData {
                 getInfo(),
                 JsonUtils.toStringSorted(scores.toString()),
                 JsonUtils.toStringSorted(heroesData.toString()));
-    }
-
-    public String getInfo() {
-        return (info == null) ? "" : info;
     }
 
 }

@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -196,6 +196,18 @@
   height: 23px;
 }
 
+.robot-pull::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1503px -10px;
+  width: 22px;
+  height: 22px;
+}
+
+.robot-fire::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1476px -10px;
+  width: 22px;
+  height: 22px;
+}
+
 .if::after {
 	background: url(../img/befunge_sprite.png) no-repeat -500px -11px;
 	width: 23px;
@@ -318,6 +330,18 @@ background: url(../img/befunge_sprite.png) no-repeat -998px -12px;
 
 .value-zombie::after {
   background: url(../img/befunge_sprite.png) no-repeat -1364px -10px;
+  width: 22px;
+  height: 22px;
+}
+
+.shortest-way::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1404px -10px;
+  width: 22px;
+  height: 22px;
+}
+
+.check-stack::after {
+  background: url(../img/befunge_sprite.png) no-repeat -1446px -10px;
   width: 22px;
   height: 22px;
 }

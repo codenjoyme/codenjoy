@@ -27,9 +27,13 @@ import com.codenjoy.dojo.services.printer.BoardReader;
 
 import java.util.LinkedList;
 
-public class NullBoardReader implements BoardReader {
+public final class NullBoardReader implements BoardReader {
 
     public static final BoardReader INSTANCE = new NullBoardReader();
+
+    private NullBoardReader(){
+        // do nothing
+    }
 
     @Override
     public int size() {

@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 
 import java.util.List;
 
+// TODO этот алгоритм выполняется достаточно продолжительно, смотри SmokeTest на 40 итерациях с участием этого бота
 public class AISolver implements Solver<Board> {
 
     private DeikstraFindWay way;
@@ -43,27 +44,17 @@ public class AISolver implements Solver<Board> {
 
     public DeikstraFindWay.Possible possible(final Board board) {
         return new DeikstraFindWay.Possible() {
-            @Override
+            @Override // TODO test me
             public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
-                if (board.isBarrierAt(x, y)) return false;
-
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
-
-                if (board.isOutOfField(nx, ny)) return false;
-
-                if (board.isBarrierAt(nx, ny)) return false;
-                if (board.isBulletAt(nx, ny)) return false;
+                Point to = where.change(from);
+                if (board.isBulletAt(to.getX(), to.getY())) return false;
 
                 return true;
             }
 
             @Override
-            public boolean possible(Point atWay) {
-                return true;
+            public boolean possible(Point point) {
+                return !board.isBarrierAt(point.getX(), point.getY());
             }
         };
     }

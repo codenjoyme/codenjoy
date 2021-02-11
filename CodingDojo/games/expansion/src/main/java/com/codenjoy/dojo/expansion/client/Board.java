@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.client;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -30,7 +30,7 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.algs.DeikstraFindWay;
 import com.codenjoy.dojo.utils.TestUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
@@ -363,25 +363,8 @@ public class Board extends AbstractBoard<Elements> {
     private DeikstraFindWay.Possible possible() {
         return new DeikstraFindWay.Possible() {
             @Override
-            public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
-                if (isBarrierAt(x, y)) return false;
-
-                Point newPt = where.change(from);
-                int nx = newPt.getX();
-                int ny = newPt.getY();
-
-                if (isOutOfField(nx, ny)) return false;
-
-                if (isBarrierAt(nx, ny)) return false;
-
-                return true;
-            }
-
-            @Override
-            public boolean possible(Point atWay) {
-                return true;
+            public boolean possible(Point point) {
+                return !isBarrierAt(point.getX(), point.getY());
             }
         };
     }

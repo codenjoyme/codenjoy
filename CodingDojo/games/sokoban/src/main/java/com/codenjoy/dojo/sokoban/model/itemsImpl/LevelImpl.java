@@ -33,9 +33,6 @@ import java.util.List;
 import static com.codenjoy.dojo.sokoban.model.itemsImpl.Elements.*;
 import static java.util.stream.Collectors.toList;
 
-/**
- * Полезный утилитный класс для получения объектов на поле из текстового вида.
- */
 public class LevelImpl implements Level {
     private final LengthToXY xy;
     private final int expectedBoxesValuesInMarks;

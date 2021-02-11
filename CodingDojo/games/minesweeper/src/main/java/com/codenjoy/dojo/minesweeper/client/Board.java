@@ -50,4 +50,8 @@ public class Board extends AbstractBoard<Elements> {
     public boolean isGameOver() {
     return !get(Elements.BANG).isEmpty();
     }
+
+    public List<Point> getWalls() {
+        return get(Elements.BORDER);
+    }
 }

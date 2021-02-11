@@ -23,6 +23,7 @@ package com.codenjoy.dojo.client;
  */
 
 
+import lombok.SneakyThrows;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.websocket.api.RemoteEndpoint;
 import org.eclipse.jetty.websocket.api.Session;
@@ -30,6 +31,8 @@ import org.eclipse.jetty.websocket.api.UpgradeException;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -39,13 +42,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WebSocketRunner implements Closeable {
-
+    
     public static final String DEFAULT_USER = "apofig@gmail.com";
     private static final String LOCALHOST = "127.0.0.1";
     public static final String WS_URI_PATTERN = "%s://%s/%s/ws?user=%s&code=%s";
     public static final String BOARD_FORMAT = "^board=(.*)$";
+    public static final String BOARD_FORMAT2 = "board=%s";
     public static final Pattern BOARD_PATTERN = Pattern.compile(BOARD_FORMAT);
-    public static String BOT_EMAIL_SUFFIX = "-super-ai@codenjoy.com";
+    public static String BOT_ID_SUFFIX = "-super-ai";
 
     public static boolean PRINT_TO_CONSOLE = true;
     public static int TIMEOUT = 10000;
@@ -72,46 +76,39 @@ public class WebSocketRunner implements Closeable {
                 solver, board, ATTEMPTS);
     }
 
-    public static WebSocketRunner runAI(String aiName, String code, Solver solver, ClientBoard board) {
+    public static WebSocketRunner runAI(String id, String code, Solver solver, ClientBoard board) {
         PRINT_TO_CONSOLE = false;
         return run(UrlParser.WS_PROTOCOL, LOCALHOST + ":" + CodenjoyContext.getPort(),
-                CodenjoyContext.getContext(), aiName, code, solver, board, 1);
+                CodenjoyContext.getContext(), id, code, solver, board, 1);
     }
 
     private static WebSocketRunner run(String protocol,
                                        String server, String context,
-                                       String userName, String code,
+                                       String id, String code,
                                        Solver solver, ClientBoard board,
                                        int countAttempts) {
-        return run(getUri(protocol, server, context, userName, code), solver, board, countAttempts);
+        return run(getUri(protocol, server, context, id, code), solver, board, countAttempts);
     }
 
-    private static URI getUri(String protocol, String server, String context, String userName, String code) {
-        try {
-            String url = String.format(WS_URI_PATTERN, protocol, server, context, userName, code);
-            return new URI(url);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows
+    private static URI getUri(String protocol, String server, String context, String id, String code) {
+        return new URI(String.format(WS_URI_PATTERN, protocol, server, context, id, code));
     }
 
     public static WebSocketRunner run(URI uri, Solver solver, ClientBoard board, int countAttempts) {
-        try {
-            WebSocketRunner client = new WebSocketRunner(solver, board);
-            client.start(uri, countAttempts);
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                if (client != null) {
-                    client.close();
-                }
-            }));
+        WebSocketRunner client = new WebSocketRunner(solver, board);
+        client.start(uri, countAttempts);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (client != null) {
+                client.close();
+            }
+        }));
 
-            return client;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return client;
     }
 
-    private void start(URI uri, int countAttempts) throws Exception {
+    @SneakyThrows
+    private void start(URI uri, int countAttempts) {
         this.uri = uri;
 
         client = createClient();
@@ -161,6 +158,11 @@ public class WebSocketRunner implements Closeable {
 
         @OnWebSocketConnect
         public void onConnect(Session session) {
+            // актуально только для LocalWSGameRunner
+            if (WebSocketRunner.this.session == null) {
+                WebSocketRunner.this.session = session;
+            }
+
             print("Opened connection " + session.toString());
         }
 
@@ -190,7 +192,7 @@ public class WebSocketRunner implements Closeable {
                 }
 
                 board.forString(matcher.group(1));
-                print("Board: " + board);
+                print("Board: \n" + board);
 
                 String answer = solver.get(board);
                 print("Answer: " + answer);
@@ -268,7 +270,11 @@ public class WebSocketRunner implements Closeable {
 
     public static void print(String message) {
         if (PRINT_TO_CONSOLE) {
-            System.out.println(message);
+            try {
+                new PrintStream(System.out, true, Encoding.UTF8).println(message);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace(System.out);
+            }
         }
     }
 

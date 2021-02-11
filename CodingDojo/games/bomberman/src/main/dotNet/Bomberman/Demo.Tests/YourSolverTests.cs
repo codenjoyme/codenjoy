@@ -40,15 +40,15 @@ namespace DemoTests
 
             string firstStep = d.Get(b);
 
-            Assert.AreEqual("Up", firstStep);
+            Assert.AreEqual("Act", firstStep);
 
             string secondStep = d.Get(b);
 
-            Assert.AreEqual("Up", secondStep);
+            Assert.AreEqual("Act", secondStep);
 
             string thirdStep = d.Get(b);
 
-            Assert.AreEqual("Up", thirdStep);
+            Assert.AreEqual("Act", thirdStep);
         }
     }
 }

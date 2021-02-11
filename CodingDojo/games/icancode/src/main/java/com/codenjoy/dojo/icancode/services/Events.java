@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.services;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -10,12 +10,12 @@ package com.codenjoy.dojo.icancode.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -32,11 +32,19 @@ import com.codenjoy.dojo.icancode.model.ICanCode;
 public class Events {
 
     public static Events WIN(int goldCount) {
-        return WIN(goldCount, ICanCode.SINGLE);
+        return WIN(goldCount, ICanCode.TRAINING);
     }
 
     public static Events WIN(int goldCount, boolean multiple) {
         return new Events(goldCount, multiple);
+    }
+
+    public static Events KILL_ZOMBIE(int killCount, boolean multiple) {
+        return new Events(Type.KILL_ZOMBIE, killCount).withMultiplie(multiple);
+    }
+
+    public static Events KILL_HERO(int killCount, boolean multiple) {
+        return new Events(Type.KILL_HERO, killCount).withMultiplie(multiple);
     }
 
     public static Events LOOSE() {
@@ -44,13 +52,25 @@ public class Events {
     }
 
     public enum Type {
-        WIN, LOOSE;
-
+        WIN, LOOSE,
+        KILL_ZOMBIE, KILL_HERO;
     }
+
     private Type type;
 
     private int goldCount;
     private boolean multiple;
+    private int killCount;
+
+    public Events(Type type, int killCount) {
+        this.type = type;
+        this.killCount = killCount;
+    }
+
+    private Events withMultiplie(boolean multiple) {
+        this.multiple = multiple;
+        return this;
+    }
 
     public Events(int goldCount, boolean multiple) {
         this.multiple = multiple;
@@ -68,6 +88,10 @@ public class Events {
 
     public int getGoldCount() {
         return goldCount;
+    }
+
+    public int getKillCount() {
+        return killCount;
     }
 
     public Type getType() {
@@ -108,6 +132,7 @@ public class Events {
         return "Events{" +
                 "type=" + type +
                 ", goldCount=" + goldCount +
+                ", killCount=" + killCount +
                 ", multiple=" + multiple +
                 '}';
     }

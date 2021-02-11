@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 import { withRouter } from 'react-router-dom';
+import { history } from '../../store';
 import qs from 'qs';
 
 // proj
@@ -21,13 +22,15 @@ import { BattleFrame, DaysPanel, RatingTable } from '../../components';
 
 // own
 import Styles from './styles.module.css';
+import {book} from '../../routes';
 
 const QS_PARSE_OPTIONS = { ignoreQueryPrefix: true };
 const period = {
     start: process.env.REACT_APP_EVENT_START || '2019-01-01T10:00:00.000Z',
     end:   process.env.REACT_APP_EVENT_END || '2019-01-31T10:00:00.000Z',
 };
-
+const EXCLUDED_DAYS = process.env.REACT_APP_EXCLUDED_DAYS;
+const DATE_FORMAT = 'YYYY-MM-DD';
 class BoardContainer extends Component {
     componentWillUnmount() {
         // eslint-disable-next-line no-sync
@@ -39,6 +42,26 @@ class BoardContainer extends Component {
             this.props.location.search,
             QS_PARSE_OPTIONS,
         );
+        const excludedDays = EXCLUDED_DAYS.split(',')
+        const dayFromQueryParam = queryParams && queryParams.day || moment().format(DATE_FORMAT);
+        if (excludedDays.includes(dayFromQueryParam)) {
+            const startDate = moment(period.start).startOf('day');
+            const endDate = moment(period.end).startOf('day');
+            const duration = moment.duration(endDate.diff(startDate));
+            const days = Math.ceil(duration.asDays()) + 1;
+            const dates = [ ...Array(days) ].map((value, index) =>
+                moment(startDate).add(index, 'd')).map((date) => date.format(DATE_FORMAT))
+            const dayFromQueryParamIndex = dates.indexOf(dayFromQueryParam);
+            let lastAvailableDay = startDate.format(DATE_FORMAT);
+            for (let i = dayFromQueryParamIndex -1; i > 0; i-- ) {
+                if(!excludedDays.includes(dates[ i ])) {
+                    lastAvailableDay = dates[ i ]
+                    break;
+                }
+            }
+            history.replace(`${book.board}?day=${lastAvailableDay}`);
+            window.location.reload();
+        }
         // eslint-disable-next-line no-sync
         this.props.startBackgroundSync(queryParams);
     }

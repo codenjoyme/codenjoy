@@ -34,7 +34,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 5/15/2019
  */
 @Component
@@ -49,12 +49,10 @@ public class OAuth2MappingUserService extends DefaultOAuth2UserService {
         OAuth2User auth = super.loadUser(userRequest);
         Map<String, Object> map = auth.getAttributes();
 
-        String email = (String) map.get("email");
-        String readableName = (String) map.get("name");
+        UserData data = new UserData(map);
 
-        Registration.User user = registration.getUserByEmail(email)
-                .orElseGet(() -> registration.register(email, readableName));
-
+        Registration.User user = registration.getOrRegister(data.id(), data.email(), data.readableName());
+        
         return user;
     }
 }

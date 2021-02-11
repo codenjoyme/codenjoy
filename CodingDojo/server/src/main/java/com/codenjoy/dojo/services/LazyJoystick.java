@@ -42,7 +42,7 @@ public class LazyJoystick implements Joystick, Tickable {
     private final Game game;
 
     private List<Consumer<Joystick>> commands = new CopyOnWriteArrayList<>();
-    private List<String> list = new CopyOnWriteArrayList<>();
+    private Collector collector = new Collector();
 
     public LazyJoystick(Game game) {
         this.game = game;
@@ -51,25 +51,25 @@ public class LazyJoystick implements Joystick, Tickable {
     @Override
     public void down() {
         commands.add(Joystick::down);
-        list.add("DOWN");
+        collector.put("DOWN");
     }
 
     @Override
     public void up() {
         commands.add(Joystick::up);
-        list.add("UP");
+        collector.put("UP");
     }
 
     @Override
     public void left() {
         commands.add(Joystick::left);
-        list.add("LEFT");
+        collector.put("LEFT");
     }
 
     @Override
     public void right() {
         commands.add(Joystick::right);
-        list.add("RIGHT");
+        collector.put("RIGHT");
     }
 
     @Override
@@ -78,7 +78,7 @@ public class LazyJoystick implements Joystick, Tickable {
             return;
         }
         commands.add(joystick -> joystick.act(parameters));
-        list.add(String.format("ACT%s", Arrays.toString(parameters)));
+        collector.put("ACT%s", Arrays.toString(parameters));
     }
 
     @Override
@@ -87,7 +87,7 @@ public class LazyJoystick implements Joystick, Tickable {
             return;
         }
         commands.add(joystick -> joystick.message(message));
-        list.add(String.format("MESSAGE('%s')", message));
+        collector.put("MESSAGE('%s')", message);
     }
 
     @Override
@@ -100,8 +100,6 @@ public class LazyJoystick implements Joystick, Tickable {
     }
 
     public synchronized String popLastCommands() {
-        String result = list.toString();
-        list.clear();
-        return result;
+        return collector.popAll();
     }
 }

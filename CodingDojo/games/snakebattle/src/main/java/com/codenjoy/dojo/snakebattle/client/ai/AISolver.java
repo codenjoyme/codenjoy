@@ -47,26 +47,24 @@ public class AISolver implements Solver<Board> {
 
     public DeikstraFindWay.Possible possible(final Board board, final Point... excludePoints) {
         return new DeikstraFindWay.Possible() {
-            @Override
+            @Override // TODO test me
             public boolean possible(Point from, Direction where) {
-                int x = from.getX();
-                int y = from.getY();
-                if (board.isBarrierAt(x, y)) return false;
+                Point to = where.change(from);
 
-                Point newPt = where.change(from);
-                for (Point p : excludePoints)
-                    if (p != null && p.equals(newPt))
+                for (Point p : excludePoints) {
+                    if (p != null && p.equals(to)) {
                         return false;
-                int nx = newPt.getX();
-                int ny = newPt.getY();
+                    }
+                }
 
-                if (board.isOutOfField(nx, ny)) return false;
+                int nx = to.getX();
+                int ny = to.getY();
 
-                if (board.isBarrierAt(nx, ny)) return false;
                 // вероятность не есть камень 3/4
                 if (board.isStoneAt(nx, ny))
                     if (dice.next(4) != 0)
                         return false;
+
                 // вероятность не врезаться в противника 9/10
                 if (board.isAt(nx, ny, ENEMY_HEAD_DOWN,
                         ENEMY_HEAD_LEFT,
@@ -86,6 +84,7 @@ public class AISolver implements Solver<Board> {
                         ENEMY_BODY_RIGHT_UP))
                     if (dice.next(10) != 0)
                         return false;
+
                 //вероятность не есть себя 3/4
                 if (board.isAt(nx, ny, BODY_HORIZONTAL,
                         BODY_VERTICAL,
@@ -100,12 +99,8 @@ public class AISolver implements Solver<Board> {
             }
 
             @Override
-            public boolean possible(Point atWay) {
-                int x = atWay.getX();
-                int y = atWay.getY();
-                if (board.isBarrierAt(x, y)) return false;
-                if (board.isOutOfField(x, y)) return false;
-                return true;
+            public boolean possible(Point point) {
+                return !board.isBarrierAt(point.getX(), point.getY());
             }
         };
     }

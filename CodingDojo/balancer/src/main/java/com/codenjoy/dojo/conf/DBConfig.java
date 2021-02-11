@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 4/8/2019
  */
 @Configuration
@@ -44,15 +44,21 @@ public class DBConfig {
     public static class SQLiteConf {
 
         @Bean
-        public ConnectionThreadPoolFactory scoresPoolFactory(@Value("${database.scores}") String scoresFile,
-                                                             ContextPathGetter contextPathGetter) {
-            return new SqliteConnectionThreadPoolFactory(scoresFile, contextPathGetter);
+        public ConnectionThreadPoolFactory scoresPoolFactory(
+                @Value("${database.memory}") boolean isMemory,
+                @Value("${database.scores}") String scoresFile,
+                ContextPathGetter contextPathGetter)
+        {
+            return new SqliteConnectionThreadPoolFactory(isMemory, scoresFile, contextPathGetter);
         }
 
         @Bean
-        public ConnectionThreadPoolFactory playersPoolFactory(@Value("${database.players}") String playersFile,
-                                                              ContextPathGetter contextPathGetter) {
-            return new SqliteConnectionThreadPoolFactory(playersFile, contextPathGetter);
+        public ConnectionThreadPoolFactory playersPoolFactory(
+                @Value("${database.memory}") boolean isMemory,
+                @Value("${database.players}") String playersFile,
+                ContextPathGetter contextPathGetter)
+        {
+            return new SqliteConnectionThreadPoolFactory(isMemory, playersFile, contextPathGetter);
         }
     }
 
@@ -60,7 +66,7 @@ public class DBConfig {
     @PostgreSQLProfile
     public static class PostgresConf {
 
-        @Value("${database.url}/${database.name}?user=${database.user}&amp;password=${database.password}")
+        @Value("${database.host}:${database.port}/${database.name:postgres}?user=${database.user}&password=${database.password}")
         private String jdbcString;
 
         @Bean

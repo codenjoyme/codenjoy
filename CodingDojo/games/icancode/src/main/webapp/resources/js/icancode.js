@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -44,7 +44,7 @@ if (typeof game == 'undefined') {
     game = {};
     game.demo = true;
     game.code = 123;
-    game.playerName = 'user@gmail.com';
+    game.playerId = 'userId';
     game.readableName = 'Stiven Pupkin';
     initLayout = function(game, html, context, transformations, scripts, onLoad) {
         onLoad();
@@ -61,8 +61,8 @@ if (gameName == 'JavaScript') {
 } else if (gameName == 'Befunge') {
     game.enableBefunge = true;
     game.sprites = 'robot';
-} else { // if (gameName == 'iCanCode Contest') { by default
-    gameName = 'Java';
+} else {
+    gameName = 'Contest';
     game.enableBefunge = false;
     game.sprites = 'robot';
     game.onlyLeaderBoard = true;
@@ -80,6 +80,14 @@ game.enableForkMe = false;
 game.enableAdvertisement = false;
 game.showBody = false;
 game.debug = false;
+if (window.location.href.includes("controlsOnly=true")) {
+    game.drawCanvases = false;
+    game.enableHeader = false;
+    game.enableFooter = false;
+} else {
+    game.enableHeader = true;
+    game.enableFooter = true;
+}
 
 // ========================== leaderboard page ==========================
 
@@ -98,12 +106,12 @@ var initAdditionalLink = function() {
     }
 }
 
-game.onBoardAllPageLoad = function() {
+game.onBoardAllPageLoad = function(showProgress) {
     initLayout(game.gameName, 'leaderboard.html', game.contextPath,
         null,
-        ['js/game/loader/boardAllPageLoad.js'],
+        [],
         function() {
-            boardAllPageLoad();
+            boardAllPageLoad(!!showProgress);
             initHelpLink();
             initAdditionalLink();
         });
@@ -135,7 +143,10 @@ game.drawBoard = function(drawer) {
 var controller;
 
 if (game.onlyLeaderBoard) {
-    game.onBoardPageLoad = game.onBoardAllPageLoad;
+    game.onBoardPageLoad = function() {
+        var showProgress = true;
+        game.onBoardAllPageLoad(showProgress);
+    }
 } else {
     game.onBoardPageLoad = function() {
         initLayout(game.gameName, 'board.html', game.contextPath,

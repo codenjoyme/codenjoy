@@ -28,6 +28,7 @@ import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -47,7 +48,8 @@ public interface GameType extends Tickable {
 
     /**
      * Так фреймворк будет стартовать новую игру для каждого пользователя
-     * @level уровень игры (опциональное поле, обычно == 0)
+     * @level уровень игры (опциональное поле, обычно начинается с 1
+     *          {@see LevelProgress#levelsStartsFrom1})
      * @return Экземпляр игры пользователя
      */
     GameField createGame(int levelNumber);
@@ -66,7 +68,7 @@ public interface GameType extends Tickable {
      * @return Список элементов отображаеммых на доске
      * Смотри класс com.codenjoy.dojo.sample.model.Elements конкретной игры
      */
-    Enum[] getPlots();
+    CharElements[] getPlots();
 
     /**
      * @return Настройки игры
@@ -99,10 +101,10 @@ public interface GameType extends Tickable {
     /**
      * Метод для создания игрового пользователя внутри игры
      * @param listener Через этот интерфейс фреймворк будет слушать какие ивенты возникают в твоей игре
-     * @param playerName Имейл игровка зарегавшегося на сервере
+     * @param playerId Имейл игровка зарегавшегося на сервере
      * @return Игрок
      */
-    GamePlayer createPlayer(EventListener listener, String playerName);
+    GamePlayer createPlayer(EventListener listener, String playerId);
 
     /**
      * @return нормальный Random, но ты можешь переопределить его, например, для тестовых целей

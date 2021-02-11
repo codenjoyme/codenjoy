@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ "x$CODENJOY_VERSION" = "x" ]; then
-    CODENJOY_VERSION=1.1.0
+    CODENJOY_VERSION=1.1.1
 fi
 
 mkdir .\.mvn

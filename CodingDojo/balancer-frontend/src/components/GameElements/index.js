@@ -2,292 +2,164 @@
 import React, { Component } from 'react';
 
 // proj
-import Apple from '../../styles/images/game/apple.png';
-import BodyHorizontal from '../../styles/images/game/body_horizontal.png';
-import BodyLeftDown from '../../styles/images/game/body_left_down.png';
-import BodyLeftUp from '../../styles/images/game/body_left_up.png';
-import BodyRightDown from '../../styles/images/game/body_right_down.png';
-import BodyRightUp from '../../styles/images/game/body_right_up.png';
-import BodyVertical from '../../styles/images/game/body_vertical.png';
-import EnemyBodyHorizontal from '../../styles/images/game/enemy_body_horizontal.png';
-import EnemyBodyLeftDown from '../../styles/images/game/enemy_body_left_down.png';
-import EnemyBodyLeftUp from '../../styles/images/game/enemy_body_left_up.png';
-import EnemyBodyRightDown from '../../styles/images/game/enemy_body_right_down.png';
-import EnemyBodyRightUp from '../../styles/images/game/enemy_body_right_up.png';
-import EnemyBodyVertical from '../../styles/images/game/enemy_body_vertical.png';
-import EnemyHeadDead from '../../styles/images/game/enemy_head_dead.png';
-import EnemyHeadDown from '../../styles/images/game/enemy_head_down.png';
-import EnemyHeadEvil from '../../styles/images/game/enemy_head_evil.png';
-import EnemyHeadFly from '../../styles/images/game/enemy_head_fly.png';
-import EnemyHeadLeft from '../../styles/images/game/enemy_head_left.png';
-import EnemyHeadRight from '../../styles/images/game/enemy_head_right.png';
-import EnemyHeadSleep from '../../styles/images/game/enemy_head_sleep.png';
-import EnemyHeadUp from '../../styles/images/game/enemy_head_up.png';
-import EnemyTailEndDown from '../../styles/images/game/enemy_tail_end_down.png';
-import EnemyTailEndLeft from '../../styles/images/game/enemy_tail_end_left.png';
-import EnemyTailEndRight from '../../styles/images/game/enemy_tail_end_right.png';
-import EnemyTailEndUp from '../../styles/images/game/enemy_tail_end_up.png';
-import EnemyTailInactive from '../../styles/images/game/enemy_tail_inactive.png';
-import FlyingPill from '../../styles/images/game/flying_pill.png';
-import FuryPill from '../../styles/images/game/fury_pill.png';
-import Gold from '../../styles/images/game/gold.png';
-import HeadDead from '../../styles/images/game/head_dead.png';
-import HeadDown from '../../styles/images/game/head_down.png';
-import HeadEvil from '../../styles/images/game/head_evil.png';
-import HeadFly from '../../styles/images/game/head_fly.png';
-import HeadLeft from '../../styles/images/game/head_left.png';
-import HeadRight from '../../styles/images/game/head_right.png';
-import HeadSleep from '../../styles/images/game/head_sleep.png';
-import HeadUp from '../../styles/images/game/head_up.png';
-import None from '../../styles/images/game/none.png';
-import StartFloor from '../../styles/images/game/start_floor.png';
-import Stone from '../../styles/images/game/stone.png';
-import TailEndDown from '../../styles/images/game/tail_end_down.png';
-import TailEndLeft from '../../styles/images/game/tail_end_left.png';
-import TailEndRight from '../../styles/images/game/tail_end_right.png';
-import TailEndUp from '../../styles/images/game/tail_end_up.png';
-import TailInactive from '../../styles/images/game/tail_inactive.png';
-import Wall from '../../styles/images/game/wall.png';
+// import bomb from '../../styles/images/game/sprite/bomb.png';
+import bomb_blast_radius_increase from '../../styles/images/game/sprite/bomb_blast_radius_increase.png';
+import bomb_bomberman from '../../styles/images/game/sprite/bomb_bomberman.png';
+import bomb_count_increase from '../../styles/images/game/sprite/bomb_count_increase.png';
+import bomb_immune from '../../styles/images/game/sprite/bomb_immune.png';
+import bomb_remote_control from '../../styles/images/game/sprite/bomb_remote_control.png';
+// import bomb_timer_0 from '../../styles/images/game/sprite/bomb_timer_0.png';
+import bomb_timer_1 from '../../styles/images/game/sprite/bomb_timer_1.png';
+import bomb_timer_2 from '../../styles/images/game/sprite/bomb_timer_2.png';
+import bomb_timer_3 from '../../styles/images/game/sprite/bomb_timer_3.png';
+import bomb_timer_4 from '../../styles/images/game/sprite/bomb_timer_4.png';
+import bomb_timer_5 from '../../styles/images/game/sprite/bomb_timer_5.png';
+import bomberman from '../../styles/images/game/sprite/bomberman.png';
+import boom from '../../styles/images/game/sprite/boom.png';
+import dead_bomberman from '../../styles/images/game/sprite/dead_bomberman.png';
+import dead_meat_chopper from '../../styles/images/game/sprite/dead_meat_chopper.png';
+import destroyable_wall from '../../styles/images/game/sprite/destroyable_wall.png';
+import destroyed_wall from '../../styles/images/game/sprite/destroyed_wall.png';
+import meat_chopper from '../../styles/images/game/sprite/meat_chopper.png';
+import none from '../../styles/images/game/sprite/none.png';
+import other_bomb_bomberman from '../../styles/images/game/sprite/other_bomb_bomberman.png';
+import other_bomberman from '../../styles/images/game/sprite/other_bomberman.png';
+import other_dead_bomberman from '../../styles/images/game/sprite/other_dead_bomberman.png';
+import wall from '../../styles/images/game/sprite/wall.png';
 
 //own
 import Styles from './styles.module.css';
 
 const ELEMENTS = [
     {
-        image:       None,
-        title:       'NONE(\' \')',
-        description: 'Пусте місце – по якому може рухатись Учасник',
+        image:       bomberman,
+        title:       `BOMBERMAN ('☺')`,
+        description: `Ваш Бомбермен.`,
     },
     {
-        image:       Wall,
-        title:       'WALL(\'☼\')',
-        description: 'Стіна, через яку не можна пройти',
+        image:       bomb_bomberman,
+        title:       `BOMB_BOMBERMAN ('☻')`,
+        description: `Ваш Бомбермен, якщо він сидить на бомбі.`,
     },
     {
-        image:       StartFloor,
-        title:       'START_FLOOR(\'#\')',
-        description: 'Стартова точка. Звідси починає рух Змійка',
-    },
-    { image: Apple, title: 'APPLE(\'○\')', description: 'Яблуко' },
-    { image: Stone, title: 'STONE(\'●\')', description: 'Гиря (Камінь)' },
-    {
-        image:       FlyingPill,
-        title:       'FLYING_PILL(\'©\')',
-        description: 'Ангельські крила (Таблетка польоту)',
+        image:       dead_bomberman,
+        title:       `DEAD_BOMBERMAN ('Ѡ')`,
+        description: `Йойкс! Ваш Бомбермен помер. Нехвилюйтеся, він з'явиться
+десь на полі і з новим Раудндом ви зможете їм керувати, але цілком ймовірно за
+це ви отримаєте штрафні бали.`,
     },
     {
-        image:       FuryPill,
-        title:       'FURY_PILL(\'®\')',
-        description: 'Маска диявола (Таблетка люті)',
-    },
-    { image: Gold, title: 'GOLD(\'$\')', description: 'Золото' },
-    {
-        image:       HeadDown,
-        title:       'HEAD_DOWN(\'▼\')',
-        description: 'Голова Змійки Учасника у напрямку вниз',
+        image:       other_bomberman,
+        title:       `OTHER_BOMBERMAN ('♥')`,
+        description: `Бомбермен суперника.`,
     },
     {
-        image:       HeadLeft,
-        title:       'HEAD_LEFT(\'◄\')',
-        description: 'Голова Змійки Учасника у напрямку вліво',
+        image:       other_bomb_bomberman,
+        title:       `OTHER_BOMB_BOMBERMAN ('♠')`,
+        description: `Бомбермен суперника, який сидить на бомбі.`
     },
     {
-        image:       HeadRight,
-        title:       'HEAD_RIGHT(\'►\')',
-        description: 'Голова Змійки Учасника у напрямку вправо',
+        image:       other_dead_bomberman,
+        title:       `OTHER_DEAD_BOMBERMAN ('♣')`,
+        description: `Так виглядає мертвий Бомбермен суперника.
+Якщо це ви його підірвали - ви отримаєте бонусні бали.`
     },
     {
-        image:       HeadUp,
-        title:       'HEAD_UP(\'▲\')',
-        description: 'Голова Змійки Учасника у напрямку вгору',
+        image:       bomb_timer_5,
+        title:       `BOMB_TIMER_5 ('5')`,
+        description: `Після того як Бомбермен поставить бомбу таймер
+почне працювати (всього 5 тіків/секунд). Скоріше за все ви не побачите
+не цей символ, а BOMB_BOMBERMAN('☻'), але пам'ятайте - 5 секунд і вибух.
+Тре тікати швидко.`
     },
     {
-        image:       HeadEvil,
-        title:       'HEAD_EVIL(\'♥\')',
-        description: 'Голова Змійки Учасника із надздібностю "лють"',
+        image:       bomb_timer_4,
+        title:       `BOMB_TIMER_4 ('4')`,
+        description: `Ця бомба вибухне через 4 тіків.`
     },
     {
-        image:       HeadFly,
-        title:       'HEAD_FLY(\'♠\')',
-        description: 'Голова Змійки Учасника із надздібностю "політ"',
+        image:       bomb_timer_3,
+        title:       `BOMB_TIMER_3 ('3')`,
+        description: `Ця бомба вибухне через 3 тіки.`
     },
     {
-        image:       HeadSleep,
-        title:       'HEAD_SLEEP(\'&\')',
-        description: 'Голова неактивної Змійки Учасника',
+        image:       bomb_timer_2,
+        title:       `BOMB_TIMER_2 ('2')`,
+        description: `Ця бомба вибухне через 2 тіки.`
     },
     {
-        image:       HeadDead,
-        title:       'HEAD_DEAD(\'☻\')',
-        description: 'Голова мертвої Змійки Учасника',
-    },
-
-    {
-        title:       'TAIL_END_DOWN(\'╙\')',
-        description: 'Хвіст Змійки Учасника у напрямку вниз',
-        image:       TailEndDown,
+        image:       bomb_timer_1,
+        title:       `BOMB_TIMER_1 ('1')`,
+        description: `Ця бомба вибухне через 1 тік.`
     },
     {
-        title:       'TAIL_END_LEFT(\'╘\')',
-        description: 'Хвіст Змійки Учасника у напрямку вліво',
-        image:       TailEndLeft,
+        image:       boom,
+        title:       `BOOM ('҉')`,
+        description: `Бам! Це те, як бомба вибухає. При цьому
+все, що може бути зруйновано – зруйнується разом із вашим Бомберменом,
+якщо заздалегідь не заховатися.`
     },
     {
-        title:       'TAIL_END_UP(\'╓\')',
-        description: 'Хвіст Змійки Учасника у напрямку вгору',
-        image:       TailEndUp,
+        image:       wall,
+        title:       `WALL ('☼')`,
+        description: `Неруйнівні стіни - їм вибухи бомб не страшні.`
     },
     {
-        title:       'TAIL_END_RIGHT(\'╕\')',
-        description: 'Хвіст Змійки Учасника у напрямку вправо',
-        image:       TailEndRight,
+        image:       destroyable_wall,
+        title:       `DESTROYABLE_WALL ('#')`,
+        description: `А ця стінка може бути зруйнована.`
     },
     {
-        title:       'TAIL_INACTIVE(\'~\')',
-        description: 'Хвіст неактивної Змійки Учасника',
-        image:       TailInactive,
-    },
-
-    {
-        title:       'BODY_HORIZONTAL(\'═\')',
-        description: 'Тулуб Змійки Учасника у горизонтальному положені',
-        image:       BodyHorizontal,
+        image:       destroyed_wall,
+        title:       `DESTROYED_WALL ('H')`,
+        description: `Це як зруйнована стіна виглядає, вона пропаде
+в наступну секунду. Якщо це ви зробили - отримаєте бонусні бали.`
     },
     {
-        title:       'BODY_VERTICAL(\'║\')',
-        description: 'Тулуб Змійки Учасника у вертикальному положені',
-        image:       BodyVertical,
+        image:       meat_chopper,
+        title:       `MEAT_CHOPPER ('&')`,
+        description: `Цей малий бігає по полю в довільному порядку.
+Якщо він доторкнеться до Бомбермена - той помре, краще б вам знищити
+цей шматок .... м'яса, за це ви отримаєте бонусні бали. Інакше тікайте!`
     },
     {
-        title:       'BODY_LEFT_DOWN(\'╗\')',
-        description:
-            'Тулуб Змійки Учасника при повороті вліво під час підняття',
-        image: BodyLeftDown,
+        image:       dead_meat_chopper,
+        title:       `DEAD_MEAT_CHOPPER ('x')`,
+        description: `Це мітчопер, який вибухнув. Якщо це ви зробили -
+отримаєте бонусні бали.`
     },
     {
-        title:       'BODY_LEFT_UP(\'╝\')',
-        description:
-            'Тулуб Змійки Учасника при повороті вліво під час спускання',
-        image: BodyLeftUp,
+        image:       bomb_blast_radius_increase,
+        title:       `BOMB_BLAST_RADIUS_INCREASE ('+')`,
+        description: `Збільшує радіус* вибуху бомби. Діє лише для нових бомб.`
     },
     {
-        title:       'BODY_RIGHT_DOWN(\'╔\')',
-        description:
-            'Тулуб Змійки Учасника при повороті вправо під час підняття',
-        image: BodyRightDown,
+        image:       bomb_count_increase,
+        title:       `BOMB_COUNT_INCREASE ('c')`,
+        description: `Збільшує кількість* доступних гравцю бомб.`
     },
     {
-        title:       'BODY_RIGHT_UP(\'╚\')',
-        description:
-            'Тулуб Змійки Учасника при повороті вправо під час спускання',
-        image: BodyRightUp,
-    },
-
-    {
-        image:       EnemyHeadDown,
-        title:       'ENEMY_HEAD_DOWN(\'˅\')',
-        description: 'Голова Змійки Учасника у напрямку вниз',
+        image:       bomb_immune,
+        title:       `BOMB_IMMUNE ('i')`,
+        description: `Дає імунітет до вибухів бомб (навіть чужих).`
     },
     {
-        image:       EnemyHeadLeft,
-        title:       'ENEMY_HEAD_LEFT(\'<\')',
-        description: 'Голова Змійки суперника у напрямку вліво',
+        image:       bomb_remote_control,
+        title:       `BOMB_REMOTE_CONTROL ('r')`,
+        description: `Дистанційне керування детонатором. Бомба вибухає
+при повторній дії ACT команди. В наявності є декілька* детонаторів.`
     },
     {
-        image:       EnemyHeadRight,
-        title:       'ENEMY_HEAD_RIGHT(\'>\')',
-        description: 'Голова Змійки суперника у напрямку вправо',
-    },
-    {
-        image:       EnemyHeadUp,
-        title:       'ENEMY_HEAD_UP(\'˄\')',
-        description: 'Голова Змійки суперника у напрямку вгору',
-    },
-    {
-        image:       EnemyHeadEvil,
-        title:       'ENEMY_HEAD_EVIL(\'♣\')',
-        description: 'Голова Змійки суперника із надздібностю "лють"',
-    },
-    {
-        image:       EnemyHeadFly,
-        title:       'ENEMY_HEAD_FLY(\'♦\')',
-        description: 'Голова Змійки суперника із надздібностю "політ"',
-    },
-    {
-        image:       EnemyHeadSleep,
-        title:       'ENEMY_HEAD_SLEEP(\'ø\')',
-        description: 'Голова неактивної Змійки суперника',
-    },
-    {
-        image:       EnemyHeadDead,
-        title:       'ENEMY_HEAD_DEAD(\'☺\')',
-        description: 'Голова мертвої Змійки суперника',
-    },
-
-    {
-        title:       'ENEMY_TAIL_END_DOWN(\'¤\')',
-        description: 'Хвіст Змійки суперника у напрямку вниз',
-        image:       EnemyTailEndDown,
-    },
-    {
-        title:       'ENEMY_TAIL_END_LEFT(\'×\')',
-        description: 'Хвіст Змійки суперника у напрямку вліво',
-        image:       EnemyTailEndLeft,
-    },
-    {
-        title:       'ENEMY_TAIL_END_UP(\'æ\')',
-        description: 'Хвіст Змійки суперника у напрямку вгору',
-        image:       EnemyTailEndUp,
-    },
-    {
-        title:       'ENEMY_TAIL_END_RIGHT(\'ö\')',
-        description: 'Хвіст Змійки суперника у напрямку вправо',
-        image:       EnemyTailEndRight,
-    },
-    {
-        title:       'ENEMY_TAIL_INACTIVE(\'*\' )',
-        description: 'Хвіст неактивної Змійки суперника',
-        image:       EnemyTailInactive,
-    },
-
-    {
-        title:       'ENEMY_BODY_HORIZONTAL(\'─\')',
-        description: 'Тулуб Змійки Суперника у горизонтальному положені',
-        image:       EnemyBodyHorizontal,
-    },
-    {
-        title:       'ENEMY_BODY_VERTICAL(\'│\')',
-        description: 'Тулуб Змійки Суперника у вертикальному положені',
-        image:       EnemyBodyVertical,
-    },
-    {
-        title:       'ENEMY_BODY_LEFT_DOWN(\'┐\')',
-        description:
-            'Тулуб Змійки Суперника при повороті вліво під час підняття',
-        image: EnemyBodyLeftDown,
-    },
-    {
-        title:       'ENEMY_BODY_LEFT_UP(\'┘\')',
-        description:
-            'Тулуб Змійки Суперника при повороті вліво під час спускання',
-        image: EnemyBodyLeftUp,
-    },
-    {
-        title:       'ENEMY_BODY_RIGHT_DOWN(\'┌\')',
-        description:
-            'Тулуб Змійки Суперника при повороті вправо під час підняття',
-        image: EnemyBodyRightDown,
-    },
-    {
-        title:       'ENEMY_BODY_RIGHT_UP(\'└\')',
-        description:
-            'Тулуб Змійки Суперника при повороті вправо під час спускання',
-        image: EnemyBodyRightUp,
-    },
+        image:       none,
+        title:       `NONE ('')`,
+        description: `Вільна секція, куди ви можете направити свого Бомбермена.`
+    }
 ];
 
 export class GameElements extends Component {
     render() {
+        const {  settings  } = this.props;
+
         return (
             <div className={ Styles.gameElements }>
                 { ELEMENTS.map(({ image, title, description }) => (
@@ -299,9 +171,8 @@ export class GameElements extends Component {
                         />
                         <div className={ Styles.elementDescriptionContainer }>
                             <div className={ Styles.elementTitle }>{ title }</div>
-                            <div className={ Styles.elementDescription }>
-                                { description }
-                            </div>
+                            <div className={ Styles.elementDescription }
+                                    dangerouslySetInnerHTML={{__html: description.replace('*', '<a href="#settings">*</a>') }}/>
                         </div>
                     </div>
                 )) }

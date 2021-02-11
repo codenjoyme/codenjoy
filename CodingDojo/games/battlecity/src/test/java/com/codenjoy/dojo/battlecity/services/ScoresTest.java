@@ -23,26 +23,19 @@ package com.codenjoy.dojo.battlecity.services;
  */
 
 
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
-/**
- * User: sanja
- * Date: 05.06.13
- * Time: 20:35
- */
 public class ScoresTest {
     private PlayerScores scores;
 
-    private Settings settings;
-    private Integer killYourTankPenalty;
-    private Integer killOtherHeroTankScore;
-    private Integer killOtherAITankScore;
+    private GameSettings settings;
 
     public void killYourTank() {
         scores.event(Events.KILL_YOUR_TANK);
@@ -58,12 +51,8 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new OptionGameSettings(new SettingsImpl(), mock(Dice.class));
         scores = new Scores(0, settings);
-
-        killYourTankPenalty = settings.getParameter("Kill your tank penalty").type(Integer.class).getValue();
-        killOtherAITankScore = settings.getParameter("Kill other AI tank score").type(Integer.class).getValue();
-        killOtherHeroTankScore = settings.getParameter("Kill other hero tank score").type(Integer.class).getValue();
     }
 
     @Test
@@ -79,9 +68,10 @@ public class ScoresTest {
         killYourTank();
 
         assertEquals(140
-                + (1 + 2 + 3)*killOtherHeroTankScore
-                + 2*killOtherAITankScore
-                - killYourTankPenalty, scores.getScore());
+                + (1 + 2 + 3)*settings.killOtherHeroTankScore().getValue()
+                + 2*settings.killOtherAITankScore().getValue()
+                - settings.killYourTankPenalty().getValue(),
+                scores.getScore());
     }
 
     @Test

@@ -34,7 +34,8 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     private Deque<String> pool = new LinkedList<>();
     private PlayerScores playerScores;
-    private static final String LEVEL = "Level";
+    private Collector collector = new Collector();
+    private static final String LEVEL = "Level ";
 
     public InformationCollector(PlayerScores playerScores) {
         this.playerScores = playerScores;
@@ -42,6 +43,8 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public void event(Object event) {
+        collector.put(event.toString());
+
         if (event instanceof CustomMessage) {
             pool.add(((CustomMessage) event).getMessage());
         } else {
@@ -103,11 +106,15 @@ public class InformationCollector implements EventListener, ChangeLevelListener,
 
     @Override
     public void levelChanged(LevelProgress progress) {
-        pool.add(LEVEL + " " + (progress.getCurrent() + 1));
+        pool.add(LEVEL + progress.getCurrent());
     }
 
     public void setInfo(String information) {
         pool.clear();
         pool.add(information);
+    }
+
+    public String popLastMessages() {
+        return collector.popAll();
     }
 }

@@ -7,19 +7,26 @@ import classNames from 'classnames/bind';
 import Styles from './styles.module.css';
 const cx = classNames.bind(Styles);
 const DATE_FORMAT = 'YYYY-MM-DD';
+const EXCLUDED_DAYS = process.env.REACT_APP_EXCLUDED_DAYS;
 
 class DaysPanelHandler extends Component {
     _getDaysRangeConfig(dates) {
         const currentDate = moment().startOf('day');
+        const excludedDays = EXCLUDED_DAYS.split(',')
 
         return dates.map((date, index) => {
             const label = String(index + 1);
+            let disabledTitle = '';
             const day = date.format(DATE_FORMAT);
 
             const startOfDayDate = moment(date).startOf('day');
-            const disabled = startOfDayDate.isAfter(currentDate);
+            const isDayExcluded = excludedDays.includes(day);
+            if (isDayExcluded) {
+                disabledTitle = 'Вихідний день'
+            }
+            const disabled = startOfDayDate.isAfter(currentDate) || isDayExcluded;
 
-            return { disabled, label, day };
+            return { disabled, label, day, disabledTitle };
         });
     }
 
@@ -36,7 +43,6 @@ class DaysPanelHandler extends Component {
             period: { start, end },
             onDaySelect,
         } = this.props;
-
         const startDate = moment(start).startOf('day');
         const endDate = moment(end).startOf('day');
 
@@ -53,9 +59,9 @@ class DaysPanelHandler extends Component {
         return (
             <div className={ Styles.dayPanel }>
                 <div className={ Styles.dayName }>День №</div>
-                { daysRangeConfig.map(({ label, disabled, day: configDay }) => (
+                { daysRangeConfig.map(({ label, disabled, day: configDay, disabledTitle }) => (
                     <button
-                        title={ configDay }
+                        title={ disabledTitle || configDay }
                         className={ this._dayButtonStyles(
                             day === configDay,
                             disabled,

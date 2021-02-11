@@ -23,28 +23,33 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.State;
+import com.codenjoy.dojo.battlecity.model.items.Bullet;
+import com.codenjoy.dojo.battlecity.model.items.Tree;
+import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
+
 public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
+    public static final int MAX = 100;
     protected Dice dice;
     private List<Bullet> bullets;
     private boolean alive;
     private Gun gun;
 
     protected Direction direction;
-    protected int speed;
     protected boolean moving;
     private boolean fire;
 
-    public Tank(int x, int y, Direction direction, Dice dice, int ticksPerBullets) {
-        super(x, y);
+    private Sliding sliding;
+
+    public Tank(Point pt, Direction direction, Dice dice, int ticksPerBullets) {
+        super(pt);
         this.direction = direction;
         this.dice = dice;
         gun = new Gun(ticksPerBullets);
@@ -93,22 +98,18 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     // TODO подумать как устранить дублирование с MovingObject
     public void move() {
-        for (int i = 0; i < speed; i++) {
-            if (!moving) {
-                return;
-            }
-
-            int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
-            moving(newX, newY);
+        if (!moving) {
+            return;
         }
+        direction = sliding.act(this);
+        moving(direction.change(this));
     }
 
-    public void moving(int newX, int newY) {
-        if (field.isBarrier(newX, newY)) {
+    public void moving(Point pt) {
+        if (field.isBarrier(pt)) {
             // do nothing
         } else {
-            move(newX, newY);
+            move(pt);
         }
         moving = false;
     }
@@ -120,20 +121,25 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    public Iterable<Bullet> getBullets() {
-        return new LinkedList<Bullet>(bullets);
+    public Collection<Bullet> getBullets() {
+        return new LinkedList<>(bullets);
     }
 
     public void init(Field field) {
         super.init(field);
 
-        int xx = x;
-        int yy = y;
-        while (field.isBarrier(xx, yy)) {
-            xx = dice.next(field.size());
-            yy = dice.next(field.size());
+        sliding = new Sliding(field);
+
+        int c = 0;
+        Point pt = this;
+        while (field.isBarrier(pt) && c++ < MAX) {
+            pt = PointImpl.random(dice, field.size());
         }
-        move(xx, yy);
+        if (c >= MAX) {
+            alive = false;
+            return;
+        }
+        move(pt);
         alive = true;
     }
 
@@ -156,6 +162,11 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        Tree tree = filterOne(alsoAtPoint, Tree.class);
+        if (tree != null) {
+            return Elements.TREE;
+        }
+
         if (isAlive()) {
             if (player.getHero() == this) {
                 switch (direction) {
@@ -180,7 +191,6 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void reset() {
-        speed = 1;
         moving = false;
         fire = false;
         alive = true;
@@ -188,7 +198,7 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         bullets = new LinkedList<>();
     }
 
-    public void fire() {
+    public void tryFire() {
         if (!fire) return;
         fire = false;
 
@@ -200,5 +210,9 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
         if (!bullets.contains(bullet)) {
             bullets.add(bullet);
         }
+    }
+
+    protected boolean isTankPrize() {
+        return false;
     }
 }

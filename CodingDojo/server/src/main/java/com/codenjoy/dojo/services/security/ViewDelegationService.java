@@ -23,18 +23,17 @@ package com.codenjoy.dojo.services.security;
  */
 
 import com.codenjoy.dojo.web.controller.AdminController;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 4/24/2019
  */
 @Service
-@RequiredArgsConstructor
 public class ViewDelegationService {
 
     public static final String ADMIN_PAGE_PROP = "page.admin.url";

@@ -38,6 +38,7 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
 
 public class GameRunner extends AbstractGameType implements GameType {
@@ -75,12 +76,13 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Enum[] getPlots() {
+    public CharElements[] getPlots() {
         return Elements.values();
     }
 
     @Override
     public Class<? extends Solver> getAI() {
+        // TODO в динамической загрузке джарников не работает тут и валит всю игру
         return AISolver.class;
     }
 
@@ -95,7 +97,7 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerName) {
+    public GamePlayer createPlayer(EventListener listener, String playerId) {
         return new Player(listener);
     }
 }

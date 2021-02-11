@@ -24,10 +24,8 @@ package com.codenjoy.dojo.transport.auth;
 
 
 import com.codenjoy.dojo.client.WebSocketRunner;
-import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.dao.Registration;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class SecureAuthenticationService implements AuthenticationService {
 
+    // TODO что эти поля хотелось бы в другом месте содержать
     public static final int MAX_PLAYER_ID_LENGTH = 100;
     public static final int MAX_PLAYER_CODE_LENGTH = 50;
 
@@ -45,37 +44,37 @@ public class SecureAuthenticationService implements AuthenticationService {
 
     @Override
     public String authenticate(HttpServletRequest request) {
-        String user = request.getParameter("user");
+        String id = request.getParameter("user");
         String code = request.getParameter("code");
 
-        if ((user != null && user.length() > MAX_PLAYER_ID_LENGTH)
+        if ((id != null && id.length() > MAX_PLAYER_ID_LENGTH)
                 || (code != null && code.length() > MAX_PLAYER_CODE_LENGTH))
         {
             log.warn("Thee are unexpected pair of user {} and code {}. " +
-                    "We will drop this user.", user, code);
+                    "We will drop this user.", id, code);
             return null;
         }
 
-        if (isAI(user)){
-            log.debug("User {} with code {} logged in as AI", user, code);
+        if (isAi(id)){
+            log.debug("User {} with code {} logged in as AI", id, code);
 
-            return user;
+            return id;
         }
 
         String result = null;
         try {
-            result = registration.checkUser(user, code);
+            result = registration.checkUser(id, code);
         } catch (Exception e) {
             log.error(String.format("Error during check user on authenticate " +
-                    "for user %s with code %s", user, code), e);
+                    "for user %s with code %s", id, code), e);
         }
 
-        log.debug("User {} with code {} logged as {}", user, code, result);
+        log.debug("User {} with code {} logged as {}", id, code, result);
 
         return result;
     }
 
-    private boolean isAI(String user) {
-        return user.endsWith(WebSocketRunner.BOT_EMAIL_SUFFIX);
+    private boolean isAi(String id) {
+        return id.endsWith(WebSocketRunner.BOT_ID_SUFFIX);
     }
 }

@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -43,8 +43,8 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         super.setup();
 
         SettingsWrapper.data
-                .lobbyEnable(true)
-                .lobbyCapacity(4)
+//                .lobbyEnable(true)
+//                .lobbyCapacity(4)
                 .defenderHasAdvantage(false)
                 .shufflePlayers(false);
     }
@@ -620,10 +620,10 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
     @Test
     public void shouldAllNFirstPlayersWillBeOnLobby_whenSetLobbyCapacity() {
-        int old = data.lobbyCapacity();
+//        int old = data.lobbyCapacity();
         try {
             final int CAPACITY = 8;
-            data.lobbyCapacity(CAPACITY);
+//            data.lobbyCapacity(CAPACITY);
             givenLevels();
 
             // when
@@ -732,16 +732,16 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             assertL(LOBBY_LEVEL, PLAYER9);
             assertE(LOBBY_FORCES, PLAYER9);
         } finally {
-            data.lobbyCapacity(old);
+//            data.lobbyCapacity(old);
         }
     }
 
     @Test
     public void shouldFillAllLevelsThenStartAgain() {
-        int old = data.lobbyCapacity();
+//        int old = data.lobbyCapacity();
         try {
             final int CAPACITY = 36;
-            data.lobbyCapacity(CAPACITY);
+//            data.lobbyCapacity(CAPACITY);
             givenLevels();
 
             // when
@@ -904,7 +904,7 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             assertL(level9, PLAYER36);
             assertE(forces9, PLAYER36);
         } finally {
-            data.lobbyCapacity(old);
+//            data.lobbyCapacity(old);
         }
     }
 
@@ -1438,11 +1438,11 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         final int ROUNDS = 10;
 
         boolean old1 = data.waitingOthers();
-        int old2 = data.lobbyCapacity();
+//        int old2 = data.lobbyCapacity();
         int old3 = data.roundTicks();
         try {
             data.waitingOthers(true);
-            data.lobbyCapacity(LOBBY_CAPACITY);
+//            data.lobbyCapacity(LOBBY_CAPACITY);
             data.roundTicks(ROUNDS);
 
             givenLevels();
@@ -1500,8 +1500,8 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
             // when
             // change some settings so lobby recreates
-            data.lobbyCapacity(LOBBY_CAPACITY - 1); // just simulation
-            data.lobbyCapacity(LOBBY_CAPACITY);
+//            data.lobbyCapacity(LOBBY_CAPACITY - 1); // just simulation
+//            data.lobbyCapacity(LOBBY_CAPACITY);
 
             // when then
             // create new player so count players = 8 = current lobby capacity
@@ -1558,7 +1558,7 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             assertE(forces2, PLAYER9);
         } finally {
             data.waitingOthers(old1);
-            data.lobbyCapacity(old2);
+//            data.lobbyCapacity(old2);
             data.roundTicks(old3);
         }
     }
@@ -1569,13 +1569,13 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
         final int ROUNDS = 10;
 
         boolean old1 = data.waitingOthers();
-        int old2 = data.lobbyCapacity();
+//        int old2 = data.lobbyCapacity();
         int old3 = data.roundTicks();
-        boolean old4 = data.lobbyEnable();
+//        boolean old4 = data.lobbyEnable();
         try {
-            data.lobbyEnable(true);
+//            data.lobbyEnable(true);
             data.waitingOthers(true);
-            data.lobbyCapacity(LOBBY_CAPACITY);
+//            data.lobbyCapacity(LOBBY_CAPACITY);
             data.roundTicks(ROUNDS);
 
             givenLevels();
@@ -1633,7 +1633,7 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
             // when
             // disable lobby with players inside
-            data.lobbyEnable(false);
+//            data.lobbyEnable(false);
 
             tickAll();
 
@@ -1718,17 +1718,17 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
 
         } finally {
             data.waitingOthers(old1);
-            data.lobbyCapacity(old2);
+//            data.lobbyCapacity(old2);
             data.roundTicks(old3);
-            data.lobbyEnable(old4);
+//            data.lobbyEnable(old4);
         }
     }
 
     @Test
     public void shouldRunCommandLobbyFromSettings_enoughPlayers() {
-        int old = data.lobbyCapacity();
+//        int old = data.lobbyCapacity();
         try {
-            data.lobbyCapacity(7);
+//            data.lobbyCapacity(7);
 
             givenLevels();
 
@@ -1788,15 +1788,15 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             assertL(LOBBY_LEVEL, PLAYER5);
             assertE(LOBBY_FORCES, PLAYER5);
         } finally {
-            data.lobbyCapacity(old);
+//            data.lobbyCapacity(old);
         }
     }
 
     @Test
     public void shouldRunCommandLobbyFromSettings_notEnoughPlayers() {
-        int old = data.lobbyCapacity();
+//        int old = data.lobbyCapacity();
         try {
-            data.lobbyCapacity(7);
+//            data.lobbyCapacity(7);
 
             givenLevels();
 
@@ -1831,7 +1831,7 @@ public class GameRunnerWithLobbyTest extends AbstractGameRunnerTest {
             assertL(LOBBY_LEVEL, PLAYER3);
             assertE(LOBBY_FORCES, PLAYER3);
         } finally {
-            data.lobbyCapacity(old);
+//            data.lobbyCapacity(old);
         }
     }
 

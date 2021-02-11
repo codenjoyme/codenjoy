@@ -39,9 +39,10 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @Autowired private ErrorTicketService ticket;
+    @Autowired 
+    private ErrorTicketService ticket;
 
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(Exception.class)
     public ModelAndView defaultErrorHandler(HttpServletRequest req, Exception e) {
         String url = req.getRequestURL().toString();
 

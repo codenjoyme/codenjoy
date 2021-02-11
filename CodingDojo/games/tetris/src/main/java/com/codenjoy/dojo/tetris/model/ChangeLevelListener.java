@@ -29,5 +29,8 @@ package com.codenjoy.dojo.tetris.model;
  * Time: 1:36 PM
  */
 public interface ChangeLevelListener {
+
+    void levelCompleted(int levelNumber, GameLevel level);
+
     void levelChanged(int levelNumber, GameLevel level);
 }

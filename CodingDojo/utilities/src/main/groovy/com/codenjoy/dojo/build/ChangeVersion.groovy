@@ -1,5 +1,5 @@
-def fromVersion = '1.1.0'
-def toVersion = '1.1.1'
+def fromVersion = '1.1.1'
+def toVersion = '1.1.2'
 
 // select root directories
 def base = '..\\..\\..\\..\\..\\..\\..\\..\\';
@@ -29,21 +29,29 @@ def dirs3 = dirs2.findAll {
     found
 }
 
-// collect all pom.xml files
+// collect all pom.xml and README.md files
 def files = dirs3.collect {
     new File("$it/pom.xml")
+} + dirs3.collect {
+    new File("$it/README.md")
 }
 files << new File("${base}games\\engine\\setup.bat")
+files << new File("${base}games\\engine\\setup.sh")
 files << new File("${base}portable\\windows-cmd\\00-settings.bat")
 files << new File("${base}portable\\linux-docker-compose\\balancer.yml")
 files << new File("${base}portable\\linux-docker-compose\\codenjoy.yml")
 files << new File("${base}portable\\linux-docker-compose\\rebuild.sh")
-files << new File("${base}portable\\linux-docker\\start.sh")
+files << new File("${base}portable\\linux-docker\\2-build.sh")
+files << new File("${base}portable\\linux-docker\\3-start.sh")
+files << new File("${base}portable\\linux-docker\\run.sh")
 files << new File("${base}games\\pom.xml")
+files << new File("${base}games\\README.md")
 files << new File("${base}pom.xml")
+files << new File("${base}README.md")
 
 // replace in all files
 files.each {
+    if (!it.exists()) return
     println it
     def text = it.text
     for (i in 1..5) {

@@ -22,11 +22,20 @@ package com.codenjoy.dojo.services.entity;
  * #L%
  */
 
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
+@Getter
+@Setter
 public class Player {
 
+    public static final int APPROVED = 1;
+    public static final int NOT_APPROVED = 0;
+
+    private String id;
     private String email;
+    private String phone;
     private String firstName;
     private String lastName;
     private String password;
@@ -35,27 +44,33 @@ public class Player {
     private String comment;
     private String code;
     private String server;
+    private String callback;
+    private int approved;
+    private String verificationCode;
+    private String verificationType;
 
     public Player() {
         // do nothing
     }
 
-    public Player(String email, String password) {
+    public Player(String email, String phone) {
         this.email = email;
-        this.password = password;
+        this.phone = phone;
     }
 
-    public Player(String email, String code, String server) {
+    public Player(String email, String code, String callback) {
         this.email = email;
         this.code = code;
-        this.server = server;
+        this.callback = callback;
     }
 
-    public Player(String email, String firstName, String lastName,
+    public Player(String id, String email, String phone, String firstName, String lastName,
                   String password, String city, String skills,
-                  String comment, String code, String server)
-    {
+                  String comment, String code, String server,
+                  int approved, String callback, String verificationCode, String verificationType) {
+        this.id = id;
         this.email = email;
+        this.phone = phone;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
@@ -64,48 +79,18 @@ public class Player {
         this.comment = comment;
         this.code = code;
         this.server = server;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getServer() {
-        return server;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getSkills() {
-        return skills;
-    }
-
-    public String getComment() {
-        return comment;
+        this.approved = approved;
+        this.callback = callback;
+        this.verificationCode = verificationCode;
+        this.verificationType = verificationType;
     }
 
     @Override
     public String toString() {
         return "Player{" +
-                "email='" + email + '\'' +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
@@ -114,19 +99,17 @@ public class Player {
                 ", comment='" + comment + '\'' +
                 ", code='" + code + '\'' +
                 ", server='" + server + '\'' +
+                ", approved=" + approved +
+                ", callback='" + callback + '\'' +
+                ", verificationCode='" + verificationCode + '\'' +
+                ", verificationType='" + verificationType + '\'' +
                 '}';
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setServer(String server) {
-        this.server = server;
-    }
-
-    public void resetNullFileds(Player player) {
+    public void resetNullFields(Player player) {
+        id = StringUtils.isEmpty(id) ? player.id : id;
         email = StringUtils.isEmpty(email) ? player.email : email;
+        phone = StringUtils.isEmpty(phone) ? player.phone : phone;
         firstName = StringUtils.isEmpty(firstName) ? player.firstName : firstName;
         lastName = StringUtils.isEmpty(lastName) ? player.lastName : lastName;
         password = StringUtils.isEmpty(password) ? player.password : password;
@@ -135,5 +118,13 @@ public class Player {
         comment = StringUtils.isEmpty(comment) ? player.comment : comment;
         code = StringUtils.isEmpty(code) ? player.code : code;
         server = StringUtils.isEmpty(server) ? player.server : server;
+        approved = player.approved;
+
+        verificationCode = StringUtils.isEmpty(verificationCode) ? player.verificationCode : verificationCode;
+        verificationType = StringUtils.isEmpty(verificationType) ? player.verificationType : verificationType;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 }

@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.joystick.ActJoystick;
 import com.codenjoy.dojo.services.joystick.NoActJoystick;
 
-public class NullJoystick implements ActJoystick, NoActJoystick {
+public final class NullJoystick implements ActJoystick, NoActJoystick {
 
     public static final Joystick INSTANCE = new NullJoystick();
 

@@ -23,11 +23,16 @@ package com.codenjoy.dojo.snake.model.artifacts;
  */
 
 
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.snake.model.Elements;
 import com.codenjoy.dojo.snake.model.Hero;
 
 public class Apple extends EateablePoint implements Element, State<Elements, Object> {
+
+    public Apple(Point pt) {
+        super(pt);
+    }
 
     public Apple(int x, int y) {
         super(x, y);

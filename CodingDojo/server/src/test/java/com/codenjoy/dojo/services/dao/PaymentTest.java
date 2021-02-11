@@ -45,7 +45,7 @@ public class PaymentTest {
     public void setup() {
         String dbFile = "target/payment.db" + new Random().nextInt();
         service = new Payment(
-                new SqliteConnectionThreadPoolFactory(dbFile,
+                new SqliteConnectionThreadPoolFactory(false, dbFile,
                         new ContextPathGetter() {
                             @Override
                             public String getContext() {

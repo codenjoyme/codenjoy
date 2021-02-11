@@ -21,7 +21,7 @@
   -->
 <configuration>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>logs/${project.artifactId}.log</file>
+        <file>logs/@project.artifactId@.log</file>
         <append>true</append>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
@@ -49,7 +49,7 @@
     <logger name="com.codenjoy.dojo" level="DEBUG" additivity="true"/>
     <logger name="org.eclipse.jetty" level="DEBUG" additivity="false"/>
 
-    <root level="debug">
+    <root level="INFO">
         <appender-ref ref="FILE" additivity="false"/>
         <appender-ref ref="STDOUT" additivity="false"/>
     </root>

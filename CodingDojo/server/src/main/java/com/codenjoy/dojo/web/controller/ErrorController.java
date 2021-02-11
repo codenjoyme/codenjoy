@@ -23,7 +23,11 @@ package com.codenjoy.dojo.web.controller;
  */
 
 import com.codenjoy.dojo.services.ErrorTicketService;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.server.Request;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.firewall.FirewalledRequest;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,28 +35,68 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 5/23/2019
  */
 @Controller
 @RequestMapping(ErrorController.URI)
-public class ErrorController {
+public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
 
     public static final String URI = "/error";
+    public static final String JAVAX_SERVLET_ERROR_MESSAGE = "javax.servlet.error.message";
+    public static final String JAVAX_SERVLET_ERROR_EXCEPTION = "javax.servlet.error.exception";
 
-    @Autowired private ErrorTicketService ticket;
+    @Autowired
+    private ErrorTicketService ticket;
+
+    @RequestMapping()
+    public String error(HttpServletRequest req, ModelMap model) {
+        Exception throwable = (Exception)req.getAttribute(JAVAX_SERVLET_ERROR_EXCEPTION);
+        if (throwable != null) {
+            return error(throwable, req, model);
+        }
+
+        String message = (String) req.getAttribute(JAVAX_SERVLET_ERROR_MESSAGE);
+        if (!StringUtils.isEmpty(message)) {
+            return error(message, req, model);
+        }
+
+        return error("Something wrong", req, model);
+    }
 
     @GetMapping(params = "message")
-    public String error(HttpServletRequest req, ModelMap model, @RequestParam("message") String message) {
+    public String error(@RequestParam("message") String message, HttpServletRequest req, ModelMap model) {
+        IllegalAccessException exception = new IllegalAccessException(message);
+        return error(exception, req, model);
+    }
+
+    private String error(Exception exception, HttpServletRequest req, ModelMap model) {
         String url = req.getRequestURL().toString();
 
-        ModelAndView view = ticket.get(url, new IllegalAccessException(message));
-        view.addObject("message", message);
+        // для "not found" запросов вытаскиваем доп инфо
+        if (req instanceof SecurityContextHolderAwareRequestWrapper) {
+            ServletRequest request = ((SecurityContextHolderAwareRequestWrapper) req).getRequest();
+            if (request instanceof FirewalledRequest) {
+                ServletRequest request2 = ((FirewalledRequest) request).getRequest();
+                if (request2 instanceof Request) {
+                    url = String.format("%s [%s]",
+                            url, ((Request)request2).getOriginalURI());
+                }
+            }
+        }
+
+        ModelAndView view = ticket.get(url, exception);
         model.mergeAttributes(view.getModel());
 
         return view.getViewName();
+    }
+
+    @Override
+    public String getErrorPath() {
+        return URI;
     }
 }

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.battlecity.model.levels;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.Border;
+import com.codenjoy.dojo.battlecity.model.items.Border;
 
 import java.util.LinkedList;
 import java.util.List;

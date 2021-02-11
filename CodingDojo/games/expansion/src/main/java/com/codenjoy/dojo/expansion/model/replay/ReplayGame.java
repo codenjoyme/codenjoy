@@ -4,7 +4,7 @@ package com.codenjoy.dojo.expansion.model.replay;
  * #%L
  * expansion - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2017 EPAM
+ * Copyright (C) 2016 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -25,12 +25,13 @@ package com.codenjoy.dojo.expansion.model.replay;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.nullobj.NullJoystick;
-import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
@@ -38,11 +39,11 @@ import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 /**
  * Created by Oleksandr_Baglai on 2017-09-21.
  */
-public abstract class ReplayGame implements Game {
+public class ReplayGame implements Game {
 
     private static final String START_FROM_TICK = "startFromTick";
     private static final String REPLAY_NAME = "replayName";
-    private static final String PLAYER_NAME = "playerName";
+    private static final String PLAYER_ID = "playerId";
 
     private final int startFrom;
     private int tick;
@@ -61,9 +62,9 @@ public abstract class ReplayGame implements Game {
     public ReplayGame(JSONObject save) {
         String replayName = save.getString(REPLAY_NAME);
         startFrom = save.optInt(START_FROM_TICK, 0);
-        String playerName = save.getString(PLAYER_NAME);
+        String playerId = save.getString(PLAYER_ID);
 
-        this.loggerReader = getLoggerReader(replayName, playerName);
+        this.loggerReader = getLoggerReader(replayName, playerId);
         start = false;
         tick = -1;
         if (!data.delayReplay()) {
@@ -72,23 +73,8 @@ public abstract class ReplayGame implements Game {
     }
 
     @NotNull
-    protected LoggerReader getLoggerReader(String replayName, String playerName) {
-        return new LoggerReaderImpl(replayName, playerName);
-    }
-
-    @Override
-    public Joystick getJoystick() {
-        return NullJoystick.INSTANCE;
-    }
-
-    @Override
-    public boolean isGameOver() {
-        return false;
-    }
-
-    @Override
-    public void newGame() {
-        // do nothing
+    protected LoggerReader getLoggerReader(String replayName, String playerId) {
+        return new LoggerReaderImpl(replayName, playerId);
     }
 
     @Override
@@ -131,16 +117,12 @@ public abstract class ReplayGame implements Game {
             return result;
         }
 
-        // TODO this method not used
         public List<Game> playersGroup() {
-            return Arrays.asList(ReplayGame.this);
+            // TODO this method not used
+            // return Arrays.asList(ReplayGame.this);
+            return null;
         }
     };
-
-    @Override
-    public JSONObject getSave() {
-        return new JSONObject();
-    }
 
     public boolean noMoreTicks() {
         return tick == -1 || tick >= loggerReader.size();
@@ -155,4 +137,72 @@ public abstract class ReplayGame implements Game {
         }
         tick++;
     }
+
+    // unused methods
+
+    @Override
+    public Joystick getJoystick() {
+        return NullJoystick.INSTANCE;
+    }
+
+    @Override
+    public boolean isGameOver() {
+        return false;
+    }
+
+    @Override
+    public boolean isWin() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldLeave() {
+        return false;
+    }
+
+    @Override
+    public void newGame() {
+        // do nothing
+    }
+
+    @Override
+    public void loadSave(JSONObject save) {
+        // do nothing
+    }
+
+    @Override
+    public JSONObject getSave() {
+        return new JSONObject();
+    }
+
+    @Override
+    public GamePlayer getPlayer() {
+        return null;
+    }
+
+    @Override
+    public GameField getField() {
+        return null;
+    }
+
+    @Override
+    public void on(GameField field) {
+        // do nothing
+    }
+
+    @Override
+    public void setProgress(LevelProgress progress) {
+        // do nothing
+    }
+
+    @Override
+    public LevelProgress getProgress() {
+        return null;
+    }
+
+    @Override
+    public void close() {
+        // do nothing
+    }
+
 }

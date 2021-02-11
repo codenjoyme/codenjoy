@@ -23,13 +23,19 @@ package com.codenjoy.dojo.services;
  */
 
 
+import com.codenjoy.dojo.services.classloader.GameLoader;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.utils.ReflectUtils;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
-import org.reflections.Reflections;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,23 +46,36 @@ import static java.util.stream.Collectors.toMap;
 @Component("gameService")
 public class GameServiceImpl implements GameService {
 
+    // TODO кажется это старый код комнат, его можно убрать после окончательной имплементации комнат
     public static final String ROOMS_SEPARATOR = "-";
-
-    @Autowired private TimerService timer;
-    @Autowired private PlayerService players;
 
     private Map<String, GameType> cache = new TreeMap<>();
 
-    public GameServiceImpl() {
+    @Value("${plugins.enable}")
+    private boolean pluginsEnable;
+
+    @Value("${plugins.path}")
+    private String pluginsPath;
+
+    @Value("${plugins.game.exclude}")
+    protected String[] excludeGames;
+
+    @Value("${plugins.game.package}")
+    private String gamePackage;
+
+    @PostConstruct
+    public void init() {
+        // TODO сделать перезагрузку этого всего контента по запросу админа, но только для тех игрушек, что обновились
+        // TODO так же надо будет для новозагруженной игры всех юзеров перезапустить
         for (Class<? extends GameType> clazz : allGames()) {
             GameType gameType = loadGameType(clazz);
             cache.put(gameType.name(), gameType);
         }
     }
 
-    private List<Class<? extends GameType>> allGames() {
-        List<Class<? extends GameType>> result = new LinkedList<>(
-                findInPackage("com.codenjoy.dojo"));
+    private List<Class> allGames() {
+        List<Class> result = new LinkedList<>(
+                findInPackage(gamePackage));
 
         result.sort(Comparator.comparing(Class::getName));
 
@@ -66,20 +85,32 @@ public class GameServiceImpl implements GameService {
         remove(result,
                 it -> ConstructorUtils.getMatchingAccessibleConstructor(it) == null);
 
-        remove(result, it -> Stream.of("chess", "sokoban", "expansion")
-                .anyMatch(name -> it.getPackage().toString().contains(name)));
+        if (pluginsEnable) {
+            loadFromPlugins(result);
+        }
+
+        if (excludeGames != null) {
+            remove(result, it -> Stream.of(excludeGames)
+                    .anyMatch(name -> it.getPackage().toString().contains(name)));
+        }
 
         return result;
     }
 
-    private void remove(List<Class<? extends GameType>> result, Predicate<Class<? extends GameType>> predicate) {
+    private void loadFromPlugins(List<Class> result) {
+        File directory = new File(pluginsPath);
+        Map<String, Class> games = new GameLoader().loadGames(directory);
+        result.addAll(games.values());
+    }
+
+    private void remove(List<Class> result, Predicate<Class> predicate) {
         result.removeAll(result.stream()
                 .filter(predicate)
                 .collect(Collectors.toList()));
     }
 
-    Collection<? extends Class<? extends GameType>> findInPackage(String packageName) {
-        return new Reflections(packageName).getSubTypesOf(GameType.class);
+    protected Collection<? extends Class> findInPackage(String packageName) {
+        return ReflectUtils.findInPackage(packageName, GameType.class);
     }
 
     @Override
@@ -87,7 +118,6 @@ public class GameServiceImpl implements GameService {
         return new LinkedList<>(cache.keySet());
     }
 
-    // TODO test me
     @Override
     public List<String> getOnlyGameNames() {
         return getGameNames().stream()
@@ -100,26 +130,40 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public Map<String, List<String>> getSpritesNames() {
+        return getStringListMap(plot -> plot.name().toLowerCase());
+    }
+
+    @Override
+    public Map<String, List<String>> getSpritesValues() {
+        return getStringListMap(plot -> String.valueOf(plot.ch()));
+    }
+
+    // TODO может сделать универсальную версию метода с CharElements и ну его два вурхних метода?
+    @Override
     public Map<String, List<String>> getSprites() {
+        return getStringListMap(plot -> plot.name().toLowerCase() + "=" + plot.ch());
+    }
+
+    private Map<String, List<String>> getStringListMap(Function<CharElements, String> mapper) {
         return cache.entrySet().stream()
-                .map(entry -> new HashMap.SimpleEntry<>(
-                        entry.getValue().name(),
-                        Arrays.stream(entry.getValue().getPlots())
-                                .map(plot -> plot.name().toLowerCase())
-                                .collect(toList())
-                ))
+                .map(entry -> 
+                    new HashMap.SimpleEntry<>(
+                            entry.getValue().name(),
+                            Arrays.stream(entry.getValue().getPlots())
+                                    .map(mapper)
+                                    .collect(toList())
+                    )
+                )
                 .collect(toMap(
                         AbstractMap.SimpleEntry::getKey,
                         AbstractMap.SimpleEntry::getValue
                 ));
     }
 
-    GameType loadGameType(Class<? extends GameType> gameType) {
-        try {
-            return gameType.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows
+    private GameType loadGameType(Class<? extends GameType> gameType) {
+        return gameType.newInstance();
     }
 
     @Override

@@ -27,31 +27,50 @@ import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import lombok.Getter;
 
 import java.util.function.Consumer;
 
+/**
+ * Класс представляет собой игру пользователя, объединяя данные о пользователе в Player,
+ * Игру на которой он играет - Game. Комнату в которой эта игра происходит - playerRoom. 
+ * А так же джойстик которым он играет - Joystick. 
+ */
+@Getter
 public class PlayerGame implements Tickable {
-
+    
     private Player player;
     private Game game;
+    private String roomName;
     private LazyJoystick joystick;
 
-    public PlayerGame(Player player, Game game) {
+    public PlayerGame(Player player, Game game, String roomName) {
         this.player = player;
         this.game = game;
-        this.joystick = new LazyJoystick(game);
+        setRoomName(roomName);
+        joystick = new LazyJoystick(game);
     }
 
     // only for searching
     public static PlayerGame by(Game game) {
-        return new PlayerGame(null, game);
+        return new PlayerGame(null, game, null);
     }
 
+    /**
+     * Есть необходимость искать по разным компонентам этого объекта, 
+     * а потому o - может принимать разные типы
+     * @param o если String - это roomName, 
+     *          может быть так же Player, PlayerGame, GameField
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null) return false;
         if (this == NullPlayerGame.INSTANCE && (o != NullPlayer.INSTANCE && o != NullPlayerGame.INSTANCE)) return false;
 
+        if (o instanceof String) {
+            return o.equals(roomName);
+        }
+        
         if (o instanceof Player) {
             Player p = (Player)o;
 
@@ -89,22 +108,15 @@ public class PlayerGame implements Tickable {
         player.close();
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
     public GameField getField() {
         return game.getField();
     }
 
     @Override
     public String toString() {
-        return String.format("PlayerGame[player=%s, game=%s]",
+        return String.format("PlayerGame[player=%s, roomName=%s, game=%s]",
                 player,
+                roomName,
                 game.getClass().getSimpleName());
     }
 
@@ -113,15 +125,38 @@ public class PlayerGame implements Tickable {
         joystick.tick();
     }
 
-    public Joystick getJoystick() {
-        return joystick;
-    }
-
     public GameType getGameType() {
         return player.getGameType();
+    }
+    
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+        getPlayer();
+    }
+
+    /*
+     * Так случилось, что roomName содержится в двух местах, 
+     * а потому надо держать в консистентности данные  
+     */
+    public Player getPlayer() {
+        if (player != null) {
+            player.setRoomName(roomName);
+        }
+        return player;
     }
 
     public String popLastCommand() {
         return joystick.popLastCommands();
+    }
+
+    public void clearScore() {
+        player.clearScore();
+        game.clearScore();
+    }
+
+    public void fireOnLevelChanged() {
+        Game game = getGame();
+        Player player = getPlayer();
+        player.getEventListener().levelChanged(game.getProgress());
     }
 }

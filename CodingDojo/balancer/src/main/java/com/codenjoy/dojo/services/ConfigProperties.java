@@ -23,7 +23,10 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.hash.Hash;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
@@ -37,187 +40,22 @@ import java.util.List;
  * а это потому, что он не обрабатывается фильтрами maven при сборке в war.
  * Единственное место, где конфигурится *.properties - applicationContext.xml
  */
+@Getter
+@Setter
 @Component
 public class ConfigProperties {
+
+    @Value("${admin.login}")
+    private String adminLogin;
 
     @Value("${admin.password}")
     private String adminPassword;
 
-    @Value("${email.hash}")
-    private String emailHash;
-
-    @Value("${dispatcher.url.create}")
-    private String urlCreatePlayer;
-
-    @Value("${dispatcher.url.remove}")
-    private String urlRemovePlayer;
-
-    @Value("${dispatcher.url.get}")
-    private String urlGetPlayers;
-
-    @Value("${dispatcher.url.clear}")
-    private String urlClearScores;
-
-    @Value("${dispatcher.url.exists}")
-    private String urlExistsPlayer;
-
-    @Value("${dispatcher.url.enabled}")
-    private String urlGameEnabled;
-
-    @Value("${game.type}")
-    private String gameType;
-
-    @Value("${game.room}")
-    private int gameRoom;
-
-    @Value("${game.final.time}")
-    private String gameFinalTime;
-
-    @Value("#{'${game.servers}'.split(',')}")
-    private List<String> servers;
-
-    @Value("${game.start.day}")
-    private String dayStart;
-
-    @Value("${game.end.day}")
-    private String dayEnd;
-
-    @Value("${game.finalists.count}")
-    private int dayFinalistsCount;
+    @Autowired
+    private GameProperties game;
 
     public void updateFrom(ConfigProperties config) {
         BeanUtils.copyProperties(config, this);
     }
 
-    public String getAdminPassword() {
-        return adminPassword;
-    }
-
-    public String getEmailHash() {
-        return emailHash;
-    }
-
-    public String getUrlCreatePlayer() {
-        return urlCreatePlayer;
-    }
-
-    public String getUrlRemovePlayer() {
-        return urlRemovePlayer;
-    }
-
-    public String getUrlGetPlayers() {
-        return urlGetPlayers;
-    }
-
-    public String getUrlClearScores() {
-        return urlClearScores;
-    }
-
-    public String getUrlExistsPlayer() {
-        return urlExistsPlayer;
-    }
-
-    public String getUrlGameEnabled() {
-        return urlGameEnabled;
-    }
-
-    public String getGameType() {
-        return gameType;
-    }
-
-    public int getGameRoom() {
-        return gameRoom;
-    }
-
-    public String getGameFinalTime() {
-        return gameFinalTime;
-    }
-
-    public List<String> getServers() {
-        return servers;
-    }
-
-    public String getEmail(String id) {
-        return Hash.getEmail(id, emailHash);
-    }
-
-    public String getId(String email) {
-        return Hash.getId(email, emailHash);
-    }
-
-    public String getAdminToken() {
-        return DigestUtils.md5DigestAsHex(adminPassword.getBytes());
-    }
-
-    public String getDayStart() {
-        return dayStart;
-    }
-
-    public String getDayEnd() {
-        return dayEnd;
-    }
-
-    public int getDayFinalistCount() {
-        return dayFinalistsCount;
-    }
-
-    public void setAdminPassword(String adminPassword) {
-        this.adminPassword = adminPassword;
-    }
-
-    public void setEmailHash(String emailHash) {
-        this.emailHash = emailHash;
-    }
-
-    public void setUrlCreatePlayer(String urlCreatePlayer) {
-        this.urlCreatePlayer = urlCreatePlayer;
-    }
-
-    public void setUrlRemovePlayer(String urlRemovePlayer) {
-        this.urlRemovePlayer = urlRemovePlayer;
-    }
-
-    public void setUrlGetPlayers(String urlGetPlayers) {
-        this.urlGetPlayers = urlGetPlayers;
-    }
-
-    public void setUrlClearScores(String urlClearScores) {
-        this.urlClearScores = urlClearScores;
-    }
-
-    public void setUrlExistsPlayer(String urlExistsPlayer) {
-        this.urlExistsPlayer = urlExistsPlayer;
-    }
-
-    public void setUrlGameEnabled(String urlGameEnabled) {
-        this.urlGameEnabled = urlGameEnabled;
-    }
-
-    public void setGameType(String gameType) {
-        this.gameType = gameType;
-    }
-
-    public void setGameRoom(int gameRoom) {
-        this.gameRoom = gameRoom;
-    }
-
-    public void setGameFinalTime(String gameFinalTime) {
-        this.gameFinalTime = gameFinalTime;
-    }
-
-    public void setServers(List<String> servers) {
-        this.servers = servers;
-    }
-
-    public void setDayStart(String dayStart) {
-        this.dayStart = dayStart;
-    }
-
-    public void setDayEnd(String dayEnd) {
-        this.dayEnd = dayEnd;
-    }
-
-    public void setDayFinalistsCount(int dayFinalistsCount) {
-        this.dayFinalistsCount = dayFinalistsCount;
-    }
 }

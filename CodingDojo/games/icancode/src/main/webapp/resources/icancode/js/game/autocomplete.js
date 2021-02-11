@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -85,15 +85,15 @@ var autocomplete = {
     }
 }
 
-var initAutocomplete = function(level, levelInfo) {
+var initAutocomplete = function(current, levelInfo) {
     autocompleteMaps = {};
 
-    for (var levelIndex = 0; levelIndex <= level; levelIndex++) {
-        if (!levelInfo.getInfo) {
+    for (var level = levelsStartsFrom1; level <= current; level++) {
+        if (!levelInfo.getLevel) {
             continue;
         }
 
-        var data = levelInfo.getInfo(levelIndex + 1).autocomplete;
+        var data = levelInfo.getLevel(level).autocomplete;
 
         if (!data) {
             continue;

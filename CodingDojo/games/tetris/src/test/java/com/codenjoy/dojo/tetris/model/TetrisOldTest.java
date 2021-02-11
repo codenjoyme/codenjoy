@@ -46,6 +46,7 @@
 ///**
 // * @author serhiy.zelenin
 // */
+// TODO доделать этот тест
 //@RunWith(MockitoJUnitRunner.class)
 //public class TetrisOldTest {
 //    public static final int WIDTH = 10;

@@ -24,14 +24,12 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.transport.ws.GameState;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class BoardGameState implements GameState {
 
     private String board;
-
-    public BoardGameState(String board) {
-        this.board = board;
-    }
 
     @Override
     public String asString() {

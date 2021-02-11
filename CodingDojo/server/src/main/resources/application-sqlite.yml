@@ -1,4 +1,5 @@
 database:
+  memory: false
   files:
     log: database/logs.db
     saves: database/saves.db

@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.services;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -23,12 +23,14 @@ package com.codenjoy.dojo.icancode.services;
  */
 
 
+import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
     private PlayerScores scores;
@@ -37,6 +39,9 @@ public class ScoresTest {
     private Integer loosePenalty;
     private Integer winScore;
     private Integer goldScore;
+    private Integer killHeroScore;
+    private Integer killZombieScore;
+    private SettingsWrapper wrapper;
 
     public void loose() {
         scores.event(new Events());
@@ -46,23 +51,51 @@ public class ScoresTest {
         scores.event(Events.WIN(0));
     }
 
+    public void winMultiple() {
+        scores.event(Events.WIN(0, ICanCode.CONTEST));
+    }
+
     public void win(int goldCount) {
         scores.event(Events.WIN(goldCount));
+    }
+
+    public void killHero(int count) {
+        scores.event(Events.KILL_HERO(count, ICanCode.TRAINING));
+    }
+
+    public void killZombie(int count) {
+        scores.event(Events.KILL_ZOMBIE(count, ICanCode.TRAINING));
+    }
+
+    public void killHeroMultiple(int count) {
+        scores.event(Events.KILL_HERO(count, ICanCode.CONTEST));
+    }
+
+    public void killZombieMultiple(int count) {
+        scores.event(Events.KILL_ZOMBIE(count, ICanCode.CONTEST));
     }
 
     @Before
     public void setup() {
         settings = new SettingsImpl();
-        scores = new Scores(0, settings);
+        wrapper = SettingsWrapper.setup(settings);
+        scores = new Scores(0, wrapper);
 
         loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
         winScore = settings.getParameter("Win score").type(Integer.class).getValue();
         goldScore = settings.getParameter("Gold score").type(Integer.class).getValue();
+
+        killHeroScore = settings.getParameter("Kill hero score").type(Integer.class).getValue();
+        killZombieScore = settings.getParameter("Kill zombie score").type(Integer.class).getValue();
+    }
+
+    private void setEnableScoreKills(boolean enableKills) {
+        settings.addCheckBox("Enable score for kill").type(Boolean.class).def(enableKills);
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, settings);
+        scores = new Scores(140, wrapper);
 
         win();  //+
         win();  //+
@@ -71,25 +104,37 @@ public class ScoresTest {
 
         loose(); //-
 
-        Assert.assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
+        assertEquals(140 + 4 * winScore - loosePenalty, scores.getScore());
+    }
+
+    @Test
+    public void shouldCollectScores_ignoreOnMultiple() {
+        scores = new Scores(140, wrapper);
+
+        winMultiple();
+        winMultiple();
+        winMultiple();
+        winMultiple();
+
+        assertEquals(140, scores.getScore());
     }
 
     @Test
     public void shouldWithWithGold() {
-        scores = new Scores(0, settings);
+        scores = new Scores(0, wrapper);
 
         win(0);  //+
         win(1);  //+
         win(2);  //+
 
-        Assert.assertEquals(3 * winScore + 3 * goldScore, scores.getScore());
+        assertEquals(3 * winScore + 3 * goldScore, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
         loose();   //-
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
     @Test
@@ -98,8 +143,38 @@ public class ScoresTest {
 
         scores.clear();
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
+    @Test
+    public void shouldNotCountZombieKillInSingleMode() {
+        setEnableScoreKills(true);
 
+        killZombie(1);
+        killHero(1);
+
+        assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void disabledKillsShouldNotCountKillZombiesAndHero() {
+        setEnableScoreKills(false);
+
+        killZombieMultiple(1);
+        killHeroMultiple(1);
+
+        assertEquals(0, scores.getScore());
+    }
+
+    @Test
+    public void shouldCountKills() {
+        int zombie = 2;
+        int heros = 1;
+        setEnableScoreKills(true);
+
+        killZombieMultiple(zombie);
+        killHeroMultiple(heros);
+
+        assertEquals(killHeroScore * heros + killZombieScore * zombie, scores.getScore());
+    }
 }

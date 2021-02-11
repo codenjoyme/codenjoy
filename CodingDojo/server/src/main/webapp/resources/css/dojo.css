@@ -75,6 +75,8 @@ label.error {
 .admin-table {
     background-color: papayawhip;
     margin:10px;
+    font-family: monospace;
+    font-size: 14px;
 }
 
 .admin-table input[type="text"] {
@@ -87,6 +89,10 @@ label.error {
 }
 
 .admin-table .input-callback {
+    width:90px !important;
+}
+
+.admin-table .input-room {
     width:90px !important;
 }
 
@@ -209,4 +215,21 @@ canvas {
     float: right;
     margin-right: 150px; /* form-me.png width */
     z-index: 100;
+}
+
+span.a {
+    color: #428bca;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+span.a:hover,
+span.a:focus {
+    color: #2a6496;
+    text-decoration: underline;
+}
+
+td.joystick {
+    white-space: nowrap;
+    letter-spacing: -3px;
 }

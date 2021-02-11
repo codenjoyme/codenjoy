@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * @author Igor_Petrov@epam.com
+ * @author Igor Petrov
  * Created at 3/6/2019
  */
 @Configuration
@@ -44,13 +44,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SqliteDBConfig {
 
     private final ContextPathGetter contextPathGetter;
-    private final SQLiteFilesProperties sqlite;
+    private final SQLiteFilesProperties database;
     private final PasswordEncoder passwordEncoder;
     private final ConfigProperties properties;
 
     @Bean
     public ConnectionThreadPoolFactory databasePoolFactory() {
-        return new SqliteConnectionThreadPoolFactory(sqlite.getFiles().getLog(), contextPathGetter);
+        return new SqliteConnectionThreadPoolFactory(
+                database.isMemory(),
+                database.getFiles().getLog(),
+                contextPathGetter
+        );
     }
 
     @Bean
@@ -60,7 +64,11 @@ public class SqliteDBConfig {
 
     @Bean
     public ConnectionThreadPoolFactory playerPoolFactory() {
-        return new SqliteConnectionThreadPoolFactory(sqlite.getFiles().getSaves(), contextPathGetter);
+        return new SqliteConnectionThreadPoolFactory(
+                database.isMemory(),
+                database.getFiles().getSaves(),
+                contextPathGetter
+        );
     }
 
     @Bean
@@ -70,7 +78,11 @@ public class SqliteDBConfig {
 
     @Bean
     public ConnectionThreadPoolFactory registrationPoolFactory() {
-        return new SqliteConnectionThreadPoolFactory(sqlite.getFiles().getUsers(), contextPathGetter);
+        return new SqliteConnectionThreadPoolFactory(
+                database.isMemory(),
+                database.getFiles().getUsers(),
+                contextPathGetter
+        );
     }
 
     @Bean
@@ -82,7 +94,11 @@ public class SqliteDBConfig {
 
     @Bean
     public ConnectionThreadPoolFactory paymentPoolFactory() {
-        return new SqliteConnectionThreadPoolFactory(sqlite.getFiles().getPayment(), contextPathGetter);
+        return new SqliteConnectionThreadPoolFactory(
+                database.isMemory(),
+                database.getFiles().getPayment(),
+                contextPathGetter
+        );
     }
 
     @Bean
@@ -92,7 +108,11 @@ public class SqliteDBConfig {
 
     @Bean
     public ConnectionThreadPoolFactory gameDataPoolFactory() {
-        return new SqliteConnectionThreadPoolFactory(sqlite.getFiles().getSettings(), contextPathGetter);
+        return new SqliteConnectionThreadPoolFactory(
+                database.isMemory(),
+                database.getFiles().getSettings(),
+                contextPathGetter
+        );
     }
 
     @Bean

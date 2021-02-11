@@ -1,6 +1,6 @@
 <!--
   #%L
-  iCanCode - it's a dojo-like platform from developers to developers.
+  Codenjoy - it's a dojo-like platform from developers to developers.
   %%
   Copyright (C) 2018 Codenjoy
   %%
@@ -19,7 +19,6 @@
   <http://www.gnu.org/licenses/gpl-3.0.html>.
   #L%
   -->
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <head>
     <meta charset="UTF-8">
 </head>
@@ -34,9 +33,9 @@
         <div class="container-fluid">
             <header class="header row">
                 <div class="col-xs-6">
-                    <a class="logo inline" href="#" title="Home"><img src="img/logo.png"></a>
+                    <a class="logo inline" href="#" title="Home"><img src="../img/logo.png"></a>
                     <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <a class="logo inline" href="#" title="Home"><img src="img/i_can_code_Logo.png"></a>
+                    <a class="logo inline" href="#" title="Home"><img src="img/robot-logo.png"></a>
                     <span class="title icancode-title">ICanCode</span>
                 </div>
                 <span class="admin-title">
@@ -46,46 +45,58 @@
         </div>
     </div>
     <div class="container-fluid">
-
-
-        <div class="row train mCustomScrollbar" hidden>
+        <div class="row train mCustomScrollbar">
             <ul id="progress-bar" class="trainings">
-                <li class="training level-current" level="1">Level 1A</li>
-                <li class="training level-done" level="2">Level 2A</li>
-                <li class="training level-done" level="3">Level 3A</li>
-                <li class="training level-done" level="4">Level 4A</li>
-                <li class="training level-done" level="5">Level 5A</li>
-                <li class="training level-done" level="6">Level 6A</li>
-                <li class="training level-done" level="7">Level 7A</li>
-                <li class="training level-done" level="8">Level 8A</li>
-                <li class="training level-done" level="9">Level 9A</li>
-                <li class="training level-done" level="10">Level 1B</li>
-                <li class="training level-done" level="11">Level 2B</li>
-                <li class="training level-done" level="12">Level 3B</li>
-                <li class="training level-done" level="13">Level C</li>
-                <li class="training level-done" level="14">Level D</li>
+                <li class="training level-done" level="0">Level 1</li>
+                <li class="training level-done" level="1">Level 2</li>
+                <li class="training level-current" level="2">Level 3</li>
+                <li class="training level-not-active" level="3">Level 4</li>
+                <li class="training level-not-active hidden" level="4">Level 5</li>
+                <li class="training level-not-active hidden" level="5">Level 6</li>
+                <li class="training level-not-active hidden" level="6">Level 7</li>
+                <li class="training level-not-active hidden" level="7">Level 8</li>
+                <li class="training level-not-active hidden" level="8">Level 9</li>
+                <li class="training level-not-active hidden" level="9">Level 10</li>
+                <li class="training level-not-active hidden" level="10">Level 11</li>
+                <li class="training level-not-active hidden" level="11">Level 12</li>
+                <li class="training level-not-active hidden" level="12">Level 13</li>
+                <li class="training level-not-active hidden" level="13">Level 14</li>
+                <li class="training level-not-active hidden" level="14">Level 15</li>
+                <li class="training level-not-active hidden" level="15">Level 16</li>
+                <li class="training level-not-active hidden" level="16">Level 17</li>
+                <li class="training level-not-active hidden" level="17">Level 18</li>
+                <li class="training level-not-active hidden" level="18">Level 19</li>
+                <li class="training level-not-active hidden" level="19">Level 20</li>
+                <li class="training level-not-active hidden" level="20">Level 21</li>
+                <li class="training level-not-active hidden" level="21">Level 22</li>
+                <li class="training level-not-active hidden" level="22">Level 23</li>
+                <li class="training level-not-active hidden" level="23">Level 24</li>
+                <li class="training level-not-active hidden" level="24">Level 25</li>
+                <!-- TODO динамически добавлять необходимое количество элементов -->
             </ul>
         </div>
-        <div class="row admin-main" id="levels-settings" hidden>
+        <div class="row admin-main" id="levels-settings">
             <div>
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation">
+                        <a href="#map" aria-controls="map" role="tab"
+                           data-toggle="tab">Level Map</a></li>
+                    <li role="presentation">
+                        <a href="#help" aria-controls="help" role="tab"
+                           data-toggle="tab">Help code</a></li>
                     <li role="presentation" class="active">
                         <a href="#default" aria-controls="default" role="tab"
                            data-toggle="tab">Default code</a></li>
                     <li role="presentation">
                         <a href="#win" aria-controls="win" role="tab"
-                           data-toggle="tab">Win code</a>
-                    </li>
+                           data-toggle="tab">Win code</a></li>
                     <li role="presentation">
                         <a href="#refactored" aria-controls="refactored" role="tab"
                            data-toggle="tab">Refactored code</a></li>
                     <li role="presentation">
-                        <a href="#help" aria-controls="help" role="tab"
-                           data-toggle="tab">Help code</a></li>
-                    <li role="presentation">
-                        <a href="#map" aria-controls="map" role="tab"
-                           data-toggle="tab">Level Map</a></li>
+                        <a href="#befungeCommands" aria-controls="befungeCommands" role="tab"
+                           data-toggle="tab">Befunge commands</a></li>
                     <li role="presentation">
                         <a href="#methods" aria-controls="methods" role="tab"
                            data-toggle="tab">Methods</a>
@@ -94,11 +105,12 @@
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="default" placeholder="// Enter default code"></div>
+                    <div role="tabpanel" class="tab-pane active" id="map" placeholder="// Enter level map"></div>
+                    <div role="tabpanel" class="tab-pane" id="help" placeholder="// Enter help code"></div>
+                    <div role="tabpanel" class="tab-pane" id="default" placeholder="// Enter default code"></div>
                     <div role="tabpanel" class="tab-pane" id="win" placeholder="// Enter win code"></div>
                     <div role="tabpanel" class="tab-pane" id="refactored" placeholder="// Enter refactored code"></div>
-                    <div role="tabpanel" class="tab-pane" id="help" placeholder="// Enter help code"></div>
-                    <div role="tabpanel" class="tab-pane" id="map" placeholder="// Enter level map"></div>
+                    <div role="tabpanel" class="tab-pane" id="befungeCommands" placeholder="// Enter refactored code"></div>
                     <div role="tabpanel" class="tab-pane mCustomScrollbar" id="methods">
                         <p class="message">Select enabled methods for this level</p>
                         <div class="method">
@@ -224,17 +236,18 @@
     </footer>
 </div>
 
-<script src="js/jquery/jquery-3.1.0.min.js"></script>
+<script src="../js/jquery/jquery-3.1.0.min.js"></script>
 <script src="js/scroll/jquery.mCustomScrollbar.concat.min.js"></script>
 <script src="js/ace/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/ace/src/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
 <script src="../css/bootstrap/bootstrap.min.js"></script>
 <script src="js/game/editor.js"></script>
 <script src="js/game/progressbar.js"></script>
-<script src="js/game/admin-settings.js"></script>
+<script src="js/game/level-info.js"></script>
+<script src="../js/admin-settings.js"></script>
 <script src="js/game/admin.js"></script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         initAdmin('/codenjoy-contest');
     });
 

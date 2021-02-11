@@ -23,16 +23,28 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
-import com.codenjoy.dojo.battlecity.model.levels.Level;
+import com.codenjoy.dojo.battlecity.model.items.Bullet;
+import com.codenjoy.dojo.battlecity.model.items.Prize;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 
 import java.util.List;
 
-public interface Field extends GameField<Player>, Level {
+public interface Field extends GameField<Player> {
 
-    boolean isBarrier(int x, int y);
-
-    boolean outOfField(int x, int y);
+    boolean isBarrier(Point pt);
 
     void affect(Bullet bullet);
+
+    boolean isRiver(Point pt);
+
+    boolean isIce(Point pt);
+
+    void addPrize(Prize prize);
+
+    void addAi(Tank tank);
+
+    List<Tank> aiTanks();
+
+    int size();
 }

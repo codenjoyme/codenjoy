@@ -26,4 +26,8 @@ public interface Level {
     int bombsCount();
 
     int bombsPower();
+
+    default int perksDropRate() {
+        return 0;
+    }
 }

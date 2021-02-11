@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -23,11 +23,13 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.services.DLoggerFactory;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Game;
-import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.expansion.model.levels.Levels;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
+import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.Events;
@@ -38,41 +40,52 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class Player extends GamePlayer<Hero, Field> {
+public class Player extends GamePlayer<Hero, IField> {
 
     private static Logger logger = DLoggerFactory.getLogger(Player.class);
 
     Hero hero;
-    private ProgressBar progressBar;
     private String name;
+    private IField field;
+    private Printer<PrinterData> printer;
+    private boolean isWin;
 
-    public Player(EventListener listener, ProgressBar progressBar, String name) {
+    public Player(EventListener listener, String name) {
         super(listener);
-        this.progressBar = progressBar;
         this.name = name;
-        progressBar.setPlayer(this);
+        isWin = false;
+        setupPrinter();
+    }
+
+    private void setupPrinter() {
+        printer = new LayeredViewPrinter(
+                () -> field.layeredReader(),
+                () -> this,
+                Levels.COUNT_LAYERS);
     }
 
     public void event(Events event) {
         if (logger.isDebugEnabled()) {
             logger.debug("Player {} fired event {}", lg.id(), event);
         }
+        super.event(event);
 
-        if (listener != null && progressBar.enableWinScore()) {
-            listener.event(event);
-        }
+        //if (listener != null /* TODO что это было тут? && progressBar.enableWinScore()*/) {
+        //    listener.event(event);
+        //}
     }
 
     public Hero getHero() {
         return hero;
     }
 
-    public void newHero(Field field) {
+    public void newHero(IField field) {
+        this.field = field;
         if (hero == null) {
             hero = new Hero();
         }
 
-        hero.setField(field);
+        hero.init(field);
     }
 
     @Override
@@ -80,22 +93,61 @@ public class Player extends GamePlayer<Hero, Field> {
         return hero.isAlive();
     }
 
-    public void tick() {
-        progressBar.checkLevel();
-        hero.tick();
+    @Override
+    public boolean isWin() {
+        return isWin;
     }
 
-    public void setNextLevel() {
-        progressBar.setNextLevel();
+    public void goToNextLevel() {
+        isWin = true;
     }
 
     public int getForcesColor() {
         return hero.getBase().element().getIndex();
     }
 
-    public Game getGame() {
-        return progressBar.getGameOwner();
+    public IField getField() {
+        return field;
     }
+
+    @Override
+    public HeroData getHeroData() {
+        return new GameHeroData();
+    }
+
+    public int getRoundTicks() {
+        return field.getRoundTicks();
+    }
+
+    public class GameHeroData implements HeroData {
+        @Override
+        public Point getCoordinate() {
+            return new PointImpl(getHero().getBasePosition());
+        }
+
+        @Override
+        public boolean isMultiplayer() {
+            return Player.this.field.isMultiplayer();
+        }
+
+        @Override
+        public int getLevel() {
+            return 0;
+        }
+
+        @Override
+        public Object getAdditionalData() {
+            JSONObject result = new JSONObject();
+            result.put("lastAction", getCurrentAction());
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("getAdditionalData for game {} prepare {}", lg.id(), JsonUtils.toStringSorted(result));
+            }
+
+            return result;
+        }
+
+    };
 
     public Point getBasePosition() {
         return hero.getBasePosition();
@@ -119,14 +171,6 @@ public class Player extends GamePlayer<Hero, Field> {
         this.hero = hero;
     }
 
-    public void setPlayerBoard(PlayerBoard current) {
-        progressBar.setCurrent(current);
-    }
-
-    public PlayerBoard getCurrent() {
-        return progressBar.getCurrent();
-    }
-
     public String getName() {
         return name;
     }
@@ -137,7 +181,7 @@ public class Player extends GamePlayer<Hero, Field> {
                 put("id", id());
                 put("name", name);
                 put("hero", (hero != null) ? hero.lg.json() : "null");
-                put("progressBar", (progressBar != null) ? progressBar.lg.json() : "null");
+                put("field", (field != null) ? field.id() : "null");
             }};
         }
 
@@ -151,6 +195,10 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public LogState lg = new LogState();
+
+    public Printer<PrinterData> getPrinter() {
+        return printer;
+    }
 
     @Override
     public String toString() {

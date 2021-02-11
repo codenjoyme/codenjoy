@@ -54,7 +54,7 @@ public class LevelBuilder {
                 }
 
                 int index = dice.next(numbers.size());
-                field[x][y] = new ArrayList<Integer>(numbers.values()).get(index);
+                field[x][y] = new ArrayList<>(numbers.values()).get(index);
             }
         }
     }

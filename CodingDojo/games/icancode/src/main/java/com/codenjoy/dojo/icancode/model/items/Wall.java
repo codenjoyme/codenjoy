@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -23,12 +23,12 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
+import com.codenjoy.dojo.icancode.model.BaseItem;
 import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.enums.FeatureItem;
 
 public class Wall extends BaseItem {
 
     public Wall(Elements el) {
-        super(el, new FeatureItem[]{FeatureItem.IMPASSABLE});
+        super(el, IMPASSABLE);
     }
 }

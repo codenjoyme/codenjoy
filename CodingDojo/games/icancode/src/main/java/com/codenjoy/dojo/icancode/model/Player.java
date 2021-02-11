@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -23,7 +23,6 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.IField;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -34,10 +33,10 @@ import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import org.json.JSONObject;
 
-public class Player extends GamePlayer<Hero, IField> {
+public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
-    private IField field;
+    private Field field;
     private Printer<PrinterData> printer;
 
     public Player(EventListener listener) {
@@ -49,7 +48,6 @@ public class Player extends GamePlayer<Hero, IField> {
         printer = new LayeredViewPrinter(
                 () -> field.layeredReader(),
                 () -> this,
-                Levels.size(),
                 Levels.COUNT_LAYERS);
     }
 
@@ -57,7 +55,7 @@ public class Player extends GamePlayer<Hero, IField> {
         return hero;
     }
 
-    public void newHero(IField field) {
+    public void newHero(Field field) {
         this.field = field;
         if (hero == null) {
             hero = new Hero(Elements.ROBO);
@@ -81,7 +79,7 @@ public class Player extends GamePlayer<Hero, IField> {
         return new ICanCodeHeroData();
     }
 
-    public IField getField() {
+    public Field getField() {
         return field;
     }
 
@@ -109,7 +107,7 @@ public class Player extends GamePlayer<Hero, IField> {
 
         @Override
         public boolean isMultiplayer() {
-            return Player.this.field.isMultiplayer();
+            return Player.this.field.isContest();
         }
 
         @Override

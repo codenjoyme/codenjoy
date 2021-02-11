@@ -4,7 +4,7 @@ package com.codenjoy.dojo.expansion.model.levels.items;
  * #%L
  * expansion - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2016 - 2017 EPAM
+ * Copyright (C) 2016 - 2020 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -27,7 +27,7 @@ import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.Item;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.utils.TestUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Created by Oleksandr_Baglai on 2017-12-12.

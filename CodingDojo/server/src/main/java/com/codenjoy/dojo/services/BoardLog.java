@@ -24,78 +24,42 @@ package com.codenjoy.dojo.services;
 
 
 import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Getter
+@ToString
+@AllArgsConstructor
 public class BoardLog {
 
     private long time;
-    private String playerName;
-    private String board;
-    private String command;
+    private String playerId;
     private String gameType;
     private Object score;
-
-    public BoardLog(long time, String playerName, String gameType, Object score, String board, String command) {
-        this.time = time;
-        this.playerName = playerName;
-        this.gameType = gameType;
-        this.score = score;
-        this.board = board;
-        this.command = command;
-    }
+    private String board;
+    private String message;
+    private String command;
 
     public BoardLog(ResultSet resultSet) {
         try {
             time = JDBCTimeUtils.getTimeLong(resultSet);
-            playerName = resultSet.getString("player_name");
+            playerId = resultSet.getString("player_id");
             gameType = resultSet.getString("game_type");
             score = resultSet.getInt("score");
             board = resultSet.getString("board");
+            message = resultSet.getString("message");
             command = resultSet.getString("command");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public String getPlayerName() {
-        return playerName;
-    }
-
-    public String getBoard() {
-        return board;
-    }
-
-    public String getCommand() {
-        return command;
-    }
-
-    @Override
-    public String toString() {
-        return "BoardLog{" +
-                "playerName='" + playerName + '\'' +
-                ", time='" + time + '\'' +
-                ", board='" + board + '\'' +
-                ", command='" + command + '\'' +
-                ", gameType='" + gameType + '\'' +
-                ", score=" + score +
-                '}';
-    }
-
-    public Object getScore() {
-        return score;
-    }
-
-    public String getGameType() {
-        return gameType;
-    }
-
-    public long getTime() {
-        return time;
-    }
-
     public void setBoard(String board) {
         this.board = board;
     }
+
 }

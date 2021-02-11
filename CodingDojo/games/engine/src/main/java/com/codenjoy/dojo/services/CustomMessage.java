@@ -22,35 +22,19 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
+@AllArgsConstructor
+@Getter
+@EqualsAndHashCode
 public class CustomMessage {
 
     private String message;
 
-    public CustomMessage(String message) {
-        this.message = message;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
     @Override
     public String toString() {
         return "[" + message + "]";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CustomMessage that = (CustomMessage) o;
-        return Objects.equals(message, that.message);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(message);
     }
 }

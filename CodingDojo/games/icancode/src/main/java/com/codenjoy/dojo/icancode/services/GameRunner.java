@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.services;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -30,51 +30,40 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.icancode.model.Player;
-import com.codenjoy.dojo.icancode.model.interfaces.ILevel;
+import com.codenjoy.dojo.icancode.model.Level;
 import org.json.JSONObject;
 
+import static com.codenjoy.dojo.icancode.services.SettingsWrapper.*;
+import static com.codenjoy.dojo.services.multiplayer.MultiplayerType.*;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
 public class GameRunner extends AbstractGameType implements GameType  {
-
-    private Parameter<Integer> isTrainingMode;
 
     public GameRunner() {
         setupSettings();
     }
 
-    @SuppressWarnings("unchecked")
     private void setupSettings() {
-        new Scores(0, settings);
-        isTrainingMode = settings
-                .addEditBox("Is training mode")
-                .type(Integer.class).def(1);
+        SettingsWrapper.setup(settings);
     }
     
     @Override
     public PlayerScores getPlayerScores(Object score) {
-        return new Scores((Integer)score, settings);
+        return new Scores((Integer)score, SettingsWrapper.data);
     }
 
     @Override
     public GameField createGame(int levelNumber) {
+        Level level = loadLevel(levelNumber);
         boolean isSingle = levelNumber < getMultiplayerType().getLevelsCount();
-        if (isSingle) {
-            ILevel levels = loadLevel(levelNumber);
-            return new ICanCode(levels,
-                    getDice(),
-                    ICanCode.SINGLE);
-        } else {
-            return new ICanCode(Levels.getMultiple(),
-                    getDice(),
-                    ICanCode.MULTIPLE);
-        }
+        return new ICanCode(level, getDice(), isSingle ? ICanCode.TRAINING : ICanCode.CONTEST);
     }
 
     @Override
@@ -89,15 +78,31 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TRAINING.apply(Levels.getSingleMaps().size());
+        int count = Levels.all().size();
+        int roomSize = SettingsWrapper.data.roomSize();
+
+        switch (SettingsWrapper.data.gameMode()) {
+            default:
+            case CLASSSIC_TRAINING:
+                return TRAINING.apply(count);
+
+            case ALL_SINGLE:
+                return SINGLE_LEVELS.apply(count);
+
+            case ALL_IN_ROOMS:
+                return MULTIPLE_LEVELS.apply(roomSize, count);
+
+            case TRAINING_MULTIMAP:
+                return MULTIPLE_LEVELS_MULTIROOM.apply(roomSize, count);
+        }
     }
 
-    public ILevel loadLevel(int level) {
+    public Level loadLevel(int level) {
         return Levels.loadLevel(level);
     }
 
     @Override
-    public Enum[] getPlots() {
+    public CharElements[] getPlots() {
         return Elements.values();
     }
 
@@ -112,8 +117,8 @@ public class GameRunner extends AbstractGameType implements GameType  {
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerName) {
-        if (isTrainingMode.getValue() == 0) { // TODO найти как это загрузить
+    public GamePlayer createPlayer(EventListener listener, String playerId) {
+        if (SettingsWrapper.data.isTrainingMode()) { // TODO найти как это загрузить
 //            int total = Levels.collectSingle().size();
 //            save = "{'total':" + total + ",'current':0,'lastPassed':" + (total - 1) + ",'multiple':true}";
         }

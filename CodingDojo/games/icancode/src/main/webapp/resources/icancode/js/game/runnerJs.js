@@ -1,6 +1,6 @@
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -157,6 +157,9 @@ function initRunnerJs(game, libs, getLevelInfo, storage) {
         },
         runProgram : function(robot) {
             runProgram(functionToRun, robot);
+        },
+        levelUpdate: function(level, multiple, lastPassed) {
+            // do nothing
         }
     };
 }

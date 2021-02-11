@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.model;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -23,28 +23,29 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import org.junit.Ignore;
+import com.codenjoy.dojo.services.Game;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.expansion.model.AbstractSinglePlayersTest.*;
 import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Sanja on 15.02.14.
  */
-@Ignore("TODO: пофиксить создание игры")
 public class GameRunnerTest extends AbstractGameRunnerTest {
 
     @Test
     public void shouldCreateSixPlayersInTwoDifferentRooms() {
         givenLevels();
 
-        createNewGame(); // LEVEL1
-        createNewGame(0); // first free room
-        createNewGame(0); // first free room
-        createNewGame(0); // first free room
-        createNewGame(); // Next level is LEVEL2
-        createNewGame(0); // first free room
+        createNewGame(0); // LEVEL1
+        createNewGame(); // first free room
+        createNewGame(); // first free room
+        createNewGame(); // first free room
+        createNewGame(1); // Next level is LEVEL2
+        createNewGame(); // first free room
 
         String level1 =
                 "╔════┐\n" +
@@ -60,10 +61,10 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
                 "------\n" +
                 "-♠--♣-\n" +
                 "------\n";
-        assertL(level1, AbstractSinglePlayersTest.PLAYER1);
-        assertE(forces1, AbstractSinglePlayersTest.PLAYER1);
-        assertL(level1, AbstractSinglePlayersTest.PLAYER2);
-        assertE(forces1, AbstractSinglePlayersTest.PLAYER2);
+        assertL(level1, PLAYER1);
+        assertE(forces1, PLAYER1);
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
         assertL(level1, AbstractSinglePlayersTest.PLAYER3);
         assertE(forces1, AbstractSinglePlayersTest.PLAYER3);
         assertL(level1, AbstractSinglePlayersTest.PLAYER4);
@@ -93,8 +94,8 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
     public void shouldNextTwoPlayersGoToSecondRoom() {
         shouldCreateSixPlayersInTwoDifferentRooms();
 
-        createNewGame(0); // first free room
-        createNewGame(0); // first free room
+        createNewGame(); // first free room
+        createNewGame(); // first free room
 
         String level2 =
                 "╔════┐\n" +
@@ -114,18 +115,24 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
         assertE(forces2, AbstractSinglePlayersTest.PLAYER5);
         assertL(level2, AbstractSinglePlayersTest.PLAYER6);
         assertE(forces2, AbstractSinglePlayersTest.PLAYER6);
-        assertL(level2, AbstractSinglePlayersTest.PLAYER7);
-        assertE(forces2, AbstractSinglePlayersTest.PLAYER7);
-        assertL(level2, AbstractSinglePlayersTest.PLAYER8);
-        assertE(forces2, AbstractSinglePlayersTest.PLAYER8);
+        assertL(level2, PLAYER7);
+        assertE(forces2, PLAYER7);
+        assertL(level2, PLAYER8);
+        assertE(forces2, PLAYER8);
     }
 
     @Test
     public void shouldWhenOneUserShouldResetLevelThenGoToAnotherFreeRoom() {
         shouldCreateSixPlayersInTwoDifferentRooms();
 
-        game(AbstractSinglePlayersTest.PLAYER1).getJoystick().act(0); // player want to leave room
-        gotoFreeRoom(1); // select free room with index 1 (PLAYER5, PLAYER6)
+        Game game = game(PLAYER1);
+
+        assertEquals(false, game.isGameOver());
+        game.getJoystick().act(0); // player want to leave room
+        assertEquals(true, game.isGameOver());
+
+        destroy(PLAYER1); // this framework will do
+        createNewGame(); // select free room with index 1 (PLAYER5, PLAYER6)
         tickAll();
 
         String level1 =
@@ -142,8 +149,8 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
                 "------\n" +
                 "-♠--♣-\n" +
                 "------\n";
-        assertL(level1, AbstractSinglePlayersTest.PLAYER2);
-        assertE(forces1, AbstractSinglePlayersTest.PLAYER2);
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
         assertL(level1, AbstractSinglePlayersTest.PLAYER3);
         assertE(forces1, AbstractSinglePlayersTest.PLAYER3);
         assertL(level1, AbstractSinglePlayersTest.PLAYER4);
@@ -167,8 +174,8 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
         assertE(forces2, AbstractSinglePlayersTest.PLAYER5);
         assertL(level2, AbstractSinglePlayersTest.PLAYER6);
         assertE(forces2, AbstractSinglePlayersTest.PLAYER6);
-        assertL(level2, AbstractSinglePlayersTest.PLAYER1);
-        assertE(forces2, AbstractSinglePlayersTest.PLAYER1);
+        assertL(level2, PLAYER7);
+        assertE(forces2, PLAYER7);
 
     }
 
@@ -176,7 +183,7 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
     public void shouldWhenOneUserShouldResetLevelThenGoToAnotherFreeRoom_caseSameRoom() {
         shouldCreateSixPlayersInTwoDifferentRooms();
 
-        game(AbstractSinglePlayersTest.PLAYER1).getJoystick().act(0); // player want to leave room
+        game(PLAYER1).getJoystick().act(0); // player want to leave room
         gotoFreeRoom(0); // select free room with index 0 (PLAYER2, PLAYER3, PLAYER4)
         tickAll();
 
@@ -194,10 +201,10 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
                 "------\n" +
                 "-♠--♣-\n" +
                 "------\n";
-        assertL(level1, AbstractSinglePlayersTest.PLAYER1);
-        assertE(forces1, AbstractSinglePlayersTest.PLAYER1);
-        assertL(level1, AbstractSinglePlayersTest.PLAYER2);
-        assertE(forces1, AbstractSinglePlayersTest.PLAYER2);
+        assertL(level1, PLAYER1);
+        assertE(forces1, PLAYER1);
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
         assertL(level1, AbstractSinglePlayersTest.PLAYER3);
         assertE(forces1, AbstractSinglePlayersTest.PLAYER3);
         assertL(level1, AbstractSinglePlayersTest.PLAYER4);
@@ -221,64 +228,13 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
         assertE(forces2, AbstractSinglePlayersTest.PLAYER5);
         assertL(level2, AbstractSinglePlayersTest.PLAYER6);
         assertE(forces2, AbstractSinglePlayersTest.PLAYER6);
-    }
-
-    @Test
-    public void shouldNewUserCanGoToAnyFreeRoomAtThisMoment_oneOneRoom() {
-        shouldWhenOneUserShouldResetLevelThenGoToAnotherFreeRoom();
-
-        createNewGame(0); // first free room (PLAYER2, PLAYER3, PLAYER4)
-
-        String level1 =
-                "╔════┐\n" +
-                "║1..2│\n" +
-                "║....│\n" +
-                "║....│\n" +
-                "║4..3│\n" +
-                "└────┘\n";
-        String forces1 =
-                "------\n" +
-                "-♥--♦-\n" +
-                "------\n" +
-                "------\n" +
-                "-♠--♣-\n" +
-                "------\n";
-        assertL(level1, AbstractSinglePlayersTest.PLAYER2);
-        assertE(forces1, AbstractSinglePlayersTest.PLAYER2);
-        assertL(level1, AbstractSinglePlayersTest.PLAYER3);
-        assertE(forces1, AbstractSinglePlayersTest.PLAYER3);
-        assertL(level1, AbstractSinglePlayersTest.PLAYER4);
-        assertE(forces1, AbstractSinglePlayersTest.PLAYER4);
-        assertL(level1, AbstractSinglePlayersTest.PLAYER7);
-        assertE(forces1, AbstractSinglePlayersTest.PLAYER7);
-
-        String level2 =
-                "╔════┐\n" +
-                "║..1.│\n" +
-                "║4...│\n" +
-                "║...2│\n" +
-                "║.3..│\n" +
-                "└────┘\n";
-        String forces2 =
-                "------\n" +
-                "---♥--\n" +
-                "------\n" +
-                "----♦-\n" +
-                "--♣---\n" +
-                "------\n";
-        assertL(level2, AbstractSinglePlayersTest.PLAYER5);
-        assertE(forces2, AbstractSinglePlayersTest.PLAYER5);
-        assertL(level2, AbstractSinglePlayersTest.PLAYER6);
-        assertE(forces2, AbstractSinglePlayersTest.PLAYER6);
-        assertL(level2, AbstractSinglePlayersTest.PLAYER1);
-        assertE(forces2, AbstractSinglePlayersTest.PLAYER1);
     }
 
     @Test
     public void shouldNewUserCanGoToAnyFreeRoomAtThisMoment_anotherOneRoom() {
         shouldWhenOneUserShouldResetLevelThenGoToAnotherFreeRoom();
 
-        createNewGame(1); // second free room (PLAYER5, PLAYER6, PLAYER1)
+        createNewGame(); // second free room (PLAYER5, PLAYER6, PLAYER7(1))
 
         String level1 =
                 "╔════┐\n" +
@@ -294,8 +250,8 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
                 "------\n" +
                 "-♠--♣-\n" +
                 "------\n";
-        assertL(level1, AbstractSinglePlayersTest.PLAYER2);
-        assertE(forces1, AbstractSinglePlayersTest.PLAYER2);
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
         assertL(level1, AbstractSinglePlayersTest.PLAYER3);
         assertE(forces1, AbstractSinglePlayersTest.PLAYER3);
         assertL(level1, AbstractSinglePlayersTest.PLAYER4);
@@ -319,19 +275,19 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
         assertE(forces2, AbstractSinglePlayersTest.PLAYER5);
         assertL(level2, AbstractSinglePlayersTest.PLAYER6);
         assertE(forces2, AbstractSinglePlayersTest.PLAYER6);
-        assertL(level2, AbstractSinglePlayersTest.PLAYER1);
-        assertE(forces2, AbstractSinglePlayersTest.PLAYER1);
-        assertL(level2, AbstractSinglePlayersTest.PLAYER7);
-        assertE(forces2, AbstractSinglePlayersTest.PLAYER7);
+        assertL(level2, PLAYER7);
+        assertE(forces2, PLAYER7);
+        assertL(level2, PLAYER8);
+        assertE(forces2, PLAYER8);
     }
 
     @Test
     public void shouldNewUserCanGoToAnyFreeRoomAtThisMoment_caseWhenBaseIsBusyInFRoomWith3Players() {
         shouldWhenOneUserShouldResetLevelThenGoToAnotherFreeRoom();
 
-        goTimes(AbstractSinglePlayersTest.PLAYER2, pt(4, 4), 4).left();
+        goTimes(PLAYER2, pt(4, 4), 4).left();
 
-        createNewGame(0); // first free room is (PLAYER5, PLAYER6, PLAYER1)
+        createNewGame(); // first free room is (PLAYER5, PLAYER6, PLAYER7(1))
         // because base in first room is busy by another player
 
         String level1 =
@@ -348,8 +304,8 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
                 "------\n" +
                 "-♠--♣-\n" +
                 "------\n";
-        assertL(level1, AbstractSinglePlayersTest.PLAYER2);
-        assertE(forces1, AbstractSinglePlayersTest.PLAYER2);
+        assertL(level1, PLAYER2);
+        assertE(forces1, PLAYER2);
         assertL(level1, AbstractSinglePlayersTest.PLAYER3);
         assertE(forces1, AbstractSinglePlayersTest.PLAYER3);
         assertL(level1, AbstractSinglePlayersTest.PLAYER4);
@@ -373,10 +329,10 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
         assertE(forces2, AbstractSinglePlayersTest.PLAYER5);
         assertL(level2, AbstractSinglePlayersTest.PLAYER6);
         assertE(forces2, AbstractSinglePlayersTest.PLAYER6);
-        assertL(level2, AbstractSinglePlayersTest.PLAYER1);
-        assertE(forces2, AbstractSinglePlayersTest.PLAYER1);
-        assertL(level2, AbstractSinglePlayersTest.PLAYER7);
-        assertE(forces2, AbstractSinglePlayersTest.PLAYER7);
+        assertL(level2, PLAYER7);
+        assertE(forces2, PLAYER7);
+        assertL(level2, PLAYER8);
+        assertE(forces2, PLAYER8);
     }
 
     @Test
@@ -386,8 +342,8 @@ public class GameRunnerTest extends AbstractGameRunnerTest {
             data.roundTicks(10);
             shouldCreateSixPlayersInTwoDifferentRooms();
 
-            destroy(AbstractSinglePlayersTest.PLAYER1);
-            destroy(AbstractSinglePlayersTest.PLAYER2);
+            destroy(PLAYER1);
+            destroy(PLAYER2);
 
             String level1 =
                     "╔════┐\n" +

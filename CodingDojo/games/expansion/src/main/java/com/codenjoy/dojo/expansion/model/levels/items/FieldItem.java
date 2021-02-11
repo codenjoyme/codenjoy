@@ -2,7 +2,7 @@ package com.codenjoy.dojo.expansion.model.levels.items;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -24,20 +24,20 @@ package com.codenjoy.dojo.expansion.model.levels.items;
 
 
 import com.codenjoy.dojo.expansion.model.Elements;
-import com.codenjoy.dojo.expansion.model.Field;
+import com.codenjoy.dojo.expansion.model.IField;
 
 /**
  * Created by Mikhail_Udalyi on 05.07.2016.
  */
 public class FieldItem extends BaseItem {
 
-    protected Field field;
+    protected IField field;
 
     public FieldItem(Elements element) {
         super(element);
     }
 
-    public void setField(Field value) {
+    public void setField(IField value) {
         field = value;
     }
 

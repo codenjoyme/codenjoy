@@ -1,29 +1,33 @@
-Чтобы настроить клиент сделай следующее:
-- установи Java (JDK 7 или 8)
-- установи Maven3
-- импортируй текущий проект как Maven project в Intellij Idea (Eclipse не рекомендуется)
-- если нет интернета и не будет хватать engine dependency
-    = на странице http://host/codenjoy-contest/help можно скачать zip с этим dependency
-        ~ тут host
-            = server_ip:8080 для игры с сервером поднятым в локальной сети
-            = codenjoy.com для игры с общим сервером размещенным в интернете
-    = там же есть инструкции по игре
-- в классе .\src\main\java\com\codenjoy\dojo\<game_package>\client\YourSolver.java
-    = впиши имейл с которым ты регистрировался на сервере в константу USER_NAME
-    = напиши свою логику в методе
-        public String get(Board board) {
-    = запусти YourSolver класс как main метод
-        ~ обрати внимание, что для игры с локальным сервером в main методе стоит расскоментировать строчку
-            WebSocketRunner.runOnServer("192.168.1.1:8080", // to use for local server
-        ~ указать IP сервера
-        ~ и закомментировать строчку для подключения к удаленному серверу
-            WebSocketRunner.run(WebSocketRunner.Host.REMOTE, // to use for codenjoy.com server
-    = загляни на http://host/codenjoy-contest/board/game/<game_name>
-      твой бот должен был начать двигаться
-    = перезапусти процесс, если сделал изменения
-        ~ внимание! только один YourSolver за раз можно запустить - следи за этим
-- в классе .\src\main\java\com\codenjoy\dojo\<game_package>\client\Board.java
-    = можешь дополнять воспомагательные методы для парсинга борды из строки
-- В тестовом пакете .\src\test\java\com\codenjoy\dojo\<game_package>\client
-    = можешь размещать свои тесты
+For NonJava languages:
+- please go to .\src\main\<language>
+- chose your language
+- and follow README.md instructions
+
+For Java:
+- setup Java (JDK 8/11)
+    + setup JAVA_HOME variable
+- setup Maven3
+    + setup M2_HOME variable
+    + setup Path variable
+    + open cmd and run command 'mvn -version' it should print valid java and maven location
+- import this project as Maven project into Intellij Idea (Eclipse/ is not recommended)
+- please install Engine dependency
+    + on page http://server/codenjoy-contest/help
+        * you can download zip with dependency
+            - server = server_host_ip:8080 server ip inside your LAN
+            - server = codenjoy.com if you play on http://codenjoy.com/codenjoy-contest
+        * on this page you can also read game instructions
+- register your hero on server http://server/codenjoy-contest/register
+- in class .\src\main\java\com\codenjoy\dojo\<gamename>\client\YourSolver.java
+    + copy board page browser url from address bar and paste into main method
+    + implement logic inside method
+        * public String get(Board board) {
+    + run main method of YourSolver class
+    + on page http://server/codenjoy-contest/board/game/<gamename> you can check the leaderboard - your bot should move
+    + if something changed - restart the process
+        * warning! only one instance of YourSolver class you can run per player - please check this
+- in class .\src\main\java\com\codenjoy\dojo\<gamename>\client\Board.java
+    + you can add you own methods for work with board
+- in test package .\src\test\java\com\codenjoy\dojo\<gamename>\client
+    + you can write yor own test
 - Codenjoy!

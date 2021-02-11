@@ -2,7 +2,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 /*-
  * #%L
- * iCanCode - it's a dojo-like platform from developers to developers.
+ * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
  * Copyright (C) 2018 Codenjoy
  * %%
@@ -23,9 +23,7 @@ package com.codenjoy.dojo.icancode.model.items;
  */
 
 
-import com.codenjoy.dojo.icancode.model.interfaces.IItem;
-import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.Hero;
+import com.codenjoy.dojo.icancode.model.*;
 
 public class Hole extends BaseItem {
 
@@ -34,7 +32,7 @@ public class Hole extends BaseItem {
     }
 
     @Override
-    public void action(IItem item) {
+    public void action(Item item) {
         HeroItem heroItem = getIf(item, HeroItem.class);
         if (heroItem == null) {
             return;

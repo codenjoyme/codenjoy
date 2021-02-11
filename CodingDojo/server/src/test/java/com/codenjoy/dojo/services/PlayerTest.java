@@ -43,14 +43,14 @@ public class PlayerTest {
         assertEquals("vasia", player.toString());
 
         assertEquals("http://valia:8888/", player.getCallbackUrl());
-        assertEquals("vasia", player.getName());
+        assertEquals("vasia", player.getId());
         assertEquals(null, player.getPassword());
         assertNull(player.getCode());
         assertEquals(123, player.getScore());
         assertEquals("game", player.getGameName());
 
-        player.setName("katya");
-        assertEquals("katya", player.getName());
+        player.setId("katya");
+        assertEquals("katya", player.getId());
 
         player.setCallbackUrl("http://katya:8888/");
         assertEquals("http://katya:8888/", player.getCallbackUrl());

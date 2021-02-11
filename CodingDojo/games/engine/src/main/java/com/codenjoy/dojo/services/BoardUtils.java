@@ -22,11 +22,14 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import lombok.experimental.UtilityClass;
+
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
+@UtilityClass
 public class BoardUtils {
 
     public static final Point NO_SPACE = pt(0, 0);

@@ -96,27 +96,27 @@ var Elements = {
     BATTLE_WALL: '☼',
     BANG: 'Ѡ',
 
-    CONSTRUCTION: '╬',
+    WALL: '╬',
 
-    CONSTRUCTION_DESTROYED_DOWN: '╩',
-    CONSTRUCTION_DESTROYED_UP: '╦',
-    CONSTRUCTION_DESTROYED_LEFT: '╠',
-    CONSTRUCTION_DESTROYED_RIGHT: '╣',
+    WALL_DESTROYED_DOWN: '╩',
+    WALL_DESTROYED_UP: '╦',
+    WALL_DESTROYED_LEFT: '╠',
+    WALL_DESTROYED_RIGHT: '╣',
 
-    CONSTRUCTION_DESTROYED_DOWN_TWICE: '╨',
-    CONSTRUCTION_DESTROYED_UP_TWICE: '╥',
-    CONSTRUCTION_DESTROYED_LEFT_TWICE: '╞',
-    CONSTRUCTION_DESTROYED_RIGHT_TWICE: '╡',
+    WALL_DESTROYED_DOWN_TWICE: '╨',
+    WALL_DESTROYED_UP_TWICE: '╥',
+    WALL_DESTROYED_LEFT_TWICE: '╞',
+    WALL_DESTROYED_RIGHT_TWICE: '╡',
 
-    CONSTRUCTION_DESTROYED_LEFT_RIGHT: '│',
-    CONSTRUCTION_DESTROYED_UP_DOWN: '─',
+    WALL_DESTROYED_LEFT_RIGHT: '│',
+    WALL_DESTROYED_UP_DOWN: '─',
 
-    CONSTRUCTION_DESTROYED_UP_LEFT: '┌',
-    CONSTRUCTION_DESTROYED_RIGHT_UP: '┐',
-    CONSTRUCTION_DESTROYED_DOWN_LEFT: '└',
-    CONSTRUCTION_DESTROYED_DOWN_RIGHT: '┘',
+    WALL_DESTROYED_UP_LEFT: '┌',
+    WALL_DESTROYED_RIGHT_UP: '┐',
+    WALL_DESTROYED_DOWN_LEFT: '└',
+    WALL_DESTROYED_DOWN_RIGHT: '┘',
 
-    CONSTRUCTION_DESTROYED: ' ',
+    WALL_DESTROYED: ' ',
 
     BULLET: '•',
 
@@ -370,21 +370,21 @@ var Board = function(board){
     var getBarriers = function() {
         var result = [];
         result = result.concat(findAll(Elements.BATTLE_WALL));
-        result = result.concat(findAll(Elements.CONSTRUCTION));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_TWICE));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_TWICE));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT_TWICE));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT_TWICE));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_LEFT_RIGHT));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_DOWN));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_UP_LEFT));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_RIGHT_UP));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_LEFT));
-        result = result.concat(findAll(Elements.CONSTRUCTION_DESTROYED_DOWN_RIGHT));
+        result = result.concat(findAll(Elements.WALL));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_DOWN));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_UP));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_LEFT));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_RIGHT));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_DOWN_TWICE));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_UP_TWICE));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_LEFT_TWICE));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_RIGHT_TWICE));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_LEFT_RIGHT));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_UP_DOWN));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_UP_LEFT));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_RIGHT_UP));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_DOWN_LEFT));
+        result = result.concat(findAll(Elements.WALL_DESTROYED_DOWN_RIGHT));
         return sort(result);
     };
 

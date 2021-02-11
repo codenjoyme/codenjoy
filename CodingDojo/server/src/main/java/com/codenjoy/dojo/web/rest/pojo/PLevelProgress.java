@@ -23,28 +23,14 @@ package com.codenjoy.dojo.web.rest.pojo;
  */
 
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
+@Setter
 public class PLevelProgress extends LevelProgress {
-
-    public PLevelProgress() {
-        super();
-    }
-
+    
     public PLevelProgress(LevelProgress progress) {
         super(progress.getTotal(), progress.getCurrent(), progress.getPassed());
     }
-
-    public void setTotal(int total) {
-        this.total = total;
-    }
-
-    public void setCurrent(int current) {
-        this.current = current;
-    }
-
-    public void setPassed(int passed) {
-        this.passed = passed;
-    }
-
 }
