@@ -22,7 +22,6 @@ package com.codenjoy.dojo.loderunner;
  * #L%
  */
 
-import com.codenjoy.dojo.services.settings.EditBox;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 
@@ -51,10 +50,5 @@ public class TestSettings extends SettingsImpl {
 
     private Parameter<?> editBox(String name) {
         return super.addEditBox(name);
-    }
-
-    @Override
-    public Parameter<?> addEditBox(String name) {
-        return new EditBox<>(name);
     }
 }
