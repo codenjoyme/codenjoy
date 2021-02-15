@@ -2538,7 +2538,7 @@ public class ICanCodeTest extends AbstractGameTest {
     @Test
     public void shouldStart_whenSeveralStarts_case1() {
         // given
-        when(dice.next(anyInt())).thenReturn(0);
+        dice(0);
 
         givenFl("╔═════┐" +
                 "║S...S│" +
@@ -2572,7 +2572,7 @@ public class ICanCodeTest extends AbstractGameTest {
     @Test
     public void shouldStart_whenSeveralStarts_case2() {
         // given
-        when(dice.next(anyInt())).thenReturn(1);
+        dice(1);
 
         givenFl("╔═════┐" +
                 "║S...S│" +
@@ -2606,7 +2606,7 @@ public class ICanCodeTest extends AbstractGameTest {
     @Test
     public void shouldStart_whenSeveralStarts_case3() {
         // given
-        when(dice.next(anyInt())).thenReturn(2);
+        dice(2);
 
         givenFl("╔═════┐" +
                 "║S...S│" +
@@ -2640,7 +2640,7 @@ public class ICanCodeTest extends AbstractGameTest {
     @Test
     public void shouldStart_whenSeveralStarts_case4() {
         // given
-        when(dice.next(anyInt())).thenReturn(3);
+        dice(3);
 
         givenFl("╔═════┐" +
                 "║S...S│" +

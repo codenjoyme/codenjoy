@@ -259,7 +259,7 @@ public class ICanCodePerkTest extends AbstractGameTest {
         // given
         game = new ICanCode(mock(Level.class), dice, TRAINING);
         settings.perkDropRatio(0);
-        when(dice.next(anyInt())).thenReturn(100);
+        dice(100);
 
         // when
         Optional<AbstractPerk> nextPerk = game.dropNextPerk();
@@ -272,9 +272,7 @@ public class ICanCodePerkTest extends AbstractGameTest {
     public void doDropNextPerk() {
         // given
         game = new ICanCode(mock(Level.class), dice, TRAINING);
-        when(dice.next(anyInt()))
-                .thenReturn(0)
-                .thenReturn(new Random().nextInt(Elements.getPerks().size()));
+        dice(0, 1);
 
         // when
         Optional<AbstractPerk> nextPerk = game.dropNextPerk();
