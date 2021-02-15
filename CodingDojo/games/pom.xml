@@ -364,8 +364,7 @@
                                                src/test/${client.java.package}/client/*.java,
                                                README.*,
                                                src/license/**,
-                                               **/pom.xml,
-                                               src/main/resources/logback.xml"
+                                               **/pom.xml"
                                          excludes="src/main/${client.java.package}/client/ai/*,
                                                src/test/${client.java.package}/client/ai/*,
                                                **/target/**"
@@ -381,6 +380,7 @@
                                          update="true"/>
 
                                     <!-- используется для отключения DEBUG информации в STDOUT java клиентов -->
+                                    <!-- TODO ??? если logback.xml уже есть в игре, то не добавлять пустой (пример expansion) -->
                                     <echo file="./target/stuff/logback.xml" append="false">
                                         <![CDATA[
                                             <configuration></configuration>
