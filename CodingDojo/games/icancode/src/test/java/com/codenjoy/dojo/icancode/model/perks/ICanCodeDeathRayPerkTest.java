@@ -207,8 +207,8 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "---♂--------" +
                 "------------" +
                 "------------");
-        assertTrue(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+        
+        heroHas(UnstoppableLaserPerk.class, true);
 
         hero.down();
         hero.fire();
@@ -226,10 +226,10 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "---✝--------" +
                 "---↓--------" +
                 "------------");
-        assertTrue(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
-        assertTrue(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof DeathRayPerk));
+        
+        heroHas(UnstoppableLaserPerk.class, true);
+        
+        heroHas(DeathRayPerk.class, true);
 
         game.tick();
 

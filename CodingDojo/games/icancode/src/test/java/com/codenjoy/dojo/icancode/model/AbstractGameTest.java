@@ -25,6 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
+import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
@@ -44,6 +45,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -163,5 +165,10 @@ public class AbstractGameTest {
 
     protected void assertF(String expected) {
         assertA(expected, LAYER3);
+    }
+
+    protected void heroHas(Class<? extends AbstractPerk> perkClass, boolean has) {
+        assertEquals(has, hero.getPerks().stream()
+                .anyMatch(perk -> perk.getClass().equals(perkClass)));
     }
 }

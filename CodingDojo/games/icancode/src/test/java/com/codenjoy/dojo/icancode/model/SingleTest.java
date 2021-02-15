@@ -4463,6 +4463,7 @@ public class SingleTest {
                 "║..E.│" +
                 "║....│" +
                 "└────┘");
+
         setGoldCount(hero1(), 1);
 
         hero2().right();
@@ -4477,6 +4478,7 @@ public class SingleTest {
                 "------" +
                 "------" +
                 "------");
+
         assertE(single2,
                 "------" +
                 "--X-☺-" +
@@ -4496,6 +4498,7 @@ public class SingleTest {
                 "------" +
                 "------" +
                 "------");
+
         assertE(single2,
                 "------" +
                 "--X←☺-" +
@@ -4513,6 +4516,7 @@ public class SingleTest {
                 "------" +
                 "------" +
                 "------");
+
         assertL(single1,
                 "╔════┐" +
                 "║$S..│" +

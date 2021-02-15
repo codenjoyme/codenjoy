@@ -29,8 +29,6 @@ import com.codenjoy.dojo.icancode.model.Level;
 import com.codenjoy.dojo.icancode.model.items.Floor;
 import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
 import java.util.Optional;
@@ -143,8 +141,7 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        assertTrue(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+        heroHas(UnstoppableLaserPerk.class, true);
     }
 
     @Test
@@ -241,24 +238,20 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        assertTrue(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+        heroHas(UnstoppableLaserPerk.class, true);
 
         // then
         game.tick();
 
-        assertTrue(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+        heroHas(UnstoppableLaserPerk.class, true);
 
         game.tick();
 
-        assertTrue(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+        heroHas(UnstoppableLaserPerk.class, true);
 
         game.tick();
 
-        assertFalse(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk));
+        heroHas(UnstoppableLaserPerk.class, false);
     }
 
     @Test
