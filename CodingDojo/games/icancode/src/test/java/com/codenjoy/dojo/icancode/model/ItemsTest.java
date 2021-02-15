@@ -43,6 +43,9 @@ public class ItemsTest {
 
         assertEquals(LAYER1, new Hole(Elements.HOLE).layer());
         assertEquals(LAYER2, new Laser(Elements.LASER_UP).layer());
+        assertEquals(LAYER2, new Laser(Elements.LASER_DOWN).layer());
+        assertEquals(LAYER2, new Laser(Elements.LASER_LEFT).layer());
+        assertEquals(LAYER2, new Laser(Elements.LASER_RIGHT).layer());
         assertEquals(LAYER1, new LaserMachine(Elements.LASER_MACHINE_CHARGING_DOWN).layer());
         assertEquals(LAYER1, new Start(Elements.START).layer());
         assertEquals(LAYER1, new Wall(Elements.WALL_BACK).layer());
