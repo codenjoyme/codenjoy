@@ -1,7 +1,7 @@
 // vendor
 import React, { PureComponent } from 'react';
 import { NavLink } from 'react-router-dom';
-import logo from './game-logo.png';
+import logo from './icancode/game-logo.png';
 import avaDefault from './icon_ava_default.svg';
 import classnames from 'classnames';
 
