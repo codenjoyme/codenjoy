@@ -4,6 +4,8 @@
     background: rgb( 45, 45, 45 , 0.3) url(./../../styles/images/layout/icancode/dark.jpg);
     background-size: cover;
     background-repeat: no-repeat;
+    background-blend-mode: overlay;
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -84,7 +86,7 @@
 .prizeImage {
     margin: 10px;
     height: 260px;
-    margin-top: -30px;
+    margin-top: 200px;
 }
 
 .prizeList {
