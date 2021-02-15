@@ -57,6 +57,7 @@ public class LocalGameRunner {
     public static String showPlayers = null;
     public static boolean exit = false;
     public static int waitForPlayers = 1;
+    public static int levelNumber = LevelProgress.levelsStartsFrom1;
 
     private GameField field;
     private List<Game> games;
@@ -97,7 +98,7 @@ public class LocalGameRunner {
         games = new LinkedList<>();
         scores = new LinkedList<>();
 
-        field = gameType.createGame(LevelProgress.levelsStartsFrom1);
+        field = gameType.createGame(levelNumber);
     }
 
     public LocalGameRunner run(Consumer<Integer> onTick) {
