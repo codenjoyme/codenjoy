@@ -990,6 +990,5 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
                 "-------" +
                 "-------" +
                 "-------");
-        assertEquals(true, player.isAlive());
     }
 }
