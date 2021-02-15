@@ -164,12 +164,6 @@ public enum Elements implements CharElements {
                 UNLIMITED_FIRE_PERK);
     }
 
-    // TODO refactoring needed
-    public static Elements getRandomPerk(Dice dice) {
-        List<Elements> perks = getPerks();
-        return perks.get(dice.next(perks.size()));
-    }
-
     public int getLayer() {
         return layer;
     }

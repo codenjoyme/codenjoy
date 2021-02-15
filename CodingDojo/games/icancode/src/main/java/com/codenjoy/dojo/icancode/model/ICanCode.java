@@ -23,10 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 import com.codenjoy.dojo.icancode.model.items.*;
-import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
-import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
-import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
-import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
+import com.codenjoy.dojo.icancode.model.perks.*;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
@@ -44,6 +41,7 @@ public class ICanCode implements Tickable, Field {
     public static final boolean CONTEST = true;
 
     private static final int MAX = 10;
+    public static final int MAX_PERCENTS = 100;
 
     private Dice dice;
     private Level level;
@@ -271,23 +269,13 @@ public class ICanCode implements Tickable, Field {
         return result;
     }
 
-    // TODO refactoring needed
     @Override
     public Optional<AbstractPerk> dropNextPerk() {
-        if (dice.next(100) > SettingsWrapper.data.perkDropRatio()) {
+        if (dice.next(MAX_PERCENTS) > SettingsWrapper.data.perkDropRatio()) {
             return Optional.empty();
         }
-        Elements element = Elements.getRandomPerk(dice);
-        switch (element) {
-            case UNSTOPPABLE_LASER_PERK:
-                return Optional.of(new UnstoppableLaserPerk(element));
-            case DEATH_RAY_PERK:
-                return Optional.of(new DeathRayPerk(element));
-            case UNLIMITED_FIRE_PERK:
-                return Optional.of(new UnlimitedFirePerk(element));
-            default:
-                return Optional.empty();
-        }
+
+        return PerkUtils.random(dice);
     }
 
     // TODO refactoring needed
