@@ -42,7 +42,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ICanCodeAbstractPerkTest extends AbstractGameTest {
+public class ICanCodePerkTest extends AbstractGameTest {
 
     @Test
     public void perkAppear_afterZombieDie() {
@@ -327,7 +327,7 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void goldStateWithUnstoppableLaserPerk() {
+    public void goldState_withUnstoppableLaserPerk() {
         // given
         Gold gold = new Gold(Elements.GOLD);
 
@@ -339,7 +339,7 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void goldStateWithDeathRayPerk() {
+    public void goldState_withDeathRayPerk() {
         // given
         Gold gold = new Gold(Elements.GOLD);
 
@@ -351,7 +351,7 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void goldStateWithUnlimitedFirePerk() {
+    public void goldState_withUnlimitedFirePerk() {
         // given
         Gold gold = new Gold(Elements.GOLD);
 
@@ -363,7 +363,7 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void floorStateWithUnstoppableLaserPerk() {
+    public void floorState_withUnstoppableLaserPerk() {
         // given
         Floor floor = new Floor(FLOOR);
 
@@ -375,7 +375,7 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void floorStateWithDeathRayPerk() {
+    public void floorState_withDeathRayPerk() {
         // given
         Floor floor = new Floor(FLOOR);
 
@@ -387,7 +387,7 @@ public class ICanCodeAbstractPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void floorStateWithUnlimitedFirePerk() {
+    public void floorState_withUnlimitedFirePerk() {
         // given
         Floor floor = new Floor(FLOOR);
 

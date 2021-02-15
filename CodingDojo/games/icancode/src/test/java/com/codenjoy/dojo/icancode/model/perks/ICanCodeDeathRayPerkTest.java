@@ -38,7 +38,8 @@ import static org.junit.Assert.assertTrue;
 public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
 
     @Test
-    public void testDeathRayPerk() {
+    public void shouldDeathRayPerk() {
+        // given
         settings.deathRayRange(10);
 
         givenFl("╔══════════┐" +
@@ -53,6 +54,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║..........│" +
                 "║..........│" +
                 "└──────────┘");
+        
         game.move(new DeathRayPerk(DEATH_RAY_PERK), 3, 9);
         game.move(new Box(BOX), 3, 5);
 
@@ -68,6 +70,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║..........│" +
                 "║..........│" +
                 "└──────────┘");
+        
         assertE("------------" +
                 "---☺--------" +
                 "------------" +
@@ -81,9 +84,11 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------");
 
+        // when
         hero.down();
         game.tick();
 
+        // then
         assertE("------------" +
                 "------------" +
                 "---☺--------" +
@@ -96,13 +101,15 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------" +
                 "------------");
-        assertTrue(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof DeathRayPerk));
+        
+        heroHas(DeathRayPerk.class, true);
 
+        // when
         hero.down();
         hero.fire();
         game.tick();
 
+        // then
         assertE("------------" +
                 "------------" +
                 "---☺--------" +
@@ -115,11 +122,13 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------" +
                 "------------");
-        assertTrue(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof DeathRayPerk));
+        
+        heroHas(DeathRayPerk.class, true);
 
+        // when
         game.tick();
 
+        // then
         assertE("------------" +
                 "------------" +
                 "---☺--------" +
@@ -132,12 +141,13 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------" +
                 "------------");
-        assertTrue(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof DeathRayPerk));
+
+        heroHas(DeathRayPerk.class, true);
     }
 
     @Test
     public void deathRayAndUnstoppableLaser() {
+        // given
         settings.deathRayRange(10);
 
         givenFl("╔══════════┐" +
@@ -152,6 +162,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║..........│" +
                 "║..........│" +
                 "└──────────┘");
+        
         game.move(new DeathRayPerk(DEATH_RAY_PERK), 3, 9);
         game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 3, 8);
 
@@ -174,9 +185,11 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║..........│" +
                 "└──────────┘");
 
+        // when
         hero.down();
         game.tick();
 
+        // then
         assertE("------------" +
                 "------------" +
                 "---☺--------" +
@@ -189,12 +202,14 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "---♂--------" +
                 "------------" +
                 "------------");
-        assertTrue(hero.getPerks().stream()
-                .anyMatch(perk -> perk instanceof DeathRayPerk));
+        
+        heroHas(DeathRayPerk.class, true);
 
+        // when
         hero.down();
         game.tick();
 
+        // then
         assertE("------------" +
                 "------------" +
                 "------------" +
@@ -210,10 +225,12 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
         
         heroHas(UnstoppableLaserPerk.class, true);
 
+        // when
         hero.down();
         hero.fire();
         game.tick();
 
+        // then
         assertE("------------" +
                 "------------" +
                 "------------" +
@@ -231,8 +248,10 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
         
         heroHas(DeathRayPerk.class, true);
 
+        // when
         game.tick();
 
+        // then
         assertE("------------" +
                 "------------" +
                 "------------" +
@@ -249,12 +268,14 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
 
     @Test
     public void heroHasDeathRayPerk() {
+        // given
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
+
         game.move(new DeathRayPerk(DEATH_RAY_PERK), 2, 3);
 
         assertL("╔════┐" +
@@ -264,21 +285,25 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
+        // when
         hero.down();
         game.tick();
 
+        // then
         assertE("------" +
                 "------" +
                 "--☺---" +
                 "------" +
                 "------" +
                 "------");
+
         assertL("╔════┐" +
                 "║.S..│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
+
         assertTrue(hero.hasDeathRayPerk());
     }
 }
