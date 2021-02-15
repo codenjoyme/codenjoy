@@ -169,12 +169,12 @@ public class ScoresTest {
     @Test
     public void shouldCountKills() {
         int zombie = 2;
-        int heros = 1;
+        int heroes = 1;
         setEnableScoreKills(true);
 
         killZombieMultiple(zombie);
-        killHeroMultiple(heros);
+        killHeroMultiple(heroes);
 
-        assertEquals(killHeroScore * heros + killZombieScore * zombie, scores.getScore());
+        assertEquals(killHeroScore * heroes + killZombieScore * zombie, scores.getScore());
     }
 }
