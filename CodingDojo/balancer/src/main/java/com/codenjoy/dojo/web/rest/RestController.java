@@ -36,6 +36,7 @@ import com.codenjoy.dojo.web.controller.ErrorTicketService;
 import com.codenjoy.dojo.web.controller.LoginException;
 import com.codenjoy.dojo.web.controller.BalancerValidator;
 import com.codenjoy.dojo.web.rest.dto.*;
+import com.codenjoy.dojo.web.rest.dto.settings.AbstractSettings;
 import com.codenjoy.dojo.web.security.SecurityContextAuthenticator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -482,14 +483,14 @@ public class RestController {
     // TODO test me
     @GetMapping(GAME_SETTINGS + "/get")
     @ResponseBody
-    public List<GameSettings> getGameSettings() {
+    public List<AbstractSettings> getGameSettings() {
         return dispatcher.getGameSettings();
     }
 
     // TODO test me
     @PostMapping(GAME_SETTINGS + "/set")
     @ResponseStatus(HttpStatus.OK)
-    public void saveGameSettings(@RequestBody GameSettings gameSettings) {
+    public void saveGameSettings(@RequestBody AbstractSettings gameSettings) {
         dispatcher.updateGameSettings(gameSettings);
     }
 
