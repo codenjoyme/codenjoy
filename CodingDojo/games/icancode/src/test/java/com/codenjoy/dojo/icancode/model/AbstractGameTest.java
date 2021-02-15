@@ -65,6 +65,14 @@ public class AbstractGameTest {
 
     @Before
     public void setup() {
+        settings = SettingsWrapper.setup(new SettingsImpl())
+                .perkActivity(10)
+                .perkAvailability(10)
+                .perkDropRatio(100)
+                .deathRayRange(10)
+                .gunRecharge(0)
+                .gunRestTime(0)
+                .gunShotQueue(0);
         dice = mock(Dice.class);
     }
 
