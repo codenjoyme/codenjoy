@@ -4407,6 +4407,7 @@ public class SingleTest {
                 "------");
 
         // then
+        dice(0); // dice return always index 0
         tick();
 
         assertE(single1,
@@ -4457,6 +4458,7 @@ public class SingleTest {
 
     @Test
     public void dropTemporaryGold_onlyOnFloor() {
+        // given
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +
@@ -4487,6 +4489,7 @@ public class SingleTest {
                 "------" +
                 "------");
 
+        // when
         hero2().fire();
         hero2().left();
         tick();
@@ -4507,6 +4510,8 @@ public class SingleTest {
                 "------" +
                 "------");
 
+        // then
+        dice(0); // dice return always index 0
         tick();
 
         assertE(single1,
@@ -4581,6 +4586,7 @@ public class SingleTest {
                 "------");
 
         // then
+        dice(0); // dice return always index 0
         tick();
 
         assertE(single1,
@@ -4658,6 +4664,7 @@ public class SingleTest {
                 "------");
 
         // then
+        dice(0); // dice return always index 0
         tick();
 
         assertE(single1,
@@ -4736,6 +4743,7 @@ public class SingleTest {
                 "------");
 
         // then
+        dice(0); // dice return always index 0
         tick();
 
         assertE(single1,
@@ -4792,6 +4800,8 @@ public class SingleTest {
         // when
         hero2().fire();
         hero2().left();
+
+        dice(0); // dice return always index 0
         tick();
 
         // then

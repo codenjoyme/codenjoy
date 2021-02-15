@@ -43,6 +43,8 @@ public class ICanCode implements Tickable, Field {
     public static final boolean TRAINING = false;
     public static final boolean CONTEST = true;
 
+    private static final int MAX = 10;
+
     private Dice dice;
     private Level level;
 
@@ -293,38 +295,36 @@ public class ICanCode implements Tickable, Field {
     public void dropTemporaryGold(Hero hero) {
         Cell cell = hero.getItem().getCell();
         List<Cell> cells = getNeighborhoodCells(cell);
-        shuffle(cells, dice);
         int remaining = Math.min(hero.getGoldCount(), cells.size());
-        for (int i = 0; i < cells.size() && remaining > 0; i++) {
-            Cell next = cells.get(i);
-            if (!next.isOutOf(size()) && isAvailable(next)) {
-                Gold gold = new Gold(Elements.GOLD);
-                gold.setTemporary(true);
-                next.add(gold);
-                remaining--;
+        int count = 0;
+        while (remaining != 0 && ++count < MAX) {
+            Cell next = cells.remove(dice.next(cells.size()));
+            if (next.isOutOf(size()) || !isAvailable(next)) {
+                continue;
             }
-        }
-    }
 
-    private void shuffle(List<Cell> cells, Dice dice) {
-        // TODO to use dice here
-        Collections.shuffle(cells);
+            Gold gold = new Gold(Elements.GOLD);
+            gold.setTemporary(true);
+            next.add(gold);
+            remaining--;
+        }
     }
 
     // TODO refactoring needed
     private List<Cell> getNeighborhoodCells(Cell cell) {
-        return Arrays.asList(
-                cell,
-                getCell(cell.getX() - 1, cell.getY()),
-                getCell(cell.getX() + 1, cell.getY()),
+        return new LinkedList<>(){{
+            add(cell);
+            add(getCell(cell.getX() - 1, cell.getY()));
+            add(getCell(cell.getX() + 1, cell.getY()));
 
-                getCell(cell.getX(), cell.getY() + 1),
-                getCell(cell.getX() - 1, cell.getY() + 1),
-                getCell(cell.getX() + 1, cell.getY() + 1),
+            add(getCell(cell.getX(), cell.getY() + 1));
+            add(getCell(cell.getX() - 1, cell.getY() + 1));
+            add(getCell(cell.getX() + 1, cell.getY() + 1));
 
-                getCell(cell.getX(), cell.getY() - 1),
-                getCell(cell.getX() - 1, cell.getY() - 1),
-                getCell(cell.getX() + 1, cell.getY() - 1));
+            add(getCell(cell.getX(), cell.getY() - 1));
+            add(getCell(cell.getX() - 1, cell.getY() - 1));
+            add(getCell(cell.getX() + 1, cell.getY() - 1));
+        }};
     }
 
     // TODO refactoring needed
