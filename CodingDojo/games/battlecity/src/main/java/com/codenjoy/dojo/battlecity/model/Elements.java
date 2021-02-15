@@ -85,7 +85,8 @@ public enum Elements implements CharElements {
     PRIZE('!'),
     PRIZE_IMMORTALITY('1'),
     PRIZE_BREAKING_WALLS('2'),
-    PRIZE_WALKING_ON_WATER('3');
+    PRIZE_WALKING_ON_WATER('3'),
+    PRIZE_NO_SLIDING('4');
 
     public final char ch;
     int power;

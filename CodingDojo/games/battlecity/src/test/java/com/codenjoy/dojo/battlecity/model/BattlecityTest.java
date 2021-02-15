@@ -219,6 +219,106 @@ public class BattlecityTest {
     }
 
     @Test
+    @Ignore
+    public void shouldTankCanGoIfAceAtWayWithoutSliding_whenTankTakePrize() {
+        prizeOnField = v(5);
+        hitKillsAiPrize = v(1);
+        prizeWorking = v(6);
+        slidingValue = v(1);
+
+        givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    ?    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        ai(0).kill(mock(Bullet.class));
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    Ѡ    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        when(dice.next(anyInt())).thenReturn(3).thenReturn(0);
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    4    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        hero(0).up();
+        game.tick();
+
+        assertPrize(hero(0), 1);
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+        // заезжаем на лед
+        hero(0).up();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    ▲    ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+
+
+        //  DOWN -> UP но так как игрок взял приз скольжение не происходить, по этому DOWN -> DOWN
+        hero(0).down();
+        game.tick();
+
+        assertD("☼☼☼☼☼☼☼☼☼☼☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼         ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    #    ☼\n" +
+                "☼    ▼    ☼\n" +
+                "☼         ☼\n" +
+                "☼☼☼☼☼☼☼☼☼☼☼\n");
+    }
+
+    @Test
     public void shouldTankMove() {
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +

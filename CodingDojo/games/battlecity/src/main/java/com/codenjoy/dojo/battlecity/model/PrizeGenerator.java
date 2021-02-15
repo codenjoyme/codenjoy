@@ -36,7 +36,8 @@ public class PrizeGenerator {
     private static final List<Elements> PRIZES = Arrays.asList(
             Elements.PRIZE_IMMORTALITY,
             Elements.PRIZE_BREAKING_WALLS,
-            Elements.PRIZE_WALKING_ON_WATER);
+            Elements.PRIZE_WALKING_ON_WATER,
+            Elements.PRIZE_NO_SLIDING);
 
     private Field field;
     private Dice dice;
