@@ -40,6 +40,7 @@ public class GunWithOverHeatParamTest {
 
     public static final String SYMBOL_FIRE = "f";
     public static final String SYMBOL_PAUSE = "-";
+
     private Gun gun;
     private SettingsWrapper settings;
     private Params params;
@@ -54,7 +55,7 @@ public class GunWithOverHeatParamTest {
     @Parameters
     public static Collection<Params> data() {
         List<Params> data = new ArrayList<>();
-        //should shoot without recharge, pause and rest
+        // should shoot without recharge, pause and rest
         data.add(new Params(
                 50,
                 "ffffffffffffffffffffffffffffffffffffffffffffffffff",
@@ -62,7 +63,7 @@ public class GunWithOverHeatParamTest {
                 0,
                 0));
 
-        //should make delay for recharge
+        // should make delay for recharge
         data.add(new Params(
                 50,
                 "f-f-f-f-f-f-f-f-f-f-f-f-f-f-f-f-f-f-f-f-f-f-f-f-f-",
@@ -70,7 +71,7 @@ public class GunWithOverHeatParamTest {
                 0,
                 0));
 
-        //should shoot without recharge and take a rest after long queue
+        // should shoot without recharge and take a rest after long queue
         data.add(new Params(
                 50,
                 "ffffffffff-----ffffffffff-----ffffffffff-----fffff",
@@ -78,7 +79,7 @@ public class GunWithOverHeatParamTest {
                 5,
                 10));
 
-        //should shoot with recharge and take a rest after long queue
+        // should shoot with recharge and take a rest after long queue
         data.add(new Params(
                 60,
                 "f---f---f---f---f----------f---f---f---f---f----------f---f-",
@@ -86,7 +87,7 @@ public class GunWithOverHeatParamTest {
                 10,
                 5));
 
-        //should shoot with recharge and ignore rest after long queue
+        // should shoot with recharge and ignore rest after long queue
         data.add(new Params(
                 50,
                 "f-----f-----f-----f-----f-----f-----f-----f-----f-",
@@ -104,7 +105,6 @@ public class GunWithOverHeatParamTest {
         settings.gunShotQueue(params.gunShotQueue);
 
         String result = new String();
-//        gun.reset();
         for (int i = 0; i < params.shots; i++) {
             if (gun.isCanShoot()) {
                 gun.shoot();
