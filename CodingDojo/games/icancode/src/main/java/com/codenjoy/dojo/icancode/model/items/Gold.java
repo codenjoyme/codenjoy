@@ -73,20 +73,19 @@ public class Gold extends BaseItem {
     public void action(Item item) {
         if (hidden) return; // TODO test me
 
-        HeroItem heroItem = getIf(item, HeroItem.class);
-        if (heroItem == null) {
-            return;
-        }
+        check(item, HeroItem.class)
+                .ifPresent(heroItem -> {
+                    Hero hero = heroItem.getHero();
+                    if (!hero.isFlying()) {
+                        hero.pickUpGold();
+                        if (temporary) {
+                            removeFromCell();
+                        } else {
+                            hidden = true;
+                        }
+                    }
+                });
 
-        Hero hero = heroItem.getHero();
-        if (!hero.isFlying()) {
-            hero.pickUpGold();
-            if (temporary) {
-                removeFromCell();
-            } else {
-                hidden = true;
-            }
-        }
     }
 
     public void reset() {

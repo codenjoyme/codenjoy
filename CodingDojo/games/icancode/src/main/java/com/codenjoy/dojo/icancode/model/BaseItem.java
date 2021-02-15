@@ -25,6 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class BaseItem implements Item {
 
@@ -65,14 +66,14 @@ public abstract class BaseItem implements Item {
         return items;
     }
 
-    protected <T> T getIf(Object item, Class<T> clazz) {
+    protected <T> Optional<T> check(Object item, Class<T> clazz) {
         if (item == null) {
-            return null;
+            return Optional.empty();
         }
         if (item.getClass().equals(clazz)) {
-            return (T)item;
+            return Optional.of((T) item);
         }
-        return null;
+        return Optional.empty();
     }
 
     public Elements getState() {

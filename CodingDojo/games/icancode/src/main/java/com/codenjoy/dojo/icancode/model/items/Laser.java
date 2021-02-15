@@ -80,29 +80,31 @@ public class Laser extends FieldItem implements Tickable {
 
     @Override
     public void action(Item item) {
-        HeroItem heroItem = getIf(item, HeroItem.class);
-        if (heroItem != null) {
-            Hero hero = heroItem.getHero();
-            if (!hero.isFlying()) {
-                if (shouldLaserAttackHero(hero)) {
-                    if (!unstoppable) {
-                        die();
+        check(item, HeroItem.class)
+                .ifPresent(heroItem -> {
+                    Hero hero = heroItem.getHero();
+                    if (!hero.isFlying()) {
+                        if (shouldLaserAttackHero(hero)) {
+                            if (!unstoppable) {
+                                die();
+                            }
+                            hero.dieOnLaser();
+                            field.dropTemporaryGold(hero);
+                            addOwnerKillHeroScore();
+                        }
                     }
-                    hero.dieOnLaser();
-                    field.dropTemporaryGold(hero);
-                    addOwnerKillHeroScore();
-                }
-            }
-        }
+                });
 
-        Zombie zombie = getIf(item, Zombie.class);
-        if (zombie != null) {
-            if (!unstoppable) {
-                die();
-            }
-            zombie.die();
-            addOwnerKillZombieScore();
-        }
+        check(item, Zombie.class)
+                .ifPresent(zombie -> {
+                    if (zombie != null) {
+                        if (!unstoppable) {
+                            die();
+                        }
+                        zombie.die();
+                        addOwnerKillZombieScore();
+                    }
+                });
     }
 
     private boolean shouldLaserAttackHero(Hero hero) {
