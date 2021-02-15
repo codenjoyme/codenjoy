@@ -82,11 +82,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         resetFlags();
     }
 
-    public List<AbstractPerk> getPerks() {
-        // TODO do we need here unmodifiableList
-        return Collections.unmodifiableList(perks);
-    }
-
     private void resetFlags() {
         direction = null;
         win = false;
