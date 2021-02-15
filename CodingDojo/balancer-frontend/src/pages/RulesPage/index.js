@@ -4,7 +4,7 @@ import DocumentTitle from 'react-document-title';
 
 // proj
 import { Layout } from '../../layouts';
-import { RulesContainer } from '../../containers';
+import { RulesContainer } from '../../containers/RulesContainer/icancode';
 
 export default class RulesPage extends Component {
     render() {

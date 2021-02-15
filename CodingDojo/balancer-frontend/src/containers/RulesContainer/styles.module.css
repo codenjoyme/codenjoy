@@ -11,6 +11,8 @@
     background: rgb( 45, 45, 45 , 0.3) url(./../../styles/images/layout/icancode/dark.jpg);
     background-size: cover;
     background-repeat: no-repeat;
+    background-blend-mode: overlay;
+
 }
 
 b {
@@ -58,6 +60,6 @@ b {
 }
 
 ul {
-    list-style-type: circle;
+    list-style-type: disc;
     margin-left: 40px;
 }
