@@ -105,7 +105,7 @@ function initRegistration(waitApprove, contextPath) {
         var checkEls = {};
 
         var validateEmail = function (email) {
-            var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+            var emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,6})?$/;
             return emailReg.test(email);
         };
 
