@@ -22,7 +22,6 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;

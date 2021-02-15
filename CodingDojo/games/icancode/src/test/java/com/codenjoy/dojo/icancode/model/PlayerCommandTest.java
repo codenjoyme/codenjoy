@@ -22,7 +22,6 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.PlayerCommand;
 import org.junit.Test;

@@ -22,7 +22,6 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
