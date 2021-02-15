@@ -64,7 +64,7 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        assertEquals(true, hero.has(UnlimitedFirePerk.class));
+        has(UnlimitedFirePerk.class);
     }
 
     @Test
@@ -87,7 +87,7 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
-        assertEquals(false, hero.has(UnlimitedFirePerk.class));
+        hasNot(UnlimitedFirePerk.class);
 
         hero.fire();
         hero.down();
@@ -101,7 +101,7 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
-        assertEquals(false, hero.has(UnlimitedFirePerk.class));
+        hasNot(UnlimitedFirePerk.class);
 
         hero.fire();
         hero.down();
@@ -115,7 +115,7 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
-        assertEquals(false, hero.has(UnlimitedFirePerk.class));
+        hasNot(UnlimitedFirePerk.class);
 
         hero.fire();
         hero.down();
@@ -129,7 +129,7 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
-        assertEquals(false, hero.has(UnlimitedFirePerk.class));
+        hasNot(UnlimitedFirePerk.class);
 
         hero.fire();
         hero.down();
@@ -143,7 +143,7 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "--↓----" +
                 "-------");
 
-        assertEquals(false, hero.has(UnlimitedFirePerk.class));
+        hasNot(UnlimitedFirePerk.class);
     }
 
     @Test

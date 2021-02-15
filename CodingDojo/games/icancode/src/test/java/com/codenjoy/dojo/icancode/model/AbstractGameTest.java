@@ -26,6 +26,7 @@ import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
@@ -167,4 +168,11 @@ public class AbstractGameTest {
         assertA(expected, LAYER3);
     }
 
+    protected void has(Class<? extends AbstractPerk> perkClass) {
+        assertEquals(true, hero.has(perkClass));
+    }
+
+    protected void hasNot(Class<? extends AbstractPerk> perkClass) {
+        assertEquals(false, hero.has(perkClass));
+    }
 }

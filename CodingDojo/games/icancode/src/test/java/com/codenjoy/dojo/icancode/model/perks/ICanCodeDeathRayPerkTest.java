@@ -101,7 +101,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------");
 
-        assertEquals(true, hero.has(DeathRayPerk.class));
+        has(DeathRayPerk.class);
 
         // when
         hero.down();
@@ -122,7 +122,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------");
 
-        assertEquals(true, hero.has(DeathRayPerk.class));
+        has(DeathRayPerk.class);
 
         // when
         game.tick();
@@ -141,7 +141,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------");
 
-        assertEquals(true, hero.has(DeathRayPerk.class));
+        has(DeathRayPerk.class);
     }
 
     @Test
@@ -202,7 +202,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------");
 
-        assertEquals(true, hero.has(DeathRayPerk.class));
+        has(DeathRayPerk.class);
 
         // when
         hero.down();
@@ -222,7 +222,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------");
 
-        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
+        has(UnstoppableLaserPerk.class);
 
         // when
         hero.down();
@@ -243,9 +243,9 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "---↓--------" +
                 "------------");
 
-        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
+        has(UnstoppableLaserPerk.class);
 
-        assertEquals(true, hero.has(DeathRayPerk.class));
+        has(DeathRayPerk.class);
 
         // when
         game.tick();
@@ -303,6 +303,6 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        assertEquals(true, hero.has(DeathRayPerk.class));
+        has(DeathRayPerk.class);
     }
 }

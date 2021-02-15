@@ -184,7 +184,7 @@ public class ShooterTest extends AbstractGameTest {
                 "--------" +
                 "--------");
 
-        assertEquals(true, hero.has(DeathRayPerk.class));
+        has(DeathRayPerk.class);
 
         assertEquals(0, game.getLevel().getItems(Laser.class).size());
 
