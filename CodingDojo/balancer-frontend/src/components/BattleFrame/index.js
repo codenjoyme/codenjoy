@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 // proj
 import { getIFrameLink } from '../../utils';
-import battleComplete from '../../styles/images/layout/battleComplete.jpg';
+import battleComplete from '../../styles/images/layout/icancode/battleComplete.jpg';
 
 // own
 import Styles from './styles.module.css';
@@ -25,7 +25,7 @@ class BattleFrameHandler extends Component {
                             className={ Styles.ratioInner }
                             src={ getIFrameLink(server, id) }
                         />
-                    ) : 
+                    ) :
                         battleCompleted && (
                             <img
                                 className={ Styles.ratioInner }
