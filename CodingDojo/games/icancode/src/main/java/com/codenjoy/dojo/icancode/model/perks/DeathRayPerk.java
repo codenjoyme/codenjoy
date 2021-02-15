@@ -30,7 +30,4 @@ public class DeathRayPerk extends AbstractPerk {
         super(element);
     }
 
-    public DeathRayPerk(Elements element, String value) {
-        super(element, value);
-    }
 }

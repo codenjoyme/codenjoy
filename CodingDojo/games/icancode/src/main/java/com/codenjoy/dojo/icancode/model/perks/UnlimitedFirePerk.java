@@ -30,7 +30,4 @@ public class UnlimitedFirePerk extends AbstractPerk {
         super(element);
     }
 
-    public UnlimitedFirePerk(Elements element, String value) {
-        super(element, value);
-    }
 }

@@ -30,7 +30,4 @@ public class UnstoppableLaserPerk extends AbstractPerk {
         super(element);
     }
 
-    public UnstoppableLaserPerk(Elements element, String value) {
-        super(element, value);
-    }
 }

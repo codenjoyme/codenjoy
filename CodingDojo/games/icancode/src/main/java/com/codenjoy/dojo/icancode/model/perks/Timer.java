@@ -55,9 +55,8 @@ public class Timer implements Tickable {
 
     @Override
     public String toString() {
-        return "Timer{" +
-                "timeout=" + timeout +
-                ", value=" + value +
-                '}';
+        return String.format("Timer{%s out of %s}",
+                value,
+                timeout);
     }
 }

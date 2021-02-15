@@ -108,6 +108,7 @@ public class GameRunner extends AbstractGameType implements GameType  {
 
     @Override
     public Class<? extends Solver> getAI() {
+        // TODO to use AI solver here
         return null;
     }
 
