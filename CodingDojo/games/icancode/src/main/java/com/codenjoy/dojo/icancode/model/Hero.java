@@ -294,7 +294,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             int newX = direction.changeX(x);
             int newY = direction.changeY(y);
 
-            if (flying && (field.isAt(newX, newY, Box.class) || field.isAt(newX, newY, LaserMachine.class))) {
+            if (flying && (field.isAt(newX, newY, Box.class)
+                    || field.isAt(newX, newY, LaserMachine.class)))
+            {
                 int nextX = direction.changeX(newX);
                 int nextY = direction.changeY(newY);
                 if (!field.isBarrier(nextX, nextY)) {

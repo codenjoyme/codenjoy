@@ -127,7 +127,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldMovedBox_whenHeroPullItRight_case1() {
+    public void shouldCantMoveBox_whenHeroPullItRight() {
         // given
         givenFl("╔════┐" +
                 "║....│" +
@@ -153,7 +153,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
                 "------" +
                 "------" +
                 "------" +
-                "--B☺--" +
+                "-B-☺--" +
                 "------");
 
         // when
@@ -172,7 +172,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
                 "------" +
                 "------" +
                 "------" +
-                "--B-☺-" +
+                "-B--☺-" +
                 "------");
 
         // when
@@ -195,24 +195,24 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
                 "------" +
                 "------" +
                 "------" +
-                "---B☺-" +
+                "-B--☺-" +
                 "------");
     }
 
     @Test
-    public void shouldMovedBox_whenHeroPullItRight_case2() {
+    public void shouldMovedBox_whenHeroPullItRight() {
         // given
         givenFl("╔════┐" +
                 "║....│" +
                 "║....│" +
-                "║B...│" +
                 "║.S..│" +
+                "║B...│" +
                 "└────┘");
 
-        hero.up();
+        // when
+        hero.down();
         game.tick();
 
-        // when
         hero.pull();
         hero.right();
         game.tick();
@@ -221,15 +221,15 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         assertL("╔════┐" +
                 "║....│" +
                 "║....│" +
-                "║....│" +
                 "║.S..│" +
+                "║....│" +
                 "└────┘");
 
         assertE("------" +
                 "------" +
                 "------" +
-                "--B☺--" +
                 "------" +
+                "--B☺--" +
                 "------");
 
         // when
@@ -240,15 +240,15 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         assertL("╔════┐" +
                 "║....│" +
                 "║....│" +
-                "║....│" +
                 "║.S..│" +
+                "║....│" +
                 "└────┘");
 
         assertE("------" +
                 "------" +
                 "------" +
-                "--B-☺-" +
                 "------" +
+                "--B-☺-" +
                 "------");
 
         // when
@@ -263,15 +263,15 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         assertL("╔════┐" +
                 "║....│" +
                 "║....│" +
-                "║....│" +
                 "║.S..│" +
+                "║....│" +
                 "└────┘");
 
         assertE("------" +
                 "------" +
                 "------" +
-                "---B☺-" +
                 "------" +
+                "---B☺-" +
                 "------");
     }
 
@@ -346,89 +346,16 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldMovedBox_whenHeroPullItLeft_case1() {
+    public void shouldMovedBox_whenHeroPullItLeft() {
         // given
         givenFl("╔════┐" +
-                "║..SB│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        // when
-        hero.pull();
-        hero.left();
-        game.tick();
-
-        // then
-        assertL("╔════┐" +
-                "║..S.│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        assertE("------" +
-                "--☺B--" +
-                "------" +
-                "------" +
-                "------" +
-                "------");
-
-        // when
-        hero.left();
-        game.tick();
-
-        // then
-        assertL("╔════┐" +
-                "║..S.│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        assertE("------" +
-                "-☺-B--" +
-                "------" +
-                "------" +
-                "------" +
-                "------");
-
-        // when
-        hero.right();
-        game.tick();
-
-        hero.pull();
-        hero.left();
-        game.tick();
-
-        // then
-        assertL("╔════┐" +
-                "║..S.│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        assertE("------" +
-                "-☺B---" +
-                "------" +
-                "------" +
-                "------" +
-                "------");
-    }
-
-    @Test
-    public void shouldMovedBox_whenHeroPullItLeft_case2() {
-        // given
-        givenFl("╔════┐" +
-                "║..S.│" +
                 "║...B│" +
+                "║..S.│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
 
-        hero.down();
+        hero.up();
         game.tick();
 
         // when
@@ -438,15 +365,15 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
 
         // then
         assertL("╔════┐" +
-                "║..S.│" +
                 "║....│" +
+                "║..S.│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
 
         assertE("------" +
-                "------" +
                 "--☺B--" +
+                "------" +
                 "------" +
                 "------" +
                 "------");
@@ -457,15 +384,15 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
 
         // then
         assertL("╔════┐" +
-                "║..S.│" +
                 "║....│" +
+                "║..S.│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
 
         assertE("------" +
-                "------" +
                 "-☺-B--" +
+                "------" +
                 "------" +
                 "------" +
                 "------");
@@ -480,15 +407,15 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
 
         // then
         assertL("╔════┐" +
-                "║..S.│" +
                 "║....│" +
+                "║..S.│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
 
         assertE("------" +
-                "------" +
                 "-☺B---" +
+                "------" +
                 "------" +
                 "------" +
                 "------");
@@ -565,7 +492,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldMovedBox_whenHeroPullItUp_case1() {
+    public void shouldCantMoveBox_whenHeroPullItUp() {
         // given
         givenFl("╔════┐" +
                 "║....│" +
@@ -590,8 +517,8 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         assertE("------" +
                 "------" +
                 "-☺----" +
-                "-B----" +
                 "------" +
+                "-B----" +
                 "------");
 
         // when
@@ -609,8 +536,8 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         assertE("------" +
                 "-☺----" +
                 "------" +
-                "-B----" +
                 "------" +
+                "-B----" +
                 "------");
 
         // when
@@ -631,28 +558,26 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
 
         assertE("------" +
                 "-☺----" +
+                "------" +
+                "------" +
                 "-B----" +
-                "------" +
-                "------" +
                 "------");
     }
 
     @Test
-    public void shouldMovedBox_whenHeroPullItUp_case2() {
+    public void shouldMovedBox_whenHeroPullItUp() {
         // given
         givenFl("╔════┐" +
                 "║....│" +
-                "║S...│" +
                 "║....│" +
-                "║.B..│" +
+                "║.S..│" +
+                "║B...│" +
                 "└────┘");
 
-        hero.down();
-        game.tick();
-        hero.right();
+        // when
+        hero.left();
         game.tick();
 
-        // when
         hero.pull();
         hero.up();
         game.tick();
@@ -660,15 +585,15 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         // then
         assertL("╔════┐" +
                 "║....│" +
-                "║S...│" +
                 "║....│" +
+                "║.S..│" +
                 "║....│" +
                 "└────┘");
 
         assertE("------" +
                 "------" +
-                "--☺---" +
-                "--B---" +
+                "-☺----" +
+                "-B----" +
                 "------" +
                 "------");
 
@@ -679,15 +604,15 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         // then
         assertL("╔════┐" +
                 "║....│" +
-                "║S...│" +
                 "║....│" +
+                "║.S..│" +
                 "║....│" +
                 "└────┘");
 
         assertE("------" +
-                "--☺---" +
+                "-☺----" +
                 "------" +
-                "--B---" +
+                "-B----" +
                 "------" +
                 "------");
 
@@ -702,14 +627,14 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         // then
         assertL("╔════┐" +
                 "║....│" +
-                "║S...│" +
                 "║....│" +
+                "║.S..│" +
                 "║....│" +
                 "└────┘");
 
         assertE("------" +
-                "--☺---" +
-                "--B---" +
+                "-☺----" +
+                "-B----" +
                 "------" +
                 "------" +
                 "------");
@@ -786,7 +711,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldMovedBox_whenHeroPullItDown_case1() {
+    public void shouldCantMoveBox_whenHeroPullItDown() {
         // given
         givenFl("╔════┐" +
                 "║...B│" +
@@ -809,8 +734,8 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
                 "└────┘");
 
         assertE("------" +
-                "------" +
                 "----B-" +
+                "------" +
                 "----☺-" +
                 "------" +
                 "------");
@@ -828,8 +753,8 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
                 "└────┘");
 
         assertE("------" +
-                "------" +
                 "----B-" +
+                "------" +
                 "------" +
                 "----☺-" +
                 "------");
@@ -851,24 +776,24 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
                 "└────┘");
 
         assertE("------" +
-                "------" +
-                "------" +
                 "----B-" +
+                "------" +
+                "------" +
                 "----☺-" +
                 "------");
     }
 
     @Test
-    public void shouldMovedBox_whenHeroPullItDown_case2() {
+    public void shouldMovedBox_whenHeroPullItDown() {
         // given
         givenFl("╔════┐" +
-                "║..B.│" +
-                "║...S│" +
+                "║...B│" +
+                "║..S.│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
 
-        hero.left();
+        hero.right();
         game.tick();
 
         // when
@@ -879,15 +804,15 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         // then
         assertL("╔════┐" +
                 "║....│" +
-                "║...S│" +
+                "║..S.│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
 
         assertE("------" +
                 "------" +
-                "---B--" +
-                "---☺--" +
+                "----B-" +
+                "----☺-" +
                 "------" +
                 "------");
 
@@ -898,16 +823,16 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         // then
         assertL("╔════┐" +
                 "║....│" +
-                "║...S│" +
+                "║..S.│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
 
         assertE("------" +
                 "------" +
-                "---B--" +
+                "----B-" +
                 "------" +
-                "---☺--" +
+                "----☺-" +
                 "------");
 
         // when
@@ -921,7 +846,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         // then
         assertL("╔════┐" +
                 "║....│" +
-                "║...S│" +
+                "║..S.│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
@@ -929,13 +854,13 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         assertE("------" +
                 "------" +
                 "------" +
-                "---B--" +
-                "---☺--" +
+                "----B-" +
+                "----☺-" +
                 "------");
     }
 
     @Test
-    public void shouldNotMovedBox_whenHeroPushItOnWall() {
+    public void shouldCantMoveBox_whenHeroPushItOnWall() {
         // given
         givenFl("╔════┐" +
                 "║..SB│" +
@@ -965,7 +890,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldNotMovedBox_whenHeroPushItOnOtherBox() {
+    public void shouldCantMoveBox_whenHeroPushItOnOtherBox() {
         // given
         givenFl("╔════┐" +
                 "║SBB.│" +
@@ -995,7 +920,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldNotMovedBox_whenHeroPushItOnZombie() {
+    public void shouldCantMoveBox_whenHeroPushItOnZombie() {
         // given
         givenFl("╔════┐" +
                 "║SB..│" +
@@ -1038,7 +963,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldNotMovedBox_whenHeroPushItOnStartPoint() {
+    public void shouldCantMoveBox_whenHeroPushItOnStartPoint() {
         // given
         givenFl("╔════┐" +
                 "║SBS.│" +
@@ -1080,7 +1005,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldNotMovedBox_whenHeroPullItOnStartPoint() {
+    public void shouldCantMoveBox_whenHeroPullItOnStartPoint() {
         // given
         givenFl("╔════┐" +
                 "║.BS.│" +
@@ -1123,7 +1048,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldNotMovedBox_whenHeroPushItOnGold() {
+    public void shouldCantMoveBox_whenHeroPushItOnGold() {
         // given
         givenFl("╔════┐" +
                 "║SB$.│" +
@@ -1215,7 +1140,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldNotMovedBox_whenHeroPushItOnLaserMachine() {
+    public void shouldCantMoveBox_whenHeroPushItOnLaserMachine() {
         // given
         givenFl("╔════┐" +
                 "║SB˃.│" +
@@ -1245,7 +1170,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldNotMovedBox_whenHeroPushItOnOtherHero() {
+    public void shouldCantMoveBox_whenHeroPushItOnOtherHero() {
         // given
         givenFl("╔════┐" +
                 "║SB..│" +
@@ -1545,7 +1470,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldNotMovedBox_whenHeroPushItOnStart() {
+    public void shouldCantMoveBox_whenHeroPushItOnStart() {
         // given
         givenFl("╔════┐" +
                 "║SBS.│" +
@@ -1654,7 +1579,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldMovedBox_whenHeroPullUpright_case1() {
+    public void shouldCantMoveBox_whenHeroPullUpright() {
         // given
         givenFl("╔═════┐" +
                 "║..B..│" +
@@ -1679,8 +1604,8 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
                 "└─────┘");
 
         assertE("-------" +
-                "-------" +
-                "--BBB--" +
+                "---B---" +
+                "--B-B--" +
                 "--B☺B--" +
                 "--BBB--" +
                 "-------" +
@@ -1696,6 +1621,65 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
                 "║.....│" +
                 "║..S..│" +
                 "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "---B---" +
+                "--B☺B--" +
+                "--BBB--" +
+                "--B-B--" +
+                "-------" +
+                "-------");
+    }
+
+    @Test
+    public void shouldMovedBox_whenHeroPullUpright_case1() {
+        // given
+        givenFl("╔═════┐" +
+                "║..B..│" +
+                "║.B.B.│" +
+                "║.BSB.│" +
+                "║.BBB.│" +
+                "║.....│" +
+                "└─────┘");
+
+        // when
+        hero.up();
+        game.tick();
+
+        hero.pull();
+        hero.down();
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║.....│" +
+                "║.....│" +
+                "║..S..│" +
+                "║.....│" +
+                "║.....│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-------" +
+                "--BBB--" +
+                "--B☺B--" +
+                "--BBB--" +
+                "-------" +
+                "-------");
+
+        // when
+        hero.pull();
+        hero.up();
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║.....│" +
+                "║.....│" +
+                "║..S..│" +
                 "║.....│" +
                 "║.....│" +
                 "└─────┘");
@@ -1769,7 +1753,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldMovedBox_whenHeroPullHorizontally_case1() {
+    public void shouldCantMoveBox_whenHeroPullHorizontally_caseOnStart() {
         // given
         givenFl("╔══════┐" +
                 "║......│" +
@@ -1798,7 +1782,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         assertE("--------" +
                 "--------" +
                 "---BB---" +
-                "---B☺B--" +
+                "--B-☺B--" +
                 "---BB---" +
                 "--------" +
                 "--------" +
@@ -1822,13 +1806,76 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         assertE("--------" +
                 "--------" +
                 "---BB---" +
-                "--B☺-B--" +
+                "--B☺B---" +
                 "---BB---" +
                 "--------" +
                 "--------" +
                 "--------");
     }
 
+    @Test
+    public void shouldMovedBox_whenHeroPullHorizontally_case1() {
+        // given
+        givenFl("╔══════┐" +
+                "║......│" +
+                "║..BB..│" +
+                "║.B.SB.│" +
+                "║..BB..│" +
+                "║......│" +
+                "║......│" +
+                "└──────┘");
+
+        // when
+        hero.left();
+        game.tick();
+
+        hero.pull();
+        hero.right();
+        game.tick();
+
+        // then
+        assertL("╔══════┐" +
+                "║......│" +
+                "║......│" +
+                "║...S..│" +
+                "║......│" +
+                "║......│" +
+                "║......│" +
+                "└──────┘");
+
+        assertE("--------" +
+                "--------" +
+                "---BB---" +
+                "---B☺B--" +
+                "---BB---" +
+                "--------" +
+                "--------" +
+                "--------");
+
+        // when
+        hero.pull();
+        hero.left();
+        game.tick();
+
+        // then
+        assertL("╔══════┐" +
+                "║......│" +
+                "║......│" +
+                "║...S..│" +
+                "║......│" +
+                "║......│" +
+                "║......│" +
+                "└──────┘");
+
+        assertE("--------" +
+                "--------" +
+                "---BB---" +
+                "--B☺-B--" +
+                "---BB---" +
+                "--------" +
+                "--------" +
+                "--------");
+    }
 
     @Test
     public void shouldMovedBox_whenHeroPullHorizontally_case2() {
@@ -1962,7 +2009,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldCantMovedBox_whenJump_case1() {
+    public void shouldCantMoveBox_whenStartJumping() {
         // given
         givenFl("╔════┐" +
                 "║SB..│" +
@@ -2027,7 +2074,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldCantMovedBox_whenJump_case2() {
+    public void shouldCantMoveBox_whenJumping_inTheAir() {
         // given
         givenFl("╔════┐" +
                 "║S.B.│" +
@@ -2092,7 +2139,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldCantMovedBox_whenJump_case3() {
+    public void shouldCantMoveBox_whenJump_case3() {
         // given
         givenFl("╔════┐" +
                 "║SB..│" +
