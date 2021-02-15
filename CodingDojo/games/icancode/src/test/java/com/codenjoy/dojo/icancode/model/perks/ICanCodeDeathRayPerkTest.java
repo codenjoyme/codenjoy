@@ -303,6 +303,6 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        assertTrue(hero.hasDeathRayPerk());
+        assertEquals(true, hero.has(DeathRayPerk.class));
     }
 }

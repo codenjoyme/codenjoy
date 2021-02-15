@@ -4034,7 +4034,7 @@ public class SingleTest {
                 "--X---" +
                 "------");
 
-        assertTrue(hero1().hasDeathRayPerk());
+        assertEquals(true, hero1().has(DeathRayPerk.class));
 
         // when
         hero1().fire();
@@ -4179,7 +4179,7 @@ public class SingleTest {
                 "--X---" +
                 "------");
 
-        assertTrue(hero1().hasDeathRayPerk());
+        assertEquals(true, hero1().has(DeathRayPerk.class));
 
         // when
         hero1().fire();

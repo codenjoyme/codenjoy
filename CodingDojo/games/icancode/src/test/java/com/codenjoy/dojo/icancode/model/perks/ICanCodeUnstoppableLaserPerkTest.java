@@ -499,6 +499,6 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        assertTrue(hero.hasUnstoppableLaserPerk());
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
     }
 }

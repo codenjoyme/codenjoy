@@ -27,9 +27,7 @@ import com.codenjoy.dojo.icancode.model.gun.Gun;
 import com.codenjoy.dojo.icancode.model.gun.GunWithOverHeat;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
-import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
-import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -278,7 +276,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (fire) {
-            if (hasUnlimitedFirePerk()) {
+            if (has(UnlimitedFirePerk.class)) {
                 field.fire(direction, item.getCell(), item);
                 gun.unlimitedShoot();
             } else if (gun.isCanShoot()) {
@@ -477,18 +475,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void dieOnZombie() {
         laser = true; // TODO может сделать зеленым его?
         die();
-    }
-
-    public boolean hasDeathRayPerk() {
-        return has(DeathRayPerk.class);
-    }
-
-    public boolean hasUnstoppableLaserPerk() {
-        return has(UnstoppableLaserPerk.class);
-    }
-
-    public boolean hasUnlimitedFirePerk() {
-        return has(UnlimitedFirePerk.class);
     }
 
     public boolean has(Class<? extends AbstractPerk> perkClass) {

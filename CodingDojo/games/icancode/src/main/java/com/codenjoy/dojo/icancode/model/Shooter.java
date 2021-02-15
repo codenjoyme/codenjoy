@@ -25,6 +25,8 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.Laser;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -49,7 +51,7 @@ public class Shooter {
         } else if (owner instanceof HeroItem) {
             HeroItem heroItem = (HeroItem) owner;
             Laser laser = new Laser(heroItem.getHero(), direction, field);
-            if (heroItem.getHero().hasDeathRayPerk()) {
+            if (heroItem.getHero().has(DeathRayPerk.class)) {
                 fireDeathRayByHero(laser, from, heroItem);
             } else {
                 fireRegularLaserByHero(laser, heroItem);
@@ -65,7 +67,7 @@ public class Shooter {
     }
 
     public void fireDeathRayByHero(Laser laser, Point from, HeroItem heroItem) {
-        boolean unstoppableLaserPerk = heroItem.getHero().hasUnstoppableLaserPerk();
+        boolean perk = heroItem.getHero().has(UnstoppableLaserPerk.class);
         Laser topLaser = laser;
         topLaser.setDeathRay(true);
         List<Laser> lasers = Lists.newArrayList(topLaser);
@@ -73,7 +75,7 @@ public class Shooter {
         Point to = topLaser.getDirection().change(from);
         field.getCell(to.getX(), to.getY()).add(topLaser);
         for (int i = 0; i < SettingsWrapper.data.getDeathRayRange() - 1; i++) {
-            Optional<Cell> nextCell = findNextAvailableCell(topLaser, unstoppableLaserPerk);
+            Optional<Cell> nextCell = findNextAvailableCell(topLaser, perk);
             if (!nextCell.isPresent()) {
                 break;
             }
@@ -98,7 +100,7 @@ public class Shooter {
     }
 
     public void fireRegularLaserByHero(Laser laser, HeroItem heroItem) {
-        laser.setUnstoppable(heroItem.getHero().hasUnstoppableLaserPerk());
+        laser.setUnstoppable(heroItem.getHero().has(UnstoppableLaserPerk.class));
         heroItem.getCell().add(laser);
     }
 }
