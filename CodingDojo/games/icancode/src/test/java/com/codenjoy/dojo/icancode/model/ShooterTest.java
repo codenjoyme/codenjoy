@@ -46,7 +46,9 @@ public class ShooterTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        new Shooter(game).fire(Direction.UP, new PointImpl(2, 0), mock(LaserMachine.class));
+        new Shooter(game).fire(Direction.UP,
+                new PointImpl(2, 0),
+                mock(LaserMachine.class));
 
         assertE("------" +
                 "--☺---" +
@@ -65,8 +67,14 @@ public class ShooterTest extends AbstractGameTest {
                 "║.B..│" +
                 "└────┘");
 
-        new Shooter(game).fire(Direction.UP, new PointImpl(2, 0), mock(LaserMachine.class));
-        new Shooter(game).fire(Direction.UP, new PointImpl(3, 0), mock(LaserMachine.class));
+        new Shooter(game).fire(Direction.UP,
+                new PointImpl(2, 0),
+                mock(LaserMachine.class));
+
+        new Shooter(game).fire(Direction.UP,
+                new PointImpl(3, 0),
+                mock(LaserMachine.class));
+
         //first laser shouldn't go
         //the second one must stuck in box
         assertE("------" +
@@ -112,11 +120,14 @@ public class ShooterTest extends AbstractGameTest {
 
         assertEquals(0, game.getLevel().getItems(Laser.class).size());
 
-        new Shooter(game).fire(Direction.DOWN, hero.getPosition(), hero.getItem());
+        new Shooter(game).fire(Direction.DOWN,
+                hero.getPosition(),
+                hero.getItem());
 
         assertEquals(1, game.getLevel().getItems(Laser.class).size());
         assertTrue(hero.getItem().getCell().items().stream()
                 .anyMatch(item -> item instanceof Laser));
+
         assertE("------" +
                 "--☺---" +
                 "------" +
@@ -149,6 +160,7 @@ public class ShooterTest extends AbstractGameTest {
                 "║......│" +
                 "║......│" +
                 "└──────┘");
+
         game.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), 2, 5);
 
         assertL("╔══════┐" +
@@ -178,6 +190,7 @@ public class ShooterTest extends AbstractGameTest {
         new Shooter(game).fire(Direction.DOWN, hero.getItem().getCell(), hero.getItem());
 
         assertEquals(3, game.getLevel().getItems(Laser.class).size());
+
         assertE("--------" +
                 "--------" +
                 "--☺-----" +
