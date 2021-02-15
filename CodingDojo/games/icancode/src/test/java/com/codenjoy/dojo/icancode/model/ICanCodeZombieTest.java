@@ -23,22 +23,18 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.services.Events;
-import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
-import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
+import com.codenjoy.dojo.icancode.services.Events;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
 import static com.codenjoy.dojo.services.Direction.LEFT;
 import static com.codenjoy.dojo.services.Direction.UP;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class ICanCodeZombieTest extends AbstractGameTest {
 
@@ -291,22 +287,12 @@ public class ICanCodeZombieTest extends AbstractGameTest {
         return dice(0);
     }
 
-    OngoingStubbing<Integer> generateFemale() {
-        return dice(1);
-    }
-
-    OngoingStubbing<Integer> generateMale() {
-        return dice(0);
-    }
-
-    OngoingStubbing<Direction> givenZombie() {
-        Zombie.BRAIN = mock(ZombieBrain.class);
-        return when(Zombie.BRAIN.whereToGo(any(Point.class), any(Field.class)));
-    }
-
     @Test
     public void shouldHeroKillZombie() {
         // given
+        SettingsWrapper.setup(new SettingsImpl())
+                .perkDropRatio(0);
+
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 6;
         Zombie.WALK_EACH_TICKS = 2;
         givenZombie().thenReturn(UP);
