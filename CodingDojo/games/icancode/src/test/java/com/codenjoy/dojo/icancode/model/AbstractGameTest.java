@@ -167,8 +167,4 @@ public class AbstractGameTest {
         assertA(expected, LAYER3);
     }
 
-    protected void heroHas(Class<? extends AbstractPerk> perkClass, boolean has) {
-        assertEquals(has, hero.getPerks().stream()
-                .anyMatch(perk -> perk.getClass().equals(perkClass)));
-    }
 }

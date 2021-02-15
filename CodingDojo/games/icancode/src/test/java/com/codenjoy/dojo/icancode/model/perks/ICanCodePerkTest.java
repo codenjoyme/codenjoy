@@ -141,7 +141,7 @@ public class ICanCodePerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
     }
 
     @Test
@@ -238,20 +238,20 @@ public class ICanCodePerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         // then
         game.tick();
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         game.tick();
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         game.tick();
 
-        heroHas(UnstoppableLaserPerk.class, false);
+        assertEquals(false, hero.has(UnstoppableLaserPerk.class));
     }
 
     @Test

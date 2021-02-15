@@ -26,13 +26,12 @@ import com.codenjoy.dojo.icancode.model.AbstractGameTest;
 import com.codenjoy.dojo.icancode.model.Field;
 import com.codenjoy.dojo.icancode.model.items.Box;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import static com.codenjoy.dojo.icancode.model.Elements.*;
 import static com.codenjoy.dojo.services.Direction.STOP;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
@@ -101,8 +100,8 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------" +
                 "------------");
-        
-        heroHas(DeathRayPerk.class, true);
+
+        assertEquals(true, hero.has(DeathRayPerk.class));
 
         // when
         hero.down();
@@ -122,8 +121,8 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------" +
                 "------------");
-        
-        heroHas(DeathRayPerk.class, true);
+
+        assertEquals(true, hero.has(DeathRayPerk.class));
 
         // when
         game.tick();
@@ -142,7 +141,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "------------" +
                 "------------");
 
-        heroHas(DeathRayPerk.class, true);
+        assertEquals(true, hero.has(DeathRayPerk.class));
     }
 
     @Test
@@ -202,8 +201,8 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "---♂--------" +
                 "------------" +
                 "------------");
-        
-        heroHas(DeathRayPerk.class, true);
+
+        assertEquals(true, hero.has(DeathRayPerk.class));
 
         // when
         hero.down();
@@ -222,8 +221,8 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "---♂--------" +
                 "------------" +
                 "------------");
-        
-        heroHas(UnstoppableLaserPerk.class, true);
+
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         // when
         hero.down();
@@ -243,10 +242,10 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "---✝--------" +
                 "---↓--------" +
                 "------------");
-        
-        heroHas(UnstoppableLaserPerk.class, true);
-        
-        heroHas(DeathRayPerk.class, true);
+
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
+
+        assertEquals(true, hero.has(DeathRayPerk.class));
 
         // when
         game.tick();

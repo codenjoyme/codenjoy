@@ -27,14 +27,13 @@ import com.codenjoy.dojo.icancode.model.Field;
 import com.codenjoy.dojo.icancode.model.items.Box;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.services.Events;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import static com.codenjoy.dojo.icancode.model.Elements.BOX;
 import static com.codenjoy.dojo.icancode.model.Elements.UNSTOPPABLE_LASER_PERK;
 import static com.codenjoy.dojo.services.Direction.STOP;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 
@@ -72,7 +71,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         hero.down();
         hero.fire();
@@ -151,7 +150,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         hero.up();
         hero.fire();
@@ -165,7 +164,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         game.tick();
 
@@ -177,7 +176,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
         verify(listener).event(Events.KILL_HERO(1, true));
 
         game.tick();
@@ -190,7 +189,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
     }
 
     @Test
@@ -253,7 +252,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         hero.down();
         hero.fire();
@@ -269,7 +268,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         game.tick();
 
@@ -283,7 +282,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
         verify(listener).event(Events.KILL_ZOMBIE(1, true));
 
         game.tick();
@@ -298,7 +297,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
     }
 
     @Test
@@ -357,7 +356,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "--☺------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         givenZombie().thenReturn(STOP);
         Zombie zombie = new Zombie(true);
@@ -374,7 +373,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "--☺------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
 
         hero.up();
@@ -391,7 +390,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "--☺------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         game.tick();
 
@@ -405,7 +404,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "--☺------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         game.tick();
 
@@ -419,7 +418,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "--☺------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
         verify(listener).event(Events.KILL_ZOMBIE(1, true));
 
         game.tick();
@@ -434,7 +433,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "--☺------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
 
         game.tick();
 
@@ -448,7 +447,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "--☺------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
         verify(listener).event(Events.KILL_HERO(1, true));
 
         game.tick();
@@ -463,7 +462,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "--☺------" +
                 "---------");
 
-        heroHas(UnstoppableLaserPerk.class, true);
+        assertEquals(true, hero.has(UnstoppableLaserPerk.class));
     }
 
     @Test

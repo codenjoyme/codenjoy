@@ -480,17 +480,19 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public boolean hasDeathRayPerk() {
-        return perks.stream()
-                .anyMatch(perk -> perk instanceof DeathRayPerk);
+        return has(DeathRayPerk.class);
     }
 
     public boolean hasUnstoppableLaserPerk() {
-        return perks.stream()
-                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk);
+        return has(UnstoppableLaserPerk.class);
     }
 
     public boolean hasUnlimitedFirePerk() {
+        return has(UnlimitedFirePerk.class);
+    }
+
+    public boolean has(Class<? extends AbstractPerk> perkClass) {
         return perks.stream()
-                .anyMatch(perk -> perk instanceof UnlimitedFirePerk);
+                .anyMatch(perk -> perk.getClass().equals(perkClass));
     }
 }
