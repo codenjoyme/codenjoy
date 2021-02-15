@@ -211,6 +211,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
 
         hero.up();
         game.tick();
+
         // when
         hero.pull();
         hero.right();
@@ -429,6 +430,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
 
         hero.down();
         game.tick();
+
         // when
         hero.pull();
         hero.left();
@@ -491,7 +493,6 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
                 "------" +
                 "------");
     }
-
 
     @Test
     public void shouldMovedBox_whenHeroPushItDown() {
@@ -650,6 +651,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
         game.tick();
         hero.right();
         game.tick();
+
         // when
         hero.pull();
         hero.up();
@@ -868,6 +870,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
 
         hero.left();
         game.tick();
+
         // when
         hero.pull();
         hero.down();
@@ -1716,8 +1719,10 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
                 "║.BBB.│" +
                 "║.....│" +
                 "└─────┘");
+
         hero.up();
         game.tick();
+
         // when
         hero.pull();
         hero.down();
@@ -1839,6 +1844,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
 
         hero.left();
         game.tick();
+
         // when
         hero.pull();
         hero.right();
@@ -1865,6 +1871,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
 
         hero.right();
         game.tick();
+
         // when
         hero.pull();
         hero.left();
