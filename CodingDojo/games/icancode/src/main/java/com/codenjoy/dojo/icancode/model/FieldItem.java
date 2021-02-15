@@ -39,13 +39,4 @@ public class FieldItem extends BaseItem {
         field = value;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
 }

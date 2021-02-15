@@ -42,16 +42,6 @@ public class Gold extends BaseItem {
     }
 
     @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
-
-    @Override
     public Elements state(Player player, Object... alsoAtPoint) {
         // TODO refactoring needed
         if (filterOne(alsoAtPoint, DeathRayPerk.class) != null) {

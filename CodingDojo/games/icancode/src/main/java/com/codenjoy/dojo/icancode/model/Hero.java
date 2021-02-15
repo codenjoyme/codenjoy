@@ -242,16 +242,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return super.equals(o);
-    }
-
-    @Override
     public void tick() {
         laser = false;
         hole = false;
