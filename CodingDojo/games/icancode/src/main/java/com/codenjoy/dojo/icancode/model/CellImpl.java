@@ -31,6 +31,7 @@ import com.google.common.collect.ListMultimap;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
@@ -58,6 +59,8 @@ public class CellImpl extends PointImpl implements Cell {
     public void comeIn(Item input) {
         items().stream()
                 .filter(item -> !item.equals(input))
+                // TODO to use dice
+                .sorted((o1, o2) -> ThreadLocalRandom.current().nextInt(-1, 2))
                 .forEach(item -> {
                     item.action(input);
                     input.action(item);

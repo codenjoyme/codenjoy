@@ -26,9 +26,6 @@ package com.codenjoy.dojo.icancode.model;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Mikhail_Udalyi on 08.06.2016.
- */
 public abstract class BaseItem implements Item {
 
     public static final boolean PASSABLE = true;

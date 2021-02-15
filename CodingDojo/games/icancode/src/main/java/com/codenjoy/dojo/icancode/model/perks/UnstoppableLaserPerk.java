@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model;
+package com.codenjoy.dojo.icancode.model.perks;
 
 /*-
  * #%L
@@ -10,36 +10,27 @@ package com.codenjoy.dojo.icancode.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
+import com.codenjoy.dojo.icancode.model.Elements;
 
-import com.codenjoy.dojo.services.State;
+public class UnstoppableLaserPerk extends AbstractPerk {
 
-import java.util.List;
+    public UnstoppableLaserPerk(Elements element) {
+        super(element);
+    }
 
-public interface Item extends State<Elements, Player> {
-
-    void action(Item item);
-
-    Cell getCell();
-
-    List<Item> getItemsInSameCell(int layer);
-
-    void setCell(Cell value);
-
-    boolean passable();
-
-    void removeFromCell();
-
-    int layer();
+    public UnstoppableLaserPerk(Elements element, String value) {
+        super(element, value);
+    }
 }

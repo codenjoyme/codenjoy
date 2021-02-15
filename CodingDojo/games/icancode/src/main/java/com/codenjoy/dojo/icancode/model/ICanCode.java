@@ -22,17 +22,21 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
-
 import com.codenjoy.dojo.icancode.model.items.*;
+import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Predicate;
 
 public class ICanCode implements Tickable, Field {
 
@@ -44,6 +48,7 @@ public class ICanCode implements Tickable, Field {
 
     private List<Player> players;
     private boolean contest;
+    private Shooter shooter;
 
     public ICanCode(Level level, Dice dice, boolean contest) {
         this.level = level;
@@ -51,22 +56,19 @@ public class ICanCode implements Tickable, Field {
         this.dice = dice;
         this.contest = contest;
         players = new LinkedList();
+        shooter = new Shooter(this);
     }
 
     @Override
-    public void fire(State owner, Direction direction, Point from) {
-        Point to = direction.change(from);
-        move(newLaser(owner, direction), to.getX(), to.getY());
-    }
-
-    private Laser newLaser(State owner, Direction direction) {
-        Laser laser = new Laser(owner, direction);
-        laser.setField(this);
-        return laser;
+    public void fire(Direction direction, Point from, FieldItem owner) {
+        shooter.fire(direction, from, owner);
     }
 
     int priority(Object o) {
-        if (o instanceof HeroItem) return 12;
+        if (o instanceof HeroItem) return 20;
+        if (o instanceof DeathRayPerk) return 13;
+        if (o instanceof UnstoppableLaserPerk) return 12;
+        if (o instanceof UnlimitedFirePerk) return 11;
         if (o instanceof ZombiePot) return 10;
         if (o instanceof Zombie) return 8;
         if (o instanceof LaserMachine) return 6;
@@ -83,10 +85,13 @@ public class ICanCode implements Tickable, Field {
 
         level.getItems(Tickable.class).stream()
                 .filter(it -> !(it instanceof HeroItem))
-                .filter(it -> !(it instanceof Laser && ((Laser)it).skipFirstTick()) ) // TODO это хак, надо разобраться!
                 .sorted((o1, o2) -> Integer.compare(priority(o2), priority(o1)))
                 .map(it -> (Tickable)it)
                 .forEach(Tickable::tick);
+
+        perks().stream()
+                .filter(perk -> !perk.isAvailable())
+                .forEach(BaseItem::removeFromCell);
 
         // после всех перемещений, если герой в полете его надо на 3й леер, иначе приземлить
         level.getItems(HeroItem.class).stream()
@@ -148,6 +153,11 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
+    public List<AbstractPerk> perks() {
+        return level.getItems(AbstractPerk.class);
+    }
+
+    @Override
     public boolean isBarrier(int x, int y) {
         return level.isBarrier(x, y);
     }
@@ -169,6 +179,14 @@ public class ICanCode implements Tickable, Field {
         Cell cell = level.getCell(x, y);
         cell.add(item);
         cell.comeIn(item);
+    }
+
+    @Override
+    public Optional<AbstractPerk> pickPerk(int x, int y) {
+        Cell cell = level.getCell(x, y);
+        return perks().stream()
+                .filter(perk -> perk.getCell().equals(cell))
+                .findAny();
     }
 
     @Override
@@ -230,7 +248,7 @@ public class ICanCode implements Tickable, Field {
         }
 
         for (Gold gold : golds) {
-            if (gold.getHidden() && !floors.isEmpty()) {
+            if (gold.isHidden() && !floors.isEmpty()) {
                 int random = dice.next(floors.size());
 
                 Floor floor = floors.get(random);
@@ -249,6 +267,74 @@ public class ICanCode implements Tickable, Field {
             result.add(player.getHero());
         }
         return result;
+    }
+
+    // TODO refactoring needed
+    @Override
+    public Optional<AbstractPerk> dropNextPerk() {
+        if (dice.next(100) > SettingsWrapper.data.perkDropRatio()) {
+            return Optional.empty();
+        }
+        Elements element = Elements.getRandomPerk(dice);
+        switch (element) {
+            case UNSTOPPABLE_LASER_PERK:
+                return Optional.of(new UnstoppableLaserPerk(element));
+            case DEATH_RAY_PERK:
+                return Optional.of(new DeathRayPerk(element));
+            case UNLIMITED_FIRE_PERK:
+                return Optional.of(new UnlimitedFirePerk(element));
+            default:
+                return Optional.empty();
+        }
+    }
+
+    // TODO refactoring needed
+    @Override
+    public void dropTemporaryGold(Hero hero) {
+        Cell cell = hero.getItem().getCell();
+        List<Cell> cells = getNeighborhoodCells(cell);
+        shuffle(cells, dice);
+        int remaining = Math.min(hero.getGoldCount(), cells.size());
+        for (int i = 0; i < cells.size() && remaining > 0; i++) {
+            Cell next = cells.get(i);
+            if (!next.isOutOf(size()) && isAvailable(next)) {
+                Gold gold = new Gold(Elements.GOLD);
+                gold.setTemporary(true);
+                next.add(gold);
+                remaining--;
+            }
+        }
+    }
+
+    private void shuffle(List<Cell> cells, Dice dice) {
+        // TODO to use dice here
+        Collections.shuffle(cells);
+    }
+
+    // TODO refactoring needed
+    private List<Cell> getNeighborhoodCells(Cell cell) {
+        return Arrays.asList(
+                cell,
+                getCell(cell.getX() - 1, cell.getY()),
+                getCell(cell.getX() + 1, cell.getY()),
+
+                getCell(cell.getX(), cell.getY() + 1),
+                getCell(cell.getX() - 1, cell.getY() + 1),
+                getCell(cell.getX() + 1, cell.getY() + 1),
+
+                getCell(cell.getX(), cell.getY() - 1),
+                getCell(cell.getX() - 1, cell.getY() - 1),
+                getCell(cell.getX() + 1, cell.getY() - 1));
+    }
+
+    // TODO refactoring needed
+    private boolean isAvailable(Cell cell) {
+        Predicate<Item> floor = item -> item instanceof Floor;
+        Predicate<Item> air = item -> item instanceof Air;
+        Predicate<Item> deathHero = item -> item instanceof HeroItem && !((HeroItem) item).getHero().isAlive();
+        return cell.items(0).stream().allMatch(floor)
+                && cell.items(1).stream().allMatch(air.or(deathHero))
+                && cell.items(2).stream().allMatch(air);
     }
 
     public void newGame(Player player) {

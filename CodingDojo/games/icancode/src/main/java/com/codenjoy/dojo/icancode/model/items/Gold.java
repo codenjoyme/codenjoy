@@ -24,14 +24,21 @@ package com.codenjoy.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.icancode.model.*;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
+
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Gold extends BaseItem {
 
     private boolean hidden;
+    private boolean temporary;
 
     public Gold(Elements el) {
         super(el);
         hidden = false;
+        temporary = false;
     }
 
     @Override
@@ -46,11 +53,20 @@ public class Gold extends BaseItem {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
+        // TODO refactoring needed
+        if (filterOne(alsoAtPoint, DeathRayPerk.class) != null) {
+            return Elements.DEATH_RAY_PERK;
+        }
+        if (filterOne(alsoAtPoint, UnstoppableLaserPerk.class) != null) {
+            return Elements.UNSTOPPABLE_LASER_PERK;
+        }
+        if (filterOne(alsoAtPoint, UnlimitedFirePerk.class) != null) {
+            return Elements.UNLIMITED_FIRE_PERK;
+        }
         if (hidden) {
             return Elements.FLOOR;
-        } else {
-            return super.state(player, alsoAtPoint);
         }
+        return super.state(player, alsoAtPoint);
     }
 
     @Override
@@ -65,7 +81,11 @@ public class Gold extends BaseItem {
         Hero hero = heroItem.getHero();
         if (!hero.isFlying()) {
             hero.pickUpGold();
-            hidden = true;
+            if (temporary) {
+                removeFromCell();
+            } else {
+                hidden = true;
+            }
         }
     }
 
@@ -73,7 +93,15 @@ public class Gold extends BaseItem {
         hidden = false;
     }
 
-    public boolean getHidden() {
+    public boolean isHidden() {
         return hidden;
+    }
+
+    public boolean isTemporary() {
+        return temporary;
+    }
+
+    public void setTemporary(boolean temporary) {
+        this.temporary = temporary;
     }
 }

@@ -25,10 +25,34 @@ package com.codenjoy.dojo.icancode.model.items;
 
 import com.codenjoy.dojo.icancode.model.BaseItem;
 import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.icancode.model.Player;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
+
+import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Floor extends BaseItem {
 
     public Floor(Elements el) {
         super(el);
+    }
+
+    @Override
+    public Elements state(Player player, Object... alsoAtPoint) {
+        // TODO refactoring needed
+        if (filterOne(alsoAtPoint, DeathRayPerk.class) != null) {
+            return Elements.DEATH_RAY_PERK;
+        }
+        if (filterOne(alsoAtPoint, UnstoppableLaserPerk.class) != null) {
+            return Elements.UNSTOPPABLE_LASER_PERK;
+        }
+        if (filterOne(alsoAtPoint, UnlimitedFirePerk.class) != null) {
+            return Elements.UNLIMITED_FIRE_PERK;
+        }
+        if (filterOne(alsoAtPoint, Gold.class) != null) {
+            return Elements.GOLD;
+        }
+        return super.state(player, alsoAtPoint);
     }
 }

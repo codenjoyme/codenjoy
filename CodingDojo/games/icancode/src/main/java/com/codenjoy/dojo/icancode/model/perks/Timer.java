@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model;
+package com.codenjoy.dojo.icancode.model.perks;
 
 /*-
  * #%L
@@ -10,36 +10,54 @@ package com.codenjoy.dojo.icancode.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
+import com.codenjoy.dojo.services.Tickable;
 
-import com.codenjoy.dojo.services.State;
+public class Timer implements Tickable {
 
-import java.util.List;
+    private final int timeout;
+    private int value;
 
-public interface Item extends State<Elements, Player> {
+    public Timer(int timeout) {
+        this.timeout = timeout;
+        this.value = timeout;
+    }
 
-    void action(Item item);
+    public static Timer empty() {
+        return new Timer(0);
+    }
 
-    Cell getCell();
+    public boolean isTimeUp() {
+        return value == 0;
+    }
 
-    List<Item> getItemsInSameCell(int layer);
+    @Override
+    public void tick() {
+        if (value > 0) {
+            value--;
+        }
+    }
 
-    void setCell(Cell value);
+    public void reset() {
+        value = timeout;
+    }
 
-    boolean passable();
-
-    void removeFromCell();
-
-    int layer();
+    @Override
+    public String toString() {
+        return "Timer{" +
+                "timeout=" + timeout +
+                ", value=" + value +
+                '}';
+    }
 }

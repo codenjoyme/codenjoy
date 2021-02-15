@@ -24,14 +24,15 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.items.*;
+import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface Field extends GameField<Player> {
 
@@ -42,6 +43,12 @@ public interface Field extends GameField<Player> {
     Cell getEndPosition();
 
     void move(Item item, int x, int y);
+
+    Optional<AbstractPerk> pickPerk(int x, int y);
+
+    Optional<AbstractPerk> dropNextPerk();
+
+    void dropTemporaryGold(Hero hero);
 
     Cell getCell(int x, int y);
 
@@ -59,7 +66,7 @@ public interface Field extends GameField<Player> {
 
     Level getLevel();
 
-    void fire(State owner, Direction direction, Point from);
+    void fire(Direction direction, Point from, FieldItem owner);
 
     int size();
 
@@ -74,4 +81,6 @@ public interface Field extends GameField<Player> {
     List<ZombiePot> zombiePots();
 
     List<Floor> floors();
+
+    List<AbstractPerk> perks();
 }

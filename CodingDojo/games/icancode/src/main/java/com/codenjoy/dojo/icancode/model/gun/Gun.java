@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model;
+package com.codenjoy.dojo.icancode.model.gun;
 
 /*-
  * #%L
@@ -10,36 +10,42 @@ package com.codenjoy.dojo.icancode.model;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
 
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
+import com.codenjoy.dojo.services.Tickable;
 
-import com.codenjoy.dojo.services.State;
+public interface Gun extends Tickable {
 
-import java.util.List;
+    void reset();
 
-public interface Item extends State<Elements, Player> {
+    boolean isCanShoot();
 
-    void action(Item item);
+    void shoot();
 
-    Cell getCell();
+    void unlimitedShoot();
 
-    List<Item> getItemsInSameCell(int layer);
+    // TODO refactoring needed
+    default int getChargePoints() {
+        return SettingsWrapper.data.gunRecharge();
+    }
 
-    void setCell(Cell value);
+    default int getGunShotQueue() {
+        return SettingsWrapper.data.gunShotQueue();
+    }
 
-    boolean passable();
+    default int getGunRestTime() {
+        return SettingsWrapper.data.gunRestTime();
+    }
 
-    void removeFromCell();
-
-    int layer();
 }

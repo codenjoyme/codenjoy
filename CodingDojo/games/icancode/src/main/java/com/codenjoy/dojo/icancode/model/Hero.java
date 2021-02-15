@@ -23,17 +23,25 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.items.Box;
-import com.codenjoy.dojo.icancode.model.items.Gold;
-import com.codenjoy.dojo.icancode.model.items.HeroItem;
-import com.codenjoy.dojo.icancode.model.items.LaserMachine;
+import com.codenjoy.dojo.icancode.model.gun.Gun;
+import com.codenjoy.dojo.icancode.model.gun.GunWithOverHeat;
+import com.codenjoy.dojo.icancode.model.items.*;
+import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
+import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
@@ -46,13 +54,20 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private boolean reset;
     private boolean laser;
     private boolean fire;
-    private Direction fireDirection;
     private boolean hole;
     private boolean landOn;
     private int goldCount;
     private int killZombieCount;
     private int killHeroCount;
     private HeroItem item;
+    private Gun gun;
+
+    // TODO refactoring needed
+    private List<AbstractPerk> perks;
+
+    public boolean isLandOn() {
+        return landOn;
+    }
 
     public void removeFromCell() {
         item.removeFromCell();
@@ -65,8 +80,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public Hero(Elements el) {
         item = new HeroItem(el);
         item.init(this);
-
+        gun = new GunWithOverHeat();
         resetFlags();
+    }
+
+    public List<AbstractPerk> getPerks() {
+        // TODO do we need here unmodifiableList
+        return Collections.unmodifiableList(perks);
     }
 
     private void resetFlags() {
@@ -83,6 +103,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         goldCount = 0;
         resetZombieKillCount();
         resetHeroKillCount();
+        perks = new ArrayList<>();
+        gun.reset();
     }
 
     public void resetZombieKillCount() {
@@ -136,46 +158,34 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void down() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.DOWN;
-        }
+        direction = Direction.DOWN;
     }
 
     @Override
     public void up() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.UP;
-        }
+        direction = Direction.UP;
     }
 
     @Override
     public void left() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.LEFT;
-        }
+        direction = Direction.LEFT;
     }
 
     @Override
     public void right() {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
-
-        if (!flying) {
-            direction = Direction.RIGHT;
-        }
+        direction = Direction.RIGHT;
     }
 
     public void reset() {
@@ -196,14 +206,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     @Override
     public void act(int... p) {
-        if (!alive) {
+        if (!alive || flying) {
             return;
         }
 
         if (p.length == 0 || p[0] == 1) {
-            if (!flying) {
-                jump = true;
-            }
+            jump = true;
         } else if (p.length == 1 && p[0] == 2) {
             pull = true;
         } else if (p.length == 1 && p[0] == 3) { // TODO test me
@@ -270,11 +278,21 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (fire) {
-            fireDirection = direction;
+            if (hasUnlimitedFirePerk()) {
+                field.fire(direction, item.getCell(), item);
+                gun.unlimitedShoot();
+            } else if (gun.isCanShoot()) {
+                field.fire(direction, item.getCell(), item);
+                gun.shoot();
+            }
             fire = false;
             direction = null;
-            fireLaser();
         }
+
+        perks = perks.stream()
+                .peek(AbstractPerk::tick)
+                .filter(AbstractPerk::isActive)
+                .collect(toList());
 
         if (direction != null) {
             int x = item.getCell().getX();
@@ -307,6 +325,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                         }
                     }
                     field.move(item, newX, newY);
+                    field.pickPerk(newX, newY).ifPresent(perk -> {
+                        perk.removeFromCell();
+                        perks.add(perk);
+                    });
                 }
             }
         }
@@ -315,6 +337,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
         landOn = false;
         pull = false;
+        gun.tick();
     }
 
     public void fixLayer() {
@@ -331,6 +354,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
         Item item = field.getIfPresent(Box.class, boxX, boxY);
         if (item == null) {
+            return false;
+        }
+
+        if (field.isAt(x, y, Start.class)) {
             return false;
         }
 
@@ -356,8 +383,16 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return false;
         }
 
+        if (field.isAt(newX, newY, Zombie.class)) {
+            return false;
+        }
+
+        if (field.isAt(newX, newY, Start.class)) {
+            return false;
+        }
+
         Gold gold = (Gold) field.getIfPresent(Gold.class, newX, newY);
-        if (gold != null && !gold.getHidden()) {
+        if (gold != null && !gold.isHidden()) {
             return false;
         }
 
@@ -413,6 +448,22 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return flying;
     }
 
+    public boolean isJump() {
+        return jump;
+    }
+
+    public boolean isPull() {
+        return pull;
+    }
+
+    public boolean isReset() {
+        return reset;
+    }
+
+    public boolean isFire() {
+        return fire;
+    }
+
     public void dieOnHole() {
         hole = true;
         die();
@@ -428,10 +479,18 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         die();
     }
 
-    private void fireLaser() {
-        if (fireDirection != null) {
-            field.fire(this, fireDirection, item.getCell());
-            fireDirection = null;
-        }
+    public boolean hasDeathRayPerk() {
+        return perks.stream()
+                .anyMatch(perk -> perk instanceof DeathRayPerk);
+    }
+
+    public boolean hasUnstoppableLaserPerk() {
+        return perks.stream()
+                .anyMatch(perk -> perk instanceof UnstoppableLaserPerk);
+    }
+
+    public boolean hasUnlimitedFirePerk() {
+        return perks.stream()
+                .anyMatch(perk -> perk instanceof UnlimitedFirePerk);
     }
 }
