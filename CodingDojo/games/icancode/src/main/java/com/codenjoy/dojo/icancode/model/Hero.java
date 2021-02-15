@@ -204,14 +204,19 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (p.length == 0 || p[0] == 1) {
+            // ACT | ACT(1)
             jump = true;
         } else if (p.length == 1 && p[0] == 2) {
+            // ACT(2)
             pull = true;
         } else if (p.length == 1 && p[0] == 3) { // TODO test me
+            // ACT(3)
             fire = true;
         } else if (p[0] == 0) {
+            // ACT(0)
             reset = true;
         } else if (p[0] == -1) { // TODO test me
+            // ACT(-1)
             Cell end = field.getEndPosition();
             field.move(item, end.getX(), end.getY());
         }
@@ -270,7 +275,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             jump = false;
         }
 
-        if (fire) {
+        if (fire && direction != null) {
             if (has(UnlimitedFirePerk.class)) {
                 field.fire(direction, item.getCell(), item);
                 gun.unlimitedShoot();
