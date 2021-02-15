@@ -157,13 +157,11 @@ public enum Elements implements CharElements {
         }
     }
 
-    // TODO refactoring needed
     public static List<Elements> getPerks() {
-        return ImmutableList.<Elements>builder()
-                .add(UNSTOPPABLE_LASER_PERK)
-                .add(DEATH_RAY_PERK)
-                .add(UNLIMITED_FIRE_PERK)
-                .build();
+        return Arrays.asList(
+                UNSTOPPABLE_LASER_PERK,
+                DEATH_RAY_PERK,
+                UNLIMITED_FIRE_PERK);
     }
 
     // TODO refactoring needed
