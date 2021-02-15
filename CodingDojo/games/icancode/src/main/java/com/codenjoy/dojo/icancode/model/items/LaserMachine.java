@@ -43,21 +43,31 @@ public class LaserMachine extends FieldItem implements Tickable {
 
     private Direction getDirection(Elements element) {
         switch (element) {
-            case LASER_MACHINE_CHARGING_LEFT: return Direction.LEFT;
-            case LASER_MACHINE_CHARGING_RIGHT: return Direction.RIGHT;
-            case LASER_MACHINE_CHARGING_UP: return Direction.UP;
-            case LASER_MACHINE_CHARGING_DOWN: return Direction.DOWN;
-            default: throw new IllegalStateException("Unexpected element: " + element);
+            case LASER_MACHINE_CHARGING_LEFT:
+                return Direction.LEFT;
+            case LASER_MACHINE_CHARGING_RIGHT:
+                return Direction.RIGHT;
+            case LASER_MACHINE_CHARGING_UP:
+                return Direction.UP;
+            case LASER_MACHINE_CHARGING_DOWN:
+                return Direction.DOWN;
+            default:
+                throw new IllegalStateException("Unexpected element: " + element);
         }
     }
 
     private Elements getChargedElement(Direction direction) {
         switch (direction) {
-            case LEFT: return Elements.LASER_MACHINE_READY_LEFT;
-            case RIGHT: return Elements.LASER_MACHINE_READY_RIGHT;
-            case UP: return Elements.LASER_MACHINE_READY_UP;
-            case DOWN: return Elements.LASER_MACHINE_READY_DOWN;
-            default: throw new IllegalStateException("Unexpected direction: " + direction);
+            case LEFT:
+                return Elements.LASER_MACHINE_READY_LEFT;
+            case RIGHT:
+                return Elements.LASER_MACHINE_READY_RIGHT;
+            case UP:
+                return Elements.LASER_MACHINE_READY_UP;
+            case DOWN:
+                return Elements.LASER_MACHINE_READY_DOWN;
+            default:
+                throw new IllegalStateException("Unexpected direction: " + direction);
         }
     }
 
