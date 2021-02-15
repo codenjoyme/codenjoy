@@ -24,7 +24,9 @@ package com.codenjoy.dojo.icancode.services;
 
 
 import com.codenjoy.dojo.icancode.services.levels.Level;
-import com.codenjoy.dojo.services.settings.*;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 
 import java.util.Arrays;
 
@@ -37,11 +39,18 @@ public final class SettingsWrapper {
 
     public static SettingsWrapper data;
 
+    private final Parameter<Integer> perkDropRatio;
+    private final Parameter<Integer> perkAvailability;
+    private final Parameter<Integer> perkActivity;
+    private final Parameter<Integer> deathRayRange;
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> goldScore;
     private final Parameter<Integer> killZombieScore;
     private final Parameter<Integer> killHeroScore;
     private final Parameter<Boolean> enableKillScore;
+    private final Parameter<Integer> gunRecharge;
+    private final Parameter<Integer> gunShotQueue;
+    private final Parameter<Integer> gunRestTime;
     private final Parameter<Integer> loosePenalty;
     private final Parameter<Boolean> isTrainingMode;
     private final Parameter<String> gameMode;
@@ -62,13 +71,20 @@ public final class SettingsWrapper {
         data = this;
         this.settings = settings;
 
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(50);
+        perkDropRatio = settings.addEditBox("Perk drop ratio").type(Integer.class).def(50);
+        perkAvailability = settings.addEditBox("Perk availability").type(Integer.class).def(10);
+        perkActivity = settings.addEditBox("Perk activity").type(Integer.class).def(10);
+        deathRayRange = settings.addEditBox("Death-Ray perk range").type(Integer.class).def(10);
+        winScore = settings.addEditBox("Win score").type(Integer.class).def(25);
         goldScore = settings.addEditBox("Gold score").type(Integer.class).def(10);
-        killZombieScore = settings.addEditBox("Kill zombie score").type(Integer.class).def(20);
-        killHeroScore = settings.addEditBox("Kill hero score").type(Integer.class).def(50);
+        killZombieScore = settings.addEditBox("Kill zombie score").type(Integer.class).def(5);
+        killHeroScore = settings.addEditBox("Kill hero score").type(Integer.class).def(10);
         enableKillScore = settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
+        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(5);
         isTrainingMode = settings.addCheckBox("Is training mode").type(Boolean.class).def(true);
+        gunRecharge = settings.addEditBox("Heroes gun recharge").type(Integer.class).def(2);
+        gunShotQueue = settings.addEditBox("Heroes gun need to relax after a series of shots").type(Integer.class).def(10);
+        gunRestTime = settings.addEditBox("Heroes gun rest time(ticks)").type(Integer.class).def(10);
 
         gameMode = settings.addSelect("Game mode", Arrays.asList(
                 CLASSSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP))
@@ -79,8 +95,36 @@ public final class SettingsWrapper {
         Levels.setup();
     }
 
+    public int perkDropRatio() {
+        return perkDropRatio.getValue();
+    }
+
+    public int perkAvailability() {
+        return perkAvailability.getValue();
+    }
+
+    public int perkActivity() {
+        return perkActivity.getValue();
+    }
+
+    public int getDeathRayRange() {
+        return deathRayRange.getValue();
+    }
+
     public int goldScore() {
         return goldScore.getValue();
+    }
+
+    public int gunRecharge() {
+        return gunRecharge.getValue();
+    }
+
+    public int gunShotQueue() {
+        return gunShotQueue.getValue();
+    }
+
+    public int gunRestTime() {
+        return gunRestTime.getValue();
     }
 
     public int killZombieScore() {
@@ -144,6 +188,26 @@ public final class SettingsWrapper {
 
     // setters for testing
 
+    public SettingsWrapper perkDropRatio(int value) {
+        perkDropRatio.update(value);
+        return this;
+    }
+
+    public SettingsWrapper perkAvailability(int value) {
+        perkAvailability.update(value);
+        return this;
+    }
+
+    public SettingsWrapper perkActivity(int value) {
+        perkActivity.update(value);
+        return this;
+    }
+
+    public SettingsWrapper deathRayRange(int value) {
+        deathRayRange.update(value);
+        return this;
+    }
+
     public SettingsWrapper loosePenalty(int value) {
         loosePenalty.update(value);
         return this;
@@ -156,6 +220,22 @@ public final class SettingsWrapper {
 
     public SettingsWrapper winScore(int value) {
         winScore.update(value);
+        return this;
+    }
+
+    public SettingsWrapper gunRecharge(int value) {
+        gunRecharge.update(value);
+        return this;
+    }
+
+    public SettingsWrapper gunShotQueue(int value) {
+        gunShotQueue.update(value);
+        return this;
+
+    }
+
+    public SettingsWrapper gunRestTime(int value) {
+        gunRestTime.update(value);
         return this;
     }
 
