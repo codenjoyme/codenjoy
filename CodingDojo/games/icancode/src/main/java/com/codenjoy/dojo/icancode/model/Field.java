@@ -48,7 +48,7 @@ public interface Field extends GameField<Player> {
 
     Optional<AbstractPerk> dropNextPerk();
 
-    void dropTemporaryGold(Hero hero);
+    void dropPickedGold(Hero hero);
 
     Cell getCell(int x, int y);
 
@@ -74,13 +74,13 @@ public interface Field extends GameField<Player> {
 
     List<Laser> lasers();
 
-    List<Gold> golds();
+    List<Gold> pickedGold();
 
     List<LaserMachine> laserMachines();
 
     List<ZombiePot> zombiePots();
 
-    List<Floor> floors();
+    List<Floor> floor();
 
     List<AbstractPerk> perks();
 }

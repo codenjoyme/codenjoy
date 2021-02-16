@@ -1963,7 +1963,7 @@ public class SingleTest {
     }
 
     @Test
-    public void testGetBoardAsString() {
+    public void shouldGetBoardAsString() {
         // given
         givenFl("╔═══┐" +
                 "║SE.│" +
@@ -2118,7 +2118,7 @@ public class SingleTest {
     }
 
     @Test
-    public void testGetBoardAsString_whenBigFrame() {
+    public void shouldGetBoardAsString_whenBigFrame() {
         // given
         String field =
                 "╔══════════════════┐" +
@@ -4250,7 +4250,7 @@ public class SingleTest {
     }
 
     @Test
-    public void doNotDropTemporaryGoldAfterPlayerDeath_ifHeroIsEmpty() {
+    public void shouldNotDropPickedGold_afterPlayerDeath_ifHeroIsEmpty() {
         // given
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -4271,6 +4271,7 @@ public class SingleTest {
                 "------" +
                 "------" +
                 "------");
+
         assertL(single1,
                 "╔════┐" +
                 "║.S..│" +
@@ -4307,6 +4308,7 @@ public class SingleTest {
                 "------" +
                 "------" +
                 "------");
+
         assertE(single2,
                 "------" +
                 "--X→☺-" +
@@ -4333,12 +4335,12 @@ public class SingleTest {
                 "║....│" +
                 "└────┘");
 
-        assertTrue(gameMultiple.golds().stream()
-                .noneMatch(Gold::isTemporary));
+        noGold(hero1());
+        noGold(hero2());
     }
 
     @Test
-    public void dropTemporaryGold_afterPlayerDeath() {
+    public void shouldDropPickedGold_afterPlayerDeath() {
         // given
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -4427,8 +4429,8 @@ public class SingleTest {
                 "║....│" +
                 "└────┘");
 
-        assertTrue(gameMultiple.golds().stream()
-                .anyMatch(Gold::isTemporary));
+        noGold(hero1());
+        noGold(hero2());
 
         // when
         hero1().right();
@@ -4453,12 +4455,12 @@ public class SingleTest {
                 "║....│" +
                 "└────┘");
 
-        assertTrue(gameMultiple.golds().stream()
-                .noneMatch(Gold::isTemporary));
+        assertEquals(1, hero1().gold().size());
+        noGold(hero2());
     }
 
     @Test
-    public void dropTemporaryGold_onlyOnFloor() {
+    public void shouldDropPickedGold_onlyOnFloor() {
         // given
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -4606,13 +4608,17 @@ public class SingleTest {
                 "║....│" +
                 "└────┘");
 
-        assertEquals(3, gameMultiple.golds().stream()
-                .filter(Gold::isTemporary)
-                .count());
+        Hero hero = hero1();
+        noGold(hero);
+        noGold(hero2());
+    }
+
+    private void noGold(Hero hero) {
+        assertEquals(0, hero.gold().size());
     }
 
     @Test
-    public void dropMax6Golds_afterHeroDeath() {
+    public void shouldDropAllPickedGolds_evenIfNoSpaceAroundHero_afterHeroDeath() {
         // given
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -4679,18 +4685,17 @@ public class SingleTest {
         assertL(single1,
                 "╔════┐" +
                 "║$S$.│" +
-                "║$$$.│" +
-                "║..E.│" +
-                "║....│" +
+                "║$$$$│" +
+                "║$$E$│" +
+                "║$...│" +
                 "└────┘");
 
-        assertEquals(5, gameMultiple.golds().stream()
-                .filter(Gold::isTemporary)
-                .count());
+        noGold(hero1());
+        noGold(hero2());
     }
 
     @Test
-    public void onlyOneTemporaryGold_canDrop_onAvailableCell() {
+    public void shouldOnlyOnePickedGold_canDrop_onAvailableCell() {
         // given
         givenFl("╔════┐" +
                 "║OS..│" +
@@ -4758,18 +4763,17 @@ public class SingleTest {
         assertL(single1,
                 "╔════┐" +
                 "║OS$.│" +
-                "║OOO.│" +
-                "║..E.│" +
-                "║....│" +
+                "║OOO$│" +
+                "║$$E$│" +
+                "║$...│" +
                 "└────┘");
 
-        assertEquals(1, gameMultiple.golds().stream()
-                .filter(Gold::isTemporary)
-                .count());
+        noGold(hero1());
+        noGold(hero2());
     }
 
     @Test
-    public void doNotDropTemporaryGold_onAliveHero() {
+    public void shouldNotDropPickedGold_onAliveHero() {
         // given
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -4825,15 +4829,14 @@ public class SingleTest {
 
         assertL(single1,
                 "╔════┐" +
-                "║$S..│" +
-                "║$$$.│" +
+                "║$S.$│" +
+                "║$$$$│" +
                 "║..E.│" +
                 "║....│" +
                 "└────┘");
 
-        assertEquals(4, gameMultiple.golds().stream()
-                .filter(Gold::isTemporary)
-                .count());
+        noGold(hero1());
+        noGold(hero2());
     }
 
 }

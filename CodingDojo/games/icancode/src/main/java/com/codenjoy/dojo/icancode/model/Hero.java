@@ -116,9 +116,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     private void reset(Field field) {
-        resetFlags();
         field.getStartPosition().add(this.item);
         field.reset();
+        resetFlags();
     }
 
     @Override
@@ -382,7 +382,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         Gold gold = (Gold) field.getIfPresent(Gold.class, newX, newY);
-        if (gold != null && !gold.isHidden()) {
+        if (gold != null) {
             return false;
         }
 
@@ -472,5 +472,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public boolean has(Class<? extends AbstractPerk> perkClass) {
         return perks.stream()
                 .anyMatch(perk -> perk.getClass().equals(perkClass));
+    }
+
+    public List<Gold> gold() {
+        return gold;
     }
 }

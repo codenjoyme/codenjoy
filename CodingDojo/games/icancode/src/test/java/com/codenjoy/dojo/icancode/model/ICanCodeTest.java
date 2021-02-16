@@ -847,7 +847,7 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-------");
 
         // when
-        dice(0, 1, 1); // index of start position, then 2 indexes of floors for gold
+        dice(0, 3, 4 - 1); // index of start position, then 2 indexes of floors for gold
         hero.reset();
         game.tick();
 

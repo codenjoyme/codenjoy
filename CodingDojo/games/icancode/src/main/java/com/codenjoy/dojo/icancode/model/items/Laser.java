@@ -89,7 +89,7 @@ public class Laser extends FieldItem implements Tickable {
                                 die();
                             }
                             hero.dieOnLaser();
-                            field.dropTemporaryGold(hero);
+                            field.dropPickedGold(hero);
                             addOwnerKillHeroScore();
                         }
                     }

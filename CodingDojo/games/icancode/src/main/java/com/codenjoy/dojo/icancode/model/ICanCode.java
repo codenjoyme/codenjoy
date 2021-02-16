@@ -35,6 +35,8 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
+import static java.util.stream.Collectors.toList;
+
 public class ICanCode implements Tickable, Field {
 
     public static final boolean TRAINING = false;
@@ -133,8 +135,10 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public List<Gold> golds() {
-        return level.getItems(Gold.class);
+    public List<Gold> pickedGold() {
+        return getHeroes().stream()
+                    .flatMap(hero -> hero.gold().stream())
+                    .collect(toList());
     }
 
     @Override
@@ -148,7 +152,7 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public List<Floor> floors() {
+    public List<Floor> floor() {
         return level.getItems(Floor.class);
     }
 
@@ -195,6 +199,7 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
+    // TODO to make cast inside
     public Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
         for (Item item : getCell(x, y).items()) {
             if (item.getClass().equals(clazz)) {
@@ -216,20 +221,20 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public void reset() {
-        List<Gold> golds = golds();
+        List<Gold> gold = pickedGold();
 
         if (contest) {
-            setRandomGold(golds);
+            setRandomGold(gold);
+        } else {
+            gold.forEach(Gold::reset);
         }
-
-        golds.forEach(it -> it.reset());
 
         if (!contest) {
             // TODO test me
-            zombiePots().forEach(it -> it.reset());
+            zombiePots().forEach(ZombiePot::reset);
 
             // TODO test me
-            laserMachines().forEach(it -> it.reset());
+            laserMachines().forEach(LaserMachine::reset);
         }
     }
 
@@ -238,24 +243,23 @@ public class ICanCode implements Tickable, Field {
         return contest;
     }
 
-    private void setRandomGold(List<Gold> golds) {
-        List<Floor> floors = floors();
+    private void setRandomGold(List<Gold> gold) {
+        List<Floor> floor = floor().stream()
+                .filter(item -> item.getCell().items().size() == 1)
+                .collect(toList());
 
-        for (int i = floors.size() - 1; i > -1; --i) {
-            if (floors.get(i).getCell().items().size() > 1) {
-                floors.remove(i);
-            }
+        if (floor.isEmpty() && !gold.isEmpty()) {
+            System.out.println("Try solve this");
+            return;
         }
 
-        for (Gold gold : golds) {
-            if (gold.isHidden() && !floors.isEmpty()) {
-                int random = dice.next(floors.size());
+        for (Gold item : gold) {
+            int random = dice.next(floor.size());
 
-                Floor floor = floors.get(random);
-                floors.remove(random);
+            Floor place = floor.get(random);
+            floor.remove(random);
 
-                floor.getCell().add(gold);
-            }
+            place.getCell().add(item);
         }
     }
 
@@ -276,28 +280,30 @@ public class ICanCode implements Tickable, Field {
         return PerkUtils.random(dice);
     }
 
-    // TODO refactoring needed
     @Override
-    public void dropTemporaryGold(Hero hero) {
-        Cell cell = hero.getItem().getCell();
-        List<Cell> cells = getNeighborhoodCells(cell);
-        int remaining = Math.min(hero.getGoldCount(), cells.size());
-        int count = 0;
-        while (remaining != 0 && ++count < MAX) {
-            Cell next = cells.remove(dice.next(cells.size()));
-            if (next.isOutOf(size()) || !isAvailable(next)) {
+    public void dropPickedGold(Hero hero) {
+        Cell heroCell = hero.getItem().getCell();
+        List<Cell> cells = neighbors(heroCell);
+        List<Gold> gold = hero.gold();
+        while (!gold.isEmpty() && !cells.isEmpty()) {
+            int random = dice.next(cells.size());
+            Cell place = cells.remove(random);
+
+            if (place.isOutOf(size()) || !isAvailable(place)) {
                 continue;
             }
 
-            Gold gold = new Gold(Elements.GOLD);
-            gold.setTemporary(true);
-            next.add(gold);
-            remaining--;
+            place.add(gold.remove(0));
+        }
+
+        if (!gold.isEmpty()) {
+            setRandomGold(gold);
+            gold.clear();
         }
     }
 
     // TODO refactoring needed
-    private List<Cell> getNeighborhoodCells(Cell cell) {
+    private List<Cell> neighbors(Cell cell) {
         return new LinkedList<>(){{
             add(cell);
             add(getCell(cell.getX() - 1, cell.getY()));

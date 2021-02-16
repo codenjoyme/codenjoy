@@ -30,13 +30,11 @@ import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class Gold extends BaseItem {
 
-    private boolean hidden;
-    private boolean temporary;
+    private Cell dock;
 
     public Gold(Elements el) {
         super(el);
-        hidden = false;
-        temporary = false;
+        dock = null;
     }
 
     @Override
@@ -46,45 +44,31 @@ public class Gold extends BaseItem {
             return perk.state(player, alsoAtPoint);
         }
 
-        if (hidden) {
-            return Elements.FLOOR;
-        }
-
         return super.state(player, alsoAtPoint);
     }
 
     @Override
     public void action(Item item) {
-        if (hidden) return; // TODO test me
-
         check(item, HeroItem.class)
                 .ifPresent(heroItem -> {
                     Hero hero = heroItem.getHero();
                     if (!hero.isFlying()) {
                         hero.pickUp(this);
-                        if (temporary) {
-                            removeFromCell();
-                        } else {
-                            hidden = true;
-                        }
+                        removeFromCell();
                     }
                 });
+    }
 
+    @Override
+    public void setCell(Cell cell) {
+        if (dock == null && cell != null) {
+            dock = cell;
+        }
+        super.setCell(cell);
     }
 
     public void reset() {
-        hidden = false;
+        dock.add(this);
     }
 
-    public boolean isHidden() {
-        return hidden;
-    }
-
-    public boolean isTemporary() {
-        return temporary;
-    }
-
-    public void setTemporary(boolean temporary) {
-        this.temporary = temporary;
-    }
 }
