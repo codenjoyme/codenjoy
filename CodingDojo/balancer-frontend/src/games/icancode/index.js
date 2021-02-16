@@ -10,13 +10,13 @@ import RulesContainer from './../../containers/RulesContainer/icancode';
 const name = 'icancode';
 
 export default {
+    name,
+    RulesContainer,
+    Elements,
     battleComplete,
     logo,
-    Elements,
     boardSample,
     stepWinHeader,
     stepBattleHeader,
-    stepCreateHeader,
-    RulesContainer,
-    name
+    stepCreateHeader
 };
