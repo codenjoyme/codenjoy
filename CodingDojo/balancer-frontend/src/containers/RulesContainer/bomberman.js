@@ -249,7 +249,7 @@ class RulesContainer extends Component {
                         Розшифрування символів
                     </div>
                     <p className="game-field-img-container">
-                        <img className="responsive-img" src={ Game.BoardSample } alt='Ігрове поле'/>
+                        <img className="responsive-img" src={ Game.boardSample } alt='Ігрове поле'/>
                     </p>
                     <GameElements
                         settings={ settings }
