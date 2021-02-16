@@ -28,13 +28,11 @@ import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Tickable;
 import org.apache.commons.lang3.StringUtils;
 
-// TODO refactoring needed
-// TODO to use FieldItem instead of BaseItem
 public abstract class AbstractPerk extends BaseItem implements Tickable {
 
-    private final String value;
-    private final Timer availability;
-    private final Timer activity;
+    private String value;
+    private Timer availability;
+    private Timer activity;
 
     public AbstractPerk(Elements element) {
         this(element, StringUtils.EMPTY);
