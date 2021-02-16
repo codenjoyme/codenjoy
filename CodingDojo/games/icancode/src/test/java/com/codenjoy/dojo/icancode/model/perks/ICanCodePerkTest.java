@@ -263,8 +263,8 @@ public class ICanCodePerkTest extends AbstractGameTest {
                 "└────┘");
 
         // when then
-        assertTrue(game.pickPerk(pt(2, 1)).isPresent());
-        assertFalse(game.pickPerk(pt(2, 4)).isPresent());
+        assertTrue(game.perkAt(pt(2, 1)).isPresent());
+        assertFalse(game.perkAt(pt(2, 4)).isPresent());
     }
 
     @Test

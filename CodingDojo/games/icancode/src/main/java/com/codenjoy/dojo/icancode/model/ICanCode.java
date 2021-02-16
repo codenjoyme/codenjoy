@@ -187,7 +187,7 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public Optional<AbstractPerk> pickPerk(Point pt) {
+    public Optional<AbstractPerk> perkAt(Point pt) {
         Cell cell = level.getCell(pt);
         return perks().stream()
                 .filter(perk -> perk.getCell().equals(cell))

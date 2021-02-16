@@ -44,7 +44,7 @@ public interface Field extends GameField<Player> {
 
     void move(Item item, Point pt);
 
-    Optional<AbstractPerk> pickPerk(Point pt);
+    Optional<AbstractPerk> perkAt(Point pt);
 
     Optional<AbstractPerk> dropNextPerk();
 

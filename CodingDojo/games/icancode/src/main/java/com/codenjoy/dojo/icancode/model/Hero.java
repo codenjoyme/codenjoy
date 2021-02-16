@@ -59,8 +59,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private int killHeroCount;
     private HeroItem item;
     private Gun gun;
-
-    // TODO refactoring needed
     private List<AbstractPerk> perks;
 
     public boolean isLandOn() {
@@ -311,7 +309,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                         }
                     }
                     field.move(item, to);
-                    field.pickPerk(to).ifPresent(perk -> {
+                    field.perkAt(to).ifPresent(perk -> {
                         perk.removeFromCell();
                         perks.add(perk);
                     });
