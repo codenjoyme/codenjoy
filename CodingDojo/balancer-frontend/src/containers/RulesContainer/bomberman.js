@@ -11,7 +11,7 @@ import {  getGameConnectionString, getJavaClient  } from '../../utils';
 import { requestSettingsStart } from '../../redux/settings';
 import {  book  } from '../../routes';
 import Icon from '../../styles/images/icons/rules.svg';
-import BoardSample from '../../styles/images/game/field-sample.png';
+import BoardSample from '../../styles/images/game/bomberman/field-sample.png';
 
 // own
 import Styles from './styles.module.css';
