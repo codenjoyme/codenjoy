@@ -50,9 +50,12 @@ public class Floor extends BaseItem {
         if (filterOne(alsoAtPoint, UnlimitedFirePerk.class) != null) {
             return Elements.UNLIMITED_FIRE_PERK;
         }
-        if (filterOne(alsoAtPoint, Gold.class) != null) {
-            return Elements.GOLD;
+
+        Gold gold = filterOne(alsoAtPoint, Gold.class);
+        if (gold != null) {
+            return gold.state(player, alsoAtPoint);
         }
+
         return super.state(player, alsoAtPoint);
     }
 }

@@ -680,6 +680,12 @@ public class ICanCodeTest extends AbstractGameTest {
                 "└───┘" +
                 "     ");
 
+        assertL("     " +
+                "╔═══┐" +
+                "║S$E│" +
+                "└───┘" +
+                "     ");
+
         // when
         hero.right();
         game.tick();
@@ -739,6 +745,128 @@ public class ICanCodeTest extends AbstractGameTest {
                 "------" +
                 "------" +
                 "------");
+    }
+
+    @Test
+    public void shouldPutAllGoldOnField_afterHeroCollectIt_whenReset_caseSingle() {
+        // given
+        mode = ICanCode.TRAINING;
+
+        givenFl("       " +
+                "╔═════┐" +
+                "║S$$..│" +
+                "║....E│" +
+                "└─────┘" +
+                "       " +
+                "       ");
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        assertL("       " +
+                "╔═════┐" +
+                "║S....│" +
+                "║....E│" +
+                "└─────┘" +
+                "       " +
+                "       ");
+
+        assertE("-------" +
+                "-------" +
+                "----☺--" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        // when
+        dice(0); // index of start position
+        hero.reset();
+        game.tick();
+
+        // then
+        assertL("       " +
+                "╔═════┐" +
+                "║S$$..│" +
+                "║....E│" +
+                "└─────┘" +
+                "       " +
+                "       ");
+
+        assertE("-------" +
+                "-------" +
+                "-☺-----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+    }
+
+    @Test
+    public void shouldPutAllGoldOnField_afterHeroCollectIt_whenReset_caseMultiple() {
+        // given
+        mode = ICanCode.CONTEST;
+
+        givenFl("       " +
+                "╔═════┐" +
+                "║S$$..│" +
+                "║....E│" +
+                "└─────┘" +
+                "       " +
+                "       ");
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        hero.right();
+        game.tick();
+
+        assertL("       " +
+                "╔═════┐" +
+                "║S....│" +
+                "║....E│" +
+                "└─────┘" +
+                "       " +
+                "       ");
+
+        assertE("-------" +
+                "-------" +
+                "----☺--" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        // when
+        dice(0, 1, 1); // index of start position, then 2 indexes of floors for gold
+        hero.reset();
+        game.tick();
+
+        // then
+        assertL("       " +
+                "╔═════┐" +
+                "║S...$│" +
+                "║$...E│" +
+                "└─────┘" +
+                "       " +
+                "       ");
+
+        assertE("-------" +
+                "-------" +
+                "-☺-----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
     }
 
     @Test

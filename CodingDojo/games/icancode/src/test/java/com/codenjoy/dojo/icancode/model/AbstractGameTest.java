@@ -26,7 +26,6 @@ import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
-import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
@@ -56,6 +55,7 @@ public class AbstractGameTest {
 
     public static final int FIRE_TICKS = 6;
     private static final int COUNT_LAYERS = 3;
+    public boolean mode;
     protected ICanCode game;
     private Printer<PrinterData> printer;
 
@@ -68,6 +68,8 @@ public class AbstractGameTest {
 
     @Before
     public void setup() {
+        mode = ICanCode.TRAINING;
+
         settings = SettingsWrapper.setup(new SettingsImpl())
                 .perkActivity(10)
                 .perkAvailability(10)
@@ -100,7 +102,7 @@ public class AbstractGameTest {
     protected void givenFl(int viewSize, String board) {
         Levels.VIEW_SIZE = viewSize;
         Level level = createLevels(new String[]{board}).get(0);
-        game = new ICanCode(level, dice, ICanCode.TRAINING);
+        game = new ICanCode(level, dice, mode);
         listener = mock(EventListener.class);
         player = new Player(listener);
         game.newGame(player);

@@ -59,7 +59,8 @@ public class LevelImpl implements Level {
                 Elements element = Elements.valueOf(map.charAt(indexChar));
                 BaseItem item = getBaseItem(element);
 
-                if (element.getLayer() != Elements.Layers.LAYER1) {
+                if (element.getLayer() != Elements.Layers.LAYER1
+                    || element == Elements.GOLD) {
                     Elements atBottom = Elements.valueOf(Elements.FLOOR.ch());
                     cell.add(getBaseItem(atBottom));
                 }

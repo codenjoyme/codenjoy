@@ -219,7 +219,7 @@ public class ICanCode implements Tickable, Field {
         List<Gold> golds = golds();
 
         if (contest) {
-            setRandomGold(golds); // TODO test me
+            setRandomGold(golds);
         }
 
         golds.forEach(it -> it.reset());
@@ -254,9 +254,7 @@ public class ICanCode implements Tickable, Field {
                 Floor floor = floors.get(random);
                 floors.remove(random);
 
-                Cell cell = gold.getCell();
                 floor.getCell().add(gold);
-                cell.add(floor);
             }
         }
     }
