@@ -11,7 +11,14 @@ import RegisterConfirmContainer from './RegisterConfirmContainer';
 import RulesContainerICanCode from './RulesContainer/icancode';
 import RulesContainerBomberman from './RulesContainer/bomberman';
 
-const RulesContainer = RulesContainerICanCode;
+const RulesContainer = function getRulesContainer() {
+    switch (process.env.REACT_APP_GAME) {
+        case 'icancode' :
+            return RulesContainerICanCode;
+        case 'bomberman' :
+            return RulesContainerBomberman;
+    }
+}();
 
 export {
     BoardContainer,

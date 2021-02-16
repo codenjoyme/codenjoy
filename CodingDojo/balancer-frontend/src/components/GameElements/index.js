@@ -4,7 +4,14 @@ import Styles from "./styles.module.css";
 import ElementsBomberman from "./bomberman";
 import ElementsICanCode from "./icancode";
 
-const Elements = ElementsICanCode;
+const Elements = function getElements() {
+    switch (process.env.REACT_APP_GAME) {
+        case 'icancode' :
+            return ElementsICanCode;
+        case 'bomberman' :
+            return ElementsBomberman;
+    }
+}();
 
 export class GameElements extends Component {
     render() {
