@@ -8,35 +8,10 @@ import First from '../../styles/images/prizes/first.png';
 import Second from '../../styles/images/prizes/second.png';
 import Third from '../../styles/images/prizes/third.png';
 import Icon from '../../styles/images/icons/rules.svg';
-
-import stepWinHeader_icancode from '../../styles/images/layout/icancode/presents.jpg';
-import stepWinHeader_bomberman from '../../styles/images/layout/bomberman/presents.jpg';
-import stepBattleHeader_icancode from '../../styles/images/layout/icancode/battle.jpg';
-import stepBattleHeader_bomberman from '../../styles/images/layout/bomberman/battle.jpg';
-import stepCreateHeader_icancode from '../../styles/images/layout/icancode/create.jpg';
-import stepCreateHeader_bomberman from '../../styles/images/layout/bomberman/create.jpg';
+import Game from '../../games'
 
 // own
 import Styles from './styles.module.css';
-
-const stepWinHeader = function(){
-    switch (process.env.REACT_APP_GAME) {
-        case 'icancode' :  return stepWinHeader_icancode;
-        case 'bomberman' : return stepWinHeader_bomberman;
-    }
-}();
-const stepBattleHeader = function(){
-    switch (process.env.REACT_APP_GAME) {
-        case 'icancode' : return stepBattleHeader_icancode;
-        case 'bomberman' : return stepBattleHeader_bomberman;
-    }
-}();
-const stepCreateHeader = function(){
-    switch (process.env.REACT_APP_GAME) {
-        case 'icancode' : return stepCreateHeader_icancode;
-        case 'bomberman' : return stepCreateHeader_bomberman;
-    }
-}();
 
 const startDate = process.env.REACT_APP_EVENT_START_DATE;
 const endDate = process.env.REACT_APP_EVENT_END_DATE;
@@ -68,7 +43,7 @@ const HomeContainer = () => (
             <div className={ Styles.guideContainer }>
                 <div className={ Styles.guideStep }>
                     <div className={ Styles.steps }>
-                        <img src={ stepCreateHeader } alt='Створи' />
+                        <img src={ Game.stepCreateHeader } alt='Створи' />
                     </div>
                     <div className={ Styles.stepTitle }>СТВОРИ</div>
                     <div className={ Styles.stepDescription }>
@@ -83,7 +58,7 @@ const HomeContainer = () => (
                 </div>
                 <div className={ Styles.guideStep }>
                     <div className={ Styles.steps }>
-                        <img src={ stepBattleHeader } alt='Змагайся' />
+                        <img src={ Game.stepBattleHeader } alt='Змагайся' />
                     </div>
                     <div className={ Styles.stepTitle }>ЗМАГАЙСЯ</div>
                     <div className={ Styles.stepDescription }>
@@ -102,7 +77,7 @@ const HomeContainer = () => (
                 </div>
                 <div className={ Styles.guideStep }>
                     <div className={ Styles.steps }>
-                        <img src={ stepWinHeader } alt='Вигравай' />
+                        <img src={ Game.stepWinHeader } alt='Вигравай' />
                     </div>
                     <div className={ Styles.stepTitle }>ВИГРАВАЙ</div>
                     <div className={ Styles.stepDescription }>
