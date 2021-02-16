@@ -179,7 +179,6 @@ public class ICanCode implements Tickable, Field {
         return level.getItems(Exit.class).get(0).getCell();
     }
 
-    // TODO refactoring needed: dont use this method in test
     @Override
     public void move(Item item, Point pt) {
         Cell cell = level.getCell(pt);

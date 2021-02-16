@@ -31,8 +31,14 @@ public class Zombie extends FieldItem implements Tickable {
 
     public static int WALK_EACH_TICKS = 2;
     public static ZombieBrain BRAIN = new ZombieBrain();
+
     private int ticks = 0;
     private boolean die;
+
+    public Zombie(Elements gender) {
+        super(gender);
+        die = false;
+    }
 
     public Zombie(boolean gender) {
         super(getElement(gender));

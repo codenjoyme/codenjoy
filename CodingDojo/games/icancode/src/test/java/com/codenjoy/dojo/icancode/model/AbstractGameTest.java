@@ -38,12 +38,15 @@ import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
+import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
+import static com.codenjoy.dojo.services.Direction.STOP;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -176,5 +179,12 @@ public class AbstractGameTest {
 
     protected void hasNot(Class<? extends AbstractPerk> perkClass) {
         assertEquals(false, hero.has(perkClass));
+    }
+
+    protected void zombieAt(int x, int y) {
+        givenZombie().thenReturn(STOP);
+        Zombie zombie = new Zombie(true);
+        zombie.setField(mock(Field.class));
+        game.move(zombie, pt(x, y));
     }
 }

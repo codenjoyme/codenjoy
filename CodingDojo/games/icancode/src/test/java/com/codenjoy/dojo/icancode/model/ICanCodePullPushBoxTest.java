@@ -924,27 +924,11 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     public void shouldCantMoveBox_whenHeroPushItOnZombie() {
         // given
         givenFl("╔════┐" +
-                "║SB..│" +
+                "║SB♂.│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
-
-        game.move(new Zombie(true), pt(3, 4));
-
-        assertL("╔════┐" +
-                "║S...│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        assertE("------" +
-                "-☺B♂--" +
-                "------" +
-                "------" +
-                "------" +
-                "------");
 
         // when
         hero.right();

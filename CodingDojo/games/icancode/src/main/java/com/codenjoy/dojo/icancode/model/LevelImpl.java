@@ -77,9 +77,9 @@ public class LevelImpl implements Level {
 
     private BaseItem getBaseItem(Elements element) {
         return constructor()
-                            .withParameterTypes(Elements.class)
-                            .in(ElementsMapper.getItsClass(element))
-                            .newInstance(element);
+                .withParameterTypes(Elements.class)
+                .in(ElementsMapper.getItsClass(element))
+                .newInstance(element);
     }
 
     @Override

@@ -128,14 +128,11 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║..........│" +
                 "║..B.......│" +
                 "║..........│" +
-                "║..........│" +
+                "║..♂.......│" +
                 "║..........│" +
                 "└──────────┘");
         
         givenZombie().thenReturn(STOP);
-        Zombie zombie = new Zombie(true);
-        zombie.setField(Mockito.mock(Field.class));
-        game.move(zombie, pt(3, 2));
 
         // when
         hero.down();

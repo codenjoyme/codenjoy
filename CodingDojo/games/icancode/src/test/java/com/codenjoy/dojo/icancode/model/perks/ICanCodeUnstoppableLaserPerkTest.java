@@ -24,7 +24,6 @@ package com.codenjoy.dojo.icancode.model.perks;
 
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
 import com.codenjoy.dojo.icancode.model.Field;
-import com.codenjoy.dojo.icancode.model.items.Box;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
@@ -32,8 +31,6 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static com.codenjoy.dojo.icancode.model.Elements.BOX;
-import static com.codenjoy.dojo.icancode.model.Elements.UNSTOPPABLE_LASER_PERK;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.mockito.Mockito.verify;
@@ -183,34 +180,24 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
     @Test
     public void heroFireThroughZombie_withUnstoppableLaser() {
+        // given
         givenFl("╔═══════┐" +
                 "║.S.....│" +
                 "║.l.....│" +
                 "║.......│" +
-                "║.......│" +
+                "║.♂.....│" +
                 "║.......│" +
                 "║.......│" +
                 "║.......│" +
                 "└───────┘");
 
         givenZombie().thenReturn(STOP);
-        Zombie zombie = new Zombie(true);
-        zombie.setField(Mockito.mock(Field.class));
-        game.move(zombie, pt(2, 4));
 
-        assertE("---------" +
-                "--☺------" +
-                "---------" +
-                "---------" +
-                "--♂------" +
-                "---------" +
-                "---------" +
-                "---------" +
-                "---------");
-
+        // when
         hero.down();
         game.tick();
 
+        // then
         assertL("╔═══════┐" +
                 "║.S.....│" +
                 "║.......│" +
@@ -233,10 +220,12 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
         has(UnstoppableLaserPerk.class);
 
+        // when
         hero.down();
         hero.fire();
         game.tick();
 
+        // then
         assertE("---------" +
                 "---------" +
                 "--☺------" +
@@ -249,8 +238,10 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
         has(UnstoppableLaserPerk.class);
 
+        // when
         game.tick();
 
+        // then
         assertE("---------" +
                 "---------" +
                 "--☺------" +
@@ -264,8 +255,10 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
         has(UnstoppableLaserPerk.class);
         verify(listener).event(Events.KILL_ZOMBIE(1, true));
 
+        // when
         game.tick();
 
+        // then
         assertE("---------" +
                 "---------" +
                 "--☺------" +
@@ -313,8 +306,6 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------" +
                 "---------");
 
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(2, 1));
-
         assertL("╔═══════┐" +
                 "║.......│" +
                 "║.S.....│" +
@@ -340,10 +331,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
 
         has(UnstoppableLaserPerk.class);
 
-        givenZombie().thenReturn(STOP);
-        Zombie zombie = new Zombie(true);
-        zombie.setField(Mockito.mock(Field.class));
-        game.move(zombie, pt(2, 4));
+        zombieAt(2, 4);
 
         assertE("---------" +
                 "---------" +

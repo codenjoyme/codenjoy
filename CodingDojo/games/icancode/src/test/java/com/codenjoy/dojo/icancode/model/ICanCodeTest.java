@@ -2087,40 +2087,26 @@ public class ICanCodeTest extends AbstractGameTest {
 
     @Test
     public void killZombieNearYouByFirstLaserTick() {
+        // given
         SettingsWrapper.setup(new SettingsImpl())
                 .perkAvailability(10)
                 .perkActivity(10);
 
         givenFl("╔════┐" +
                 "║.S..│" +
-                "║....│" +
+                "║.♂..│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
 
         givenZombie().thenReturn(STOP);
-        Zombie zombie = new Zombie(true);
-        zombie.setField(Mockito.mock(Field.class));
-        game.move(zombie, pt(2, 3));
 
-        assertL("╔════┐" +
-                "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        assertE("------" +
-                "--☺---" +
-                "--♂---" +
-                "------" +
-                "------" +
-                "------");
-
+        // when
         hero.down();
         hero.fire();
         game.tick();
 
+        // then
         assertE("------" +
                 "--☺---" +
                 "--✝---" +
