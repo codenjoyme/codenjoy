@@ -1,15 +1,7 @@
 import React, {Component} from "react";
 import Styles from "./styles.module.css";
 
-import ElementsBomberman from "./bomberman";
-import ElementsICanCode from "./icancode";
-
-const Elements = function() {
-    switch (process.env.REACT_APP_GAME) {
-        case 'icancode' : return ElementsICanCode;
-        case 'bomberman' : return ElementsBomberman;
-    }
-}();
+import Game from '../../games';
 
 export class GameElements extends Component {
     render() {
@@ -17,7 +9,7 @@ export class GameElements extends Component {
 
         return (
             <div className={ Styles.gameElements }>
-                { Elements.map(({ image, title, description }) => (
+                { Game.Elements.map(({ image, title, description }) => (
                     <div key={ title } className={ Styles.elementContainer }>
                         <img
                             className={ Styles.elementImage }
