@@ -30,15 +30,12 @@ import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
-import org.fest.util.Lists;
 
-import java.util.List;
 import java.util.Optional;
 
-// TODO refactoring needed
 public class Shooter {
 
-    private final Field field;
+    private Field field;
 
     public Shooter(Field field) {
         this.field = field;
@@ -46,52 +43,54 @@ public class Shooter {
 
     public void fire(Direction direction, Point from, FieldItem owner) {
         if (owner instanceof LaserMachine) {
-            LaserMachine laserMachine = (LaserMachine) owner;
-            fireByLaserMachine(direction, from, laserMachine);
+            LaserMachine item = (LaserMachine) owner;
+            fireByLaserMachine(direction, from, item);
         } else if (owner instanceof HeroItem) {
-            HeroItem heroItem = (HeroItem) owner;
-            Laser laser = new Laser(heroItem.getHero(), direction, field);
-            if (heroItem.getHero().has(DeathRayPerk.class)) {
-                fireDeathRayByHero(laser, from, heroItem);
+            HeroItem item = (HeroItem) owner;
+            Hero hero = item.getHero();
+
+            Laser laser = new Laser(hero, direction, field);
+            if (hero.has(DeathRayPerk.class)) {
+                fireDeathRayByHero(laser, from, item);
             } else {
-                fireRegularLaserByHero(laser, heroItem);
+                fireRegularLaserByHero(laser, item);
             }
         }
     }
 
     public void fireByLaserMachine(Direction direction, Point from, LaserMachine owner) {
         Point to = direction.change(from);
-        if (!field.isBarrier(to.getX(),to.getY())) {
-            field.move(new Laser(owner, direction, field), to.getX(), to.getY());
+        if (!field.isBarrier(to.getX(), to.getY())) {
+            Laser laser = new Laser(owner, direction, field);
+            field.move(laser, to.getX(), to.getY());
         }
     }
 
     public void fireDeathRayByHero(Laser laser, Point from, HeroItem heroItem) {
-        boolean perk = heroItem.getHero().has(UnstoppableLaserPerk.class);
-        Laser topLaser = laser;
-        topLaser.setDeathRay(true);
-        List<Laser> lasers = Lists.newArrayList(topLaser);
+        Hero hero = heroItem.getHero();
+        boolean perk = hero.has(UnstoppableLaserPerk.class);
 
-        Point to = topLaser.getDirection().change(from);
-        field.getCell(to.getX(), to.getY()).add(topLaser);
+        laser.setDeathRay(true);
+
+        Point to = laser.getDirection().change(from);
+        field.getCell(to.getX(), to.getY()).add(laser);
         for (int i = 0; i < SettingsWrapper.data.getDeathRayRange() - 1; i++) {
-            Optional<Cell> nextCell = findNextAvailableCell(topLaser, perk);
-            if (!nextCell.isPresent()) {
+            Optional<Cell> next = findAvailable(laser, perk);
+            if (!next.isPresent()) {
                 break;
             }
-            topLaser = new Laser(heroItem.getHero(), topLaser.getDirection(), field);
-            topLaser.setDeathRay(true);
-            nextCell.get().add(topLaser);
-            lasers.add(topLaser);
+            laser = new Laser(hero, laser.getDirection(), field);
+            laser.setDeathRay(true);
+            next.get().add(laser);
         }
     }
 
-    private Optional<Cell> findNextAvailableCell(Laser laser, boolean unstoppableLaser) {
+    private Optional<Cell> findAvailable(Laser laser, boolean unstoppable) {
         Point point = laser.getDirection().change(laser.getCell());
         while (!point.isOutOf(field.size())) {
             if (!field.isBarrier(point.getX(), point.getY())) {
                 return Optional.of(field.getCell(point.getX(), point.getY()));
-            } else if (field.isBarrier(point.getX(), point.getY()) && !unstoppableLaser) {
+            } else if (field.isBarrier(point.getX(), point.getY()) && !unstoppable) {
                 return Optional.empty();
             }
             point = laser.getDirection().change(point);
