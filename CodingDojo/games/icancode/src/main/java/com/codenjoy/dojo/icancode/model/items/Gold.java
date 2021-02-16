@@ -64,7 +64,7 @@ public class Gold extends BaseItem {
                 .ifPresent(heroItem -> {
                     Hero hero = heroItem.getHero();
                     if (!hero.isFlying()) {
-                        hero.pickUpGold();
+                        hero.pickUpGold(this);
                         if (temporary) {
                             removeFromCell();
                         } else {

@@ -36,7 +36,7 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -54,7 +54,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private boolean fire;
     private boolean hole;
     private boolean landOn;
-    private int goldCount;
+    private List<Gold> gold;
     private int killZombieCount;
     private int killHeroCount;
     private HeroItem item;
@@ -93,7 +93,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         flying = false;
         laser = false;
         alive = true;
-        goldCount = 0;
+        gold = new LinkedList<>();
         resetZombieKillCount();
         resetHeroKillCount();
         perks = new ArrayList<>();
@@ -410,8 +410,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return win;
     }
 
-    public void pickUpGold() {
-        goldCount++;
+    public void pickUpGold(Gold item) {
+        gold.add(item);
     }
 
     public void addZombieKill() {
@@ -423,7 +423,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public int getGoldCount() {
-        return goldCount;
+        return gold.size();
     }
 
     public int getKillZombieCount() {

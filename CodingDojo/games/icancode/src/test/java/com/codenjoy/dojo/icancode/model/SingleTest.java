@@ -4243,9 +4243,9 @@ public class SingleTest {
         assertTrue(single2.getPlayer().isAlive());
     }
 
-    private void setGoldCount(Hero hero, int goldCount) {
-        for (int i = 0; i < goldCount; i++) {
-            hero.pickUpGold();
+    private void setGoldCount(Hero hero, int count) {
+        for (int i = 0; i < count; i++) {
+            hero.pickUpGold(new Gold(Elements.GOLD));
         }
     }
 
@@ -4346,6 +4346,7 @@ public class SingleTest {
                 "║..E.│" +
                 "║....│" +
                 "└────┘");
+
         setGoldCount(hero2(), 1);
 
         hero2().right();
@@ -4776,6 +4777,7 @@ public class SingleTest {
                 "║..E.│" +
                 "║....│" +
                 "└────┘");
+
         setGoldCount(hero1(), 6);
 
         hero2().right();
