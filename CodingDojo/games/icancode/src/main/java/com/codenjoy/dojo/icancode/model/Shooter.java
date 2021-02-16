@@ -84,14 +84,18 @@ public class Shooter {
     }
 
     private Cell nextAvailable(Laser laser, boolean unstoppable) {
-        Point point = laser.getDirection().change(laser.getCell());
+        Direction direction = laser.getDirection();
+        Point point = direction.change(laser.getCell());
         while (!point.isOutOf(field.size())) {
             if (!field.isBarrier(point.getX(), point.getY())) {
                 return field.getCell(point.getX(), point.getY());
-            } else if (field.isBarrier(point.getX(), point.getY()) && !unstoppable) {
+            }
+
+            if (field.isBarrier(point.getX(), point.getY()) && !unstoppable) {
                 return null;
             }
-            point = laser.getDirection().change(point);
+
+            point = direction.change(point);
         }
         return null;
     }
