@@ -22,7 +22,6 @@ package com.codenjoy.dojo.icancode.model.gun;
  * #L%
  */
 
-// TODO refactoring needed
 public class GunWithRecharge implements Gun {
 
     protected boolean canShoot;
@@ -62,16 +61,16 @@ public class GunWithRecharge implements Gun {
         if (!canShoot) {
             ticks++;
         }
-        int chargePoints = getChargePoints();
-        if (chargePoints <= 0) {
+        int charge = charge();
+        if (charge <= 0) {
             canShoot = true;
-        } else if (ticks == chargePoints + 1) {
+        } else if (ticks == charge + 1) {
             recharge();
         }
     }
 
     @Override
-    public boolean isCanShoot() {
+    public boolean canShoot() {
         return canShoot;
     }
 }

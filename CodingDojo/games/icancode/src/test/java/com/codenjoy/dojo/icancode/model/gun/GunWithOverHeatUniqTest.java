@@ -50,7 +50,7 @@ public class GunWithOverHeatUniqTest {
 
         // when shot 3 times with recharge
         for (int i = 0; i < 5; i++) {
-            result += getResultOfAttemptShot();
+            result += shot();
         }
 
         // then
@@ -67,7 +67,9 @@ public class GunWithOverHeatUniqTest {
 
         // when make fire queue with 9 shots with
         // recharge and rest after it. And then full 10 shots queue
-        for (int i = 0; i < 50; i++) result += getResultOfAttemptShot();
+        for (int i = 0; i < 50; i++) {
+            result += shot();
+        }
         //then
         assertEquals("f-f-f-----f-f-f-f-f-f-f-f-f----------f-f-f-f-f-f-f-f-f-f----", result);
     }
@@ -78,7 +80,7 @@ public class GunWithOverHeatUniqTest {
 
         // when shot 7 times with recharge
         for (int i = 0; i < 13; i++) {
-            result += getResultOfAttemptShot();
+            result += shot();
         }
 
         // then
@@ -96,15 +98,15 @@ public class GunWithOverHeatUniqTest {
         // when make fire queue with 5 shots with recharge
         // and rest after it. And then full 10 shots queue after rest
         for (int i = 0; i < 51; i++) {
-            result += getResultOfAttemptShot();
+            result += shot();
         }
 
         // then
         assertEquals("f-f-f-f-f-f-f-----f-f-f-f-f----------f-f-f-f-f-f-f-f-f-f----------f-f", result);
     }
 
-    private String getResultOfAttemptShot() {
-        if (gun.isCanShoot()) {
+    private String shot() {
+        if (gun.canShoot()) {
             gun.shoot();
             gun.tick();
             return SYMBOL_FIRE;

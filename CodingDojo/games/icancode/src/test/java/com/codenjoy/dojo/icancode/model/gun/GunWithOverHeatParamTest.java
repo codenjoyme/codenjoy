@@ -106,7 +106,7 @@ public class GunWithOverHeatParamTest {
 
         String result = new String();
         for (int i = 0; i < params.shots; i++) {
-            if (gun.isCanShoot()) {
+            if (gun.canShoot()) {
                 gun.shoot();
                 result += SYMBOL_FIRE;
             } else {

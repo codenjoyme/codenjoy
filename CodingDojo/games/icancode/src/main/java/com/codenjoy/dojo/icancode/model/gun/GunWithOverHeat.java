@@ -22,60 +22,59 @@ package com.codenjoy.dojo.icancode.model.gun;
  * #L%
  */
 
-// TODO refactoring needed
 public class GunWithOverHeat extends GunWithRecharge {
 
     private boolean cool;
-    private int heatPoints;
-    private int coolDownPoints;
+    private int heat;
+    private int coolDown;
 
     @Override
     public void reset() {
         super.reset();
         cool = true;
-        heatPoints = 0;
-        coolDownPoints = 0;
+        heat = 0;
+        coolDown = 0;
     }
 
     @Override
     public void shoot() {
         super.shoot();
-        coolDownPoints = 0;
-        heatPoints++;
+        coolDown = 0;
+        heat++;
     }
 
     @Override
     public void unlimitedShoot() {
         shoot();
-        heatPoints = 0;
+        heat = 0;
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (heatPoints == 0 || getGunRestTime() == 0) {
+        if (heat == 0 || restTime() == 0) {
             cool = true;
             return;
         }
-        if (heatPoints == getGunShotQueue() && cool) {
+        if (heat == shotQueue() && cool) {
             cool = false;
-            heatPoints = getGunRestTime();
+            heat = restTime();
         }
         if (cool) {
-            int chargePoints = getChargePoints() + 1;
-            if (coolDownPoints == chargePoints) {
-                coolDownPoints = 0;
-                heatPoints--;
+            int charge = charge() + 1;
+            if (coolDown == charge) {
+                coolDown = 0;
+                heat--;
             } else {
-                coolDownPoints++;
+                coolDown++;
             }
         } else {
-            heatPoints--;
+            heat--;
         }
     }
 
     @Override
-    public boolean isCanShoot() {
-        return cool && super.isCanShoot();
+    public boolean canShoot() {
+        return cool && super.canShoot();
     }
 }

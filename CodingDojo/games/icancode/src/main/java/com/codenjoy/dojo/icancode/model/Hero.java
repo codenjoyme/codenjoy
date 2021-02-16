@@ -269,7 +269,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             if (has(UnlimitedFirePerk.class)) {
                 field.fire(direction, item.getCell(), item);
                 gun.unlimitedShoot();
-            } else if (gun.isCanShoot()) {
+            } else if (gun.canShoot()) {
                 field.fire(direction, item.getCell(), item);
                 gun.shoot();
             }

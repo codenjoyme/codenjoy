@@ -29,22 +29,21 @@ public interface Gun extends Tickable {
 
     void reset();
 
-    boolean isCanShoot();
+    boolean canShoot();
 
     void shoot();
 
     void unlimitedShoot();
 
-    // TODO refactoring needed
-    default int getChargePoints() {
+    default int charge() {
         return SettingsWrapper.data.gunRecharge();
     }
 
-    default int getGunShotQueue() {
+    default int shotQueue() {
         return SettingsWrapper.data.gunShotQueue();
     }
 
-    default int getGunRestTime() {
+    default int restTime() {
         return SettingsWrapper.data.gunRestTime();
     }
 
