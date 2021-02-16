@@ -11,7 +11,7 @@ import {  getGameConnectionString, getJavaClient  } from '../../utils';
 import { requestSettingsStart } from '../../redux/settings';
 import {  book  } from '../../routes';
 import Icon from '../../styles/images/icons/rules.svg';
-import BoardSample from '../../styles/images/game/icancode/field-sample.png';
+import Game from '../../games';
 
 // own
 import Styles from './styles.module.css';
@@ -207,7 +207,7 @@ class RulesContainer extends Component {
                         Розшифрування символів
                     </div>
                     <p className="game-field-img-container">
-                        <img className="responsive-img" src={ BoardSample } alt='Ігрове поле'/>
+                        <img className="responsive-img" src={ Game.BoardSample } alt='Ігрове поле'/>
                     </p>
                     <GameElements
                         settings={ settings }
