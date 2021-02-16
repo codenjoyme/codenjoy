@@ -4243,7 +4243,7 @@ public class SingleTest {
         assertTrue(single2.getPlayer().isAlive());
     }
 
-    private void setGoldCount(Hero hero, int count) {
+    private void pickedGold(Hero hero, int count) {
         for (int i = 0; i < count; i++) {
             hero.pickUpGold(new Gold(Elements.GOLD));
         }
@@ -4347,7 +4347,7 @@ public class SingleTest {
                 "║....│" +
                 "└────┘");
 
-        setGoldCount(hero2(), 1);
+        pickedGold(hero2(), 1);
 
         hero2().right();
         tick();
@@ -4467,7 +4467,7 @@ public class SingleTest {
                 "║....│" +
                 "└────┘");
 
-        setGoldCount(hero1(), 1);
+        pickedGold(hero1(), 1);
 
         hero2().right();
         tick();
@@ -4542,7 +4542,7 @@ public class SingleTest {
                 "║....│" +
                 "└────┘");
 
-        setGoldCount(hero1(), 3);
+        pickedGold(hero1(), 3);
 
         hero2().right();
         tick();
@@ -4621,7 +4621,7 @@ public class SingleTest {
                 "║....│" +
                 "└────┘");
 
-        setGoldCount(hero1(), 10);
+        pickedGold(hero1(), 10);
 
         hero2().right();
         tick();
@@ -4699,7 +4699,7 @@ public class SingleTest {
                 "║....│" +
                 "└────┘");
 
-        setGoldCount(hero1(), 6);
+        pickedGold(hero1(), 6);
 
         hero2().right();
         tick();
@@ -4778,7 +4778,7 @@ public class SingleTest {
                 "║....│" +
                 "└────┘");
 
-        setGoldCount(hero1(), 6);
+        pickedGold(hero1(), 6);
 
         hero2().right();
         tick();
