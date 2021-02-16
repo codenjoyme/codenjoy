@@ -8,9 +8,9 @@ import First from '../../styles/images/prizes/first.png';
 import Second from '../../styles/images/prizes/second.png';
 import Third from '../../styles/images/prizes/third.png';
 import Icon from '../../styles/images/icons/rules.svg';
-import StepWinHeader from '../../styles/images/layout/presents.jpg';
-import stepBattleHeader from '../../styles/images/layout/battle.jpg';
-import stepCreateHeader from '../../styles/images/layout/create.jpg';
+import StepWinHeader from '../../styles/images/layout/icancode/presents.jpg';
+import stepBattleHeader from '../../styles/images/layout/icancode/battle.jpg';
+import stepCreateHeader from '../../styles/images/layout/icancode/create.jpg';
 
 // own
 import Styles from './styles.module.css';
