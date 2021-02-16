@@ -4245,7 +4245,7 @@ public class SingleTest {
 
     private void pickedGold(Hero hero, int count) {
         for (int i = 0; i < count; i++) {
-            hero.pickUpGold(new Gold(Elements.GOLD));
+            hero.pickUp(new Gold(Elements.GOLD));
         }
     }
 

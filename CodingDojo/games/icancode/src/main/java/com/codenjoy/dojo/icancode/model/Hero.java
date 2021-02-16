@@ -410,7 +410,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return win;
     }
 
-    public void pickUpGold(Gold item) {
+    public void pickUp(Gold item) {
         gold.add(item);
     }
 

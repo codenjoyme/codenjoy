@@ -25,9 +25,6 @@ package com.codenjoy.dojo.icancode.model.items;
 
 import com.codenjoy.dojo.icancode.model.*;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
-import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
-import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
-import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
 
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
@@ -64,7 +61,7 @@ public class Gold extends BaseItem {
                 .ifPresent(heroItem -> {
                     Hero hero = heroItem.getHero();
                     if (!hero.isFlying()) {
-                        hero.pickUpGold(this);
+                        hero.pickUp(this);
                         if (temporary) {
                             removeFromCell();
                         } else {
