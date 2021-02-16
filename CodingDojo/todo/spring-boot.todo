@@ -1152,9 +1152,9 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
 clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.profiles.active=sqlite,trace,debug,icancode -Dcontext=/codenjoy-contest -Ptetris,snake,a2048,battlecity -f pom.xml
 ---
 
-+ 93) Со странички регистрации-логина убрать все артефакты связывающие страничку с EPAM
++ 93) Со странички регистрации-логина убрать все артефакты связывающие страничку с компанией
     хедер
-        оставляем иконку и надпись Coding Dojo вместо EPAM DOJO
+        оставляем иконку и надпись Coding Dojo вместо DOJO
     футер
         оставляем About DOJO = codenjoy.com
         Codenjoy on GitHub  = github.com/codenjoyme

@@ -105,7 +105,7 @@ class RulesContainer extends Component {
 
         return (
             <div className='container'>
-                <div className={ mask }>EPAM Bot Challenge - як грати?</div>
+                <div className={ mask }>Bot Challenge - як грати?</div>
                 <div className='content'>
                     <h2 className='title'>Регламент проведення фіналу:</h2>
                     <p>
