@@ -2,30 +2,30 @@
 import React, { Component } from 'react';
 
 // proj
-// import bomb from './sprite/bomb.png';
-import bomb_blast_radius_increase from './sprite/bomb_blast_radius_increase.png';
-import bomb_bomberman from './sprite/bomb_bomberman.png';
-import bomb_count_increase from './sprite/bomb_count_increase.png';
-import bomb_immune from './sprite/bomb_immune.png';
-import bomb_remote_control from './sprite/bomb_remote_control.png';
-// import bomb_timer_0 from './sprite/bomb_timer_0.png';
-import bomb_timer_1 from './sprite/bomb_timer_1.png';
-import bomb_timer_2 from './sprite/bomb_timer_2.png';
-import bomb_timer_3 from './sprite/bomb_timer_3.png';
-import bomb_timer_4 from './sprite/bomb_timer_4.png';
-import bomb_timer_5 from './sprite/bomb_timer_5.png';
-import bomberman from './sprite/bomberman.png';
-import boom from './sprite/boom.png';
-import dead_bomberman from './sprite/dead_bomberman.png';
-import dead_meat_chopper from './sprite/dead_meat_chopper.png';
-import destroyable_wall from './sprite/destroyable_wall.png';
-import destroyed_wall from './sprite/destroyed_wall.png';
-import meat_chopper from './sprite/meat_chopper.png';
-import none from './sprite/none.png';
-import other_bomb_bomberman from './sprite/other_bomb_bomberman.png';
-import other_bomberman from './sprite/other_bomberman.png';
-import other_dead_bomberman from './sprite/other_dead_bomberman.png';
-import wall from './sprite/wall.png';
+// import bomb from './images/sprite/bomb.png';
+import bomb_blast_radius_increase from './images/sprite/bomb_blast_radius_increase.png';
+import bomb_bomberman from './images/sprite/bomb_bomberman.png';
+import bomb_count_increase from './images/sprite/bomb_count_increase.png';
+import bomb_immune from './images/sprite/bomb_immune.png';
+import bomb_remote_control from './images/sprite/bomb_remote_control.png';
+// import bomb_timer_0 from './images/sprite/bomb_timer_0.png';
+import bomb_timer_1 from './images/sprite/bomb_timer_1.png';
+import bomb_timer_2 from './images/sprite/bomb_timer_2.png';
+import bomb_timer_3 from './images/sprite/bomb_timer_3.png';
+import bomb_timer_4 from './images/sprite/bomb_timer_4.png';
+import bomb_timer_5 from './images/sprite/bomb_timer_5.png';
+import bomberman from './images/sprite/bomberman.png';
+import boom from './images/sprite/boom.png';
+import dead_bomberman from './images/sprite/dead_bomberman.png';
+import dead_meat_chopper from './images/sprite/dead_meat_chopper.png';
+import destroyable_wall from './images/sprite/destroyable_wall.png';
+import destroyed_wall from './images/sprite/destroyed_wall.png';
+import meat_chopper from './images/sprite/meat_chopper.png';
+import none from './images/sprite/none.png';
+import other_bomb_bomberman from './images/sprite/other_bomb_bomberman.png';
+import other_bomberman from './images/sprite/other_bomberman.png';
+import other_dead_bomberman from './images/sprite/other_dead_bomberman.png';
+import wall from './images/sprite/wall.png';
 
 //own
 

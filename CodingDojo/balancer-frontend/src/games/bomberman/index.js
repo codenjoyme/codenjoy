@@ -1,10 +1,10 @@
-import battleComplete from './battle-complete.jpg';
-import logo from './game-logo.png';
+import battleComplete from './images/battle-complete.jpg';
+import logo from './images/game-logo.png';
 import Elements from "./elements";
-import boardSample from './field-sample.png';
-import stepWinHeader from './presents.jpg';
-import stepBattleHeader from './battle.jpg';
-import stepCreateHeader from './create.jpg';
+import boardSample from './images/field-sample.png';
+import stepWinHeader from './images/presents.jpg';
+import stepBattleHeader from './images/battle.jpg';
+import stepCreateHeader from './images/create.jpg';
 import RulesContainer from './../../containers/RulesContainer/bomberman';
 
 const name = 'bomberman';
