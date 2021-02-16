@@ -61,11 +61,9 @@ import death_ray_perk from '../../styles/images/game/icancode/death_ray_perk.png
 import unstoppable_laser_perk from '../../styles/images/game/icancode/unstoppable_laser_perk.png';
 import unlimited_fire_perk from '../../styles/images/game/icancode/unlimited_fire_perk.png';
 
-
 //own
-import Styles from './styles.module.css';
 
-const ELEMENTS = [
+export default [
 	{
 		image:  start,
 		title: `START('S')`,
@@ -307,28 +305,3 @@ const ELEMENTS = [
 		description: `Елемент стіни`,
 	},
 ];
-
-export class GameElements extends Component {
-    render() {
-        const {  settings  } = this.props;
-
-        return (
-            <div className={ Styles.gameElements }>
-                { ELEMENTS.map(({ image, title, description }) => (
-                    <div key={ title } className={ Styles.elementContainer }>
-                        <img
-                            className={ Styles.elementImage }
-                            src={ image }
-                            alt={ title }
-                        />
-                        <div className={ Styles.elementDescriptionContainer }>
-                            <div className={ Styles.elementTitle }>{ title }</div>
-                            <div className={ Styles.elementDescription }
-                                    dangerouslySetInnerHTML={{__html: description.replace('*', '<a href="#settings">*</a>') }}/>
-                        </div>
-                    </div>
-                )) }
-            </div>
-        );
-    }
-}
