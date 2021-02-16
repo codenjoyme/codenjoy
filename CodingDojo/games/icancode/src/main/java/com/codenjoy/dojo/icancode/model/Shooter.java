@@ -31,8 +31,6 @@ import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
-import java.util.Optional;
-
 public class Shooter {
 
     private Field field;
@@ -74,28 +72,28 @@ public class Shooter {
 
         Point to = laser.getDirection().change(from);
         field.getCell(to.getX(), to.getY()).add(laser);
-        for (int i = 0; i < SettingsWrapper.data.getDeathRayRange() - 1; i++) {
-            Optional<Cell> next = findAvailable(laser, perk);
-            if (!next.isPresent()) {
+        for (int range = 0; range < SettingsWrapper.data.getDeathRayRange() - 1; range++) {
+            Cell cell = nextAvailable(laser, perk);
+            if (cell == null) {
                 break;
             }
             laser = new Laser(hero, laser.getDirection(), field);
             laser.setDeathRay(true);
-            next.get().add(laser);
+            cell.add(laser);
         }
     }
 
-    private Optional<Cell> findAvailable(Laser laser, boolean unstoppable) {
+    private Cell nextAvailable(Laser laser, boolean unstoppable) {
         Point point = laser.getDirection().change(laser.getCell());
         while (!point.isOutOf(field.size())) {
             if (!field.isBarrier(point.getX(), point.getY())) {
-                return Optional.of(field.getCell(point.getX(), point.getY()));
+                return field.getCell(point.getX(), point.getY());
             } else if (field.isBarrier(point.getX(), point.getY()) && !unstoppable) {
-                return Optional.empty();
+                return null;
             }
             point = laser.getDirection().change(point);
         }
-        return Optional.empty();
+        return null;
     }
 
     public void fireRegularLaserByHero(Laser laser, HeroItem heroItem) {
