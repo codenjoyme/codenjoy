@@ -7,6 +7,8 @@ import stepBattleHeader from './battle.jpg';
 import stepCreateHeader from './create.jpg';
 import RulesContainer from './../../containers/RulesContainer/bomberman';
 
+const name = 'bomberman';
+
 export default {
     battleComplete,
     logo,
@@ -15,5 +17,6 @@ export default {
     stepWinHeader,
     stepBattleHeader,
     stepCreateHeader,
-    RulesContainer
+    RulesContainer,
+    name
 };
