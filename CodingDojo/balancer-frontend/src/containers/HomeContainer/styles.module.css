@@ -1,7 +1,7 @@
 .homeTitle {
     padding: 45px 0 55px;
     width: 100%;
-    background: rgb( 45, 45, 45 , 0.3) url(./../../games/icancode/images/dark.jpg);
+    background: rgb( 45, 45, 45 , 0.3);
     background-size: cover;
     background-repeat: no-repeat;
     background-blend-mode: overlay;

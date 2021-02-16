@@ -22,7 +22,7 @@ const registerEndDate = process.env.REACT_APP_EVENT_REGISTER_END_DATE;
 
 const HomeContainer = () => (
     <div className='container'>
-        <div className={ Styles.homeTitle }>
+        <div className={ Styles.homeTitle } style={{ backgroundImage: `url("${Game.dark}")` }}>
             <div className={ Styles.mainText }>Створи розумного бота</div>
             <div className={ Styles.subText }>Змагайся з іншими учасниками</div>
             <div className={ Styles.subText }>Вигравай один із трьох призів</div>

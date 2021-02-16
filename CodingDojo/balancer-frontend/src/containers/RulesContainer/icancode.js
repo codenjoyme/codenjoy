@@ -79,7 +79,7 @@ class RulesContainer extends Component {
 
         return (
             <div className='container'>
-                <div className={ mask }>Bot Challenge - як грати?</div>
+                <div id='qqqq' className={ mask } style={{ backgroundImage: `url("${Game.dark}")` }}>Bot Challenge - як грати?</div>
                 <div className='content'>
                     <h2 className='title'>Регламент проведення фіналу:</h2>
                     <p>
