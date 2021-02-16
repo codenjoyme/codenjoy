@@ -32,14 +32,14 @@ public class StateUtils {
 	public static <T extends Point> List<T> filter(Object[] array, Class<T> clazz) {
 		return (List) Arrays.stream(array)
 				.filter(it -> it != null)
-				.filter(it -> it.getClass().equals(clazz))
+				.filter(it -> clazz.isAssignableFrom(it.getClass()))
 				.collect(toList());
 	}
 
 	public static <T extends Point> T filterOne(Object[] array, Class<T> clazz) {
 		return (T) Arrays.stream(array)
 				.filter(it -> it != null)
-				.filter(it -> it.getClass().equals(clazz))
+				.filter(it -> clazz.isAssignableFrom(it.getClass()))
 				.findFirst()
 				.orElse(null);
 	}
