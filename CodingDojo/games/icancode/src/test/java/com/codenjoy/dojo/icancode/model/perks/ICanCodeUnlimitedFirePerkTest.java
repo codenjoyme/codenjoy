@@ -35,14 +35,6 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
     public void heroHasUnlimitedFirePerk() {
         givenFl("╔════┐" +
                 "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-        game.move(new UnlimitedFirePerk(UNLIMITED_FIRE_PERK), pt(2, 3));
-
-        assertL("╔════┐" +
-                "║.S..│" +
                 "║.f..│" +
                 "║....│" +
                 "║....│" +
@@ -154,15 +146,6 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
 
         givenFl("╔═════┐" +
                 "║.S...│" +
-                "║.....│" +
-                "║.....│" +
-                "║.....│" +
-                "║.....│" +
-                "└─────┘");
-        game.move(new UnlimitedFirePerk(UNLIMITED_FIRE_PERK), pt(2, 4));
-
-        assertL("╔═════┐" +
-                "║.S...│" +
                 "║.f...│" +
                 "║.....│" +
                 "║.....│" +
@@ -179,6 +162,7 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "-------" +
                 "-------" +
                 "-------");
+
         assertL("╔═════┐" +
                 "║.S...│" +
                 "║.....│" +
@@ -186,7 +170,8 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "║.....│" +
                 "║.....│" +
                 "└─────┘");
-        assertTrue(hero.has(UnlimitedFirePerk.class));
+        
+        has(UnlimitedFirePerk.class);
 
         hero.fire();
         hero.down();
@@ -199,7 +184,8 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "-------" +
                 "-------" +
                 "-------");
-        assertTrue(hero.has(UnlimitedFirePerk.class));
+        
+        has(UnlimitedFirePerk.class);
 
         hero.fire();
         hero.down();
@@ -212,7 +198,8 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "--↓----" +
                 "-------" +
                 "-------");
-        assertFalse(hero.has(UnlimitedFirePerk.class));
+        
+        hasNot(UnlimitedFirePerk.class);
 
         hero.fire();
         hero.down();

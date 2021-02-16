@@ -217,8 +217,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             reset = true;
         } else if (p[0] == -1) { // TODO test me
             // ACT(-1)
-            Cell end = field.getEndPosition();
-            field.move(item, end);
+            Cell to = field.getEndPosition();
+            field.move(item, to);
         }
     }
 

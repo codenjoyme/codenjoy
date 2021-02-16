@@ -3786,16 +3786,6 @@ public class SingleTest {
 
         givenFl("╔════┐" +
                 "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║..E.│" +
-                "└────┘");
-
-        gameMultiple.move(new DeathRayPerk(DEATH_RAY_PERK), pt(2, 3));
-
-        assertL(single1,
-                "╔════┐" +
-                "║.S..│" +
                 "║.r..│" +
                 "║....│" +
                 "║..E.│" +
@@ -3968,26 +3958,6 @@ public class SingleTest {
                 "║.S..│" +
                 "║....│" +
                 "║....│" +
-                "║...E│" +
-                "└────┘");
-        gameMultiple.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), pt(2, 1));
-
-        verifyNoMoreInteractions(listener1);
-        verifyNoMoreInteractions(listener2);
-
-        assertL(single1,
-                "╔════┐" +
-                "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║.r.E│" +
-                "└────┘");
-
-        assertL(single2,
-                "╔════┐" +
-                "║.S..│" +
-                "║....│" +
-                "║....│" +
                 "║.r.E│" +
                 "└────┘");
 
@@ -4106,27 +4076,6 @@ public class SingleTest {
                 .deathRayRange(10);
 
         givenFl("╔════┐" +
-                "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║...E│" +
-                "└────┘");
-
-        gameMultiple.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), pt(2, 1));
-
-        verifyNoMoreInteractions(listener1);
-        verifyNoMoreInteractions(listener2);
-
-        assertL(single1,
-                "╔════┐" +
-                "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║.r.E│" +
-                "└────┘");
-
-        assertL(single2,
-                "╔════┐" +
                 "║.S..│" +
                 "║....│" +
                 "║....│" +

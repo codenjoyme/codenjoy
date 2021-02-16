@@ -42,45 +42,16 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
 
         givenFl("╔══════════┐" +
                 "║..S.......│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "└──────────┘");
-        
-        game.move(new DeathRayPerk(DEATH_RAY_PERK), pt(3, 9));
-        game.move(new Box(BOX), pt(3, 5));
-
-        assertL("╔══════════┐" +
-                "║..S.......│" +
                 "║..r.......│" +
                 "║..........│" +
                 "║..........│" +
                 "║..........│" +
-                "║..........│" +
+                "║..B.......│" +
                 "║..........│" +
                 "║..........│" +
                 "║..........│" +
                 "║..........│" +
                 "└──────────┘");
-        
-        assertE("------------" +
-                "---☺--------" +
-                "------------" +
-                "------------" +
-                "------------" +
-                "------------" +
-                "---B--------" +
-                "------------" +
-                "------------" +
-                "------------" +
-                "------------" +
-                "------------");
 
         // when
         hero.down();
@@ -150,38 +121,21 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
 
         givenFl("╔══════════┐" +
                 "║..S.......│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "║..........│" +
-                "└──────────┘");
-        
-        game.move(new DeathRayPerk(DEATH_RAY_PERK), pt(3, 9));
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(3, 8));
-
-        game.move(new Box(BOX), pt(3, 4));
-        givenZombie().thenReturn(STOP);
-        Zombie zombie = new Zombie(true);
-        zombie.setField(Mockito.mock(Field.class));
-        game.move(zombie, pt(3, 2));
-
-        assertL("╔══════════┐" +
-                "║..S.......│" +
                 "║..r.......│" +
                 "║..l.......│" +
                 "║..........│" +
                 "║..........│" +
                 "║..........│" +
-                "║..........│" +
+                "║..B.......│" +
                 "║..........│" +
                 "║..........│" +
                 "║..........│" +
                 "└──────────┘");
+        
+        givenZombie().thenReturn(STOP);
+        Zombie zombie = new Zombie(true);
+        zombie.setField(Mockito.mock(Field.class));
+        game.move(zombie, pt(3, 2));
 
         // when
         hero.down();
@@ -268,15 +222,6 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
     public void heroHasDeathRayPerk() {
         // given
         givenFl("╔════┐" +
-                "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        game.move(new DeathRayPerk(DEATH_RAY_PERK), pt(2, 3));
-
-        assertL("╔════┐" +
                 "║.S..│" +
                 "║.r..│" +
                 "║....│" +

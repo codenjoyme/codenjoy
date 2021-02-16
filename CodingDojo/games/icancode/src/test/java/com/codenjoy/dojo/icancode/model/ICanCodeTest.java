@@ -2097,6 +2097,7 @@ public class ICanCodeTest extends AbstractGameTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
+
         givenZombie().thenReturn(STOP);
         Zombie zombie = new Zombie(true);
         zombie.setField(Mockito.mock(Field.class));
@@ -2108,6 +2109,7 @@ public class ICanCodeTest extends AbstractGameTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
+
         assertE("------" +
                 "--☺---" +
                 "--♂---" +

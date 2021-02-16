@@ -106,15 +106,6 @@ public class ICanCodePerkTest extends AbstractGameTest {
         // given
         givenFl("╔════┐" +
                 "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(2, 3));
-
-        assertL("╔════┐" +
-                "║.S..│" +
                 "║.l..│" +
                 "║....│" +
                 "║....│" +
@@ -148,15 +139,6 @@ public class ICanCodePerkTest extends AbstractGameTest {
         settings.perkAvailability(3);
 
         givenFl("╔════┐" +
-                "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(2, 3));
-
-        assertL("╔════┐" +
                 "║.S..│" +
                 "║.l..│" +
                 "║....│" +
@@ -203,15 +185,6 @@ public class ICanCodePerkTest extends AbstractGameTest {
         settings.perkActivity(3);
 
         givenFl("╔════┐" +
-                "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(2, 3));
-
-        assertL("╔════┐" +
                 "║.S..│" +
                 "║.l..│" +
                 "║....│" +
@@ -283,15 +256,6 @@ public class ICanCodePerkTest extends AbstractGameTest {
     public void pickPerk() {
         // given
         givenFl("╔════┐" +
-                "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        game.move(new UnstoppableLaserPerk(Elements.UNSTOPPABLE_LASER_PERK), pt(2, 1));
-
-        assertL("╔════┐" +
                 "║.S..│" +
                 "║....│" +
                 "║....│" +

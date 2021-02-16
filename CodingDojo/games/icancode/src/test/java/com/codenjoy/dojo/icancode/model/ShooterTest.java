@@ -149,23 +149,13 @@ public class ShooterTest extends AbstractGameTest {
 
     @Test
     public void fireDeathRayLasersWhenHeroIsOwner() {
+        // given
         SettingsWrapper.setup(new SettingsImpl())
                 .perkAvailability(10)
                 .perkActivity(10)
                 .deathRayRange(3);
 
         givenFl("╔══════┐" +
-                "║.S....│" +
-                "║......│" +
-                "║......│" +
-                "║......│" +
-                "║......│" +
-                "║......│" +
-                "└──────┘");
-
-        game.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), pt(2, 5));
-
-        assertL("╔══════┐" +
                 "║.S....│" +
                 "║.r....│" +
                 "║......│" +
@@ -174,6 +164,7 @@ public class ShooterTest extends AbstractGameTest {
                 "║......│" +
                 "└──────┘");
 
+        // when
         hero.down();
         game.tick();
 
