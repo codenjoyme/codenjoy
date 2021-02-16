@@ -30,6 +30,7 @@ import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -319,14 +320,26 @@ public class ICanCode implements Tickable, Field {
         }};
     }
 
-    // TODO refactoring needed
     private boolean isAvailable(Cell cell) {
-        Predicate<Item> floor = item -> item instanceof Floor;
-        Predicate<Item> air = item -> item instanceof Air;
-        Predicate<Item> deathHero = item -> item instanceof HeroItem && !((HeroItem) item).getHero().isAlive();
-        return cell.items(0).stream().allMatch(floor)
-                && cell.items(1).stream().allMatch(air.or(deathHero))
-                && cell.items(2).stream().allMatch(air);
+        return cell.only(0, FLOOR())
+                && cell.only(1, AIR().or(DEAD_HERO()))
+                && cell.only(2, AIR());
+    }
+
+    @NotNull
+    private Predicate<Item> AIR() {
+        return item -> item instanceof Air;
+    }
+
+    @NotNull
+    private Predicate<Item> FLOOR() {
+        return item -> item instanceof Floor;
+    }
+
+    @NotNull
+    private Predicate<Item> DEAD_HERO() {
+        return item -> item instanceof HeroItem
+                && ((HeroItem)item).getHero().isDead();
     }
 
     public void newGame(Player player) {

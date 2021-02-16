@@ -398,6 +398,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return alive;
     }
 
+    public boolean isDead() {
+        return !alive;
+    }
+
     public void setWin() {
         win = true;
     }
