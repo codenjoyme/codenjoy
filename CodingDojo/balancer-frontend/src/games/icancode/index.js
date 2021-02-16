@@ -5,6 +5,7 @@ import BoardSample from './field-sample.png';
 import stepWinHeader from './presents.jpg';
 import stepBattleHeader from './battle.jpg';
 import stepCreateHeader from './create.jpg';
+import RulesContainer from './../../containers/RulesContainer/icancode';
 
 export default {
     battleComplete,
@@ -13,5 +14,6 @@ export default {
     BoardSample,
     stepWinHeader,
     stepBattleHeader,
-    stepCreateHeader
+    stepCreateHeader,
+    RulesContainer
 };
