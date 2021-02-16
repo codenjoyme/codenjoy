@@ -159,27 +159,19 @@ public class Laser extends FieldItem implements Tickable {
         return ticks;
     }
 
-    public State owner() {
-        return owner;
-    }
-
     public Direction getDirection() {
         return direction;
     }
 
-    public boolean isUnstoppable() {
-        return unstoppable;
-    }
-
-    public void setUnstoppable(boolean unstoppable) {
+    public void unstoppable(boolean unstoppable) {
         this.unstoppable = unstoppable;
     }
 
-    public boolean isDeathRay() {
+    public boolean deathRay() {
         return deathRay;
     }
 
-    public void setDeathRay(boolean deathRay) {
+    public void deathRay(boolean deathRay) {
         this.deathRay = deathRay;
     }
 

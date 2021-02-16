@@ -125,6 +125,7 @@ public class ShooterTest extends AbstractGameTest {
                 hero.getItem());
 
         assertEquals(1, game.getLevel().getItems(Laser.class).size());
+        // TODO refactoring needed
         assertTrue(hero.getItem().getCell().items().stream()
                 .anyMatch(item -> item instanceof Laser));
 
@@ -201,9 +202,10 @@ public class ShooterTest extends AbstractGameTest {
                 "--------" +
                 "--------");
 
+        // TODO refactoring needed
         assertTrue(game.getLevel().getItems(Laser.class).stream()
                 .map(item -> (Laser) item)
-                .allMatch(laser -> laser.isDeathRay() && laser.getTicks() == 0));
+                .allMatch(laser -> laser.deathRay() && laser.getTicks() == 0));
 
         game.tick();
 

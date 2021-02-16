@@ -68,7 +68,7 @@ public class Shooter {
         Hero hero = heroItem.getHero();
         boolean perk = hero.has(UnstoppableLaserPerk.class);
 
-        laser.setDeathRay(true);
+        laser.deathRay(true);
 
         Point to = laser.getDirection().change(from);
         field.getCell(to.getX(), to.getY()).add(laser);
@@ -78,7 +78,7 @@ public class Shooter {
                 break;
             }
             laser = new Laser(hero, laser.getDirection(), field);
-            laser.setDeathRay(true);
+            laser.deathRay(true);
             cell.add(laser);
         }
     }
@@ -97,7 +97,7 @@ public class Shooter {
     }
 
     public void fireRegularLaserByHero(Laser laser, HeroItem heroItem) {
-        laser.setUnstoppable(heroItem.getHero().has(UnstoppableLaserPerk.class));
+        laser.unstoppable(heroItem.getHero().has(UnstoppableLaserPerk.class));
         heroItem.getCell().add(laser);
     }
 }
