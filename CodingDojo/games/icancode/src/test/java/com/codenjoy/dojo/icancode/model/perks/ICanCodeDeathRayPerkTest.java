@@ -31,8 +31,7 @@ import org.mockito.Mockito;
 
 import static com.codenjoy.dojo.icancode.model.Elements.*;
 import static com.codenjoy.dojo.services.Direction.STOP;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
 
@@ -54,8 +53,8 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║..........│" +
                 "└──────────┘");
         
-        game.move(new DeathRayPerk(DEATH_RAY_PERK), 3, 9);
-        game.move(new Box(BOX), 3, 5);
+        game.move(new DeathRayPerk(DEATH_RAY_PERK), pt(3, 9));
+        game.move(new Box(BOX), pt(3, 5));
 
         assertL("╔══════════┐" +
                 "║..S.......│" +
@@ -162,14 +161,14 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║..........│" +
                 "└──────────┘");
         
-        game.move(new DeathRayPerk(DEATH_RAY_PERK), 3, 9);
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 3, 8);
+        game.move(new DeathRayPerk(DEATH_RAY_PERK), pt(3, 9));
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(3, 8));
 
-        game.move(new Box(BOX), 3, 4);
+        game.move(new Box(BOX), pt(3, 4));
         givenZombie().thenReturn(STOP);
         Zombie zombie = new Zombie(true);
         zombie.setField(Mockito.mock(Field.class));
-        game.move(zombie, 3, 2);
+        game.move(zombie, pt(3, 2));
 
         assertL("╔══════════┐" +
                 "║..S.......│" +
@@ -275,7 +274,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        game.move(new DeathRayPerk(DEATH_RAY_PERK), 2, 3);
+        game.move(new DeathRayPerk(DEATH_RAY_PERK), pt(2, 3));
 
         assertL("╔════┐" +
                 "║.S..│" +

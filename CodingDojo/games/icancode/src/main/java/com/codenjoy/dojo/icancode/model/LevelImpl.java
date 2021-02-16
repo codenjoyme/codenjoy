@@ -93,8 +93,8 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public Cell getCell(Point point) {
-        return getCell(point.getX(), point.getY());
+    public Cell getCell(Point pt) {
+        return getCell(pt.getX(), pt.getY());
     }
 
     @Override
@@ -103,9 +103,9 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        return pt(x, y).isOutOf(size)
-                || !getCell(x, y).passable();
+    public boolean isBarrier(Point pt) {
+        return pt.isOutOf(size)
+                || !getCell(pt).passable();
     }
 
     @Override

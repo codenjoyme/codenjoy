@@ -51,6 +51,7 @@ import static com.codenjoy.dojo.icancode.model.Elements.DEATH_RAY_PERK;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER1;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.TestUtils.injectN;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
@@ -3790,9 +3791,8 @@ public class SingleTest {
                 "║..E.│" +
                 "└────┘");
 
-        gameMultiple.move(new DeathRayPerk(DEATH_RAY_PERK), 2, 3);
+        gameMultiple.move(new DeathRayPerk(DEATH_RAY_PERK), pt(2, 3));
 
-//        tick();
         assertL(single1,
                 "╔════┐" +
                 "║.S..│" +
@@ -3970,7 +3970,7 @@ public class SingleTest {
                 "║....│" +
                 "║...E│" +
                 "└────┘");
-        gameMultiple.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), 2, 1);
+        gameMultiple.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), pt(2, 1));
 
         verifyNoMoreInteractions(listener1);
         verifyNoMoreInteractions(listener2);
@@ -4111,7 +4111,8 @@ public class SingleTest {
                 "║....│" +
                 "║...E│" +
                 "└────┘");
-        gameMultiple.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), 2, 1);
+
+        gameMultiple.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), pt(2, 1));
 
         verifyNoMoreInteractions(listener1);
         verifyNoMoreInteractions(listener2);
@@ -4839,4 +4840,91 @@ public class SingleTest {
         noGold(hero2());
     }
 
+    @Test
+    public void shouldFly_onOtherPlayer() {
+        // given
+        givenFl("╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║.E.│" +
+                "└───┘");
+
+        // when
+        hero1().right();
+        tick();
+
+        // then
+        assertE(single1,
+                "-----" +
+                "-----" +
+                "--X☺-" +
+                "-----" +
+                "-----");
+
+        assertF(single1,
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertL(single1,
+                "╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║.E.│" +
+                "└───┘");
+
+        // when
+        hero1().jump();
+        hero1().left();
+        tick();
+
+        // then
+        assertE(single1,
+                "-----" +
+                "-----" +
+                "--X--" +
+                "-----" +
+                "-----");
+
+        assertF(single1,
+                "-----" +
+                "-----" +
+                "--*--" +
+                "-----" +
+                "-----");
+
+        assertL(single1,
+                "╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║.E.│" +
+                "└───┘");
+
+        // when
+        tick();
+
+        // then
+        assertE(single1,
+                "-----" +
+                "-----" +
+                "-☺X--" +
+                "-----" +
+                "-----");
+
+        assertF(single1,
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----" +
+                "-----");
+
+        assertL(single1,
+                "╔═══┐" +
+                "║...│" +
+                "║.S.│" +
+                "║.E.│" +
+                "└───┘");
+    }
 }

@@ -32,15 +32,13 @@ import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import org.junit.Test;
 
 import java.util.Optional;
-import java.util.Random;
 
 import static com.codenjoy.dojo.icancode.model.Elements.*;
 import static com.codenjoy.dojo.icancode.model.ICanCode.TRAINING;
 import static com.codenjoy.dojo.services.Direction.UP;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class ICanCodePerkTest extends AbstractGameTest {
 
@@ -113,7 +111,7 @@ public class ICanCodePerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 2, 3);
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(2, 3));
 
         assertL("╔════┐" +
                 "║.S..│" +
@@ -156,7 +154,7 @@ public class ICanCodePerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 2, 3);
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(2, 3));
 
         assertL("╔════┐" +
                 "║.S..│" +
@@ -211,7 +209,7 @@ public class ICanCodePerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 2, 3);
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(2, 3));
 
         assertL("╔════┐" +
                 "║.S..│" +
@@ -291,7 +289,7 @@ public class ICanCodePerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        game.move(new UnstoppableLaserPerk(Elements.UNSTOPPABLE_LASER_PERK), 2, 1);
+        game.move(new UnstoppableLaserPerk(Elements.UNSTOPPABLE_LASER_PERK), pt(2, 1));
 
         assertL("╔════┐" +
                 "║.S..│" +
@@ -301,8 +299,8 @@ public class ICanCodePerkTest extends AbstractGameTest {
                 "└────┘");
 
         // when then
-        assertTrue(game.pickPerk(2, 1).isPresent());
-        assertFalse(game.pickPerk(2, 4).isPresent());
+        assertTrue(game.pickPerk(pt(2, 1)).isPresent());
+        assertFalse(game.pickPerk(pt(2, 4)).isPresent());
     }
 
     @Test

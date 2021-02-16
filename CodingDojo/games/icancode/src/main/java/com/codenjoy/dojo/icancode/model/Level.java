@@ -31,7 +31,7 @@ public interface Level {
 
     Cell getCell(int x, int y);
 
-    Cell getCell(Point point);
+    Cell getCell(Point pt);
 
     int getSize();
 
@@ -39,7 +39,7 @@ public interface Level {
 
     Cell[] getCells();
 
-    boolean isBarrier(int x, int y);
+    boolean isBarrier(Point pt);
 
     void setField(Field field);
 }

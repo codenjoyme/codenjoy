@@ -26,6 +26,7 @@ import com.codenjoy.dojo.icancode.model.AbstractGameTest;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.icancode.model.Elements.UNLIMITED_FIRE_PERK;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.*;
 
 public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
@@ -38,7 +39,7 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        game.move(new UnlimitedFirePerk(UNLIMITED_FIRE_PERK), 2, 3);
+        game.move(new UnlimitedFirePerk(UNLIMITED_FIRE_PERK), pt(2, 3));
 
         assertL("╔════┐" +
                 "║.S..│" +
@@ -158,7 +159,7 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "║.....│" +
                 "║.....│" +
                 "└─────┘");
-        game.move(new UnlimitedFirePerk(UNLIMITED_FIRE_PERK), 2, 4);
+        game.move(new UnlimitedFirePerk(UNLIMITED_FIRE_PERK), pt(2, 4));
 
         assertL("╔═════┐" +
                 "║.S...│" +

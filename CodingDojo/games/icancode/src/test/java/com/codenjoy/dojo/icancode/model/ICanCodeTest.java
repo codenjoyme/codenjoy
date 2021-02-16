@@ -32,9 +32,10 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import static com.codenjoy.dojo.services.Direction.STOP;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class ICanCodeTest extends AbstractGameTest {
 
@@ -2099,7 +2100,7 @@ public class ICanCodeTest extends AbstractGameTest {
         givenZombie().thenReturn(STOP);
         Zombie zombie = new Zombie(true);
         zombie.setField(Mockito.mock(Field.class));
-        game.move(zombie, 2, 3);
+        game.move(zombie, pt(2, 3));
 
         assertL("╔════┐" +
                 "║.S..│" +
@@ -2800,7 +2801,7 @@ public class ICanCodeTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldFlyOnShootingMachine() {
+    public void shouldFly_onShootingMachine() {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
@@ -2857,7 +2858,7 @@ public class ICanCodeTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldShootWithDelay() {
+    public void shouldShoot_withDelay() {
         // given
         settings.gunRecharge(2);
         givenFl("╔═══┐" +
@@ -2913,52 +2914,4 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
     }
-
-
-    /*@Test
-    public void shouldFlyOnOtherPlayer() {
-        // given
-        givenFlWithOnePlayer(
-                "╔═══┐" +
-                "║..˂│" +
-                "║.S.│" +
-                "║...│" +
-                "└───┘");
-
-        // when
-        ticks((FIRE_TICKS - 1) * 2);
-        hero.right();
-        ticks(2);
-
-        // then
-        assertE("-----" +
-                "-----" +
-                "--X☺-" +
-                "-----" +
-                "-----");
-
-        assertL("╔═══┐" +
-                "║..◄│" +
-                "║.S.│" +
-                "║...│" +
-                "└───┘");
-
-        // when
-        hero.jump();
-        hero.left();
-        ticks(2);
-
-        // then
-        assertE("-----" +
-                "--←--" +
-                "--X☺-" +
-                "-----" +
-                "-----");
-
-        assertL("╔═══┐" +
-                "║..◄│" +
-                "║.S.│" +
-                "║...│" +
-                "└───┘");
-    }*/
 }

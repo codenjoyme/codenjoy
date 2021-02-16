@@ -163,8 +163,8 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public boolean isBarrier(int x, int y) {
-        return level.isBarrier(x, y);
+    public boolean isBarrier(Point pt) {
+        return level.isBarrier(pt);
     }
 
     @Override
@@ -179,30 +179,31 @@ public class ICanCode implements Tickable, Field {
         return level.getItems(Exit.class).get(0).getCell();
     }
 
+    // TODO refactoring needed: dont use this method in test
     @Override
-    public void move(Item item, int x, int y) {
-        Cell cell = level.getCell(x, y);
+    public void move(Item item, Point pt) {
+        Cell cell = level.getCell(pt);
         cell.add(item);
         cell.comeIn(item);
     }
 
     @Override
-    public Optional<AbstractPerk> pickPerk(int x, int y) {
-        Cell cell = level.getCell(x, y);
+    public Optional<AbstractPerk> pickPerk(Point pt) {
+        Cell cell = level.getCell(pt);
         return perks().stream()
                 .filter(perk -> perk.getCell().equals(cell))
                 .findAny();
     }
 
     @Override
-    public Cell getCell(int x, int y) {
-        return level.getCell(x, y);
+    public Cell getCell(Point pt) {
+        return level.getCell(pt);
     }
 
     @Override
     // TODO to make cast inside
-    public Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y) {
-        for (Item item : getCell(x, y).items()) {
+    public Item getIfPresent(Class<? extends BaseItem> clazz, Point pt) {
+        for (Item item : getCell(pt).items()) {
             if (item.getClass().equals(clazz)) {
                 return item;
             }
@@ -211,9 +212,9 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public boolean isAt(int x, int y, Class<? extends BaseItem>... classes) {
+    public boolean isAt(Point pt, Class<? extends BaseItem>... classes) {
         for (Class clazz : classes) {
-            if (getIfPresent(clazz, x, y) != null) {
+            if (getIfPresent(clazz, pt) != null) {
                 return true;
             }
         }
@@ -303,20 +304,19 @@ public class ICanCode implements Tickable, Field {
         }
     }
 
-    // TODO refactoring needed
     private List<Cell> neighbors(Cell cell) {
         return new LinkedList<>(){{
             add(cell);
-            add(getCell(cell.getX() - 1, cell.getY()));
-            add(getCell(cell.getX() + 1, cell.getY()));
+            add(getCell(QDirection.LEFT.change(cell)));
+            add(getCell(QDirection.RIGHT.change(cell)));
 
-            add(getCell(cell.getX(), cell.getY() + 1));
-            add(getCell(cell.getX() - 1, cell.getY() + 1));
-            add(getCell(cell.getX() + 1, cell.getY() + 1));
+            add(getCell(QDirection.UP.change(cell)));
+            add(getCell(QDirection.LEFT_UP.change(cell)));
+            add(getCell(QDirection.RIGHT_UP.change(cell)));
 
-            add(getCell(cell.getX(), cell.getY() - 1));
-            add(getCell(cell.getX() - 1, cell.getY() - 1));
-            add(getCell(cell.getX() + 1, cell.getY() - 1));
+            add(getCell(QDirection.DOWN.change(cell)));
+            add(getCell(QDirection.LEFT_DOWN.change(cell)));
+            add(getCell(QDirection.RIGHT_DOWN.change(cell)));
         }};
     }
 

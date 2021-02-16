@@ -26,6 +26,7 @@ import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.services.Events;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.mockito.Mockito.verify;
 
 public class ICanCodePullPushBoxTest extends AbstractGameTest {
@@ -928,13 +929,16 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        game.move(new Zombie(true),3,4);
+
+        game.move(new Zombie(true), pt(3, 4));
+
         assertL("╔════┐" +
                 "║S...│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
                 "└────┘");
+
         assertE("------" +
                 "-☺B♂--" +
                 "------" +
@@ -1501,7 +1505,7 @@ public class ICanCodePullPushBoxTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldJumpOverBoxDoNotMoveIt() {
+    public void shouldJumpOverBox_doNotMoveIt() {
         // given
         givenFl("╔════┐" +
                 "║SB..│" +

@@ -33,8 +33,7 @@ import org.mockito.Mockito;
 import static com.codenjoy.dojo.icancode.model.Elements.BOX;
 import static com.codenjoy.dojo.icancode.model.Elements.UNSTOPPABLE_LASER_PERK;
 import static com.codenjoy.dojo.services.Direction.STOP;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.mockito.Mockito.verify;
 
 public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
@@ -49,8 +48,8 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "║.....│" +
                 "└─────┘");
 
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 3, 4);
-        game.move(new Box(BOX), 3, 2);
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(3, 4));
+        game.move(new Box(BOX), pt(3, 2));
 
         assertL("╔═════┐" +
                 "║..S..│" +
@@ -129,7 +128,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "-------" +
                 "-------");
 
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 3, 2);
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(3, 2));
 
         assertL("╔═════┐" +
                 "║.....│" +
@@ -205,11 +204,11 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "║.......│" +
                 "└───────┘");
 
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 2, 6);
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(2, 6));
         givenZombie().thenReturn(STOP);
         Zombie zombie = new Zombie(true);
         zombie.setField(Mockito.mock(Field.class));
-        game.move(zombie, 2, 4);
+        game.move(zombie, pt(2, 4));
 
         assertL("╔═══════┐" +
                 "║.S.....│" +
@@ -332,7 +331,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "---------" +
                 "---------");
 
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 2, 1);
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(2, 1));
 
         assertL("╔═══════┐" +
                 "║.......│" +
@@ -362,7 +361,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
         givenZombie().thenReturn(STOP);
         Zombie zombie = new Zombie(true);
         zombie.setField(Mockito.mock(Field.class));
-        game.move(zombie, 2, 4);
+        game.move(zombie, pt(2, 4));
 
         assertE("---------" +
                 "---------" +
@@ -475,7 +474,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
-        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), 2, 3);
+        game.move(new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK), pt(2, 3));
 
         assertL("╔════┐" +
                 "║.S..│" +

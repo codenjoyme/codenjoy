@@ -24,6 +24,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 import com.codenjoy.dojo.icancode.model.*;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 
 public class Zombie extends FieldItem implements Tickable {
@@ -80,11 +81,10 @@ public class Zombie extends FieldItem implements Tickable {
         if (direction == null) {
             return;
         }
-        int newX = direction.changeX(getCell().getX());
-        int newY = direction.changeY(getCell().getY());
+        Point to = direction.change(getCell());
 
-        if (!field.isBarrier(newX, newY) && !field.isAt(newX, newY, Zombie.class)) {
-            field.move(this, newX, newY);
+        if (!field.isBarrier(to) && !field.isAt(to, Zombie.class)) {
+            field.move(this, to);
         }
     }
 

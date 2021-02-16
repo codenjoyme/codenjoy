@@ -218,7 +218,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         } else if (p[0] == -1) { // TODO test me
             // ACT(-1)
             Cell end = field.getEndPosition();
-            field.move(item, end.getX(), end.getY());
+            field.move(item, end);
         }
     }
 
@@ -283,39 +283,35 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                 .collect(toList());
 
         if (direction != null) {
-            int x = item.getCell().getX();
-            int y = item.getCell().getY();
+            Cell from = item.getCell();
+            Point to = direction.change(from);
 
-            int newX = direction.changeX(x);
-            int newY = direction.changeY(y);
-
-            if (flying && (field.isAt(newX, newY, Box.class)
-                    || field.isAt(newX, newY, LaserMachine.class)))
+            if (flying && (field.isAt(to, Box.class)
+                    || field.isAt(to, LaserMachine.class)))
             {
-                int nextX = direction.changeX(newX);
-                int nextY = direction.changeY(newY);
-                if (!field.isBarrier(nextX, nextY)) {
-                    field.move(item, newX, newY);
+                Point next = direction.change(to);
+                if (!field.isBarrier(next)) {
+                    field.move(item, to);
                 }
             } else {
                 if (pull && !landOn) {
-                    if (tryPushBox(newX, newY)) {
+                    if (tryPushBox(to)) {
                         pull = false;
                     }
                 }
 
-                if (field.isBarrier(newX, newY)) {
+                if (field.isBarrier(to)) {
                     if (landOn) {
                         item.getCell().comeIn(item);
                     }
                 } else {
                     if (pull) {
-                        if (tryPullBox(x, y)) {
+                        if (tryPullBox(from)) {
                             pull = false;
                         }
                     }
-                    field.move(item, newX, newY);
-                    field.pickPerk(newX, newY).ifPresent(perk -> {
+                    field.move(item, to);
+                    field.pickPerk(to).ifPresent(perk -> {
                         perk.removeFromCell();
                         perks.add(perk);
                     });
@@ -338,55 +334,53 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    private boolean tryPullBox(int x, int y) {
-        int boxX = direction.inverted().changeX(x);
-        int boxY = direction.inverted().changeY(y);
+    private boolean tryPullBox(Point pt) {
+        Point box = direction.inverted().change(pt);
 
-        Item item = field.getIfPresent(Box.class, boxX, boxY);
+        Item item = field.getIfPresent(Box.class, box);
         if (item == null) {
             return false;
         }
 
-        if (field.isAt(x, y, Start.class)) {
+        if (field.isAt(pt, Start.class)) {
             return false;
         }
 
-        field.move(item, x, y);
+        field.move(item, pt);
         return true;
     }
 
-    private boolean tryPushBox(int x, int y) {
-        Item item = field.getIfPresent(Box.class, x, y);
+    private boolean tryPushBox(Point pt) {
+        Item item = field.getIfPresent(Box.class, pt);
 
         if (item == null) {
             return false;
         }
 
-        int newX = direction.changeX(x);
-        int newY = direction.changeY(y);
+        Point to = direction.change(pt);
 
-        if (field.isBarrier(newX, newY)) {
+        if (field.isBarrier(to)) {
             return false;
         }
 
-        if (field.isAt(newX, newY, HeroItem.class)) {
+        if (field.isAt(to, HeroItem.class)) {
             return false;
         }
 
-        if (field.isAt(newX, newY, Zombie.class)) {
+        if (field.isAt(to, Zombie.class)) {
             return false;
         }
 
-        if (field.isAt(newX, newY, Start.class)) {
+        if (field.isAt(to, Start.class)) {
             return false;
         }
 
-        Gold gold = (Gold) field.getIfPresent(Gold.class, newX, newY);
+        Gold gold = (Gold) field.getIfPresent(Gold.class, to);
         if (gold != null) {
             return false;
         }
 
-        field.move(item, newX, newY);
+        field.move(item, to);
         return true;
     }
 

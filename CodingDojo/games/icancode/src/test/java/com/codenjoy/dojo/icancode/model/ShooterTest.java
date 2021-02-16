@@ -31,6 +31,7 @@ import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -162,7 +163,7 @@ public class ShooterTest extends AbstractGameTest {
                 "║......│" +
                 "└──────┘");
 
-        game.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), 2, 5);
+        game.move(new DeathRayPerk(Elements.DEATH_RAY_PERK), pt(2, 5));
 
         assertL("╔══════┐" +
                 "║.S....│" +

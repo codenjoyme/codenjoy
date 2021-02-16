@@ -58,20 +58,18 @@ public class Shooter {
 
     public void fireByLaserMachine(Direction direction, Point from, LaserMachine owner) {
         Point to = direction.change(from);
-        if (!field.isBarrier(to.getX(), to.getY())) {
+        if (!field.isBarrier(to)) {
             Laser laser = new Laser(owner, direction, field);
-            field.move(laser, to.getX(), to.getY());
+            field.move(laser, to);
         }
     }
 
     public void fireDeathRayByHero(Laser laser, Point from, HeroItem heroItem) {
         Hero hero = heroItem.getHero();
         boolean perk = hero.has(UnstoppableLaserPerk.class);
-
         laser.deathRay(true);
-
         Point to = laser.getDirection().change(from);
-        field.getCell(to.getX(), to.getY()).add(laser);
+        field.getCell(to).add(laser);
         for (int range = 0; range < SettingsWrapper.data.getDeathRayRange() - 1; range++) {
             Cell cell = nextAvailable(laser, perk);
             if (cell == null) {
@@ -85,17 +83,17 @@ public class Shooter {
 
     private Cell nextAvailable(Laser laser, boolean unstoppable) {
         Direction direction = laser.getDirection();
-        Point point = direction.change(laser.getCell());
-        while (!point.isOutOf(field.size())) {
-            if (!field.isBarrier(point.getX(), point.getY())) {
-                return field.getCell(point.getX(), point.getY());
+        Point to = direction.change(laser.getCell());
+        while (!to.isOutOf(field.size())) {
+            if (!field.isBarrier(to)) {
+                return field.getCell(to);
             }
 
-            if (field.isBarrier(point.getX(), point.getY()) && !unstoppable) {
+            if (field.isBarrier(to) && !unstoppable) {
                 return null;
             }
 
-            point = direction.change(point);
+            to = direction.change(to);
         }
         return null;
     }

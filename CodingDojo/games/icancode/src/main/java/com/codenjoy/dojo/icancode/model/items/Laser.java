@@ -25,6 +25,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 import com.codenjoy.dojo.icancode.model.*;
 import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.Tickable;
 
@@ -137,17 +138,16 @@ public class Laser extends FieldItem implements Tickable {
     public void tick() {
         Cell cell = getCell();
         if (getCell() == null) return; // TODO почему-то тут был NPE
-        int newX = direction.changeX(getCell().getX());
-        int newY = direction.changeY(getCell().getY());
+        Point to = direction.change(getCell());
 
         if (deathRay && ticks == 0) {
             cell.comeIn(this);
         } else if (deathRay) {
             removeFromCell();
-        } else if (!field.isBarrier(newX, newY)) {
-            field.move(this, newX, newY);
-        } else if (field.isAt(newX, newY, Box.class) && unstoppable) {
-            field.move(this, newX, newY);
+        } else if (!field.isBarrier(to)) {
+            field.move(this, to);
+        } else if (field.isAt(to, Box.class) && unstoppable) {
+            field.move(this, to);
         } else {
             removeFromCell();
         }

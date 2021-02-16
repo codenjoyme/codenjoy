@@ -36,25 +36,25 @@ import java.util.Optional;
 
 public interface Field extends GameField<Player> {
 
-    boolean isBarrier(int x, int y);
+    boolean isBarrier(Point pt);
 
     Cell getStartPosition();
 
     Cell getEndPosition();
 
-    void move(Item item, int x, int y);
+    void move(Item item, Point pt);
 
-    Optional<AbstractPerk> pickPerk(int x, int y);
+    Optional<AbstractPerk> pickPerk(Point pt);
 
     Optional<AbstractPerk> dropNextPerk();
 
     void dropPickedGold(Hero hero);
 
-    Cell getCell(int x, int y);
+    Cell getCell(Point pt);
 
-    Item getIfPresent(Class<? extends BaseItem> clazz, int x, int y);
+    Item getIfPresent(Class<? extends BaseItem> clazz, Point pt);
 
-    boolean isAt(int x, int y, Class<? extends BaseItem>... clazz);
+    boolean isAt(Point pt, Class<? extends BaseItem>... clazz);
 
     void reset();
 
