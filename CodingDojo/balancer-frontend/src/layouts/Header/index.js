@@ -4,22 +4,12 @@ import { NavLink } from 'react-router-dom';
 import avaDefault from './icon_ava_default.svg';
 import classnames from 'classnames';
 
-import logo_icancode from './icancode/game-logo.png';
-import logo_bomberman from './bomberman/game-logo.png';
-
 // proj
 import { book } from '../../routes';
+import Game from '../../games';
 
 // own
 import Styles from './styles.module.css';
-
-const logo = function(){
-    switch (process.env.REACT_APP_GAME) {
-        case 'icancode' : return logo_icancode;
-        case 'bomberman' : return logo_bomberman;
-    }
-}();
-
 
 class HeaderComponent extends PureComponent {
     render() {
@@ -29,7 +19,7 @@ class HeaderComponent extends PureComponent {
             <header>
                 <div className={ Styles.container }>
                     <NavLink className={ Styles.logoContainer } to={ book.home }>
-                        <img className={ Styles.logo } src={ logo } alt='' />
+                        <img className={ Styles.logo } src={ Game.logo } alt='' />
                     </NavLink>
 
                     <ul>

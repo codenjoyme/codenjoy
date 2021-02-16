@@ -1,5 +1,5 @@
-import icancode from './icancode';
-import bomberman from './bomberman';
+import icancode from './icancode/index';
+import bomberman from './bomberman/index';
 
 const result = function(){
     switch (process.env.REACT_APP_GAME) {
