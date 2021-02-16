@@ -34,6 +34,7 @@ import com.codenjoy.dojo.icancode.services.GameRunner;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -46,6 +47,7 @@ import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
+    @Ignore
     @Test
     public void test() {
         // given
