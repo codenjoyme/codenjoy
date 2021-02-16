@@ -34,9 +34,6 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
-/**
- * Created by Sanja on 15.02.14.
- */
 public class ICanCodePerformanceTest {
 
     @Test // TODO закончить как будет настроение :)

@@ -1217,7 +1217,8 @@ public class ICanCodeTest extends AbstractGameTest {
     }
 
     @Test
-    public void leftHaveNoEffectWhenFlying() {
+    public void shouldLeftHaveNoEffect_whenFlying() {
+        // given
         givenFl("╔═══┐" +
                 "║...│" +
                 "║.S.│" +
@@ -1230,9 +1231,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.jump();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "-----" +
@@ -1245,19 +1248,23 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.left();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "--☺--" +
                 "-----" +
                 "-----");
+        
         assertNotEquals(Direction.LEFT, hero.getDirection());
     }
 
     @Test
-    public void rightHaveNoEffectWhenFlying() {
+    public void shoudlRightHaveNoEffect_whenFlying() {
+        // given
         givenFl("╔═══┐" +
                 "║...│" +
                 "║.S.│" +
@@ -1270,9 +1277,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.jump();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "-----" +
@@ -1285,19 +1294,23 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.right();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "--☺--" +
                 "-----" +
                 "-----");
+        
         assertNotEquals(Direction.RIGHT, hero.getDirection());
     }
 
     @Test
-    public void upHaveNoEffectWhenFlying() {
+    public void shoudlUpHaveNoEffect_whenFlying() {
+        // given 
         givenFl("╔═══┐" +
                 "║...│" +
                 "║.S.│" +
@@ -1310,9 +1323,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when 
         hero.jump();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "-----" +
@@ -1325,19 +1340,23 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.up();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "--☺--" +
                 "-----" +
                 "-----");
+        
         assertNotEquals(Direction.UP, hero.getDirection());
     }
 
     @Test
-    public void downHaveNoEffectWhenFlying() {
+    public void shouldDownHaveNoEffect_whenFlying() {
+        // given
         givenFl("╔═══┐" +
                 "║...│" +
                 "║.S.│" +
@@ -1350,9 +1369,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.jump();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "-----" +
@@ -1365,19 +1386,23 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.down();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "--☺--" +
                 "-----" +
                 "-----");
+        
         assertNotEquals(Direction.DOWN, hero.getDirection());
     }
 
     @Test
-    public void resetHaveNoEffectWhenFlying() {
+    public void shoudlResetHaveNoEffect_whenFlying() {
+        // given 
         givenFl("╔═══┐" +
                 "║...│" +
                 "║.S.│" +
@@ -1390,9 +1415,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.jump();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "-----" +
@@ -1405,19 +1432,23 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.reset();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "--☺--" +
                 "-----" +
                 "-----");
-        assertFalse(hero.isReset());
+        
+        assertEquals(false, hero.isReset());
     }
 
     @Test
-    public void jumpHaveNoEffectWhenFlying() {
+    public void shouldKumpHaveNoEffect_whenFlying() {
+        // given
         givenFl("╔═══┐" +
                 "║...│" +
                 "║.S.│" +
@@ -1430,9 +1461,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.jump();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "-----" +
@@ -1445,19 +1478,23 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.jump();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "--☺--" +
                 "-----" +
                 "-----");
-        assertFalse(hero.isJump());
+        
+        assertEquals(false, hero.isJump());
     }
 
     @Test
-    public void pullHaveNoEffectWhenFlying() {
+    public void shouldPullHaveNoEffect_whenFlying() {
+        // given
         givenFl("╔═══┐" +
                 "║...│" +
                 "║.S.│" +
@@ -1470,9 +1507,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.jump();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "-----" +
@@ -1485,19 +1524,23 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.pull();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "--☺--" +
                 "-----" +
                 "-----");
-        assertFalse(hero.isPull());
+        
+        assertEquals(false, hero.isPull());
     }
 
     @Test
-    public void fireHaveNoEffectWhenFlying() {
+    public void shoudlFireHaveNoEffect_whenFlying() {
+        // given
         givenFl("╔═══┐" +
                 "║...│" +
                 "║.S.│" +
@@ -1510,9 +1553,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.jump();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "-----" +
@@ -1525,15 +1570,18 @@ public class ICanCodeTest extends AbstractGameTest {
                 "-----" +
                 "-----");
 
+        // when
         hero.fire();
         game.tick();
 
+        // then
         assertE("-----" +
                 "-----" +
                 "--☺--" +
                 "-----" +
                 "-----");
-        assertFalse(hero.isFire());
+        
+        assertEquals(false, hero.isFire());
     }
 
     @Test
@@ -2377,7 +2425,7 @@ public class ICanCodeTest extends AbstractGameTest {
 
     @Test
     public void shouldScrollingView() {
-        //given
+        // given
         givenFl(Levels.VIEW_SIZE_TESTING,
                 "╔══════════════════┐" +
                 "║S.................│" +
@@ -2400,7 +2448,7 @@ public class ICanCodeTest extends AbstractGameTest {
                 "║.................E│" +
                 "└──────────────────┘");
 
-        //then
+        // then
         assertL("╔═══════════════" +
                 "║S.............." +
                 "║..............." +
@@ -2418,13 +2466,13 @@ public class ICanCodeTest extends AbstractGameTest {
                 "║..............." +
                 "║...............");
 
-        //when
+        // when
         for (int i = 0; i < 10; ++i) {
             hero.right();
             game.tick();
         }
 
-        //then
+        // then
         assertL("╔═══════════════" +
                 "║S.............." +
                 "║..............." +
@@ -2442,11 +2490,11 @@ public class ICanCodeTest extends AbstractGameTest {
                 "║..............." +
                 "║...............");
 
-        //when
+        // when
         hero.right();
         game.tick();
 
-        //then
+        // then
         assertL("════════════════" +
                 "S..............." +
                 "................" +
@@ -2465,13 +2513,13 @@ public class ICanCodeTest extends AbstractGameTest {
                 "................");
 
 
-        //when
+        // when
         for (int i = 0; i < 12; ++i) {
             hero.right();
             game.tick();
         }
 
-        //then
+        // then
         assertL("═══════════════┐" +
                 "...............│" +
                 "...............│" +
@@ -2489,7 +2537,7 @@ public class ICanCodeTest extends AbstractGameTest {
                 "...............│" +
                 "...............│");
 
-        //when
+        // when
         hero.left();
         game.tick();
 
@@ -2515,7 +2563,7 @@ public class ICanCodeTest extends AbstractGameTest {
                 "..............E│" +
                 "───────────────┘");
 
-        //when
+        // when
         for (int i = 0; i < 20; ++i) {
             hero.left();
             game.tick();
@@ -2592,7 +2640,7 @@ public class ICanCodeTest extends AbstractGameTest {
 
     @Test
     public void shouldStartOnCenter() {
-        //given
+        // given
         givenFl(Levels.VIEW_SIZE_TESTING,
                 "╔════════════════════════════════════┐" +
                 "║....................................│" +
@@ -2633,7 +2681,7 @@ public class ICanCodeTest extends AbstractGameTest {
                 "║...................................E│" +
                 "└────────────────────────────────────┘");
 
-        //then
+        // then
         assertL("................" +
                 "................" +
                 "................" +

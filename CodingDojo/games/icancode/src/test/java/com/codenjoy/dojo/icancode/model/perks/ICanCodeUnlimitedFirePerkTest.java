@@ -33,6 +33,7 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
 
     @Test
     public void heroHasUnlimitedFirePerk() {
+        // given
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║.f..│" +
@@ -40,9 +41,11 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
+        // when
         hero.down();
         game.tick();
 
+        // then
         assertE("------" +
                 "------" +
                 "--☺---" +
@@ -61,7 +64,8 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void testFireWithoutUnlimitedFirePerk() {
+    public void testFire_withoutUnlimitedFirePerk() {
+        // given
         settings.gunRecharge(2);
 
         givenFl("╔═════┐" +
@@ -82,10 +86,12 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
 
         hasNot(UnlimitedFirePerk.class);
 
+        // when
         hero.fire();
         hero.down();
         game.tick();
 
+        // then
         assertE("-------" +
                 "--☺----" +
                 "--↓----" +
@@ -96,10 +102,12 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
 
         hasNot(UnlimitedFirePerk.class);
 
+        // when
         hero.fire();
         hero.down();
         game.tick();
 
+        // then
         assertE("-------" +
                 "--☺----" +
                 "-------" +
@@ -110,10 +118,12 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
 
         hasNot(UnlimitedFirePerk.class);
 
+        // when
         hero.fire();
         hero.down();
         game.tick();
 
+        // then
         assertE("-------" +
                 "--☺----" +
                 "-------" +
@@ -124,10 +134,12 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
 
         hasNot(UnlimitedFirePerk.class);
 
+        // when
         hero.fire();
         hero.down();
         game.tick();
 
+        // then
         assertE("-------" +
                 "--☺----" +
                 "--↓----" +
@@ -140,7 +152,8 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void testFireWithUnlimitedFirePerk() {
+    public void testFire_withUnlimitedFirePerk() {
+        // given
         settings.perkActivity(2)
                 .gunRecharge(3);
 
@@ -152,9 +165,11 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "║.....│" +
                 "└─────┘");
 
+        // when
         hero.down();
         game.tick();
 
+        // then
         assertE("-------" +
                 "-------" +
                 "--☺----" +
@@ -170,13 +185,15 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "║.....│" +
                 "║.....│" +
                 "└─────┘");
-        
+
         has(UnlimitedFirePerk.class);
 
+        // when
         hero.fire();
         hero.down();
         game.tick();
 
+        // then
         assertE("-------" +
                 "-------" +
                 "--☺----" +
@@ -187,10 +204,12 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
         
         has(UnlimitedFirePerk.class);
 
+        // when
         hero.fire();
         hero.down();
         game.tick();
 
+        // then
         assertE("-------" +
                 "-------" +
                 "--☺----" +
@@ -201,10 +220,12 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
         
         hasNot(UnlimitedFirePerk.class);
 
+        // when
         hero.fire();
         hero.down();
         game.tick();
 
+        // then
         assertE("-------" +
                 "-------" +
                 "--☺----" +

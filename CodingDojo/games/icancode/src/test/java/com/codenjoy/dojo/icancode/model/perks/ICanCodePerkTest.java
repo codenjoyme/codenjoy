@@ -518,73 +518,43 @@ public class ICanCodePerkTest extends AbstractGameTest {
 
     @Test
     public void goldState_withUnstoppableLaserPerk() {
-        // given
-        Gold gold = new Gold(Elements.GOLD);
-
-        // when
-        Elements element = gold.state(player, new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK));
-
-        // then
-        assertEquals(UNSTOPPABLE_LASER_PERK, element);
+        assertEquals(UNSTOPPABLE_LASER_PERK,
+                new Gold(Elements.GOLD).state(player,
+                        new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK)));
     }
 
     @Test
     public void goldState_withDeathRayPerk() {
-        // given
-        Gold gold = new Gold(Elements.GOLD);
-
-        // when
-        Elements element = gold.state(player, new DeathRayPerk(DEATH_RAY_PERK));
-
-        // then
-        assertEquals(DEATH_RAY_PERK, element);
+        assertEquals(DEATH_RAY_PERK,
+                new Gold(Elements.GOLD).state(player,
+                        new DeathRayPerk(DEATH_RAY_PERK)));
     }
 
     @Test
     public void goldState_withUnlimitedFirePerk() {
-        // given
-        Gold gold = new Gold(Elements.GOLD);
-
-        // when
-        Elements element = gold.state(player, new UnlimitedFirePerk(UNLIMITED_FIRE_PERK));
-
-        // then
-        assertEquals(UNLIMITED_FIRE_PERK, element);
+        assertEquals(UNLIMITED_FIRE_PERK,
+                new Gold(Elements.GOLD).state(player,
+                        new UnlimitedFirePerk(UNLIMITED_FIRE_PERK)));
     }
 
     @Test
     public void floorState_withUnstoppableLaserPerk() {
-        // given
-        Floor floor = new Floor(FLOOR);
-
-        // when
-        Elements element = floor.state(player, new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK));
-
-        // then
-        assertEquals(UNSTOPPABLE_LASER_PERK, element);
+        assertEquals(UNSTOPPABLE_LASER_PERK,
+                new Floor(FLOOR).state(player,
+                        new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK)));
     }
 
     @Test
     public void floorState_withDeathRayPerk() {
-        // given
-        Floor floor = new Floor(FLOOR);
-
-        // when
-        Elements element = floor.state(player, new DeathRayPerk(DEATH_RAY_PERK));
-
-        // then
-        assertEquals(DEATH_RAY_PERK, element);
+        assertEquals(DEATH_RAY_PERK,
+                new Floor(FLOOR).state(player,
+                        new DeathRayPerk(DEATH_RAY_PERK)));
     }
 
     @Test
     public void floorState_withUnlimitedFirePerk() {
-        // given
-        Floor floor = new Floor(FLOOR);
-
-        // when
-        Elements element = floor.state(player, new UnlimitedFirePerk(UNLIMITED_FIRE_PERK));
-
-        // then
-        assertEquals(UNLIMITED_FIRE_PERK, element);
+        assertEquals(UNLIMITED_FIRE_PERK,
+                new Floor(FLOOR).state(player,
+                        new UnlimitedFirePerk(UNLIMITED_FIRE_PERK)));
     }
 }

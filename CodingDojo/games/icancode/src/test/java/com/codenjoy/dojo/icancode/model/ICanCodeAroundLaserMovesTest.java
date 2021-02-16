@@ -31,6 +31,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
+
     @Test
     public void shouldAlive_whenStepToCellWithLeavingSelfLaser() {
         // given
@@ -112,6 +113,7 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
         hero.up();
         game.tick();
 
+        // than
         assertL("╔═════┐" +
                 "║˃....│" +
                 "║.S...│" +
@@ -142,11 +144,11 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
                 "       " +
                 "       ");
 
-        //when
+        // when
         ticks(FIRE_TICKS);
         game.tick();
 
-        //then
+        // then
         assertL("╔═════┐" +
                 "║˃....│" +
                 "║.....│" +
@@ -168,7 +170,7 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
         hero.jump();
         game.tick();
 
-        //then
+        // then
         assertL("╔═════┐" +
                 "║˃....│" +
                 "║.....│" +
@@ -191,10 +193,10 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
                 "-------" +
                 "-------" +
                 "-------");
-        //when
+        // when
         game.tick();
 
-        //then
+        // then
         assertL("╔═════┐" +
                 "║˃....│" +
                 "║.....│" +

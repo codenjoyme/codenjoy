@@ -39,7 +39,8 @@ import static org.mockito.Mockito.mock;
 public class ShooterTest extends AbstractGameTest {
 
     @Test
-    public void fireWhenLaserMachineIsOwner() {
+    public void shouldFire_whenLaserMachineIsOwner() {
+        // given
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +
@@ -47,10 +48,12 @@ public class ShooterTest extends AbstractGameTest {
                 "║....│" +
                 "└────┘");
 
+        // when
         new Shooter(game).fire(Direction.UP,
                 new PointImpl(2, 0),
                 mock(LaserMachine.class));
 
+        // then
         assertE("------" +
                 "--☺---" +
                 "------" +
@@ -60,7 +63,8 @@ public class ShooterTest extends AbstractGameTest {
     }
 
     @Test
-    public void LaserMachineShouldNotShootThroughTheBarrier() {
+    public void shouldNotLaserMachineShoot_throughTheBarrier() {
+        // given
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║..B.│" +
@@ -68,6 +72,7 @@ public class ShooterTest extends AbstractGameTest {
                 "║.B..│" +
                 "└────┘");
 
+        // when
         new Shooter(game).fire(Direction.UP,
                 new PointImpl(2, 0),
                 mock(LaserMachine.class));
@@ -76,32 +81,41 @@ public class ShooterTest extends AbstractGameTest {
                 new PointImpl(3, 0),
                 mock(LaserMachine.class));
 
-        //first laser shouldn't go
-        //the second one must stuck in box
+        // then
+        // first laser shouldn't go
+        // the second one must stuck in box
         assertE("------" +
                 "--☺---" +
                 "---B--" +
                 "------" +
                 "--B↑--" +
                 "------");
+
+        // when
         game.tick();
 
+        // then
         assertE("------" +
                 "--☺---" +
                 "---B--" +
                 "---↑--" +
                 "--B---" +
                 "------");
+
+        // when
         game.tick();
 
+        // then
         assertE("------" +
                 "--☺---" +
                 "---B--" +
                 "------" +
                 "--B---" +
                 "------");
-
+        // when
         game.tick();
+
+        // then
         assertE("------" +
                 "--☺---" +
                 "---B--" +
@@ -111,7 +125,8 @@ public class ShooterTest extends AbstractGameTest {
     }
 
     @Test
-    public void fireRegularLaserWhenHeroIsOwner() {
+    public void shoudlFireRegularLaser_whenHeroIsOwner() {
+        // given
         givenFl("╔════┐" +
                 "║.S..│" +
                 "║....│" +
@@ -137,8 +152,10 @@ public class ShooterTest extends AbstractGameTest {
                 "------" +
                 "------");
 
+        // when
         game.tick();
 
+        // then
         assertE("------" +
                 "--☺---" +
                 "--↓---" +
@@ -148,7 +165,7 @@ public class ShooterTest extends AbstractGameTest {
     }
 
     @Test
-    public void fireDeathRayLasersWhenHeroIsOwner() {
+    public void shoudldFireDeathRayLasers_whenHeroIsOwner() {
         // given
         SettingsWrapper.setup(new SettingsImpl())
                 .perkAvailability(10)
@@ -168,6 +185,7 @@ public class ShooterTest extends AbstractGameTest {
         hero.down();
         game.tick();
 
+        // than
         assertE("--------" +
                 "--------" +
                 "--☺-----" +
@@ -181,8 +199,10 @@ public class ShooterTest extends AbstractGameTest {
 
         assertEquals(0, game.getLevel().getItems(Laser.class).size());
 
+        // when
         new Shooter(game).fire(Direction.DOWN, hero.getItem().getCell(), hero.getItem());
 
+        // then
         assertEquals(3, game.getLevel().getItems(Laser.class).size());
 
         assertE("--------" +
@@ -199,8 +219,10 @@ public class ShooterTest extends AbstractGameTest {
                 .map(item -> (Laser) item)
                 .allMatch(laser -> laser.deathRay() && laser.getTicks() == 0));
 
+        // when
         game.tick();
 
+        // then
         assertE("--------" +
                 "--------" +
                 "--☺-----" +
@@ -210,8 +232,10 @@ public class ShooterTest extends AbstractGameTest {
                 "--------" +
                 "--------");
 
+        // when
         game.tick();
 
+        // then
         assertEquals(0, game.getLevel().getItems(Laser.class).size());
     }
 }

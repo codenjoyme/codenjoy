@@ -1299,6 +1299,7 @@ public class SingleTest {
         tick(single1);
         tick(single2);
 
+        // then
         assertL(single1,
                 "╔═══┐" +
                 "║S..│" +
@@ -1345,6 +1346,7 @@ public class SingleTest {
         tick(single1);
         tick(single2);
 
+        // then
         assertL(single1,
                 "╔═══┐" +
                 "║S..│" +
@@ -1392,6 +1394,7 @@ public class SingleTest {
         tick(single1);
         tick(single2);
 
+        // then
         assertL(single1,
                 "╔═══┐" +
                 "║S..│" +
@@ -1498,6 +1501,7 @@ public class SingleTest {
         tick(single1);
         tick(single2);
 
+        // then
         assertL(single1,
                 "╔═══┐" +
                 "║S..│" +
@@ -1531,6 +1535,7 @@ public class SingleTest {
         tick(single1);
         tick(single2);
 
+        // then
         assertL(single1,
                 "╔═══┐" +
                 "║S..│" +
@@ -1563,6 +1568,7 @@ public class SingleTest {
         tick(single1);
         tick(single2);
 
+        // then
         assertL(single1,
                 "╔═══┐" +
                 "║S..│" +
@@ -1596,6 +1602,7 @@ public class SingleTest {
         tick(single1);
         tick(single2);
 
+        // then
         assertL(single1,
                 "╔═══┐" +
                 "║S..│" +
