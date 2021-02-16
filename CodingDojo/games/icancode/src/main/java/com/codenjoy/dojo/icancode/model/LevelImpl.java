@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
+import com.codenjoy.dojo.icancode.model.perks.PerkUtils;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 
@@ -60,7 +61,9 @@ public class LevelImpl implements Level {
                 BaseItem item = getBaseItem(element);
 
                 if (element.getLayer() != Elements.Layers.LAYER1
-                    || element == Elements.GOLD) {
+                    || element == Elements.GOLD
+                    || PerkUtils.isPerk(element))
+                {
                     Elements atBottom = Elements.valueOf(Elements.FLOOR.ch());
                     cell.add(getBaseItem(atBottom));
                 }

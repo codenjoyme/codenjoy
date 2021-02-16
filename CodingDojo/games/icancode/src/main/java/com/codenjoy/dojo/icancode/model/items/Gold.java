@@ -24,6 +24,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.icancode.model.*;
+import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
 import com.codenjoy.dojo.icancode.model.perks.UnstoppableLaserPerk;
@@ -43,19 +44,15 @@ public class Gold extends BaseItem {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        // TODO refactoring needed
-        if (filterOne(alsoAtPoint, DeathRayPerk.class) != null) {
-            return Elements.DEATH_RAY_PERK;
+        AbstractPerk perk = filterOne(alsoAtPoint, AbstractPerk.class);
+        if (perk != null) {
+            return perk.state(player, alsoAtPoint);
         }
-        if (filterOne(alsoAtPoint, UnstoppableLaserPerk.class) != null) {
-            return Elements.UNSTOPPABLE_LASER_PERK;
-        }
-        if (filterOne(alsoAtPoint, UnlimitedFirePerk.class) != null) {
-            return Elements.UNLIMITED_FIRE_PERK;
-        }
+
         if (hidden) {
             return Elements.FLOOR;
         }
+
         return super.state(player, alsoAtPoint);
     }
 

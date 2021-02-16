@@ -157,7 +157,7 @@ public enum Elements implements CharElements {
         }
     }
 
-    public static List<Elements> getPerks() {
+    public static List<Elements> perks() {
         return Arrays.asList(
                 UNSTOPPABLE_LASER_PERK,
                 DEATH_RAY_PERK,

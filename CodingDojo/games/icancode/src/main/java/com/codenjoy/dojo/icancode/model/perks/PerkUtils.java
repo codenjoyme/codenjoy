@@ -9,7 +9,7 @@ import java.util.Optional;
 public class PerkUtils {
 
     public static Optional<AbstractPerk> random(Dice dice) {
-        List<Elements> perks = Elements.getPerks();
+        List<Elements> perks = Elements.perks();
         Elements element = perks.get(dice.next(perks.size()));
         switch (element) {
             case UNSTOPPABLE_LASER_PERK:
@@ -23,4 +23,7 @@ public class PerkUtils {
         }
     }
 
+    public static boolean isPerk(Elements element) {
+        return Elements.perks().contains(element);
+    }
 }

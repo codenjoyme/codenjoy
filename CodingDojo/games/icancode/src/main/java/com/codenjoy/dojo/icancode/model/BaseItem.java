@@ -38,7 +38,7 @@ public abstract class BaseItem implements Item {
 
     public BaseItem(Elements element) {
         this.element = element;
-        this.passable = true;
+        this.passable = PASSABLE;
     }
 
     public BaseItem(Elements element, boolean passable) {
