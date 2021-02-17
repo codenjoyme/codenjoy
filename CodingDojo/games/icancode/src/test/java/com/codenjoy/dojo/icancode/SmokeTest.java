@@ -47,12 +47,12 @@ import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
 
-    @Ignore
     @Test
     public void test() {
         // given
         List<String> messages = new LinkedList<>();
 
+        Levels.VIEW_SIZE = 20;
         LocalGameRunner.timeout = 0;
         LocalGameRunner.out = (e) -> messages.add(e);
         LocalGameRunner.countIterations = 20;

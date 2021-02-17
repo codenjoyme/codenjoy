@@ -37,8 +37,8 @@ import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
+import org.junit.After;
 import org.junit.Before;
-import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
@@ -48,7 +48,6 @@ import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -68,9 +67,11 @@ public class AbstractGameTest {
     protected Player player;
     private Player otherPlayer;
     protected SettingsWrapper settings;
+    private int old;
 
     @Before
     public void setup() {
+        old = Levels.VIEW_SIZE;
         mode = ICanCode.TRAINING;
 
         settings = SettingsWrapper.setup(new SettingsImpl())
@@ -81,7 +82,13 @@ public class AbstractGameTest {
                 .gunRecharge(0)
                 .gunRestTime(0)
                 .gunShotQueue(0);
+
         dice = mock(Dice.class);
+    }
+
+    @After
+    public void tearDown() {
+        Levels.VIEW_SIZE = old;
     }
 
     protected void ticks(int count) {
