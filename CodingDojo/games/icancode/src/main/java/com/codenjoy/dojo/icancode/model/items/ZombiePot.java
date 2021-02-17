@@ -28,8 +28,18 @@ import com.codenjoy.dojo.icancode.model.Elements;
 
 public class ZombiePot extends FieldItem implements Tickable {
 
-    public static int TICKS_PER_NEW_ZOMBIE = 20;
-    public static int COUNT_ZOMBIES_ON_MAP = 4;
+    // TODO to use another way to change this data
+    public static int TICKS_PER_NEW_ZOMBIE;
+    public static int COUNT_ZOMBIES_ON_MAP;
+
+    static {
+        init();
+    }
+
+    public static void init() {
+        TICKS_PER_NEW_ZOMBIE = 20;
+        COUNT_ZOMBIES_ON_MAP = 4;
+    }
 
     private int time = 0;
 

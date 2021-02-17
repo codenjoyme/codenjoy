@@ -24,6 +24,8 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
+import com.codenjoy.dojo.icancode.model.items.Zombie;
+import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
@@ -71,6 +73,10 @@ public class SingleTest {
 
     @Before
     public void setup() {
+        Levels.init();
+        Zombie.init();
+        ZombiePot.init();
+
         dice = mock(Dice.class);
     }
 

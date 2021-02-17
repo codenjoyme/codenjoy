@@ -29,8 +29,18 @@ import com.codenjoy.dojo.services.Tickable;
 
 public class Zombie extends FieldItem implements Tickable {
 
-    public static int WALK_EACH_TICKS = 2;
-    public static ZombieBrain BRAIN = new ZombieBrain();
+    // TODO to use another way to change this data
+    public static int WALK_EACH_TICKS;
+    public static ZombieBrain BRAIN;
+
+    static {
+        init();
+    }
+
+    public static void init() {
+        WALK_EACH_TICKS = 2;
+        BRAIN = new ZombieBrain();
+    }
 
     private int ticks = 0;
     private boolean die;

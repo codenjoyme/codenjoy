@@ -29,6 +29,7 @@ import com.codenjoy.dojo.icancode.client.Board;
 import com.codenjoy.dojo.icancode.client.ai.AISolver;
 import com.codenjoy.dojo.icancode.client.ai.BotSolver;
 import com.codenjoy.dojo.icancode.model.Level;
+import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import com.codenjoy.dojo.icancode.services.Levels;
@@ -52,7 +53,10 @@ public class SmokeTest {
         // given
         List<String> messages = new LinkedList<>();
 
-        Levels.VIEW_SIZE = 20;
+        Levels.init();
+        Zombie.init();
+        ZombiePot.init();
+
         LocalGameRunner.timeout = 0;
         LocalGameRunner.out = (e) -> messages.add(e);
         LocalGameRunner.countIterations = 20;

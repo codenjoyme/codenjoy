@@ -25,6 +25,7 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
+import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
@@ -67,11 +68,13 @@ public class AbstractGameTest {
     protected Player player;
     private Player otherPlayer;
     protected SettingsWrapper settings;
-    private int old;
 
     @Before
     public void setup() {
-        old = Levels.VIEW_SIZE;
+        Levels.init();
+        Zombie.init();
+        ZombiePot.init();
+
         mode = ICanCode.TRAINING;
 
         settings = SettingsWrapper.setup(new SettingsImpl())
@@ -84,11 +87,6 @@ public class AbstractGameTest {
                 .gunShotQueue(0);
 
         dice = mock(Dice.class);
-    }
-
-    @After
-    public void tearDown() {
-        Levels.VIEW_SIZE = old;
     }
 
     protected void ticks(int count) {

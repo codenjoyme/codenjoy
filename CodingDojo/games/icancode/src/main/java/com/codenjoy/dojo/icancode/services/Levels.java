@@ -38,9 +38,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public final class Levels {
 
-    public static int VIEW_SIZE = 20;
+    // TODO to use another way to change this data
+    public static int VIEW_SIZE;
+
     public static final int VIEW_SIZE_TESTING = 16;
     public static final int COUNT_LAYERS = 3;
+
+    static {
+        init();
+    }
+
+    public static void init() {
+        VIEW_SIZE = 20;
+    }
 
     private Levels() {
         throw new IllegalAccessError("Utility class");
