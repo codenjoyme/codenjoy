@@ -15,10 +15,7 @@ public class JumpPerk extends AbstractPerk {
     }
 
     @Override
-    protected void toggle(Hero hero) {
-        if (!hero.isFlying()) {
-            hero.setCanJump(true);
-            this.removeFromCell();
-        }
+    protected void activate(Hero hero) {
+        hero.setCanJump(true);
     }
 }

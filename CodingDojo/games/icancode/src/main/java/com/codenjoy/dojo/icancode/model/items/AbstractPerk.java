@@ -15,9 +15,13 @@ public abstract class AbstractPerk extends FieldItem {
     public void action(Item item) {
         HeroItem heroItem = getIf(item, HeroItem.class);
         if (heroItem != null) {
-            toggle(heroItem.getHero());
+            Hero hero = heroItem.getHero();
+            if (!hero.isFlying()) {
+                activate(hero);
+                removeFromCell();
+            }
         }
     }
 
-    protected abstract void toggle(Hero hero);
+    protected abstract void activate(Hero hero);
 }
