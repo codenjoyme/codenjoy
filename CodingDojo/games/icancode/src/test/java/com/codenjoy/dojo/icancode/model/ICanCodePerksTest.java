@@ -4,6 +4,7 @@ import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class ICanCodePerksTest extends AbstractGameTest {
@@ -17,7 +18,7 @@ public class ICanCodePerksTest extends AbstractGameTest {
 
     @Test
     public void firePerkShouldBeOnBoard() {
-        //given
+        // given
         givenFl("╔════┐" +
                 "║Sƒ..│" +
                 "║....│" +
@@ -65,7 +66,7 @@ public class ICanCodePerksTest extends AbstractGameTest {
         game.tick();
 
         // then
-        assertTrue(hero.getCanFire());
+        assertTrue(hero.isCanFire());
         assertE("------" +
                 "--☺---" +
                 "------" +
@@ -91,5 +92,32 @@ public class ICanCodePerksTest extends AbstractGameTest {
                 "--↓---" +
                 "------" +
                 "------");
+    }
+
+    @Test
+    public void shouldNotPickUpFirePerk_whenJumpOverIt() {
+        // given
+        givenFl("╔════┐" +
+                "║Sƒ..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.jump();
+        hero.right();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "--ƒ☺--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertFalse(hero.isCanFire());
     }
 }

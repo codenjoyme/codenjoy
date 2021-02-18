@@ -398,7 +398,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         canFire = value;
     }
 
-    public boolean getCanFire() {
+    public boolean isCanFire() {
         return canFire;
     }
 
