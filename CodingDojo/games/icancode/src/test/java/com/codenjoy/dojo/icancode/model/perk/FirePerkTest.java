@@ -21,7 +21,7 @@ public class FirePerkTest extends AbstractGameTest {
     public void firePerkShouldBeOnBoard() {
         // given
         givenFl("╔════┐" +
-                "║Sƒ..│" +
+                "║Sf..│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
@@ -32,7 +32,7 @@ public class FirePerkTest extends AbstractGameTest {
 
         // then
         assertE("------" +
-                "-☺ƒ---" +
+                "-☺f---" +
                 "------" +
                 "------" +
                 "------" +
@@ -43,7 +43,7 @@ public class FirePerkTest extends AbstractGameTest {
     public void shouldBeAbleToFire_whenHeroPicksUpFirePerk() {
         // given
         givenFl("╔════┐" +
-                "║Sƒ..│" +
+                "║Sf..│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
@@ -56,7 +56,7 @@ public class FirePerkTest extends AbstractGameTest {
 
         // then
         assertE("------" +
-                "-☺ƒ---" +
+                "-☺f---" +
                 "------" +
                 "------" +
                 "------" +
@@ -99,7 +99,7 @@ public class FirePerkTest extends AbstractGameTest {
     public void shouldNotPickUpFirePerk_whenJumpOverIt() {
         // given
         givenFl("╔════┐" +
-                "║Sƒ..│" +
+                "║Sf..│" +
                 "║....│" +
                 "║....│" +
                 "║....│" +
@@ -113,7 +113,7 @@ public class FirePerkTest extends AbstractGameTest {
 
         // then
         assertE("------" +
-                "--ƒ☺--" +
+                "--f☺--" +
                 "------" +
                 "------" +
                 "------" +

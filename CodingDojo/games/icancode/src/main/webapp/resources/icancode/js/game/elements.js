@@ -101,7 +101,7 @@ var Element = {
     LASER_UP: el('↑', 'LASER_UP', Direction.UP),
     LASER_DOWN: el('↓', 'LASER_DOWN', Direction.DOWN),
 
-    FIRE_PERK: el('ƒ', 'FIRE_PERK'),
+    FIRE_PERK: el('f', 'FIRE_PERK'),
     JUMP_PERK: el('j', 'JUMP_PERK'),
     MOVE_BOXES_PERK: el('m', 'MOVE_BOXES_PERK'),
 
