@@ -26,5 +26,7 @@ public class ItemsTest {
         assertEquals(LAYER1, new Wall(Elements.WALL_BACK).layer());
         assertEquals(LAYER2, new Zombie(true).layer());
         assertEquals(LAYER1, new ZombiePot(Elements.ZOMBIE_START).layer());
+
+        assertEquals(LAYER2, new FirePerk().layer());
     }
 }

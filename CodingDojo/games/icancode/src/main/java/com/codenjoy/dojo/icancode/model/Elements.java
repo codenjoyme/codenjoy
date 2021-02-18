@@ -86,6 +86,9 @@ public enum Elements implements CharElements {
     ROBO_OTHER_FLYING(LAYER3, '^'),
     ROBO_OTHER_LASER(LAYER2, '&'),
 
+    // perks
+    FIRE_PERK(LAYER2, 'ƒ'),
+
     // laser
     LASER_LEFT(LAYER2, '←'),
     LASER_RIGHT(LAYER2, '→'),

@@ -23,6 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.Printer;
@@ -31,6 +32,7 @@ import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.icancode.services.Levels;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.LinkedList;
@@ -56,6 +58,11 @@ public class AbstractGameTest {
     EventListener listener;
     Player player;
     private Player otherPlayer;
+
+    @BeforeClass
+    public static void init() {
+        SettingsWrapper.setup();
+    }
 
     @Before
     public void setup() {

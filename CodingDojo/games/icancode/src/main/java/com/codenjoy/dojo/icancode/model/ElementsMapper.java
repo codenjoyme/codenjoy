@@ -89,6 +89,8 @@ public class ElementsMapper {
 
         put(FOG, Wall.class);
         put(BACKGROUND, Wall.class);
+
+        put(FIRE_PERK, FirePerk.class);
     }};
 
     public static Class<? extends BaseItem> getItsClass(Elements element) {

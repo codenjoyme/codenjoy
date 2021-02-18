@@ -28,6 +28,7 @@ import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
@@ -49,6 +50,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private Direction fireDirection;
     private boolean hole;
     private boolean landOn;
+    private boolean canFire;
     private int goldCount;
     private int killZombieCount;
     private int killHeroCount;
@@ -81,6 +83,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         laser = false;
         alive = true;
         goldCount = 0;
+        canFire = SettingsWrapper.data.canFireByDefault();
         resetZombieKillCount();
         resetHeroKillCount();
     }
@@ -270,10 +273,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (fire) {
-            fireDirection = direction;
+            if (canFire) {
+                fireDirection = direction;
+                fireLaser();
+            }
             fire = false;
             direction = null;
-            fireLaser();
         }
 
         if (direction != null) {
@@ -387,6 +392,14 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public void pickUpGold() {
         goldCount++;
+    }
+
+    public void setCanFire(boolean value) {
+        canFire = value;
+    }
+
+    public boolean getCanFire() {
+        return canFire;
     }
 
     public void addZombieKill() {

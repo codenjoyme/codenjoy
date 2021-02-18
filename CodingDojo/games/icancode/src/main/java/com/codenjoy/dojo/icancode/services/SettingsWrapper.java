@@ -47,6 +47,7 @@ public final class SettingsWrapper {
     private final Parameter<String> gameMode;
     private final Parameter<Integer> roomSize;
     private final Parameter<Integer> levelsCount;
+    private final Parameter<Boolean> canFireByDefault;
     private final Settings settings;
 
     public static SettingsWrapper setup(Settings settings) {
@@ -69,6 +70,7 @@ public final class SettingsWrapper {
         enableKillScore = settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
         isTrainingMode = settings.addCheckBox("Is training mode").type(Boolean.class).def(true);
+        canFireByDefault = settings.addCheckBox("Can fire by default").type(Boolean.class).def(true);
 
         gameMode = settings.addSelect("Game mode", Arrays.asList(
                 CLASSSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP))
@@ -122,6 +124,10 @@ public final class SettingsWrapper {
 
     public int levelsCount() {
         return levelsCount.getValue();
+    }
+
+    public boolean canFireByDefault() {
+        return canFireByDefault.getValue();
     }
 
     public SettingsWrapper addLevel(int index, Level level) {
@@ -191,6 +197,11 @@ public final class SettingsWrapper {
 
     public SettingsWrapper levelsCount(int value) {
         levelsCount.update(value);
+        return this;
+    }
+
+    public SettingsWrapper canFireByDefault(boolean value) {
+        canFireByDefault.update(value);
         return this;
     }
 
