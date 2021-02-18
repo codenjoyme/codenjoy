@@ -87,6 +87,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         alive = true;
         goldCount = 0;
         canFire = SettingsWrapper.data.canFireByDefault();
+        canJump = SettingsWrapper.data.canJumpByDefault();
         resetZombieKillCount();
         resetHeroKillCount();
     }
@@ -271,7 +272,11 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         if (jump) {
-            flying = true;
+            if (canJump) {
+                flying = true;
+            } else {
+                direction = null;
+            }
             jump = false;
         }
 
