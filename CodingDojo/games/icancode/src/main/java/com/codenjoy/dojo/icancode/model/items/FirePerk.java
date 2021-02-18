@@ -5,10 +5,10 @@ import com.codenjoy.dojo.icancode.model.FieldItem;
 import com.codenjoy.dojo.icancode.model.Hero;
 import com.codenjoy.dojo.icancode.model.Item;
 
-public class FirePerk extends FieldItem {
+public class FirePerk extends AbstractPerk {
 
     public FirePerk() {
-        super(Elements.FIRE_PERK, PASSABLE);
+        super(Elements.FIRE_PERK);
     }
 
     // For reflection
@@ -17,13 +17,7 @@ public class FirePerk extends FieldItem {
     }
 
     @Override
-    public void action(Item item) {
-        HeroItem heroItem = getIf(item, HeroItem.class);
-        if (heroItem == null) {
-            return;
-        }
-
-        Hero hero = heroItem.getHero();
+    protected void toggle(Hero hero) {
         if (!hero.isFlying()) {
             hero.setCanFire(true);
             this.removeFromCell();
