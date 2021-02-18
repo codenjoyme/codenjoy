@@ -46,7 +46,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AbstractGameTest {
+public abstract class AbstractGameTest {
 
     public static final int FIRE_TICKS = 6;
     private static final int COUNT_LAYERS = 3;
