@@ -49,6 +49,7 @@ public final class SettingsWrapper {
     private final Parameter<Integer> levelsCount;
     private final Parameter<Boolean> canFireByDefault;
     private final Parameter<Boolean> canJumpByDefault;
+    private final Parameter<Boolean> canMoveBoxesByDefault;
     private final Settings settings;
 
     public static SettingsWrapper setup(Settings settings) {
@@ -73,6 +74,7 @@ public final class SettingsWrapper {
         isTrainingMode = settings.addCheckBox("Is training mode").type(Boolean.class).def(true);
         canFireByDefault = settings.addCheckBox("Can fire by default").type(Boolean.class).def(true);
         canJumpByDefault = settings.addCheckBox("Can jump by default").type(Boolean.class).def(true);
+        canMoveBoxesByDefault = settings.addCheckBox("Can move boxes by default").type(Boolean.class).def(true);
 
         gameMode = settings.addSelect("Game mode", Arrays.asList(
                 CLASSSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP))
@@ -134,6 +136,10 @@ public final class SettingsWrapper {
 
     public boolean canJumpByDefault() {
         return canJumpByDefault.getValue();
+    }
+
+    public boolean canMoveBoxesByDefault() {
+        return canMoveBoxesByDefault.getValue();
     }
 
     public SettingsWrapper addLevel(int index, Level level) {
@@ -213,6 +219,11 @@ public final class SettingsWrapper {
 
     public SettingsWrapper canJumpByDefault(boolean value) {
         canJumpByDefault.update(value);
+        return this;
+    }
+
+    public SettingsWrapper canMoveBoxesByDefault(boolean value) {
+        canMoveBoxesByDefault.update(value);
         return this;
     }
 

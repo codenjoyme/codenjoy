@@ -92,6 +92,7 @@ public class ElementsMapper {
 
         put(FIRE_PERK, FirePerk.class);
         put(JUMP_PERK, JumpPerk.class);
+        put(MOVE_BOXES_PERK, MoveBoxesPerk.class);
     }};
 
     public static Class<? extends BaseItem> getItsClass(Elements element) {

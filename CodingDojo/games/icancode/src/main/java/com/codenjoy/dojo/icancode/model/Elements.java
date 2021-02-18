@@ -89,6 +89,7 @@ public enum Elements implements CharElements {
     // perks
     FIRE_PERK(LAYER2, 'ƒ'),
     JUMP_PERK(LAYER2, 'j'),
+    MOVE_BOXES_PERK(LAYER2, 'm'),
 
     // laser
     LASER_LEFT(LAYER2, '←'),

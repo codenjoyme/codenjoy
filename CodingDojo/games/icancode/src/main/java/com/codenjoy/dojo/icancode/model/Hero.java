@@ -58,6 +58,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     // perks
     private boolean canFire;
     private boolean canJump;
+    private boolean canMoveBoxes;
 
     public void removeFromCell() {
         item.removeFromCell();
@@ -88,6 +89,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         goldCount = 0;
         canFire = SettingsWrapper.data.canFireByDefault();
         canJump = SettingsWrapper.data.canJumpByDefault();
+        canMoveBoxes = SettingsWrapper.data.canMoveBoxesByDefault();
         resetZombieKillCount();
         resetHeroKillCount();
     }
@@ -462,5 +464,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public boolean isCanJump() {
         return canJump;
+    }
+
+    public void setCanMoveBoxes(boolean value) {
+        canMoveBoxes = value;
+    }
+
+    public boolean isCanMoveBoxes() {
+        return canMoveBoxes;
     }
 }
