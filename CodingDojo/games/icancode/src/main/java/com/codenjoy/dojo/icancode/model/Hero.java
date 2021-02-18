@@ -50,11 +50,14 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private Direction fireDirection;
     private boolean hole;
     private boolean landOn;
-    private boolean canFire;
     private int goldCount;
     private int killZombieCount;
     private int killHeroCount;
     private HeroItem item;
+
+    // perks
+    private boolean canFire;
+    private boolean canJump;
 
     public void removeFromCell() {
         item.removeFromCell();
@@ -446,5 +449,13 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             field.fire(this, fireDirection, item.getCell());
             fireDirection = null;
         }
+    }
+
+    public void setCanJump(boolean value) {
+        canJump = value;
+    }
+
+    public boolean isCanJump() {
+        return canJump;
     }
 }
