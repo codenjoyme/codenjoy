@@ -103,6 +103,7 @@ var Element = {
 
     FIRE_PERK: el('ƒ', 'FIRE_PERK'),
     JUMP_PERK: el('j', 'JUMP_PERK'),
+    MOVE_BOXES_PERK: el('m', 'MOVE_BOXES_PERK'),
 
     FEMALE_ZOMBIE: el('♀', 'ZOMBIE'),
     MALE_ZOMBIE: el('♂', 'ZOMBIE'),
