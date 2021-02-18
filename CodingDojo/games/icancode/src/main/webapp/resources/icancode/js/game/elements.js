@@ -102,6 +102,7 @@ var Element = {
     LASER_DOWN: el('↓', 'LASER_DOWN', Direction.DOWN),
 
     FIRE_PERK: el('ƒ', 'FIRE_PERK'),
+    JUMP_PERK: el('j', 'JUMP_PERK'),
 
     FEMALE_ZOMBIE: el('♀', 'ZOMBIE'),
     MALE_ZOMBIE: el('♂', 'ZOMBIE'),
