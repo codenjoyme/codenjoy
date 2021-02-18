@@ -305,7 +305,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                     field.move(item, newX, newY);
                 }
             } else {
-                if (pull && !landOn) {
+                if (canMoveBoxes && pull && !landOn) {
                     if (tryPushBox(newX, newY)) {
                         pull = false;
                     }
@@ -316,7 +316,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                         item.getCell().comeIn(item);
                     }
                 } else {
-                    if (pull) {
+                    if (canMoveBoxes && pull) {
                         if (tryPullBox(x, y)) {
                             pull = false;
                         }
