@@ -1,5 +1,6 @@
-package com.codenjoy.dojo.icancode.model;
+package com.codenjoy.dojo.icancode.model.perk;
 
+import com.codenjoy.dojo.icancode.model.AbstractGameTest;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import org.junit.BeforeClass;
 import org.junit.Test;

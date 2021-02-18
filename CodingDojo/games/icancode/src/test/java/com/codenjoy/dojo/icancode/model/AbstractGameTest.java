@@ -50,13 +50,13 @@ public class AbstractGameTest {
 
     public static final int FIRE_TICKS = 6;
     private static final int COUNT_LAYERS = 3;
-    ICanCode game;
+    public ICanCode game;
     private Printer<PrinterData> printer;
 
-    Hero hero;
-    Dice dice;
-    EventListener listener;
-    Player player;
+    public Hero hero;
+    public Dice dice;
+    public EventListener listener;
+    public Player player;
     private Player otherPlayer;
 
     @BeforeClass
@@ -69,7 +69,7 @@ public class AbstractGameTest {
         dice = mock(Dice.class);
     }
 
-    OngoingStubbing<Integer> dice(int... ints) {
+    public OngoingStubbing<Integer> dice(int... ints) {
         OngoingStubbing<Integer> when = when(dice.next(anyInt()));
         for (int i : ints) {
             when = when.thenReturn(i);
@@ -77,11 +77,11 @@ public class AbstractGameTest {
         return when;
     }
 
-    void givenFl(String board) {
+    public void givenFl(String board) {
         givenFl(viewSize(board), board);
     }
 
-    void givenFl(int viewSize, String board) {
+    public void givenFl(int viewSize, String board) {
         Levels.VIEW_SIZE = viewSize;
         Level level = createLevels(new String[]{board}).get(0);
         game = new ICanCode(level, dice, ICanCode.TRAINING);
@@ -109,11 +109,11 @@ public class AbstractGameTest {
                 COUNT_LAYERS);
     }
 
-    int viewSize(String board) {
+    public int viewSize(String board) {
         return (int)Math.sqrt(board.length());
     }
 
-    List<Level> createLevels(String[] boards) {
+    public List<Level> createLevels(String[] boards) {
         List<Level> levels = new LinkedList<>();
         for (String board : boards) {
             Level level = new LevelImpl(board);
@@ -122,7 +122,7 @@ public class AbstractGameTest {
         return levels;
     }
 
-    void assertL(String expected) {
+    public void assertL(String expected) {
         assertA(expected, LAYER1);
     }
 
@@ -131,11 +131,11 @@ public class AbstractGameTest {
                 TestUtils.injectN(printer.print().getLayers().get(index)));
     }
 
-    void assertE(String expected) {
+    public void assertE(String expected) {
         assertA(expected, LAYER2);
     }
 
-    void assertF(String expected) {
+    public void assertF(String expected) {
         assertA(expected, LAYER3);
     }
 }
