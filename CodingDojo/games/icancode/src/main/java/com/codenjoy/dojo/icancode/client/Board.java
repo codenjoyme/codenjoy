@@ -217,7 +217,10 @@ public class Board extends AbstractBoard<Elements> {
         return get(LAYER1,
                 UNSTOPPABLE_LASER_PERK,
                 DEATH_RAY_PERK,
-                UNLIMITED_FIRE_PERK);
+                UNLIMITED_FIRE_PERK,
+                FIRE_PERK,
+                JUMP_PERK,
+                MOVE_BOXES_PERK);
     }
 
     /**
