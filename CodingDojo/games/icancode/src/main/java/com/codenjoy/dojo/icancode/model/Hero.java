@@ -360,30 +360,30 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
     }
 
-    private boolean tryPullBox(Point pt) {
-        Point box = direction.inverted().change(pt);
+    private boolean tryPullBox(Point hero) {
+        Point from = direction.inverted().change(hero);
 
-        Item item = field.getIf(Box.class, box);
-        if (item == null) {
+        Box box = field.getIf(Box.class, from);
+        if (box == null) {
             return false;
         }
 
-        if (field.isAt(pt, Start.class)) {
+        if (field.isAt(hero, Start.class)) {
             return false;
         }
 
-        field.move(item, pt);
+        field.move(box, hero);
         return true;
     }
 
-    private boolean tryPushBox(Point pt) {
-        Item item = field.getIf(Box.class, pt);
+    private boolean tryPushBox(Point hero) {
+        Box box = field.getIf(Box.class, hero);
 
-        if (item == null) {
+        if (box == null) {
             return false;
         }
 
-        Point to = direction.change(pt);
+        Point to = direction.change(hero);
 
         if (field.isBarrier(to)) {
             return false;
@@ -401,12 +401,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return false;
         }
 
-        Gold gold = (Gold) field.getIf(Gold.class, to);
+        Gold gold = field.getIf(Gold.class, to);
         if (gold != null) {
             return false;
         }
 
-        field.move(item, to);
+        field.move(box, to);
         return true;
     }
 

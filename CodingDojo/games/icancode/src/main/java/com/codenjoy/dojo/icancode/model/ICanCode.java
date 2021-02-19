@@ -202,11 +202,10 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    // TODO to make cast inside
-    public Item getIf(Class<? extends BaseItem> clazz, Point pt) {
+    public <T extends BaseItem> T getIf(Class<T> clazz, Point pt) {
         for (Item item : getCell(pt).items()) {
             if (item.getClass().equals(clazz)) {
-                return item;
+                return (T)item;
             }
         }
         return null;

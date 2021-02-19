@@ -52,7 +52,7 @@ public interface Field extends GameField<Player> {
 
     Cell getCell(Point pt);
 
-    Item getIf(Class<? extends BaseItem> clazz, Point pt);
+    <T extends BaseItem> T getIf(Class<T> clazz, Point pt);
 
     boolean isAt(Point pt, Class<? extends BaseItem>... clazz);
 
