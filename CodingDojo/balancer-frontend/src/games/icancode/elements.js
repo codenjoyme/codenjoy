@@ -60,6 +60,9 @@ import zombie_start from './images/sprite/zombie_start.png';
 import death_ray_perk from './images/sprite/death_ray_perk.png';
 import unstoppable_laser_perk from './images/sprite/unstoppable_laser_perk.png';
 import unlimited_fire_perk from './images/sprite/unlimited_fire_perk.png';
+import jump_perk from './images/sprite/jump_perk.png';
+import move_boxes_perk from './images/sprite/move_boxes_perk.png';
+import fire_perk from './images/sprite/fire_perk.png';
 
 //own
 
@@ -115,9 +118,24 @@ export default [
     	description: `Перк. Промінь смерті`,
     },
     {
-        	image:  unlimited_fire_perk,
-        	title: `UNLIMITED_FIRE_PERK('f')`,
-        	description: `Перк. Бесперервна стрільба`,
+        image:  unlimited_fire_perk,
+        title: `UNLIMITED_FIRE_PERK('f')`,
+        description: `Перк. Бесперервна стрільба`,
+    },
+    {
+        image:  jump_perk,
+        title: `JUMP_PERK('f')`,
+        description: `Перк. Можливість стрибати`,
+    },
+    {
+        image:  move_boxes_perk,
+        title: `MOVE_BOXES_PERK('f')`,
+        description: `Перк. Можливість штовхати коробки`,
+    },
+    {
+        image:  fire_perk,
+        title: `FIRE_PERK('f')`,
+        description: `Перк. Можливість стріляти`,
     },
     {
 		image:  robo,
@@ -216,8 +234,6 @@ export default [
 		title: `LASER_MACHINE_READY_DOWN('▼')`,
 		description: ` Лазерна машина готова стріляти`,
 	},
-
-
 	{
 		image:  laser_left,
 		title: `LASER_LEFT('←')`,
@@ -238,7 +254,6 @@ export default [
 		title: `LASER_DOWN('↓')`,
 		description: ` Лазер, що рухається вниз`,
 	},
-
 	{
 		image:  angle_in_left,
 		title: `ANGLE_IN_LEFT('╔')`,
