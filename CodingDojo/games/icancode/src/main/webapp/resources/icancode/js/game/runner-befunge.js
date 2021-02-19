@@ -379,6 +379,18 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
         stack.push('UNLIMITED_FIRE_PERK')
     }
 
+    var valueFirePerkCommand = function (x, y) {
+        stack.push('FIRE_PERK')
+    }
+
+    var valueJumpPerkCommand = function (x, y) {
+        stack.push('JUMP_PERK')
+    }
+
+    var valueMoveBoxesPerkCommand = function (x, y) {
+        stack.push('MOVE_BOXES_PERK')
+    }
+
     // ------------------------------------- commands -----------------------------------
     var gameName = game.sprites;
     var commands = [
@@ -811,7 +823,35 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             process: valueUnlimitedFirePerkCommand,
             description: 'Значение - "Безлимитный выстрел". Испольузется совместно с другими командами.',
             img1: 'unlimited_fire_perk.png'
+        },
+
+        {
+            id: 'value-fire-perk',
+            type: 3,
+            title: 'value-fire-perk',
+            process: valueFirePerkCommand,
+            description: 'Значение - "Возможность стрелять". Испольузется совместно с другими командами.',
+            img1: 'fire_perk.png'
+        },
+
+        {
+            id: 'value-jump-perk',
+            type: 3,
+            title: 'value-jump-perk',
+            process: valueJumpPerkCommand,
+            description: 'Значение - "Возможность прыгать". Испольузется совместно с другими командами.',
+            img1: 'jump_perk.png'
+        },
+
+        {
+            id: 'value-move-boxes-perk',
+            type: 3,
+            title: 'value-move-boxes-perk',
+            process: valueMoveBoxesPerkCommand,
+            description: 'Значение - "Возможность двигать коробки". Испольузется совместно с другими командами.',
+            img1: 'move_boxes_perk.png'
         }
+
     ];
 
     // ------------------------------------- save state -----------------------------------
