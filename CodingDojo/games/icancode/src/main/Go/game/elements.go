@@ -88,6 +88,9 @@ const (
 	UNSTOPPABLE_LASER_PERK = 'l'
 	DEATH_RAY_PERK         = 'r'
 	UNLIMITED_FIRE_PERK    = 'f'
+	FIRE_PERK              = 'a'
+    JUMP_PERK              = 'j'
+    MOVE_BOXES_PERK        = 'm'
 
 	// system elements, don't touch it
 	FOG        = 'F'

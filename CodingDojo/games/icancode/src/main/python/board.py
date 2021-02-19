@@ -161,6 +161,9 @@ class Board:
         points.update(self._find_all(Element('UNSTOPPABLE_LASER_PERK')))
         points.update(self._find_all(Element('DEATH_RAY_PERK')))
         points.update(self._find_all(Element('UNLIMITED_FIRE_PERK')))
+        points.update(self._find_all(Element('FIRE_PERK')))
+        points.update(self._find_all(Element('JUMP_PERK')))
+        points.update(self._find_all(Element('MOVE_BOXES_PERK')))
         return list(points)
 
     def is_near(self, x, y, elem):

@@ -288,6 +288,9 @@ func (b *Board) GetPerks() []Point {
 		DEATH_RAY_PERK, //layer1
 		UNLIMITED_FIRE_PERK,
 		UNSTOPPABLE_LASER_PERK,
+		FIRE_PERK,
+		JUMP_PERK,
+		MOVE_BOXES_PERK,
 	)
 }
 
