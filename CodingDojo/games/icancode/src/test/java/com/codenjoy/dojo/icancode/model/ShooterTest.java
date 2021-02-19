@@ -164,9 +164,9 @@ public class ShooterTest extends AbstractGameTest {
     }
 
     @Test
-    public void shoudldFireDeathRayLasers_whenHeroIsOwner() {
+    public void shouldFireDeathRayLasers_whenHeroIsOwner() {
         // given
-        SettingsWrapper.setup(new SettingsImpl())
+        SettingsWrapper.data
                 .perkAvailability(10)
                 .perkActivity(10)
                 .deathRayRange(3);

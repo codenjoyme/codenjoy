@@ -2136,7 +2136,7 @@ public class CoreLogicTest extends AbstractGameTest {
     @Test
     public void killZombieNearYouByFirstLaserTick() {
         // given
-        SettingsWrapper.setup(new SettingsImpl())
+        SettingsWrapper.data
                 .perkAvailability(10)
                 .perkActivity(10);
 

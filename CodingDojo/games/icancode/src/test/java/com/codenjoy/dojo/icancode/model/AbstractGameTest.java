@@ -84,7 +84,10 @@ public abstract class AbstractGameTest {
                 .deathRayRange(10)
                 .gunRecharge(0)
                 .gunRestTime(0)
-                .gunShotQueue(0);
+                .gunShotQueue(0)
+                .canJump(true)
+                .canFire(true)
+                .canMoveBoxes(true);
 
         dice = mock(Dice.class);
     }

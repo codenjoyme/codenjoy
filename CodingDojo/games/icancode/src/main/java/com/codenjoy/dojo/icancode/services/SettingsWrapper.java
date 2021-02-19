@@ -90,9 +90,9 @@ public final class SettingsWrapper {
         gunShotQueue = settings.addEditBox("Heroes gun need to relax after a series of shots").type(Integer.class).def(10);
         gunRestTime = settings.addEditBox("Heroes gun rest time(ticks)").type(Integer.class).def(10);
 
-        canFire = settings.addCheckBox("Can fire by default").type(Boolean.class).def(true);
-        canJump = settings.addCheckBox("Can jump by default").type(Boolean.class).def(true);
-        canMoveBoxes = settings.addCheckBox("Can move boxes by default").type(Boolean.class).def(true);
+        canFire = settings.addCheckBox("Can fire by default").type(Boolean.class).def(false);
+        canJump = settings.addCheckBox("Can jump by default").type(Boolean.class).def(false);
+        canMoveBoxes = settings.addCheckBox("Can move boxes by default").type(Boolean.class).def(false);
 
         gameMode = settings.addSelect("Game mode", Arrays.asList(
                 CLASSSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP))

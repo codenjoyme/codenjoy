@@ -290,7 +290,7 @@ public class ZombieTest extends AbstractGameTest {
     @Test
     public void shouldHeroKillZombie() {
         // given
-        SettingsWrapper.setup(new SettingsImpl())
+        SettingsWrapper.data
                 .perkDropRatio(0);
 
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 6;

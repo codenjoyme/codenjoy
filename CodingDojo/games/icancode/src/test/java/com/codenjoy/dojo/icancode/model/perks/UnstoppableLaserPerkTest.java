@@ -296,7 +296,7 @@ public class UnstoppableLaserPerkTest extends AbstractGameTest {
     @Test
     public void shouldHeroKillsZombieAndOtherHero_withUnstoppableLaser() {
         // given
-        SettingsWrapper.setup(new SettingsImpl())
+        SettingsWrapper.data
                 .perkActivity(11);
 
         givenFl("╔═══════┐" +

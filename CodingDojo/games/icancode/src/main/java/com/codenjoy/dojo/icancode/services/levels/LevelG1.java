@@ -10,7 +10,7 @@ public class LevelG1 implements Level {
 
                 "Рay attention - the laser kills zombie. If it happens you will see \"ZOMBIE_DIE\" on board. <br><br>\n" +
 
-                "Another way to get lasershow on board - fire. Yes you can do it ! Sorry, we forgot to tell you about that...<br><br>\n" +
+                "Don't forget the \"FIRE_PERK\" to fire. Another perks also are on the way !<br><br>\n" +
 
                 "There are several method for the Robot:\n" +
                 "<pre>robot.fireLeft();\n" +
@@ -57,19 +57,20 @@ public class LevelG1 implements Level {
                 " #..# #....O...####B..## #### \n" +
                 " #.O# ####..$..#  #####       \n" +
                 " #..#    #$..O.#        ##### \n" +
-                " #$$# ####....B######## #$$.# \n" +
+                " #$$# ####m...B######## #$$.# \n" +
                 " #### #....O$...O...$.# #...# \n" +
-                "      #.#####..######## ###B# \n" +
+                "      #.#####.j######## ###B# \n" +
                 "   ####$#   #..#          #.# \n" +
                 "   #..O.#   #..#####  #####.# \n" +
                 "####.####   #.O....####..$..# \n" +
-                "#S...#      #...$..B.....#### \n" +
+                "#S.a.#      #...$..B.....#### \n" +
                 "######      ##############    \n";
     }
 
     @Override
     public List<String> befungeCommands() {
         return Level.extendBefunge(new LevelF3(),
+                "value-fire-perk",
                 "procedure-1", "procedure-2", "procedure-3");
     }
 

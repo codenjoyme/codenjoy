@@ -116,6 +116,11 @@ public class MultiplayerTest {
 
         single2 = new Single(player2, gameRunner.getPrinterFactory(), type);
         player2TryLoadLevel(LevelProgress.levelsStartsFrom1);
+
+        SettingsWrapper.data
+                .canJump(true)
+                .canFire(true)
+                .canMoveBoxes(true);
     }
 
     private Hero hero1() {
@@ -3790,7 +3795,7 @@ public class MultiplayerTest {
     @Test
     public void shouldRunEventAfterKillHero_withDeathRayPerk() {
         // given
-        SettingsWrapper.setup(new SettingsImpl())
+        SettingsWrapper.data
                 .perkAvailability(10)
                 .perkActivity(10)
                 .deathRayRange(10);
@@ -3960,7 +3965,7 @@ public class MultiplayerTest {
     @Test
     public void shouldAlive_heroJumpsOnDeathRay() {
         // given
-        SettingsWrapper.setup(new SettingsImpl())
+        SettingsWrapper.data
                 .perkAvailability(10)
                 .perkActivity(10)
                 .deathRayRange(10);
@@ -4081,7 +4086,7 @@ public class MultiplayerTest {
     @Test
     public void shouldAlive_heroJumpsOnDeathRay_fromRightSide() {
         // given
-        SettingsWrapper.setup(new SettingsImpl())
+        SettingsWrapper.data
                 .perkAvailability(10)
                 .perkActivity(10)
                 .deathRayRange(10);

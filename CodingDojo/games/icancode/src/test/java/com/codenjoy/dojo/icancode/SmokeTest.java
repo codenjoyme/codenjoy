@@ -106,7 +106,10 @@ public class SmokeTest {
                 .deathRayRange(10)
                 .gunRecharge(2)
                 .gunRestTime(4)
-                .gunShotQueue(2);
+                .gunShotQueue(2)
+                .canJump(true)
+                .canFire(true)
+                .canMoveBoxes(true);
 
         final int[] index = {0};
         List<String> commands = Arrays.asList(
