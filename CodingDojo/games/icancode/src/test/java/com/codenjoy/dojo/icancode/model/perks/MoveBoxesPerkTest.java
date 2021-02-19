@@ -1,8 +1,8 @@
 package com.codenjoy.dojo.icancode.model.perks;
 
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
+import com.codenjoy.dojo.icancode.model.items.perks.MoveBoxesPerk;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

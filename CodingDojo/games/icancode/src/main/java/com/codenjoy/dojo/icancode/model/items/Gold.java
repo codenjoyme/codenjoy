@@ -24,8 +24,7 @@ package com.codenjoy.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.icancode.model.*;
-import com.codenjoy.dojo.icancode.model.perks.Perk;
-import com.codenjoy.dojo.icancode.model.perks.TimeoutPerk;
+import com.codenjoy.dojo.icancode.model.items.perks.Perk;
 
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 

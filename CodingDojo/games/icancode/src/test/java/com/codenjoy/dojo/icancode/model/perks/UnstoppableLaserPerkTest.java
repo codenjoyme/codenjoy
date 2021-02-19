@@ -23,16 +23,14 @@ package com.codenjoy.dojo.icancode.model.perks;
  */
 
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
-import com.codenjoy.dojo.icancode.model.Field;
-import com.codenjoy.dojo.icancode.model.items.Zombie;
+import com.codenjoy.dojo.icancode.model.items.perks.UnlimitedFirePerk;
+import com.codenjoy.dojo.icancode.model.items.perks.UnstoppableLaserPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import static com.codenjoy.dojo.services.Direction.STOP;
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.mockito.Mockito.verify;
 
 public class UnstoppableLaserPerkTest extends AbstractGameTest {

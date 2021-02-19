@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 
-import com.codenjoy.dojo.icancode.model.perks.PerkUtils;
+import com.codenjoy.dojo.icancode.model.items.perks.PerkUtils;
 import com.codenjoy.dojo.services.LengthToXY;
 import com.codenjoy.dojo.services.Point;
 

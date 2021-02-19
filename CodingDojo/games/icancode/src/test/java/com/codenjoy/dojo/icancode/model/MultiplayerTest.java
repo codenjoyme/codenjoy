@@ -26,7 +26,7 @@ import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
-import com.codenjoy.dojo.icancode.model.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.items.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
@@ -49,11 +49,9 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.icancode.model.Elements.DEATH_RAY_PERK;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER1;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.TestUtils.injectN;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;

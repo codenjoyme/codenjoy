@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.perks;
+package com.codenjoy.dojo.icancode.model.items.perks;
 
 /*-
  * #%L

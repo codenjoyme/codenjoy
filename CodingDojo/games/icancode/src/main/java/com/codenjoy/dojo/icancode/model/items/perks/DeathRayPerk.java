@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.perks;
+package com.codenjoy.dojo.icancode.model.items.perks;
 
 /*-
  * #%L
@@ -22,33 +22,11 @@ package com.codenjoy.dojo.icancode.model.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.*;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
+import com.codenjoy.dojo.icancode.model.Elements;
 
-public abstract class TimeoutPerk extends Perk {
+public class DeathRayPerk extends TimeoutPerk {
 
-    protected Timer availability;
-    protected Timer activity;
-
-    public TimeoutPerk(Elements element) {
-        super(element);
-        this.availability = new Timer(SettingsWrapper.data.perkAvailability());
-        this.activity = new Timer(SettingsWrapper.data.perkActivity());
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return !availability.isTimeUp();
-    }
-
-    @Override
-    public boolean isActive() {
-        return !activity.isTimeUp();
-    }
-
-    @Override
-    public void tick() {
-        availability.tick();
-        activity.tick();
+    public DeathRayPerk() {
+        super(Elements.DEATH_RAY_PERK);
     }
 }

@@ -23,12 +23,15 @@ package com.codenjoy.dojo.icancode.model.perks;
  */
 
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
-import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.icancode.model.Level;
 import com.codenjoy.dojo.icancode.model.items.Floor;
 import com.codenjoy.dojo.icancode.model.items.Gold;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
+import com.codenjoy.dojo.icancode.model.items.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.items.perks.Perk;
+import com.codenjoy.dojo.icancode.model.items.perks.UnlimitedFirePerk;
+import com.codenjoy.dojo.icancode.model.items.perks.UnstoppableLaserPerk;
 import org.junit.Test;
 
 import java.util.Optional;

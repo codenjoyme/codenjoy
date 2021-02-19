@@ -23,15 +23,11 @@ package com.codenjoy.dojo.icancode.model.perks;
  */
 
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
-import com.codenjoy.dojo.icancode.model.Field;
-import com.codenjoy.dojo.icancode.model.items.Box;
-import com.codenjoy.dojo.icancode.model.items.Zombie;
+import com.codenjoy.dojo.icancode.model.items.perks.DeathRayPerk;
+import com.codenjoy.dojo.icancode.model.items.perks.UnstoppableLaserPerk;
 import org.junit.Test;
-import org.mockito.Mockito;
 
-import static com.codenjoy.dojo.icancode.model.Elements.*;
 import static com.codenjoy.dojo.services.Direction.STOP;
-import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class DeathRayPerkTest extends AbstractGameTest {
 

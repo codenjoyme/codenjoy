@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.icancode.model.perks;
+package com.codenjoy.dojo.icancode.model.items.perks;
 
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.ElementsMapper;

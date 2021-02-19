@@ -24,7 +24,7 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.items.*;
-import com.codenjoy.dojo.icancode.model.perks.*;
+import com.codenjoy.dojo.icancode.model.items.perks.*;
 
 import java.util.EnumMap;
 import java.util.Map;

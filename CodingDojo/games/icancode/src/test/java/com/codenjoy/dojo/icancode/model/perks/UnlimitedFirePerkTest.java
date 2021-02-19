@@ -23,11 +23,8 @@ package com.codenjoy.dojo.icancode.model.perks;
  */
 
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
+import com.codenjoy.dojo.icancode.model.items.perks.UnlimitedFirePerk;
 import org.junit.Test;
-
-import static com.codenjoy.dojo.icancode.model.Elements.UNLIMITED_FIRE_PERK;
-import static com.codenjoy.dojo.services.PointImpl.pt;
-import static org.junit.Assert.*;
 
 public class UnlimitedFirePerkTest extends AbstractGameTest {
 

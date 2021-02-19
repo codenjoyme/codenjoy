@@ -23,7 +23,7 @@ package com.codenjoy.dojo.icancode.model;
  */
 
 import com.codenjoy.dojo.icancode.model.items.*;
-import com.codenjoy.dojo.icancode.model.perks.*;
+import com.codenjoy.dojo.icancode.model.items.perks.*;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
