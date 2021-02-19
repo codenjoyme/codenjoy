@@ -24,10 +24,9 @@ package com.codenjoy.dojo.icancode.model.perks;
 
 import com.codenjoy.dojo.icancode.model.Elements;
 
-public class DeathRayPerk extends AbstractPerk {
+public class DeathRayPerk extends TimeoutPerk {
 
-    public DeathRayPerk(Elements element) {
-        super(element);
+    public DeathRayPerk() {
+        super(Elements.DEATH_RAY_PERK);
     }
-
 }

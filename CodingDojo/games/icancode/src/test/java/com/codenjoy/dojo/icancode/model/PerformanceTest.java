@@ -34,7 +34,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
-public class ICanCodePerformanceTest {
+public class PerformanceTest {
 
     @Test // TODO закончить как будет настроение :)
     public void test() {

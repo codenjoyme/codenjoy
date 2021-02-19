@@ -24,10 +24,9 @@ package com.codenjoy.dojo.icancode.model.perks;
 
 import com.codenjoy.dojo.icancode.model.Elements;
 
-public class UnstoppableLaserPerk extends AbstractPerk {
+public class UnstoppableLaserPerk extends TimeoutPerk {
 
-    public UnstoppableLaserPerk(Elements element) {
-        super(element);
+    public UnstoppableLaserPerk() {
+        super(Elements.UNSTOPPABLE_LASER_PERK);
     }
-
 }

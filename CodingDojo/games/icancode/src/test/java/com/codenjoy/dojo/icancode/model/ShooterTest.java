@@ -185,7 +185,7 @@ public class ShooterTest extends AbstractGameTest {
         hero.down();
         game.tick();
 
-        // than
+        // then
         assertE("--------" +
                 "--------" +
                 "--☺-----" +

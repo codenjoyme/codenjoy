@@ -43,8 +43,8 @@ public class ZombiePot extends FieldItem implements Tickable {
 
     private int time = 0;
 
-    public ZombiePot(Elements el) {
-        super(el);
+    public ZombiePot() {
+        super(Elements.ZOMBIE_START);
     }
 
     @Override

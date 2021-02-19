@@ -36,7 +36,7 @@ import static com.codenjoy.dojo.services.Direction.UP;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 
-public class ICanCodeZombieTest extends AbstractGameTest {
+public class ZombieTest extends AbstractGameTest {
 
     @Test
     public void shouldZombieFemaleStart() {

@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
+import static com.codenjoy.dojo.icancode.model.Elements.*;
 import static java.util.stream.Collectors.toList;
 
 public class ICanCode implements Tickable, Field {
@@ -96,7 +97,8 @@ public class ICanCode implements Tickable, Field {
                 .filter(perk -> !perk.isAvailable())
                 .forEach(BaseItem::removeFromCell);
 
-        // после всех перемещений, если герой в полете его надо на 3й леер, иначе приземлить
+        // после всех перемещений, если герой в полете его надо
+        // на 3й леер, иначе приземлить
         level.getItems(HeroItem.class).stream()
                 .map(it -> (HeroItem)it)
                 .forEach(HeroItem::fixLayer);
@@ -158,8 +160,8 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public List<AbstractPerk> perks() {
-        return level.getItems(AbstractPerk.class);
+    public List<Perk> perks() {
+        return level.getItems(Perk.class);
     }
 
     @Override
@@ -187,7 +189,7 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public Optional<AbstractPerk> perkAt(Point pt) {
+    public Optional<Perk> perkAt(Point pt) {
         Cell cell = level.getCell(pt);
         return perks().stream()
                 .filter(perk -> perk.getCell().equals(cell))
@@ -201,7 +203,7 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     // TODO to make cast inside
-    public Item getIfPresent(Class<? extends BaseItem> clazz, Point pt) {
+    public Item getIf(Class<? extends BaseItem> clazz, Point pt) {
         for (Item item : getCell(pt).items()) {
             if (item.getClass().equals(clazz)) {
                 return item;
@@ -213,7 +215,7 @@ public class ICanCode implements Tickable, Field {
     @Override
     public boolean isAt(Point pt, Class<? extends BaseItem>... classes) {
         for (Class clazz : classes) {
-            if (getIfPresent(clazz, pt) != null) {
+            if (getIf(clazz, pt) != null) {
                 return true;
             }
         }
@@ -273,12 +275,15 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public Optional<AbstractPerk> dropNextPerk() {
+    public Optional<Perk> dropNextPerk() {
         if (dice.next(MAX_PERCENTS) > SettingsWrapper.data.perkDropRatio()) {
             return Optional.empty();
         }
 
-        return PerkUtils.random(dice);
+        return PerkUtils.random(dice,
+                UNSTOPPABLE_LASER_PERK,
+                DEATH_RAY_PERK,
+                UNLIMITED_FIRE_PERK);
     }
 
     @Override
@@ -355,7 +360,6 @@ public class ICanCode implements Tickable, Field {
             hero.removeFromCell();
         }
     }
-
 
     @Override
     public BoardReader reader() {

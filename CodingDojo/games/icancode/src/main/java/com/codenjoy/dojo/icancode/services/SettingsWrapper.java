@@ -56,6 +56,9 @@ public final class SettingsWrapper {
     private final Parameter<String> gameMode;
     private final Parameter<Integer> roomSize;
     private final Parameter<Integer> levelsCount;
+    private final Parameter<Boolean> canFire;
+    private final Parameter<Boolean> canJump;
+    private final Parameter<Boolean> canMoveBoxes;
     private final Settings settings;
 
     public static SettingsWrapper setup(Settings settings) {
@@ -82,9 +85,14 @@ public final class SettingsWrapper {
         enableKillScore = settings.addCheckBox("Enable score for kill").type(Boolean.class).def(true);
         loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(5);
         isTrainingMode = settings.addCheckBox("Is training mode").type(Boolean.class).def(true);
+
         gunRecharge = settings.addEditBox("Heroes gun recharge").type(Integer.class).def(2);
         gunShotQueue = settings.addEditBox("Heroes gun need to relax after a series of shots").type(Integer.class).def(10);
         gunRestTime = settings.addEditBox("Heroes gun rest time(ticks)").type(Integer.class).def(10);
+
+        canFire = settings.addCheckBox("Can fire by default").type(Boolean.class).def(true);
+        canJump = settings.addCheckBox("Can jump by default").type(Boolean.class).def(true);
+        canMoveBoxes = settings.addCheckBox("Can move boxes by default").type(Boolean.class).def(true);
 
         gameMode = settings.addSelect("Game mode", Arrays.asList(
                 CLASSSIC_TRAINING, ALL_SINGLE, ALL_IN_ROOMS, TRAINING_MULTIMAP))
@@ -166,6 +174,18 @@ public final class SettingsWrapper {
 
     public int levelsCount() {
         return levelsCount.getValue();
+    }
+
+    public boolean canFire() {
+        return canFire.getValue();
+    }
+
+    public boolean canJump() {
+        return canJump.getValue();
+    }
+
+    public boolean canMoveBoxes() {
+        return canMoveBoxes.getValue();
     }
 
     public SettingsWrapper addLevel(int index, Level level) {
@@ -271,6 +291,21 @@ public final class SettingsWrapper {
 
     public SettingsWrapper levelsCount(int value) {
         levelsCount.update(value);
+        return this;
+    }
+
+    public SettingsWrapper canFire(boolean value) {
+        canFire.update(value);
+        return this;
+    }
+
+    public SettingsWrapper canJump(boolean value) {
+        canJump.update(value);
+        return this;
+    }
+
+    public SettingsWrapper canMoveBoxes(boolean value) {
+        canMoveBoxes.update(value);
         return this;
     }
 

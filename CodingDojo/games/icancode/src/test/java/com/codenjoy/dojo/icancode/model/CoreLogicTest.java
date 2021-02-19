@@ -37,7 +37,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-public class ICanCodeTest extends AbstractGameTest {
+public class CoreLogicTest extends AbstractGameTest {
 
     @Test
     public void shouldFieldAtStart() {
@@ -1539,7 +1539,7 @@ public class ICanCodeTest extends AbstractGameTest {
     }
 
     @Test
-    public void shoudlFireHaveNoEffect_whenFlying() {
+    public void shouldFireHaveNoEffect_whenFlying() {
         // given
         givenFl("╔═══┐" +
                 "║...│" +

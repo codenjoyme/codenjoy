@@ -26,9 +26,9 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.gun.Gun;
 import com.codenjoy.dojo.icancode.model.gun.GunWithOverHeat;
 import com.codenjoy.dojo.icancode.model.items.*;
-import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
-import com.codenjoy.dojo.icancode.model.perks.UnlimitedFirePerk;
+import com.codenjoy.dojo.icancode.model.perks.*;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
@@ -59,7 +59,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private int killHeroCount;
     private HeroItem item;
     private Gun gun;
-    private List<AbstractPerk> perks;
+    private List<Perk> perks;
 
     public boolean isLandOn() {
         return landOn;
@@ -180,19 +180,48 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public void reset() {
-        act(0);
+        reset = true;
     }
 
     public void jump() {
-        act(1);
+        if (!canJump() || flying) {
+            return;
+        }
+
+        jump = true;
     }
 
     public void pull() {
-        act(2);
+        if (!canMoveBoxes() || flying) {
+            return;
+        }
+
+        pull = true;
+    }
+
+    public boolean canFire() {
+        return SettingsWrapper.data.canFire() || has(FirePerk.class);
+    }
+
+    public boolean canJump() {
+        return SettingsWrapper.data.canJump() || has(JumpPerk.class);
+    }
+
+    public boolean canMoveBoxes() {
+        return SettingsWrapper.data.canMoveBoxes() || has(MoveBoxesPerk.class);
     }
 
     public void fire() {
-        act(3);
+        if (!canFire() || flying) {
+            return;
+        }
+
+        fire = true;
+    }
+
+    public void nextLevel() {
+        Cell to = field.getEndPosition();
+        field.move(item, to);
     }
 
     @Override
@@ -201,22 +230,17 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return;
         }
 
-        if (p.length == 0 || p[0] == 1) {
-            // ACT | ACT(1)
-            jump = true;
-        } else if (p.length == 1 && p[0] == 2) {
-            // ACT(2)
-            pull = true;
-        } else if (p.length == 1 && p[0] == 3) { // TODO test me
-            // ACT(3)
-            fire = true;
-        } else if (p[0] == 0) {
-            // ACT(0)
-            reset = true;
-        } else if (p[0] == -1) { // TODO test me
-            // ACT(-1)
-            Cell to = field.getEndPosition();
-            field.move(item, to);
+        var is = new Act(p);
+        if (is.act() || is.act(1)) {
+            jump();
+        } else if (is.act(2)) {
+            pull();
+        } else if (is.act(3)) { // TODO test me
+            fire();
+        } else if (is.act(0)) {
+            reset();
+        } else if (is.act(-1)) { // TODO test me
+            nextLevel();
         }
     }
 
@@ -276,8 +300,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         }
 
         perks = perks.stream()
-                .peek(AbstractPerk::tick)
-                .filter(AbstractPerk::isActive)
+                .peek(Perk::tick)
+                .filter(Perk::isActive)
                 .collect(toList());
 
         if (direction != null) {
@@ -292,14 +316,14 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                     field.move(item, to);
                 }
             } else {
-                if (pull && !landOn) {
+                if (pull && !landOn) { // TODO test part && !landOn
                     if (tryPushBox(to)) {
                         pull = false;
                     }
                 }
 
                 if (field.isBarrier(to)) {
-                    if (landOn) {
+                    if (landOn) { // TODO test landOn
                         item.getCell().comeIn(item);
                     }
                 } else {
@@ -308,11 +332,15 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
                             pull = false;
                         }
                     }
+
                     field.move(item, to);
-                    field.perkAt(to).ifPresent(perk -> {
-                        perk.removeFromCell();
-                        perks.add(perk);
-                    });
+
+                    if (!flying) {
+                        field.perkAt(to).ifPresent(perk -> {
+                            perk.removeFromCell();
+                            perks.add(perk);
+                        });
+                    }
                 }
             }
         }
@@ -335,7 +363,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private boolean tryPullBox(Point pt) {
         Point box = direction.inverted().change(pt);
 
-        Item item = field.getIfPresent(Box.class, box);
+        Item item = field.getIf(Box.class, box);
         if (item == null) {
             return false;
         }
@@ -349,7 +377,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     private boolean tryPushBox(Point pt) {
-        Item item = field.getIfPresent(Box.class, pt);
+        Item item = field.getIf(Box.class, pt);
 
         if (item == null) {
             return false;
@@ -373,7 +401,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
             return false;
         }
 
-        Gold gold = (Gold) field.getIfPresent(Gold.class, to);
+        Gold gold = (Gold) field.getIf(Gold.class, to);
         if (gold != null) {
             return false;
         }
@@ -465,7 +493,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         die();
     }
 
-    public boolean has(Class<? extends AbstractPerk> perkClass) {
+    public boolean has(Class<? extends Perk> perkClass) {
         return perks.stream()
                 .anyMatch(perk -> perk.getClass().equals(perkClass));
     }

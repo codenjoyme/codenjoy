@@ -24,7 +24,7 @@ package com.codenjoy.dojo.icancode.model;
 
 
 import com.codenjoy.dojo.icancode.model.items.*;
-import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.Perk;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
@@ -44,15 +44,15 @@ public interface Field extends GameField<Player> {
 
     void move(Item item, Point pt);
 
-    Optional<AbstractPerk> perkAt(Point pt);
+    Optional<Perk> perkAt(Point pt);
 
-    Optional<AbstractPerk> dropNextPerk();
+    Optional<Perk> dropNextPerk();
 
     void dropPickedGold(Hero hero);
 
     Cell getCell(Point pt);
 
-    Item getIfPresent(Class<? extends BaseItem> clazz, Point pt);
+    Item getIf(Class<? extends BaseItem> clazz, Point pt);
 
     boolean isAt(Point pt, Class<? extends BaseItem>... clazz);
 
@@ -82,5 +82,5 @@ public interface Field extends GameField<Player> {
 
     List<Floor> floor();
 
-    List<AbstractPerk> perks();
+    List<Perk> perks();
 }

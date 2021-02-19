@@ -30,9 +30,6 @@ import com.codenjoy.dojo.services.Point;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
-import static org.fest.reflect.core.Reflection.constructor;
-
 public class LevelImpl implements Level {
 
     private Cell[] cells;
@@ -58,14 +55,14 @@ public class LevelImpl implements Level {
 
                 CellImpl cell = new CellImpl(x, y);
                 Elements element = Elements.valueOf(map.charAt(indexChar));
-                BaseItem item = getBaseItem(element);
+                BaseItem item = create(element);
 
                 if (element.getLayer() != Elements.Layers.LAYER1
                     || element == Elements.GOLD
                     || PerkUtils.isPerk(element))
                 {
                     Elements atBottom = Elements.valueOf(Elements.FLOOR.ch());
-                    cell.add(getBaseItem(atBottom));
+                    cell.add(create(atBottom));
                 }
 
                 cell.add(item);
@@ -75,11 +72,8 @@ public class LevelImpl implements Level {
         }
     }
 
-    private BaseItem getBaseItem(Elements element) {
-        return constructor()
-                .withParameterTypes(Elements.class)
-                .in(ElementsMapper.getItsClass(element))
-                .newInstance(element);
+    private BaseItem create(Elements element) {
+        return ElementsMapper.get(element);
     }
 
     @Override

@@ -104,6 +104,9 @@ public enum Elements implements CharElements {
     UNSTOPPABLE_LASER_PERK(LAYER1, 'l'),
     DEATH_RAY_PERK(LAYER1, 'r'),
     UNLIMITED_FIRE_PERK(LAYER1, 'f'),
+    FIRE_PERK(LAYER1, 'a'),
+    JUMP_PERK(LAYER1, 'j'),
+    MOVE_BOXES_PERK(LAYER1, 'm'),
 
     // system elements, don't touch it
     FOG(LAYER1, 'F'),
@@ -161,7 +164,10 @@ public enum Elements implements CharElements {
         return Arrays.asList(
                 UNSTOPPABLE_LASER_PERK,
                 DEATH_RAY_PERK,
-                UNLIMITED_FIRE_PERK);
+                UNLIMITED_FIRE_PERK,
+                FIRE_PERK,
+                JUMP_PERK,
+                MOVE_BOXES_PERK);
     }
 
     public int getLayer() {

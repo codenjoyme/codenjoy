@@ -33,10 +33,10 @@ import static com.codenjoy.dojo.icancode.model.Elements.*;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
+public class DeathRayPerkTest extends AbstractGameTest {
 
     @Test
-    public void shouldDeathRayPerk() {
+    public void shouldDrawPickAndFire_withDeathRayPerk() {
         // given
         settings.deathRayRange(10);
 
@@ -49,11 +49,38 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "║..B...│" +
                 "└──────┘");
 
+        assertL("╔══════┐" +
+                "║..S...│" +
+                "║..r...│" +
+                "║......│" +
+                "║......│" +
+                "║......│" +
+                "║......│" +
+                "└──────┘");
+
+        assertE("--------" +
+                "---☺----" +
+                "--------" +
+                "--------" +
+                "--------" +
+                "--------" +
+                "---B----" +
+                "--------");
+
         // when
         hero.down();
         game.tick();
 
         // then
+        assertL("╔══════┐" +
+                "║..S...│" +
+                "║......│" +
+                "║......│" +
+                "║......│" +
+                "║......│" +
+                "║......│" +
+                "└──────┘");
+
         assertE("--------" +
                 "--------" +
                 "---☺----" +
@@ -99,7 +126,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void deathRayAndUnstoppableLaser() {
+    public void shouldUseTogetherDeathRay_andUnstoppableLaser() {
         // given
         settings.deathRayRange(10);
 
@@ -200,7 +227,7 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void heroHasDeathRayPerk() {
+    public void shouldHero_hasDeathRayPerk() {
         // given
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -229,5 +256,72 @@ public class ICanCodeDeathRayPerkTest extends AbstractGameTest {
                 "└────┘");
 
         has(DeathRayPerk.class);
+    }
+
+    @Test
+    public void shouldNotPickDeathRayPerk_whenJumpOverIt() {
+        // given
+        givenFl("╔════┐" +
+                "║Sr..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.jump();
+        hero.right();
+        game.tick();
+
+        // then
+        hasNot(DeathRayPerk.class);
+
+        assertL("╔════┐" +
+                "║Sr..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "--*---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        hasNot(DeathRayPerk.class);
+
+        assertL("╔════┐" +
+                "║Sr..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "---☺--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "------" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
     }
 }

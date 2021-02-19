@@ -30,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
+public class AroundLaserMovesTest extends AbstractGameTest {
 
     @Test
     public void shouldAlive_whenStepToCellWithLeavingSelfLaser() {
@@ -113,7 +113,7 @@ public class ICanCodeAroundLaserMovesTest extends AbstractGameTest {
         hero.up();
         game.tick();
 
-        // than
+        // then
         assertL("╔═════┐" +
                 "║˃....│" +
                 "║.S...│" +

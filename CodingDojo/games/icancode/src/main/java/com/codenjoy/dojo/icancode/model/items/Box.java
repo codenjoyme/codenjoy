@@ -30,8 +30,8 @@ import com.codenjoy.dojo.icancode.model.Player;
 
 public class Box extends FieldItem {
 
-    public Box(Elements el) {
-        super(el, IMPASSABLE);
+    public Box() {
+        super(Elements.BOX, IMPASSABLE);
     }
 
     @Override

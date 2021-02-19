@@ -35,10 +35,10 @@ import static com.codenjoy.dojo.services.Direction.STOP;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.mockito.Mockito.verify;
 
-public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
+public class UnstoppableLaserPerkTest extends AbstractGameTest {
 
     @Test
-    public void shoulHeroFireThroughBox_withUnstoppableLaser() {
+    public void shouldHeroFireThroughBox_withUnstoppableLaser() {
         // given
         givenFl("╔═════┐" +
                 "║..S..│" +
@@ -53,6 +53,14 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
         game.tick();
 
         // then
+        assertL("╔═════┐" +
+                "║..S..│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "║.....│" +
+                "└─────┘");
+
         assertE("-------" +
                 "-------" +
                 "---☺---" +
@@ -338,7 +346,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
         hero.down();
         game.tick();
 
-        // than
+        // then
         assertE("---------" +
                 "---------" +
                 "--X------" +
@@ -402,7 +410,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
         // when
         game.tick();
 
-        // than
+        // then
         assertE("---------" +
                 "---------" +
                 "--X------" +
@@ -419,7 +427,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
         // whan
         game.tick();
 
-        // than
+        // then
         assertE("---------" +
                 "---------" +
                 "--X------" +
@@ -480,7 +488,7 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
         hero.down();
         game.tick();
 
-        // than
+        // then
         assertE("------" +
                 "------" +
                 "--☺---" +
@@ -496,5 +504,72 @@ public class ICanCodeUnstoppableLaserPerkTest extends AbstractGameTest {
                 "└────┘");
 
         has(UnstoppableLaserPerk.class);
+    }
+
+    @Test
+    public void shouldNotPickUnlimitedFirePerk_whenJumpOverIt() {
+        // given
+        givenFl("╔════┐" +
+                "║Sl..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.jump();
+        hero.right();
+        game.tick();
+
+        // then
+        hasNot(UnlimitedFirePerk.class);
+
+        assertL("╔════┐" +
+                "║Sl..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "--*---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        hasNot(UnlimitedFirePerk.class);
+
+        assertL("╔════┐" +
+                "║Sl..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "---☺--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "------" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
     }
 }

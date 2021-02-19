@@ -24,7 +24,8 @@ package com.codenjoy.dojo.icancode.model.items;
 
 
 import com.codenjoy.dojo.icancode.model.*;
-import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.Perk;
+import com.codenjoy.dojo.icancode.model.perks.TimeoutPerk;
 
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
@@ -32,14 +33,14 @@ public class Gold extends BaseItem {
 
     private Cell dock;
 
-    public Gold(Elements el) {
-        super(el);
+    public Gold() {
+        super(Elements.GOLD);
         dock = null;
     }
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        AbstractPerk perk = filterOne(alsoAtPoint, AbstractPerk.class);
+        Perk perk = filterOne(alsoAtPoint, Perk.class);
         if (perk != null) {
             return perk.state(player, alsoAtPoint);
         }

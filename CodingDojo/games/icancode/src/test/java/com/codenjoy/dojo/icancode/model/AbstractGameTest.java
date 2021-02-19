@@ -26,7 +26,7 @@ import com.codenjoy.dojo.icancode.model.items.HeroItem;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
-import com.codenjoy.dojo.icancode.model.perks.AbstractPerk;
+import com.codenjoy.dojo.icancode.model.perks.Perk;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
@@ -38,7 +38,6 @@ import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
-import org.junit.After;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -54,10 +53,11 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class AbstractGameTest {
+public abstract class AbstractGameTest {
 
     public static final int FIRE_TICKS = 6;
     private static final int COUNT_LAYERS = 3;
+
     public boolean mode;
     protected ICanCode game;
     private Printer<PrinterData> printer;
@@ -136,7 +136,7 @@ public class AbstractGameTest {
     }
 
     protected int viewSize(String board) {
-        return (int) Math.sqrt(board.length());
+        return (int)Math.sqrt(board.length());
     }
 
     protected List<Level> createLevels(String[] boards) {
@@ -178,11 +178,11 @@ public class AbstractGameTest {
         assertA(expected, LAYER3);
     }
 
-    protected void has(Class<? extends AbstractPerk> perkClass) {
+    protected void has(Class<? extends Perk> perkClass) {
         assertEquals(true, hero.has(perkClass));
     }
 
-    protected void hasNot(Class<? extends AbstractPerk> perkClass) {
+    protected void hasNot(Class<? extends Perk> perkClass) {
         assertEquals(false, hero.has(perkClass));
     }
 

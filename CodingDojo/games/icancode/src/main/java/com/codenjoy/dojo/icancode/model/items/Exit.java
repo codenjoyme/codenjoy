@@ -27,8 +27,8 @@ import com.codenjoy.dojo.icancode.model.*;
 
 public class Exit extends BaseItem {
 
-    public Exit(Elements el) {
-        super(el);
+    public Exit() {
+        super(Elements.EXIT);
     }
 
     @Override

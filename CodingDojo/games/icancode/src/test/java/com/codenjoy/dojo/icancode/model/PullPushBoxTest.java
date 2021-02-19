@@ -22,14 +22,12 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.services.Events;
 import org.junit.Test;
 
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.mockito.Mockito.verify;
 
-public class ICanCodePullPushBoxTest extends AbstractGameTest {
+public class PullPushBoxTest extends AbstractGameTest {
 
     @Test
     public void shouldMovableBoxOnBoard() {

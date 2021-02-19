@@ -60,7 +60,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
-public class SingleTest {
+public class MultiplayerTest {
 
     private Dice dice;
     private EventListener listener1;
@@ -4208,7 +4208,7 @@ public class SingleTest {
 
     private void pickedGold(Hero hero, int count) {
         for (int i = 0; i < count; i++) {
-            hero.pickUp(new Gold(Elements.GOLD));
+            hero.pickUp(new Gold());
         }
     }
 

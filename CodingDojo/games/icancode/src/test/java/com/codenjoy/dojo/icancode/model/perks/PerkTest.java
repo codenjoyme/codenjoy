@@ -40,7 +40,7 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
-public class ICanCodePerkTest extends AbstractGameTest {
+public class PerkTest extends AbstractGameTest {
 
     @Test
     public void perkAppear_afterZombieDie() {
@@ -233,7 +233,7 @@ public class ICanCodePerkTest extends AbstractGameTest {
         dice(100);
 
         // when
-        Optional<AbstractPerk> nextPerk = game.dropNextPerk();
+        Optional<Perk> nextPerk = game.dropNextPerk();
 
         // then
         assertFalse(nextPerk.isPresent());
@@ -246,10 +246,32 @@ public class ICanCodePerkTest extends AbstractGameTest {
         dice(0, 1);
 
         // when
-        Optional<AbstractPerk> nextPerk = game.dropNextPerk();
+        Optional<Perk> nextPerk = game.dropNextPerk();
 
         // then
         assertTrue(nextPerk.isPresent());
+    }
+
+    @Test
+    public void firePerkShouldBeOnBoard() {
+        //given
+        givenFl("╔════┐" +
+                "║Sa..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺----" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
     }
 
     @Test
@@ -519,42 +541,36 @@ public class ICanCodePerkTest extends AbstractGameTest {
     @Test
     public void goldState_withUnstoppableLaserPerk() {
         assertEquals(UNSTOPPABLE_LASER_PERK,
-                new Gold(Elements.GOLD).state(player,
-                        new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK)));
+                new Gold().state(player, new UnstoppableLaserPerk()));
     }
 
     @Test
     public void goldState_withDeathRayPerk() {
         assertEquals(DEATH_RAY_PERK,
-                new Gold(Elements.GOLD).state(player,
-                        new DeathRayPerk(DEATH_RAY_PERK)));
+                new Gold().state(player, new DeathRayPerk()));
     }
 
     @Test
     public void goldState_withUnlimitedFirePerk() {
         assertEquals(UNLIMITED_FIRE_PERK,
-                new Gold(Elements.GOLD).state(player,
-                        new UnlimitedFirePerk(UNLIMITED_FIRE_PERK)));
+                new Gold().state(player, new UnlimitedFirePerk()));
     }
 
     @Test
     public void floorState_withUnstoppableLaserPerk() {
         assertEquals(UNSTOPPABLE_LASER_PERK,
-                new Floor(FLOOR).state(player,
-                        new UnstoppableLaserPerk(UNSTOPPABLE_LASER_PERK)));
+                new Floor().state(player, new UnstoppableLaserPerk()));
     }
 
     @Test
     public void floorState_withDeathRayPerk() {
         assertEquals(DEATH_RAY_PERK,
-                new Floor(FLOOR).state(player,
-                        new DeathRayPerk(DEATH_RAY_PERK)));
+                new Floor().state(player, new DeathRayPerk()));
     }
 
     @Test
     public void floorState_withUnlimitedFirePerk() {
         assertEquals(UNLIMITED_FIRE_PERK,
-                new Floor(FLOOR).state(player,
-                        new UnlimitedFirePerk(UNLIMITED_FIRE_PERK)));
+                new Floor().state(player, new UnlimitedFirePerk()));
     }
 }

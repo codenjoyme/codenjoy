@@ -27,8 +27,8 @@ import com.codenjoy.dojo.icancode.model.*;
 
 public class Hole extends BaseItem {
 
-    public Hole(Elements el) {
-        super(el);
+    public Hole() {
+        super(Elements.HOLE);
     }
 
     @Override

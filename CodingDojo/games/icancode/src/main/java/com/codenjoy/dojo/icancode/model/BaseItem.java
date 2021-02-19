@@ -121,6 +121,6 @@ public abstract class BaseItem implements Item {
 
     @Override
     public int layer() {
-        return ElementsMapper.levelFor(this.getClass());
+        return element.getLayer();
     }
 }

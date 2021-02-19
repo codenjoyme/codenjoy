@@ -29,12 +29,19 @@ import static com.codenjoy.dojo.icancode.model.Elements.UNLIMITED_FIRE_PERK;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.*;
 
-public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
+public class UnlimitedFirePerkTest extends AbstractGameTest {
 
     @Test
     public void heroHasUnlimitedFirePerk() {
         // given
         givenFl("╔════┐" +
+                "║.S..│" +
+                "║.f..│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertL("╔════┐" +
                 "║.S..│" +
                 "║.f..│" +
                 "║....│" +
@@ -233,5 +240,72 @@ public class ICanCodeUnlimitedFirePerkTest extends AbstractGameTest {
                 "--↓----" +
                 "--↓----" +
                 "-------");
+    }
+
+    @Test
+    public void shouldNotPickUnlimitedFirePerk_whenJumpOverIt() {
+        // given
+        givenFl("╔════┐" +
+                "║Sf..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.jump();
+        hero.right();
+        game.tick();
+
+        // then
+        hasNot(UnlimitedFirePerk.class);
+
+        assertL("╔════┐" +
+                "║Sf..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "--*---" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        hasNot(UnlimitedFirePerk.class);
+
+        assertL("╔════┐" +
+                "║Sf..│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "---☺--" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "------" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
     }
 }

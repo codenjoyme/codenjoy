@@ -22,37 +22,26 @@ package com.codenjoy.dojo.icancode.model.perks;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.BaseItem;
-import com.codenjoy.dojo.icancode.model.Elements;
+import com.codenjoy.dojo.icancode.model.*;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
-import com.codenjoy.dojo.services.Tickable;
-import org.apache.commons.lang3.StringUtils;
 
-public abstract class AbstractPerk extends BaseItem implements Tickable {
+public abstract class TimeoutPerk extends Perk {
 
-    private String value;
-    private Timer availability;
-    private Timer activity;
+    protected Timer availability;
+    protected Timer activity;
 
-    public AbstractPerk(Elements element) {
-        this(element, StringUtils.EMPTY);
-    }
-
-    public AbstractPerk(Elements element, String value) {
+    public TimeoutPerk(Elements element) {
         super(element);
-        this.value = value;
         this.availability = new Timer(SettingsWrapper.data.perkAvailability());
         this.activity = new Timer(SettingsWrapper.data.perkActivity());
     }
 
-    public String getValue() {
-        return value;
-    }
-
+    @Override
     public boolean isAvailable() {
         return !availability.isTimeUp();
     }
 
+    @Override
     public boolean isActive() {
         return !activity.isTimeUp();
     }
