@@ -214,7 +214,14 @@ var Board = function (boardString) {
     };
 
     var getPerks = function () {
-        var elements = [Element.UNSTOPPABLE_LASER_PERK, Element.DEATH_RAY_PERK, Element.UNLIMITED_FIRE_PERK];
+        var elements = [
+            Element.UNSTOPPABLE_LASER_PERK,
+            Element.DEATH_RAY_PERK,
+            Element.UNLIMITED_FIRE_PERK,
+            Element.FIRE_PERK,
+            Element.JUMP_PERK,
+            Element.MOVE_BOXES_PERK
+        ];
         return get(elements, LAYER1);
     };
 
