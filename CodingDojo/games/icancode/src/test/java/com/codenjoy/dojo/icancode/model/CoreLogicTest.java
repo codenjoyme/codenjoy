@@ -424,7 +424,7 @@ public class CoreLogicTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldStartInNewPlace_whenAct() {
+    public void shouldStartInNewPlace_whenReset() {
         // given
         givenFl("╔═══┐" +
                 "║...│" +
