@@ -39,14 +39,13 @@ import java.util.Optional;
 import static com.codenjoy.dojo.icancode.model.Elements.*;
 import static com.codenjoy.dojo.icancode.model.ICanCode.TRAINING;
 import static com.codenjoy.dojo.services.Direction.UP;
-import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class PerkTest extends AbstractGameTest {
 
     @Test
-    public void perkAppear_afterZombieDie() {
+    public void shouldPerkAppear_afterZombieDie() {
         // given
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 4;
         givenZombie().thenReturn(UP);
@@ -105,7 +104,7 @@ public class PerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void heroTakesPerk() {
+    public void shouldHeroHasNewPerk_whenTakesIt() {
         // given
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -137,7 +136,7 @@ public class PerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void perkAvailabilityTest() {
+    public void shouldPerkDisappear_whenAvailableTimeIsUp() {
         // given
         settings.perkAvailability(3);
 
@@ -183,7 +182,7 @@ public class PerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void perkActivityTest() {
+    public void shouldPerkEffectIsOver_whenTimeIsUp() {
         // given
         settings.perkActivity(3);
 
@@ -228,6 +227,7 @@ public class PerkTest extends AbstractGameTest {
         hasNot(UnstoppableLaserPerk.class);
     }
 
+    // TODO why you are here?
     @Test
     public void doNotDropNextPerk() {
         // given
@@ -239,9 +239,10 @@ public class PerkTest extends AbstractGameTest {
         Optional<Perk> nextPerk = game.dropNextPerk();
 
         // then
-        assertFalse(nextPerk.isPresent());
+        assertEquals(false, nextPerk.isPresent());
     }
 
+    // TODO why you are here?
     @Test
     public void doDropNextPerk() {
         // given
@@ -256,44 +257,7 @@ public class PerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void firePerkShouldBeOnBoard() {
-        //given
-        givenFl("╔════┐" +
-                "║Sa..│" +
-                "║....│" +
-                "║....│" +
-                "║....│" +
-                "└────┘");
-
-        // when
-        game.tick();
-
-        // then
-        assertE("------" +
-                "-☺----" +
-                "------" +
-                "------" +
-                "------" +
-                "------");
-    }
-
-    @Test
-    public void pickPerk() {
-        // given
-        givenFl("╔════┐" +
-                "║.S..│" +
-                "║....│" +
-                "║....│" +
-                "║.l..│" +
-                "└────┘");
-
-        // when then
-        assertTrue(game.perkAt(pt(2, 1)).isPresent());
-        assertFalse(game.perkAt(pt(2, 4)).isPresent());
-    }
-
-    @Test
-    public void perksOnBoard() {
+    public void shouldWrawAllPerksOnBoard_whenStart() {
         // given
         givenFl("╔═════════┐" +
                 "║Srlf.rlf.│" +
@@ -353,7 +317,7 @@ public class PerkTest extends AbstractGameTest {
     @Test
     public void shouldDrawFloorUnderPerks_whenGotIt() {
         // given
-        perksOnBoard();
+        shouldWrawAllPerksOnBoard_whenStart();
 
         assertL("╔═════════┐" +
                 "║Srlf.rlf.│" +
