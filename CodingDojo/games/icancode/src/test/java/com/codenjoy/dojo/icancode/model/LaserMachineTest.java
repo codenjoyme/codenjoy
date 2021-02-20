@@ -30,7 +30,303 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
-public class AroundLaserMovesTest extends AbstractGameTest {
+public class LaserMachineTest extends AbstractGameTest {
+
+    @Test
+    public void shouldLaserFireOn6Ticks() {
+        // given
+        givenFl("╔═════┐" +
+                "║˃...˅│" +
+                "║.S...│" +
+                "║.....│" +
+                "║.....│" +
+                "║˄...˂│" +
+                "└─────┘");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║˃...˅│" +
+                "║.S...│" +
+                "║.....│" +
+                "║.....│" +
+                "║˄...˂│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-------" +
+                "--☺----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        // when
+        ticks(FIRE_TICKS - 1);
+
+        // then
+        assertL("╔═════┐" +
+                "║►...▼│" +
+                "║.S...│" +
+                "║.....│" +
+                "║.....│" +
+                "║▲...◄│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-------" +
+                "--☺----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║˃...˅│" +
+                "║.S...│" +
+                "║.....│" +
+                "║.....│" +
+                "║˄...˂│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "--→----" +
+                "--☺--↓-" +
+                "-------" +
+                "-↑-----" +
+                "----←--" +
+                "-------");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║˃...˅│" +
+                "║.S...│" +
+                "║.....│" +
+                "║.....│" +
+                "║˄...˂│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "---→---" +
+                "--☺----" +
+                "-↑---↓-" +
+                "-------" +
+                "---←---" +
+                "-------");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║˃...˅│" +
+                "║.S...│" +
+                "║.....│" +
+                "║.....│" +
+                "║˄...˂│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "----→--" +
+                "-↑☺----" +
+                "-------" +
+                "-----↓-" +
+                "--←----" +
+                "-------");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║˃...˅│" +
+                "║.S...│" +
+                "║.....│" +
+                "║.....│" +
+                "║˄...˂│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-------" +
+                "--☺----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+    }
+
+    @Test
+    public void shouldLaserDoNotTouchGoldPitStartEnd() {
+        // given
+        givenFl("╔═════┐" +
+                "║˃.O.˅│" +
+                "║.....│" +
+                "║S...E│" +
+                "║.....│" +
+                "║˄.$.˂│" +
+                "└─────┘");
+
+        // when
+        hero.right();
+        ticks(FIRE_TICKS);
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║˃.O.˅│" +
+                "║.....│" +
+                "║S...E│" +
+                "║.....│" +
+                "║˄.$.˂│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "--→----" +
+                "-----↓-" +
+                "--☺----" +
+                "-↑-----" +
+                "----←--" +
+                "-------");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║˃.O.˅│" +
+                "║.....│" +
+                "║S...E│" +
+                "║.....│" +
+                "║˄.$.˂│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "---→---" +
+                "-------" +
+                "-↑☺--↓-" +
+                "-------" +
+                "---←---" +
+                "-------");
+
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║˃.O.˅│" +
+                "║.....│" +
+                "║S...E│" +
+                "║.....│" +
+                "║˄.$.˂│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "----→--" +
+                "-↑-----" +
+                "--☺----" +
+                "-----↓-" +
+                "--←----" +
+                "-------");
+    }
+
+    @Test
+    public void shouldLaserKillRobo() {
+        // given
+        givenFl("╔═════┐" +
+                "║˃....│" +
+                "║..S..│" +
+                "└─────┘" +
+                "       " +
+                "       " +
+                "       ");
+
+        hero.up();
+        ticks(FIRE_TICKS);
+        game.tick();
+
+        assertL("╔═════┐" +
+                "║˃....│" +
+                "║..S..│" +
+                "└─────┘" +
+                "       " +
+                "       " +
+                "       ");
+
+        assertE("-------" +
+                "--→☺---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        // when
+        game.tick();
+
+        // then
+        verify(listener).event(Events.LOOSE());
+
+        assertL("╔═════┐" +
+                "║˃....│" +
+                "║..S..│" +
+                "└─────┘" +
+                "       " +
+                "       " +
+                "       ");
+
+        assertE("-------" +
+                "---☻---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        assertEquals(false, player.isAlive());
+        assertEquals(false, player.isWin());
+
+        // when
+        game.newGame(player);
+        game.tick();
+
+        // then
+        assertEquals(true, player.isAlive());
+        assertEquals(false, player.isWin());
+
+        assertL("╔═════┐" +
+                "║˃....│" +
+                "║..S..│" +
+                "└─────┘" +
+                "       " +
+                "       " +
+                "       ");
+
+        assertE("-------" +
+                "-------" +
+                "---☺---" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        // when
+        game.tick();
+
+        // then
+        assertEquals(true, player.isAlive());
+        assertEquals(false, player.isWin());
+
+        verifyNoMoreInteractions(listener);
+    }
 
     @Test
     public void shouldAlive_whenStepToCellWithLeavingSelfLaser() {
