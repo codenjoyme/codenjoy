@@ -1,16 +1,16 @@
 package com.codenjoy.dojo.icancode.model.perks;
 
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
+import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class JumpPerkTest extends AbstractGameTest {
 
     @Test
-    public void jumpPerkShouldBeOnBoard() {
+    public void shouldPerkOnField_whenStart() {
         // given
         SettingsWrapper.data.canJump(false);
 
@@ -41,8 +41,50 @@ public class JumpPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldBeAbleToJump_whenHeroPicksUpJumpPerk() {
+    public void shouldBeAbleToJump_withoutJumpPerk_whenContest() {
         // given
+        mode = ICanCode.CONTEST;
+        SettingsWrapper.data.canJump(false); // will be ignored
+
+        givenFl("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.down();
+        hero.jump();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        assertF("------" +
+                "------" +
+                "-*----" +
+                "------" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldBeAbleToJump_whenHeroPicksUpJumpPerk_whenTraining() {
+        // given
+        mode = ICanCode.TRAINING;
         SettingsWrapper.data.canJump(false);
 
         givenFl("╔════┐" +

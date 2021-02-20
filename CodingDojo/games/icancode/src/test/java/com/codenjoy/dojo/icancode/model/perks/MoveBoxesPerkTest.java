@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.icancode.model.perks;
 
 import com.codenjoy.dojo.icancode.model.AbstractGameTest;
+import com.codenjoy.dojo.icancode.model.ICanCode;
 import com.codenjoy.dojo.icancode.model.items.perks.MoveBoxesPerk;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class MoveBoxesPerkTest extends AbstractGameTest {
 
     @Test
-    public void moveBoxesPerkShouldBeOnBoard() {
+    public void shouldPerkOnField_whenStart() {
         // given
         SettingsWrapper.data.canMoveBoxes(false);
 
@@ -41,8 +42,43 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldPushBoxes_onlyWhenPickedUpSuchPerk() {
+    public void shouldPushBoxes_onlyWhenPickedUpSuchPerk_whenContest() {
         // given
+        mode = ICanCode.CONTEST;
+        SettingsWrapper.data.canMoveBoxes(false); // will be ignored
+
+        givenFl("╔════┐" +
+                "║S...│" +
+                "║BB..│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.down();
+        hero.pull();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "-☺B---" +
+                "-B----" +
+                "------" +
+                "------");
+    }
+
+    @Test
+    public void shouldPushBoxes_onlyWhenPickedUpSuchPerk_whenTraining() {
+        // given
+        mode = ICanCode.TRAINING;
         SettingsWrapper.data.canMoveBoxes(false);
 
         givenFl("╔════┐" +
@@ -101,8 +137,43 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldPullBoxes_onlyWhenPickedUpSuchPerk() {
+    public void shouldPullBoxes_onlyWhenPickedUpSuchPerk_whenContest() {
         // given
+        mode = ICanCode.CONTEST;
+        SettingsWrapper.data.canMoveBoxes(false); // will be ignored
+
+        givenFl("╔════┐" +
+                "║....│" +
+                "║S...│" +
+                "║BB..│" +
+                "║....│" +
+                "└────┘");
+
+        // when
+        hero.down();
+        hero.pull();
+        game.tick();
+
+        // then
+        assertL("╔════┐" +
+                "║....│" +
+                "║S...│" +
+                "║....│" +
+                "║....│" +
+                "└────┘");
+
+        assertE("------" +
+                "------" +
+                "------" +
+                "-☺B---" +
+                "-B----" +
+                "------");
+    }
+
+    @Test
+    public void shouldPullBoxes_onlyWhenPickedUpSuchPerk_whenTraining() {
+        // given
+        mode = ICanCode.TRAINING;
         SettingsWrapper.data.canMoveBoxes(false);
 
         givenFl("╔════┐" +

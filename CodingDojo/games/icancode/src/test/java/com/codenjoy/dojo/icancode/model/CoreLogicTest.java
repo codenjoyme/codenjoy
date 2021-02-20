@@ -22,18 +22,15 @@ package com.codenjoy.dojo.icancode.model;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
 import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import static com.codenjoy.dojo.services.Direction.STOP;
-import static com.codenjoy.dojo.services.PointImpl.pt;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
@@ -2601,6 +2598,7 @@ public class CoreLogicTest extends AbstractGameTest {
     public void shouldShoot_withDelay() {
         // given
         settings.gunRecharge(2);
+
         givenFl("╔═══┐" +
                 "║.S.│" +
                 "║...│" +

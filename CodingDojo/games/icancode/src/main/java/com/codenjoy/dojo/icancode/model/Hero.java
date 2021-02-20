@@ -77,10 +77,10 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         item = new HeroItem(Elements.ROBO);
         item.init(this);
         gun = new GunWithOverHeat();
-        resetFlags();
+        resetState();
     }
 
-    private void resetFlags() {
+    private void resetState() {
         direction = null;
         win = false;
         jump = false;
@@ -110,13 +110,20 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public void init(Field field) {
         super.init(field);
         item.setField(field);
-        reset(field);
+        resetField();
     }
 
-    private void reset(Field field) {
+    private void resetField() {
         field.getStartPosition().add(this.item);
         field.reset();
-        resetFlags();
+        resetState();
+        if (field.isContest()) {
+            perks.addAll(PerkUtils.get(
+                    Elements.JUMP_PERK,
+                    Elements.FIRE_PERK,
+                    Elements.MOVE_BOXES_PERK)
+            );
+        }
     }
 
     @Override
@@ -273,7 +280,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
         if (reset) {
             reset = false;
-            reset(field);
+            resetField();
             return;
         }
 
