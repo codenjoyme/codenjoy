@@ -804,7 +804,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-unstoppable-laser-perk',
             process: valueUnstoppableLaserPerkCommand,
             description: 'Значение - "Неостанавливаемый лазер". Испольузется совместно с другими командами.',
-            img1: 'unstoppable_laser_perk.png'
+            img1: '../' + gameName + '/unstoppable_laser_perk.png'
         },
 
         {
@@ -813,7 +813,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-death-ray-perk',
             process: valueDeathRayPerkCommand,
             description: 'Значение - "Луч смерти". Испольузется совместно с другими командами.',
-            img1: 'death_ray_perk.png'
+            img1: '../' + gameName + '/death_ray_perk.png'
         },
 
         {
@@ -822,7 +822,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-unlimited-fire-perk',
             process: valueUnlimitedFirePerkCommand,
             description: 'Значение - "Безлимитный выстрел". Испольузется совместно с другими командами.',
-            img1: 'unlimited_fire_perk.png'
+            img1: '../' + gameName + '/unlimited_fire_perk.png'
         },
 
         {
@@ -831,7 +831,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-fire-perk',
             process: valueFirePerkCommand,
             description: 'Значение - "Возможность стрелять". Испольузется совместно с другими командами.',
-            img1: 'fire_perk.png'
+            img1: '../' + gameName + '/fire_perk.png'
         },
 
         {
@@ -840,7 +840,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-jump-perk',
             process: valueJumpPerkCommand,
             description: 'Значение - "Возможность прыгать". Испольузется совместно с другими командами.',
-            img1: 'jump_perk.png'
+            img1: '../' + gameName + '/jump_perk.png'
         },
 
         {
@@ -849,7 +849,7 @@ function initRunnerBefunge(logger, getLevelInfo, storage) {
             title: 'value-move-boxes-perk',
             process: valueMoveBoxesPerkCommand,
             description: 'Значение - "Возможность двигать коробки". Испольузется совместно с другими командами.',
-            img1: 'move_boxes_perk.png'
+            img1: '../' + gameName + '/move_boxes_perk.png'
         }
 
     ];
