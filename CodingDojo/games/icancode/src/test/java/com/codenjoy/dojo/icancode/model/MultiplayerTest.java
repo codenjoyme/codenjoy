@@ -70,7 +70,15 @@ public class MultiplayerTest {
 
     @Before
     public void setup() {
-        SettingsWrapper.setup();
+        SettingsWrapper.setup()
+                .perkActivity(10)
+                .perkAvailability(10)
+                .perkDropRatio(50)
+                .deathRayRange(10)
+                .gunRecharge(0)
+                .gunRestTime(0)
+                .gunShotQueue(0)
+                .defaultPerks("ajm,ajm");
 
         Levels.init();
         Zombie.init();
@@ -119,9 +127,7 @@ public class MultiplayerTest {
         player2TryLoadLevel(LevelProgress.levelsStartsFrom1);
 
         SettingsWrapper.data
-                .canJump(true)
-                .canFire(true)
-                .canMoveBoxes(true);
+                .defaultPerks("ajm,ajm");
     }
 
     private Hero hero1() {

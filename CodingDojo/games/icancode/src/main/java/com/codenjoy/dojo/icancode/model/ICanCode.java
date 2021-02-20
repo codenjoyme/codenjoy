@@ -277,11 +277,7 @@ public class ICanCode implements Tickable, Field {
         if (dice.next(MAX_PERCENTS) > SettingsWrapper.data.perkDropRatio()) {
             return Optional.empty();
         }
-
-        return PerkUtils.random(dice,
-                UNSTOPPABLE_LASER_PERK,
-                DEATH_RAY_PERK,
-                UNLIMITED_FIRE_PERK);
+        return PerkUtils.random(dice, contest);
     }
 
     @Override

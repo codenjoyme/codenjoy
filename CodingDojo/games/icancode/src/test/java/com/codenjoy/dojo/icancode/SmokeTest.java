@@ -107,9 +107,7 @@ public class SmokeTest {
                 .gunRecharge(2)
                 .gunRestTime(4)
                 .gunShotQueue(2)
-                .canJump(true)
-                .canFire(true)
-                .canMoveBoxes(true);
+                .defaultPerks("ajm,ajm");
 
         final int[] index = {0};
         List<String> commands = Arrays.asList(

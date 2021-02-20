@@ -12,8 +12,6 @@ public class FirePerkTest extends AbstractGameTest {
     @Test
     public void shouldPerkOnField_whenStart() {
         // given
-        SettingsWrapper.data.canFire(false);
-
         givenFl("╔════┐" +
                 "║Sa..│" +
                 "║....│" +
@@ -44,7 +42,7 @@ public class FirePerkTest extends AbstractGameTest {
     public void shouldBeAbleToFire_withoutFirePerk_whenContest() {
         // given
         mode = ICanCode.CONTEST;
-        SettingsWrapper.data.canFire(false); // will be ignored
+        SettingsWrapper.data.defaultPerks(",a");
 
         givenFl("╔════┐" +
                 "║S...│" +
@@ -78,7 +76,7 @@ public class FirePerkTest extends AbstractGameTest {
     public void shouldBeAbleToFire_whenHeroPicksUpFirePerk_whenTraining() {
         // given
         mode = ICanCode.TRAINING;
-        SettingsWrapper.data.canFire(false);
+        SettingsWrapper.data.defaultPerks("");
 
         givenFl("╔════┐" +
                 "║S...│" +
@@ -154,7 +152,7 @@ public class FirePerkTest extends AbstractGameTest {
     @Test
     public void shouldNotPickUpFirePerk_whenJumpOverIt() {
         // given
-        SettingsWrapper.data.canFire(false);
+        SettingsWrapper.data.defaultPerks("j,j");
 
         givenFl("╔════┐" +
                 "║Sa..│" +

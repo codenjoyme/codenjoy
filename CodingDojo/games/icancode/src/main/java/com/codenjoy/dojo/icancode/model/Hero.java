@@ -28,7 +28,6 @@ import com.codenjoy.dojo.icancode.model.gun.GunWithOverHeat;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.items.perks.*;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
@@ -117,13 +116,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         field.getStartPosition().add(this.item);
         field.reset();
         resetState();
-        if (field.isContest()) {
-            perks.addAll(PerkUtils.get(
-                    Elements.JUMP_PERK,
-                    Elements.FIRE_PERK,
-                    Elements.MOVE_BOXES_PERK)
-            );
-        }
+        perks.addAll(PerkUtils.defaultFor(field.isContest()));
     }
 
     @Override
@@ -207,15 +200,15 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     }
 
     public boolean canFire() {
-        return SettingsWrapper.data.canFire() || has(FirePerk.class);
+        return has(FirePerk.class);
     }
 
     public boolean canJump() {
-        return SettingsWrapper.data.canJump() || has(JumpPerk.class);
+        return has(JumpPerk.class);
     }
 
     public boolean canMoveBoxes() {
-        return SettingsWrapper.data.canMoveBoxes() || has(MoveBoxesPerk.class);
+        return has(MoveBoxesPerk.class);
     }
 
     public void fire() {

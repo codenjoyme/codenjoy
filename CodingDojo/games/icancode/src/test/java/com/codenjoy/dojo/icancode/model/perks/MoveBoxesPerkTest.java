@@ -13,8 +13,6 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     @Test
     public void shouldPerkOnField_whenStart() {
         // given
-        SettingsWrapper.data.canMoveBoxes(false);
-
         givenFl("╔════┐" +
                 "║Sm..│" +
                 "║....│" +
@@ -45,7 +43,7 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     public void shouldPushBoxes_onlyWhenPickedUpSuchPerk_whenContest() {
         // given
         mode = ICanCode.CONTEST;
-        SettingsWrapper.data.canMoveBoxes(false); // will be ignored
+        SettingsWrapper.data.defaultPerks(",m");
 
         givenFl("╔════┐" +
                 "║S...│" +
@@ -79,7 +77,7 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     public void shouldPushBoxes_onlyWhenPickedUpSuchPerk_whenTraining() {
         // given
         mode = ICanCode.TRAINING;
-        SettingsWrapper.data.canMoveBoxes(false);
+        SettingsWrapper.data.defaultPerks("");
 
         givenFl("╔════┐" +
                 "║Sm..│" +
@@ -140,7 +138,7 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     public void shouldPullBoxes_onlyWhenPickedUpSuchPerk_whenContest() {
         // given
         mode = ICanCode.CONTEST;
-        SettingsWrapper.data.canMoveBoxes(false); // will be ignored
+        SettingsWrapper.data.defaultPerks(",m");
 
         givenFl("╔════┐" +
                 "║....│" +
@@ -174,7 +172,7 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     public void shouldPullBoxes_onlyWhenPickedUpSuchPerk_whenTraining() {
         // given
         mode = ICanCode.TRAINING;
-        SettingsWrapper.data.canMoveBoxes(false);
+        SettingsWrapper.data.defaultPerks("");
 
         givenFl("╔════┐" +
                 "║....│" +
@@ -234,6 +232,8 @@ public class MoveBoxesPerkTest extends AbstractGameTest {
     @Test
     public void shouldNotPickMoveBoxesPerk_whenJumpOverIt() {
         // given
+        SettingsWrapper.data.defaultPerks("j,j");
+
         givenFl("╔════┐" +
                 "║Sm..│" +
                 "║....│" +

@@ -85,9 +85,7 @@ public abstract class AbstractGameTest {
                 .gunRecharge(0)
                 .gunRestTime(0)
                 .gunShotQueue(0)
-                .canJump(true)
-                .canFire(true)
-                .canMoveBoxes(true);
+                .defaultPerks("ajm,ajm");
 
         dice = mock(Dice.class);
     }

@@ -12,8 +12,6 @@ public class JumpPerkTest extends AbstractGameTest {
     @Test
     public void shouldPerkOnField_whenStart() {
         // given
-        SettingsWrapper.data.canJump(false);
-
         givenFl("╔════┐" +
                 "║Sj..│" +
                 "║....│" +
@@ -44,7 +42,7 @@ public class JumpPerkTest extends AbstractGameTest {
     public void shouldBeAbleToJump_withoutJumpPerk_whenContest() {
         // given
         mode = ICanCode.CONTEST;
-        SettingsWrapper.data.canJump(false); // will be ignored
+        SettingsWrapper.data.defaultPerks(",j");
 
         givenFl("╔════┐" +
                 "║S...│" +
@@ -85,7 +83,7 @@ public class JumpPerkTest extends AbstractGameTest {
     public void shouldBeAbleToJump_whenHeroPicksUpJumpPerk_whenTraining() {
         // given
         mode = ICanCode.TRAINING;
-        SettingsWrapper.data.canJump(false);
+        SettingsWrapper.data.defaultPerks("");
 
         givenFl("╔════┐" +
                 "║S...│" +
