@@ -29,7 +29,7 @@ import org.junit.Test;
 public class UnlimitedFirePerkTest extends AbstractGameTest {
 
     @Test
-    public void heroHasUnlimitedFirePerk() {
+    public void shouldHeroHasPerk_whenPickItUp() {
         // given
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -68,7 +68,7 @@ public class UnlimitedFirePerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void testFire_withoutUnlimitedFirePerk() {
+    public void shouldFire_withoutPerk() {
         // given
         settings.gunRecharge(2);
 
@@ -156,7 +156,7 @@ public class UnlimitedFirePerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void testFire_withUnlimitedFirePerk() {
+    public void shouldFire_withPerk() {
         // given
         settings.perkActivity(2)
                 .gunRecharge(3);
@@ -240,7 +240,7 @@ public class UnlimitedFirePerkTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldNotPickUnlimitedFirePerk_whenJumpOverIt() {
+    public void shouldNotPickPerk_whenJumpOverIt() {
         // given
         givenFl("╔════┐" +
                 "║Sf..│" +
