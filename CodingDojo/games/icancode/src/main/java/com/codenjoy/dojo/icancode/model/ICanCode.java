@@ -44,7 +44,6 @@ public class ICanCode implements Tickable, Field {
     public static final boolean TRAINING = false;
     public static final boolean CONTEST = true;
 
-    private static final int MAX = 10;
     public static final int MAX_PERCENTS = 100;
 
     private Dice dice;
@@ -54,12 +53,15 @@ public class ICanCode implements Tickable, Field {
     private boolean contest;
     private Shooter shooter;
 
+    private List<Perk> perks;
+
     public ICanCode(Level level, Dice dice, boolean contest) {
         this.level = level;
         level.setField(this);
         this.dice = dice;
         this.contest = contest;
         players = new LinkedList();
+        perks = availablePerks();
         shooter = new Shooter(this);
     }
 
@@ -93,7 +95,7 @@ public class ICanCode implements Tickable, Field {
                 .map(it -> (Tickable)it)
                 .forEach(Tickable::tick);
 
-        perks().stream()
+        availablePerks().stream()
                 .filter(perk -> !perk.isAvailable())
                 .forEach(BaseItem::removeFromCell);
 
@@ -160,7 +162,7 @@ public class ICanCode implements Tickable, Field {
     }
 
     @Override
-    public List<Perk> perks() {
+    public List<Perk> availablePerks() {
         return level.getItems(Perk.class);
     }
 
@@ -188,10 +190,9 @@ public class ICanCode implements Tickable, Field {
         cell.comeIn(item);
     }
 
-    @Override
     public Optional<Perk> perkAt(Point pt) {
         Cell cell = level.getCell(pt);
-        return perks().stream()
+        return availablePerks().stream()
                 .filter(perk -> perk.getCell().equals(cell))
                 .findAny();
     }
@@ -223,17 +224,18 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public void reset() {
+        // TODO что если плеер на contest
+        //      ... отнес золото на финишный спот, оно пропадет из борды?
+        //      ... с золотом покинул игру, оно пропадет из борды?
         List<Gold> gold = pickedGold();
 
         if (contest) {
             setRandomGold(gold);
         } else {
             gold.forEach(Gold::reset);
-        }
-
-        if (!contest) {
             zombiePots().forEach(ZombiePot::reset);
             laserMachines().forEach(LaserMachine::reset);
+            perks.forEach(Perk::reset);
         }
     }
 

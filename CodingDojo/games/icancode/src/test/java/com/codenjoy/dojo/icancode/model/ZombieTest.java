@@ -212,17 +212,7 @@ public class ZombieTest extends AbstractGameTest {
                 "------");
 
         // when
-        game.reset();
-
-        // then
-        assertE("------" +
-                "-☺--✝-" +
-                "------" +
-                "----✝-" +
-                "------" +
-                "------");
-
-        // when
+        hero.reset();
         game.tick();
 
         // then
@@ -273,17 +263,7 @@ public class ZombieTest extends AbstractGameTest {
                 "------");
 
         // when
-        game.reset();
-
-        // then
-        assertE("------" +
-                "-☺--♀-" +
-                "------" +
-                "----♂-" +
-                "------" +
-                "------");
-
-        // when
+        hero.reset();
         game.tick();
 
         // then

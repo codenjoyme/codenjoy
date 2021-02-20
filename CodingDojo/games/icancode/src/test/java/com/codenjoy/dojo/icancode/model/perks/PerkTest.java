@@ -37,6 +37,7 @@ import org.junit.Test;
 import java.util.Optional;
 
 import static com.codenjoy.dojo.icancode.model.Elements.*;
+import static com.codenjoy.dojo.icancode.model.ICanCode.CONTEST;
 import static com.codenjoy.dojo.icancode.model.ICanCode.TRAINING;
 import static com.codenjoy.dojo.services.Direction.UP;
 import static org.junit.Assert.*;
@@ -275,7 +276,7 @@ public class PerkTest extends AbstractGameTest {
         game.tick();
 
         // then
-        assertEquals(6, game.perks().size());
+        assertEquals(6, game.availablePerks().size());
 
         assertL("╔═════════┐" +
                 "║Srlf.rlf.│" +
@@ -482,6 +483,168 @@ public class PerkTest extends AbstractGameTest {
 
         assertE("-----------" +
                 "--------☺--" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------");
+
+        assertF("-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------");
+    }
+
+    @Test
+    public void shouldResetAllPerks_whenResetBoard_onContest() {
+        // given
+        mode = TRAINING;
+
+        shouldDrawFloorUnderPerks_whenGotIt();
+
+        assertL("╔═════════┐" +
+                "║S........│" +
+                "└─────────┘" +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           ");
+
+        assertE("-----------" +
+                "--------☺--" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------");
+
+        has(UnstoppableLaserPerk.class);
+        has(UnlimitedFirePerk.class);
+        has(DeathRayPerk.class);
+
+        // when
+        hero.reset();
+        game.tick();
+
+        // then
+        hasNot(UnstoppableLaserPerk.class);
+        hasNot(UnlimitedFirePerk.class);
+        hasNot(DeathRayPerk.class);
+
+        assertL("╔═════════┐" +
+                "║Srlf.rlf.│" +
+                "└─────────┘" +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           ");
+
+        assertE("-----------" +
+                "-☺---------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------");
+
+        assertF("-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------");
+    }
+
+    @Test
+    public void shouldNotResetAllPerks_whenResetBoard_onContest() {
+        // given
+        mode = CONTEST;
+
+        shouldDrawFloorUnderPerks_whenGotIt();
+
+        assertL("╔═════════┐" +
+                "║S........│" +
+                "└─────────┘" +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           ");
+
+        assertE("-----------" +
+                "--------☺--" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------" +
+                "-----------");
+
+        has(UnstoppableLaserPerk.class);
+        has(UnlimitedFirePerk.class);
+        has(DeathRayPerk.class);
+
+        // when
+        hero.reset();
+        game.tick();
+
+        // then
+        hasNot(UnstoppableLaserPerk.class);
+        hasNot(UnlimitedFirePerk.class);
+        hasNot(DeathRayPerk.class);
+
+        assertL("╔═════════┐" +
+                "║S........│" +
+                "└─────────┘" +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           " +
+                "           ");
+
+        assertE("-----------" +
+                "-☺---------" +
                 "-----------" +
                 "-----------" +
                 "-----------" +

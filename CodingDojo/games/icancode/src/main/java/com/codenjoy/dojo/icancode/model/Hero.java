@@ -48,7 +48,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     private Direction direction;
     private boolean jump;
     private boolean pull;
-    private boolean flying;
+    protected boolean flying;
     private boolean reset;
     private boolean laser;
     private boolean fire;
@@ -500,5 +500,9 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
 
     public List<Gold> gold() {
         return gold;
+    }
+
+    public void add(Perk perk) {
+        perks.add(perk);
     }
 }

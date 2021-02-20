@@ -4,7 +4,7 @@ import com.codenjoy.dojo.icancode.model.BaseItem;
 import com.codenjoy.dojo.icancode.model.Cell;
 import com.codenjoy.dojo.icancode.model.Elements;
 
-public class RenewableItem extends BaseItem {
+public abstract class RenewableItem extends BaseItem {
 
     private Cell dock;
 

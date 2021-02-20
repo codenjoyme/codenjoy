@@ -166,13 +166,13 @@ public class LaserMachineTest extends AbstractGameTest {
                 "-------");
 
         // when
-        game.reset();
+        hero.reset();
 
         // then
         assertLaserMachineReadyToFire();
 
         // when
-        game.reset();
+        hero.reset();
 
         // then
         assertLaserMachineReadyToFire();
@@ -218,7 +218,7 @@ public class LaserMachineTest extends AbstractGameTest {
                 "-------");
 
         // when
-        game.reset(); // ignored
+        hero.reset(); // ignored
 
         // then
         assertL("╔═════┐" +

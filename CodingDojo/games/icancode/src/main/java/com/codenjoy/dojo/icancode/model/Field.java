@@ -82,5 +82,5 @@ public interface Field extends GameField<Player> {
 
     List<Floor> floor();
 
-    List<Perk> perks();
+    List<Perk> availablePerks();
 }

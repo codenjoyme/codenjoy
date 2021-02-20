@@ -32,6 +32,10 @@ public abstract class TimeoutPerk extends Perk {
 
     public TimeoutPerk(Elements element) {
         super(element);
+        initTimers();
+    }
+
+    private void initTimers() {
         this.availability = new Timer(SettingsWrapper.data.perkAvailability());
         this.activity = new Timer(SettingsWrapper.data.perkActivity());
     }
@@ -50,5 +54,11 @@ public abstract class TimeoutPerk extends Perk {
     public void tick() {
         availability.tick();
         activity.tick();
+    }
+
+    @Override
+    public void reset() {
+        super.reset();
+        initTimers();
     }
 }
