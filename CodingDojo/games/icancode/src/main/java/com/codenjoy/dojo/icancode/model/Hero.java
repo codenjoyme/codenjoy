@@ -73,8 +73,8 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         return item;
     }
 
-    public Hero(Elements el) {
-        item = new HeroItem(el);
+    public Hero() {
+        item = new HeroItem(Elements.ROBO);
         item.init(this);
         gun = new GunWithOverHeat();
         resetFlags();

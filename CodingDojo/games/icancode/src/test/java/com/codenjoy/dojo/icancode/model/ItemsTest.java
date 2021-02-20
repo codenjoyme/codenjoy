@@ -44,8 +44,8 @@ public class ItemsTest {
         assertEquals(LAYER1, new Floor().layer());
         assertEquals(LAYER1, new Gold().layer());
 
-        assertEquals(LAYER2, new Hero(Elements.ROBO).getItem().layer());
-        assertEquals(LAYER3, new Hero(Elements.ROBO){{ flying = true; }}.getItem().layer());
+        assertEquals(LAYER2, new Hero().getItem().layer());
+        assertEquals(LAYER3, new Hero(){{ flying = true; }}.getItem().layer());
 
         assertEquals(LAYER1, new Hole().layer());
         assertEquals(LAYER2, new Laser(Elements.LASER_UP).layer());

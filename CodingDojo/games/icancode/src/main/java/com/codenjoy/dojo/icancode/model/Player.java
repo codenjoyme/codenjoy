@@ -58,7 +58,7 @@ public class Player extends GamePlayer<Hero, Field> {
     public void newHero(Field field) {
         this.field = field;
         if (hero == null) {
-            hero = new Hero(Elements.ROBO);
+            hero = new Hero();
         }
 
         hero.init(field);
