@@ -37,7 +37,7 @@ public class GunWithOverHeatUniqTest {
 
     @Before
     public void setup() {
-        SettingsWrapper.setup(new SettingsImpl())
+        SettingsWrapper.setup()
                 .gunRecharge(1)
                 .gunRestTime(10)
                 .gunShotQueue(10);

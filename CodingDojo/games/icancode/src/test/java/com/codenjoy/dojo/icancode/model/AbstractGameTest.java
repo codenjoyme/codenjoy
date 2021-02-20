@@ -77,7 +77,7 @@ public abstract class AbstractGameTest {
 
         mode = ICanCode.TRAINING;
 
-        settings = SettingsWrapper.setup(new SettingsImpl())
+        settings = SettingsWrapper.setup()
                 .perkActivity(10)
                 .perkAvailability(10)
                 .perkDropRatio(100)

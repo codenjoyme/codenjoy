@@ -24,6 +24,7 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.items.perks.*;
+import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
@@ -33,6 +34,10 @@ public class ItemsTest {
 
     @Test
     public void testLayers() {
+        // given
+        SettingsWrapper.setup();
+
+        // when then
         assertEquals(LAYER2, new Air().layer());
         assertEquals(LAYER2, new Box().layer());
         assertEquals(LAYER1, new Exit().layer());
@@ -40,7 +45,7 @@ public class ItemsTest {
         assertEquals(LAYER1, new Gold().layer());
 
         assertEquals(LAYER2, new Hero(Elements.ROBO).getItem().layer());
-        assertEquals(LAYER3, new Hero(Elements.ROBO){{ jump(); tick(); }}.getItem().layer());
+        assertEquals(LAYER3, new Hero(Elements.ROBO){{ flying = true; }}.getItem().layer());
 
         assertEquals(LAYER1, new Hole().layer());
         assertEquals(LAYER2, new Laser(Elements.LASER_UP).layer());

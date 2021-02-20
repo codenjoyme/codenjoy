@@ -47,7 +47,7 @@ public class GunWithOverHeatParamTest {
 
     public GunWithOverHeatParamTest(Params params) {
         this.params = params;
-        settings = SettingsWrapper.setup(new SettingsImpl());
+        settings = SettingsWrapper.setup();
         gun = new GunWithOverHeat();
 
     }

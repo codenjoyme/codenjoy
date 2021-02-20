@@ -38,7 +38,6 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
 import com.codenjoy.dojo.icancode.services.GameRunner;
 import org.json.JSONArray;
@@ -71,6 +70,8 @@ public class MultiplayerTest {
 
     @Before
     public void setup() {
+        SettingsWrapper.setup();
+
         Levels.init();
         Zombie.init();
         ZombiePot.init();
