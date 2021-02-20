@@ -198,8 +198,10 @@ public class ZombieTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldZombiePot_reset() {
+    public void shouldZombiePotKillAllZombies_whenReset_onTrainingLevel() {
         // given
+        mode = ICanCode.TRAINING;
+
         shouldZombiePot_generatesAnotherOne();
 
         assertE("------" +
@@ -253,6 +255,67 @@ public class ZombieTest extends AbstractGameTest {
                 "------" +
                 "------" +
                 "----♀-" +
+                "------");
+    }
+
+    @Test
+    public void shouldNotZombiePotKillAllZombies_whenReset_onContestLevel() {
+        // given
+        mode = ICanCode.CONTEST;
+
+        shouldZombiePot_generatesAnotherOne();
+
+        assertE("------" +
+                "-☺--♀-" +
+                "------" +
+                "----♂-" +
+                "------" +
+                "------");
+
+        // when
+        game.reset();
+
+        // then
+        assertE("------" +
+                "-☺--♀-" +
+                "------" +
+                "----♂-" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺--♀-" +
+                "------" +
+                "----♂-" +
+                "------" +
+                "------");
+
+        // when
+        generateFemale();
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺--♀-" +
+                "----♂-" +
+                "------" +
+                "----♀-" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺--♀-" +
+                "----♂-" +
+                "----♀-" +
+                "------" +
                 "------");
     }
 
