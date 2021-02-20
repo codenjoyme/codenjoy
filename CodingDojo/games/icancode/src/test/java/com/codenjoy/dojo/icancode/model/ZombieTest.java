@@ -39,7 +39,7 @@ import static org.mockito.Mockito.verify;
 public class ZombieTest extends AbstractGameTest {
 
     @Test
-    public void shouldZombieFemaleStart() {
+    public void shouldZombieFemale_start() {
         // given
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 3;
 
@@ -51,7 +51,7 @@ public class ZombieTest extends AbstractGameTest {
                 "└────┘");
 
         // when
-        dice(1); // female
+        generateFemale();
         game.tick();
         game.tick();
 
@@ -74,7 +74,7 @@ public class ZombieTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldZombieCanWalk() {
+    public void shouldZombie_canWalk() {
         // given
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 10;
         Zombie.WALK_EACH_TICKS = 2;
@@ -88,7 +88,7 @@ public class ZombieTest extends AbstractGameTest {
                 "└────┘");
 
         // when
-        dice(1); // female
+        generateFemale();
         game.tick();
         game.tick();
         game.tick();
@@ -133,7 +133,7 @@ public class ZombieTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldZombiePotGeneratesAnotherOne() {
+    public void shouldZombiePot_generatesAnotherOne() {
         // given
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 4;
         Zombie.WALK_EACH_TICKS = 2;
@@ -147,7 +147,7 @@ public class ZombieTest extends AbstractGameTest {
                 "└────┘");
 
         // when
-        dice(1); // female
+        generateFemale();
         game.tick();
         game.tick();
         game.tick();
@@ -198,7 +198,66 @@ public class ZombieTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldZombieKillHero() {
+    public void shouldZombiePot_reset() {
+        // given
+        shouldZombiePot_generatesAnotherOne();
+
+        assertE("------" +
+                "-☺--♀-" +
+                "------" +
+                "----♂-" +
+                "------" +
+                "------");
+
+        // when
+        game.reset();
+
+        // then
+        assertE("------" +
+                "-☺--✝-" +
+                "------" +
+                "----✝-" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺----" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        game.tick();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺----" +
+                "------" +
+                "------" +
+                "------" +
+                "------");
+
+        // when
+        generateFemale();
+        game.tick();
+
+        // then
+        assertE("------" +
+                "-☺----" +
+                "------" +
+                "------" +
+                "----♀-" +
+                "------");
+    }
+
+    @Test
+    public void shouldZombie_killHero() {
         // given
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 6;
         Zombie.WALK_EACH_TICKS = 2;
@@ -288,7 +347,7 @@ public class ZombieTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldHeroKillZombie() {
+    public void shouldHero_killZombie() {
         // given
         SettingsWrapper.data
                 .perkDropRatio(0);
@@ -384,7 +443,7 @@ public class ZombieTest extends AbstractGameTest {
 
 
     @Test
-    public void shouldPlayerJumpOverZombie() {
+    public void shouldPlayer_jumpOverZombie() {
         // given
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 6;
         Zombie.WALK_EACH_TICKS = 2;

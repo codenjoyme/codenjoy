@@ -65,6 +65,6 @@ public class ZombiePot extends FieldItem implements Tickable {
 
     public void reset() {
         time = 0;
-        field.zombies().forEach(it -> it.die());
+        field.zombies().forEach(Zombie::die);
     }
 }

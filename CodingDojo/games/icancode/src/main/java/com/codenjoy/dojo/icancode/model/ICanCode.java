@@ -232,7 +232,6 @@ public class ICanCode implements Tickable, Field {
         }
 
         if (!contest) {
-            // TODO test me
             zombiePots().forEach(ZombiePot::reset);
 
             // TODO test me
