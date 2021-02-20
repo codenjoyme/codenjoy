@@ -6,19 +6,10 @@ public class LevelG1 implements Level {
     
     @Override
     public String help() {
-        return "The more gold you collect, the more points you earn. But zombies are on the way. <br><br>\n" +
+        return "This level is too big to fit on the screen. " +
+                "You have to learn how to store a complete map as you move. <br><br>\n" +
 
-                "Рay attention - the laser kills zombie. If it happens you will see \"ZOMBIE_DIE\" on board. <br><br>\n" +
-
-                "Don't forget the \"FIRE_PERK\" to fire. Another perks also are on the way !<br><br>\n" +
-
-                "There are several method for the Robot:\n" +
-                "<pre>robot.fireLeft();\n" +
-                "robot.fireRight();\n" +
-                "robot.fireUp();\n" +
-                "robot.fireDown();\n" +
-                "robot.fire(\"LEFT\");</pre>\n" +
-                "Good luck !<br><br>\n" +
+                "Don't forget the perks, they are on the way !<br><br>\n" +
 
                 "Remember ! Your program should work for all previous levels too.";
     }
@@ -59,18 +50,17 @@ public class LevelG1 implements Level {
                 " #..#    #$..O.#        ##### \n" +
                 " #$$# ####m...B######## #$$.# \n" +
                 " #### #....O$...O...$.# #...# \n" +
-                "      #.#####.j######## ###B# \n" +
+                "      #.#####.a######## ###B# \n" +
                 "   ####$#   #..#          #.# \n" +
                 "   #..O.#   #..#####  #####.# \n" +
                 "####.####   #.O....####..$..# \n" +
-                "#S.a.#      #...$..B.....#### \n" +
+                "#S.j.#      #...$..B.....#### \n" +
                 "######      ##############    \n";
     }
 
     @Override
     public List<String> befungeCommands() {
         return Level.extendBefunge(new LevelF3(),
-                "value-fire-perk",
                 "procedure-1", "procedure-2", "procedure-3");
     }
 

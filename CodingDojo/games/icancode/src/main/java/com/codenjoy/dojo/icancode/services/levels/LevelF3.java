@@ -75,6 +75,7 @@ public class LevelF3 implements Level {
     @Override
     public List<String> befungeCommands() {
         return Level.extendBefunge(new LevelF2(),
+                "value-fire-perk",
                 "robot-fire");
     }
 }
