@@ -28,13 +28,10 @@ import com.codenjoy.dojo.icancode.model.items.perks.Perk;
 
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
-public class Gold extends BaseItem {
-
-    private Cell dock;
+public class Gold extends RenewableItem {
 
     public Gold() {
         super(Elements.GOLD);
-        dock = null;
     }
 
     @Override
@@ -57,18 +54,6 @@ public class Gold extends BaseItem {
                         removeFromCell();
                     }
                 });
-    }
-
-    @Override
-    public void setCell(Cell cell) {
-        if (dock == null && cell != null) {
-            dock = cell;
-        }
-        super.setCell(cell);
-    }
-
-    public void reset() {
-        dock.add(this);
     }
 
 }
