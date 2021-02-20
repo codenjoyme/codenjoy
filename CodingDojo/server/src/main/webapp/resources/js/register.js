@@ -187,8 +187,10 @@ function initRegistration(waitApprove, contextPath) {
         }
 
         var fixMd5 = function(element) {
-            if ($(element).length) {
-                $(element).val($.md5($(element).val()));
+            var from = element + ' input';
+            var to = element + '-md5 input';
+            if ($(from).length) {
+                $(to).val($.md5($(from).val()));
             }
         }
 
@@ -202,8 +204,8 @@ function initRegistration(waitApprove, contextPath) {
                 );
 
                 saveDataToLocalStorage();
-                fixMd5('#password input');
-                fixMd5('#passwordConfirmation input');
+                fixMd5('#password');
+                fixMd5('#passwordConfirmation');
                 $('#form').submit();
             }
         };

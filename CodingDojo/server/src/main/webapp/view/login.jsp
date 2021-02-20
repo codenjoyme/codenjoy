@@ -84,11 +84,14 @@ License along with this program.  If not, see
                 <span class="icon fa"></span>
             </div>
             <div id="password" class="field not-valid">
-                <input type="password" placeholder="Password" name="password"/>
+                <input type="password" placeholder="Password"/>
                 <span class="icon fa"></span>
             </div>
             <div id="data" hidden>
                 <input type="text" name="data"/>
+            </div>
+            <div id="password-md5" hidden>
+                <input type="hidden" name="password"/>
             </div>
             <c:if test="${not adminLogin}">
                 <div id="gameName" class="field valid" hidden>

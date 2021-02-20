@@ -85,16 +85,22 @@ License along with this program.  If not, see
             </div>
             <div id="password" class="field not-valid">
                 <form:errors path="password" cssClass="error-message" />
-                <form:input type="password" placeholder="Password" path="password"/>
+                <input type="password" placeholder="Password"/>
                 <span class="icon fa"></span>
             </div>
             <div id="passwordConfirmation" class="field not-valid">
                 <form:errors path="passwordConfirmation" cssClass="error-message" />
-                <form:input type="password" placeholder="Confirm password" path="passwordConfirmation"/>
+                <input type="password" placeholder="Confirm password"/>
                 <span class="icon fa"></span>
             </div>
             <div id="data" hidden>
                 <form:input type="text" path="data"/>
+            </div>
+            <div id="password-md5" hidden>
+                <form:input type="hidden" path="password"/>
+            </div>
+            <div id="passwordConfirmation-md5" hidden>
+                <form:input type="hidden" path="passwordConfirmation"/>
             </div>
             <!-- add attribute 'not-empty' to the div if you want to enable validation -->
             <div id="data1" class="field not-valid" not-empty hidden>
