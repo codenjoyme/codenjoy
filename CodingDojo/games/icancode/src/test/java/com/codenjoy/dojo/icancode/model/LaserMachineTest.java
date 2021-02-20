@@ -33,7 +33,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 public class LaserMachineTest extends AbstractGameTest {
 
     @Test
-    public void shouldLaserFireOn6Ticks() {
+    public void shouldLaserFire_on6Ticks() {
         // given
         givenFl("╔═════┐" +
                 "║˃...˅│" +
@@ -43,45 +43,8 @@ public class LaserMachineTest extends AbstractGameTest {
                 "║˄...˂│" +
                 "└─────┘");
 
-        // when
-        game.tick();
-
         // then
-        assertL("╔═════┐" +
-                "║˃...˅│" +
-                "║.S...│" +
-                "║.....│" +
-                "║.....│" +
-                "║˄...˂│" +
-                "└─────┘");
-
-        assertE("-------" +
-                "-------" +
-                "--☺----" +
-                "-------" +
-                "-------" +
-                "-------" +
-                "-------");
-
-        // when
-        ticks(FIRE_TICKS - 1);
-
-        // then
-        assertL("╔═════┐" +
-                "║►...▼│" +
-                "║.S...│" +
-                "║.....│" +
-                "║.....│" +
-                "║▲...◄│" +
-                "└─────┘");
-
-        assertE("-------" +
-                "-------" +
-                "--☺----" +
-                "-------" +
-                "-------" +
-                "-------" +
-                "-------");
+        assertLaserMachineReadyToFire();
 
         // when
         game.tick();
@@ -165,7 +128,101 @@ public class LaserMachineTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldLaserDoNotTouchGoldPitStartEnd() {
+    public void shouldResetLaserMachine_whenTrainingLevel() {
+        // given
+        mode = ICanCode.TRAINING;
+
+        givenFl("╔═════┐" +
+                "║˃...˅│" +
+                "║.S...│" +
+                "║.....│" +
+                "║.....│" +
+                "║˄...˂│" +
+                "└─────┘");
+
+        // when
+        assertLaserMachineReadyToFire();
+
+        // when
+        game.tick();
+        game.tick();
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║˃...˅│" +
+                "║.S...│" +
+                "║.....│" +
+                "║.....│" +
+                "║˄...˂│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "----→--" +
+                "-↑☺----" +
+                "-------" +
+                "-----↓-" +
+                "--←----" +
+                "-------");
+
+        // when
+        game.reset();
+
+        // then
+        assertLaserMachineReadyToFire();
+
+        // when
+        game.reset();
+
+        // then
+        assertLaserMachineReadyToFire();
+
+    }
+
+    private void assertLaserMachineReadyToFire() {
+        // when
+        game.tick();
+
+        // then
+        assertL("╔═════┐" +
+                "║˃...˅│" +
+                "║.S...│" +
+                "║.....│" +
+                "║.....│" +
+                "║˄...˂│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-------" +
+                "--☺----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+
+        // when
+        ticks(FIRE_TICKS - 1);
+
+        // then
+        assertL("╔═════┐" +
+                "║►...▼│" +
+                "║.S...│" +
+                "║.....│" +
+                "║.....│" +
+                "║▲...◄│" +
+                "└─────┘");
+
+        assertE("-------" +
+                "-------" +
+                "--☺----" +
+                "-------" +
+                "-------" +
+                "-------" +
+                "-------");
+    }
+
+    @Test
+    public void shouldLaser_doNotTouchGoldPitStartEnd() {
         // given
         givenFl("╔═════┐" +
                 "║˃.O.˅│" +
@@ -239,7 +296,7 @@ public class LaserMachineTest extends AbstractGameTest {
     }
 
     @Test
-    public void shouldLaserKillRobo() {
+    public void shouldLaser_killRobo() {
         // given
         givenFl("╔═════┐" +
                 "║˃....│" +

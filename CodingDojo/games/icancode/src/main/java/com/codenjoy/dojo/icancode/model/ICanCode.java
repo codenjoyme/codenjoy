@@ -233,8 +233,6 @@ public class ICanCode implements Tickable, Field {
 
         if (!contest) {
             zombiePots().forEach(ZombiePot::reset);
-
-            // TODO test me
             laserMachines().forEach(LaserMachine::reset);
         }
     }
