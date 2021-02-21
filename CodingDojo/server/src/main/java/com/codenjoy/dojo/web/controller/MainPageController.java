@@ -49,6 +49,8 @@ import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 @AllArgsConstructor
 public class MainPageController {
 
+    public static final String HELP_URI = "/help";
+
     private PlayerService playerService;
     private Registration registration;
     private GameService gameService;
@@ -57,13 +59,13 @@ public class MainPageController {
     private RoomsAliaser rooms;
     private RegistrationService registrationService;
 
-    @GetMapping("/help")
+    @GetMapping(HELP_URI)
     public String help(Model model) {
         model.addAttribute("gameNames", gameService.getOnlyGameNames());
         return "help";
     }
 
-    @GetMapping(value = "/help", params = "gameName")
+    @GetMapping(value = HELP_URI, params = "gameName")
     public String helpForGame(@RequestParam("gameName") String gameName) {
         validator.checkGameName(gameName, CANT_BE_NULL);
 
