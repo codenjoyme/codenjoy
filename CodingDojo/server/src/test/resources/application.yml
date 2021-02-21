@@ -49,6 +49,7 @@ registration:
 page:
   main:
     url: ''
+    unauthorized: true
   registration:
     url: ''
   admin:
