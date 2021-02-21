@@ -48,6 +48,9 @@ public class ConfigProperties {
     @Value("${page.admin.url}")
     private String adminPage;
 
+    @Value("${page.main.unauthorized}")
+    private boolean allowUnauthorizedMainPage;
+
     @Value("${page.help.language}")
     private String helpLanguage;
 
