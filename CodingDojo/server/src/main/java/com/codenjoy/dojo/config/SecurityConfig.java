@@ -96,11 +96,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             MainPageController.HELP_URI,
             MainPageController.HELP_URI + "**",
             "/rest/*/status",
-            BoardController.URI + "/rejoining/*",
-            LoginController.URI + "**"
+            BoardController.URI + "/rejoining/*"
     );
 
     public static final List<String> UNAUTHORIZED_URIS = new LinkedList<>(Arrays.asList(
+            LoginController.URI + "**",
             LoginController.ADMIN_URI,
             RegistrationController.URI + "*",
             LOGIN_PROCESSING_URI,
