@@ -233,7 +233,10 @@ function initRegistration(waitApprove, contextPath) {
 
         var params = new URLSearchParams(window.location.search);
         if (params.has('gameName')) {
-            value = params.get('gameName');
+            var data = params.get('gameName');
+            if (!!data) {
+                value = data;
+            }
         }
 
         var select = $(selector).find('select');
