@@ -1132,7 +1132,7 @@ clean spring-boot:run -DMAVEN_OPTS=-Xmx1024m -Dmaven.test.skip=true -Dspring.pro
                 </form>
             </div>
        чтобы она срабатывала по клику на logout что на icancode board.html
-            <li class="title inline"><a id="register-link" href="/codenjoy-contest/resources/registration.html">Log out</a></li>
+            <li class="title inline"><a id="login-logout-link" href="/codenjoy-contest/resources/registration.html">Log out</a></li>
        можно ли сделать не сабмит формы, а GET запрос для логаута, тогда можно обойтись простой урлой /codenjoy-contest/logout
  Igor: перевел на линк вместо формы, на icancode спрятал общий logout link.
 

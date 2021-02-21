@@ -170,7 +170,7 @@ var boardPageLoad = function() {
             $('#ide-help-window').html(help);
             $("#modal").removeClass("close");
         } else {
-            window.open('/codenjoy-contest/resources/icancode/landing-training.html', '_blank');
+            window.open(game.contextPath + '/resources/icancode/landing-training.html', '_blank');
             window.focus();
         }
     };
@@ -263,7 +263,9 @@ var boardPageLoad = function() {
         } else {
             buttons.disableHelp();
 
-            var link = $('#register-link').attr('href');
+            var link = game.contextPath + '/login?gameName=icancode';
+            $('#login-logout-link').attr('href', link);
+            $('#login-logout-link').html('LOG IN');
             logger.print('<a href="' + link + '">Please register</a>');
 
             runner.setStubValue();
