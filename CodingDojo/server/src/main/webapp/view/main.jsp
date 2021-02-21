@@ -37,8 +37,14 @@
     <%@include file="forkMe.jsp"%>
 
     <div class="page-header">
-        <h1>Hi ${(user!=null)?user:ip}, please:</h1>
+        <h1>Hi ${(user!=null)?user:ip} !</h1>
     </div>
+    <div class="main-page">
+        <div>
+            <sec:authorize access="!isAuthenticated()">
+                <a href="${ctx}/login">Login</a>
+            </sec:authorize>
+        </div>
         <div><a href="${ctx}/help">How to start</a></div>
         <div>Check game board</div>
         <div>
@@ -50,5 +56,6 @@
             </c:forEach>
             </ul>
         </div>
+    </div>
 </body>
 </html>

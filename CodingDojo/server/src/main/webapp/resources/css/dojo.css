@@ -24,6 +24,14 @@ body, input, textarea {
     color: black !important;
 }
 
+body {
+    margin: 10px;
+}
+
+.main-page li {
+    margin-left: 25px;
+}
+
 .table-striped>tbody>tr:nth-of-type(odd) {
     background-color: #dededead !important;
 }

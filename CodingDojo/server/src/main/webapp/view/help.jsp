@@ -40,21 +40,31 @@
         <h1>Help</h1>
     </div>
     <h3>Environment setup and registration</h3>
-    <ol>
-        <li>Download client templates for your game
-            <select id="games">
-            <option value="">(select your game)</option>
-            <c:forEach items="${gameNames}" var="gameName">
-                <option value="${gameName}">${gameName}</option>
-            </c:forEach>
-            </select>
-        <li>Setup project according to instruction in README.txt for your developing language</li>
-        <ul>
-            <li>For Java, please <a href="${ctx}/resources/user/engine-libs.zip">download zip</a> and install Engine library before (run setup.bat inside)</li>
-        </ul>
-        <li>Read game instructions: <c:forEach items="${gameNames}" var="gameName"><a href="${ctx}/help?gameName=${gameName}">${gameName}</a>&nbsp;&nbsp;</c:forEach></li>
-        <li>Open <a href="${ctx}/register">registration page</a></li>
-        <li>Enter your name/password and codenjoy!</li>
-    </ol>
+    <div class="main-page">
+        <ol>
+            <li>Download client templates for your game
+                <select id="games">
+                <option value="">(select your game)</option>
+                <c:forEach items="${gameNames}" var="gameName">
+                    <option value="${gameName}">${gameName}</option>
+                </c:forEach>
+                </select>
+            <li>Setup project according to instruction in README.txt for your developing language</li>
+            <ul>
+                <li>For Java, please <a href="${ctx}/resources/user/engine-libs.zip">download zip</a> and install Engine library before (run setup.bat inside)</li>
+            </ul>
+            <li>Read game instructions:
+                <ul>
+                    <c:forEach items="${gameNames}" var="gameName">
+                        <li>
+                            <a href="${ctx}/help?gameName=${gameName}">${gameName}</a>
+                        </li>
+                    </c:forEach>
+                </ul>
+            </li>
+            <li>Open <a href="${ctx}/register">registration page</a></li>
+            <li>Enter your name/password and codenjoy!</li>
+        </ol>
+    </div>
 </body>
 </html>
