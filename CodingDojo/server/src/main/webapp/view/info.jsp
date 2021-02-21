@@ -26,7 +26,7 @@
 
 <div id="how-to-play">
     <h3>
-        <a href="${ctx}/help?gameName=${gameNameOnly}" target="_blank">
+        <a href="${ctx}/help?gameName=${gameNameOnly}">
             How to play ${gameNameOnly}
         </a>
     </h3>
