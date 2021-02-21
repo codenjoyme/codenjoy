@@ -86,7 +86,8 @@ function initRegistration(waitApprove, contextPath) {
             var gamesCount = $('#gameName select > option').length;
             display('#gameName', gamesCount > 1);
 
-            display('#gameType', data.showGames);
+            // will display in fillFormFromLocalStorage
+            // display('#gameType', data.showGames);
             display('#readableName', data.showNames);
             display('#data1', data.showData1);
             display('#data2', data.showData2);
@@ -229,6 +230,12 @@ function initRegistration(waitApprove, contextPath) {
 
     function loadGameNameSelect(key, selector, onSelect) {
         var value = localStorage.getItem(key);
+
+        var params = new URLSearchParams(window.location.search);
+        if (params.has('gameName')) {
+            value = params.get('gameName');
+        }
+
         var select = $(selector).find('select');
         if (!!value) {
             select.val(value);

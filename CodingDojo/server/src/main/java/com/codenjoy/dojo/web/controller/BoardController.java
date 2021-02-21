@@ -110,6 +110,10 @@ public class BoardController {
     {
         validator.checkGameName(gameName, CANT_BE_NULL);
 
+        if (user == null) {
+            return "redirect:/login?" + GAME_NAME_KEY + "=" + gameName;
+        }
+
         // TODO ROOM а надо ли тут этот метод вообще, ниже есть более универсальный? 
         // TODO ROOM так как есть rest методы то может вообще убрать отсюда этих двоих?
         String roomName = gameName; 
@@ -187,6 +191,7 @@ public class BoardController {
 
         Player player = playerService.getRandom(gameName);
         if (player == NullPlayer.INSTANCE) {
+            // TODO а это тут вообще надо?
             return "redirect:/register?" + GAME_NAME_KEY + "=" + gameName;
         }
         GameType gameType = player.getGameType();
