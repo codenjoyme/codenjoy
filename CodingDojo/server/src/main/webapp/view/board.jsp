@@ -25,6 +25,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="page" scope="request" value="board"/>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -38,7 +39,7 @@
     <script src="${ctx}/resources/js/${gameNameOnly}.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" page="board" contextPath="${ctx}" gameName="${gameName}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}" playerId="${playerId}" readableName="${readableName}" code="${code}" allPlayersScreen="${allPlayersScreen}"></div>
 
     <%@include file="forkMe.jsp"%>
 

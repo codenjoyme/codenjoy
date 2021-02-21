@@ -23,8 +23,10 @@ License along with this program.  If not, see
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+
 <html lang="en">
+<c:set var="page" scope="request" value="register"/>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -36,118 +38,119 @@ License along with this program.  If not, see
     <script src="${ctx}/resources/css/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
-<div id="settings" page="register" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
-<div class="header-container">
-    <div class="container-fluid">
-        <header class="header">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/logo.png"></a>
-                <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <c:if test="${activeProfiles.contains('icancode')}">
-                    <!-- TODO to remove from here -->
-                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/robot-logo.png"></a>
-                    <span class="title icancode-title">ICanCode</span>
-                </c:if>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <nav class="nav pull-right text-right">
-                    <ul class="nav-list">
-                        <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
-                        <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#"></a></li>
-                        <sec:authorize access="isAuthenticated()">
-                            <li class="logo title inline"><img src="${ctx}/resources/img/profile.png"></li>
-                        </sec:authorize>
-                    </ul>
-                </nav>
-            </div>
-        </header>
-    </div>
-</div>
-<div class="container-fluid">
-    <form:form class="form-registr" id="form" modelAttribute="player" action="register" method="POST">
-        <h2 class="form-title">Sign up</h2>
-        <div class="inputs">
-            <div id="readableName" class="field not-valid" not-empty>
-                <form:errors path="readableName" cssClass="error-message" />
-                <form:input type="text" placeholder="FirstName LastName" path="readableName"/>
-                <span class="icon fa"></span>
-            </div>
-            <div id="email" class="field not-valid">
-                <form:errors path="email" cssClass="error-message" />
-                <form:input type="email" placeholder="Email address (valid)" path="email"/>
-                <span class="icon fa"></span>
-            </div>
-            <div id="password" class="field not-valid">
-                <form:errors path="password" cssClass="error-message" />
-                <input type="password" placeholder="Password"/>
-                <span class="icon fa"></span>
-            </div>
-            <div id="passwordConfirmation" class="field not-valid">
-                <form:errors path="passwordConfirmation" cssClass="error-message" />
-                <input type="password" placeholder="Confirm password"/>
-                <span class="icon fa"></span>
-            </div>
-            <div id="data" hidden>
-                <form:input type="text" path="data"/>
-            </div>
-            <div id="password-md5" hidden>
-                <form:input type="hidden" path="password"/>
-            </div>
-            <div id="passwordConfirmation-md5" hidden>
-                <form:input type="hidden" path="passwordConfirmation"/>
-            </div>
-            <!-- add attribute 'not-empty' to the div if you want to enable validation -->
-            <div id="data1" class="field not-valid" not-empty hidden>
-                <input type="text" placeholder="Country / City"/>
-                <span class="icon fa"></span>
-            </div>
-            <div id="data2" class="field not-valid" not-empty hidden>
-                <!-- also you can change input placeholder="..." -->
-                <input type="text" placeholder="Primary skill / Tech level"/>
-                <span class="icon fa"></span>
-            </div>
-            <div id="data3" class="field not-valid" not-empty hidden>
-                <input type="text" placeholder="Company / Position"/>
-                <span class="icon fa"></span>
-            </div>
-            <div id="data4" class="field not-valid" not-empty hidden>
-                <input type="text" placeholder="Experience"/>
-                <span class="icon fa"></span>
-            </div>
-            <c:if test="${not adminLogin}">
-                <div id="gameName" class="field valid" hidden>
-                    <form:select id="gameNameSelect" items="${gameNames}" path="gameName"/>
-                    <form:errors path="gameName" cssClass="error" />
-                </div>
+    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
 
-                <div id="gameType" class="field valid" hidden>
-                    <select placeholder="Select your game" name="game">
-                        <!--option value="Type1">Type1</option-->
-                        <!--option value="Type2">Type2</option-->
-                        <!--option value="Type3">Type3</option-->
-                    </select>
+    <div class="header-container">
+        <div class="container-fluid">
+            <header class="header">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/logo.png"></a>
+                    <span class="title dojo-title">Coding DOJO&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <c:if test="${activeProfiles.contains('icancode')}">
+                        <!-- TODO to remove from here -->
+                        <a class="logo inline" href="#" title="Home"><img src="${ctx}/resources/img/robot-logo.png"></a>
+                        <span class="title icancode-title">ICanCode</span>
+                    </c:if>
                 </div>
-            </c:if>
-            <button class="btn-submit" id="submit-button" type="button">Sign up</button>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <nav class="nav pull-right text-right">
+                        <ul class="nav-list">
+                            <li class="title icancode-title inline"><a id="additional-link" target="_blank" href="#"></a></li>
+                            <li class="title icancode-title inline"><a id="help-link" target="_blank" href="#"></a></li>
+                            <sec:authorize access="isAuthenticated()">
+                                <li class="logo title inline"><img src="${ctx}/resources/img/profile.png"></li>
+                            </sec:authorize>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
         </div>
-    </form:form>
-</div>
-<footer class="footer">
-    <div class="container-fluid">
-        <nav class="footer-nav">
-            <ul class="footer-list">
-                <li class="footer-item inline"><a href="http://codenjoy.com" target="blank">About DOJO</a></li>
-                <li class="footer-item inline"><a href="https://github.com/codenjoyme/codenjoy" target="blank">Codenjoy on GitHub</a></li>
-                <li class="footer-item inline"><a href="mailto:codenjoyme@gmail.com" target="blank">Ask me anything</a></li>
-            </ul>
-        </nav>
     </div>
-</footer>
+    <div class="container-fluid">
+        <form:form class="form-registr" id="form" modelAttribute="player" action="register" method="POST">
+            <h2 class="form-title">Sign up</h2>
+            <div class="inputs">
+                <div id="readableName" class="field not-valid" not-empty>
+                    <form:errors path="readableName" cssClass="error-message" />
+                    <form:input type="text" placeholder="FirstName LastName" path="readableName"/>
+                    <span class="icon fa"></span>
+                </div>
+                <div id="email" class="field not-valid">
+                    <form:errors path="email" cssClass="error-message" />
+                    <form:input type="email" placeholder="Email address (valid)" path="email"/>
+                    <span class="icon fa"></span>
+                </div>
+                <div id="password" class="field not-valid">
+                    <form:errors path="password" cssClass="error-message" />
+                    <input type="password" placeholder="Password"/>
+                    <span class="icon fa"></span>
+                </div>
+                <div id="passwordConfirmation" class="field not-valid">
+                    <form:errors path="passwordConfirmation" cssClass="error-message" />
+                    <input type="password" placeholder="Confirm password"/>
+                    <span class="icon fa"></span>
+                </div>
+                <div id="data" hidden>
+                    <form:input type="text" path="data"/>
+                </div>
+                <div id="password-md5" hidden>
+                    <form:input type="hidden" path="password"/>
+                </div>
+                <div id="passwordConfirmation-md5" hidden>
+                    <form:input type="hidden" path="passwordConfirmation"/>
+                </div>
+                <!-- add attribute 'not-empty' to the div if you want to enable validation -->
+                <div id="data1" class="field not-valid" not-empty hidden>
+                    <input type="text" placeholder="Country / City"/>
+                    <span class="icon fa"></span>
+                </div>
+                <div id="data2" class="field not-valid" not-empty hidden>
+                    <!-- also you can change input placeholder="..." -->
+                    <input type="text" placeholder="Primary skill / Tech level"/>
+                    <span class="icon fa"></span>
+                </div>
+                <div id="data3" class="field not-valid" not-empty hidden>
+                    <input type="text" placeholder="Company / Position"/>
+                    <span class="icon fa"></span>
+                </div>
+                <div id="data4" class="field not-valid" not-empty hidden>
+                    <input type="text" placeholder="Experience"/>
+                    <span class="icon fa"></span>
+                </div>
+                <c:if test="${not adminLogin}">
+                    <div id="gameName" class="field valid" hidden>
+                        <form:select id="gameNameSelect" items="${gameNames}" path="gameName"/>
+                        <form:errors path="gameName" cssClass="error" />
+                    </div>
+
+                    <div id="gameType" class="field valid" hidden>
+                        <select placeholder="Select your game" name="game">
+                            <!--option value="Type1">Type1</option-->
+                            <!--option value="Type2">Type2</option-->
+                            <!--option value="Type3">Type3</option-->
+                        </select>
+                    </div>
+                </c:if>
+                <button class="btn-submit" id="submit-button" type="button">Sign up</button>
+            </div>
+        </form:form>
+    </div>
+    <footer class="footer">
+        <div class="container-fluid">
+            <nav class="footer-nav">
+                <ul class="footer-list">
+                    <li class="footer-item inline"><a href="http://codenjoy.com" target="blank">About DOJO</a></li>
+                    <li class="footer-item inline"><a href="https://github.com/codenjoyme/codenjoy" target="blank">Codenjoy on GitHub</a></li>
+                    <li class="footer-item inline"><a href="mailto:codenjoyme@gmail.com" target="blank">Ask me anything</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
 </body>
 </html>

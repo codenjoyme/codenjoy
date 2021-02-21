@@ -40,11 +40,16 @@
     </c:choose>
 </head>
 
-<sec:authorize access="isAuthenticated()">
-    <!-- TODO to remove games from here -->
-    <c:if test="${!justBoard && gameNameOnly != 'icancode' && gameNameOnly != 'expansion'}" >
+<!-- TODO to remove games from here -->
+<c:if test="${!justBoard && page != 'register' && gameNameOnly != 'icancode' && gameNameOnly != 'expansion'}" >
+    <sec:authorize access="isAuthenticated()">
         <body>
             <a href="${ctx}/process_logout" class="logout-link">Logout</a>
         </body>
-    </c:if>
-</sec:authorize>
+    </sec:authorize>
+    <sec:authorize access="!isAuthenticated()">
+        <body>
+            <a href="${ctx}/login?gameName=${gameNameOnly}" class="logout-link">Login</a>
+        </body>
+    </sec:authorize>
+</c:if>

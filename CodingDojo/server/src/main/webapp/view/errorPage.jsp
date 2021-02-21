@@ -25,6 +25,7 @@
 <!DOCTYPE html>
 <html>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="page" scope="request" value="main"/>
 <head>
     <title>Codenjoy</title>
 
@@ -33,7 +34,8 @@
     <jsp:include page="common-inclusion.jsp" />
 </head>
 <body>
-    <div id="settings" page="main" contextPath="${ctx}" gameName="${gameName}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}"></div>
+
     <%@include file="forkMe.jsp"%>
 
     <div class="page-header">

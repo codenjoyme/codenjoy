@@ -25,6 +25,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="page" scope="request" value="help"/>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Codenjoy help</title>
@@ -34,8 +35,10 @@
     <jsp:include page="common-inclusion.jsp" />
 </head>
 <body>
-    <div id="settings" page="help" contextPath="${ctx}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}"></div>
+
     <%@include file="forkMe.jsp"%>
+
     <div class="page-header">
         <h1>Help</h1>
     </div>

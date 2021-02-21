@@ -25,6 +25,7 @@
 
 <html>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="page" scope="request" value="admin"/>
 <head>
     <meta http-equiv="Content-Type" content="text/html;">
     <title>Codenjoy admin page</title>
@@ -36,9 +37,10 @@
 
 </head>
 <body>
-    <div id="settings" page="admin" contextPath="${ctx}" gameName="${gameName}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}"></div>
 
     <%@include file="forkMe.jsp"%>
+
     <div class="page-header">
         <h1>Admin page</h1>
     </div>
