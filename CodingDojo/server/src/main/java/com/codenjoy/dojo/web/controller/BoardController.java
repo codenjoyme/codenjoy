@@ -179,7 +179,8 @@ public class BoardController {
     @GetMapping(URI + "/game/{gameName}")
     public String boardAllGames(ModelMap model,
                                 @PathVariable("gameName") String gameName,
-                                @RequestParam(value = "code", required = false) String code)
+                                @RequestParam(value = "code", required = false) String code,
+                                @AuthenticationPrincipal Registration.User user)
     {
         // TODO возможно тут CAN_BE_NULL, иначе проверка (gameName == null) никогда не true
         validator.checkGameName(gameName, CANT_BE_NULL);
@@ -197,6 +198,10 @@ public class BoardController {
         GameType gameType = player.getGameType();
         if (gameType.getMultiplayerType() == MultiplayerType.MULTIPLE) {
             return "redirect:/board/player/" + player.getId() + code(code);
+        }
+
+        if (user != null && code == null) {
+            code = user.getCode();
         }
 
         model.addAttribute("code", code);

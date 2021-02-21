@@ -19,9 +19,6 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-/**
- * Created by Mikhail_Udalyi on 08.08.2016.
- */
 
 var boardPageLoad = function() {
 
@@ -263,9 +260,7 @@ var boardPageLoad = function() {
         } else {
             buttons.disableHelp();
 
-            var link = game.contextPath + '/login?gameName=icancode';
-            $('#login-logout-link').attr('href', link);
-            $('#login-logout-link').html('LOG IN');
+            var link = $('#login-logout-link').attr('href');
             logger.print('<a href="' + link + '">Please register</a>');
 
             runner.setStubValue();

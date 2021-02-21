@@ -19,9 +19,6 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-/**
- * Created by Mikhail_Udalyi on 09.08.2016.
- */
 
 var boardAllPageLoad = function(showProgress) {
 
@@ -124,5 +121,6 @@ var boardAllPageLoad = function(showProgress) {
 
     $('#table-logs').removeClass('table');
     $('#table-logs').removeClass('table-striped');
+
     $(document.body).show();
 }

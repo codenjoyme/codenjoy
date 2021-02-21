@@ -102,12 +102,23 @@ var initHelpLink = function() {
         return; // TODO написать нормально мануал и убрать это
     }
     var pageName = gameName.split(' ').join('-').toLowerCase();
-    $('#help-link').attr('href', '/codenjoy-contest/resources/icancode/landing-' + pageName + '.html')
+    $('#help-link').attr('href', game.contextPath + '/resources/icancode/landing-' + pageName + '.html')
 }
 var initAdditionalLink = function() {
     if (game.onlyLeaderBoard) {
-        $('#additional-link').attr('href', '/codenjoy-contest/resources/user/icancode-servers.zip')
+        $('#additional-link').attr('href', game.contextPath + '/resources/user/icancode-servers.zip')
         $('#additional-link').text('Get client')
+    }
+}
+var initLoginLogoutLink = function() {
+    if (!!game.code) {
+        var link = game.contextPath + '/process_logout';
+        $('#login-logout-link').attr('href', link);
+        $('#login-logout-link').html('Logout');
+    } else {
+        var link = game.contextPath + '/login?gameName=icancode';
+        $('#login-logout-link').attr('href', link);
+        $('#login-logout-link').html('Login');
     }
 }
 
@@ -119,6 +130,7 @@ game.onBoardAllPageLoad = function(showProgress) {
             boardAllPageLoad(!!showProgress);
             initHelpLink();
             initAdditionalLink();
+            initLoginLogoutLink();
         });
 }
 
@@ -162,6 +174,7 @@ if (game.onlyLeaderBoard) {
                     boardPageLoad();
                     initHelpLink();
                     initAdditionalLink();
+                    initLoginLogoutLink();
                 }
             });
     }
