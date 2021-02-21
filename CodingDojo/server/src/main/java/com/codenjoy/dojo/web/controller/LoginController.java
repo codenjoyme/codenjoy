@@ -46,17 +46,15 @@ public class LoginController {
 
     private PlayerService playerService;
     private RoomsAliaser rooms;
-    private RegistrationService registrationService;
-    private ViewDelegationService viewDelegationService;
 
     @GetMapping
-    public String register(Model model) {
+    public String login(Model model) {
         populateModel(model, false);
         return "login";
     }
 
     @GetMapping(ADMIN)
-    public String registerAdmin(Model model) {
+    public String loginAdmin(Model model) {
         populateModel(model, true);
         return "login";
     }
@@ -65,6 +63,5 @@ public class LoginController {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         model.addAttribute("gameNames", rooms.alises());
         model.addAttribute("adminLogin", isAdmin);
-//        model.addAttribute("registrationUri", viewDelegationService.registrationUri());
     }
 }
