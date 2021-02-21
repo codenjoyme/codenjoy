@@ -27,11 +27,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 21:22
- */
 public class BoardGameStateTest {
 
     @Test

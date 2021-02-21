@@ -33,11 +33,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
-/**
- * User: oleksandr.baglai
- * Date: 11/13/12
- * Time: 2:06 AM
- */
 public class InformationCollectorTest {
 
     public enum Events {
