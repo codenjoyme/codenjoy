@@ -261,7 +261,7 @@ var boardPageLoad = function() {
             buttons.disableHelp();
 
             var link = $('#login-logout-link').attr('href');
-            logger.print('<a href="' + link + '">Please register</a>');
+            logger.print('<a href="' + link + '">Please login</a>');
 
             runner.setStubValue();
         }

@@ -142,7 +142,7 @@ function initRunnerJs(game, libs, getLevelInfo, storage) {
         },
         setStubValue : function() {
             editor.setValue('function program(robot) {\n' +
-                    '    // PLEASE REGISTER\n' +
+                    '    // PLEASE LOGIN\n' +
                     '}');
         },
         compileProgram : function(robot) {
