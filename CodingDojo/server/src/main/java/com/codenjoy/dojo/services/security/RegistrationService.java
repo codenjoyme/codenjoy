@@ -203,10 +203,6 @@ public class RegistrationService {
     }
 
     public String register(String id, String code, String roomName, String gameName, String ip) {
-        // TODO #984 вот тут дополнительная защита на всякий
-        if (gameName == null) {
-            gameName = gameService.getDefaultGame();
-        }
         Player player = playerService.register(id, ip, roomName, gameName);
         return getBoardUrl(code, player.getId(), gameName);
     }
