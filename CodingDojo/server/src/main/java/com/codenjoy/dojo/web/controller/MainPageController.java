@@ -32,7 +32,7 @@ import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.security.RegistrationService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +41,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
@@ -75,24 +77,33 @@ public class MainPageController {
     }
 
     @GetMapping("/")
-    public String getMainPage(HttpServletRequest request, Model model, Authentication authentication) {
+    public String getMainPage(HttpServletRequest request, Model model,
+                              @AuthenticationPrincipal Registration.User user)
+    {
+        // если указана кастомная домашняя страничка - редиректим туда
         String mainPage = properties.getMainPage();
         if (StringUtils.isNotEmpty(mainPage)) {
             model.addAttribute("url", mainPage);
             return "redirect";
         }
 
-        if (gameService.getGameNames().size() > 1) {
-            return getMainPage(request, null, model);
+        if (user == null && !properties.isAllowUnauthorizedMainPage()) {
+            return "redirect:login";
         }
 
-        Registration.User principal = (Registration.User) authentication.getPrincipal();
-        // TODO если юзер не авторизирован, то надо вызвать борду со всеми пользователями
-        if (true) {
-            return "redirect:" + registrationService.getBoardUrl(principal.getCode(), principal.getId(), null);
-        } else {
-            return "redirect:board";
+        List<String> games = gameService.getGameNames();
+        // игра одна
+        if (games.size() == 1) {
+            if (user == null) {
+                // юзер неавторизирован - показываем все борды в этой игре
+                return "redirect:board/game/" + games.get(0);
+            }
+            // юзер авторизирован - показываем борду юзера
+            return "redirect:" + registrationService.getBoardUrl(user.getCode(), user.getId(), null);
         }
+
+        // игр несколько - грузим страничку с возможносью подглядеть за любой игрой
+        return getMainPage(request, null, model);
     }
 
     @GetMapping(value = "/", params = "code")
