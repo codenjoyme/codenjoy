@@ -41,38 +41,26 @@ import com.codenjoy.dojo.sokoban.model.itemsImpl.LevelImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-/**
- * Генератор игор - реализация {@see GameType}
- */
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    private final Level level;
-
-    public GameRunner() {
-        new Scores(0, settings);
-        level = new LevelImpl(getMap());
-    }
-
-    protected String getMap() {
-        if (Storage.levels.size()>0)
-        return TextIOHelper.getStringFromResourcesRtf(Storage.levels.get("PlayerFirst")); //TODO player has to be real, not PlayerFirst as dummy
-        else
-            return TextIOHelper.getStringFromResourcesRtf(1);
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer)score, settings);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        return new Sokoban(level, getDice());
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        return new Sokoban(settings.level(), getDice());
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return v(settings.level().getSize());
     }
 
     @Override
@@ -86,12 +74,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.MULTIPLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
         return new Player(listener, playerId);
     }
 

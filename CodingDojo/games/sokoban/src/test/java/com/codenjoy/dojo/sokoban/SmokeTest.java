@@ -30,6 +30,7 @@ import com.codenjoy.dojo.sokoban.client.Board;
 import com.codenjoy.dojo.sokoban.client.ai.ApofigSolver;
 import com.codenjoy.dojo.sokoban.services.GameRunner;
 import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.sokoban.services.GameSettings;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -74,18 +75,20 @@ public class SmokeTest {
             }
 
             @Override
-            protected String getMap() {
-                return  "☼☼☼☼☼☼☼☼☼☼☼" +
-                        "☼ $       ☼" +
-                        "☼     $  $☼" +
-                        "☼         ☼" +
-                        "☼   $  $  ☼" +
-                        "☼         ☼" +
-                        "☼     $   ☼" +
-                        "☼         ☼" +
-                        "☼ ☺    $  ☼" +
-                        "☼  $      ☼" +
-                        "☼☼☼☼☼☼☼☼☼☼☼";
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .levelMap(
+                                "☼☼☼☼☼☼☼☼☼☼☼" +
+                                "☼ $       ☼" +
+                                "☼     $  $☼" +
+                                "☼         ☼" +
+                                "☼   $  $  ☼" +
+                                "☼         ☼" +
+                                "☼     $   ☼" +
+                                "☼         ☼" +
+                                "☼ ☺    $  ☼" +
+                                "☼  $      ☼" +
+                                "☼☼☼☼☼☼☼☼☼☼☼");
             }
         };
 

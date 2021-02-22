@@ -47,7 +47,7 @@ public class Player extends GamePlayer<Hero, Field> {
         super(listener);
         this.name = name;
         if (!Storage.levels.containsKey(name)){
-            Storage.levels.put(name,1);}
+            Storage.levels.put(name, 1);}
     }
 
     public void event(Events event) {
