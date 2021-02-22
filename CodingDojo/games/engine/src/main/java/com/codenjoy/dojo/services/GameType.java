@@ -38,26 +38,29 @@ import com.codenjoy.dojo.services.settings.Settings;
  * на админке (http://localhost:8080/codenjoy-contest/admin)
  * будет возможность переключиться на твою игру.
  */
-public interface GameType extends Tickable {
+public interface GameType<T extends Settings> extends Tickable {
 
     /**
      * @param score значения очков перед началом игры (используется например при загрузке игры из save)
+     * @param settings настройки по умолчанию связанные с текущей комнатой
      * @return Возвращается объект который умеет в зависимости от типа события на карте подчитывать очки игроков
      */
-    PlayerScores getPlayerScores(Object score);
+    PlayerScores getPlayerScores(Object score, T settings);
 
     /**
      * Так фреймворк будет стартовать новую игру для каждого пользователя
-     * @level уровень игры (опциональное поле, обычно начинается с 1
+     * @param levelNumber уровень игры (опциональное поле, обычно начинается с 1
      *          {@see LevelProgress#levelsStartsFrom1})
+     * @param settings настройки по умолчанию связанные с текущей комнатой
      * @return Экземпляр игры пользователя
      */
-    GameField createGame(int levelNumber);
+    GameField createGame(int levelNumber, T settings);
 
     /**
+     * @param settings настройки по умолчанию связанные с текущей комнатой
      * @return Размер доски. Важно, чтобы у всех пользователей были одинаковые по размеру поля
      */
-    Parameter<Integer> getBoardSize();
+    Parameter<Integer> getBoardSize(T settings);
 
     /**
      * @return Имя твоей игры
@@ -71,10 +74,11 @@ public interface GameType extends Tickable {
     CharElements[] getPlots();
 
     /**
-     * @return Настройки игры
+     * @return Настройки игры по умолчанию. Эти настройки будут использоваться
+     * для каждой отдельной комнаты и смогут меняться независимо.
      * @see Settings
      */
-    Settings getSettings();
+    T getSettings();
 
     /**
      * @return каждая игра должна предоставить своего AI который будет развлекать новопришедших игроков
@@ -94,17 +98,19 @@ public interface GameType extends Tickable {
     String getVersion();
 
     /**
+     * @param settings настройки по умолчанию связанные с текущей комнатой
      * @return Возвращает тип мультиплеера для этой игы
      */
-    MultiplayerType getMultiplayerType();
+    MultiplayerType getMultiplayerType(T settings);
 
     /**
      * Метод для создания игрового пользователя внутри игры
      * @param listener Через этот интерфейс фреймворк будет слушать какие ивенты возникают в твоей игре
+     * @param settings настройки по умолчанию связанные с текущей комнатой
      * @param playerId Имейл игровка зарегавшегося на сервере
      * @return Игрок
      */
-    GamePlayer createPlayer(EventListener listener, String playerId);
+    GamePlayer createPlayer(EventListener listener, String playerId, T settings);
 
     /**
      * @return нормальный Random, но ты можешь переопределить его, например, для тестовых целей

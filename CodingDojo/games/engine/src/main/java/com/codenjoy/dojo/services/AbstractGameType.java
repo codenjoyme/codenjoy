@@ -33,31 +33,16 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
  * Класс позволяет не фиксить все игры, если будет добьавлен интерфейсный метод в GameType
  * Так же содержит наиболее общий код, актуальный для всех игр
  */
-public abstract class AbstractGameType implements GameType {
-
-    protected final Settings settings;
-
-    public AbstractGameType() {
-        settings = createSettings();
-    }
-
-    /**
-     * Этот метод можно пеоерпределить. Используется в тестовых целях.
-     * @return Настройки игры до момента, когда оно будет использовано в системе
-     */
-    protected SettingsImpl createSettings() {
-        return new SettingsImpl();
-    }
+public abstract class AbstractGameType<T extends Settings> implements GameType<T> {
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(T settings) {
         return MultiplayerType.SINGLE;
     }
 
-
     @Override
-    public Settings getSettings() {
-        return settings;
+    public T getSettings() {
+        return (T)new SettingsImpl();
     }
 
     @Override

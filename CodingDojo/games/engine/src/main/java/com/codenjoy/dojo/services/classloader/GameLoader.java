@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.classloader;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GameField;
+import com.codenjoy.dojo.services.settings.Settings;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -76,8 +77,9 @@ public class GameLoader {
     public static void main(String[] args) {
         File directory = new File("C:\\Java\\iCanCode\\codenjoy\\CodingDojo\\external");
         GameType gameType = (GameType)new GameLoader().loadGames(directory).get("a2048").newInstance();
-        GameField game = gameType.createGame(0);
-        game.newGame(gameType.createPlayer(event -> {}, "id"));
+        Settings settings = gameType.getSettings();
+        GameField game = gameType.createGame(0, settings);
+        game.newGame(gameType.createPlayer(event -> {}, "id", settings));
         game.tick();
         Iterator<? extends Point> iterator = game.reader().elements().iterator();
         System.out.println(iterator.next());

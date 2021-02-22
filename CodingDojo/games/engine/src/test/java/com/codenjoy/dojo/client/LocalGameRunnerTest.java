@@ -33,6 +33,8 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -115,7 +117,8 @@ public class LocalGameRunnerTest {
                 player.getHero().tick();
             }
         };
-        when(gameType.createGame(anyInt())).thenReturn(field);
+        when(gameType.getSettings()).thenReturn(new SettingsImpl());
+        when(gameType.createGame(anyInt(), any(Settings.class))).thenReturn(field);
         when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(
                 (BoardReader reader, GamePlayer player)
                         -> "PRINTER_PRINTS_BOARD" + id() + "{reader=" + reader + ",player=" + player + "}")
@@ -124,7 +127,7 @@ public class LocalGameRunnerTest {
         listener = event -> messages.add("GOT_EVENT" + id() + "{" + event + "}");
 
         PlayerScores scores = mock(PlayerScores.class);
-        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
+        when(gameType.getPlayerScores(anyInt(), any(Settings.class))).thenReturn(scores);
         when(scores.getScore()).thenAnswer(inv -> "SCORE" + id());
 
         gamePlayer = new GamePlayer(listener) {
@@ -181,7 +184,7 @@ public class LocalGameRunnerTest {
                 return "PLAYER" + id();
             }
         };
-        when(gameType.createPlayer(any(EventListener.class), any(String.class)))
+        when(gameType.createPlayer(any(EventListener.class), any(String.class), any(Settings.class)))
                 .thenReturn(gamePlayer);
 
         solver = board -> {

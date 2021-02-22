@@ -33,6 +33,7 @@ import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.Settings;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
@@ -64,8 +65,9 @@ public class TestUtils {
     }
 
     public static Game  buildGame(GameType gameType, EventListener listener, PrinterFactory factory) {
-        GameField gameField = gameType.createGame(LevelProgress.levelsStartsFrom1);
-        GamePlayer gamePlayer = gameType.createPlayer(listener, null);
+        Settings settings = gameType.getSettings();
+        GameField gameField = gameType.createGame(LevelProgress.levelsStartsFrom1, settings);
+        GamePlayer gamePlayer = gameType.createPlayer(listener, null, settings);
         Game game = new Single(gamePlayer, factory);
         game.on(gameField);
         game.newGame();

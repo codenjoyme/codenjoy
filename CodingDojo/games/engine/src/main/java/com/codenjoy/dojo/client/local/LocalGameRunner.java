@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.Settings;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -59,6 +60,7 @@ public class LocalGameRunner {
     public static int waitForPlayers = 1;
     public static int levelNumber = LevelProgress.levelsStartsFrom1;
 
+    private Settings settings;
     private GameField field;
     private List<Game> games;
     private GameType gameType;
@@ -93,12 +95,13 @@ public class LocalGameRunner {
     public LocalGameRunner(GameType gameType) {
         this.gameType = gameType;
 
+        settings = gameType.getSettings();
         solvers = new LinkedList<>();
         boards = new LinkedList<>();
         games = new LinkedList<>();
         scores = new LinkedList<>();
 
-        field = gameType.createGame(levelNumber);
+        field = gameType.createGame(levelNumber, settings);
     }
 
     public LocalGameRunner run(Consumer<Integer> onTick) {
@@ -257,7 +260,7 @@ public class LocalGameRunner {
     }
 
     private Game createGame() {
-        PlayerScores score = gameType.getPlayerScores(0);
+        PlayerScores score = gameType.getPlayerScores(0, settings);
         scores.add(score);
         int index = scores.indexOf(score);
 
@@ -266,7 +269,7 @@ public class LocalGameRunner {
                     print(index, "Fire Event: " + event.toString());
                     score.event(event);
                 },
-                getPlayerId());
+                getPlayerId(), settings);
 
         PrinterFactory factory = gameType.getPrinterFactory();
 
