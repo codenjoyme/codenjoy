@@ -46,10 +46,6 @@ public final class GameSettings extends SettingsImpl {
         Levels.setup(this);
     }
 
-    public int levelsCount() {
-        return levelsCount.getValue();
-    }
-
     public GameSettings addLevel(int index, Level level) {
         levelsCount.update(index);
 
@@ -65,6 +61,12 @@ public final class GameSettings extends SettingsImpl {
 
     private String levelPrefix(int index) {
         return "Level" + index + "";
+    }
+
+    // getters
+
+    public int levelsCount() {
+        return levelsCount.getValue();
     }
 
     public int winScore() {
@@ -83,10 +85,30 @@ public final class GameSettings extends SettingsImpl {
         return loosePenalty.getValue();
     }
 
-    // setters for testing
+    // setters
 
     public GameSettings levelsCount(int value) {
         levelsCount.update(value);
+        return this;
+    }
+
+    public GameSettings winScore(int value) {
+        winScore.update(value);
+        return this;
+    }
+
+    public GameSettings failPenalty(int value) {
+        failPenalty.update(value);
+        return this;
+    }
+
+    public GameSettings successScore(int value) {
+        successScore.update(value);
+        return this;
+    }
+
+    public GameSettings loosePenalty(int value) {
+        loosePenalty.update(value);
         return this;
     }
 }
