@@ -41,11 +41,6 @@ public abstract class AbstractGameType<T extends Settings> implements GameType<T
     }
 
     @Override
-    public T getSettings() {
-        return (T)new SettingsImpl();
-    }
-
-    @Override
     public String getVersion() {
         return VersionReader.version(name()).toString();
     }
