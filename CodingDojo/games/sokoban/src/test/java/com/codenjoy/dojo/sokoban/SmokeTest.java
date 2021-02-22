@@ -10,12 +10,12 @@ package com.codenjoy.dojo.sokoban;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,12 +24,12 @@ package com.codenjoy.dojo.sokoban;
 
 
 import com.codenjoy.dojo.client.ClientBoard;
-import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.sokoban.client.Board;
 import com.codenjoy.dojo.sokoban.client.ai.ApofigSolver;
 import com.codenjoy.dojo.sokoban.services.GameRunner;
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.sokoban.services.GameSettings;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -79,26 +79,26 @@ public class SmokeTest {
                 return super.getSettings()
                         .levelMap(
                                 "☼☼☼☼☼☼☼☼☼☼☼" +
-                                "☼ $       ☼" +
-                                "☼     $  $☼" +
-                                "☼         ☼" +
-                                "☼   $  $  ☼" +
-                                "☼         ☼" +
-                                "☼     $   ☼" +
-                                "☼         ☼" +
-                                "☼ ☺    $  ☼" +
-                                "☼  $      ☼" +
-                                "☼☼☼☼☼☼☼☼☼☼☼");
+                                        "☼ $       ☼" +
+                                        "☼     $  $☼" +
+                                        "☼         ☼" +
+                                        "☼   $  $  ☼" +
+                                        "☼         ☼" +
+                                        "☼     $   ☼" +
+                                        "☼         ☼" +
+                                        "☼ ☺    $  ☼" +
+                                        "☼  $      ☼" +
+                                        "☼☼☼☼☼☼☼☼☼☼☼");
             }
         };
 
         // when
         LocalGameRunner.run(gameType,
-                new LinkedList<Solver>(){{
+                new LinkedList<Solver>() {{
                     add(new ApofigSolver(dice));
                     add(new ApofigSolver(dice));
                 }},
-                new LinkedList<ClientBoard>(){{
+                new LinkedList<ClientBoard>() {{
                     add(new Board());
                     add(new Board());
                 }});

@@ -22,12 +22,15 @@ package com.codenjoy.dojo.sokoban.model.game;
  * #L%
  */
 
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.PointImpl;
+import com.codenjoy.dojo.services.Tickable;
+import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.sokoban.model.items.Field;
 import com.codenjoy.dojo.sokoban.model.items.Level;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.*;
 import com.codenjoy.dojo.sokoban.services.Events;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.sokoban.services.Player;
 
 import java.util.LinkedList;
@@ -45,6 +48,10 @@ import static java.util.stream.Collectors.toList;
 public class Sokoban implements Field {
 
     public static final int MAX = 100;
+    static int realMarksToWin;
+
+    private int marksToWin;
+    private int size;
     private List<BoxOnTheMark> boxesOnTheMarks;
     private List<Wall> walls;
     private List<Gold> gold;
@@ -54,9 +61,6 @@ public class Sokoban implements Field {
     private boolean boxesBlocked;
     private boolean isWon;
     private List<Player> players;
-    private final int marksToWin;
-    private final int size;
-    static int realMarksToWin;
     private Dice dice;
 
     public Sokoban(Level level, Dice dice) {

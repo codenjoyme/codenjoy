@@ -28,7 +28,7 @@ import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.json.JSONObject;
 
-public abstract class PointEnriched  <F extends GameField> extends PointImpl implements Tickable{
+public abstract class PointEnriched<F extends GameField> extends PointImpl implements Tickable {
     protected F field;
 
     public PointEnriched(int x, int y) {

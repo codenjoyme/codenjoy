@@ -23,11 +23,11 @@ package com.codenjoy.dojo.sokoban.services;
  */
 
 
-import com.codenjoy.dojo.sokoban.model.items.Field;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.Hero;
-import com.codenjoy.dojo.sokoban.services.Events;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.sokoban.model.items.Field;
+import com.codenjoy.dojo.sokoban.model.itemsImpl.Hero;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +38,8 @@ import static java.util.logging.Logger.getLogger;
  * Тут же ивенты передабтся лиснеру фреймворка.
  */
 public class Player extends GamePlayer<Hero, Field> {
-    Logger log = getLogger(Player.class.getName());
+
+    private static Logger log = getLogger(Player.class.getName());
 
     public Hero hero;
     private String name;
@@ -46,8 +47,9 @@ public class Player extends GamePlayer<Hero, Field> {
     public Player(EventListener listener, String name) {
         super(listener);
         this.name = name;
-        if (!Storage.levels.containsKey(name)){
-            Storage.levels.put(name, 1);}
+        if (!Storage.levels.containsKey(name)) {
+            Storage.levels.put(name, 1);
+        }
     }
 
     public void event(Events event) {
@@ -78,15 +80,13 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
 
-
     private void increaseLevel(int value) {
         int lvl = Storage.levels.get(this.name);
-        if (lvl<=(Storage.MAX_VALUE-value)){
-        Storage.levels.put(this.name,lvl+value);
-        log.log(Level.INFO, String.format("reached lvl:%d\t max limit:%d", lvl + value, Storage.MAX_VALUE));
-        }
-        else {
-            log.log(Level.WARNING,"reached max limit: {}",Storage.MAX_VALUE);
+        if (lvl <= (Storage.MAX_VALUE - value)) {
+            Storage.levels.put(this.name, lvl + value);
+            log.log(Level.INFO, String.format("reached lvl:%d\t max limit:%d", lvl + value, Storage.MAX_VALUE));
+        } else {
+            log.log(Level.WARNING, "reached max limit: {}", Storage.MAX_VALUE);
         }
     }
 

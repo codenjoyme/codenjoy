@@ -28,12 +28,12 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.sokoban.helper.TextIOHelper;
-import com.codenjoy.dojo.sokoban.services.Player;
 import com.codenjoy.dojo.sokoban.model.game.Sokoban;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.Box;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.Hero;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.LevelImpl;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.Mark;
+import com.codenjoy.dojo.sokoban.services.Player;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -78,7 +78,7 @@ public class SokobanTest {
 
         game = new Sokoban(level, dice);
         listener = mock(EventListener.class);
-        player = new Player(listener,"PlayerFirst");
+        player = new Player(listener, "PlayerFirst");
         game.newGame(player);
         player.hero = hero;
 
@@ -331,7 +331,7 @@ public class SokobanTest {
                 "☼    ☼" +
                 "☼☼☼☼☼☼";
         givenF(testBoardInit);
-        for (int i = 0; i<2; i++){
+        for (int i = 0; i < 2; i++) {
             hero.right();
             game.tick();
         }
@@ -353,7 +353,6 @@ public class SokobanTest {
             assertE(testBoardInit);
         }
     }
-
 
 
 //    @Test

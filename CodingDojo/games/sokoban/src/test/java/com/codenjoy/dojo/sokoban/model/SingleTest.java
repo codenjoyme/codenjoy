@@ -23,23 +23,23 @@ package com.codenjoy.dojo.sokoban.model;
  */
 
 
-import com.codenjoy.dojo.sokoban.services.Player;
-import com.codenjoy.dojo.sokoban.model.game.Sokoban;
-import com.codenjoy.dojo.sokoban.model.items.Level;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.LevelImpl;
-import com.codenjoy.dojo.sokoban.services.Events;
-import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.multiplayer.Single;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+//import com.codenjoy.dojo.sokoban.services.Player;
+//import com.codenjoy.dojo.sokoban.model.game.Sokoban;
+//import com.codenjoy.dojo.sokoban.model.items.Level;
+//import com.codenjoy.dojo.sokoban.model.itemsImpl.LevelImpl;
+//import com.codenjoy.dojo.sokoban.services.Events;
+//import com.codenjoy.dojo.services.Dice;
+//import com.codenjoy.dojo.services.EventListener;
+//import com.codenjoy.dojo.services.multiplayer.Single;
+//import com.codenjoy.dojo.services.printer.PrinterFactory;
+//import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+//import org.junit.Before;
+//import org.junit.Test;
+//
+//import static org.junit.Assert.assertEquals;
+//import static org.junit.Assert.assertTrue;
+//import static org.mockito.ArgumentMatchers.anyInt;
+//import static org.mockito.Mockito.*;
 
 public class SingleTest {
     // TODO вернуть тесты к жизни

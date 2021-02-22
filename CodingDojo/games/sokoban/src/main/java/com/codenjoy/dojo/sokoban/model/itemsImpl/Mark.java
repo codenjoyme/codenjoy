@@ -26,8 +26,8 @@ package com.codenjoy.dojo.sokoban.model.itemsImpl;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.sokoban.model.items.Field;
-import com.codenjoy.dojo.sokoban.services.Player;
 import com.codenjoy.dojo.sokoban.model.items.PointEnriched;
+import com.codenjoy.dojo.sokoban.services.Player;
 
 public class Mark extends PointEnriched<Field> implements State<Elements, Player> {
 
@@ -46,11 +46,7 @@ public class Mark extends PointEnriched<Field> implements State<Elements, Player
     public void tick() {
 
         if (field != null) {
-            if (this.field.isBoxOnTheMark(this)) {
-                isFilled = true;
-            } else  {
-                isFilled = false;
-            }
+            isFilled = this.field.isBoxOnTheMark(this);
         }
     }
 

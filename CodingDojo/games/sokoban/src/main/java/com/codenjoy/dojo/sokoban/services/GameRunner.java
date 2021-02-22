@@ -10,12 +10,12 @@ package com.codenjoy.dojo.sokoban.services;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -25,19 +25,18 @@ package com.codenjoy.dojo.sokoban.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.printer.CharElements;
-import com.codenjoy.dojo.sokoban.client.Board;
-import com.codenjoy.dojo.sokoban.client.ai.ApofigSolver;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.sokoban.helper.TextIOHelper;
+import com.codenjoy.dojo.sokoban.client.Board;
+import com.codenjoy.dojo.sokoban.client.ai.ApofigSolver;
 import com.codenjoy.dojo.sokoban.model.game.Sokoban;
-import com.codenjoy.dojo.sokoban.model.items.Level;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.Elements;
-import com.codenjoy.dojo.sokoban.model.itemsImpl.LevelImpl;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -50,7 +49,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public PlayerScores getPlayerScores(Object score, GameSettings settings) {
-        return new Scores((Integer)score, settings);
+        return new Scores((Integer) score, settings);
     }
 
     @Override
