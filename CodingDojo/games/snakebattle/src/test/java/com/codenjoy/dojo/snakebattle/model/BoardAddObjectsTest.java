@@ -25,12 +25,14 @@ package com.codenjoy.dojo.snakebattle.model;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.round.Round;
+import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.services.round.RoundImpl;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
+import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -61,22 +63,19 @@ public class BoardAddObjectsTest {
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
 
-        Round round = new RoundImpl(
-                new SimpleParameter<>(5),
-                new SimpleParameter<>(2),
-                new SimpleParameter<>(0),
-                new SimpleParameter<>(300),
-                new SimpleParameter<>(1)
-        );
+        GameSettings settings = new GameSettings()
+                .roundsEnabled(true)
+                .roundsPerMatch(5)
+                .minTicksForWin(2)
+                .timeBeforeStart(0)
+                .timePerRound(300)
+                .timeForWinner(1)
+                .flyingCount(10)
+                .furyCount(10)
+                .stoneReduced(3);
 
-        game = new SnakeBoard(
-                level,
-                mock(Dice.class),
-                round,
-                new SimpleParameter<>(10),
-                new SimpleParameter<>(10),
-                new SimpleParameter<>(3)
-        );
+        Round round = new RoundImpl(settings);
+        game = new SnakeBoard(level, mock(Dice.class), round, settings);
 
         SimpleParameter<Boolean> roundsEnabled = new SimpleParameter<>(true);
 

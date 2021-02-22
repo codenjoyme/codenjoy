@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.round.RoundGameField;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
+import com.codenjoy.dojo.snakebattle.services.GameSettings;
 
 public interface Field extends RoundGameField<Player> {
 
@@ -59,9 +60,5 @@ public interface Field extends RoundGameField<Player> {
 
     Hero enemyEatenWith(Hero h);
 
-    Parameter<Integer> flyingCount();
-
-    Parameter<Integer> furyCount();
-
-    Parameter<Integer> stoneReduced();
+    GameSettings settings();
 }

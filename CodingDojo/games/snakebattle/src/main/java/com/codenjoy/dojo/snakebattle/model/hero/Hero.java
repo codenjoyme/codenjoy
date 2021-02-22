@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
+import com.codenjoy.dojo.snakebattle.services.GameSettings;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -53,6 +54,8 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
     private int furyCount;
     private boolean leaveApples;
     private Point lastTailPosition;
+
+    private GameSettings settings;
 
     public Hero(Point xy) {
         this(RIGHT);
@@ -133,6 +136,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
     @Override
     public void init(Field field) {
         this.field = field;
+        settings = field.settings();
     }
 
     @Override
@@ -228,7 +232,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
         if (field.isStone(head) && !isFlying()) {
             stonesCount++;
             if (!isFury()) {
-                reduce(field.stoneReduced().getValue(), NOW);
+                reduce(settings.stoneReduced().getValue(), NOW);
             }
         }
         if (field.isFlyingPill(head)) {
@@ -243,11 +247,11 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
     }
 
     public void eatFlying() {
-        flyingCount += field.flyingCount().getValue();
+        flyingCount += settings.flyingCount().getValue();
     }
 
     public void eatFury() {
-        furyCount += field.furyCount().getValue();
+        furyCount += settings.furyCount().getValue();
     }
 
     public void count() {

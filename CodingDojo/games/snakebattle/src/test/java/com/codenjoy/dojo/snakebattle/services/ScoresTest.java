@@ -39,18 +39,19 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Parameterized.class)
 public class ScoresTest {
 
+    private GameSettings settings;
     Scores scores;
     Events event;
     int changeValue;
 
     public ScoresTest(int startScore, Events event, int changeValue) {
-        SettingsImpl settings = new SettingsImpl();
+        settings = new GameSettings()
+                .winScore(30)
+                .appleScore(1)
+                .goldScore(5)
+                .diePenalty(10)
+                .stoneScore(-1);
         scores = new Scores(startScore, settings);
-        settings.getParameter("Win score").type(Integer.class).update(30);
-        settings.getParameter("Apple score").type(Integer.class).update(1);
-        settings.getParameter("Gold score").type(Integer.class).update(5);
-        settings.getParameter("Die penalty").type(Integer.class).update(10);
-        settings.getParameter("Stone score").type(Integer.class).update(-1);
         this.event = event;
         this.changeValue = changeValue;
     }

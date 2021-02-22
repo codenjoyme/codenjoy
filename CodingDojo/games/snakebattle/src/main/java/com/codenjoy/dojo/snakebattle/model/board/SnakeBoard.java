@@ -38,6 +38,7 @@ import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.services.Events;
+import com.codenjoy.dojo.snakebattle.services.GameSettings;
 
 import java.util.*;
 import java.util.function.Function;
@@ -59,26 +60,17 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     private List<Gold> gold;
 
     private List<Player> players;
-
-    private Parameter<Integer> flyingCount;
-    private Parameter<Integer> furyCount;
-    private Parameter<Integer> stoneReduced;
-
     private int size;
     private Dice dice;
 
+    private GameSettings settings;
+
     public SnakeBoard(Level level, Dice dice, Round round,
-                      Parameter<Integer> flyingCount,
-                      Parameter<Integer> furyCount,
-                      Parameter<Integer> stoneReduced)
-    {
+                      GameSettings settings) {
+
         super(round, Events.START, Events.WIN, Events.DIE);
-
-        this.flyingCount = flyingCount;
-        this.furyCount = furyCount;
-        this.stoneReduced = stoneReduced;
+        this.settings = settings;
         this.dice = dice;
-
         walls = level.getWalls();
         starts = level.getStartPoints();
         apples = level.getApples();
@@ -361,18 +353,8 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     }
 
     @Override
-    public Parameter<Integer> flyingCount() {
-        return flyingCount;
-    }
-
-    @Override
-    public Parameter<Integer> furyCount() {
-        return furyCount;
-    }
-
-    @Override
-    public Parameter<Integer> stoneReduced() {
-        return stoneReduced;
+    public GameSettings settings() {
+        return settings;
     }
 
     private Hero enemyCrossedWith(Hero me) {

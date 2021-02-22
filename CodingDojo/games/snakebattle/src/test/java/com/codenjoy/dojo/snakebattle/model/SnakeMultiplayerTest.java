@@ -27,12 +27,13 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.services.round.RoundImpl;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.services.Events;
+import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,6 @@ import org.mockito.exceptions.verification.NeverWantedButInvoked;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 
 /**
  * ®author Kors
@@ -60,36 +60,30 @@ public class SnakeMultiplayerTest {
     private Player enemyPlayer;
 
     private PrinterFactory printer = new PrinterFactoryImpl();
-    private SimpleParameter<Integer> timer;
-    private SimpleParameter<Integer> roundsPerMatch;
-    private SimpleParameter<Integer> minTicksForWin;
+
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        timer = new SimpleParameter<>(0);
-        roundsPerMatch = new SimpleParameter<>(5);
-        minTicksForWin = new SimpleParameter<>(1);
+
+        settings = new GameSettings()
+                .roundsEnabled(true)
+                .roundsPerMatch(5)
+                .minTicksForWin(1)
+                .timeBeforeStart(0)
+                .timePerRound(300)
+                .timeForWinner(1)
+                .flyingCount(10)
+                .furyCount(10)
+                .stoneReduced(3);
     }
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board.replaceAll("\n", ""));
-        RoundImpl round = new RoundImpl(
-                roundsPerMatch,
-                minTicksForWin,
-                timer,
-                new SimpleParameter<>(300),
-                new SimpleParameter<>(1)
-        );
 
-        game = new SnakeBoard(
-                level,
-                dice,
-                round,
-                new SimpleParameter<>(10),
-                new SimpleParameter<>(10),
-                new SimpleParameter<>(3)
-        );
+        RoundImpl round = new RoundImpl(settings);
+        game = new SnakeBoard(level, dice, round, settings);
 
         SimpleParameter<Boolean> roundsEnabled = new SimpleParameter<>(true);
 
@@ -1097,7 +1091,7 @@ public class SnakeMultiplayerTest {
     // змейка не стартует сразу если стоит таймер
     @Test
     public void shouldWaitTillTimer_thenStart() {
-        timer.update(4);
+        settings.timeBeforeStart(4);
 
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1170,8 +1164,8 @@ public class SnakeMultiplayerTest {
     // если одна змейка погибает, стартует новый раунд
     @Test
     public void shouldStartNewGame_whenGameOver() {
-        timer.update(1);
-        roundsPerMatch.update(3);
+        settings.timeBeforeStart(1)
+                .roundsPerMatch(3);
 
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
@@ -2839,7 +2833,7 @@ public class SnakeMultiplayerTest {
     // если тиков для победы недостаточно, то WIN ты не получишь
     @Test
     public void shouldNoWin_whenIsNotEnoughTicksForWin() {
-        minTicksForWin.update(10);
+        settings.minTicksForWin(10);
 
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼┌─┐   ☼" +

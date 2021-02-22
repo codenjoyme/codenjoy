@@ -24,11 +24,10 @@ package com.codenjoy.dojo.snakebattle.model;
 
 
 import com.codenjoy.dojo.services.Point;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.hero.Tail;
+import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,16 +47,18 @@ public class SnakeHeroTest {
 
     private SnakeBoard game;
     private Hero hero;
-    private Parameter<Integer> stoneReduced;
+    private GameSettings settings;
 
     @Before
     public void setup() {
+        settings = new GameSettings()
+                .flyingCount(10)
+                .furyCount(10)
+                .stoneReduced(3);
+
         hero = new Hero(pt(0, 0));
         game = mock(SnakeBoard.class);
-        when(game.flyingCount()).thenReturn(new SimpleParameter<>(10));
-        when(game.furyCount()).thenReturn(new SimpleParameter<>(10));
-        stoneReduced = new SimpleParameter<>(3);
-        when(game.stoneReduced()).thenReturn(stoneReduced);
+        when(game.settings()).thenReturn(settings);
         hero.init(game);
         hero.setActive(true);
         hero.setPlayer(mock(Player.class));
@@ -132,7 +133,7 @@ public class SnakeHeroTest {
     // тест что короткая змейка погибает от камня
     @Test
     public void diedByStone() {
-        snakeIncreasing(stoneReduced.getValue() - 1);
+        snakeIncreasing(settings.stoneReduced().getValue() - 1);
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
         hero.eat();
@@ -143,14 +144,15 @@ public class SnakeHeroTest {
     // тест что большая змейка уменьшается от камня, но не погибает
     @Test
     public void reduceByStone() {
-        snakeIncreasing(stoneReduced.getValue());
+        snakeIncreasing(settings.stoneReduced().getValue());
         int before = hero.size();
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
         hero.eat();
         stonesAtAllPoints(false);
         assertTrue("Большая змейка погибла от камня!", hero.isAlive());
-        assertEquals("Змейка не укоротилась на предполагаемую длину!", before - stoneReduced.getValue(), hero.size());
+        assertEquals("Змейка не укоротилась на предполагаемую длину!",
+                before - settings.stoneReduced().getValue(), hero.size());
         hero.tick();
         hero.eat();
     }

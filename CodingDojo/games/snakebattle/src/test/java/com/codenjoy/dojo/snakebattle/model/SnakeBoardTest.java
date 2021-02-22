@@ -27,11 +27,14 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.round.RoundSettings;
+import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.services.round.RoundImpl;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
+import com.codenjoy.dojo.snakebattle.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,12 +54,22 @@ public class SnakeBoardTest {
     private EventListener listener;
     private Player player;
     private PrinterFactory printer = new PrinterFactoryImpl();
-    private SimpleParameter<Integer> timer;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        timer = new SimpleParameter<>(0);
+
+        settings = new GameSettings()
+                .roundsEnabled(true)
+                .roundsPerMatch(5)
+                .minTicksForWin(2)
+                .timeBeforeStart(0)
+                .timePerRound(300)
+                .timeForWinner(1)
+                .flyingCount(10)
+                .furyCount(10)
+                .stoneReduced(3);
     }
 
     private void givenFl(String board) {
@@ -67,22 +80,8 @@ public class SnakeBoardTest {
     private void given(String board) {
         LevelImpl level = new LevelImpl(board);
 
-        RoundImpl round = new RoundImpl(
-                new SimpleParameter<>(5),
-                new SimpleParameter<>(2),
-                timer,
-                new SimpleParameter<>(300),
-                new SimpleParameter<>(1)
-        );
-
-        game = new SnakeBoard(
-                level,
-                dice,
-                round,
-                new SimpleParameter<>(10),
-                new SimpleParameter<>(10),
-                new SimpleParameter<>(3)
-        );
+        RoundImpl round = new RoundImpl(settings);
+        game = new SnakeBoard(level, dice, round, settings);
 
         SimpleParameter<Boolean> roundsEnabled = new SimpleParameter<>(true);
 

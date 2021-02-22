@@ -34,91 +34,34 @@ import com.codenjoy.dojo.services.round.RoundFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.client.Board;
 import com.codenjoy.dojo.snakebattle.client.ai.AISolver;
-import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
-import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
 import com.codenjoy.dojo.snakebattle.model.Elements;
 import com.codenjoy.dojo.snakebattle.model.Player;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    private final Level level;
-    private final Parameter<Integer> flyingCount;
-    private final Parameter<Integer> furyCount;
-    private final Parameter<Integer> playersPerRoom;
-    private final Parameter<Integer> stoneReducedValue;
-    private final RoundSettingsWrapper roundSettings;
-
-    public GameRunner() {
-        new Scores(0, settings);
-
-        roundSettings = new RoundSettingsWrapper(settings,
-                true,  // roundsEnabled
-                300,   // timePerRound
-                1,     // timeForWinner
-                5,     // timeBeforeStart
-                3,     // roundsPerMatch
-                40);    // minTicksForWin
-
-        playersPerRoom = settings.addEditBox("Players per Room").type(Integer.class).def(5);
-        flyingCount = settings.addEditBox("Flying count").type(Integer.class).def(10);
-        furyCount = settings.addEditBox("Fury count").type(Integer.class).def(10);
-        stoneReducedValue = settings.addEditBox("Stone reduced value").type(Integer.class).def(3);
-        level = new LevelImpl(getMap());
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
-    protected String getMap() {
-        return "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼☼         ○                 ☼" +
-                "☼#                           ☼" +
-                "☼☼  ○   ☼#         ○         ☼" +
-                "☼☼                      ○    ☼" +
-                "☼# ○         ●               ☼" +
-                "☼☼                ☼#        %☼" +
-                "☼☼      ☼☼☼        ☼  ☼      ☼" +
-                "☼#      ☼      ○   ☼  ☼      ☼" +
-                "☼☼      ☼○         ☼  ☼      ☼" +
-                "☼☼      ☼☼☼               ●  ☼" +
-                "☼#              ☼#           ☼" +
-                "☼☼○                         $☼" +
-                "☼☼    ●              ☼       ☼" +
-                "☼#             ○             ☼" +
-                "☼☼                           ☼" +
-                "☼☼   ○             ☼#        ☼" +
-                "☼#       ☼☼ ☼                ☼" +
-                "☼☼          ☼     ●     ○    ☼" +
-                "☼☼       ☼☼ ☼                ☼" +
-                "☼#          ☼               @☼" +
-                "☼☼         ☼#                ☼" +
-                "☼☼           ○               ☼" +
-                "☼#                  ☼☼☼      ☼" +
-                "☼☼                           ☼" +
-                "☼☼      ○        ☼☼☼#    ○   ☼" +
-                "☼#                           ☼" +
-                "☼☼     ╘►        ○           ☼" +
-                "☼☼                           ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼";
-    }
-
-    public GameField createGame(int levelNumber) {
-        return new SnakeBoard(level, getDice(),
-                RoundFactory.get(roundSettings),
-                flyingCount,
-                furyCount,
-                stoneReducedValue);
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        return new SnakeBoard(settings.level(), getDice(),
+                RoundFactory.get(settings),
+                settings);
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer)score, settings);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return v(settings.level().getSize());
     }
 
     @Override
@@ -142,12 +85,14 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
-        return MultiplayerType.TEAM.apply(playersPerRoom.getValue(), MultiplayerType.DISPOSABLE);
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
+        return MultiplayerType.TEAM.apply(
+                settings.playersPerRoom().getValue(),
+                MultiplayerType.DISPOSABLE);
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
-        return new Player(listener, roundSettings.roundsEnabled());
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
+        return new Player(listener, settings.roundsEnabledValue());
     }
 }
