@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.startandjump.client.Board;
 import com.codenjoy.dojo.startandjump.client.ai.AISolver;
 import com.codenjoy.dojo.startandjump.services.GameRunner;
+import com.codenjoy.dojo.startandjump.services.GameSettings;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -64,16 +65,18 @@ public class SmokeTest {
             }
 
             @Override
-            protected String getMap() {
-                return "#########" +
-                        " =       " +
-                        " =       " +
-                        " =       " +
-                        "         " +
-                        "☺       =" +
-                        " =    == " +
-                        " =  ==   " +
-                        "#########";
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .levelMap(
+                            "#########" +
+                            " =       " +
+                            " =       " +
+                            " =       " +
+                            "         " +
+                            "☺       =" +
+                            " =    == " +
+                            " =  ==   " +
+                            "#########");
             }
         };
 
