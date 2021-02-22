@@ -31,57 +31,42 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.*;
-import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
 import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.client.ai.AISolver;
 import com.codenjoy.dojo.tetris.model.*;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
-import com.codenjoy.dojo.tetris.model.levels.level.ProbabilityWithoutOverflownLevels;
 import org.json.JSONObject;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    private Parameter<String> gameLevels;
-    private Parameter<Integer> glassSize;
-
-    public GameRunner() {
-        gameLevels = settings.addSelect("Game Levels", (List)levels())
-                .type(String.class)
-                .def(ProbabilityWithoutOverflownLevels.class.getSimpleName());
-        glassSize = settings.addEditBox("Glass Size").type(Integer.class).def(18);
-    }
-
-    private List<String> levels() {
-        LevelsFactory factory = new LevelsFactory();
-        return factory.allLevels();
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer)score, settings);
     }
 
     @Override
-    public GameField createGame(int level) {
+    public GameField createGame(int level, GameSettings settings) {
         Figures queue = new Figures();
-        Levels levels = loadLevelsFor(queue, gameLevels.getValue());
+        Levels levels = loadLevelsFor(queue, settings.gameLevels().getValue());
         levels.gotoLevel(level - LevelProgress.levelsStartsFrom1);
-        return new Tetris(levels, queue, glassSize.getValue());
+        return new Tetris(levels, queue, settings.glassSize().getValue());
     }
 
-    private Levels loadLevelsFor(FigureQueue queue, String levelName) {
-        return new LevelsFactory().createLevels(levelName, getDice(), queue);
+    private Levels loadLevelsFor(FigureQueue queue, String levelsType) {
+        return new LevelsFactory().createLevels(levelsType, getDice(), queue);
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return glassSize;
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return settings.glassSize();
     }
 
     @Override
@@ -95,20 +80,16 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public Settings getSettings() {
-        return settings;
-    }
-
-    @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         // TODO слишком много тут делается для получения количества уровней
-        Levels levels = loadLevelsFor(NullFigureQueue.INSTANCE, gameLevels.getValue());
+        String levelsType = settings.gameLevels().getValue();
+        Levels levels = loadLevelsFor(NullFigureQueue.INSTANCE, levelsType);
 
         return MultiplayerType.SINGLE_LEVELS.apply(levels.count());
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
         return new Player(listener);
     }
 
