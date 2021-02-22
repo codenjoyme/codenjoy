@@ -24,18 +24,15 @@ package com.codenjoy.dojo.sudoku.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
-    private PlayerScores scores;
 
-    private Settings settings;
-    private SettingsWrapper wrapper;
+    private PlayerScores scores;
+    private GameSettings settings;
 
     private Integer failPenalty;
     private Integer winScore;
@@ -60,19 +57,18 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
-        wrapper = SettingsWrapper.setup(settings);
-        scores = new Scores(0, wrapper);
+        settings = new GameSettings();
+        scores = new Scores(0, settings);
 
-        winScore = settings.getParameter("Win score").type(Integer.class).getValue();
-        failPenalty = settings.getParameter("Fail penalty").type(Integer.class).getValue();
-        successScore = settings.getParameter("Success score").type(Integer.class).getValue();
-        loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
+        winScore = settings.winScore();
+        failPenalty = settings.failPenalty();
+        successScore = settings.successScore();
+        loosePenalty = settings.loosePenalty();
     }
 
     @Test
     public void shouldCollectScores() {
-        scores = new Scores(140, wrapper);
+        scores = new Scores(140, settings);
 
         success();  //+10
         success();  //+10

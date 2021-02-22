@@ -28,11 +28,7 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.sudoku.model.level.Level;
 import com.codenjoy.dojo.sudoku.model.level.Levels;
 
-public final class SettingsWrapper {
-
-    public static SettingsWrapper data;
-
-    private final Settings settings;
+public final class GameSettings extends SettingsImpl {
 
     private final Parameter<Integer> winScore;
     private final Parameter<Integer> failPenalty;
@@ -40,43 +36,31 @@ public final class SettingsWrapper {
     private final Parameter<Integer> loosePenalty;
     private final Parameter<Integer> levelsCount;
 
-    public static SettingsWrapper setup(Settings settings) {
-        return new SettingsWrapper(settings);
-    }
+    public GameSettings() {
+        winScore = addEditBox("Win score").type(Integer.class).def(1000);
+        failPenalty = addEditBox("Fail penalty").type(Integer.class).def(10);
+        loosePenalty = addEditBox("Loose penalty").type(Integer.class).def(500);
+        successScore = addEditBox("Success score").type(Integer.class).def(10);
 
-    // for testing
-    public static SettingsWrapper setup() {
-        return setup(new SettingsImpl());
-    }
-
-    private SettingsWrapper(Settings settings) {
-        data = this;
-        this.settings = settings;
-
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(1000);
-        failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).def(10);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(500);
-        successScore = settings.addEditBox("Success score").type(Integer.class).def(10);
-
-        levelsCount = settings.addEditBox("Levels count").type(Integer.class).def(0);
-        Levels.setup();
+        levelsCount = addEditBox("Levels count").type(Integer.class).def(0);
+        Levels.setup(this);
     }
 
     public int levelsCount() {
         return levelsCount.getValue();
     }
 
-    public SettingsWrapper addLevel(int index, Level level) {
+    public GameSettings addLevel(int index, Level level) {
         levelsCount.update(index);
 
         String prefix = levelPrefix(index);
-        settings.addEditBox(prefix).multiline().type(String.class).def(level.all());
+        addEditBox(prefix).multiline().type(String.class).def(level.all());
         return this;
     }
 
     public String levelMap(int index) {
         String prefix = levelPrefix(index);
-        return settings.addEditBox(prefix).type(String.class).getValue();
+        return addEditBox(prefix).type(String.class).getValue();
     }
 
     private String levelPrefix(int index) {
@@ -101,7 +85,7 @@ public final class SettingsWrapper {
 
     // setters for testing
 
-    public SettingsWrapper levelsCount(int value) {
+    public GameSettings levelsCount(int value) {
         levelsCount.update(value);
         return this;
     }

@@ -23,7 +23,7 @@ package com.codenjoy.dojo.sudoku.model.level;
  */
 
 import com.codenjoy.dojo.sudoku.model.level.levels.*;
-import com.codenjoy.dojo.sudoku.services.SettingsWrapper;
+import com.codenjoy.dojo.sudoku.services.GameSettings;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,9 +31,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Levels {
 
-    public static void setup() {
+    public static void setup(GameSettings settings) {
         AtomicInteger index = new AtomicInteger();
-        all().forEach(level -> SettingsWrapper.data.addLevel(index.incrementAndGet(), level));
+        all().forEach(level -> settings.addLevel(index.incrementAndGet(), level));
     }
 
     public static List<Level> all() {

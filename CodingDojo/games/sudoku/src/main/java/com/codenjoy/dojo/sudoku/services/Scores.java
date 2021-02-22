@@ -28,9 +28,9 @@ import com.codenjoy.dojo.services.PlayerScores;
 public class Scores implements PlayerScores {
 
     private volatile int score;
-    private SettingsWrapper settings;
+    private GameSettings settings;
 
-    public Scores(int startScore, SettingsWrapper settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
         this.settings = settings;
     }
