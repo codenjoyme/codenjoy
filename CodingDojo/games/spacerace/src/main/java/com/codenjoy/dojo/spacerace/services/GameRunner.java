@@ -39,67 +39,28 @@ import com.codenjoy.dojo.spacerace.model.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
-public class GameRunner extends AbstractGameType implements GameType {
+public class GameRunner extends AbstractGameType<GameSettings> {
 
-    private final Level level;
-    private final Parameter<Integer> ticksToRecharge;
-    private final Parameter<Integer> bulletsCount;
-
-    public GameRunner() {
-        new Scores(0, settings);
-
-        ticksToRecharge = settings.addEditBox("Ticks to recharge").type(Integer.class).def(30);
-        bulletsCount = settings.addEditBox("Bullets count").type(Integer.class).def(10);
-
-        level = new LevelImpl(getMap());
-    }
-
-    protected String getMap() {
-        return "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼                            ☼" +
-                "☼              ☺             ☼";
+    @Override
+    public GameSettings getSettings() {
+        return new GameSettings();
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, GameSettings settings) {
         return new Scores((Integer)score, settings);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
-        return new Spacerace(level, getDice(), ticksToRecharge.getValue(), bulletsCount.getValue());
+    public GameField createGame(int levelNumber, GameSettings settings) {
+        return new Spacerace(settings.level(), getDice(),
+                settings.ticksToRecharge(),
+                settings.bulletsCount());
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
-        return v(level.getSize());
+    public Parameter<Integer> getBoardSize(GameSettings settings) {
+        return v(settings.level().getSize());
     }
 
     @Override
@@ -123,12 +84,12 @@ public class GameRunner extends AbstractGameType implements GameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.MULTIPLE;
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
+    public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
         return new Player(listener);
     }
 }

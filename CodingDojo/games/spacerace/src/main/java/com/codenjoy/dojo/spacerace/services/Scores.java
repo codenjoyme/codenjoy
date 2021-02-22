@@ -28,20 +28,13 @@ import com.codenjoy.dojo.services.settings.Settings;
 
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> destroyBombScore;
-    private final Parameter<Integer> destroyStoneScore;
-    private final Parameter<Integer> destroyEnemyScore;
-    private final Parameter<Integer> loosePenalty;
-
     private volatile int score;
 
-    public Scores(int startScore, Settings settings) {
-        this.score = startScore;
+    private GameSettings settings;
 
-        destroyBombScore = settings.addEditBox("Destroy bomb score").type(Integer.class).def(30);
-        destroyStoneScore = settings.addEditBox("Destroy stone score").type(Integer.class).def(10);
-        destroyEnemyScore = settings.addEditBox("Destroy enemy score").type(Integer.class).def(500);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(100);
+    public Scores(int startScore, GameSettings settings) {
+        this.score = startScore;
+        this.settings = settings;
     }
 
     @Override
@@ -57,13 +50,13 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.DESTROY_BOMB)) {
-            score += destroyBombScore.getValue();
+            score += settings.destroyBombScore();
         } else if (event.equals(Events.DESTROY_STONE)) {
-            score += destroyStoneScore.getValue();
+            score += settings.destroyStoneScore();
         } else if (event.equals(Events.DESTROY_ENEMY)) {
-            score += destroyEnemyScore.getValue();
+            score += settings.destroyEnemyScore();
         } else if (event.equals(Events.LOOSE)) {
-            score -= loosePenalty.getValue();
+            score -= settings.loosePenalty();
         }
         score = Math.max(0, score);
     }

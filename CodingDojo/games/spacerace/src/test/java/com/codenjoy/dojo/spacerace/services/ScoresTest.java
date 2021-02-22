@@ -23,8 +23,6 @@ package com.codenjoy.dojo.spacerace.services;
  */
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,11 +30,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
+
     private PlayerScores scores;
 
-    private Settings settings;
+    private GameSettings settings;
     private Integer loosePenalty;
-    private Integer removeEnemyScore;
+    private Integer destroyEnemyScore;
 
     public void loose() {
         scores.event(Events.LOOSE);
@@ -45,15 +44,16 @@ public class ScoresTest {
     public void destroyEnemy() {
         scores.event(Events.DESTROY_ENEMY);
     }
+
     // TODO implement for other cases
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new GameSettings();
         scores = new Scores(0, settings);
 
-        loosePenalty = settings.getParameter("Loose penalty").type(Integer.class).getValue();
-        removeEnemyScore = settings.getParameter("Destroy enemy score").type(Integer.class).getValue();
+        loosePenalty = settings.loosePenalty();
+        destroyEnemyScore = settings.destroyEnemyScore();
     }
 
     @Test
@@ -67,7 +67,7 @@ public class ScoresTest {
 
         loose(); //-100
 
-        Assert.assertEquals(140 + 4 * removeEnemyScore - loosePenalty, scores.getScore());
+        Assert.assertEquals(140 + 4 * destroyEnemyScore - loosePenalty, scores.getScore());
     }
 
     @Test
