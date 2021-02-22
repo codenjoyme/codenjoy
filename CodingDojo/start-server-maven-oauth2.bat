@@ -8,9 +8,10 @@ IF "%CLIENT_SECRET%"=="" (
 	set CLIENT_SECRET=secret
 )
 
-call %ROOT%\mvnw mvn -f %ROOT%\server\pom.xml ^
+cd %ROOT%\server
+call %ROOT%\mvnw clean spring-boot:run ^
         -DMAVEN_OPTS=-Xmx1024m ^
-        -Dspring.profiles.active=sqlite,oauth2,debug,trace ^
+        -Dspring.profiles.active=sqlite,oauth2,debug ^
         -Dcontext=/codenjoy-contest ^
 		-Dpage.main.unauthorized=false ^
         -Dspring.security.oauth2.client.registration.dojo.redirect-uri-template=http://localhost:3000/codenjoy-contest/login/oauth2/code/dojo ^

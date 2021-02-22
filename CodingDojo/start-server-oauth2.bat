@@ -10,7 +10,7 @@ IF "%CLIENT_SECRET%"=="" (
 
 java -jar %ROOT%\server\target\codenjoy-contest.war ^
         --MAVEN_OPTS=-Xmx1024m ^
-        --spring.profiles.active=sqlite,oauth2,debug,trace ^
+        --spring.profiles.active=sqlite,oauth2,debug ^
         --context=/codenjoy-contest ^
 		--page.main.unauthorized=false ^
         --spring.security.oauth2.client.registration.dojo.redirect-uri-template=http://localhost:3000/codenjoy-contest/login/oauth2/code/dojo ^
