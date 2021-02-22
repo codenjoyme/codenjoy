@@ -27,11 +27,29 @@ public class GameSettings extends SettingsImpl {
         return factory.allLevels();
     }
 
-    public Parameter<String> gameLevels() {
-        return gameLevels;
+    // getters
+
+    public String gameLevels() {
+        return gameLevels.getValue();
     }
 
-    public Parameter<Integer> glassSize() {
+    public Integer glassSize() {
+        return glassSize.getValue();
+    }
+
+    public Parameter<Integer> getGlassSize() {
         return glassSize;
+    }
+
+    // setters
+
+    public GameSettings gameLevels(String value) {
+        gameLevels.update(value);
+        return this;
+    }
+
+    public GameSettings glassSize(Integer value) {
+        glassSize.update(value);
+        return this;
     }
 }

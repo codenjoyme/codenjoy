@@ -55,9 +55,9 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     @Override
     public GameField createGame(int level, GameSettings settings) {
         Figures queue = new Figures();
-        Levels levels = loadLevelsFor(queue, settings.gameLevels().getValue());
+        Levels levels = loadLevelsFor(queue, settings.gameLevels());
         levels.gotoLevel(level - LevelProgress.levelsStartsFrom1);
-        return new Tetris(levels, queue, settings.glassSize().getValue());
+        return new Tetris(levels, queue, settings.glassSize());
     }
 
     private Levels loadLevelsFor(FigureQueue queue, String levelsType) {
@@ -66,7 +66,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
-        return settings.glassSize();
+        return settings.getGlassSize();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
         // TODO слишком много тут делается для получения количества уровней
-        String levelsType = settings.gameLevels().getValue();
+        String levelsType = settings.gameLevels();
         Levels levels = loadLevelsFor(NullFigureQueue.INSTANCE, levelsType);
 
         return MultiplayerType.SINGLE_LEVELS.apply(levels.count());
