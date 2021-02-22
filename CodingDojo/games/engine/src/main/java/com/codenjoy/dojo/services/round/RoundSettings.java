@@ -22,13 +22,19 @@ package com.codenjoy.dojo.services.round;
  * #L%
  */
 
-public class RoundFactory {
+import com.codenjoy.dojo.services.settings.Parameter;
 
-    public static Round get(RoundSettings settings) {
-        if (settings.roundsEnabled().getValue()) {
-            return new RoundImpl(settings);
-        } else {
-            return new NullRound();
-        }
-    }
+public interface RoundSettings {
+
+    Parameter<Integer> timeBeforeStart();
+
+    Parameter<Integer> roundsPerMatch();
+
+    Parameter<Integer> minTicksForWin();
+
+    Parameter<Integer> timePerRound();
+
+    Parameter<Integer> timeForWinner();
+
+    Parameter<Boolean> roundsEnabled();
 }

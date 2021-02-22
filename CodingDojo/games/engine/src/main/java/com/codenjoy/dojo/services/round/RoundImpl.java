@@ -31,11 +31,7 @@ public class RoundImpl implements Round {
 
     private RoundGameField<RoundGamePlayer<RoundPlayerHero, RoundGameField>> field;
 
-    private Parameter<Integer> roundsPerMatch;
-    private Parameter<Integer> minTicksForWin;
-    private Parameter<Integer> timeBeforeStart;
-    private Parameter<Integer> timePerRound;
-    private Parameter<Integer> timeForWinner;
+    private RoundSettings settings;
 
     private Timer startTimer;
     private Timer roundTimer;
@@ -45,23 +41,9 @@ public class RoundImpl implements Round {
 
     private Object winEvent;
 
-    public RoundImpl(Parameter<Integer> roundsPerMatch, Parameter<Integer> minTicksForWin,
-                     Parameter<Integer> timeBeforeStart, Parameter<Integer> timePerRound,
-                     Parameter<Integer> timeForWinner)
-    {
-        this.roundsPerMatch = roundsPerMatch;
-        this.minTicksForWin = minTicksForWin;
-        this.timeBeforeStart = timeBeforeStart;
-        this.timePerRound = timePerRound;
-        this.timeForWinner = timeForWinner;
-
+    public RoundImpl(RoundSettings settings) {
+        this.settings = settings;
         clear();
-    }
-
-    public RoundImpl(RoundSettingsWrapper settings) {
-        this(settings.roundsPerMatch(), settings.minTicksForWin(),
-                settings.timeBeforeStart(), settings.timePerRound(),
-                settings.timeForWinner());
     }
 
     @Override
@@ -133,7 +115,7 @@ public class RoundImpl implements Round {
 
         field.aliveActive().forEach(p -> {
             if (field.score(p) == max
-                    && roundTimer.time() > minTicksForWin.getValue())
+                    && roundTimer.time() > settings.minTicksForWin().getValue())
             {
                 p.event(winEvent);
             } else {
@@ -153,7 +135,7 @@ public class RoundImpl implements Round {
     @Override
     public void rewardTheWinner() {
         if (isLastOnBoard()) {
-            if (roundTimer.time() >= minTicksForWin.getValue()) {
+            if (roundTimer.time() >= settings.minTicksForWin().getValue()) {
                 getLast().event(winEvent);
             }
         }
@@ -163,16 +145,16 @@ public class RoundImpl implements Round {
     public boolean isMatchOver() {
         // тут >= а не == потому что на админке можно поменять roundsPerMatch
         // в меньшую сторону и тут можно зациклится в противном случае
-        return round >= roundsPerMatch.getValue();
+        return round >= settings.roundsPerMatch().getValue();
     }
 
     @Override
     public void clear() {
         round = 0;
 
-        startTimer = new Timer(timeBeforeStart);
-        roundTimer = new Timer(timePerRound);
-        winnerTimer = new Timer(timeForWinner);
+        startTimer = new Timer(settings.timeBeforeStart());
+        roundTimer = new Timer(settings.timePerRound());
+        winnerTimer = new Timer(settings.timeForWinner());
 
         startTimer = startTimer.start();
         roundTimer = roundTimer.stop();
