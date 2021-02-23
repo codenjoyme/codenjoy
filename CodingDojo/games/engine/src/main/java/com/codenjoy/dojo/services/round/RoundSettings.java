@@ -23,18 +23,54 @@ package com.codenjoy.dojo.services.round;
  */
 
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 public interface RoundSettings {
 
-    Parameter<Integer> timeBeforeStart();
+    public enum Keys implements SettingsReader.Key {
 
-    Parameter<Integer> roundsPerMatch();
+        ROUNDS_ENABLED("[Game][Rounds] Enabled"),
+        TIME_PER_ROUND("[Rounds] Time per Round"),
+        TIME_FOR_WINNER("[Rounds] Time for Winner"),
+        TIME_BEFORE_START("[Rounds] Time before start Round"),
+        ROUNDS_PER_MATCH("[Rounds] Rounds per Match"),
+        MIN_TICKS_FOR_WIN("[Rounds] Min ticks for win");
 
-    Parameter<Integer> minTicksForWin();
+        private String key;
 
-    Parameter<Integer> timePerRound();
+        Keys(String key) {
+            this.key = key;
+        }
 
-    Parameter<Integer> timeForWinner();
+        @Override
+        public String key() {
+            return key;
+        }
+    }
 
-    Parameter<Boolean> roundsEnabled();
+    Parameter<?> getParameter(String name);
+
+    default Parameter<Integer> timeBeforeStart() {
+        return getParameter(Keys.TIME_BEFORE_START.key()).type(Integer.class);
+    }
+
+    default Parameter<Integer> roundsPerMatch() {
+        return getParameter(Keys.ROUNDS_PER_MATCH.key()).type(Integer.class);
+    }
+
+    default Parameter<Integer> minTicksForWin() {
+        return getParameter(Keys.MIN_TICKS_FOR_WIN.key()).type(Integer.class);
+    }
+
+    default Parameter<Integer> timePerRound() {
+        return getParameter(Keys.TIME_PER_ROUND.key()).type(Integer.class);
+    }
+
+    default Parameter<Integer> timeForWinner() {
+        return getParameter(Keys.TIME_FOR_WINNER.key()).type(Integer.class);
+    }
+
+    default Parameter<Boolean> roundsEnabled() {
+        return getParameter(Keys.ROUNDS_ENABLED.key()).type(Boolean.class);
+    }
 }
