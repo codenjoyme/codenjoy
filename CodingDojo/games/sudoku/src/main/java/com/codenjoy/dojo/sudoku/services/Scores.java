@@ -25,6 +25,8 @@ package com.codenjoy.dojo.sudoku.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 
+import static com.codenjoy.dojo.sudoku.services.GameSettings.Keys.*;
+
 public class Scores implements PlayerScores {
 
     private volatile int score;
@@ -48,13 +50,13 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.WIN)) {
-            score += settings.winScore();
+            score += settings.integer(WIN_SCORE);
         } else if (event.equals(Events.FAIL)) {
-            score -= settings.failPenalty();
+            score -= settings.integer(FAIL_PENALTY);
         } else if (event.equals(Events.SUCCESS)) {
-            score += settings.successScore();
+            score += settings.integer(SUCCESS_SCORE);
         } else if (event.equals(Events.LOOSE)) {
-            score -= settings.loosePenalty();
+            score -= settings.integer(LOOSE_PENALTY);
         }
         score = Math.max(0, score);
     }

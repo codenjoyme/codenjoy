@@ -22,32 +22,48 @@ package com.codenjoy.dojo.sudoku.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.sudoku.model.level.Level;
 import com.codenjoy.dojo.sudoku.model.level.Levels;
 
-public final class GameSettings extends SettingsImpl {
+import static com.codenjoy.dojo.sudoku.services.GameSettings.Keys.*;
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> failPenalty;
-    private final Parameter<Integer> successScore;
-    private final Parameter<Integer> loosePenalty;
-    private final Parameter<Integer> levelsCount;
+public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
+
+    public enum Keys implements Key {
+
+        WIN_SCORE("Win score"),
+        FAIL_PENALTY("Fail penalty"),
+        LOOSE_PENALTY("Loose penalty"),
+        SUCCESS_SCORE("Success score"),
+        LEVELS_COUNT("Levels count");
+
+        private String key;
+
+        Keys(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String key() {
+            return key;
+        }
+    }
+
 
     public GameSettings() {
-        winScore = addEditBox("Win score").type(Integer.class).def(1000);
-        failPenalty = addEditBox("Fail penalty").type(Integer.class).def(10);
-        loosePenalty = addEditBox("Loose penalty").type(Integer.class).def(500);
-        successScore = addEditBox("Success score").type(Integer.class).def(10);
+        addEditBox(WIN_SCORE.key()).type(Integer.class).def(1000);
+        addEditBox(FAIL_PENALTY.key()).type(Integer.class).def(10);
+        addEditBox(LOOSE_PENALTY.key()).type(Integer.class).def(500);
+        addEditBox(SUCCESS_SCORE.key()).type(Integer.class).def(10);
 
-        levelsCount = addEditBox("Levels count").type(Integer.class).def(0);
+        addEditBox(LEVELS_COUNT.key()).type(Integer.class).def(0);
         Levels.setup(this);
     }
 
     public GameSettings addLevel(int index, Level level) {
-        levelsCount.update(index);
+        integer(LEVELS_COUNT, index);
 
         String prefix = levelPrefix(index);
         addEditBox(prefix).multiline().type(String.class).def(level.all());
@@ -63,52 +79,4 @@ public final class GameSettings extends SettingsImpl {
         return "Level" + index + "";
     }
 
-    // getters
-
-    public int levelsCount() {
-        return levelsCount.getValue();
-    }
-
-    public int winScore() {
-        return winScore.getValue();
-    }
-
-    public int failPenalty() {
-        return failPenalty.getValue();
-    }
-
-    public int successScore() {
-        return successScore.getValue();
-    }
-
-    public int loosePenalty() {
-        return loosePenalty.getValue();
-    }
-
-    // setters
-
-    public GameSettings levelsCount(int value) {
-        levelsCount.update(value);
-        return this;
-    }
-
-    public GameSettings winScore(int value) {
-        winScore.update(value);
-        return this;
-    }
-
-    public GameSettings failPenalty(int value) {
-        failPenalty.update(value);
-        return this;
-    }
-
-    public GameSettings successScore(int value) {
-        successScore.update(value);
-        return this;
-    }
-
-    public GameSettings loosePenalty(int value) {
-        loosePenalty.update(value);
-        return this;
-    }
 }

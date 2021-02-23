@@ -27,17 +27,13 @@ import com.codenjoy.dojo.services.PlayerScores;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.sudoku.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
 
     private PlayerScores scores;
     private GameSettings settings;
-
-    private Integer failPenalty;
-    private Integer winScore;
-    private Integer successScore;
-    private Integer loosePenalty;
 
     public void fail() {
         scores.event(Events.FAIL);
@@ -59,29 +55,29 @@ public class ScoresTest {
     public void setup() {
         settings = new GameSettings();
         scores = new Scores(0, settings);
-
-        winScore = settings.winScore();
-        failPenalty = settings.failPenalty();
-        successScore = settings.successScore();
-        loosePenalty = settings.loosePenalty();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        success();  //+10
-        success();  //+10
-        success();  //+10
-        success();  //+10
+        success();  // +10
+        success();  // +10
+        success();  // +10
+        success();  // +10
 
-        fail(); //-10
+        fail(); // -10
 
         win(); // +1000
 
         loose(); // -500
 
-        assertEquals(140 + 4* successScore - failPenalty + winScore - loosePenalty, scores.getScore());
+        assertEquals(140
+                + 4 * settings.integer(SUCCESS_SCORE)
+                - settings.integer(FAIL_PENALTY)
+                + settings.integer(WIN_SCORE)
+                - settings.integer(LOOSE_PENALTY),
+                scores.getScore());
     }
 
     @Test
