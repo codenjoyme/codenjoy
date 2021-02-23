@@ -125,7 +125,7 @@ public class Sudoku implements Field {
     }
 
     @Override
-    public SettingsReader settings() {
+    public GameSettings settings() {
         return settings;
     }
 

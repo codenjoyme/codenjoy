@@ -421,7 +421,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     }
 
     @Override
-    public SettingsReader settings() {
+    public GameSettings settings() {
         return settings;
     }
 
