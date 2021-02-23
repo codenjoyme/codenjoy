@@ -24,29 +24,18 @@ package com.codenjoy.dojo.tetris.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+
+import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.*;
 
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> oneLineRemovedScore;
-    private final Parameter<Integer> twoLinesRemovedScore;
-    private final Parameter<Integer> threeLinesRemovedScore;
-    private final Parameter<Integer> fourLinesRemovedScore;
-    private final Parameter<Integer> figureDroppedScore;
-    private final Parameter<Integer> glassOverflownPenalty;
-
     private volatile int score;
 
-    public Scores(int score, Settings settings) {
-        this.score = score;
+    private GameSettings settings;
 
-        figureDroppedScore = settings.addEditBox("Figure dropped score score").type(Integer.class).def(1);
-        oneLineRemovedScore = settings.addEditBox("One line removed score").type(Integer.class).def(10);
-        twoLinesRemovedScore = settings.addEditBox("Two lines removed score").type(Integer.class).def(30);
-        threeLinesRemovedScore = settings.addEditBox("Three lines removed score").type(Integer.class).def(50);
-        fourLinesRemovedScore = settings.addEditBox("Four lines removed score").type(Integer.class).def(100);
-        glassOverflownPenalty = settings.addEditBox("Glass overflown penalty").type(Integer.class).def(10);
+    public Scores(int score, GameSettings settings) {
+        this.score = score;
+        this.settings = settings;
     }
 
     @Override
@@ -73,26 +62,26 @@ public class Scores implements PlayerScores {
     }
 
     private void figureDropped(int figureIndex) {
-        score += figureDroppedScore.getValue() * figureIndex;
+        score += settings.integer(FIGURE_DROPPED_SCORE) * figureIndex;
     }
 
     private void glassOverflown(int level) {
-        score -= glassOverflownPenalty.getValue() * level;
+        score -= settings.integer(GLASS_OVERFLOWN_PENALTY) * level;
     }
 
     private void linesRemoved(int level, int count) {
         switch (count) {
             case 1:
-                score += oneLineRemovedScore.getValue() * level;
+                score += settings.integer(ONE_LINE_REMOVED_SCORE) * level;
                 break;
             case 2:
-                score += twoLinesRemovedScore.getValue() * level;
+                score += settings.integer(TWO_LINES_REMOVED_SCORE) * level;
                 break;
             case 3:
-                score += threeLinesRemovedScore.getValue() * level;
+                score += settings.integer(THREE_LINES_REMOVED_SCORE) * level;
                 break;
             case 4:
-                score += fourLinesRemovedScore.getValue() * level;
+                score += settings.integer(FOUR_LINES_REMOVED_SCORE) * level;
                 break;
         }
     }
