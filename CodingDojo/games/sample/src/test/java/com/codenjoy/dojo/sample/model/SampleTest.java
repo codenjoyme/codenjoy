@@ -23,7 +23,8 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
-import com.codenjoy.dojo.sample.model.level.LevelImpl;
+import com.codenjoy.dojo.sample.model.level.Level;
+import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.sample.services.Events;
@@ -34,6 +35,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -47,11 +49,14 @@ public class SampleTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private PrinterFactory printer;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        settings = new GameSettings();
+        printer = new PrinterFactoryImpl();
     }
 
     private void dice(int...ints) {
@@ -62,12 +67,14 @@ public class SampleTest {
     }
 
     private void givenFl(String board) {
-        LevelImpl level = new LevelImpl(board);
+        settings.string(LEVEL_MAP, board);
+
+        Level level = settings.level();
         Hero hero = level.heroes().get(0);
 
-        game = new Sample(level, dice);
+        game = new Sample(level, dice, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, settings);
         game.newGame(player);
         player.hero = hero;
         hero.init(game);

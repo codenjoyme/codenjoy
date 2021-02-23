@@ -23,19 +23,19 @@ package com.codenjoy.dojo.sample;
  */
 
 
-import com.codenjoy.dojo.client.ClientBoard;
-import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.client.Solver;
+import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.sample.client.Board;
 import com.codenjoy.dojo.sample.client.ai.AISolver;
 import com.codenjoy.dojo.sample.services.GameRunner;
-import com.codenjoy.dojo.sample.services.SettingsWrapper;
+import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -71,20 +71,24 @@ public class SmokeTest {
             public Dice getDice() {
                 return dice;
             }
-        };
 
-        SettingsWrapper.data.levelMap(
-                "☼☼☼☼☼☼☼☼☼☼☼" +
-                "☼ $       ☼" +
-                "☼     $  $☼" +
-                "☼         ☼" +
-                "☼   $  $  ☼" +
-                "☼         ☼" +
-                "☼     $   ☼" +
-                "☼         ☼" +
-                "☼ ☺    $  ☼" +
-                "☼  $      ☼" +
-                "☼☼☼☼☼☼☼☼☼☼☼");
+            @Override
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .string(LEVEL_MAP,
+                            "☼☼☼☼☼☼☼☼☼☼☼" +
+                            "☼ $       ☼" +
+                            "☼     $  $☼" +
+                            "☼         ☼" +
+                            "☼   $  $  ☼" +
+                            "☼         ☼" +
+                            "☼     $   ☼" +
+                            "☼         ☼" +
+                            "☼ ☺    $  ☼" +
+                            "☼  $      ☼" +
+                            "☼☼☼☼☼☼☼☼☼☼☼");
+            }
+        };
 
         // when
         LocalGameRunner.run(gameType,

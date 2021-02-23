@@ -23,37 +23,39 @@ package com.codenjoy.dojo.sample.services;
  */
 
 
+import com.codenjoy.dojo.sample.model.level.Level;
 import com.codenjoy.dojo.sample.model.level.LevelImpl;
-import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
-public final class SettingsWrapper {
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 
-    public static SettingsWrapper data;
+public final class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> loosePenalty;
-    private final Parameter<String> levelMap;
+    public enum Keys implements Key {
 
-    private final Settings settings;
+        WIN_SCORE("Win score"),
+        LOOSE_PENALTY("Loose penalty"),
+        LEVEL_MAP("Level map");
 
-    public static SettingsWrapper setup(Settings settings) {
-        return new SettingsWrapper(settings);
+        private String key;
+
+        Keys(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String key() {
+            return key;
+        }
     }
 
-    // for testing
-    public static SettingsWrapper setup() {
-        return setup(new SettingsImpl());
-    }
+    public GameSettings() {
+        addEditBox(WIN_SCORE.key()).type(Integer.class).def(30);
+        addEditBox(LOOSE_PENALTY.key()).type(Integer.class).def(100);
 
-    private SettingsWrapper(Settings settings) {
-        data = this;
-        this.settings = settings;
-
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(100);
-        levelMap = settings.addEditBox("Level map").multiline().type(String.class)
+        addEditBox(LEVEL_MAP.key()).multiline().type(String.class)
                 .def("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                     "☼          $                 ☼" +
                     "☼                            ☼" +
@@ -86,37 +88,8 @@ public final class SettingsWrapper {
                     "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
-    public int loosePenalty() {
-        return loosePenalty.getValue();
-    }
-
-    public int winScore() {
-        return winScore.getValue();
-    }
-
-    public String levelMap() {
-        return levelMap.getValue();
-    }
-
-    public int getSize() {
-        return new LevelImpl(levelMap()).size(); // TODO а что если уровней несколько?
-    }
-
-    // setters for testing
-
-    public SettingsWrapper loosePenalty(int value) {
-        loosePenalty.update(value);
-        return this;
-    }
-
-    public SettingsWrapper winScore(int value) {
-        winScore.update(value);
-        return this;
-    }
-
-    public SettingsWrapper levelMap(String value) {
-        levelMap.update(value);
-        return this;
+    public Level level() {
+        return new LevelImpl(string(LEVEL_MAP));
     }
 
 }

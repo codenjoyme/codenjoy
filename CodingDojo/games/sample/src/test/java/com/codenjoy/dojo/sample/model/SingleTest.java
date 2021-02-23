@@ -23,9 +23,8 @@ package com.codenjoy.dojo.sample.model;
  */
 
 
-import com.codenjoy.dojo.sample.model.level.Level;
-import com.codenjoy.dojo.sample.model.level.LevelImpl;
 import com.codenjoy.dojo.sample.services.Events;
+import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -35,6 +34,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.sample.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -54,28 +54,29 @@ public class SingleTest {
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        Level level = new LevelImpl(
-                "☼☼☼☼☼☼" +
-                "☼   $☼" +
-                "☼    ☼" +
-                "☼    ☼" +
-                "☼    ☼" +
-                "☼☼☼☼☼☼");
+        GameSettings settings = new GameSettings()
+                .string(LEVEL_MAP,
+                        "☼☼☼☼☼☼" +
+                        "☼   $☼" +
+                        "☼    ☼" +
+                        "☼    ☼" +
+                        "☼    ☼" +
+                        "☼☼☼☼☼☼");
 
         dice = mock(Dice.class);
-        field = new Sample(level, dice);
+        field = new Sample(settings.level(), dice, settings);
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(new Player(listener1), factory);
+        game1 = new Single(new Player(listener1, settings), factory);
         game1.on(field);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(new Player(listener2), factory);
+        game2 = new Single(new Player(listener2, settings), factory);
         game2.on(field);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(new Player(listener3), factory);
+        game3 = new Single(new Player(listener3, settings), factory);
         game3.on(field);
 
         dice(1, 4);

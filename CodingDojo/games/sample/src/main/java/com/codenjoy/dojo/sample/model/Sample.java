@@ -28,11 +28,13 @@ import com.codenjoy.dojo.sample.model.items.Gold;
 import com.codenjoy.dojo.sample.model.items.Wall;
 import com.codenjoy.dojo.sample.model.level.Level;
 import com.codenjoy.dojo.sample.services.Events;
+import com.codenjoy.dojo.sample.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -55,11 +57,14 @@ public class Sample implements Field {
     private final int size;
     private Dice dice;
 
-    public Sample(Level level, Dice dice) {
+    private GameSettings settings;
+
+    public Sample(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         walls = level.walls();
         gold = level.gold();
         size = level.size();
+        this.settings = settings;
         players = new LinkedList<>();
         bombs = new LinkedList<>();
     }
@@ -160,6 +165,11 @@ public class Sample implements Field {
     @Override
     public void remove(Player player) {
         players.remove(player);
+    }
+
+    @Override
+    public SettingsReader settings() {
+        return settings;
     }
 
     public List<Wall> getWalls() {

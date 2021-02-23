@@ -27,9 +27,6 @@ import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.sample.client.Board;
 import com.codenjoy.dojo.sample.services.GameRunner;
 
-/**
- * Created by Oleksandr_Baglai on 2019-07-12.
- */
 public class DryRunGame {
 
     public static void main(String[] args) {
