@@ -26,6 +26,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 public abstract class RoundGamePlayer<H extends RoundPlayerHero, F extends GameField> extends GamePlayer<H, F> {
 
@@ -33,9 +34,9 @@ public abstract class RoundGamePlayer<H extends RoundPlayerHero, F extends GameF
     private boolean shouldLeave;
     private Parameter<Boolean> roundsEnabled;
 
-    public RoundGamePlayer(EventListener listener, Parameter<Boolean> roundsEnabled) {
-        super(listener);
-        this.roundsEnabled = roundsEnabled;
+    public RoundGamePlayer(EventListener listener, SettingsReader settings) {
+        super(listener, settings);
+        this.roundsEnabled = settings.boolValue(RoundSettings.Keys.ROUNDS_ENABLED);
         shouldLeave = false;
     }
 

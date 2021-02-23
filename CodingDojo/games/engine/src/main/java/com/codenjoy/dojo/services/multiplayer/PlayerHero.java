@@ -25,6 +25,8 @@ package com.codenjoy.dojo.services.multiplayer;
 
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.NoMessageJoystick;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.json.JSONObject;
 
 /**
@@ -63,5 +65,9 @@ public abstract class PlayerHero<F extends GameField> extends PointImpl implemen
 
     public F field() {
         return field;
+    }
+
+    public SettingsReader settings() {
+        return field.settings();
     }
 }

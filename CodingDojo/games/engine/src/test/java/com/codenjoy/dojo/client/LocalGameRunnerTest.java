@@ -33,8 +33,10 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -70,6 +72,8 @@ public class LocalGameRunnerTest {
         id = 0;
 
         gameType = mock(GameType.class);
+        Settings settings = new SettingsImpl();
+        SettingsReader settingsReader = name -> settings.getParameter(name);
         GameField field = new GameField() {
             public GamePlayer player;
 
@@ -112,12 +116,17 @@ public class LocalGameRunnerTest {
             }
 
             @Override
+            public SettingsReader settings() {
+                return settingsReader;
+            }
+
+            @Override
             public void tick() {
                 messages.add("TICK_GAME" + id());
                 player.getHero().tick();
             }
         };
-        when(gameType.getSettings()).thenReturn(new SettingsImpl());
+        when(gameType.getSettings()).thenReturn(settings);
         when(gameType.createGame(anyInt(), any(Settings.class))).thenReturn(field);
         when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(
                 (BoardReader reader, GamePlayer player)
@@ -130,7 +139,7 @@ public class LocalGameRunnerTest {
         when(gameType.getPlayerScores(anyInt(), any(Settings.class))).thenReturn(scores);
         when(scores.getScore()).thenAnswer(inv -> "SCORE" + id());
 
-        gamePlayer = new GamePlayer(listener) {
+        gamePlayer = new GamePlayer(listener, settingsReader) {
             PlayerHero hero;
 
             @Override

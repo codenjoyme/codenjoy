@@ -27,6 +27,8 @@ import com.codenjoy.dojo.services.CustomMessage;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 /**
  * Игрок внутри игры представлен в виде наследника этого класса.
@@ -36,14 +38,16 @@ import com.codenjoy.dojo.services.hero.HeroData;
 public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
 
     protected EventListener listener;
+    private SettingsReader settings;
     private LevelProgress progress;
 
     /**
      * @param listener Это шпийон от фреймоврка. Ты должен все ивенты
      *                 которые касаются конкретного пользователя скормить ему.
      */
-    public GamePlayer(EventListener listener) {
+    public GamePlayer(EventListener listener, SettingsReader settings) {
         this.listener = listener;
+        this.settings = settings;
     }
 
     /**
