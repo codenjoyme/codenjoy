@@ -24,14 +24,13 @@ package com.codenjoy.dojo.spacerace.model;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.settings.SettingsReader;
-import com.codenjoy.dojo.spacerace.services.Events;
+import com.codenjoy.dojo.spacerace.services.GameSettings;
 
 public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
 
-    public Player(EventListener listener, SettingsReader settings) {
+    public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 

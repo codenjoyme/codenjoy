@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.spacerace.services.Events;
+import com.codenjoy.dojo.spacerace.services.GameSettings;
 
 import java.util.*;
 
@@ -38,7 +39,7 @@ public class Spacerace implements Field {
     private static final int NEW_APPEAR_PERIOD = 3;
     private static final int MAX_COUNT_BULLET_PACKS = 1;
     private final int size;
-    private SettingsReader settings;
+    private GameSettings settings;
     private List<Wall> walls;
     private List<BulletPack> bulletPacks;
     private List<Gold> gold;
@@ -54,7 +55,7 @@ public class Spacerace implements Field {
     private int countBomb = 0;
     private int currentBulletPacks = 0;
 
-    public Spacerace(Level level, Dice dice, SettingsReader settings) {
+    public Spacerace(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         walls = level.getWalls();
         gold = level.getGold();
