@@ -23,19 +23,17 @@ package com.codenjoy.dojo.snake.services;
  */
 
 
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.snake.services.GameSettings.Keys.EAT_STONE_PENALTY;
+import static com.codenjoy.dojo.snake.services.GameSettings.Keys.GAME_OVER_PENALTY;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
 
     private Scores scores;
-    private Settings settings;
-
-    private SnakeSettings setup;
+    private GameSettings settings;
 
     public void snakeEatApple() {
         scores.event(Events.EAT_APPLE);
@@ -51,8 +49,7 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
-        setup = new SnakeSettings(settings);
+        settings = new GameSettings();
         scores = getScores(0);
     }
 
@@ -73,8 +70,8 @@ public class ScoresTest {
 
         // then
         assertEquals(140 + 3 + 4 + 5 + 6
-                        - setup.eatStonePenalty().getValue()
-                        - setup.gameOverPenalty().getValue(),
+                        - settings.integer(EAT_STONE_PENALTY)
+                        - settings.integer(GAME_OVER_PENALTY),
                 score());
         assertEquals(2, length());
     }
@@ -101,7 +98,7 @@ public class ScoresTest {
     }
 
     private Scores getScores(int startScore) {
-        return new Scores(startScore, setup);
+        return new Scores(startScore, settings);
     }
 
     @Test
@@ -134,7 +131,7 @@ public class ScoresTest {
 
         // then
         assertEquals(3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12
-                - setup.eatStonePenalty().getValue()
+                - settings.integer(EAT_STONE_PENALTY)
                 + 3 + 4, score());
         assertEquals(4, length());
     }
@@ -181,7 +178,7 @@ public class ScoresTest {
 
         // then
         assertEquals(100
-                - setup.gameOverPenalty().getValue()
+                - settings.integer(GAME_OVER_PENALTY)
                 + 3 + 4, score());
         assertEquals(4, length());
     }

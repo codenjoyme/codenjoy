@@ -25,6 +25,8 @@ package com.codenjoy.dojo.snake.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 
+import static com.codenjoy.dojo.snake.services.GameSettings.Keys.*;
+
 // Классический подсчет очков, где очки постоянно агреггируются от игре к игре.
 // "Инкриз" очков рассчитывается из текущего размера змеи в момент съедания яблока.
 // Тогда как камень укорачивает только длинну (-10), ровно как и суицид (до 2х).
@@ -35,16 +37,16 @@ public class Scores implements PlayerScores {
 
     protected volatile int score;
     protected volatile int length;  // TODO remove from here
-    protected SnakeSettings setup;
+    protected GameSettings settings;
 
-    public Scores(int startScore, SnakeSettings setup) {
-        this.setup = setup;
+    public Scores(int startScore, GameSettings setup) {
+        this.settings = setup;
         score = startScore;
         initLength();
     }
 
     protected void initLength() {
-        length = setup.startSnakeLength().getValue();
+        length = settings.integer(START_SNAKE_LENGTH);
     }
 
     @Override
@@ -72,11 +74,11 @@ public class Scores implements PlayerScores {
             snakeEatStone();
         }
         score = Math.max(0, score);
-        length = Math.max(setup.startSnakeLength().getValue(), length);
+        length = Math.max(settings.integer(START_SNAKE_LENGTH), length);
     }
 
     protected void snakeIsDead() {
-        score -= setup.gameOverPenalty().getValue();
+        score -= settings.integer(GAME_OVER_PENALTY);
         initLength();
     }
 
@@ -86,8 +88,8 @@ public class Scores implements PlayerScores {
     }
 
     protected void snakeEatStone() {
-        score -= setup.eatStonePenalty().getValue();
-        length -= setup.eatStoneDecrease().getValue();
+        score -= settings.integer(EAT_STONE_PENALTY);
+        length -= settings.integer(EAT_STONE_DECREASE);
     }
 
     @Override

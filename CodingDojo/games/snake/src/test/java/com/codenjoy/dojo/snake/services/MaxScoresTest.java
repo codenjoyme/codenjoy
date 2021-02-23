@@ -23,8 +23,6 @@ package com.codenjoy.dojo.snake.services;
  */
 
 
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,9 +33,8 @@ import static org.junit.Assert.assertEquals;
 public class MaxScoresTest {
 
     private Scores scores;
-    private Settings settings;
 
-    private SnakeSettings setup;
+    private GameSettings settings;
 
     public void snakeEatApple() {
         scores.event(Events.EAT_APPLE);
@@ -53,8 +50,7 @@ public class MaxScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
-        setup = new SnakeSettings(settings);
+        settings = new GameSettings();
         scores = getScores(0);
     }
 
@@ -63,7 +59,7 @@ public class MaxScoresTest {
     }
 
     private MaxScores getScores(int startScore, int startLength) {
-        return new MaxScores(startScore, setup){{
+        return new MaxScores(startScore, settings){{
             length = startLength;
         }};
     }

@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.snake.model.artifacts.EmptySpace;
 import com.codenjoy.dojo.snake.model.artifacts.Tail;
+import com.codenjoy.dojo.snake.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -56,7 +57,7 @@ public class DirectionTest {
         snake = new Hero(50, 50);
         when(board.createSnake()).thenReturn(snake);
         listener = mock(EventListener.class);
-        Player player = new Player(listener);
+        Player player = new Player(listener, mock(GameSettings.class));
         player.newHero(board);
     }
 

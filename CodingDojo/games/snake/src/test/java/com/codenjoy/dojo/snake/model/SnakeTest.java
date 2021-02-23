@@ -23,37 +23,41 @@ package com.codenjoy.dojo.snake.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.snake.model.artifacts.Apple;
 import com.codenjoy.dojo.snake.model.artifacts.ArtifactGenerator;
 import com.codenjoy.dojo.snake.model.artifacts.BasicWalls;
 import com.codenjoy.dojo.snake.model.artifacts.Stone;
+import com.codenjoy.dojo.snake.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static com.codenjoy.dojo.snake.services.GameSettings.Keys.START_SNAKE_LENGTH;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class SnakeTest {
 
     private static final int BOARD_SIZE = 9;
-    private static final int SNAKE_SIZE = 2;
     private Field board;
     private Hero hero;
     private Stone stone;
     private ArtifactGenerator generator = new HaveNothing();
     private EventListener listener;
     private PrinterFactory printer = new PrinterFactoryImpl();
+    private GameSettings settings;
 
     @Before
     public void setup() {
+        settings = new GameSettings()
+            .integer(START_SNAKE_LENGTH, 2);
         givenBoardSize(BOARD_SIZE);
     }
         
@@ -114,13 +118,13 @@ public class SnakeTest {
     }
 
     void givenBoardSize(int size) {
-        givenBoard(size, new BasicWalls(size), SNAKE_SIZE);
+        givenBoard(size, new BasicWalls(size));
     }
 
-    private void givenBoard(int size, Walls walls, int snakeSize) {
-        board = new Snake(generator, walls, size, snakeSize);
+    private void givenBoard(int size, Walls walls) {
+        board = new Snake(generator, walls, size, settings);
         listener = mock(EventListener.class);
-        board.newGame(new Player(listener));
+        board.newGame(new Player(listener, settings));
         hero = board.snake();
         stone = board.getStone();
     }
@@ -251,7 +255,8 @@ public class SnakeTest {
     }
 
     void givenBoardWithSnakeSize(int snakeSize) {
-        givenBoard(BOARD_SIZE, new BasicWalls(BOARD_SIZE), snakeSize);
+        settings.integer(START_SNAKE_LENGTH, snakeSize);
+        givenBoard(BOARD_SIZE, new BasicWalls(BOARD_SIZE));
     }
 
     // Направление движеня змейки изначально в право.
@@ -2052,7 +2057,7 @@ public class SnakeTest {
     }
 
     private void givenBoardWithoutWalls() {
-        givenBoard(BOARD_SIZE, new Walls(), SNAKE_SIZE);
+        givenBoard(BOARD_SIZE, new Walls());
     }
 
     // проверить что если нет стен, и змейка проходит сквозь стены
@@ -2101,7 +2106,7 @@ public class SnakeTest {
         Joystick joystick = board.snake();
 
         // when
-        board.newGame(new Player(mock(EventListener.class)));
+        board.newGame(new Player(mock(EventListener.class), settings));
 
         // then
         assertNotSame(joystick, board.snake());

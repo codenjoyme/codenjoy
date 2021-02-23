@@ -23,11 +23,15 @@ package com.codenjoy.dojo.snake.model.artifacts;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.Dice;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.snake.model.Field;
 import com.codenjoy.dojo.snake.model.Hero;
 import com.codenjoy.dojo.snake.model.Player;
 import com.codenjoy.dojo.snake.model.Walls;
+import com.codenjoy.dojo.snake.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -36,7 +40,8 @@ import org.mockito.stubbing.Answer;
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -73,7 +78,7 @@ public class RandomArtifactGeneratorTest {
     private void initSnake() {
         when(board.createSnake()).thenReturn(snake);
         EventListener listener = mock(EventListener.class);
-        Player player = new Player(listener);
+        Player player = new Player(listener, mock(GameSettings.class));
         player.newHero(board);
     }
 
