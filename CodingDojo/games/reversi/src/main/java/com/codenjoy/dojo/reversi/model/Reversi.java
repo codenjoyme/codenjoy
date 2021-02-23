@@ -26,10 +26,12 @@ package com.codenjoy.dojo.reversi.model;
 import com.codenjoy.dojo.reversi.model.items.Break;
 import com.codenjoy.dojo.reversi.model.items.Chip;
 import com.codenjoy.dojo.reversi.services.Events;
+import com.codenjoy.dojo.reversi.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,8 +50,10 @@ public class Reversi implements Field {
     private Level level;
     private Dice dice;
     private boolean current;
+    private GameSettings settings;
 
-    public Reversi(Level level, Dice dice) {
+    public Reversi(Level level, Dice dice, GameSettings settings) {
+        this.settings = settings;
         flipper = new Flipper(this);
         this.level = level;
         this.dice = dice;
@@ -268,6 +272,11 @@ public class Reversi implements Field {
     public void remove(Player player) {
         players.remove(player);
         player.hero = null;
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 
     @Override

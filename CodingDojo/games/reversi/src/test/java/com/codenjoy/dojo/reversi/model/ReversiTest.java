@@ -24,6 +24,7 @@ package com.codenjoy.dojo.reversi.model;
 
 
 import com.codenjoy.dojo.reversi.services.Events;
+import com.codenjoy.dojo.reversi.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -35,6 +36,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.reversi.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -50,11 +52,14 @@ public class ReversiTest {
     private EventListener listener2;
     private Player player1;
     private Player player2;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private PrinterFactory printer;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        printer = new PrinterFactoryImpl();
+        settings = new GameSettings();
     }
 
     private void dice(int...ints) {
@@ -65,12 +70,12 @@ public class ReversiTest {
     }
 
     private void givenFl(String board) {
-        Level level = new LevelImpl(board);
-        game = new Reversi(level, dice);
+        settings.string(LEVEL_MAP, board);
+        game = new Reversi(settings.level(), dice, settings);
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);
-        player1 = new Player(listener1);
-        player2 = new Player(listener2);
+        player1 = new Player(listener1, settings);
+        player2 = new Player(listener2, settings);
         game.newGame(player1);
         game.newGame(player2);
         hero1 = game.getHeroes().get(0);
@@ -1138,7 +1143,7 @@ public class ReversiTest {
                 "        ");
 
         try {
-            game.newGame(new Player(mock(EventListener.class)));
+            game.newGame(new Player(mock(EventListener.class), settings));
             fail("Expected exception");
         } catch (IllegalArgumentException exception) {
             assertEquals("Нельзя добавить игрока - поле занято!", exception.getMessage());

@@ -24,23 +24,17 @@ package com.codenjoy.dojo.reversi.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+
+import static com.codenjoy.dojo.reversi.services.GameSettings.Keys.*;
 
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> loosePenalty;
-    private final Parameter<Integer> flipScore;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(100);
-        flipScore = settings.addEditBox("Flip score").type(Integer.class).def(1);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(0);
+        this.settings = settings;
     }
 
     @Override
@@ -58,11 +52,11 @@ public class Scores implements PlayerScores {
         Events event = (Events)object;
 
         if (event.isFlip()) {
-            score += flipScore.getValue() * event.count();
+            score += settings.integer(FLIP_SCORE) * event.count();
         } else if (event.isWin()) {
-            score += winScore.getValue();
+            score += settings.integer(WIN_SCORE);
         } else if (event.isLoose()) {
-            score -= loosePenalty.getValue();
+            score -= settings.integer(LOOSE_PENALTY);
         }
         score = Math.max(0, score);
     }
