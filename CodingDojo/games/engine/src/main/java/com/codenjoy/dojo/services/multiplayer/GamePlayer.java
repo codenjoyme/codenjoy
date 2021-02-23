@@ -148,4 +148,8 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
     public void setProgress(LevelProgress progress) {
         this.progress = progress;
     }
+
+    public SettingsReader settings() {
+        return settings;
+    }
 }
