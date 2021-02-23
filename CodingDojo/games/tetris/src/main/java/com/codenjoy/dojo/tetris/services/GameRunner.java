@@ -40,6 +40,9 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.GAME_LEVELS;
+import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.GLASS_SIZE;
+
 public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
@@ -55,9 +58,9 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     @Override
     public GameField createGame(int level, GameSettings settings) {
         Figures queue = new Figures();
-        Levels levels = loadLevelsFor(queue, settings.gameLevels());
+        Levels levels = loadLevelsFor(queue, settings.string(GAME_LEVELS));
         levels.gotoLevel(level - LevelProgress.levelsStartsFrom1);
-        return new Tetris(levels, queue, settings.glassSize());
+        return new Tetris(levels, queue, settings.integer(GLASS_SIZE));
     }
 
     private Levels loadLevelsFor(FigureQueue queue, String levelsType) {
@@ -66,7 +69,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public Parameter<Integer> getBoardSize(GameSettings settings) {
-        return settings.getGlassSize();
+        return settings.integerValue(GLASS_SIZE);
     }
 
     @Override
@@ -82,7 +85,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
         // TODO слишком много тут делается для получения количества уровней
-        String levelsType = settings.gameLevels();
+        String levelsType = settings.string(GAME_LEVELS);
         Levels levels = loadLevelsFor(NullFigureQueue.INSTANCE, levelsType);
 
         return MultiplayerType.SINGLE_LEVELS.apply(levels.count());

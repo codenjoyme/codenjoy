@@ -37,6 +37,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -72,8 +73,8 @@ public class SmokeTest {
             @Override
             public GameSettings getSettings() {
                 return super.getSettings()
-                        .glassSize(10)
-                        .gameLevels(AllFigureLevels.class.getSimpleName());
+                        .integer(GLASS_SIZE, 10)
+                        .string(GAME_LEVELS, AllFigureLevels.class.getSimpleName());
             }
 
             @Override

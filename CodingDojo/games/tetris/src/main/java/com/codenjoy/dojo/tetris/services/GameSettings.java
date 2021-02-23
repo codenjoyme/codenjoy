@@ -1,25 +1,39 @@
 package com.codenjoy.dojo.tetris.services;
 
-import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
 import com.codenjoy.dojo.tetris.model.levels.level.ProbabilityWithoutOverflownLevels;
 
 import java.util.List;
 
-public class GameSettings extends SettingsImpl {
+import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.GAME_LEVELS;
+import static com.codenjoy.dojo.tetris.services.GameSettings.Keys.GLASS_SIZE;
 
-    public static final String GAME_LEVELS = "Game Levels";
-    public static final String GLASS_SIZE = "Glass Size";
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
-    private Parameter<String> gameLevels;
-    private Parameter<Integer> glassSize;
+    public enum Keys implements Key {
+
+        GAME_LEVELS("Game Levels"),
+        GLASS_SIZE("Glass Size");
+
+        private String key;
+
+        Keys(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public String key() {
+            return key;
+        }
+    }
 
     public GameSettings() {
-        gameLevels = addSelect(GAME_LEVELS, (List)levels()).type(String.class)
+        addSelect(GAME_LEVELS.key(), (List)levels()).type(String.class)
                 .def(ProbabilityWithoutOverflownLevels.class.getSimpleName());
 
-        glassSize = addEditBox(GLASS_SIZE).type(Integer.class).def(18);
+        addEditBox(GLASS_SIZE.key()).type(Integer.class).def(18);
     }
 
     private List<String> levels() {
@@ -27,29 +41,4 @@ public class GameSettings extends SettingsImpl {
         return factory.allLevels();
     }
 
-    // getters
-
-    public String gameLevels() {
-        return gameLevels.getValue();
-    }
-
-    public Integer glassSize() {
-        return glassSize.getValue();
-    }
-
-    public Parameter<Integer> getGlassSize() {
-        return glassSize;
-    }
-
-    // setters
-
-    public GameSettings gameLevels(String value) {
-        gameLevels.update(value);
-        return this;
-    }
-
-    public GameSettings glassSize(Integer value) {
-        glassSize.update(value);
-        return this;
-    }
 }
