@@ -25,6 +25,8 @@ package com.codenjoy.dojo.startandjump.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 
+import static com.codenjoy.dojo.startandjump.services.GameSettings.Keys.WIN_SCORE;
+
 public class Scores implements PlayerScores {
 
     private volatile int score;
@@ -49,7 +51,7 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.STILL_ALIVE)) {
-            score += settings.winScore();
+            score += settings.integer(WIN_SCORE);
         }
         score = Math.max(0, score);
     }
