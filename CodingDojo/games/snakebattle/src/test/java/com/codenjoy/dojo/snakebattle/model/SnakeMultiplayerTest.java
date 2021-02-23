@@ -40,6 +40,9 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.TIME_FOR_WINNER;
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
@@ -67,16 +70,8 @@ public class SnakeMultiplayerTest {
     public void setup() {
         dice = mock(Dice.class);
 
-        settings = new GameSettings()
-                .roundsEnabled(true)
-                .roundsPerMatch(5)
-                .minTicksForWin(1)
-                .timeBeforeStart(0)
-                .timePerRound(300)
-                .timeForWinner(1)
-                .flyingCount(10)
-                .furyCount(10)
-                .stoneReduced(3);
+        settings = new TestGameSettings()
+                .integer(MIN_TICKS_FOR_WIN, 1);
     }
 
     private void givenFl(String board) {
@@ -1091,7 +1086,7 @@ public class SnakeMultiplayerTest {
     // змейка не стартует сразу если стоит таймер
     @Test
     public void shouldWaitTillTimer_thenStart() {
-        settings.timeBeforeStart(4);
+        settings.integer(TIME_BEFORE_START, 4);
 
         givenFl("☼☼☼☼☼☼☼" +
                 "☼     ☼" +
@@ -1164,8 +1159,8 @@ public class SnakeMultiplayerTest {
     // если одна змейка погибает, стартует новый раунд
     @Test
     public void shouldStartNewGame_whenGameOver() {
-        settings.timeBeforeStart(1)
-                .roundsPerMatch(3);
+        settings.integer(TIME_BEFORE_START, 1)
+                .integer(ROUNDS_PER_MATCH, 3);
 
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼☼     ☼" +
@@ -2833,7 +2828,7 @@ public class SnakeMultiplayerTest {
     // если тиков для победы недостаточно, то WIN ты не получишь
     @Test
     public void shouldNoWin_whenIsNotEnoughTicksForWin() {
-        settings.minTicksForWin(10);
+        settings.integer(MIN_TICKS_FOR_WIN, 10);
 
         givenFl("☼☼☼☼☼☼☼☼" +
                 "☼┌─┐   ☼" +

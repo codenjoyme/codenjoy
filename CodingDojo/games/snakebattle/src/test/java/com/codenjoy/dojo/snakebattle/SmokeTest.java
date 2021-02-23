@@ -36,6 +36,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.LEVEL_MAP;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -124,7 +125,8 @@ public class SmokeTest {
             @Override
             public GameSettings getSettings() {
                 return super.getSettings()
-                        .levelMap("☼☼☼☼☼☼☼☼☼" +
+                        .string(LEVEL_MAP,
+                                "☼☼☼☼☼☼☼☼☼" +
                                 "☼☼      ☼" +
                                 "☼#      ☼" +
                                 "☼☼ ☼# ○ ☼" +

@@ -34,6 +34,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -52,9 +53,9 @@ public class SnakeHeroTest {
     @Before
     public void setup() {
         settings = new GameSettings()
-                .flyingCount(10)
-                .furyCount(10)
-                .stoneReduced(3);
+                .integer(FLYING_COUNT, 10)
+                .integer(FURY_COUNT, 10)
+                .integer(STONE_REDUCED, 3);
 
         hero = new Hero(pt(0, 0));
         game = mock(SnakeBoard.class);
@@ -133,7 +134,7 @@ public class SnakeHeroTest {
     // тест что короткая змейка погибает от камня
     @Test
     public void diedByStone() {
-        snakeIncreasing(settings.stoneReduced().getValue() - 1);
+        snakeIncreasing(stoneReduced() - 1);
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
         hero.eat();
@@ -144,7 +145,7 @@ public class SnakeHeroTest {
     // тест что большая змейка уменьшается от камня, но не погибает
     @Test
     public void reduceByStone() {
-        snakeIncreasing(settings.stoneReduced().getValue());
+        snakeIncreasing(stoneReduced());
         int before = hero.size();
         stonesAtAllPoints(true);// впереди камень
         hero.tick();
@@ -152,9 +153,13 @@ public class SnakeHeroTest {
         stonesAtAllPoints(false);
         assertTrue("Большая змейка погибла от камня!", hero.isAlive());
         assertEquals("Змейка не укоротилась на предполагаемую длину!",
-                before - settings.stoneReduced().getValue(), hero.size());
+                before - stoneReduced(), hero.size());
         hero.tick();
         hero.eat();
+    }
+
+    private Integer stoneReduced() {
+        return settings.integer(STONE_REDUCED);
     }
 
     // змейка может откусить себе хвост

@@ -35,11 +35,12 @@ import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.snakebattle.client.Board;
 import com.codenjoy.dojo.snakebattle.client.ai.AISolver;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
-import com.codenjoy.dojo.snakebattle.model.level.Level;
 import com.codenjoy.dojo.snakebattle.model.Elements;
 import com.codenjoy.dojo.snakebattle.model.Player;
 
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.PLAYERS_PER_ROOM;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
@@ -87,12 +88,12 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     @Override
     public MultiplayerType getMultiplayerType(GameSettings settings) {
         return MultiplayerType.TEAM.apply(
-                settings.playersPerRoom().getValue(),
+                settings.integer(PLAYERS_PER_ROOM),
                 MultiplayerType.DISPOSABLE);
     }
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener, settings.roundsEnabledValue());
+        return new Player(listener, settings.boolValue(ROUNDS_ENABLED));
     }
 }

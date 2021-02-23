@@ -25,10 +25,11 @@ package com.codenjoy.dojo.snakebattle.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
+
 public class Scores implements PlayerScores {
 
     private GameSettings settings;
-
     private volatile int score;
 
     public Scores(int startScore, GameSettings settings) {
@@ -52,17 +53,17 @@ public class Scores implements PlayerScores {
             return;
         Events event = (Events)object;
         if (event.isWin()) {
-            score += settings.winScore().getValue();
+            score += settings.integer(WIN_SCORE);
         } else if (event.isApple()) {
-            score += settings.appleScore().getValue();
+            score += settings.integer(APPLE_SCORE);
         } else if (event.isGold()) {
-            score += settings.goldScore().getValue();
+            score += settings.integer(GOLD_SCORE);
         } else if (event.isDie()) {
-            score -= settings.diePenalty().getValue();
+            score -= settings.integer(DIE_PENALTY);
         } else if (event.isStone()) {
-            score += settings.stoneScore().getValue();
+            score += settings.integer(STONE_SCORE);
         } else if (event.isEat()) {
-            score += settings.eatScore().getValue() * event.getAmount();
+            score += settings.integer(EAT_SCORE) * event.getAmount();
         }
         score = Math.max(0, score);
     }

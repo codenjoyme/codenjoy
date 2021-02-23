@@ -40,6 +40,9 @@ import org.junit.runners.Parameterized;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.TIME_FOR_WINNER;
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
@@ -63,16 +66,7 @@ public class BoardAddObjectsTest {
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
 
-        GameSettings settings = new GameSettings()
-                .roundsEnabled(true)
-                .roundsPerMatch(5)
-                .minTicksForWin(2)
-                .timeBeforeStart(0)
-                .timePerRound(300)
-                .timeForWinner(1)
-                .flyingCount(10)
-                .furyCount(10)
-                .stoneReduced(3);
+        GameSettings settings = new TestGameSettings();
 
         Round round = new RoundImpl(settings);
         game = new SnakeBoard(level, mock(Dice.class), round, settings);

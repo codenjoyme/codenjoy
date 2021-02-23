@@ -36,6 +36,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.services.Direction.*;
 import static com.codenjoy.dojo.snakebattle.model.DirectionUtils.getPointAt;
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static java.util.stream.Collectors.toList;
 
 public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tail>, Player> {
@@ -232,7 +233,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
         if (field.isStone(head) && !isFlying()) {
             stonesCount++;
             if (!isFury()) {
-                reduce(settings.stoneReduced().getValue(), NOW);
+                reduce(settings.integer(STONE_REDUCED), NOW);
             }
         }
         if (field.isFlyingPill(head)) {
@@ -247,11 +248,11 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
     }
 
     public void eatFlying() {
-        flyingCount += settings.flyingCount().getValue();
+        flyingCount += settings.integer(FLYING_COUNT);
     }
 
     public void eatFury() {
-        furyCount += settings.furyCount().getValue();
+        furyCount += settings.integer(FURY_COUNT);
     }
 
     public void count() {

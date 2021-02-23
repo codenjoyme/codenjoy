@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.round.RoundImpl;
 import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.client.Board;
 import com.codenjoy.dojo.snakebattle.model.Player;
+import com.codenjoy.dojo.snakebattle.model.TestGameSettings;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
@@ -41,6 +42,8 @@ import org.junit.Test;
 
 import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static com.codenjoy.dojo.services.Direction.UP;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -70,16 +73,7 @@ public class AISolverTest {
         // можно смело убирать, если мешает
         LevelImpl level = new LevelImpl(board);
 
-        settings = new GameSettings()
-                .roundsEnabled(true)
-                .roundsPerMatch(5)
-                .minTicksForWin(2)
-                .timeBeforeStart(0)
-                .timePerRound(300)
-                .timeForWinner(1)
-                .flyingCount(10)
-                .furyCount(10)
-                .stoneReduced(3);
+        settings = new TestGameSettings();
 
         Round round = new RoundImpl(settings);
         SnakeBoard game = new SnakeBoard(level, dice, round, settings);

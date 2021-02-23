@@ -39,7 +39,10 @@ import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.TIME_FOR_WINNER;
 import static com.codenjoy.dojo.snakebattle.model.SnakeMultiplayerTest.verifyEvents;
+import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -60,16 +63,7 @@ public class SnakeBoardTest {
     public void setup() {
         dice = mock(Dice.class);
 
-        settings = new GameSettings()
-                .roundsEnabled(true)
-                .roundsPerMatch(5)
-                .minTicksForWin(2)
-                .timeBeforeStart(0)
-                .timePerRound(300)
-                .timeForWinner(1)
-                .flyingCount(10)
-                .furyCount(10)
-                .stoneReduced(3);
+        settings = new TestGameSettings();
     }
 
     private void givenFl(String board) {
