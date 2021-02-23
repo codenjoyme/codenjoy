@@ -37,6 +37,7 @@ import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.services.Events;
+import com.codenjoy.dojo.snakebattle.services.GameSettings;
 
 import java.util.*;
 import java.util.function.Function;
@@ -60,9 +61,9 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     private List<Player> players;
     private int size;
     private Dice dice;
-    private SettingsReader settings;
+    private GameSettings settings;
 
-    public SnakeBoard(Level level, Dice dice, Round round, SettingsReader settings) {
+    public SnakeBoard(Level level, Dice dice, Round round, GameSettings settings) {
         super(round, Events.START, Events.WIN, Events.DIE);
         this.dice = dice;
         walls = level.getWalls();

@@ -25,13 +25,13 @@ package com.codenjoy.dojo.snakebattle.model;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.round.RoundGamePlayer;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
+import com.codenjoy.dojo.snakebattle.services.GameSettings;
 
 public class Player extends RoundGamePlayer<Hero, Field> {
 
-    public Player(EventListener listener, SettingsReader settings) {
+    public Player(EventListener listener, GameSettings settings) {
         super(listener, settings);
     }
 
