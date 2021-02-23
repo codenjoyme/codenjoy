@@ -78,7 +78,7 @@ public class SokobanTest {
             level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
 
-        SettingsReader settings = new GameSettings();
+        GameSettings settings = new GameSettings();
         game = new Sokoban(level, dice, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, "PlayerFirst", settings);

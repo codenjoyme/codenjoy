@@ -25,6 +25,7 @@ package com.codenjoy.dojo.sokoban.model;
 
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
@@ -69,7 +70,7 @@ public class SokobanTestBackup {
         LevelImpl level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
 
-        SettingsReader settings = new GameSettings();
+        GameSettings settings = new GameSettings();
         game = new Sokoban(level, dice, settings);
         listener = mock(EventListener.class);
         player = new Player(listener, "Player1", settings);

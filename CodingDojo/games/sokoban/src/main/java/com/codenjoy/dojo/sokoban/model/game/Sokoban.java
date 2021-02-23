@@ -32,6 +32,7 @@ import com.codenjoy.dojo.sokoban.model.items.Field;
 import com.codenjoy.dojo.sokoban.model.items.Level;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.*;
 import com.codenjoy.dojo.sokoban.services.Events;
+import com.codenjoy.dojo.sokoban.services.GameSettings;
 import com.codenjoy.dojo.sokoban.services.Player;
 
 import java.util.LinkedList;
@@ -63,9 +64,9 @@ public class Sokoban implements Field {
     private boolean isWon;
     private List<Player> players;
     private Dice dice;
-    private SettingsReader settings;
+    private GameSettings settings;
 
-    public Sokoban(Level level, Dice dice, SettingsReader settings) {
+    public Sokoban(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         size = level.getSize();
         walls = level.getWalls();

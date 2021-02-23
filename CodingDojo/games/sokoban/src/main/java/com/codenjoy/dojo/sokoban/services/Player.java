@@ -41,7 +41,7 @@ public class Player extends GamePlayer<Hero, Field> {
     public Hero hero;
     private String name;
 
-    public Player(EventListener listener, String name, SettingsReader settings) {
+    public Player(EventListener listener, String name, GameSettings settings) {
         super(listener, settings);
         this.name = name;
         if (!Storage.levels.containsKey(name)) {
