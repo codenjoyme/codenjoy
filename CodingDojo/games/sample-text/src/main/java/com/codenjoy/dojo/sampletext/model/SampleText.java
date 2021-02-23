@@ -93,12 +93,12 @@ public class SampleText implements Field {
 
     @Override
     public String getQuestion(int index) {
-        return level.getQuestions().get(index);
+        return level.questions().get(index);
     }
 
     @Override
     public String getAnswer(int index) {
-        return level.getAnswers().get(index);
+        return level.answers().get(index);
     }
 
     @Override

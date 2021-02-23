@@ -26,6 +26,7 @@ package com.codenjoy.dojo.sampletext.model;
 import com.codenjoy.dojo.utils.JsonUtils;
 
 public class QuestionAnswer {
+
     private String question;
     private String answer;
     private boolean valid;

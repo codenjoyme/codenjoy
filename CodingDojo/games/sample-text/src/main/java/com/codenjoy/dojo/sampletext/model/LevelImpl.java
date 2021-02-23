@@ -43,12 +43,12 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<String> getQuestions() {
+    public List<String> questions() {
         return questions;
     }
 
     @Override
-    public List<String> getAnswers() {
+    public List<String> answers() {
         return answers;
     }
 

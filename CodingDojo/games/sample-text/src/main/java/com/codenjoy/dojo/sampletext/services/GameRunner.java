@@ -27,8 +27,11 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.sampletext.client.Board;
 import com.codenjoy.dojo.sampletext.client.ai.AISolver;
-import com.codenjoy.dojo.sampletext.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.sampletext.model.Player;
+import com.codenjoy.dojo.sampletext.model.SampleText;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
@@ -100,7 +103,7 @@ public class GameRunner extends AbstractGameType<GameSettings>{
             JSONObject result = new JSONObject();
 
             result.put("nextQuestion", player.getNextQuestion());
-            result.put("history", player.getHistory());
+            result.put("history", player.history());
 
             return result;
         });

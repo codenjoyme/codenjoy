@@ -76,7 +76,7 @@ public class Player extends GamePlayer<Hero, Field> {
         return field.getQuestion(questionIndex);
     }
 
-    public List<QuestionAnswer> getHistory() {
+    public List<QuestionAnswer> history() {
         List<QuestionAnswer> result = new LinkedList<>();
         result.addAll(history);
         return result;
