@@ -23,12 +23,12 @@ package com.codenjoy.dojo.snakebattle.model.hero;
  */
 
 
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.Point;
+import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.round.RoundPlayerHero;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.board.Field;
-import com.codenjoy.dojo.snakebattle.services.GameSettings;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -56,8 +56,6 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
     private boolean leaveApples;
     private Point lastTailPosition;
 
-    private GameSettings settings;
-
     public Hero(Point xy) {
         this(RIGHT);
         elements.add(new Tail(xy.getX() - 1, xy.getY(), this));
@@ -80,7 +78,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
     }
 
     public List<Tail> reversedBody() {
-        return new LinkedList<Tail>(elements){{
+        return new LinkedList<>(elements){{
             Collections.reverse(this);
         }};
     }
@@ -137,7 +135,6 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
     @Override
     public void init(Field field) {
         this.field = field;
-        settings = field.settings();
     }
 
     @Override
@@ -233,7 +230,7 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
         if (field.isStone(head) && !isFlying()) {
             stonesCount++;
             if (!isFury()) {
-                reduce(settings.integer(STONE_REDUCED), NOW);
+                reduce(settings().integer(STONE_REDUCED), NOW);
             }
         }
         if (field.isFlyingPill(head)) {
@@ -248,11 +245,11 @@ public class Hero extends RoundPlayerHero<Field> implements State<LinkedList<Tai
     }
 
     public void eatFlying() {
-        flyingCount += settings.integer(FLYING_COUNT);
+        flyingCount += settings().integer(FLYING_COUNT);
     }
 
     public void eatFury() {
-        furyCount += settings.integer(FURY_COUNT);
+        furyCount += settings().integer(FURY_COUNT);
     }
 
     public void count() {

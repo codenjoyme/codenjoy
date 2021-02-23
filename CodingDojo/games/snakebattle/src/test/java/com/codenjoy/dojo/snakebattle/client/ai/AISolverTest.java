@@ -29,7 +29,6 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.round.Round;
 import com.codenjoy.dojo.services.round.RoundImpl;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.client.Board;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.TestGameSettings;
@@ -42,8 +41,6 @@ import org.junit.Test;
 
 import static com.codenjoy.dojo.services.Direction.RIGHT;
 import static com.codenjoy.dojo.services.Direction.UP;
-import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
-import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -77,11 +74,10 @@ public class AISolverTest {
 
         Round round = new RoundImpl(settings);
         SnakeBoard game = new SnakeBoard(level, dice, round, settings);
-        SimpleParameter<Boolean> roundsEnabled = new SimpleParameter<>(true);
 
         Hero hero = level.getHero(game);
         EventListener listener = mock(EventListener.class);
-        Player player = new Player(listener, roundsEnabled);
+        Player player = new Player(listener, settings);
 
         game.newGame(player);
         if (hero != null) {

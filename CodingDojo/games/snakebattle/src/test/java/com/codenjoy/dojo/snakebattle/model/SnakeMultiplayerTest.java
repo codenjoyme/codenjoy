@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.round.RoundImpl;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import com.codenjoy.dojo.snakebattle.model.board.SnakeBoard;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.LevelImpl;
@@ -41,8 +40,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.exceptions.verification.NeverWantedButInvoked;
 
 import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
-import static com.codenjoy.dojo.services.round.RoundSettings.Keys.TIME_FOR_WINNER;
-import static com.codenjoy.dojo.snakebattle.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
@@ -80,12 +77,10 @@ public class SnakeMultiplayerTest {
         RoundImpl round = new RoundImpl(settings);
         game = new SnakeBoard(level, dice, round, settings);
 
-        SimpleParameter<Boolean> roundsEnabled = new SimpleParameter<>(true);
-
         Hero hero = level.getHero(game);
         hero.setActive(true);
         heroEvents = mock(EventListener.class);
-        heroPlayer = new Player(heroEvents, roundsEnabled);
+        heroPlayer = new Player(heroEvents, settings);
         game.newGame(heroPlayer);
         heroPlayer.setHero(hero);
         hero.init(game);
@@ -94,7 +89,7 @@ public class SnakeMultiplayerTest {
         Hero enemy = level.getEnemy(game);
         enemy.setActive(true);
         enemyEvents = mock(EventListener.class);
-        enemyPlayer = new Player(enemyEvents, roundsEnabled);
+        enemyPlayer = new Player(enemyEvents, settings);
         game.newGame(enemyPlayer);
         enemyPlayer.setHero(enemy);
         enemy.init(game);

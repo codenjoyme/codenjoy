@@ -30,15 +30,13 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.round.Round;
-import com.codenjoy.dojo.services.round.RoundImpl;
 import com.codenjoy.dojo.services.round.RoundField;
-import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.snakebattle.model.Player;
 import com.codenjoy.dojo.snakebattle.model.hero.Hero;
 import com.codenjoy.dojo.snakebattle.model.level.Level;
 import com.codenjoy.dojo.snakebattle.model.objects.*;
 import com.codenjoy.dojo.snakebattle.services.Events;
-import com.codenjoy.dojo.snakebattle.services.GameSettings;
 
 import java.util.*;
 import java.util.function.Function;
@@ -62,14 +60,10 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     private List<Player> players;
     private int size;
     private Dice dice;
+    private SettingsReader settings;
 
-    private GameSettings settings;
-
-    public SnakeBoard(Level level, Dice dice, Round round,
-                      GameSettings settings) {
-
+    public SnakeBoard(Level level, Dice dice, Round round, SettingsReader settings) {
         super(round, Events.START, Events.WIN, Events.DIE);
-        this.settings = settings;
         this.dice = dice;
         walls = level.getWalls();
         starts = level.getStartPoints();
@@ -79,6 +73,7 @@ public class SnakeBoard extends RoundField<Player> implements Field {
         furyPills = level.getFuryPills();
         gold = level.getGold();
         size = level.getSize();
+        this.settings = settings;
         players = new LinkedList<>();
     }
 
@@ -352,11 +347,6 @@ public class SnakeBoard extends RoundField<Player> implements Field {
                 .filter(h -> !h.equals(me));
     }
 
-    @Override
-    public GameSettings settings() {
-        return settings;
-    }
-
     private Hero enemyCrossedWith(Hero me) {
         return aliveEnemies(me)
                 .filter(h -> me.isHeadIntersect(h))
@@ -427,6 +417,11 @@ public class SnakeBoard extends RoundField<Player> implements Field {
             players.add(player);
         }
         player.newHero(this);
+    }
+
+    @Override
+    public SettingsReader settings() {
+        return settings;
     }
 
     public List<Wall> getWalls() {
