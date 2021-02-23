@@ -61,7 +61,7 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
     public Sudoku createGame(int levelNumber, GameSettings settings) {
         int index = levelNumber - LevelProgress.levelsStartsFrom1;
         Level level = getLevel(levelNumber, settings);
-        return new Sudoku(level, index);
+        return new Sudoku(level, index, settings);
     }
 
     private Level getLevel(int levelNumber, GameSettings settings) {
@@ -100,6 +100,6 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener);
+        return new Player(listener, settings);
     }
 }

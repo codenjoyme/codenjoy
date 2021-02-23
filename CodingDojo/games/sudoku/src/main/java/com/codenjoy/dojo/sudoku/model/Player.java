@@ -32,6 +32,7 @@ import com.codenjoy.dojo.services.joystick.ActJoystick;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.sudoku.services.GameSettings;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -39,8 +40,8 @@ public class Player extends GamePlayer<PlayerHero, Field> {
 
     private Field field;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
     }
 
     public static final int SIZE = 9;

@@ -25,8 +25,10 @@ package com.codenjoy.dojo.sudoku.model;
 
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.sudoku.model.level.Level;
 import com.codenjoy.dojo.sudoku.services.Events;
+import com.codenjoy.dojo.sudoku.services.GameSettings;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -45,10 +47,13 @@ public class Sudoku implements Field {
     private boolean gameOver;
     private boolean win;
 
-    public Sudoku(Level level, int levelNumber) {
+    private GameSettings settings;
+
+    public Sudoku(Level level, int levelNumber, GameSettings settings) {
         cells = level.cells();
         walls = level.walls();
         size = level.size();
+        this.settings = settings;
         acts = new LinkedList<>();
         gameOver = false;
         this.levelNumber = levelNumber;
@@ -117,6 +122,11 @@ public class Sudoku implements Field {
 
     public void remove(Player player) {
         this.player = null;
+    }
+
+    @Override
+    public SettingsReader settings() {
+        return settings;
     }
 
     public List<Cell> getCells() {
