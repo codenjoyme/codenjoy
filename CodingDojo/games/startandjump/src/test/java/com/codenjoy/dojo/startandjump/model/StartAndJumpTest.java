@@ -23,12 +23,13 @@ package com.codenjoy.dojo.startandjump.model;
  */
 
 
-import com.codenjoy.dojo.startandjump.services.HeroStatus;
-import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.startandjump.services.GameSettings;
+import com.codenjoy.dojo.startandjump.services.HeroStatus;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,9 +37,9 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class StartAndJumpTest {
 
@@ -65,9 +66,10 @@ public class StartAndJumpTest {
         LevelImpl level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
 
-        game = new StartAndJump(dice, level);
+        GameSettings settings = new GameSettings();
+        game = new StartAndJump(dice, level, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, settings);
         game.newGame(player);
         player.hero = hero;
         this.hero = game.getHeroes().get(0);

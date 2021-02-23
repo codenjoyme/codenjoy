@@ -24,9 +24,8 @@ package com.codenjoy.dojo.startandjump.model;
 
 
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.startandjump.services.Events;
+import com.codenjoy.dojo.startandjump.services.GameSettings;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
@@ -34,8 +33,8 @@ public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
     }
 
     public Hero getHero() {

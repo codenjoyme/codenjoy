@@ -25,15 +25,20 @@ package com.codenjoy.dojo.startandjump.services;
 
 import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.printer.CharElements;
-import com.codenjoy.dojo.startandjump.client.Board;
-import com.codenjoy.dojo.startandjump.client.ai.AISolver;
-import com.codenjoy.dojo.startandjump.model.*;
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.AbstractGameType;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
+import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.startandjump.client.Board;
+import com.codenjoy.dojo.startandjump.client.ai.AISolver;
+import com.codenjoy.dojo.startandjump.model.Elements;
+import com.codenjoy.dojo.startandjump.model.Player;
+import com.codenjoy.dojo.startandjump.model.StartAndJump;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 
@@ -51,7 +56,7 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new StartAndJump(getDice(), settings.level());
+        return new StartAndJump(getDice(), settings.level(), settings);
     }
 
     @Override
@@ -86,6 +91,6 @@ public class GameRunner extends AbstractGameType<GameSettings> implements GameTy
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener);
+        return new Player(listener, settings);
     }
 }
