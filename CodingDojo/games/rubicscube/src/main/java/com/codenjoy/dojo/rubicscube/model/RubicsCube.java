@@ -24,8 +24,10 @@ package com.codenjoy.dojo.rubicscube.model;
 
 
 import com.codenjoy.dojo.rubicscube.services.Events;
+import com.codenjoy.dojo.rubicscube.services.GameSettings;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.List;
 
@@ -40,8 +42,11 @@ public class RubicsCube implements Field {
     private boolean gameOver;
     private RandomCommand generator;
 
-    public RubicsCube(RandomCommand generator) {
+    private GameSettings settings;
+
+    public RubicsCube(RandomCommand generator, GameSettings settings) {
         this.generator = generator;
+        this.settings = settings;
         cube = new Cube();
         cells = new CellsAdapter(cube);
         gameOver = false;
@@ -82,6 +87,11 @@ public class RubicsCube implements Field {
     @Override
     public void remove(Player player) {
         this.player = null;
+    }
+
+    @Override
+    public SettingsReader settings() {
+        return settings;
     }
 
     public List<Cell> getCells() {

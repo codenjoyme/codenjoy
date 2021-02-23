@@ -24,6 +24,7 @@ package com.codenjoy.dojo.rubicscube.model;
 
 
 import com.codenjoy.dojo.rubicscube.services.Events;
+import com.codenjoy.dojo.rubicscube.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Joystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -36,11 +37,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-/**
- * User: sanja
- * Date: 17.12.13
- * Time: 4:47
- */
 public class RubicsCubeTest {
 
     public static final String INITIAL =
@@ -74,14 +70,19 @@ public class RubicsCubeTest {
     private Joystick joystick;
     private RandomCommand command;
     private PrinterFactory printer = new PrinterFactoryImpl();
+    private GameSettings settings;
+
+    public void setup() {
+        settings = new GameSettings();
+    }
 
     private void givenFl(String command) {
         this.command = mock(RandomCommand.class);
         when(this.command.next()).thenReturn(command);
 
-        game = new RubicsCube(this.command);
+        game = new RubicsCube(this.command, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, settings);
         game.newGame(player);
         joystick = player.getHero();
     }

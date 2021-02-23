@@ -24,21 +24,18 @@ package com.codenjoy.dojo.rubicscube.services;
 
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+
+import static com.codenjoy.dojo.rubicscube.services.GameSettings.Keys.FAIL_PENALTY;
+import static com.codenjoy.dojo.rubicscube.services.GameSettings.Keys.SUCCESS_SCORE;
 
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> failPenalty;
-    private final Parameter<Integer> successScore;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        failPenalty = settings.addEditBox("Fail penalty").type(Integer.class).def(500);
-        successScore = settings.addEditBox("Success score").type(Integer.class).def(1000);
+        this.settings = settings;
     }
 
     @Override
@@ -54,9 +51,9 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.FAIL)) {
-            score -= failPenalty.getValue();
+            score -= settings.integer(FAIL_PENALTY);
         } else if (event.equals(Events.SUCCESS)) {
-            score += successScore.getValue();
+            score += settings.integer(SUCCESS_SCORE);
         }
         score = Math.max(0, score);
     }

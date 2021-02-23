@@ -29,7 +29,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RandomCommand {
+
     private Dice dice;
+
     private List<String> parts = Arrays.asList(
             "B", "B2", "B'", "D", "D2", "D'",
             "F", "F2", "F'", "L", "L2", "L'",
