@@ -53,9 +53,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new Spacerace(settings.level(), getDice(),
-                settings.integer(TICKS_TO_RECHARGE),
-                settings.integer(BULLETS_COUNT));
+        return new Spacerace(settings.level(), getDice(), settings);
     }
 
     @Override
@@ -90,6 +88,6 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener);
+        return new Player(listener, settings);
     }
 }

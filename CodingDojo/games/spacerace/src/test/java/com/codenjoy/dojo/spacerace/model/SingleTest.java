@@ -29,9 +29,12 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.spacerace.services.GameSettings;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.BULLETS_COUNT;
+import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.TICKS_TO_RECHARGE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -65,33 +68,35 @@ public class SingleTest {
                 "☼   ☼");
 
         dice = mock(Dice.class);
-        field = new Spacerace(level, dice,
-                SpaceraceTest.getBulletCharger().getTicksToRecharge(),
-                SpaceraceTest.getBulletCharger().getBulletsCount());
+        GameSettings settings = new GameSettings()
+                .integer(TICKS_TO_RECHARGE, 100)
+                .integer(BULLETS_COUNT, 1);
+
+        field = new Spacerace(level, dice, settings);
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(new Player(listener1), factory);
+        game1 = new Single(new Player(listener1, settings), factory);
         game1.on(field);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(new Player(listener2), factory);
+        game2 = new Single(new Player(listener2, settings), factory);
         game2.on(field);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(new Player(listener3), factory);
+        game3 = new Single(new Player(listener3, settings), factory);
         game3.on(field);
 
         listener4 = mock(EventListener.class);
-        game4 = new Single(new Player(listener4), factory);
+        game4 = new Single(new Player(listener4, settings), factory);
         game4.on(field);
 
         listener5 = mock(EventListener.class);
-        game5 = new Single(new Player(listener5), factory);
+        game5 = new Single(new Player(listener5, settings), factory);
         game5.on(field);
 
         listener6 = mock(EventListener.class);
-        game6 = new Single(new Player(listener6), factory);
+        game6 = new Single(new Player(listener6, settings), factory);
         game6.on(field);
 
         dice(1, 0);

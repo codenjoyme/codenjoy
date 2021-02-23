@@ -26,12 +26,15 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.spacerace.services.Events;
+import com.codenjoy.dojo.services.settings.SettingsReader;
+import com.codenjoy.dojo.spacerace.services.GameSettings;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.BULLETS_COUNT;
+import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.TICKS_TO_RECHARGE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -42,16 +45,21 @@ import static org.mockito.Mockito.when;
 public class SpaceraceTest {
 
     private Spacerace game;
-    private BulletCharger charger = getBulletCharger();
+    private BulletCharger charger;
     private Hero hero;
     private Dice dice;
     private EventListener listener;
     private Player player;
     private PrinterFactory printer = new PrinterFactoryImpl();
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        settings = new GameSettings()
+                .integer(TICKS_TO_RECHARGE, 100)
+                .integer(BULLETS_COUNT, 1);
+        charger = new BulletCharger(settings);
     }
 
     private void dice(int...ints) {
@@ -87,11 +95,9 @@ public class SpaceraceTest {
         LevelImpl level = new LevelImpl(board);
         Hero hero = level.getHero(charger).get(0);
 
-        game = new Spacerace(level, dice,
-                charger.getTicksToRecharge(),
-                charger.getBulletsCount());
+        game = new Spacerace(level, dice, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, settings);
         game.newGame(player);
         player.hero = hero;
         hero.init(game);
@@ -104,9 +110,11 @@ public class SpaceraceTest {
     }
 
     private void newBulletPackForHeroWithGivenBullets(int i) {
-        int ticksToRecharge = 1000;
-        int bulletsCount = i;
-        charger = new BulletCharger(ticksToRecharge, bulletsCount);
+        SettingsReader settings = new GameSettings()
+                .integer(TICKS_TO_RECHARGE, 1000)
+                .integer(BULLETS_COUNT, i);
+
+        charger = new BulletCharger(settings);
     }
 
     @Test
@@ -1164,10 +1172,6 @@ public class SpaceraceTest {
                 "☼   ☼" +
                 "☼   ☼" +
                 "☼   ☼");
-    }
-
-    public static BulletCharger getBulletCharger() {
-        return new BulletCharger(100, 1);
     }
 }
 
