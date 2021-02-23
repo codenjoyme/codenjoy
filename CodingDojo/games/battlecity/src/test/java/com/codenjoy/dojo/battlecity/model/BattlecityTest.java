@@ -219,7 +219,6 @@ public class BattlecityTest {
     }
 
     @Test
-    @Ignore
     public void shouldTankCanGoIfAceAtWayWithoutSliding_whenTankTakePrize() {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);

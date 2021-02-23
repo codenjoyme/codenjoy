@@ -100,6 +100,10 @@ public class Tank extends PlayerHero<Field> implements State<Elements, Player> {
 
     // TODO подумать как устранить дублирование с MovingObject
     public void move() {
+        if (this.prizes().contains(PRIZE_NO_SLIDING)) {
+            sliding.stop();
+        }
+
         if (!moving && !field.isIce(this)) {
             return;
         }
