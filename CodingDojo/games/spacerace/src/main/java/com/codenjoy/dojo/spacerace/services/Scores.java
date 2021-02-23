@@ -23,8 +23,8 @@ package com.codenjoy.dojo.spacerace.services;
  */
 
 import com.codenjoy.dojo.services.PlayerScores;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
+
+import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.*;
 
 public class Scores implements PlayerScores {
 
@@ -50,13 +50,13 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.DESTROY_BOMB)) {
-            score += settings.destroyBombScore();
+            score += settings.integer(DESTROY_BOMB_SCORE);
         } else if (event.equals(Events.DESTROY_STONE)) {
-            score += settings.destroyStoneScore();
+            score += settings.integer(DESTROY_STONE_SCORE);
         } else if (event.equals(Events.DESTROY_ENEMY)) {
-            score += settings.destroyEnemyScore();
+            score += settings.integer(DESTROY_ENEMY_SCORE);
         } else if (event.equals(Events.LOOSE)) {
-            score -= settings.loosePenalty();
+            score -= settings.integer(LOOSE_PENALTY);
         }
         score = Math.max(0, score);
     }

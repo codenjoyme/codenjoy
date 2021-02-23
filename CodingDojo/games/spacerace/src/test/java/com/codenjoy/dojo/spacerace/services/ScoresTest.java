@@ -34,8 +34,6 @@ public class ScoresTest {
     private PlayerScores scores;
 
     private GameSettings settings;
-    private Integer loosePenalty;
-    private Integer destroyEnemyScore;
 
     public void loose() {
         scores.event(Events.LOOSE);
@@ -45,45 +43,53 @@ public class ScoresTest {
         scores.event(Events.DESTROY_ENEMY);
     }
 
-    // TODO implement for other cases
+    public void destroyBomb() {
+        scores.event(Events.DESTROY_BOMB);
+    }
+
+    public void destroyStone() {
+        scores.event(Events.DESTROY_STONE);
+    }
 
     @Before
     public void setup() {
         settings = new GameSettings();
         scores = new Scores(0, settings);
-
-        loosePenalty = settings.loosePenalty();
-        destroyEnemyScore = settings.destroyEnemyScore();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        destroyEnemy();  //+500
-        destroyEnemy();  //+500
-        destroyEnemy();  //+500
-        destroyEnemy();  //+500
+        destroyEnemy();
+        destroyEnemy();
+        destroyEnemy();
+        destroyEnemy();
 
-        loose(); //-100
+        destroyStone();
+        destroyStone();
 
-        Assert.assertEquals(140 + 4 * destroyEnemyScore - loosePenalty, scores.getScore());
+        destroyBomb();
+
+        loose();
+
+        assertEquals(2090, scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        loose();    //-100
+        loose();
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        destroyEnemy();    // +30
+        destroyEnemy();
 
         scores.clear();
 
-        Assert.assertEquals(0, scores.getScore());
+        assertEquals(0, scores.getScore());
     }
 
 

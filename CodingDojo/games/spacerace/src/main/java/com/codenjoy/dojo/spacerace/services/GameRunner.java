@@ -26,7 +26,6 @@ import com.codenjoy.dojo.client.ClientBoard;
 import com.codenjoy.dojo.client.Solver;
 import com.codenjoy.dojo.services.AbstractGameType;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -38,6 +37,7 @@ import com.codenjoy.dojo.spacerace.client.ai.AISolver;
 import com.codenjoy.dojo.spacerace.model.*;
 
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static com.codenjoy.dojo.spacerace.services.GameSettings.Keys.*;
 
 public class GameRunner extends AbstractGameType<GameSettings> {
 
@@ -54,8 +54,8 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     @Override
     public GameField createGame(int levelNumber, GameSettings settings) {
         return new Spacerace(settings.level(), getDice(),
-                settings.ticksToRecharge(),
-                settings.bulletsCount());
+                settings.integer(TICKS_TO_RECHARGE),
+                settings.integer(BULLETS_COUNT));
     }
 
     @Override
