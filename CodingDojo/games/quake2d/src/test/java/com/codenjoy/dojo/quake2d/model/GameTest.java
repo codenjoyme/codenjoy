@@ -22,6 +22,7 @@ package com.codenjoy.dojo.quake2d.model;
  * #L%
  */
 
+import com.codenjoy.dojo.quake2d.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -48,11 +49,14 @@ public class GameTest {
     private Player otherPlayer;
     private Hero otherHero;
     private Ability ability;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private PrinterFactory printer;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        printer = new PrinterFactoryImpl();
+        settings = new GameSettings();
     }
 
     private void dice(int...ints) {
@@ -66,9 +70,9 @@ public class GameTest {
         LevelImpl level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
 
-        game = new Quake2D(level, dice);
+        game = new Quake2D(level, dice, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, settings);
         game.newGame(player);
         player.hero = hero;
         hero.init(game);
@@ -78,7 +82,7 @@ public class GameTest {
 
         if (level.getOtherHero().size() != 0){
             Hero otherHero = level.getOtherHero().get(0);
-            otherPlayer = new Player(listener);
+            otherPlayer = new Player(listener, settings);
             game.newGame(otherPlayer);
             otherPlayer.hero = otherHero;
             otherHero.init(game);

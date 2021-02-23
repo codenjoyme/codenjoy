@@ -27,9 +27,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.State;
 
-/**
- * Артефакт Золото на поле
- */
 public class Ability extends PointImpl implements State<Elements, Player> {
     public static final int HEALTH_BONUS = 30;
     enum Type {WEAPON, DEFENCE, HEALTH}
