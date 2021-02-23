@@ -23,7 +23,7 @@ package com.codenjoy.dojo.expansion.model.replay;
  */
 
 
-import com.codenjoy.dojo.expansion.model.AbstractSinglePlayersTest;
+import com.codenjoy.dojo.expansion.model.AbstractMultiplayerTest;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
@@ -38,7 +38,7 @@ import static org.junit.Assert.fail;
 /**
  * Created by Oleksandr_Baglai on 2017-09-22.
  */
-public class GameLoggerTest extends AbstractSinglePlayersTest {
+public class GameLoggerTest extends AbstractMultiplayerTest {
 
     private File gameDataFolder;
 
