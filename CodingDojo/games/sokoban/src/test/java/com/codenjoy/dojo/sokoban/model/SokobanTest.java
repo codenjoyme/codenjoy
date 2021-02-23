@@ -27,12 +27,14 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.sokoban.helper.TextIOHelper;
 import com.codenjoy.dojo.sokoban.model.game.Sokoban;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.Box;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.Hero;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.LevelImpl;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.Mark;
+import com.codenjoy.dojo.sokoban.services.GameSettings;
 import com.codenjoy.dojo.sokoban.services.Player;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
@@ -76,9 +78,10 @@ public class SokobanTest {
             level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
 
-        game = new Sokoban(level, dice);
+        SettingsReader settings = new GameSettings();
+        game = new Sokoban(level, dice, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener, "PlayerFirst");
+        player = new Player(listener, "PlayerFirst", settings);
         game.newGame(player);
         player.hero = hero;
 

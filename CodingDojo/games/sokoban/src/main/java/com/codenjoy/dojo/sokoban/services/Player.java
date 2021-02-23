@@ -25,6 +25,7 @@ package com.codenjoy.dojo.sokoban.services;
 
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.sokoban.model.items.Field;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.Hero;
 
@@ -33,10 +34,6 @@ import java.util.logging.Logger;
 
 import static java.util.logging.Logger.getLogger;
 
-/**
- * Класс игрока. Тут кроме героя может подсчитываться очки.
- * Тут же ивенты передабтся лиснеру фреймворка.
- */
 public class Player extends GamePlayer<Hero, Field> {
 
     private static Logger log = getLogger(Player.class.getName());
@@ -44,8 +41,8 @@ public class Player extends GamePlayer<Hero, Field> {
     public Hero hero;
     private String name;
 
-    public Player(EventListener listener, String name) {
-        super(listener);
+    public Player(EventListener listener, String name, SettingsReader settings) {
+        super(listener, settings);
         this.name = name;
         if (!Storage.levels.containsKey(name)) {
             Storage.levels.put(name, 1);

@@ -27,6 +27,7 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.sokoban.model.items.Field;
 import com.codenjoy.dojo.sokoban.model.items.Level;
 import com.codenjoy.dojo.sokoban.model.itemsImpl.*;
@@ -62,8 +63,9 @@ public class Sokoban implements Field {
     private boolean isWon;
     private List<Player> players;
     private Dice dice;
+    private SettingsReader settings;
 
-    public Sokoban(Level level, Dice dice) {
+    public Sokoban(Level level, Dice dice, SettingsReader settings) {
         this.dice = dice;
         size = level.getSize();
         walls = level.getWalls();
@@ -71,6 +73,7 @@ public class Sokoban implements Field {
         marks = level.getMarks();
 //      boxesOnTheMarks = new LinkedList<>();
         boxesOnTheMarks = level.getBoxesOnTheMarks();
+        this.settings = settings;
         marks.stream().forEach(mark -> mark.init(this));
         gold = level.getGold();
         this.marksToWin = level.getMarksToWin();
@@ -263,6 +266,11 @@ public class Sokoban implements Field {
     @Override
     public void remove(Player player) {
         players.remove(player);
+    }
+
+    @Override
+    public SettingsReader settings() {
+        return settings;
     }
 
     public List<Wall> getWalls() {
