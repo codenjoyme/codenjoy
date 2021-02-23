@@ -23,8 +23,10 @@ package com.codenjoy.dojo.sampletext.model;
  */
 
 
+import com.codenjoy.dojo.sampletext.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,9 +44,12 @@ public class SampleText implements Field {
     private List<Player> players;
     private Dice dice;
 
-    public SampleText(Level level, Dice dice) {
+    private GameSettings settings;
+
+    public SampleText(Level level, Dice dice, GameSettings settings) {
         this.level = level;
         this.dice = dice;
+        this.settings = settings;
         players = new LinkedList<>();
     }
 
@@ -79,6 +84,11 @@ public class SampleText implements Field {
     @Override
     public void remove(Player player) {
         players.remove(player);
+    }
+
+    @Override
+    public SettingsReader settings() {
+        return settings;
     }
 
     @Override

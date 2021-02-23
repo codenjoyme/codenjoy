@@ -24,11 +24,9 @@ package com.codenjoy.dojo.sampletext.model;
 
 
 import com.codenjoy.dojo.sampletext.services.Events;
+import com.codenjoy.dojo.sampletext.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -44,8 +42,8 @@ public class Player extends GamePlayer<Hero, Field> {
     private int questionIndex;
     Hero hero;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
         history = new LinkedList<>();
     }
 

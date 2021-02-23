@@ -25,6 +25,7 @@ package com.codenjoy.dojo.sampletext.model;
 
 import com.codenjoy.dojo.sampletext.services.Events;
 import com.codenjoy.dojo.sampletext.services.GameRunner;
+import com.codenjoy.dojo.sampletext.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -34,6 +35,7 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.sampletext.services.GameSettings.Keys.QUESTIONS;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -52,25 +54,26 @@ public class SingleTest {
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        Level level = new LevelImpl(
-                "question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
+        GameSettings settings = new GameSettings()
+                .string(QUESTIONS,
+                        "question1=answer1\n" +
+                        "question2=answer2\n" +
+                        "question3=answer3");
 
         dice = mock(Dice.class);
-        field = new SampleText(level, dice);
+        field = new SampleText(settings.level(), dice, settings);
         PrinterFactory factory = new GameRunner().getPrinterFactory();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(new Player(listener1), factory);
+        game1 = new Single(new Player(listener1, settings), factory);
         game1.on(field);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(new Player(listener2), factory);
+        game2 = new Single(new Player(listener2, settings), factory);
         game2.on(field);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(new Player(listener3), factory);
+        game3 = new Single(new Player(listener3, settings), factory);
         game3.on(field);
 
         dice(1, 4);
