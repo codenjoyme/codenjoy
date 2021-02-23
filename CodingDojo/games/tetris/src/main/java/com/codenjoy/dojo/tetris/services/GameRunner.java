@@ -30,7 +30,10 @@ import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.*;
+import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.printer.Printer;
+import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.tetris.client.Board;
 import com.codenjoy.dojo.tetris.client.ai.AISolver;
@@ -60,7 +63,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
         Figures queue = new Figures();
         Levels levels = loadLevelsFor(queue, settings.string(GAME_LEVELS));
         levels.gotoLevel(level - LevelProgress.levelsStartsFrom1);
-        return new Tetris(levels, queue, settings.integer(GLASS_SIZE));
+        return new Tetris(levels, queue, settings.integer(GLASS_SIZE), settings);
     }
 
     private Levels loadLevelsFor(FigureQueue queue, String levelsType) {
@@ -93,7 +96,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
 
     @Override
     public GamePlayer createPlayer(EventListener listener, String playerId, GameSettings settings) {
-        return new Player(listener);
+        return new Player(listener, settings);
     }
 
     @Override
