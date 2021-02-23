@@ -40,7 +40,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
-public class SingleTest {
+public class SingleplayerTest {
 
     private EventListener listener1;
     private EventListener listener2;

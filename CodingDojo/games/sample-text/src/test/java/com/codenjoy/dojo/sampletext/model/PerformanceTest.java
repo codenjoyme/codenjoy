@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.sample.model;
+package com.codenjoy.dojo.sampletext.model;
 
 /*-
  * #%L
@@ -24,11 +24,10 @@ package com.codenjoy.dojo.sample.model;
 
 
 import com.codenjoy.dojo.profile.Profiler;
-import com.codenjoy.dojo.sample.services.GameRunner;
+import com.codenjoy.dojo.sampletext.services.GameRunner;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
-import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
@@ -37,15 +36,15 @@ import java.util.List;
 
 import static org.mockito.Mockito.mock;
 
-public class SamplePerformanceTest {
+public class PerformanceTest {
 
     @Test
     public void test() {
         GameRunner gameType = new GameRunner();
 
-        List<Game> games = new LinkedList<>();
+        List<Game> games = new LinkedList<Game>();
 
-        PrinterFactory factory = new PrinterFactoryImpl();
+        PrinterFactory factory = gameType.getPrinterFactory();
         for (int index = 0; index < 50; index++) {
             Game game = TestUtils.buildGame(gameType, mock(EventListener.class), factory);
             games.add(game);

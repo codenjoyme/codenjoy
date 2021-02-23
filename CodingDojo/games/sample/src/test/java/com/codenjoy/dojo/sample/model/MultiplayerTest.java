@@ -42,7 +42,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
-public class SampleTest {
+public class MultiplayerTest {
 
     private Sample game;
     private Hero hero;
