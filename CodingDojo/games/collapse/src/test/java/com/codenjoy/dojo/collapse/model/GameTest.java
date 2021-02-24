@@ -24,10 +24,12 @@ package com.codenjoy.dojo.collapse.model;
 
 
 import com.codenjoy.dojo.collapse.services.Events;
+import com.codenjoy.dojo.collapse.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.utils.TestUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -43,15 +45,22 @@ public class GameTest {
     private Player player;
     private Joystick joystick;
     private Dice dice;
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private PrinterFactory printerFactory;
+    private GameSettings settings;
+
+    @Before
+    public void setup() {
+        printerFactory = new PrinterFactoryImpl();
+        settings = new GameSettings();
+    }
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
 
         dice = mock(Dice.class);
-        game = new Collapse(level, dice);
+        game = new Collapse(level, dice, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, settings);
         game.newGame(player);
         joystick = player.getHero();
     }

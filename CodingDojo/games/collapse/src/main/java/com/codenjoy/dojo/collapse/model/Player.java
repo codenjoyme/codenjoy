@@ -24,6 +24,7 @@ package com.codenjoy.dojo.collapse.model;
 
 
 import com.codenjoy.dojo.collapse.services.Events;
+import com.codenjoy.dojo.collapse.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
@@ -31,8 +32,8 @@ public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
     }
 
     @Override

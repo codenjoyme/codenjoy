@@ -27,6 +27,7 @@ import com.codenjoy.dojo.collapse.client.Board;
 import com.codenjoy.dojo.collapse.client.ai.AISolver;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.collapse.services.GameRunner;
+import com.codenjoy.dojo.collapse.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import org.junit.Test;
@@ -34,6 +35,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.collapse.services.GameSettings.Keys.FIELD_SIZE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -62,9 +64,9 @@ public class SmokeTest {
             }
 
             @Override
-            public GameField createGame(int levelNumber) {
-                settings.getParameter("Field size").type(Integer.class).update(5);
-                return super.createGame(levelNumber);
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .integer(FIELD_SIZE, 5);
             }
         };
 
