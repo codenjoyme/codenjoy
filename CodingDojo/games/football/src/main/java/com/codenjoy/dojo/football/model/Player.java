@@ -25,6 +25,7 @@ package com.codenjoy.dojo.football.model;
 
 import com.codenjoy.dojo.football.model.elements.Hero;
 import com.codenjoy.dojo.football.services.Events;
+import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
@@ -36,8 +37,8 @@ public class Player extends GamePlayer<Hero, Field> {
     private Elements myGoal;
     private String team;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
     }
 
     public void event(Events event) {

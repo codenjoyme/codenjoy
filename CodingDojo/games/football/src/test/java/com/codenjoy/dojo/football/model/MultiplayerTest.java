@@ -22,6 +22,7 @@ package com.codenjoy.dojo.football.model;
  * #L%
  */
 
+import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -59,19 +60,20 @@ public class MultiplayerTest {
                 "☼☼┬┬☼☼");
 
         dice = mock(Dice.class);
-        field = new Football(level, dice);
+        GameSettings settings = new GameSettings();
+        field = new Football(level, dice, settings);
         PrinterFactory factory = new PrinterFactoryImpl();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(new Player(listener1), factory);
+        game1 = new Single(new Player(listener1, settings), factory);
         game1.on(field);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(new Player(listener2), factory);
+        game2 = new Single(new Player(listener2, settings), factory);
         game2.on(field);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(new Player(listener3), factory);
+        game3 = new Single(new Player(listener3, settings), factory);
         game3.on(field);
 
         dice(1, 1);

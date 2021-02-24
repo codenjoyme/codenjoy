@@ -24,6 +24,7 @@ package com.codenjoy.dojo.football.model;
 
 import com.codenjoy.dojo.football.model.elements.Hero;
 import com.codenjoy.dojo.football.services.Events;
+import com.codenjoy.dojo.football.services.GameSettings;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.utils.TestUtils;
 import com.codenjoy.dojo.services.Dice;
@@ -51,11 +52,14 @@ public class GameTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private PrinterFactory printer;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        printer = new PrinterFactoryImpl();
+        settings = new GameSettings();
     }
 
     private void dice(int...ints) {
@@ -69,9 +73,9 @@ public class GameTest {
         LevelImpl level = new LevelImpl(board);
         Hero hero = level.getHero().get(0);
 
-        game = new Football(level, dice);
+        game = new Football(level, dice, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, settings);
         game.newGame(player);
         player.hero = hero;
         hero.init(game);
