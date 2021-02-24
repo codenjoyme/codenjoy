@@ -26,6 +26,7 @@ package com.codenjoy.dojo.battlecity.model;
 import com.codenjoy.dojo.battlecity.model.items.AITank;
 import com.codenjoy.dojo.battlecity.model.items.Bullet;
 import com.codenjoy.dojo.battlecity.model.items.Wall;
+import com.codenjoy.dojo.battlecity.model.levels.Level;
 import com.codenjoy.dojo.battlecity.services.GameRunner;
 import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
@@ -33,7 +34,6 @@ import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.settings.Parameter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -43,31 +43,22 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class GameTest {
 
     protected Dice dice;
-    public int size;
-    private Parameter<Integer> spawnAiPrize;
-    private Parameter<Integer> hitKillsAiPrize;
-    private Parameter<Integer> prizeOnField;
-    private Parameter<Integer> prizeWorking;
-    private Parameter<Integer> aiTicksPerShoot;
-    private Parameter<Integer> tankTicksPerShoot;
-    private Parameter<Integer> slidingValue;
-    private Parameter<Integer> aiPrizeLimit;
-
     private Battlecity game;
     private List<Player> players = new LinkedList<>();
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
 
-    private GameSettings settings = mock(GameSettings.class);
+    private GameSettings settings;
 
     private List<Tank> heroes = new LinkedList<>();
     private List<EventListener> listeners = new LinkedList<>();
@@ -75,15 +66,16 @@ public class GameTest {
 
     @Before
     public void setup() {
-        size = 7;
-        spawnAiPrize = v(4);
-        hitKillsAiPrize = v(3);
-        prizeOnField = v(3);
-        prizeWorking = v(10);
-        aiTicksPerShoot = v(10);
-        tankTicksPerShoot = v(1);
-        slidingValue = v(3);
-        aiPrizeLimit = v(10);
+        settings = new GameSettings()
+                .integer(SPAWN_AI_PRIZE, 4)
+                .integer(KILL_HITS_AI_PRIZE, 3)
+                .integer(PRIZE_ON_FIELD, 3)
+                .integer(PRIZE_WORKING, 10)
+                .integer(AI_TICKS_PER_SHOOT, 10)
+                .integer(TANK_TICKS_PER_SHOOT, 1)
+                .integer(SLIPPERINESS, 3)
+                .integer(AI_PRIZE_LIMIT, 10);
+
         dice = mock(Dice.class);
     }
 
@@ -97,35 +89,24 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        when(settings.spawnAiPrize()).thenReturn(spawnAiPrize);
-        when(settings.hitKillsAiPrize()).thenReturn(hitKillsAiPrize);
-        when(settings.prizeOnField()).thenReturn(prizeOnField);
-        when(settings.prizeWorking()).thenReturn(prizeWorking);
-        when(settings.aiTicksPerShoot()).thenReturn(aiTicksPerShoot);
-        when(settings.tankTicksPerShoot()).thenReturn(tankTicksPerShoot);
-        when(settings.slipperiness()).thenReturn(slidingValue);
-        when(settings.aiPrizeLimit()).thenReturn(aiPrizeLimit);
+        settings.string(LEVEL_MAP, board.replaceAll("\n", ""));
 
         GameRunner runner = new GameRunner() {
-            @Override
-            public String getMap() {
-                return board.replaceAll("\n", "");
-            }
-
             @Override
             public Dice getDice() {
                 return dice;
             }
 
             @Override
-            protected GameSettings getGameSettings() {
-                return GameTest.this.settings;
+            public GameSettings getSettings() {
+                return settings;
             }
         };
-        game = (Battlecity) runner.createGame(0);
+        game = (Battlecity) runner.createGame(0, settings);
 
-        runner.getLevel().getTanks(tankTicksPerShoot.getValue())
-                .forEach(tank -> initPlayer(game, tank));
+        Level level = settings.level(dice);
+        level.getTanks().forEach(tank ->
+            game.newGame(initPlayer(game, tank)));
 
         heroes = game.tanks();
     }
@@ -134,7 +115,7 @@ public class GameTest {
         EventListener listener = mock(EventListener.class);
         listeners.add(listener);
 
-        Player player = new Player(listener, dice, tankTicksPerShoot){
+        Player player = new Player(listener, dice, settings){
             @Override
             public void newHero(Field field) {
                 // do nothing
@@ -2583,7 +2564,7 @@ public class GameTest {
 
     @Test
     public void shouldNTicksPerBullet() {
-        tankTicksPerShoot = v(4);
+        settings.integer(TANK_TICKS_PER_SHOOT, 4);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -2606,7 +2587,7 @@ public class GameTest {
                 "☼☼☼☼☼☼☼\n";
         assertD(field);
 
-        for (int i = 1; i < tankTicksPerShoot.getValue(); i++) {
+        for (int i = 1; i < settings.integer(TANK_TICKS_PER_SHOOT); i++) {
             hero(0).act();
             game.tick();
 
@@ -2899,8 +2880,8 @@ public class GameTest {
     // если стенка недорушенная, снаряд летит, и ресетнули игру, то все конструкции восстанавливаются
     @Test
     public void shouldRemoveBulletsAndResetWalls_whenReset() {
-        tankTicksPerShoot = v(3);
-
+        settings.integer(TANK_TICKS_PER_SHOOT, 3);
+        
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼╬        ☼\n" +
                 "☼╬        ☼\n" +
@@ -3105,7 +3086,7 @@ public class GameTest {
     // первый выстрел иногда получается сделать дважды
     @Test
     public void shouldCantFireTwice() {
-        tankTicksPerShoot = v(4);
+        settings.integer(TANK_TICKS_PER_SHOOT, 4);
 
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -4108,7 +4089,7 @@ public class GameTest {
 
     @Test
     public void shouldTankMoveLeftThenUpThenDown_onIce() {
-        slidingValue = v(1);
+        settings.integer(SLIPPERINESS, 1);
 
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -4190,7 +4171,7 @@ public class GameTest {
     //2.2) также когда на нем двигается враг он проскальзывает команду на два тика
     @Test
     public void shouldOtherTankMoveLeftThenUpThenDown_onIce() {
-        slidingValue = v(1);
+        settings.integer(SLIPPERINESS, 1);
 
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -4650,7 +4631,7 @@ public class GameTest {
     // создаем АИтанк с призами
     @Test
     public void shouldCreatedAiPrize() {
-        hitKillsAiPrize = v(3);
+        settings.integer(KILL_HITS_AI_PRIZE, 3);
 
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ?☼\n" +
@@ -4691,7 +4672,7 @@ public class GameTest {
     // У АИтанка с призами после 4-го хода должен смениться Element
     @Test
     public void shouldSwapElementAfterFourTicks() {
-        hitKillsAiPrize = v(3);
+        settings.integer(KILL_HITS_AI_PRIZE, 3);
 
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼      ?☼\n" +
@@ -4784,7 +4765,7 @@ public class GameTest {
     // если spawnAiPrize = 3, а спаунится сразу 2 АИтанка, то 2-й должен быть АИтанком с призами
     @Test
     public void shouldSpawnAiPrizeWhenTwoAi() {
-        spawnAiPrize = v(3);
+        settings.integer(SPAWN_AI_PRIZE, 3);
 
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ¿    ¿☼\n" +
@@ -4814,7 +4795,7 @@ public class GameTest {
     // если spawnAiPrize = 3 и спаунится сразу 3 АИтанка, то 2-й должен быть АИтанком с призами
     @Test
     public void shouldSpawnAiPrizeWhenThreeAi() {
-        spawnAiPrize = v(3);
+        settings.integer(SPAWN_AI_PRIZE, 3);
 
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ¿  ¿ ¿☼\n" +
@@ -4844,7 +4825,7 @@ public class GameTest {
     // если spawnAiPrize = 3, а спаунятся сразу 6 АИтанков, то должно быть 2 АИтанка с призами
     @Test
     public void shouldSpawnTwoAiPrizeWhenSixAi() {
-        spawnAiPrize = v(3);
+        settings.integer(SPAWN_AI_PRIZE, 3);
 
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ¿¿¿¿¿¿☼\n" +
@@ -4876,7 +4857,7 @@ public class GameTest {
     // так же проверяем что призовой танк меняет свой символ каждые 4 тика
     @Test
     public void shouldSpawnAiPrize_whenAddOneByOneAI() {
-        spawnAiPrize = v(3);
+        settings.integer(SPAWN_AI_PRIZE, 3);
 
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼       ☼\n" +
@@ -4991,7 +4972,7 @@ public class GameTest {
     // в AI-танк с призами надо попасть 3 раза, чтобы убить
     @Test
     public void shouldKillAiPrizeInThreeHits() {
-        hitKillsAiPrize = v(3);
+        settings.integer(KILL_HITS_AI_PRIZE, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼?    ☼\n" +
@@ -5144,7 +5125,7 @@ public class GameTest {
 
     @Test
     public void shouldDropPrize_onlyInPointKilledAiPrize() {
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -5185,7 +5166,7 @@ public class GameTest {
 
     @Test
     public void shouldDropPrize_inPointKilledAiPrize_underTree() {
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -5238,7 +5219,7 @@ public class GameTest {
 
     @Test
     public void shouldDropPrize_InPointKilledAiPrize_onIce() {
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -5292,8 +5273,8 @@ public class GameTest {
     // приз должен експайриться и исчезнуть через 2 тика, если его не подобрали
     @Test
     public void shouldExpirePrizeOnField_disappearTwoTicks() {
-        prizeOnField = v(2);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 2);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -5338,8 +5319,8 @@ public class GameTest {
     // приз должен експайриться и исчезнуть через 3 тика, если его не подобрали
     @Test
     public void shouldExpirePrizeOnField_disappearThreeTicks() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -5403,8 +5384,8 @@ public class GameTest {
     // приз должен експайриться и исчезнуть через 4 тика, если его не подобрали
     @Test
     public void shouldExpirePrizeOnField_disappearFourTicks() {
-        prizeOnField = v(4);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 4);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -5470,8 +5451,8 @@ public class GameTest {
     // после исчезновения приза видим кусты
     @Test
     public void shouldExpirePrizeOnField_disappearOnTree() {
-        prizeOnField = v(2);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 2);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -5546,8 +5527,8 @@ public class GameTest {
     // после исчезновения приза видим лед
     @Test
     public void shouldExpirePrizeOnField_disappearOnIce() {
-        prizeOnField = v(2);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 2);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -5620,8 +5601,8 @@ public class GameTest {
 
     @Test
     public void shouldHeroTookPrize() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -5680,8 +5661,8 @@ public class GameTest {
 
     @Test
     public void shouldOtherTookPrize() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -5741,8 +5722,8 @@ public class GameTest {
 
     @Test
     public void shouldHeroTookPrize_underTree() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -5803,8 +5784,8 @@ public class GameTest {
 
     @Test
     public void shouldOtherTookPrize_underTree() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -5866,8 +5847,8 @@ public class GameTest {
 
     @Test
     public void shouldHeroTookPrize_onIce() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -5928,8 +5909,8 @@ public class GameTest {
 
     @Test
     public void shouldOtherTookPrize_onIce() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -5991,8 +5972,8 @@ public class GameTest {
 
     @Test
     public void shouldAiDontTookPrize() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -6052,8 +6033,8 @@ public class GameTest {
     // то приз считается подобраным и не отбражается на филде
     @Test
     public void shouldHeroTookPrize_inPointKillAi() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -6107,8 +6088,8 @@ public class GameTest {
     // если в момент подбора приза прилетает снаряд, то умирает танк, а приз остается
     @Test
     public void shouldKillHero_whenHeroTookPrizeAndComesBullet() {
-        prizeOnField = v(6);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 6);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -6210,8 +6191,8 @@ public class GameTest {
 
     @Test
     public void shouldHeroKillPrize() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -6270,8 +6251,8 @@ public class GameTest {
     // то приз не подбирается
     @Test
     public void shouldHeroKillPrize_dontTakeNextTick() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -6329,8 +6310,8 @@ public class GameTest {
 
     @Test
     public void shouldKilAITankWithPrize_whenHitKillsIs2() {
-        prizeOnField = v(3);
-        hitKillsAiPrize = v(2);
+        settings.integer(KILL_HITS_AI_PRIZE, 2)
+                .integer(PRIZE_ON_FIELD, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -6429,9 +6410,9 @@ public class GameTest {
 
     @Test
     public void shouldHeroTakePrize_breakingWalls() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        prizeWorking = v(10);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(PRIZE_WORKING, 10);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼  ╬  ☼\n" +
@@ -6527,8 +6508,8 @@ public class GameTest {
 
     @Test
     public void shouldHeroTakePrizeEnemyWithoutPrize_breakingWalls() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼╬╬╬  ☼\n" +
@@ -6598,8 +6579,8 @@ public class GameTest {
 
     @Test
     public void shouldHeroNotBreakingBorder_breakingWalls() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼╬╬╬  ☼\n" +
@@ -6688,9 +6669,9 @@ public class GameTest {
 
     @Test
     public void shouldEndPrizeWorking_breakingWalls() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        prizeWorking = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(PRIZE_WORKING, 1);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼╬    ☼\n" +
@@ -6769,8 +6750,8 @@ public class GameTest {
 
     @Test
     public void shouldHeroTakePrizeEnemyShootsHero_immortality() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -6844,9 +6825,9 @@ public class GameTest {
 
     @Test
     public void shouldEndPrizeWorkingEnemyShootsHero_immortality() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        prizeWorking = v(3);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(PRIZE_WORKING, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -6958,8 +6939,8 @@ public class GameTest {
 
     @Test
     public void shouldHeroTakePrizeAiShootsHero_immortality() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -7046,9 +7027,9 @@ public class GameTest {
 
     @Test
     public void shouldEndPrizeWorkingAiShootsHero_immortality() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        prizeWorking = v(2);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(PRIZE_WORKING, 2);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼¿    ☼\n" +
@@ -7164,7 +7145,7 @@ public class GameTest {
     // то продолжается движение вперед по старой команде на 1 тик.
     @Test
     public void shouldTankSlidingOneTicks() {
-        slidingValue = v(3);
+        settings.integer(SLIPPERINESS, 3);
 
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -7212,7 +7193,7 @@ public class GameTest {
     // то продолжается движение по старой команде N тиков.
     @Test
     public void shouldTankSlidingNTicks() {
-        slidingValue = v(3);
+        settings.integer(SLIPPERINESS, 3);
 
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -7310,7 +7291,7 @@ public class GameTest {
     // слушается команда N + 1 и опять занос N тиков
     @Test
     public void shouldTankSlidingNTicks_andAgainSliding() {
-        slidingValue = v(3);
+        settings.integer(SLIPPERINESS, 3);
 
         givenFl("☼☼☼☼☼☼☼☼☼☼☼\n" +
                 "☼         ☼\n" +
@@ -7455,7 +7436,7 @@ public class GameTest {
     // если герой в ходе заноса уперся в стену, то занос прекращается
     @Test
     public void shouldTankAndSliding_ifBumpedWall() {
-        slidingValue = v(5);
+        settings.integer(SLIPPERINESS, 5);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼###  ☼\n" +
@@ -7527,9 +7508,9 @@ public class GameTest {
 
     @Test
     public void shouldTankCanGoIfRiverAtWay_whenTankTakePrize() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        prizeWorking = v(3);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(PRIZE_WORKING, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -7607,9 +7588,9 @@ public class GameTest {
 
     @Test
     public void shouldHeroTakePrize_walkOnWater() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        prizeWorking = v(3);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(PRIZE_WORKING, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼     ☼\n" +
@@ -7684,9 +7665,9 @@ public class GameTest {
     // когда заканчивается действие приза движение по воде отключается
     @Test
     public void shouldTankCanGoIfRiverAtWay_whenPrizeIsOver() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        prizeWorking = v(2);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(PRIZE_WORKING, 2);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼~    ☼\n" +
@@ -7779,9 +7760,9 @@ public class GameTest {
     @Test
     @Ignore // TODO продолжить тут
     public void shouldTankCanGoIfRiverAtWay_whenPrizeIsOver_butTankOnWater() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        prizeWorking = v(3);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(PRIZE_WORKING, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼ ~~~ ☼\n" +
@@ -7941,10 +7922,10 @@ public class GameTest {
 
     @Test
     public void shouldHeroTakePrizeAndShootsEveryTick_breakingWalls() {
-        tankTicksPerShoot = v(3);
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        prizeWorking = v(3);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(PRIZE_WORKING, 3)
+                .integer(TANK_TICKS_PER_SHOOT, 3);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼╬╬╬  ☼\n" +
@@ -8121,7 +8102,7 @@ public class GameTest {
     // теперь все нормально
     @Test
     public void shouldDropAiOnIce() {
-        slidingValue = v(2);
+        settings.integer(SLIPPERINESS, 2);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼#    ☼\n" +
@@ -8214,8 +8195,8 @@ public class GameTest {
     // если aiPrizeLimit = 2, то будет на поле 2 АИтанка с призами
     @Test
     public void shouldSpawnTwoAiPrize() {
-        spawnAiPrize = v(2);
-        aiPrizeLimit = v(2);
+        settings.integer(SPAWN_AI_PRIZE, 2)
+                .integer(AI_PRIZE_LIMIT, 2);
 
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼ ¿¿¿¿¿¿☼\n" +
@@ -8247,10 +8228,10 @@ public class GameTest {
     // АИтанков с призами больше появляться не будет
     @Test
     public void shouldNotSpawnAiPrize_ifPrizeOnField() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        spawnAiPrize = v(2);
-        aiPrizeLimit = v(2);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(SPAWN_AI_PRIZE, 2)
+                .integer(AI_PRIZE_LIMIT, 2);
 
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼¿¿¿¿¿¿ ☼\n" +
@@ -8335,10 +8316,10 @@ public class GameTest {
 
     @Test
     public void shouldSpawnAiPrize_ifKillPrize() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        spawnAiPrize = v(2);
-        aiPrizeLimit = v(2);
+        settings.integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_ON_FIELD, 5)
+                .integer(SPAWN_AI_PRIZE, 2)
+                .integer(AI_PRIZE_LIMIT, 2);
 
         givenFl("☼☼☼☼☼☼☼☼☼\n" +
                 "☼¿¿¿¿¿¿ ☼\n" +

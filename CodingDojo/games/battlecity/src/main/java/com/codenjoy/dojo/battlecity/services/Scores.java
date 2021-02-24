@@ -22,8 +22,9 @@ package com.codenjoy.dojo.battlecity.services;
  * #L%
  */
 
-
 import com.codenjoy.dojo.services.PlayerScores;
+
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
 
 public class Scores implements PlayerScores {
 
@@ -51,11 +52,11 @@ public class Scores implements PlayerScores {
             return;
         Events event = (Events)object;
         if (event.isKillYourTank()) {
-            score -= settings.killYourTankPenalty().getValue();
+            score -= settings.integer(KILL_YOUR_TANK_PENALTY);
         } else if (event.isKillOtherHeroTank()) {
-            score += settings.killOtherHeroTankScore().getValue() * event.getAmount();
+            score += settings.integer(KILL_OTHER_HERO_TANK_SCORE) * event.getAmount();
         } else if (event.isKillOtherAITank()) {
-            score += settings.killOtherAITankScore().getValue();
+            score += settings.integer(KILL_OTHER_AI_TANK_SCORE);
         }
 
         score = Math.max(0, score);

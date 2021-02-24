@@ -30,23 +30,25 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_TICKS_PER_SHOOT;
 import static com.codenjoy.dojo.services.StateUtils.filterOne;
 
 public class AITank extends Tank {
 
     public static final int MAX = 10;
-    private final int ticksPerShoot;
     private final int ticksStandByRiver = 5;
     public boolean dontShoot = false;
     private int act;
     private int count;
 
-    public AITank(Point pt, Direction direction,
-                  int ticksPerShoot, Dice dice)
-    {
-        super(pt, direction, dice, 1);
-        this.ticksPerShoot = ticksPerShoot;
+    public AITank(Point pt, Direction direction, Dice dice) {
+        super(pt, direction, dice);
         this.count = 0;
+    }
+
+    @Override
+    protected int ticksPerShoot() {
+        return settings().integer(AI_TICKS_PER_SHOOT);
     }
 
     @Override
@@ -82,7 +84,7 @@ public class AITank extends Tank {
             return;
         }
 
-        if (act++ % ticksPerShoot == 0) {
+        if (act++ % ticksPerShoot() == 0) {
             act();
         }
     }

@@ -23,20 +23,26 @@ package com.codenjoy.dojo.battlecity.model;
  */
 
 
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Tickable;
 
-public class Gun implements Tickable {
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
 
-    private final int ticksPerShoot;
+public class Gun implements Tickable {
 
     private boolean canFire;
     private boolean machineGun;
     private int ticks;
     private int shootThrough;
+    private GameSettings settings;
 
-    public Gun(int ticksPerShoot) {
-        this.ticksPerShoot = ticksPerShoot;
+    public Gun(GameSettings settings) {
+        this.settings = settings;
         reset();
+    }
+
+    private int ticksPerShoot() {
+        return settings.integer(TANK_TICKS_PER_SHOOT);
     }
 
     public void reset() {
@@ -75,7 +81,7 @@ public class Gun implements Tickable {
         if (machineGun) {
             shootThrough = 0;
         } else {
-            shootThrough = ticksPerShoot;
+            shootThrough = ticksPerShoot();
         }
     }
 }

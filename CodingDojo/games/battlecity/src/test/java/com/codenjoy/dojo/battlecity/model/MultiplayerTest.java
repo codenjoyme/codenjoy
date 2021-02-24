@@ -24,15 +24,19 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.model.levels.DefaultBorders;
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import com.codenjoy.dojo.services.settings.Parameter;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_PRIZE_LIMIT;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -50,36 +54,37 @@ public class MultiplayerTest {
     private Game tanks2;
     private Player player1;
     private Player player2;
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private PrinterFactory printerFactory;
+    private GameSettings settings;
 
     public void givenGame() {
-        Parameter<Integer> spawnAiPrize = v(4);
-        Parameter<Integer> hitKillsAiPrize = v(3);
-        Parameter<Integer> prizeOnField = v(3);
-        Parameter<Integer> prizeWorking = v(3);
-        Parameter<Integer> aiTicksPerShoot = v(3);
-        Parameter<Integer> tankTicksPerShoot = v(4);
-        Parameter<Integer> slipperiness = v(3);
-        Parameter<Integer> aiPrizeLimit = v(3);
 
-        game = new Battlecity(size, mock(Dice.class),
-                spawnAiPrize,
-                hitKillsAiPrize,
-                prizeOnField,
-                prizeWorking,
-                aiTicksPerShoot,
-                slipperiness,
-                aiPrizeLimit);
+        game = new Battlecity(size, mock(Dice.class), settings);
 
 
         game.addBorder(new DefaultBorders(size).get());
 
-        player1 = new Player(null, dice1, tankTicksPerShoot);
-        player2 = new Player(null, dice2, tankTicksPerShoot);
+        player1 = new Player(null, dice1, settings);
+        player2 = new Player(null, dice2, settings);
         tanks1 = new Single(player1, printerFactory);
         tanks1.on(game);
         tanks2 = new Single(player2, printerFactory);
         tanks2.on(game);
+    }
+
+    @Before
+    public void setUp() {
+        settings = new GameSettings()
+                .integer(SPAWN_AI_PRIZE, 4)
+                .integer(KILL_HITS_AI_PRIZE, 3)
+                .integer(PRIZE_ON_FIELD, 3)
+                .integer(PRIZE_WORKING, 3)
+                .integer(AI_TICKS_PER_SHOOT, 3)
+                .integer(TANK_TICKS_PER_SHOOT, 4)
+                .integer(SLIPPERINESS, 3)
+                .integer(AI_PRIZE_LIMIT, 3);
+
+        printerFactory = new PrinterFactoryImpl();
     }
 
     @Test

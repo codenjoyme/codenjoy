@@ -27,21 +27,19 @@ import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.AI_TICKS_PER_SHOOT;
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.KILL_HITS_AI_PRIZE;
+
 public class AITankPrize extends AITank {
 
     private final int CHANGE_EVERY_TICKS = 4;
-    private final int vitality;
 
     private int damage;
     private int ticks;
     private boolean wounded;
 
-    public AITankPrize(Point pt, Direction direction,
-                       int vitality, int ticksPerShoot,
-                       Dice dice)
-    {
-        super(pt, direction, ticksPerShoot, dice);
-        this.vitality = vitality;
+    public AITankPrize(Point pt, Direction direction, Dice dice) {
+        super(pt, direction, dice);
         damage = 0;
         ticks = 0;
         wounded = false;
@@ -59,10 +57,14 @@ public class AITankPrize extends AITank {
         damage++;
         wounded = true;
 
-        if (damage == vitality) {
+        if (damage == vitality()) {
             damage = 0;
             super.kill(bullet);
         }
+    }
+
+    private int vitality() {
+        return settings().integer(KILL_HITS_AI_PRIZE);
     }
 
     @Override

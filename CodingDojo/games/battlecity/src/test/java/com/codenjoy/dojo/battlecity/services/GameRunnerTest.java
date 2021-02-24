@@ -26,6 +26,7 @@ package com.codenjoy.dojo.battlecity.services;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -33,14 +34,16 @@ import org.mockito.Mockito;
 import static org.junit.Assert.assertEquals;
 
 public class GameRunnerTest {
+
     @Test
     public void testNoNPE() {
-        GameType gameType = new GameRunner();
-        assertEquals(34, gameType.getBoardSize().getValue().intValue());
+        GameType runner = new GameRunner();
+        Settings settings = runner.getSettings();
+        assertEquals(34, runner.getBoardSize(settings).getValue());
 
-        TestUtils.buildGame(gameType,
+        TestUtils.buildGame(runner,
                 Mockito.mock(EventListener.class),
                 new PrinterFactoryImpl());
-        assertEquals(34, gameType.getBoardSize().getValue().intValue());
+        assertEquals(34, runner.getBoardSize(settings).getValue());
     }
 }

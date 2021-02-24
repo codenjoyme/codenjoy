@@ -24,28 +24,24 @@ package com.codenjoy.dojo.battlecity.model;
 
 
 import com.codenjoy.dojo.battlecity.services.Events;
+import com.codenjoy.dojo.battlecity.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.settings.Parameter;
 
+import static com.codenjoy.dojo.battlecity.services.GameSettings.Keys.TANK_TICKS_PER_SHOOT;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 
 public class Player extends GamePlayer<Tank, Field> {
-
-    private final Parameter<Integer> tankTicksPerShoot;
 
     Tank hero;
     private Dice dice;
     private int killed;
 
-    public Player(EventListener listener,
-                  Dice dice,
-                  Parameter<Integer> tankTicksPerShoot)
-    {
-        super(listener);
-        this.tankTicksPerShoot = tankTicksPerShoot;
+    public Player(EventListener listener, Dice dice, GameSettings settings){
+        super(listener, settings);
         this.dice = dice;
         reset();
     }
@@ -80,9 +76,7 @@ public class Player extends GamePlayer<Tank, Field> {
     }
 
     public void newHero(Field field) {
-        hero = new Tank(pt(0, 0), Direction.UP,
-                dice,
-                tankTicksPerShoot.getValue());
+        hero = new Tank(pt(0, 0), Direction.UP, dice);
         hero.removeBullets();
         hero.init(field);
         reset();

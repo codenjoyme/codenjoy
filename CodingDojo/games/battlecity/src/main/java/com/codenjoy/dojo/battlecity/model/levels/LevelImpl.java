@@ -83,43 +83,43 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public List<Tank> getAiTanks(int aiTicksPerShoot) {
+    public List<Tank> getAiTanks() {
         return new LinkedList<>(){{
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new AITank(pt, DOWN, aiTicksPerShoot, dice),
+                    (pt, el) -> new AITank(pt, DOWN, dice),
                     AI_TANK_DOWN));
 
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new AITank(pt, UP, aiTicksPerShoot, dice),
+                    (pt, el) -> new AITank(pt, UP, dice),
                     AI_TANK_UP));
 
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new AITank(pt, LEFT, aiTicksPerShoot, dice),
+                    (pt, el) -> new AITank(pt, LEFT, dice),
                     AI_TANK_LEFT));
 
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new AITank(pt, RIGHT, aiTicksPerShoot, dice),
+                    (pt, el) -> new AITank(pt, RIGHT, dice),
                     AI_TANK_RIGHT));
         }};
     }
 
     @Override
-    public List<Tank> getTanks(int ticksPerBullets) {
+    public List<Tank> getTanks() {
         return new LinkedList<>(){{
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new Tank(pt, DOWN, dice, ticksPerBullets),
+                    (pt, el) -> new Tank(pt, DOWN, dice),
                     TANK_DOWN, OTHER_TANK_DOWN));
 
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new Tank(pt, UP, dice, ticksPerBullets),
+                    (pt, el) -> new Tank(pt, UP, dice),
                     TANK_UP, OTHER_TANK_UP));
 
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new Tank(pt, LEFT, dice, ticksPerBullets),
+                    (pt, el) -> new Tank(pt, LEFT, dice),
                     TANK_LEFT, OTHER_TANK_LEFT));
 
             addAll(LevelUtils.getObjects(xy, map,
-                    (pt, el) -> new Tank(pt, RIGHT, dice, ticksPerBullets),
+                    (pt, el) -> new Tank(pt, RIGHT, dice),
                     TANK_RIGHT, OTHER_TANK_RIGHT));
         }};
     }
@@ -144,7 +144,7 @@ public class LevelImpl implements Level {
                 return new LinkedList<>() {{
                     addAll(LevelImpl.this.getBorders());
                     addAll(LevelImpl.this.getWalls());
-                    addAll(LevelImpl.this.getAiTanks(0));
+                    addAll(LevelImpl.this.getAiTanks());
                     addAll(LevelImpl.this.getIce());
                     addAll(LevelImpl.this.getRivers());
                     addAll(LevelImpl.this.getTrees());
