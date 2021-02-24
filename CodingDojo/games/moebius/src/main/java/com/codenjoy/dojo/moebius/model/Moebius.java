@@ -24,10 +24,12 @@ package com.codenjoy.dojo.moebius.model;
 
 
 import com.codenjoy.dojo.moebius.services.Events;
+import com.codenjoy.dojo.moebius.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -44,10 +46,13 @@ public class Moebius implements Field {
     private Dice dice;
     private Player player;
 
-    public Moebius(Level level, Dice dice) {
+    private GameSettings settings;
+
+    public Moebius(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         this.level = level;
         this.size = level.getSize();
+        this.settings = settings;
     }
 
     @Override
@@ -192,4 +197,8 @@ public class Moebius implements Field {
         };
     }
 
+    @Override
+    public GameSettings settings() {
+        return settings;
+    }
 }

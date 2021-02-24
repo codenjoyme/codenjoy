@@ -27,6 +27,7 @@ import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.moebius.client.Board;
 import com.codenjoy.dojo.moebius.client.ai.AISolver;
 import com.codenjoy.dojo.moebius.services.GameRunner;
+import com.codenjoy.dojo.moebius.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
@@ -34,6 +35,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.moebius.services.GameSettings.Keys.SIZE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
@@ -71,10 +73,9 @@ public class SmokeTest {
             }
 
             @Override
-            protected SettingsImpl createSettings() {
-                SettingsImpl settings = super.createSettings();
-                settings.addEditBox("Size").type(Integer.class).update(5);
-                return settings;
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .integer(SIZE, 5);
             }
         };
 
