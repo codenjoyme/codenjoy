@@ -30,12 +30,13 @@ import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
     private PlayerScores scores;
 
-    private Settings settings;
+    private GameSettings settings;
     private Integer killHeroPenalty;
     private Integer killEnemyScore;
     private Integer getGoldScore;
@@ -55,49 +56,43 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new GameSettings()
+                .integer(KILL_HERO_PENALTY, 30)
+                .integer(GET_GOLD_SCORE, 10)
+                .integer(GET_NEXT_GOLD_INCREMENT, 3);
+        
         scores = new Scores(0, settings);
-
-        Parameter<Integer> p1 = settings.getParameter("Kill hero penalty").type(Integer.class);
-        p1.update(30);
-        killHeroPenalty = p1.getValue();
-
-        killEnemyScore = settings.getParameter("Kill enemy score").type(Integer.class).getValue();
-
-        Parameter<Integer> p3 = settings.getParameter("Get gold score").type(Integer.class);
-        p3.update(10);
-        getGoldScore = p3.getValue();
-
-        Parameter<Integer> p2 = settings.getParameter("Get next gold increment score").type(Integer.class);
-        p2.update(3);
-        forNextGoldIncScore = p2.getValue();
     }
 
     @Test
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        killEnemy();  //+100
-        killEnemy();  //+100
-        killEnemy();  //+100
+        killEnemy();  
+        killEnemy();  
+        killEnemy();  
 
-        getGold();  //+10
+        getGold();  
 
-        killHero(); //-30
+        killHero(); 
 
-        assertEquals(140 + 3*killEnemyScore + getGoldScore - killHeroPenalty, scores.getScore());
+        assertEquals(140
+                + 3 * settings.integer(KILL_ENEMY_SCORE)
+                + settings.integer(GET_GOLD_SCORE)
+                - settings.integer(KILL_HERO_PENALTY),
+                scores.getScore());
     }
 
     @Test
     public void shouldStillZeroAfterDead() {
-        killHero();    //-30
+        killHero();    
 
         assertEquals(0, scores.getScore());
     }
 
     @Test
     public void shouldClearScore() {
-        getGold();    // +10
+        getGold();
 
         scores.clear();
 
@@ -108,27 +103,31 @@ public class ScoresTest {
     public void shouldIncreaseForNextGold() {
         scores = new Scores(0, settings);
 
-        getGold();  //+10
-        getGold();  //+13
-        getGold();  //+16
-        getGold();  //+19
+        getGold();  
+        getGold();
+        getGold();
+        getGold();
 
-        assertEquals(10*4 + 3 + 6 + 9, scores.getScore());
+        assertEquals(4 * settings.integer(GET_GOLD_SCORE)
+                + 3
+                + 6
+                + 9,
+                scores.getScore());
     }
 
     @Test
-    public void shouldCleanIncreasedIfGameover() {
+    public void shouldCleanIncreasedIfGameOver() {
         scores = new Scores(0, settings);
 
-        getGold();  //+10
-        getGold();  //+13
-        getGold();  //+16
-        killHero(); //-30
+        getGold();  
+        getGold();
+        getGold();
+        killHero(); 
 
         assertEquals(3 + 6, scores.getScore());
 
-        getGold();  //+10
-        getGold();  //+13
+        getGold();  
+        getGold();
 
         assertEquals(3 + 6 + 10 + 13, scores.getScore());
     }
@@ -137,14 +136,14 @@ public class ScoresTest {
     public void shouldCleanIncreasedIfClean() {
         scores = new Scores(0, settings);
 
-        getGold();  //+10
+        getGold();  
         getGold();  //+13
         getGold();  //+16
         scores.clear();
 
         assertEquals(0, scores.getScore());
 
-        getGold();  //+10
+        getGold();  
         getGold();  //+13
 
         assertEquals(10 + 13, scores.getScore());

@@ -24,12 +24,14 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import com.codenjoy.dojo.loderunner.services.Events;
+import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -43,7 +45,14 @@ public class EnemyMultiplayerTest {
     private EventListener listener;
     private Game game;
     private Loderunner field;
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private PrinterFactory printerFactory;
+    private GameSettings settings;
+
+    @Before
+    public void setUp() {
+        printerFactory = new PrinterFactoryImpl();
+        settings = new GameSettings();
+    }
 
     // чертик идет за тобой
     @Test
@@ -316,7 +325,7 @@ public class EnemyMultiplayerTest {
 
     private void setupPlayer(int x, int y) {
         listener = mock(EventListener.class);
-        game = new Single(new Player(listener), printerFactory);
+        game = new Single(new Player(listener, settings), printerFactory);
         game.on(field);
         when(dice.next(anyInt())).thenReturn(x, y);
         game.newGame();
@@ -325,7 +334,7 @@ public class EnemyMultiplayerTest {
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
         dice = mock(Dice.class);
-        field = new Loderunner(level, dice);
+        field = new Loderunner(level, dice, settings);
 
         int px = level.getHeroes().get(0).getX();
         int py = level.getHeroes().get(0).getY();

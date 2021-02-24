@@ -24,12 +24,14 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import com.codenjoy.dojo.loderunner.services.Events;
+import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -47,7 +49,14 @@ public class MultiplayerTest {
     private Loderunner field;
     private EventListener listener3;
     private Game game3;
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private PrinterFactory printerFactory;
+    private GameSettings settings;
+
+    @Before
+    public void setUp() throws Exception {
+        printerFactory = new PrinterFactoryImpl();
+        settings = new GameSettings();
+    }
 
     // появляется другие игроки, игра становится мультипользовательской
     @Test
@@ -633,7 +642,7 @@ public class MultiplayerTest {
 
     private void setupPlayer2(int x, int y) {
         listener2 = mock(EventListener.class);
-        game2 = new Single(new Player(listener2), printerFactory);
+        game2 = new Single(new Player(listener2, settings), printerFactory);
         game2.on(field);
         when(dice.next(anyInt())).thenReturn(x, y);
         game2.newGame();
@@ -641,7 +650,7 @@ public class MultiplayerTest {
 
     private void setupPlayer3(int x, int y) {
         listener3 = mock(EventListener.class);
-        game3 = new Single(new Player(listener3), printerFactory);
+        game3 = new Single(new Player(listener3, settings), printerFactory);
         game3.on(field);
         when(dice.next(anyInt())).thenReturn(x, y);
         game3.newGame();
@@ -649,7 +658,7 @@ public class MultiplayerTest {
 
     private void setupPlayer1(int x, int y) {
         listener1 = mock(EventListener.class);
-        game1 = new Single(new Player(listener1), printerFactory);
+        game1 = new Single(new Player(listener1, settings), printerFactory);
         game1.on(field);
         when(dice.next(anyInt())).thenReturn(x, y);
         game1.newGame();
@@ -658,7 +667,7 @@ public class MultiplayerTest {
     private void setupGm(String map) {
         Level level = new LevelImpl(map);
         dice = mock(Dice.class);
-        field = new Loderunner(level, dice);
+        field = new Loderunner(level, dice, settings);
     }
 
     @Test

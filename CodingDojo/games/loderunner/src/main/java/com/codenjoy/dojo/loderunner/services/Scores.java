@@ -27,23 +27,17 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
+import static com.codenjoy.dojo.loderunner.services.GameSettings.Keys.*;
+
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> killHeroPenalty;
-    private final Parameter<Integer> killEnemyScore;
-    private final Parameter<Integer> getGoldScore;
-    private final Parameter<Integer> forNextGoldIncScore;
-
     private volatile int score;
+    private GameSettings settings;
     private volatile int count;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        killHeroPenalty = settings.addEditBox("Kill hero penalty").type(Integer.class).def(0);
-        killEnemyScore = settings.addEditBox("Kill enemy score").type(Integer.class).def(10);
-        getGoldScore = settings.addEditBox("Get gold score").type(Integer.class).def(1);
-        forNextGoldIncScore = settings.addEditBox("Get next gold increment score").type(Integer.class).def(1);
+        this.settings = settings;
     }
 
     @Override
@@ -60,13 +54,13 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.GET_GOLD)) {
-            score += getGoldScore.getValue() + count;
-            count += forNextGoldIncScore.getValue();
+            score += settings.integer(GET_GOLD_SCORE) + count;
+            count += settings.integer(GET_NEXT_GOLD_INCREMENT);
         } else if (event.equals(Events.KILL_ENEMY)) {
-            score += killEnemyScore.getValue();
+            score += settings.integer(KILL_ENEMY_SCORE);
         } else if (event.equals(Events.KILL_HERO)) {
             count = 0;
-            score -= killHeroPenalty.getValue();
+            score -= settings.integer(KILL_HERO_PENALTY);
         }
         score = Math.max(0, score);
     }

@@ -24,6 +24,7 @@ package com.codenjoy.dojo.loderunner.model;
 
 
 import com.codenjoy.dojo.loderunner.services.Events;
+import com.codenjoy.dojo.loderunner.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.joystick.DirectionActJoystick;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -47,13 +48,17 @@ public class GameTest {
     private EventListener listener;
     private Player player;
     private EnemyAI ai;
-    private Joystick enemy = new EnemyJoystick();
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private Joystick enemy;
+    private PrinterFactory printer;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
         ai = mock(EnemyAI.class);
+        settings = new GameSettings();
+        printer = new PrinterFactoryImpl();
+        enemy = new EnemyJoystick();
     }
 
     private void dice(int...ints) {
@@ -74,9 +79,9 @@ public class GameTest {
             hero = level.getHeroes().get(0);
         }
 
-        game = new Loderunner(level, dice);   // Ужас! :)
+        game = new Loderunner(level, dice, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, settings);
         game.newGame(player);
         player.hero = hero;
         hero.init(game);
