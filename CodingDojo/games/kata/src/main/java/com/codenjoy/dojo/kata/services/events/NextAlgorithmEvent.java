@@ -37,10 +37,8 @@ public class NextAlgorithmEvent {
         this.time = time;
     }
 
-    public int getScore(Parameter<Integer> A, Parameter<Integer> B, Parameter<Integer> C) {
-        double a = A.getValue();
-        double b = B.getValue();
-        double c = C.getValue() / 100D;
+    public int getScore(double a, double b, double c) {
+        c = c / 100D;
         if (time > b*complexity) {
             time = b*complexity;
         }

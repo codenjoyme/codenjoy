@@ -34,13 +34,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class ScoresTest {
-    private PlayerScores scores;
 
-    private Settings settings;
-    private Integer A;
-    private Integer B;
-    private Integer C;
-    private Integer D;
+    private PlayerScores scores;
+    private GameSettings settings;
 
     public void passTest(int complexity, int testsCount) {
         scores.event(new PassTestEvent(complexity, testsCount));
@@ -52,13 +48,8 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new GameSettings();
         scores = new Scores(0, settings);
-
-        A = settings.getParameter("A constant").type(Integer.class).getValue();
-        B = settings.getParameter("B constant").type(Integer.class).getValue();
-        B = settings.getParameter("C constant").type(Integer.class).getValue();
-        B = settings.getParameter("D constant").type(Integer.class).getValue();
     }
 
     @Test
@@ -68,14 +59,16 @@ public class ScoresTest {
         int complexity = 100;
         int testsCount = 10;
 
-        passTest(complexity, testsCount);  // + 100
-        passTest(complexity, testsCount);  // + 100
-        passTest(complexity, testsCount);  // + 100
-        passTest(complexity, testsCount);  // + 100
+        passTest(complexity, testsCount);
+        passTest(complexity, testsCount);
+        passTest(complexity, testsCount);
+        passTest(complexity, testsCount);
 
-        nextAlgorithm(complexity, complexity); // + 10000
+        nextAlgorithm(complexity, complexity);
 
-        assertEquals(140 + 10000 + 4*100, scores.getScore());
+        assertEquals(140
+                + 10000
+                + 4*100, scores.getScore());
     }
 
     @Test

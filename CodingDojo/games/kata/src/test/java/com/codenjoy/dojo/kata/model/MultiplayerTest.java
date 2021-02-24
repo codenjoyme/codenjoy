@@ -26,6 +26,7 @@ package com.codenjoy.dojo.kata.model;
 import com.codenjoy.dojo.kata.model.levels.Level;
 import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
 import com.codenjoy.dojo.kata.services.GameRunner;
+import com.codenjoy.dojo.kata.services.GameSettings;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.Dice;
@@ -64,24 +65,25 @@ public class MultiplayerTest {
                 "question3=answer3");
 
         dice = mock(Dice.class);
-        field = new Kata(dice);
+        GameSettings settings = new GameSettings();
+        field = new Kata(dice, settings);
         PrinterFactory factory = new GameRunner().getPrinterFactory();
 
         listener1 = mock(EventListener.class);
         LevelsPoolImpl levelsPool1 = new LevelsPoolImpl(Arrays.asList(level));
-        Player player1 = new Player(listener1, levelsPool1);
+        Player player1 = new Player(listener1, levelsPool1, settings);
         game1 = new Single(player1, factory);
         game1.on(field);
 
         listener2 = mock(EventListener.class);
         LevelsPoolImpl levelsPool2 = new LevelsPoolImpl(Arrays.asList(level));
-        Player player2 = new Player(listener2, levelsPool2);
+        Player player2 = new Player(listener2, levelsPool2, settings);
         game2 = new Single(player2, factory);
         game2.on(field);
 
         listener3 = mock(EventListener.class);
         LevelsPoolImpl levelsPool3 = new LevelsPoolImpl(Arrays.asList(level));
-        Player player3 = new Player(listener3, levelsPool3);
+        Player player3 = new Player(listener3, levelsPool3, settings);
         game3 = new Single(player3, factory);
         game3.on(field);
 

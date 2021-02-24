@@ -24,6 +24,7 @@ package com.codenjoy.dojo.kata.model;
 
 
 import com.codenjoy.dojo.kata.model.levels.LevelsPool;
+import com.codenjoy.dojo.kata.services.GameSettings;
 import com.codenjoy.dojo.kata.services.events.NextAlgorithmEvent;
 import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.EventListener;
@@ -43,8 +44,8 @@ public class Player extends GamePlayer<Hero, Field> {
     Hero hero;
     private Timer timer = new Timer();
 
-    public Player(EventListener listener, LevelsPool level) {
-        super(listener);
+    public Player(EventListener listener, LevelsPool level, GameSettings settings) {
+        super(listener, settings);
         this.history = new LinkedList<>();
         this.level = level;
         level.firstLevel();

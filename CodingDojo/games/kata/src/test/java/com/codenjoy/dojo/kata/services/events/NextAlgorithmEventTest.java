@@ -85,7 +85,8 @@ public class NextAlgorithmEventTest {
     }
 
     private void assertScores(int expected, int complexity, double time) {
-        assertEquals(expected, new NextAlgorithmEvent(complexity, time).getScore(A, B, C));
+        assertEquals(expected, new NextAlgorithmEvent(complexity, time)
+                .getScore(A.getValue(), B.getValue(), C.getValue()));
     }
 
 }

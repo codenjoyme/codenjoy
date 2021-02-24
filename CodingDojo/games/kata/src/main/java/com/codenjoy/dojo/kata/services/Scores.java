@@ -29,29 +29,19 @@ import com.codenjoy.dojo.kata.services.events.PassTestEvent;
 import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
-/**
- * Класс, который умеет подсчитывать очки за те или иные действия.
- * Обычно хочется, чтобы константы очков не были захардкоджены, потому используй объект {@see Settings} для их хранения.
- * @see Level#complexity()
- */
+import static com.codenjoy.dojo.kata.services.GameSettings.Keys.*;
+
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> A;
-    private final Parameter<Integer> B;
-    private final Parameter<Integer> C;
-    private final Parameter<Integer> D;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        // вот тут мы на админке увидим два поля с подписями и возожностью редактировать значение по умолчанию
-        A = settings.addEditBox("A constant").type(Integer.class).def(100);
-        B = settings.addEditBox("B constant").type(Integer.class).def(3);
-        C = settings.addEditBox("C constant").type(Integer.class).def(30);
-        D = settings.addEditBox("D constant").type(Integer.class).def(10);    }
+        this.settings = settings;
+    }
 
     @Override
     public int clear() {
@@ -66,9 +56,14 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event instanceof PassTestEvent) {
-            score += ((PassTestEvent) event).getScore(A, D);
+            score += ((PassTestEvent) event).getScore(
+                    settings.integer(A_CONSTANT),
+                    settings.integer(D_CONSTANT));
         } else if (event instanceof NextAlgorithmEvent) {
-            score += ((NextAlgorithmEvent) event).getScore(A, B, C);
+            score += ((NextAlgorithmEvent) event).getScore(
+                    settings.integer(A_CONSTANT),
+                    settings.integer(B_CONSTANT),
+                    settings.integer(C_CONSTANT));
         }
         score = Math.max(0, score);
     }

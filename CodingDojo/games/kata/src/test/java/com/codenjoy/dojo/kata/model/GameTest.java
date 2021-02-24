@@ -27,6 +27,7 @@ import com.codenjoy.dojo.kata.model.levels.Level;
 import com.codenjoy.dojo.kata.model.levels.LevelsPool;
 import com.codenjoy.dojo.kata.model.levels.LevelsPoolImpl;
 import com.codenjoy.dojo.kata.model.levels.QuestionAnswerLevelImpl;
+import com.codenjoy.dojo.kata.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.utils.JsonUtils;
@@ -49,10 +50,12 @@ public class GameTest {
     private EventListener listener;
     private Player player;
     private LevelsPool pool;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        settings = new GameSettings();
     }
 
     private void dice(int...ints) {
@@ -81,10 +84,10 @@ public class GameTest {
     }
 
     private void givenGame(Level... levels) {
-        game = new Kata(dice);
+        game = new Kata(dice, settings);
         listener = mock(EventListener.class);
         pool = new LevelsPoolImpl(Arrays.asList(levels));
-        player = new Player(listener, pool);
+        player = new Player(listener, pool, settings);
         game.newGame(player);
         hero = player.hero;
         hero.init(game);

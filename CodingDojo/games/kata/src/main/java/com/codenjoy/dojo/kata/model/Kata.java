@@ -23,8 +23,10 @@ package com.codenjoy.dojo.kata.model;
  */
 
 
+import com.codenjoy.dojo.kata.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -34,9 +36,11 @@ public class Kata implements Field {
 
     private List<Player> players;
     private Dice dice;
+    private GameSettings settings;
 
-    public Kata(Dice dice) {
+    public Kata(Dice dice, GameSettings settings) {
         this.dice = dice;
+        this.settings = settings;
         players = new LinkedList<>();
     }
 
@@ -72,6 +76,11 @@ public class Kata implements Field {
 
     public void remove(Player player) {
         players.remove(player);
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 
 }
