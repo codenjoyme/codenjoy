@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest.pojo;
  */
 
 import com.codenjoy.dojo.services.Game;
+import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerSave;
 import com.codenjoy.dojo.services.dao.Registration;
@@ -54,9 +55,10 @@ public class PlayerDetailInfo {
     public PlayerDetailInfo(Player player, Registration.User registration,
                             String roomName, Game game, List<String> group)
     {
-        gameType = player.getGameType().name();
+        GameType type = player.getGameType();
+        this.gameType = type.name();
         this.roomName = roomName;
-        multiplayer = new PMuptiplayerType(player.getGameType().getMultiplayerType());
+        multiplayer = new PMuptiplayerType(type.getMultiplayerType(type.getSettings()));
 
         callbackUrl = player.getCallbackUrl();
         score = String.valueOf(player.getScore());

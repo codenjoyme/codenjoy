@@ -163,14 +163,14 @@ public class PlayerServiceImplTest {
 
         when(gameService.getGame(anyString())).thenReturn(gameType);
 
-        when(gameType.getBoardSize()).thenReturn(v(15));
-        when(gameType.getPlayerScores(anyInt())).thenAnswer(inv -> {
+        when(gameType.getBoardSize(any())).thenReturn(v(15));
+        when(gameType.getPlayerScores(anyInt(), any())).thenAnswer(inv -> {
             PlayerScores scores = mock(PlayerScores.class);
             when(scores.getScore()).thenReturn(0);
             playerScores.add(scores);
             return scores;
         });
-        when(gameType.createGame(anyInt())).thenAnswer(inv -> {
+        when(gameType.createGame(anyInt(), any())).thenAnswer(inv -> {
             GameField field = mock(GameField.class);
             gameFields.add(field);
 
@@ -178,7 +178,7 @@ public class PlayerServiceImplTest {
             return field;
         });
         heroesData.addAll(Arrays.asList(heroData(1, 2), heroData(3, 4), heroData(5, 6), heroData(7, 8)));
-        when(gameType.createPlayer(any(EventListener.class), anyString()))
+        when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
                 .thenAnswer(inv -> {
                     Joystick joystick = mock(Joystick.class);
                     joysticks.add(joystick);
@@ -194,7 +194,7 @@ public class PlayerServiceImplTest {
         when(gameType.name()).thenReturn("game");
         when(gameType.getPlots()).thenReturn(Elements.values());
         when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(printer));
-        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
+        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
 
         // по умолчанию все команаты будут активными
         when(roomService.isActive(anyString())).thenReturn(true);
@@ -536,7 +536,7 @@ public class PlayerServiceImplTest {
         players.add(player);
 
         if (player != NullPlayer.INSTANCE) {
-            verify(gameType, atLeastOnce()).createGame(anyInt());
+            verify(gameType, atLeastOnce()).createGame(anyInt(), any());
         }
 
         return player;
@@ -583,7 +583,7 @@ public class PlayerServiceImplTest {
         playerService.register(save);
 
         // then
-        verify(gameType).getPlayerScores(100);
+        verify(gameType).getPlayerScores(eq(100), any());
         when(playerScores(0).getScore()).thenReturn(100);
 
         Player player = playerService.get(VASYA);
@@ -605,7 +605,7 @@ public class PlayerServiceImplTest {
         playerService.register(save);
 
         // then
-        verify(gameType).getPlayerScores(200);
+        verify(gameType).getPlayerScores(eq(200), any());
         when(playerScores(1).getScore()).thenReturn(200);
 
         Player player = playerService.get(VASYA);
@@ -628,7 +628,7 @@ public class PlayerServiceImplTest {
         playerService.register(save);
 
         // then
-        verify(gameType).getPlayerScores(0);
+        verify(gameType).getPlayerScores(eq(0), any());
         when(playerScores(1).getScore()).thenReturn(0);
 
         Player player = playerService.get(VASYA);
@@ -780,7 +780,7 @@ public class PlayerServiceImplTest {
         setup(game1);
         setup(game2);
 
-        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
+        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
 
         // when
         playerService.tick();
@@ -813,7 +813,7 @@ public class PlayerServiceImplTest {
         GameField field2 = game2.getField();
         doThrow(new RuntimeException()).when(field1).tick();
 
-        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
+        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
 
         // when
         playerService.tick();
@@ -852,7 +852,7 @@ public class PlayerServiceImplTest {
         when(game2.getField()).thenReturn(field1);
         doThrow(new RuntimeException()).when(field1).tick();
 
-        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.MULTIPLE);   // тут отличия с прошлым тестом
+        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.MULTIPLE);   // тут отличия с прошлым тестом
 
         // when
         playerService.tick();
@@ -922,7 +922,7 @@ public class PlayerServiceImplTest {
         setup(game1);
         setup(game2);
 
-        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.MULTIPLE); // тут отличия с прошлым тестом
+        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.MULTIPLE); // тут отличия с прошлым тестом
         GameField field1 = game1.getField();
         when(game2.getField()).thenReturn(field1);
 

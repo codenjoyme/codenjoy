@@ -36,6 +36,7 @@ import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
 import com.codenjoy.dojo.services.playerdata.PlayerData;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.transport.screen.ScreenData;
 import com.codenjoy.dojo.transport.screen.ScreenRecipient;
 import lombok.extern.slf4j.Slf4j;
@@ -213,7 +214,7 @@ public class PlayerServiceImpl implements PlayerService {
         return id.endsWith(WebSocketRunner.BOT_ID_SUFFIX);
     }
 
-    private Closeable createAI(String id, String code, GameType gameType) {
+    private Closeable createAI(String id, String code, GameType<Settings> gameType) {
         Class<? extends Solver> ai = gameType.getAI();
         if (ai == null) {
             return null;
@@ -264,7 +265,7 @@ public class PlayerServiceImpl implements PlayerService {
         if (newPlayer) {
             playerGames.remove(player);
 
-            PlayerScores playerScores = gameType.getPlayerScores(save.getScore());
+            PlayerScores playerScores = gameType.getPlayerScores(save.getScore(), gameType.getSettings());
             InformationCollector listener = new InformationCollector(playerScores);
 
             player = new Player(name, callbackUrl,

@@ -270,13 +270,13 @@ public class PlayerServiceImplIntegrationTest {
 
 
         GameType gameType = mock(GameType.class);
-        when(gameType.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
-        when(gameType.createGame(anyInt())).thenAnswer(inv -> {
+        when(gameType.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
+        when(gameType.createGame(anyInt(), any())).thenAnswer(inv -> {
             GameField field = mock(GameField.class);
             when(field.reader()).thenAnswer(inv2 -> mock(BoardReader.class));
             return field;
         });
-        when(gameType.createPlayer(any(EventListener.class), anyString()))
+        when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
                 .thenAnswer(inv -> mock(GamePlayer.class));
         when(gameType.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
         when(gameType.getAI()).thenReturn((Class)AISolverStub.class);

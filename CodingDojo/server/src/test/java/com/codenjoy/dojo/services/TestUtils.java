@@ -72,13 +72,13 @@ public class TestUtils {
             }
         }
 
-        when(gameType.getMultiplayerType()).thenReturn(type);
-        when(gameType.createGame(anyInt())).thenAnswer(getGame);
+        when(gameType.getMultiplayerType(any())).thenReturn(type);
+        when(gameType.createGame(anyInt(), any())).thenAnswer(getGame);
         PrinterFactory printerFactory = mock(PrinterFactory.class);
         when(gameType.getPrinterFactory()).thenReturn(printerFactory);
         when(printerFactory.getPrinter(any(BoardReader.class), any()))
                 .thenAnswer(inv1 -> printer);
-        when(gameType.createPlayer(any(EventListener.class), anyString()))
+        when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
                 .thenAnswer(inv -> gamePlayer);
 
         PlayerGame playerGame = playerGames.add(player, roomName, save);

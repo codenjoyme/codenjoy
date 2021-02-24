@@ -435,7 +435,7 @@ public class AdminController {
         model.addAttribute("generateRoomName", gameName);
         model.addAttribute("timerPeriod", timerService.getPeriod());
 
-        MultiplayerType type = gameService.getGame(gameName).getMultiplayerType();
+        MultiplayerType type = game.getMultiplayerType(game.getSettings());
         JSONObject save = type.progress().saveTo(new JSONObject());
         model.addAttribute("defaultProgress", save.toString().replace('"', '\''));
 

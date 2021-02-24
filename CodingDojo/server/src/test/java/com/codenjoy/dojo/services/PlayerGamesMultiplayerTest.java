@@ -88,11 +88,11 @@ public class PlayerGamesMultiplayerTest {
 
     private GameType setupGameType(String gameName, MultiplayerType type) {
         GameType result = mock(GameType.class);
-        when(result.getMultiplayerType()).thenReturn(type);
+        when(result.getMultiplayerType(any())).thenReturn(type);
         when(result.name()).thenReturn(gameName);
         when(result.getPrinterFactory()).thenReturn(printerFactory);
-        when(result.createGame(anyInt())).thenAnswer(inv -> createGameField());
-        when(result.createPlayer(any(EventListener.class), anyString())).thenAnswer(inv -> createGamePlayer());
+        when(result.createGame(anyInt(), any())).thenAnswer(inv -> createGameField());
+        when(result.createPlayer(any(EventListener.class), anyString(), any())).thenAnswer(inv -> createGamePlayer());
         return result;
     }
 

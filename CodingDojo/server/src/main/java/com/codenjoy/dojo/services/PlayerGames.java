@@ -92,7 +92,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         if (index == -1) return;
         PlayerGame game = all.remove(index);
         GameType gameType = game.getGameType();
-        MultiplayerType type = gameType.getMultiplayerType();
+        MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
 
         if (reloadAlone) {
             removeWithResetAlone(game.getGame(), type.shouldReloadAlone());
@@ -128,7 +128,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
     private void play(Game game, String roomName, GameType gameType, JSONObject save) {
         game.close();
 
-        MultiplayerType type = gameType.getMultiplayerType();
+        MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
         int roomSize = type.loadProgress(game, save);
         LevelProgress progress = game.getProgress();
         int levelNumber = progress.getCurrent();
@@ -139,7 +139,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
                 levelNumber,
                 () -> {
                     game.getPlayer().setProgress(progress);
-                    return gameType.createGame(levelNumber);
+                    return gameType.createGame(levelNumber, gameType.getSettings());
                 });
 
         game.on(field);
@@ -169,11 +169,11 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private Single buildSingle(Player player, GameType gameType) {
         GamePlayer gamePlayer = gameType.createPlayer(player.getEventListener(),
-                player.getId());
+                player.getId(), gameType.getSettings());
 
         return new Single(gamePlayer,
                 gameType.getPrinterFactory(),
-                gameType.getMultiplayerType());
+                gameType.getMultiplayerType(gameType.getSettings()));
     }
 
     private JSONObject parseSave(PlayerSave save) {
@@ -268,7 +268,8 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
             Game game = playerGame.getGame();
             String roomName = playerGame.getRoomName();
 
-            MultiplayerType type = playerGame.getGameType().getMultiplayerType();
+            GameType gameType = playerGame.getGameType();
+            MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
             if (game.isGameOver()) {
                 quiet(() -> {
                     JSONObject level = game.getSave();
@@ -320,7 +321,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         PlayerGame playerGame = getPlayerGame(game);
         playerGame.setRoomName(roomName);
         GameType gameType = playerGame.getGameType();
-        MultiplayerType type = gameType.getMultiplayerType();
+        MultiplayerType type = gameType.getMultiplayerType(gameType.getSettings());
 
         if (reloadAlone) {
             removeWithResetAlone(game, type.shouldReloadAlone());

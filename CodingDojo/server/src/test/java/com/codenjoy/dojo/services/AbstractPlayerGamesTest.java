@@ -150,7 +150,7 @@ public class AbstractPlayerGamesTest {
         GameType gameType = mock(GameType.class);
         gameTypes.add(gameType);
         PlayerScores scores = mock(PlayerScores.class);
-        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
+        when(gameType.getPlayerScores(anyInt(), any())).thenReturn(scores);
         when(gameType.name()).thenReturn(gameName);
         when(gameService.getGame(anyString())).thenReturn(gameType);
 

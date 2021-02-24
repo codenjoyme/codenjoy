@@ -957,7 +957,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayer("player1", MultiplayerType.SINGLE, save);
 
         // then
-        verify(fields.get(0), never()).loadSave(anyObject());
+        verify(fields.get(0), never()).loadSave(any());
     }
 
     @Test
@@ -969,7 +969,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayerFromSave("player1", save);
 
         // then
-        verify(fields.get(0), never()).loadSave(anyObject());
+        verify(fields.get(0), never()).loadSave(any());
     }
 
     @Test
@@ -981,7 +981,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayerFromSave("player1", save);
 
         // then
-        verify(fields.get(0), never()).loadSave(anyObject());
+        verify(fields.get(0), never()).loadSave(any());
     }
 
     @Test
@@ -993,7 +993,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayerFromSave("player1", save);
 
         // then
-        verify(fields.get(0), never()).loadSave(anyObject());
+        verify(fields.get(0), never()).loadSave(any());
     }
 
     @Test
@@ -1005,7 +1005,7 @@ public class PlayerGamesTest extends AbstractPlayerGamesTest {
         createPlayerFromSave("player1", save);
 
         // then
-        verify(fields.get(0), never()).loadSave(anyObject());
+        verify(fields.get(0), never()).loadSave(any());
     }
 
     @Test

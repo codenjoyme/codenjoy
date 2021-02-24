@@ -443,13 +443,13 @@ public class PlayerGamesViewTest {
 
     private GameType addNewGameType(String gameName, int boardSize, Answer<Object> fieldSupplier) {
         GameType result = mock(GameType.class);
-        when(result.getBoardSize()).thenReturn(new SimpleParameter<>(boardSize));
+        when(result.getBoardSize(any())).thenReturn(new SimpleParameter<>(boardSize));
         when(result.name()).thenReturn(gameName);
-        when(result.getMultiplayerType()).thenReturn(MultiplayerType.SINGLE);
+        when(result.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
         when(result.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
-        when(result.createPlayer(any(EventListener.class), anyString()))
+        when(result.createPlayer(any(EventListener.class), anyString(), any()))
                 .thenAnswer(inv -> gamePlayers.get(gamePlayers.size() - 1));
-        when(result.createGame(anyInt())).thenAnswer(fieldSupplier);
+        when(result.createGame(anyInt(), any())).thenAnswer(fieldSupplier);
         gameTypes.add(result);
         return result;
     }

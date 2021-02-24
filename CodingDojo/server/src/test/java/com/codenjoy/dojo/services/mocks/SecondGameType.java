@@ -39,23 +39,15 @@ import com.codenjoy.dojo.services.settings.SimpleParameter;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class SecondGameType extends AbstractGameType {
-
-    private final SettingsImpl result;
-
-    public SecondGameType() {
-        result = new SettingsImpl();
-        result.addEditBox("Parameter 3").type(Integer.class).def(43);
-        result.addCheckBox("Parameter 4").type(Boolean.class).def(false).update(true);
-    }
+public class SecondGameType extends AbstractGameType<SettingsImpl> {
 
     @Override
-    public PlayerScores getPlayerScores(Object score) {
+    public PlayerScores getPlayerScores(Object score, SettingsImpl settings) {
         return new FakePlayerScores(score);
     }
 
     @Override
-    public GameField createGame(int levelNumber) {
+    public GameField createGame(int levelNumber, SettingsImpl settings) {
         GameField field = mock(GameField.class);
         BoardReader reader = mock(BoardReader.class);
         when(field.reader()).thenReturn(reader);
@@ -63,7 +55,7 @@ public class SecondGameType extends AbstractGameType {
     }
 
     @Override
-    public Parameter<Integer> getBoardSize() {
+    public Parameter<Integer> getBoardSize(SettingsImpl settings) {
         return new SimpleParameter<>(56);
     }
 
@@ -103,8 +95,11 @@ public class SecondGameType extends AbstractGameType {
     }
 
     @Override
-    public Settings getSettings() {
-        return result;
+    public SettingsImpl getSettings() {
+        return new SettingsImpl(){{
+            addEditBox("Parameter 3").type(Integer.class).def(43);
+            addCheckBox("Parameter 4").type(Boolean.class).def(false).update(true);
+        }};
     }
 
     @Override
@@ -118,12 +113,12 @@ public class SecondGameType extends AbstractGameType {
     }
 
     @Override
-    public MultiplayerType getMultiplayerType() {
+    public MultiplayerType getMultiplayerType(SettingsImpl settings) {
         return MultiplayerType.TRAINING.apply(10);
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId) {
+    public GamePlayer createPlayer(EventListener listener, String playerId, SettingsImpl settings) {
         return mock(GamePlayer.class);
     }
     

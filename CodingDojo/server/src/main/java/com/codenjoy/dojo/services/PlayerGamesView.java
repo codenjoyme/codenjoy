@@ -23,6 +23,7 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.hero.HeroData;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.web.rest.pojo.PScoresOf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,12 +51,12 @@ public class PlayerGamesView {
                 .collect(toMap(
                         pg -> pg.getPlayer().getId(),
                         pg -> {
-                            GameType gameType = pg.getGameType();
+                            GameType<Settings> gameType = pg.getGameType();
                             String player = pg.getPlayer().getId();
                             List<String> group = groupsMap.get(player);
 
                             return new GameData(
-                                    gameType.getBoardSize().getValue(),
+                                    gameType.getBoardSize(gameType.getSettings()).getValue(),
                                     decoders.get(gameType.name()),
                                     filterByGroup(scores, group),
                                     group,

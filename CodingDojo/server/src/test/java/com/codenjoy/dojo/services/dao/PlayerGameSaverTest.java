@@ -32,8 +32,7 @@ import org.junit.Test;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -88,7 +87,7 @@ public class PlayerGameSaverTest {
 
     private GameType getGameType(PlayerScores scores) {
         GameType gameType = mock(GameType.class);
-        when(gameType.getPlayerScores(anyInt())).thenReturn(scores);
+        when(gameType.getPlayerScores(anyInt(), any())).thenReturn(scores);
         return gameType;
     }
 
