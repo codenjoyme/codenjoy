@@ -42,11 +42,21 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
     @Override
     public T getValue() {
-        return (get() == null) ?
-                ((def == null) ?
-                        null :
-                        options.get(def)) :
-                options.get(get());
+        if (get() != null) {
+            int index = get();
+            if (index < 0 || index >= options.size()) {
+                return null;
+            }
+            return options.get(index);
+        }
+        if (def != null) {
+            return options.get(def);
+        }
+        return null;
+    }
+
+    public int index() {
+        return options.indexOf(getValue());
     }
 
     @Override

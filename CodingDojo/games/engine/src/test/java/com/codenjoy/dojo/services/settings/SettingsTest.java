@@ -871,4 +871,33 @@ public class SettingsTest {
         assertEquals("[key:String = val[other]]",
                 simpleClone.toString());
     }
+
+    @Test
+    public void shouldSelectBox_index() {
+        // given
+        SelectBox<String> select = settings.addSelect("select",
+                Arrays.asList("option1", "option2")).type(String.class);
+
+        // when then
+        select.select(1);
+        assertEquals("option2", select.getValue());
+        assertEquals(1, select.index());
+
+        // when then
+        select.select(0);
+        assertEquals("option1", select.getValue());
+        assertEquals(0, select.index());
+    }
+
+    @Test
+    public void shouldSelectBox_indexOfBound() {
+        // given
+        SelectBox<String> select = settings.addSelect("select",
+                Arrays.asList("option1", "option2")).type(String.class);
+
+        // when then
+        select.select(3);
+        assertEquals(null, select.getValue());
+        assertEquals(-1, select.index());
+    }
 }
