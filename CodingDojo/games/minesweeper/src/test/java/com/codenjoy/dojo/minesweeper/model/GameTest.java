@@ -24,9 +24,11 @@ package com.codenjoy.dojo.minesweeper.model;
 
 
 import com.codenjoy.dojo.minesweeper.services.Events;
+import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -34,7 +36,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.BOARD_SIZE;
+import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.DETECTOR_CHARGE;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -45,7 +48,14 @@ public class GameTest {
     private List<Mine> mines;
     private int detectorCharge = 3;
     private EventListener listener;
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private PrinterFactory printerFactory;
+    private GameSettings settings;
+
+    @Before
+    public void setup() {
+        printerFactory = new PrinterFactoryImpl();
+        settings = new GameSettings();
+    }
 
     private void shouldSize(int size) {
         this.size = size;
@@ -803,10 +813,11 @@ public class GameTest {
         private Player player;
 
         public MockBoard(Sapper sapper, Mine...mines) {
-            super(v(size), v(0), v(detectorCharge),
-                    (count, board) -> new ArrayList<>());
+            super((count, board) -> new ArrayList<>(),
+                    settings.integer(BOARD_SIZE, size)
+                            .integer(DETECTOR_CHARGE, detectorCharge));
 
-            player = new Player(listener) {
+            player = new Player(listener, settings) {
                 @Override
                 public void newHero(Field field) {
                     hero = sapper;

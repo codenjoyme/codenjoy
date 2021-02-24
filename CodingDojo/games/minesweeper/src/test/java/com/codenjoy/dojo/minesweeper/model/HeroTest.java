@@ -23,10 +23,12 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
-import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.minesweeper.services.GameSettings;
+import com.codenjoy.dojo.services.Direction;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.settings.Parameter;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,13 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
-
-/**
- * User: oleksii.morozov Date: 10/14/12 Time: 11:04 AM
- */
 
 public class HeroTest {
 
@@ -52,15 +49,22 @@ public class HeroTest {
     private List<Mine> mines;
     private final MinesGenerator NO_MINES = new MockGenerator();
     private EventListener listener;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private PrinterFactory printer;
+    private GameSettings settings;
 
     @Before
     public void gameStart() {
-        board = new Minesweeper(v(BOARD_SIZE), v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES);
-        board.newGame(new Player(listener));
+        settings = new GameSettings()
+                .integer(GameSettings.Keys.BOARD_SIZE, BOARD_SIZE)
+                .integer(GameSettings.Keys.MINES_ON_BOARD, MINES_COUNT)
+                .integer(GameSettings.Keys.DETECTOR_CHARGE, CHARGE_COUNT);
+
+        board = new Minesweeper(NO_MINES, settings);
+        board.newGame(new Player(listener, settings));
         sapper = board.sapper();
         mines = board.getMines();
         listener = mock(EventListener.class);
+        printer = new PrinterFactoryImpl();
     }
 
     class MockGenerator implements MinesGenerator {
@@ -83,28 +87,58 @@ public class HeroTest {
 
     @Test
     public void shouldBoardSizeMoreThanOne_whenGameStart() {
-        Parameter<Integer> boardSize = v(0);
-        new Minesweeper(boardSize, v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES).newGame(new Player(listener));
-        assertEquals(5, boardSize.getValue().intValue());
+        // given
+        settings.integer(GameSettings.Keys.BOARD_SIZE, 0);
+
+        // when
+        new Minesweeper(NO_MINES, settings)
+                .newGame(new Player(listener, settings));
+
+        // then
+        assertEquals(5, (int)settings.integer(GameSettings.Keys.BOARD_SIZE));
     }
 
     @Test
     public void shouldMinesCountLessThenAllCells_whenGameStart() {
-        Parameter<Integer> minesCount = v(100);
-        new Minesweeper(v(2), minesCount, v(CHARGE_COUNT), NO_MINES).newGame(new Player(listener));
-        assertEquals(12, minesCount.getValue().intValue());
+        // given
+        settings.integer(GameSettings.Keys.BOARD_SIZE, 2)
+                .integer(GameSettings.Keys.MINES_ON_BOARD, 100);
+
+        // when
+        new Minesweeper(NO_MINES, settings)
+                .newGame(new Player(listener, settings));
+
+        // then
+        assertEquals(12, (int)settings.integer(GameSettings.Keys.MINES_ON_BOARD));
     }
 
     @Test
     public void shouldMineDetectorChargeMoreThanMines_whenGameStart() {
-        Parameter<Integer> chargeCount = v(CHARGE_COUNT);
-        new Minesweeper(v(BOARD_SIZE), v(10), chargeCount, NO_MINES).newGame(new Player(listener));
-        assertEquals(10, chargeCount.getValue().intValue());
+        // given
+        settings.integer(GameSettings.Keys.MINES_ON_BOARD, 10)
+                .integer(GameSettings.Keys.DETECTOR_CHARGE, 20);
+
+
+        // when
+        new Minesweeper(NO_MINES, settings)
+                .newGame(new Player(listener, settings));
+
+        // then
+        assertEquals(10, (int)settings.integer(GameSettings.Keys.MINES_ON_BOARD));
+        assertEquals(10, (int)settings.integer(GameSettings.Keys.DETECTOR_CHARGE));
     }
 
     @Test
     public void shouldBoardSizeSpecify_whenGameStart() {
-        board = new Minesweeper(v(10), v(MINES_COUNT), v(CHARGE_COUNT), NO_MINES);
+        // given
+        settings.integer(GameSettings.Keys.BOARD_SIZE, 10);
+
+        // when
+        new Minesweeper(NO_MINES, settings)
+                .newGame(new Player(listener, settings));
+
+        // then
+        assertEquals(10, (int)settings.integer(GameSettings.Keys.BOARD_SIZE));
         assertEquals(10, board.size());
     }
 
@@ -330,7 +364,7 @@ public class HeroTest {
     private String getBoardAsString(Field board) {
         return (String) new PrinterFactoryImpl<Elements, Player>()
                 .getPrinter(board.reader(),
-                        new Player(listener)).print();
+                        new Player(listener, settings)).print();
     }
 
 }

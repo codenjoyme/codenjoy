@@ -23,6 +23,7 @@ package com.codenjoy.dojo.minesweeper.model;
  */
 
 
+import com.codenjoy.dojo.minesweeper.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
@@ -30,8 +31,8 @@ public class Player extends GamePlayer<Sapper, Field> {
 
     Sapper hero;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
     }
 
     @Override
