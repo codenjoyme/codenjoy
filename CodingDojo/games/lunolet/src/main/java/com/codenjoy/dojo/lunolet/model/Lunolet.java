@@ -23,7 +23,9 @@ package com.codenjoy.dojo.lunolet.model;
  */
 
 
+import com.codenjoy.dojo.lunolet.services.GameSettings;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,9 +35,11 @@ public class Lunolet implements Field {
 
     private LevelManager levelManager;
     private List<Player> players;
+    private GameSettings settings;
 
-    public Lunolet(LevelManager levelManager) {
+    public Lunolet(LevelManager levelManager, GameSettings settings) {
         this.levelManager = levelManager;
+        this.settings = settings;
         players = new LinkedList<>();
     }
 
@@ -75,4 +79,10 @@ public class Lunolet implements Field {
     public Level getLevel(int level) {
         return levelManager.getLevel(level);
     }
+
+    @Override
+    public SettingsReader settings() {
+        return settings;
+    }
+
 }
