@@ -10,6 +10,10 @@ public interface SettingsReader<T extends SettingsReader> {
     
     // getters
 
+    default <T extends Parameter> T parameter(Key key, Class<T> clazz) {
+        return (T)getParameter(key.key());
+    }
+
     default String string(Key key) {
         return getParameter(key.key()).type(String.class).getValue();
     }
