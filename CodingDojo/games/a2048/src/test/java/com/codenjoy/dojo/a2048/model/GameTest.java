@@ -24,6 +24,7 @@ package com.codenjoy.dojo.a2048.model;
 
 
 import com.codenjoy.dojo.a2048.services.Events;
+import com.codenjoy.dojo.a2048.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -37,26 +38,35 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.stream.IntStream;
+
+import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_EXISTS;
+import static com.codenjoy.dojo.a2048.services.GameSettings.BreaksMode.BREAKS_NOT_EXISTS;
+import static com.codenjoy.dojo.a2048.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMBERS_IN_CORNERS;
+import static com.codenjoy.dojo.a2048.services.GameSettings.NumbersMode.NEW_NUMBERS_IN_RANDOM;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 public class GameTest {
-
-    private static final boolean WITH_BREAK = true;
-    private static final boolean WITHOUT_BREAK = false;
-    private static final int ADD_NEW_AT_CORNER = -1;
+    
     private A2048 field;
     private Game game;
     private Joystick joystick;
     private Dice dice;
     private EventListener listener;
     private Level level;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private PrinterFactory printer;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        printer = new PrinterFactoryImpl();
+        settings = new GameSettings();
+        mode(NEW_NUMBERS_IN_CORNERS, 0);
+        mode(BREAKS_NOT_EXISTS, 0);
     }
 
     private void dice(int...ints) {
@@ -68,23 +78,18 @@ public class GameTest {
     }
 
     private void givenFl(String board) {
-        givenFl(board, 1, WITHOUT_BREAK);
-    }
+        dice(0); // по умолчанию для генераторов новых чисел
 
-    private void givenFl(String board, int newNumbers, boolean mode) {
-        givenFl(board, newNumbers, (mode)?1:0);
-    }
+        if (board != null) {
+            // эта строчка должна быть после других установок,
+            // она переопределит и карту и SIZE
+            settings.string(LEVEL_MAP, board);
+        }
 
-    private void givenFl(String board, int newNumbers, int mode) {
-        level = new LevelImpl(board);
-        level.getSettings().getParameter("New numbers").type(Integer.class).update(newNumbers);
-        level.getSettings().getParameter("Mode").type(Integer.class).update(mode);
-
-        field = new A2048(level, dice);
-        when(dice.next(anyInt())).thenReturn(-1); // ничего не генерим нового на поле с каждым тиком
+        field = new A2048(settings.level(), dice, settings);
 
         listener = mock(EventListener.class);
-        game = new Single(new Player(listener), printer);
+        game = new Single(new Player(listener, settings), printer);
         game.on(field);
         game.newGame();
         this.joystick = game.getJoystick();
@@ -98,6 +103,7 @@ public class GameTest {
     // есть поле
     @Test
     public void shouldFieldAtStart() {
+        // given
         givenFl(" 2  " +
                 "    " +
                 "  2 " +
@@ -115,14 +121,17 @@ public class GameTest {
 
     @Test
     public void shouldMoveNumbersWhenUseJoystickUp() {
+        // given
         givenFl(" 2  " +
                 "    " +
                 "  4 " +
                 "    ");
 
+        // when
         joystick.up();
         field.tick();
 
+        // then
         assertE(" 24 " +
                 "    " +
                 "    " +
@@ -131,14 +140,16 @@ public class GameTest {
 
     @Test
     public void shouldMoveNumbersWhenUseJoystickDown() {
+        // given
         givenFl(" 2  " +
                 "    " +
                 "  4 " +
                 "    ");
-
+        // when
         joystick.down();
         field.tick();
 
+        // then
         assertE("    " +
                 "    " +
                 "    " +
@@ -147,14 +158,17 @@ public class GameTest {
 
     @Test
     public void shouldMoveNumbersWhenUseJoystickRight() {
+        // given
         givenFl(" 2  " +
                 "    " +
                 "  4 " +
                 "    ");
 
+        // when
         joystick.right();
         field.tick();
 
+        // then
         assertE("   2" +
                 "    " +
                 "   4" +
@@ -163,14 +177,17 @@ public class GameTest {
 
     @Test
     public void shouldMoveNumbersWhenUseJoystickLeft() {
+        // given
         givenFl(" 2  " +
                 "    " +
                 "  4 " +
                 "    ");
 
+        // when
         joystick.left();
         field.tick();
 
+        // then
         assertE("2   " +
                 "    " +
                 "4   " +
@@ -179,14 +196,17 @@ public class GameTest {
 
     @Test
     public void shouldSumNumbersWhenEquals_moveRight() {
+        // given
         givenFl("    " +
                 "    " +
                 "2 2 " +
                 "    ");
 
+        // when
         joystick.right();
         field.tick();
 
+        // then
         assertE("    " +
                 "    " +
                 "   4" +
@@ -195,14 +215,17 @@ public class GameTest {
 
     @Test
     public void shouldSumNumbersWhenEquals_moveUp() {
+        // given
         givenFl("  2 " +
                 "    " +
                 "  2 " +
                 "    ");
 
+        // when
         joystick.up();
         field.tick();
 
+        // then
         assertE("  4 " +
                 "    " +
                 "    " +
@@ -211,14 +234,17 @@ public class GameTest {
 
     @Test
     public void shouldSumNumbersWhenEquals_moveLeft() {
+        // given
         givenFl("  2 " +
                 "    " +
                 " 22 " +
                 "    ");
 
+        // when
         joystick.left();
         field.tick();
 
+        // then
         assertE("2   " +
                 "    " +
                 "4   " +
@@ -227,14 +253,17 @@ public class GameTest {
 
     @Test
     public void shouldSumNumbersWhenEquals_moveDown() {
+        // given
         givenFl("  2 " +
                 "  2 " +
                 " 22 " +
                 "    ");
 
+        // when
         joystick.down();
         field.tick();
 
+        // then
         assertE("    " +
                 "    " +
                 "  2 " +
@@ -243,14 +272,17 @@ public class GameTest {
 
     @Test
     public void shouldNoDoubleSum() {
+        // given
         givenFl("  2 " +
                 "  2 " +
                 "  2 " +
                 "  2 ");
 
+        // when
         joystick.down();
         field.tick();
 
+        // then
         assertE("    " +
                 "    " +
                 "  4 " +
@@ -259,14 +291,17 @@ public class GameTest {
 
     @Test
     public void shouldNoDoubleSum2() {
+        // given
         givenFl("    " +
                 "  4 " +
                 "  2 " +
                 "  2 ");
 
+        // when
         joystick.down();
         field.tick();
 
+        // then
         assertE("    " +
                 "    " +
                 "  4 " +
@@ -275,6 +310,7 @@ public class GameTest {
 
     @Test
     public void shouldCombineSum() {
+        // given
         givenFl("442 " +
                 "4 24" +
                 " 22 " +
@@ -360,10 +396,13 @@ public class GameTest {
 
     @Test
     public void shouldAddScoreWhenMultipleAdd() {
+        // given
+        mode(NEW_NUMBERS_IN_RANDOM, 3);
+
         givenFl("    " +
                 "    " +
                 "    " +
-                "    ", 3, WITHOUT_BREAK);
+                "    ");
 
         // when
         dice(1,1, 2,3, 3,3);
@@ -390,8 +429,21 @@ public class GameTest {
                 " 222");
     }
 
+    private GameSettings mode(GameSettings.NumbersMode mode, int count) {
+        return settings.string(NUMBERS_MODE, mode.key())
+                .integer(NEW_NUMBERS, count);
+    }
+
+    private void mode(GameSettings.BreaksMode mode, int size) {
+        settings.integer(SIZE, size)
+                .string(BREAKS_MODE, mode.key());
+    }
+
     @Test
     public void shouldFireEventWhenIncScore() {
+        // given
+        mode(NEW_NUMBERS_IN_RANDOM, 0);
+
         givenFl("    " +
                 "    " +
                 "2 2 " +
@@ -409,6 +461,8 @@ public class GameTest {
 
         assertEvens("[SUM(4)]");
 
+        mode(NEW_NUMBERS_IN_RANDOM, 1);
+
         // when
         joystick.up();
         dice(1, 2);
@@ -425,6 +479,9 @@ public class GameTest {
 
     @Test
     public void shouldNewRandomNumberWhenTick() {
+        // given
+        mode(NEW_NUMBERS_IN_RANDOM, 1);
+
         givenFl("    " +
                 "    " +
                 "    " +
@@ -457,10 +514,13 @@ public class GameTest {
 
     @Test
     public void shouldNewNumberAtCornerWhenTick() {
+        // given
+        mode(NEW_NUMBERS_IN_CORNERS, 4);
+
         givenFl("    " +
                 "    " +
                 "    " +
-                "    ", ADD_NEW_AT_CORNER, WITHOUT_BREAK);
+                "    ");
 
         // when
         joystick.up();
@@ -505,11 +565,13 @@ public class GameTest {
 
     @Test
     public void shouldNewNumbersWhenTick() {
-        int newNumbers = 4;
+        // given
+        mode(NEW_NUMBERS_IN_RANDOM, 4);
+
         givenFl("    " +
                 "    " +
                 "    " +
-                "    ", newNumbers, WITHOUT_BREAK);
+                "    ");
 
         // when
         joystick.up();
@@ -526,6 +588,9 @@ public class GameTest {
 
     @Test
     public void shouldNewNumberOnlyIfUserAct() {
+        // given
+        mode(NEW_NUMBERS_IN_RANDOM, 1);
+
         givenFl("    " +
                 "    " +
                 "    " +
@@ -543,7 +608,6 @@ public class GameTest {
 
         // when
         dice(2, 2);    // только если юзер сделал какое-то действие
-//        joystick.up();
         field.tick();
 
         // then
@@ -555,6 +619,9 @@ public class GameTest {
 
     @Test
     public void shouldGameOverWhenNoSpace() {
+        // given
+        mode(NEW_NUMBERS_IN_RANDOM, 1);
+
         givenFl("4848" +
                 "8282" +
                 "4848" +
@@ -601,6 +668,7 @@ public class GameTest {
 
     @Test
     public void shouldNoGameOverWhenNoSpaceButCanGo() {
+        // given
         givenFl("2222" +
                 "2222" +
                 "2222" +
@@ -615,6 +683,7 @@ public class GameTest {
 
     @Test
     public void shouldNoGameOverWhenNoSpaceButCanGoHorizontal_1() {
+        // given
         givenFl("4848" +
                 "2284" +
                 "4848" +
@@ -629,6 +698,7 @@ public class GameTest {
 
     @Test
     public void shouldNoGameOverWhenNoSpaceButCanGoHorizontal_2() {
+        // given
         givenFl("4848" +
                 "8224" +
                 "4848" +
@@ -643,6 +713,7 @@ public class GameTest {
 
     @Test
     public void shouldNoGameOverWhenNoSpaceButCanGoHorizontal_3() {
+        // given
         givenFl("4848" +
                 "8422" +
                 "4848" +
@@ -657,6 +728,7 @@ public class GameTest {
 
     @Test
     public void shouldNoGameOverWhenNoSpaceButCanGoVertical_1() {
+        // given
         givenFl("4248" +
                 "8284" +
                 "4848" +
@@ -671,6 +743,7 @@ public class GameTest {
 
     @Test
     public void shouldNoGameOverWhenNoSpaceButCanGoVertical_2() {
+        // given
         givenFl("4848" +
                 "8284" +
                 "4248" +
@@ -685,6 +758,7 @@ public class GameTest {
 
     @Test
     public void shouldNoGameOverWhenNoSpaceButCanGoVertical_3() {
+        // given
         givenFl("4848" +
                 "8484" +
                 "4248" +
@@ -699,10 +773,12 @@ public class GameTest {
 
     @Test
     public void shouldGameOverWhen2048() {
+        // given
         givenFl("    " +
                 "    " +
                 "   R" +
                 "   R");
+
         assertFalse(game.isGameOver());
 
         // when
@@ -735,7 +811,9 @@ public class GameTest {
 
     @Test
     public void shouldDoNothingWhenGameOver() {
+        // given
         shouldGameOverWhenNoSpace();
+
         assertE("4848" +
                 "8282" +
                 "4848" +
@@ -758,7 +836,9 @@ public class GameTest {
 
     @Test
     public void shouldNewGameWhenGameOver() {
+        // given
         shouldGameOverWhenNoSpace();
+
         assertE("4848" +
                 "8282" +
                 "4848" +
@@ -782,6 +862,7 @@ public class GameTest {
 
     @Test
     public void shouldPrintAll() {
+        // given
         givenFl("RQPONMLKJIHGFEDCBA842 " +
                 "QPONMLKJIHGFEDCBA842  " +
                 "PONMLKJIHGFEDCBA842   " +
@@ -849,6 +930,7 @@ public class GameTest {
     }
 
     private void caseSmth() {
+        // given
         givenFl("RQPONMLKJIHGFEDCBA842 " +
                 "QPONMLKJIHGFEDCBA842  " +
                 "PONMLKJIHGFEDCBA842   " +
@@ -1005,12 +1087,58 @@ public class GameTest {
     }
 
     @Test
+    public void shouldPrintWithBreakWhenSizeIs2() {
+        // given
+        mode(BREAKS_EXISTS, 2);
+        givenFl(null);
+
+        // when
+        field.tick();
+
+        // then
+        assertE("  " +
+                "  ");
+    }
+
+    @Test
+    public void shouldPrintWithBreakWhenSizeIs3() {
+        // given
+        mode(BREAKS_EXISTS, 3);
+
+        givenFl(null);
+
+        // when
+        field.tick();
+
+        // then
+        assertE("   " +
+                " x " +
+                "   ");
+    }
+
+    @Test
+    public void shouldPrintWithBreakWhenSizeIs4() {
+        // given
+        mode(BREAKS_EXISTS, 4);
+
+        givenFl(null);
+
+        // when
+        field.tick();
+
+        // then
+        assertE("    " +
+                " x  " +
+                "  x " +
+                "    ");
+    }
+
+    @Test
     public void shouldPrintWithBreakWhenSizeIs5() {
-        givenFl("     " +
-                "     " +
-                "     " +
-                "     " +
-                "     ", 1, WITH_BREAK);
+        // given
+        mode(BREAKS_EXISTS, 5);
+
+        givenFl(null);
 
         // when
         field.tick();
@@ -1025,12 +1153,10 @@ public class GameTest {
 
     @Test
     public void shouldPrintWithBreakWhenSizeIs6() {
-        givenFl("      " +
-                "      " +
-                "      " +
-                "      " +
-                "      " +
-                "      ", 1, WITH_BREAK);
+        // given
+        mode(BREAKS_EXISTS, 6);
+
+        givenFl(null);
 
         // when
         field.tick();
@@ -1046,13 +1172,10 @@ public class GameTest {
 
     @Test
     public void shouldPrintWithBreakWhenSizeIs7() {
-        givenFl("       " +
-                "       " +
-                "       " +
-                "       " +
-                "       " +
-                "       " +
-                "       ", 1, WITH_BREAK);
+        // given
+        mode(BREAKS_EXISTS, 7);
+
+        givenFl(null);
 
         // when
         field.tick();
@@ -1069,14 +1192,10 @@ public class GameTest {
 
     @Test
     public void shouldPrintWithBreakWhenSizeIs8() {
-        givenFl("        " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "        " +
-                "        ", 1, WITH_BREAK);
+        // given
+        mode(BREAKS_EXISTS, 8);
+
+        givenFl(null);
 
         // when
         field.tick();
@@ -1092,15 +1211,131 @@ public class GameTest {
                 "   xx   ");
     }
 
+    @Test
+    public void shouldPrintWithBreakWhenSizeIs9() {
+        // given
+        mode(BREAKS_EXISTS, 9);
 
+        givenFl(null);
+
+        // when
+        field.tick();
+
+        // then
+        assertE("   xxx   " +
+                "   x x   " +
+                "         " +
+                "xx     xx" +
+                "x       x" +
+                "xx     xx" +
+                "         " +
+                "   x x   " +
+                "   xxx   ");
+    }
 
     @Test
-    public void shouldBreakNotMove() {
+    public void shouldGenerateOnly2NewNumbers_inCornerCase1() {
+        // given
+        mode(NEW_NUMBERS_IN_CORNERS, 3);
+
         givenFl("     " +
                 "     " +
                 "     " +
                 "     " +
-                "     ", 1, WITH_BREAK);
+                "     ");
+
+
+        // when
+        dice(2, 0, 1);
+        field.tick();
+
+        // then
+        assertE("    2" +
+                "     " +
+                "     " +
+                "     " +
+                "2   2");
+    }
+
+    @Test
+    public void shouldGenerateOnly2NewNumbers_inCornerCase2() {
+        // given
+        mode(NEW_NUMBERS_IN_CORNERS, 3);
+
+        givenFl("     " +
+                "     " +
+                "     " +
+                "     " +
+                "     ");
+
+        // when
+        dice(0, 0, 1);
+        field.tick();
+
+        // then
+        assertE("2   2" +
+                "     " +
+                "     " +
+                "     " +
+                "2    ");
+    }
+
+    @Test
+    public void shouldGenerateOnly2NewNumbers_inRandomCase1() {
+        // given
+        mode(NEW_NUMBERS_IN_RANDOM, 3);
+
+        givenFl("     " +
+                "     " +
+                "     " +
+                "     " +
+                "     ");
+
+        // when
+        dice(1, 1,
+                2, 2,
+                3, 3);
+        field.tick();
+
+        // then
+        assertE("     " +
+                "   2 " +
+                "  2  " +
+                " 2   " +
+                "     ");
+    }
+
+    @Test
+    public void shouldGenerateOnly2NewNumbers_inRandomCase2() {
+        // given
+        mode(NEW_NUMBERS_IN_RANDOM, 3);
+
+        givenFl("     " +
+                "     " +
+                "     " +
+                "     " +
+                "     ");
+
+        // when
+        dice(1, 3,
+                2, 2,
+                3, 1);
+        field.tick();
+
+        // then
+        assertE("     " +
+                " 2   " +
+                "  2  " +
+                "   2 " +
+                "     ");
+    }
+
+    @Test
+    public void shouldBreakNotMove() {
+        // given
+        mode(BREAKS_EXISTS, 5);
+
+        givenFl(null);
 
         // when
         joystick.left();
@@ -1116,11 +1351,21 @@ public class GameTest {
 
     @Test
     public void shouldNumberStopAtBreak() {
-        givenFl("2   2" +
+        // given
+        mode(BREAKS_EXISTS, 5);
+        mode(NEW_NUMBERS_IN_CORNERS, 4);
+
+        givenFl(null);
+
+        field.tick();
+
+        assertE("2 x 2" +
                 "     " +
+                "x   x" +
                 "     " +
-                "     " +
-                "2   2", 1, WITH_BREAK);
+                "2 x 2");
+
+        mode(NEW_NUMBERS_IN_CORNERS, 0);
 
         // when
         joystick.left();
@@ -1169,35 +1414,34 @@ public class GameTest {
 
     @Test
     public void shouldNotClearBreak() {
-        givenFl("     " +
-                "     " +
-                "     " +
-                "     " +
-                "     ", 1, WITH_BREAK);
+        // given
+        mode(BREAKS_EXISTS, 5);
+        mode(NEW_NUMBERS_IN_CORNERS, 4);
+
+        givenFl(null);
 
         // when
         game.newGame();
         field.tick();
 
         // then
-        assertE("  x  " +
+        assertE("2 x 2" +
                 "     " +
                 "x   x" +
                 "     " +
-                "  x  ");
+                "2 x 2");
     }
 
     @Test
     public void shouldNewNumbersWithBreak() {
-        givenFl("     " +
-                "     " +
-                "     " +
-                "     " +
-                "     ", 1, WITH_BREAK);
+        // given
+        mode(BREAKS_EXISTS, 5);
+        mode(NEW_NUMBERS_IN_RANDOM, 1);
+
+        givenFl(null);
 
         // when
         dice(1, 1);
-//        joystick.left(); // do nothing
         field.tick();
 
         // then
@@ -1210,6 +1454,7 @@ public class GameTest {
 
     @Test
     public void shouldBuf2244() {
+        // given
         givenFl("22 44 " +
                 " 2244 " +
                 " 224 4" +
@@ -1217,9 +1462,11 @@ public class GameTest {
                 "22 4 4" +
                 "2 24 4");
 
+        // when
         joystick.left();
         field.tick();
 
+        // then
         assertE("48    " +
                 "48    " +
                 "48    " +
@@ -1230,16 +1477,20 @@ public class GameTest {
 
     @Test
     public void shouldResetWhenAct0() {
+        // given
         givenFl("    " +
                 "2 2 " +
                 " 22 " +
                 " 22 ");
 
-        dice(1,2, 3,3);
+        // when
+        dice(1, 2,
+                3, 3);
         joystick.act();
         field.tick();
         game.newGame();
 
+        // then
         assertE("    " +
                 "    " +
                 "    " +
@@ -1248,12 +1499,31 @@ public class GameTest {
 
     @Test
     public void shouldGameOverWhenCantGoWithBreaks() {
-        givenFl("42  42" +
-                "242424" +
-                " 2424 " +
-                " 4242 " +
-                "424242" +
-                "24  24", 1, WITH_BREAK);
+        // given
+        mode(BREAKS_EXISTS, 4);
+        mode(NEW_NUMBERS_IN_CORNERS, 4);
+        givenFl(null);
+
+        IntStream.range(0, 12).forEach(i -> {
+            joystick.down();
+            field.tick();
+
+            joystick.left();
+            field.tick();
+
+            joystick.right();
+            field.tick();
+
+            joystick.up();
+            field.tick();
+        });
+
+        assertE("2484" +
+                "8xAB" +
+                "4Ax8" +
+                "2B42");
+
+        reset(listener);
 
         // when
         joystick.left(); // ignore
@@ -1264,11 +1534,9 @@ public class GameTest {
 
         assertTrue(game.isGameOver());
 
-        assertE("42xx42" +
-                "242424" +
-                "x2424x" +
-                "x4242x" +
-                "424242" +
-                "24xx24");
+        assertE("2484" +
+                "8xAB" +
+                "4Ax8" +
+                "2B42");
     }
 }

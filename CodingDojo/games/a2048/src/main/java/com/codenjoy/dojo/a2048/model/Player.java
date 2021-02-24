@@ -22,6 +22,7 @@ package com.codenjoy.dojo.a2048.model;
  * #L%
  */
 
+import com.codenjoy.dojo.a2048.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
@@ -29,8 +30,8 @@ public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
     }
 
     @Override
