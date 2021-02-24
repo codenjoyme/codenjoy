@@ -25,6 +25,7 @@ package com.codenjoy.dojo.lemonade.model;
 
 import com.codenjoy.dojo.lemonade.services.EventArgs;
 import com.codenjoy.dojo.lemonade.services.EventType;
+import com.codenjoy.dojo.lemonade.services.GameSettings;
 import com.codenjoy.dojo.lemonade.services.ScoreMode;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -35,20 +36,16 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 import java.util.Queue;
 
-/**
- * Класс игрока. Тут кроме героя может подсчитываться очки.
- * Тут же ивенты передабтся лиснеру фреймворка.
- */
+import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
+
 public class Player extends GamePlayer<Hero, GameField<Player>> {
 
     private Queue<SalesResult> history;
-    private final GameSettings gameSettings;
     Hero hero;
     private long heroRandomSeed;
 
-    public Player(EventListener listener, long heroRandomSeed, GameSettings gameSettings) {
-        super(listener);
-        this.gameSettings = gameSettings;
+    public Player(EventListener listener, long heroRandomSeed, GameSettings settings) {
+        super(listener, settings);
         this.heroRandomSeed = heroRandomSeed;
         history = new LinkedList<>();
     }
@@ -59,7 +56,7 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
         }
 
         if (hero != null) {
-            hero.init(null);
+            hero.clear();
         }
     }
 
@@ -68,7 +65,7 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
     }
 
     public void newHero(GameField<Player> field) {
-        hero = new Hero(heroRandomSeed, gameSettings, history);
+        hero = new Hero(heroRandomSeed, history);
         hero.init(field);
     }
 
@@ -94,8 +91,8 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
         // put to history and raise events if there is salesResult and no input errors
         if (salesResult != null && !salesResult.isInputError()) {
             int day = salesResult.getDay();
-            boolean isLastDayAssetsGameMode = gameSettings.getScoreMode() == ScoreMode.LAST_DAY_ASSETS;
-            if (isLastDayAssetsGameMode && day > gameSettings.getLimitDays()) {
+            boolean isLastDayAssetsGameMode = ((GameSettings)settings).scoreMode() == ScoreMode.LAST_DAY_ASSETS;
+            if (isLastDayAssetsGameMode && day > settings.integer(LIMIT_DAYS)) {
                 return;
             }
 
@@ -108,7 +105,7 @@ public class Player extends GamePlayer<Hero, GameField<Player>> {
                         salesResult.getAssetsAfter()));
             } else {
                 // raise WIN event only on SUM_OF_PROFITS game mode OR on the last day in LAST_DAY_ASSETS game mode
-                if (!isLastDayAssetsGameMode || day == gameSettings.getLimitDays()) {
+                if (!isLastDayAssetsGameMode || day == settings.integer(LIMIT_DAYS)) {
                     event(new EventArgs(EventType.WIN,
                             salesResult.getProfit(),
                             salesResult.getAssetsAfter()));

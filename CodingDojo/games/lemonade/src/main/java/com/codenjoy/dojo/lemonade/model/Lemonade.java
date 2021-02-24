@@ -23,42 +23,40 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
+import com.codenjoy.dojo.lemonade.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-/**
- * О! Это самое сердце игры - борда, на которой все происходит.
- * Если какой-то из жителей борды вдруг захочет узнать что-то у нее, то лучше ему дать интефейс {@see Field}
- * Борда реализует интерфейс {@see Tickable} чтобы быть уведомленной о каждом тике игры. Обрати внимание на {Sample#tick()}
- */
 public class Lemonade implements GameField<Player> {
 
-    private final GameSettings gameSettings;
     private List<Player> players;
     private static RandomDice dice;
     private static int lastRandomSeed;
     private static int newRandomSeed;
 
+    private GameSettings settings;
+
     static {
         dice = new RandomDice();
     }
 
-    public Lemonade(GameSettings gameSettings) {
-        this.gameSettings = gameSettings;
+    public Lemonade(GameSettings settings) {
+        this.settings = settings;
         players = new LinkedList<>();
     }
 
     @Override
     public void tick() {
         // on first tick enable new random seed generation
-        if(lastRandomSeed != newRandomSeed){
+        if (lastRandomSeed != newRandomSeed){
             lastRandomSeed = newRandomSeed;
         }
 
@@ -80,6 +78,11 @@ public class Lemonade implements GameField<Player> {
                 player.newHero(this);
             }
         }
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 
     public List<Hero> getHeroes() {

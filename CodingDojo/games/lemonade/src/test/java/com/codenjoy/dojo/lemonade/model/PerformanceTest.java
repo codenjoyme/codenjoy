@@ -23,6 +23,7 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
+import com.codenjoy.dojo.lemonade.services.GameSettings;
 import com.codenjoy.dojo.profile.Profiler;
 import com.codenjoy.dojo.lemonade.services.GameRunner;
 import com.codenjoy.dojo.services.EventListener;
@@ -35,22 +36,24 @@ import org.junit.Test;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
 import static org.mockito.Mockito.mock;
 
 public class PerformanceTest {
 
     @Test
     public void test() {
+        GameSettings settings = new GameSettings()
+                .integer(LIMIT_DAYS, 0);
+
         GameRunner gameType = new GameRunner() {
             @Override
-            public SettingsImpl createSettings(){
-                SettingsImpl settings = new SettingsImpl();
-                settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
+            public GameSettings getSettings() {
                 return settings;
             }
         };
 
-        List<Game> games = new LinkedList<Game>();
+        List<Game> games = new LinkedList<>();
 
         PrinterFactory factory = gameType.getPrinterFactory();
         for (int index = 0; index < 50; index++) {

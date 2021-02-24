@@ -23,15 +23,16 @@ package com.codenjoy.dojo.lemonade.model;
  */
 
 
+import com.codenjoy.dojo.lemonade.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -44,11 +45,13 @@ public class GameTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private GameSettings gameSettings;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        settings = new GameSettings()
+                .integer(LIMIT_DAYS, 0);
     }
 
     private void dice(int... ints) {
@@ -58,13 +61,10 @@ public class GameTest {
         }
     }
 
-    private void initGame(String... questionAnswers) {
-        SettingsImpl settings = new SettingsImpl();
-        settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
-        gameSettings = new GameSettings(settings);
-        game = new Lemonade(gameSettings);
+    private void initGame() {
+        game = new Lemonade(settings);
         listener = mock(EventListener.class);
-        player = new Player(listener, 1, gameSettings);
+        player = new Player(listener, 1, settings);
         game.newGame(player);
         hero = player.hero;
         hero.init(game);
@@ -76,18 +76,14 @@ public class GameTest {
 
     @Test
     public void shouldNoAnswersAtStart() {
-        initGame("question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
+        initGame();
 
         thenHistory("[]");
     }
 
     @Test
     public void shouldNoAnswersAtStartAfterTick() {
-        initGame("question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
+        initGame();
 
         // when
         game.tick();
@@ -97,9 +93,7 @@ public class GameTest {
 
     @Test
     public void should_invalid() {
-        initGame("question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
+        initGame();
 
         // when
         hero.message("wrong-answer");
@@ -110,9 +104,7 @@ public class GameTest {
 
     @Test
     public void should_invalid_invalid() {
-        initGame("question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
+        initGame();
 
         // when
         hero.message("wrong-answer1");
@@ -126,9 +118,7 @@ public class GameTest {
 
     @Test
     public void should_invalid_valid() {
-        initGame("question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
+        initGame();
 
         // when
         hero.message("wrong-answer");
@@ -139,100 +129,20 @@ public class GameTest {
 
         thenHistory("[]");
     }
-
-    @Test
-    public void should_invalid_valid_tick() {
-        initGame("question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
-
-        // when
-        hero.message("wrong-answer");
-        game.tick();
-
-        hero.message("answer1");
-        game.tick();
-
-        game.tick();
-
-        thenHistory("[]");
-    }
-
-    @Test
-    public void should_invalid_valid_valid() {
-        initGame("question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
-
-        // when
-        hero.message("wrong-answer");
-        game.tick();
-
-        hero.message("answer1");
-        game.tick();
-
-        hero.message("answer2");
-        game.tick();
-
-        thenHistory("[]");
-    }
-
-    @Test
-    public void should_invalid_valid_tick_valid_tick() {
-        initGame("question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
-
-        // when
-        hero.message("wrong-answer");
-        game.tick();
-
-        hero.message("answer1");
-        game.tick();
-
-        game.tick();
-
-        hero.message("answer2");
-        game.tick();
-
-        game.tick();
-
-        thenHistory("[]");
-    }
-
-    @Test
-    public void shouldAfterLastQuestion() {
-        initGame("question1=answer1",
-                "question2=answer2",
-                "question3=answer3");
-
-        // when
-        hero.message("answer1");
-        game.tick();
-
-        hero.message("answer2");
-        game.tick();
-
-        hero.message("answer3");
-        game.tick();
-
-        hero.message("answer4");
-        game.tick();
-
-        thenHistory("[]");
-    }
-
-    private final double expectedAssets = 2.0;
 
     @Test
     public void clearScoresShouldResetSimulator() {
         initGame();
 
-        Assert.assertEquals(expectedAssets, player.getNextQuestion().getDouble("assets"), Double.MIN_VALUE);
+        assertEquals(2.0d, player.getNextQuestion().getDouble("assets"), Double.MIN_VALUE);
+
         hero.message("go 10, 0, 10");
-        Assert.assertNotEquals(expectedAssets, player.getNextQuestion().getDouble("assets"), Double.MIN_VALUE);
+
+        assertNotEquals(2.0d, player.getNextQuestion().getDouble("assets"), Double.MIN_VALUE);
+
         player.clearScore();
-        Assert.assertEquals(expectedAssets, player.getNextQuestion().getDouble("assets"), Double.MIN_VALUE);
+
+        assertEquals(2.0d, player.getNextQuestion().getDouble("assets"), Double.MIN_VALUE);
 
         thenHistory("[]");
     }

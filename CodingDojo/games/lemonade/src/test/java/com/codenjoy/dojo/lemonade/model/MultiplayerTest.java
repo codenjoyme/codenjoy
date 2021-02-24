@@ -24,6 +24,7 @@ package com.codenjoy.dojo.lemonade.model;
 
 
 import com.codenjoy.dojo.lemonade.services.GameRunner;
+import com.codenjoy.dojo.lemonade.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -34,6 +35,8 @@ import com.codenjoy.dojo.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.lemonade.services.GameSettings.Keys.LIMIT_DAYS;
+import static javassist.CtMethod.ConstParameter.integer;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
@@ -49,6 +52,7 @@ public class MultiplayerTest {
     private Game game3;
     private Dice dice;
     private Lemonade field;
+    private GameSettings settings;
 
     private final String welcomeMessage = "HI! WELCOME TO LEMONSVILLE, CALIFORNIA!\\n\\nIN THIS SMALL TOWN, YOU ARE IN CHARGE OF RUNNING YOUR OWN LEMONADE STAND.\\nHOW MUCH PROFIT YOU MAKE IS UP TO YOU.\\nIF YOU MAKE THE MOST MONEY, YOU'RE THE WINNER!!\\n\\nTO MANAGE YOUR LEMONADE STAND, YOU WILL NEED TO MAKE THESE DECISIONS EVERY DAY:\\n1. HOW MANY GLASSES OF LEMONADE TO MAKE (ONLY ONE BATCH IS MADE EACH MORNING)\\n2. HOW MANY ADVERTISING SIGNS TO MAKE (THE SIGNS COST FIFTEEN CENTS EACH)\\n3. WHAT PRICE TO CHARGE FOR EACH GLASS\\n\\nYOU WILL BEGIN WITH $2.00 CASH (ASSETS). BECAUSE YOUR MOTHER GAVE YOU SOME SUGAR,\\nYOUR COST TO MAKE LEMONADE IS $0.02 (TWO CENTS A GLASS, THIS MAY CHANGE IN THE FUTURE).\\n\\nYOUR EXPENSES ARE THE SUM OF THE COST OF THE LEMONADE AND THE COST OF THE SIGNS.\\nYOUR PROFITS ARE THE DIFFERENCE BETWEEN THE INCOME FROM SALES AND YOUR EXPENSES.\\nTHE NUMBER OF GLASSES YOU SELL EACH DAY DEPENDS ON THE PRICE YOU CHARGE, AND ON\\nTHE NUMBER OF ADVERTISING SIGNS YOU USE.\\nKEEP TRACK OF YOUR ASSETS, BECAUSE YOU CAN'T SPEND MORE MONEY THAN YOU HAVE!\\n";
     private final String morningDay0Message = "\\nYOUR ASSETS: $2.00\\nLEMONSVILLE WEATHER REPORT:  SUNNY\\nON DAY 1, THE COST OF LEMONADE IS $0.02\\n";
@@ -67,31 +71,28 @@ public class MultiplayerTest {
     // появляется другие игроки, игра становится мультипользовательской
     @Before
     public void setup() {
-        SettingsImpl settings = new SettingsImpl();
-        settings.addEditBox("Limit days").type(Integer.class).update(0);
-        GameSettings gameSettings = new GameSettings(settings);
+        settings = new GameSettings()
+                .integer(LIMIT_DAYS, 0);
         dice = mock(Dice.class);
-        field = new Lemonade(gameSettings);
-        GameRunner gameRunner = new GameRunner() {
+        field = new Lemonade(settings);
+        GameRunner runner = new GameRunner(){
             @Override
-            public SettingsImpl createSettings(){
-                SettingsImpl settings = new SettingsImpl();
-                settings.addEditBox("Limit days").type(Integer.class).def(30).update(0);
+            public GameSettings getSettings() {
                 return settings;
             }
         };
-        PrinterFactory factory = gameRunner.getPrinterFactory();
+        PrinterFactory factory = runner.getPrinterFactory();
 
         listener1 = mock(EventListener.class);
-        game1 = new Single(new Player(listener1, 1, gameSettings), factory);
+        game1 = new Single(new Player(listener1, 1, settings), factory);
         game1.on(field);
 
         listener2 = mock(EventListener.class);
-        game2 = new Single(new Player(listener2, 1, gameSettings), factory);
+        game2 = new Single(new Player(listener2, 1, settings), factory);
         game2.on(field);
 
         listener3 = mock(EventListener.class);
-        game3 = new Single(new Player(listener3, 1, gameSettings), factory);
+        game3 = new Single(new Player(listener3, 1, settings), factory);
         game3.on(field);
 
         dice(1, 4);
