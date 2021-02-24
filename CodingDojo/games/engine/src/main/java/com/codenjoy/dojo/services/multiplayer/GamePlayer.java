@@ -38,7 +38,7 @@ import com.codenjoy.dojo.services.settings.SettingsReader;
 public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
 
     protected EventListener listener;
-    private SettingsReader settings;
+    protected SettingsReader settings;
     private LevelProgress progress;
 
     /**
@@ -149,7 +149,4 @@ public abstract class GamePlayer<H extends PlayerHero, F extends GameField> {
         this.progress = progress;
     }
 
-    public SettingsReader settings() {
-        return settings;
-    }
 }
