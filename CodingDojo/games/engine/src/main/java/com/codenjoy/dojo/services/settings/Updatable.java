@@ -22,22 +22,33 @@ package com.codenjoy.dojo.services.settings;
  * #L%
  */
 
+import java.util.function.Consumer;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-07.
- */
 public abstract class Updatable<T> {
 
     protected T value;
     protected boolean changed = false;
+    private Consumer<T> onChange;
 
     protected T get() {
         return value;
     }
 
-    protected void set(T value) {
+    public void justSet(T value) {
         changed = ((this.value == null && value != null) || (this.value != null && !this.value.equals(value)));
         this.value = value;
+    }
+
+    protected void set(T value) {
+        justSet(value);
+        if (onChange != null) {
+            onChange.accept(value);
+        }
+    }
+
+    public Parameter<T> onChange(Consumer<T> consumer) {
+        this.onChange = consumer;
+        return (Parameter<T>) this;
     }
 
     public boolean changed() {
