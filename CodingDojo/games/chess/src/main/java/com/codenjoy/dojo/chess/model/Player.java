@@ -26,6 +26,7 @@ package com.codenjoy.dojo.chess.model;
 import com.codenjoy.dojo.chess.model.figures.Figure;
 import com.codenjoy.dojo.chess.model.figures.Korol;
 import com.codenjoy.dojo.chess.services.Events;
+import com.codenjoy.dojo.chess.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
@@ -34,12 +35,12 @@ import java.util.List;
 
 public class Player extends GamePlayer<Korol, Field>{
 
-    List<Figure> figures = new LinkedList<Figure>();
+    List<Figure> figures = new LinkedList<>();
 
     private boolean isWhite;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
     }
 
 

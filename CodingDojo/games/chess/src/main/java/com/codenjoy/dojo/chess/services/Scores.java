@@ -27,16 +27,16 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
+import static com.codenjoy.dojo.chess.services.GameSettings.Keys.WIN_SCORE;
+
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
+        this.settings = settings;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Scores implements PlayerScores {
     @Override
     public void event(Object event) {
         if (event.equals(Events.WIN)) {
-            score += winScore.getValue();
+            score += settings.integer(WIN_SCORE);
         }
     }
 

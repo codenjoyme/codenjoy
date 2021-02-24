@@ -23,6 +23,7 @@ package com.codenjoy.dojo.chess.model;
  */
 
 
+import com.codenjoy.dojo.chess.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
@@ -51,11 +52,14 @@ public class GameTest {
     private EventListener listener2;
     private Player player1;
     private Player player2;
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private PrinterFactory printerFactory;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        printerFactory = new PrinterFactoryImpl();
+        settings = new GameSettings();
     }
 
     private void dice(int...ints) {
@@ -68,14 +72,14 @@ public class GameTest {
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
 
-        game = new Chess(level, dice);
+        game = new Chess(level, dice, settings);
 
         listener1 = mock(EventListener.class);
-        player1 = new Player(listener1);
+        player1 = new Player(listener1, settings);
         game.newGame(player1);
 
         listener2 = mock(EventListener.class);
-        player2 = new Player(listener2);
+        player2 = new Player(listener2, settings);
         game.newGame(player2);
     }
 

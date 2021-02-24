@@ -30,6 +30,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.chess.services.GameSettings.Keys.WIN_SCORE;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -38,10 +39,9 @@ import static org.junit.Assert.assertEquals;
  * Time: 20:35
  */
 public class ScoresTest {
-    private PlayerScores scores;
 
-    private Settings settings;
-    private Integer winScore;
+    private PlayerScores scores;
+    private GameSettings settings;
 
     public void win() {
         scores.event(Events.WIN);
@@ -49,10 +49,8 @@ public class ScoresTest {
 
     @Before
     public void setup() {
-        settings = new SettingsImpl();
+        settings = new GameSettings();
         scores = new Scores(0, settings);
-
-        winScore = settings.getParameter("Win score").type(Integer.class).getValue();
     }
 
     @Test
@@ -60,12 +58,14 @@ public class ScoresTest {
     public void shouldCollectScores() {
         scores = new Scores(140, settings);
 
-        win();  //+30
-        win();  //+30
-        win();  //+30
-        win();  //+30
+        win();
+        win();
+        win();
+        win();
 
-        assertEquals(140 + 4* winScore, scores.getScore());
+        assertEquals(140
+                + 4* settings.integer(WIN_SCORE),
+                scores.getScore());
     }
 
     @Test
