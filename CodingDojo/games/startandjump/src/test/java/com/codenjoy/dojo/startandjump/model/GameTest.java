@@ -162,7 +162,7 @@ public class GameTest {
                 "       " +
                 "#######");
 
-        Assert.assertEquals(1, game.getPlatforms().size());
+        assertEquals(1, game.getPlatforms().size());
     }
 
     @Test
@@ -186,7 +186,7 @@ public class GameTest {
                 "       " +
                 "#######");
 
-        Assert.assertEquals(1, game.getPlatforms().size());
+        assertEquals(1, game.getPlatforms().size());
     }
 
     @Test
@@ -864,7 +864,7 @@ public class GameTest {
                 "       " +
                 "#######");
 
-        Assert.assertEquals(10, game.getTickCounter());
+        assertEquals(10, game.getTickCounter());
     }
 
     @Test
