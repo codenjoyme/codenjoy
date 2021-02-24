@@ -23,6 +23,7 @@ package com.codenjoy.dojo.hex.model;
  */
 
 
+import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
@@ -56,10 +57,11 @@ public class MultiplayerTest {
         listener = mock(EventListener.class);
         when(level.getSize()).thenReturn(5);
 
-        game = new Hex(level, dice);
+        GameSettings settings = new GameSettings();
+        game = new Hex(level, dice, settings);
         List<Game> games = new LinkedList<>();
         for (int index = 0; index < count; index++) {
-            Game game = new Single(new Player(listener), printerFactory);
+            Game game = new Single(new Player(listener, settings), printerFactory);
             game.on(this.game);
             games.add(game);
             game.newGame();

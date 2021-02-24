@@ -24,6 +24,7 @@ package com.codenjoy.dojo.hex.model;
 
 
 import com.codenjoy.dojo.hex.services.Event;
+import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -56,11 +57,14 @@ public class GameTest {
     private Player player2;
     private Joystick joystick2;
 
-    private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    private PrinterFactory printerFactory;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        printerFactory = new PrinterFactoryImpl();
+        settings = new GameSettings();
     }
 
     private void dice(int... ints) {
@@ -72,7 +76,7 @@ public class GameTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        game = new Hex(level, dice);
+        game = new Hex(level, dice, settings);
 
         hero1 = level.getHeroes().get(0);
         setupPlayer1();
@@ -85,7 +89,7 @@ public class GameTest {
 
     private void setupPlayer1() {
         listener1 = mock(EventListener.class);
-        player1 = new Player(listener1);
+        player1 = new Player(listener1, settings);
         joystick1 = player1.getJoystick();
 
         dice(hero1.getX(), hero1.getY());
@@ -95,7 +99,7 @@ public class GameTest {
 
     private void setupPlayer2() {
         listener2 = mock(EventListener.class);
-        player2 = new Player(listener2);
+        player2 = new Player(listener2, settings);
         joystick2 = player2.getJoystick();
 
         dice(hero2.getX(), hero2.getY());

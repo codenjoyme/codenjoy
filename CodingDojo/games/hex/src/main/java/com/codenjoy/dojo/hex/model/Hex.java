@@ -23,10 +23,12 @@ package com.codenjoy.dojo.hex.model;
  */
 
 
+import com.codenjoy.dojo.hex.services.GameSettings;
 import com.codenjoy.dojo.services.BoardUtils;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -44,10 +46,13 @@ public class Hex implements Field {
     private int size;
     private Dice dice;
 
-    public Hex(Level level, Dice dice) {
+    private GameSettings settings;
+
+    public Hex(Level level, Dice dice, GameSettings settings) {
         this.dice = dice;
         walls = level.getWalls();
         size = level.getSize();
+        this.settings = settings;
         players = new LinkedList<>();
     }
 
@@ -285,5 +290,10 @@ public class Hex implements Field {
                 }};
             }
         };
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 }

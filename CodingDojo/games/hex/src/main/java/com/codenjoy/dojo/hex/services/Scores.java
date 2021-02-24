@@ -27,18 +27,17 @@ import com.codenjoy.dojo.services.PlayerScores;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;
 
+import static com.codenjoy.dojo.hex.services.GameSettings.Keys.LOOSE_PENALTY;
+import static com.codenjoy.dojo.hex.services.GameSettings.Keys.WIN_SCORE;
+
 public class Scores implements PlayerScores {
 
-    private final Parameter<Integer> winScore;
-    private final Parameter<Integer> loosePenalty;
-
     private volatile int score;
+    private GameSettings settings;
 
-    public Scores(int startScore, Settings settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
-
-        winScore = settings.addEditBox("Win score").type(Integer.class).def(30);
-        loosePenalty = settings.addEditBox("Loose penalty").type(Integer.class).def(10);
+        this.settings = settings;
     }
 
     @Override
@@ -56,9 +55,9 @@ public class Scores implements PlayerScores {
         Event hexEvent = (Event) event;
 
         if (hexEvent.getType() == Event.EventEnum.WIN) {
-            score += winScore.getValue()*hexEvent.getCount();
+            score += settings.integer(WIN_SCORE) * hexEvent.getCount();
         } else if (hexEvent.getType() == Event.EventEnum.LOOSE) {
-            score -= loosePenalty.getValue()*hexEvent.getCount();
+            score -= settings.integer(LOOSE_PENALTY) * hexEvent.getCount();
         }
         score = Math.max(0, score);
     }
