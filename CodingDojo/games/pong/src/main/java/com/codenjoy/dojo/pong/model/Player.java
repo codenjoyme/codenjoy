@@ -22,17 +22,16 @@ package com.codenjoy.dojo.pong.model;
  * #L%
  */
 
-import com.codenjoy.dojo.pong.services.Events;
+import com.codenjoy.dojo.pong.services.GameSettings;
 import com.codenjoy.dojo.services.EventListener;
-import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 
 public class Player extends GamePlayer<Hero, Field> {
 
     Hero hero;
 
-    public Player(EventListener listener) {
-        super(listener);
+    public Player(EventListener listener, GameSettings settings) {
+        super(listener, settings);
     }
 
     @Override

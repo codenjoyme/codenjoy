@@ -23,6 +23,7 @@ package com.codenjoy.dojo.pong.model;
  */
 
 import com.codenjoy.dojo.pong.services.Events;
+import com.codenjoy.dojo.pong.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
@@ -41,12 +42,15 @@ public class GameTest {
     private Dice dice;
     private EventListener listener;
     private Player player;
-    private PrinterFactory printer = new PrinterFactoryImpl();
+    private PrinterFactory printer;
     private Hero hero;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
+        printer = new PrinterFactoryImpl();
+        settings = new GameSettings();
     }
 
     private void dice(int...ints) {
@@ -58,12 +62,12 @@ public class GameTest {
 
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board);
-        game = new Pong(level, dice);
+        game = new Pong(level, dice, settings);
 
         if (!level.getHero().isEmpty()) {
             Hero hero = level.getHero().get(0);
             listener = mock(EventListener.class);
-            player = new Player(listener);
+            player = new Player(listener, settings);
             game.newGame(player);
             player.hero = hero;
             hero.init(game);
