@@ -120,6 +120,10 @@ public class Player extends GamePlayer<Hero, IField> {
         return field.getRoundTicks();
     }
 
+    public GameSettings settings() {
+        return (GameSettings) settings;
+    }
+
     public class GameHeroData implements HeroData {
         @Override
         public Point getCoordinate() {

@@ -153,6 +153,7 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
     }
 
     private void processAdminCommands() {
+        // TODO единственное место где не передается settings из codenjoy и вообще оно надо тут?
         new CommandParser(this).parse(getSettings());
     }
 
@@ -170,7 +171,7 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
             result.put("myColor", player.getForcesColor());
             result.put("tick", player.getField().ticker());
             result.put("round", player.getRoundTicks());
-            result.put("rounds", getSettings().roundTicks());
+            result.put("rounds", player.settings().roundTicks());
             result.put("available", player.getForcesPerTick());
             result.put("offset", new JSONObject(data.getOffset()));
 

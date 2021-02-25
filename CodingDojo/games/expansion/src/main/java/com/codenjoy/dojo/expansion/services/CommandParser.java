@@ -23,10 +23,10 @@ package com.codenjoy.dojo.expansion.services;
  */
 
 
-import com.codenjoy.dojo.services.settings.Settings;
 import org.apache.commons.lang3.StringUtils;
 
 public class CommandParser { // TODO test this monster
+
     private GameRunner runner;
 
     public CommandParser(GameRunner runner) {
@@ -34,8 +34,7 @@ public class CommandParser { // TODO test this monster
     }
 
     public void parse(GameSettings settings) {
-        if (settings.whatChanged().toString().equals("[Command]")) {
-
+        if (settings.whatChanged().toString().contains("Command")) {
             String command = settings.command();
             if (command.equals("lobby.letThemGo()")) {
 //                if (runner.lobby instanceof WaitForAllPlayerLobby) {
