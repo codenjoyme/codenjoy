@@ -1,13 +1,25 @@
 package com.codenjoy.dojo.services.settings;
 
+import java.util.List;
+
 public interface SettingsReader<T extends SettingsReader> {
 
     interface Key {
         String key();
     }
-    
+
+    // methods from Settings
+
+    boolean hasParameter(String name);
+
     Parameter<?> getParameter(String name);
-    
+
+    EditBox<?> addEditBox(String name);
+
+    SelectBox<?> addSelect(String name, List<Object> strings);
+
+    CheckBox<Boolean> addCheckBox(String name);
+
     // getters
 
     default <T extends Parameter> T parameter(Key key, Class<T> clazz) {
@@ -48,22 +60,50 @@ public interface SettingsReader<T extends SettingsReader> {
 
     // setters
 
+    default CheckBox<Boolean> add(SettingsReader.Key key, boolean value) {
+        return addCheckBox(key.key()).type(Boolean.class).def(value);
+    }
+
+    default EditBox<String> add(SettingsReader.Key key, String value) {
+        return addEditBox(key.key()).type(String.class).def(value);
+    }
+
+    default EditBox<Integer> add(SettingsReader.Key key, int value) {
+        return addEditBox(key.key()).type(Integer.class).def(value);
+    }
+
+    default EditBox<Double> add(SettingsReader.Key key, double value) {
+        return addEditBox(key.key()).type(Double.class).def(value);
+    }
+
     default T string(Key key, String data) {
+        if (!hasParameter(key.key())) {
+            add(key, data);
+        }
         getParameter(key.key()).update(data);
         return (T)this;
     }
 
     default T integer(Key key, Integer data) {
+        if (!hasParameter(key.key())) {
+            add(key, data);
+        }
         getParameter(key.key()).update(data);
         return (T)this;
     }
 
     default T real(Key key, Double data) {
+        if (!hasParameter(key.key())) {
+            add(key, data);
+        }
         getParameter(key.key()).update(data);
         return (T)this;
     }
 
     default T bool(Key key, Boolean data) {
+        if (!hasParameter(key.key())) {
+            add(key, data);
+        }
         getParameter(key.key()).update(data);
         return (T)this;
     }

@@ -22,7 +22,6 @@ package com.codenjoy.dojo.services.round;
  * #L%
  */
 
-import com.codenjoy.dojo.services.settings.Parameter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;

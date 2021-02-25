@@ -72,8 +72,7 @@ public class LocalGameRunnerTest {
         id = 0;
 
         gameType = mock(GameType.class);
-        Settings settings = new SettingsImpl();
-        SettingsReader settingsReader = name -> settings.getParameter(name);
+        SettingsReader settings = new TestGameSettings();
         GameField field = new GameField() {
             public GamePlayer player;
 
@@ -117,7 +116,7 @@ public class LocalGameRunnerTest {
 
             @Override
             public SettingsReader settings() {
-                return settingsReader;
+                return settings;
             }
 
             @Override
@@ -126,7 +125,7 @@ public class LocalGameRunnerTest {
                 player.getHero().tick();
             }
         };
-        when(gameType.getSettings()).thenReturn(settings);
+        when(gameType.getSettings()).thenReturn((Settings) settings);
         when(gameType.createGame(anyInt(), any(Settings.class))).thenReturn(field);
         when(gameType.getPrinterFactory()).thenReturn(PrinterFactory.get(
                 (BoardReader reader, GamePlayer player)
@@ -139,7 +138,7 @@ public class LocalGameRunnerTest {
         when(gameType.getPlayerScores(anyInt(), any(Settings.class))).thenReturn(scores);
         when(scores.getScore()).thenAnswer(inv -> "SCORE" + id());
 
-        gamePlayer = new GamePlayer(listener, settingsReader) {
+        gamePlayer = new GamePlayer(listener, settings) {
             PlayerHero hero;
 
             @Override
