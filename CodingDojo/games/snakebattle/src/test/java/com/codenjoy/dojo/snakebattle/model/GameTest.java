@@ -68,8 +68,7 @@ public class GameTest {
     private void given(String board) {
         LevelImpl level = new LevelImpl(board);
 
-        RoundImpl round = new RoundImpl(settings);
-        game = new SnakeBoard(level, dice, round, settings);
+        game = new SnakeBoard(level, dice, settings);
 
         Hero hero = level.getHero(game);
         listener = mock(EventListener.class);

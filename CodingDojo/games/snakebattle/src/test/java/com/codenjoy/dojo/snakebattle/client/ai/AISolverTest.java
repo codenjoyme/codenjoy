@@ -72,8 +72,7 @@ public class AISolverTest {
 
         settings = new TestGameSettings();
 
-        Round round = new RoundImpl(settings);
-        SnakeBoard game = new SnakeBoard(level, dice, round, settings);
+        SnakeBoard game = new SnakeBoard(level, dice, settings);
 
         Hero hero = level.getHero(game);
         EventListener listener = mock(EventListener.class);

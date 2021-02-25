@@ -63,8 +63,8 @@ public class SnakeBoard extends RoundField<Player> implements Field {
     private Dice dice;
     private GameSettings settings;
 
-    public SnakeBoard(Level level, Dice dice, Round round, GameSettings settings) {
-        super(round, Events.START, Events.WIN, Events.DIE);
+    public SnakeBoard(Level level, Dice dice, GameSettings settings) {
+        super(Events.START, Events.WIN, Events.DIE, settings);
         this.dice = dice;
         walls = level.getWalls();
         starts = level.getStartPoints();

@@ -74,8 +74,7 @@ public class MultiplayerTest {
     private void givenFl(String board) {
         LevelImpl level = new LevelImpl(board.replaceAll("\n", ""));
 
-        RoundImpl round = new RoundImpl(settings);
-        game = new SnakeBoard(level, dice, round, settings);
+        game = new SnakeBoard(level, dice,  settings);
 
         Hero hero = level.getHero(game);
         hero.setActive(true);

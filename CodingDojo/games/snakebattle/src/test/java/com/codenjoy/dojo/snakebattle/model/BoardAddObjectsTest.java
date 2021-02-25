@@ -65,8 +65,7 @@ public class BoardAddObjectsTest {
 
         GameSettings settings = new TestGameSettings();
 
-        Round round = new RoundImpl(settings);
-        game = new SnakeBoard(level, mock(Dice.class), round, settings);
+        game = new SnakeBoard(level, mock(Dice.class), settings);
 
         Hero hero = level.getHero(game);
 

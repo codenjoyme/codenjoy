@@ -51,8 +51,7 @@ public class GameRunner extends AbstractGameType<GameSettings> {
     }
 
     public GameField createGame(int levelNumber, GameSettings settings) {
-        return new SnakeBoard(settings.level(), getDice(),
-                RoundFactory.get(settings), settings);
+        return new SnakeBoard(settings.level(), getDice(), settings);
     }
 
     @Override
