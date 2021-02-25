@@ -41,6 +41,17 @@ import static org.mockito.Mockito.when;
 
 public class SecondGameType extends AbstractGameType<SettingsImpl> {
 
+    private SettingsImpl settings;
+
+    @Override
+    public SettingsImpl getSettings() {
+        // TODO после того как решу с хранением сеттингов румы в сервисе, тут надо сделать stateless
+        return settings = (settings != null) ? settings : new SettingsImpl(){{
+            addEditBox("Parameter 3").type(Integer.class).def(43);
+            addCheckBox("Parameter 4").type(Boolean.class).def(false).update(true);
+        }};
+    }
+
     @Override
     public PlayerScores getPlayerScores(Object score, SettingsImpl settings) {
         return new FakePlayerScores(score);
@@ -92,14 +103,6 @@ public class SecondGameType extends AbstractGameType<SettingsImpl> {
     @Override
     public CharElements[] getPlots() {
         return Elements.values();
-    }
-
-    @Override
-    public SettingsImpl getSettings() {
-        return new SettingsImpl(){{
-            addEditBox("Parameter 3").type(Integer.class).def(43);
-            addCheckBox("Parameter 4").type(Boolean.class).def(false).update(true);
-        }};
     }
 
     @Override
