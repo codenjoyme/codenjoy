@@ -1,12 +1,33 @@
 package com.codenjoy.dojo.services.settings;
 
+import com.codenjoy.dojo.services.round.RoundSettings;
+
+import java.util.Arrays;
 import java.util.List;
 
 public interface SettingsReader<T extends SettingsReader> {
 
     interface Key {
+
         String key();
+
+        static String keyToName(Key[] values, String value) {
+            return Arrays.stream(values)
+                    .filter(element -> element.key().equals(value))
+                    .map(Key::toString)
+                    .findFirst()
+                    .orElseGet(() -> keyToName(RoundSettings.Keys.values(), value));
+        }
+
+        static String nameToKey(Key[] values, String value) {
+            return Arrays.stream(values)
+                    .filter(element -> element.toString().equals(value))
+                    .map(Key::key)
+                    .findFirst()
+                    .orElseGet(() -> nameToKey(RoundSettings.Keys.values(), value));
+        }
     }
+
 
     // methods from Settings
 
