@@ -33,7 +33,6 @@ import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -116,7 +115,7 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         item.setField(field);
         resetField();
         gun = new GunWithOverHeat();
-        gun.setSettings(settings());
+        gun.init(settings());
         gun.reset();
     }
 

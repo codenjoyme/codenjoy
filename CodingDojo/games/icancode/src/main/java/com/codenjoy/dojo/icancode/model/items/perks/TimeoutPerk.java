@@ -65,8 +65,8 @@ public abstract class TimeoutPerk extends Perk {
     }
 
     @Override
-    public void setSettings(GameSettings settings) {
-        super.setSettings(settings);
+    public void init(GameSettings settings) {
+        super.init(settings);
         initTimers();
     }
 }

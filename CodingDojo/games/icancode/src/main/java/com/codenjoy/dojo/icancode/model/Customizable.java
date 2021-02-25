@@ -2,9 +2,9 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.services.GameSettings;
 
-public interface Settingable {
+public interface Customizable {
 
     GameSettings settings();
 
-    void setSettings(GameSettings settings);
+    void init(GameSettings settings);
 }

@@ -1,12 +1,12 @@
 package com.codenjoy.dojo.icancode.model.items.perks;
 
 import com.codenjoy.dojo.icancode.model.Elements;
-import com.codenjoy.dojo.icancode.model.Settingable;
+import com.codenjoy.dojo.icancode.model.Customizable;
 import com.codenjoy.dojo.icancode.model.items.RenewableItem;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Tickable;
 
-public abstract class Perk extends RenewableItem implements Tickable, Settingable {
+public abstract class Perk extends RenewableItem implements Tickable, Customizable {
 
     protected GameSettings settings;
 
@@ -33,7 +33,7 @@ public abstract class Perk extends RenewableItem implements Tickable, Settingabl
     }
 
     @Override
-    public void setSettings(GameSettings settings) {
+    public void init(GameSettings settings) {
         this.settings = settings;
     }
 }

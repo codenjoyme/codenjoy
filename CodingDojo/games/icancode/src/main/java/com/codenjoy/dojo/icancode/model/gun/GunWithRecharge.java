@@ -22,12 +22,12 @@ package com.codenjoy.dojo.icancode.model.gun;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.Settingable;
+import com.codenjoy.dojo.icancode.model.Customizable;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 
 import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.GUN_RECHARGE;
 
-public class GunWithRecharge implements Gun, Settingable {
+public class GunWithRecharge implements Gun, Customizable {
 
     protected boolean canShoot;
     protected int ticks;
@@ -87,7 +87,7 @@ public class GunWithRecharge implements Gun, Settingable {
     }
 
     @Override
-    public void setSettings(GameSettings settings) {
+    public void init(GameSettings settings) {
         this.settings = settings;
     }
 }

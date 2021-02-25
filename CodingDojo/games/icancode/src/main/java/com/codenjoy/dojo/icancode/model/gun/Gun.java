@@ -22,10 +22,10 @@ package com.codenjoy.dojo.icancode.model.gun;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.model.Settingable;
+import com.codenjoy.dojo.icancode.model.Customizable;
 import com.codenjoy.dojo.services.Tickable;
 
-public interface Gun extends Tickable, Settingable {
+public interface Gun extends Tickable, Customizable {
 
     void reset();
 

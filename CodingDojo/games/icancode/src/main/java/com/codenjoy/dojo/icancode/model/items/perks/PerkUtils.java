@@ -2,7 +2,6 @@ package com.codenjoy.dojo.icancode.model.items.perks;
 
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.ElementsMapper;
-import com.codenjoy.dojo.icancode.model.Field;
 import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +26,7 @@ public class PerkUtils {
         int index = dice.next(perks.length);
         Elements element = perks[index];
         Perk perk = (Perk)ElementsMapper.get(element);
-        perk.setSettings(settings);
+        perk.init(settings);
         return Optional.ofNullable(perk);
     }
 
