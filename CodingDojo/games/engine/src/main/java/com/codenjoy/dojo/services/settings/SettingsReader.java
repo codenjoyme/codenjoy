@@ -15,7 +15,7 @@ public interface SettingsReader<T extends SettingsReader> {
     }
 
     default String string(Key key) {
-        return getParameter(key.key()).type(String.class).getValue();
+        return stringValue(key).getValue();
     }
 
     default Parameter<String> stringValue(Key key) {
@@ -23,15 +23,23 @@ public interface SettingsReader<T extends SettingsReader> {
     }
 
     default Integer integer(Key key) {
-        return getParameter(key.key()).type(Integer.class).getValue();
+        return integerValue(key).getValue();
     }
 
     default Parameter<Integer> integerValue(Key key) {
         return getParameter(key.key()).type(Integer.class);
     }
 
+    default Double real(Key key) {
+        return realValue(key).getValue();
+    }
+
+    default Parameter<Double> realValue(Key key) {
+        return getParameter(key.key()).type(Double.class);
+    }
+
     default Boolean bool(Key key) {
-        return getParameter(key.key()).type(Boolean.class).getValue();
+        return boolValue(key).getValue();
     }
 
     default Parameter<Boolean> boolValue(Key key) {
@@ -46,6 +54,11 @@ public interface SettingsReader<T extends SettingsReader> {
     }
 
     default T integer(Key key, Integer data) {
+        getParameter(key.key()).update(data);
+        return (T)this;
+    }
+
+    default T real(Key key, Double data) {
         getParameter(key.key()).update(data);
         return (T)this;
     }
