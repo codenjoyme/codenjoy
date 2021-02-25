@@ -23,12 +23,12 @@ package com.codenjoy.dojo.bomberman.services;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.profile.Profiler;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.utils.TestUtils;
+import com.codenjoy.dojo.services.EventListener;
+import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
+import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Test;
 
 import java.util.LinkedList;
@@ -37,7 +37,7 @@ import java.util.List;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
-public class BombermanPerformanceTest {
+public class PerformanceTest {
 
     @Test
     public void test() {
@@ -51,7 +51,7 @@ public class BombermanPerformanceTest {
         p.start();
 
         GameRunner bomberman = new GameRunner();
-        GameSettings settings = bomberman.getGameSettings();
+        GameSettings settings = bomberman.getSettings();
         settings.getBoardSize().update(boardSize);
         settings.getDestroyWallCount().update(walls);
         settings.getMeatChoppersCount().update(meatChoppers);

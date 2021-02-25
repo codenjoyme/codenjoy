@@ -32,6 +32,8 @@ import org.junit.Test;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BIG_BADABOOM;
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BOARD_SIZE;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -41,9 +43,9 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldBoard_whenStartGame() {
-        when(settings.getBoardSize()).thenReturn(v(10));
+        settings.integer(BOARD_SIZE, 10);
 
-        Bomberman board = new Bomberman(settings);
+        Bomberman board = new Bomberman(dice, settings);
 
         assertEquals(10, board.size());
     }
@@ -347,8 +349,8 @@ public class GameTest extends AbstractGameTest {
         asrtBrd("     \n" +
                 "     \n" +
                 "     \n" +
-                "     \n" +
-                "҉ ☺  \n");
+                "҉    \n" +
+                "҉҉☺  \n");
 
         field.tick();   // бомб больше нет, иначе тут был бы взрыв второй
 
@@ -1521,7 +1523,7 @@ public class GameTest extends AbstractGameTest {
     public void shouldFireEventWhenKillWall() {
         destroyWallAt(0, 0);
 
-        dice(heroDice, 1, 0);
+        dice(dice, 1, 0);
         givenBoard(SIZE);
 
         asrtBrd("     \n" +
@@ -1553,7 +1555,7 @@ public class GameTest extends AbstractGameTest {
     public void shouldFireEventWhenKillMeatChopper() {
         meatChopperAt(0, 0);
 
-        dice(heroDice,
+        dice(dice,
                 1, 0);
         givenBoard(SIZE);
 
@@ -1583,7 +1585,7 @@ public class GameTest extends AbstractGameTest {
         meatChopperAt(0, 2);
         destroyWallAt(0, 3);
 
-        dice(heroDice, 1, 0);
+        dice(dice, 1, 0);
         givenBoard(SIZE);
 
         canDropBombs(4);
@@ -1687,7 +1689,7 @@ public class GameTest extends AbstractGameTest {
 
         initHero();
         field.tick();
-        dice(heroDice, 1, 0);
+        dice(dice, 1, 0);
         game.newGame();
 
         asrtBrd("     \n" +
@@ -1716,14 +1718,14 @@ public class GameTest extends AbstractGameTest {
 
     @Test
     public void shouldCalculateMeatChoppersAndWallKills_caseBigBadaboom() {
-        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(true));
+        settings.bool(BIG_BADABOOM, true);
 
         meatChopperAt(0, 0);
         destroyWallAt(0, 1);
         meatChopperAt(0, 2);
         destroyWallAt(0, 3);
 
-        dice(heroDice, 1, 0);
+        dice(dice, 1, 0);
         givenBoard(SIZE);
 
         canDropBombs(4);
@@ -1850,7 +1852,7 @@ public class GameTest extends AbstractGameTest {
         destroyWallAt(3, 0);
 
         givenBoard(7);
-        when(heroDice.next(anyInt())).thenReturn(101); // don't drop perk by accident
+        when(dice.next(anyInt())).thenReturn(101); // don't drop perk by accident
 
         hero.act();
         hero.up();
@@ -1878,7 +1880,7 @@ public class GameTest extends AbstractGameTest {
 
         meatChopperAt(4, 0);
 
-        dice(heroDice, 0, 0);
+        dice(dice, 0, 0);
         givenBoard(7);
 
         hero.act();
@@ -2014,8 +2016,9 @@ public class GameTest extends AbstractGameTest {
     @Test
     public void shouldWallNotAppearOnHero() {
         int size = 5;
+        Dice wallDice = mock(Dice.class);
         dice(wallDice, 2, 1);
-        dice(heroDice, 1, 1);  // hero в левом нижнем углу
+        dice(dice, 1, 1);  // hero в левом нижнем углу
 
         EatSpaceWalls walls = new EatSpaceWalls(new OriginalWalls(v(size)), v(1), wallDice);
         withWalls(walls);
@@ -2052,7 +2055,7 @@ public class GameTest extends AbstractGameTest {
                 "☼☼☼☼☼\n");
         // when
         field.tick();
-        dice(wallDice,
+        dice(dice,
                 0, 0,                     // на неразрушаемоей стене нельзя
                 hero.getX(), hero.getY(), // на месте бомбера не должен появиться
                 1, 1);                    // а вот тут свободно

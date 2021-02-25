@@ -23,7 +23,11 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
+import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.printer.CharElements;
+
+import java.util.Arrays;
+import java.util.List;
 
 public enum Elements implements CharElements {
     /// This is your Bomberman
@@ -74,6 +78,15 @@ public enum Elements implements CharElements {
 
     Elements(char ch) {
         this.ch = ch;
+    }
+
+    public static List<Elements> perks() {
+        return Arrays.asList(
+                BOMB_BLAST_RADIUS_INCREASE,
+                BOMB_COUNT_INCREASE,
+                BOMB_IMMUNE,
+                BOMB_REMOTE_CONTROL
+        );
     }
 
     @Override

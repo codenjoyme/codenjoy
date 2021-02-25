@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
@@ -44,23 +45,26 @@ public class GameRunnerTest {
         int size = 11;
 
         EventListener listener = mock(EventListener.class);
-        GameType gameType = new GameRunner();
+        GameRunner gameType = new GameRunner();
 
-        gameType.getSettings().getParameter("Board size").type(Integer.class).update(size);
+        GameSettings settings = gameType.getSettings();
+        settings.integer(BOARD_SIZE, size);
+
         int countDestroyWalls = 5;
-        gameType.getSettings().getParameter("Destroy wall count").type(Integer.class).update(5);
+        settings.integer(DESTROY_WALL_COUNT, 5);
+
         int meatChoppersCount = 15;
-        gameType.getSettings().getParameter("Meat choppers count").type(Integer.class).update(meatChoppersCount);
+        settings.integer(MEAT_CHOPPERS_COUNT, meatChoppersCount);
 
         Game game = TestUtils.buildGame(gameType, listener, printerFactory);
         game.getField().tick();
 
-        PlayerScores scores = gameType.getPlayerScores(10);
+        PlayerScores scores = gameType.getPlayerScores(10, settings);
         assertEquals(10, scores.getScore());
         scores.event(Events.KILL_MEAT_CHOPPER);
         assertEquals(110, scores.getScore());
 
-        assertEquals(size, gameType.getBoardSize().getValue().intValue());
+        assertEquals(size, gameType.getBoardSize(settings).getValue().intValue());
 
         Joystick joystick = game.getJoystick();
 

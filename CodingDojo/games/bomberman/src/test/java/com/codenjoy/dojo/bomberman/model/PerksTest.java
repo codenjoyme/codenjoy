@@ -23,14 +23,13 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 import com.codenjoy.dojo.bomberman.model.perks.*;
-import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.CATCH_PERK_SCORE;
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.KILL_WALL_SCORE;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
 
 public class PerksTest extends AbstractGameTest {
 
@@ -38,9 +37,9 @@ public class PerksTest extends AbstractGameTest {
     public void shouldPerkBeDropped_whenWallIsDestroyed() {
         // given
         givenBoardWithDestroyWalls(6);
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 3);
-        PerksSettingsWrapper.setDropRatio(20); // 20%
-        when(heroDice.next(anyInt())).thenReturn(10, 30); // must drop 1 perk
+        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, 5, 3);
+        perks.dropRatio(20); // 20%
+        dice(dice, 10, 30); // must drop 1 perk
 
         hero.act();
         field.tick();
@@ -83,10 +82,10 @@ public class PerksTest extends AbstractGameTest {
         // given
         givenBoardWithDestroyWalls(6);
 
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
-        PerksSettingsWrapper.setDropRatio(20); // 20%
+        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        perks.dropRatio(20); // 20%
 
-        when(heroDice.next(anyInt())).thenReturn(10); // must drop 2 perks
+        dice(dice, 10); // must drop 2 perks
 
         hero.act();
         field.tick();
@@ -122,7 +121,7 @@ public class PerksTest extends AbstractGameTest {
 
         // when
         // вот он последний тик перед взрывом, тут все и случится
-        dice(heroDice,
+        dice(dice,
                 0, 1,   // пробуем разместить героя поверх перка1
                 1, 0,   // пробуем разместить героя поверх перка2
                 3, 3);  // а потом в свободное место
@@ -147,11 +146,11 @@ public class PerksTest extends AbstractGameTest {
         // given
         givenBoardWithDestroyWalls(6);
 
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
-        PerksSettingsWrapper.setDropRatio(20); // 20%
-        PerksSettingsWrapper.setPickTimeout(50);
+        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        perks.dropRatio(20); // 20%
+        perks.pickTimeout(50);
 
-        when(heroDice.next(anyInt())).thenReturn(10); // must drop 2 perks
+        dice(dice, 10); // must drop 2 perks
 
         hero.act();
         field.tick();
@@ -208,7 +207,7 @@ public class PerksTest extends AbstractGameTest {
         field.tick();
 
         int before = hero.scores();
-        assertEquals(2*DefaultGameSettings.KILL_WALL_SCORE, before);
+        assertEquals(2 * settings.integer(KILL_WALL_SCORE), before);
 
         // when
         // go for perk
@@ -224,7 +223,7 @@ public class PerksTest extends AbstractGameTest {
                 "#+####\n");
 
         verifyAllEvents("[CATCH_PERK]");
-        assertEquals(before + DefaultGameSettings.CATCH_PERK_SCORE, hero.scores());
+        assertEquals(before + settings.integer(CATCH_PERK_SCORE), hero.scores());
         assertEquals("Hero had to acquire new perk", 1, player.getHero().getPerks().size());
     }
 
@@ -234,11 +233,11 @@ public class PerksTest extends AbstractGameTest {
         // given
         givenBoardWithDestroyWalls(6);
 
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
-        PerksSettingsWrapper.setDropRatio(20); // 20%
-        PerksSettingsWrapper.setPickTimeout(5);
+        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        perks.dropRatio(20); // 20%
+        perks.pickTimeout(5);
 
-        when(heroDice.next(anyInt())).thenReturn(10); // must drop 2 perks
+        dice(dice, 10); // must drop 2 perks
 
         hero.act();
         field.tick();
@@ -438,7 +437,7 @@ public class PerksTest extends AbstractGameTest {
                 "     +\n" +
                 "# ####\n");
 
-        dice(heroDice,
+        dice(dice,
                 1, 1);
         field.tick();
         newGameForDied(); // это сделает сервер
@@ -456,7 +455,7 @@ public class PerksTest extends AbstractGameTest {
     // а теперь пробуем убить анти-митчопера
     @Test
     public void shouldDropPerk_generateNewMeatChopper_thenKillIt() {
-        when(level.bombsCount()).thenReturn(2);
+        canDropBombs(2);
 
         shouldHeroAcquirePerk_whenMoveToFieldWithPerk();
         reset(listener);
@@ -752,8 +751,8 @@ public class PerksTest extends AbstractGameTest {
         int timeout = 3; // время работы перка
 
         int value = 4;   // показатель его влияния, в тесте не интересно
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, value, timeout);
-        PerksSettingsWrapper.setDropRatio(20);
+        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, value, timeout);
+        perks.dropRatio(20);
 
         player.getHero().addPerk(new BombBlastRadiusIncrease(value, timeout));
         assertEquals("Hero had to acquire new perk",
@@ -1080,7 +1079,7 @@ public class PerksTest extends AbstractGameTest {
     @Test
     public void shouldBombBlastOnAction_whenBRCperk_caseTwoBombs() {
 
-        when(level.bombsCount()).thenReturn(2);
+        canDropBombs(2);
         player.getHero().addPerk(new BombRemoteControl(2, 1));
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
@@ -1278,7 +1277,7 @@ public class PerksTest extends AbstractGameTest {
     @Test
     public void shouldBombBlastOnAction_whenBRCperk_caseOneBomb() {
 
-        when(level.bombsCount()).thenReturn(1);
+        canDropBombs(1);
         player.getHero().addPerk(new BombRemoteControl(2, 1));
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +
@@ -1478,8 +1477,8 @@ public class PerksTest extends AbstractGameTest {
         destroyWallAt(0, 1);
         meatChopperAt(3, 0);
 
-        when(level.bombsCount()).thenReturn(1);
-        when(level.bombsPower()).thenReturn(3);
+        canDropBombs(1);
+        bombsPower(3);
         player.getHero().addPerk(new BombRemoteControl(1, 1));
 
         assertEquals("[{BOMB_REMOTE_CONTROL('r') " +

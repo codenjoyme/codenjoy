@@ -39,11 +39,6 @@ import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 
-/**
- * User: oleksandr.baglai
- * Date: 3/8/13
- * Time: 01:32 AM
- */
 public class BoomEngineOriginalTest {
 
     private static final int SIZE = 21;

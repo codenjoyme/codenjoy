@@ -22,16 +22,15 @@ package com.codenjoy.dojo.bomberman.model;
  * #L%
  */
 
+import com.codenjoy.dojo.bomberman.TestGameSettings;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
+import com.codenjoy.dojo.bomberman.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Game;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.mockito.Mockito;
 import org.mockito.stubbing.OngoingStubbing;
 
@@ -40,8 +39,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.bomberman.model.EventsListenersAssert.assertAll;
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -55,52 +54,41 @@ public abstract class AbstractMultiplayerTest {
     protected List<Game> games = new LinkedList<>();
     private List<EventListener> listeners = new LinkedList<>();
     private List<Player> players = new LinkedList<>();
-    protected GameSettings settings = mock(GameSettings.class);
-    protected Level level;
+    protected GameSettings settings = settings();
     protected Bomberman field;
-    protected int bombsCount = 1;
-    protected int bombsPower = 1;
-    protected Parameter<Integer> playersPerRoom = v(Integer.MAX_VALUE);
     protected Dice heroDice = mock(Dice.class);
     protected Dice chopperDice = mock(Dice.class);
     private PrinterFactory printerFactory = new PrinterFactoryImpl();
+    protected PerksSettingsWrapper perks;
 
     protected EventsListenersAssert events = new EventsListenersAssert(listeners);
 
     public void setup() {
-        PerksSettingsWrapper.reset();
-
+        perks = settings.perksSettings();
         givenWalls();
 
-        level = mock(Level.class);
-        when(level.bombsCount()).thenAnswer(inv -> bombsCount);
-        when(level.bombsPower()).thenAnswer(inv -> bombsPower);
-
-        when(settings.getHero(any(Level.class))).thenAnswer(inv -> {
+        when(settings.getHero(any(Level.class), any(Dice.class))).thenAnswer(inv -> {
+            Level level = settings.getLevel();
             Hero hero = new Hero(level, heroDice);
             heroes.add(hero);
             return hero;
         });
 
-        when(settings.getLevel()).thenReturn(level);
-        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(false));
-        when(settings.getDice()).thenReturn(heroDice);
-        when(settings.getBoardSize()).thenReturn(v(SIZE));
-        when(settings.getWalls()).thenReturn(walls);
-        when(settings.getRoundSettings()).thenReturn(getRoundSettings());
-        when(settings.getPlayersPerRoom()).thenAnswer(inv -> playersPerRoom);
-        when(settings.killOtherHeroScore()).thenReturn(v(200));
-        when(settings.killMeatChopperScore()).thenReturn(v(100));
-        when(settings.killWallScore()).thenReturn(v(10));
-        when(settings.catchPerkScore()).thenReturn(v(5));
+        when(settings.getWalls(heroDice)).thenReturn(walls);
 
-        field = new Bomberman(settings);
+        field = new Bomberman(heroDice, settings);
+    }
+
+    protected GameSettings settings() {
+        return spy(new TestGameSettings())
+                .integer(BOARD_SIZE, SIZE)
+                .integer(BOMB_POWER, 1);
     }
 
     public void givenBoard(int count) {
         for (int i = 0; i < count; i++) {
             listeners.add(mock(EventListener.class));
-            players.add(new Player(listener(i), getRoundSettings().roundsEnabled()));
+            players.add(new Player(listener(i), heroDice, settings));
             games.add(new Single(player(i), printerFactory));
         }
 
@@ -155,8 +143,6 @@ public abstract class AbstractMultiplayerTest {
         });
         resetHeroes();
     }
-
-    protected abstract RoundSettingsWrapper getRoundSettings();
 
     protected void dice(Dice dice, int... values) {
         reset(dice);

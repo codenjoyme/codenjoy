@@ -22,14 +22,12 @@ package com.codenjoy.dojo;
  * #L%
  */
 
-import com.codenjoy.dojo.bomberman.model.GameSettings;
 import com.codenjoy.dojo.bomberman.services.GameRunner;
-import com.codenjoy.dojo.bomberman.services.OptionGameSettings;
+import com.codenjoy.dojo.bomberman.services.GameSettings;
 import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.client.local.ws.LocalWSGameServer;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -45,7 +43,7 @@ public class Main {
 
         JSONObject settings = new JSONObject(settingsString);
 
-        OptionGameSettings gameSettings = new OptionGameSettings(new SettingsImpl(), dice)
+        GameSettings gameSettings = new GameSettings()
                 .update(settings);
 
         if (!settings.has("isMultiple") && !settings.has("roundSettings")) {
@@ -69,7 +67,7 @@ public class Main {
             }
 
             @Override
-            protected GameSettings getGameSettings() {
+            public GameSettings getSettings() {
                 return gameSettings;
             }
         };

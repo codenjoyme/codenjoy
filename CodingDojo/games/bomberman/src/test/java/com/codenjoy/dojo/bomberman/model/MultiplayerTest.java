@@ -23,14 +23,13 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 
-import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
+import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Joystick;
-import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -339,7 +338,13 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     public void shouldNewGamesWhenKillAll() {
         shouldBombKillAllHero();
 
-        when(settings.getHero(any(Level.class))).thenReturn(new Hero(level, heroDice), new Hero(level, heroDice));
+        Level level1 = settings.getLevel();
+        Level level2 = settings.getLevel();
+        when(settings.getHero(any(Level.class), any(Dice.class)))
+                .thenReturn(
+                        new Hero(level1, heroDice),
+                        new Hero(level2, heroDice)
+                );
 
         dice(heroDice,
                 0, 0,
@@ -365,7 +370,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
     // на поле можно чтобы каждый поставил то количество бомб которое ему позволено и не более того
     @Test
     public void shouldTwoBombsOnBoard() {
-        bombsCount = 1;
+        settings.integer(BOMBS_COUNT, 1);
 
         dice(heroDice,
                 0, 0,
@@ -404,7 +409,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldFourBombsOnBoard() {
-        bombsCount = 2;
+        settings.integer(BOMBS_COUNT, 2);
 
         dice(heroDice,
                 0, 0,
@@ -456,7 +461,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldFourBombsOnBoard_checkTwoBombsPerHero() {
-        bombsCount = 2;
+        settings.integer(BOMBS_COUNT, 2);
 
         dice(heroDice,
                 0, 0,
@@ -629,11 +634,6 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 "#    \n", game(0));
     }
 
-    @Override
-    protected RoundSettingsWrapper getRoundSettings() {
-        return GameTest.getRoundSettings();
-    }
-
     @Test
     public void shouldCrossBlasts_checkingScores_whenDestroyWall_caseDied() {
         destroyWallAt(1, 0);
@@ -719,7 +719,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         destroyWallAt(2, 0);
         destroyWallAt(1, 0);
 
-        bombsPower = 2;
+        settings.integer(BOMB_POWER, 2);
 
         dice(heroDice,
                 0, 0,
@@ -850,7 +850,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
         destroyWallAt(2, 0);
         destroyWallAt(1, 0);
 
-        bombsPower = 2;
+        settings.integer(BOMB_POWER, 2);
 
         dice(heroDice,
                 0, 0,
@@ -1025,9 +1025,9 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
                 0, 0);
         givenBoard(1);
 
-        PerksSettingsWrapper.setPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
-        PerksSettingsWrapper.setDropRatio(20); // 20%
-        PerksSettingsWrapper.setPickTimeout(50);
+        perks.put(Elements.BOMB_BLAST_RADIUS_INCREASE, 4, 3);
+        perks.dropRatio(20); // 20%
+        perks.pickTimeout(50);
 
         hero(0).act();
         tick();
@@ -1061,9 +1061,9 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenBigBadaboom() {
-        bombsCount = 2;
-        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(true));
-        PerksSettingsWrapper.setDropRatio(0);
+        settings.integer(BOMBS_COUNT, 2)
+                .bool(BIG_BADABOOM, true)
+                .perksSettings().dropRatio(0);
 
         destroyWallAt(2, 2);
         meatChopperAt(0, 1);
@@ -1165,9 +1165,9 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenBigBadaboom_caseKillAll() {
-        bombsCount = 2;
-        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(true));
-        PerksSettingsWrapper.setDropRatio(0);
+        settings.integer(BOMBS_COUNT, 2)
+                .bool(BIG_BADABOOM, true)
+                .perksSettings().dropRatio(0);
 
         destroyWallAt(2, 2);
         meatChopperAt(0, 1);
@@ -1269,9 +1269,9 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void shouldCrossBlasts_checkingScores_whenNotBigBadaboom_caseKillAll() {
-        bombsCount = 2;
-        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(false));
-        PerksSettingsWrapper.setDropRatio(0);
+        settings.integer(BOMBS_COUNT, 2)
+                .bool(BIG_BADABOOM, false)
+                .perksSettings().dropRatio(0);
 
         destroyWallAt(2, 2);
         meatChopperAt(0, 1);

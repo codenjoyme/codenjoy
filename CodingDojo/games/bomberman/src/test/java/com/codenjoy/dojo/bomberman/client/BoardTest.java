@@ -30,11 +30,6 @@ import org.junit.Test;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 
-/**
- * User: sanja
- * Date: 25.04.13
- * Time: 13:50
- */
 public class BoardTest {
 
     private Board board;

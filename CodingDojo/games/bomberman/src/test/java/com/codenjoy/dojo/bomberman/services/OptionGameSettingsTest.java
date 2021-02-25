@@ -26,9 +26,7 @@ import com.codenjoy.dojo.bomberman.model.Elements;
 import com.codenjoy.dojo.bomberman.model.perks.PerkSettings;
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
-import com.codenjoy.dojo.services.RandomDice;
 import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.json.JSONObject;
 import org.junit.Ignore;
@@ -41,15 +39,19 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OptionGameSettingsTest {
+
     @Mock
     private Dice dice;
+
     @Mock
     Settings settings;
 
     @Test
     @Ignore("TODO: mock GameSettings properly")
     public void shouldBombermanContainPerksSettings_whenCreated() {
-        PerkSettings perkSettings = PerksSettingsWrapper.getPerkSettings(Elements.BOMB_IMMUNE);
+        GameSettings settings = new GameSettings();
+        PerksSettingsWrapper perksSettings = settings.perksSettings();
+        PerkSettings perkSettings = perksSettings.get(Elements.BOMB_IMMUNE);
 
         assertPerkSettings(Elements.BOMB_BLAST_RADIUS_INCREASE, perkSettings, 2, 10);
         assertPerkSettings(Elements.BOMB_COUNT_INCREASE, perkSettings, 3, 10);
@@ -80,86 +82,82 @@ public class OptionGameSettingsTest {
     @Test
     public void testUpdate() {
         // given
-        OptionGameSettings settings = new OptionGameSettings(new SettingsImpl(), new RandomDice());
+        GameSettings settings = new GameSettings();
 
         assertEquals("{\n" +
-                "  'boardSize':23,\n" +
-                "  'bombPower':3,\n" +
-                "  'bombsCount':1,\n" +
-                "  'catchPerkScore':5,\n" +
-                "  'destroyWallCount':52,\n" +
-                "  'diePenalty':30,\n" +
-                "  'isBigBadaboom':false,\n" +
-                "  'isMultiple':false,\n" +
-                "  'killMeatChopperScore':10,\n" +
-                "  'killOtherHeroScore':20,\n" +
-                "  'killWallScore':1,\n" +
-                "  'meatChoppersCount':5,\n" +
-                "  'perkBombBlastRadiusInc':2,\n" +
-                "  'perkBombCountInc':4,\n" +
-                "  'perkDropRatio':20,\n" +
-                "  'perkPickTimeout':30,\n" +
-                "  'playersPerRoom':5,\n" +
-                "  'remoteControlCount':3,\n" +
-                "  'roundSettings':{\n" +
-                "    'minTicksForWin':1,\n" +
-                "    'roundsEnabled':true,\n" +
-                "    'roundsPerMatch':1,\n" +
-                "    'timeBeforeStart':5,\n" +
-                "    'timeForWinner':1,\n" +
-                "    'timePerRound':200\n" +
-                "  },\n" +
-                "  'timeoutBombBlastRadiusInc':30,\n" +
-                "  'timeoutBombCountInc':30,\n" +
-                "  'timeoutBombImmune':30,\n" +
-                "  'winRoundScore':30\n" +
+                "  'BIG_BADABOOM':false,\n" +
+                "  'BOARD_SIZE':23,\n" +
+                "  'BOMBS_COUNT':1,\n" +
+                "  'BOMB_POWER':3,\n" +
+                "  'CATCH_PERK_SCORE':5,\n" +
+                "  'DEFAULT_PERKS':'r+ic',\n" +
+                "  'DESTROY_WALL_COUNT':52,\n" +
+                "  'DIE_PENALTY':30,\n" +
+                "  'KILL_MEAT_CHOPPER_SCORE':10,\n" +
+                "  'KILL_OTHER_HERO_SCORE':20,\n" +
+                "  'KILL_WALL_SCORE':1,\n" +
+                "  'MEAT_CHOPPERS_COUNT':5,\n" +
+                "  'MIN_TICKS_FOR_WIN':1,\n" +
+                "  'MULTIPLE':false,\n" +
+                "  'PERK_BOMB_BLAST_RADIUS_INC':2,\n" +
+                "  'PERK_BOMB_COUNT_INC':4,\n" +
+                "  'PERK_DROP_RATIO':20,\n" +
+                "  'PERK_PICK_TIMEOUT':30,\n" +
+                "  'PLAYERS_PER_ROOM':5,\n" +
+                "  'REMOTE_CONTROL_COUNT':3,\n" +
+                "  'ROUNDS_ENABLED':true,\n" +
+                "  'ROUNDS_PER_MATCH':1,\n" +
+                "  'TIMEOUT_BOMB_BLAST_RADIUS_INC':30,\n" +
+                "  'TIMEOUT_BOMB_COUNT_INC':30,\n" +
+                "  'TIMEOUT_BOMB_IMMUNE':30,\n" +
+                "  'TIME_BEFORE_START':5,\n" +
+                "  'TIME_FOR_WINNER':1,\n" +
+                "  'TIME_PER_ROUND':200,\n" +
+                "  'WIN_ROUND_SCORE':30\n" +
                 "}", JsonUtils.prettyPrint(settings.asJson()));
 
         // when
         settings.update(new JSONObject("{\n" +
-                "  'diePenalty':12,\n" +
-                "  'isMultiple':true,\n" +
-                "  'perkBombBlastRadiusInc':4,\n" +
-                "  'perkDropRatio':23,\n" +
-                "  'roundSettings':{\n" +
-                "    'roundsEnabled':false,\n" +
-                "    'timeBeforeStart':10,\n" +
-                "  },\n" +
-                "  'timeoutBombCountInc':12,\n" +
+                "  'DIE_PENALTY':12,\n" +
+                "  'MULTIPLE':true,\n" +
+                "  'PERK_BOMB_BLAST_RADIUS_INC':4,\n" +
+                "  'PERK_DROP_RATIO':23,\n" +
+                "  'ROUNDS_ENABLED':false,\n" +
+                "  'TIME_BEFORE_START':10,\n" +
+                "  'TIMEOUT_BOMB_COUNT_INC':12,\n" +
                 "}"));
 
         // then
         assertEquals("{\n" +
-                "  'boardSize':23,\n" +
-                "  'bombPower':3,\n" +
-                "  'bombsCount':1,\n" +
-                "  'catchPerkScore':5,\n" +
-                "  'destroyWallCount':52,\n" +
-                "  'diePenalty':12,\n" +
-                "  'isBigBadaboom':false,\n" +
-                "  'isMultiple':true,\n" +
-                "  'killMeatChopperScore':10,\n" +
-                "  'killOtherHeroScore':20,\n" +
-                "  'killWallScore':1,\n" +
-                "  'meatChoppersCount':5,\n" +
-                "  'perkBombBlastRadiusInc':4,\n" +
-                "  'perkBombCountInc':4,\n" +
-                "  'perkDropRatio':23,\n" +
-                "  'perkPickTimeout':30,\n" +
-                "  'playersPerRoom':5,\n" +
-                "  'remoteControlCount':3,\n" +
-                "  'roundSettings':{\n" +
-                "    'minTicksForWin':1,\n" +
-                "    'roundsEnabled':false,\n" +
-                "    'roundsPerMatch':1,\n" +
-                "    'timeBeforeStart':10,\n" +
-                "    'timeForWinner':1,\n" +
-                "    'timePerRound':200\n" +
-                "  },\n" +
-                "  'timeoutBombBlastRadiusInc':30,\n" +
-                "  'timeoutBombCountInc':12,\n" +
-                "  'timeoutBombImmune':30,\n" +
-                "  'winRoundScore':30\n" +
+                "  'BIG_BADABOOM':false,\n" +
+                "  'BOARD_SIZE':23,\n" +
+                "  'BOMBS_COUNT':1,\n" +
+                "  'BOMB_POWER':3,\n" +
+                "  'CATCH_PERK_SCORE':5,\n" +
+                "  'DEFAULT_PERKS':'r+ic',\n" +
+                "  'DESTROY_WALL_COUNT':52,\n" +
+                "  'DIE_PENALTY':12,\n" +
+                "  'KILL_MEAT_CHOPPER_SCORE':10,\n" +
+                "  'KILL_OTHER_HERO_SCORE':20,\n" +
+                "  'KILL_WALL_SCORE':1,\n" +
+                "  'MEAT_CHOPPERS_COUNT':5,\n" +
+                "  'MIN_TICKS_FOR_WIN':1,\n" +
+                "  'MULTIPLE':true,\n" +
+                "  'PERK_BOMB_BLAST_RADIUS_INC':4,\n" +
+                "  'PERK_BOMB_COUNT_INC':4,\n" +
+                "  'PERK_DROP_RATIO':23,\n" +
+                "  'PERK_PICK_TIMEOUT':30,\n" +
+                "  'PLAYERS_PER_ROOM':5,\n" +
+                "  'REMOTE_CONTROL_COUNT':3,\n" +
+                "  'ROUNDS_ENABLED':false,\n" +
+                "  'ROUNDS_PER_MATCH':1,\n" +
+                "  'TIMEOUT_BOMB_BLAST_RADIUS_INC':30,\n" +
+                "  'TIMEOUT_BOMB_COUNT_INC':12,\n" +
+                "  'TIMEOUT_BOMB_IMMUNE':30,\n" +
+                "  'TIME_BEFORE_START':10,\n" +
+                "  'TIME_FOR_WINNER':1,\n" +
+                "  'TIME_PER_ROUND':200,\n" +
+                "  'WIN_ROUND_SCORE':30\n" +
                 "}", JsonUtils.prettyPrint(settings.asJson()));
 
         // when
@@ -167,36 +165,35 @@ public class OptionGameSettingsTest {
 
         // then
         assertEquals("{\n" +
-                "  'boardSize':23,\n" +
-                "  'bombPower':3,\n" +
-                "  'bombsCount':1,\n" +
-                "  'catchPerkScore':5,\n" +
-                "  'destroyWallCount':52,\n" +
-                "  'diePenalty':12,\n" +
-                "  'isBigBadaboom':false,\n" +
-                "  'isMultiple':true,\n" +
-                "  'killMeatChopperScore':10,\n" +
-                "  'killOtherHeroScore':20,\n" +
-                "  'killWallScore':1,\n" +
-                "  'meatChoppersCount':5,\n" +
-                "  'perkBombBlastRadiusInc':4,\n" +
-                "  'perkBombCountInc':4,\n" +
-                "  'perkDropRatio':23,\n" +
-                "  'perkPickTimeout':30,\n" +
-                "  'playersPerRoom':5,\n" +
-                "  'remoteControlCount':3,\n" +
-                "  'roundSettings':{\n" +
-                "    'minTicksForWin':1,\n" +
-                "    'roundsEnabled':false,\n" +
-                "    'roundsPerMatch':1,\n" +
-                "    'timeBeforeStart':10,\n" +
-                "    'timeForWinner':1,\n" +
-                "    'timePerRound':200\n" +
-                "  },\n" +
-                "  'timeoutBombBlastRadiusInc':30,\n" +
-                "  'timeoutBombCountInc':12,\n" +
-                "  'timeoutBombImmune':30,\n" +
-                "  'winRoundScore':30\n" +
+                "  'BIG_BADABOOM':false,\n" +
+                "  'BOARD_SIZE':23,\n" +
+                "  'BOMBS_COUNT':1,\n" +
+                "  'BOMB_POWER':3,\n" +
+                "  'CATCH_PERK_SCORE':5,\n" +
+                "  'DEFAULT_PERKS':'r+ic',\n" +
+                "  'DESTROY_WALL_COUNT':52,\n" +
+                "  'DIE_PENALTY':12,\n" +
+                "  'KILL_MEAT_CHOPPER_SCORE':10,\n" +
+                "  'KILL_OTHER_HERO_SCORE':20,\n" +
+                "  'KILL_WALL_SCORE':1,\n" +
+                "  'MEAT_CHOPPERS_COUNT':5,\n" +
+                "  'MIN_TICKS_FOR_WIN':1,\n" +
+                "  'MULTIPLE':true,\n" +
+                "  'PERK_BOMB_BLAST_RADIUS_INC':4,\n" +
+                "  'PERK_BOMB_COUNT_INC':4,\n" +
+                "  'PERK_DROP_RATIO':23,\n" +
+                "  'PERK_PICK_TIMEOUT':30,\n" +
+                "  'PLAYERS_PER_ROOM':5,\n" +
+                "  'REMOTE_CONTROL_COUNT':3,\n" +
+                "  'ROUNDS_ENABLED':false,\n" +
+                "  'ROUNDS_PER_MATCH':1,\n" +
+                "  'TIMEOUT_BOMB_BLAST_RADIUS_INC':30,\n" +
+                "  'TIMEOUT_BOMB_COUNT_INC':12,\n" +
+                "  'TIMEOUT_BOMB_IMMUNE':30,\n" +
+                "  'TIME_BEFORE_START':10,\n" +
+                "  'TIME_FOR_WINNER':1,\n" +
+                "  'TIME_PER_ROUND':200,\n" +
+                "  'WIN_ROUND_SCORE':30\n" +
                 "}", JsonUtils.prettyPrint(settings.asJson()));
 
     }

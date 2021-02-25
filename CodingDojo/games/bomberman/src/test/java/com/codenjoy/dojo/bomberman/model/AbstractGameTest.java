@@ -23,19 +23,19 @@ package com.codenjoy.dojo.bomberman.model;
  */
 
 import com.codenjoy.dojo.bomberman.model.perks.PerksSettingsWrapper;
-import com.codenjoy.dojo.bomberman.services.DefaultGameSettings;
+import com.codenjoy.dojo.bomberman.TestGameSettings;
+import com.codenjoy.dojo.bomberman.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.bomberman.model.EventsListenersAssert.getEvents;
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
 import static org.junit.Assert.assertEquals;
@@ -47,65 +47,49 @@ public class AbstractGameTest {
     public int SIZE = 5;
     protected Game game;
     protected Hero hero;
-    protected Level level;
     protected Walls walls = new WallsImpl();
     protected GameSettings settings;
     protected EventListener listener;
     protected Dice chopperDice;
-    protected Dice wallDice;
-    protected Dice heroDice;
-    protected Dice meatDice;
+    protected Dice dice;
     protected Player player;
     protected Bomberman field;
-    private final PrinterFactory printer = new PrinterFactoryImpl();
+    private PrinterFactory printer;
+    protected PerksSettingsWrapper perks;
 
     @Before
     public void setUp() {
-        PerksSettingsWrapper.reset();
+        printer = new PrinterFactoryImpl();
+        settings = spy(new TestGameSettings());
+        perks = settings.perksSettings();
+        bombsPower(1);
 
         givenWalls();
 
         chopperDice = mock(Dice.class);
-        wallDice = mock(Dice.class);
-        heroDice = mock(Dice.class);
-        meatDice = mock(Dice.class);
+        dice = mock(Dice.class);
 
-        level = mock(Level.class);
-        canDropBombs(1);
-        bombsPower(1);
-        settings = mock(GameSettings.class);
         listener = mock(EventListener.class);
 
         withWalls(walls);
-        when(settings.getLevel()).thenReturn(level);
-        when(settings.getRoundSettings()).thenReturn(getRoundSettings());
-        when(settings.isBigBadaboom()).thenReturn(new SimpleParameter<>(false));
-        when(settings.killOtherHeroScore()).thenReturn(v(200));
-        when(settings.killMeatChopperScore()).thenReturn(v(100));
-        when(settings.killWallScore()).thenReturn(v(10));
-        when(settings.catchPerkScore()).thenReturn(v(5));
 
         initHero();
         givenBoard(SIZE);
-        PerksSettingsWrapper.clear();
     }
 
     protected void initHero() {
-        dice(heroDice, 0, 0);
-        Hero hero = new Hero(level, heroDice);
-        when(settings.getHero(level)).thenReturn(hero);
-        when(settings.getDice()).thenReturn(heroDice);
+        dice(dice, 0, 0);
+        Level level = settings.getLevel();
+        Hero hero = new Hero(level, dice);
+        when(settings.getHero(any(Level.class), any(Dice.class))).thenReturn(hero);
         this.hero = hero;
     }
 
-    public static RoundSettingsWrapper getRoundSettings() {
-        return new DefaultGameSettings(mock(Dice.class)).getRoundSettings();
-    }
-
     protected void givenBoard(int size) {
-        when(settings.getBoardSize()).thenReturn(v(size));
-        field = new Bomberman(settings);
-        player = new Player(listener, getRoundSettings().roundsEnabled());
+        settings.integer(BOARD_SIZE, size);
+
+        field = new Bomberman(dice, settings);
+        player = new Player(listener, dice, settings);
         game = new Single(player, printer);
         game.on(field);
         game.newGame();
@@ -127,9 +111,8 @@ public class AbstractGameTest {
         hero.setAlive(true);
     }
 
-    protected void canDropBombs(int countBombs) {
-        reset(level);
-        when(level.bombsCount()).thenReturn(countBombs);
+    protected void canDropBombs(int count) {
+        settings.integer(BOMBS_COUNT, count);
     }
 
     protected void assertHeroDie() {
@@ -161,7 +144,7 @@ public class AbstractGameTest {
 
     protected void givenBoardWithWalls(int size) {
         withWalls(new OriginalWalls(v(size)));
-        dice(heroDice, 1, 1);  // hero в левом нижнем углу
+        dice(dice, 1, 1);  // hero в левом нижнем углу
         givenBoard(size);
     }
 
@@ -170,13 +153,13 @@ public class AbstractGameTest {
     }
 
     protected void givenBoardWithDestroyWalls(int size) {
-        withWalls(new MeatChoppers(new DestroyWalls(new OriginalWalls(v(size))), v(0), meatDice));
-        dice(heroDice, 1, 1);  // hero в левом нижнем углу
+        withWalls(new MeatChoppers(new DestroyWalls(new OriginalWalls(v(size))), v(0), dice));
+        dice(dice, 1, 1);  // hero в левом нижнем углу
         givenBoard(size);
     }
 
     protected void withWalls(Walls walls) {
-        when(settings.getWalls()).thenReturn(walls);
+        when(settings.getWalls(dice)).thenReturn(walls);
     }
 
     protected void givenBoardWithOriginalWalls() {
@@ -185,12 +168,12 @@ public class AbstractGameTest {
 
     protected void givenBoardWithOriginalWalls(int size) {
         withWalls(new OriginalWalls(v(size)));
-        dice(heroDice, 1, 1);  // hero в левом нижнем углу
+        dice(dice, 1, 1);  // hero в левом нижнем углу
         givenBoard(size);
     }
 
     protected void bombsPower(int power) {
-        when(level.bombsPower()).thenReturn(power);
+        settings.integer(BOMB_POWER, power);
     }
 
     protected void assertBombPower(int power, String expected) {
@@ -229,7 +212,7 @@ public class AbstractGameTest {
         MeatChoppers walls = new MeatChoppers(new OriginalWalls(v(size)), v(1), chopperDice);
         withWalls(walls);
 
-        dice(heroDice, 1, 1);  // hero в левом нижнем углу
+        dice(dice, 1, 1);  // hero в левом нижнем углу
         givenBoard(size);
 
         walls.init(field);

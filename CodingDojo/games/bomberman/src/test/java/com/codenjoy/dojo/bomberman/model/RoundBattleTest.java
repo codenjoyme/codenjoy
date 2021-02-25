@@ -22,65 +22,37 @@ package com.codenjoy.dojo.bomberman.model;
  * #L%
  */
 
-import com.codenjoy.dojo.services.round.RoundSettingsWrapper;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
+import com.codenjoy.dojo.bomberman.services.GameSettings;
+import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.BOMB_POWER;
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.PLAYERS_PER_ROOM;
 import static com.codenjoy.dojo.services.Direction.DOWN;
-import static com.codenjoy.dojo.services.settings.SimpleParameter.v;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class RoundBattleTest extends AbstractMultiplayerTest {
 
     public static final int DEFAULT_COUNT = 3;
-    private int minTicksForWin = 1;
-    private int timePerRound = 10;
-    private int timeForWinner = 2;
-    private int timeBeforeStart = 5;
-    private int roundsPerMatch = 3;
 
     @Override
-    protected RoundSettingsWrapper getRoundSettings() {
-        return new RoundSettingsWrapper() {
-
-            @Override
-            public Parameter<Integer> timeBeforeStart() {
-                return v(timeBeforeStart);
-            }
-
-            @Override
-            public Parameter<Integer> roundsPerMatch() {
-                return v(roundsPerMatch);
-            }
-
-            @Override
-            public Parameter<Integer> minTicksForWin() {
-                return v(minTicksForWin);
-            }
-
-            @Override
-            public Parameter<Integer> timePerRound() {
-                return v(timePerRound);
-            }
-
-            @Override
-            public Parameter<Integer> timeForWinner() {
-                return v(timeForWinner);
-            }
-
-            @Override
-            public Parameter<Boolean> roundsEnabled() {
-                return new SimpleParameter<>(true);
-            }
-        };
+    protected GameSettings settings() {
+        return super.settings()
+                .bool(ROUNDS_ENABLED, true)
+                .integer(TIME_BEFORE_START, 5)
+                .integer(ROUNDS_PER_MATCH, 3)
+                .integer(MIN_TICKS_FOR_WIN, 1)
+                .integer(MIN_TICKS_FOR_WIN, 1)
+                .integer(TIME_PER_ROUND, 10)
+                .integer(TIME_FOR_WINNER, 2);
     }
 
     // во время старта игры, когда не прошло timeBeforeStart тиков,
     // все игроки неактивны (видно их трупики)
     @Test
     public void shouldAllPlayersOnBoardIsInactive_whenStart() {
-        playersPerRoom.update(DEFAULT_COUNT);
+        settings.integer(PLAYERS_PER_ROOM, DEFAULT_COUNT);
         setup();
 
         dice(heroDice,
@@ -234,8 +206,9 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     // то тот, которого вынесли появится в новом месте в виде трупика
     @Test
     public void shouldMoveToInactive_whenKillSomeone() {
-        playersPerRoom.update(DEFAULT_COUNT);
-        timeBeforeStart = 1; // TODO а что будет если тут 0 игра хоть начнется?
+        settings.integer(PLAYERS_PER_ROOM, DEFAULT_COUNT)
+                .integer(TIME_BEFORE_START, 1); // TODO а что будет если тут 0 игра хоть начнется?
+
         setup();
 
         dice(heroDice,
@@ -332,8 +305,8 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     // если один игрок вынесет обоих, то должен получить за это очки
     @Test
     public void shouldGetWinRoundScores_whenKillAllEnemies() {
-        playersPerRoom.update(DEFAULT_COUNT);
-        timeBeforeStart = 1;
+        settings.integer(PLAYERS_PER_ROOM, DEFAULT_COUNT)
+                .integer(TIME_BEFORE_START, 1);
         setup();
 
         dice(heroDice,
@@ -416,8 +389,8 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     // - очки победителю положено вручить
     @Test
     public void shouldGetWinRoundScores_whenKillOneAndAnotherLeaveTheGame() {
-        playersPerRoom.update(DEFAULT_COUNT);
-        timeBeforeStart = 1;
+        settings.integer(PLAYERS_PER_ROOM, DEFAULT_COUNT)
+                .integer(TIME_BEFORE_START, 1);
         setup();
 
         dice(heroDice,
@@ -569,8 +542,8 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     public void shouldGetWinRoundScores_whenKillOneEnemyAdvantage_whenRoundTimeout() {
         int count = 3;
 
-        playersPerRoom.update(count);
-        timeBeforeStart = 1;
+        settings.integer(PLAYERS_PER_ROOM, count)
+                .integer(TIME_BEFORE_START, 1);
         setup();
 
         dice(heroDice,
@@ -691,8 +664,8 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     public void shouldGetWinRoundScores_whenKillsAdvantage_whenRoundTimeout() {
         int count = 5;
 
-        playersPerRoom.update(count);
-        timeBeforeStart = 1;
+        settings.integer(PLAYERS_PER_ROOM, count)
+                .integer(TIME_BEFORE_START, 1);
         setup();
 
         dice(heroDice,
@@ -869,8 +842,8 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     public void shouldGetWinRoundScores_whenKillsAdvantagePlusOneBox_whenRoundTimeout() {
         int count = 6;
 
-        playersPerRoom.update(count);
-        timeBeforeStart = 1;
+        settings.integer(PLAYERS_PER_ROOM, count)
+                .integer(TIME_BEFORE_START, 1);
         setup();
 
         dice(heroDice,
@@ -1103,9 +1076,9 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     }
 
     private void givenCaseWhenPlaceOfDeathOnMyWay() {
-        playersPerRoom.update(DEFAULT_COUNT);
-        timeBeforeStart = 1;
-        timePerRound = 20;
+        settings.integer(PLAYERS_PER_ROOM, DEFAULT_COUNT)
+                .integer(TIME_BEFORE_START, 1)
+                .integer(TIME_PER_ROUND, 20);
         setup();
 
         dice(heroDice,
@@ -1325,9 +1298,9 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     public void shouldCleanEverything_whenCleanScores() {
         int count = 3;
 
-        playersPerRoom.update(count);
-        timeBeforeStart = 1;
-        timePerRound = 60; // до конца раунда целая минута
+        settings.integer(PLAYERS_PER_ROOM, count)
+                .integer(TIME_BEFORE_START, 1)
+                .integer(TIME_PER_ROUND, 60); // до конца раунда целая минута
         setup();
 
         dice(heroDice,
@@ -1418,9 +1391,9 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     // - от имени жертвы я вижу свой трупик, мне пофиг уже что на карте происходит, главное где поставить памятник герою
     @Test
     public void shouldDrawMeatChopper_onPlaceOfDeath() {
-        playersPerRoom.update(DEFAULT_COUNT);
-        timeBeforeStart = 1;
-        timePerRound = 20;
+        settings.integer(PLAYERS_PER_ROOM, DEFAULT_COUNT)
+                .integer(TIME_BEFORE_START, 1)
+                .integer(TIME_PER_ROUND, 20);
         setup();
 
         MeatChopper chopper = meatChopperAt(1, 1);
@@ -1508,9 +1481,9 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     // приоритет прорисовки такой: 1) митчопер 2) бомба 3) останки
     @Test
     public void shouldDrawMeatChopper_onPlaceOfDeath_withBomb() {
-        playersPerRoom.update(DEFAULT_COUNT);
-        timeBeforeStart = 1;
-        timePerRound = 20;
+        settings.integer(PLAYERS_PER_ROOM, DEFAULT_COUNT)
+                .integer(TIME_BEFORE_START, 1)
+                .integer(TIME_PER_ROUND, 20);
         setup();
 
         MeatChopper chopper = meatChopperAt(1, 1);
@@ -1643,11 +1616,12 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     // но его останки не являются препятствием
     @Test
     public void shouldPlaceOfDeath_isNotABarrierForBlast() {
-        bombsPower = 3; // бомба с большим радиусом, чем обычно
-        playersPerRoom.update(DEFAULT_COUNT);
-        timeBeforeStart = 1;
-        timePerRound = 60;
-        timeForWinner = 15; // после победы я хочу еще чуть повисеть на уровне
+
+        settings.integer(PLAYERS_PER_ROOM, DEFAULT_COUNT)
+                .integer(TIME_BEFORE_START, 1)
+                .integer(BOMB_POWER, 3) // бомба с большим радиусом, чем обычно
+                .integer(TIME_PER_ROUND, 60)
+                .integer(TIME_FOR_WINNER, 15); // после победы я хочу еще чуть повисеть на уровне
         setup();
 
         dice(heroDice,
@@ -1827,8 +1801,8 @@ public class RoundBattleTest extends AbstractMultiplayerTest {
     // и в конечном счете начнется новый раунд
     @Test
     public void shouldWinScore_whenTimeoutBy_timeForWinner() {
-        timePerRound = 60;
-        timeForWinner = 15; // после победы я хочу еще чуть повисеть на уровне
+        settings.integer(TIME_PER_ROUND, 60)
+                .integer(TIME_FOR_WINNER, 15); // после победы я хочу еще чуть повисеть на уровне
 
         shouldPlaceOfDeath_isNotABarrierForBlast();
 
