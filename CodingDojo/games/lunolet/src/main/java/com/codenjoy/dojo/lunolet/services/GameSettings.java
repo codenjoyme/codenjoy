@@ -49,8 +49,8 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(LANDED_SCORE.key()).type(Integer.class).def(10);
-        addEditBox(CRASHED_SCORE.key()).type(Integer.class).def(-1);
+        integer(LANDED_SCORE, 10);
+        integer(CRASHED_SCORE, -1);
     }
 
 

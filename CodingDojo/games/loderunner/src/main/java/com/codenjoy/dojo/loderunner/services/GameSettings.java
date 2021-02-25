@@ -53,12 +53,11 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(KILL_HERO_PENALTY.key()).type(Integer.class).def(0);
-        addEditBox(KILL_ENEMY_SCORE.key()).type(Integer.class).def(10);
-        addEditBox(GET_GOLD_SCORE.key()).type(Integer.class).def(1);
-        addEditBox(GET_NEXT_GOLD_INCREMENT.key()).type(Integer.class).def(1);
-
-        addEditBox(LEVEL_MAP.key()).multiline().type(String.class).def(Level1.get());
+        integer(KILL_HERO_PENALTY, 0);
+        integer(KILL_ENEMY_SCORE, 10);
+        integer(GET_GOLD_SCORE, 1);
+        integer(GET_NEXT_GOLD_INCREMENT, 1);
+        multiline(LEVEL_MAP, Level1.get());
     }
 
     public Level level() {

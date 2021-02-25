@@ -46,7 +46,7 @@ public abstract class Updatable<T> {
         }
     }
 
-    public Parameter<T> onChange(Consumer<T> consumer) {
+    public Parameter onChange(Consumer consumer) {
         this.onChange = consumer;
         return (Parameter<T>) this;
     }

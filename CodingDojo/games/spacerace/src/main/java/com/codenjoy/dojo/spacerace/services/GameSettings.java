@@ -32,15 +32,15 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
     
     public GameSettings() {
-        addEditBox(TICKS_TO_RECHARGE.key()).type(Integer.class).def(30);
-        addEditBox(BULLETS_COUNT.key()).type(Integer.class).def(10);
+        integer(TICKS_TO_RECHARGE, 30);
+        integer(BULLETS_COUNT, 10);
 
-        addEditBox(DESTROY_BOMB_SCORE.key()).type(Integer.class).def(30);
-        addEditBox(DESTROY_STONE_SCORE.key()).type(Integer.class).def(10);
-        addEditBox(DESTROY_ENEMY_SCORE.key()).type(Integer.class).def(500);
-        addEditBox(LOOSE_PENALTY.key()).type(Integer.class).def(100);
+        integer(DESTROY_BOMB_SCORE, 30);
+        integer(DESTROY_STONE_SCORE, 10);
+        integer(DESTROY_ENEMY_SCORE, 500);
+        integer(LOOSE_PENALTY, 100);
 
-        addEditBox(LEVEL_MAP.key()).multiline().type(String.class).def(
+        multiline(LEVEL_MAP,
                 "☼                            ☼" +
                 "☼                            ☼" +
                 "☼                            ☼" +

@@ -36,17 +36,14 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.BOARD_SIZE;
-import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.DETECTOR_CHARGE;
+import static com.codenjoy.dojo.minesweeper.services.GameSettings.Keys.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class GameTest {
 
     private MockBoard game;
-    private int size = 5;
     private List<Mine> mines;
-    private int detectorCharge = 3;
     private EventListener listener;
     private PrinterFactory printerFactory;
     private GameSettings settings;
@@ -54,15 +51,9 @@ public class GameTest {
     @Before
     public void setup() {
         printerFactory = new PrinterFactoryImpl();
-        settings = new GameSettings();
-    }
-
-    private void shouldSize(int size) {
-        this.size = size;
-    }
-
-    private void shouldDetectorCharge(int charge) {
-        this.detectorCharge = charge;
+        settings = new GameSettings()
+                .integer(BOARD_SIZE, 5)
+                .integer(DETECTOR_CHARGE, 3);
     }
 
     @Test
@@ -665,7 +656,8 @@ public class GameTest {
 
     @Test
     public void shouldWin_whenDestroyAllBombs() {
-        detectorCharge = 8;
+        settings.integer(DETECTOR_CHARGE, 8);
+
         shouldBoardWith(new Sapper(2, 2),
                 new Mine(3, 3), new Mine(3, 2), new Mine(3, 1),
                 new Mine(2, 1), new Mine(2, 3),
@@ -814,8 +806,7 @@ public class GameTest {
 
         public MockBoard(Sapper sapper, Mine...mines) {
             super((count, board) -> new ArrayList<>(),
-                    settings.integer(BOARD_SIZE, size)
-                            .integer(DETECTOR_CHARGE, detectorCharge));
+                    settings.integer(MINES_ON_BOARD, mines.length));
 
             player = new Player(listener, settings) {
                 @Override
@@ -912,11 +903,28 @@ public class GameTest {
 
     @Test
     public void shouldFireEvent_whenNoMoreCharge() {
-        detectorCharge = 3;
+        settings.integer(DETECTOR_CHARGE, 3);
+
         shouldBoardWith(new Sapper(2, 2), new Mine(1, 1));
 
         unbombDown();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼*☺*☼\n" +
+                "☼*‼*☼\n" +
+                "☼☼☼☼☼\n");
+
         unbombLeft();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼***☼\n" +
+                "☼‼☺*☼\n" +
+                "☼*‼*☼\n" +
+                "☼☼☼☼☼\n");
+
         unbombRight();
 
         assertBoard(
@@ -930,22 +938,91 @@ public class GameTest {
         verifyEvents(Events.NO_MORE_CHARGE);
 
         unbombUp();
+
         verifyNoMoreInteractions(listener);
     }
 
     @Test
-    public void shouldPrintAllBoardBombs_whenNoMoreCharge() {
-        detectorCharge = 2;
-        shouldBoardWith(new Sapper(2, 2), new Mine(1, 1), new Mine(1, 2), new Mine(1, 3), new Mine(3, 3), new Mine(2, 1));
+    public void shouldPrintAllBoardBombs_whenNoMoreCharge_case1() {
+        settings.integer(DETECTOR_CHARGE, 4);
 
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(2, 1),
+                new Mine(2, 3),
+                new Mine(1, 2),
+                new Mine(3, 2));
+
+        unbombRight();
+        unbombLeft();
         unbombDown();
+        unbombUp();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼ x ☼\n" +
+                "☼x☺x☼\n" +
+                "☼ x ☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldPrintAllBoardBombs_whenNoMoreCharge_case2() {
+        settings.integer(DETECTOR_CHARGE, 4);
+
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(1, 1),
+                new Mine(1, 3),
+                new Mine(3, 3),
+                new Mine(3, 1));
+
+        unbombRight();
+        unbombLeft();
+        unbombDown();
+        unbombUp();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼☻‼☻☼\n" +
+                "☼‼☺‼☼\n" +
+                "☼☻‼☻☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldPrintAllBoardBombs_whenNoMoreCharge_case3() {
+        settings.integer(DETECTOR_CHARGE, 2);
+
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3),
+                new Mine(3, 1));
+
+        unbombRight();
         unbombLeft();
 
         assertBoard(
                 "☼☼☼☼☼\n" +
-                "☼☻2☻☼\n" +
-                "☼x☺1☼\n" +
-                "☼☻x ☼\n" +
+                "☼ 1☻☼\n" +
+                "☼‼☺‼☼\n" +
+                "☼ 1☻☼\n" +
+                "☼☼☼☼☼\n");
+    }
+
+    @Test
+    public void shouldPrintAllBoardBombs_whenNoMoreCharge_case4() {
+        settings.integer(DETECTOR_CHARGE, 2);
+
+        shouldBoardWith(new Sapper(2, 2),
+                new Mine(3, 3),
+                new Mine(3, 1));
+
+        unbombLeft();
+        unbombDown();
+
+        assertBoard(
+                "☼☼☼☼☼\n" +
+                "☼ 1☻☼\n" +
+                "☼‼☺2☼\n" +
+                "☼ ‼☻☼\n" +
                 "☼☼☼☼☼\n");
     }
 

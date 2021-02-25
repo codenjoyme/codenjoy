@@ -54,15 +54,15 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(300);
-        addEditBox(GAME_OVER_PENALTY.key()).type(Integer.class).def(15);
-        addEditBox(DESTROYED_PENALTY.key()).type(Integer.class).def(5);
-        addEditBox(DESTROYED_FORGOT_PENALTY.key()).type(Integer.class).def(2);
-        addEditBox(CLEAR_BOARD_SCORE.key()).type(Integer.class).def(1);
+        integer(WIN_SCORE, 300);
+        integer(GAME_OVER_PENALTY, 15);
+        integer(DESTROYED_PENALTY, 5);
+        integer(DESTROYED_FORGOT_PENALTY, 2);
+        integer(CLEAR_BOARD_SCORE, 1);
 
-        addEditBox(BOARD_SIZE.key()).type(Integer.class).def(15);
-        addEditBox(MINES_ON_BOARD.key()).type(Integer.class).def(30);
-        addEditBox(DETECTOR_CHARGE.key()).type(Integer.class).def(100);
+        integer(BOARD_SIZE, 15);
+        integer(MINES_ON_BOARD, 30);
+        integer(DETECTOR_CHARGE, 100);
     }
 
 }

@@ -49,7 +49,7 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(30);
-        addEditBox(BONUS_SCORE.key()).type(Integer.class).def(100);
+        integer(WIN_SCORE, 30);
+        integer(BONUS_SCORE, 100);
     }
 }

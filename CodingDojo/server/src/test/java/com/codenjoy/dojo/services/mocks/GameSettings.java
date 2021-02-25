@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.services.mocks;
 
-import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -25,8 +24,6 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(LEVEL_MAP.key()).multiline().type(String.class)
-                .def("");
+        multiline(LEVEL_MAP, "");
     }
-
 }

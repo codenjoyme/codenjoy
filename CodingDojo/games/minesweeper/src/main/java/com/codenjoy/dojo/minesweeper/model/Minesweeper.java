@@ -217,7 +217,7 @@ public class Minesweeper implements Field {
 
             @Override
             public Iterable<? extends Point> elements() {
-                return new LinkedList<Point>() {{
+                return new LinkedList<>() {{
                     add(Minesweeper.this.sapper());
                     addAll(Minesweeper.this.getMines());
                     addAll(Minesweeper.this.removedMines);
@@ -241,7 +241,7 @@ public class Minesweeper implements Field {
         score = 0;
         cells = initializeBoardCells();
         player.newHero(this);
-        sapper().iWantToHaveMineDetectorWithChargeNumber(detectorCharge.getValue());
+        sapper().charge(detectorCharge.getValue());
         mines = minesGenerator.get(minesOnBoard.getValue(), this);
         removedMines = new LinkedList<>();
         tick();

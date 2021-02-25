@@ -26,7 +26,7 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        addEditBox(SUCCESS_SCORE.key()).type(Integer.class).def(1000);
-        addEditBox(FAIL_PENALTY.key()).type(Integer.class).def(500);
+        integer(SUCCESS_SCORE, 1000);
+        integer(FAIL_PENALTY, 500);
     }
 }

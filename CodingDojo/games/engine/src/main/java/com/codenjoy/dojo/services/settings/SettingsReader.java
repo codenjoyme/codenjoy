@@ -97,6 +97,14 @@ public interface SettingsReader<T extends SettingsReader> {
         return addEditBox(key.key()).type(Double.class).def(value);
     }
 
+    default SelectBox<String> options(Key key, List options, String value) {
+        return addSelect(key.key(), options).type(String.class).def(value);
+    }
+
+    default EditBox<String> multiline(Key key, String value) {
+        return addEditBox(key.key()).multiline().type(String.class).def(value);
+    }
+
     default T string(Key key, String data) {
         if (!hasParameter(key.key())) {
             add(key, data);
@@ -105,7 +113,7 @@ public interface SettingsReader<T extends SettingsReader> {
         return (T)this;
     }
 
-    default T integer(Key key, Integer data) {
+    default T integer(Key key, int data) {
         if (!hasParameter(key.key())) {
             add(key, data);
         }
@@ -113,7 +121,7 @@ public interface SettingsReader<T extends SettingsReader> {
         return (T)this;
     }
 
-    default T real(Key key, Double data) {
+    default T real(Key key, double data) {
         if (!hasParameter(key.key())) {
             add(key, data);
         }
@@ -121,7 +129,7 @@ public interface SettingsReader<T extends SettingsReader> {
         return (T)this;
     }
 
-    default T bool(Key key, Boolean data) {
+    default T bool(Key key, boolean data) {
         if (!hasParameter(key.key())) {
             add(key, data);
         }

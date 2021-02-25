@@ -50,39 +50,39 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(1);
+        integer(WIN_SCORE, 1);
 
-        addEditBox(LEVEL_MAP.key()).multiline().type(String.class)
-                .def("                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "------------------------------" +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                o             " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "------------------------------" +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              " +
-                    "                              ");
+        multiline(LEVEL_MAP,
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "------------------------------" +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                o             " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "------------------------------" +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              " +
+                "                              ");
     }
 
     public Level level() {

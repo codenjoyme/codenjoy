@@ -96,29 +96,19 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(LEVEL_MAP.key())
-                .multiline()
-                .type(String.class)
-                .onChange(updateSize());
+        multiline(LEVEL_MAP, null).onChange(updateSize());
 
-        addEditBox(SIZE.key())
-                .type(Integer.class)
-                .def(5)
-                .onChange(rebuildMap());
+        integer(SIZE, 5).integerValue(SIZE).onChange(rebuildMap());
 
-        addEditBox(NEW_NUMBERS.key())
-                .type(Integer.class)
-                .def(4);
+        integer(NEW_NUMBERS, 4);
 
-        addSelect(NUMBERS_MODE.key(),
-                Arrays.asList(NumbersMode.NEW_NUMBERS_IN_CORNERS.key(), NumbersMode.NEW_NUMBERS_IN_RANDOM.key()))
-                .type(String.class)
-                .def(NumbersMode.NEW_NUMBERS_IN_CORNERS.key());
+        options(NUMBERS_MODE,
+                Arrays.asList(NumbersMode.NEW_NUMBERS_IN_CORNERS.key(), NumbersMode.NEW_NUMBERS_IN_RANDOM.key()),
+                NumbersMode.NEW_NUMBERS_IN_CORNERS.key());
 
-        addSelect(BREAKS_MODE.key(),
-                Arrays.asList(BREAKS_EXISTS.key(), BREAKS_NOT_EXISTS.key()))
-                .type(String.class)
-                .def(BREAKS_NOT_EXISTS.key())
+        options(BREAKS_MODE,
+                Arrays.asList(BREAKS_EXISTS.key(), BREAKS_NOT_EXISTS.key()),
+                BREAKS_NOT_EXISTS.key())
                 .onChange(rebuildMap());
     }
 

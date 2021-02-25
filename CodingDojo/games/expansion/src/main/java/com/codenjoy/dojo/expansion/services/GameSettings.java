@@ -80,40 +80,42 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(BOARD_SIZE.key()).type(Integer.class).def(20);
+        integer(BOARD_SIZE, 20);
 
-        addEditBox(SINGLE_TRAINING_MODE.key()).type(Boolean.class).def(false);
+        bool(SINGLE_TRAINING_MODE, false);
 
-        addEditBox(WAITING_OTHERS.key()).type(Boolean.class).def(true);
-        addEditBox(SHUFFLE_PLAYERS_AFTER_LOBBY.key()).type(Boolean.class).def(true);
+        bool(WAITING_OTHERS, true);
+        bool(SHUFFLE_PLAYERS_AFTER_LOBBY, true);
 
-        addEditBox(WIN_ON_MULTIPLE_SCORE.key()).type(Integer.class).def(4);
-        addEditBox(DRAW_ON_MULTIPLE_SCORE.key()).type(Integer.class).def(1);
-        addEditBox(TICKS_PER_ROUND.key()).type(Integer.class).def(600);
+        integer(WIN_ON_MULTIPLE_SCORE, 4);
+        integer(DRAW_ON_MULTIPLE_SCORE, 1);
+        integer(TICKS_PER_ROUND, 600);
 
-        addEditBox(LEAVE_FORCES.key()).type(Integer.class).def(0);
-        addEditBox(INITIAL_FORCES.key()).type(Integer.class).def(10);
-        addEditBox(INCREASE_FORCES_PER_TICK.key()).type(Integer.class).def(10);
-        addEditBox(INCREASE_FORCES_GOLD_SCORE.key()).type(Integer.class).def(1);
-        addEditBox(REGION_SCORES.key()).type(Integer.class).def(10);
-        
-        addEditBox(DEFENDER_HAS_ADVANTAGE.key()).type(Boolean.class).def(true);
-        addEditBox(DEFENDER_ATTACK_ADVANTAGE.key()).type(Double.class).def(1.3);
+        integer(LEAVE_FORCES, 0);
+        integer(INITIAL_FORCES, 10);
+        integer(INCREASE_FORCES_PER_TICK, 10);
+        integer(INCREASE_FORCES_GOLD_SCORE, 1);
+        integer(REGION_SCORES, 10);
 
-        addEditBox(COMMAND.key()).type(String.class).def("");
-        addEditBox(GAME_LOGGING_ENABLE.key()).type(Boolean.class).def(false);
-        addEditBox(DELAY_REPLAY.key()).type(Boolean.class).def(false);
+        bool(DEFENDER_HAS_ADVANTAGE, true);
+        real(DEFENDER_ATTACK_ADVANTAGE, 1.3);
 
-        addEditBox(MULTIPLE_LEVEL_SIZE.key()).type(Integer.class).def(Levels.MULTI.size());
+        string(COMMAND, "");
+        bool(GAME_LOGGING_ENABLE, false);
+        bool(DELAY_REPLAY, false);
+
+        integer(MULTIPLE_LEVEL_SIZE, Levels.MULTI.size());
         for (int index = 0; index < Levels.MULTI.size(); index++) {
             String name = Levels.MULTI.get(index);
-            addEditBox(MULTIPLE_LEVEL(index)).type(String.class).def(name);
+            int finalIndex = index;
+            string(() -> MULTIPLE_LEVEL(finalIndex), name);
         }
 
-        addEditBox(SINGLE_LEVEL_SIZE.key()).type(Integer.class).def(Levels.SINGLE.size());
+        integer(SINGLE_LEVEL_SIZE, Levels.SINGLE.size());
         for (int index = 0; index < Levels.SINGLE.size(); index++) {
             String name = Levels.SINGLE.get(index);
-            addEditBox(SINGLE_LEVEL(index)).type(String.class).def(name);
+            int finalIndex = index;
+            string(() -> SINGLE_LEVEL(finalIndex), name);
         }
     }
 

@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.settings;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
@@ -90,6 +91,10 @@ public class SelectBox<T> extends Updatable<Integer> implements Parameter<T> {
 
     @Override
     public SelectBox<T> def(T value) {
+        if (value == null) { // TODO test me
+            def = null;
+            return this;
+        }
         checkIsPresent(value);
         this.def = options.indexOf(value);
         return this;

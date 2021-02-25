@@ -50,17 +50,17 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(30);
+        integer(WIN_SCORE, 30);
 
-        addEditBox(LEVEL_MAP.key()).multiline().type(String.class)
-                .def("tksfaskt" +
-                        "pppppppp" +
-                        "        " +
-                        "        " +
-                        "        " +
-                        "        " +
-                        "PPPPPPPP" +
-                        "TKSFASKT");
+        multiline(LEVEL_MAP,
+                "tksfaskt" +
+                "pppppppp" +
+                "        " +
+                "        " +
+                "        " +
+                "        " +
+                "PPPPPPPP" +
+                "TKSFASKT");
     }
 
     public Level level() {

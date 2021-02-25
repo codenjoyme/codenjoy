@@ -51,14 +51,12 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         }
     }
 
-
     public GameSettings() {
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(1000);
-        addEditBox(FAIL_PENALTY.key()).type(Integer.class).def(10);
-        addEditBox(LOOSE_PENALTY.key()).type(Integer.class).def(500);
-        addEditBox(SUCCESS_SCORE.key()).type(Integer.class).def(10);
-
-        addEditBox(LEVELS_COUNT.key()).type(Integer.class).def(0);
+        integer(WIN_SCORE, 1000);
+        integer(FAIL_PENALTY, 10);
+        integer(LOOSE_PENALTY, 500);
+        integer(SUCCESS_SCORE, 10);
+        integer(LEVELS_COUNT, 0);
         Levels.setup(this);
     }
 
@@ -66,13 +64,13 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
         integer(LEVELS_COUNT, index);
 
         String prefix = levelPrefix(index);
-        addEditBox(prefix).multiline().type(String.class).def(level.all());
+        multiline(() -> prefix, level.all());
         return this;
     }
 
     public String levelMap(int index) {
         String prefix = levelPrefix(index);
-        return addEditBox(prefix).type(String.class).getValue();
+        return string(() -> prefix);
     }
 
     private String levelPrefix(int index) {

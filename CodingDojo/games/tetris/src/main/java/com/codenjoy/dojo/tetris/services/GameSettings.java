@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.tetris.services;
 
+import com.codenjoy.dojo.services.settings.SelectBox;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.tetris.model.levels.LevelsFactory;
@@ -35,17 +36,15 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        addSelect(GAME_LEVELS.key(), (List)levels()).type(String.class)
-                .def(ProbabilityWithoutOverflownLevels.class.getSimpleName());
-
-        addEditBox(GLASS_SIZE.key()).type(Integer.class).def(18);
-
-        addEditBox(FIGURE_DROPPED_SCORE.key()).type(Integer.class).def(1);
-        addEditBox(ONE_LINE_REMOVED_SCORE.key()).type(Integer.class).def(10);
-        addEditBox(TWO_LINES_REMOVED_SCORE.key()).type(Integer.class).def(30);
-        addEditBox(THREE_LINES_REMOVED_SCORE.key()).type(Integer.class).def(50);
-        addEditBox(FOUR_LINES_REMOVED_SCORE.key()).type(Integer.class).def(100);
-        addEditBox(GLASS_OVERFLOWN_PENALTY.key()).type(Integer.class).def(10);
+        options(GAME_LEVELS, levels(),
+                ProbabilityWithoutOverflownLevels.class.getSimpleName());
+        integer(GLASS_SIZE, 18);
+        integer(FIGURE_DROPPED_SCORE, 1);
+        integer(ONE_LINE_REMOVED_SCORE, 10);
+        integer(TWO_LINES_REMOVED_SCORE, 30);
+        integer(THREE_LINES_REMOVED_SCORE, 50);
+        integer(FOUR_LINES_REMOVED_SCORE, 100);
+        integer(GLASS_OVERFLOWN_PENALTY, 10);
     }
 
     private List<String> levels() {

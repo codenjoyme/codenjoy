@@ -28,10 +28,10 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(30);
-        addEditBox(LOOSE_PENALTY.key()).type(Integer.class).def(100);
+        integer(WIN_SCORE, 30);
+        integer(LOOSE_PENALTY, 100);
      
-        addEditBox(QUESTIONS.key()).multiline().type(String.class).def(
+        multiline(QUESTIONS,
                 "question1=answer1\n" +
                 "question2=answer2\n" +
                 "question3=answer3\n" +

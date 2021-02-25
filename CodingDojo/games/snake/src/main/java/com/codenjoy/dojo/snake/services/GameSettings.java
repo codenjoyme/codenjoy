@@ -22,13 +22,12 @@ package com.codenjoy.dojo.snake.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.round.RoundSettings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import static com.codenjoy.dojo.snake.services.GameSettings.Keys.*;
 
-public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings>, RoundSettings {
+public class GameSettings extends SettingsImpl implements SettingsReader<GameSettings> {
 
     public enum Keys implements Key {
 
@@ -52,11 +51,11 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        addEditBox(BOARD_SIZE.key()).type(Integer.class).def(15);
-        addCheckBox(MAX_SCORE_MODE.key()).type(Boolean.class).def(false);
-        addEditBox(GAME_OVER_PENALTY.key()).type(Integer.class).def(0);
-        addEditBox(START_SNAKE_LENGTH.key()).type(Integer.class).def(2);
-        addEditBox(EAT_STONE_PENALTY.key()).type(Integer.class).def(0);
-        addEditBox(EAT_STONE_DECREASE.key()).type(Integer.class).def(10);
+        integer(BOARD_SIZE, 15);
+        bool(MAX_SCORE_MODE, false);
+        integer(GAME_OVER_PENALTY, 0);
+        integer(START_SNAKE_LENGTH, 2);
+        integer(EAT_STONE_PENALTY, 0);
+        integer(EAT_STONE_DECREASE, 10);
     }
 }

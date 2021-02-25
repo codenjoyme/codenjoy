@@ -38,26 +38,26 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
     
     public GameSettings() {
-        addCheckBox(ROUNDS_ENABLED.key()).type(Boolean.class).def(true);
-        addEditBox(TIME_PER_ROUND.key()).type(Integer.class).def(300);
-        addEditBox(TIME_FOR_WINNER.key()).type(Integer.class).def(1);
-        addEditBox(TIME_BEFORE_START.key()).type(Integer.class).def(5);
-        addEditBox(ROUNDS_PER_MATCH.key()).type(Integer.class).def(3);
-        addEditBox(MIN_TICKS_FOR_WIN.key()).type(Integer.class).def(40);
+        bool(ROUNDS_ENABLED, true);
+        integer(TIME_PER_ROUND, 300);
+        integer(TIME_FOR_WINNER, 1);
+        integer(TIME_BEFORE_START, 5);
+        integer(ROUNDS_PER_MATCH, 3);
+        integer(MIN_TICKS_FOR_WIN, 40);
 
-        addEditBox(PLAYERS_PER_ROOM.key()).type(Integer.class).def(5);
-        addEditBox(FLYING_COUNT.key()).type(Integer.class).def(10);
-        addEditBox(FURY_COUNT.key()).type(Integer.class).def(10);
-        addEditBox(STONE_REDUCED.key()).type(Integer.class).def(3);
+        integer(PLAYERS_PER_ROOM, 5);
+        integer(FLYING_COUNT, 10);
+        integer(FURY_COUNT, 10);
+        integer(STONE_REDUCED, 3);
 
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(50);
-        addEditBox(APPLE_SCORE.key()).type(Integer.class).def(1);
-        addEditBox(GOLD_SCORE.key()).type(Integer.class).def(10);
-        addEditBox(DIE_PENALTY.key()).type(Integer.class).def(0);
-        addEditBox(STONE_SCORE.key()).type(Integer.class).def(5);
-        addEditBox(EAT_SCORE.key()).type(Integer.class).def(10);
+        integer(WIN_SCORE, 50);
+        integer(APPLE_SCORE, 1);
+        integer(GOLD_SCORE, 10);
+        integer(DIE_PENALTY, 0);
+        integer(STONE_SCORE, 5);
+        integer(EAT_SCORE, 10);
 
-        addEditBox(LEVEL_MAP.key()).type(String.class).multiline().def(
+        multiline(LEVEL_MAP,
                 "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
                 "☼☼         ○                 ☼" +
                 "☼#                           ☼" +

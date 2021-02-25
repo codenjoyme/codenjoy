@@ -52,19 +52,19 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(100);
-        addEditBox(FLIP_SCORE.key()).type(Integer.class).def(1);
-        addEditBox(LOOSE_PENALTY.key()).type(Integer.class).def(0);
+        integer(WIN_SCORE, 100);
+        integer(FLIP_SCORE, 1);
+        integer(LOOSE_PENALTY, 0);
 
-        addEditBox(LEVEL_MAP.key()).multiline().type(String.class)
-                .def("        " +
-                        "        " +
-                        "        " +
-                        "   xO   " +
-                        "   Ox   " +
-                        "        " +
-                        "        " +
-                        "        ");
+        multiline(LEVEL_MAP,
+                "        " +
+                "        " +
+                "        " +
+                "   xO   " +
+                "   Ox   " +
+                "        " +
+                "        " +
+                "        ");
     }
 
     public Level level() {

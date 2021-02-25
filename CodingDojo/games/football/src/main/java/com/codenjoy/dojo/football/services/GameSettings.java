@@ -52,44 +52,44 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(NUMBER_OF_PLAYERS.key()).type(Integer.class).def(2);
-        addEditBox(IS_NEED_AI.key()).type(Integer.class).def(1);
+        integer(NUMBER_OF_PLAYERS, 2);
+        integer(IS_NEED_AI, 1);
 
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(1);
+        integer(WIN_SCORE, 1);
 
-        addEditBox(LEVEL_MAP.key()).multiline().type(String.class)
-                .def("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                    "☼☼☼☼☼☼☼☼☼☼☼☼☼┴┴┴┴┴┴┴☼☼☼☼☼☼☼☼☼☼☼☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼               ∙              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼                              ☼" +
-                    "☼☼☼☼☼☼☼☼☼☼☼☼☼┬┬┬┬┬┬┬☼☼☼☼☼☼☼☼☼☼☼☼" +
-                    "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+        multiline(LEVEL_MAP,
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼┴┴┴┴┴┴┴☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼               ∙              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼                              ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼┬┬┬┬┬┬┬☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
     public Level level() {

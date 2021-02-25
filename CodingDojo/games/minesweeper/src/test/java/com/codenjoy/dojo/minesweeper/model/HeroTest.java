@@ -115,17 +115,17 @@ public class HeroTest {
     @Test
     public void shouldMineDetectorChargeMoreThanMines_whenGameStart() {
         // given
-        settings.integer(GameSettings.Keys.MINES_ON_BOARD, 10)
-                .integer(GameSettings.Keys.DETECTOR_CHARGE, 20);
-
+        settings.integer(GameSettings.Keys.BOARD_SIZE, 100)
+                .integer(GameSettings.Keys.MINES_ON_BOARD, 20)
+                .integer(GameSettings.Keys.DETECTOR_CHARGE, 10);
 
         // when
         new Minesweeper(NO_MINES, settings)
                 .newGame(new Player(listener, settings));
 
         // then
-        assertEquals(10, (int)settings.integer(GameSettings.Keys.MINES_ON_BOARD));
-        assertEquals(10, (int)settings.integer(GameSettings.Keys.DETECTOR_CHARGE));
+        assertEquals(20, (int)settings.integer(GameSettings.Keys.MINES_ON_BOARD));
+        assertEquals(20, (int)settings.integer(GameSettings.Keys.DETECTOR_CHARGE));
     }
 
     @Test

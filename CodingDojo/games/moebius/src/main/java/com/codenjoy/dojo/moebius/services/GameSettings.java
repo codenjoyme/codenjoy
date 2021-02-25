@@ -52,10 +52,9 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(SIZE.key()).type(Integer.class).def(15);
-
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(1);
-        addEditBox(LOOSE_PENALTY.key()).type(Integer.class).def(0);
+        integer(SIZE, 15);
+        integer(WIN_SCORE, 1);
+        integer(LOOSE_PENALTY, 0);
     }
 
     public Level level() {

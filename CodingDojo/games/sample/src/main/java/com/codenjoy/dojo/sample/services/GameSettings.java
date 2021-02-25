@@ -25,7 +25,6 @@ package com.codenjoy.dojo.sample.services;
 
 import com.codenjoy.dojo.sample.model.level.Level;
 import com.codenjoy.dojo.sample.model.level.LevelImpl;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
@@ -52,40 +51,40 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(30);
-        addEditBox(LOOSE_PENALTY.key()).type(Integer.class).def(100);
+        integer(WIN_SCORE, 30);
+        integer(LOOSE_PENALTY, 100);
 
-        addEditBox(LEVEL_MAP.key()).multiline().type(String.class)
-                .def("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                    "☼          $                 ☼" +
-                    "☼                            ☼" +
-                    "☼   $              $         ☼" +
-                    "☼                       $    ☼" +
-                    "☼  $                         ☼" +
-                    "☼                            ☼" +
-                    "☼                            ☼" +
-                    "☼              $             ☼" +
-                    "☼        $                   ☼" +
-                    "☼                            ☼" +
-                    "☼                            ☼" +
-                    "☼ $                         $☼" +
-                    "☼                            ☼" +
-                    "☼              $             ☼" +
-                    "☼                            ☼" +
-                    "☼    $                       ☼" +
-                    "☼                            ☼" +
-                    "☼                       $    ☼" +
-                    "☼                            ☼" +
-                    "☼                            ☼" +
-                    "☼                            ☼" +
-                    "☼            $               ☼" +
-                    "☼                            ☼" +
-                    "☼                            ☼" +
-                    "☼       $                $   ☼" +
-                    "☼                            ☼" +
-                    "☼       ☺        $           ☼" +
-                    "☼                            ☼" +
-                    "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+        multiline(LEVEL_MAP,
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼          $                 ☼" +
+                "☼                            ☼" +
+                "☼   $              $         ☼" +
+                "☼                       $    ☼" +
+                "☼  $                         ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼              $             ☼" +
+                "☼        $                   ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼ $                         $☼" +
+                "☼                            ☼" +
+                "☼              $             ☼" +
+                "☼                            ☼" +
+                "☼    $                       ☼" +
+                "☼                            ☼" +
+                "☼                       $    ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼            $               ☼" +
+                "☼                            ☼" +
+                "☼                            ☼" +
+                "☼       $                $   ☼" +
+                "☼                            ☼" +
+                "☼       ☺        $           ☼" +
+                "☼                            ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
     public Level level() {

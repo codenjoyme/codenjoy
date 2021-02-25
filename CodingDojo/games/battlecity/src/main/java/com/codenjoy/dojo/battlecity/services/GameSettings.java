@@ -61,54 +61,54 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
     }
 
     public GameSettings() {
-        addEditBox(KILL_YOUR_TANK_PENALTY.key()).type(Integer.class).def(0);
-        addEditBox(KILL_OTHER_HERO_TANK_SCORE.key()).type(Integer.class).def(50);
-        addEditBox(KILL_OTHER_AI_TANK_SCORE.key()).type(Integer.class).def(25);
+        integer(KILL_YOUR_TANK_PENALTY, 0);
+        integer(KILL_OTHER_HERO_TANK_SCORE, 50);
+        integer(KILL_OTHER_AI_TANK_SCORE, 25);
 
-        addEditBox(SPAWN_AI_PRIZE.key()).type(Integer.class).def(4);
-        addEditBox(KILL_HITS_AI_PRIZE.key()).type(Integer.class).def(3);
-        addEditBox(PRIZE_ON_FIELD.key()).type(Integer.class).def(50);
-        addEditBox(PRIZE_WORKING.key()).type(Integer.class).def(30);
-        addEditBox(AI_TICKS_PER_SHOOT.key()).type(Integer.class).def(10);
-        addEditBox(TANK_TICKS_PER_SHOOT.key()).type(Integer.class).def(4);
-        addEditBox(SLIPPERINESS.key()).type(Integer.class).def(3);
-        addEditBox(AI_PRIZE_LIMIT.key()).type(Integer.class).def(3);
+        integer(SPAWN_AI_PRIZE, 4);
+        integer(KILL_HITS_AI_PRIZE, 3);
+        integer(PRIZE_ON_FIELD, 50);
+        integer(PRIZE_WORKING, 30);
+        integer(AI_TICKS_PER_SHOOT, 10);
+        integer(TANK_TICKS_PER_SHOOT, 4);
+        integer(SLIPPERINESS, 3);
+        integer(AI_PRIZE_LIMIT, 3);
 
-        addEditBox(LEVEL_MAP.key()).multiline().type(String.class)
-                .def("☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
-                    "☼ ¿    ¿    ¿        ¿    ¿    ¿ ☼" +
-                    "☼                                ☼" +
-                    "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                    "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                    "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                    "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                    "☼ #╬╬╬# ╬╬╬ #╬╬╬☼☼╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                    "☼ #╬╬╬# ╬╬╬ #╬╬╬☼☼╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                    "☼ #╬╬╬# ╬╬╬ #╬╬╬  ╬╬╬# ╬╬╬ #╬╬╬# ☼" +
-                    "☼ #╬╬╬# ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬ #╬╬╬# ☼" +
-                    "☼ #╬╬╬# ╬╬╬            ╬╬╬ #╬╬╬# ☼" +
-                    "☼  ╬╬╬  ╬╬╬   ~    ~   ╬╬╬  ╬╬╬  ☼" +
-                    "☼  ~~~       ╬╬╬  ╬╬╬       ~~~  ☼" +
-                    "☼  ~~        ╬╬╬  ╬╬╬        ~~  ☼" +
-                    "☼     ╬╬╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬╬╬     ☼" +
-                    "☼☼☼   ╬╬╬╬╬            ╬╬╬╬╬   ☼☼☼" +
-                    "☼ ~~          %%%%%%          ~~ ☼" +
-                    "☼           ~╬╬╬%%╬╬╬~           ☼" +
-                    "☼  ╬╬╬  ╬╬╬ ~╬╬╬%%╬╬╬~ ╬╬╬  ╬╬╬  ☼" +
-                    "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                    "☼  ╬╬╬~ ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬ ~╬╬╬  ☼" +
-                    "☼  ╬╬╬  ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬  ╬╬╬  ☼" +
-                    "☼ %╬╬╬  ╬╬╬  ╬╬╬%%╬╬╬  ╬╬╬  ╬╬╬% ☼" +
-                    "☼ %╬╬╬  ╬╬╬~ ╬╬╬%%╬╬╬ ~╬╬╬  ╬╬╬% ☼" +
-                    "☼ %╬╬╬  ╬╬╬~ ╬╬╬%%╬╬╬ ~╬╬╬  ╬╬╬% ☼" +
-                    "☼ %╬╬╬ ~╬╬╬  ╬╬╬%%╬╬╬  ╬╬╬~ ╬╬╬% ☼" +
-                    "☼ %╬╬╬  %%%            %%%  ╬╬╬% ☼" +
-                    "☼  ╬╬╬  %%%    ~~~~    %%%  ╬╬╬  ☼" +
-                    "☼  ╬╬╬  %%%  ╬╬╬╬╬╬╬╬  %%%  ╬╬╬  ☼" +
-                    "☼  ╬╬╬       ╬╬╬╬╬╬╬╬       ╬╬╬  ☼" +
-                    "☼            ╬╬    ╬╬            ☼" +
-                    "☼  %%%%%%    ╬╬    ╬╬    %%%%%%  ☼" +
-                    "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
+        multiline(LEVEL_MAP,
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼" +
+                "☼ ¿    ¿    ¿        ¿    ¿    ¿ ☼" +
+                "☼                                ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬##╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬☼☼╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬☼☼╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬ #╬╬╬  ╬╬╬# ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬ #╬╬╬# ☼" +
+                "☼ #╬╬╬# ╬╬╬            ╬╬╬ #╬╬╬# ☼" +
+                "☼  ╬╬╬  ╬╬╬   ~    ~   ╬╬╬  ╬╬╬  ☼" +
+                "☼  ~~~       ╬╬╬  ╬╬╬       ~~~  ☼" +
+                "☼  ~~        ╬╬╬  ╬╬╬        ~~  ☼" +
+                "☼     ╬╬╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬╬╬     ☼" +
+                "☼☼☼   ╬╬╬╬╬            ╬╬╬╬╬   ☼☼☼" +
+                "☼ ~~          %%%%%%          ~~ ☼" +
+                "☼           ~╬╬╬%%╬╬╬~           ☼" +
+                "☼  ╬╬╬  ╬╬╬ ~╬╬╬%%╬╬╬~ ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼  ╬╬╬~ ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬ ~╬╬╬  ☼" +
+                "☼  ╬╬╬  ╬╬╬  ╬╬╬╬╬╬╬╬  ╬╬╬  ╬╬╬  ☼" +
+                "☼ %╬╬╬  ╬╬╬  ╬╬╬%%╬╬╬  ╬╬╬  ╬╬╬% ☼" +
+                "☼ %╬╬╬  ╬╬╬~ ╬╬╬%%╬╬╬ ~╬╬╬  ╬╬╬% ☼" +
+                "☼ %╬╬╬  ╬╬╬~ ╬╬╬%%╬╬╬ ~╬╬╬  ╬╬╬% ☼" +
+                "☼ %╬╬╬ ~╬╬╬  ╬╬╬%%╬╬╬  ╬╬╬~ ╬╬╬% ☼" +
+                "☼ %╬╬╬  %%%            %%%  ╬╬╬% ☼" +
+                "☼  ╬╬╬  %%%    ~~~~    %%%  ╬╬╬  ☼" +
+                "☼  ╬╬╬  %%%  ╬╬╬╬╬╬╬╬  %%%  ╬╬╬  ☼" +
+                "☼  ╬╬╬       ╬╬╬╬╬╬╬╬       ╬╬╬  ☼" +
+                "☼            ╬╬    ╬╬            ☼" +
+                "☼  %%%%%%    ╬╬    ╬╬    %%%%%%  ☼" +
+                "☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼☼");
     }
 
     public Level level(Dice dice) {

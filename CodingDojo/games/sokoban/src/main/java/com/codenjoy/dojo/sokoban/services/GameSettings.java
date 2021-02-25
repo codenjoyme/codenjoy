@@ -29,10 +29,9 @@ public class GameSettings extends SettingsImpl implements SettingsReader<GameSet
     }
 
     public GameSettings() {
-        addEditBox(LEVEL_MAP.key()).multiline().type(String.class).def(loadLevelMap());
-
-        addEditBox(WIN_SCORE.key()).type(Integer.class).def(30);
-        addEditBox(LOOSE_PENALTY.key()).type(Integer.class).def(100);
+        integer(WIN_SCORE, 30);
+        integer(LOOSE_PENALTY, 100);
+        multiline(LEVEL_MAP, loadLevelMap());
     }
 
     private String loadLevelMap() {
