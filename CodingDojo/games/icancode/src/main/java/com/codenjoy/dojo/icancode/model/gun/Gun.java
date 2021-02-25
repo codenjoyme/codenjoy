@@ -22,10 +22,10 @@ package com.codenjoy.dojo.icancode.model.gun;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
+import com.codenjoy.dojo.icancode.model.Settingable;
 import com.codenjoy.dojo.services.Tickable;
 
-public interface Gun extends Tickable {
+public interface Gun extends Tickable, Settingable {
 
     void reset();
 
@@ -34,17 +34,5 @@ public interface Gun extends Tickable {
     void shoot();
 
     void unlimitedShoot();
-
-    default int charge() {
-        return SettingsWrapper.data.gunRecharge();
-    }
-
-    default int shotQueue() {
-        return SettingsWrapper.data.gunShotQueue();
-    }
-
-    default int restTime() {
-        return SettingsWrapper.data.gunRestTime();
-    }
 
 }

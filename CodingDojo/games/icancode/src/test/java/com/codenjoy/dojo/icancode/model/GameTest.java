@@ -24,10 +24,10 @@ package com.codenjoy.dojo.icancode.model;
 
 import com.codenjoy.dojo.icancode.services.Events;
 import com.codenjoy.dojo.icancode.services.Levels;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -1837,9 +1837,8 @@ public class GameTest extends AbstractGameTest {
     @Test
     public void killZombieNearYouByFirstLaserTick() {
         // given
-        SettingsWrapper.data
-                .perkAvailability(10)
-                .perkActivity(10);
+        settings.integer(PERK_AVAILABILITY, 10)
+                .integer(PERK_ACTIVITY, 10);
 
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -2597,7 +2596,7 @@ public class GameTest extends AbstractGameTest {
     @Test
     public void shouldShoot_withDelay() {
         // given
-        settings.gunRecharge(2);
+        settings.integer(GUN_RECHARGE, 2);
 
         givenFl("╔═══┐" +
                 "║.S.│" +

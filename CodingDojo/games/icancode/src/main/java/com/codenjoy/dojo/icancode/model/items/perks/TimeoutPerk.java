@@ -23,7 +23,10 @@ package com.codenjoy.dojo.icancode.model.items.perks;
  */
 
 import com.codenjoy.dojo.icancode.model.*;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
+import com.codenjoy.dojo.icancode.services.GameSettings;
+
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_ACTIVITY;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_AVAILABILITY;
 
 public abstract class TimeoutPerk extends Perk {
 
@@ -32,12 +35,11 @@ public abstract class TimeoutPerk extends Perk {
 
     public TimeoutPerk(Elements element) {
         super(element);
-        initTimers();
     }
 
     private void initTimers() {
-        this.availability = new Timer(SettingsWrapper.data.perkAvailability());
-        this.activity = new Timer(SettingsWrapper.data.perkActivity());
+        this.availability = new Timer(settings.integer(PERK_AVAILABILITY));
+        this.activity = new Timer(settings.integer(PERK_ACTIVITY));
     }
 
     @Override
@@ -59,6 +61,12 @@ public abstract class TimeoutPerk extends Perk {
     @Override
     public void reset() {
         super.reset();
+        initTimers();
+    }
+
+    @Override
+    public void setSettings(GameSettings settings) {
+        super.setSettings(settings);
         initTimers();
     }
 }

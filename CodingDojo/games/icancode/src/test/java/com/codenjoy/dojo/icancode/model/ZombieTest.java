@@ -26,11 +26,10 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import com.codenjoy.dojo.icancode.services.Events;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 import org.mockito.stubbing.OngoingStubbing;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_DROP_RATIO;
 import static com.codenjoy.dojo.services.Direction.LEFT;
 import static com.codenjoy.dojo.services.Direction.UP;
 import static org.junit.Assert.assertEquals;
@@ -392,8 +391,7 @@ public class ZombieTest extends AbstractGameTest {
     @Test
     public void shouldHero_killZombie() {
         // given
-        SettingsWrapper.data
-                .perkDropRatio(0);
+        settings.integer(PERK_DROP_RATIO, 0);
 
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 6;
         Zombie.WALK_EACH_TICKS = 2;

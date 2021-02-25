@@ -28,8 +28,8 @@ import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import com.codenjoy.dojo.icancode.model.items.perks.DeathRayPerk;
 import com.codenjoy.dojo.icancode.services.Events;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.icancode.services.Levels;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
@@ -51,6 +51,8 @@ import java.util.*;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER1;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER2;
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.LAYER3;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.DEFAULT_PERKS;
 import static com.codenjoy.dojo.utils.TestUtils.injectN;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
@@ -67,18 +69,19 @@ public class MultiplayerTest {
     private List<Level> singles1;
     private List<Level> singles2;
     private ICanCode gameMultiple;
+    private GameSettings settings;
 
     @Before
     public void setup() {
-        SettingsWrapper.setup()
-                .perkActivity(10)
-                .perkAvailability(10)
-                .perkDropRatio(50)
-                .deathRayRange(10)
-                .gunRecharge(0)
-                .gunRestTime(0)
-                .gunShotQueue(0)
-                .defaultPerks("ajm,ajm");
+        settings = new GameSettings()
+                .integer(PERK_ACTIVITY, 10)
+                .integer(PERK_AVAILABILITY, 10)
+                .integer(PERK_DROP_RATIO, 50)
+                .integer(DEATH_RAY_PERK_RANGE, 10)
+                .integer(GUN_RECHARGE, 0)
+                .integer(GUN_REST_TIME, 0)
+                .integer(GUN_SHOT_QUEUE, 0)
+                .string(DEFAULT_PERKS, "ajm,ajm");
 
         Levels.init();
         Zombie.init();
@@ -110,14 +113,14 @@ public class MultiplayerTest {
         singles2 = createLevels(strings);
 
         Level levelMultiple = createLevels(Arrays.asList(multiple)).get(0);
-        gameMultiple = new ICanCode(levelMultiple, dice, ICanCode.CONTEST);
+        gameMultiple = new ICanCode(levelMultiple, dice, ICanCode.CONTEST, settings);
 
         listener1 = mock(EventListener.class);
         listener2 = mock(EventListener.class);
         GameRunner gameRunner = new GameRunner();
 
-        GamePlayer player1 = gameRunner.createPlayer(listener1, null);
-        GamePlayer player2 = gameRunner.createPlayer(listener2, null);
+        GamePlayer player1 = gameRunner.createPlayer(listener1, null, settings);
+        GamePlayer player2 = gameRunner.createPlayer(listener2, null, settings);
 
         MultiplayerType type = MultiplayerType.TRAINING.apply(boards.length);
         single1 = new Single(player1, gameRunner.getPrinterFactory(), type);
@@ -126,8 +129,7 @@ public class MultiplayerTest {
         single2 = new Single(player2, gameRunner.getPrinterFactory(), type);
         player2TryLoadLevel(LevelProgress.levelsStartsFrom1);
 
-        SettingsWrapper.data
-                .defaultPerks("ajm,ajm");
+        settings.string(DEFAULT_PERKS, "ajm,ajm");
     }
 
     private Hero hero1() {
@@ -141,7 +143,7 @@ public class MultiplayerTest {
     private List<Level> createLevels(Collection<String> boards) {
         List<Level> levels = new LinkedList<>();
         for (String board : boards) {
-            Level level = new LevelImpl(board);
+            Level level = new LevelImpl(board, settings);
             levels.add(level);
         }
         return levels;
@@ -877,7 +879,7 @@ public class MultiplayerTest {
             single.on(gameMultiple);
         } else {
             int index = level - LevelProgress.levelsStartsFrom1;
-            ICanCode gameSingle = new ICanCode(levels.get(index), dice, ICanCode.TRAINING);
+            ICanCode gameSingle = new ICanCode(levels.get(index), dice, ICanCode.TRAINING, settings);
             single.on(gameSingle);
         }
         return true;
@@ -3802,10 +3804,9 @@ public class MultiplayerTest {
     @Test
     public void shouldRunEventAfterKillHero_withDeathRayPerk() {
         // given
-        SettingsWrapper.data
-                .perkAvailability(10)
-                .perkActivity(10)
-                .deathRayRange(10);
+        settings.integer(PERK_ACTIVITY, 10)
+                .integer(PERK_AVAILABILITY, 10)
+                .integer(DEATH_RAY_PERK_RANGE, 10);
 
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -3972,10 +3973,9 @@ public class MultiplayerTest {
     @Test
     public void shouldAlive_heroJumpsOnDeathRay() {
         // given
-        SettingsWrapper.data
-                .perkAvailability(10)
-                .perkActivity(10)
-                .deathRayRange(10);
+        settings.integer(PERK_ACTIVITY, 10)
+                .integer(PERK_AVAILABILITY, 10)
+                .integer(DEATH_RAY_PERK_RANGE, 10);
 
         givenFl("╔════┐" +
                 "║.S..│" +
@@ -4093,10 +4093,9 @@ public class MultiplayerTest {
     @Test
     public void shouldAlive_heroJumpsOnDeathRay_fromRightSide() {
         // given
-        SettingsWrapper.data
-                .perkAvailability(10)
-                .perkActivity(10)
-                .deathRayRange(10);
+        settings.integer(PERK_ACTIVITY, 10)
+                .integer(PERK_AVAILABILITY, 10)
+                .integer(DEATH_RAY_PERK_RANGE, 10);
 
         givenFl("╔════┐" +
                 "║.S..│" +

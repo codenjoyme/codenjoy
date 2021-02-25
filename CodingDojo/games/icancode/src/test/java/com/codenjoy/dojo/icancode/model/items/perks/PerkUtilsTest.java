@@ -2,14 +2,16 @@ package com.codenjoy.dojo.icancode.model.items.perks;
 
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.ICanCode;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.DEFAULT_PERKS;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -18,6 +20,12 @@ import static org.mockito.Mockito.when;
 public class PerkUtilsTest {
 
     private Dice dice = mock(Dice.class);
+    private GameSettings settings;
+
+    @Before
+    public void setUp() {
+        settings = new GameSettings();
+    }
 
     @Test
     public void test_isPerk() {
@@ -38,17 +46,17 @@ public class PerkUtilsTest {
                 "['l', 'r', 'f']");
     }
 
-    private void assertDefaultPerks(String settings,
+    private void assertDefaultPerks(String perks,
                                     String expectedTraining,
                                     String expectedContest)
     {
-        SettingsWrapper.setup().defaultPerks(settings);
+        settings.string(DEFAULT_PERKS, perks);
 
         assertEquals(expectedTraining,
-                PerkUtils.defaultFor(ICanCode.TRAINING).toString());
+                PerkUtils.defaultFor(ICanCode.TRAINING, settings).toString());
 
         assertEquals(expectedContest,
-                PerkUtils.defaultFor(ICanCode.CONTEST).toString());
+                PerkUtils.defaultFor(ICanCode.CONTEST, settings).toString());
     }
 
     @Test
@@ -133,8 +141,8 @@ public class PerkUtilsTest {
                 "['l', 'r', 'f', 'a', 'j', 'm']");
     }
 
-    private void assertRandom(String settings, boolean contest, String expected) {
-        SettingsWrapper.setup().defaultPerks(settings);
+    private void assertRandom(String perks, boolean contest, String expected) {
+        settings.string(DEFAULT_PERKS, perks);
 
         int length = Elements.perks().size();
 
@@ -143,7 +151,7 @@ public class PerkUtilsTest {
             when(dice.next(anyInt())).thenReturn(index);
 
             try {
-                Optional<Perk> perk = PerkUtils.random(dice, contest);
+                Optional<Perk> perk = PerkUtils.random(dice, contest, settings);
                 result.add(perk.get());
             } catch (Exception e) {
                 // do nothing

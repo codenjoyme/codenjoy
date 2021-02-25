@@ -25,12 +25,14 @@ package com.codenjoy.dojo.icancode.services;
 
 import com.codenjoy.dojo.services.PlayerScores;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
+
 public class Scores implements PlayerScores {
 
     private volatile int score;
-    private SettingsWrapper settings;
+    private GameSettings settings;
 
-    public Scores(int startScore, SettingsWrapper settings) {
+    public Scores(int startScore, GameSettings settings) {
         this.score = startScore;
         this.settings = settings;
     }
@@ -59,20 +61,20 @@ public class Scores implements PlayerScores {
         switch (eventsType) {
             case WIN:
                 if (!events.isMultiple()) {
-                    score += settings.winScore();
+                    score += settings.integer(WIN_SCORE);
                 }
-                score += settings.goldScore() * events.getGoldCount();
+                score += settings.integer(GOLD_SCORE) * events.getGoldCount();
                 break;
             case LOOSE:
-                score -= settings.loosePenalty();
+                score -= settings.integer(LOOSE_PENALTY);
                 break;
             case KILL_ZOMBIE:
-                if (settings.enableKillScore() && events.isMultiple())
-                    score += events.getKillCount() * settings.killZombieScore();
+                if (settings.bool(ENABLE_KILL_SCORE) && events.isMultiple())
+                    score += events.getKillCount() * settings.integer(KILL_ZOMBIE_SCORE);
                 break;
             case KILL_HERO:
-                if (settings.enableKillScore() && events.isMultiple())
-                    score += events.getKillCount() * settings.killHeroScore();
+                if (settings.bool(ENABLE_KILL_SCORE) && events.isMultiple())
+                    score += events.getKillCount() * settings.integer(KILL_HERO_SCORE);
                 break;
         }
         score = Math.max(0, score);

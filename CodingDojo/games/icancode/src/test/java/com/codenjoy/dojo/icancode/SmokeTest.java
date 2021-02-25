@@ -32,10 +32,9 @@ import com.codenjoy.dojo.icancode.model.Level;
 import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import com.codenjoy.dojo.icancode.services.GameRunner;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.icancode.services.Levels;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -44,6 +43,7 @@ import java.util.List;
 
 import static com.codenjoy.dojo.client.local.LocalGameRunner.generateXorShift;
 import static com.codenjoy.dojo.client.local.LocalGameRunner.getDice;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 public class SmokeTest {
@@ -76,7 +76,20 @@ public class SmokeTest {
             }
 
             @Override
-            public Level loadLevel(int level) {
+            public GameSettings getSettings() {
+                return super.getSettings()
+                        .integer(PERK_ACTIVITY, 10)
+                        .integer(PERK_AVAILABILITY, 10)
+                        .integer(PERK_DROP_RATIO, 100)
+                        .integer(DEATH_RAY_PERK_RANGE, 10)
+                        .integer(GUN_RECHARGE, 2)
+                        .integer(GUN_REST_TIME, 4)
+                        .integer(GUN_SHOT_QUEUE, 2)
+                        .string(DEFAULT_PERKS, "ajm,ajm");
+            }
+
+            @Override
+            public Level loadLevel(int level, GameSettings settings) {
                 return Levels.load(
                         "                " +
                         " ############## " +
@@ -93,21 +106,12 @@ public class SmokeTest {
                         " #...BO$..B..˂# " +
                         " #.˄.$Sr.O.B.E# " +
                         " ############## " +
-                        "                ");
+                        "                ",
+                        settings);
             }
         };
 
         ZombiePot.TICKS_PER_NEW_ZOMBIE = 5;
-
-        SettingsWrapper.data
-                .perkActivity(10)
-                .perkAvailability(10)
-                .perkDropRatio(100)
-                .deathRayRange(10)
-                .gunRecharge(2)
-                .gunRestTime(4)
-                .gunShotQueue(2)
-                .defaultPerks("ajm,ajm");
 
         final int[] index = {0};
         List<String> commands = Arrays.asList(

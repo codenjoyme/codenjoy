@@ -25,12 +25,11 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.items.Laser;
 import com.codenjoy.dojo.icancode.model.items.LaserMachine;
 import com.codenjoy.dojo.icancode.model.items.perks.DeathRayPerk;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.PointImpl;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -166,10 +165,9 @@ public class ShooterTest extends AbstractGameTest {
     @Test
     public void shouldFireDeathRayLasers_whenHeroIsOwner() {
         // given
-        SettingsWrapper.data
-                .perkAvailability(10)
-                .perkActivity(10)
-                .deathRayRange(3);
+        settings.integer(PERK_AVAILABILITY, 10)
+                .integer(PERK_ACTIVITY, 10)
+                .integer(DEATH_RAY_PERK_RANGE, 3);
 
         givenFl("╔══════┐" +
                 "║.S....│" +

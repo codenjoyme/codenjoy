@@ -28,10 +28,12 @@ import com.codenjoy.dojo.icancode.model.gun.GunWithOverHeat;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.items.perks.*;
 import com.codenjoy.dojo.icancode.services.CodeSaver;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.State;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,8 +77,12 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
     public Hero() {
         item = new HeroItem(Elements.ROBO);
         item.init(this);
-        gun = new GunWithOverHeat();
         resetState();
+    }
+
+    @Override
+    public GameSettings settings() {
+        return (GameSettings) field.settings();
     }
 
     private void resetState() {
@@ -94,7 +100,6 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         resetZombieKillCount();
         resetHeroKillCount();
         perks = new ArrayList<>();
-        gun.reset();
     }
 
     public void resetZombieKillCount() {
@@ -110,13 +115,16 @@ public class Hero extends PlayerHero<Field> implements State<Elements, Player> {
         super.init(field);
         item.setField(field);
         resetField();
+        gun = new GunWithOverHeat();
+        gun.setSettings(settings());
+        gun.reset();
     }
 
     private void resetField() {
         field.getStartPosition().add(this.item);
         field.reset();
         resetState();
-        perks.addAll(PerkUtils.defaultFor(field.isContest()));
+        perks.addAll(PerkUtils.defaultFor(field.isContest(), settings()));
     }
 
     @Override

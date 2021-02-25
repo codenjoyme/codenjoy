@@ -2,7 +2,8 @@ package com.codenjoy.dojo.icancode.model.items.perks;
 
 import com.codenjoy.dojo.icancode.model.Elements;
 import com.codenjoy.dojo.icancode.model.ElementsMapper;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
+import com.codenjoy.dojo.icancode.model.Field;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,20 +12,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.DEFAULT_PERKS;
 import static java.util.stream.Collectors.toList;
 
 public class PerkUtils {
 
-    public static Optional<Perk> random(Dice dice, boolean contest) {
+    public static Optional<Perk> random(Dice dice, boolean contest, GameSettings settings) {
         List<Elements> all = new LinkedList<>(Elements.perks());
-        defaultFor(contest).forEach(perk -> all.remove(perk.getState()));
-        return random(dice, all.toArray(new Elements[]{}));
+        defaultFor(contest, settings).forEach(perk -> all.remove(perk.getState()));
+        return random(dice, settings, all.toArray(new Elements[]{}));
     }
 
-    private static Optional<Perk> random(Dice dice, Elements... perks) {
+    private static Optional<Perk> random(Dice dice, GameSettings settings, Elements... perks) {
         int index = dice.next(perks.length);
         Elements element = perks[index];
         Perk perk = (Perk)ElementsMapper.get(element);
+        perk.setSettings(settings);
         return Optional.ofNullable(perk);
     }
 
@@ -32,8 +35,8 @@ public class PerkUtils {
         return Elements.perks().contains(element);
     }
 
-    public static List<Perk> defaultFor(boolean contest) {
-        String data = SettingsWrapper.data.defaultPerks();
+    public static List<Perk> defaultFor(boolean contest, GameSettings settings) {
+        String data = settings.string(DEFAULT_PERKS);
         if (!data.contains(",")) {
             return Arrays.asList();
         }

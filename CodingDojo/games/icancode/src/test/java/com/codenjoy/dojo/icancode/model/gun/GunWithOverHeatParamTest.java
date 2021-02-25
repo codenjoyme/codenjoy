@@ -22,8 +22,7 @@ package com.codenjoy.dojo.icancode.model.gun;
  * #L%
  */
 
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -33,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
@@ -42,14 +42,15 @@ public class GunWithOverHeatParamTest {
     public static final String SYMBOL_PAUSE = "-";
 
     private Gun gun;
-    private SettingsWrapper settings;
+    private GameSettings settings;
     private Params params;
 
     public GunWithOverHeatParamTest(Params params) {
         this.params = params;
-        settings = SettingsWrapper.setup();
-        gun = new GunWithOverHeat();
-
+        settings = new GameSettings();
+        gun = new GunWithOverHeat(){{
+            settings = GunWithOverHeatParamTest.this.settings;
+        }};
     }
 
     @Parameters
@@ -100,9 +101,9 @@ public class GunWithOverHeatParamTest {
 
     @Test
     public void shouldMakeCorrectShotsInDifferentCases() {
-        settings.gunRecharge(params.gunRecharge);
-        settings.gunRestTime(params.gunRestTime);
-        settings.gunShotQueue(params.gunShotQueue);
+        settings.integer(GUN_RECHARGE, params.gunRecharge);
+        settings.integer(GUN_REST_TIME, params.gunRestTime);
+        settings.integer(GUN_SHOT_QUEUE, params.gunShotQueue);
 
         String result = new String();
         for (int i = 0; i < params.shots; i++) {

@@ -22,11 +22,17 @@ package com.codenjoy.dojo.icancode.model.gun;
  * #L%
  */
 
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
+
 public class GunWithOverHeat extends GunWithRecharge {
 
     private boolean cool;
     private int heat;
     private int coolDown;
+
+    public GunWithOverHeat() {
+        super();
+    }
 
     @Override
     public void reset() {
@@ -52,16 +58,16 @@ public class GunWithOverHeat extends GunWithRecharge {
     @Override
     public void tick() {
         super.tick();
-        if (heat == 0 || restTime() == 0) {
+        if (heat == 0 || settings.integer(GUN_REST_TIME) == 0) {
             cool = true;
             return;
         }
-        if (heat == shotQueue() && cool) {
+        if (heat == settings.integer(GUN_SHOT_QUEUE) && cool) {
             cool = false;
-            heat = restTime();
+            heat = settings.integer(GUN_REST_TIME);
         }
         if (cool) {
-            int charge = charge() + 1;
+            int charge = settings.integer(GUN_RECHARGE) + 1;
             if (coolDown == charge) {
                 coolDown = 0;
                 heat--;

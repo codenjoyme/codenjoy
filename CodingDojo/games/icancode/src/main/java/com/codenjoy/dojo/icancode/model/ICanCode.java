@@ -25,8 +25,8 @@ package com.codenjoy.dojo.icancode.model;
 import com.codenjoy.dojo.icancode.model.items.*;
 import com.codenjoy.dojo.icancode.model.items.perks.*;
 import com.codenjoy.dojo.icancode.services.Events;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.icancode.services.Levels;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredBoardReader;
@@ -37,6 +37,7 @@ import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import static com.codenjoy.dojo.icancode.model.Elements.*;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.PERK_DROP_RATIO;
 import static java.util.stream.Collectors.toList;
 
 public class ICanCode implements Tickable, Field {
@@ -54,9 +55,11 @@ public class ICanCode implements Tickable, Field {
     private Shooter shooter;
 
     private List<Perk> perks;
+    private GameSettings settings;
 
-    public ICanCode(Level level, Dice dice, boolean contest) {
+    public ICanCode(Level level, Dice dice, boolean contest, GameSettings settings) {
         this.level = level;
+        this.settings = settings;
         level.setField(this);
         this.dice = dice;
         this.contest = contest;
@@ -274,10 +277,10 @@ public class ICanCode implements Tickable, Field {
 
     @Override
     public Optional<Perk> dropNextPerk() {
-        if (dice.next(MAX_PERCENTS) > SettingsWrapper.data.perkDropRatio()) {
+        if (dice.next(MAX_PERCENTS) > settings.integer(PERK_DROP_RATIO)) {
             return Optional.empty();
         }
-        return PerkUtils.random(dice, contest);
+        return PerkUtils.random(dice, isContest(), settings);
     }
 
     @Override
@@ -353,6 +356,11 @@ public class ICanCode implements Tickable, Field {
         if (hero != null) {
             hero.removeFromCell();
         }
+    }
+
+    @Override
+    public GameSettings settings() {
+        return settings;
     }
 
     @Override

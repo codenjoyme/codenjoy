@@ -27,8 +27,8 @@ import com.codenjoy.dojo.icancode.model.items.Zombie;
 import com.codenjoy.dojo.icancode.model.items.ZombieBrain;
 import com.codenjoy.dojo.icancode.model.items.ZombiePot;
 import com.codenjoy.dojo.icancode.model.items.perks.Perk;
+import com.codenjoy.dojo.icancode.services.GameSettings;
 import com.codenjoy.dojo.icancode.services.Levels;
-import com.codenjoy.dojo.icancode.services.SettingsWrapper;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.Direction;
 import com.codenjoy.dojo.services.EventListener;
@@ -36,7 +36,6 @@ import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.printer.Printer;
 import com.codenjoy.dojo.services.printer.layeredview.LayeredViewPrinter;
 import com.codenjoy.dojo.services.printer.layeredview.PrinterData;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.junit.Before;
 import org.mockito.stubbing.OngoingStubbing;
@@ -45,6 +44,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.codenjoy.dojo.icancode.model.Elements.Layers.*;
+import static com.codenjoy.dojo.icancode.services.GameSettings.Keys.*;
 import static com.codenjoy.dojo.services.Direction.STOP;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
@@ -67,7 +67,7 @@ public abstract class AbstractGameTest {
     protected EventListener listener;
     protected Player player;
     private Player otherPlayer;
-    protected SettingsWrapper settings;
+    protected GameSettings settings;
 
     @Before
     public void setup() {
@@ -77,15 +77,15 @@ public abstract class AbstractGameTest {
 
         mode = ICanCode.TRAINING;
 
-        settings = SettingsWrapper.setup()
-                .perkActivity(10)
-                .perkAvailability(10)
-                .perkDropRatio(100)
-                .deathRayRange(10)
-                .gunRecharge(0)
-                .gunRestTime(0)
-                .gunShotQueue(0)
-                .defaultPerks("ajm,ajm");
+        settings = new GameSettings()
+                .integer(PERK_ACTIVITY, 10)
+                .integer(PERK_AVAILABILITY, 10)
+                .integer(PERK_DROP_RATIO, 100)
+                .integer(DEATH_RAY_PERK_RANGE, 10)
+                .integer(GUN_RECHARGE, 0)
+                .integer(GUN_REST_TIME, 0)
+                .integer(GUN_SHOT_QUEUE, 0)
+                .string(DEFAULT_PERKS, "ajm,ajm");
 
         dice = mock(Dice.class);
     }
@@ -111,9 +111,9 @@ public abstract class AbstractGameTest {
     protected void givenFl(int viewSize, String board) {
         Levels.VIEW_SIZE = viewSize;
         Level level = createLevels(new String[]{board}).get(0);
-        game = new ICanCode(level, dice, mode);
+        game = new ICanCode(level, dice, mode, settings);
         listener = mock(EventListener.class);
-        player = new Player(listener);
+        player = new Player(listener, settings);
         game.newGame(player);
         this.hero = game.getHeroes().get(0);
 
@@ -122,7 +122,7 @@ public abstract class AbstractGameTest {
                 .forEach(item -> {
                     HeroItem heroItem = (HeroItem) item;
                     if (heroItem.getHero() == null) {
-                        Player player = new Player(mock(EventListener.class));
+                        Player player = new Player(mock(EventListener.class), settings);
                         game.newGame(player);
                         Hero hero = player.getHero();
                         heroItem.init(hero);
@@ -143,7 +143,7 @@ public abstract class AbstractGameTest {
     protected List<Level> createLevels(String[] boards) {
         List<Level> levels = new LinkedList<>();
         for (String board : boards) {
-            Level level = new LevelImpl(board);
+            Level level = new LevelImpl(board, settings);
             levels.add(level);
         }
         return levels;
