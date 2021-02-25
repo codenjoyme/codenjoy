@@ -33,10 +33,9 @@ import org.junit.Test;
 import java.util.*;
 
 import static com.codenjoy.dojo.expansion.services.Events.LOOSE;
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.utils.TestUtils.injectNN;
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
 
@@ -81,7 +80,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
     public void shouldNoWaitTillAllPlayersCollectedTogether_ifNoSpecialMode() {
         // given
         givenFl(MULTIPLE_LEVEL);
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(3);
 
         assertE("-------" +
@@ -127,10 +126,10 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
 
     @Test
     public void shouldWaitTillAllPlayersCollectedTogether_ifSpecialMode() {
-        boolean old = data.waitingOthers();
+        boolean old = settings.waitingOthers();
         try {
             // given
-            data.waitingOthers(true);
+            settings.waitingOthers(true);
 
             givenFl(MULTIPLE_LEVEL);
             createPlayers(3);
@@ -225,16 +224,16 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                     "-=#00B-=#-=#-=#00A-=#\n" +
                     "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
         } finally {
-            data.waitingOthers(old);
+            settings.waitingOthers(old);
         }
     }
 
     @Test
     public void shouldOnlyOnePlayerWins() {
-        boolean old = data.waitingOthers();
+        boolean old = settings.waitingOthers();
         try {
             // given
-            data.waitingOthers(true);
+            settings.waitingOthers(true);
 
             // given
             givenFl("╔═════┐" +
@@ -251,7 +250,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
             atackSecondPlayer();
             attackThirdPlayerAndWin();
         } finally {
-            data.waitingOthers(old);
+            settings.waitingOthers(old);
         }
     }
 
@@ -467,10 +466,10 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
 
     @Test
     public void shouldLosePlayersCanGetInfoAboutGame() {
-        boolean old = data.waitingOthers();
+        boolean old = settings.waitingOthers();
         try {
             // given
-            data.waitingOthers(true);
+            settings.waitingOthers(true);
 
             // given
             givenFl("╔═════┐" +
@@ -512,7 +511,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
             assertBoardData(PLAYER3, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'myBase':{'x':1,'y':1},'myColor':2,'offset':{'x':0,'y':0},'round':63,'rounds':10000,'tick':63}");
             assertBoardData(PLAYER4, "{'forces':'-=#-=#-=#-=#-=#-=#-=#-=#001-=#-=#-=#00A-=#-=#00B-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#014-=#-=#-=#-=#-=#-=#00U-=#-=#-=#00A-=#-=#-=#-=#-=#-=#-=#-=#','available':10,'layers':['╔═════┐║4...1│║.....│║.....│║.....│║3...2│└─────┘','--------♣---♥--♣------♣------♣------♣---♦--------'],'myBase':{'x':1,'y':5},'myColor':3,'offset':{'x':0,'y':0},'round':63,'rounds':10000,'tick':63}");
         } finally {
-            data.waitingOthers(old);
+            settings.waitingOthers(old);
         }
     }
 
@@ -535,7 +534,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(4);
 
         assertE("-----" +
@@ -580,7 +579,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(4);
 
         assertE("-----" +
@@ -624,7 +623,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(4);
 
         hero(PLAYER1, 2, 3).down();
@@ -672,7 +671,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(4);
 
         hero(PLAYER1, 2, 3).down();
@@ -719,7 +718,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║3.2│" +
                 "║.4.│" +
                 "└───┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(4);
 
         hero(PLAYER1, 2, 3).down();
@@ -769,7 +768,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║.12│" +
                 "║...│" +
                 "└───┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(2);
 
         assertE("-----" +
@@ -812,7 +811,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -881,7 +880,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -950,7 +949,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -1034,7 +1033,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║.....│" +
                 "║3...2│" +
                 "└─────┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(4);
 
         hero(PLAYER1, 5, 5).down();
@@ -1195,7 +1194,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(2);
 
         // when
@@ -1324,7 +1323,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║...2│" +
                 "└────┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(2);
 
         assertE("------" +
@@ -1376,7 +1375,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║....│" +
                 "║....│" +
                 "└────┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(1);
 
         assertF("-=#-=#-=#-=#-=#-=#\n" +
@@ -1524,7 +1523,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "└───┘" +
                 "     " +
                 "     ");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(1);
 
         assertF("-=#-=#-=#-=#-=#\n" +
@@ -1588,7 +1587,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║OOO│" +
                 "└───┘" +
                 "     ");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(1);
 
         assertF("-=#-=#-=#-=#-=#\n" +
@@ -1668,7 +1667,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║.4.....│  ║.....3.│" +
                 "└╗.....┌┘  └╗.....┌┘" +
                 " └─────┘    └─────┘ ");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
 
         Map<String, Integer> playerHeroes = new HashMap<>();
         Map<String, Integer> heroes = new HashMap<>();
@@ -1778,9 +1777,9 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
 
     @Test
     public void shouldCalculateRoundTicks_andResetWhenFinish() {
-        int old = data.roundTicks();
+        int old = settings.roundTicks();
         int count = 50;
-        data.roundTicks(count);
+        settings.roundTicks(count);
         try {
             // given
             givenFl("╔═════┐" +
@@ -1790,7 +1789,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                     "║.....│" +
                     "║3...2│" +
                     "└─────┘");
-            data.waitingOthers(false);
+            settings.waitingOthers(false);
             createPlayers(4);
 
             assertE("-------" +
@@ -1902,7 +1901,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
             verifyNoMoreInteractions(PLAYER3);
             verifyNoMoreInteractions(PLAYER4);
         } finally {
-            data.roundTicks(old);
+            settings.roundTicks(old);
         }
     }
 
@@ -1916,7 +1915,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║.....│" +
                 "║3...2│" +
                 "└─────┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(2);
 
         spreader.tickAll();
@@ -1972,7 +1971,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║...│" +
                 "║...│" +
                 "└───┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(2);
 
         // when then
@@ -2065,7 +2064,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                 "║...│" +
                 "║...│" +
                 "└───┘");
-        data.waitingOthers(false);
+        settings.waitingOthers(false);
         createPlayers(2);
 
         // when then
@@ -2152,16 +2151,16 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
 
     @Test
     public void shouldCanResetOnThisBoardIfTimeout_player2OnBaseOfPlayer1() {
-        int old = data.roundTicks();
+        int old = settings.roundTicks();
         try {
             // given
-            data.roundTicks(10);
+            settings.roundTicks(10);
             givenFl("╔═══┐" +
                     "║2.1│" +
                     "║...│" +
                     "║...│" +
                     "└───┘");
-            data.waitingOthers(false);
+            settings.waitingOthers(false);
             createPlayers(2);
 
             // when then
@@ -2214,22 +2213,22 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                     "-=#-=#-=#-=#-=#\n", PLAYER2);
 
         } finally {
-            data.roundTicks(old);
+            settings.roundTicks(old);
         }
     }
 
     @Test
     public void shouldCanResetOnThisBoardIfTimeout_player1OnBaseOfPlayer2() {
-        int old = data.roundTicks();
+        int old = settings.roundTicks();
         try {
             // given
-            data.roundTicks(10);
+            settings.roundTicks(10);
             givenFl("╔═══┐" +
                     "║1.2│" +
                     "║...│" +
                     "║...│" +
                     "└───┘");
-            data.waitingOthers(false);
+            settings.waitingOthers(false);
             createPlayers(2);
 
             // when then
@@ -2282,7 +2281,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                     "-=#-=#-=#-=#-=#\n", PLAYER2);
 
         } finally {
-            data.roundTicks(old);
+            settings.roundTicks(old);
         }
     }
 
@@ -2305,10 +2304,10 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
 
     @Test
     public void shouldAttackFromDifferentPositions_withAdvantage() {
-        boolean old = data.defenderHasAdvantage();
+        boolean old = settings.defenderHasAdvantage();
         try {
             // given
-            data.defenderHasAdvantage(true)
+            settings.defenderHasAdvantage(true)
                     .defenderAdvantage(2.0);
 
             collectForcesNearAndAttack();
@@ -2325,7 +2324,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                     "-=#004003015-=#\n" +
                     "-=#-=#-=#-=#-=#\n", PLAYER1);
         } finally {
-            data.defenderHasAdvantage(old);
+            settings.defenderHasAdvantage(old);
         }
     }
 
@@ -2457,10 +2456,10 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
 
     @Test
     public void shouldContinueWorkingWhenWaitForAndOnePlayerGoOutDuringTheGame() {
-        boolean old = data.waitingOthers();
+        boolean old = settings.waitingOthers();
         try {
             // given
-            data.waitingOthers(true);
+            settings.waitingOthers(true);
 
             givenFl(MULTIPLE_LEVEL);
             createPlayers(4);
@@ -2517,7 +2516,7 @@ public class SingleMultiplayer2Test extends AbstractMultiplayerTest {
                     "-=#-=#-=#-=#-=#00A-=#\n" +
                     "-=#-=#-=#-=#-=#-=#-=#\n", PLAYER1);
         } finally {
-            data.waitingOthers(old);
+            settings.waitingOthers(old);
         }
     }
 }

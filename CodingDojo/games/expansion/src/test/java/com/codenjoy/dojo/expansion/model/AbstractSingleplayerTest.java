@@ -25,11 +25,10 @@ package com.codenjoy.dojo.expansion.model;
 
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.GameRunner;
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.multiplayer.Single;
 import com.codenjoy.dojo.services.printer.PrinterFactoryImpl;
-import com.codenjoy.dojo.services.settings.Settings;
 import com.codenjoy.dojo.utils.TestUtils;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -38,9 +37,9 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -56,7 +55,7 @@ public class AbstractSingleplayerTest {
     private PrinterFactoryImpl factory;
     private Dice dice;
     private EventListener listener;
-    private Settings settings;
+    protected GameSettings settings;
     private Expansion current;
 
     @Before
@@ -64,21 +63,24 @@ public class AbstractSingleplayerTest {
         dice = mock(Dice.class);
         listener = mock(EventListener.class);
 
-        gameRunner = new GameRunner();
-        gameRunner.setDice(dice);
+        gameRunner = new GameRunner(){
+            @Override
+            public Dice getDice() {
+                return dice;
+            }
+        };
 
         games = new LinkedList<>();
         factory = new PrinterFactoryImpl();
 
-        settings = gameRunner.getSettings();
-        SettingsWrapper.data
+        settings = gameRunner.getSettings()
                 .waitingOthers(false)
                 .singleTrainingMode(false)
                 .shufflePlayers(false);
     }
 
     protected void givenFl(String... boards) {
-        SettingsWrapper.multi(boards);
+        settings.multi(boards);
     }
 
     protected JSONObject board(int player) {
@@ -107,9 +109,9 @@ public class AbstractSingleplayerTest {
 
     protected void createNewGame() {
         if (current == null || current.freeBases() == 0) {
-            current = (Expansion) gameRunner.createGame(0);
+            current = (Expansion) gameRunner.createGame(0, settings);
         }
-        Player player = (Player) gameRunner.createPlayer(listener, "");
+        Player player = (Player) gameRunner.createPlayer(listener, "", settings);
         Single game = new Single(player, gameRunner.getPrinterFactory());
         game.on(current);
         game.newGame();

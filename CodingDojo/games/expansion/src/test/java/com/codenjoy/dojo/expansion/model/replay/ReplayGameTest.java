@@ -23,14 +23,13 @@ package com.codenjoy.dojo.expansion.model.replay;
  */
 
 
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.nullobj.NullJoystick;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -38,14 +37,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-22.
- */
 public class ReplayGameTest {
+
+    private GameSettings settings;
 
     @Test
     public void testIsReplayGame() {
@@ -61,9 +58,9 @@ public class ReplayGameTest {
         final String[] actualReplayName = {null};
         final String[] actualPlayerName = {null};
 
-        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}")){
+        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}"), settings){
             @Override
-            protected LoggerReader getLoggerReader(String replayName, String playerId) {
+            protected LoggerReader getLoggerReader(String replayName, String playerId, GameSettings settings) {
                 actualReplayName[0] = replayName;
                 actualPlayerName[0] = playerId;
                 return null;
@@ -75,16 +72,15 @@ public class ReplayGameTest {
 
     @Test
     public void shouldNullJoystick() {
-        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}"));
+        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}"), settings);
         assertEquals(NullJoystick.INSTANCE, game.getJoystick());
     }
 
     @Test
     public void shouldIsGameOverFalse() {
-        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}"));
+        ReplayGame game = new ReplayGame(new JSONObject("{'startFromTick':0,'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}"), settings);
         assertEquals(false, game.isGameOver());
     }
-
 
     private JSONObject lobbyBoard;
     private Map<String, JSONObject> lobbyLastActions;
@@ -97,7 +93,7 @@ public class ReplayGameTest {
 
     @Before
     public void setup() {
-        SettingsWrapper.setup().delayReplay(true);
+        settings = new GameSettings().delayReplay(true);
 
         currentActions = new LinkedList<>();
         lastActions = new LinkedList<>();
@@ -105,11 +101,11 @@ public class ReplayGameTest {
         boards = new LinkedList<>();
 
         lobbyBoard = new JSONObject("{'lb':0}");
-        lobbyLastActions = new HashMap<String, JSONObject>(){{
+        lobbyLastActions = new HashMap(){{
                 put("user1", new JSONObject("{'loca':10}"));
                 put("user2", new JSONObject("{'loca':20}"));
         }};
-        allBasePosition = new HashMap<String, JSONObject>(){{
+        allBasePosition = new HashMap(){{
             put("user1", new JSONObject("{'abp':30}"));
             put("user2", new JSONObject("{'abp':40}"));
         }};
@@ -248,9 +244,9 @@ public class ReplayGameTest {
 
     @Test
     public void shouldNotTickWhenNoMoreTicks_whenDelayReplay() {
-        boolean old = data.delayReplay();
+        boolean old = settings.delayReplay();
         try {
-            data.delayReplay(false);
+            settings.delayReplay(false);
 
             // given
             ReplayGame game = createGame(3);
@@ -267,15 +263,15 @@ public class ReplayGameTest {
             game.tick();
             assertAtLobby(game);
         } finally {
-            data.delayReplay(old);
+            settings.delayReplay(old);
         }
     }
 
     @NotNull
     private ReplayGame createGame(int startFrom) {
-        return new ReplayGame(new JSONObject("{'startFromTick':" + startFrom + ",'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}")){
+        return new ReplayGame(new JSONObject("{'startFromTick':" + startFrom + ",'replayName':'game-E@1e16c0aa-1','playerId':'P@57bc27f5'}"), settings){
                 @Override
-                protected LoggerReader getLoggerReader(String replayName, String playerId) {
+                protected LoggerReader getLoggerReader(String replayName, String playerId, GameSettings settings) {
                     return new LoggerReader() {
                         private boolean isOutOf(int tick) {
                             return tick < 0 || tick >= boards.size();

@@ -27,7 +27,7 @@ import com.codenjoy.dojo.expansion.model.levels.*;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.services.Events;
 import com.codenjoy.dojo.expansion.services.GameRunner;
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.multiplayer.Single;
@@ -41,7 +41,6 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.*;
 
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyInt;
@@ -86,15 +85,16 @@ public abstract class AbstractMultiplayerTest {
     static final int PLAYER34 = 33;
     static final int PLAYER35 = 34;
     static final int PLAYER36 = 35;
+    protected GameSettings settings;
 
     @NotNull
     Events WIN() {
-        return Events.WIN(data.winScore());
+        return Events.WIN(settings.winScore());
     }
 
     @NotNull
     Events DRAW() {
-        return Events.WIN(data.drawScore());
+        return Events.WIN(settings.drawScore());
     }
 
 
@@ -111,11 +111,7 @@ public abstract class AbstractMultiplayerTest {
     public void setup() {
         dice = mock(Dice.class);
 
-        spreader = new SoftSpreader(new GameRunner(){{
-            setDice(dice);
-        }});
-
-        SettingsWrapper.setup()
+        settings = new GameSettings()
                 .leaveForceCount(1)
                 .regionsScores(0)
                 .roundTicks(10000)
@@ -123,6 +119,18 @@ public abstract class AbstractMultiplayerTest {
                 .defenderHasAdvantage(false)
                 .singleTrainingMode(isSingleTrainingOrMultiple())
                 .shufflePlayers(false);
+
+        spreader = new SoftSpreader(new GameRunner(){
+            @Override
+            public GameSettings getSettings() {
+                return settings;
+            }
+
+            @Override
+            public Dice getDice() {
+                return dice;
+            }
+        });
     }
 
     private void dice(int... ints) {
@@ -133,15 +141,15 @@ public abstract class AbstractMultiplayerTest {
     }
 
     protected void givenSize(int size) {
-        SettingsWrapper.data.boardSize(size);
+        settings.boardSize(size);
     }
 
     protected void givenFl(String... boards) {
-        SettingsWrapper.single(Arrays.asList(boards)
+        settings.single(Arrays.asList(boards)
                 .subList(0, boards.length - 1)
                 .toArray(new String[0]));
 
-        SettingsWrapper.multi(Arrays.asList(boards)
+        settings.multi(Arrays.asList(boards)
                 .subList(boards.length - 1, boards.length)
                 .toArray(new String[0]));
     }

@@ -29,7 +29,7 @@ import com.codenjoy.dojo.expansion.model.levels.LevelsTest;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
 import com.codenjoy.dojo.expansion.model.replay.GameLogger;
 import com.codenjoy.dojo.expansion.services.Events;
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.EventListener;
 import com.codenjoy.dojo.services.Point;
@@ -45,7 +45,6 @@ import org.mockito.stubbing.OngoingStubbing;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static junit.framework.Assert.*;
 import static org.mockito.Matchers.anyInt;
@@ -63,11 +62,12 @@ public class GameTest {
     private int size = -1;
     private int current;
     private List<Supplier<Level>> levels;
+    private GameSettings settings;
 
     @Before
     public void setup() {
         dice = mock(Dice.class);
-        SettingsWrapper.setup()
+        settings = new GameSettings()
                 .leaveForceCount(1)
                 .regionsScores(0)
                 .roundTicks(10000)
@@ -90,7 +90,7 @@ public class GameTest {
         levels = Levels.collectYours(size, boards);
         current = 0;
         listener = mock(EventListener.class);
-        player = new Player(listener, null);
+        player = new Player(listener, null, settings);
         frameworkShouldGoNextLevel();
     }
 
@@ -812,7 +812,7 @@ public class GameTest {
 
     private void frameworkShouldReloadLevel() {
         field = new Expansion(levels.get(current).get(), mock(Ticker.class),
-                dice, mock(GameLogger.class), false);
+                dice, mock(GameLogger.class), false, settings);
         field.newGame(player);
         hero = field.getPlayers().get(0).getHero();
 
@@ -971,7 +971,7 @@ public class GameTest {
     public void shouldCantMoveMoreThanExistingSoOneMustBeLeaved_changeOnSettings() {
         try {
             // given
-            data.leaveForceCount(0);
+            settings.leaveForceCount(0);
 
             givenFl("╔═══┐" +
                     "║...│" +
@@ -1002,7 +1002,7 @@ public class GameTest {
                     "-=#-=#00A-=#-=#\n" +
                     "-=#-=#-=#-=#-=#\n");
         } finally {
-            data.leaveForceCount(1);
+            settings.leaveForceCount(1);
         }
     }
 
@@ -2218,7 +2218,7 @@ public class GameTest {
     public void shouldOneMoreArmyToTheMaxCountWhenGetGold_changeOnSettings() {
         try {
             // given
-            data.goldScore(10);
+            settings.goldScore(10);
 
             givenFl("╔═══┐" +
                     "║...│" +
@@ -2307,7 +2307,7 @@ public class GameTest {
 
             assertEquals(20, hero.getForcesPerTick());
         } finally {
-            data.goldScore(1);
+            settings.goldScore(1);
         }
     }
 
@@ -3663,7 +3663,7 @@ public class GameTest {
     public void shouldIncreaseScoreDependsOnRegionsOccupations() {
         try {
             // given
-            data.regionsScores(100);
+            settings.regionsScores(100);
 
             givenFl("       " +
                     " ╔═══┐ " +
@@ -3795,7 +3795,7 @@ public class GameTest {
 
             assertEquals(10 + 100*9/9, hero.getForcesPerTick());
         } finally {
-            data.regionsScores(0);
+            settings.regionsScores(0);
         }
     }
 
@@ -3803,7 +3803,7 @@ public class GameTest {
     public void shouldIncreaseScoreDependsOnRegionsOccupations_holesAndBreaksIsNotARegion() {
         try {
             // given
-            data.regionsScores(100);
+            settings.regionsScores(100);
 
             givenFl("       " +
                     " ╔════┐" +
@@ -3816,7 +3816,7 @@ public class GameTest {
             // then
             assertEquals(10 + 100 * 1 / 9, hero.getForcesPerTick());
         } finally {
-            data.regionsScores(0);
+            settings.regionsScores(0);
         }
     }
 }

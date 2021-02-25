@@ -25,6 +25,7 @@ package com.codenjoy.dojo.expansion.model.replay;
 
 import com.codenjoy.dojo.expansion.model.Elements;
 import com.codenjoy.dojo.expansion.model.levels.Levels;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.PointImpl;
 import org.json.JSONObject;
@@ -35,23 +36,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-21.
- */
 public class LoggerReaderImpl implements LoggerReader {
 
     private List<TickData> boards = new LinkedList<>();
     private String playerId;
+    private final GameSettings settings;
     private String hero;
     private Point basePosition;
     private Elements baseColor;
     private Map<String, String> playerNames = new LinkedHashMap<>();
     private Map<String, JSONObject> bases = new LinkedHashMap<>();
 
-    public LoggerReaderImpl(String replayName, String playerId) {
+    public LoggerReaderImpl(String replayName, String playerId, GameSettings settings) {
         this.playerId = playerId;
+        this.settings = settings;
 
         File file = GameLoggerImpl.getReplayFile(replayName);
         List<String> strings = Levels.loadLines(
@@ -164,8 +163,8 @@ public class LoggerReaderImpl implements LoggerReader {
     public JSONObject getBoard(int tick) {
         boolean inLobby = isOutOf(tick);
         JSONObject result = getTickData(tick).getBoard();
-        result.put("rounds", (inLobby) ? -1 : data.roundTicks());
-        result.put("round", (inLobby) ? -1 : data.roundTicks() - tick);
+        result.put("rounds", (inLobby) ? -1 : settings.roundTicks());
+        result.put("round", (inLobby) ? -1 : settings.roundTicks() - tick);
         result.put("myBase", new JSONObject(getBasePosition(tick)));
         result.put("myColor", baseColor.getIndex());
         result.put("tick", (inLobby) ? 0 : tick);

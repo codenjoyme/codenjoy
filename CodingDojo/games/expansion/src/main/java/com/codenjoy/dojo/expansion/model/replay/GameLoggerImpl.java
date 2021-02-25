@@ -26,6 +26,7 @@ package com.codenjoy.dojo.expansion.model.replay;
 import com.codenjoy.dojo.expansion.model.Expansion;
 import com.codenjoy.dojo.expansion.model.Player;
 import com.codenjoy.dojo.expansion.model.levels.items.Hero;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.jetbrains.annotations.NotNull;
@@ -35,11 +36,6 @@ import org.slf4j.Logger;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
-
-/**
- * Created by Oleksandr_Baglai on 2017-09-14.
- */
 public class GameLoggerImpl implements GameLogger {
 
     private static Logger logger = DLoggerFactory.getLogger(GameLoggerImpl.class);
@@ -47,10 +43,12 @@ public class GameLoggerImpl implements GameLogger {
     private BufferedWriter writer;
     private Expansion expansion;
     private String replayName;
+    private GameSettings settings;
 
     @Override
     public void start(Expansion expansion) {
-        if (!data.gameLoggingEnable()) return;
+        settings = expansion.settings();
+        if (!settings.gameLoggingEnable()) return;
 
         this.expansion = expansion;
 
@@ -118,7 +116,7 @@ public class GameLoggerImpl implements GameLogger {
     }
 
     private boolean doNotRecord() {
-        return !data.gameLoggingEnable() || expansion == null;
+        return !settings.gameLoggingEnable() || expansion == null;
     }
 
     @Override

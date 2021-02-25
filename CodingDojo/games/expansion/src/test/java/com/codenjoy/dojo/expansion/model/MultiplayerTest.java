@@ -29,7 +29,6 @@ import com.codenjoy.dojo.expansion.services.Events;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static junit.framework.Assert.assertEquals;
 
 public class MultiplayerTest extends AbstractMultiplayerTest {
@@ -1182,9 +1181,9 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
 
     @Test
     public void testGetBoardAsString_structure_roundTicksDisabled() {
-        int old = data.roundTicks();
+        int old = settings.roundTicks();
         try {
-            data.roundUnlimited();
+            settings.roundUnlimited();
 
             // given
             testGetBoardAsString();
@@ -1196,7 +1195,7 @@ public class MultiplayerTest extends AbstractMultiplayerTest {
             json = JsonUtils.toStringSorted(getLayer(PLAYER2)).replace('"', '\'');
             assertEquals(json, true, json.contains("'round':-1,'rounds':-1,"));
         } finally {
-            data.roundTicks(old);
+            settings.roundTicks(old);
         }
     }
 

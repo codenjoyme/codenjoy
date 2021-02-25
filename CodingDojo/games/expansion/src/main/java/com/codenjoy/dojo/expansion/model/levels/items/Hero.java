@@ -26,11 +26,13 @@ package com.codenjoy.dojo.expansion.model.levels.items;
 import com.codenjoy.dojo.expansion.client.Command;
 import com.codenjoy.dojo.expansion.model.*;
 import com.codenjoy.dojo.expansion.services.CodeSaver;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.DLoggerFactory;
 import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.Tickable;
 import com.codenjoy.dojo.services.joystick.MessageJoystick;
 import com.codenjoy.dojo.services.multiplayer.PlayerHero;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
@@ -40,8 +42,6 @@ import org.slf4j.Logger;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 
 public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickable {
 
@@ -80,12 +80,17 @@ public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickabl
         resetOn(field);
     }
 
+    @Override
+    public GameSettings settings() {
+        return (GameSettings) super.settings();
+    }
+
     private void resetOn(IField field) {
         resetFlags();
         position = occupyFreeBase().getCell().copy();
         field.reset();
 
-        field.startMoveForces(this, position.getX(), position.getY(), data.initialForce())
+        field.startMoveForces(this, position.getX(), position.getY(), settings().initialForce())
                 .move();
     }
 
@@ -261,10 +266,10 @@ public class Hero extends PlayerHero<IField> implements MessageJoystick, Tickabl
     }
 
     public int getForcesPerTick() {
-        int result = data.increasePerTick() +
-                data.goldScore() * gold.size();
-        if (data.regionsScores() != 0) {
-            result += data.regionsScores() * field.regionsCount(this) / field.totalRegions();
+        int result = settings().increasePerTick() +
+                settings().goldScore() * gold.size();
+        if (settings().regionsScores() != 0) {
+            result += settings().regionsScores() * field.regionsCount(this) / field.totalRegions();
         }
         return result;
     }

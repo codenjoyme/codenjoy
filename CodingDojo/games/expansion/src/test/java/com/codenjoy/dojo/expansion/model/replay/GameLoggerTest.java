@@ -31,13 +31,9 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-22.
- */
 public class GameLoggerTest extends AbstractMultiplayerTest {
 
     private File gameDataFolder;
@@ -59,7 +55,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
     @Test
     public void shouldSaveStateToFile() {
         // given
-        data.gameLoggingEnable(true);
+        settings.gameLoggingEnable(true);
 
         String multiple =
                 "╔═══┐" +
@@ -163,7 +159,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
     @Test
     public void shouldCreateNewFileWhenGoToExitOnMultiple() {
         // given
-        data.gameLoggingEnable(true);
+        settings.gameLoggingEnable(true);
 
         String single =
                 "╔═══┐" +
@@ -266,7 +262,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
     @Test
     public void shouldCreateNewFileWhenSomebodyLoose() {
         // given
-        data.gameLoggingEnable(true);
+        settings.gameLoggingEnable(true);
 
         String single =
                 "╔═══┐" +
@@ -415,7 +411,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
     @Test
     public void shouldPrintHeroIsNotAliveWhen3PlayersAndOneIsDie() {
         // given
-        data.gameLoggingEnable(true);
+        settings.gameLoggingEnable(true);
 
         String single =
                 "╔═══┐" +
@@ -588,7 +584,7 @@ public class GameLoggerTest extends AbstractMultiplayerTest {
     @Test
     public void shouldCreateNewFileWhenGoToAnotherGameAfterRoundOver() {
         // given
-        data.gameLoggingEnable(true);
+        settings.gameLoggingEnable(true);
 
         String single =
                 "╔══┐" +

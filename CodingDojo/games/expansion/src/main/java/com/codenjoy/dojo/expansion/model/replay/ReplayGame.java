@@ -23,6 +23,7 @@ package com.codenjoy.dojo.expansion.model.replay;
  */
 
 
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.hero.HeroData;
 import com.codenjoy.dojo.services.multiplayer.GameField;
@@ -34,11 +35,6 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
-
-/**
- * Created by Oleksandr_Baglai on 2017-09-21.
- */
 public class ReplayGame implements Game {
 
     private static final String START_FROM_TICK = "startFromTick";
@@ -59,22 +55,22 @@ public class ReplayGame implements Game {
         }
     }
 
-    public ReplayGame(JSONObject save) {
+    public ReplayGame(JSONObject save, GameSettings settings) {
         String replayName = save.getString(REPLAY_NAME);
         startFrom = save.optInt(START_FROM_TICK, 0);
         String playerId = save.getString(PLAYER_ID);
 
-        this.loggerReader = getLoggerReader(replayName, playerId);
+        this.loggerReader = getLoggerReader(replayName, playerId, settings);
         start = false;
         tick = -1;
-        if (!data.delayReplay()) {
+        if (!settings.delayReplay()) {
             clearScore();
         }
     }
 
     @NotNull
-    protected LoggerReader getLoggerReader(String replayName, String playerId) {
-        return new LoggerReaderImpl(replayName, playerId);
+    protected LoggerReader getLoggerReader(String replayName, String playerId, GameSettings settings) {
+        return new LoggerReaderImpl(replayName, playerId, settings);
     }
 
     @Override

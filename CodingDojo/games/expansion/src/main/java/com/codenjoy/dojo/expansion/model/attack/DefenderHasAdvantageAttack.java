@@ -24,15 +24,17 @@ package com.codenjoy.dojo.expansion.model.attack;
 
 
 import com.codenjoy.dojo.expansion.model.levels.items.HeroForces;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 
 import java.util.List;
 
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
-
-/**
- * Created by Oleksandr_Baglai on 2017-09-12.
- */
 public class DefenderHasAdvantageAttack implements Attack {
+
+    private GameSettings settings;
+
+    public DefenderHasAdvantageAttack(GameSettings settings) {
+        this.settings = settings;
+    }
 
     @Override
     public boolean calculate(List<HeroForces> forces) {
@@ -87,7 +89,7 @@ public class DefenderHasAdvantageAttack implements Attack {
     }
 
     private double advantage() {
-        return data.defenderAdvantage();
+        return settings.defenderAdvantage();
     }
 
     private void setWinner(List<HeroForces> forces, HeroForces winner, HeroForces defender) {

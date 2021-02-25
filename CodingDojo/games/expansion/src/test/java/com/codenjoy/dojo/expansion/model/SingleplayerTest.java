@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.Game;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.expansion.model.AbstractMultiplayerTest.*;
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static org.junit.Assert.assertEquals;
 
@@ -334,9 +333,9 @@ public class SingleplayerTest extends AbstractSingleplayerTest {
 
     @Test
     public void shouldResetAllUsersAfterRoundTicksIsUp() {
-        int old = data.roundTicks();
+        int old = settings.roundTicks();
         try {
-            data.roundTicks(10);
+            settings.roundTicks(10);
             shouldCreateSixPlayersInTwoDifferentRooms();
 
             destroy(PLAYER1);
@@ -424,7 +423,7 @@ public class SingleplayerTest extends AbstractSingleplayerTest {
             assertL(level2, AbstractMultiplayerTest.PLAYER6);
             assertE(forces2, AbstractMultiplayerTest.PLAYER6);
         } finally {
-            data.roundTicks(old);
+            settings.roundTicks(old);
         }
     }
 

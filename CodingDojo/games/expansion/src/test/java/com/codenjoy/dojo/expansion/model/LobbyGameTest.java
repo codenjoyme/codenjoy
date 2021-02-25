@@ -23,26 +23,22 @@ package com.codenjoy.dojo.expansion.model;
  */
 
 
-import com.codenjoy.dojo.expansion.services.SettingsWrapper;
+import com.codenjoy.dojo.expansion.services.GameSettings;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
 import static com.codenjoy.dojo.expansion.model.AbstractMultiplayerTest.*;
-import static com.codenjoy.dojo.expansion.services.SettingsWrapper.data;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Sanja on 15.02.14.
- */
 @Ignore("TODO: пофиксить создание игры")
 public class LobbyGameTest extends AbstractSingleplayerTest {
-
+    
     @Override
     public void setup() {
         super.setup();
 
-        SettingsWrapper.data
+        settings
 //                .lobbyEnable(true)
 //                .lobbyCapacity(4)
                 .defenderHasAdvantage(false)
@@ -440,10 +436,10 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
 
     @Test
     public void shouldResetAllUsersAfterRoundTicksIsUp() {
-        int old = data.roundTicks();
+        int old = settings.roundTicks();
         try {
             int ROUND_TICKS = 10;
-            data.roundTicks(ROUND_TICKS);
+            settings.roundTicks(ROUND_TICKS);
             shouldCreateEightPlayersInTwoDifferentRooms();
 
             destroy(PLAYER1);
@@ -572,7 +568,7 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
             assertE(forces1, PLAYER6);
 
         } finally {
-            data.roundTicks(old);
+            settings.roundTicks(old);
         }
     }
 
@@ -620,10 +616,10 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
 
     @Test
     public void shouldAllNFirstPlayersWillBeOnLobby_whenSetLobbyCapacity() {
-//        int old = data.lobbyCapacity();
+//        int old = settings.lobbyCapacity();
         try {
             final int CAPACITY = 8;
-//            data.lobbyCapacity(CAPACITY);
+//            settings.lobbyCapacity(CAPACITY);
             givenLevels();
 
             // when
@@ -732,16 +728,16 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
             assertL(LOBBY_LEVEL, PLAYER9);
             assertE(LOBBY_FORCES, PLAYER9);
         } finally {
-//            data.lobbyCapacity(old);
+//            settings.lobbyCapacity(old);
         }
     }
 
     @Test
     public void shouldFillAllLevelsThenStartAgain() {
-//        int old = data.lobbyCapacity();
+//        int old = settings.lobbyCapacity();
         try {
             final int CAPACITY = 36;
-//            data.lobbyCapacity(CAPACITY);
+//            settings.lobbyCapacity(CAPACITY);
             givenLevels();
 
             // when
@@ -904,7 +900,7 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
             assertL(level9, PLAYER36);
             assertE(forces9, PLAYER36);
         } finally {
-//            data.lobbyCapacity(old);
+//            settings.lobbyCapacity(old);
         }
     }
 
@@ -1437,13 +1433,13 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
         final int LOBBY_CAPACITY = 8;
         final int ROUNDS = 10;
 
-        boolean old1 = data.waitingOthers();
-//        int old2 = data.lobbyCapacity();
-        int old3 = data.roundTicks();
+        boolean old1 = settings.waitingOthers();
+//        int old2 = settings.lobbyCapacity();
+        int old3 = settings.roundTicks();
         try {
-            data.waitingOthers(true);
-//            data.lobbyCapacity(LOBBY_CAPACITY);
-            data.roundTicks(ROUNDS);
+            settings.waitingOthers(true);
+//            settings.lobbyCapacity(LOBBY_CAPACITY);
+            settings.roundTicks(ROUNDS);
 
             givenLevels();
 
@@ -1500,8 +1496,8 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
 
             // when
             // change some settings so lobby recreates
-//            data.lobbyCapacity(LOBBY_CAPACITY - 1); // just simulation
-//            data.lobbyCapacity(LOBBY_CAPACITY);
+//            settings.lobbyCapacity(LOBBY_CAPACITY - 1); // just simulation
+//            settings.lobbyCapacity(LOBBY_CAPACITY);
 
             // when then
             // create new player so count players = 8 = current lobby capacity
@@ -1557,9 +1553,9 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
             assertL(level2, PLAYER9);
             assertE(forces2, PLAYER9);
         } finally {
-            data.waitingOthers(old1);
-//            data.lobbyCapacity(old2);
-            data.roundTicks(old3);
+            settings.waitingOthers(old1);
+//            settings.lobbyCapacity(old2);
+            settings.roundTicks(old3);
         }
     }
 
@@ -1568,15 +1564,15 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
         final int LOBBY_CAPACITY = 8;
         final int ROUNDS = 10;
 
-        boolean old1 = data.waitingOthers();
-//        int old2 = data.lobbyCapacity();
-        int old3 = data.roundTicks();
-//        boolean old4 = data.lobbyEnable();
+        boolean old1 = settings.waitingOthers();
+//        int old2 = settings.lobbyCapacity();
+        int old3 = settings.roundTicks();
+//        boolean old4 = settings.lobbyEnable();
         try {
-//            data.lobbyEnable(true);
-            data.waitingOthers(true);
-//            data.lobbyCapacity(LOBBY_CAPACITY);
-            data.roundTicks(ROUNDS);
+//            settings.lobbyEnable(true);
+            settings.waitingOthers(true);
+//            settings.lobbyCapacity(LOBBY_CAPACITY);
+            settings.roundTicks(ROUNDS);
 
             givenLevels();
 
@@ -1633,7 +1629,7 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
 
             // when
             // disable lobby with players inside
-//            data.lobbyEnable(false);
+//            settings.lobbyEnable(false);
 
             tickAll();
 
@@ -1717,18 +1713,18 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
             assertE(forces1, PLAYER5);
 
         } finally {
-            data.waitingOthers(old1);
-//            data.lobbyCapacity(old2);
-            data.roundTicks(old3);
-//            data.lobbyEnable(old4);
+            settings.waitingOthers(old1);
+//            settings.lobbyCapacity(old2);
+            settings.roundTicks(old3);
+//            settings.lobbyEnable(old4);
         }
     }
 
     @Test
     public void shouldRunCommandLobbyFromSettings_enoughPlayers() {
-//        int old = data.lobbyCapacity();
+//        int old = settings.lobbyCapacity();
         try {
-//            data.lobbyCapacity(7);
+//            settings.lobbyCapacity(7);
 
             givenLevels();
 
@@ -1754,12 +1750,12 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
             assertE(LOBBY_FORCES, PLAYER5);
 
             // when
-            data.command("lobby.letThemGo()");
+            settings.command("lobby.letThemGo()");
             tickAll();
 
             // then
             // clear settings
-            assertEquals("", data.command());
+            assertEquals("", settings.command());
 
             // all players go to boards
             String level =
@@ -1788,15 +1784,15 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
             assertL(LOBBY_LEVEL, PLAYER5);
             assertE(LOBBY_FORCES, PLAYER5);
         } finally {
-//            data.lobbyCapacity(old);
+//            settings.lobbyCapacity(old);
         }
     }
 
     @Test
     public void shouldRunCommandLobbyFromSettings_notEnoughPlayers() {
-//        int old = data.lobbyCapacity();
+//        int old = settings.lobbyCapacity();
         try {
-//            data.lobbyCapacity(7);
+//            settings.lobbyCapacity(7);
 
             givenLevels();
 
@@ -1816,12 +1812,12 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
             assertE(LOBBY_FORCES, PLAYER3);
 
             // when
-            data.command("lobby.letThemGo()");
+            settings.command("lobby.letThemGo()");
             tickAll();
 
             // then
             // clear settings
-            assertEquals("", data.command());
+            assertEquals("", settings.command());
 
             // all players go to boards
             assertL(LOBBY_LEVEL, PLAYER1);
@@ -1831,7 +1827,7 @@ public class LobbyGameTest extends AbstractSingleplayerTest {
             assertL(LOBBY_LEVEL, PLAYER3);
             assertE(LOBBY_FORCES, PLAYER3);
         } finally {
-//            data.lobbyCapacity(old);
+//            settings.lobbyCapacity(old);
         }
     }
 

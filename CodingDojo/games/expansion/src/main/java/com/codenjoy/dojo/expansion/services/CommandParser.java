@@ -26,9 +26,6 @@ package com.codenjoy.dojo.expansion.services;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * Created by Oleksandr_Baglai on 2017-09-14.
- */
 public class CommandParser { // TODO test this monster
     private GameRunner runner;
 
@@ -36,10 +33,10 @@ public class CommandParser { // TODO test this monster
         this.runner = runner;
     }
 
-    public void parse(Settings settings) {
+    public void parse(GameSettings settings) {
         if (settings.whatChanged().toString().equals("[Command]")) {
 
-            String command = SettingsWrapper.data.command();
+            String command = settings.command();
             if (command.equals("lobby.letThemGo()")) {
 //                if (runner.lobby instanceof WaitForAllPlayerLobby) {
 //                    ((WaitForAllPlayerLobby) runner.lobby).letThemGo(false);
@@ -48,7 +45,7 @@ public class CommandParser { // TODO test this monster
 //            else if (command.equals("any command that you want to run from admin")) {
 
 //            }
-            SettingsWrapper.data.command(StringUtils.EMPTY);
+            settings.command(StringUtils.EMPTY);
             settings.changesReacted();
         }
     }
