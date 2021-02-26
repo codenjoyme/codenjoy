@@ -25,6 +25,9 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.mocks.FirstGameType;
+import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.web.rest.pojo.PParameters;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -70,6 +73,9 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Autowired
     private SaveService saveService;
 
+    @Autowired
+    private RoomService roomService;
+
     @Before
     public void setUp() {
         super.setUp();
@@ -78,14 +84,12 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         playerService.removeAll();
         saveService.removeAllSaves();
+        roomService.removeAll();
 
         resetAllSettings();
     }
 
     private void resetAllSettings() {
-        games.getGameNames().stream()
-                .forEach(name -> games.getGame(name).getSettings().reset());
-
         if (saved == null) {
             saved = semifinal.clone();
         } else {
@@ -96,6 +100,11 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldStartStopGame_oneRoom() {
         // given
+        assertEquals(false, service.getEnabled("name"));
+        assertEquals("false", get("/rest/admin/room/name/pause"));
+
+        roomService.create("name", new FirstGameType());
+
         // TODO я думаю что сервис напрямую дергать не надо, т.к. его никто так вызывать не будет, только через rest
         assertEquals(true, service.getEnabled("name"));
         assertEquals("true", get("/rest/admin/room/name/pause"));
@@ -118,6 +127,12 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldStartStopGame_severalRooms() {
         // given
+        assertEquals(false, service.getEnabled("name1"));
+        assertEquals("false", get("/rest/admin/room/name2/pause"));
+
+        roomService.create("name1", new FirstGameType());
+        roomService.create("name2", new SecondGameType());
+
         assertEquals(true, service.getEnabled("name1"));
         assertEquals("true", get("/rest/admin/room/name2/pause"));
 
@@ -413,7 +428,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetSetSettings() {
         PParameters settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
                         "[Parameter 2:Boolean = def[true] val[true]], " +
                         "[Semifinal enabled:Boolean = def[false] val[false]], " +
                         "[Semifinal timeout:Integer = multiline[false] def[900] val[900]], " +
@@ -426,7 +441,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
         assertEquals("{\"parameters\":[" +
                         "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
                         "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
                         "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
                         "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
@@ -476,7 +491,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldSetSettings_onlyKeyValue() {
         PParameters settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
                         "[Parameter 2:Boolean = def[true] val[true]], " +
                         "[Semifinal enabled:Boolean = def[false] val[false]], " +
                         "[Semifinal timeout:Integer = multiline[false] def[900] val[900]], " +
@@ -489,7 +504,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
         assertEquals("{\"parameters\":[" +
                         "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
                         "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
                         "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
                         "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
@@ -539,7 +554,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldSetSettings_onlyKeyValue_semifinal() {
         PParameters settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
                         "[Parameter 2:Boolean = def[true] val[true]], " +
                         "[Semifinal enabled:Boolean = def[false] val[false]], " +
                         "[Semifinal timeout:Integer = multiline[false] def[900] val[900]], " +
@@ -552,7 +567,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         JSONObject settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
         assertEquals("{\"parameters\":[" +
                         "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
                         "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
                         "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\"],\"type\":\"editbox\",\"value\":\"900\"}," +
                         "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
@@ -575,7 +590,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
 
         // then
         settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
                         "[Parameter 2:Boolean = def[true] val[true]], " +
                         "[Semifinal enabled:Boolean = def[false] val[true]], " +
                         "[Semifinal timeout:Integer = multiline[false] def[900] val[500]], " +
@@ -589,7 +604,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
         assertEquals("{\"parameters\":[" +
                         "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
                         "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
                         "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\",\"500\"],\"type\":\"editbox\",\"value\":\"500\"}," +
                         "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\",\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
@@ -613,7 +628,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         // then
         // TODO semifinal settings один для всех, хотя хотелось бы чтобы был для каждой румы отдельный
         settings1 = service.getSettings("name1", "first");
-        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[12]], " +
+        assertEquals("[[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
                         "[Parameter 2:Boolean = def[true] val[true]], " +
                         "[Semifinal enabled:Boolean = def[false] val[false]], " +
                         "[Semifinal timeout:Integer = multiline[false] def[900] val[300]], " +
@@ -626,7 +641,7 @@ public class RestAdminControllerTest extends AbstractRestControllerTest {
         settings2 = new JSONObject(get("/rest/admin/room/name2/settings/second"));
         assertEquals("{\"parameters\":[" +
                         "{\"def\":\"43\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Parameter 3\",\"options\":[\"43\"],\"type\":\"editbox\",\"value\":\"43\"}," +
-                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
+                        "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Parameter 4\",\"options\":[\"false\",\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +
                         "{\"def\":\"false\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal enabled\",\"options\":[\"false\"],\"type\":\"checkbox\",\"value\":\"false\"}," +
                         "{\"def\":\"900\",\"valueType\":\"Integer\",\"multiline\":false,\"name\":\"Semifinal timeout\",\"options\":[\"900\",\"300\"],\"type\":\"editbox\",\"value\":\"300\"}," +
                         "{\"def\":\"true\",\"valueType\":\"Boolean\",\"multiline\":false,\"name\":\"Semifinal percentage\",\"options\":[\"true\"],\"type\":\"checkbox\",\"value\":\"true\"}," +

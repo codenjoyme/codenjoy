@@ -83,4 +83,7 @@ public class RoomService {
         return rooms.get(room).getType().getSettings();
     }
 
+    public void removeAll() {
+        rooms.clear();
+    }
 }
