@@ -55,6 +55,7 @@ public class RestAdminController {
     public static final String URI = "/rest/admin";
     public static final String ROOM = "/room/{roomName}";
 
+    private GameService gameService;
     private Validator validator;
     private PlayerService playerService;
     private ErrorTicketService ticket;
@@ -227,9 +228,10 @@ public class RestAdminController {
                                    @PathVariable("gameName") String gameName)
     {
         validator.checkRoomName(roomName, CANT_BE_NULL);
-        GameType type = validator.checkGameType(gameName);
+        validator.checkGameType(gameName);
 
-        // TODO настройки должны распостраняться только на эту комнату
+        GameType type = gameService.getGame(gameName, roomName);
+
         Settings settings = type.getSettings();
         List<Parameter> result = settings.getParameters();
         result.addAll(semifinalSettings.parameters());
@@ -246,9 +248,10 @@ public class RestAdminController {
         validator.checkNotNull("parameters", input);
         validator.checkNotNull("parameters", input.getParameters());
 
-        GameType type = validator.checkGameType(gameName);
+        validator.checkGameType(gameName);
 
-        // TODO настройки должны распостраняться только на эту комнату
+        GameType type = gameService.getGame(gameName, roomName);
+
         Settings settings = type.getSettings();
 
         List<Parameter> parameters = input.build();

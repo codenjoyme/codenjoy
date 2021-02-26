@@ -24,6 +24,7 @@ package com.codenjoy.dojo.web.rest;
 
 
 import com.codenjoy.dojo.client.Encoding;
+import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.dao.GameData;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -45,6 +46,7 @@ public class RestSettingsController {
     public static final String SETTINGS = "_settings_";
     public static final String GENERAL = "general";
 
+    private GameService gameService;
     private GameData gameData;
     private Validator validator;
 
@@ -53,18 +55,23 @@ public class RestSettingsController {
         validator.checkNotEmpty("key", key);
         validator.checkGameName(game, Validator.CANT_BE_NULL);
 
-        if (!GENERAL.equals(game)) {
-            GameType type = validator.checkGameType(game);
+        if (GENERAL.equals(game)) {
+            return gameData.get(game, key);
+        }
 
-            Settings settings = type.getSettings();
-            if (key.equals(SETTINGS)) {
-                PParameters parameters = new PParameters(settings.getParameters());
-                return new JSONObject(parameters).toString();
-            }
+        validator.checkGameType(game);
 
-            if (settings.hasParameter(key)) {
-                return settings.getParameter(key).getValue().toString();
-            }
+        // TODO тут наверняка надо брать с учетом roomName
+        GameType type = gameService.getGame(game);
+
+        Settings settings = type.getSettings();
+        if (key.equals(SETTINGS)) {
+            PParameters parameters = new PParameters(settings.getParameters());
+            return new JSONObject(parameters).toString();
+        }
+
+        if (settings.hasParameter(key)) {
+            return settings.getParameter(key).getValue().toString();
         }
 
         return gameData.get(game, key);
@@ -78,7 +85,10 @@ public class RestSettingsController {
         value = encode(value);
 
         if (!GENERAL.equals(game)) {
-            GameType type = validator.checkGameType(game);
+            validator.checkGameType(game);
+
+            // TODO 4456 тут наверняка надо брать с учетом roomName
+            GameType type = gameService.getGame(game);
 
             Settings settings = type.getSettings();
             if (settings.hasParameter(key)) {

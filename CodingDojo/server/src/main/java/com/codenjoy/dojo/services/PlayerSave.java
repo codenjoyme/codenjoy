@@ -44,7 +44,7 @@ public class PlayerSave {
         this.save = save;
     }
 
-    public PlayerSave(String id, String callbackUrl, String roomName, String gameName, Object score, String save) {
+    public PlayerSave(String id, String callbackUrl, String gameName, String roomName, Object score, String save) {
         this.id = id;
         this.gameName = gameName;
         this.roomName = roomName;

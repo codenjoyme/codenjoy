@@ -112,7 +112,7 @@ public class SaveServiceImpl implements SaveService {
     @Override
     public void load(String id, String roomName, String gameName, String save) {
         String ip = tryGetIpFromSave(id);
-        resetPlayer(id, new PlayerSave(id, ip, roomName, gameName, 0, save));
+        resetPlayer(id, new PlayerSave(id, ip, gameName, roomName, 0, save));
     }
 
     private String tryGetIpFromSave(String id) {

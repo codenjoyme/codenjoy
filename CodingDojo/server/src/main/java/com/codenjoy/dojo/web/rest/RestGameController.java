@@ -58,6 +58,7 @@ public class RestGameController {
             return null;
         }
 
+        // TODO 4456 тут наверняка надо брать с учетом roomName
         GameType game = gameService.getGame(name);
 
         PSprites sprites = new PSprites(spritesAlphabet(), spritesUrl(name),

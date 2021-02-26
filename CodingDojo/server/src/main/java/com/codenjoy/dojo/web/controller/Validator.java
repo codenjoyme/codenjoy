@@ -196,14 +196,12 @@ public class Validator {
     }
 
     // TODO возможно хорошая идея использовать его всегда вместо checkGameName везде по коду
-    public GameType checkGameType(String input) {
+    public void checkGameType(String input) {
         checkGameName(input, Validator.CANT_BE_NULL);
 
-        GameType type = gameService.getGame(input);
-        if (type == NullGameType.INSTANCE) {
+        if (!gameService.exists(input)) {
             throw new IllegalArgumentException("Game not found: " + input);
         }
-        return type;
     }
 
     public void checkMD5(String input) {

@@ -77,7 +77,7 @@ public class PlayerGameSaver implements GameSaver {
                         String roomName = rs.getString("room_name");
                         String gameName = rs.getString("game_name");
                         String save = rs.getString("save");
-                        return new PlayerSave(id, callbackUrl, roomName, gameName, score, save);
+                        return new PlayerSave(id, callbackUrl, gameName, roomName, score, save);
                     } else {
                         return PlayerSave.NULL;
                     }

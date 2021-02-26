@@ -203,7 +203,7 @@ public class RegistrationService {
     }
 
     public String register(String id, String code, String roomName, String gameName, String ip) {
-        Player player = playerService.register(id, ip, roomName, gameName);
+        Player player = playerService.register(id, gameName, roomName, ip);
         return getBoardUrl(code, player.getId(), gameName);
     }
 

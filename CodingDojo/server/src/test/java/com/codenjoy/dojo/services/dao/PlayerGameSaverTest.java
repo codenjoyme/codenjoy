@@ -95,6 +95,8 @@ public class PlayerGameSaverTest {
         GameService gameService = mock(GameService.class);
         GameType gameType = getGameType(scores);
         when(gameService.getGame(anyString())).thenReturn(gameType);
+        when(gameService.getGame(anyString(), anyString())).thenReturn(gameType);
+        when(gameService.exists(anyString())).thenReturn(true);
         return gameService;
     }
 

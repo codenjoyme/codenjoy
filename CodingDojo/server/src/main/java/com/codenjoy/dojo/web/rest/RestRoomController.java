@@ -27,7 +27,6 @@ import com.codenjoy.dojo.services.GameService;
 import com.codenjoy.dojo.services.Player;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PlayerId;
@@ -124,11 +123,11 @@ public class RestRoomController {
             return null;
         }
 
-        if (gameService.getGame(gameName) instanceof NullGameType) {
+        if (gameService.exists(gameName)) {
             return null;
         }
 
-        playerService.register(user.getId(), request.getRemoteAddr(), roomName, gameName);
+        playerService.register(user.getId(), gameName, roomName, request.getRemoteAddr());
 
         return new PlayerId(user);
     }

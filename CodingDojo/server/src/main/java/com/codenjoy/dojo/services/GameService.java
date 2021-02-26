@@ -38,7 +38,11 @@ public interface GameService {
 
     Map<String, List<String>> getSprites();
 
-    GameType getGame(String name);
+    GameType getGame(String gameName);
+
+    GameType getGame(String gameName, String roomName);
 
     String getDefaultGame();
+
+    boolean exists(String gameName);
 }

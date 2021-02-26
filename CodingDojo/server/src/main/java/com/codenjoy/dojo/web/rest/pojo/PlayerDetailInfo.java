@@ -76,6 +76,6 @@ public class PlayerDetailInfo {
         if (StringUtils.isEmpty(roomName)) { // TODO test me
             roomName = gameType;
         }
-        return new PlayerSave(id, callbackUrl, roomName, gameType, Integer.valueOf(score), save);
+        return new PlayerSave(id, callbackUrl, gameType, roomName, Integer.valueOf(score), save);
     }
 }

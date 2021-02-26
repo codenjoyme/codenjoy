@@ -153,6 +153,8 @@ public class AbstractPlayerGamesTest {
         when(gameType.getPlayerScores(anyInt(), any())).thenReturn(scores);
         when(gameType.name()).thenReturn(gameName);
         when(gameService.getGame(anyString())).thenReturn(gameType);
+        when(gameService.getGame(anyString(), anyString())).thenReturn(gameType);
+        when(gameService.exists(anyString())).thenReturn(true);
 
         Player player = new Player(name, "url", gameType, scores, mock(Information.class));
         player.setEventListener(mock(InformationCollector.class));

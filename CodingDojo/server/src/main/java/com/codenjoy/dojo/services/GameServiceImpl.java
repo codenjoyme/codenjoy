@@ -167,16 +167,31 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameType getGame(String name) {
-        if (cache.containsKey(name)) {
-            return cache.get(name);
+    public GameType getGame(String gameName) {
+        if (!cache.containsKey(gameName)) {
+            return NullGameType.INSTANCE;
         }
 
-        return NullGameType.INSTANCE;
+        return cache.get(gameName);
+    }
+
+    @Override
+    public GameType getGame(String gameName, String roomName) {
+        // TODO 4456 тут продолжить с получением GameType с привязкой Settings к конкретной комнате
+        if (!cache.containsKey(gameName)) {
+            return NullGameType.INSTANCE;
+        }
+
+        return cache.get(gameName);
     }
 
     @Override
     public String getDefaultGame() {
         return getGameNames().iterator().next();
+    }
+
+    @Override
+    public boolean exists(String gameName) {
+        return cache.containsKey(gameName);
     }
 }

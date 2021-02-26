@@ -808,6 +808,8 @@ public class ValidatorTest {
 
     @Test
     public void validateCheckGameType() {
+        when(gameService.exists(anyString())).thenReturn(false);
+
         // empty string
         shouldError("Game name is invalid: 'Null'",
                 () -> validator.checkGameType("Null"));
@@ -824,11 +826,12 @@ public class ValidatorTest {
         shouldError("Game name is invalid: ''",
                 () -> validator.checkGameType(""));
 
-        shouldOk(() -> validator.checkGameType("not-empty"));
+        shouldError("Game not found: not-empty",
+                () -> validator.checkGameType("not-empty"));
 
         // other cases
-        when(gameService.getGame("valid-game")).thenReturn(mock(GameType.class));
-        when(gameService.getGame("bad-game")).thenReturn(NullGameType.INSTANCE);
+        when(gameService.exists("valid-game")).thenReturn(true);
+        when(gameService.exists("bad-game")).thenReturn(false);
 
         shouldOk(() -> validator.checkGameType("valid-game"));
 

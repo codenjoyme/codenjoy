@@ -103,7 +103,7 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player register(String id, String ip, String roomName, String gameName) {
+    public Player register(String id, String gameName, String roomName, String ip) {
         lock.writeLock().lock();
         try {
             log.debug("Registered user {} in game {}", id, gameName);
@@ -112,7 +112,7 @@ public class PlayerServiceImpl implements PlayerService {
                 return NullPlayer.INSTANCE;
             }
 
-            registerAIIfNeeded(id, roomName, gameName);
+            registerAIIfNeeded(id, gameName, roomName);
 
             // TODO test me
             PlayerSave save = saver.loadGame(id);
@@ -122,9 +122,9 @@ public class PlayerServiceImpl implements PlayerService {
             {
                 save.setCallbackUrl(ip);
             } else {
-                save = new PlayerSave(id, ip, roomName, gameName, 0, null);
+                save = new PlayerSave(id, ip, gameName, roomName, 0, null);
             }
-            Player player = register(new PlayerSave(id, ip, roomName, gameName, save.getScore(), save.getSave()));
+            Player player = register(new PlayerSave(id, ip, gameName, roomName, save.getScore(), save.getSave()));
 
             return player;
         } finally {
@@ -137,24 +137,24 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             PlayerGame playerGame = playerGames.get(id);
-            registerAI(id, playerGame.getRoomName(), playerGame.getGameType()); // TODO ROOM test me
+            registerAI(id, playerGame.getGameType().name(), playerGame.getRoomName()); // TODO ROOM test me
         } finally {
             lock.writeLock().unlock();
         }
     }
 
-    private void registerAIIfNeeded(String forPlayer, String roomName, String gameName) {
+    private void registerAIIfNeeded(String forPlayer, String gameName, String roomName) {
         if (isAI(forPlayer)) return;
         if (!isAiNeeded) return;
 
-        GameType gameType = gameService.getGame(gameName);
+        GameType gameType = gameService.getGame(gameName, roomName);
 
         // если в эту игру ai еще не играет
         String aiId = gameName + WebSocketRunner.BOT_ID_SUFFIX;
         PlayerGame playerGame = playerGames.get(aiId);
 
         if (playerGame instanceof NullPlayerGame) {
-            registerAI(aiId, roomName, gameType);
+            registerAI(aiId, gameName, roomName);
         }
     }
 
@@ -162,22 +162,26 @@ public class PlayerServiceImpl implements PlayerService {
         return Hash.getCode(id, id);
     }
 
-    private void registerAI(String id, String roomName, GameType gameType) {
+    private void registerAI(String id, String gameName, String roomName) {
         String code = isAI(id) ?
                 gerCodeForAI(id) :
                 registration.getCodeById(id);
 
-        setupPlayerAI(() -> getPlayer(new PlayerSave(id,
-                            "127.0.0.1", roomName, gameType.name(),
-                            0, null), gameType),
-                id, code, gameType);
+        setupPlayerAI(getPlayerSupplier(id, gameName, roomName),
+                id, code, gameName, roomName);
     }
 
-    private void setupPlayerAI(Supplier<Player> getPlayer, String id, String code, GameType gameType) {
-        Closeable ai = createAI(id, code, gameType);
+    private Supplier<Player> getPlayerSupplier(String id, String gameName, String roomName) {
+        return () -> getPlayer(new PlayerSave(id,
+                            "127.0.0.1", gameName, roomName,
+                0, null), gameName, roomName);
+    }
+
+    private void setupPlayerAI(Supplier<Player> getPlayer, String id, String code, String gameName, String roomName) {
+        Closeable ai = createAI(id, code, gameName, roomName);
         if (ai != null) {
             Player player = getPlayer.get();
-            player.setReadableName(StringUtils.capitalize(gameType.name()) + " SuperAI");
+            player.setReadableName(StringUtils.capitalize(gameName) + " SuperAI");
             player.setAi(ai);
         }
     }
@@ -195,16 +199,17 @@ public class PlayerServiceImpl implements PlayerService {
     private Player justRegister(PlayerSave save) {
         String id = save.getId();
         String gameName = save.getGameName();
+        String roomName = save.getRoomName();
 
-        GameType gameType = gameService.getGame(gameName);
-        if (gameType instanceof NullGameType) {
+        if (!gameService.exists(gameName)) {
             return NullPlayer.INSTANCE;
         }
-        Player player = getPlayer(save, gameType);
+
+        Player player = getPlayer(save, gameName, roomName);
 
         if (isAI(id)) {
             setupPlayerAI(() -> player,
-                    id, gerCodeForAI(id), gameType);
+                    id, gerCodeForAI(id), gameName, roomName);
         }
 
         return player;
@@ -214,7 +219,8 @@ public class PlayerServiceImpl implements PlayerService {
         return id.endsWith(WebSocketRunner.BOT_ID_SUFFIX);
     }
 
-    private Closeable createAI(String id, String code, GameType<Settings> gameType) {
+    private Closeable createAI(String id, String code, String gameName, String roomName) {
+        GameType<Settings> gameType = gameService.getGame(gameName, roomName);
         Class<? extends Solver> ai = gameType.getAI();
         if (ai == null) {
             return null;
@@ -250,12 +256,11 @@ public class PlayerServiceImpl implements PlayerService {
         return WebSocketRunner.runAI(id, code, solver, board);
     }
 
-    private Player getPlayer(PlayerSave save, GameType gameType) {
+    private Player getPlayer(PlayerSave save, String gameName, String roomName) {
         String name = save.getId();
-        String roomName = save.getRoomName();
-        String gameName = save.getGameName();
         String callbackUrl = save.getCallbackUrl();
 
+        GameType gameType = gameService.getGame(gameName, roomName);
         Player player = getPlayer(name);
         PlayerGame oldPlayerGame = playerGames.get(name);
 

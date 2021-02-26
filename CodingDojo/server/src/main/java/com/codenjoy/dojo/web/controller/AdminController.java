@@ -26,7 +26,6 @@ package com.codenjoy.dojo.web.controller;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.security.GameAuthorities;
@@ -311,6 +310,7 @@ public class AdminController {
 
         List<Exception> errors = new LinkedList<>();
         if (settings.getParameters() != null) {
+            // TODO тут наверняка надо брать с учетом roomName
             Settings gameSettings = gameService.getGame(settings.getGameName()).getSettings();
             List<Parameter> parameters = gameSettings.getParameters();
             for (int index = 0; index < parameters.size(); index++) {
@@ -346,7 +346,7 @@ public class AdminController {
 
                 created++;
                 String code = getCode(id);
-                playerService.register(id, "127.0.0.1", roomName, settings.getGameName());
+                playerService.register(id, settings.getGameName(), roomName, "127.0.0.1");
             }
         }
 
@@ -400,6 +400,7 @@ public class AdminController {
             return viewDelegationService.adminView(gameName);
         }
 
+        // TODO тут наверняка надо брать с учетом roomName
         GameType game = gameService.getGame(gameName);
 
         if (game instanceof NullGameType) {

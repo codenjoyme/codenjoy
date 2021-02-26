@@ -162,6 +162,8 @@ public class PlayerServiceImplTest {
         when(printer.print(any(), any())).thenReturn("1234");
 
         when(gameService.getGame(anyString())).thenReturn(gameType);
+        when(gameService.getGame(anyString(), anyString())).thenReturn(gameType);
+        when(gameService.exists(anyString())).thenReturn(true);
 
         when(gameType.getBoardSize(any())).thenReturn(v(15));
         when(gameType.getPlayerScores(anyInt(), any())).thenAnswer(inv -> {
@@ -364,9 +366,9 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldRequestControl_fromAllPlayers_skipNonActiveRooms() {
         // given
-        Player vasia = createPlayer(VASYA, "room1", "game1");
-        Player petia = createPlayer(PETYA, "room2", "game1");
-        Player katya = createPlayer(KATYA, "room3", "game2");
+        Player vasia = createPlayer(VASYA, "game1", "room1");
+        Player petia = createPlayer(PETYA, "game1", "room2");
+        Player katya = createPlayer(KATYA, "game2", "room3");
 
         setActive("room1", false);
 
@@ -527,12 +529,12 @@ public class PlayerServiceImplTest {
     private Player createPlayer(String id) {
         String roomName = id + " room";
         String gameName = id + " game";
-        return createPlayer(id, roomName, gameName);
+        return createPlayer(id, gameName, roomName);
     }
 
-    private Player createPlayer(String id, String roomName, String gameName) {
-        Player player = playerService.register(id, getCallbackUrl(id),
-                roomName, gameName);
+    private Player createPlayer(String id, String gameName, String roomName) {
+        Player player = playerService.register(id, gameName, roomName,
+                getCallbackUrl(id));
         players.add(player);
 
         if (player != NullPlayer.INSTANCE) {
@@ -577,7 +579,7 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldCreatePlayerFromSavedPlayerGame_whenPlayerNotRegisterYet() {
         // given
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "room", "game", 100, null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", "room", 100, null);
 
         // when
         playerService.register(save);
@@ -599,7 +601,7 @@ public class PlayerServiceImplTest {
         Player registeredPlayer = createPlayer(VASYA);
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_room", "other_game", 200, null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "other_game", "other_room", 200, null);
 
         // when
         playerService.register(save);
@@ -622,7 +624,7 @@ public class PlayerServiceImplTest {
         assertEquals(VASYA_URL, registeredPlayer.getCallbackUrl());
         assertEquals(0, registeredPlayer.getScore());
 
-        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "room", "game", 200, null);
+        PlayerSave save = new PlayerSave(VASYA, getCallbackUrl(VASYA), "game", "room", 200, null);
 
         // when
         playerService.register(save);
@@ -746,10 +748,10 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldRemoveAll_forRoom() {
         // given
-        createPlayer(VASYA, "room1", "game1");
-        createPlayer(PETYA, "room1", "game1");
-        createPlayer(KATYA, "room2", "game1");
-        createPlayer(OLIA,  "room3", "game3");
+        createPlayer(VASYA, "game1", "room1");
+        createPlayer(PETYA, "game1", "room1");
+        createPlayer(KATYA, "game1", "room2");
+        createPlayer(OLIA, "game3", "room3");
 
         // when
         playerService.removeAll("room1");
@@ -1245,10 +1247,10 @@ public class PlayerServiceImplTest {
     @Test
     public void shouldCleanAllScores_forRoom() {
         // given
-        createPlayer(VASYA, "room1", "game1");
-        createPlayer(PETYA, "room1", "game1");
-        createPlayer(KATYA, "room2", "game1");
-        createPlayer(OLIA,  "room3", "game3");
+        createPlayer(VASYA, "game1", "room1");
+        createPlayer(PETYA, "game1", "room1");
+        createPlayer(KATYA, "game1", "room2");
+        createPlayer(OLIA, "game3", "room3");
 
         // when
         playerService.cleanAllScores("room1");
@@ -1541,7 +1543,7 @@ public class PlayerServiceImplTest {
         // given
         when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
         when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
-        PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "room", "game", 100, null);
+        PlayerSave save = new PlayerSave(VASYA_AI, getCallbackUrl(VASYA_AI), "game", "room", 100, null);
 
         // when
         playerService.register(save);
