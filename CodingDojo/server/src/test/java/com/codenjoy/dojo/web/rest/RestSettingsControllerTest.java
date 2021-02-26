@@ -67,9 +67,6 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     }
 
     @Autowired
-    private RestSettingsController service;
-
-    @Autowired
     private GameService gameService;
 
     @Before
@@ -92,12 +89,12 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldGetSet_caseGameDataAsStorage() {
         // when
-        assertEquals("{}", service.set("first", NO_ROOM_NAME, "key", "value"));
+        assertEquals("{}", post(200, "/rest/settings/first/" + NO_ROOM_NAME + "/key", "value"));
         assertEquals("{}", post(200, "/rest/settings/second/" + NO_ROOM_NAME + "/key2", "value2"));
 
         // then
         assertEquals("value", get("/rest/settings/first/" + NO_ROOM_NAME + "/key"));
-        assertEquals("value2", service.get("second", NO_ROOM_NAME, "key2"));
+        assertEquals("value2", get("/rest/settings/second/" + NO_ROOM_NAME + "/key2"));
 
         // then do not touch any settings
         assertEquals("{'parameters':[" +
@@ -108,18 +105,18 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
         assertEquals("{'parameters':[" +
                         "{'def':'option1','multiline':false,'name':'three','options':['option1','option2','option3'],'type':'selectbox','value':'option1','valueType':'String'}," +
                         "{'def':'some-data','multiline':false,'name':'four','options':['some-data'],'type':'editbox','value':'some-data','valueType':'String'}]}",
-                fix(service.get("second", NO_ROOM_NAME, SETTINGS)));
+                fix(get("/rest/settings/second/" + NO_ROOM_NAME + "/" + SETTINGS)));
     }
 
     @Test
     public void shouldGetSet_caseGameDataAsStorage_caseGeneral() {
         // when
-        assertEquals("{}", service.set(GENERAL, NO_ROOM_NAME, "key", "value"));
+        assertEquals("{}", post(200, "/rest/settings/" + GENERAL + "/" + NO_ROOM_NAME + "/key", "value"));
         assertEquals("{}", post(200, "/rest/settings/" + GENERAL + "/" + NO_ROOM_NAME + "/key2", "value2"));
 
         // then
         assertEquals("value", get("/rest/settings/" + GENERAL + "/" + NO_ROOM_NAME + "/key"));
-        assertEquals("value2", service.get(GENERAL, NO_ROOM_NAME, "key2"));
+        assertEquals("value2", get("/rest/settings/" + GENERAL + "/" + NO_ROOM_NAME + "/key2"));
 
         // then do not touch any settings
         assertEquals("{'parameters':[" +
@@ -130,20 +127,20 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
         assertEquals("{'parameters':[" +
                         "{'def':'option1','multiline':false,'name':'three','options':['option1','option2','option3'],'type':'selectbox','value':'option1','valueType':'String'}," +
                         "{'def':'some-data','multiline':false,'name':'four','options':['some-data'],'type':'editbox','value':'some-data','valueType':'String'}]}",
-                fix(service.get("second", NO_ROOM_NAME, SETTINGS)));
+                fix(get("/rest/settings/second/" + NO_ROOM_NAME + "/" + SETTINGS)));
     }
 
     @Test
     public void shouldGetSet_caseSettingsAsStorage() {
         // when
-        assertEquals("{}", service.set("first", NO_ROOM_NAME, "two", "135"));
+        assertEquals("{}", post(200, "/rest/settings/first/" + NO_ROOM_NAME + "/two", "135"));
         assertEquals("{}", post(200, "/rest/settings/second/" + NO_ROOM_NAME + "/three", "option2"));
 
         // then
         assertEquals("true", get("/rest/settings/first/" + NO_ROOM_NAME + "/one"));
         assertEquals("135", get("/rest/settings/first/" + NO_ROOM_NAME + "/two"));
-        assertEquals("option2", service.get("second", NO_ROOM_NAME, "three"));
-        assertEquals("some-data", service.get("second", NO_ROOM_NAME, "four"));
+        assertEquals("option2", get("/rest/settings/second/" + NO_ROOM_NAME + "/three"));
+        assertEquals("some-data", get("/rest/settings/second/" + NO_ROOM_NAME + "/four"));
 
         // then
         assertEquals("{'parameters':[" +
@@ -154,18 +151,18 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
         assertEquals("{'parameters':[" +
                         "{'def':'option1','multiline':false,'name':'three','options':['option1','option2','option3'],'type':'selectbox','value':'option2','valueType':'String'}," +
                         "{'def':'some-data','multiline':false,'name':'four','options':['some-data'],'type':'editbox','value':'some-data','valueType':'String'}]}",
-                fix(service.get("second", NO_ROOM_NAME, SETTINGS)));
+                fix(get("/rest/settings/second/" + NO_ROOM_NAME  + "/" + SETTINGS)));
     }
 
     @Test
     public void shouldSet_removeQuotesOnJson() {
         // when
-        assertEquals("{}", service.set("first", NO_ROOM_NAME, "one", quotes("true")));
-        assertEquals("{}", service.set("first", NO_ROOM_NAME, "two", quotes("135")));
+        assertEquals("{}", post(200, "/rest/settings/first/" + NO_ROOM_NAME + "/one", quotes("true")));
+        assertEquals("{}", post(200, "/rest/settings/first/" + NO_ROOM_NAME + "/two", quotes("135")));
 
         // then
-        assertEquals("true", service.get("first", NO_ROOM_NAME, "one"));
-        assertEquals("135", service.get("first", NO_ROOM_NAME, "two"));
+        assertEquals("true", get("/rest/settings/first/" + NO_ROOM_NAME + "/one"));
+        assertEquals("135", get("/rest/settings/first/" + NO_ROOM_NAME + "/two"));
     }
 
     @Test
@@ -182,7 +179,7 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     }
 
     private void assertReplaceN(String expected, String input) {
-        assertEquals("{}", service.set("second", NO_ROOM_NAME, "four", quotes(input)));
-        assertEquals(expected, service.get("second",  NO_ROOM_NAME, "four"));
+        assertEquals("{}", post(200, "/rest/settings/second/" + NO_ROOM_NAME + "/four", quotes(input)));
+        assertEquals(expected, get("/rest/settings/second/" + NO_ROOM_NAME + "/four"));
     }
 }
