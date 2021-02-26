@@ -123,7 +123,7 @@ public class RestRoomController {
             return null;
         }
 
-        if (gameService.exists(gameName)) {
+        if (!gameService.exists(gameName)) {
             return null;
         }
 
