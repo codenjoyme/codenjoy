@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.classloader.GameLoader;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.printer.CharElements;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.utils.ReflectUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
@@ -50,6 +51,8 @@ public class GameServiceImpl implements GameService {
     public static final String ROOMS_SEPARATOR = "-";
 
     private Map<String, GameType> cache = new TreeMap<>();
+
+    protected RoomService roomService;
 
     @Value("${plugins.enable}")
     private boolean pluginsEnable;
@@ -177,12 +180,13 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameType getGame(String gameName, String roomName) {
-        // TODO 4456 тут продолжить с получением GameType с привязкой Settings к конкретной комнате
         if (!cache.containsKey(gameName)) {
             return NullGameType.INSTANCE;
         }
 
-        return cache.get(gameName);
+        GameType gameType = cache.get(gameName);
+
+        return roomService.create(roomName, gameType);
     }
 
     @Override

@@ -63,14 +63,16 @@ public class RoomService {
         rooms.get(room).setActive(value);
     }
 
-    public void create(String room, GameType gameType) {
+    public GameType create(String room, GameType gameType) {
         if (rooms.containsKey(room)) {
-            return;
+            return rooms.get(room).getType();
         }
 
         RoomGameType decorator = new RoomGameType(gameType);
         RoomState state = new RoomState(room, decorator, true);
         rooms.put(room, state);
+
+        return decorator;
     }
 
     public Settings settings(String room) {

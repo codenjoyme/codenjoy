@@ -3,8 +3,11 @@ package com.codenjoy.dojo.services.mocks;
 import com.codenjoy.dojo.services.settings.SettingsImpl;
 import com.codenjoy.dojo.services.settings.SettingsReader;
 
+import java.util.List;
+
 import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
 import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER2;
+import static java.util.stream.Collectors.toList;
 
 public class FirstGameSettings extends SettingsImpl implements SettingsReader<FirstGameSettings> {
 
@@ -33,6 +36,6 @@ public class FirstGameSettings extends SettingsImpl implements SettingsReader<Fi
 
     @Override
     public String toString() {
-        return "First-" + super.toString() + "";
+        return "First" + super.toStringShort();
     }
 }

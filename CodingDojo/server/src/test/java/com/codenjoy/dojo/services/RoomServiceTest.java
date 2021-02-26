@@ -63,15 +63,36 @@ public class RoomServiceTest {
     }
 
     @Test
-    public void shouldCreateAgain_whenCreated() {
+    public void shouldReturnNewGameType_whenCreated() {
+        // when
+        GameType game = service.create("room", game1);
+
+        // then
+        assertEquals("RoomGameType{type=GameType[first], " +
+                        "settings=First[Parameter 1=15, Parameter 2=true]}",
+                game.toString());
+
+        assertEquals("GameType[first]",
+                game1.toString());
+    }
+
+    @Test
+    public void shouldDoNotCreateNew_whenCreateAgain() {
         // given
         service.create("room", game1);
 
         // when
-        service.create("room", game1);
+        GameType game = service.create("room", game1);
 
         // then
         assertEquals(true, service.isActive("room"));
+
+        assertEquals("RoomGameType{type=GameType[first], " +
+                        "settings=First[Parameter 1=15, Parameter 2=true]}",
+                game.toString());
+
+        assertEquals("GameType[first]",
+                game1.toString());
     }
 
     @Test
@@ -109,9 +130,7 @@ public class RoomServiceTest {
         // when then
         assertEquals("RoomState(name=room, " +
                         "type=RoomGameType{type=GameType[first], " +
-                        "settings=First-SettingsImpl(map={" +
-                            "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
-                            "Parameter 2=[Parameter 2:Boolean = def[true] val[true]]})}, " +
+                        "settings=First[Parameter 1=15, Parameter 2=true]}, " +
                         "active=true)",
                 service.state("room").toString());
     }
@@ -128,9 +147,7 @@ public class RoomServiceTest {
         service.create("room", game1);
 
         // when then
-        assertEquals("First-SettingsImpl(map={" +
-                        "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
-                        "Parameter 2=[Parameter 2:Boolean = def[true] val[true]]})",
+        assertEquals("First[Parameter 1=15, Parameter 2=true]",
                 service.settings("room").toString());
     }
 
@@ -160,9 +177,7 @@ public class RoomServiceTest {
 
         // then
         // проверили что поменялось в другом
-        assertEquals("First-SettingsImpl(map={" +
-                        "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[23]], " +
-                        "Parameter 2=[Parameter 2:Boolean = def[true] val[true]]})",
+        assertEquals("First[Parameter 1=23, Parameter 2=true]",
                 settings2.toString());
         // при этом объекты все так же равны
         assertEquals(settings1.toString(), settings2.toString());
@@ -191,14 +206,10 @@ public class RoomServiceTest {
 
         // then
         // проверили что поменялось только в нем
-        assertEquals("First-SettingsImpl(map={" +
-                        "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[23]], " +
-                        "Parameter 2=[Parameter 2:Boolean = def[true] val[true]]})",
+        assertEquals("First[Parameter 1=23, Parameter 2=true]",
                 settings1.toString());
 
-        assertEquals("First-SettingsImpl(map={" +
-                        "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
-                        "Parameter 2=[Parameter 2:Boolean = def[true] val[true]]})",
+        assertEquals("First[Parameter 1=15, Parameter 2=true]",
                 settings2.toString());
     }
 
@@ -223,14 +234,10 @@ public class RoomServiceTest {
 
         // then
         // проверили что поменялось только в нем
-        assertEquals("First-SettingsImpl(map={" +
-                        "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[23]], " +
-                        "Parameter 2=[Parameter 2:Boolean = def[true] val[true]]})",
+        assertEquals("First[Parameter 1=23, Parameter 2=true]",
                 settings1.toString());
 
-        assertEquals("Second-SettingsImpl(map={" +
-                        "Parameter 3=[Parameter 3:Integer = multiline[false] def[43] val[43]], " +
-                        "Parameter 4=[Parameter 4:Boolean = def[false] val[true]]})",
+        assertEquals("Second[Parameter 3=43, Parameter 4=true]",
                 settings2.toString());
     }
 }

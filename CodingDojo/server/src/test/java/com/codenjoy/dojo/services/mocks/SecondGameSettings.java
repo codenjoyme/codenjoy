@@ -33,6 +33,6 @@ public class SecondGameSettings extends SettingsImpl implements SettingsReader<F
 
     @Override
     public String toString() {
-        return "Second-" + super.toString() + "";
+        return "Second" + super.toStringShort();
     }
 }
