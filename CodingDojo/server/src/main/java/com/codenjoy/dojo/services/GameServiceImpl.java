@@ -30,6 +30,7 @@ import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.utils.ReflectUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -52,6 +53,7 @@ public class GameServiceImpl implements GameService {
 
     private Map<String, GameType> cache = new TreeMap<>();
 
+    @Autowired
     protected RoomService roomService;
 
     @Value("${plugins.enable}")
