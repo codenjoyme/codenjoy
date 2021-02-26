@@ -237,12 +237,12 @@ public class LocalGameRunner {
         };
     }
 
-    public static int[] generateXorShift(String soul, long max, long count) {
-        long[] current = new long[] { soul.hashCode() };
-        System.out.println("Soul = " + soul);
+    public static int[] generateXorShift(String seed, long max, long count) {
+        long[] current = new long[] { seed.hashCode() };
+        out.accept("Seed = " + seed + "\n");
         int[] result = IntStream.generate(() -> {
-            long a0 = current[0] % soul.length();
-            int a1 = soul.charAt((int)Math.abs(a0));
+            long a0 = current[0] % seed.length();
+            int a1 = seed.charAt((int)Math.abs(a0));
             long a2 = (current[0] << (a1 % 5)) ^ current[0];
             long a3 = (current[0] >>> (a1 % 6)) ^ (current[0] << (a1 % 2));
             current[0] = a2 ^ a3;

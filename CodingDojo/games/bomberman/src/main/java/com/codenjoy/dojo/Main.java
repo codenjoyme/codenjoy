@@ -28,31 +28,40 @@ import com.codenjoy.dojo.client.local.LocalGameRunner;
 import com.codenjoy.dojo.client.local.ws.LocalWSGameServer;
 import com.codenjoy.dojo.services.Dice;
 import com.codenjoy.dojo.services.RandomDice;
+import com.codenjoy.dojo.services.round.RoundSettings;
+import com.codenjoy.dojo.services.settings.SettingsReader;
 import com.codenjoy.dojo.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 
+import static com.codenjoy.dojo.bomberman.services.GameSettings.Keys.MULTIPLE;
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
+
 public class Main {
 
     public static void main(String[] args) {
+        LocalGameRunner.out.accept("Please run this stuff with VM options:\n" +
+                "\t\t-Dsettings={'ROUNDS_ENABLED':false, ...}\n" +
+                "\t\t-Drandom=SEED_STRING\n");
+
         String game = "bomberman";
         String settingsString = System.getProperty("settings", "{}");
-        String randomSoul = System.getProperty("random", null);
+        String randomSeed = System.getProperty("random", null);
 
-        Dice dice = getDice(randomSoul);
+        Dice dice = getDice(randomSeed);
 
         JSONObject settings = new JSONObject(settingsString);
 
         GameSettings gameSettings = new GameSettings()
                 .update(settings);
 
-        if (!settings.has("isMultiple") && !settings.has("roundSettings")) {
+        if (!contains(settings, ROUNDS_ENABLED)
+                && !contains(settings, MULTIPLE))
+        {
             String json = "{\n" +
-                    "  'isMultiple':true,\n" +
-                    "  'roundSettings':{\n" +
-                    "    'roundsEnabled':false,\n" +
-                    "  },\n" +
-                    "}";
+                    "  'MULTIPLE':true,\n" +
+                    "  'ROUNDS_ENABLED':false\n" +
+                    "}\n";
             LocalGameRunner.out.accept("Simple mode! Hardcoded: \n" + json);
             gameSettings.update(new JSONObject(json));
         }
@@ -75,13 +84,17 @@ public class Main {
         LocalWSGameServer.startGame(game, gameType);
     }
 
-    private static Dice getDice(String randomSoul) {
-        if (StringUtils.isEmpty(randomSoul)) {
+    private static boolean contains(JSONObject settings, SettingsReader.Key key) {
+        return settings.has(SettingsReader.Key.keyToName(RoundSettings.Keys.values(), key.key()));
+    }
+
+    private static Dice getDice(String randomSeed) {
+        if (StringUtils.isEmpty(randomSeed)) {
             return new RandomDice();
         } else {
             LocalGameRunner.printDice = false;
             LocalGameRunner.printConversions = false;
-            return LocalGameRunner.getDice(LocalGameRunner.generateXorShift(randomSoul, 100, 10000));
+            return LocalGameRunner.getDice(LocalGameRunner.generateXorShift(randomSeed, 100, 10000));
         }
     }
 
