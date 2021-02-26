@@ -177,10 +177,12 @@ public class RoomServiceTest {
         // получаем сеттинги из одной комнаты
         Settings settings1 = service.settings("room1");
         Settings settings2 = service.settings("room2");
+        Settings settings3 = service.settings("room1"); // первая комната
 
         // then
         // они пока что идентичны по наполнению
         assertEquals(settings1.toString(), settings2.toString());
+        assertEquals(settings1.toString(), settings3.toString());
 
         // when
         // меняем настройку в одном сеттинг объекте
