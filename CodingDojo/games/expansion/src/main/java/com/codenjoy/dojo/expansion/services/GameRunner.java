@@ -153,7 +153,7 @@ public class GameRunner extends AbstractGameType<GameSettings>  {
     }
 
     private void processAdminCommands() {
-        // TODO единственное место где не передается settings из codenjoy и вообще оно надо тут?
+        // TODO попробовать решить это другим способом
         new CommandParser(this).parse(getSettings());
     }
 

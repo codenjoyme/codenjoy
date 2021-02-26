@@ -287,9 +287,10 @@ public class AdminController {
             }
         }
 
+        String gameName = settings.getGameName();
+
         if (settings.getProgress() != null) {
-            playerService.loadSaveForAll(settings.getGameName(),
-                    settings.getProgress());
+            playerService.loadSaveForAll(gameName, settings.getProgress());
         }
 
         if (settings.getGames() != null) {
@@ -310,8 +311,8 @@ public class AdminController {
 
         List<Exception> errors = new LinkedList<>();
         if (settings.getParameters() != null) {
-            // TODO тут наверняка надо брать с учетом roomName
-            Settings gameSettings = gameService.getGame(settings.getGameName()).getSettings();
+            // TODO 4456 тут наверняка надо брать с учетом roomName
+            Settings gameSettings = gameService.getGame(gameName, gameName).getSettings();
             List<Parameter> parameters = gameSettings.getParameters();
             for (int index = 0; index < parameters.size(); index++) {
                 try {
@@ -346,12 +347,12 @@ public class AdminController {
 
                 created++;
                 String code = getCode(id);
-                playerService.register(id, settings.getGameName(), roomName, "127.0.0.1");
+                playerService.register(id, gameName, roomName, "127.0.0.1");
             }
         }
 
-        request.setAttribute(GAME_NAME_KEY, settings.getGameName());
-        return getAdmin(settings.getGameName());
+        request.setAttribute(GAME_NAME_KEY, gameName);
+        return getAdmin(gameName);
     }
 
     private String getCode(String id) {
@@ -400,8 +401,8 @@ public class AdminController {
             return viewDelegationService.adminView(gameName);
         }
 
-        // TODO тут наверняка надо брать с учетом roomName
-        GameType game = gameService.getGame(gameName);
+        // TODO 4456 тут наверняка надо брать с учетом roomName
+        GameType game = gameService.getGame(gameName, gameName);
 
         if (game instanceof NullGameType) {
             return getAdmin(gameName);

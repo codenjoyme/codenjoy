@@ -29,6 +29,7 @@ import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Room;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.room.RoomService;
+import com.codenjoy.dojo.services.settings.Settings;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
@@ -152,12 +153,13 @@ public class AbstractPlayerGamesTest {
         gameTypes.add(gameType);
         PlayerScores scores = mock(PlayerScores.class);
         when(gameType.getPlayerScores(anyInt(), any())).thenReturn(scores);
+        when(gameType.getSettings()).thenReturn(mock(Settings.class));
         when(gameType.name()).thenReturn(gameName);
         when(gameService.getGame(anyString())).thenReturn(gameType);
         when(gameService.getGame(anyString(), anyString())).thenReturn(gameType);
         when(gameService.exists(anyString())).thenReturn(true);
 
-        Player player = new Player(name, "url", gameType, scores, mock(Information.class));
+        Player player = new Player(name, "url", new RoomGameType(gameType), scores, mock(Information.class));
         player.setEventListener(mock(InformationCollector.class));
         Closeable ai = mock(Closeable.class);
         ais.put(player, ai);

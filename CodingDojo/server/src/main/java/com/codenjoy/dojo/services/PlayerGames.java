@@ -242,11 +242,17 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return playerGame -> roomService.isActive(playerGame.getRoomName());
     }
 
+    /**
+     * @return Возвращает уникальные (недублирующиеся) GameType в которые сейчас играют.
+     */
     public List<GameType> getGameTypes() {
         List<GameType> result = new LinkedList<>();
 
         for (PlayerGame playerGame : all) {
             GameType gameType = playerGame.getGameType();
+            if (gameType instanceof RoomGameType) {
+                gameType = ((RoomGameType)gameType).getWrapped();
+            }
             if (!result.contains(gameType)) {
                 result.add(gameType);
             }

@@ -42,6 +42,10 @@ public class RoomGameType implements GameType {
         this.settings = type.getSettings();
     }
 
+    public GameType getWrapped() {
+        return type;
+    }
+
     @Override
     public Settings getSettings() {
         return settings;
@@ -53,6 +57,18 @@ public class RoomGameType implements GameType {
                 "type=" + type +
                 ", settings=" + settings +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // не переопределять
+        return this == o;
+    }
+
+    @Override
+    public int hashCode() {
+        // не переопределять
+        return super.hashCode();
     }
 
     @Override
