@@ -97,7 +97,7 @@ public class SmartAssert extends Runner {
             StackTraceElement[] stackTrace = stackTrace();
             String caller = getCaller().getClassName();
             
-            return new LinkedList<StackTraceElement>(){{
+            return new LinkedList<>(){{
                 for (int i = 0; i < stackTrace.length; i++) {
                     if (size() >= count) break;
                     
@@ -111,7 +111,7 @@ public class SmartAssert extends Runner {
         
         @Override
         public String toString() {
-            // TODO почему-то тут idea не полхватывает expected: but was:
+            // TODO почему-то тут idea не подхватывает expected: but was:
             return  "org.junit.ComparisonFailure: " + message + "\n" +
                     "\t\texpected: " + expected + "\n" +
                     "\t\tactual:   " + actual + "\n" +
