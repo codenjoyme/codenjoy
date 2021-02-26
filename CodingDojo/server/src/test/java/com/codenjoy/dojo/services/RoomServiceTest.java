@@ -22,27 +22,66 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.mocks.FirstGameType;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class RoomServiceTest {
 
     private RoomService service;
+    private GameType gameType;
 
     @Before
     public void setUp() {
+        // given
         service = new RoomService();
+        gameType = new FirstGameType();
     }
 
     @Test
-    public void shouldRoomByDefault_isActive() {
+    public void shouldRoomIsNotActive_ifNotPresent() {
+        // when then
+        assertEquals(false, service.isActive("non-exists-room"));
+    }
+
+    @Test
+    public void shouldRoomIsActiveByDefault_ifPresent() {
+        // given
+        service.create("room", gameType);
+
+        // when then
         assertEquals(true, service.isActive("room"));
     }
 
     @Test
+    public void shouldCreateAgain_whenCreated() {
+        // given
+        service.create("room", gameType);
+
+        // when
+        service.create("room", gameType);
+
+        // then
+        assertEquals(true, service.isActive("room"));
+    }
+
+    @Test
+    public void shouldException_whenSetActiveOfNonExistsRoom() {
+        // when
+        service.setActive("room", true);
+
+        // then
+        assertEquals(false, service.isActive("room"));
+    }
+
+    @Test
     public void shouldChangeRoomActiveness() {
+        // given
+        service.create("room", mock(GameType.class));
+
         // when
         service.setActive("room", false);
 
@@ -54,5 +93,44 @@ public class RoomServiceTest {
 
         // then
         assertEquals(true, service.isActive("room"));
+    }
+
+    @Test
+    public void shouldGetState_ifCreated() {
+        // given
+        service.create("room", gameType);
+
+        // when then
+        assertEquals("RoomService.RoomState(name=room, " +
+                        "type=RoomGameType{type=GameType[first], " +
+                        "settings=First-SettingsImpl(map={" +
+                            "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
+                            "Parameter 2=[Parameter 2:Boolean = def[true] val[true]]})}, " +
+                        "active=true)",
+                service.state("room").toString());
+    }
+
+    @Test
+    public void shouldGetState_ifNotCreated() {
+        // when then
+        assertEquals(null, service.state("room"));
+    }
+
+    @Test
+    public void shouldGetSettings_ifCreated() {
+        // given
+        service.create("room", gameType);
+
+        // when then
+        assertEquals("First-SettingsImpl(map={" +
+                        "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
+                        "Parameter 2=[Parameter 2:Boolean = def[true] val[true]]})",
+                service.settings("room").toString());
+    }
+
+    @Test
+    public void shouldGetSettings_ifNotCreated() {
+        // when then
+        assertEquals(null, service.settings("room"));
     }
 }

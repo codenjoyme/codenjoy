@@ -23,10 +23,16 @@ package com.codenjoy.dojo.services.settings;
  */
 
 
-import java.util.*;
+import lombok.ToString;
+
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
+@ToString
 public class SettingsImpl implements Settings {
 
     private Map<String, Parameter<?>> map = new LinkedHashMap<>();

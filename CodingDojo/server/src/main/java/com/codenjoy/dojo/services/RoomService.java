@@ -22,23 +22,77 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.settings.Settings;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@Slf4j
 public class RoomService {
 
-    private Map<String, Boolean> active = new ConcurrentHashMap<>();
+    @Data
+    @AllArgsConstructor
+    @ToString
+    static class RoomState {
+        private String name;
+        private GameType type;
+        private Boolean active;
+
+        public RoomState(RoomState state) {
+            this(state.name, state.type, state.active);
+        }
+    }
+
+    private Map<String, RoomState> rooms = new ConcurrentHashMap<>();
 
     public boolean isActive(String room) {
-        return !active.containsKey(room) || active.get(room);
+        if (!rooms.containsKey(room)) {
+            log.warn("Room '{}' not found", room);
+            return false;
+        }
+
+        return rooms.get(room).getActive();
+    }
+
+    public RoomState state(String room) {
+        if (!rooms.containsKey(room)) {
+            log.warn("Room '{}' not found", room);
+            return null;
+        }
+
+        return new RoomState(rooms.get(room));
     }
 
     public void setActive(String room, boolean value) {
-        active.put(room, value);
+        if (!rooms.containsKey(room)) {
+            log.warn("Room '{}' not found", room);
+            return;
+        }
+        rooms.get(room).setActive(value);
+    }
+
+    public void create(String room, GameType gameType) {
+        if (rooms.containsKey(room)) {
+            return;
+        }
+
+        RoomGameType decorator = new RoomGameType(gameType);
+        RoomState state = new RoomState(room, decorator, true);
+        rooms.put(room, state);
+    }
+
+    public Settings settings(String room) {
+        if (!rooms.containsKey(room)) {
+            log.warn("Room '{}' not found", room);
+            return null;
+        }
+        return rooms.get(room).getType().getSettings();
     }
 
 }

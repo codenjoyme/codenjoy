@@ -31,25 +31,16 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
-import com.codenjoy.dojo.services.settings.Parameter;
-import com.codenjoy.dojo.services.settings.Settings;
-import com.codenjoy.dojo.services.settings.SettingsImpl;
-import com.codenjoy.dojo.services.settings.SimpleParameter;
+import com.codenjoy.dojo.services.settings.*;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class SecondGameType extends AbstractGameType<SettingsImpl> {
 
-    private SettingsImpl settings;
-
     @Override
     public SettingsImpl getSettings() {
-        // TODO после того как решу с хранением сеттингов румы в сервисе, тут надо сделать stateless
-        return settings = (settings != null) ? settings : new SettingsImpl(){{
-            addEditBox("Parameter 3").type(Integer.class).def(43);
-            addCheckBox("Parameter 4").type(Boolean.class).def(false).update(true);
-        }};
+        return new SecondGameSettings();
     }
 
     @Override
