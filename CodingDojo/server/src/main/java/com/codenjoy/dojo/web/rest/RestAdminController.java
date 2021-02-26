@@ -26,6 +26,7 @@ package com.codenjoy.dojo.web.rest;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.nullobj.NullPlayer;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.services.settings.Parameter;
 import com.codenjoy.dojo.services.settings.Settings;

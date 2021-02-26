@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.jdbc.SqliteConnectionThreadPoolFactory;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.room.RoomService;
 import lombok.SneakyThrows;
 import org.junit.After;
 import org.junit.Before;

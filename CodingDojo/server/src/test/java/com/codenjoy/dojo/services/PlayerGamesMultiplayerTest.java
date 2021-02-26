@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.multiplayer.LevelProgress;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.PrinterFactory;
+import com.codenjoy.dojo.services.room.RoomService;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;

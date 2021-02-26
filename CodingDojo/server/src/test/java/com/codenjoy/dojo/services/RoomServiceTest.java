@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.mocks.FirstGameType;
 import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Before;
 import org.junit.Test;
@@ -106,7 +107,7 @@ public class RoomServiceTest {
         service.create("room", game1);
 
         // when then
-        assertEquals("RoomService.RoomState(name=room, " +
+        assertEquals("RoomState(name=room, " +
                         "type=RoomGameType{type=GameType[first], " +
                         "settings=First-SettingsImpl(map={" +
                             "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[15]], " +

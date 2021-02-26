@@ -26,6 +26,7 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.lock.LockedGame;
 import com.codenjoy.dojo.services.multiplayer.*;
 import com.codenjoy.dojo.services.nullobj.NullPlayerGame;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.google.common.collect.Multimap;
 import lombok.experimental.FieldNameConstants;
 import org.json.JSONObject;

@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.multiplayer.GamePlayer;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.Room;
 import com.codenjoy.dojo.services.printer.BoardReader;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;

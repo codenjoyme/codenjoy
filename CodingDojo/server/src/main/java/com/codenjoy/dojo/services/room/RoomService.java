@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.services;
+package com.codenjoy.dojo.services.room;
 
 /*-
  * #%L
@@ -22,10 +22,9 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
+import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.RoomGameType;
 import com.codenjoy.dojo.services.settings.Settings;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -35,19 +34,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Slf4j
 public class RoomService {
-
-    @Data
-    @AllArgsConstructor
-    @ToString
-    static class RoomState {
-        private String name;
-        private GameType type;
-        private Boolean active;
-
-        public RoomState(RoomState state) {
-            this(state.name, state.type, state.active);
-        }
-    }
 
     private Map<String, RoomState> rooms = new ConcurrentHashMap<>();
 
