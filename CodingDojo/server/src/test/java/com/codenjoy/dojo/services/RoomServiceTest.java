@@ -23,22 +23,27 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.mocks.FirstGameType;
+import com.codenjoy.dojo.services.mocks.SecondGameType;
+import com.codenjoy.dojo.services.settings.Settings;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 public class RoomServiceTest {
 
     private RoomService service;
-    private GameType gameType;
+    private GameType game1;
+    private GameType game2;
 
     @Before
     public void setUp() {
         // given
         service = new RoomService();
-        gameType = new FirstGameType();
+        game1 = new FirstGameType();
+        game2 = new SecondGameType();
     }
 
     @Test
@@ -50,7 +55,7 @@ public class RoomServiceTest {
     @Test
     public void shouldRoomIsActiveByDefault_ifPresent() {
         // given
-        service.create("room", gameType);
+        service.create("room", game1);
 
         // when then
         assertEquals(true, service.isActive("room"));
@@ -59,10 +64,10 @@ public class RoomServiceTest {
     @Test
     public void shouldCreateAgain_whenCreated() {
         // given
-        service.create("room", gameType);
+        service.create("room", game1);
 
         // when
-        service.create("room", gameType);
+        service.create("room", game1);
 
         // then
         assertEquals(true, service.isActive("room"));
@@ -98,7 +103,7 @@ public class RoomServiceTest {
     @Test
     public void shouldGetState_ifCreated() {
         // given
-        service.create("room", gameType);
+        service.create("room", game1);
 
         // when then
         assertEquals("RoomService.RoomState(name=room, " +
@@ -119,7 +124,7 @@ public class RoomServiceTest {
     @Test
     public void shouldGetSettings_ifCreated() {
         // given
-        service.create("room", gameType);
+        service.create("room", game1);
 
         // when then
         assertEquals("First-SettingsImpl(map={" +
@@ -132,5 +137,33 @@ public class RoomServiceTest {
     public void shouldGetSettings_ifNotCreated() {
         // when then
         assertEquals(null, service.settings("room"));
+    }
+
+    @Test
+    public void shouldAllSettings_isSame_inOneRoom() {
+        // given
+        service.create("room", game1);
+
+        // when
+        // получаем сеттинги из одной комнаты
+        Settings settings1 = service.settings("room");
+        Settings settings2 = service.settings("room");
+
+        // then
+        // они идекнтичны по наполнению
+        assertEquals(settings1.toString(), settings2.toString());
+
+        // when
+        // меняем настройку в одном сеттинг объекте
+        settings1.getParameter(PARAMETER1.key()).update(23);
+
+        // then
+        // проверили что поменялось в другом
+        assertEquals("First-SettingsImpl(map={" +
+                        "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[23]], " +
+                        "Parameter 2=[Parameter 2:Boolean = def[true] val[true]]})",
+                service.settings("room").toString());
+        // при этом обхъекты все так же равны
+        assertEquals(settings1.toString(), settings2.toString());
     }
 }
