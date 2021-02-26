@@ -171,7 +171,7 @@ public class RoomServiceTest {
     public void shouldAllSettings_isNotSame_inSeparateRooms() {
         // given
         service.create("room1", game1);
-        service.create("room2", game1);
+        service.create("room2", game1); // другая комната той же игры
 
         // when
         // получаем сеттинги из одной комнаты
@@ -197,6 +197,37 @@ public class RoomServiceTest {
                         "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[15]], " +
                         "Parameter 2=[Parameter 2:Boolean = def[true] val[true]]})",
                 settings2.toString());
+    }
 
+    @Test
+    public void shouldAllSettings_isNotSame_inSeparateGames() {
+        // given
+        service.create("room1", game1);
+        service.create("room2", game2); // другая комната другой игры
+
+        // when
+        // получаем сеттинги из одной комнаты
+        Settings settings1 = service.settings("room1");
+        Settings settings2 = service.settings("room2");
+
+        // then
+        // они изначально различны по наполнению
+        assertNotEquals(settings1.toString(), settings2.toString());
+
+        // when
+        // меняем настройку в одном сеттинг объекте
+        settings1.getParameter(PARAMETER1.key()).update(23);
+
+        // then
+        // проверили что поменялось только в нем
+        assertEquals("First-SettingsImpl(map={" +
+                        "Parameter 1=[Parameter 1:Integer = multiline[false] def[12] val[23]], " +
+                        "Parameter 2=[Parameter 2:Boolean = def[true] val[true]]})",
+                settings1.toString());
+
+        assertEquals("Second-SettingsImpl(map={" +
+                        "Parameter 3=[Parameter 3:Integer = multiline[false] def[43] val[43]], " +
+                        "Parameter 4=[Parameter 4:Boolean = def[false] val[true]]})",
+                settings2.toString());
     }
 }

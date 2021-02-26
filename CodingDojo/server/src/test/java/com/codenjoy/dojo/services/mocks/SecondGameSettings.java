@@ -27,7 +27,7 @@ public class SecondGameSettings extends SettingsImpl implements SettingsReader<F
 
     public SecondGameSettings() {
         integer(PARAMETER3, 43);
-        bool(PARAMETER3, false);
+        bool(PARAMETER4, false);
         boolValue(PARAMETER4).update(true);
     }
 
