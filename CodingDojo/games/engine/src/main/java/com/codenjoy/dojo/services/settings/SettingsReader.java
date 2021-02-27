@@ -27,18 +27,21 @@ import com.codenjoy.dojo.services.round.RoundSettings;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.codenjoy.dojo.services.round.RoundSettings.Keys.ROUNDS_ENABLED;
+
 public interface SettingsReader<T extends SettingsReader> {
 
     interface Key {
 
         String key();
 
+        // TODO вот это как-то по проще не получится сделать?
         static String keyToName(Key[] values, String value) {
             return Arrays.stream(values)
                     .filter(element -> element.key().equals(value))
                     .map(Key::toString)
                     .findFirst()
-                    .orElseGet(() -> keyToName(RoundSettings.Keys.values(), value));
+                    .orElseGet(() -> (!isRounds(values)) ? keyToName(RoundSettings.Keys.values(), value) : null);
         }
 
         static String nameToKey(Key[] values, String value) {
@@ -46,7 +49,11 @@ public interface SettingsReader<T extends SettingsReader> {
                     .filter(element -> element.toString().equals(value))
                     .map(Key::key)
                     .findFirst()
-                    .orElseGet(() -> nameToKey(RoundSettings.Keys.values(), value));
+                    .orElseGet(() -> (!isRounds(values)) ? nameToKey(RoundSettings.Keys.values(), value) : null);
+        }
+
+        private static boolean isRounds(Key[] values) {
+            return Arrays.asList(values).contains(ROUNDS_ENABLED);
         }
     }
 

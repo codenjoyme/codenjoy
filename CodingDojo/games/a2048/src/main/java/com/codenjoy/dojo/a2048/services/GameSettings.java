@@ -110,6 +110,8 @@ public final class GameSettings extends SettingsImpl implements SettingsReader<G
                 Arrays.asList(BREAKS_EXISTS.key(), BREAKS_NOT_EXISTS.key()),
                 BREAKS_NOT_EXISTS.key())
                 .onChange(rebuildMap());
+
+        rebuildMap().accept(null);
     }
 
     private Consumer<String> updateSize() {
