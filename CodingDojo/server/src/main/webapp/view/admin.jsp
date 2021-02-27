@@ -222,14 +222,6 @@
         </table>
     </form:form>
 
-    <table class="admin-table" id="refresh">
-        <tr>
-            <td>
-                <a href="${ctx}/admin?refreshGame&gameName=${gameName}">Refresh game</a>.
-            </td>
-        </tr>
-    </table>
-
     <table class="admin-table" id="cleanGame">
         <tr>
             <tr colspan="2">

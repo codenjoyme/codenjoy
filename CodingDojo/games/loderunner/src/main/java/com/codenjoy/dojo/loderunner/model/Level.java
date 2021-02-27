@@ -51,8 +51,6 @@ public interface Level {
 
     List<Portal> getPortals();
 
-    void refresh(String map);
-
     UUID getMapUUID();
 
     EnemyAI getAi();

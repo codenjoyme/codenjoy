@@ -118,8 +118,6 @@ public interface GameType extends Tickable {
      * Если хочешь использовать кастомный принтер - {@see PrinterFactory#get(GraphicPrinter)}
      */
     PrinterFactory getPrinterFactory();
-
-    default void refresh() {}
 }
 
 
