@@ -86,7 +86,7 @@ public class AdminController {
     }
 
     // TODO ROOM а этот метод вообще зачем?
-    @GetMapping(value = "/", params = {"player", "data"})
+    @GetMapping(params = {"player", "data"})
     public String loadPlayerGameFromSave(@RequestParam("player") String id,
                                          @RequestParam("data") String save,
                                          HttpServletRequest request)
@@ -308,7 +308,7 @@ public class AdminController {
 
     // ----------------
 
-    @PostMapping("/")
+    @PostMapping()
     public String saveSettings(AdminSettings settings,
                                BindingResult result,
                                HttpServletRequest request)
@@ -439,7 +439,7 @@ public class AdminController {
 
     // ----------------
 
-    @GetMapping("/")
+    @GetMapping()
     public String getAdmin(Model model,
                            @RequestParam(value = ROOM_NAME_KEY, required = false)
                                String roomName,
