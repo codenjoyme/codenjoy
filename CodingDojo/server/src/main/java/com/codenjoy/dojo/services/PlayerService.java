@@ -31,6 +31,7 @@ public interface PlayerService extends Tickable {
     Player register(PlayerSave save);
     List<Player> getAll();
     List<Player> getAll(String gameName);
+    List<Player> getAllInRoom(String roomName);
     void remove(String id);
     void update(Player player);
     boolean contains(String id);
@@ -45,7 +46,7 @@ public interface PlayerService extends Tickable {
     void cleanAllScores(String roomName);
     void reloadAllRooms();
     void reloadAllRooms(String roomName);
-    void loadSaveForAll(String gameName, String save);
+    void loadSaveForAll(String roomName, String save);
 
     Joystick getJoystick(String id); // TODO Как-то тут этот метод не вяжется, но ладно пока пусть остается
 

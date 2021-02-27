@@ -405,6 +405,16 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
+    public List<Player> getAllInRoom(String roomName) {
+        lock.readLock().lock();
+        try {
+            return playerGames.getPlayersByRoom(roomName);
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    @Override
     public void remove(String id) {
         lock.writeLock().lock();
         try {

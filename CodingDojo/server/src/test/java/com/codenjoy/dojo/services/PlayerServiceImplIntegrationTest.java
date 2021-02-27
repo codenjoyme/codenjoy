@@ -130,7 +130,9 @@ public class PlayerServiceImplIntegrationTest {
         // первый плеер зарегался (у него сейвов нет)
         when(saver.loadGame(anyString())).thenReturn(PlayerSave.NULL);
         Player player1 = service.register("player1", "game1", "room1", "callback1");
-        assertEquals("[game1-super-ai, player1]", service.getAll().toString());
+        String expected = "[game1-super-ai, player1]";
+        assertEquals(expected, service.getAll().toString());
+        assertEquals(expected, service.getAllInRoom("room1").toString());
         assertEquals(true, runners.containsKey("game1-super-ai"));
 
         // потом еще двое подоспели на ту же игру
@@ -138,18 +140,21 @@ public class PlayerServiceImplIntegrationTest {
         Player player3 = service.register("player3", "game1", "room1", "callback2");
         verify(gameTypes.get("game1"), times(++ai1)).getAI();
         verify(gameTypes.get("game1"), times(ai1)).getBoard();
-        assertEquals("[game1-super-ai, player1, player2, player3]",
-                service.getAll().toString());
+        expected = "[game1-super-ai, player1, player2, player3]";
+        assertEquals(expected, service.getAll().toString());
+        assertEquals(expected, service.getAllInRoom("room1").toString());
 
         // второй вышел
         service.remove("player2");
-        assertEquals("[game1-super-ai, player1, player3]",
-                service.getAll().toString());
+        expected = "[game1-super-ai, player1, player3]";
+        assertEquals(expected, service.getAll().toString());
+        assertEquals(expected, service.getAllInRoom("room1").toString());
 
         // и третий тоже
         service.remove("player3");
-        assertEquals("[game1-super-ai, player1]",
-                service.getAll().toString());
+        expected = "[game1-super-ai, player1]";
+        assertEquals(expected, service.getAll().toString());
+        assertEquals(expected, service.getAllInRoom("room1").toString());
 
         // смотрим есть ли пользователи
         assertEquals(true, service.contains("player1"));
@@ -161,10 +166,14 @@ public class PlayerServiceImplIntegrationTest {
         verify(gameTypes.get("game2"), times(ai2)).getBoard();
         Player player5 = service.register("player5", "game2", "room2", "callback5");
         Player player6 = service.register("player6", "game1", "room1", "callback6");
-        assertEquals("[game1-super-ai, player1, player6]",
-                service.getAll("game1").toString());
-        assertEquals("[game2-super-ai, player4, player5]",
-                service.getAll("game2").toString());
+        assertEquals("[game1-super-ai, player1, game2-super-ai, player4, player5, player6]",
+                service.getAll().toString());
+        expected = "[game1-super-ai, player1, player6]";
+        assertEquals(expected, service.getAll("game1").toString());
+        assertEquals(expected, service.getAllInRoom("room1").toString());
+        expected = "[game2-super-ai, player4, player5]";
+        assertEquals(expected, service.getAll("game2").toString());
+        assertEquals(expected, service.getAllInRoom("room2").toString());
 
         // при этом у нас теперь два AI
         assertEquals(true, service.contains("game1-super-ai"));
@@ -176,10 +185,8 @@ public class PlayerServiceImplIntegrationTest {
         assertEquals("game1", service.getAnyGameWithPlayers().name());
 
         // и рендомных прееров
-        assertEquals("game1-super-ai",
-                service.getRandom("game1").toString());
-        assertEquals("game2-super-ai",
-                service.getRandom("game2").toString());
+        assertEquals("game1-super-ai", service.getRandom("game1").toString());
+        assertEquals("game2-super-ai", service.getRandom("game2").toString());
 
         // несложно понять что берется просто первый в очереди
         verifyNoMoreInteractions(runners.get("game2-super-ai"));
@@ -195,8 +202,8 @@ public class PlayerServiceImplIntegrationTest {
         assertEquals(false, service.isRegistrationOpened());
         Player player7 = service.register("player7", "game3", "room3", "callback7");
         assertEquals(false, service.contains("player7"));
-        assertEquals("[]",
-                service.getAll("game3").toString());
+        assertEquals("[]", service.getAll("game3").toString());
+        assertEquals("[]", service.getAllInRoom("room3").toString());
 
         // открыли регистрацию
         service.openRegistration();
@@ -205,8 +212,9 @@ public class PlayerServiceImplIntegrationTest {
         verify(gameTypes.get("game3"), times(++ai3)).getAI();
         verify(gameTypes.get("game3"), times(ai3)).getBoard();
         assertEquals(true, service.contains("player7"));
-        assertEquals("[game3-super-ai, player7]",
-                service.getAll("game3").toString());
+        expected = "[game3-super-ai, player7]";
+        assertEquals(expected, service.getAll("game3").toString());
+        assertEquals(expected, service.getAllInRoom("room3").toString());
         assertEquals(true, runners.containsKey("game1-super-ai"));
         assertEquals(false, runners.containsKey("game2-super-ai"));
         assertEquals(true, runners.containsKey("game3-super-ai"));
@@ -217,6 +225,9 @@ public class PlayerServiceImplIntegrationTest {
         verify(gameTypes.get("game3"), times(ai3)).getBoard();
         assertEquals("[game3-super-ai, player7]",
                 service.getAll("game3").toString());
+        expected = "[game3-super-ai, player7]";
+        assertEquals(expected, service.getAll("game3").toString());
+        assertEquals(expected, service.getAllInRoom("room3").toString());
         assertEquals(true, runners.containsKey("game1-super-ai"));
         assertEquals(false, runners.containsKey("game2-super-ai"));
         assertEquals(true, runners.containsKey("game3-super-ai"));
@@ -232,15 +243,39 @@ public class PlayerServiceImplIntegrationTest {
                 "player7_updated]", service.getAll().toString());
 
         // зарегали существующего пользователя в другую игру
-        assertEquals("[game1-super-ai_updated, player1_updated, player6_updated]",
-                service.getAll("game1").toString());
-        assertEquals("[player4_updated, player5_updated]",
-                service.getAll("game2").toString());
+        expected = "[game1-super-ai_updated, player1_updated, player6_updated]";
+        assertEquals(expected, service.getAll("game1").toString());
+        assertEquals(expected, service.getAllInRoom("room1").toString());
+        expected = "[player4_updated, player5_updated]";
+        assertEquals(expected, service.getAll("game2").toString());
+        assertEquals(expected, service.getAllInRoom("room2").toString());
         player1 = service.register("player1_updated", "game2", "room2", "callback1");
-        assertEquals("[game1-super-ai_updated, player6_updated]",
-                service.getAll("game1").toString());
+        expected = "[game1-super-ai_updated, player6_updated]";
+        assertEquals(expected, service.getAll("game1").toString());
+        assertEquals(expected, service.getAllInRoom("room1").toString());
+        expected = "[player4_updated, player5_updated, game2-super-ai, player1_updated]";
+        // TODO какого фига сюда AI ломится? Там же есть ребята уже
+        assertEquals(expected, service.getAll("game2").toString());
+        assertEquals(expected, service.getAllInRoom("room2").toString());
+        expected = "[game3-super-ai_updated, player7_updated]";
+        assertEquals(expected, service.getAll("game3").toString());
+        assertEquals(expected, service.getAllInRoom("room3").toString());
+
+        // пользователь перешел в другую комнату той же игры
+        player1 = service.register("player1_updated", "game2", "room4", "callback1");
+        expected = "[game1-super-ai_updated, player6_updated]";
+        assertEquals(expected, service.getAll("game1").toString());
+        assertEquals(expected, service.getAllInRoom("room1").toString());
         assertEquals("[player4_updated, player5_updated, game2-super-ai, player1_updated]",
-                service.getAll("game2").toString()); // TODO какого фига сюда AI ломится? Там же есть ребята уже
+                service.getAll("game2").toString()); // тут отличие game2 != room2
+        assertEquals("[player4_updated, player5_updated, game2-super-ai]",
+                service.getAllInRoom("room2").toString()); // тут отличие game2 != room2
+        expected = "[game3-super-ai_updated, player7_updated]";
+        assertEquals(expected, service.getAll("game3").toString());
+        assertEquals(expected, service.getAllInRoom("room3").toString());
+        assertEquals("[]", service.getAll("game4").toString()); // нет такой игры
+        assertEquals("[player1_updated]", service.getAllInRoom("room4").toString());
+
 
         // удалили всех нафиг
         service.removeAll();

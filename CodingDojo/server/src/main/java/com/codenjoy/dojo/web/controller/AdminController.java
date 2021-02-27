@@ -177,7 +177,7 @@ public class AdminController {
     public String reloadAllAI(Model model, HttpServletRequest request) {
         String roomName = getGameRoom(request);
 
-        playerService.getAll(roomName)
+        playerService.getAllInRoom(roomName)
                 .stream().filter(not(Player::hasAi))
                 .map(Player::getId)
                 .forEach(playerService::reloadAI);
@@ -226,7 +226,8 @@ public class AdminController {
     @GetMapping(params = "removeRegistrationAll")
     public String removePlayerRegistration(HttpServletRequest request) {
         String roomName = getGameRoom(request);
-        registration.removeAll(); // TODO for room name
+        playerService.getAllInRoom(roomName)
+                .forEach(player -> registration.remove(player.getId()));
         return getAdmin(roomName);
     }
 
