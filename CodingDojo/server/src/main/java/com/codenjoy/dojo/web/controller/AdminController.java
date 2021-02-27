@@ -142,8 +142,9 @@ public class AdminController {
 
     @GetMapping(params = "loadAll")
     public String loadAllGames(Model model, HttpServletRequest request) {
-        saveService.loadAll();
-        return getAdmin(request);
+        String roomName = getGameRoom(request);
+        saveService.loadAll(roomName);
+        return getAdmin(roomName);
     }
 
     @GetMapping(params = "gameOver")
