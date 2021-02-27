@@ -36,11 +36,11 @@ import java.util.*;
 import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1;
 import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER3;
 import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER4;
-import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 
 public class GameServiceTest {
-    
+
+    private RoomService roomService;
     private GameServiceImpl service;
 
     @Before
@@ -54,7 +54,7 @@ public class GameServiceTest {
 
             {
                 excludeGames = new String[0];
-                roomService = new RoomService();
+                roomService = GameServiceTest.this.roomService = new RoomService();
             }
 
             @Override
@@ -68,6 +68,16 @@ public class GameServiceTest {
     public void shouldGetGameNames() {
         assertEquals("[first, second]", 
                 service.getGameNames().toString());
+    }
+
+    @Test
+    public void shouldGetRoomNames() {
+        roomService.create("room1", service.getGame("first"));
+        roomService.create("room2", service.getGame("second"));
+        roomService.create("room3", service.getGame("second"));
+
+        assertEquals("[room1, room2, room3]",
+                service.getRoomNames().toString());
     }
 
     @Test
@@ -96,8 +106,12 @@ public class GameServiceTest {
     
     @Test
     public void shouldGetDefaultGame() {
-        assertEquals("first", 
-                service.getDefaultGame());
+        roomService.create("room1", service.getGame("first"));
+        roomService.create("room2", service.getGame("second"));
+        roomService.create("room3", service.getGame("second"));
+
+        assertEquals("room1",
+                service.getDefaultRoom());
     }
 
     @Test

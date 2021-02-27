@@ -24,6 +24,7 @@ pages = pages || {};
 
 pages.board = function() {
     game.gameName = getSettings('gameName');
+    game.roomName = getSettings('roomName');
     game.playerId = getSettings('playerId');
     game.readableName = getSettings('readableName');
     game.code = getSettings('code');
@@ -35,7 +36,7 @@ pages.board = function() {
 }
 
 function initBoardPage(game, onLoad) {
-    loadData('/rest/player/' + game.playerId + '/' + game.code + '/wantsToPlay/' + game.gameName, function(gameData) {
+    loadData('/rest/player/' + game.playerId + '/' + game.code + '/wantsToPlay/' + game.gameName + '/' + game.roomName, function(gameData) {
         game.contextPath = gameData.context;
         game.multiplayerType = gameData.gameType.multiplayerType;
         game.boardSize = gameData.gameType.boardSize;

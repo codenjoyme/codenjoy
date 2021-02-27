@@ -240,4 +240,31 @@ public class RoomServiceTest {
         assertEquals("Second[Parameter 3=43, Parameter 4=true]",
                 settings2.toString());
     }
+
+    @Test
+    public void shouldGetRoomNames_withSorting() {
+        // given
+        service.create("room4", game2);
+        service.create("room2", game1);
+        service.create("room1", game1);
+        service.create("room3", game2);
+
+        // when then
+        assertEquals("[room1, room2, room3, room4]", service.names().toString());
+    }
+
+    @Test
+    public void shouldGetGameName() {
+        // given
+        service.create("room1", game1);
+        service.create("room2", game1);
+        service.create("room3", game2);
+        service.create("room4", game2);
+
+        // when then
+        assertEquals("first", service.gameName("room1"));
+        assertEquals("first", service.gameName("room2"));
+        assertEquals("second", service.gameName("room3"));
+        assertEquals("second", service.gameName("room4"));
+    }
 }

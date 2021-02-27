@@ -38,6 +38,7 @@ public class AdminSettings {
     private List<Object> games;
     private List<Object> parameters;
     private String gameName;
+    private String roomName;
     private String generateNameMask;
     private String generateCount;
     private String generateRoomName;

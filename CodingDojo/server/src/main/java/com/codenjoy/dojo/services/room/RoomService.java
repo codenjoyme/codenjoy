@@ -28,8 +28,13 @@ import com.codenjoy.dojo.services.settings.Settings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Component
@@ -85,5 +90,20 @@ public class RoomService {
 
     public void removeAll() {
         rooms.clear();
+    }
+
+    public List<String> names() {
+        return rooms.values().stream()
+                .sorted(Comparator.comparing(o -> o.getType().name() + o.getName()))
+                .map(roomState -> roomState.getName())
+                .collect(toList());
+    }
+
+    public String gameName(String room) {
+        RoomState state = state(room);
+        if (state == null) {
+            return null;
+        }
+        return state.getType().name();
     }
 }

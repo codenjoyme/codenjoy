@@ -30,6 +30,8 @@ public interface GameService {
 
     List<String> getGameNames();
 
+    List<String> getRoomNames();
+
     List<String> getOnlyGameNames();
 
     Map<String, List<String>> getSpritesNames();
@@ -42,7 +44,7 @@ public interface GameService {
 
     GameType getGame(String gameName, String roomName);
 
-    String getDefaultGame();
+    String getDefaultRoom();
 
     boolean exists(String gameName);
 }

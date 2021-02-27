@@ -25,9 +25,11 @@ var adminKey = false;
 
 function initHotkeys() {
     var gameName = getSettings('gameName') || game.gameName;
+    var roomName = getSettings('roomName') || game.roomName;
     var contextPath = getSettings('contextPath') || game.contextPath;
 
     var gameNameParam = ((!gameName)?'':'gameName=' + gameName);
+    var roomNameParam = ((!roomName)?'':'roomName=' + roomName);
     $('body').keydown(function(ev) {
         if (!game.enableHotkeys) {
             return;
@@ -36,7 +38,7 @@ function initHotkeys() {
         if (ev.ctrlKey && ev.altKey && ev.keyCode == 65) { // Ctrl-Alt-A + ...
             adminKey = true;
         } else if (adminKey && ev.keyCode == 68) { // ... + D (aDmin)
-            window.open(contextPath + '/admin' + (gameNameParam == ''?'':'?select&') + gameNameParam);
+            window.open(contextPath + '/admin' + (roomNameParam == ''?'':'?select&') + roomNameParam);
         } else if (adminKey && ev.keyCode == 82) { // ... + R (Register)
             window.open(contextPath + '/register' + (gameNameParam == ''?'':'?') + gameNameParam);
         } else if (adminKey && ev.keyCode == 77) { // ... + M (Main)
@@ -44,7 +46,7 @@ function initHotkeys() {
         } else if (adminKey && ev.keyCode == 74) { // ... + J (Joystick)
             game.enableJoystick = !game.enableJoystick;
         } else if (adminKey && ev.keyCode == 76) { // ... + l (Log)
-            window.open(contextPath + '/board/log/player/' + game.playerId + '?code=' + game.code + '&gameName=' + gameName);
+            window.open(contextPath + '/board/log/player/' + game.playerId + '?code=' + game.code + '&gameName=' + gameName + + '&roomName=' + roomName);
         } else if (adminKey && ev.keyCode == 66) { // ... + B (Board)
             window.open(contextPath + '/board/game/' + gameName);
         } else if (adminKey && ev.keyCode == 72) { // ... + H (Help)

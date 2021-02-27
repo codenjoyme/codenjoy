@@ -44,6 +44,8 @@ function defaultRegistrationSettings() {
 
 pages.admin = function() {
     var contextPath = game.contextPath = getSettings('contextPath');
+    game.gameName = getSettings('gameName');
+    game.roomName = getSettings('roomName');
 
     // ------------------------ registration settings -----------------------
     var settings = new AdminSettings(contextPath, 'general', 'registration');

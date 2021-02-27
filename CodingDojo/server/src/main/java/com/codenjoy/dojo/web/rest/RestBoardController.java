@@ -116,18 +116,20 @@ public class RestBoardController {
     }
 
     // TODO test me
-    @GetMapping("/player/{player}/{code}/wantsToPlay/{gameName}")
+    @GetMapping("/player/{player}/{code}/wantsToPlay/{gameName}/{roomName}")
     public synchronized PPlayerWantsToPlay playerWantsToPlay(
             @PathVariable("player") String id,
             @PathVariable("code") String code,
-            @PathVariable("gameName") String gameName)
+            @PathVariable("gameName") String gameName,
+            @PathVariable("roomName") String roomName)
     {
         validator.checkPlayerId(id, CAN_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
         validator.checkGameName(gameName, CANT_BE_NULL);
+        validator.checkRoomName(roomName, CANT_BE_NULL);
 
         String context = getContext();
-        PGameTypeInfo gameType = gameController.type(gameName);
+        PGameTypeInfo gameType = gameController.type(gameName, roomName);
         boolean registered = registration.checkUser(id, code) != null;
         List<String> sprites = gameController.spritesNames(gameName);
         String alphabet = gameController.spritesAlphabet();

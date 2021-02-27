@@ -504,10 +504,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override // TODO test me
-    public void loadSaveForAll(String gameName, String newSave) {
+    public void loadSaveForAll(String roomName, String newSave) {
         lock.writeLock().lock();
         try {
-            List<Player> players = playerGames.getPlayers(gameName);
+            List<Player> players = playerGames.getPlayersByRoom(roomName);
             players.forEach(player -> playerGames.setLevel(
                     player.getId(),
                     new JSONObject(newSave)));

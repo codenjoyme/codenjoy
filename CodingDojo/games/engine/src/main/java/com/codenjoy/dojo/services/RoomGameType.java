@@ -42,6 +42,13 @@ public class RoomGameType implements GameType {
         this.settings = type.getSettings();
     }
 
+    public static GameType unwrap(GameType gameType) {
+        if (gameType instanceof RoomGameType) {
+            gameType = ((RoomGameType)gameType).getWrapped();
+        }
+        return gameType;
+    }
+
     public GameType getWrapped() {
         return type;
     }

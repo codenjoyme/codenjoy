@@ -250,9 +250,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
         for (PlayerGame playerGame : all) {
             GameType gameType = playerGame.getGameType();
-            if (gameType instanceof RoomGameType) {
-                gameType = ((RoomGameType)gameType).getWrapped();
-            }
+            gameType = RoomGameType.unwrap(gameType);
             if (!result.contains(gameType)) {
                 result.add(gameType);
             }
@@ -380,6 +378,13 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         return all.stream()
                 .map(playerGame -> playerGame.getPlayer())
                 .filter(player -> player.getGameName().equals(gameName))
+                .collect(toList());
+    }
+
+    public List<Player> getPlayersByRoom(String roomName) {
+        return all.stream()
+                .map(playerGame -> playerGame.getPlayer())
+                .filter(player -> player.getRoomName().equals(roomName))
                 .collect(toList());
     }
 

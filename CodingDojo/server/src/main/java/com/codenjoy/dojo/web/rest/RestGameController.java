@@ -52,19 +52,21 @@ public class RestGameController {
         return gameService.getGameNames().contains(name);
     }
 
-    @GetMapping("/{name}/info")
-    public PGameTypeInfo type(@PathVariable("name") String name) {
+    // TODO узнать кто использует и предупредить, что добавилось roomName
+    @GetMapping("/{name}/{roomName}/info")
+    public PGameTypeInfo type(@PathVariable("name") String name,
+                              @PathVariable("roomName") String roomName)
+    {
         if (!exists(name)) {
-            return null;
+            return null; // TODO а если roomName несуществует, может тоже возвращать null
         }
 
-        // TODO 4456 тут наверняка надо брать с учетом roomName
-        GameType game = gameService.getGame(name);
+        GameType game = gameService.getGame(name, roomName);
 
         PSprites sprites = new PSprites(spritesAlphabet(), spritesUrl(name),
                 spritesNames(name), spritesValues(name));
         
-        return new PGameTypeInfo(game, help(name), client(name), ws(), sprites);
+        return new PGameTypeInfo(game, roomName, help(name), client(name), ws(), sprites);
     }
 
     @GetMapping("/{name}/help/url")

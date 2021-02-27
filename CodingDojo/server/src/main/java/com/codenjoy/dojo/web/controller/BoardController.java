@@ -41,6 +41,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_KEY;
+import static com.codenjoy.dojo.web.controller.AdminController.ROOM_NAME_KEY;
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
 
@@ -141,18 +142,21 @@ public class BoardController {
     private void populateJoiningGameModel(ModelMap model, String code, Player player) {
         model.addAttribute("code", code);
         model.addAttribute(GAME_NAME_KEY, player.getGameName());
+        model.addAttribute(ROOM_NAME_KEY, player.getRoomName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerId", player.getId());
         model.addAttribute("readableName", player.getReadableName());
         model.addAttribute("allPlayersScreen", false);
     }
 
-    @GetMapping(value = URI + "/log/player/{player}", params = "gameName")
+    @GetMapping(value = URI + "/log/player/{player}", params = {"gameName", "roomName"})
     public String boardPlayerLog(ModelMap model, @PathVariable("player") String id,
-                                 @RequestParam("gameName") String gameName)
+                                 @RequestParam("gameName") String gameName,
+                                 @RequestParam("roomName") String roomName)
     {
         validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkGameName(gameName, CANT_BE_NULL);
+        validator.checkRoomName(roomName, CANT_BE_NULL);
 
         Optional<Registration.User> user = registration.getUserById(id);
         if (!user.isPresent()) {
@@ -160,6 +164,7 @@ public class BoardController {
         }
 
         model.addAttribute(GAME_NAME_KEY, gameName);
+        model.addAttribute(ROOM_NAME_KEY, roomName);
         model.addAttribute("gameNameOnly", GameServiceImpl.removeNumbers(gameName));
         model.addAttribute("playerId", user.get().getId());
         model.addAttribute("readableName", user.get().getReadableName());
@@ -206,6 +211,7 @@ public class BoardController {
 
         model.addAttribute("code", code);
         model.addAttribute(GAME_NAME_KEY, gameName);
+        model.addAttribute(ROOM_NAME_KEY, player.getRoomName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerId", null);
         model.addAttribute("readableName", null);
@@ -230,9 +236,9 @@ public class BoardController {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
-        String gameName = player.getGameName();
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME_KEY, gameName);
+        model.addAttribute(GAME_NAME_KEY, player.getGameName());
+        model.addAttribute(ROOM_NAME_KEY, player.getRoomName());
         model.addAttribute("gameNameOnly", player.getGameNameOnly());
         model.addAttribute("playerId", player.getId());
         model.addAttribute("readableName", player.getReadableName());

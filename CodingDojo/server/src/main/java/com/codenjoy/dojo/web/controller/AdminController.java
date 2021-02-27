@@ -28,7 +28,9 @@ import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthorities;
+import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.services.security.ViewDelegationService;
 import com.codenjoy.dojo.services.settings.CheckBox;
 import com.codenjoy.dojo.services.settings.Parameter;
@@ -49,8 +51,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Predicate;
-
-import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 
 import static java.util.stream.Collectors.toList;
 
@@ -78,6 +78,7 @@ public class AdminController {
     private final RoomsAliaser rooms;
     private final ViewDelegationService viewDelegationService;
     private final Semifinal semifinal;
+    private final RoomService roomService;
 
     @GetMapping(params = "save")
     public String savePlayerGame(@RequestParam("save") String id, Model model, HttpServletRequest request) {
@@ -86,7 +87,7 @@ public class AdminController {
     }
 
     private String getAdmin(HttpServletRequest request) {
-        return getAdmin(getGameName(request));
+        return getAdmin(getGameRoom(request));
     }
 
     @GetMapping(params = "gameVersion")
@@ -288,9 +289,10 @@ public class AdminController {
         }
 
         String gameName = settings.getGameName();
+        String roomName = settings.getRoomName();
 
         if (settings.getProgress() != null) {
-            playerService.loadSaveForAll(gameName, settings.getProgress());
+            playerService.loadSaveForAll(roomName, settings.getProgress());
         }
 
         if (settings.getGames() != null) {
@@ -311,8 +313,7 @@ public class AdminController {
 
         List<Exception> errors = new LinkedList<>();
         if (settings.getParameters() != null) {
-            // TODO 4456 тут наверняка надо брать с учетом roomName
-            Settings gameSettings = gameService.getGame(gameName, gameName).getSettings();
+            Settings gameSettings = gameService.getGame(gameName, roomName).getSettings();
             List<Parameter> parameters = gameSettings.getParameters();
             for (int index = 0; index < parameters.size(); index++) {
                 try {
@@ -332,7 +333,7 @@ public class AdminController {
         if (settings.getGenerateNameMask() != null) {
             String mask = settings.getGenerateNameMask();
             int count = Integer.parseInt(settings.getGenerateCount());
-            String roomName = settings.getGenerateRoomName();
+            String room = settings.getGenerateRoomName();
             int numLength = String.valueOf(count).length();
 
             int created = 0;
@@ -347,12 +348,12 @@ public class AdminController {
 
                 created++;
                 String code = getCode(id);
-                playerService.register(id, gameName, roomName, "127.0.0.1");
+                playerService.register(id, gameName, room, "127.0.0.1");
             }
         }
 
-        request.setAttribute(GAME_NAME_KEY, gameName);
-        return getAdmin(gameName);
+        request.setAttribute(ROOM_NAME_KEY, roomName);
+        return getAdmin(roomName);
     }
 
     private String getCode(String id) {
@@ -370,42 +371,44 @@ public class AdminController {
         return value;
     }
 
-    private String getAdmin(String gameName) {
-        if (gameName == null) {
+    private String getAdmin(String roomName) {
+        if (roomName == null) {
             return getAdmin();
         }
-        return "redirect:/admin?" + GAME_NAME_KEY + "=" + gameName;
+        return "redirect:/admin?" + ROOM_NAME_KEY + "=" + roomName;
     }
 
     private String getAdmin() {
-        return getAdmin(getDefaultGame());
+        return getAdmin(getDefaultRoom());
     }
 
-    private String getDefaultGame() {
-        return gameService.getDefaultGame();
+    private String getDefaultRoom() {
+        return gameService.getDefaultRoom();
     }
 
     @GetMapping()
     public String getAdminPage(Model model,
-                               @RequestParam(value = GAME_NAME_KEY, required = false) String gameName,
-                               @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
-                                           Boolean gameSpecificAdminPage) {
+                       @RequestParam(value = ROOM_NAME_KEY, required = false)
+                               String roomName,
+                       @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
+                               Boolean gameSpecificAdminPage)
+    {
+        roomName = (roomName == null || roomName.equals("null")) ? null : roomName;
 
-        gameName = (gameName == null || gameName.equals("null")) ? null : gameName;
-
-        if (gameName == null) {
-            return getAdmin(gameName);
+        if (roomName == null) {
+            return getAdmin(roomName);
         }
 
-        if (gameSpecificAdminPage) {
+        String gameName = roomService.gameName(roomName);
+
+        if (gameSpecificAdminPage && gameName != null) {
             return viewDelegationService.adminView(gameName);
         }
 
-        // TODO 4456 тут наверняка надо брать с учетом roomName
-        GameType game = gameService.getGame(gameName, gameName);
+        GameType game = gameService.getGame(gameName, roomName);
 
         if (game instanceof NullGameType) {
-            return getAdmin(gameName);
+            return getAdmin(roomName);
         }
 
         Settings gameSettings = game.getSettings();
@@ -431,10 +434,11 @@ public class AdminController {
         model.addAttribute("settings", parameters);
         model.addAttribute("semifinalTick", semifinal.getTime());
         model.addAttribute(GAME_NAME_KEY, gameName);
+        model.addAttribute(ROOM_NAME_KEY, roomName);
         model.addAttribute("gameVersion", game.getVersion());
         model.addAttribute("generateNameMask", "demo%");
         model.addAttribute("generateCount", "30");
-        model.addAttribute("generateRoomName", gameName);
+        model.addAttribute("generateRoomName", roomName);
         model.addAttribute("timerPeriod", timerService.getPeriod());
 
         MultiplayerType type = game.getMultiplayerType(game.getSettings());
@@ -446,13 +450,13 @@ public class AdminController {
         checkAutoSaveStatus(model);
         checkDebugStatus(model);
         checkRegistrationClosed(model);
-        prepareList(model, settings, gameName);
+        prepareList(model, settings, roomName);
 
         return "admin";
     }
 
     private String getGameRoom(HttpServletRequest request) {
-         String roomName = request.getParameter(ROOM_NAME_KEY);
+        String roomName = request.getParameter(ROOM_NAME_KEY);
         if (roomName == null || roomName.equals("null")) {
             return null;
         }
@@ -467,27 +471,29 @@ public class AdminController {
         return gameName;
     }
 
-    private void prepareList(Model model, AdminSettings settings, String gameName) {
+    private void prepareList(Model model, AdminSettings settings, String roomName) {
         List<PlayerInfo> players = saveService.getSaves();
 
-        Set<String> gameNames = new TreeSet<>(gameService.getGameNames());
+        List<String> roomNames = gameService.getRoomNames();
         List<String> counts = new LinkedList<>();
-        for (String name : gameNames) {
+        for (String name : roomNames) {
             int count = 0;
             for (PlayerInfo player : players) {
-                if (name.equals(player.getGameName())) {
+                if (name.equals(player.getRoomName())) {
                     count++;
                 }
             }
             String countPlayers = (count != 0) ? String.format("(%s)", count) : "";
             counts.add(countPlayers);
         }
-        model.addAttribute("games", gameNames);
-        model.addAttribute("gamesCount", counts);
+        model.addAttribute("rooms", roomNames);
+        model.addAttribute("roomsCount", counts);
 
+        Set<String> gamesNames = new TreeSet<>(gameService.getGameNames());
+        model.addAttribute("games", gamesNames);
 
         for (PlayerInfo player : players) {
-            player.setHidden(!gameName.equals(player.getGameName()));
+            player.setHidden(!roomName.equals(player.getRoomName()));
         }
 
         if (!players.isEmpty()) {
@@ -509,11 +515,11 @@ public class AdminController {
     }
 
     @GetMapping(params = "select")
-    public String selectGame(HttpServletRequest request, Model model, @RequestParam(GAME_NAME_KEY) String gameName) {
-        if (gameName == null) {
-            gameName = getDefaultGame();
+    public String selectGame(HttpServletRequest request, Model model, @RequestParam(ROOM_NAME_KEY) String roomName) {
+        if (roomName == null) {
+            roomName = getDefaultRoom();
         }
-        request.setAttribute(GAME_NAME_KEY, gameName);
+        request.setAttribute(ROOM_NAME_KEY, roomName);
         return getAdmin(request);
     }
 

@@ -38,6 +38,7 @@ pages.boardLog = function() {
     game.heroInfo = null;
 
     game.gameName = getSettings('gameName');
+    game.roomName = getSettings('roomName');
     game.playerId = getSettings('playerId');
     game.readableName = getSettings('readableName');
     game.contextPath = getSettings('contextPath');

@@ -124,6 +124,11 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
+    public List<String> getRoomNames() {
+        return new LinkedList<>(roomService.names());
+    }
+
+    @Override
     public List<String> getOnlyGameNames() {
         return getGameNames().stream()
                 .map(GameServiceImpl::removeNumbers)
@@ -192,8 +197,8 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public String getDefaultGame() {
-        return getGameNames().iterator().next();
+    public String getDefaultRoom() {
+        return getRoomNames().iterator().next();
     }
 
     @Override

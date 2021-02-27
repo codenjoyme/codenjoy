@@ -23,6 +23,7 @@ package com.codenjoy.dojo.web.rest.pojo;
  */
 
 import com.codenjoy.dojo.services.GameType;
+import com.codenjoy.dojo.services.RoomGameType;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.settings.Settings;
 import lombok.Getter;
@@ -31,7 +32,8 @@ import java.util.List;
 
 @Getter
 public class PGameTypeInfo {
-    
+
+    private String roomName;
     private String version;
     private String info;
     private int boardSize;
@@ -42,15 +44,18 @@ public class PGameTypeInfo {
     private String wsUrl;
     private PSprites sprites;
 
-    public PGameTypeInfo(GameType<Settings> type, String helpUrl,
+    public PGameTypeInfo(GameType<Settings> type, String roomName, String helpUrl,
                          String clientUrl, String wsUrl,
                          PSprites sprites) 
     {
+
+        Settings settings = type.getSettings();
         version = type.getVersion();
-        info = type.toString();
-        boardSize = type.getBoardSize(type.getSettings()).getValue();
-        parameters = new PParameters(type.getSettings().getParameters()).getParameters();
-        multiplayerType = type.getMultiplayerType(type.getSettings());
+        this.roomName = roomName;
+        info = RoomGameType.unwrap(type).toString();
+        boardSize = type.getBoardSize(settings).getValue();
+        parameters = new PParameters(settings.getParameters()).getParameters();
+        multiplayerType = type.getMultiplayerType(settings);
         this.helpUrl = helpUrl;
         this.clientUrl = clientUrl;
         this.wsUrl = wsUrl;
