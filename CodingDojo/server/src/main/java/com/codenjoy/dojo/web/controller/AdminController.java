@@ -80,13 +80,9 @@ public class AdminController {
     private final Semifinal semifinal;
     private final RoomService roomService;
 
-    @GetMapping(params = "gameVersion")
-    public @ResponseBody String getGameVersion(@RequestParam("gameVersion") String gameName) {
+    @GetMapping("gameVersion")
+    public @ResponseBody String getGameVersion(@RequestParam(GAME_NAME_KEY) String gameName) {
         return gameService.getGame(gameName).getVersion();
-    }
-
-    private String getAdmin(HttpServletRequest request) {
-        return getAdmin(getGameRoom(request));
     }
 
     // TODO ROOM а этот метод вообще зачем?
@@ -97,11 +93,6 @@ public class AdminController {
     {
         saveService.load(id, getGameRoom(request), getGameName(request), save);
         return "redirect:/board/player/" + id;
-    }
-
-    @GetMapping(params = "select")
-    public String selectGame(@RequestParam(ROOM_NAME_KEY) String roomName) {
-        return getAdmin(roomName);
     }
 
     @GetMapping(params = "close")
@@ -265,15 +256,10 @@ public class AdminController {
         return getAdmin(request);
     }
 
-
     @GetMapping(params = "resume")
     public String resumeGame(HttpServletRequest request) {
         timerService.resume();
         return getAdmin(request);
-    }
-
-    private void checkGameStatus(Model model) {
-        model.addAttribute("paused", timerService.isPaused());
     }
 
     // ----------------
@@ -324,10 +310,6 @@ public class AdminController {
     public String stopRecordingGame(HttpServletRequest request) {
         actionLogger.pause();
         return getAdmin(request);
-    }
-
-    private void checkRecordingStatus(Model model) {
-        model.addAttribute("recording", actionLogger.isWorking());
     }
 
     // ----------------
@@ -444,6 +426,11 @@ public class AdminController {
         return value;
     }
 
+
+    private String getAdmin(HttpServletRequest request) {
+        return getAdmin(getGameRoom(request));
+    }
+
     private String getAdmin(String roomName) {
         if (roomName == null) {
             return getAdmin();
@@ -452,18 +439,14 @@ public class AdminController {
     }
 
     private String getAdmin() {
-        return getAdmin(getDefaultRoom());
-    }
-
-    private String getDefaultRoom() {
-        return gameService.getDefaultRoom();
+        return getAdmin(gameService.getDefaultRoom());
     }
 
     @GetMapping()
-    public String getAdminPage(Model model,
-                       @RequestParam(value = ROOM_NAME_KEY, required = false)
+    public String getAdmin(Model model,
+                           @RequestParam(value = ROOM_NAME_KEY, required = false)
                                String roomName,
-                       @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
+                           @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
                                Boolean gameSpecificAdminPage)
     {
         roomName = (roomName == null || roomName.equals("null")) ? null : roomName;

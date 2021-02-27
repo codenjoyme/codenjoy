@@ -57,7 +57,7 @@
                     <c:if test="${room == roomName}">
                         <b>
                     </c:if>
-                        <a href="${ctx}/admin?roomName=${room}&select">${room}${roomsCount[status.index]}</a>&nbsp;&nbsp;&nbsp;
+                        <a href="${ctx}/admin?roomName=${room}">${room}${roomsCount[status.index]}</a>&nbsp;&nbsp;&nbsp;
                     <c:if test="${room == roomName}">
                         </b>
                     </c:if>
