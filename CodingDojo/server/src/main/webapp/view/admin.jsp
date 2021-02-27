@@ -48,7 +48,7 @@
     <table class="admin-table" id="selectGame">
         <tr>
             <td style="width:300px;">
-                <b>Please select your game</b>
+                <b>Please select your room</b>
             </td>
         </tr>
         <tr>

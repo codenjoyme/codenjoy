@@ -100,24 +100,14 @@ public class AdminController {
     }
 
     @GetMapping(params = "select")
-    public String selectGame(HttpServletRequest request,
-                             @RequestParam(ROOM_NAME_KEY) String roomName)
-    {
-        if (roomName == null) {
-            roomName = getDefaultRoom();
-        }
-        request.setAttribute(ROOM_NAME_KEY, roomName);
-        return getAdmin(request);
+    public String selectGame(@RequestParam(ROOM_NAME_KEY) String roomName) {
+        return getAdmin(roomName);
     }
 
     @GetMapping(params = "close")
     public String close(HttpServletRequest request) {
         playerService.closeRegistration();
         return getAdmin(request);
-    }
-
-    private void checkRegistrationClosed(Model model) {
-        model.addAttribute("opened", playerService.isRegistrationOpened());
     }
 
     @GetMapping(params = "open")
