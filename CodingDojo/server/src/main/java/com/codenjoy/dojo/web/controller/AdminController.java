@@ -250,7 +250,7 @@ public class AdminController {
         saveService.saveAll(roomName);
         playerService.removeAll(roomName);
         saveService.loadAll(roomName);
-        return "redirect:/";
+        return getAdmin(roomName);
     }
 
     @GetMapping(params = "cleanAll")
