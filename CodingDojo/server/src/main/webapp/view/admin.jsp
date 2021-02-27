@@ -102,10 +102,10 @@
             <td>
                 <c:choose>
                     <c:when test="${paused}">
-                        <b>The Codenjoy was suspended</b></br> <a href="${ctx}/admin?resume&roomName=${roomName}">Resume game</a>.
+                        <b>The Codenjoy was suspended</b></br> <a href="${ctx}/admin/game/resume?roomName=${roomName}">Resume game</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The Codenjoy is active</b></br> <a href="${ctx}/admin?pause&roomName=${roomName}">Pause game</a>.
+                        <b>The Codenjoy is active</b></br> <a href="${ctx}/admin/game/pause?roomName=${roomName}">Pause game</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -129,10 +129,10 @@
             <td>
                 <c:choose>
                     <c:when test="${recording}">
-                        <b>The recording is active</b></br> <a href="${ctx}/admin?stopRecording&roomName=${roomName}">Stop recording</a>.
+                        <b>The recording is active</b></br> <a href="${ctx}/admin/recording/stop?roomName=${roomName}">Stop recording</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The recording was suspended</b></br> <a href="${ctx}/admin?recording&roomName=${roomName}">Start recording</a>.
+                        <b>The recording was suspended</b></br> <a href="${ctx}/admin/recording/start?roomName=${roomName}">Start recording</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -144,10 +144,10 @@
             <td>
                 <c:choose>
                     <c:when test="${debugLog}">
-                        <b>The debug in progress</b></br> <a href="${ctx}/admin?stopDebug&roomName=${roomName}">Stop debug</a>.
+                        <b>The debug in progress</b></br> <a href="${ctx}/admin/debug/stop?roomName=${roomName}">Stop debug</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The debug was suspended</b></br> <a href="${ctx}/admin?startDebug&roomName=${roomName}">Start debug</a>.
+                        <b>The debug was suspended</b></br> <a href="${ctx}/admin/debug/start?roomName=${roomName}">Start debug</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -159,10 +159,10 @@
             <td>
                 <c:choose>
                     <c:when test="${autoSave}">
-                        <b>The auto save in progress</b></br> <a href="${ctx}/admin?stopAutoSave&roomName=${roomName}">Stop auto save</a>.
+                        <b>The auto save in progress</b></br> <a href="${ctx}/admin/autoSave/stop?roomName=${roomName}">Stop auto save</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The auto save was suspended</b></br> <a href="${ctx}/admin?startAutoSave&roomName=${roomName}">Start auto save</a>.
+                        <b>The auto save was suspended</b></br> <a href="${ctx}/admin/autoSave/start?roomName=${roomName}">Start auto save</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -174,10 +174,10 @@
             <td>
                 <c:choose>
                     <c:when test="${opened}">
-                        <b>The registration is active</b></br> <a href="${ctx}/admin?close&roomName=${roomName}">Close registration</a>.
+                        <b>The registration is active</b></br> <a href="${ctx}/admin/registration/stop?roomName=${roomName}">Close registration</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The registration was closed</b></br> <a href="${ctx}/admin?open&roomName=${roomName}">Open registration</a>.
+                        <b>The registration was closed</b></br> <a href="${ctx}/admin/registration/start?roomName=${roomName}">Open registration</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -233,9 +233,9 @@
                 <td><b>Clean / Reset</b></td>
             </tr>
             <td>
-                <a href="${ctx}/admin?cleanAll&roomName=${roomName}">Clean all scores</a>. </br>
-                <a href="${ctx}/admin?reloadAllRooms&roomName=${roomName}">Reload all rooms</a>. Not working for !disposable rooms. </br>
-                <a href="${ctx}/admin?resetAll&roomName=${roomName}">Reload all players</a>. Through saves: saveAll -> removeAll -> loadAll
+                <a href="${ctx}/admin/game/scores/cleanAll?roomName=${roomName}">Clean all scores</a>. </br>
+                <a href="${ctx}/admin/game/board/reloadAll?roomName=${roomName}">Reload all rooms</a>. Not working for !disposable rooms. </br>
+                <a href="${ctx}/admin/player/reloadAll?roomName=${roomName}">Reload all players</a>. Through saves: saveAll -> removeAll -> loadAll
             </td>
         </tr>
     </table>
@@ -400,26 +400,26 @@
                     <td class="header">Joystick</td>
                     <td class="header">GameName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>
-                        <a href="${ctx}/admin?saveAll&roomName=${roomName}">SaveAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/saveAll?roomName=${roomName}">SaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin?loadAll&roomName=${roomName}">LoadAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/loadAll?roomName=${roomName}">LoadAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin?removeSaveAll&roomName=${roomName}">RemoveSaveAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/save/removeAll?roomName=${roomName}">RemoveSaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin?removeRegistrationAll&roomName=${roomName}">RemoveRegAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/registration/removeAll?roomName=${roomName}">RemoveRegAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin?gameOverAll&roomName=${roomName}">GameOverAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/gameOverAll?roomName=${roomName}">GameOverAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
                         <a href="${ctx}/board/game/${gameName}">ViewGameAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header">PlayerLogAll</td>
                     <td>
-                        <a href="${ctx}/admin?reloadAllAI&roomName=${roomName}">LoadAIAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/ai/reloadAll?roomName=${roomName}">LoadAIAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header">Save data&nbsp;&nbsp;</td>
                 </tr>
@@ -454,10 +454,10 @@
                                     </c:otherwise>
                                 </c:choose>
                                 <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
-                                <td><a href="${ctx}/admin?save=${player.id}&roomName=${roomName}">Save</a></td>
+                                <td><a href="${ctx}/admin/player/${player.id}/save?roomName=${roomName}">Save</a></td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin?load=${player.id}&roomName=${roomName}">Load</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/load?roomName=${roomName}">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -465,7 +465,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin?removeSave=${player.id}&roomName=${roomName}">RemoveSave</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?roomName=${roomName}">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
@@ -473,13 +473,13 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin?removeRegistration=${player.id}&roomName=${roomName}">RemoveReg</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?roomName=${roomName}">RemoveReg</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveReg</td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><a href="${ctx}/admin?gameOver=${player.id}&roomName=${roomName}">GameOver</a></td>
+                                <td><a href="${ctx}/admin/player/${player.id}/gameOver?roomName=${roomName}">GameOver</a></td>
                                 <td><a href="${ctx}/board/player/${player.id}?code=${player.code}">ViewGame</a></td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
@@ -494,7 +494,7 @@
                                         <td>Loaded</td>
                                     </c:when>
                                     <c:otherwise>
-                                        <td><a href="${ctx}/admin?reloadAI=${player.id}&roomName=${roomName}">LoadAI</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/ai/reload?roomName=${roomName}">LoadAI</a></td>
                                     </c:otherwise>
                                 </c:choose>
                                 <c:choose>
@@ -518,7 +518,7 @@
                                 <td>Save</td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin?load=${player.id}&roomName=${roomName}">Load</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/load?roomName=${roomName}">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -526,7 +526,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin?removeSave=${player.id}&roomName=${roomName}">RemoveSave</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?roomName=${roomName}">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
@@ -534,7 +534,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin?removeRegistration=${player.id}&roomName=${roomName}">RemoveReg</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?roomName=${roomName}">RemoveReg</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveReg</td>
