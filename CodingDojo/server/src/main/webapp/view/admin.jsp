@@ -234,7 +234,7 @@
             </tr>
             <td>
                 <a href="${ctx}/admin?cleanAll&roomName=${roomName}">Clean all scores</a>. </br>
-                <a href="${ctx}/admin?reloadRooms&roomName=${roomName}">Reload all rooms</a>. Not working for !disposable rooms. </br>
+                <a href="${ctx}/admin?reloadAllRooms&roomName=${roomName}">Reload all rooms</a>. Not working for !disposable rooms. </br>
                 <a href="${ctx}/admin?resetAll&roomName=${roomName}">Reload all players</a>. Through saves: saveAll -> removeAll -> loadAll
             </td>
         </tr>
