@@ -148,8 +148,8 @@ public class AdminController {
     }
 
     @GetMapping(params = "gameOver")
-    public String removePlayer(@RequestParam("gameOver") String name, HttpServletRequest request) {
-        playerService.remove(name);
+    public String removePlayer(@RequestParam("gameOver") String id, HttpServletRequest request) {
+        playerService.remove(id);
         return getAdmin(request);
     }
 
@@ -160,8 +160,8 @@ public class AdminController {
     }
 
     @GetMapping(params = "removeRegistration")
-    public String removePlayerRegistration(@RequestParam("removeRegistration") String name, Model model, HttpServletRequest request) {
-        registration.remove(name);
+    public String removePlayerRegistration(@RequestParam("removeRegistration") String id, Model model, HttpServletRequest request) {
+        registration.remove(id);
         return getAdmin(request);
     }
 
