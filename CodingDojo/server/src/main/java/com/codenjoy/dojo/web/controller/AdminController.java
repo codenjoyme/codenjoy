@@ -126,12 +126,14 @@ public class AdminController {
 
     @GetMapping(params = "reloadAllAI")
     public String reloadAllAI(Model model, HttpServletRequest request) {
-        playerService.getAll()
+        String roomName = getGameRoom(request);
+
+        playerService.getAll(roomName)
                 .stream().filter(not(Player::hasAi))
                 .map(Player::getId)
                 .forEach(playerService::reloadAI);
 
-        return getAdmin(request);
+        return getAdmin(roomName);
     }
 
     private <T> Predicate<T> not(Predicate<T> predicate) {
