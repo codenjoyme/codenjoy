@@ -179,8 +179,9 @@ public class AdminController {
 
     @GetMapping(params = "gameOverAll")
     public String gameOverAllPlayers(Model model, HttpServletRequest request) {
-        playerService.removeAll();
-        return getAdmin(request);
+        String roomName = getGameRoom(request);
+        playerService.removeAll(roomName);
+        return getAdmin(roomName);
     }
 
     @GetMapping(params = "resetAll")
