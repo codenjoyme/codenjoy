@@ -86,7 +86,7 @@ public class AdminController {
     }
 
     // TODO ROOM а этот метод вообще зачем?
-    @GetMapping(params = {"player", "data"})
+    @GetMapping(value = "/", params = {"player", "data"})
     public String loadPlayerGameFromSave(@RequestParam("player") String id,
                                          @RequestParam("data") String save,
                                          HttpServletRequest request)
