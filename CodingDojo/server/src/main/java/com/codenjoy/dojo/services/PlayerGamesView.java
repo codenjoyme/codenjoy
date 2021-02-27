@@ -106,6 +106,7 @@ public class PlayerGamesView {
 
     private List<List<String>> getGroupBy(Function<PlayerGame, Object> function) {
         return service.all().stream()
+                    .filter(playerGame -> Objects.nonNull(function.apply(playerGame)))
                     .collect(groupingBy(function))
                     .values().stream()
                     .map(group -> group.stream()

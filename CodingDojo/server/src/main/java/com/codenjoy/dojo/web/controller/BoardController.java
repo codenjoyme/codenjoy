@@ -96,7 +96,7 @@ public class BoardController {
             return "redirect:/register?id=" + id;
         }
 
-        populateJoiningGameModel(model, code, player);
+        populateBoardAttributes(model, code, player, false);
 
         justBoard = justBoard != null && justBoard;
         model.addAttribute("justBoard", justBoard);
@@ -130,17 +130,24 @@ public class BoardController {
             return registrationService.connectRegisteredPlayer(user.getCode(), request, user.getId(), roomName, gameName);
         }
 
-        populateJoiningGameModel(model, player.getCode(), player);
+        populateBoardAttributes(model, player.getCode(), player, false);
         return "board";
     }
 
-    private void populateJoiningGameModel(ModelMap model, String code, Player player) {
+    private void populateBoardAttributes(ModelMap model, String code, Player player, boolean allPlayersScreen) {
+        populateBoardAttributes(model, code, player.getGameName(), player.getGameNameOnly(), player.getId(),
+                player.getReadableName(), allPlayersScreen);
+    }
+
+    private void populateBoardAttributes(ModelMap model, String code, String gameName, String gameNameOnly,
+                                         String playerId, String readableName, boolean allPlayersScreen) {
         model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME_KEY, player.getGameName());
-        model.addAttribute("gameNameOnly", player.getGameNameOnly());
-        model.addAttribute("playerId", player.getId());
-        model.addAttribute("readableName", player.getReadableName());
-        model.addAttribute("allPlayersScreen", false);
+        model.addAttribute(GAME_NAME_KEY, gameName);
+        model.addAttribute("gameNameOnly", gameNameOnly);
+        model.addAttribute("playerId", playerId);
+        model.addAttribute("readableName", readableName);
+        model.addAttribute("allPlayersScreen", allPlayersScreen); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
+        model.addAttribute("playerScoreCleanupEnabled", properties.isPlayerScoreCleanupEnabled());
     }
 
     @GetMapping(value = URI + "/log/player/{player}", params = "gameName")
@@ -194,12 +201,7 @@ public class BoardController {
             return "redirect:/board/player/" + player.getId() + code(code);
         }
 
-        model.addAttribute("code", code);
-        model.addAttribute(GAME_NAME_KEY, gameName);
-        model.addAttribute("gameNameOnly", player.getGameNameOnly());
-        model.addAttribute("playerId", null);
-        model.addAttribute("readableName", null);
-        model.addAttribute("allPlayersScreen", true); // TODO так клиенту припрутся все доски и даже не из его игры, надо фиксить dojo transport
+        populateBoardAttributes(model, code, gameName, player.getGameNameOnly(), null, null, true);
         return "board";
     }
 

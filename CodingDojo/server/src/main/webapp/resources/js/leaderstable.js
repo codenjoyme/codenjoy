@@ -138,3 +138,14 @@ function initLeadersTable(contextPath, playerId, code, onDrawItem, onParseValue)
         }
     });
 };
+
+function cleanPlayerScores() {
+    $.ajax({
+        type: "DELETE",
+        url: game.contextPath + '/rest/game/scores',
+        dataType: "json",
+        error: function () {
+            console.error('Failed to cleanup score');
+        }
+    });
+}

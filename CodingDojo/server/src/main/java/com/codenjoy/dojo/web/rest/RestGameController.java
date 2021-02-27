@@ -23,19 +23,13 @@ package com.codenjoy.dojo.web.rest;
  */
 
 import com.codenjoy.dojo.client.CodenjoyContext;
-import com.codenjoy.dojo.services.GameService;
-import com.codenjoy.dojo.services.GameType;
-import com.codenjoy.dojo.services.GuiPlotColorDecoder;
+import com.codenjoy.dojo.services.*;
+import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.web.rest.pojo.PGameTypeInfo;
 import com.codenjoy.dojo.web.rest.pojo.PSprites;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -46,6 +40,10 @@ import java.util.Map;
 public class RestGameController {
 
     private GameService gameService;
+
+    private PlayerService playerService;
+
+    private ConfigProperties properties;
 
     @GetMapping("/{name}/exists")
     public Boolean exists(@PathVariable("name") String name) {
@@ -144,5 +142,12 @@ public class RestGameController {
         return String.valueOf(GuiPlotColorDecoder.GUI.toCharArray());
     }
 
+    @DeleteMapping("/scores")
+    public void cleanScores(@AuthenticationPrincipal Registration.User user) {
+        if (!properties.isPlayerScoreCleanupEnabled()) {
+            return;
+        }
+        playerService.cleanScores(user.getId());
+    }
 }
 
