@@ -29,8 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Stream;
 
- import static com.codenjoy.dojo.services.PlayerGames.withRoom;
+import static com.codenjoy.dojo.services.PlayerGames.withRoom;
 
 @Component("saveService")
 public class SaveServiceImpl implements SaveService {
@@ -70,11 +71,7 @@ public class SaveServiceImpl implements SaveService {
 
     @Override
     public void loadAll(String roomName) {
-        List<String> saved = saver.getSavedList();
-
-        playerGames.getAll(withRoom(roomName)).stream()
-                .map(PlayerGame::getPlayerId)
-                .filter(saved::contains)
+        getSavedStream(roomName)
                 .forEach(this::load);
     }
 
@@ -189,6 +186,20 @@ public class SaveServiceImpl implements SaveService {
         for (String id : saver.getSavedList()) {
             saver.delete(id);
         }
+    }
+
+    @Override
+    public void removeAllSaves(String roomName) {
+        getSavedStream(roomName)
+                .forEach(this::removeSave);
+    }
+
+    private Stream<String> getSavedStream(String roomName) {
+        List<String> saved = saver.getSavedList();
+
+        return playerGames.getAll(withRoom(roomName)).stream()
+                .map(PlayerGame::getPlayerId)
+                .filter(saved::contains);
     }
 
 }

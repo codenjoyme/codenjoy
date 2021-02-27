@@ -37,5 +37,5 @@ public interface SaveService {
     void loadAll();
     void removeSave(String id);
     void removeAllSaves();
-
+    void removeAllSaves(String roomName);
 }

@@ -463,13 +463,15 @@ public class SaveServiceImplTest {
 
     @Test
     public void shouldRemoveAllSaves() {
-        when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second"));
+        when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second", "third"));
+        createPlayer("first", "room1");
+        createPlayer("second", "room2");
+        createPlayer("third", "room1");
 
-        saveService.removeAllSaves();
+        saveService.removeAllSaves("room1");
 
         verify(saver).delete("first");
-        verify(saver).delete("second");
+        verify(saver).delete("third");
         verifyNoMoreInteractions(playerService);
     }
-
 }

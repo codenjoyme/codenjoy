@@ -45,7 +45,6 @@ public class RestRegistrationController {
     private Registration registration;
     private PlayerService playerService;
     private PlayerGames playerGames;
-    private GameService gameService;
     private SaveService saveService;
     private Validator validator;
 

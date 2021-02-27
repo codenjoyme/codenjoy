@@ -211,7 +211,7 @@ public class AdminController {
     @GetMapping(params = "removeSaveAll")
     public String removePlayerSave(HttpServletRequest request) {
         String roomName = getGameRoom(request);
-        saveService.removeAllSaves(); // TODO for room name
+        saveService.removeAllSaves(roomName);
         return getAdmin(roomName);
     }
 
