@@ -186,9 +186,10 @@ public class AdminController {
 
     @GetMapping(params = "resetAll")
     public String resetAllPlayers(Model model, HttpServletRequest request) {
-        saveService.saveAll();
-        playerService.removeAll();
-        saveService.loadAll();
+        String roomName = getGameRoom(request);
+        saveService.saveAll(roomName);
+        playerService.removeAll(roomName);
+        saveService.loadAll(roomName);
         return "redirect:/";
     }
 
