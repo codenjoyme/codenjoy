@@ -94,14 +94,16 @@ public class AdminController {
     @GetMapping(params = {"player", "data"})
     public String loadPlayerGameFromSave(@RequestParam("player") String id,
                                          @RequestParam("data") String save,
-                                         Model model, HttpServletRequest request)
+                                         HttpServletRequest request)
     {
         saveService.load(id, getGameRoom(request), getGameName(request), save);
         return "redirect:/board/player/" + id;
     }
 
     @GetMapping(params = "select")
-    public String selectGame(HttpServletRequest request, Model model, @RequestParam(ROOM_NAME_KEY) String roomName) {
+    public String selectGame(HttpServletRequest request,
+                             @RequestParam(ROOM_NAME_KEY) String roomName)
+    {
         if (roomName == null) {
             roomName = getDefaultRoom();
         }
@@ -110,7 +112,7 @@ public class AdminController {
     }
 
     @GetMapping(params = "close")
-    public String close(Model model, HttpServletRequest request) {
+    public String close(HttpServletRequest request) {
         playerService.closeRegistration();
         return getAdmin(request);
     }
@@ -120,7 +122,7 @@ public class AdminController {
     }
 
     @GetMapping(params = "open")
-    public String open(Model model, HttpServletRequest request) {
+    public String open(HttpServletRequest request) {
         playerService.openRegistration();
         return getAdmin(request);
     }
@@ -138,13 +140,15 @@ public class AdminController {
     // ----------------
 
     @GetMapping(params = "save")
-    public String savePlayerGame(@RequestParam("save") String id, Model model, HttpServletRequest request) {
+    public String savePlayerGame(@RequestParam("save") String id,
+                                 HttpServletRequest request)
+    {
         saveService.save(id);
         return getAdmin(request);
     }
 
     @GetMapping(params = "saveAll")
-    public String saveAllGames(Model model, HttpServletRequest request) {
+    public String saveAllGames(HttpServletRequest request) {
         String roomName = getGameRoom(request);
         saveService.saveAll(roomName);
         return getAdmin(roomName);
@@ -153,13 +157,15 @@ public class AdminController {
     // ----------------
 
     @GetMapping(params = "load")
-    public String loadPlayerGame(@RequestParam("load") String id, Model model, HttpServletRequest request) {
+    public String loadPlayerGame(@RequestParam("load") String id,
+                                 HttpServletRequest request)
+    {
         saveService.load(id);
         return getAdmin(request);
     }
 
     @GetMapping(params = "loadAll")
-    public String loadAllGames(Model model, HttpServletRequest request) {
+    public String loadAllGames(HttpServletRequest request) {
         String roomName = getGameRoom(request);
         saveService.loadAll(roomName);
         return getAdmin(roomName);
@@ -168,13 +174,14 @@ public class AdminController {
     // ----------------
 
     @GetMapping(params = "reloadAI")
-    public String reloadAI(@RequestParam("reloadAI") String id, Model model, HttpServletRequest request) {
+    public String reloadAI(@RequestParam("reloadAI") String id,
+                           HttpServletRequest request) {
         playerService.reloadAI(id);
         return getAdmin(request);
     }
 
     @GetMapping(params = "reloadAllAI")
-    public String reloadAllAI(Model model, HttpServletRequest request) {
+    public String reloadAllAI(HttpServletRequest request) {
         String roomName = getGameRoom(request);
 
         playerService.getAllInRoom(roomName)
@@ -188,13 +195,15 @@ public class AdminController {
     // ----------------
 
     @GetMapping(params = "gameOver")
-    public String removePlayer(@RequestParam("gameOver") String id, HttpServletRequest request) {
+    public String removePlayer(@RequestParam("gameOver") String id,
+                               HttpServletRequest request)
+    {
         playerService.remove(id);
         return getAdmin(request);
     }
 
     @GetMapping(params = "gameOverAll")
-    public String gameOverAllPlayers(Model model, HttpServletRequest request) {
+    public String gameOverAllPlayers(HttpServletRequest request) {
         String roomName = getGameRoom(request);
         playerService.removeAll(roomName);
         return getAdmin(roomName);
@@ -203,7 +212,8 @@ public class AdminController {
     // ----------------
 
     @GetMapping(params = "removeSave")
-    public String removePlayerSave(@RequestParam("removeSave") String id, HttpServletRequest request) {
+    public String removePlayerSave(@RequestParam("removeSave") String id,
+                                   HttpServletRequest request) {
         saveService.removeSave(id);
         return getAdmin(request);
     }
@@ -218,7 +228,9 @@ public class AdminController {
     // ----------------
 
     @GetMapping(params = "removeRegistration")
-    public String removePlayerRegistration(@RequestParam("removeRegistration") String id, Model model, HttpServletRequest request) {
+    public String removePlayerRegistration(@RequestParam("removeRegistration") String id,
+                                           HttpServletRequest request)
+    {
         registration.remove(id);
         return getAdmin(request);
     }
@@ -234,7 +246,7 @@ public class AdminController {
     // ----------------
 
     @GetMapping(params = "resetAll")
-    public String resetAllPlayers(Model model, HttpServletRequest request) {
+    public String resetAllPlayers(HttpServletRequest request) {
         String roomName = getGameRoom(request);
         saveService.saveAll(roomName);
         playerService.removeAll(roomName);
@@ -243,14 +255,14 @@ public class AdminController {
     }
 
     @GetMapping(params = "cleanAll")
-    public String cleanAllPlayersScores(Model model, HttpServletRequest request) {
+    public String cleanAllPlayersScores(HttpServletRequest request) {
         String roomName = getGameRoom(request);
         playerService.cleanAllScores(roomName);
         return getAdmin(roomName);
     }
 
     @GetMapping(params = "reloadAllRooms")
-    public String reloadAllPlayersRooms(Model model, HttpServletRequest request) {
+    public String reloadAllPlayersRooms(HttpServletRequest request) {
         String roomName = getGameRoom(request);
         playerService.reloadAllRooms(roomName);
         return getAdmin(request);
@@ -259,14 +271,14 @@ public class AdminController {
     // ----------------
 
     @GetMapping(params = "pause")
-    public String pauseGame(Model model, HttpServletRequest request) {
+    public String pauseGame(HttpServletRequest request) {
         timerService.pause();
         return getAdmin(request);
     }
 
 
     @GetMapping(params = "resume")
-    public String resumeGame(Model model, HttpServletRequest request) {
+    public String resumeGame(HttpServletRequest request) {
         timerService.resume();
         return getAdmin(request);
     }
@@ -278,13 +290,13 @@ public class AdminController {
     // ----------------
 
     @GetMapping(params = "stopDebug")
-    public String stopDebug(Model model, HttpServletRequest request) {
+    public String stopDebug(HttpServletRequest request) {
         debugService.pause();
         return getAdmin(request);
     }
 
     @GetMapping(params = "startDebug")
-    public String startDebug(Model model, HttpServletRequest request) {
+    public String startDebug(HttpServletRequest request) {
         debugService.resume();
         return getAdmin(request);
     }
@@ -296,13 +308,13 @@ public class AdminController {
     // ----------------
 
     @GetMapping(params = "stopAutoSave")
-    public String stopAutoSave(Model model, HttpServletRequest request) {
+    public String stopAutoSave(HttpServletRequest request) {
         autoSaver.pause();
         return getAdmin(request);
     }
 
     @GetMapping(params = "startAutoSave")
-    public String startAutoSave(Model model, HttpServletRequest request) {
+    public String startAutoSave(HttpServletRequest request) {
         autoSaver.resume();
         return getAdmin(request);
     }
@@ -314,13 +326,13 @@ public class AdminController {
     // ----------------
 
     @GetMapping(params = "recording")
-    public String recordingGame(Model model, HttpServletRequest request) {
+    public String recordingGame(HttpServletRequest request) {
         actionLogger.resume();
         return getAdmin(request);
     }
 
     @GetMapping(params = "stopRecording")
-    public String stopRecordingGame(Model model, HttpServletRequest request) {
+    public String stopRecordingGame(HttpServletRequest request) {
         actionLogger.pause();
         return getAdmin(request);
     }
@@ -332,7 +344,10 @@ public class AdminController {
     // ----------------
 
     @PostMapping()
-    public String saveSettings(AdminSettings settings, BindingResult result, Model model, HttpServletRequest request) {
+    public String saveSettings(AdminSettings settings,
+                               BindingResult result,
+                               HttpServletRequest request)
+    {
         if (!result.hasErrors()) {
             // do nothing
         }
