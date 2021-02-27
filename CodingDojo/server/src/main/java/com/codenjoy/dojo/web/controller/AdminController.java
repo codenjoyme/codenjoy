@@ -50,7 +50,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.function.Predicate;
 
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
@@ -497,7 +496,35 @@ public class AdminController {
 
         Settings gameSettings = game.getSettings();
         List<Parameter> parameters = gameSettings.getParameters();
+        model.addAttribute("settings", parameters);
+        model.addAttribute("semifinalTick", semifinal.getTime());
+        model.addAttribute(GAME_NAME_KEY, gameName);
+        model.addAttribute(ROOM_NAME_KEY, roomName);
+        model.addAttribute("gameVersion", game.getVersion());
+        model.addAttribute("generateNameMask", "demo%");
+        model.addAttribute("generateCount", "30");
+        model.addAttribute("generateRoomName", roomName);
+        model.addAttribute("timerPeriod", timerService.getPeriod());
+        model.addAttribute("defaultProgress", getDefaultProgress(game));
+        model.addAttribute("paused", timerService.isPaused());
+        model.addAttribute("recording", actionLogger.isWorking());
+        model.addAttribute("autoSave", autoSaver.isWorking());
+        model.addAttribute("debugLog", debugService.isWorking());
+        model.addAttribute("opened", playerService.isRegistrationOpened());
+        AdminSettings settings = getAdminSettings(parameters);
+        model.addAttribute("adminSettings", settings);
+        settings.setPlayers(preparePlayers(model, roomName));
 
+        return "admin";
+    }
+
+    public String getDefaultProgress(GameType game) {
+        MultiplayerType type = game.getMultiplayerType(game.getSettings());
+        JSONObject save = type.progress().saveTo(new JSONObject());
+        return save.toString().replace('"', '\'');
+    }
+
+    public AdminSettings getAdminSettings(List<Parameter> parameters) {
         AdminSettings settings = new AdminSettings();
 
         settings.setSemifinal(semifinal.settings().clone());
@@ -513,30 +540,7 @@ public class AdminController {
                                 .map(name -> enabled.contains(name))
                                 .collect(toList());
         settings.setGames(games);
-
-        model.addAttribute("adminSettings", settings);
-        model.addAttribute("settings", parameters);
-        model.addAttribute("semifinalTick", semifinal.getTime());
-        model.addAttribute(GAME_NAME_KEY, gameName);
-        model.addAttribute(ROOM_NAME_KEY, roomName);
-        model.addAttribute("gameVersion", game.getVersion());
-        model.addAttribute("generateNameMask", "demo%");
-        model.addAttribute("generateCount", "30");
-        model.addAttribute("generateRoomName", roomName);
-        model.addAttribute("timerPeriod", timerService.getPeriod());
-
-        MultiplayerType type = game.getMultiplayerType(game.getSettings());
-        JSONObject save = type.progress().saveTo(new JSONObject());
-        model.addAttribute("defaultProgress", save.toString().replace('"', '\''));
-
-        checkGameStatus(model);
-        checkRecordingStatus(model);
-        checkAutoSaveStatus(model);
-        checkDebugStatus(model);
-        checkRegistrationClosed(model);
-        prepareList(model, settings, roomName);
-
-        return "admin";
+        return settings;
     }
 
     private String getGameRoom(HttpServletRequest request) {
@@ -555,10 +559,25 @@ public class AdminController {
         return gameName;
     }
 
-    private void prepareList(Model model, AdminSettings settings, String roomName) {
+    private List<PlayerInfo> preparePlayers(Model model, String roomName) {
         List<PlayerInfo> players = saveService.getSaves();
 
         List<String> roomNames = gameService.getRoomNames();
+        model.addAttribute("rooms", roomNames);
+        model.addAttribute("roomsCount", getRoomCounts(players, roomNames));
+        model.addAttribute("games", new TreeSet<>(gameService.getGameNames()));
+
+        for (PlayerInfo player : players) {
+            player.setHidden(!roomName.equals(player.getRoomName()));
+        }
+
+        if (!players.isEmpty()) {
+            model.addAttribute("players", players);
+        }
+        return players;
+    }
+
+    private List<String> getRoomCounts(List<PlayerInfo> players, List<String> roomNames) {
         List<String> counts = new LinkedList<>();
         for (String name : roomNames) {
             int count = 0;
@@ -570,20 +589,7 @@ public class AdminController {
             String countPlayers = (count != 0) ? String.format("(%s)", count) : "";
             counts.add(countPlayers);
         }
-        model.addAttribute("rooms", roomNames);
-        model.addAttribute("roomsCount", counts);
-
-        Set<String> gamesNames = new TreeSet<>(gameService.getGameNames());
-        model.addAttribute("games", gamesNames);
-
-        for (PlayerInfo player : players) {
-            player.setHidden(!roomName.equals(player.getRoomName()));
-        }
-
-        if (!players.isEmpty()) {
-            model.addAttribute("players", players);
-        }
-        settings.setPlayers(players);
+        return counts;
     }
 
 }
