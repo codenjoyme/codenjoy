@@ -97,8 +97,9 @@ public class AdminController {
 
     @GetMapping(params = "saveAll")
     public String saveAllGames(Model model, HttpServletRequest request) {
-        saveService.saveAll();
-        return getAdmin(request);
+        String roomName = getGameRoom(request);
+        saveService.saveAll(roomName);
+        return getAdmin(roomName);
     }
 
     @GetMapping(params = "load")

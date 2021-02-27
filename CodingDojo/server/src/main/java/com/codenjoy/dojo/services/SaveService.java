@@ -29,6 +29,7 @@ public interface SaveService {
 
     boolean load(String id);
     void load(String id, String roomName, String gameName, String save);
+    void loadAll(String roomName);
     long save(String id);
     List<PlayerInfo> getSaves();
     long saveAll();

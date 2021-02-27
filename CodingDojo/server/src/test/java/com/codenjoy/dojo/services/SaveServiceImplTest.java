@@ -54,6 +54,7 @@ public class SaveServiceImplTest {
 
     private List<Player> players;
     private List<GameField> fields;
+    public static final boolean NOT_REGISTERED = false;
 
     @Before
     public void setUp() {
@@ -392,8 +393,38 @@ public class SaveServiceImplTest {
         verifyNoMoreInteractions(playerService);
     }
 
+    @Test
+    public void shouldLoadAll_byRoomName() {
+        when(saver.getSavedList()).thenReturn(Arrays.asList("first", "second", "third"));
+        createPlayer("first", "room1");
+        createPlayer("second", "room2");
+        createPlayer("third", "room1");
+
+        PlayerSave first = mock(PlayerSave.class);
+        when(first.getRoomName()).thenReturn("room1");
+
+        PlayerSave second = mock(PlayerSave.class);
+        when(second.getRoomName()).thenReturn("room2");
+
+        PlayerSave third = mock(PlayerSave.class);
+        when(third.getRoomName()).thenReturn("room1");
+
+        when(saver.loadGame("first")).thenReturn(first);
+        when(saver.loadGame("second")).thenReturn(second);
+        when(saver.loadGame("third")).thenReturn(third);
+
+        saveService.loadAll("room1");
+
+        verify(playerService).contains("first");
+        verify(playerService).register(first);
+
+        verify(playerService).contains("third");
+        verify(playerService).register(third);
+
+        verifyNoMoreInteractions(playerService);
+    }
+
     private void allPlayersNotRegistered() {
-        boolean NOT_REGISTERED = false;
         when(playerService.contains(anyString())).thenReturn(NOT_REGISTERED);
     }
 

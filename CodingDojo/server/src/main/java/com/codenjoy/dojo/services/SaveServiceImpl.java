@@ -69,6 +69,16 @@ public class SaveServiceImpl implements SaveService {
     }
 
     @Override
+    public void loadAll(String roomName) {
+        List<String> saved = saver.getSavedList();
+
+        playerGames.getAll(withRoom(roomName)).stream()
+                .map(PlayerGame::getPlayerId)
+                .filter(saved::contains)
+                .forEach(this::load);
+    }
+
+    @Override
     public long save(String id) {
         PlayerGame playerGame = playerGames.get(id);
         if (playerGame != NullPlayerGame.INSTANCE) {
