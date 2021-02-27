@@ -510,8 +510,9 @@ public class AdminController {
 
     @GetMapping(params = "cleanAll")
     public String cleanAllPlayersScores(Model model, HttpServletRequest request) {
-        playerService.cleanAllScores();
-        return getAdmin(request);
+        String roomName = getGameRoom(request);
+        playerService.cleanAllScores(roomName);
+        return getAdmin(roomName);
     }
 
     @GetMapping(params = "reloadAllRooms")
