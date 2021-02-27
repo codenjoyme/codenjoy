@@ -511,7 +511,8 @@ public class AdminController {
 
     @GetMapping(params = "reloadAllRooms")
     public String reloadAllPlayersRooms(Model model, HttpServletRequest request) {
-        playerService.reloadAllRooms();
+        String roomName = getGameRoom(request);
+        playerService.reloadAllRooms(roomName);
         return getAdmin(request);
     }
 
