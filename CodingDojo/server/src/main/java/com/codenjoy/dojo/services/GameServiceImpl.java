@@ -75,7 +75,10 @@ public class GameServiceImpl implements GameService {
         // TODO так же надо будет для новозагруженной игры всех юзеров перезапустить
         for (Class<? extends GameType> clazz : allGames()) {
             GameType gameType = loadGameType(clazz);
-            cache.put(gameType.name(), gameType);
+            String name = gameType.name();
+            cache.put(name, gameType);
+            // создаем комнаты для каждой игры сразу
+            roomService.create(name, gameType);
         }
     }
 

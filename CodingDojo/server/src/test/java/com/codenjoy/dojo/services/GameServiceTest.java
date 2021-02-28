@@ -95,7 +95,7 @@ public class GameServiceTest {
         roomService.create("room2", service.getGame("second"));
         roomService.create("room3", service.getGame("second"));
 
-        assertEquals("[room1, room2, room3]",
+        assertEquals("[first, room1, room2, room3, second]",
                 service.getRoomNames().toString());
     }
 
@@ -125,11 +125,12 @@ public class GameServiceTest {
     
     @Test
     public void shouldGetDefaultGame() {
+        // по умолчанию так же создаются комнаты first & second
         roomService.create("room1", service.getGame("first"));
         roomService.create("room2", service.getGame("second"));
         roomService.create("room3", service.getGame("second"));
 
-        assertEquals("room1",
+        assertEquals("first",
                 service.getDefaultRoom());
     }
 
