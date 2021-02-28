@@ -87,14 +87,14 @@
                     </td>
                 </tr>
             </c:forEach>
+            <tr>
+                <td>
+                    <input type="hidden" name="gameName" value="${gameName}"/>
+                    <input type="hidden" name="roomName" value="${roomName}"/>
+                    <input type="submit" value="Save"/>
+                </td>
+            </tr>
         </table>
-        <tr>
-            <td>
-                <input type="hidden" name="gameName" value="${gameName}"/>
-                <input type="hidden" name="roomName" value="${roomName}"/>
-                <input type="submit" value="Save"/>
-            </td>
-        </tr>
     </form:form>
 
     <table class="admin-table" id="pauseGame">
