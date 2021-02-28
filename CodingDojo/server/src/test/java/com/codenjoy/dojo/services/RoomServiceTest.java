@@ -254,6 +254,22 @@ public class RoomServiceTest {
     }
 
     @Test
+    public void shouldExists() {
+        // given
+        service.create("room1", game1);
+        service.create("room2", game2);
+
+        // when then
+        assertEquals(true, service.exists("room1"));
+        assertEquals(true, service.exists("room2"));
+
+        assertEquals(false, service.exists("room3"));
+        assertEquals(false, service.exists(null));
+        assertEquals(false, service.exists("null"));
+        assertEquals(false, service.exists(""));
+    }
+
+    @Test
     public void shouldGetGameName() {
         // given
         service.create("room1", game1);

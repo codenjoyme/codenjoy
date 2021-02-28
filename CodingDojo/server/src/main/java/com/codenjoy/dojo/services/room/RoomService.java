@@ -25,6 +25,7 @@ package com.codenjoy.dojo.services.room;
 import com.codenjoy.dojo.services.GameType;
 import com.codenjoy.dojo.services.RoomGameType;
 import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.web.controller.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +44,7 @@ public class RoomService {
     private Map<String, RoomState> rooms = new ConcurrentHashMap<>();
 
     public boolean isActive(String room) {
-        if (!rooms.containsKey(room)) {
+        if (!exists(room)) {
             log.warn("Room '{}' not found", room);
             return false;
         }
@@ -51,8 +52,13 @@ public class RoomService {
         return rooms.get(room).getActive();
     }
 
+    public boolean exists(String room) {
+        return !Validator.isEmpty(room)
+                && rooms.containsKey(room);
+    }
+
     public RoomState state(String room) {
-        if (!rooms.containsKey(room)) {
+        if (!exists(room)) {
             log.warn("Room '{}' not found", room);
             return null;
         }
@@ -61,7 +67,7 @@ public class RoomService {
     }
 
     public void setActive(String room, boolean value) {
-        if (!rooms.containsKey(room)) {
+        if (!exists(room)) {
             log.warn("Room '{}' not found", room);
             return;
         }
@@ -69,7 +75,7 @@ public class RoomService {
     }
 
     public GameType create(String room, GameType gameType) {
-        if (rooms.containsKey(room)) {
+        if (exists(room)) {
             return rooms.get(room).getType();
         }
 
@@ -81,7 +87,7 @@ public class RoomService {
     }
 
     public Settings settings(String room) {
-        if (!rooms.containsKey(room)) {
+        if (!exists(room)) {
             log.warn("Room '{}' not found", room);
             return null;
         }
@@ -100,10 +106,10 @@ public class RoomService {
     }
 
     public String gameName(String room) {
-        RoomState state = state(room);
-        if (state == null) {
+        if (!exists(room)) {
+            log.warn("Room '{}' not found", room);
             return null;
         }
-        return state.getType().name();
+        return state(room).getType().name();
     }
 }
