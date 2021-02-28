@@ -91,8 +91,7 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     }
 
     // для "not found" запросов вытаскиваем доп инфо
-    private ServletRequest unwrap(HttpServletRequest req) {
-        ServletRequest request = req;
+    private ServletRequest unwrap(ServletRequest request) {
         while (request instanceof ServletRequestWrapper) {
             request = ((ServletRequestWrapper) request).getRequest();
         }
