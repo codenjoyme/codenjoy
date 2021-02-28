@@ -34,8 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 @Slf4j
 @Component
@@ -111,5 +110,14 @@ public class RoomService {
             return null;
         }
         return state(room).getType().name();
+    }
+
+    public List<GameRooms> gameRooms() {
+        return rooms.values().stream()
+                .collect(groupingBy(roomState -> roomState.getType().name(),
+                        mapping(roomState -> roomState.getName(), toList())))
+                .entrySet().stream()
+                .map(entry -> new GameRooms(entry.getKey(), entry.getValue()))
+                .collect(toList());
     }
 }
