@@ -64,7 +64,7 @@ var AdminAjax = function(contextPath, url) {
 }
 
 var AdminSettings = function(contextPath, gameName, settingsName) {
-    var url = 'rest/settings/' + gameName + '/' + settingsName;
+    var url = 'rest/settings/' + gameName + '/null/' + settingsName;
     var ajax = new AdminAjax(contextPath, url);
 
     return {
