@@ -75,15 +75,15 @@
             </tr>
             <c:forEach items="${gameRooms}" var="game" varStatus="status">
                 <tr>
-                    <td calss="rightStep">
+                    <td class="rightStep">
                         <form:checkbox id="enable-games-${game.game}" path="games[${status.index}]"/>
                         <label class="check-label" for="enable-games-${game.game}"></label>
                         <span>${game.game}</span>
                     </td>
-                    <td calss="rightStep">
+                    <td class="rightStep">
                         <a href="${ctx}/admin?gameName=${game.game}">info</a>
                     </td>
-                    <td calss="rightStep">
+                    <td class="rightStep">
                         <c:forEach items="${game.rooms}" var="room" varStatus="status">
                             <c:if test="${room == roomName}">
                                 <b>
