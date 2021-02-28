@@ -514,19 +514,19 @@ public class AdminController {
     }
 
     private String getGameRoom(HttpServletRequest request) {
-        String roomName = request.getParameter(ROOM_NAME_KEY);
-        if (roomName == null || roomName.equals("null")) {
+        String result = request.getParameter(ROOM_NAME_KEY);
+        if (Validator.isEmpty(result)) {
             return null;
         }
-        return roomName;
+        return result;
     }
 
     private String getGameName(HttpServletRequest request) {
-        String gameName = request.getParameter(GAME_NAME_KEY);
-        if (gameName == null || gameName.equals("null")) {
+        String result = request.getParameter(GAME_NAME_KEY);
+        if (Validator.isEmpty(result)) {
             return null;
         }
-        return gameName;
+        return result;
     }
 
     private List<PlayerInfo> preparePlayers(Model model, String roomName) {
