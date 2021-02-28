@@ -45,6 +45,25 @@
         <h1>Admin page</h1>
     </div>
 
+    <table class="admin-table" id="gameVersion">
+        <tr>
+            <td>
+                <b>Room:</b> ${roomName}
+            </td>
+            <td>
+                <b>Game:</b> ${gameName}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Game version:</b>
+            </td>
+            <td style="width:500px;">
+                <textarea>${gameVersion}</textarea>
+            </td>
+        </tr>
+    </table>
+
     <form:form modelAttribute="adminSettings" action="admin#activeGames" method="POST">
         <table class="admin-table" id="activeGames">
             <tr>
@@ -75,11 +94,6 @@
                     </td>
                 </tr>
             </c:forEach>
-            <tr>
-                <td colspan="3" style="width:500px;">
-                    <b>Game version is</b> ${gameVersion}
-                </td>
-            </tr>
             <tr>
                 <td>
                     <input type="hidden" name="gameName" value="${gameName}"/>
