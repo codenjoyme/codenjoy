@@ -50,6 +50,8 @@
             <td>
                 <b>Room:</b> ${roomName}
             </td>
+        <tr>
+        </tr>
             <td>
                 <b>Game:</b> ${gameName}
             </td>
@@ -59,7 +61,7 @@
                 <b>Game version:</b>
             </td>
             <td style="width:500px;">
-                <textarea>${gameVersion}</textarea>
+                <textarea rows="3" cols="45">${gameVersion}</textarea>
             </td>
         </tr>
     </table>
