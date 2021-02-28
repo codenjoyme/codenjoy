@@ -71,6 +71,34 @@
         </tr>
     </table>
 
+    <table class="admin-table" id="selectGameRoom">
+        <tr>
+            <td style="width:300px;">
+                <b>Please select your room</b>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:300px;">
+                <c:forEach items="${gameRooms}" var="game" varStatus="status">
+                    <div>
+                        <a href="${ctx}/admin?gameName=${game.game}">${game.game}</a>
+                        <div>
+                            <c:forEach items="${game.rooms}" var="room" varStatus="status">
+                                <c:if test="${room == roomName}">
+                                    <b>
+                                </c:if>
+                                <a href="${ctx}/admin?roomName=${room}">${room}${roomsCount[status.index]}</a>&nbsp;&nbsp;&nbsp;
+                                <c:if test="${room == roomName}">
+                                    </b>
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:forEach>
+            </td>
+        </tr>
+    </table>
+
     <form:form modelAttribute="adminSettings" action="admin#activeGames" method="POST">
         <table class="admin-table" id="activeGames">
             <tr>

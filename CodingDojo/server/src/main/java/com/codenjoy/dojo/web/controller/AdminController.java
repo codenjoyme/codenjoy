@@ -558,6 +558,7 @@ public class AdminController {
 
         List<String> roomNames = gameService.getRoomNames();
         model.addAttribute("rooms", roomNames);
+        model.addAttribute("gameRooms", roomService.gameRooms());
         model.addAttribute("roomsCount", getRoomCounts(players, roomNames));
         model.addAttribute("games", new TreeSet<>(gameService.getGameNames()));
 
