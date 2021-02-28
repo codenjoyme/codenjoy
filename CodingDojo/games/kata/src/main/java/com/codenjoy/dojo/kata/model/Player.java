@@ -61,10 +61,12 @@ public class Player extends GamePlayer<Hero, Field> {
     }
 
     public void event(Object event) {
-        logger.info("Player '{}' on Level '{}:{}' fired event '{}'",
-                this.toString(),
-                level.getLevelIndex(), level.getQuestionIndex(),
-                event);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Player '{}' on Level '{}:{}' fired event '{}'",
+                    this.toString(),
+                    level.getLevelIndex(), level.getQuestionIndex(),
+                    event);
+        }
 
         super.event(event);
     }
