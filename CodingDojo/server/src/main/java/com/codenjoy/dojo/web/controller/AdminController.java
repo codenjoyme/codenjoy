@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.controller;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -344,34 +344,13 @@ public class AdminController {
 
         if (settings.getGames() != null) {
             List<Parameter> games = (List)settings.getGames();
-            List<String> toRemove = new LinkedList<>();
-            List<String> allGames = gameService.getGameNames();
-            if (games.size() != allGames.size()) {
-                throw new IllegalStateException("Список игр к активации не полный");
-            }
-            for (int i = 0; i < allGames.size(); i++) {
-                if (games.get(i) == null) {
-                    toRemove.add(allGames.get(i));
-                }
-            }
-
-            rooms.enableGames(toRemove);
+            setEnable(games);
         }
 
         List<Exception> errors = new LinkedList<>();
         if (settings.getParameters() != null) {
-            Settings gameSettings = gameService.getGame(gameName, roomName).getSettings();
-            List<Parameter> parameters = gameSettings.getParameters();
-            for (int index = 0; index < parameters.size(); index++) {
-                try {
-                    Parameter parameter = parameters.get(index);
-                    Object value = settings.getParameters().get(index);
-                    value = fixForCheckbox(parameter, value);
-                    parameter.update(value);
-                } catch (Exception e) {
-                    errors.add(e);
-                }
-            }
+            List<Object> updated = settings.getParameters();
+            updateParameters(gameName, roomName, updated, errors);
         }
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException("There are errors during save settings: " + errors.toString());
@@ -381,26 +360,60 @@ public class AdminController {
             String mask = settings.getGenerateNameMask();
             int count = Integer.parseInt(settings.getGenerateCount());
             String room = settings.getGenerateRoomName();
-            int numLength = String.valueOf(count).length();
-
-            int created = 0;
-            int index = 0;
-            while (created != count) {
-                String number = StringUtils.leftPad(String.valueOf(++index), numLength, "0");
-                String id = mask.replaceAll("%", number);
-
-                if (playerService.contains(id) && index < playerService.getAll().size()) {
-                    continue;
-                }
-
-                created++;
-                String code = register(id);
-                playerService.register(id, gameName, room, "127.0.0.1");
-            }
+            generateNewPlayers(gameName, room, mask, count);
         }
 
         request.setAttribute(ROOM_NAME_KEY, roomName);
         return getAdmin(roomName);
+    }
+
+    private void setEnable(List<Parameter> games) {
+        List<String> toRemove = new LinkedList<>();
+        List<String> allGames = gameService.getGameNames();
+        if (games.size() != allGames.size()) {
+            throw new IllegalStateException("Список игр к активации не полный");
+        }
+        for (int i = 0; i < allGames.size(); i++) {
+            if (games.get(i) == null) {
+                toRemove.add(allGames.get(i));
+            }
+        }
+
+        rooms.enableGames(toRemove);
+    }
+
+    public void updateParameters(String gameName, String roomName, List<Object> updated, List<Exception> errors) {
+        Settings gameSettings = gameService.getGame(gameName, roomName).getSettings();
+        List<Parameter> actual = gameSettings.getParameters();
+        for (int index = 0; index < actual.size(); index++) {
+            try {
+                Parameter parameter = actual.get(index);
+                Object value = updated.get(index);
+                value = fixForCheckbox(parameter, value);
+                parameter.update(value);
+            } catch (Exception e) {
+                errors.add(e);
+            }
+        }
+    }
+
+    public void generateNewPlayers(String gameName, String roomName, String mask, int count) {
+        int numLength = String.valueOf(count).length();
+
+        int created = 0;
+        int index = 0;
+        while (created != count) {
+            String number = StringUtils.leftPad(String.valueOf(++index), numLength, "0");
+            String id = mask.replaceAll("%", number);
+
+            if (playerService.contains(id) && index < playerService.getAll().size()) {
+                continue;
+            }
+
+            created++;
+            String code = register(id);
+            playerService.register(id, gameName, roomName, "127.0.0.1");
+        }
     }
 
     private String register(String id) {
