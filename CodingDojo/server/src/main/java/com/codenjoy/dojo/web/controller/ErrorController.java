@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -74,25 +75,28 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
         return error(exception, req, model);
     }
 
-    private String error(Exception exception, HttpServletRequest req, ModelMap model) {
-        String url = req.getRequestURL().toString();
+    private String error(Exception exception, HttpServletRequest httpRequset, ModelMap model) {
+        String url = httpRequset.getRequestURL().toString();
 
-        // для "not found" запросов вытаскиваем доп инфо
-        if (req instanceof SecurityContextHolderAwareRequestWrapper) {
-            ServletRequest request = ((SecurityContextHolderAwareRequestWrapper) req).getRequest();
-            if (request instanceof FirewalledRequest) {
-                ServletRequest request2 = ((FirewalledRequest) request).getRequest();
-                if (request2 instanceof Request) {
-                    url = String.format("%s [%s]",
-                            url, ((Request)request2).getOriginalURI());
-                }
-            }
+        ServletRequest request = unwrap(httpRequset);
+        if (request instanceof Request) {
+            url = String.format("%s [%s]",
+                    url, ((Request) request).getOriginalURI());
         }
 
         ModelAndView view = ticket.get(url, exception);
         model.mergeAttributes(view.getModel());
 
         return view.getViewName();
+    }
+
+    // для "not found" запросов вытаскиваем доп инфо
+    private ServletRequest unwrap(HttpServletRequest req) {
+        ServletRequest request = req;
+        while (request instanceof ServletRequestWrapper) {
+            request = ((ServletRequestWrapper) request).getRequest();
+        }
+        return request;
     }
 
     @Override
