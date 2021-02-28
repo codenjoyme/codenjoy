@@ -55,6 +55,7 @@ public class LocalGameRunner {
     public static boolean printConversions = true;
     public static boolean printDice = true;
     public static boolean printTick = false;
+    public static boolean printSeed = false;
     public static String showPlayers = null;
     public static boolean exit = false;
     public static int waitForPlayers = 1;
@@ -239,7 +240,9 @@ public class LocalGameRunner {
 
     public static int[] generateXorShift(String seed, long max, long count) {
         long[] current = new long[] { seed.hashCode() };
-        out.accept("Seed = " + seed + "\n");
+        if (printSeed) {
+            out.accept("Seed = " + seed + "\n");
+        }
         int[] result = IntStream.generate(() -> {
             long a0 = current[0] % seed.length();
             int a1 = seed.charAt((int)Math.abs(a0));
