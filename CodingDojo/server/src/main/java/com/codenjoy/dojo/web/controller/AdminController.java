@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
+import com.codenjoy.dojo.services.room.GameRooms;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
@@ -553,8 +554,9 @@ public class AdminController {
     private List<PlayerInfo> preparePlayers(Model model, String roomName) {
         List<PlayerInfo> players = saveService.getSaves();
 
-        model.addAttribute("gameRooms", roomService.gameRooms());
-        model.addAttribute("roomsCount", getRoomCounts(players));
+        List<GameRooms> gameRooms = roomService.gameRooms();
+        model.addAttribute("gameRooms", gameRooms);
+        model.addAttribute("roomsCount", getRoomCounts(players, gameRooms));
 
         for (PlayerInfo player : players) {
             player.setHidden(!roomName.equals(player.getRoomName()));
@@ -566,13 +568,13 @@ public class AdminController {
         return players;
     }
 
-    private Map<String, String> getRoomCounts(List<PlayerInfo> players) {
+    private Map<String, String> getRoomCounts(List<PlayerInfo> players, List<GameRooms> gameRooms) {
         Map<String, String> result = new HashMap<>();
-        for (String name : roomService.names()) {
+        for (GameRooms game : gameRooms) {
             long count = players.stream()
-                    .filter(player -> name.equals(player.getRoomName()))
+                    .filter(player -> game.getGame().equals(player.getRoomName()))
                     .count();
-            result.put(name, (count != 0) ? String.format("(%s)", count) : "");
+            result.put(game.getGame(), (count != 0) ? String.format("(%s)", count) : "");
         }
         return result;
     }
