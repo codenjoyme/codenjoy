@@ -71,7 +71,7 @@
         </tr>
     </table>
 
-    <form:form modelAttribute="adminSettings" action="admin" method="POST">
+    <form:form modelAttribute="adminSettings" action="admin#activeGames" method="POST">
         <table class="admin-table" id="activeGames">
             <tr>
                 <td style="width:300px;">
@@ -109,7 +109,7 @@
                     </c:otherwise>
                 </c:choose>
             </td>
-            <form:form modelAttribute="adminSettings" action="admin" method="POST">
+            <form:form modelAttribute="adminSettings" action="admin#pauseGame" method="POST">
                 <tr>
                     <td><input type="text" name="timerPeriod" value="${timerPeriod}"/></td>
                 </tr>
@@ -184,7 +184,7 @@
         </tr>
     </table>
 
-    <form:form modelAttribute="adminSettings" action="admin" method="POST">
+    <form:form modelAttribute="adminSettings" action="admin#semifinal" method="POST">
         <table class="admin-table" id="semifinal">
             <tr colspan="2">
                 <td><b>Semifinal settings</b></td>
@@ -240,7 +240,7 @@
         </tr>
     </table>
 
-    <form:form modelAttribute="adminSettings" action="admin" method="POST">
+    <form:form modelAttribute="adminSettings" action="admin#loadSaveForAll" method="POST">
         <table class="admin-table" id="loadSaveForAll">
             <tr>
                 <td><b>Load save (progress) for all</b></td>
@@ -321,7 +321,7 @@
         </tr>
     </table>
 
-    <form:form modelAttribute="adminSettings" action="admin" method="POST">
+    <form:form modelAttribute="adminSettings" action="admin#createNewUsers" method="POST">
         <table class="admin-table" id="createNewUsers">
             <tr colspan="2">
                 <td><b>Create new users</b></td>
@@ -346,7 +346,7 @@
     </form:form>
 
     <c:if test="${parameters.size() != 0}">
-        <form:form modelAttribute="adminSettings" action="admin" method="POST">
+        <form:form modelAttribute="adminSettings" action="admin#gameSettings" method="POST">
             <table class="admin-table" id="gameSettings">
                 <tr colspan="2">
                     <td><b>Game settings</b></td>
@@ -386,7 +386,7 @@
     </c:if>
 
     <c:if test="${players != null || savedGames != null}">
-        <form:form modelAttribute="adminSettings" action="admin" method="POST">
+        <form:form modelAttribute="adminSettings" action="admin#savePlayersGame" method="POST">
             <table class="admin-table" id="savePlayersGame">
                 <tr colspan="4">
                     <td><b>Registered Players</b></td>
