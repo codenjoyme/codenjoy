@@ -46,10 +46,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
@@ -556,11 +553,8 @@ public class AdminController {
     private List<PlayerInfo> preparePlayers(Model model, String roomName) {
         List<PlayerInfo> players = saveService.getSaves();
 
-        List<String> roomNames = gameService.getRoomNames();
-        model.addAttribute("rooms", roomNames);
         model.addAttribute("gameRooms", roomService.gameRooms());
-        model.addAttribute("roomsCount", getRoomCounts(players, roomNames));
-        model.addAttribute("games", new TreeSet<>(gameService.getGameNames()));
+        model.addAttribute("roomsCount", getRoomCounts(players));
 
         for (PlayerInfo player : players) {
             player.setHidden(!roomName.equals(player.getRoomName()));
@@ -572,19 +566,15 @@ public class AdminController {
         return players;
     }
 
-    private List<String> getRoomCounts(List<PlayerInfo> players, List<String> roomNames) {
-        List<String> counts = new LinkedList<>();
-        for (String name : roomNames) {
-            int count = 0;
-            for (PlayerInfo player : players) {
-                if (name.equals(player.getRoomName())) {
-                    count++;
-                }
-            }
-            String countPlayers = (count != 0) ? String.format("(%s)", count) : "";
-            counts.add(countPlayers);
+    private Map<String, String> getRoomCounts(List<PlayerInfo> players) {
+        Map<String, String> result = new HashMap<>();
+        for (String name : roomService.names()) {
+            long count = players.stream()
+                    .filter(player -> name.equals(player.getRoomName()))
+                    .count();
+            result.put(name, (count != 0) ? String.format("(%s)", count) : "");
         }
-        return counts;
+        return result;
     }
 
     // ----------------

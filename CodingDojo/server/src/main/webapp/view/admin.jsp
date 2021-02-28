@@ -45,76 +45,41 @@
         <h1>Admin page</h1>
     </div>
 
-    <table class="admin-table" id="selectGame">
-        <tr>
-            <td style="width:300px;">
-                <b>Please select your room</b>
-            </td>
-        </tr>
-        <tr>
-            <td style="width:300px;">
-                <c:forEach items="${rooms}" var="room" varStatus="status">
-                    <c:if test="${room == roomName}">
-                        <b>
-                    </c:if>
-                        <a href="${ctx}/admin?roomName=${room}">${room}${roomsCount[status.index]}</a>&nbsp;&nbsp;&nbsp;
-                    <c:if test="${room == roomName}">
-                        </b>
-                    </c:if>
-                </c:forEach>
-            </td>
-        </tr>
-        <tr>
-            <td style="width:500px;">
-                <b>Game version is</b> ${gameVersion}
-            </td>
-        </tr>
-    </table>
-
-    <table class="admin-table" id="selectGameRoom">
-        <tr>
-            <td style="width:300px;">
-                <b>Please select your room</b>
-            </td>
-        </tr>
-        <tr>
-            <td style="width:300px;">
-                <c:forEach items="${gameRooms}" var="game" varStatus="status">
-                    <div>
-                        <a href="${ctx}/admin?gameName=${game.game}">${game.game}</a>
-                        <div>
-                            <c:forEach items="${game.rooms}" var="room" varStatus="status">
-                                <c:if test="${room == roomName}">
-                                    <b>
-                                </c:if>
-                                <a href="${ctx}/admin?roomName=${room}">${room}${roomsCount[status.index]}</a>&nbsp;&nbsp;&nbsp;
-                                <c:if test="${room == roomName}">
-                                    </b>
-                                </c:if>
-                            </c:forEach>
-                        </div>
-                    </div>
-                </c:forEach>
-            </td>
-        </tr>
-    </table>
-
     <form:form modelAttribute="adminSettings" action="admin#activeGames" method="POST">
         <table class="admin-table" id="activeGames">
             <tr>
-                <td style="width:300px;">
+                <td colspan="3" style="width:300px;">
                     <b>Active games for participants</b>
                 </td>
             </tr>
-            <c:forEach items="${games}" var="game" varStatus="status">
+            <c:forEach items="${gameRooms}" var="game" varStatus="status">
                 <tr>
-                    <td>
-                        <form:checkbox id="enable-games-${game}" path="games[${status.index}]"/>
-                        <label class="check-label" for="enable-games-${game}"></label>
-                        <span>${game}</span>
+                    <td calss="rightStep">
+                        <form:checkbox id="enable-games-${game.game}" path="games[${status.index}]"/>
+                        <label class="check-label" for="enable-games-${game.game}"></label>
+                        <span>${game.game}</span>
+                    </td>
+                    <td calss="rightStep">
+                        <a href="${ctx}/admin?gameName=${game.game}">info</a>
+                    </td>
+                    <td calss="rightStep">
+                        <c:forEach items="${game.rooms}" var="room" varStatus="status">
+                            <c:if test="${room == roomName}">
+                                <b>
+                            </c:if>
+                            <a href="${ctx}/admin?roomName=${room}">${room}${roomsCount.get(room)}</a>
+                            <c:if test="${room == roomName}">
+                                </b>
+                            </c:if>
+                        </c:forEach>
                     </td>
                 </tr>
             </c:forEach>
+            <tr>
+                <td colspan="3" style="width:500px;">
+                    <b>Game version is</b> ${gameVersion}
+                </td>
+            </tr>
             <tr>
                 <td>
                     <input type="hidden" name="gameName" value="${gameName}"/>
