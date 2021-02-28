@@ -49,8 +49,8 @@ public class Player implements ScreenRecipient, Closeable {
     private String code;
     private String data;
     private String callbackUrl;
-    private String gameName;
-    private String roomName;
+    private String game;
+    private String room;
     private String password;
     private String passwordConfirmation;
     private PlayerScores scores;
@@ -124,13 +124,13 @@ public class Player implements ScreenRecipient, Closeable {
         return info.getMessage();
     }
 
-    public String getGameName() {
-        return (gameType != null) ? gameType.name() : gameName;
+    public String getGame() {
+        return (gameType != null) ? gameType.name() : game;
     }
 
     // TODO test me
-    public String getGameNameOnly() {
-        return removeNumbers(getGameName());
+    public String getGameOnly() {
+        return removeNumbers(getGame());
     }
 
     @Override

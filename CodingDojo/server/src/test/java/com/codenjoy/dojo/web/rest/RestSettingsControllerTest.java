@@ -73,8 +73,8 @@ public class RestSettingsControllerTest extends AbstractRestControllerTest {
     public void setUp() {
         super.setUp();
 
-        first = gameService.getGame("first", "first").getSettings();
-        second = gameService.getGame("second", "second").getSettings();
+        first = gameService.getGameType("first", "first").getSettings();
+        second = gameService.getGameType("second", "second").getSettings();
 
         first.clear();
         second.clear();

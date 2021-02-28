@@ -54,7 +54,7 @@ import static java.util.stream.Collectors.toList;
 public class RestAdminController {
 
     public static final String URI = "/rest/admin";
-    public static final String ROOM = "/room/{roomName}";
+    public static final String ROOM = "/room/{room}";
 
     private GameService gameService;
     private Validator validator;
@@ -72,7 +72,7 @@ public class RestAdminController {
     @GetMapping("version")
     @ResponseBody
     public String version() {
-        List<String> list = games.getGameNames();
+        List<String> list = games.getGames();
         list.add(0, "engine");
         list.add(1, "server");
         return VersionReader.version(list).toString();
@@ -94,7 +94,7 @@ public class RestAdminController {
         if (StringUtils.isEmpty(ticketId)) {
             return tickets;
         } else {
-            return new HashMap<String, Map<String, Object>>(){{
+            return new HashMap<>(){{
                 put(ticketId, tickets.get(ticketId));
             }};
         }
@@ -113,11 +113,11 @@ public class RestAdminController {
                     .findFirst()
                     .orElse(NullPlayer.INSTANCE);
 
-            String gameName = player.getGameName();
-            if (!result.containsKey(gameName)) {
-                result.put(gameName, new LinkedList<>());
+            String game = player.getGame();
+            if (!result.containsKey(game)) {
+                result.put(game, new LinkedList<>());
             }
-            result.get(gameName).add(group);
+            result.get(game).add(group);
         }
         return result;
     }
@@ -164,74 +164,74 @@ public class RestAdminController {
 
             PlayerGame playerGame = playerGames.get(player.getId());
             Game game = playerGame.getGame();
-            String roomName = playerGame.getRoomName();
+            String room = playerGame.getRoom();
             List<String> group = groups.get(player.getId());
-            result.add(new PlayerDetailInfo(player, user, roomName, game, group));
+            result.add(new PlayerDetailInfo(player, user, room, game, group));
         }
 
         return result;
     }
 
     @GetMapping(ROOM + "/pause/{enabled}")
-    public void setEnabled(@PathVariable("roomName") String roomName,
+    public void setEnabled(@PathVariable("room") String room,
                            @PathVariable("enabled") boolean enabled)
     {
-        validator.checkRoomName(roomName, CANT_BE_NULL);
+        validator.checkRoom(room, CANT_BE_NULL);
 
-        roomService.setActive(roomName, enabled);
+        roomService.setActive(room, enabled);
     }
 
     @GetMapping(ROOM + "/pause")
-    public boolean getEnabled(@PathVariable("roomName") String roomName) {
-        validator.checkRoomName(roomName, CANT_BE_NULL);
+    public boolean getEnabled(@PathVariable("room") String room) {
+        validator.checkRoom(room, CANT_BE_NULL);
 
-        return roomService.isActive(roomName);
+        return roomService.isActive(room);
     }
 
     @GetMapping(ROOM + "/scores/clear")
-    public void cleanScores(@PathVariable("roomName") String roomName) {
-        validator.checkRoomName(roomName, CANT_BE_NULL);
+    public void cleanScores(@PathVariable("room") String room) {
+        validator.checkRoom(room, CANT_BE_NULL);
 
-        playerService.cleanAllScores(roomName);
+        playerService.cleanAllScores(room);
     }
 
     @GetMapping(ROOM + "/scores/{player}/set/{score}")
-    public void setScores(@PathVariable("roomName") String roomName,
+    public void setScores(@PathVariable("room") String room,
                           @PathVariable("player") String id,
                           @PathVariable("score") String score)
     {
         validator.checkNotEmpty("score", score);
-        validator.checkPlayerInRoom(id, roomName);
+        validator.checkPlayerInRoom(id, room);
 
         Player player = playerService.get(id);
-        player.setRoomName(null);
+        player.setRoom(null);
         player.setData(null);
         player.setScore(score);
         playerService.update(player);
     }
 
     @GetMapping(ROOM + "/reload")
-    public void reload(@PathVariable("roomName") String roomName) {
-        validator.checkRoomName(roomName, CANT_BE_NULL);
+    public void reload(@PathVariable("room") String room) {
+        validator.checkRoom(room, CANT_BE_NULL);
 
-        playerService.reloadAllRooms(roomName);
+        playerService.reloadAllRooms(room);
     }
 
     /**
-     * @param roomName имя комнаты, для которой мы хотим получить настройки
-     * @param gameName имя игры указывается тут, потому что этот метод будет
+     * @param room имя комнаты, для которой мы хотим получить настройки
+     * @param game имя игры указывается тут, потому что этот метод будет
      *                 дергаться еще до первого зарегистрированного пользователя
      *                 в комнату, а потому откуда codenjoy знает про связку комната + игра?
      * @return кастомные настройки для этой комнаты
      */
-    @GetMapping(ROOM + "/settings/{gameName}")
-    public PParameters getSettings(@PathVariable("roomName") String roomName,
-                                   @PathVariable("gameName") String gameName)
+    @GetMapping(ROOM + "/settings/{game}")
+    public PParameters getSettings(@PathVariable("room") String room,
+                                   @PathVariable("game") String game)
     {
-        validator.checkRoomName(roomName, CANT_BE_NULL);
-        validator.checkGameType(gameName);
+        validator.checkRoom(room, CANT_BE_NULL);
+        validator.checkGameType(game);
 
-        GameType type = gameService.getGame(gameName, roomName);
+        GameType type = gameService.getGameType(game, room);
 
         Settings settings = type.getSettings();
         List<Parameter> result = settings.getParameters();
@@ -240,18 +240,18 @@ public class RestAdminController {
         return new PParameters(result);
     }
 
-    @PostMapping(ROOM + "/settings/{gameName}")
-    public void setSettings(@PathVariable("roomName") String roomName,
-                            @PathVariable("gameName") String gameName,
+    @PostMapping(ROOM + "/settings/{game}")
+    public void setSettings(@PathVariable("room") String room,
+                            @PathVariable("game") String game,
                             @RequestBody PParameters input)
     {
-        validator.checkRoomName(roomName, CANT_BE_NULL);
+        validator.checkRoom(room, CANT_BE_NULL);
         validator.checkNotNull("parameters", input);
         validator.checkNotNull("parameters", input.getParameters());
 
-        validator.checkGameType(gameName);
+        validator.checkGameType(game);
 
-        GameType type = gameService.getGame(gameName, roomName);
+        GameType type = gameService.getGameType(game, room);
 
         Settings settings = type.getSettings();
 
@@ -265,38 +265,37 @@ public class RestAdminController {
         settings.updateAll(other);
     }
 
-    // TODO заменить во всех Rest и других controller's: roomName -> room, gameName -> game
     @GetMapping(ROOM + "/gameOver/{player}")
-    public void gameOver(@PathVariable("roomName") String roomName,
+    public void gameOver(@PathVariable("room") String room,
                          @PathVariable("player") String id)
     {
-        validator.checkPlayerInRoom(id, roomName);
+        validator.checkPlayerInRoom(id, room);
 
         playerService.remove(id);
     }
 
     @GetMapping(ROOM + "/gameOverAll")
-    public void gameOverAll(@PathVariable("roomName") String roomName) {
-        validator.checkRoomName(roomName, CANT_BE_NULL);
+    public void gameOverAll(@PathVariable("room") String room) {
+        validator.checkRoom(room, CANT_BE_NULL);
 
-        playerService.removeAll(roomName);
+        playerService.removeAll(room);
     }
 
     @GetMapping(ROOM + "/load/{player}")
-    public void load(@PathVariable("roomName") String roomName,
+    public void load(@PathVariable("room") String room,
                      @PathVariable("player") String id)
     {
-        validator.checkRoomName(roomName, CANT_BE_NULL);
+        validator.checkRoom(room, CANT_BE_NULL);
         validator.checkPlayerId(id, CANT_BE_NULL);
 
         saveService.load(id);
     }
 
     @GetMapping(ROOM + "/saveAll")
-    public void saveAll(@PathVariable("roomName") String roomName) {
-        validator.checkRoomName(roomName, CANT_BE_NULL);
+    public void saveAll(@PathVariable("room") String room) {
+        validator.checkRoom(room, CANT_BE_NULL);
 
-        saveService.saveAll(roomName);
+        saveService.saveAll(room);
     }
 
     // TODO test me

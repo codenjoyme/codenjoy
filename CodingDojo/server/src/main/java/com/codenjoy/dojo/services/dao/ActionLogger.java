@@ -89,7 +89,7 @@ public class ActionLogger extends Suspendable {
 
                     stmt.setString(1, JDBCTimeUtils.toString(new Date(data.getTime())));
                     stmt.setString(2, data.getPlayerId());
-                    stmt.setString(3, data.getGameType());
+                    stmt.setString(3, data.getGame());
                     stmt.setString(4, data.getScore().toString());
                     stmt.setString(5, data.getCommand());
                     stmt.setString(6, data.getMessage());
@@ -113,7 +113,7 @@ public class ActionLogger extends Suspendable {
             Player player = playerGame.getPlayer();
             cache.add(new BoardLog(time,
                     player.getId(),
-                    player.getGameName(),
+                    player.getGame(),
                     player.getScore(),
                     playerGame.getGame().getBoardAsString().toString(),
                     player.getEventListener().popLastMessages(),

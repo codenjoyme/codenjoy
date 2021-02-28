@@ -52,11 +52,11 @@
         }
     </style>
 
-    <script src="${ctx}/resources/js/canvases-${gameNameOnly}.js"></script>
+    <script src="${ctx}/resources/js/canvases-${gameOnly}.js"></script>
     <script src="${ctx}/resources/js/all.js"></script>
 </head>
 <body style="display:none;">
-    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}" roomName="${roomName}" playerId="${playerId}" readableName="${readableName}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" room="${room}" playerId="${playerId}" readableName="${readableName}"></div>
 
     <div id="board_page">
         <%@include file="canvases.jsp"%>

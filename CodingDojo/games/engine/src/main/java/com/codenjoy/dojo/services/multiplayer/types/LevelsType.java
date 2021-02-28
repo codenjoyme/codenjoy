@@ -85,7 +85,7 @@ public class LevelsType extends MultiplayerType {
     }
 
     @Override
-    public String getRoomName(String roomName, int levelNumber) {
-        return roomName + "[" + levelNumber + "]";
+    public String getRoom(String room, int levelNumber) {
+        return room + "[" + levelNumber + "]";
     }
 }

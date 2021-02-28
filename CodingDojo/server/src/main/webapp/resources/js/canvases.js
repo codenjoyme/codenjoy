@@ -22,7 +22,7 @@
 var currentBoardSize = null;
 
 function initCanvases(contextPath, players, allPlayersScreen,
-                multiplayerType, boardSize, gameName,
+                multiplayerType, boardSize, game,
                 enablePlayerInfo, enablePlayerInfoLevel,
                 sprites, alphabet, spriteElements,
                 drawBoard, onLoad)
@@ -81,9 +81,9 @@ function initCanvases(contextPath, players, allPlayersScreen,
         reloading = false;
     }
 
-    function justGame(gameRoom) {
+    function justGame(room) {
         var ROOMS_SEPARATOR = '-';
-        return gameRoom.split(ROOMS_SEPARATOR).shift();
+        return room.split(ROOMS_SEPARATOR).shift();
     }
 
     function loadSpriteImages(elements, alphabet, onImageLoad) {
@@ -92,7 +92,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
             var color = elements[index];
             plots[ch] = color;
             var subFolder = (!!sprites) ? sprites + '/' : '';
-            plotsUrls[color] = contextPath + '/resources/sprite/' + justGame(gameName) + '/' + subFolder + color + '.png';
+            plotsUrls[color] = contextPath + '/resources/sprite/' + justGame(game) + '/' + subFolder + color + '.png';
 
             var image = new Image();
             image.onload = function() {
@@ -146,8 +146,8 @@ function initCanvases(contextPath, players, allPlayersScreen,
             });
         });
         $('#players_container script').tmpl(templateData).appendTo('#players_container');
-        if (!!game.canvasCursor) {
-            $('#players_container canvas').css('cursor', game.canvasCursor);
+        if (!!setup.canvasCursor) {
+            $('#players_container canvas').css('cursor', setup.canvasCursor);
         }
     }
 
@@ -187,7 +187,7 @@ function initCanvases(contextPath, players, allPlayersScreen,
         }
 
         var drawAllLayers = function(layers, onDrawItem){
-            var isDrawByOrder = game.isDrawByOrder;
+            var isDrawByOrder = setup.isDrawByOrder;
 
             var drawChar = function(plotIndex) {
                 var x = 0;

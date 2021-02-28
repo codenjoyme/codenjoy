@@ -23,22 +23,22 @@
 pages = pages || {};
 
 pages.boardOnly = function() {
-    game.enableDonate = false;
-    game.enableJoystick = false;
-    game.enableAlways = false;
-    game.enablePlayerInfo = false;
-    game.enablePlayerInfoLevel = false;
-    game.enableLeadersTable = false;
-    game.enableForkMe = false;
-    game.enableInfo = false;
-    game.enableHotkeys = true;
-    game.enableAdvertisement = false;
-    game.showBody = true;
-    game.sprites = null;
-    game.heroInfo = null;
+    setup.enableDonate = false;
+    setup.enableJoystick = false;
+    setup.enableAlways = false;
+    setup.enablePlayerInfo = false;
+    setup.enablePlayerInfoLevel = false;
+    setup.enableLeadersTable = false;
+    setup.enableForkMe = false;
+    setup.enableInfo = false;
+    setup.enableHotkeys = true;
+    setup.enableAdvertisement = false;
+    setup.showBody = true;
+    setup.sprites = null;
+    setup.heroInfo = null;
     
     if (window.location.href.includes("click=true")) {
-        game.canvasCursor = 'pointer';
+        setup.canvasCursor = 'pointer';
     
         $('body').click(function() {
             window.open(window.location.href.replace('only=true', 'only=false'));            

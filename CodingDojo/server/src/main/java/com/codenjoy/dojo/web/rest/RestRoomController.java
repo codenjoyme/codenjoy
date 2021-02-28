@@ -40,6 +40,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+
 /**
  * Используется внешним сервисом для входа, выхода из
  * комнаты и проверки статуса для залогиненного/незалогиненного пользователя.
@@ -53,12 +55,12 @@ public class RestRoomController {
     private GameService gameService;
     private Validator validator;
 
-    @GetMapping("/room/{roomName}/leave")
+    @GetMapping("/room/{room}/leave")
     @ResponseBody
-    public synchronized boolean leavePlayerFromRoom(@PathVariable("roomName") String roomName,
+    public synchronized boolean leavePlayerFromRoom(@PathVariable("room") String room,
                                                     @AuthenticationPrincipal Registration.User user)
     {
-        validator.checkRoomName(roomName, Validator.CANT_BE_NULL);
+        validator.checkRoom(room, CANT_BE_NULL);
 
         if (user == null) {
             return false;
@@ -66,7 +68,7 @@ public class RestRoomController {
 
         String id = user.getId();
 
-        if (!validator.isPlayerInRoom(id, roomName)) {
+        if (!validator.isPlayerInRoom(id, room)) {
             return false;
         }
 
@@ -80,54 +82,54 @@ public class RestRoomController {
         return true;
     }
 
-    @GetMapping("/room/{roomName}/joined")
+    @GetMapping("/room/{room}/joined")
     @ResponseBody
-    public boolean isPlayerInRoom(@PathVariable("roomName") String roomName,
+    public boolean isPlayerInRoom(@PathVariable("room") String room,
                                   @AuthenticationPrincipal Registration.User user)
     {
-        validator.checkRoomName(roomName, Validator.CANT_BE_NULL);
+        validator.checkRoom(room, CANT_BE_NULL);
 
         if (user == null) {
             return false;
         }
 
         String id = user.getId();
-        return validator.isPlayerInRoom(id, roomName);
+        return validator.isPlayerInRoom(id, room);
     }
 
-    @GetMapping("/room/{roomName}/player/{playerId}/joined")
+    @GetMapping("/room/{room}/player/{playerId}/joined")
     @ResponseBody
-    public boolean isPlayerInRoom(@PathVariable("roomName") String roomName,
+    public boolean isPlayerInRoom(@PathVariable("room") String room,
                                   @PathVariable("playerId") String playerId)
     {
-        validator.checkRoomName(roomName, Validator.CANT_BE_NULL);
-        validator.checkPlayerId(playerId, Validator.CANT_BE_NULL);
+        validator.checkRoom(room, CANT_BE_NULL);
+        validator.checkPlayerId(playerId, CANT_BE_NULL);
 
         if (playerId == null) {
             return false;
         }
 
-        return validator.isPlayerInRoom(playerId, roomName);
+        return validator.isPlayerInRoom(playerId, room);
     }
 
-    @GetMapping("/room/{roomName}/game/{gameName}/join")
+    @GetMapping("/room/{room}/game/{game}/join")
     @ResponseBody
-    public synchronized PlayerId joinPlayerInRoom(@PathVariable("gameName") String gameName,
-                                                  @PathVariable("roomName") String roomName,
+    public synchronized PlayerId joinPlayerInRoom(@PathVariable("game") String game,
+                                                  @PathVariable("room") String room,
                                                   HttpServletRequest request,
                                                   @AuthenticationPrincipal Registration.User user)
     {
-        validator.checkRoomName(roomName, Validator.CANT_BE_NULL);
+        validator.checkRoom(room, CANT_BE_NULL);
 
         if (user == null) {
             return null;
         }
 
-        if (!gameService.exists(gameName)) {
+        if (!gameService.exists(game)) {
             return null;
         }
 
-        playerService.register(user.getId(), gameName, roomName, request.getRemoteAddr());
+        playerService.register(user.getId(), game, room, request.getRemoteAddr());
 
         return new PlayerId(user);
     }

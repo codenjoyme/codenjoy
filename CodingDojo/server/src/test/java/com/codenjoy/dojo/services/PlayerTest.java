@@ -47,7 +47,7 @@ public class PlayerTest {
         assertEquals(null, player.getPassword());
         assertNull(player.getCode());
         assertEquals(123, player.getScore());
-        assertEquals("game", player.getGameName());
+        assertEquals("game", player.getGame());
 
         player.setId("katya");
         assertEquals("katya", player.getId());

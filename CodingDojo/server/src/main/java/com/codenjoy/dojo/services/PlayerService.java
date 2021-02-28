@@ -27,26 +27,26 @@ import java.util.List;
 
 public interface PlayerService extends Tickable {
 
-    Player register(String id, String gameName, String roomName, String ip);
+    Player register(String id, String game, String room, String ip);
     Player register(PlayerSave save);
     List<Player> getAll();
-    List<Player> getAll(String gameName);
-    List<Player> getAllInRoom(String roomName);
+    List<Player> getAll(String game);
+    List<Player> getAllInRoom(String room);
     void remove(String id);
     void update(Player player);
     boolean contains(String id);
     Player get(String id);
     void updateAll(List<PlayerInfo> players);
     void removeAll();
-    void removeAll(String roomName);
-    Player getRandom(String gameType);
+    void removeAll(String room);
+    Player getRandom(String game);
     GameType getAnyGameWithPlayers();
 
     void cleanAllScores();
-    void cleanAllScores(String roomName);
+    void cleanAllScores(String room);
     void reloadAllRooms();
-    void reloadAllRooms(String roomName);
-    void loadSaveForAll(String roomName, String save);
+    void reloadAllRooms(String room);
+    void loadSaveForAll(String room, String save);
 
     Joystick getJoystick(String id); // TODO Как-то тут этот метод не вяжется, но ладно пока пусть остается
 

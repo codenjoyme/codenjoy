@@ -227,8 +227,8 @@ public class MultiplayerType {
         return LevelsType.class.isAssignableFrom(getClass());
     }
 
-    public boolean isLastLevel(int levelNumber) {
-        return levelNumber == levelsCount;
+    public boolean isLastLevel(int level) {
+        return level == levelsCount;
     }
 
     public String getType() {
@@ -290,22 +290,22 @@ public class MultiplayerType {
     /**
      * Иногда случается так, что надо создавать отдельную комнату,
      * а иногда искать свободную, если она конечно есть.
-     * @param levelNumber номер уровня для которого делаем проверку
+     * @param level номер уровня для которого делаем проверку
      * @return надо ли создавать новую комнату?
      */
-    public boolean shouldTryFindUnfilled(int levelNumber) {
+    public boolean shouldTryFindUnfilled(int level) {
         return true;
     }
 
     /**
      * Некоторые типы игр могут иметь иное именование комнат,
      * скажем в зависимости от номера уровня (см. переопределенные методы)
-     * @param roomName исходное имя комнаты
+     * @param room исходное имя комнаты
      * @param levelNumber номер уровня
      * @return обновленное имя комнаты
      */
-    public String getRoomName(String roomName, int levelNumber) {
-        return roomName;
+    public String getRoom(String room, int levelNumber) {
+        return room;
     }
 
     /**

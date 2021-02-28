@@ -119,10 +119,10 @@ public class PlayerServiceImplIntegrationTest {
         int ai1 = 0;
         int ai2 = 0;
         int ai3 = 0;
-        when(gameService.getGame(anyString())).thenAnswer(
+        when(gameService.getGameType(anyString())).thenAnswer(
                 inv -> getOrCreateGameType(inv.getArgument(0))
         );
-        when(gameService.getGame(anyString(), anyString())).thenAnswer(
+        when(gameService.getGameType(anyString(), anyString())).thenAnswer(
                 inv -> getOrCreateGameType(inv.getArgument(0))
         );
         when(gameService.exists(anyString())).thenReturn(true);
@@ -235,7 +235,7 @@ public class PlayerServiceImplIntegrationTest {
 
         // обновили описание ребят
         List<PlayerInfo> infos = service.getAll().stream().map(player -> new PlayerInfo(player.getId() + "_updated",
-                player.getCode(), player.getCallbackUrl(), player.getGameName())).collect(toList());
+                player.getCode(), player.getCallbackUrl(), player.getGame())).collect(toList());
         service.updateAll(infos);
         assertEquals("[game1-super-ai_updated, " +
                 "player1_updated, player4_updated, player5_updated, " +

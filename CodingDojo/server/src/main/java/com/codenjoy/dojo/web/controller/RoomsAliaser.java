@@ -56,15 +56,15 @@ public class RoomsAliaser {
 
     private void addAllGames() {
         rooms = new DualLinkedHashBidiMap();
-        gameService.getGameNames()
-                .forEach(gameName -> rooms.put(gameName, gameName));
+        gameService.getGames()
+                .forEach(game -> rooms.put(game, game));
     }
 
-    public String getAlias(String gameName) {
-        if (!rooms.containsKey(gameName)) {
-            return gameName;
+    public String getAlias(String game) {
+        if (!rooms.containsKey(game)) {
+            return game;
         }
-        return rooms.get(gameName);
+        return rooms.get(game);
     }
 
     public Set<String> alises() {
@@ -78,7 +78,7 @@ public class RoomsAliaser {
         return rooms.getKey(alias);
     }
 
-    public Set<String> gameNames() {
+    public Set<String> game() {
         return rooms.keySet();
     }
 

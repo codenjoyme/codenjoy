@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 import static java.util.stream.Collectors.toList;
 
 @Controller
@@ -53,19 +54,19 @@ public class RestRegistrationController {
     public boolean checkUserLogin(@PathVariable("player") String id,
                                   @PathVariable("code") String code)
     {
-        validator.checkPlayerId(id, Validator.CANT_BE_NULL);
-        validator.checkCode(code, Validator.CANT_BE_NULL);
+        validator.checkPlayerId(id, CANT_BE_NULL);
+        validator.checkCode(code, CANT_BE_NULL);
 
         return registration.checkUser(id, code) != null;
     }
 
     // TODO test me
-    @GetMapping("/game/{gameName}/players")
+    @GetMapping("/game/{game}/players")
     @ResponseBody
-    public List<PlayerInfo> getGamePlayers(@PathVariable("gameName") String gameName) {
-        validator.checkGameName(gameName, Validator.CANT_BE_NULL);
+    public List<PlayerInfo> getGamePlayers(@PathVariable("game") String game) {
+        validator.checkGame(game, CANT_BE_NULL);
 
-        return playerService.getAll(gameName).stream()
+        return playerService.getAll(game).stream()
                 .map(PlayerInfo::new)
                 .collect(toList());
     }
@@ -104,7 +105,7 @@ public class RestRegistrationController {
     @GetMapping("/player/{player}/exists")
     @ResponseBody
     public boolean isPlayerExists(@PathVariable("player") String id) {
-        validator.checkPlayerId(id, Validator.CANT_BE_NULL);
+        validator.checkPlayerId(id, CANT_BE_NULL);
 
         return registration.checkUser(id) != null
                 && playerService.contains(id);

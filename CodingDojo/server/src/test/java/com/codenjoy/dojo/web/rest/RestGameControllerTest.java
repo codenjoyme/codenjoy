@@ -120,7 +120,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
                 "      'valueType':'Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'roomName':'room1',\n" +
+                "  'room':'room1',\n" +
                 "  'sprites':{\n" +
                 "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',\n" +
                 "    'names':[\n" +
@@ -188,7 +188,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
                 "      'valueType':'Boolean'\n" +
                 "    }\n" +
                 "  ],\n" +
-                "  'roomName':'room2',\n" +
+                "  'room':'room2',\n" +
                 "  'sprites':{\n" +
                 "    'alphabet':'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',\n" +
                 "    'names':[\n" +

@@ -25,7 +25,7 @@ package com.codenjoy.dojo.services.multiplayer;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Room {
+public class GameRoom {
 
     private final GameField field;
     private final int count;
@@ -33,7 +33,7 @@ public class Room {
     private final boolean disposable;
     private List<GamePlayer> players = new LinkedList<>();
 
-    public Room(GameField field, int count, boolean disposable) {
+    public GameRoom(GameField field, int count, boolean disposable) {
         this.field = field;
         this.count = count;
         this.disposable = disposable;

@@ -41,13 +41,13 @@ public class PlayerGame implements Tickable {
     
     private Player player;
     private Game game;
-    private String roomName;
+    private String room;
     private LazyJoystick joystick;
 
-    public PlayerGame(Player player, Game game, String roomName) {
+    public PlayerGame(Player player, Game game, String room) {
         this.player = player;
         this.game = game;
-        setRoomName(roomName);
+        setRoom(room);
         joystick = new LazyJoystick(game);
     }
 
@@ -59,7 +59,7 @@ public class PlayerGame implements Tickable {
     /**
      * Есть необходимость искать по разным компонентам этого объекта, 
      * а потому o - может принимать разные типы
-     * @param o если String - это roomName, 
+     * @param o если String - это room,
      *          может быть так же Player, PlayerGame, GameField
      */
     @Override
@@ -68,7 +68,7 @@ public class PlayerGame implements Tickable {
         if (this == NullPlayerGame.INSTANCE && (o != NullPlayer.INSTANCE && o != NullPlayerGame.INSTANCE)) return false;
 
         if (o instanceof String) {
-            return o.equals(roomName);
+            return o.equals(room);
         }
         
         if (o instanceof Player) {
@@ -114,9 +114,9 @@ public class PlayerGame implements Tickable {
 
     @Override
     public String toString() {
-        return String.format("PlayerGame[player=%s, roomName=%s, game=%s]",
+        return String.format("PlayerGame[player=%s, room=%s, game=%s]",
                 player,
-                roomName,
+                room,
                 game.getClass().getSimpleName());
     }
 
@@ -129,18 +129,18 @@ public class PlayerGame implements Tickable {
         return player.getGameType();
     }
     
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setRoom(String room) {
+        this.room = room;
         getPlayer();
     }
 
     /*
-     * Так случилось, что roomName содержится в двух местах, 
+     * Так случилось, что room содержится в двух местах,
      * а потому надо держать в консистентности данные  
      */
     public Player getPlayer() {
         if (player != null) {
-            player.setRoomName(roomName);
+            player.setRoom(room);
         }
         return player;
     }

@@ -80,7 +80,7 @@ public class RegistrationValidatorTest {
             setReadableName("Readable Name");
             setPassword("12345");
             setPasswordConfirmation("12345");
-            setGameName("dummy");
+            setGame("dummy");
         }};
     }
 
@@ -175,13 +175,13 @@ public class RegistrationValidatorTest {
         // given
         String invalidGameName = "invalidGame";
         when(commonValidator.isGameName(invalidGameName, Validator.CANT_BE_NULL)).thenReturn(false);
-        player.setGameName(invalidGameName);
+        player.setGame(invalidGameName);
 
         // when
         validator.validate(player, errors);
 
         // then
-        assertError(errors, "gameName", "registration.game.invalid");
+        assertError(errors, "game", "registration.game.invalid");
     }
 
     private void assertError(Errors errors, String field, String expectedCode) {

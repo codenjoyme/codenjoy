@@ -103,28 +103,28 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player register(String id, String gameName, String roomName, String ip) {
+    public Player register(String id, String game, String room, String ip) {
         lock.writeLock().lock();
         try {
-            log.debug("Registered user {} in game {}", id, gameName);
+            log.debug("Registered user {} in game {}", id, game);
 
             if (!config.isRegistrationOpened()) {
                 return NullPlayer.INSTANCE;
             }
 
-            registerAIIfNeeded(id, gameName, roomName);
+            registerAIIfNeeded(id, game, room);
 
             // TODO test me
             PlayerSave save = saver.loadGame(id);
             if (save != PlayerSave.NULL 
-                    && gameName.equals(save.getGameName())
-                    && roomName.equals(save.getRoomName())) // TODO ROOM test me 
+                    && game.equals(save.getGame())
+                    && room.equals(save.getRoom())) // TODO ROOM test me
             {
                 save.setCallbackUrl(ip);
             } else {
-                save = new PlayerSave(id, ip, gameName, roomName, 0, null);
+                save = new PlayerSave(id, ip, game, room, 0, null);
             }
-            Player player = register(new PlayerSave(id, ip, gameName, roomName, save.getScore(), save.getSave()));
+            Player player = register(new PlayerSave(id, ip, game, room, save.getScore(), save.getSave()));
 
             return player;
         } finally {
@@ -137,24 +137,24 @@ public class PlayerServiceImpl implements PlayerService {
         lock.writeLock().lock();
         try {
             PlayerGame playerGame = playerGames.get(id);
-            registerAI(id, playerGame.getGameType().name(), playerGame.getRoomName()); // TODO ROOM test me
+            registerAI(id, playerGame.getGameType().name(), playerGame.getRoom()); // TODO ROOM test me
         } finally {
             lock.writeLock().unlock();
         }
     }
 
-    private void registerAIIfNeeded(String forPlayer, String gameName, String roomName) {
+    private void registerAIIfNeeded(String forPlayer, String game, String room) {
         if (isAI(forPlayer)) return;
         if (!isAiNeeded) return;
 
-        GameType gameType = gameService.getGame(gameName, roomName);
+        GameType gameType = gameService.getGameType(game, room);
 
         // если в эту игру ai еще не играет
-        String aiId = gameName + WebSocketRunner.BOT_ID_SUFFIX;
+        String aiId = game + WebSocketRunner.BOT_ID_SUFFIX;
         PlayerGame playerGame = playerGames.get(aiId);
 
         if (playerGame instanceof NullPlayerGame) {
-            registerAI(aiId, gameName, roomName);
+            registerAI(aiId, game, room);
         }
     }
 
@@ -162,26 +162,26 @@ public class PlayerServiceImpl implements PlayerService {
         return Hash.getCode(id, id);
     }
 
-    private void registerAI(String id, String gameName, String roomName) {
+    private void registerAI(String id, String game, String room) {
         String code = isAI(id) ?
                 gerCodeForAI(id) :
                 registration.getCodeById(id);
 
-        setupPlayerAI(getPlayerSupplier(id, gameName, roomName),
-                id, code, gameName, roomName);
+        setupPlayerAI(getPlayerSupplier(id, game, room),
+                id, code, game, room);
     }
 
-    private Supplier<Player> getPlayerSupplier(String id, String gameName, String roomName) {
+    private Supplier<Player> getPlayerSupplier(String id, String game, String room) {
         return () -> getPlayer(new PlayerSave(id,
-                            "127.0.0.1", gameName, roomName,
-                0, null), gameName, roomName);
+                            "127.0.0.1", game, room,
+                0, null), game, room);
     }
 
-    private void setupPlayerAI(Supplier<Player> getPlayer, String id, String code, String gameName, String roomName) {
-        Closeable ai = createAI(id, code, gameName, roomName);
+    private void setupPlayerAI(Supplier<Player> getPlayer, String id, String code, String game, String room) {
+        Closeable ai = createAI(id, code, game, room);
         if (ai != null) {
             Player player = getPlayer.get();
-            player.setReadableName(StringUtils.capitalize(gameName) + " SuperAI");
+            player.setReadableName(StringUtils.capitalize(game) + " SuperAI");
             player.setAi(ai);
         }
     }
@@ -198,18 +198,18 @@ public class PlayerServiceImpl implements PlayerService {
 
     private Player justRegister(PlayerSave save) {
         String id = save.getId();
-        String gameName = save.getGameName();
-        String roomName = save.getRoomName();
+        String game = save.getGame();
+        String room = save.getRoom();
 
-        if (!gameService.exists(gameName)) {
+        if (!gameService.exists(game)) {
             return NullPlayer.INSTANCE;
         }
 
-        Player player = getPlayer(save, gameName, roomName);
+        Player player = getPlayer(save, game, room);
 
         if (isAI(id)) {
             setupPlayerAI(() -> player,
-                    id, gerCodeForAI(id), gameName, roomName);
+                    id, gerCodeForAI(id), game, room);
         }
 
         return player;
@@ -219,8 +219,8 @@ public class PlayerServiceImpl implements PlayerService {
         return id.endsWith(WebSocketRunner.BOT_ID_SUFFIX);
     }
 
-    private Closeable createAI(String id, String code, String gameName, String roomName) {
-        GameType<Settings> gameType = gameService.getGame(gameName, roomName);
+    private Closeable createAI(String id, String code, String game, String room) {
+        GameType<Settings> gameType = gameService.getGameType(game, room);
         Class<? extends Solver> ai = gameType.getAI();
         if (ai == null) {
             return null;
@@ -256,17 +256,17 @@ public class PlayerServiceImpl implements PlayerService {
         return WebSocketRunner.runAI(id, code, solver, board);
     }
 
-    private Player getPlayer(PlayerSave save, String gameName, String roomName) {
+    private Player getPlayer(PlayerSave save, String game, String room) {
         String name = save.getId();
         String callbackUrl = save.getCallbackUrl();
 
-        GameType gameType = gameService.getGame(gameName, roomName);
+        GameType gameType = gameService.getGameType(game, room);
         Player player = getPlayer(name);
         PlayerGame oldPlayerGame = playerGames.get(name);
 
         boolean newPlayer = (player instanceof NullPlayer) 
-                || !gameName.equals(player.getGameName())
-                || !roomName.equals(oldPlayerGame.getRoomName()); // TODO ROOM test me
+                || !game.equals(player.getGame())
+                || !room.equals(oldPlayerGame.getRoom()); // TODO ROOM test me
         if (newPlayer) {
             playerGames.remove(player);
 
@@ -278,7 +278,7 @@ public class PlayerServiceImpl implements PlayerService {
             player.setEventListener(listener);
 
             player.setGameType(gameType);
-            PlayerGame playerGame = playerGames.add(player, roomName, save);
+            PlayerGame playerGame = playerGames.add(player, room, save);
 
             player = playerGame.getPlayer();
 
@@ -395,20 +395,20 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public List<Player> getAll(String gameName) {
+    public List<Player> getAll(String game) {
         lock.readLock().lock();
         try {
-            return playerGames.getPlayers(gameName);
+            return playerGames.getPlayers(game);
         } finally {
             lock.readLock().unlock();
         }
     }
 
     @Override
-    public List<Player> getAllInRoom(String roomName) {
+    public List<Player> getAllInRoom(String room) {
         lock.readLock().lock();
         try {
-            return playerGames.getPlayersByRoom(roomName);
+            return playerGames.getPlayersByRoom(room);
         } finally {
             lock.readLock().unlock();
         }
@@ -421,7 +421,7 @@ public class PlayerServiceImpl implements PlayerService {
             Player player = getPlayer(id);
 
             log.debug("Unregistered user {} from game {}",
-                    player.getId(), player.getGameName());
+                    player.getId(), player.getGame());
 
             playerGames.remove(player);
         } finally {
@@ -494,13 +494,13 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         // TODO ROOM test me
-        boolean updateRoomName = input.getRoomName() != null
-                && !playerGame.getRoomName().equals(input.getRoomName());
+        boolean updateRoomName = input.getRoom() != null
+                && !playerGame.getRoom().equals(input.getRoom());
         if (updateRoomName) {
-            updated.setRoomName(input.getRoomName());
+            updated.setRoom(input.getRoom());
             // TODO тут как-то неочевидно, что создается рума если ее не существовало раннее
-            GameType game = gameService.getGame(input.getGameName(), input.getRoomName());
-            playerGames.changeRoom(input.getId(), input.getRoomName());
+            GameType game = gameService.getGameType(input.getGame(), input.getRoom());
+            playerGames.changeRoom(input.getId(), input.getRoom());
         }
         
         Game game = playerGame.getGame();
@@ -516,10 +516,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override // TODO test me
-    public void loadSaveForAll(String roomName, String newSave) {
+    public void loadSaveForAll(String room, String newSave) {
         lock.writeLock().lock();
         try {
-            List<Player> players = playerGames.getPlayersByRoom(roomName);
+            List<Player> players = playerGames.getPlayersByRoom(room);
             players.forEach(player -> playerGames.setLevel(
                     player.getId(),
                     new JSONObject(newSave)));
@@ -563,10 +563,10 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void removeAll(String roomName) {
+    public void removeAll(String room) {
         lock.writeLock().lock();
         try {
-            playerGames.getAll(withRoom(roomName))
+            playerGames.getAll(withRoom(room))
                     .forEach(playerGames.all()::remove);
         } finally {
             lock.writeLock().unlock();
@@ -611,12 +611,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void cleanAllScores(String roomName) {
+    public void cleanAllScores(String room) {
         lock.writeLock().lock();
         try {
             semifinal.clean(); // TODO semifinal должен научиться работать для определенных комнат
 
-            playerGames.getAll(withRoom(roomName))
+            playerGames.getAll(withRoom(room))
                 .forEach(PlayerGame::clearScore);
         } finally {
             lock.writeLock().unlock();
@@ -634,26 +634,26 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void reloadAllRooms(String roomName) {
+    public void reloadAllRooms(String room) {
         lock.writeLock().lock();
         try {
-            playerGames.reloadAll(true, withRoom(roomName));
+            playerGames.reloadAll(true, withRoom(room));
         } finally {
             lock.writeLock().unlock();
         }
     }
 
     @Override
-    public Player getRandom(String gameType) {
+    public Player getRandom(String game) {
         lock.readLock().lock();
         try {
             if (playerGames.isEmpty()) return NullPlayer.INSTANCE;
 
-            if (gameType == null) {
+            if (game == null) {
                 return playerGames.iterator().next().getPlayer();
             }
 
-            Iterator<Player> iterator = playerGames.getPlayers(gameType).iterator();
+            Iterator<Player> iterator = playerGames.getPlayers(game).iterator();
             if (!iterator.hasNext()) return NullPlayer.INSTANCE;
             return iterator.next();
         } finally {

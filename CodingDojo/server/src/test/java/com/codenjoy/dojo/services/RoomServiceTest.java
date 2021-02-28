@@ -278,10 +278,10 @@ public class RoomServiceTest {
         service.create("room4", game2);
 
         // when then
-        assertEquals("first", service.gameName("room1"));
-        assertEquals("first", service.gameName("room2"));
-        assertEquals("second", service.gameName("room3"));
-        assertEquals("second", service.gameName("room4"));
+        assertEquals("first", service.game("room1"));
+        assertEquals("first", service.game("room2"));
+        assertEquals("second", service.game("room3"));
+        assertEquals("second", service.game("room4"));
     }
 
     @Test

@@ -22,8 +22,8 @@
 
 var boardAllPageLoad = function(showProgress) {
 
-    if (game.debug) {
-        game.debugger();
+    if (setup.debug) {
+        setup.debugger();
     }
 
     // ----------------------- init progressbar -------------------
@@ -32,11 +32,11 @@ var boardAllPageLoad = function(showProgress) {
         var onChangeLevel = function(level, multiple, lastPassed, levelIncreased, win) {
             // do nothing
         }
-        var levelProgress = initLevelProgress(game, onChangeLevel);
+        var levelProgress = initLevelProgress(setup, onChangeLevel);
     }
     // ----------------------- init leaders table -------------------
 
-    initLeadersTable(game.contextPath, game.playerId, game.code,
+    initLeadersTable(setup.contextPath, setup.playerId, setup.code,
         function(count, you, link, name, score, maxLength, level) {
             var star = '';
             if (count == 1) {

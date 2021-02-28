@@ -66,7 +66,7 @@ public class PlayerGameSaverTest {
         Information info = getInfo("Some info");
         GameService gameService = getGameService(scores);
         Player player = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), scores, info);
-        player.setRoomName("room");
+        player.setRoom("room");
 
         // when
         long now = System.currentTimeMillis();
@@ -94,8 +94,8 @@ public class PlayerGameSaverTest {
     private GameService getGameService(PlayerScores scores) {
         GameService gameService = mock(GameService.class);
         GameType gameType = getGameType(scores);
-        when(gameService.getGame(anyString())).thenReturn(gameType);
-        when(gameService.getGame(anyString(), anyString())).thenReturn(gameType);
+        when(gameService.getGameType(anyString())).thenReturn(gameType);
+        when(gameService.getGameType(anyString(), anyString())).thenReturn(gameType);
         when(gameService.exists(anyString())).thenReturn(true);
         return gameService;
     }
@@ -116,7 +116,7 @@ public class PlayerGameSaverTest {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getCallbackUrl(), actual.getCallbackUrl());
         assertEquals(expected.getScore(), actual.getScore());
-        assertEquals(expected.getRoomName(), actual.getRoomName());
+        assertEquals(expected.getRoom(), actual.getRoom());
     }
 
     @Test
@@ -124,8 +124,8 @@ public class PlayerGameSaverTest {
         // given
         Player player1 = new Player("vasia", "http://127.0.0.1:8888", PlayerTest.mockGameType("game"), getScores(10), getInfo("Some other info"));
         Player player2 = new Player("katia", "http://127.0.0.3:7777", PlayerTest.mockGameType("game"), getScores(20), getInfo("Some info"));
-        player1.setRoomName("room");
-        player2.setRoomName("room");
+        player1.setRoom("room");
+        player2.setRoom("room");
 
         // when
         long now = System.currentTimeMillis();

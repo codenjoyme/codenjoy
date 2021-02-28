@@ -104,7 +104,7 @@ public class RoomService {
                 .collect(toList());
     }
 
-    public String gameName(String room) {
+    public String game(String room) {
         if (!exists(room)) {
             log.warn("Room '{}' not found", room);
             return null;

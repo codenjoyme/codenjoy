@@ -68,35 +68,35 @@ public class GameServiceTest {
     @Test
     public void shouldGetGameNames() {
         assertEquals("[first, second]", 
-                service.getGameNames().toString());
+                service.getGames().toString());
     }
 
     @Test
     public void shouldGetNullGame_whenEmptyGameName_caseGameNameOnly() {
-        assertEquals(NullGameType.INSTANCE, service.getGame(null));
-        assertEquals(NullGameType.INSTANCE, service.getGame("null"));
-        assertEquals(NullGameType.INSTANCE, service.getGame("not-exists"));
+        assertEquals(NullGameType.INSTANCE, service.getGameType(null));
+        assertEquals(NullGameType.INSTANCE, service.getGameType("null"));
+        assertEquals(NullGameType.INSTANCE, service.getGameType("not-exists"));
     }
 
     @Test
     public void shouldGetNullGame_whenEmptyGameName_caseGameAndRoomNames() {
-        assertEquals(NullGameType.INSTANCE, service.getGame(null, "valid-room"));
-        assertEquals(NullGameType.INSTANCE, service.getGame("null", "valid-room"));
-        assertEquals(NullGameType.INSTANCE, service.getGame("not-exists", "valid-room"));
+        assertEquals(NullGameType.INSTANCE, service.getGameType(null, "valid-room"));
+        assertEquals(NullGameType.INSTANCE, service.getGameType("null", "valid-room"));
+        assertEquals(NullGameType.INSTANCE, service.getGameType("not-exists", "valid-room"));
 
-        assertEquals(NullGameType.INSTANCE, service.getGame("first", null));
-        assertEquals(NullGameType.INSTANCE, service.getGame("first", "null"));
-        assertNotEquals(NullGameType.INSTANCE, service.getGame("first", "non-exists")); // valid room and game
+        assertEquals(NullGameType.INSTANCE, service.getGameType("first", null));
+        assertEquals(NullGameType.INSTANCE, service.getGameType("first", "null"));
+        assertNotEquals(NullGameType.INSTANCE, service.getGameType("first", "non-exists")); // valid room and game
     }
 
     @Test
     public void shouldGetNullGame_whenEmptyGameName() {
-        roomService.create("room1", service.getGame("first"));
-        roomService.create("room2", service.getGame("second"));
-        roomService.create("room3", service.getGame("second"));
+        roomService.create("room1", service.getGameType("first"));
+        roomService.create("room2", service.getGameType("second"));
+        roomService.create("room3", service.getGameType("second"));
 
         assertEquals("[first, room1, room2, room3, second]",
-                service.getRoomNames().toString());
+                service.getRooms().toString());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class GameServiceTest {
     @Test
     public void shouldGetOnlyGameNames() {
         assertEquals("[first, second]", 
-                service.getOnlyGameNames().toString());
+                service.getOnlyGames().toString());
     }
     
     @Test
@@ -126,9 +126,9 @@ public class GameServiceTest {
     @Test
     public void shouldGetDefaultGame() {
         // по умолчанию так же создаются комнаты first & second
-        roomService.create("room1", service.getGame("first"));
-        roomService.create("room2", service.getGame("second"));
-        roomService.create("room3", service.getGame("second"));
+        roomService.create("room1", service.getGameType("first"));
+        roomService.create("room2", service.getGameType("second"));
+        roomService.create("room3", service.getGameType("second"));
 
         assertEquals("first",
                 service.getDefaultRoom());
@@ -137,13 +137,13 @@ public class GameServiceTest {
     @Test
     public void shouldGetGame() {
         assertEquals(FirstGameType.class,
-                service.getGame("first").getClass());
+                service.getGameType("first").getClass());
 
         assertEquals(SecondGameType.class,
-                service.getGame("second").getClass());
+                service.getGameType("second").getClass());
 
         assertEquals(NullGameType.class,
-                service.getGame("not-exists").getClass());
+                service.getGameType("not-exists").getClass());
     }
 
     // TODO этот тест надо запускать с парамером mvn test -DallGames иначе не тянутся дипенденси игр а хотелось бы их чекнуть так же 
@@ -176,20 +176,20 @@ public class GameServiceTest {
     public void shouldSameSettings_whenGetGameByRoomName() {
         // given
         List<GameType> list = new LinkedList<>(){{
-            add(service.getGame("first", "room1"));
-            add(service.getGame("first", "room1"));
+            add(service.getGameType("first", "room1"));
+            add(service.getGameType("first", "room1"));
 
-            add(service.getGame("first", "room2"));
+            add(service.getGameType("first", "room2"));
 
-            add(service.getGame("second", "room3"));
-            add(service.getGame("second", "room3"));
+            add(service.getGameType("second", "room3"));
+            add(service.getGameType("second", "room3"));
 
-            add(service.getGame("second", "room4"));
-            add(service.getGame("second", "room4"));
+            add(service.getGameType("second", "room4"));
+            add(service.getGameType("second", "room4"));
 
-            add(service.getGame("first"));
+            add(service.getGameType("first"));
 
-            add(service.getGame("second"));
+            add(service.getGameType("second"));
         }};
 
         // then

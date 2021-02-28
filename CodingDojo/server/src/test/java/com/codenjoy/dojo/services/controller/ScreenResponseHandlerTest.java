@@ -63,7 +63,7 @@ public class ScreenResponseHandlerTest {
         // when
         handler.onResponse(socket,
                 "{'name':getScreen, 'allPlayersScreen':true, " +
-                        "'players':[], 'gameName':'game'}");
+                        "'players':[], 'game':'game'}");
 
         // then
         Function function = verifySetFilterFor();
@@ -78,7 +78,7 @@ public class ScreenResponseHandlerTest {
                 "  'player2':{\n" +
                 "    'board':'some_board2',\n" +
                 "    'boardSize':12,\n" +
-                "    'gameName':'game',\n" +
+                "    'game':'game',\n" +
                 "    'heroesData':{\n" +
                 "      'coordinates':'coordinates1',\n" +
                 "      'group':[\n" +
@@ -96,7 +96,7 @@ public class ScreenResponseHandlerTest {
                 "  'player4':{\n" +
                 "    'board':'some_board4',\n" +
                 "    'boardSize':45,\n" +
-                "    'gameName':'game',\n" +
+                "    'game':'game',\n" +
                 "    'heroesData':{\n" +
                 "      'coordinates':'coordinates4',\n" +
                 "      'group':[\n" +
@@ -119,7 +119,7 @@ public class ScreenResponseHandlerTest {
         // when
         handler.onResponse(socket,
                 "{'name':getScreen, 'allPlayersScreen':true, " +
-                        "'players':[], 'gameName':'game'}");
+                        "'players':[], 'game':'game'}");
 
         // then
         Function function = verifySetFilterFor();
@@ -139,7 +139,7 @@ public class ScreenResponseHandlerTest {
                 "  'player1':{\n" +
                 "    'board':'some_board1',\n" +
                 "    'boardSize':10,\n" +
-                "    'gameName':'game',\n" +
+                "    'game':'game',\n" +
                 "    'heroesData':{\n" +
                 "      'coordinates':'coordinates1',\n" +
                 "      'group':[\n" +
@@ -155,7 +155,7 @@ public class ScreenResponseHandlerTest {
                 "  'player2':{\n" +
                 "    'board':'some_board2',\n" +
                 "    'boardSize':12,\n" +
-                "    'gameName':'game',\n" +
+                "    'game':'game',\n" +
                 "    'heroesData':{\n" +
                 "      'coordinates':'coordinates1',\n" +
                 "      'group':[\n" +
@@ -171,7 +171,7 @@ public class ScreenResponseHandlerTest {
                 "  'player4':{\n" +
                 "    'board':'some_board4',\n" +
                 "    'boardSize':45,\n" +
-                "    'gameName':'game',\n" +
+                "    'game':'game',\n" +
                 "    'heroesData':{\n" +
                 "      'coordinates':'coordinates4',\n" +
                 "      'group':[\n" +
@@ -194,7 +194,7 @@ public class ScreenResponseHandlerTest {
         // when
         handler.onResponse(socket,
                 "{'name':getScreen, 'allPlayersScreen':false, " +
-                        "'players':['player3'], 'gameName':'other_game'}");
+                        "'players':['player3'], 'game':'other_game'}");
 
         // then
         Function function = verifySetFilterFor();
@@ -209,7 +209,7 @@ public class ScreenResponseHandlerTest {
                 "  'player3':{\n" +
                 "    'board':'some_board3',\n" +
                 "    'boardSize':14,\n" +
-                "    'gameName':'other_game',\n" +
+                "    'game':'other_game',\n" +
                 "    'heroesData':{\n" +
                 "      'coordinates':'coordinates1',\n" +
                 "      'group':[\n" +
@@ -232,7 +232,7 @@ public class ScreenResponseHandlerTest {
         // when
         handler.onResponse(socket,
                 "{'name':getScreen, 'allPlayersScreen':false, " +
-                        "'players':['player2'], 'gameName':'game'}");
+                        "'players':['player2'], 'game':'game'}");
 
         // then
         Function function = verifySetFilterFor();
@@ -247,7 +247,7 @@ public class ScreenResponseHandlerTest {
                 "  'player2':{\n" +
                 "    'board':'some_board2',\n" +
                 "    'boardSize':12,\n" +
-                "    'gameName':'game',\n" +
+                "    'game':'game',\n" +
                 "    'heroesData':{\n" +
                 "      'coordinates':'coordinates1',\n" +
                 "      'group':[\n" +
@@ -269,25 +269,25 @@ public class ScreenResponseHandlerTest {
         Map<Player, PlayerData> map = new HashMap<>();
 
         Player player1 = new Player("player1");
-        player1.setGameName("game");
+        player1.setGame("game");
         map.put(player1, new PlayerData(10, "some_board1", "game",
                 134, "some_info1", new JSONObject("{'player1':100,'player2':200}"),
                 new JSONObject("{'coordinates':'coordinates1','group':['player1','player2']}")));
 
         Player player2 = new Player("player2");
-        player2.setGameName("game");
+        player2.setGame("game");
         map.put(player2, new PlayerData(12, "some_board2", "game",
                 546, "some_info2", new JSONObject("{'player1':100,'player2':200}"),
                 new JSONObject("{'coordinates':'coordinates1','group':['player1','player2']}")));
 
         Player player4 = new Player("player4");
-        player4.setGameName("game");
+        player4.setGame("game");
         map.put(player4, new PlayerData(45, "some_board4", "game",
                 765, "some_info4", new JSONObject("{'player4':400}"),
                 new JSONObject("{'coordinates':'coordinates4','group':['player4']}")));
 
         Player player3 = new Player("player3");
-        player3.setGameName("other_game");
+        player3.setGame("other_game");
         map.put(player3, new PlayerData(14, "some_board3", "other_game",
                 235, "some_info3", new JSONObject("{'player3':300}"),
                 new JSONObject("{'coordinates':'coordinates1','group':['player3']}")));

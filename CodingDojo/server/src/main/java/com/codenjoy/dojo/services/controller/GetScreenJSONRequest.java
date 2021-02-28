@@ -55,11 +55,11 @@ class GetScreenJSONRequest {
         return getPlayers().contains(player.getId());
     }
 
-    public String getGameName() {
-        return request.getString("gameName");
+    public String getGame() {
+        return request.getString("game");
     }
 
     public boolean isMyGame(Player player) {
-        return player.getGameName().equals(getGameName());
+        return player.getGame().equals(getGame());
     }
 }

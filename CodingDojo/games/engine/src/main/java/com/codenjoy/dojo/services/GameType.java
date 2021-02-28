@@ -49,12 +49,12 @@ public interface GameType<T extends Settings> extends Tickable {
 
     /**
      * Так фреймворк будет стартовать новую игру для каждого пользователя
-     * @param levelNumber уровень игры (опциональное поле, обычно начинается с 1
+     * @param level уровень игры (опциональное поле, обычно начинается с 1
      *          {@see LevelProgress#levelsStartsFrom1})
      * @param settings настройки по умолчанию связанные с текущей комнатой
      * @return Экземпляр игры пользователя
      */
-    GameField createGame(int levelNumber, T settings);
+    GameField createGame(int level, T settings);
 
     /**
      * @param settings настройки по умолчанию связанные с текущей комнатой
@@ -91,7 +91,7 @@ public interface GameType<T extends Settings> extends Tickable {
     Class<? extends ClientBoard> getBoard();
 
     /**
-     * Если подложить в 'src\main\resources\gameName\version.properties' игры строчку '${project.version}_${build.time}'
+     * Если подложить в 'src\main\resources\<GAME>\version.properties' игры строчку '${project.version}_${build.time}'
      * то ее потом мождно будет прочитать с помощью VersionReader.getCurrentVersion();
      * @return версия игры
      */

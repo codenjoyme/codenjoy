@@ -87,10 +87,10 @@ public class PlayerGamesMultiplayerTest {
         training4 = setupGameType("training4", MultiplayerType.TRAINING.apply(4));
     }
 
-    private GameType setupGameType(String gameName, MultiplayerType type) {
+    private GameType setupGameType(String game, MultiplayerType type) {
         GameType result = mock(GameType.class);
         when(result.getMultiplayerType(any())).thenReturn(type);
-        when(result.name()).thenReturn(gameName);
+        when(result.name()).thenReturn(game);
         when(result.getPrinterFactory()).thenReturn(printerFactory);
         when(result.createGame(anyInt(), any())).thenAnswer(inv -> createGameField());
         when(result.createPlayer(any(EventListener.class), anyString(), any())).thenAnswer(inv -> createGamePlayer());
@@ -134,8 +134,8 @@ public class PlayerGamesMultiplayerTest {
 
     private PlayerGame playerWantsToPlay(GameType gameType, Player player, Object data) {
         player.setGameType(gameType);
-        String roomName = gameType.name();
-        return playerGames.add(player, roomName, null);
+        String room = gameType.name();
+        return playerGames.add(player, room, null);
     }
 
     private static class GroupsAsserter {

@@ -61,8 +61,6 @@ public class AdminController {
 
     public static final String URI = "/admin";
 
-    public static final String GAME_NAME_KEY = "gameName";
-    public static final String ROOM_NAME_KEY = "roomName";
     public static final String CUSTOM_ADMIN_PAGE_KEY = "custom";
 
     private final TimerService timerService;
@@ -78,10 +76,6 @@ public class AdminController {
     private final Semifinal semifinal;
     private final RoomService roomService;
 
-    @GetMapping("/gameVersion")
-    public @ResponseBody String getGameVersion(@RequestParam(GAME_NAME_KEY) String gameName) {
-        return gameService.getGame(gameName).getVersion();
-    }
 
     // TODO ROOM а этот метод вообще зачем?
     @GetMapping(params = {"player", "data"})
@@ -89,7 +83,7 @@ public class AdminController {
                                          @RequestParam("data") String save,
                                          HttpServletRequest request)
     {
-        saveService.load(id, getGameRoom(request), getGameName(request), save);
+        saveService.load(id, getGameName(request), getGameRoom(request), save);
         return "redirect:/board/player/" + id;
     }
     // используется как rest для апдейта полей конкретного player на admin page
@@ -115,9 +109,9 @@ public class AdminController {
 
     @GetMapping("/player/saveAll")
     public String saveAllGames(HttpServletRequest request) {
-        String roomName = getGameRoom(request);
-        saveService.saveAll(roomName);
-        return getAdmin(roomName);
+        String room = getGameRoom(request);
+        saveService.saveAll(room);
+        return getAdmin(room);
     }
 
     // ----------------
@@ -132,9 +126,9 @@ public class AdminController {
 
     @GetMapping("/player/loadAll")
     public String loadAllGames(HttpServletRequest request) {
-        String roomName = getGameRoom(request);
-        saveService.loadAll(roomName);
-        return getAdmin(roomName);
+        String room = getGameRoom(request);
+        saveService.loadAll(room);
+        return getAdmin(room);
     }
 
     // ----------------
@@ -148,14 +142,14 @@ public class AdminController {
 
     @GetMapping("/player/ai/reloadAll")
     public String reloadAllAI(HttpServletRequest request) {
-        String roomName = getGameRoom(request);
+        String room = getGameRoom(request);
 
-        playerService.getAllInRoom(roomName)
+        playerService.getAllInRoom(room)
                 .stream().filter(not(Player::hasAi))
                 .map(Player::getId)
                 .forEach(playerService::reloadAI);
 
-        return getAdmin(roomName);
+        return getAdmin(room);
     }
 
     // ----------------
@@ -170,9 +164,9 @@ public class AdminController {
 
     @GetMapping("/player/gameOverAll")
     public String gameOverAllPlayers(HttpServletRequest request) {
-        String roomName = getGameRoom(request);
-        playerService.removeAll(roomName);
-        return getAdmin(roomName);
+        String room = getGameRoom(request);
+        playerService.removeAll(room);
+        return getAdmin(room);
     }
 
     // ----------------
@@ -186,9 +180,9 @@ public class AdminController {
 
     @GetMapping("/player/save/removeAll")
     public String removePlayerSave(HttpServletRequest request) {
-        String roomName = getGameRoom(request);
-        saveService.removeAllSaves(roomName);
-        return getAdmin(roomName);
+        String room = getGameRoom(request);
+        saveService.removeAllSaves(room);
+        return getAdmin(room);
     }
 
     // ----------------
@@ -203,34 +197,34 @@ public class AdminController {
 
     @GetMapping("/player/registration/removeAll")
     public String removePlayerRegistration(HttpServletRequest request) {
-        String roomName = getGameRoom(request);
-        playerService.getAllInRoom(roomName)
+        String room = getGameRoom(request);
+        playerService.getAllInRoom(room)
                 .forEach(player -> registration.remove(player.getId()));
-        return getAdmin(roomName);
+        return getAdmin(room);
     }
 
     // ----------------
 
     @GetMapping("/game/board/reloadAll")
     public String resetAllPlayers(HttpServletRequest request) {
-        String roomName = getGameRoom(request);
-        saveService.saveAll(roomName);
-        playerService.removeAll(roomName);
-        saveService.loadAll(roomName);
-        return getAdmin(roomName);
+        String room = getGameRoom(request);
+        saveService.saveAll(room);
+        playerService.removeAll(room);
+        saveService.loadAll(room);
+        return getAdmin(room);
     }
 
     @GetMapping("/game/scores/cleanAll")
     public String cleanAllPlayersScores(HttpServletRequest request) {
-        String roomName = getGameRoom(request);
-        playerService.cleanAllScores(roomName);
-        return getAdmin(roomName);
+        String room = getGameRoom(request);
+        playerService.cleanAllScores(room);
+        return getAdmin(room);
     }
 
     @GetMapping("/player/reloadAll")
     public String reloadAllPlayersRooms(HttpServletRequest request) {
-        String roomName = getGameRoom(request);
-        playerService.reloadAllRooms(roomName);
+        String room = getGameRoom(request);
+        playerService.reloadAllRooms(room);
         return getAdmin(request);
     }
 
@@ -335,11 +329,11 @@ public class AdminController {
             }
         }
 
-        String gameName = settings.getGameName();
-        String roomName = settings.getRoomName();
+        String game = settings.getGame();
+        String room = settings.getRoom();
 
         if (settings.getProgress() != null) {
-            playerService.loadSaveForAll(roomName, settings.getProgress());
+            playerService.loadSaveForAll(room, settings.getProgress());
         }
 
         if (settings.getGames() != null) {
@@ -350,7 +344,7 @@ public class AdminController {
         List<Exception> errors = new LinkedList<>();
         if (settings.getParameters() != null) {
             List<Object> updated = settings.getParameters();
-            updateParameters(gameName, roomName, updated, errors);
+            updateParameters(game, room, updated, errors);
         }
         if (!errors.isEmpty()) {
             throw new IllegalArgumentException("There are errors during save settings: " + errors.toString());
@@ -359,17 +353,17 @@ public class AdminController {
         if (settings.getGenerateNameMask() != null) {
             String mask = settings.getGenerateNameMask();
             int count = Integer.parseInt(settings.getGenerateCount());
-            String room = settings.getGenerateRoomName();
-            generateNewPlayers(gameName, room, mask, count);
+            String generateRoom = settings.getGenerateRoom();
+            generateNewPlayers(game, generateRoom, mask, count);
         }
 
-        request.setAttribute(ROOM_NAME_KEY, roomName);
-        return getAdmin(roomName);
+        request.setAttribute("room", room);
+        return getAdmin(room);
     }
 
     private void setEnable(List<Parameter> games) {
         List<String> toRemove = new LinkedList<>();
-        List<String> allGames = gameService.getGameNames();
+        List<String> allGames = gameService.getGames();
         if (games.size() != allGames.size()) {
             throw new IllegalStateException("Список игр к активации не полный");
         }
@@ -382,8 +376,8 @@ public class AdminController {
         rooms.enableGames(toRemove);
     }
 
-    public void updateParameters(String gameName, String roomName, List<Object> updated, List<Exception> errors) {
-        Settings gameSettings = gameService.getGame(gameName, roomName).getSettings();
+    public void updateParameters(String game, String room, List<Object> updated, List<Exception> errors) {
+        Settings gameSettings = gameService.getGameType(game, room).getSettings();
         List<Parameter> actual = gameSettings.getParameters();
         for (int index = 0; index < actual.size(); index++) {
             try {
@@ -397,7 +391,7 @@ public class AdminController {
         }
     }
 
-    public void generateNewPlayers(String gameName, String roomName, String mask, int count) {
+    public void generateNewPlayers(String game, String room, String mask, int count) {
         int numLength = String.valueOf(count).length();
 
         int created = 0;
@@ -412,7 +406,7 @@ public class AdminController {
 
             created++;
             String code = register(id);
-            playerService.register(id, gameName, roomName, "127.0.0.1");
+            playerService.register(id, game, room, "127.0.0.1");
         }
     }
 
@@ -437,11 +431,11 @@ public class AdminController {
         return getAdmin(getGameRoom(request));
     }
 
-    private String getAdmin(String roomName) {
-        if (roomName == null) {
+    private String getAdmin(String room) {
+        if (room == null) {
             return getAdmin();
         }
-        return "redirect:/admin?" + ROOM_NAME_KEY + "=" + roomName;
+        return "redirect:/admin?" + "room" + "=" + room;
     }
 
     private String getAdmin() {
@@ -452,65 +446,63 @@ public class AdminController {
 
     @GetMapping()
     public String getAdmin(Model model,
-                           @RequestParam(value = ROOM_NAME_KEY, required = false)
-                               String roomName,
-                           @RequestParam(value = GAME_NAME_KEY, required = false)
-                               String gameName,
+                           @RequestParam(value = "room", required = false) String room,
+                           @RequestParam(value = "game", required = false) String game,
                            @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
                                Boolean gameSpecificAdminPage)
     {
         // каждый из этих параметров может быть null, "", "null"
-        roomName = Validator.isEmpty(roomName) ? null : roomName;
-        gameName = Validator.isEmpty(gameName) ? null : gameName;
+        room = Validator.isEmpty(room) ? null : room;
+        game = Validator.isEmpty(game) ? null : game;
 
         // если не установили оба, идем на дифолтовую админку
-        if (roomName == null && gameName == null) {
+        if (room == null && game == null) {
             return getAdmin();
         }
 
         // ну может хоть имя игры указали?
-        if (roomName == null) {
-            roomName = gameName;
+        if (room == null) {
+            room = game;
         }
 
-        // если нет такой roomName, првоеряем есть ли gameName
-        if (!roomService.exists(roomName)) {
-            GameType game = gameService.getGame(gameName);
-            if (game instanceof NullGameType) {
+        // если нет такой room, првоеряем есть ли game
+        if (!roomService.exists(room)) {
+            GameType gameType = gameService.getGameType(game);
+            if (gameType instanceof NullGameType) {
                 // если нет - дифлотовая админка
                 return getAdmin();
             }
             // иначе создаем новую комнату, которую тут же будем админить
-            roomService.create(roomName, game);
+            roomService.create(room, gameType);
         }
 
         // получаем уже законным образом имя игры по комнате
-        gameName = roomService.gameName(roomName);
+        game = roomService.game(room);
 
         // проверяем не надо ли нам перейти на кастомную страничку
-        if (gameSpecificAdminPage && gameName != null) {
-            return viewDelegationService.adminView(gameName);
+        if (gameSpecificAdminPage && game != null) {
+            return viewDelegationService.adminView(game);
         }
 
         // получаем тип игры
-        GameType game = gameService.getGame(gameName, roomName);
-        if (game instanceof NullGameType) {
+        GameType gameType = gameService.getGameType(game, room);
+        if (gameType instanceof NullGameType) {
             return getAdmin();
         }
 
         // готовим данные для странички
-        Settings gameSettings = game.getSettings();
+        Settings gameSettings = gameType.getSettings();
         List<Parameter> parameters = gameSettings.getParameters();
         model.addAttribute("settings", parameters);
         model.addAttribute("semifinalTick", semifinal.getTime());
-        model.addAttribute(GAME_NAME_KEY, gameName);
-        model.addAttribute(ROOM_NAME_KEY, roomName);
-        model.addAttribute("gameVersion", game.getVersion());
+        model.addAttribute("game", game);
+        model.addAttribute("room", room);
+        model.addAttribute("gameVersion", gameType.getVersion());
         model.addAttribute("generateNameMask", "demo%");
         model.addAttribute("generateCount", "30");
-        model.addAttribute("generateRoomName", roomName);
+        model.addAttribute("generateRoom", room);
         model.addAttribute("timerPeriod", timerService.getPeriod());
-        model.addAttribute("defaultProgress", getDefaultProgress(game));
+        model.addAttribute("defaultProgress", getDefaultProgress(gameType));
         model.addAttribute("paused", timerService.isPaused());
         model.addAttribute("recording", actionLogger.isWorking());
         model.addAttribute("autoSave", autoSaver.isWorking());
@@ -521,7 +513,7 @@ public class AdminController {
         List<PlayerInfo> saves = saveService.getSaves();
         model.addAttribute("gameRooms", roomService.gameRooms());
         model.addAttribute("playersCount", getRoomCounts(saves));
-        settings.setPlayers(preparePlayers(model, roomName, saves));
+        settings.setPlayers(preparePlayers(model, room, saves));
 
         return "admin";
     }
@@ -542,8 +534,8 @@ public class AdminController {
             settings.getParameters().add(p.getValue());
         }
 
-        Set<String> enabled = rooms.gameNames();
-        List<Object> games = gameService.getGameNames()
+        Set<String> enabled = rooms.game();
+        List<Object> games = gameService.getGames()
                                 .stream()
                                 .map(name -> enabled.contains(name))
                                 .collect(toList());
@@ -552,7 +544,7 @@ public class AdminController {
     }
 
     private String getGameRoom(HttpServletRequest request) {
-        String result = request.getParameter(ROOM_NAME_KEY);
+        String result = request.getParameter("room");
         if (Validator.isEmpty(result)) {
             return null;
         }
@@ -560,16 +552,16 @@ public class AdminController {
     }
 
     private String getGameName(HttpServletRequest request) {
-        String result = request.getParameter(GAME_NAME_KEY);
+        String result = request.getParameter("game");
         if (Validator.isEmpty(result)) {
             return null;
         }
         return result;
     }
 
-    private List<PlayerInfo> preparePlayers(Model model, String roomName, List<PlayerInfo> players) {
+    private List<PlayerInfo> preparePlayers(Model model, String room, List<PlayerInfo> players) {
         for (PlayerInfo player : players) {
-            player.setHidden(!roomName.equals(player.getRoomName()));
+            player.setHidden(!room.equals(player.getRoom()));
         }
 
         if (!players.isEmpty()) {
@@ -586,7 +578,7 @@ public class AdminController {
 
     private int count(List<PlayerInfo> players, String room) {
         return (int) players.stream()
-                .filter(player -> room.equals(player.getRoomName()))
+                .filter(player -> room.equals(player.getRoom()))
                 .count();
     }
 

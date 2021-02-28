@@ -81,20 +81,23 @@ public class RestBoardController {
         return true;
     }
 
-    @GetMapping("/game/{gameName}/scores")
-    public List<PScoresOf> getPlayersScoresForGame(@PathVariable("gameName") String gameName) {
-        return playerGamesView.getScoresForGame(gameName);
+    // TODO ROOM тут наверное room надо, хотя вот ниже есть метод...
+    @GetMapping("/game/{game}/scores")
+    public List<PScoresOf> getPlayersScoresForGame(@PathVariable("game") String game) {
+        return playerGamesView.getScoresForGame(game);
     }
 
     // TODO test me
-    @GetMapping("/room/{roomName}/scores")
-    public List<PScoresOf> getPlayersScoresForRoom(@PathVariable("roomName") String roomName) {
-        return playerGamesView.getScoresForRoom(roomName);
+    @GetMapping("/room/{room}/scores")
+    public List<PScoresOf> getPlayersScoresForRoom(@PathVariable("room") String room) {
+        return playerGamesView.getScoresForRoom(room);
     }
 
     // TODO test me
     @GetMapping("/player/{player}/{code}/reset")
-    public synchronized boolean reset(@PathVariable("player") String id, @PathVariable("code") String code){
+    public synchronized boolean reset(@PathVariable("player") String id,
+                                      @PathVariable("code") String code)
+    {
         validator.checkPlayerCode(id, code);
 
         if (!playerService.contains(id)) {
@@ -116,24 +119,24 @@ public class RestBoardController {
     }
 
     // TODO test me
-    @GetMapping("/player/{player}/{code}/wantsToPlay/{gameName}/{roomName}")
+    @GetMapping("/player/{player}/{code}/wantsToPlay/{game}/{room}")
     public synchronized PPlayerWantsToPlay playerWantsToPlay(
             @PathVariable("player") String id,
             @PathVariable("code") String code,
-            @PathVariable("gameName") String gameName,
-            @PathVariable("roomName") String roomName)
+            @PathVariable("game") String game,
+            @PathVariable("room") String room)
     {
         validator.checkPlayerId(id, CAN_BE_NULL);
         validator.checkCode(code, CAN_BE_NULL);
-        validator.checkGameName(gameName, CANT_BE_NULL);
-        validator.checkRoomName(roomName, CANT_BE_NULL);
+        validator.checkGame(game, CANT_BE_NULL);
+        validator.checkRoom(room, CANT_BE_NULL);
 
         String context = getContext();
-        PGameTypeInfo gameType = gameController.type(gameName, roomName);
+        PGameTypeInfo gameType = gameController.type(game, room);
         boolean registered = registration.checkUser(id, code) != null;
-        List<String> sprites = gameController.spritesNames(gameName);
+        List<String> sprites = gameController.spritesNames(game);
         String alphabet = gameController.spritesAlphabet();
-        List<PlayerInfo> players = registrationController.getGamePlayers(gameName);
+        List<PlayerInfo> players = registrationController.getGamePlayers(game);
 
         return new PPlayerWantsToPlay(context, gameType,
                 registered, sprites, alphabet, players);
@@ -162,7 +165,7 @@ public class RestBoardController {
 
         // TODO Как-то тут сложно и долго грузится
         // TODO а еще если участник играл в одну игру, а потом переключился в бомбер и там продолжал, то тут будет ошибка так как одной игрой парсим другую
-        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameService.getGame(result.get(0).getGameType()).getPlots());
+        GuiPlotColorDecoder decoder = new GuiPlotColorDecoder(gameService.getGameType(result.get(0).getGame()).getPlots());
 
         // TODO доделать для icancode
         result.forEach(log -> {
@@ -181,9 +184,9 @@ public class RestBoardController {
         }
     }
 
-    @GetMapping("/{gameName}/status")
-    public Map<String, Object> checkGameIsActive(@PathVariable("gameName") String gameName) {
-        boolean active = playerGames.getPlayers(gameName).size() > 0;
+    @GetMapping("/{game}/status")
+    public Map<String, Object> checkGameIsActive(@PathVariable("game") String game) {
+        boolean active = playerGames.getPlayers(game).size() > 0;
         return Collections.singletonMap("active", active);
     }
 }

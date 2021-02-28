@@ -98,7 +98,7 @@ public class PlayerGamesView {
     }
 
     public List<List<String>> getGroupsByRooms() {
-        return getGroupBy(PlayerGame::getRoomName);
+        return getGroupBy(PlayerGame::getRoom);
     }
 
     public List<List<String>> getGroupsByField() {
@@ -121,8 +121,8 @@ public class PlayerGamesView {
                         pg -> pg.getPlayer().getScore()));
     }
 
-    public List<PScoresOf> getScoresForGame(String gameName) {
-        return scoresFor(pg -> pg.getPlayer().getGameName().equals(gameName));
+    public List<PScoresOf> getScoresForGame(String game) {
+        return scoresFor(pg -> pg.getPlayer().getGame().equals(game));
     }
 
     private List<PScoresOf> scoresFor(Predicate<PlayerGame> predicate) {
@@ -132,8 +132,8 @@ public class PlayerGamesView {
                 .collect(toList());
     }
 
-    public List<PScoresOf> getScoresForRoom(String roomName) {
-        return scoresFor(pg -> pg.getRoomName().equals(roomName));
+    public List<PScoresOf> getScoresForRoom(String room) {
+        return scoresFor(pg -> pg.getRoom().equals(room));
     }
 
     public Map<String, String> getReadableNames() {

@@ -132,7 +132,7 @@ public class PlayerGameTest {
     }
 
     @Test
-    public void testEquals_roomName() {
+    public void testEquals_room() {
         // when then
         assertEquals(true, playerGame.equals("room"));
         assertEquals(false, playerGame.equals("otherRoom"));
@@ -211,7 +211,7 @@ public class PlayerGameTest {
     @Test
     public void testToString() {
         // when then
-        assertEquals(String.format("PlayerGame[player=player, roomName=room, game=%s]",
+        assertEquals(String.format("PlayerGame[player=player, room=room, game=%s]",
                 game.getClass().getSimpleName()),
                 playerGame.toString());
     }
@@ -219,14 +219,14 @@ public class PlayerGameTest {
     @Test 
     public void testSetRoomName_alsoUpdatePlayer() {
         // given
-        assertEquals("room", playerGame.getRoomName());
-        assertEquals("room", playerGame.getPlayer().getRoomName());
+        assertEquals("room", playerGame.getRoom());
+        assertEquals("room", playerGame.getPlayer().getRoom());
         
         // when 
-        playerGame.setRoomName("otherRoom");
+        playerGame.setRoom("otherRoom");
         
         // then
-        assertEquals("otherRoom", playerGame.getRoomName());
-        assertEquals("otherRoom", playerGame.getPlayer().getRoomName());
+        assertEquals("otherRoom", playerGame.getRoom());
+        assertEquals("otherRoom", playerGame.getPlayer().getRoom());
     }
 }

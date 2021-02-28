@@ -100,7 +100,7 @@ public class PlayerGamesViewTest {
 
     private void givenUsersInSameGroup() {
         GameField field = mock(GameField.class); // same group
-        GameType gameType = addNewGameType("gameName1", 1234, inv -> field);
+        GameType gameType = addNewGameType("game1", 1234, inv -> field);
 
         addNewPlayer(gameType, 123, getHeroDataForAllPlayers(10, pt(1, 2), "data1"));
         addNewPlayer(gameType, 234, getHeroDataForAllPlayers(11, pt(3, 4), "data2"));
@@ -217,9 +217,9 @@ public class PlayerGamesViewTest {
             addAll(Arrays.asList(field1, field1));
             addAll(Arrays.asList(field2, field2));
         }};
-        GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
+        GameType gameType = addNewGameType("game1", 1234, inv -> fields.remove(0));
 
-        // комната будет у всех одна, общая игровая gameName1
+        // комната будет у всех одна, общая игровая game1
         // но сама игра говорит, что fields будут у них не общие
         addNewPlayer(gameType, 123, getHeroData(10, pt(1, 2), "data1"));
         addNewPlayer(gameType, 234, getHeroData(11, pt(3, 4), "data2"));
@@ -234,7 +234,7 @@ public class PlayerGamesViewTest {
             addAll(Arrays.asList(field1, field1));
             addAll(Arrays.asList(field2, field2));
         }};
-        GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
+        GameType gameType = addNewGameType("game1", 1234, inv -> fields.remove(0));
 
         // отличия от givenUsersInSeveralGroups метода только в явно указанных комнатах тут
         // симулируем тут две комнаты для одной игры
@@ -277,12 +277,12 @@ public class PlayerGamesViewTest {
         testGetGamesDataMap_singleGames();
 
         // юзера которые не должны войти в запрос
-        GameType gameType2 = addNewGameType("gameName2", 1234, inv -> mock(GameField.class));
+        GameType gameType2 = addNewGameType("game2", 1234, inv -> mock(GameField.class));
         addNewPlayer(gameType2, 678, getHeroData(23, pt(5, 6), "data8"));
         addNewPlayer(gameType2, 789, getHeroData(24, pt(8, 7), "data9"));
 
         // when
-        List<PScoresOf> scores = playerGamesView.getScoresForGame("gameName1");
+        List<PScoresOf> scores = playerGamesView.getScoresForGame("game1");
 
         // then
         assertEquals("[" +
@@ -302,7 +302,7 @@ public class PlayerGamesViewTest {
             addAll(Arrays.asList(field1, field1, field1, field1));
             addAll(Arrays.asList(field2, field2));
         }};
-        GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
+        GameType gameType = addNewGameType("game1", 1234, inv -> fields.remove(0));
 
         addNewPlayer(gameType, "room1", 123, getHeroData(10, pt(1, 2), "data1"));
         addNewPlayer(gameType, "room1", 234, getHeroData(11, pt(3, 4), "data2"));
@@ -333,7 +333,7 @@ public class PlayerGamesViewTest {
             addAll(Arrays.asList(field1, field1, field1, field1));
             addAll(Arrays.asList(field2, field2));
         }};
-        GameType gameType = addNewGameType("gameName1", 1234, inv -> fields.remove(0));
+        GameType gameType = addNewGameType("game1", 1234, inv -> fields.remove(0));
 
         addNewPlayer(gameType, "room1", 123, getHeroData(10, pt(1, 2), "data1"));
         addNewPlayer(gameType, "room1", 234, getHeroData(11, pt(3, 4), "data2"));
@@ -355,7 +355,7 @@ public class PlayerGamesViewTest {
     public void testGetGamesDataMap_singleGames() {
         // given
         // separate groups
-        GameType gameType = addNewGameType("gameName1", 1234, inv -> mock(GameField.class));
+        GameType gameType = addNewGameType("game1", 1234, inv -> mock(GameField.class));
 
         addNewPlayer(gameType, 123, getHeroData(10, pt(1, 2), "data1"));
         addNewPlayer(gameType, 234, getHeroData(11, pt(3, 4), "data2"));
@@ -441,10 +441,10 @@ public class PlayerGamesViewTest {
         return result;
     }
 
-    private GameType addNewGameType(String gameName, int boardSize, Answer<Object> fieldSupplier) {
+    private GameType addNewGameType(String game, int boardSize, Answer<Object> fieldSupplier) {
         GameType result = mock(GameType.class);
         when(result.getBoardSize(any())).thenReturn(new SimpleParameter<>(boardSize));
-        when(result.name()).thenReturn(gameName);
+        when(result.name()).thenReturn(game);
         when(result.getMultiplayerType(any())).thenReturn(MultiplayerType.SINGLE);
         when(result.getPrinterFactory()).thenReturn(mock(PrinterFactory.class));
         when(result.createPlayer(any(EventListener.class), anyString(), any()))
@@ -458,7 +458,7 @@ public class PlayerGamesViewTest {
         return addNewPlayer(gameType, gameType.name(), scores, heroData);
     }
 
-    private PlayerGame addNewPlayer(GameType gameType, String roomName, int scores, HeroData heroData) {
+    private PlayerGame addNewPlayer(GameType gameType, String room, int scores, HeroData heroData) {
         PlayerScores gameScore = mock(PlayerScores.class);
         when(gameScore.getScore()).thenReturn(scores);
 
@@ -475,7 +475,7 @@ public class PlayerGamesViewTest {
 
         Controller controller = mock(Controller.class);
         controllers.add(controller);
-        PlayerGame playerGame = playerGames.add(player, roomName, null);
+        PlayerGame playerGame = playerGames.add(player, room, null);
         games.add(playerGame.getGame());
         return playerGame;
     }
@@ -522,18 +522,18 @@ public class PlayerGamesViewTest {
     @Test
     public void shouldGetDecoders() {
         // given
-        GameType gameType1 = addNewGameType("gameName1", 1234, inv -> mock(GameField.class));
+        GameType gameType1 = addNewGameType("game1", 1234, inv -> mock(GameField.class));
         when(gameType1.getPlots()).thenReturn(Elements1.values());
 
-        GameType gameType2 = addNewGameType("gameName2", 1234, inv -> mock(GameField.class));
+        GameType gameType2 = addNewGameType("game2", 1234, inv -> mock(GameField.class));
         when(gameType2.getPlots()).thenReturn(Elements2.values());
 
         addNewPlayer(gameType1, 123, getHeroData(10, pt(1, 2), "data1"));
         addNewPlayer(gameType2, 234, getHeroData(11, pt(3, 4), "data2"));
 
         // when then
-        assertEquals("{gameName1=[abc -> ABC], " +
-                        "gameName2=[1234 -> ABCD]}",
+        assertEquals("{game1=[abc -> ABC], " +
+                        "game2=[1234 -> ABCD]}",
                 playerGamesView.getDecoders().toString());
     }
 }

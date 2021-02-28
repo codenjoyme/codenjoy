@@ -91,8 +91,8 @@ public class SaveServiceImplTest {
         when(player.getId()).thenReturn(id);
         when(player.getCode()).thenReturn("code_" + id);
         when(player.getData()).thenReturn("data for " + id);
-        when(player.getGameName()).thenReturn("game " + room);
-        when(player.getRoomName()).thenReturn(room);
+        when(player.getGame()).thenReturn("game " + room);
+        when(player.getRoom()).thenReturn(room);
         when(player.hasAi()).thenReturn(true);
         when(player.getCallbackUrl()).thenReturn("http://" + id + ":1234");
         when(player.getEventListener()).thenReturn(mock(InformationCollector.class));
@@ -182,7 +182,7 @@ public class SaveServiceImplTest {
         allPlayersNotRegistered();
 
         // when
-        saveService.load("vasia", "room", "game", "{'save':'data'}");
+        saveService.load("vasia", "game", "room", "{'save':'data'}");
 
         // then
         verify(saver).loadGame("vasia");
@@ -193,9 +193,9 @@ public class SaveServiceImplTest {
         verify(playerService).register(captor.capture());
         PlayerSave actual = captor.getValue();
         assertEquals("{'callbackUrl':'127.0.0.2'," +
-                "'gameName':'game'," +
+                "'game':'game'," +
                 "'id':'vasia'," +
-                "'roomName':'room'," +
+                "'room':'room'," +
                 "'save':'{'save':'data'}'," +
                 "'score':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
@@ -208,7 +208,7 @@ public class SaveServiceImplTest {
         allPlayersNotRegistered();
 
         // when
-        saveService.load("vasia", "room", "game", "{'save':'data'}");
+        saveService.load("vasia", "game", "room", "{'save':'data'}");
 
         // then
         verify(saver).loadGame("vasia");
@@ -219,9 +219,9 @@ public class SaveServiceImplTest {
         verify(playerService).register(captor.capture());
         PlayerSave actual = captor.getValue();
         assertEquals("{'callbackUrl':'" + SaveServiceImpl.DEFAULT_CALLBACK_URL + "'," +
-                "'gameName':'game'," +
+                "'game':'game'," +
                 "'id':'vasia'," +
-                "'roomName':'room'," +
+                "'room':'room'," +
                 "'save':'{'save':'data'}'," +
                 "'score':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
@@ -235,7 +235,7 @@ public class SaveServiceImplTest {
         allPlayersRegistered();
 
         // when
-        saveService.load("vasia", "room", "game", "{'save':'data'}");
+        saveService.load("vasia", "game", "room", "{'save':'data'}");
 
         // then
         verify(saver).loadGame("vasia");
@@ -247,9 +247,9 @@ public class SaveServiceImplTest {
         verify(playerService).register(captor.capture());
         PlayerSave actual = captor.getValue();
         assertEquals("{'callbackUrl':'127.0.0.2'," +
-                "'gameName':'game'," +
+                "'game':'game'," +
                 "'id':'vasia'," +
-                "'roomName':'room'," +
+                "'room':'room'," +
                 "'save':'{'save':'data'}'," +
                 "'score':0}", JsonUtils.cleanSorted(actual));
         verifyNoMoreInteractions(playerService);
@@ -293,10 +293,10 @@ public class SaveServiceImplTest {
         assertEquals("code_active", active.getCode());
         assertEquals("readable_active", active.getReadableName());
         assertEquals("http://active:1234", active.getCallbackUrl());
-        assertEquals("game room", active.getGameName());
+        assertEquals("game room", active.getGame());
         assertEquals("{\"data\":2}", active.getData());
         assertEquals(11, active.getScore());
-        assertEquals("room", active.getRoomName());
+        assertEquals("room", active.getRoom());
         assertEquals(true, active.isAiPlayer());
         assertTrue(active.isActive());
         assertFalse(active.isSaved());
@@ -305,10 +305,10 @@ public class SaveServiceImplTest {
         assertEquals("code_activeSaved", activeSaved.getCode());
         assertEquals("readable_activeSaved", activeSaved.getReadableName());
         assertEquals("http://activeSaved:1234", activeSaved.getCallbackUrl());
-        assertEquals("game room", activeSaved.getGameName());
+        assertEquals("game room", activeSaved.getGame());
         assertEquals("{\"data\":1}", activeSaved.getData());
         assertEquals(10, activeSaved.getScore());
-        assertEquals("room", activeSaved.getRoomName());
+        assertEquals("room", activeSaved.getRoom());
         assertEquals(true, activeSaved.isAiPlayer());
         assertTrue(activeSaved.isActive());
         assertTrue(activeSaved.isSaved());
@@ -317,10 +317,10 @@ public class SaveServiceImplTest {
         assertEquals("code_saved", saved.getCode());
         assertEquals("readable_saved", saved.getReadableName());
         assertEquals("http://saved:1234", saved.getCallbackUrl());
-        assertEquals("saved game room", saved.getGameName());
+        assertEquals("saved game room", saved.getGame());
         assertNull(saved.getData());
         assertEquals(15, saved.getScore());
-        assertEquals("room", saved.getRoomName());
+        assertEquals("room", saved.getRoom());
         assertEquals(false, saved.isAiPlayer());
         assertFalse(saved.isActive());
         assertTrue(saved.isSaved());
@@ -401,13 +401,13 @@ public class SaveServiceImplTest {
         createPlayer("third", "room1");
 
         PlayerSave first = mock(PlayerSave.class);
-        when(first.getRoomName()).thenReturn("room1");
+        when(first.getRoom()).thenReturn("room1");
 
         PlayerSave second = mock(PlayerSave.class);
-        when(second.getRoomName()).thenReturn("room2");
+        when(second.getRoom()).thenReturn("room2");
 
         PlayerSave third = mock(PlayerSave.class);
-        when(third.getRoomName()).thenReturn("room1");
+        when(third.getRoom()).thenReturn("room1");
 
         when(saver.loadGame("first")).thenReturn(first);
         when(saver.loadGame("second")).thenReturn(second);

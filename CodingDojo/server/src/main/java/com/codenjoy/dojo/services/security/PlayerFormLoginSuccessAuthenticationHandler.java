@@ -34,8 +34,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.codenjoy.dojo.web.controller.AdminController.GAME_NAME_KEY;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -50,16 +48,16 @@ public class PlayerFormLoginSuccessAuthenticationHandler extends SimpleUrlAuthen
                                         Authentication authentication) throws IOException
     {
         Registration.User principal = (Registration.User) authentication.getPrincipal();
-        String gameName = request.getParameter(GAME_NAME_KEY);
-        String roomName = gameName; // TODO ROOM тут надо получить roomName как-то
+        String game = request.getParameter("game");
+        String room = game; // TODO ROOM тут надо получить room как-то
 
-        if (gameName == null) {
+        if (game == null) {
             getRedirectStrategy().sendRedirect(request, response, AdminController.URI);
             return;
         }
 
         String targetUrl = "/" + registrationService.register(principal.getId(),
-                principal.getCode(), roomName, gameName, request.getRemoteAddr());
+                principal.getCode(), game, room, request.getRemoteAddr());
 
         log.debug("Redirecting to  URL: " + targetUrl);
 

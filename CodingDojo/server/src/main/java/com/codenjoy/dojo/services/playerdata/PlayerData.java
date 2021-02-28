@@ -36,7 +36,7 @@ public class PlayerData implements ScreenData {
 
     private int boardSize;
     private Object board;
-    private String gameName;
+    private String game;
     private Object score;
     private String info;
     private JSONObject scores;
@@ -51,14 +51,14 @@ public class PlayerData implements ScreenData {
         return String.format(
                 "PlayerData[BoardSize:%s, " +
                         "Board:'%s', " +
-                        "GameName:'%s', " +
+                        "Game:'%s', " +
                         "Score:%s, " +
                         "Info:'%s', " +
                         "Scores:'%s', " +
                         "HeroesData:'%s']",
                 boardSize,
                 board,
-                gameName,
+                game,
                 score,
                 getInfo(),
                 JsonUtils.toStringSorted(scores.toString()),

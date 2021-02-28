@@ -48,8 +48,8 @@
             <li>Download client templates for your game
                 <select id="games">
                 <option value="">(select your game)</option>
-                <c:forEach items="${gameNames}" var="gameName">
-                    <option value="${gameName}">${gameName}</option>
+                <c:forEach items="${games}" var="item">
+                    <option value="${item}">${item}</option>
                 </c:forEach>
                 </select>
             <li>Setup project according to instruction in README.txt for your developing language</li>
@@ -58,9 +58,9 @@
             </ul>
             <li>Read game instructions:
                 <ul>
-                    <c:forEach items="${gameNames}" var="gameName">
+                    <c:forEach items="${games}" var="item">
                         <li>
-                            <a href="${ctx}/help?gameName=${gameName}">${gameName}</a>
+                            <a href="${ctx}/help?game=${item}">${item}</a>
                         </li>
                     </c:forEach>
                 </ul>

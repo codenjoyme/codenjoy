@@ -39,7 +39,7 @@ License along with this program.  If not, see
     <script src="${ctx}/resources/css/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
-    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" waitApprove="${wait_approve}"></div>
 
     <div class="header-container">
         <div class="container-fluid">
@@ -97,10 +97,10 @@ License along with this program.  If not, see
                     <input type="hidden" name="password"/>
                 </div>
                 <c:if test="${not adminLogin}">
-                    <div id="gameName" class="field valid" hidden>
-                        <select name="gameName">
-                            <c:forEach items="${gameNames}" var="game" >
-                                <option value="${game}">${game}</option>
+                    <div id="game" class="field valid" hidden>
+                        <select name="game">
+                            <c:forEach items="${games}" var="item" >
+                                <option value="${item}">${item}</option>
                             </c:forEach>
                         </select>
                     </div>

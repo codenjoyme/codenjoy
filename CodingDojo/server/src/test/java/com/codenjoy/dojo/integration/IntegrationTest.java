@@ -87,7 +87,7 @@ public class IntegrationTest {
     private PlayerGameSaver playerGameSaver;
 
     @Before
-    public void setupJetty() throws Exception {
+    public void setup() {
         url = String.format("http://localhost:%s%s", port, contextPath);
 
         System.out.println(url);
@@ -176,7 +176,7 @@ public class IntegrationTest {
         assertSaves(saves);
     }
 
-    private void register(String name, String password, String gameName) throws Exception {
+    private void register(String name, String password, String game) throws Exception {
         driver.get(url);
 
         driver.findElement(By.linkText("Register")).click();
@@ -185,7 +185,7 @@ public class IntegrationTest {
         assertEquals("Register", driver.findElement(By.id("submit")).getAttribute("value"));
         driver.findElement(By.id("name")).sendKeys(name);
         driver.findElement(By.id("password")).sendKeys(password);
-        driver.findElement(By.id("gameName")).sendKeys(gameName);
+        driver.findElement(By.id("game")).sendKeys(game);
         driver.findElement(By.id("submit")).click();
 
         String activationUrl = getActivationUrl(name);

@@ -27,17 +27,17 @@
 var doNothing = true;
 
 /*
-game.enableDonate = false;
-game.enableJoystick = true;
-game.enableAlways = true;
-game.enablePlayerInfo = false;
-game.enableLeadersTable = false;
-game.enableHotkeys = true;
-game.enableAdvertisement = false;
-game.showBody = false;
+setup.enableDonate = false;
+setup.enableJoystick = true;
+setup.enableAlways = true;
+setup.enablePlayerInfo = false;
+setup.enableLeadersTable = false;
+setup.enableHotkeys = true;
+setup.enableAdvertisement = false;
+setup.showBody = false;
 
-game.onBoardPageLoad = function() {
-    initLayout(game.gameName, 'board.html', game.contextPath,
+setup.onBoardPageLoad = function() {
+    initLayout(setup.game, 'board.html', setup.contextPath,
         function() {
             $("#glasses").before($("#main_board"));
             $("#main_board").remove();
@@ -56,8 +56,8 @@ game.onBoardPageLoad = function() {
         });
 }
 
-game.onBoardAllPageLoad = function() {
-    initLayout(game.gameName, 'leaderboard.html', game.contextPath,
+setup.onBoardAllPageLoad = function() {
+    initLayout(setup.game, 'leaderboard.html', setup.contextPath,
         null,
         [],
         function() {

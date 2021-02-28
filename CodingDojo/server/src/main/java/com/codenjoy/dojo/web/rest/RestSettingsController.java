@@ -38,6 +38,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 
+import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
+import static com.codenjoy.dojo.web.controller.Validator.CAN_BE_NULL;
+
 @RestController
 @RequestMapping(RestSettingsController.URI)
 @AllArgsConstructor
@@ -51,27 +54,27 @@ public class RestSettingsController {
     private GameData gameData;
     private Validator validator;
 
-    @GetMapping("/{gameName}/{roomName}/{key}")
-    public String get(@PathVariable("gameName") String gameName,
-                      @PathVariable("roomName") String roomName,
+    @GetMapping("/{game}/{room}/{key}")
+    public String get(@PathVariable("game") String game,
+                      @PathVariable("room") String room,
                       @PathVariable("key") String key)
     {
         validator.checkNotEmpty("key", key);
-        validator.checkGameName(gameName, Validator.CANT_BE_NULL);
-        validator.checkRoomName(roomName, Validator.CAN_BE_NULL);
+        validator.checkGame(game, CANT_BE_NULL);
+        validator.checkRoom(room, CAN_BE_NULL);
 
-        if (GENERAL.equals(gameName)) {
-            return gameData.get(gameName, key);
+        if (GENERAL.equals(game)) {
+            return gameData.get(game, key);
         }
 
-        validator.checkGameType(gameName);
+        validator.checkGameType(game);
 
         // если не указывают им комнаты, используем комнату по умолчанию для всех игр
-        if (isEmpty(roomName)) {
-            roomName = gameName;
+        if (Validator.isEmpty(room)) {
+            room = game;
         }
 
-        GameType type = gameService.getGame(gameName, roomName);
+        GameType type = gameService.getGameType(game, room);
 
         Settings settings = type.getSettings();
         if (key.equals(SETTINGS)) {
@@ -83,34 +86,34 @@ public class RestSettingsController {
             return settings.getParameter(key).getValue().toString();
         }
 
-        return gameData.get(gameName, key);
+        return gameData.get(game, key);
     }
 
-    @PostMapping("/{gameName}/{roomName}/{key}")
-    public String set(@PathVariable("gameName") String gameName,
-                      @PathVariable("roomName") String roomName,
+    @PostMapping("/{game}/{room}/{key}")
+    public String set(@PathVariable("game") String game,
+                      @PathVariable("room") String room,
                       @PathVariable("key") String key,
                       @RequestBody String value)
     {
         validator.checkNotEmpty("key", key);
-        validator.checkGameName(gameName, Validator.CANT_BE_NULL);
-        validator.checkRoomName(roomName, Validator.CAN_BE_NULL);
+        validator.checkGame(game, CANT_BE_NULL);
+        validator.checkRoom(room, CAN_BE_NULL);
 
         value = encode(value);
 
-        if (GENERAL.equals(gameName)) {
-            gameData.set(gameName, key, value);
+        if (GENERAL.equals(game)) {
+            gameData.set(game, key, value);
             return "{}";
         }
 
-        validator.checkGameType(gameName);
+        validator.checkGameType(game);
 
         // если не указывают им комнаты, используем комнату по умолчанию для всех игр
-        if (isEmpty(roomName)) {
-            roomName = gameName;
+        if (Validator.isEmpty(room)) {
+            room = game;
         }
 
-        GameType type = gameService.getGame(gameName, roomName);
+        GameType type = gameService.getGameType(game, room);
 
         Settings settings = type.getSettings();
         if (settings.hasParameter(key)) {
@@ -118,12 +121,8 @@ public class RestSettingsController {
             return "{}";
         }
 
-        gameData.set(gameName, key, value);
+        gameData.set(game, key, value);
         return "{}";
-    }
-
-    private boolean isEmpty(String roomName) {
-        return StringUtils.isEmpty(roomName) || "null".equalsIgnoreCase(roomName);
     }
 
     @SneakyThrows

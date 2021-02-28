@@ -162,8 +162,8 @@ public class PlayerServiceImplTest {
 
         when(printer.print(any(), any())).thenReturn("1234");
 
-        when(gameService.getGame(anyString())).thenReturn(gameType);
-        when(gameService.getGame(anyString(), anyString())).thenReturn(gameType);
+        when(gameService.getGameType(anyString())).thenReturn(gameType);
+        when(gameService.getGameType(anyString(), anyString())).thenReturn(gameType);
         when(gameService.exists(anyString())).thenReturn(true);
 
         when(gameType.getBoardSize(any())).thenReturn(v(15));
@@ -277,7 +277,7 @@ public class PlayerServiceImplTest {
         Player player = playerService.get(VASYA);
 
         // then
-        assertEquals("game", player.getGameName());
+        assertEquals("game", player.getGame());
         assertEquals(VASYA, player.getId());
         assertNull(player.getPassword());
         assertNull(player.getCode());
@@ -416,7 +416,7 @@ public class PlayerServiceImplTest {
 
         assertEquals(
                 "{petya=PlayerData[" +
-                    "BoardSize:15, Board:'DCBA', GameName:'game', " +
+                    "BoardSize:15, Board:'DCBA', Game:'game', " +
                     "Score:234, Info:'', " +
                     "Scores:'{'petya':234}', " +
                     "HeroesData:'{" +
@@ -425,7 +425,7 @@ public class PlayerServiceImplTest {
                         "'readableNames':{'petya':'readable_petya'}" +
                         "}'], " +
                 "vasya=PlayerData[" +
-                    "BoardSize:15, Board:'ABCD', GameName:'game', " +
+                    "BoardSize:15, Board:'ABCD', Game:'game', " +
                     "Score:123, Info:'', " +
                     "Scores:'{'vasya':123}', " +
                     "HeroesData:'{" +
@@ -528,13 +528,11 @@ public class PlayerServiceImplTest {
     }
 
     private Player createPlayer(String id) {
-        String roomName = id + " room";
-        String gameName = id + " game";
-        return createPlayer(id, gameName, roomName);
+        return createPlayer(id, id + " game", id + " room");
     }
 
-    private Player createPlayer(String id, String gameName, String roomName) {
-        Player player = playerService.register(id, gameName, roomName,
+    private Player createPlayer(String id, String game, String room) {
+        Player player = playerService.register(id, game, room,
                 getCallbackUrl(id));
         players.add(player);
 
@@ -1329,13 +1327,13 @@ public class PlayerServiceImplTest {
         Player player1 = all.get(0);
         assertEquals("new-url1", player1.getCallbackUrl());
         assertNull(player1.getCode());
-        assertEquals("game", player1.getGameName());
+        assertEquals("game", player1.getGame());
         assertEquals(null, player1.getPassword());
 
         Player player2 = all.get(1);
         assertEquals("new-url2", player2.getCallbackUrl());
         assertNull(player2.getCode());
-        assertEquals("game", player1.getGameName());
+        assertEquals("game", player1.getGame());
         assertEquals(null, player2.getPassword());
     }
 
@@ -1520,7 +1518,7 @@ public class PlayerServiceImplTest {
         when(gameType.getAI()).thenReturn((Class)AISolverStub.class);
         when(gameType.getBoard()).thenReturn((Class)BoardStub.class);
 
-        String gameName = createPlayer(VASYA).getGameName();
+        String game = createPlayer(VASYA).getGame();
 
         verify(gameType, times(1)).getAI();
         verify(gameType, times(1)).getBoard();
@@ -1533,7 +1531,7 @@ public class PlayerServiceImplTest {
         verify(gameType, times(2)).getBoard();
 
         PlayerGame playerGame = playerGames.get(VASYA);
-        assertEquals(gameName, playerGame.getPlayer().getGameName());
+        assertEquals(game, playerGame.getPlayer().getGame());
         Player player = playerGame.getPlayer();
         assertEquals(VASYA, player.getId());
         assertNotNull(VASYA, player.getAi());
@@ -1554,7 +1552,7 @@ public class PlayerServiceImplTest {
         verify(gameType).getBoard();
 
         PlayerGame playerGame = playerGames.get(VASYA_AI);
-        assertEquals("game", playerGame.getPlayer().getGameName());
+        assertEquals("game", playerGame.getPlayer().getGame());
         Player player = playerGame.getPlayer();
         assertEquals(VASYA_AI, player.getId());
         assertNotNull(VASYA, player.getAi());

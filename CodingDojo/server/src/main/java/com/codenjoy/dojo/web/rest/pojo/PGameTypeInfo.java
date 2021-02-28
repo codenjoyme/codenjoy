@@ -33,7 +33,7 @@ import java.util.List;
 @Getter
 public class PGameTypeInfo {
 
-    private String roomName;
+    private String room;
     private String version;
     private String info;
     private int boardSize;
@@ -44,14 +44,14 @@ public class PGameTypeInfo {
     private String wsUrl;
     private PSprites sprites;
 
-    public PGameTypeInfo(GameType<Settings> type, String roomName, String helpUrl,
+    public PGameTypeInfo(GameType<Settings> type, String room, String helpUrl,
                          String clientUrl, String wsUrl,
                          PSprites sprites) 
     {
 
         Settings settings = type.getSettings();
         version = type.getVersion();
-        this.roomName = roomName;
+        this.room = room;
         info = RoomGameType.unwrap(type).toString();
         boardSize = type.getBoardSize(settings).getValue();
         parameters = new PParameters(settings.getParameters()).getParameters();

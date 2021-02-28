@@ -19,28 +19,28 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-var game = game || {};
+var setup = setup || {};
 
-game.enableDonate = false;
-game.enableJoystick = false;
-game.enableAlways = false;
-game.enablePlayerInfo = true;
-game.enablePlayerInfoLevel = true;
-game.enableLeadersTable = true;
-game.enableForkMe = true;
-game.enableInfo = true;
-game.enableHotkeys = true;
-game.enableAdvertisement = false;
-game.showBody = true;
-game.sprites = null;
-game.heroInfo = null;
-game.isDrawByOrder = false;
-game.canvasCursor = 'auto';
-game.loadBoardData = true;
-game.drawCanvases = true;
+setup.enableDonate = false;
+setup.enableJoystick = false;
+setup.enableAlways = false;
+setup.enablePlayerInfo = true;
+setup.enablePlayerInfoLevel = true;
+setup.enableLeadersTable = true;
+setup.enableForkMe = true;
+setup.enableInfo = true;
+setup.enableHotkeys = true;
+setup.enableAdvertisement = false;
+setup.showBody = true;
+setup.sprites = null;
+setup.heroInfo = null;
+setup.isDrawByOrder = false;
+setup.canvasCursor = 'auto';
+setup.loadBoardData = true;
+setup.drawCanvases = true;
 
-game.debug = false;
-game['debugger'] = function() {
+setup.debug = false;
+setup['debugger'] = function() {
     debugger;
 }
 

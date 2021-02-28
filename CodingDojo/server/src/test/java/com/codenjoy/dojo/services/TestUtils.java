@@ -52,7 +52,7 @@ public class TestUtils {
 
     public static Env getPlayerGame(PlayerGames playerGames,
                                     Player player,
-                                    String roomName,
+                                    String room,
                                     Answer<Object> getGame,
                                     MultiplayerType type, 
                                     PlayerSave save, 
@@ -81,7 +81,7 @@ public class TestUtils {
         when(gameType.createPlayer(any(EventListener.class), anyString(), any()))
                 .thenAnswer(inv -> gamePlayer);
 
-        PlayerGame playerGame = playerGames.add(player, roomName, save);
+        PlayerGame playerGame = playerGames.add(player, room, save);
         Env result = new Env();
         result.gamePlayer = gamePlayer;
         result.gameType = gameType;

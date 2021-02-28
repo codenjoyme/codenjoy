@@ -20,11 +20,11 @@
  * #L%
  */
 
-var game = game || {};
+var setup = setup || {};
 
 function getContext() {
     var pathFromUrl = '/' + location.pathname.split('/')[1];
-    var ctx = (!!game.contextPath) ? game.contextPath : pathFromUrl;
+    var ctx = (!!setup.contextPath) ? setup.contextPath : pathFromUrl;
     return ctx;
 }
 

@@ -59,8 +59,8 @@ public class PlayerGameSaver implements GameSaver {
                 new Object[]{JDBCTimeUtils.toString(new Date(time)),
                         player.getId(),
                         player.getCallbackUrl(),
-                        player.getRoomName(),
-                        player.getGameName(),
+                        player.getRoom(),
+                        player.getGame(),
                         player.getScore(),
                         save
                 });
@@ -74,10 +74,10 @@ public class PlayerGameSaver implements GameSaver {
                     if (rs.next()) {
                         String callbackUrl = rs.getString("callback_url");
                         int score = rs.getInt("score");
-                        String roomName = rs.getString("room_name");
-                        String gameName = rs.getString("game_name");
+                        String room = rs.getString("room_name");
+                        String game = rs.getString("game_name");
                         String save = rs.getString("save");
-                        return new PlayerSave(id, callbackUrl, gameName, roomName, score, save);
+                        return new PlayerSave(id, callbackUrl, game, room, score, save);
                     } else {
                         return PlayerSave.NULL;
                     }

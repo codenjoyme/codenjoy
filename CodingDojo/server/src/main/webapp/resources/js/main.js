@@ -34,10 +34,10 @@ function bindActiveGameCheck() {
         e.preventDefault();
 
         var contextPath = 'codenjoy-contest';
-        var gameName = $(this).attr('gameName');
+        var game = $(this).attr('game');
         var viewLink = $(this);
 
-        $.get('/' + contextPath + '/rest/' + gameName + '/status',
+        $.get('/' + contextPath + '/rest/' + game + '/status',
             null,
             function(statusData) {
                 if (!statusData) {
@@ -46,7 +46,7 @@ function bindActiveGameCheck() {
 
                 if (!statusData.active === true) {
                     if (confirm('Nobody is playing this game yet. Would you like to rejoin and become first?')) {
-                        $('#rejoin-' + gameName)[0].click();
+                        $('#rejoin-' + game)[0].click();
                     }
                 } else {
                     viewLink.unbind('click');

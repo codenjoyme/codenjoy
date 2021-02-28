@@ -19,10 +19,10 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-function initSocket(game, buttons, logger, onSocketMessage, onSocketClose) {
+function initSocket(setup, buttons, logger, onSocketMessage, onSocketClose) {
 
-    if (game.debug) {
-        game.debugger();
+    if (setup.debug) {
+        setup.debugger();
     }
 
     var createSocket = function(url) {
@@ -33,7 +33,7 @@ function initSocket(game, buttons, logger, onSocketMessage, onSocketClose) {
             }
         }
 
-        if (game.demo) {
+        if (setup.demo) {
             var count = 0;
             return {
                 runMock : function() {
@@ -64,7 +64,7 @@ function initSocket(game, buttons, logger, onSocketMessage, onSocketClose) {
         var server = getWSProtocol() + '://' + hostIp + ':' + port + '/codenjoy-contest/ws';
 
         logger.print('Connecting to Hero...');
-        socket = createSocket(server + '?user=' + game.playerId + "&code=" + game.code);
+        socket = createSocket(server + '?user=' + setup.playerId + "&code=" + setup.code);
 
         socket.onopen = function() {
             logger.print('...connected successfully!');
@@ -92,7 +92,7 @@ function initSocket(game, buttons, logger, onSocketMessage, onSocketClose) {
             socket = null;
         }
 
-        if (game.demo) {
+        if (setup.demo) {
             socket.runMock();
         }
     }

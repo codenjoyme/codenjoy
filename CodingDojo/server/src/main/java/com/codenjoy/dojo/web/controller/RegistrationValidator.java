@@ -97,9 +97,9 @@ public class RegistrationValidator implements Validator {
             errors.rejectValue("passwordConfirmation", "registration.password.invalidConfirmation");
         }
 
-        String gameName = rooms.getGameName(player.getGameName());
-        if (!validator.isGameName(gameName, CANT_BE_NULL)) {
-            errors.rejectValue("gameName", "registration.game.invalid", new Object[]{ gameName }, null);
+        String game = rooms.getGameName(player.getGame());
+        if (!validator.isGameName(game, CANT_BE_NULL)) {
+            errors.rejectValue("game", "registration.game.invalid", new Object[]{ game }, null);
         }
     }
 

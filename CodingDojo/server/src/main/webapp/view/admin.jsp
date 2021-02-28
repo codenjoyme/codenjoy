@@ -37,7 +37,7 @@
 
 </head>
 <body>
-    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}" roomName="${roomName}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" room="${room}"></div>
 
     <%@include file="forkMe.jsp"%>
 
@@ -48,12 +48,12 @@
     <table class="admin-table" id="gameVersion">
         <tr>
             <td>
-                <b>Room:</b> ${roomName}
+                <b>Room:</b> ${room}
             </td>
         <tr>
         </tr>
             <td>
-                <b>Game:</b> ${gameName}
+                <b>Game:</b> ${game}
             </td>
         </tr>
         <tr>
@@ -73,23 +73,23 @@
                     <b>Active games for participants</b>
                 </td>
             </tr>
-            <c:forEach items="${gameRooms}" var="game" varStatus="status">
+            <c:forEach items="${gameRooms}" var="gameItem" varStatus="status">
                 <tr>
                     <td class="rightStep">
-                        <form:checkbox id="enable-games-${game.game}" path="games[${status.index}]"/>
-                        <label class="check-label" for="enable-games-${game.game}"></label>
-                        <span>${game.game}</span>
+                        <form:checkbox id="enable-games-${gameItem.game}" path="games[${status.index}]"/>
+                        <label class="check-label" for="enable-games-${gameItem.game}"></label>
+                        <span>${gameItem.game}</span>
                     </td>
                     <td class="rightStep">
-                        <a href="${ctx}/admin?gameName=${game.game}">info</a>
+                        <a href="${ctx}/admin?game=${gameItem.game}">info</a>
                     </td>
                     <td class="rightStep">
-                        <c:forEach items="${game.rooms}" var="room" varStatus="status2">
-                            <c:if test="${room == roomName}">
+                        <c:forEach items="${gameItem.rooms}" var="roomItem" varStatus="status2">
+                            <c:if test="${roomItem == room}">
                                 <b style="font-size:18px">
                             </c:if>
-                            <a href="${ctx}/admin?roomName=${room}">${room}<span class="pow">${playersCount.get(room)}</span></a>&nbsp;
-                            <c:if test="${room == roomName}">
+                            <a href="${ctx}/admin?room=${roomItem}">${roomItem}<span class="pow">${playersCount.get(roomItem)}</span></a>&nbsp;
+                            <c:if test="${roomItem == room}">
                                 </b>
                             </c:if>
                         </c:forEach>
@@ -98,8 +98,8 @@
             </c:forEach>
             <tr>
                 <td>
-                    <input type="hidden" name="gameName" value="${gameName}"/>
-                    <input type="hidden" name="roomName" value="${roomName}"/>
+                    <input type="hidden" name="game" value="${game}"/>
+                    <input type="hidden" name="room" value="${room}"/>
                     <input type="submit" value="Save"/>
                 </td>
             </tr>
@@ -111,10 +111,10 @@
             <td>
                 <c:choose>
                     <c:when test="${paused}">
-                        <b>The Codenjoy was suspended</b></br> <a href="${ctx}/admin/game/resume?roomName=${roomName}#pauseGame">Resume game</a>.
+                        <b>The Codenjoy was suspended</b></br> <a href="${ctx}/admin/game/resume?room=${room}#pauseGame">Resume game</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The Codenjoy is active</b></br> <a href="${ctx}/admin/game/pause?roomName=${roomName}#pauseGame">Pause game</a>.
+                        <b>The Codenjoy is active</b></br> <a href="${ctx}/admin/game/pause?room=${room}#pauseGame">Pause game</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -124,8 +124,8 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="hidden" name="gameName" value="${gameName}"/>
-                        <input type="hidden" name="roomName" value="${roomName}"/>
+                        <input type="hidden" name="game" value="${game}"/>
+                        <input type="hidden" name="room" value="${room}"/>
                         <input type="submit" value="Set"/>
                     </td>
                 </tr>
@@ -138,10 +138,10 @@
             <td>
                 <c:choose>
                     <c:when test="${recording}">
-                        <b>The recording is active</b></br> <a href="${ctx}/admin/recording/stop?roomName=${roomName}#recordGame">Stop recording</a>.
+                        <b>The recording is active</b></br> <a href="${ctx}/admin/recording/stop?room=${room}#recordGame">Stop recording</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The recording was suspended</b></br> <a href="${ctx}/admin/recording/start?roomName=${roomName}#recordGame">Start recording</a>.
+                        <b>The recording was suspended</b></br> <a href="${ctx}/admin/recording/start?room=${room}#recordGame">Start recording</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -153,10 +153,10 @@
             <td>
                 <c:choose>
                     <c:when test="${debugLog}">
-                        <b>The debug in progress</b></br> <a href="${ctx}/admin/debug/stop?roomName=${roomName}#debug">Stop debug</a>.
+                        <b>The debug in progress</b></br> <a href="${ctx}/admin/debug/stop?room=${room}#debug">Stop debug</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The debug was suspended</b></br> <a href="${ctx}/admin/debug/start?roomName=${roomName}#debug">Start debug</a>.
+                        <b>The debug was suspended</b></br> <a href="${ctx}/admin/debug/start?room=${room}#debug">Start debug</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -168,10 +168,10 @@
             <td>
                 <c:choose>
                     <c:when test="${autoSave}">
-                        <b>The auto save in progress</b></br> <a href="${ctx}/admin/autoSave/stop?roomName=${roomName}#autoSave">Stop auto save</a>.
+                        <b>The auto save in progress</b></br> <a href="${ctx}/admin/autoSave/stop?room=${room}#autoSave">Stop auto save</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The auto save was suspended</b></br> <a href="${ctx}/admin/autoSave/start?roomName=${roomName}#autoSave">Start auto save</a>.
+                        <b>The auto save was suspended</b></br> <a href="${ctx}/admin/autoSave/start?room=${room}#autoSave">Start auto save</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -183,10 +183,10 @@
             <td>
                 <c:choose>
                     <c:when test="${opened}">
-                        <b>The registration is active</b></br> <a href="${ctx}/admin/registration/stop?roomName=${roomName}#closeRegistration">Close registration</a>.
+                        <b>The registration is active</b></br> <a href="${ctx}/admin/registration/stop?room=${room}#closeRegistration">Close registration</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The registration was closed</b></br> <a href="${ctx}/admin/registration/start?roomName=${roomName}#closeRegistration">Open registration</a>.
+                        <b>The registration was closed</b></br> <a href="${ctx}/admin/registration/start?room=${room}#closeRegistration">Open registration</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -228,8 +228,8 @@
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="gameName" value="${gameName}"/>
-                    <input type="hidden" name="roomName" value="${roomName}"/>
+                    <input type="hidden" name="game" value="${game}"/>
+                    <input type="hidden" name="room" value="${room}"/>
                     <input type="submit" value="Save"/>
                 </td>
             </tr>
@@ -242,9 +242,9 @@
                 <td><b>Clean / Reset</b></td>
             </tr>
             <td>
-                <a href="${ctx}/admin/game/scores/cleanAll?roomName=${roomName}#cleanGame">Clean all scores</a>. </br>
-                <a href="${ctx}/admin/game/board/reloadAll?roomName=${roomName}#cleanGame">Reload all rooms</a>. Not working for !disposable rooms. </br>
-                <a href="${ctx}/admin/player/reloadAll?roomName=${roomName}#cleanGame">Reload all players</a>. Through saves: saveAll -> removeAll -> loadAll
+                <a href="${ctx}/admin/game/scores/cleanAll?room=${room}#cleanGame">Clean all scores</a>. </br>
+                <a href="${ctx}/admin/game/board/reloadAll?room=${room}#cleanGame">Reload all rooms</a>. Not working for !disposable rooms. </br>
+                <a href="${ctx}/admin/player/reloadAll?room=${room}#cleanGame">Reload all players</a>. Through saves: saveAll -> removeAll -> loadAll
             </td>
         </tr>
     </table>
@@ -259,8 +259,8 @@
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="gameName" value="${gameName}"/>
-                    <input type="hidden" name="roomName" value="${roomName}"/>
+                    <input type="hidden" name="game" value="${game}"/>
+                    <input type="hidden" name="room" value="${room}"/>
                     <input type="submit" value="Apply for all"/>
                 </td>
             </tr>
@@ -342,12 +342,12 @@
             <tr>
                 <td><input type="text" name="generateNameMask" value="${generateNameMask}"/></td>
                 <td><input type="text" name="generateCount" value="${generateCount}"/></td>
-                <td><input type="text" name="generateRoomName" value="${generateRoomName}"/></td>
+                <td><input type="text" name="generateRoom" value="${generateRoom}"/></td>
             </tr>
             <tr>
                 <td>
-                    <input type="hidden" name="gameName" value="${gameName}"/>
-                    <input type="hidden" name="roomName" value="${roomName}"/>
+                    <input type="hidden" name="game" value="${game}"/>
+                    <input type="hidden" name="room" value="${room}"/>
                     <input type="submit" value="Create"/>
                 </td>
             </tr>
@@ -385,8 +385,8 @@
                 </c:forEach>
                 <tr>
                     <td>
-                        <input type="hidden" name="gameName" value="${gameName}"/>
-                        <input type="hidden" name="roomName" value="${roomName}"/>
+                        <input type="hidden" name="game" value="${game}"/>
+                        <input type="hidden" name="room" value="${room}"/>
                         <input type="submit" value="Save"/>
                     </td>
                 </tr>
@@ -409,26 +409,26 @@
                     <td class="header">Joystick</td>
                     <td class="header">GameName&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>
-                        <a href="${ctx}/admin/player/saveAll?roomName=${roomName}#savePlayersGame">SaveAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/saveAll?room=${room}#savePlayersGame">SaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/loadAll?roomName=${roomName}#savePlayersGame">LoadAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/loadAll?room=${room}#savePlayersGame">LoadAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/save/removeAll?roomName=${roomName}#savePlayersGame">RemoveSaveAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/save/removeAll?room=${room}#savePlayersGame">RemoveSaveAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/registration/removeAll?roomName=${roomName}#savePlayersGame">RemoveRegAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/registration/removeAll?room=${room}#savePlayersGame">RemoveRegAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/admin/player/gameOverAll?roomName=${roomName}#savePlayersGame">GameOverAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/gameOverAll?room=${room}#savePlayersGame">GameOverAll</a>&nbsp;&nbsp;
                     </td>
                     <td>
-                        <a href="${ctx}/board/game/${gameName}">ViewGameAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/board/game/${game}">ViewGameAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header">PlayerLogAll</td>
                     <td>
-                        <a href="${ctx}/admin/player/ai/reloadAll?roomName=${roomName}#savePlayersGame">LoadAIAll</a>&nbsp;&nbsp;
+                        <a href="${ctx}/admin/player/ai/reloadAll?room=${room}#savePlayersGame">LoadAIAll</a>&nbsp;&nbsp;
                     </td>
                     <td class="header">Save data&nbsp;&nbsp;</td>
                 </tr>
@@ -445,7 +445,7 @@
                             <c:when test="${player.active}">
                                 <td><form:input class="input-id" readonly="true" index="${status.index}" path="players[${status.index}].id"/></td>
                                 <td><form:input class="input-readable" path="players[${status.index}].readableName"/></td>
-                                <td><form:input class="input-room" path="players[${status.index}].roomName"/></td>
+                                <td><form:input class="input-room" path="players[${status.index}].room"/></td>
                                 <td><form:input class="input-score" path="players[${status.index}].score"/></td>
                                 <td><form:input class="input-callback" path="players[${status.index}].callbackUrl"/></td>
                                 <c:choose>
@@ -462,11 +462,11 @@
                                         <td>UDLRA</td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
-                                <td><a href="${ctx}/admin/player/${player.id}/save?roomName=${roomName}#savePlayersGame">Save</a></td>
+                                <td><a href="${ctx}/board/game/${player.game}">${player.game}</a></td>
+                                <td><a href="${ctx}/admin/player/${player.id}/save?room=${room}#savePlayersGame">Save</a></td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/load?roomName=${roomName}#savePlayersGame">Load</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${room}#savePlayersGame">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -474,7 +474,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?roomName=${roomName}#savePlayersGame">RemoveSave</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${room}#savePlayersGame">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
@@ -482,17 +482,17 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?roomName=${roomName}#savePlayersGame">RemoveReg</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${room}#savePlayersGame">RemoveReg</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveReg</td>
                                     </c:otherwise>
                                 </c:choose>
-                                <td><a href="${ctx}/admin/player/${player.id}/gameOver?roomName=${roomName}#savePlayersGame">GameOver</a></td>
+                                <td><a href="${ctx}/admin/player/${player.id}/gameOver?room=${room}#savePlayersGame">GameOver</a></td>
                                 <td><a href="${ctx}/board/player/${player.id}?code=${player.code}">ViewGame</a></td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&gameName=${gameName}&roomName=${roomName}">PlayerLog</a></td>
+                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${game}&room=${room}">PlayerLog</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>PlayerLog</td>
@@ -503,7 +503,7 @@
                                         <td>Loaded</td>
                                     </c:when>
                                     <c:otherwise>
-                                        <td><a href="${ctx}/admin/player/${player.id}/ai/reload?roomName=${roomName}#savePlayersGame">LoadAI</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/ai/reload?room=${room}#savePlayersGame">LoadAI</a></td>
                                     </c:otherwise>
                                 </c:choose>
                                 <c:choose>
@@ -519,15 +519,15 @@
                             <c:otherwise>
                                 <td><input type="text" readonly="true" class="input-id"       value="${player.id}"/></td>
                                 <td><input type="text" readonly="true" class="input-readable" value="${player.readableName}"/></td>
-                                <td><input type="text" readonly="true" class="input-room" value="${player.roomName}"/></td>
+                                <td><input type="text" readonly="true" class="input-room" value="${player.room}"/></td>
                                 <td><input type="text" readonly="true" class="input-score"    value="${player.score}"/></td>
                                 <td><input type="text" readonly="true" class="input-callback" value="${player.callbackUrl}"/></td>
                                 <td>UDLRA</td>
-                                <td><a href="${ctx}/board/game/${player.gameName}">${player.gameName}</a></td>
+                                <td><a href="${ctx}/board/game/${player.game}">${player.game}</a></td>
                                 <td>Save</td>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/load?roomName=${roomName}#savePlayersGame">Load</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/load?room=${room}#savePlayersGame">Load</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>Load</td>
@@ -535,7 +535,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.saved}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?roomName=${roomName}#savePlayersGame">RemoveSave</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/save/remove?room=${room}#savePlayersGame">RemoveSave</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveSave</td>
@@ -543,7 +543,7 @@
                                 </c:choose>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?roomName=${roomName}#savePlayersGame">RemoveReg</a></td>
+                                        <td><a href="${ctx}/admin/player/${player.id}/registration/remove?room=${room}#savePlayersGame">RemoveReg</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>RemoveReg</td>
@@ -553,7 +553,7 @@
                                 <td>ViewGame</td>
                                 <c:choose>
                                     <c:when test="${player.code != null}">
-                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&gameName=${gameName}&roomName=${roomName}">PlayerLog</a></td>
+                                        <td><a href="${ctx}/board/log/player/${player.id}?code=${player.code}&game=${game}&room=${room}">PlayerLog</a></td>
                                     </c:when>
                                     <c:otherwise>
                                         <td>PlayerLog</td>
@@ -574,8 +574,8 @@
                 </c:forEach>
                 <tr>
                     <td>
-                        <input type="hidden" name="gameName" value="${gameName}"/>
-                        <input type="hidden" name="roomName" value="${roomName}"/>
+                        <input type="hidden" name="game" value="${game}"/>
+                        <input type="hidden" name="room" value="${room}"/>
                         <input type="submit" value="Save all"/>
                     </td>
                 </tr>

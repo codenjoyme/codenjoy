@@ -123,24 +123,24 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public List<String> getGameNames() {
+    public List<String> getGames() {
         return new LinkedList<>(cache.keySet());
     }
 
     @Override
-    public List<String> getRoomNames() {
+    public List<String> getRooms() {
         return new LinkedList<>(roomService.names());
     }
 
     @Override
-    public List<String> getOnlyGameNames() {
-        return getGameNames().stream()
+    public List<String> getOnlyGames() {
+        return getGames().stream()
                 .map(GameServiceImpl::removeNumbers)
                 .collect(Collectors.toList());
     }
 
-    public static String removeNumbers(String gameName) {
-        return gameName.split(ROOMS_SEPARATOR)[0];
+    public static String removeNumbers(String game) {
+        return game.split(ROOMS_SEPARATOR)[0];
     }
 
     @Override
@@ -181,33 +181,33 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public GameType getGame(String gameName) {
-        if (!exists(gameName)) {
+    public GameType getGameType(String game) {
+        if (!exists(game)) {
             return NullGameType.INSTANCE;
         }
 
-        return cache.get(gameName);
+        return cache.get(game);
     }
 
     @Override
-    public GameType getGame(String gameName, String roomName) {
-        if (!exists(gameName) || Validator.isEmpty(roomName)) {
+    public GameType getGameType(String game, String room) {
+        if (!exists(game) || Validator.isEmpty(room)) {
             return NullGameType.INSTANCE;
         }
 
-        GameType gameType = cache.get(gameName);
+        GameType gameType = cache.get(game);
 
-        return roomService.create(roomName, gameType);
+        return roomService.create(room, gameType);
     }
 
     @Override
     public String getDefaultRoom() {
-        return getRoomNames().iterator().next();
+        return getRooms().iterator().next();
     }
 
     @Override
-    public boolean exists(String gameName) {
-        return !Validator.isEmpty(gameName)
-                && cache.containsKey(gameName);
+    public boolean exists(String game) {
+        return !Validator.isEmpty(game)
+                && cache.containsKey(game);
     }
 }

@@ -38,7 +38,7 @@ License along with this program.  If not, see
     <script src="${ctx}/resources/css/bootstrap/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
-    <div id="settings" page="${page}" contextPath="${ctx}" gameName="${gameName}" waitApprove="${wait_approve}"></div>
+    <div id="settings" page="${page}" contextPath="${ctx}" game="${game}" waitApprove="${wait_approve}"></div>
 
     <div class="header-container">
         <div class="container-fluid">
@@ -124,9 +124,9 @@ License along with this program.  If not, see
                     <span class="icon fa"></span>
                 </div>
                 <c:if test="${not adminLogin}">
-                    <div id="gameName" class="field valid" hidden>
-                        <form:select id="gameNameSelect" items="${gameNames}" path="gameName"/>
-                        <form:errors path="gameName" cssClass="error" />
+                    <div id="game" class="field valid" hidden>
+                        <form:select id="gameSelect" items="${games}" path="game"/>
+                        <form:errors path="game" cssClass="error" />
                     </div>
 
                     <div id="gameType" class="field valid" hidden>

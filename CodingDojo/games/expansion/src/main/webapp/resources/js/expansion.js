@@ -22,21 +22,21 @@
 
 // ========================== game setup ==========================
 
-if (typeof game == 'undefined') {
-    game = {};
-    game.demo = true;
-    game.code = 123;
-    game.playerId = 'userId';
-    game.readableName = 'Stiven Pupkin';
+if (typeof setup == 'undefined') {
+    setup = {};
+    setup.demo = true;
+    setup.code = 123;
+    setup.playerId = 'userId';
+    setup.readableName = 'Stiven Pupkin';
     initLayout = function(game, html, context, transformations, scripts, onLoad) {
         onLoad();
     }
 }
 
-game.isDrawByOrder = true;
-game.enablePlayerInfo = false;
-game.enablePlayerInfoLevel = false;
-game.showBody = false;
+setup.isDrawByOrder = true;
+setup.enablePlayerInfo = false;
+setup.enablePlayerInfoLevel = false;
+setup.showBody = false;
 
 // ========================== leaderboard page ==========================
 
@@ -66,7 +66,7 @@ var boardAllPageLoad = function() {
         return target.split(search).join(replacement);
     };
 
-    initLeadersTable(game.contextPath, game.playerId, game.code,
+    initLeadersTable(setup.contextPath, setup.playerId, setup.code,
         function(count, you, link, name, score, maxLength, level) {
             var star = '';
             if (count == 1) {
@@ -117,7 +117,7 @@ var boardAllPageLoad = function() {
     $(document.body).show();
 }
 
-game.onBoardAllPageLoad = function() {
+setup.onBoardAllPageLoad = function() {
     loadArrowImages();
 
     boardAllPageLoad();
@@ -127,7 +127,7 @@ game.onBoardAllPageLoad = function() {
 
 // ========================== user page ==========================
 
-game.onBoardPageLoad = game.onBoardAllPageLoad;
+setup.onBoardPageLoad = setup.onBoardAllPageLoad;
 
 // ========================== board draw logic ==========================
 
@@ -139,7 +139,7 @@ var loadStuff = function() {
 var sprites = {};
 var directions = ['up', 'right_up', 'right', 'right_down', 'down', 'left_down', 'left', 'left_up'];
 var loadImage = function(name) {
-    var url = game.contextPath + '/resources/sprite/' + game.gameName + '/' + name + '.png';
+    var url = setup.contextPath + '/resources/sprite/' + setup.game + '/' + name + '.png';
     var image = new Image();
     image.onload = function() {
         // do nothing
@@ -167,7 +167,7 @@ var loadArrowImages = function() {
 }
 
 var previousBoard = {};
-game.drawBoard = function(drawer) {
+setup.drawBoard = function(drawer) {
     // so we see past tick on board with current arrows
     var playerId = drawer.playerId;
     var allPlayersScreen = drawer.allPlayersScreen;
@@ -454,6 +454,6 @@ game.drawBoard = function(drawer) {
 
 // ========================== demo stuff ==========================
 
-if (game.demo) {
-    game.onBoardPageLoad();
+if (setup.demo) {
+    setup.onBoardPageLoad();
 }
