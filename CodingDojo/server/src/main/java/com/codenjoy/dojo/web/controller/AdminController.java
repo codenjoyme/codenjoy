@@ -583,13 +583,13 @@ public class AdminController {
         return players;
     }
 
-    private Map<String, String> getRoomCounts(List<PlayerInfo> players, List<GameRooms> gameRooms) {
-        Map<String, String> result = new HashMap<>();
+    private Map<String, Integer> getRoomCounts(List<PlayerInfo> players, List<GameRooms> gameRooms) {
+        Map<String, Integer> result = new HashMap<>();
         for (GameRooms game : gameRooms) {
-            long count = players.stream()
+            int count = (int) players.stream()
                     .filter(player -> game.getGame().equals(player.getRoomName()))
                     .count();
-            result.put(game.getGame(), (count != 0) ? String.format("(%s)", count) : "");
+            result.put(game.getGame(), count);
         }
         return result;
     }

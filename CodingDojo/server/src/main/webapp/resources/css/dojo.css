@@ -91,6 +91,11 @@ label.error {
     padding-right: 20px;
 }
 
+.admin-table span.pow {
+    vertical-align: 7px;
+    font-size: 10px;
+}
+
 .admin-table input[type="text"] {
     width:150px;
     height:24px;

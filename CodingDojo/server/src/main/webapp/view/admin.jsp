@@ -88,7 +88,9 @@
                             <c:if test="${room == roomName}">
                                 <b style="font-size:18px">
                             </c:if>
-                            <a href="${ctx}/admin?roomName=${room}">${room}${roomsCount.get(room)}</a>
+                            <a href="${ctx}/admin?roomName=${room}">
+                                ${room}<span class="pow">${roomsCount.get(room)}</span>
+                            </a>
                             <c:if test="${room == roomName}">
                                 </b>
                             </c:if>
