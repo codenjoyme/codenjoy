@@ -443,27 +443,51 @@ public class AdminController {
     public String getAdmin(Model model,
                            @RequestParam(value = ROOM_NAME_KEY, required = false)
                                String roomName,
+                           @RequestParam(value = GAME_NAME_KEY, required = false)
+                               String gameName,
                            @RequestParam(value = CUSTOM_ADMIN_PAGE_KEY, required = false, defaultValue = "false")
                                Boolean gameSpecificAdminPage)
     {
-        roomName = (roomName == null || roomName.equals("null")) ? null : roomName;
+        // каждый из этих параметров может быть null, "", "null"
+        roomName = Validator.isEmpty(roomName) ? null : roomName;
+        gameName = Validator.isEmpty(gameName) ? null : gameName;
 
-        if (roomName == null) {
-            return getAdmin(roomName);
+        // если не установили оба, идем на дифолтовую админку
+        if (roomName == null && gameName == null) {
+            return getAdmin();
         }
 
-        String gameName = roomService.gameName(roomName);
+        // ну может хоть имя игры указали?
+        if (roomName == null) {
+            roomName = gameName;
+        }
 
+        // если нет такой roomName, првоеряем есть ли gameName
+        if (!roomService.exists(roomName)) {
+            GameType game = gameService.getGame(gameName);
+            if (game instanceof NullGameType) {
+                // если нет - дифлотовая админка
+                return getAdmin();
+            }
+            // иначе создаем новую комнату, которую тут же будем админить
+            roomService.create(roomName, game);
+        }
+
+        // получаем уже законным образом имя игры по комнате
+        gameName = roomService.gameName(roomName);
+
+        // проверяем не надо ли нам перейти на кастомную страничку
         if (gameSpecificAdminPage && gameName != null) {
             return viewDelegationService.adminView(gameName);
         }
 
-        GameType game = gameService.getGame(gameName, roomName);
-
+        // получаем тип игры
+        GameType game = gameService.getGame(gameName);
         if (game instanceof NullGameType) {
-            return getAdmin(roomName);
+            return getAdmin();
         }
 
+        // готовим данные для странички
         Settings gameSettings = game.getSettings();
         List<Parameter> parameters = gameSettings.getParameters();
         model.addAttribute("settings", parameters);
