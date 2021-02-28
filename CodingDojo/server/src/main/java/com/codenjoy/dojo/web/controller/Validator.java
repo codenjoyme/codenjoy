@@ -157,7 +157,7 @@ public class Validator {
         }
     }
 
-    public boolean isEmpty(String input) {
+    public static boolean isEmpty(String input) {
         return StringUtils.isEmpty(input) || input.equalsIgnoreCase("null");
     }
 

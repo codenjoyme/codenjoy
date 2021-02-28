@@ -28,6 +28,7 @@ import com.codenjoy.dojo.services.nullobj.NullGameType;
 import com.codenjoy.dojo.services.printer.CharElements;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.utils.ReflectUtils;
+import com.codenjoy.dojo.web.controller.Validator;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -178,7 +179,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameType getGame(String gameName) {
-        if (!cache.containsKey(gameName)) {
+        if (!exists(gameName)) {
             return NullGameType.INSTANCE;
         }
 
@@ -187,7 +188,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameType getGame(String gameName, String roomName) {
-        if (!cache.containsKey(gameName)) {
+        if (!exists(gameName) || Validator.isEmpty(roomName)) {
             return NullGameType.INSTANCE;
         }
 
@@ -203,6 +204,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public boolean exists(String gameName) {
-        return cache.containsKey(gameName);
+        return !Validator.isEmpty(gameName)
+                && cache.containsKey(gameName);
     }
 }

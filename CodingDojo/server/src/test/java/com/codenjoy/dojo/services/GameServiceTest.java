@@ -37,6 +37,7 @@ import static com.codenjoy.dojo.services.mocks.FirstGameSettings.Keys.PARAMETER1
 import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER3;
 import static com.codenjoy.dojo.services.mocks.SecondGameSettings.Keys.PARAMETER4;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class GameServiceTest {
 
@@ -71,7 +72,25 @@ public class GameServiceTest {
     }
 
     @Test
-    public void shouldGetRoomNames() {
+    public void shouldGetNullGame_whenEmptyGameName_caseGameNameOnly() {
+        assertEquals(NullGameType.INSTANCE, service.getGame(null));
+        assertEquals(NullGameType.INSTANCE, service.getGame("null"));
+        assertEquals(NullGameType.INSTANCE, service.getGame("not-exists"));
+    }
+
+    @Test
+    public void shouldGetNullGame_whenEmptyGameName_caseGameAndRoomNames() {
+        assertEquals(NullGameType.INSTANCE, service.getGame(null, "valid-room"));
+        assertEquals(NullGameType.INSTANCE, service.getGame("null", "valid-room"));
+        assertEquals(NullGameType.INSTANCE, service.getGame("not-exists", "valid-room"));
+
+        assertEquals(NullGameType.INSTANCE, service.getGame("first", null));
+        assertEquals(NullGameType.INSTANCE, service.getGame("first", "null"));
+        assertNotEquals(NullGameType.INSTANCE, service.getGame("first", "non-exists")); // valid room and game
+    }
+
+    @Test
+    public void shouldGetNullGame_whenEmptyGameName() {
         roomService.create("room1", service.getGame("first"));
         roomService.create("room2", service.getGame("second"));
         roomService.create("room3", service.getGame("second"));
