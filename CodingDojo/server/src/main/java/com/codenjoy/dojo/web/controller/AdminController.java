@@ -28,7 +28,6 @@ import com.codenjoy.dojo.services.dao.ActionLogger;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.nullobj.NullGameType;
-import com.codenjoy.dojo.services.room.GameRooms;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.security.GameAuthorities;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
@@ -51,6 +50,7 @@ import java.util.*;
 
 import static java.util.function.Predicate.not;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 @Controller
 @RequestMapping(AdminController.URI)
@@ -519,16 +519,11 @@ public class AdminController {
         AdminSettings settings = getAdminSettings(parameters);
         model.addAttribute("adminSettings", settings);
         List<PlayerInfo> saves = saveService.getSaves();
-        prepareGameRooms(model, saves);
+        model.addAttribute("gameRooms", roomService.gameRooms());
+        model.addAttribute("playersCount", getRoomCounts(saves));
         settings.setPlayers(preparePlayers(model, roomName, saves));
 
         return "admin";
-    }
-
-    private void prepareGameRooms(Model model, List<PlayerInfo> players) {
-        List<GameRooms> gameRooms = roomService.gameRooms();
-        model.addAttribute("gameRooms", gameRooms);
-        model.addAttribute("roomsCount", getRoomCounts(players, gameRooms));
     }
 
     public String getDefaultProgress(GameType game) {
@@ -583,15 +578,16 @@ public class AdminController {
         return players;
     }
 
-    private Map<String, Integer> getRoomCounts(List<PlayerInfo> players, List<GameRooms> gameRooms) {
-        Map<String, Integer> result = new HashMap<>();
-        for (GameRooms game : gameRooms) {
-            int count = (int) players.stream()
-                    .filter(player -> game.getGame().equals(player.getRoomName()))
-                    .count();
-            result.put(game.getGame(), count);
-        }
-        return result;
+    private Map<String, Integer> getRoomCounts(List<PlayerInfo> players) {
+        return roomService.names().stream()
+                .map(room -> new HashMap.SimpleEntry<>(room, count(players, room)))
+                .collect(toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+    }
+
+    private int count(List<PlayerInfo> players, String room) {
+        return (int) players.stream()
+                .filter(player -> room.equals(player.getRoomName()))
+                .count();
     }
 
     // ----------------
