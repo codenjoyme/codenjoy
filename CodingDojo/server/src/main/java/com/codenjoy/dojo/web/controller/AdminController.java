@@ -493,7 +493,7 @@ public class AdminController {
         }
 
         // получаем тип игры
-        GameType game = gameService.getGame(gameName);
+        GameType game = gameService.getGame(gameName, roomName);
         if (game instanceof NullGameType) {
             return getAdmin();
         }
