@@ -240,13 +240,13 @@ public class AdminController {
 
     @GetMapping("/registration/start")
     public String close(HttpServletRequest request) {
-        playerService.closeRegistration();
+        playerService.openRegistration();
         return getAdmin(request);
     }
 
     @GetMapping("/registration/stop")
     public String open(HttpServletRequest request) {
-        playerService.openRegistration();
+        playerService.closeRegistration();
         return getAdmin(request);
     }
 
