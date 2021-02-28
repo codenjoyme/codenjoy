@@ -27,8 +27,6 @@ import org.eclipse.jetty.server.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.firewall.FirewalledRequest;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestWrapper;
 import javax.servlet.http.HttpServletRequest;
 
 // TODO почти такой же как в Server - подумать как устранить дублирование
@@ -67,24 +66,29 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     }
 
     @GetMapping(params = "message")
-    public ResponseEntity<ModelMap> error(@RequestParam("message") String message, HttpServletRequest req, ModelMap model) {
+    public ResponseEntity<ModelMap> error(@RequestParam("message") String message, HttpServletRequest reqest, ModelMap model) {
         IllegalAccessException exception = new IllegalAccessException(message);
-        return error(exception, req, model);
+        return error(exception, reqest, model);
     }
 
-    private String error(Exception exception, HttpServletRequest httpRequset, ModelMap model) {
-        String url = httpRequset.getRequestURL().toString();
+    private ResponseEntity<ModelMap> error(Exception exception, HttpServletRequest request, ModelMap model) {
+        String url = request.getRequestURL().toString();
 
-        ServletRequest request = unwrap(httpRequset);
-        if (request instanceof Request) {
-            url = String.format("%s [%s]",
-                    url, ((Request) request).getOriginalURI());
+        String uri = getOriginalUri(request);
+        if (uri != null) {
+            url = String.format("%s [%s]", url, uri);
         }
 
         ModelAndView view = ticket.get(url, exception);
         model.mergeAttributes(view.getModel());
 
-        return view.getViewName();
+        return new ResponseEntity<>(model,
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private String getOriginalUri(HttpServletRequest httpRequest) {
+        ServletRequest request = unwrap(httpRequest);
+        return ((Request) request).getOriginalURI();
     }
 
     // для "not found" запросов вытаскиваем доп инфо

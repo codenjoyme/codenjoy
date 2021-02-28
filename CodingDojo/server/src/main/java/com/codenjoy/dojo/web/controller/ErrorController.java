@@ -55,39 +55,44 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     private ErrorTicketService ticket;
 
     @RequestMapping()
-    public String error(HttpServletRequest req, ModelMap model) {
-        Exception throwable = (Exception)req.getAttribute(JAVAX_SERVLET_ERROR_EXCEPTION);
+    public String error(HttpServletRequest reqest, ModelMap model) {
+        Exception throwable = (Exception)reqest.getAttribute(JAVAX_SERVLET_ERROR_EXCEPTION);
         if (throwable != null) {
-            return error(throwable, req, model);
+            return error(throwable, reqest, model);
         }
 
-        String message = (String) req.getAttribute(JAVAX_SERVLET_ERROR_MESSAGE);
+        String message = (String) reqest.getAttribute(JAVAX_SERVLET_ERROR_MESSAGE);
         if (!StringUtils.isEmpty(message)) {
-            return error(message, req, model);
+            return error(message, reqest, model);
         }
 
-        return error("Something wrong", req, model);
+        return error("Something wrong", reqest, model);
     }
 
     @GetMapping(params = "message")
-    public String error(@RequestParam("message") String message, HttpServletRequest req, ModelMap model) {
+    public String error(@RequestParam("message") String message, HttpServletRequest request, ModelMap model) {
         IllegalAccessException exception = new IllegalAccessException(message);
-        return error(exception, req, model);
+        return error(exception, request, model);
     }
 
-    private String error(Exception exception, HttpServletRequest httpRequset, ModelMap model) {
-        String url = httpRequset.getRequestURL().toString();
+    private String error(Exception exception, HttpServletRequest request, ModelMap model) {
+        String url = request.getRequestURL().toString();
 
-        ServletRequest request = unwrap(httpRequset);
-        if (request instanceof Request) {
+        String uri = getOriginalUri(request);
+        if (uri != null) {
             url = String.format("%s [%s]",
-                    url, ((Request) request).getOriginalURI());
+                    url, uri);
         }
 
         ModelAndView view = ticket.get(url, exception);
         model.mergeAttributes(view.getModel());
 
         return view.getViewName();
+    }
+
+    private String getOriginalUri(HttpServletRequest httpRequest) {
+        ServletRequest request = unwrap(httpRequest);
+        return ((Request) request).getOriginalURI();
     }
 
     // для "not found" запросов вытаскиваем доп инфо
