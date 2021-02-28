@@ -412,6 +412,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
         playerGame.fireOnLevelChanged();
     }
 
+    // TODO а что если я поменяю комнату с изменением игры?
     public void changeRoom(String playerId, String roomName) {
         if (roomName == null) {
             return;

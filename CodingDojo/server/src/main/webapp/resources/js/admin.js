@@ -137,6 +137,7 @@ pages.admin = function() {
                     var test = $('<button type="button">Save</button>').click(function () {
                         var data = {};
                         data[PLAYER_ID] = playerId;
+                        data['gameName'] = game.gameName;
                         data[field] = input.val();
                         ajax.save(data,
                             function() {

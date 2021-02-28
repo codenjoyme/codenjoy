@@ -498,6 +498,8 @@ public class PlayerServiceImpl implements PlayerService {
                 && !playerGame.getRoomName().equals(input.getRoomName());
         if (updateRoomName) {
             updated.setRoomName(input.getRoomName());
+            // TODO тут как-то неочевидно, что создается рума если ее не существовало раннее
+            GameType game = gameService.getGame(input.getGameName(), input.getRoomName());
             playerGames.changeRoom(input.getId(), input.getRoomName());
         }
         
