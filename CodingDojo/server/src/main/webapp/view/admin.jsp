@@ -86,7 +86,7 @@
                     <td class="rightStep">
                         <c:forEach items="${game.rooms}" var="room" varStatus="status">
                             <c:if test="${room == roomName}">
-                                <b>
+                                <b style="font-size:18px">
                             </c:if>
                             <a href="${ctx}/admin?roomName=${room}">${room}${roomsCount.get(room)}</a>
                             <c:if test="${room == roomName}">
