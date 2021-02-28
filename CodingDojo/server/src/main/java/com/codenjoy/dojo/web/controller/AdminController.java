@@ -518,9 +518,17 @@ public class AdminController {
         model.addAttribute("opened", playerService.isRegistrationOpened());
         AdminSettings settings = getAdminSettings(parameters);
         model.addAttribute("adminSettings", settings);
-        settings.setPlayers(preparePlayers(model, roomName));
+        List<PlayerInfo> saves = saveService.getSaves();
+        prepareGameRooms(model, saves);
+        settings.setPlayers(preparePlayers(model, roomName, saves));
 
         return "admin";
+    }
+
+    private void prepareGameRooms(Model model, List<PlayerInfo> players) {
+        List<GameRooms> gameRooms = roomService.gameRooms();
+        model.addAttribute("gameRooms", gameRooms);
+        model.addAttribute("roomsCount", getRoomCounts(players, gameRooms));
     }
 
     public String getDefaultProgress(GameType game) {
@@ -564,13 +572,7 @@ public class AdminController {
         return result;
     }
 
-    private List<PlayerInfo> preparePlayers(Model model, String roomName) {
-        List<PlayerInfo> players = saveService.getSaves();
-
-        List<GameRooms> gameRooms = roomService.gameRooms();
-        model.addAttribute("gameRooms", gameRooms);
-        model.addAttribute("roomsCount", getRoomCounts(players, gameRooms));
-
+    private List<PlayerInfo> preparePlayers(Model model, String roomName, List<PlayerInfo> players) {
         for (PlayerInfo player : players) {
             player.setHidden(!roomName.equals(player.getRoomName()));
         }
