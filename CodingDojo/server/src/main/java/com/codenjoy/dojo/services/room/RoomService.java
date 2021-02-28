@@ -117,6 +117,7 @@ public class RoomService {
                 .collect(groupingBy(roomState -> roomState.getType().name(),
                         mapping(roomState -> roomState.getName(), toList())))
                 .entrySet().stream()
+                .sorted(Comparator.comparing(Map.Entry::getKey))
                 .map(entry -> new GameRooms(entry.getKey(), entry.getValue()))
                 .collect(toList());
     }
