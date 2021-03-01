@@ -22,23 +22,49 @@ package com.codenjoy.dojo.cucumber;
  * #L%
  */
 
-import org.springframework.boot.web.server.LocalServerPort;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class Server {
+public class WebDriverWrapper {
 
-    private final String SERVER_URL = "http://localhost";
-    private final String THINGS_ENDPOINT = "/codenjoy-contest";
+    private WebDriver driver;
 
-    @LocalServerPort
-    private int port;
+    @Autowired
+    private Server server;
 
-    public String endpoint() {
-        return SERVER_URL + ":" + port + THINGS_ENDPOINT;
+    @PostConstruct
+    public void init() {
+        System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chromedriver.exe");
+        driver = new ChromeDriver();
+        System.out.println("Started here: " + server.endpoint());
+    }
+
+    public void open(String url) {
+        driver.get(server.endpoint() + url);
+    }
+
+    public WebElement element(String selector) {
+        return driver.findElement(By.cssSelector(selector));
+    }
+
+    public Select select(String selector) {
+        return new Select(element(selector));
+    }
+
+    public void click(String selector) {
+        element(selector).click();
     }
 }

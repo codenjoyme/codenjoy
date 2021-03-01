@@ -26,7 +26,7 @@
         <commons-collections.version>4.4</commons-collections.version>
         <reflections.version>0.9.11</reflections.version> <!-- do not update -->
         <fest-reflect.version>1.4.1</fest-reflect.version>
-        <selenium.version>2.47.1</selenium.version>
+        <selenium.version>3.141.59</selenium.version>
         <sac.version>1.3</sac.version>
         <fest-assert.version>1.4</fest-assert.version>
         <guava.version>30.1-jre</guava.version>
@@ -842,15 +842,9 @@
             <version>${selenium.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency> <!-- for selenium -->
-            <groupId>org.w3c.css</groupId>
-            <artifactId>sac</artifactId>
-            <version>${sac.version}</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>htmlunit-driver</artifactId>
+            <artifactId>selenium-chrome-driver</artifactId>
             <version>${selenium.version}</version>
             <scope>test</scope>
         </dependency>
