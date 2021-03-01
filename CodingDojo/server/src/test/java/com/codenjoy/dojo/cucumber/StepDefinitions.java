@@ -1,5 +1,6 @@
 package com.codenjoy.dojo.cucumber;
 
+import com.codenjoy.dojo.services.dao.Registration;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -12,21 +13,64 @@ public class StepDefinitions {
     @Autowired
     private WebDriverWrapper web;
 
-    @Given("Login page opened in browser")
+    @Autowired
+    private Registration registration;
+
+    @When("Login page opened in browser")
     public void loginPage() {
         web.open("/login");
     }
 
     @When("Try to login as {string} with {string} password in game {string}")
     public void login(String email, String password, String game) {
-        web.element("#email input").sendKeys(email);
-        web.element("#password input").sendKeys(password);
-        web.select("#game select").selectByVisibleText(game);
+        web.text("#email input", email);
+        web.text("#password input", password);
+        web.select("#game select", game);
         web.click("#submit-button");
     }
 
     @Then("See {string} login error")
     public void login(String error) {
         assertEquals(error, web.element("#error-message").getText());
+    }
+
+    @When("Press register button")
+    public void pressRegisterButton() {
+        web.element("#register-button").click();
+    }
+
+    @When("Try to register with: name {string}, email {string}, " +
+            "password {string}, city {string}, " +
+            "tech skills {string}, company {string}, " +
+            "experience {string}, game {string}")
+    public void tryToRegister(String name, String email,
+                              String password, String country,
+                              String techSkills, String company,
+                              String experience, String game)
+    {
+        web.text("#readableName input", name);
+        web.text("#email input", email);
+        web.text("#password input", password);
+        web.text("#passwordConfirmation input", password);
+        web.text("#data1 input", country);
+        web.text("#data2 input", techSkills);
+        web.text("#data3 input", company);
+        web.text("#data4 input", experience);
+        web.select("#game select", game);
+        web.click("#submit-button");
+    }
+
+    @Then("On game board with url {string}")
+    public void onGameBoard(String url) {
+        String playerId = web.get("#settings", "playerId");
+        String code = web.get("#settings", "code");
+        url = url.replaceAll("<PLAYER_ID>", playerId)
+            .replaceAll("<CODE>", code);
+        assertEquals(url, web.url());
+    }
+
+    @Given("Clean all registration data")
+    public void cleanAllRegistrationData() {
+        registration.removeAll();
     }
 }

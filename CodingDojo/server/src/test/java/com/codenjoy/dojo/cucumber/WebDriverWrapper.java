@@ -60,11 +60,33 @@ public class WebDriverWrapper {
         return driver.findElement(By.cssSelector(selector));
     }
 
-    public Select select(String selector) {
-        return new Select(element(selector));
+    public void select(String selector, String text) {
+        new Select(element(selector))
+                .selectByVisibleText(text);
     }
 
     public void click(String selector) {
         element(selector).click();
+    }
+
+    public String url() {
+        String absoluteUrl = driver.getCurrentUrl();
+        String endpoint = server.endpoint();
+        int position = absoluteUrl.indexOf(endpoint);
+        if (position == 0) {
+            return absoluteUrl.substring(endpoint.length());
+        } else {
+            return absoluteUrl;
+        }
+    }
+
+    public void text(String selector, String text) {
+        WebElement element = element(selector);
+        element.clear();
+        element.sendKeys(text);
+    }
+
+    public String get(String selector, String attribute) {
+        return element(selector).getAttribute(attribute);
     }
 }
