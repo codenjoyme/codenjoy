@@ -64,12 +64,24 @@ public class StepDefinitions {
     @SneakyThrows
     @Then("On game board with url {string}")
     public void onGameBoard(String url) {
-        String playerId = web.get("#settings", "playerId");
-        String code = web.get("#settings", "code");
-        url = url.replaceAll("<PLAYER_ID>", playerId)
-            .replaceAll("<CODE>", code);
+        url = replaceAll(url);
+
         assertEquals(url, web.url());
         Thread.sleep(2000);
+    }
+
+    public String replaceAll(String url) {
+        url = replace(url, "<PLAYER_ID>", "playerId");
+        url = replace(url, "<CODE>", "code");
+        return url;
+    }
+
+    public String replace(String data, String key, String attribute) {
+        if (data.contains(key)) {
+            String playerId = web.get("#settings", attribute);
+            data = data.replaceAll(key, playerId);
+        }
+        return data;
     }
 
     @Given("Clean all registration data")
