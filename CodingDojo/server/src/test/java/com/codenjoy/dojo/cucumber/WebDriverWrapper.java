@@ -23,6 +23,7 @@ package com.codenjoy.dojo.cucumber;
  */
 
 
+import com.codenjoy.dojo.cucumber.page.Server;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

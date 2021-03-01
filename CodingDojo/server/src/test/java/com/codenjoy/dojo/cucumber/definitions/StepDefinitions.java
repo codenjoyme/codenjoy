@@ -1,5 +1,7 @@
-package com.codenjoy.dojo.cucumber;
+package com.codenjoy.dojo.cucumber.definitions;
 
+import com.codenjoy.dojo.cucumber.WebDriverWrapper;
+import com.codenjoy.dojo.cucumber.page.Page;
 import com.codenjoy.dojo.services.dao.Registration;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -7,6 +9,7 @@ import io.cucumber.java.en.When;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static com.codenjoy.dojo.cucumber.page.Page.CODE;
 import static org.junit.Assert.assertEquals;
 
 public class StepDefinitions {
@@ -16,6 +19,9 @@ public class StepDefinitions {
 
     @Autowired
     private Registration registration;
+
+    @Autowired
+    private Page page;
 
     @When("Login page opened in browser")
     public void loginPage() {
@@ -64,28 +70,17 @@ public class StepDefinitions {
     @SneakyThrows
     @Then("On game board with url {string}")
     public void onGameBoard(String url) {
-        url = replaceAll(url);
-
-        assertEquals(url, web.url());
-        Thread.sleep(2000);
-    }
-
-    public String replaceAll(String url) {
-        url = replace(url, "<PLAYER_ID>", "playerId");
-        url = replace(url, "<CODE>", "code");
-        return url;
-    }
-
-    public String replace(String data, String key, String attribute) {
-        if (data.contains(key)) {
-            String playerId = web.get("#settings", attribute);
-            data = data.replaceAll(key, playerId);
-        }
-        return data;
+        assertEquals(page.injectSettings(url), web.url());
     }
 
     @Given("Clean all registration data")
     public void cleanAllRegistrationData() {
         registration.removeAll();
+    }
+
+    @Then("User registered in database as {string}")
+    public void userRegisteredInDatabaseAs(String user) {
+        assertEquals(page.injectSettings(user),
+                registration.getUserByCode(page.pageSetting(CODE)));
     }
 }
