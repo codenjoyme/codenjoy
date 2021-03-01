@@ -43,7 +43,7 @@ import static org.mockito.Mockito.when;
 
 public class FirstGameType extends AbstractGameType<SettingsImpl> {
 
-    private final SimpleParameter<Integer> size = new SimpleParameter<>(23);
+    private final SimpleParameter<Integer> size = new SimpleParameter<>(10);
 
     @Override
     public SettingsImpl getSettings() {
@@ -185,6 +185,10 @@ public class FirstGameType extends AbstractGameType<SettingsImpl> {
     }
 
     class Hero extends PlayerHero implements NoDirectionJoystick, State<Elements, Player> {
+
+        public Hero() {
+            super(1, 1);
+        }
 
         @Override
         public void act(int... p) {

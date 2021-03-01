@@ -4,6 +4,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
@@ -60,6 +61,7 @@ public class StepDefinitions {
         web.click("#submit-button");
     }
 
+    @SneakyThrows
     @Then("On game board with url {string}")
     public void onGameBoard(String url) {
         String playerId = web.get("#settings", "playerId");
@@ -67,6 +69,7 @@ public class StepDefinitions {
         url = url.replaceAll("<PLAYER_ID>", playerId)
             .replaceAll("<CODE>", code);
         assertEquals(url, web.url());
+        Thread.sleep(2000);
     }
 
     @Given("Clean all registration data")
