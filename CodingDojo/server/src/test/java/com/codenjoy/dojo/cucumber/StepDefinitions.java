@@ -1,6 +1,5 @@
 package com.codenjoy.dojo.cucumber;
 
-import com.codenjoy.dojo.services.room.RoomService;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -11,11 +10,11 @@ import static org.junit.Assert.assertEquals;
 public class StepDefinitions {
 
     @Autowired
-    private Server server;
+    private WebdriverWrapper web;
 
     @Given("Home page opened in browser")
     public void homePage() {
-
+        web.open("/");
     }
 
     @When("Try to login as {string} with {string}")
@@ -25,6 +24,6 @@ public class StepDefinitions {
 
     @Then("See {string} login error")
     public void login(String error) {
-        assertEquals("", server.endpoint());
+        assertEquals("", "");
     }
 }
