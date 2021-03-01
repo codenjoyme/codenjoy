@@ -68,7 +68,7 @@ public class StepDefinitions {
     }
 
     @SneakyThrows
-    @Then("On game board with url {string}")
+    @Then("On page with url {string}")
     public void onGameBoard(String url) {
         assertEquals(page.injectSettings(url), web.url());
     }
@@ -81,6 +81,21 @@ public class StepDefinitions {
     @Then("User registered in database as {string}")
     public void userRegisteredInDatabaseAs(String user) {
         assertEquals(page.injectSettings(user),
-                registration.getUserByCode(page.pageSetting(CODE)));
+                registration.getUserByCode(page.pageSetting(CODE)).toString());
+    }
+
+    @When("Logout")
+    public void logout() {
+        page.logLink().click();
+    }
+
+    @Then("Login link present")
+    public void loginLinkPresent() {
+        assertEquals("Login", page.logLink().getText());
+    }
+
+    @Then("Logout link present")
+    public void logoutLinkPresent() {
+        assertEquals("Logout", page.logLink().getText());
     }
 }

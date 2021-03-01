@@ -1,6 +1,7 @@
 package com.codenjoy.dojo.cucumber.page;
 
 import com.codenjoy.dojo.cucumber.WebDriverWrapper;
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -33,5 +34,9 @@ public class Page {
 
     public String pageSetting(String key) {
         return web.get("#settings", key);
+    }
+
+    public WebElement logLink() {
+        return web.element(".logout-link");
     }
 }
