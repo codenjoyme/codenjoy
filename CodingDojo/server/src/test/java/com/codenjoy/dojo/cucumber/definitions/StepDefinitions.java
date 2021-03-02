@@ -166,11 +166,6 @@ public class StepDefinitions {
         error.clear();
     }
 
-    @Then("See Admin page")
-    public void seeAdminPage() {
-        assertUrl("/admin?room=first");
-    }
-
     @And("Close browser")
     public void closeBrowser() {
         web.exit();
