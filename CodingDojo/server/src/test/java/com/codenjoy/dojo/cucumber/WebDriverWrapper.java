@@ -91,7 +91,7 @@ public class WebDriverWrapper {
         return element(selector).getAttribute(attribute);
     }
 
-    public void exit() {
+    public void closeBrowser() {
         driver.close();
     }
 }

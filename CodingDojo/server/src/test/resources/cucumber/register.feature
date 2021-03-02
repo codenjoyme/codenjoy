@@ -2,8 +2,6 @@ Feature: Registration
   Registration process
 
 Scenario: Register new user and try login/logout
-  Given Clean all registration data
-
   When Open login page
   And Try to login as 'user1@mail.com' with 'password1' password in game 'first'
   Then See 'Wrong email or password' login error
@@ -21,5 +19,3 @@ Scenario: Register new user and try login/logout
   When Click login
   And Try to login as 'user1@mail.com' with 'password1' password in game 'first'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>&game=first'
-
-  And Close browser

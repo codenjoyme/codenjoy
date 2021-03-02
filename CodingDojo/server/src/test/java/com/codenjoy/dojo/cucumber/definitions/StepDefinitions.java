@@ -24,6 +24,8 @@ package com.codenjoy.dojo.cucumber.definitions;
 
 import com.codenjoy.dojo.cucumber.WebDriverWrapper;
 import com.codenjoy.dojo.cucumber.page.*;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -53,6 +55,17 @@ public class StepDefinitions {
 
     @Autowired
     private AdminPage admin;
+
+    @Before
+    public void cleanUp() {
+        registration.cleanUp();
+        admin.cleanUp();
+    }
+
+    @After
+    public void tearDown() {
+        web.closeBrowser();
+    }
 
     @When("Open login page")
     public void loginPage() {
@@ -160,11 +173,6 @@ public class StepDefinitions {
         error.assertTicketNumber();
         error.assertErrorMessage(message);
         error.clear();
-    }
-
-    @And("Close browser")
-    public void closeBrowser() {
-        web.exit();
     }
 
     @Then("We are on page with url {string}")
