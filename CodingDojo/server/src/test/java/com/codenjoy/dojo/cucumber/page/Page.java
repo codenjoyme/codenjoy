@@ -74,6 +74,12 @@ public class Page {
     }
 
     public void logout() {
+        assertLogoutLink();
+        logLink().click();
+    }
+
+    public void login() {
+        assertLoginLink();
         logLink().click();
     }
 

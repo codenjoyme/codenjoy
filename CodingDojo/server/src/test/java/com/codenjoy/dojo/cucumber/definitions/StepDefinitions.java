@@ -98,12 +98,6 @@ public class StepDefinitions {
         registration.submit();
     }
 
-    @SneakyThrows
-    @Then("We are on page with url {string}")
-    public void assertUrl(String url) {
-        page.assertUrl(url);
-    }
-
     @Given("Clean all registration data")
     public void cleanAllRegistrationData() {
         registration.clear();
@@ -117,6 +111,11 @@ public class StepDefinitions {
     @When("Click logout")
     public void logout() {
         page.logout();
+    }
+
+    @When("Click login")
+    public void login() {
+        page.login();
     }
 
     @Then("Login link present")
@@ -168,9 +167,20 @@ public class StepDefinitions {
         web.exit();
     }
 
+    @Then("We are on page with url {string}")
+    public void assertUrl(String url) {
+        page.assertUrl(url);
+    }
+
     @Then("Admin page opened with url {string}")
     public void adminPageOpened(String url) {
         admin.assertOnPage();
+        page.assertUrl(url);
+    }
+
+    @Then("Board page opened with url {string}")
+    public void boardPageOpened(String url) {
+        board.assertOnPage();
         page.assertUrl(url);
     }
 }
