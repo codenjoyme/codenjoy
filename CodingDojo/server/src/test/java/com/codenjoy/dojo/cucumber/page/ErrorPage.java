@@ -1,7 +1,6 @@
 package com.codenjoy.dojo.cucumber.page;
 
 import com.codenjoy.dojo.cucumber.WebDriverWrapper;
-import com.codenjoy.dojo.cucumber.definitions.StepDefinitions;
 import com.codenjoy.dojo.services.ErrorTicketService;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,10 @@ import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
-public class ErrorPage extends Page {
+public class ErrorPage {
+
+    @Autowired
+    private Page page;
 
     @Autowired
     private WebDriverWrapper web;
@@ -41,7 +43,7 @@ public class ErrorPage extends Page {
     }
 
     public void assertErrorPage() {
-        assertPage("error");
+        page.assertPage("error");
     }
 
     public void assertTicketNumber() {

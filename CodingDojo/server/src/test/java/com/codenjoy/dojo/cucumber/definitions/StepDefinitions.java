@@ -24,6 +24,7 @@ package com.codenjoy.dojo.cucumber.definitions;
 
 import com.codenjoy.dojo.cucumber.WebDriverWrapper;
 import com.codenjoy.dojo.cucumber.page.ErrorPage;
+import com.codenjoy.dojo.cucumber.page.LoginPage;
 import com.codenjoy.dojo.cucumber.page.Page;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
@@ -49,27 +50,30 @@ public class StepDefinitions {
     private Registration registration;
 
     @Autowired
-    private Page page;
+    private LoginPage login;
 
     @Autowired
     private ErrorPage error;
 
+    @Autowired
+    private Page page;
+
     @When("Login page opened in browser")
     public void loginPage() {
-        web.open("/login");
+        login.open();
     }
 
     @When("Try to login as {string} with {string} password in game {string}")
     public void login(String email, String password, String game) {
-        web.text("#email input", email);
-        web.text("#password input", password);
-        web.select("#game select", game);
-        web.click("#submit-button");
+        login.email(email);
+        login.password(password);
+        login.game(game);
+        login.submit();
     }
 
     @Then("See {string} login error")
     public void login(String error) {
-        assertEquals(error, web.element("#error-message").getText());
+        login.assertErrorMessage(error);
     }
 
     @When("Press register button")
