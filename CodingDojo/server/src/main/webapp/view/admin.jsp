@@ -22,6 +22,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
@@ -191,11 +192,11 @@
             <td>
                 <c:choose>
                     <c:when test="${opened}">
-                        <b>The registration is active</b></br>
+                        <b><spring:message key="registration.active"/></b></br>
                         <a href="${ctx}/admin/registration/stop?room=${room}#closeRegistration">Close registration</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The registration was closed</b></br>
+                        <b><spring:message key="registration.closed"/></b></br>
                         <a href="${ctx}/admin/registration/start?room=${room}#closeRegistration">Open registration</a>.
                     </c:otherwise>
                 </c:choose>
