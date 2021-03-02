@@ -23,10 +23,7 @@ package com.codenjoy.dojo.cucumber.definitions;
  */
 
 import com.codenjoy.dojo.cucumber.WebDriverWrapper;
-import com.codenjoy.dojo.cucumber.page.ErrorPage;
-import com.codenjoy.dojo.cucumber.page.LoginPage;
-import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.cucumber.page.RegistrationPage;
+import com.codenjoy.dojo.cucumber.page.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -50,6 +47,9 @@ public class StepDefinitions {
 
     @Autowired
     private Page page;
+
+    @Autowired
+    private AdminPage admin;
 
     @When("Login page opened in browser")
     public void loginPage() {
@@ -141,7 +141,7 @@ public class StepDefinitions {
 
     @When("Try open Admin page")
     public void tryOpenAdminPage() {
-        web.open("/admin");
+        admin.open();
     }
 
     @When("Login as {string} {string}")
