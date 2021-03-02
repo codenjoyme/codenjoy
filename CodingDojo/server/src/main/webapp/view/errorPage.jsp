@@ -25,7 +25,7 @@
 <!DOCTYPE html>
 <html>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<c:set var="page" scope="request" value="main"/>
+<c:set var="page" scope="request" value="error"/>
 <head>
     <title>Codenjoy</title>
 
@@ -41,8 +41,8 @@
     <div class="page-header">
         <h1>WTF! Something wrong...</h1>
     </div>
-        <div>Your ticket number is: ${ticketNumber}</div></br>
-        <div>${message}</div></br>
+        <div id="ticket-number">Your ticket number is: ${ticketNumber}</div></br>
+        <div id="error-message">${message}</div></br>
         <div><a href="${ctx}">Go to main page</a><div></br>
         <div>${stacktrace}</div></br>
     </div>

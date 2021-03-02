@@ -110,7 +110,7 @@ public class ErrorTicketService {
     }
 
     public Map<String, Object> getDetails(String ticket, String url, Exception exception) {
-        return new HashMap<String, Object>(){{
+        return new HashMap<>(){{
             put("ticketNumber", ticket);
             put("time", now());
             put("message", exception.getClass().getName() + ": " + exception.getMessage());
@@ -175,6 +175,11 @@ public class ErrorTicketService {
 
     public Map<String, Map<String, Object>> getErrors() {
         return tickets;
+    }
+
+    public void clear() {
+        tickets.clear();
+        info.clear();
     }
 
     public void logInfo(String message) {

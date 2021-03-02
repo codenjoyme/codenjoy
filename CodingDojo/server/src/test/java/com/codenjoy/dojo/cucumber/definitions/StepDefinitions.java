@@ -1,13 +1,40 @@
 package com.codenjoy.dojo.cucumber.definitions;
 
+/*-
+ * #%L
+ * Codenjoy - it's a dojo-like platform from developers to developers.
+ * %%
+ * Copyright (C) 2018 - 2021 Codenjoy
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+
 import com.codenjoy.dojo.cucumber.WebDriverWrapper;
+import com.codenjoy.dojo.cucumber.page.ErrorPage;
 import com.codenjoy.dojo.cucumber.page.Page;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.services.hash.Hash;
+import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Arrays;
 
 import static com.codenjoy.dojo.cucumber.page.Page.CODE;
 import static org.junit.Assert.assertEquals;
@@ -22,6 +49,9 @@ public class StepDefinitions {
 
     @Autowired
     private Page page;
+
+    @Autowired
+    private ErrorPage error;
 
     @When("Login page opened in browser")
     public void loginPage() {
@@ -69,7 +99,7 @@ public class StepDefinitions {
 
     @SneakyThrows
     @Then("On page with url {string}")
-    public void onGameBoard(String url) {
+    public void assertUrl(String url) {
         assertEquals(page.injectSettings(url), web.url());
     }
 
@@ -79,7 +109,7 @@ public class StepDefinitions {
     }
 
     @Then("User registered in database as {string}")
-    public void userRegisteredInDatabaseAs(String user) {
+    public void registerUser(String user) {
         assertEquals(page.injectSettings(user),
                 registration.getUserByCode(page.pageSetting(CODE)).toString());
     }
@@ -97,5 +127,46 @@ public class StepDefinitions {
     @Then("Logout link present")
     public void logoutLinkPresent() {
         assertEquals("Logout", page.logLink().getText());
+    }
+
+    @Given("User registered with name {string}, email {string}, " +
+            "password {string}, city {string}, " +
+            "tech skills {string}, company {string}, " +
+            "experience {string}")
+    public void registerUser(String name, String email,
+                              String password, String country,
+                              String techSkills, String company,
+                              String experience)
+    {
+        String data = String.join("%s|%s|%s|%s", country, techSkills, company, experience);
+        String id = Hash.getRandomId();
+        registration.register(id, email, name, Hash.md5(password), data,
+                Arrays.asList(GameAuthoritiesConstants.ROLE_USER));
+    }
+
+    @When("Try open Admin page")
+    public void tryOpenAdminPage() {
+        web.open("/admin");
+    }
+
+    @When("Login as {string} {string}")
+    public void loginAs(String email, String password) {
+        loginPage();
+        login(email, password, "first");
+        page.assertPage("board");
+        assertUrl("/board/player/<PLAYER_ID>?code=<CODE>&game=first");
+    }
+
+    @Then("See {string} message on error page")
+    public void seeErrorPageWith(String message) {
+        error.assertErrorPage();
+        error.assertTicketNumber();
+        error.assertErrorMessage(message);
+        error.clear();
+    }
+
+    @Then("See Admin page")
+    public void seeAdminPage() {
+        assertUrl("/admin?room=first");
     }
 }
