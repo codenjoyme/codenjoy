@@ -111,10 +111,12 @@
             <td>
                 <c:choose>
                     <c:when test="${paused}">
-                        <b>The Codenjoy was suspended</b></br> <a href="${ctx}/admin/game/resume?room=${room}#pauseGame">Resume game</a>.
+                        <b>The Codenjoy was suspended</b></br>
+                        <a href="${ctx}/admin/game/resume?room=${room}#pauseGame">Resume game</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The Codenjoy is active</b></br> <a href="${ctx}/admin/game/pause?room=${room}#pauseGame">Pause game</a>.
+                        <b>The Codenjoy is active</b></br>
+                        <a href="${ctx}/admin/game/pause?room=${room}#pauseGame">Pause game</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -138,10 +140,12 @@
             <td>
                 <c:choose>
                     <c:when test="${recording}">
-                        <b>The recording is active</b></br> <a href="${ctx}/admin/recording/stop?room=${room}#recordGame">Stop recording</a>.
+                        <b>The recording is active</b></br>
+                        <a href="${ctx}/admin/recording/stop?room=${room}#recordGame">Stop recording</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The recording was suspended</b></br> <a href="${ctx}/admin/recording/start?room=${room}#recordGame">Start recording</a>.
+                        <b>The recording was suspended</b></br>
+                        <a href="${ctx}/admin/recording/start?room=${room}#recordGame">Start recording</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -153,10 +157,12 @@
             <td>
                 <c:choose>
                     <c:when test="${debugLog}">
-                        <b>The debug in progress</b></br> <a href="${ctx}/admin/debug/stop?room=${room}#debug">Stop debug</a>.
+                        <b>The debug in progress</b></br>
+                        <a href="${ctx}/admin/debug/stop?room=${room}#debug">Stop debug</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The debug was suspended</b></br> <a href="${ctx}/admin/debug/start?room=${room}#debug">Start debug</a>.
+                        <b>The debug was suspended</b></br>
+                        <a href="${ctx}/admin/debug/start?room=${room}#debug">Start debug</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -168,10 +174,12 @@
             <td>
                 <c:choose>
                     <c:when test="${autoSave}">
-                        <b>The auto save in progress</b></br> <a href="${ctx}/admin/autoSave/stop?room=${room}#autoSave">Stop auto save</a>.
+                        <b>The auto save in progress</b></br>
+                        <a href="${ctx}/admin/autoSave/stop?room=${room}#autoSave">Stop auto save</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The auto save was suspended</b></br> <a href="${ctx}/admin/autoSave/start?room=${room}#autoSave">Start auto save</a>.
+                        <b>The auto save was suspended</b></br>
+                        <a href="${ctx}/admin/autoSave/start?room=${room}#autoSave">Start auto save</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
@@ -183,10 +191,12 @@
             <td>
                 <c:choose>
                     <c:when test="${opened}">
-                        <b>The registration is active</b></br> <a href="${ctx}/admin/registration/stop?room=${room}#closeRegistration">Close registration</a>.
+                        <b>The registration is active</b></br>
+                        <a href="${ctx}/admin/registration/stop?room=${room}#closeRegistration">Close registration</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The registration was closed</b></br> <a href="${ctx}/admin/registration/start?room=${room}#closeRegistration">Open registration</a>.
+                        <b>The registration was closed</b></br>
+                        <a href="${ctx}/admin/registration/start?room=${room}#closeRegistration">Open registration</a>.
                     </c:otherwise>
                 </c:choose>
             </td>
