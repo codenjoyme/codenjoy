@@ -42,4 +42,8 @@ public class LoginPage {
     public void open() {
         web.open("/login");
     }
+
+    public void clickRegister() {
+        web.element("#register-button").click();
+    }
 }

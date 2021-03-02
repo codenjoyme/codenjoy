@@ -26,9 +26,7 @@ import com.codenjoy.dojo.cucumber.WebDriverWrapper;
 import com.codenjoy.dojo.cucumber.page.ErrorPage;
 import com.codenjoy.dojo.cucumber.page.LoginPage;
 import com.codenjoy.dojo.cucumber.page.Page;
-import com.codenjoy.dojo.services.dao.Registration;
-import com.codenjoy.dojo.services.hash.Hash;
-import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
+import com.codenjoy.dojo.cucumber.page.RegistrationPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -36,9 +34,6 @@ import io.cucumber.java.en.When;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
-
-import static com.codenjoy.dojo.cucumber.page.Page.CODE;
 import static org.junit.Assert.assertEquals;
 
 public class StepDefinitions {
@@ -47,10 +42,10 @@ public class StepDefinitions {
     private WebDriverWrapper web;
 
     @Autowired
-    private Registration registration;
+    private LoginPage login;
 
     @Autowired
-    private LoginPage login;
+    private RegistrationPage registration;
 
     @Autowired
     private ErrorPage error;
@@ -78,7 +73,7 @@ public class StepDefinitions {
 
     @When("Press register button")
     public void pressRegisterButton() {
-        web.element("#register-button").click();
+        login.clickRegister();
     }
 
     @When("Try to register with: name {string}, email {string}, " +
@@ -90,16 +85,16 @@ public class StepDefinitions {
                               String techSkills, String company,
                               String experience, String game)
     {
-        web.text("#readableName input", name);
-        web.text("#email input", email);
-        web.text("#password input", password);
-        web.text("#passwordConfirmation input", password);
-        web.text("#data1 input", country);
-        web.text("#data2 input", techSkills);
-        web.text("#data3 input", company);
-        web.text("#data4 input", experience);
-        web.select("#game select", game);
-        web.click("#submit-button");
+        registration.name(name);
+        registration.email(email);
+        registration.password(password);
+        registration.confirmPassword(password);
+        registration.country(country);
+        registration.tech(techSkills);
+        registration.company(company);
+        registration.experience(experience);
+        registration.game(game);
+        registration.submit();
     }
 
     @SneakyThrows
@@ -110,13 +105,12 @@ public class StepDefinitions {
 
     @Given("Clean all registration data")
     public void cleanAllRegistrationData() {
-        registration.removeAll();
+        registration.clear();
     }
 
     @Then("User registered in database as {string}")
     public void registerUser(String user) {
-        assertEquals(page.injectSettings(user),
-                registration.getUserByCode(page.pageSetting(CODE)).toString());
+        registration.assertUserInDatabase(user);
     }
 
     @When("Logout")
@@ -143,10 +137,8 @@ public class StepDefinitions {
                               String techSkills, String company,
                               String experience)
     {
-        String data = String.join("%s|%s|%s|%s", country, techSkills, company, experience);
-        String id = Hash.getRandomId();
-        registration.register(id, email, name, Hash.md5(password), data,
-                Arrays.asList(GameAuthoritiesConstants.ROLE_USER));
+        registration.registerInDatabase(name, email, password,
+                country, techSkills, company, experience);
     }
 
     @When("Try open Admin page")
