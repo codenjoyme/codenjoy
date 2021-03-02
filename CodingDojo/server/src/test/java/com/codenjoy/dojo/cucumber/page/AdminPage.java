@@ -23,16 +23,24 @@ package com.codenjoy.dojo.cucumber.page;
  */
 
 import com.codenjoy.dojo.cucumber.WebDriverWrapper;
+import com.codenjoy.dojo.services.AutoSaver;
+import com.codenjoy.dojo.services.DebugService;
+import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.TimerService;
+import com.codenjoy.dojo.services.dao.ActionLogger;
+import com.codenjoy.dojo.stuff.SmartAssert;
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
-import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 public class AdminPage {
+
+    public static final String URL = "/admin?room=first";
 
     @Autowired
     private Page page;
@@ -70,5 +78,25 @@ public class AdminPage {
 
     public void assertOnPage() {
         page.assertPage("admin");
+    }
+
+    public void assertRegistrationActive(boolean active) {
+        String status = registrationActiveStatus().getText();
+        String linkText = registrationChangeActiveLink().getText();
+        if (active) {
+            SmartAssert.assertEquals("Registration is active", status);
+            SmartAssert.assertEquals("Close registration", linkText);
+        } else {
+            SmartAssert.assertEquals("Registration was closed", status);
+            SmartAssert.assertEquals("Open registration", linkText);
+        }
+    }
+
+    public WebElement registrationActiveStatus() {
+        return web.element("#closeRegistration td b");
+    }
+
+    public WebElement registrationChangeActiveLink() {
+        return web.element("#closeRegistration td a");
     }
 }

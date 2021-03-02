@@ -30,7 +30,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class StepDefinitions {
@@ -72,6 +71,11 @@ public class StepDefinitions {
         login.open();
     }
 
+    @When("Open admin login page")
+    public void loginAdminPage() {
+        login.adminOpen();
+    }
+
     @When("Try to login as {string} with {string} password in game {string}")
     public void login(String email, String password, String game) {
         login.email(email);
@@ -80,9 +84,21 @@ public class StepDefinitions {
         login.submit();
     }
 
+    @When("Try to login as {string} with {string} password")
+    public void login(String email, String password) {
+        login.email(email);
+        login.password(password);
+        login.submit();
+    }
+
     @Then("See {string} login error")
-    public void login(String error) {
+    public void assertLoginError(String error) {
         login.assertErrorMessage(error);
+    }
+
+    @Then("See {string} registration error")
+    public void assertRegistrationError(String error) {
+        registration.assertErrorMessage(error);
     }
 
     @When("Press register button")
@@ -111,13 +127,8 @@ public class StepDefinitions {
         registration.submit();
     }
 
-    @Given("Clean all registration data")
-    public void cleanAllRegistrationData() {
-        registration.clear();
-    }
-
     @Then("User registered in database as {string}")
-    public void registerUser(String user) {
+    public void assertUserRegistered(String user) {
         registration.assertUserInDatabase(user);
     }
 
@@ -132,12 +143,12 @@ public class StepDefinitions {
     }
 
     @Then("Login link present")
-    public void loginLinkPresent() {
+    public void assertLoginLinkPresent() {
         page.assertLoginLink();
     }
 
     @Then("Logout link present")
-    public void logoutLinkPresent() {
+    public void assertLogoutLinkPresent() {
         page.assertLogoutLink();
     }
 
@@ -168,7 +179,7 @@ public class StepDefinitions {
     }
 
     @Then("Error page opened with message {string}")
-    public void seeErrorPageWith(String message) {
+    public void assertErrorPageWith(String message) {
         error.assertOnPage();
         error.assertTicketNumber();
         error.assertErrorMessage(message);
@@ -181,14 +192,56 @@ public class StepDefinitions {
     }
 
     @Then("Admin page opened with url {string}")
-    public void adminPageOpened(String url) {
+    public void assertAdminPageOpened(String url) {
         admin.assertOnPage();
         page.assertUrl(url);
     }
 
     @Then("Board page opened with url {string}")
-    public void boardPageOpened(String url) {
+    public void assertBoardPageOpened(String url) {
         board.assertOnPage();
         page.assertUrl(url);
+    }
+
+    @Given("Login to Admin page")
+    public void loginToAdminPage() {
+        loginAs("admin@codenjoyme.com", "admin");
+        admin.open();
+        assertAdminPageOpened(AdminPage.URL);
+    }
+
+    @Then("Registration is active")
+    public void assertRegistrationIsActive() {
+        admin.assertRegistrationActive(true);
+    }
+
+    @Then("Registration was closed")
+    public void assertRegistrationWasClosed() {
+        admin.assertRegistrationActive(false);
+    }
+
+    @When("Click Close registration")
+    public void clickCloseRegistration() {
+        admin.registrationChangeActiveLink().click();
+    }
+
+    @When("Click Open registration")
+    public void clickOpenRegistration() {
+        admin.registrationChangeActiveLink().click();
+    }
+
+    @When("Open registration page")
+    public void openRegistrationPage() {
+        registration.open();
+    }
+
+    @And("There is no controls on registration form")
+    public void assertNoControlsOnRegistrationForm() {
+        registration.assertFormHidden();
+    }
+
+    @And("There is no controls on login form")
+    public void assertNoControlsOnLoginForm() {
+        login.assertFormHidden();
     }
 }

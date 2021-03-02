@@ -25,6 +25,7 @@ package com.codenjoy.dojo.cucumber;
 
 import com.codenjoy.dojo.cucumber.page.Server;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -93,5 +94,14 @@ public class WebDriverWrapper {
 
     public void closeBrowser() {
         driver.close();
+    }
+
+    public boolean exists(String selector) {
+        try {
+            element(selector);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 }

@@ -33,12 +33,24 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.cucumber.page.Page.CODE;
-import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
+import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
 public class RegistrationPage {
+
+    public static final String SUBMIT_BUTTON = "#submit-button";
+    public static final String READABLE_NAME_INPUT = "#readableName input";
+    public static final String PASSWORD_INPUT = "#password input";
+    public static final String EMAIL_INPUT = "#email input";
+    public static final String PASSWORD_CONFIRMATION_INPUT = "#passwordConfirmation input";
+    public static final String COUNTRY_INPUT = "#data1 input";
+    public static final String TECH_INPUT = "#data2 input";
+    public static final String COMPANY_INPUT = "#data3 input";
+    public static final String EXPERIENCE_INPUT = "#data4 input";
+    public static final String GAME_SELECT = "#game select";
+    public static final String ERROR_MESSAGE = "#error-message";
 
     @Autowired
     private Page page;
@@ -67,42 +79,63 @@ public class RegistrationPage {
     }
 
     public void submit() {
-        web.click("#submit-button");
+        web.click(SUBMIT_BUTTON);
     }
 
     public void name(String name) {
-        web.text("#readableName input", name);
+        web.text(READABLE_NAME_INPUT, name);
     }
 
     public void password(String password) {
-        web.text("#password input", password);
+        web.text(PASSWORD_INPUT, password);
     }
 
     public void email(String email) {
-        web.text("#email input", email);
+        web.text(EMAIL_INPUT, email);
     }
 
     public void confirmPassword(String password) {
-        web.text("#passwordConfirmation input", password);
+        web.text(PASSWORD_CONFIRMATION_INPUT, password);
     }
 
     public void country(String country) {
-        web.text("#data1 input", country);
+        web.text(COUNTRY_INPUT, country);
     }
 
     public void tech(String techSkills) {
-        web.text("#data2 input", techSkills);
+        web.text(TECH_INPUT, techSkills);
     }
 
     public void company(String company) {
-        web.text("#data3 input", company);
+        web.text(COMPANY_INPUT, company);
     }
 
     public void experience(String experience) {
-        web.text("#data4 input", experience);
+        web.text(EXPERIENCE_INPUT, experience);
     }
 
     public void game(String game) {
-        web.select("#game select", game);
+        web.select(GAME_SELECT, game);
+    }
+
+    public void open() {
+        web.open("/register");
+    }
+
+    public void assertErrorMessage(String error) {
+        assertEquals(error, web.element(ERROR_MESSAGE).getText());
+    }
+
+    public void assertFormHidden() {
+        assertEquals(false, web.exists(READABLE_NAME_INPUT));
+        assertEquals(false, web.exists(PASSWORD_INPUT));
+        assertEquals(false, web.exists(EMAIL_INPUT));
+        assertEquals(false, web.exists(PASSWORD_CONFIRMATION_INPUT));
+        assertEquals(false, web.exists(COUNTRY_INPUT));
+        assertEquals(false, web.exists(TECH_INPUT));
+        assertEquals(false, web.exists(COMPANY_INPUT));
+        assertEquals(false, web.exists(EXPERIENCE_INPUT));
+        assertEquals(false, web.exists(GAME_SELECT));
+        assertEquals(false, web.exists(SUBMIT_BUTTON));
     }
 }
