@@ -51,7 +51,7 @@ public class StepDefinitions {
     @Autowired
     private AdminPage admin;
 
-    @When("Login page opened in browser")
+    @When("Open login page")
     public void loginPage() {
         login.open();
     }
@@ -96,7 +96,7 @@ public class StepDefinitions {
     }
 
     @SneakyThrows
-    @Then("On page with url {string}")
+    @Then("We are on page with url {string}")
     public void assertUrl(String url) {
         page.assertUrl(url);
     }
@@ -111,7 +111,7 @@ public class StepDefinitions {
         registration.assertUserInDatabase(user);
     }
 
-    @When("Logout")
+    @When("Click logout")
     public void logout() {
         page.logout();
     }
@@ -152,7 +152,7 @@ public class StepDefinitions {
         page.assertUrl("/board/player/<PLAYER_ID>?code=<CODE>&game=first");
     }
 
-    @Then("See {string} message on error page")
+    @Then("Error page opened with message {string}")
     public void seeErrorPageWith(String message) {
         error.assertErrorPage();
         error.assertTicketNumber();

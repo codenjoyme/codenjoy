@@ -7,7 +7,7 @@ Scenario: User cant open admin page but Admin can
 
   When Login as 'user1@mail.com' 'password1'
   When Try open Admin page
-  Then See 'Something wrong with your request. Please save you ticker number and ask site administrator.' message on error page
+  Then Error page opened with message 'Something wrong with your request. Please save you ticker number and ask site administrator.'
 
   When Login as 'admin@codenjoyme.com' 'admin'
   When Try open Admin page
