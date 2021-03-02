@@ -26,6 +26,7 @@ import com.codenjoy.dojo.client.CodenjoyContext;
 import com.codenjoy.dojo.services.*;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.mail.MailService;
+import com.codenjoy.dojo.services.nullobj.NullPlayer;
 import com.codenjoy.dojo.web.controller.RoomsAliaser;
 import com.codenjoy.dojo.web.controller.Validator;
 import lombok.AllArgsConstructor;
@@ -202,6 +203,9 @@ public class RegistrationService {
 
     public String register(String id, String code, String game, String room, String ip) {
         Player player = playerService.register(id, game, room, ip);
+        if (player == NullPlayer.INSTANCE) {
+            return "login";
+        }
         return getBoardUrl(code, player.getId(), game);
     }
 
