@@ -164,4 +164,10 @@ public class StepDefinitions {
     public void closeBrowser() {
         web.exit();
     }
+
+    @Then("Admin page opened with url {string}")
+    public void adminPageOpened(String url) {
+        admin.assertAdminPage();
+        page.assertUrl(url);
+    }
 }

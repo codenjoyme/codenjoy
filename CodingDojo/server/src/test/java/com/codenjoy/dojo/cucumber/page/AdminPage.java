@@ -22,4 +22,7 @@ public class AdminPage {
         web.open("/admin");
     }
 
+    public void assertAdminPage() {
+        page.assertPage("admin");
+    }
 }

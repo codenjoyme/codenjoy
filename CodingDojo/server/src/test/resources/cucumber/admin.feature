@@ -11,6 +11,6 @@ Scenario: User cant open admin page but Admin can
 
   When Login as 'admin@codenjoyme.com' 'admin'
   When Try open Admin page
-  Then On page with url '/admin?room=first'
+  Then Admin page opened with url '/admin?room=first'
 
   And Close browser
