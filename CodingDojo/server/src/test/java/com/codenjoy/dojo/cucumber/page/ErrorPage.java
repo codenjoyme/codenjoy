@@ -42,7 +42,7 @@ public class ErrorPage {
         tickets.clear();
     }
 
-    public void assertErrorPage() {
+    public void assertOnPage() {
         page.assertPage("error");
     }
 

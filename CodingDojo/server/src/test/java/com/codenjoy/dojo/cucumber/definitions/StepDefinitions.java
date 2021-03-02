@@ -40,6 +40,9 @@ public class StepDefinitions {
     private LoginPage login;
 
     @Autowired
+    private BoardPage board;
+
+    @Autowired
     private RegistrationPage registration;
 
     @Autowired
@@ -148,13 +151,13 @@ public class StepDefinitions {
     public void loginAs(String email, String password) {
         login.open();
         login(email, password, "first");
-        page.assertPage("board");
-        page.assertUrl("/board/player/<PLAYER_ID>?code=<CODE>&game=first");
+        board.assertOnPage();
+        page.assertUrl(BoardPage.URL);
     }
 
     @Then("Error page opened with message {string}")
     public void seeErrorPageWith(String message) {
-        error.assertErrorPage();
+        error.assertOnPage();
         error.assertTicketNumber();
         error.assertErrorMessage(message);
         error.clear();
@@ -167,7 +170,7 @@ public class StepDefinitions {
 
     @Then("Admin page opened with url {string}")
     public void adminPageOpened(String url) {
-        admin.assertAdminPage();
+        admin.assertOnPage();
         page.assertUrl(url);
     }
 }

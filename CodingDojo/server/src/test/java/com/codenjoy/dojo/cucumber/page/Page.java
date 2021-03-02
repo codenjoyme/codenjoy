@@ -36,6 +36,7 @@ import static org.junit.Assert.assertEquals;
 public class Page {
 
     public static final String CODE = "code";
+    public static final String GAME = "game";
     public static final String PLAYER_ID = "playerId";
 
     @Autowired
@@ -44,6 +45,7 @@ public class Page {
     public String injectSettings(String data) {
         data = replace(data, "<PLAYER_ID>", PLAYER_ID);
         data = replace(data, "<CODE>", CODE);
+        data = replace(data, "<GAME>", GAME);
         return data;
     }
 
