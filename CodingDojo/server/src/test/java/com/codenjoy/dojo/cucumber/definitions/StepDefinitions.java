@@ -34,8 +34,6 @@ import io.cucumber.java.en.When;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertEquals;
-
 public class StepDefinitions {
 
     @Autowired
@@ -100,7 +98,7 @@ public class StepDefinitions {
     @SneakyThrows
     @Then("On page with url {string}")
     public void assertUrl(String url) {
-        assertEquals(page.injectSettings(url), web.url());
+        page.assertUrl(url);
     }
 
     @Given("Clean all registration data")
@@ -115,17 +113,17 @@ public class StepDefinitions {
 
     @When("Logout")
     public void logout() {
-        page.logLink().click();
+        page.logout();
     }
 
     @Then("Login link present")
     public void loginLinkPresent() {
-        assertEquals("Login", page.logLink().getText());
+        page.assertLoginLink();
     }
 
     @Then("Logout link present")
     public void logoutLinkPresent() {
-        assertEquals("Logout", page.logLink().getText());
+        page.assertLogoutLink();
     }
 
     @Given("User registered with name {string}, email {string}, " +
@@ -148,10 +146,10 @@ public class StepDefinitions {
 
     @When("Login as {string} {string}")
     public void loginAs(String email, String password) {
-        loginPage();
+        login.open();
         login(email, password, "first");
         page.assertPage("board");
-        assertUrl("/board/player/<PLAYER_ID>?code=<CODE>&game=first");
+        page.assertUrl("/board/player/<PLAYER_ID>?code=<CODE>&game=first");
     }
 
     @Then("See {string} message on error page")

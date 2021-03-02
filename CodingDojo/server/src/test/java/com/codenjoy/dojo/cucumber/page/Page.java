@@ -66,4 +66,20 @@ public class Page {
     public void assertPage(String name) {
         assertEquals(name, pageSetting("page"));
     }
+
+    public void assertUrl(String url) {
+        assertEquals(injectSettings(url), web.url());
+    }
+
+    public void logout() {
+        logLink().click();
+    }
+
+    public void assertLoginLink() {
+        assertEquals("Login", logLink().getText());
+    }
+
+    public void assertLogoutLink() {
+        assertEquals("Logout", logLink().getText());
+    }
 }
