@@ -13,3 +13,4 @@ Scenario: User cant open admin page but Admin can
   When Try open Admin page
   Then See Admin page
 
+  And Close browser

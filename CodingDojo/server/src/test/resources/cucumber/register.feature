@@ -17,3 +17,5 @@ Scenario: Register new user and try login/logout
   When Logout
   Then On page with url '/'
   Then Login link present
+
+  And Close browser

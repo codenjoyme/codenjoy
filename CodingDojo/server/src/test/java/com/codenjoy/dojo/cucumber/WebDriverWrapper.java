@@ -90,4 +90,8 @@ public class WebDriverWrapper {
     public String get(String selector, String attribute) {
         return element(selector).getAttribute(attribute);
     }
+
+    public void exit() {
+        driver.close();
+    }
 }

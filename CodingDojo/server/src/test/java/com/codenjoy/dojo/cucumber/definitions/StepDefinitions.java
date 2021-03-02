@@ -28,6 +28,7 @@ import com.codenjoy.dojo.cucumber.page.Page;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -168,5 +169,10 @@ public class StepDefinitions {
     @Then("See Admin page")
     public void seeAdminPage() {
         assertUrl("/admin?room=first");
+    }
+
+    @And("Close browser")
+    public void closeBrowser() {
+        web.exit();
     }
 }
