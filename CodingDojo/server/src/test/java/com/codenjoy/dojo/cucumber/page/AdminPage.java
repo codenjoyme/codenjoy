@@ -34,6 +34,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
+import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
@@ -83,11 +84,11 @@ public class AdminPage {
         String status = registrationActiveStatus().getText();
         String linkText = registrationChangeActiveLink().getText();
         if (active) {
-            SmartAssert.assertEquals("Registration is active", status);
-            SmartAssert.assertEquals("Close registration", linkText);
+            assertEquals("Registration is active", status);
+            assertEquals("Close registration", linkText);
         } else {
-            SmartAssert.assertEquals("Registration was closed", status);
-            SmartAssert.assertEquals("Open registration", linkText);
+            assertEquals("Registration was closed", status);
+            assertEquals("Open registration", linkText);
         }
     }
 
@@ -97,5 +98,25 @@ public class AdminPage {
 
     public WebElement registrationChangeActiveLink() {
         return web.element("#closeRegistration td a");
+    }
+
+    public WebElement pauseResumeGameStatus() {
+        return web.element("#pauseGame td b");
+    }
+
+    public WebElement pauseResumeGameLink() {
+        return web.element("#pauseGame td a");
+    }
+
+    public void assertGameIsActive(boolean active) {
+        String status = pauseResumeGameStatus().getText();
+        String linkText = pauseResumeGameLink().getText();
+        if (active) {
+            assertEquals("Game in this room is active", status);
+            assertEquals("Pause game", linkText);
+        } else {
+            assertEquals("Game in this room was suspended", status);
+            assertEquals("Resume game", linkText);
+        }
     }
 }

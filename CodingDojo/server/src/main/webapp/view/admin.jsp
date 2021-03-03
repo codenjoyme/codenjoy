@@ -112,11 +112,11 @@
             <td>
                 <c:choose>
                     <c:when test="${paused}">
-                        <b>The Codenjoy was suspended</b></br>
+                        <b><spring:message key="game.suspended"/></b></br>
                         <a href="${ctx}/admin/game/resume?room=${room}#pauseGame">Resume game</a>.
                     </c:when>
                     <c:otherwise>
-                        <b>The Codenjoy is active</b></br>
+                        <b><spring:message key="game.active"/></b></br>
                         <a href="${ctx}/admin/game/pause?room=${room}#pauseGame">Pause game</a>.
                     </c:otherwise>
                 </c:choose>

@@ -227,7 +227,7 @@ public class StepDefinitions {
 
     @When("Click Open registration")
     public void clickOpenRegistration() {
-        admin.registrationChangeActiveLink().click();
+        clickCloseRegistration();
     }
 
     @When("Open registration page")
@@ -243,5 +243,25 @@ public class StepDefinitions {
     @And("There is no controls on login form")
     public void assertNoControlsOnLoginForm() {
         login.assertFormHidden();
+    }
+
+    @Then("Game is resumed")
+    public void assertGameIsResumed() {
+        admin.assertGameIsActive(true);
+    }
+
+    @When("Click Pause game")
+    public void clickPauseGame() {
+        admin.pauseResumeGameLink().click();
+    }
+
+    @Then("Game is paused")
+    public void assertGameIsPaused() {
+        admin.assertGameIsActive(false);
+    }
+
+    @When("Click Resume game")
+    public void clickResumeGame() {
+        clickPauseGame();
     }
 }
