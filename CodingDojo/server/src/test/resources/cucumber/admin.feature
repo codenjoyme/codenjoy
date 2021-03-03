@@ -68,3 +68,49 @@ Scenario: Admin can pause/resume game only in this room
 
   When Click Resume game
   Then Game is resumed
+
+Scenario: When game room is paused then is no communication with websocket client
+  Given User registered with name 'Stiven Pupkin', email 'user1@mail.com', password 'password1', city 'Moon', tech skills 'Java', company 'Home', experience '10 years'
+
+  When Login as 'user1@mail.com' 'password1' in game 'first'
+  Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>&game=first'
+  Then Websocket client 'client1' connected successfully to the '/board/player/<PLAYER_ID>?code=<CODE>'
+  Then Websocket 'client1' send 'ACT' and got '      \n      \n      \n      \n ☺    \n      \n'
+  Then Websocket 'client1' send 'ACT' and got '      \n      \n      \n      \n ☺    \n      \n'
+  Then Websocket 'client1' send 'ACT' and got '      \n      \n      \n      \n ☺    \n      \n'
+
+  When Click logout
+
+  Given Login to Admin page
+  Then Check game room is 'first'
+  Then Game is resumed
+
+  When Click Pause game
+  Then Game is paused
+
+  When Click logout
+
+  When Login as 'user1@mail.com' 'password1' in game 'first'
+  Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>&game=first'
+  Then Websocket client 'client1' connected successfully to the '/board/player/<PLAYER_ID>?code=<CODE>'
+  Then Websocket 'client1' send 'ACT' and got nothing
+  Then Websocket 'client1' send 'ACT' and got nothing
+  Then Websocket 'client1' send 'ACT' and got nothing
+
+  When Click logout
+
+  Given Login to Admin page
+  Then Check game room is 'first'
+  Then Game is paused
+
+  When Click Resume game
+  Then Game is resumed
+
+  When Click logout
+
+  When Login as 'user1@mail.com' 'password1' in game 'first'
+  Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>&game=first'
+  Then Websocket client 'client1' connected successfully to the '/board/player/<PLAYER_ID>?code=<CODE>'
+  Then Websocket 'client1' send 'ACT' and got '      \n      \n      \n      \n ☺    \n      \n'
+  Then Websocket 'client1' send 'ACT' and got '      \n      \n      \n      \n ☺    \n      \n'
+  Then Websocket 'client1' send 'ACT' and got '      \n      \n      \n      \n ☺    \n      \n'

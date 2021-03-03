@@ -37,7 +37,7 @@ public class FirstGameType extends FakeGameType {
 
     @Override
     public Parameter<Integer> getBoardSize(Settings settings) {
-        return new SimpleParameter<>(10);
+        return new SimpleParameter<>(6);
     }
 
     @Override

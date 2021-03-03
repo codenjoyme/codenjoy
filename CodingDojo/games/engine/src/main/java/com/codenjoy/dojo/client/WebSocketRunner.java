@@ -35,7 +35,6 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.net.ConnectException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -167,6 +166,14 @@ public class WebSocketRunner implements Closeable {
         } catch (Exception e) {
             print(e);
         }
+    }
+
+    public Solver solver() {
+        return solver;
+    }
+
+    public ClientBoard board() {
+        return board;
     }
 
     @WebSocket

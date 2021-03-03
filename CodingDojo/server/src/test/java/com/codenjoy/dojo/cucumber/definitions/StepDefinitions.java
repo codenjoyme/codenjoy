@@ -55,14 +55,19 @@ public class StepDefinitions {
     @Autowired
     private AdminPage admin;
 
+    @Autowired
+    private WebsocketClients clients;
+
     @Before
     public void cleanUp() {
         registration.cleanUp();
         admin.cleanUp();
+        clients.cleanUp();
     }
 
     @After
     public void tearDown() {
+        cleanUp();
         web.closeBrowser();
     }
 
@@ -172,8 +177,13 @@ public class StepDefinitions {
 
     @When("Login as {string} {string}")
     public void loginAs(String email, String password) {
+        loginAs(email, password, "first");
+    }
+
+    @When("Login as {string} {string} in game {string}")
+    public void loginAs(String email, String password, String game) {
         login.open();
-        login(email, password, "first");
+        login(email, password, game);
         board.assertOnPage();
         page.assertUrl(BoardPage.URL);
     }
@@ -273,5 +283,23 @@ public class StepDefinitions {
     @Then("Check game room is {string}")
     public void assertGameIs(String room) {
         admin.assertRoom(room);
+    }
+
+    @Then("Websocket client {string} connected successfully to the {string}")
+    public void assertClientConnected(String name, String url) {
+        String game = page.pageSetting("game");
+        url = page.injectSettings(url);
+        clients.assertConnected(game, name, url);
+    }
+
+    @Then("Websocket {string} send {string} and got {string}")
+    public void websocketClientSend(String name, String command, String board) {
+        board = board.replaceAll("\\\\n", "\n");
+        clients.assertRequestReceived(name, command, board);
+    }
+
+    @Then("Websocket {string} send {string} and got nothing")
+    public void websocketClientGotNothing(String name, String command) {
+        clients.assertRequestReceivedNothing(name, command);
     }
 }

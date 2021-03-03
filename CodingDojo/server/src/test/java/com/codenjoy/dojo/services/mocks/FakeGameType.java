@@ -118,7 +118,8 @@ public abstract class FakeGameType extends AbstractGameType<Settings> {
     @Override
     public abstract String name();
 
-    class ClientBoard extends AbstractBoard<CharElements> {
+    public class ClientBoard extends AbstractBoard<CharElements> {
+
         @Override
         public CharElements valueOf(char ch) {
             return FakeGameType.this.valueOf(ch);
