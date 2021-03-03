@@ -87,6 +87,7 @@
         <module>excitebike</module>
         <module>selfdefense</module>
         <module>japanese</module>
+        <module>vacuum</module>
     </modules>
 
     <profiles>

@@ -579,6 +579,21 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>vacuum</id>
+            <activation>
+                <property>
+                    <name>allGames</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>vacuum-engine</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
 <!-- this is your new game
         <profile>
             <id>yourgame</id>
