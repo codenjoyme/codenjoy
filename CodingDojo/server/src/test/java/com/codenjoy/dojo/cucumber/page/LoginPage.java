@@ -22,7 +22,6 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.WebDriverWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

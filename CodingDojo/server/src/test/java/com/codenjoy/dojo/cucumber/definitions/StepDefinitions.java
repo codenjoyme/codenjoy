@@ -22,7 +22,7 @@ package com.codenjoy.dojo.cucumber.definitions;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.WebDriverWrapper;
+import com.codenjoy.dojo.cucumber.page.WebDriverWrapper;
 import com.codenjoy.dojo.cucumber.page.*;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;

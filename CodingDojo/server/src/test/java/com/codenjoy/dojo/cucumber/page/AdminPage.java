@@ -22,7 +22,6 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.WebDriverWrapper;
 import com.codenjoy.dojo.services.AutoSaver;
 import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.PlayerService;

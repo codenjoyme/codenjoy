@@ -22,7 +22,6 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
-import com.codenjoy.dojo.cucumber.WebDriverWrapper;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;

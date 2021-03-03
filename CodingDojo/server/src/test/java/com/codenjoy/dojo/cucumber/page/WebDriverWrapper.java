@@ -1,4 +1,4 @@
-package com.codenjoy.dojo.cucumber;
+package com.codenjoy.dojo.cucumber.page;
 
 /*-
  * #%L
