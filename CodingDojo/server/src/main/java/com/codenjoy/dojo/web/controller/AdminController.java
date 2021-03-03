@@ -246,13 +246,15 @@ public class AdminController {
 
     @GetMapping("/game/pause")
     public String pauseGame(HttpServletRequest request) {
-        timerService.pause();
+        String room = getGameRoom(request);
+        roomService.setActive(room, false);
         return getAdmin(request);
     }
 
     @GetMapping("/game/resume")
     public String resumeGame(HttpServletRequest request) {
-        timerService.resume();
+        String room = getGameRoom(request);
+        roomService.setActive(room, true);
         return getAdmin(request);
     }
 
@@ -503,7 +505,7 @@ public class AdminController {
         model.addAttribute("generateRoom", room);
         model.addAttribute("timerPeriod", timerService.getPeriod());
         model.addAttribute("defaultProgress", getDefaultProgress(gameType));
-        model.addAttribute("paused", timerService.isPaused());
+        model.addAttribute("paused", roomService.isActive(room));
         model.addAttribute("recording", actionLogger.isWorking());
         model.addAttribute("autoSave", autoSaver.isWorking());
         model.addAttribute("debugLog", debugService.isWorking());
