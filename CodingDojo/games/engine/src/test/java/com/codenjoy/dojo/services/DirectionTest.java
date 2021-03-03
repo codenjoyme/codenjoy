@@ -28,10 +28,14 @@ import org.junit.Test;
 import java.util.Arrays;
 
 import static com.codenjoy.dojo.services.PointImpl.pt;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class DirectionTest {
+
+    @Test
+    public void test_values() {
+        assertEquals("[LEFT, RIGHT, UP, DOWN]", Direction.getValues().toString());
+    }
 
     @Test
     public void test_valueOfIndex() {
@@ -39,6 +43,18 @@ public class DirectionTest {
         assertEquals("RIGHT", Direction.valueOf(1).toString());
         assertEquals("UP", Direction.valueOf(2).toString());
         assertEquals("DOWN", Direction.valueOf(3).toString());
+        assertEquals("ACT", Direction.valueOf(4).toString());
+        assertEquals("STOP", Direction.valueOf(5).toString());
+    }
+
+    @Test
+    public void test_valueOfIndex_validation() {
+        try {
+            Direction.valueOf(6);
+            fail("Expected exception");
+        } catch (IllegalArgumentException exception) {
+            assertEquals("No such Direction for: 6", exception.getMessage());
+        }
     }
 
     @Test
@@ -57,6 +73,56 @@ public class DirectionTest {
     }
 
     @Test
+    public void test_clockwise() {
+        assertEquals(Direction.UP, Direction.LEFT.clockwise());
+        assertEquals(Direction.DOWN, Direction.RIGHT.clockwise());
+        assertEquals(Direction.RIGHT, Direction.UP.clockwise());
+        assertEquals(Direction.LEFT, Direction.DOWN.clockwise());
+    }
+
+    @Test
+    public void test_clockwise_validation() {
+        try {
+            Direction.STOP.clockwise();
+            fail("Expected exception");
+        } catch (IllegalArgumentException exception) {
+            assertEquals("Cant clockwise for: STOP", exception.getMessage());
+        }
+
+        try {
+            Direction.ACT.clockwise();
+            fail("Expected exception");
+        } catch (IllegalArgumentException exception) {
+            assertEquals("Cant clockwise for: ACT", exception.getMessage());
+        }
+    }
+
+    @Test
+    public void test_counterClockwise() {
+        assertEquals(Direction.DOWN, Direction.LEFT.counterClockwise());
+        assertEquals(Direction.UP, Direction.RIGHT.counterClockwise());
+        assertEquals(Direction.LEFT, Direction.UP.counterClockwise());
+        assertEquals(Direction.RIGHT, Direction.DOWN.counterClockwise());
+    }
+
+    @Test
+    public void test_counterClockwise_validation() {
+        try {
+            Direction.STOP.counterClockwise();
+            fail("Expected exception");
+        } catch (IllegalArgumentException exception) {
+            assertEquals("Cant counter clockwise for: STOP", exception.getMessage());
+        }
+
+        try {
+            Direction.ACT.counterClockwise();
+            fail("Expected exception");
+        } catch (IllegalArgumentException exception) {
+            assertEquals("Cant counter clockwise for: ACT", exception.getMessage());
+        }
+    }
+
+    @Test
     public void test_valueOfName() {
         assertEquals(0, Direction.valueOf("LEFT").value());
         assertEquals(1, Direction.valueOf("RIGHT").value());
@@ -70,6 +136,23 @@ public class DirectionTest {
         assertEquals(Direction.LEFT, Direction.RIGHT.inverted());
         assertEquals(Direction.DOWN, Direction.UP.inverted());
         assertEquals(Direction.UP, Direction.DOWN.inverted());
+    }
+
+    @Test
+    public void test_inverted_validation() {
+        try {
+            Direction.STOP.inverted();
+            fail("Expected exception");
+        } catch (IllegalArgumentException exception) {
+            assertEquals("Cant invert for: STOP", exception.getMessage());
+        }
+
+        try {
+            Direction.ACT.inverted();
+            fail("Expected exception");
+        } catch (IllegalArgumentException exception) {
+            assertEquals("Cant invert for: ACT", exception.getMessage());
+        }
     }
 
     @Test
@@ -105,5 +188,26 @@ public class DirectionTest {
         assertEquals(expected.getX(), direction.changeX(input.getX()));
         assertEquals(expected.getY(), direction.changeY(input.getY()));
         assertEquals(expected, direction.change(input));
+    }
+
+    @Test
+    public void test_act() {
+        assertEquals("ACT()", Direction.ACT());
+        assertEquals("ACT(-1)", Direction.ACT(-1));
+        assertEquals("ACT(null)", Direction.ACT(null));
+        assertEquals("ACT(1)", Direction.ACT(1));
+        assertEquals("ACT(1,2)", Direction.ACT(1, 2));
+        assertEquals("ACT(1,2,3)", Direction.ACT(1, 2, 3));
+    }
+
+    @Test
+    public void test_actBeforeAfter() {
+        assertEquals("ACT,LEFT", Direction.LEFT.ACT(true));
+        assertEquals("LEFT,ACT", Direction.LEFT.ACT(false));
+
+        assertEquals("ACT,ACT", Direction.ACT.ACT(true));
+        assertEquals("ACT,ACT", Direction.ACT.ACT(false));
+
+        assertEquals("ACT,STOP", Direction.STOP.ACT(true));
     }
 }

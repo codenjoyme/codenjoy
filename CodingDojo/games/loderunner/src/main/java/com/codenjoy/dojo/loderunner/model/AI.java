@@ -96,7 +96,7 @@ public class AI implements EnemyAI {
                 for (int y = 0; y < field.size(); y++) {
                     Point pt = pt(x, y);
                     List<Direction> directions = new LinkedList<>();
-                    for (Direction direction : Direction.onlyDirections()) {
+                    for (Direction direction : Direction.getValues()) {
                         if (isPossible(field, pt, direction)) {
                             directions.add(direction);
                         }
