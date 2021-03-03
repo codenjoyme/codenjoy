@@ -49,3 +49,22 @@ Scenario: Admin can close/open registration
   When Open login page
   And Try to login as 'user1@mail.com' with 'password1' password in game 'first'
   Then Board page opened with url '/board/player/<PLAYER_ID>?code=<CODE>&game=first'
+
+Scenario: Admin can pause/resume game only in this room
+  Given Login to Admin page
+  Then Check game room is 'first'
+  Then Game is resumed
+
+  When Click Pause game
+  Then Game is paused
+
+  When Select game room 'second'
+  Then Check game room is 'second'
+  Then Game is resumed
+
+  When Select game room 'first'
+  Then Check game room is 'first'
+  Then Game is paused
+
+  When Click Resume game
+  Then Game is resumed
