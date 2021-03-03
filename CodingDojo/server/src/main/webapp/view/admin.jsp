@@ -82,14 +82,14 @@
                         <span>${gameItem.game}</span>
                     </td>
                     <td class="rightStep">
-                        <a href="${ctx}/admin?game=${gameItem.game}">info</a>
+                        <a id="game-${gameItem.game}" href="${ctx}/admin?game=${gameItem.game}">game</a>
                     </td>
                     <td class="rightStep">
                         <c:forEach items="${gameItem.rooms}" var="roomItem" varStatus="status2">
                             <c:if test="${roomItem == room}">
                                 <b style="font-size:18px">
                             </c:if>
-                            <a href="${ctx}/admin?room=${roomItem}">${roomItem}<span class="pow">${playersCount.get(roomItem)}</span></a>&nbsp;
+                            <a id="game-${gameItem.game}-room-${status2.index}" href="${ctx}/admin?room=${roomItem}">${roomItem}<span class="pow">${playersCount.get(roomItem)}</span></a>&nbsp;
                             <c:if test="${roomItem == room}">
                                 </b>
                             </c:if>
