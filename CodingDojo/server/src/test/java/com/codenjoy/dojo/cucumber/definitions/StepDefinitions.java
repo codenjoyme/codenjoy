@@ -207,7 +207,7 @@ public class StepDefinitions {
     public void loginToAdminPage() {
         loginAs("admin@codenjoyme.com", "admin");
         admin.open();
-        assertAdminPageOpened(AdminPage.URL);
+        assertAdminPageOpened(AdminPage.URL + "first");
     }
 
     @Then("Registration is active")
@@ -263,5 +263,15 @@ public class StepDefinitions {
     @When("Click Resume game")
     public void clickResumeGame() {
         clickPauseGame();
+    }
+
+    @When("Select game room {string}")
+    public void selectGameRoom(String room) {
+        admin.selectRoom(room);
+    }
+
+    @Then("Check game room is {string}")
+    public void assertGameIs(String room) {
+        admin.assertRoom(room);
     }
 }

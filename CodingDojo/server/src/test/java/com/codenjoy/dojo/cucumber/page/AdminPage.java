@@ -40,7 +40,7 @@ import static org.junit.Assert.assertEquals;
 @Scope(SCOPE_CUCUMBER_GLUE)
 public class AdminPage {
 
-    public static final String URL = "/admin?room=first";
+    public static final String URL = "/admin?room=";
 
     @Autowired
     private Page page;
@@ -118,5 +118,15 @@ public class AdminPage {
             assertEquals("Game in this room was suspended", status);
             assertEquals("Resume game", linkText);
         }
+    }
+
+    public void selectRoom(String room) {
+        web.element("#game-" + room + "-room-0").click();
+    }
+
+    public void assertRoom(String room) {
+        assertEquals(room, page.pageSetting("game"));
+        assertEquals(room, page.pageSetting("room"));
+        page.assertUrl(URL + room);
     }
 }
