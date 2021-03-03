@@ -23,102 +23,26 @@ package com.codenjoy.dojo.services.mocks;
  */
 
 
-import com.codenjoy.dojo.client.AbstractBoard;
-import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.joystick.NoDirectionJoystick;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.multiplayer.PlayerHero;
-import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
-import com.codenjoy.dojo.services.settings.*;
-import org.mockito.Mockito;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 
-import java.util.Arrays;
-import java.util.LinkedList;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
-import static org.mockito.Mockito.when;
+public class FirstGameType extends FakeGameType {
 
-public class FirstGameType extends AbstractGameType<SettingsImpl> {
-
-    private final SimpleParameter<Integer> size = new SimpleParameter<>(10);
+    @Override
+    public Parameter<Integer> getBoardSize(Settings settings) {
+        return new SimpleParameter<>(10);
+    }
 
     @Override
     public SettingsImpl getSettings() {
         return new FirstGameSettings();
-    }
-
-    @Override
-    public PlayerScores getPlayerScores(Object score, SettingsImpl settings) {
-        return new FakePlayerScores(score);
-    }
-
-    class Field implements GameField<Player> {
-
-        private Player player;
-        private SettingsReader settings;
-
-        public Field(SettingsImpl settings) {
-            this.settings = (SettingsReader) settings;
-        }
-
-        @Override
-        public BoardReader reader() {
-            return new BoardReader() {
-                @Override
-                public int size() {
-                    return size.getValue();
-                }
-
-                @Override
-                public Iterable<? extends Point> elements() {
-                    return new LinkedList<>() {{
-                        add(Field.this.hero());
-                    }};
-                }
-            };
-        }
-
-        private Hero hero() {
-            return (Hero) player.getHero();
-        }
-
-        @Override
-        public void newGame(Player player) {
-            this.player = player;
-            player.newHero(this);
-        }
-
-        @Override
-        public void remove(Player player) {
-            this.player = null;
-        }
-
-        @Override
-        public SettingsReader settings() {
-            return settings;
-        }
-
-        @Override
-        public void tick() {
-            if (player == null || player.getHero() == null) {
-                return;
-            }
-
-            player.getHero().tick();
-        }
-    }
-
-    @Override
-    public GameField createGame(int levelNumber, SettingsImpl settings) {
-        return Mockito.spy(new Field(settings));
-    }
-
-    @Override
-    public Parameter<Integer> getBoardSize(SettingsImpl settings) {
-        return size;
     }
 
     @Override
@@ -138,13 +62,6 @@ public class FirstGameType extends AbstractGameType<SettingsImpl> {
             this.ch = ch;
         }
 
-        public static Elements valueOf(char ch) {
-            return Arrays.stream(Elements.values())
-                    .filter(el -> el.ch == ch)
-                    .findFirst()
-                    .get();
-        }
-
         @Override
         public char ch() {
             return ch;
@@ -157,83 +74,24 @@ public class FirstGameType extends AbstractGameType<SettingsImpl> {
 
     }
 
-    class ClientBoard extends AbstractBoard<Elements> {
-        @Override
-        public Elements valueOf(char ch) {
-            return Elements.valueOf(ch);
-        }
-    }
-
     @Override
     public Elements[] getPlots() {
         return Elements.values();
     }
 
     @Override
-    public Class<? extends Solver> getAI() {
-        return null;
-    }
-
-    @Override
-    public Class<? extends ClientBoard> getBoard() {
-        return ClientBoard.class;
-    }
-
-    @Override
-    public MultiplayerType getMultiplayerType(SettingsImpl settings) {
+    public MultiplayerType getMultiplayerType(Settings settings) {
         return MultiplayerType.SINGLE;
     }
 
-    class Hero extends PlayerHero implements NoDirectionJoystick, State<Elements, Player> {
-
-        public Hero() {
-            super(1, 1);
-        }
-
-        @Override
-        public void act(int... p) {
-
-        }
-
-        @Override
-        public void tick() {
-
-        }
-
-        @Override
-        public Elements state(Player player, Object... alsoAtPoint) {
-            return Elements.HERO;
-        }
+    @Override
+    public Point heroAt() {
+        return pt(1, 1);
     }
 
-    class Player extends GamePlayer {
-
-        Hero hero;
-
-        public Player(EventListener listener, SettingsReader settings) {
-            super(listener, settings);
-        }
-
-        @Override
-        public PlayerHero getHero() {
-            return hero;
-        }
-
-        @Override
-        public void newHero(GameField field) {
-            hero = new Hero();
-            hero.init(field);
-        }
-
-        @Override
-        public boolean isAlive() {
-            return true;
-        }
-    };
-
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, SettingsImpl settings) {
-        return Mockito.spy(new Player(listener, (SettingsReader) settings));
+    public CharElements getHeroElement() {
+        return Elements.HERO;
     }
 
     @Override

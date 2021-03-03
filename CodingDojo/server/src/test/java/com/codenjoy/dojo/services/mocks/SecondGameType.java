@@ -23,20 +23,17 @@ package com.codenjoy.dojo.services.mocks;
  */
 
 
-import com.codenjoy.dojo.client.ClientBoard;
-import com.codenjoy.dojo.client.Solver;
-import com.codenjoy.dojo.services.*;
-import com.codenjoy.dojo.services.multiplayer.GameField;
-import com.codenjoy.dojo.services.multiplayer.GamePlayer;
+import com.codenjoy.dojo.services.Point;
 import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
-import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.printer.CharElements;
-import com.codenjoy.dojo.services.settings.*;
+import com.codenjoy.dojo.services.settings.Parameter;
+import com.codenjoy.dojo.services.settings.Settings;
+import com.codenjoy.dojo.services.settings.SettingsImpl;
+import com.codenjoy.dojo.services.settings.SimpleParameter;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static com.codenjoy.dojo.services.PointImpl.pt;
 
-public class SecondGameType extends AbstractGameType<SettingsImpl> {
+public class SecondGameType extends FakeGameType {
 
     @Override
     public SettingsImpl getSettings() {
@@ -44,20 +41,7 @@ public class SecondGameType extends AbstractGameType<SettingsImpl> {
     }
 
     @Override
-    public PlayerScores getPlayerScores(Object score, SettingsImpl settings) {
-        return new FakePlayerScores(score);
-    }
-
-    @Override
-    public GameField createGame(int levelNumber, SettingsImpl settings) {
-        GameField field = mock(GameField.class);
-        BoardReader reader = mock(BoardReader.class);
-        when(field.reader()).thenReturn(reader);
-        return field;
-    }
-
-    @Override
-    public Parameter<Integer> getBoardSize(SettingsImpl settings) {
+    public Parameter<Integer> getBoardSize(Settings settings) {
         return new SimpleParameter<>(56);
     }
 
@@ -97,25 +81,21 @@ public class SecondGameType extends AbstractGameType<SettingsImpl> {
     }
 
     @Override
-    public Class<? extends Solver> getAI() {
-        return null;
-    }
-
-    @Override
-    public Class<? extends ClientBoard> getBoard() {
-        return null;
-    }
-
-    @Override
-    public MultiplayerType getMultiplayerType(SettingsImpl settings) {
+    public MultiplayerType getMultiplayerType(Settings settings) {
         return MultiplayerType.TRAINING.apply(10);
     }
 
     @Override
-    public GamePlayer createPlayer(EventListener listener, String playerId, SettingsImpl settings) {
-        return mock(GamePlayer.class);
+    public Point heroAt() {
+        int x = getBoardSize(getSettings()).getValue() - 1;
+        return pt(x, x);
     }
-    
+
+    @Override
+    public CharElements getHeroElement() {
+        return Elements.BLUE;
+    }
+
     @Override
     public String getVersion() {
         return "version 12";
