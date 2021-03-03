@@ -37,6 +37,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -89,14 +90,15 @@ public class GameServiceImpl implements GameService {
         result.sort(Comparator.comparing(Class::getName));
 
         result.remove(NullGameType.class);
-        result.remove(AbstractGameType.class);
-
-        remove(result,
-                it -> ConstructorUtils.getMatchingAccessibleConstructor(it) == null);
 
         if (pluginsEnable) {
             loadFromPlugins(result);
         }
+
+        // remove abstract and other stub/fake classes
+        remove(result,
+                it -> ConstructorUtils.getMatchingAccessibleConstructor(it) == null
+                        || Modifier.isAbstract(it.getModifiers()));
 
         if (excludeGames != null) {
             remove(result, it -> Stream.of(excludeGames)
