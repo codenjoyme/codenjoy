@@ -75,7 +75,7 @@ public class RestGameControllerTest extends AbstractRestControllerTest {
     @Test
     public void shouldInfo() {
         String expected1 = "{\n" +
-                "  'boardSize':23,\n" +
+                "  'boardSize':6,\n" +
                 "  'clientUrl':'/codenjoy-contest/resources/user/first-servers.zip',\n" +
                 "  'helpUrl':'/codenjoy-contest/resources/help/first.html',\n" +
                 "  'info':'GameType[first]',\n" +
