@@ -41,6 +41,7 @@ import static java.util.stream.Collectors.toList;
 public class Battlecity implements Field {
 
     private final Parameter<Integer> slipperiness;
+    private final Parameter<Integer> prizeWorking;
 
     private int size;
 
@@ -87,6 +88,7 @@ public class Battlecity implements Field {
                 aiPrizeLimit);
 
         this.slipperiness = slipperiness;
+        this.prizeWorking = prizeWorking;
     }
 
     public void addAiTanks(List<? extends Point> tanks) {
@@ -309,6 +311,11 @@ public class Battlecity implements Field {
     @Override
     public int slipperiness() {
         return slipperiness.getValue();
+    }
+
+    @Override
+    public int prizeWorking() {
+        return prizeWorking.getValue();
     }
 
     @Override

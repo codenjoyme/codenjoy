@@ -317,7 +317,6 @@ public class BattlecityTest {
     }
 
     @Test
-    @Ignore
     public void shouldTankCanGoIfAceAtWay_whenPrizeWorkingEnd() {
         prizeOnField = v(5);
         hitKillsAiPrize = v(1);

@@ -28,7 +28,8 @@ public class Sliding {
 
     public final int slipperiness;
     private final Field field;
-    
+    private int prizeWorking;
+
     private int tick;
     private Direction before;
 
@@ -36,12 +37,18 @@ public class Sliding {
         this.field = field;
         this.before = before;
         this.slipperiness = field.slipperiness();
+        this.prizeWorking = field.prizeWorking();
     }
 
     public Direction act(Tank tank) {
         if (!field.isIce(tank) || slipperiness == 0) {
             tick = 0;
             return before = tank.getDirection();
+        }
+
+        if (tick == prizeWorking) {
+            prizeWorking = 0;
+            return before;
         }
 
         if (tick == slipperiness) {
