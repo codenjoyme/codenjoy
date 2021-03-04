@@ -67,7 +67,6 @@ public class BoardController {
 
     @GetMapping(value = URI + "/player/{player}", params = {"code", "remove"})
     public String removePlayer(@PathVariable("player") String id, @RequestParam("code") String code) {
-        validator.checkPlayerId(id, CANT_BE_NULL);
         validator.checkPlayerCode(id, code);
 
         Player player = playerService.get(id);
