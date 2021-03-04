@@ -6,3 +6,4 @@ database:
     users: database/users.db
     payment: database/payment.db
     settings: database/settings.db
+    messages: database/messages.db
