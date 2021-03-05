@@ -8430,8 +8430,8 @@ public class GameTest {
 
     @Test
     public void shouldHeroTakePrizeAndSeeAiUnderTree_visibility() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
+        settings.integer(PRIZE_ON_FIELD, 5)
+                .integer(KILL_HITS_AI_PRIZE, 1);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼  %% ☼\n" +
@@ -8492,8 +8492,8 @@ public class GameTest {
 
     @Test
     public void shouldHeroTakePrizeAndSeeEnemyUnderTree_visibility() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
+        settings.integer(PRIZE_ON_FIELD, 5)
+                .integer(KILL_HITS_AI_PRIZE, 1);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼  %% ☼\n" +
@@ -8565,9 +8565,9 @@ public class GameTest {
 
     @Test
     public void shouldEndPrizeWorkingDontSeeAiUnderTree_visibility() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        prizeWorking = v(2);
+        settings.integer(PRIZE_ON_FIELD, 5)
+                .integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_WORKING, 2);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼  %% ☼\n" +
@@ -8663,9 +8663,9 @@ public class GameTest {
 
     @Test
     public void shouldEndPrizeWorkingDontSeeEnemyUnderTree_visibility() {
-        prizeOnField = v(5);
-        hitKillsAiPrize = v(1);
-        prizeWorking = v(2);
+        settings.integer(PRIZE_ON_FIELD, 5)
+                .integer(KILL_HITS_AI_PRIZE, 1)
+                .integer(PRIZE_WORKING, 2);
 
         givenFl("☼☼☼☼☼☼☼\n" +
                 "☼  %% ☼\n" +
