@@ -91,9 +91,9 @@ public class AITank extends Tank {
 
     @Override
     public Elements state(Player player, Object... alsoAtPoint) {
-        Tree tree = filterOne(alsoAtPoint, Tree.class);
-        if (tree != null) {
-            return Elements.TREE;
+        Elements elements = super.visibility(player, alsoAtPoint);
+        if (elements != null) {
+            return elements;
         }
 
         if (!isAlive()) {
