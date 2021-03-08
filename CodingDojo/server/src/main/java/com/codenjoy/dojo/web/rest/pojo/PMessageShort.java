@@ -1,10 +1,10 @@
-package com.codenjoy.dojo.config;
+package com.codenjoy.dojo.web.rest.pojo;
 
 /*-
  * #%L
  * Codenjoy - it's a dojo-like platform from developers to developers.
  * %%
- * Copyright (C) 2018 - 2019 Codenjoy
+ * Copyright (C) 2018 - 2021 Codenjoy
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,29 +22,9 @@ package com.codenjoy.dojo.config;
  * #L%
  */
 
-import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * @author Igor Petrov
- * Created at 3/6/2019
- */
 @Data
-@ConfigurationProperties("database")
-@SQLiteProfile
-public class SQLiteFilesProperties {
-
-    private boolean memory;
-    private DBProps files;
-
-    @Data
-    public static class DBProps {
-        private String log;
-        private String saves;
-        private String users;
-        private String payment;
-        private String settings;
-        private String messages;
-    }
+public class PMessageShort {
+    private String text;
 }

@@ -29,6 +29,8 @@ import org.sqlite.date.FastDateFormat;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -36,8 +38,8 @@ import java.util.Date;
  */
 @UtilityClass
 public class JDBCTimeUtils {
-
-    private static final FastDateFormat formatter = FastDateFormat.getInstance("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+    public static final String DATE_TIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+    private static final FastDateFormat formatter = FastDateFormat.getInstance(DATE_TIME_PATTERN);
 
     public static long getTimeLong(ResultSet resultSet) throws SQLException {
         try {
@@ -57,7 +59,16 @@ public class JDBCTimeUtils {
         }
     }
 
+    public static LocalDateTime toLocalDateTime(String timestamp) {
+        return LocalDateTime.parse(timestamp,
+                DateTimeFormatter.ofPattern(JDBCTimeUtils.DATE_TIME_PATTERN));
+    }
+
     public static String toString(Date dateTime) {
         return formatter.format(dateTime);
+    }
+
+    public static String toString(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
     }
 }
