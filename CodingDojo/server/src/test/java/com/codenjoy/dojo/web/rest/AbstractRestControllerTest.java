@@ -193,6 +193,11 @@ public abstract class AbstractRestControllerTest {
                 .content(data));
     }
 
+    @SneakyThrows
+    protected String delete(String uri) {
+        return process(200, MockMvcRequestBuilders.delete(uri));
+    }
+
     protected String process(int status, MockHttpServletRequestBuilder post) throws Exception {
         MvcResult mvcResult = mvc.perform(post
                 .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();

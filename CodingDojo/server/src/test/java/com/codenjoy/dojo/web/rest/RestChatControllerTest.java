@@ -35,7 +35,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -92,7 +91,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertEquals("[]", get("/rest/chat/validRoom/messages"));
 
         // when
-        when(time.now()).thenReturn(12345L);
+        nowIs(12345L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message1'}"));
 
@@ -101,7 +100,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 quote(get("/rest/chat/validRoom/messages")));
 
         // when
-        when(time.now()).thenReturn(23456L);
+        nowIs(23456L);
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message2'}"));
 
@@ -109,5 +108,51 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
                         "{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}]",
                 quote(get("/rest/chat/validRoom/messages")));
+    }
+
+    @Test
+    public void shouldDeleteMessages() {
+        // given
+        nowIs(12345L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message1'}"));
+
+        nowIs(23456L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message2'}"));
+
+        nowIs(34567L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message3'}"));
+
+        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
+                        "{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}," +
+                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':34567}]",
+                quote(get("/rest/chat/validRoom/messages")));
+
+        // when
+        delete("/rest/chat/validRoom/messages/0");
+
+        // then
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}," +
+                "{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':34567}]",
+                quote(get("/rest/chat/validRoom/messages")));
+
+        // when
+        delete("/rest/chat/validRoom/messages/2");
+
+        // then
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}]",
+                quote(get("/rest/chat/validRoom/messages")));
+
+        // when
+        delete("/rest/chat/validRoom/messages/1");
+
+        // then
+        assertEquals("[]", quote(get("/rest/chat/validRoom/messages")));
+    }
+
+    public void nowIs(long time) {
+        when(this.time.now()).thenReturn(time);
     }
 }
