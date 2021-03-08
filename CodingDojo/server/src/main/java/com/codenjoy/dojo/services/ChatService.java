@@ -95,6 +95,8 @@ public class ChatService {
     public boolean deleteMessage(int messageId, String room, String playerId) {
         validator.checkPlayerInRoom(room, playerId);
 
-        return chat.deleteMessage(messageId);
+        chat.deleteMessage(messageId);
+
+        return true;
     }
 }

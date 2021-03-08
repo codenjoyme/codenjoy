@@ -119,13 +119,8 @@ public class Chat {
         return message;
     }
 
-    public boolean deleteMessage(int id) {
-        try {
-            pool.update("DELETE FROM messages WHERE id = ?", new Object[]{id});
-            return true;
-        } catch (RuntimeException ex) {
-            return false;
-        }
+    public void deleteMessage(int id) {
+        pool.update("DELETE FROM messages WHERE id = ?", new Object[]{id});
     }
 
     private static List<Message> parseMessages(ResultSet rs) throws SQLException {

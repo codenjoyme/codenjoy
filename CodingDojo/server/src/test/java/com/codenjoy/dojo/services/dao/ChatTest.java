@@ -255,4 +255,10 @@ public class ChatTest {
                         "time=1615235514756, text=message2)]",
                 chat.getMessages("room", 10).toString());
     }
+
+    @Test
+    public void shouldDeleteMessageById_whenNotExists() {
+        // when then
+        chat.deleteMessage(100500);
+    }
 }
