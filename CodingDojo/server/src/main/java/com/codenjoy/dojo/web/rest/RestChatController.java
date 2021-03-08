@@ -40,57 +40,53 @@ import javax.validation.constraints.NotNull;
 @Secured(GameAuthoritiesConstants.ROLE_USER)
 public class RestChatController {
 
-    private final ChatService service;
+    private final ChatService chat;
     private final Validator validator;
 
-    private void validate(Registration.User user, String roomId) {
-        String playerId = user.getId();
-        String code = user.getCode();
-        validator.checkRoom(roomId, Validator.CANT_BE_NULL);
-        validator.checkPlayerCode(playerId, code);
-        validator.checkPlayerInRoom(playerId, roomId);
-    }
-
     @GetMapping("/{room}/messages")
-    ResponseEntity<?> getMessages(
+    public ResponseEntity<?> getMessages(
             @PathVariable(name = "room") String room,
             @RequestParam(name = "count", required = false, defaultValue = "10") int count,
             @RequestParam(name = "after", required = false) Integer after,
             @RequestParam(name = "before", required = false) Integer before,
             @AuthenticationPrincipal Registration.User user)
     {
-        validate(user, room);
-        return ResponseEntity.ok(service.getMessages(room, count, after, before));
+        validator.checkPlayerInRoom(room, user.getId(), user.getCode());
+
+        return ResponseEntity.ok(chat.getMessages(room, count, after, before));
     }
 
     @PostMapping("/{room}/messages")
-    ResponseEntity<?> postMessage(
+    public ResponseEntity<?> postMessage(
             @PathVariable(name = "room") String room,
             @NotNull @RequestBody PMessageShort message,
             @AuthenticationPrincipal Registration.User user)
     {
-        validate(user, room);
-        return ResponseEntity.ok(service.postMessage(message.getText(), room, user));
+        validator.checkPlayerInRoom(room, user.getId(), user.getCode());
+
+        return ResponseEntity.ok(chat.postMessage(message.getText(), room, user));
     }
 
     @GetMapping("/{room}/messages/{id}")
-    ResponseEntity<?> getMessage(
+    public ResponseEntity<?> getMessage(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
             @AuthenticationPrincipal Registration.User user)
     {
-        validate(user, room);
-        return ResponseEntity.ok(service.getMessage(id, room));
+        validator.checkPlayerInRoom(room, user.getId(), user.getCode());
+
+        return ResponseEntity.ok(chat.getMessage(id, room));
     }
 
     @DeleteMapping("/{room}/messages/{id}")
-    ResponseEntity<?> deleteMessage(
+    public ResponseEntity<?> deleteMessage(
             @PathVariable(name = "room") String room,
             @PathVariable(name = "id") int id,
             @AuthenticationPrincipal Registration.User user)
     {
-        validate(user, room);
-        return ResponseEntity.ok(service.deleteMessage(id, room, user));
+        validator.checkPlayerInRoom(room, user.getId(), user.getCode());
+
+        return ResponseEntity.ok(chat.deleteMessage(id, room, user));
     }
 
 }
