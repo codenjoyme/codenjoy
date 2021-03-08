@@ -34,10 +34,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatDAO {
+public class Chat {
     private final CrudConnectionThreadPool pool;
 
-    public ChatDAO(ConnectionThreadPoolFactory factory) {
+    public Chat(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS messages (" +
                         "id varchar(255), " +
@@ -58,7 +58,7 @@ public class ChatDAO {
                         "ORDER BY timestamp " +
                         "LIMIT " + count + ";",
                 new Object[]{roomId},
-                ChatDAO::parseMessages
+                Chat::parseMessages
         );
     }
 
@@ -71,7 +71,7 @@ public class ChatDAO {
                         "ORDER BY timestamp " +
                         "LIMIT " + count + ";",
                 new Object[]{roomId, afterId, beforeId},
-                ChatDAO::parseMessages
+                Chat::parseMessages
         );
     }
 
@@ -81,7 +81,7 @@ public class ChatDAO {
                         "ORDER BY timestamp " +
                         "LIMIT " + count + ";",
                 new Object[]{roomId, afterId},
-                ChatDAO::parseMessages
+                Chat::parseMessages
         );
     }
 
@@ -91,7 +91,7 @@ public class ChatDAO {
                         "ORDER BY timestamp " +
                         "LIMIT " + count + ";",
                 new Object[]{roomId, beforeId},
-                ChatDAO::parseMessages
+                Chat::parseMessages
         );
     }
 

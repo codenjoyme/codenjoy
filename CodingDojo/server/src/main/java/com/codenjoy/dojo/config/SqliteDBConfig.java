@@ -77,8 +77,8 @@ public class SqliteDBConfig {
     }
 
     @Bean
-    public ChatDAO chatDAO() {
-        return new ChatDAO(chatPoolFactory());
+    public Chat chat() {
+        return new Chat(chatPoolFactory());
     }
 
     @Bean

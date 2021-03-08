@@ -22,34 +22,30 @@ package com.codenjoy.dojo.services;
  * #L%
  */
 
-import com.codenjoy.dojo.services.dao.ChatDAO;
+import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-    private final ChatDAO dao;
+    private final Chat dao;
 
     public List<PMessage> getMessages(String roomId, int count, Integer afterId, Integer beforeId) {
-        List<ChatDAO.Message> messages = new ArrayList<>();
+        List<Chat.Message> messages;
         if (afterId != null && beforeId != null) {
             messages = dao.getMessagesBetweenIds(roomId, count, afterId, beforeId);
-        }
-        if (afterId != null) {
+        } else if (afterId != null) {
             messages = dao.getMessagesAfterId(roomId, count, afterId);
-        }
-        if (beforeId != null) {
+        } else if (beforeId != null) {
             messages = dao.getMessagesBeforeId(roomId, count, beforeId);
-        }
-        if (afterId == null && beforeId == null) {
+        } else {
             messages = dao.getMessages(roomId, count);
         }
         return messages.stream()
@@ -58,15 +54,16 @@ public class ChatService {
     }
 
     public PMessage getMessage(int messageId, String roomId) {
-        ChatDAO.Message message = dao.getMessageById(messageId);
+        Chat.Message message = dao.getMessageById(messageId);
         if (message == null || !message.getRoomId().equals(roomId)) {
-            throw new IllegalArgumentException("There is no message with id: " + messageId + " in room with id: " + roomId);
+            throw new IllegalArgumentException(
+                    "There is no message with id: " + messageId + " in room with id: " + roomId);
         }
         return PMessage.from(message);
     }
 
     public PMessage postMessage(String text, String roomId, Registration.User user) {
-        ChatDAO.Message message = ChatDAO.Message.builder()
+        Chat.Message message = Chat.Message.builder()
                 .roomId(roomId)
                 .playerId(user.getId())
                 .timestamp(LocalDateTime.now())

@@ -42,7 +42,7 @@ public class RestChatController {
     private final ChatService service;
     private final Validator validator;
 
-    private void validateUserAndRoom(Registration.User user, String roomId) {
+    private void validate(Registration.User user, String roomId) {
         String playerId = user.getId();
         String code = user.getCode();
         validator.checkRoom(roomId, Validator.CANT_BE_NULL);
@@ -56,7 +56,7 @@ public class RestChatController {
                                   @RequestParam(required = false) Integer afterId,
                                   @RequestParam(required = false) Integer beforeId,
                                   @AuthenticationPrincipal Registration.User user) {
-        validateUserAndRoom(user, roomId);
+        validate(user, roomId);
         return ResponseEntity.ok(service.getMessages(roomId, count, afterId, beforeId));
     }
 
@@ -65,7 +65,7 @@ public class RestChatController {
             @PathVariable String roomId,
             @NotNull @RequestBody PMessageShort message,
             @AuthenticationPrincipal Registration.User user) {
-        validateUserAndRoom(user, roomId);
+        validate(user, roomId);
         return ResponseEntity.ok(service.postMessage(message.getText(), roomId, user));
     }
 
@@ -73,7 +73,7 @@ public class RestChatController {
     ResponseEntity<?> getMessage(@PathVariable String roomId,
                                  @PathVariable int messageId,
                                  @AuthenticationPrincipal Registration.User user) {
-        validateUserAndRoom(user, roomId);
+        validate(user, roomId);
         return ResponseEntity.ok(service.getMessage(messageId, roomId));
     }
 
@@ -82,7 +82,7 @@ public class RestChatController {
             @PathVariable String roomId,
             @PathVariable int messageId,
             @AuthenticationPrincipal Registration.User user) {
-        validateUserAndRoom(user, roomId);
+        validate(user, roomId);
         return ResponseEntity.ok(service.deleteMessage(messageId, roomId, user));
     }
 
