@@ -70,4 +70,9 @@ public class SqliteConnectionThreadPool extends CrudConnectionThreadPool {
             throw new RuntimeException("Cant remove DB " + file.getAbsolutePath());
         }
     }
+
+    @Override
+    String getLastInsertedIdQuery(String table, String column) {
+        return "select last_insert_rowid()";
+    }
 }

@@ -30,7 +30,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class CrudConnectionThreadPool extends ConnectionThreadPool {
+public abstract class CrudConnectionThreadPool extends ConnectionThreadPool {
 
     public CrudConnectionThreadPool(int count, Supplier<Connection> factory) {
        super(count, factory);
@@ -88,9 +88,10 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
         });
     }
 
-    public Integer lastInsertId() {
-        // TODO this works only for sqlite
-        return select("select last_insert_rowid()",
+    public Integer lastInsertId(String table, String column) {
+        return select(getLastInsertedIdQuery(table, column),
                 rs -> rs.next() ? rs.getInt(1) : null);
     }
+
+    abstract String getLastInsertedIdQuery(String table, String column);
 }

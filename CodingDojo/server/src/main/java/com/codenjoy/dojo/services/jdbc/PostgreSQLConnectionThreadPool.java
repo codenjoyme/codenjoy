@@ -54,4 +54,9 @@ public class PostgreSQLConnectionThreadPool extends CrudConnectionThreadPool {
     public void removeDatabase() {
         close();
     }
+
+    @Override
+    String getLastInsertedIdQuery(String table, String column) {
+        return "SELECT currval(pg_get_serial_sequence('" + table + "','" + column + "'))";
+    }
 }

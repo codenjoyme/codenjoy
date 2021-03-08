@@ -115,7 +115,7 @@ public class Chat {
                         message.getText()
                 }
         );
-        message.setId(pool.lastInsertId());
+        message.setId(pool.lastInsertId("messages", "id"));
         return message;
     }
 
