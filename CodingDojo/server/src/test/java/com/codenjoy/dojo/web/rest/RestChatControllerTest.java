@@ -26,6 +26,7 @@ import com.codenjoy.dojo.CodenjoyContestApplication;
 import com.codenjoy.dojo.config.meta.SQLiteProfile;
 import com.codenjoy.dojo.services.GameServiceImpl;
 import com.codenjoy.dojo.services.PlayerService;
+import com.codenjoy.dojo.services.TimeService;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.room.RoomService;
 import org.junit.Before;
@@ -34,6 +35,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
@@ -41,6 +44,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = CodenjoyContestApplication.class,
         properties = "spring.main.allow-bean-definition-overriding=true")
@@ -67,6 +71,9 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     @Autowired
     private PlayerService playerService;
 
+    @SpyBean
+    private TimeService time;
+
     @Before
     public void setUp() {
         super.setUp();
@@ -80,12 +87,27 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    public void shouldGetAllMessages() {
+    public void shouldGetAllMessages_whenPostIt() {
         // given
         assertEquals("[]", get("/rest/chat/validRoom/messages"));
 
         // when
+        when(time.now()).thenReturn(12345L);
         post(200, "/rest/chat/validRoom/messages",
-                unquote("{text:''}"));
+                unquote("{text:'message1'}"));
+
+        // then
+        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages")));
+
+        // when
+        when(time.now()).thenReturn(23456L);
+        post(200, "/rest/chat/validRoom/messages",
+                unquote("{text:'message2'}"));
+
+        // then
+        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
+                        "{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}]",
+                quote(get("/rest/chat/validRoom/messages")));
     }
 }
