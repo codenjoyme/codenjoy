@@ -50,6 +50,9 @@ public class ErrorTicketService {
     @Autowired
     private DebugService debug;
 
+    @Autowired
+    private TimeService time;
+
     private boolean printStackTrace = true;
 
     private Map<String, Map<String, Object>> tickets = new ConcurrentHashMap<>();
@@ -166,7 +169,7 @@ public class ErrorTicketService {
 
     private String ticket() {
         return Hash.md5("anotherSoul" + Hash.md5("someSoul" +
-                Calendar.getInstance().getTimeInMillis()));
+                time.now()));
     }
 
     public void setPrintStackTrace(boolean printStackTrace) {

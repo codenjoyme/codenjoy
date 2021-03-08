@@ -25,19 +25,19 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ChatService {
 
-    private final Validator validator;
-    private final Chat chat;
+    private Validator validator;
+    private Chat chat;
+    private TimeService time;
 
     public List<PMessage> getMessages(String room, int count,
                                       Integer afterId, Integer beforeId,
@@ -85,7 +85,7 @@ public class ChatService {
         Chat.Message message = Chat.Message.builder()
                 .chatId(room)
                 .playerId(playerId)
-                .time(Calendar.getInstance().getTimeInMillis())
+                .time(time.now())
                 .text(text)
                 .build();
 
