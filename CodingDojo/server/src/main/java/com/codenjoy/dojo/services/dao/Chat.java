@@ -62,9 +62,9 @@ public class Chat {
         );
     }
 
-    public List<Message> getMessagesBetweenIds(String chatId, int count, int beforeId, int afterId) {
-        if (afterId <= beforeId) {
-            throw new IllegalArgumentException("First id in interval should be smaller than second");
+    public List<Message> getMessagesBetweenIds(String chatId, int count, int afterId, int beforeId) {
+        if (afterId > beforeId) {
+            throw new IllegalArgumentException("afterId in interval should be smaller than beforeId");
         }
         return pool.select("SELECT * FROM messages " +
                         "WHERE chat_id = ? AND id > ? AND id < ?" +
