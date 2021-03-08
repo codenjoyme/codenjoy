@@ -42,6 +42,7 @@ import javax.validation.constraints.NotNull;
 public class RestChatController {
 
     public static final String URI = "/rest/chat";
+    private static final String DEFAULT_COUNT = "10";
 
     private Validator validator;
     private ChatService chat;
@@ -49,7 +50,7 @@ public class RestChatController {
     @GetMapping("/{room}/messages")
     public ResponseEntity<?> getMessages(
             @PathVariable(name = "room") String room,
-            @RequestParam(name = "count", required = false, defaultValue = "10") int count,
+            @RequestParam(name = "count", required = false, defaultValue = DEFAULT_COUNT) int count,
             @RequestParam(name = "afterId", required = false) Integer afterId,
             @RequestParam(name = "beforeId", required = false) Integer beforeId,
             @AuthenticationPrincipal Registration.User user)
