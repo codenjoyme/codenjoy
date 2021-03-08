@@ -214,6 +214,17 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 quote(get("/rest/chat/validRoom/messages")));
 
         // when then
+        // all + count
+        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
+                        "{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages?count=2")));
+
+        // when then
+        // between + count
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages?afterId=0&beforeId=3&count=1")));
+
+        // when then
         // between
         assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
                         "{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}]",
@@ -224,6 +235,12 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         assertEquals("[]",
                 quote(get("/rest/chat/validRoom/messages?afterId=2&beforeId=2")));
+
+        // when then
+        // after + count
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
+                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages?afterId=0&count=2")));
 
         // when then
         // after
@@ -238,6 +255,12 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         assertEquals("[]",
                 quote(get("/rest/chat/validRoom/messages?afterId=3")));
+
+        // when then
+        // before + count
+        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
+                        "{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages?beforeId=3&count=2")));
 
         // when then
         // before
