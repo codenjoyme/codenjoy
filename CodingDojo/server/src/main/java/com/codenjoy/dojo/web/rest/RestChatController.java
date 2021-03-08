@@ -62,9 +62,10 @@ public class RestChatController {
             @NotNull @RequestBody PMessageShort message,
             @AuthenticationPrincipal Registration.User user)
     {
-        validator.checkPlayerInRoom(room, user.getId(), user.getCode());
+        String playerId = user.getId();
+        validator.checkPlayerInRoom(room, playerId, user.getCode());
 
-        return ResponseEntity.ok(chat.postMessage(message.getText(), room, user));
+        return ResponseEntity.ok(chat.postMessage(message.getText(), room, playerId));
     }
 
     @GetMapping("/{room}/messages/{id}")
@@ -84,9 +85,10 @@ public class RestChatController {
             @PathVariable(name = "id") int id,
             @AuthenticationPrincipal Registration.User user)
     {
-        validator.checkPlayerInRoom(room, user.getId(), user.getCode());
+        String playerId = user.getId();
+        validator.checkPlayerInRoom(room, playerId, user.getCode());
 
-        return ResponseEntity.ok(chat.deleteMessage(id, room, user));
+        return ResponseEntity.ok(chat.deleteMessage(id, room, playerId));
     }
 
 }

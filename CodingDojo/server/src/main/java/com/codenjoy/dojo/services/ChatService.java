@@ -70,10 +70,10 @@ public class ChatService {
         return PMessage.from(message);
     }
 
-    public PMessage postMessage(String text, String room, Registration.User user) {
+    public PMessage postMessage(String text, String room, String playerId) {
         Chat.Message message = Chat.Message.builder()
                 .chatId(room)
-                .playerId(user.getId())
+                .playerId(playerId)
                 .time(Calendar.getInstance().getTimeInMillis())
                 .text(text)
                 .build();
@@ -81,7 +81,7 @@ public class ChatService {
         return PMessage.from(message);
     }
 
-    public boolean deleteMessage(int messageId, String room, Registration.User user) {
-        return chat.deleteMessage(messageId, room, user.getId());
+    public boolean deleteMessage(int messageId, String room, String playerId) {
+        return chat.deleteMessage(messageId, room, playerId);
     }
 }
