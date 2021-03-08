@@ -195,4 +195,64 @@ public class ChatTest {
         assertEquals(null,
                 service.getMessageById(100500));
     }
+
+    @Test
+    public void shouldDeleteMessageById() {
+        // given
+        service.saveMessage(new Chat.Message("room", "player1",
+                JDBCTimeUtils.getTimeLong("2021-03-08T21:23:43.345+0200"),
+                "message1"));
+
+        service.saveMessage(new Chat.Message("room", "player1",
+                JDBCTimeUtils.getTimeLong("2021-03-08T22:31:54.756+0200"),
+                "message2"));
+
+        service.saveMessage(new Chat.Message("room", "player2",
+                JDBCTimeUtils.getTimeLong("2021-03-08T23:53:24.792+0200"),
+                "message3"));
+
+        service.saveMessage(new Chat.Message("room", "player3",
+                JDBCTimeUtils.getTimeLong("2021-03-08T23:53:24.793+0200"),
+                "message4"));
+
+        assertEquals("[Chat.Message(id=0, chatId=room, playerId=player1, " +
+                        "time=1615231423345, text=message1), " +
+                        "Chat.Message(id=1, chatId=room, playerId=player1, " +
+                        "time=1615235514756, text=message2), " +
+                        "Chat.Message(id=2, chatId=room, playerId=player2, " +
+                        "time=1615240404792, text=message3), " +
+                        "Chat.Message(id=3, chatId=room, playerId=player3, " +
+                        "time=1615240404793, text=message4)]",
+                service.getMessages("room", 10).toString());
+
+        // when
+        service.deleteMessage(0);
+
+        // then
+        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, " +
+                        "time=1615235514756, text=message2), " +
+                        "Chat.Message(id=2, chatId=room, playerId=player2, " +
+                        "time=1615240404792, text=message3), " +
+                        "Chat.Message(id=3, chatId=room, playerId=player3, " +
+                        "time=1615240404793, text=message4)]",
+                service.getMessages("room", 10).toString());
+
+        // when
+        service.deleteMessage(2);
+
+        // then
+        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, " +
+                        "time=1615235514756, text=message2), " +
+                        "Chat.Message(id=3, chatId=room, playerId=player3, " +
+                        "time=1615240404793, text=message4)]",
+                service.getMessages("room", 10).toString());
+
+        // when
+        service.deleteMessage(3);
+
+        // then
+        assertEquals("[Chat.Message(id=1, chatId=room, playerId=player1, " +
+                        "time=1615235514756, text=message2)]",
+                service.getMessages("room", 10).toString());
+    }
 }

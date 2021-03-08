@@ -119,12 +119,9 @@ public class Chat {
         return message;
     }
 
-    public boolean deleteMessage(int id, String chatId, String playerId) {
+    public boolean deleteMessage(int id) {
         try {
-            pool.update(
-                    "DELETE FROM messages WHERE id = ? AND chat_id = ? AND player_id = ?",
-                    new Object[]{id, chatId, playerId}
-            );
+            pool.update("DELETE FROM messages WHERE id = ?", new Object[]{id});
             return true;
         } catch (RuntimeException ex) {
             return false;
