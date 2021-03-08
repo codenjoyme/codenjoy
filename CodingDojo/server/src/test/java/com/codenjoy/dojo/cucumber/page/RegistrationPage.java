@@ -25,6 +25,7 @@ package com.codenjoy.dojo.cucumber.page;
 import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -37,6 +38,7 @@ import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
+@RequiredArgsConstructor
 public class RegistrationPage {
 
     public static final String SUBMIT_BUTTON = "#submit-button";
@@ -51,14 +53,9 @@ public class RegistrationPage {
     public static final String GAME_SELECT = "#game select";
     public static final String ERROR_MESSAGE = "#error-message";
 
-    @Autowired
-    private Page page;
-
-    @Autowired
-    private WebDriverWrapper web;
-
-    @Autowired
-    private Registration registration;
+    private final Page page;
+    private final WebDriverWrapper web;
+    private final Registration registration;
 
     public void cleanUp() {
         registration.removeAll();

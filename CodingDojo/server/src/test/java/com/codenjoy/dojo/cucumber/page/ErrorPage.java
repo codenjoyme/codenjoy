@@ -23,6 +23,7 @@ package com.codenjoy.dojo.cucumber.page;
  */
 
 import com.codenjoy.dojo.services.ErrorTicketService;
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -36,16 +37,12 @@ import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
+@RequiredArgsConstructor
 public class ErrorPage {
 
-    @Autowired
-    private Page page;
-
-    @Autowired
-    private WebDriverWrapper web;
-
-    @Autowired
-    private ErrorTicketService tickets;
+    private final Page page;
+    private final WebDriverWrapper web;
+    private final ErrorTicketService tickets;
 
     public WebElement errorMessage() {
         return web.element("#error-message");

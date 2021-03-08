@@ -24,6 +24,7 @@ package com.codenjoy.dojo.cucumber.page;
 
 
 import com.codenjoy.dojo.cucumber.page.Server;
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -40,12 +41,11 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
+@RequiredArgsConstructor
 public class WebDriverWrapper {
 
     private WebDriver driver;
-
-    @Autowired
-    private Server server;
+    private final Server server;
 
     @PostConstruct
     public void init() {

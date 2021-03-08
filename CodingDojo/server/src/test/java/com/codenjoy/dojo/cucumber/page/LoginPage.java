@@ -22,6 +22,7 @@ package com.codenjoy.dojo.cucumber.page;
  * #L%
  */
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,7 @@ import static org.junit.Assert.assertEquals;
 
 @Component
 @Scope(SCOPE_CUCUMBER_GLUE)
+@RequiredArgsConstructor
 public class LoginPage {
 
     public static final String PASSWORD_INPUT = "#password input";
@@ -40,12 +42,8 @@ public class LoginPage {
     public static final String ERROR_MESSAGE = "#error-message";
     public static final String EMAIL_INPUT = "#email input";
 
-    @Autowired
-    private Page page;
-
-    @Autowired
-    private WebDriverWrapper web;
-
+    private final Page page;
+    private final WebDriverWrapper web;
 
     public void email(String email) {
         web.text(EMAIL_INPUT, email);

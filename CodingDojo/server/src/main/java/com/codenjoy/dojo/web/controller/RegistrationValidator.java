@@ -34,10 +34,6 @@ import org.springframework.validation.Validator;
 
 import static com.codenjoy.dojo.web.controller.Validator.CANT_BE_NULL;
 
-/**
- * @author Igor Petrov
- * Created at 3/27/2019
- */
 @Component
 @RequiredArgsConstructor
 public class RegistrationValidator implements Validator {

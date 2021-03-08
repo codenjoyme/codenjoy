@@ -25,8 +25,8 @@ package com.codenjoy.dojo.services;
 import com.codenjoy.dojo.client.Closeable;
 import com.codenjoy.dojo.services.multiplayer.GameField;
 import com.codenjoy.dojo.services.multiplayer.GamePlayer;
-import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.multiplayer.GameRoom;
+import com.codenjoy.dojo.services.multiplayer.MultiplayerType;
 import com.codenjoy.dojo.services.printer.BoardReader;
 import com.codenjoy.dojo.services.room.RoomService;
 import com.codenjoy.dojo.services.settings.Settings;
@@ -45,9 +45,6 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-/**
- * Created by Oleksandr_Baglai on 2019-10-12.
- */
 public class AbstractPlayerGamesTest {
 
     protected PlayerGames playerGames;

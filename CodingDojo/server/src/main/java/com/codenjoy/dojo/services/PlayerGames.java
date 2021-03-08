@@ -54,7 +54,7 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     private Consumer<PlayerGame> onAdd;
     private Consumer<PlayerGame> onRemove;
-    private ReadWriteLock lock;
+    private ReadWriteLock lock = new ReentrantReadWriteLock();
     private Spreader spreader = new Spreader();
 
     @Autowired
@@ -70,10 +70,6 @@ public class PlayerGames implements Iterable<PlayerGame>, Tickable {
 
     public void init(ReadWriteLock lock) {
         this.lock = lock;
-    }
-
-    public PlayerGames() {
-        lock = new ReentrantReadWriteLock();
     }
 
     // удаление текущего игрока

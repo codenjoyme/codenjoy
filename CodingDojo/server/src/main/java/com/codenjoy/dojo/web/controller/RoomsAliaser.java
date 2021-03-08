@@ -23,10 +23,9 @@ package com.codenjoy.dojo.web.controller;
  */
 
 import com.codenjoy.dojo.services.GameService;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.BidiMap;
 import org.apache.commons.collections4.bidimap.DualLinkedHashBidiMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -35,10 +34,10 @@ import java.util.Map;
 import java.util.Set;
 
 @Component
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class RoomsAliaser {
 
-    @Autowired private GameService gameService;
+    private final GameService gameService;
 
     private BidiMap<String, String> rooms;
 

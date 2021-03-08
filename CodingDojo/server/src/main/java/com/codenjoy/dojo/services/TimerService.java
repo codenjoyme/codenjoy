@@ -23,8 +23,8 @@ package com.codenjoy.dojo.services;
  */
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ScheduledFuture;
@@ -33,13 +33,13 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class TimerService implements Runnable {
 
     private ScheduledThreadPoolExecutor executor;
     private ScheduledFuture<?> future;
 
-    @Autowired
-    private PlayerService playerService;
+    private final PlayerService playerService;
 
     private volatile boolean paused;
     private volatile long period;

@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.DebugService;
 import com.codenjoy.dojo.services.PlayerService;
 import com.codenjoy.dojo.services.TimerService;
 import com.codenjoy.dojo.services.dao.ActionLogger;
-import com.codenjoy.dojo.stuff.SmartAssert;
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -37,31 +37,19 @@ import static io.cucumber.spring.CucumberTestContext.SCOPE_CUCUMBER_GLUE;
 import static org.junit.Assert.assertEquals;
 
 @Component
+@RequiredArgsConstructor
 @Scope(SCOPE_CUCUMBER_GLUE)
 public class AdminPage {
 
     public static final String URL = "/admin?room=";
 
-    @Autowired
-    private Page page;
-
-    @Autowired
-    private WebDriverWrapper web;
-
-    @Autowired
-    private AutoSaver autoSaver;
-
-    @Autowired
-    private DebugService debugService;
-
-    @Autowired
-    private TimerService timerService;
-
-    @Autowired
-    private ActionLogger actionLogger;
-
-    @Autowired
-    private PlayerService playerService;
+    private final Page page;
+    private final WebDriverWrapper web;
+    private final AutoSaver autoSaver;
+    private final DebugService debugService;
+    private final TimerService timerService;
+    private final ActionLogger actionLogger;
+    private final PlayerService playerService;
 
     public void cleanUp() {
         actionLogger.pause();

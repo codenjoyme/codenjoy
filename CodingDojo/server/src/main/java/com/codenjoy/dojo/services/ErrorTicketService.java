@@ -24,9 +24,9 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.hash.Hash;
 import com.codenjoy.dojo.transport.ws.PlayerSocketCreator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,17 +41,15 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class ErrorTicketService {
 
     private static final String ERROR_MESSAGE = "Something wrong with your request. " +
             "Please save you ticker number and ask site administrator.";
     private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
-    @Autowired
-    private DebugService debug;
-
-    @Autowired
-    private TimeService time;
+    private final DebugService debug;
+    private final TimeService time;
 
     private boolean printStackTrace = true;
 
