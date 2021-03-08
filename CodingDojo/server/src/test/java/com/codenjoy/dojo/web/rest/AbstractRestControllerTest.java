@@ -35,6 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.SortedJSONArray;
 import org.json.SortedJSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -226,13 +227,25 @@ public abstract class AbstractRestControllerTest {
     }
 
     protected String quote(String input) {
+        if (input.startsWith("[")) {
+            return new SortedJSONArray(input)
+                    .toString()
+                    .replace('\"', '\'');
+        }
+
         return new SortedJSONObject(input)
                 .toString()
                 .replace('\"', '\'');
     }
 
     protected String unquote(String input) {
-        return new SortedJSONObject(input.replace('\'', '\"'))
+        input = input.replace('\'', '\"');
+        if (input.startsWith("[")) {
+            return new SortedJSONArray(input)
+                    .toString();
+        }
+
+        return new SortedJSONObject(input)
                 .toString();
     }
 
