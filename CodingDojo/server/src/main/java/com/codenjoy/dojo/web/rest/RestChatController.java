@@ -47,13 +47,13 @@ public class RestChatController {
     public ResponseEntity<?> getMessages(
             @PathVariable(name = "room") String room,
             @RequestParam(name = "count", required = false, defaultValue = "10") int count,
-            @RequestParam(name = "after", required = false) Integer after,
-            @RequestParam(name = "before", required = false) Integer before,
+            @RequestParam(name = "afterId", required = false) Integer afterId,
+            @RequestParam(name = "beforeId", required = false) Integer beforeId,
             @AuthenticationPrincipal Registration.User user)
     {
         validator.checkPlayerInRoom(room, user.getId(), user.getCode());
 
-        return ResponseEntity.ok(chat.getMessages(room, count, after, before));
+        return ResponseEntity.ok(chat.getMessages(room, count, afterId, beforeId));
     }
 
     @PostMapping("/{room}/messages")
