@@ -28,9 +28,9 @@ import com.codenjoy.dojo.services.jdbc.JDBCTimeUtils;
 import lombok.Builder;
 import lombok.Data;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class Chat {
                         "id varchar(255), " +
                         "room_id varchar(255), " +
                         "player_id varchar(255), " +
-                        "timestamp varchar(255), " +
+                        "time varchar(255), " +
                         "text varchar(255));"
         );
     }
@@ -55,7 +55,7 @@ public class Chat {
     public List<Message> getMessages(String roomId, int count) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE room_id = ? " +
-                        "ORDER BY timestamp " +
+                        "ORDER BY time " +
                         "LIMIT " + count + ";",
                 new Object[]{roomId},
                 Chat::parseMessages
@@ -68,7 +68,7 @@ public class Chat {
         }
         return pool.select("SELECT * FROM messages " +
                         "WHERE room_id = ? AND id > ? AND id < ?" +
-                        "ORDER BY timestamp " +
+                        "ORDER BY time " +
                         "LIMIT " + count + ";",
                 new Object[]{roomId, afterId, beforeId},
                 Chat::parseMessages
@@ -78,7 +78,7 @@ public class Chat {
     public List<Message> getMessagesAfterId(String roomId, int count, int afterId) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE room_id = ? AND id > ?" +
-                        "ORDER BY timestamp " +
+                        "ORDER BY time " +
                         "LIMIT " + count + ";",
                 new Object[]{roomId, afterId},
                 Chat::parseMessages
@@ -88,7 +88,7 @@ public class Chat {
     public List<Message> getMessagesBeforeId(String roomId, int count, int beforeId) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE room_id = ? AND id < ?" +
-                        "ORDER BY timestamp " +
+                        "ORDER BY time " +
                         "LIMIT " + count + ";",
                 new Object[]{roomId, beforeId},
                 Chat::parseMessages
@@ -103,17 +103,16 @@ public class Chat {
     }
 
     // TODO id creation probably cause race condition, find another solution
-    @SuppressWarnings("UnusedReturnValue")
     public Message saveMessage(Message message) {
         message.setId(generateId());
         pool.update("INSERT INTO messages " +
-                        "(id, room_id, player_id, timestamp, text) " +
+                        "(id, room_id, player_id, time, text) " +
                         "VALUES (?, ?, ?, ?, ?);",
                 new Object[]{
                         message.getId(),
                         message.getRoomId(),
                         message.getPlayerId(),
-                        JDBCTimeUtils.toString(message.getTimestamp()),
+                        JDBCTimeUtils.toString(new Date(message.getTime())),
                         message.getText()
                 }
         );
@@ -153,14 +152,14 @@ public class Chat {
         private Integer id;
         private String roomId;
         private String playerId;
-        private LocalDateTime timestamp;
+        private long time;
         private String text;
 
         @Builder
-        private Message(String roomId, String playerId, LocalDateTime timestamp, String text) {
+        public Message(String roomId, String playerId, long time, String text) {
             this.roomId = roomId;
             this.playerId = playerId;
-            this.timestamp = timestamp;
+            this.time = time;
             this.text = text;
         }
 
@@ -168,7 +167,7 @@ public class Chat {
             this.id = rs.getInt("id");
             this.roomId = rs.getString("room_id");
             this.playerId = rs.getString("player_id");
-            this.timestamp = JDBCTimeUtils.toLocalDateTime(rs.getString("timestamp"));
+            this.time = JDBCTimeUtils.getTimeLong(rs);
             this.text = rs.getString("text");
         }
     }

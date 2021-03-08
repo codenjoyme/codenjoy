@@ -29,11 +29,12 @@ import java.time.LocalDateTime;
 
 @Data
 public class PMessage {
+
     private final Integer id;
     private final String text;
     private final String roomId;
     private final String playerId;
-    private final LocalDateTime timestamp;
+    private final long time;
 
     public static PMessage from(Chat.Message message) {
         return new PMessage(
@@ -41,7 +42,7 @@ public class PMessage {
                 message.getText(),
                 message.getRoomId(),
                 message.getPlayerId(),
-                message.getTimestamp()
+                message.getTime()
         );
     }
 }

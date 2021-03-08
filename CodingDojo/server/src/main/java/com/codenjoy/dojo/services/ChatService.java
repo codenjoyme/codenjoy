@@ -28,7 +28,7 @@ import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,7 +73,7 @@ public class ChatService {
         Chat.Message message = Chat.Message.builder()
                 .roomId(roomId)
                 .playerId(user.getId())
-                .timestamp(LocalDateTime.now())
+                .time(Calendar.getInstance().getTimeInMillis())
                 .text(text)
                 .build();
         chat.saveMessage(message);
