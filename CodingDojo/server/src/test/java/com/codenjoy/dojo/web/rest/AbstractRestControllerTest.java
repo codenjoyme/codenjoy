@@ -231,6 +231,11 @@ public abstract class AbstractRestControllerTest {
                 .replace('\"', '\'');
     }
 
+    protected String fix2(String input) {
+        return new SortedJSONObject(input.replace('\'', '\"'))
+                .toString();
+    }
+
     protected String quotes(String input) {
         return "\"" + input + "\"";
     }
