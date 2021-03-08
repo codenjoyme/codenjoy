@@ -42,7 +42,7 @@ public class ChatTest {
                 "message1"));
 
         // then
-        assertEquals("Chat.Message(id=0, roomId=room1, playerId=player1, " +
+        assertEquals("Chat.Message(id=0, chatId=room1, playerId=player1, " +
                         "time=1615231875792, text=message1)",
                 message1.toString());
 
@@ -52,7 +52,7 @@ public class ChatTest {
                 "message2"));
 
         // then
-        assertEquals("Chat.Message(id=1, roomId=room2, playerId=player2, " +
+        assertEquals("Chat.Message(id=1, chatId=room2, playerId=player2, " +
                         "time=1646767875792, text=message2)",
                 message2.toString());
     }
@@ -81,11 +81,11 @@ public class ChatTest {
         List<Chat.Message> messages = service.getMessages("room1", 10);
 
         // then
-        assertEquals("[Chat.Message(id=0, roomId=room1, playerId=player1, " +
+        assertEquals("[Chat.Message(id=0, chatId=room1, playerId=player1, " +
                         "time=1615231423345, text=message1), " +
-                        "Chat.Message(id=1, roomId=room1, playerId=player1, " +
+                        "Chat.Message(id=1, chatId=room1, playerId=player1, " +
                         "time=1615235514756, text=message2), " +
-                        "Chat.Message(id=2, roomId=room1, playerId=player2, " +
+                        "Chat.Message(id=2, chatId=room1, playerId=player2, " +
                         "time=1615240404792, text=message3)]",
                 messages.toString());
     }
@@ -115,10 +115,25 @@ public class ChatTest {
         List<Chat.Message> messages = service.getMessages("room1", 2);
 
         // then
-        assertEquals("[Chat.Message(id=0, roomId=room1, playerId=player1, " +
+        assertEquals("[Chat.Message(id=0, chatId=room1, playerId=player1, " +
                         "time=1615231423345, text=message1), " +
-                        "Chat.Message(id=1, roomId=room1, playerId=player1, " +
+                        "Chat.Message(id=1, chatId=room1, playerId=player1, " +
                         "time=1615235514756, text=message2)]",
+                messages.toString());
+    }
+
+    @Test
+    public void shouldGetAllMessages_onlyForThisRoom_whenNoSuchRoom() {
+        // given
+        service.saveMessage(new Chat.Message("room1", "player1",
+                JDBCTimeUtils.getTimeLong("2021-03-08T21:23:43.345+0200"),
+                "message1"));
+
+        // when
+        List<Chat.Message> messages = service.getMessages("room2", 2);
+
+        // then
+        assertEquals("[]",
                 messages.toString());
     }
 }
