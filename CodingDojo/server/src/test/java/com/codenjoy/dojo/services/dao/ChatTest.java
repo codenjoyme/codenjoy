@@ -315,27 +315,27 @@ public class ChatTest {
         assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
                         "Chat.Message(id=6, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesAfterId("room", MAX, 0).toString());
+                chat.getMessagesAfter("room", MAX, 0).toString());
 
         // берутся только два сверху, хотя доступные 3
         assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesAfterId("room", 2, 0).toString());
+                chat.getMessagesAfter("room", 2, 0).toString());
 
         // можно указывать даже айдишку из другого чата - они порядковые
         assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
                         "Chat.Message(id=6, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesAfterId("room", MAX, 1).toString());
+                chat.getMessagesAfter("room", MAX, 1).toString());
 
         // минус одно сообщение с id = afterId
         assertEquals("[Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
                         "Chat.Message(id=6, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesAfterId("room", MAX, 3).toString());
+                chat.getMessagesAfter("room", MAX, 3).toString());
 
         // минус одно сообщение с id = afterId
         assertEquals("[]",
-                chat.getMessagesAfterId("room", MAX, 6).toString());
+                chat.getMessagesAfter("room", MAX, 6).toString());
     }
 
     @Test
@@ -391,27 +391,27 @@ public class ChatTest {
                         "Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
                         "Chat.Message(id=6, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesBeforeId("room", MAX, 7).toString());
+                chat.getMessagesBefore("room", MAX, 7).toString());
 
         // первое сообщение c id = beforeId не включается
         assertEquals("[Chat.Message(id=0, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
                         "Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBeforeId("room", MAX, 6).toString());
+                chat.getMessagesBefore("room", MAX, 6).toString());
 
         // берутся только два но сверху, хотя доступные 3
         assertEquals("[Chat.Message(id=0, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
                         "Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3)]",
-                chat.getMessagesBeforeId("room", 2, 6).toString());
+                chat.getMessagesBefore("room", 2, 6).toString());
 
         // минус одно сообщение с id = beforeId
         assertEquals("[Chat.Message(id=0, chatId=room, playerId=player1, time=1615231423345, text=message1), " +
                         "Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3)]",
-                chat.getMessagesBeforeId("room", MAX, 4).toString());
+                chat.getMessagesBefore("room", MAX, 4).toString());
 
         // минус одно сообщение с id = beforeId
         assertEquals("[]",
-                chat.getMessagesBeforeId("room", MAX, 0).toString());
+                chat.getMessagesBefore("room", MAX, 0).toString());
     }
 
     @Test
@@ -467,26 +467,26 @@ public class ChatTest {
         assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5), " +
                         "Chat.Message(id=6, chatId=room, playerId=player2, time=1615240404792, text=message7)]",
-                chat.getMessagesBetweenIds("room", MAX, 0, 7).toString());
+                chat.getMessagesBetween("room", MAX, 0, 7).toString());
 
         // первое сообщение c id = beforeId не включается
         // так же как и последнее сообщение c id = afterId тоже не включается
         assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBetweenIds("room", MAX, 0, 6).toString());
+                chat.getMessagesBetween("room", MAX, 0, 6).toString());
 
         // первое сообщение c id = afterId не включается
         // + берутся только два но сверху, хотя доступные 3
         assertEquals("[Chat.Message(id=2, chatId=room, playerId=player1, time=1615235514756, text=message3), " +
                         "Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBetweenIds("room", 2, 0, 7).toString());
+                chat.getMessagesBetween("room", 2, 0, 7).toString());
 
         // минус одно сообщение с id = beforeId
         // минус одно сообщение с id = afterId
         assertEquals("[Chat.Message(id=4, chatId=room, playerId=player2, time=1615240404792, text=message5)]",
-                chat.getMessagesBetweenIds("room", MAX, 2, 6).toString());
+                chat.getMessagesBetween("room", MAX, 2, 6).toString());
 
         assertEquals("[]",
-                chat.getMessagesBetweenIds("room", MAX, 4, 4).toString());
+                chat.getMessagesBetween("room", MAX, 4, 4).toString());
     }
 }

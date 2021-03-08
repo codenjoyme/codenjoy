@@ -23,7 +23,6 @@ package com.codenjoy.dojo.services;
  */
 
 import com.codenjoy.dojo.services.dao.Chat;
-import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import lombok.RequiredArgsConstructor;
@@ -47,15 +46,15 @@ public class ChatService {
         validator.checkPlayerInRoom(room, playerId);
 
         if (afterId != null && beforeId != null) {
-            return wrap(chat.getMessagesBetweenIds(room, count, afterId, beforeId));
+            return wrap(chat.getMessagesBetween(room, count, afterId, beforeId));
         }
 
         if (afterId != null) {
-            return wrap(chat.getMessagesAfterId(room, count, afterId));
+            return wrap(chat.getMessagesAfter(room, count, afterId));
         }
 
         if (beforeId != null) {
-            return wrap(chat.getMessagesBeforeId(room, count, beforeId));
+            return wrap(chat.getMessagesBefore(room, count, beforeId));
         }
 
         return wrap(chat.getMessages(room, count));

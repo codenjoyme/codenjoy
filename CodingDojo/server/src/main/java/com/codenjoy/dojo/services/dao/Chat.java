@@ -62,7 +62,7 @@ public class Chat {
         );
     }
 
-    public List<Message> getMessagesBetweenIds(String chatId, int count, int afterId, int beforeId) {
+    public List<Message> getMessagesBetween(String chatId, int count, int afterId, int beforeId) {
         if (afterId > beforeId) {
             throw new IllegalArgumentException("afterId in interval should be smaller than beforeId");
         }
@@ -75,7 +75,7 @@ public class Chat {
         );
     }
 
-    public List<Message> getMessagesAfterId(String chatId, int count, int afterId) {
+    public List<Message> getMessagesAfter(String chatId, int count, int afterId) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE chat_id = ? AND id > ?" +
                         "ORDER BY time " +
@@ -85,7 +85,7 @@ public class Chat {
         );
     }
 
-    public List<Message> getMessagesBeforeId(String chatId, int count, int beforeId) {
+    public List<Message> getMessagesBefore(String chatId, int count, int beforeId) {
         return pool.select("SELECT * FROM messages " +
                         "WHERE chat_id = ? AND id < ?" +
                         "ORDER BY time " +
