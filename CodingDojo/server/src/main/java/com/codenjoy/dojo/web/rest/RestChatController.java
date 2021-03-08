@@ -10,12 +10,12 @@ package com.codenjoy.dojo.web.rest;
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -39,6 +39,7 @@ import javax.validation.constraints.NotNull;
 @RestController("/rest/chat")
 @Secured(GameAuthoritiesConstants.ROLE_USER)
 public class RestChatController {
+
     private final ChatService service;
     private final Validator validator;
 
@@ -50,40 +51,46 @@ public class RestChatController {
         validator.checkPlayerInRoom(playerId, roomId);
     }
 
-    @GetMapping("/{roomId}/messages")
-    ResponseEntity<?> getMessages(@PathVariable String roomId,
-                                  @RequestParam(required = false, defaultValue = "10") int count,
-                                  @RequestParam(required = false) Integer afterId,
-                                  @RequestParam(required = false) Integer beforeId,
-                                  @AuthenticationPrincipal Registration.User user) {
-        validate(user, roomId);
-        return ResponseEntity.ok(service.getMessages(roomId, count, afterId, beforeId));
+    @GetMapping("/{room}/messages")
+    ResponseEntity<?> getMessages(
+            @PathVariable(name = "room") String room,
+            @RequestParam(name = "count", required = false, defaultValue = "10") int count,
+            @RequestParam(name = "after", required = false) Integer after,
+            @RequestParam(name = "before", required = false) Integer before,
+            @AuthenticationPrincipal Registration.User user)
+    {
+        validate(user, room);
+        return ResponseEntity.ok(service.getMessages(room, count, after, before));
     }
 
-    @PostMapping("/{roomId}/messages")
+    @PostMapping("/{room}/messages")
     ResponseEntity<?> postMessage(
-            @PathVariable String roomId,
+            @PathVariable(name = "room") String room,
             @NotNull @RequestBody PMessageShort message,
-            @AuthenticationPrincipal Registration.User user) {
-        validate(user, roomId);
-        return ResponseEntity.ok(service.postMessage(message.getText(), roomId, user));
+            @AuthenticationPrincipal Registration.User user)
+    {
+        validate(user, room);
+        return ResponseEntity.ok(service.postMessage(message.getText(), room, user));
     }
 
-    @GetMapping("/{roomId}/messages/{messageId}")
-    ResponseEntity<?> getMessage(@PathVariable String roomId,
-                                 @PathVariable int messageId,
-                                 @AuthenticationPrincipal Registration.User user) {
-        validate(user, roomId);
-        return ResponseEntity.ok(service.getMessage(messageId, roomId));
+    @GetMapping("/{room}/messages/{id}")
+    ResponseEntity<?> getMessage(
+            @PathVariable(name = "room") String room,
+            @PathVariable(name = "id") int id,
+            @AuthenticationPrincipal Registration.User user)
+    {
+        validate(user, room);
+        return ResponseEntity.ok(service.getMessage(id, room));
     }
 
-    @DeleteMapping("/{roomId}/messages/{messageId}")
+    @DeleteMapping("/{room}/messages/{id}")
     ResponseEntity<?> deleteMessage(
-            @PathVariable String roomId,
-            @PathVariable int messageId,
-            @AuthenticationPrincipal Registration.User user) {
-        validate(user, roomId);
-        return ResponseEntity.ok(service.deleteMessage(messageId, roomId, user));
+            @PathVariable(name = "room") String room,
+            @PathVariable(name = "id") int id,
+            @AuthenticationPrincipal Registration.User user)
+    {
+        validate(user, room);
+        return ResponseEntity.ok(service.deleteMessage(id, room, user));
     }
 
 }

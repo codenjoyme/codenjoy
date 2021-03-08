@@ -38,20 +38,20 @@ public class ChatService {
 
     private final Chat chat;
 
-    public List<PMessage> getMessages(String roomId, int count, Integer afterId, Integer beforeId) {
+    public List<PMessage> getMessages(String room, int count, Integer afterId, Integer beforeId) {
         if (afterId != null && beforeId != null) {
-            return wrap(chat.getMessagesBetweenIds(roomId, count, afterId, beforeId));
+            return wrap(chat.getMessagesBetweenIds(room, count, afterId, beforeId));
         }
 
         if (afterId != null) {
-            return wrap(chat.getMessagesAfterId(roomId, count, afterId));
+            return wrap(chat.getMessagesAfterId(room, count, afterId));
         }
 
         if (beforeId != null) {
-            return wrap(chat.getMessagesBeforeId(roomId, count, beforeId));
+            return wrap(chat.getMessagesBeforeId(room, count, beforeId));
         }
 
-        return wrap(chat.getMessages(roomId, count));
+        return wrap(chat.getMessages(room, count));
     }
 
     private List<PMessage> wrap(List<Chat.Message> messages) {
@@ -60,18 +60,19 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
-    public PMessage getMessage(int messageId, String roomId) {
+    public PMessage getMessage(int messageId, String room) {
         Chat.Message message = chat.getMessageById(messageId);
-        if (message == null || !message.getRoomId().equals(roomId)) {
+        if (message == null || !message.getChatId().equals(room)) {
             throw new IllegalArgumentException(
-                    "There is no message with id: " + messageId + " in room with id: " + roomId);
+                    "There is no message with id: " + messageId +
+                            " in room with id: " + room);
         }
         return PMessage.from(message);
     }
 
-    public PMessage postMessage(String text, String roomId, Registration.User user) {
+    public PMessage postMessage(String text, String room, Registration.User user) {
         Chat.Message message = Chat.Message.builder()
-                .roomId(roomId)
+                .chatId(room)
                 .playerId(user.getId())
                 .time(Calendar.getInstance().getTimeInMillis())
                 .text(text)
@@ -80,7 +81,7 @@ public class ChatService {
         return PMessage.from(message);
     }
 
-    public boolean deleteMessage(int messageId, String roomId, Registration.User user) {
-        return chat.deleteMessage(messageId, roomId, user.getId());
+    public boolean deleteMessage(int messageId, String room, Registration.User user) {
+        return chat.deleteMessage(messageId, room, user.getId());
     }
 }
