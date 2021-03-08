@@ -136,4 +136,19 @@ public class ChatTest {
         assertEquals("[]",
                 messages.toString());
     }
+
+    @Test
+    public void shouldGetAllMessages_onlyForThisRoom_whenZeroMessages() {
+        // given
+        service.saveMessage(new Chat.Message("room1", "player1",
+                JDBCTimeUtils.getTimeLong("2021-03-08T21:23:43.345+0200"),
+                "message1"));
+
+        // when
+        List<Chat.Message> messages = service.getMessages("room1", 0);
+
+        // then
+        assertEquals("[]",
+                messages.toString());
+    }
 }
