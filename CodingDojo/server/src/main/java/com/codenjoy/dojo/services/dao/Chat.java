@@ -56,8 +56,8 @@ public class Chat {
         return pool.select("SELECT * FROM messages " +
                         "WHERE chat_id = ? " +
                         "ORDER BY time " +
-                        "LIMIT " + count + ";",
-                new Object[]{chatId},
+                        "LIMIT ?;",
+                new Object[]{chatId, count},
                 Chat::parseMessages
         );
     }
@@ -69,8 +69,8 @@ public class Chat {
         return pool.select("SELECT * FROM messages " +
                         "WHERE chat_id = ? AND id > ? AND id < ?" +
                         "ORDER BY time " +
-                        "LIMIT " + count + ";",
-                new Object[]{chatId, afterId, beforeId},
+                        "LIMIT ?;",
+                new Object[]{chatId, afterId, beforeId, count},
                 Chat::parseMessages
         );
     }
@@ -79,8 +79,8 @@ public class Chat {
         return pool.select("SELECT * FROM messages " +
                         "WHERE chat_id = ? AND id > ?" +
                         "ORDER BY time " +
-                        "LIMIT " + count + ";",
-                new Object[]{chatId, afterId},
+                        "LIMIT ?;",
+                new Object[]{chatId, afterId, count},
                 Chat::parseMessages
         );
     }
@@ -89,8 +89,8 @@ public class Chat {
         return pool.select("SELECT * FROM messages " +
                         "WHERE chat_id = ? AND id < ?" +
                         "ORDER BY time " +
-                        "LIMIT " + count + ";",
-                new Object[]{chatId, beforeId},
+                        "LIMIT ?;",
+                new Object[]{chatId, beforeId, count},
                 Chat::parseMessages
         );
     }
