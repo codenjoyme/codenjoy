@@ -35,26 +35,33 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-    private final Chat dao;
+
+    private final Chat chat;
 
     public List<PMessage> getMessages(String roomId, int count, Integer afterId, Integer beforeId) {
-        List<Chat.Message> messages;
         if (afterId != null && beforeId != null) {
-            messages = dao.getMessagesBetweenIds(roomId, count, afterId, beforeId);
-        } else if (afterId != null) {
-            messages = dao.getMessagesAfterId(roomId, count, afterId);
-        } else if (beforeId != null) {
-            messages = dao.getMessagesBeforeId(roomId, count, beforeId);
-        } else {
-            messages = dao.getMessages(roomId, count);
+            return wrap(chat.getMessagesBetweenIds(roomId, count, afterId, beforeId));
         }
+
+        if (afterId != null) {
+            return wrap(chat.getMessagesAfterId(roomId, count, afterId));
+        }
+
+        if (beforeId != null) {
+            return wrap(chat.getMessagesBeforeId(roomId, count, beforeId));
+        }
+
+        return wrap(chat.getMessages(roomId, count));
+    }
+
+    private List<PMessage> wrap(List<Chat.Message> messages) {
         return messages.stream()
                 .map(PMessage::from)
                 .collect(Collectors.toList());
     }
 
     public PMessage getMessage(int messageId, String roomId) {
-        Chat.Message message = dao.getMessageById(messageId);
+        Chat.Message message = chat.getMessageById(messageId);
         if (message == null || !message.getRoomId().equals(roomId)) {
             throw new IllegalArgumentException(
                     "There is no message with id: " + messageId + " in room with id: " + roomId);
@@ -69,11 +76,11 @@ public class ChatService {
                 .timestamp(LocalDateTime.now())
                 .text(text)
                 .build();
-        dao.saveMessage(message);
+        chat.saveMessage(message);
         return PMessage.from(message);
     }
 
     public boolean deleteMessage(int messageId, String roomId, Registration.User user) {
-        return dao.deleteMessage(messageId, roomId, user.getId());
+        return chat.deleteMessage(messageId, roomId, user.getId());
     }
 }
