@@ -24,6 +24,7 @@ package com.codenjoy.dojo.services;
 
 import com.codenjoy.dojo.services.dao.Chat;
 import com.codenjoy.dojo.services.dao.Registration;
+import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,9 +37,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChatService {
 
+    private final Validator validator;
     private final Chat chat;
 
-    public List<PMessage> getMessages(String room, int count, Integer afterId, Integer beforeId) {
+    public List<PMessage> getMessages(String room, int count,
+                                      Integer afterId, Integer beforeId,
+                                      String playerId)
+    {
+        validator.checkPlayerInRoom(room, playerId);
+
         if (afterId != null && beforeId != null) {
             return wrap(chat.getMessagesBetweenIds(room, count, afterId, beforeId));
         }
@@ -60,7 +67,9 @@ public class ChatService {
                 .collect(Collectors.toList());
     }
 
-    public PMessage getMessage(int messageId, String room) {
+    public PMessage getMessage(int messageId, String room, String playerId) {
+        validator.checkPlayerInRoom(room, playerId);
+
         Chat.Message message = chat.getMessageById(messageId);
         if (message == null || !message.getChatId().equals(room)) {
             throw new IllegalArgumentException(
@@ -71,6 +80,8 @@ public class ChatService {
     }
 
     public PMessage postMessage(String text, String room, String playerId) {
+        validator.checkPlayerInRoom(room, playerId);
+
         Chat.Message message = Chat.Message.builder()
                 .chatId(room)
                 .playerId(playerId)
@@ -82,6 +93,8 @@ public class ChatService {
     }
 
     public boolean deleteMessage(int messageId, String room, String playerId) {
+        validator.checkPlayerInRoom(room, playerId);
+
         return chat.deleteMessage(messageId, room, playerId);
     }
 }

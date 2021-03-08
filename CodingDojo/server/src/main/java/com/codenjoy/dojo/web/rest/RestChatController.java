@@ -40,8 +40,8 @@ import javax.validation.constraints.NotNull;
 @Secured(GameAuthoritiesConstants.ROLE_USER)
 public class RestChatController {
 
-    private final ChatService chat;
     private final Validator validator;
+    private final ChatService chat;
 
     @GetMapping("/{room}/messages")
     public ResponseEntity<?> getMessages(
@@ -51,9 +51,9 @@ public class RestChatController {
             @RequestParam(name = "beforeId", required = false) Integer beforeId,
             @AuthenticationPrincipal Registration.User user)
     {
-        validator.checkPlayerInRoom(room, user.getId(), user.getCode());
+        validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getMessages(room, count, afterId, beforeId));
+        return ResponseEntity.ok(chat.getMessages(room, count, afterId, beforeId, user.getId()));
     }
 
     @PostMapping("/{room}/messages")
@@ -62,10 +62,9 @@ public class RestChatController {
             @NotNull @RequestBody PMessageShort message,
             @AuthenticationPrincipal Registration.User user)
     {
-        String playerId = user.getId();
-        validator.checkPlayerInRoom(room, playerId, user.getCode());
+        validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.postMessage(message.getText(), room, playerId));
+        return ResponseEntity.ok(chat.postMessage(message.getText(), room, user.getId()));
     }
 
     @GetMapping("/{room}/messages/{id}")
@@ -74,9 +73,9 @@ public class RestChatController {
             @PathVariable(name = "id") int id,
             @AuthenticationPrincipal Registration.User user)
     {
-        validator.checkPlayerInRoom(room, user.getId(), user.getCode());
+        validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.getMessage(id, room));
+        return ResponseEntity.ok(chat.getMessage(id, room, user.getId()));
     }
 
     @DeleteMapping("/{room}/messages/{id}")
@@ -85,10 +84,9 @@ public class RestChatController {
             @PathVariable(name = "id") int id,
             @AuthenticationPrincipal Registration.User user)
     {
-        String playerId = user.getId();
-        validator.checkPlayerInRoom(room, playerId, user.getCode());
+        validator.checkUser(user);
 
-        return ResponseEntity.ok(chat.deleteMessage(id, room, playerId));
+        return ResponseEntity.ok(chat.deleteMessage(id, room, user.getId()));
     }
 
 }

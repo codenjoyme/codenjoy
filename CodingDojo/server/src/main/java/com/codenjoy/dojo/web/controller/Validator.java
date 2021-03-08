@@ -246,8 +246,7 @@ public class Validator {
     }
 
     // TODO test me
-    public void checkPlayerInRoom(String room, String id, String code) {
-        checkPlayerCode(id, code);
-        checkPlayerInRoom(room, id);
+    public void checkUser(Registration.User user) {
+        checkPlayerCode(user.getId(), user.getCode());
     }
 }
