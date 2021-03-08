@@ -188,4 +188,11 @@ public class ChatTest {
                         "time=1615240404792, text=message4)",
                 service.getMessageById(3).toString());
     }
+
+    @Test
+    public void shouldGetMessageById_whenNotExists() {
+        // when then
+        assertEquals(null,
+                service.getMessageById(100500));
+    }
 }

@@ -98,7 +98,7 @@ public class Chat {
     public Message getMessageById(int messageId) {
         return pool.select("SELECT * FROM messages WHERE id = ?",
                 new Object[]{messageId},
-                Message::new
+                rs -> rs.next() ? new Message(rs) : null
         );
     }
 
