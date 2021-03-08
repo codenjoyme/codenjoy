@@ -27,7 +27,7 @@ import com.codenjoy.dojo.services.dao.Registration;
 import com.codenjoy.dojo.services.security.GameAuthoritiesConstants;
 import com.codenjoy.dojo.web.controller.Validator;
 import com.codenjoy.dojo.web.rest.pojo.PMessageShort;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,13 +35,16 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
-@RequiredArgsConstructor
-@RestController("/rest/chat")
+@RestController
 @Secured(GameAuthoritiesConstants.ROLE_USER)
+@RequestMapping(RestChatController.URI)
+@AllArgsConstructor
 public class RestChatController {
 
-    private final Validator validator;
-    private final ChatService chat;
+    public static final String URI = "/rest/chat";
+
+    private Validator validator;
+    private ChatService chat;
 
     @GetMapping("/{room}/messages")
     public ResponseEntity<?> getMessages(

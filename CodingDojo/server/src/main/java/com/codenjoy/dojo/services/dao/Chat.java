@@ -139,6 +139,10 @@ public class Chat {
         return lastMessage == null ? 0 : lastMessage.id + 1;
     }
 
+    public void removeAll() {
+        pool.update("DELETE FROM messages");
+    }
+
     @Data
     public static class Message {
         private Integer id;

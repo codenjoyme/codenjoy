@@ -43,7 +43,7 @@ public class ChatService {
                                       Integer afterId, Integer beforeId,
                                       String playerId)
     {
-        validator.checkPlayerInRoom(room, playerId);
+        validator.checkPlayerInRoom(playerId, room);
 
         if (afterId != null && beforeId != null) {
             return wrap(chat.getMessagesBetween(room, count, afterId, beforeId));
@@ -67,9 +67,10 @@ public class ChatService {
     }
 
     public PMessage getMessage(int messageId, String room, String playerId) {
-        validator.checkPlayerInRoom(room, playerId);
+        validator.checkPlayerInRoom(playerId, room);
 
         Chat.Message message = chat.getMessageById(messageId);
+
         if (message == null || !message.getChatId().equals(room)) {
             throw new IllegalArgumentException(
                     "There is no message with id: " + messageId +
@@ -79,7 +80,7 @@ public class ChatService {
     }
 
     public PMessage postMessage(String text, String room, String playerId) {
-        validator.checkPlayerInRoom(room, playerId);
+        validator.checkPlayerInRoom(playerId, room);
 
         Chat.Message message = Chat.Message.builder()
                 .chatId(room)
@@ -87,12 +88,14 @@ public class ChatService {
                 .time(Calendar.getInstance().getTimeInMillis())
                 .text(text)
                 .build();
+
         chat.saveMessage(message);
+
         return PMessage.from(message);
     }
 
     public boolean deleteMessage(int messageId, String room, String playerId) {
-        validator.checkPlayerInRoom(room, playerId);
+        validator.checkPlayerInRoom(playerId, room);
 
         chat.deleteMessage(messageId);
 
