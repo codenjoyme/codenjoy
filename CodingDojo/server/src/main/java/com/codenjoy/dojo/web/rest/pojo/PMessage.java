@@ -22,7 +22,7 @@ package com.codenjoy.dojo.web.rest.pojo;
  * #L%
  */
 
-import com.codenjoy.dojo.services.dao.ChatDAO;
+import com.codenjoy.dojo.services.dao.Chat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -35,7 +35,7 @@ public class PMessage {
     private final String playerId;
     private final LocalDateTime timestamp;
 
-    public static PMessage from(ChatDAO.Message message) {
+    public static PMessage from(Chat.Message message) {
         return new PMessage(
                 message.getId(),
                 message.getText(),
