@@ -87,4 +87,10 @@ public class CrudConnectionThreadPool extends ConnectionThreadPool {
             return null;
         });
     }
+
+    public Integer lastInsertId() {
+        // TODO this works only for sqlite
+        return select("select last_insert_rowid()",
+                rs -> rs.next() ? rs.getInt(1) : null);
+    }
 }

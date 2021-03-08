@@ -42,6 +42,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.util.stream.IntStream;
+
 import static com.codenjoy.dojo.stuff.SmartAssert.assertEquals;
 import static org.mockito.Mockito.when;
 
@@ -96,7 +98,7 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 unquote("{text:'message1'}"));
 
         // then
-        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}]",
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}]",
                 quote(get("/rest/chat/validRoom/messages")));
 
         // when
@@ -105,8 +107,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 unquote("{text:'message2'}"));
 
         // then
-        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
-                        "{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}]",
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
+                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}]",
                 quote(get("/rest/chat/validRoom/messages")));
     }
 
@@ -125,28 +127,28 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
         post(200, "/rest/chat/validRoom/messages",
                 unquote("{text:'message3'}"));
 
-        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
-                        "{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}," +
-                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':34567}]",
-                quote(get("/rest/chat/validRoom/messages")));
-
-        // when
-        delete("/rest/chat/validRoom/messages/0");
-
-        // then
-        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}," +
-                "{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':34567}]",
-                quote(get("/rest/chat/validRoom/messages")));
-
-        // when
-        delete("/rest/chat/validRoom/messages/2");
-
-        // then
-        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}]",
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
+                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}," +
+                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':34567}]",
                 quote(get("/rest/chat/validRoom/messages")));
 
         // when
         delete("/rest/chat/validRoom/messages/1");
+
+        // then
+        assertEquals("[{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}," +
+                "{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':34567}]",
+                quote(get("/rest/chat/validRoom/messages")));
+
+        // when
+        delete("/rest/chat/validRoom/messages/3");
+
+        // then
+        assertEquals("[{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}]",
+                quote(get("/rest/chat/validRoom/messages")));
+
+        // when
+        delete("/rest/chat/validRoom/messages/2");
 
         // then
         assertEquals("[]", quote(get("/rest/chat/validRoom/messages")));
@@ -160,8 +162,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
     public void shouldGetMessage_whenPostIt() {
         // given
         assertError("java.lang.IllegalArgumentException: There is no message " +
-                        "with id: 0 in room with id: validRoom",
-            "/rest/chat/validRoom/messages/0");
+                        "with id: 1 in room with id: validRoom",
+            "/rest/chat/validRoom/messages/1");
 
         // when
         nowIs(12345L);
@@ -169,8 +171,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 unquote("{text:'message1'}"));
 
         // then
-        assertEquals("{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}",
-                quote(get("/rest/chat/validRoom/messages/0")));
+        assertEquals("{'id':1,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}",
+                quote(get("/rest/chat/validRoom/messages/1")));
 
         // when
         nowIs(23456L);
@@ -178,8 +180,8 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
                 unquote("{text:'message2'}"));
 
         // then
-        assertEquals("{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}",
-                quote(get("/rest/chat/validRoom/messages/1")));
+        assertEquals("{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':23456}",
+                quote(get("/rest/chat/validRoom/messages/2")));
     }
 
     @Test
@@ -207,72 +209,100 @@ public class RestChatControllerTest extends AbstractRestControllerTest {
 
         // when then
         // all
-        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
-                        "{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
-                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}," +
-                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message4','time':12345}]",
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
+                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
+                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}," +
+                        "{'id':4,'playerId':'player','roomId':'validRoom','text':'message4','time':12345}]",
                 quote(get("/rest/chat/validRoom/messages")));
 
         // when then
         // all + count
-        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
-                        "{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}]",
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
+                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}]",
                 quote(get("/rest/chat/validRoom/messages?count=2")));
 
         // when then
         // between + count
-        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}]",
-                quote(get("/rest/chat/validRoom/messages?afterId=0&beforeId=3&count=1")));
+        assertEquals("[{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages?afterId=1&beforeId=4&count=1")));
 
         // when then
         // between
-        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
-                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}]",
-                quote(get("/rest/chat/validRoom/messages?afterId=0&beforeId=3")));
+        assertEquals("[{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
+                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages?afterId=1&beforeId=4")));
 
         assertEquals("[]",
-                quote(get("/rest/chat/validRoom/messages?afterId=1&beforeId=2")));
+                quote(get("/rest/chat/validRoom/messages?afterId=2&beforeId=3")));
 
         assertEquals("[]",
-                quote(get("/rest/chat/validRoom/messages?afterId=2&beforeId=2")));
+                quote(get("/rest/chat/validRoom/messages?afterId=3&beforeId=3")));
 
         // when then
         // after + count
-        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
-                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}]",
-                quote(get("/rest/chat/validRoom/messages?afterId=0&count=2")));
+        assertEquals("[{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
+                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages?afterId=1&count=2")));
 
         // when then
         // after
-        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
-                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}," +
-                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message4','time':12345}]",
-                quote(get("/rest/chat/validRoom/messages?afterId=0")));
-
-        assertEquals("[{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}," +
-                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message4','time':12345}]",
+        assertEquals("[{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
+                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}," +
+                        "{'id':4,'playerId':'player','roomId':'validRoom','text':'message4','time':12345}]",
                 quote(get("/rest/chat/validRoom/messages?afterId=1")));
 
+        assertEquals("[{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}," +
+                        "{'id':4,'playerId':'player','roomId':'validRoom','text':'message4','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages?afterId=2")));
+
         assertEquals("[]",
-                quote(get("/rest/chat/validRoom/messages?afterId=3")));
+                quote(get("/rest/chat/validRoom/messages?afterId=4")));
 
         // when then
         // before + count
-        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
-                        "{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}]",
-                quote(get("/rest/chat/validRoom/messages?beforeId=3&count=2")));
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
+                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages?beforeId=4&count=2")));
 
         // when then
         // before
         assertEquals("[]",
                 quote(get("/rest/chat/validRoom/messages?beforeId=0")));
 
-        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}]",
-                quote(get("/rest/chat/validRoom/messages?beforeId=1")));
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages?beforeId=2")));
 
-        assertEquals("[{'id':0,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
-                        "{'id':1,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
-                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}]",
-                quote(get("/rest/chat/validRoom/messages?beforeId=3")));
+        assertEquals("[{'id':1,'playerId':'player','roomId':'validRoom','text':'message1','time':12345}," +
+                        "{'id':2,'playerId':'player','roomId':'validRoom','text':'message2','time':12345}," +
+                        "{'id':3,'playerId':'player','roomId':'validRoom','text':'message3','time':12345}]",
+                quote(get("/rest/chat/validRoom/messages?beforeId=4")));
+    }
+
+    @Test
+    public void shouldGetAllMessages_countByDefault() {
+        // given
+        IntStream.range(0, 20).forEach(index -> {
+            nowIs(12345L + index);
+            post(200, "/rest/chat/validRoom/messages",
+                    unquote("{text:'message" + index + "'}"));
+        });
+
+
+        // when then
+        String expected = "[{'id':1,'playerId':'player','roomId':'validRoom','text':'message0','time':12345}," +
+                "{'id':2,'playerId':'player','roomId':'validRoom','text':'message1','time':12346}," +
+                "{'id':3,'playerId':'player','roomId':'validRoom','text':'message2','time':12347}," +
+                "{'id':4,'playerId':'player','roomId':'validRoom','text':'message3','time':12348}," +
+                "{'id':5,'playerId':'player','roomId':'validRoom','text':'message4','time':12349}," +
+                "{'id':6,'playerId':'player','roomId':'validRoom','text':'message5','time':12350}," +
+                "{'id':7,'playerId':'player','roomId':'validRoom','text':'message6','time':12351}," +
+                "{'id':8,'playerId':'player','roomId':'validRoom','text':'message7','time':12352}," +
+                "{'id':9,'playerId':'player','roomId':'validRoom','text':'message8','time':12353}," +
+                "{'id':10,'playerId':'player','roomId':'validRoom','text':'message9','time':12354}]";
+
+        assertEquals(expected, quote(get("/rest/chat/validRoom/messages")));
+        assertEquals(expected, quote(get("/rest/chat/validRoom/messages?beforeId=20")));
+        assertEquals(expected, quote(get("/rest/chat/validRoom/messages?afterId=-1")));
+        assertEquals(expected, quote(get("/rest/chat/validRoom/messages?afterId=-1&beforeId=20")));
     }
 }

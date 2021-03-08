@@ -40,7 +40,8 @@ public class Chat {
     public Chat(ConnectionThreadPoolFactory factory) {
         pool = factory.create(
                 "CREATE TABLE IF NOT EXISTS messages (" +
-                        "id varchar(255), " +
+                        // TODO this works only for sqlite
+                        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                         "chat_id varchar(255), " +
                         "player_id varchar(255), " +
                         "time varchar(255), " +
@@ -102,20 +103,19 @@ public class Chat {
         );
     }
 
-    // TODO id creation probably cause race condition, find another solution
     public Message saveMessage(Message message) {
-        message.setId(generateId());
         pool.update("INSERT INTO messages " +
                         "(id, chat_id, player_id, time, text) " +
                         "VALUES (?, ?, ?, ?, ?);",
                 new Object[]{
-                        message.getId(),
+                        null,
                         message.getChatId(),
                         message.getPlayerId(),
                         JDBCTimeUtils.toString(new Date(message.getTime())),
                         message.getText()
                 }
         );
+        message.setId(pool.lastInsertId());
         return message;
     }
 
@@ -131,15 +131,9 @@ public class Chat {
         return messages;
     }
 
-    private int generateId() {
-        Message lastMessage = pool.select(
-                "SELECT * FROM messages ORDER BY id DESC LIMIT 1;",
-                rs -> rs.next() ? new Message(rs) : null
-        );
-        return lastMessage == null ? 0 : lastMessage.id + 1;
-    }
-
     public void removeAll() {
+        // TODO this works only for sqlite
+        pool.update("UPDATE sqlite_sequence SET seq = 0 WHERE name = 'messages'");
         pool.update("DELETE FROM messages");
     }
 
